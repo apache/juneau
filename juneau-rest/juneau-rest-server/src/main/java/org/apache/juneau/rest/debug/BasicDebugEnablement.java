@@ -16,10 +16,14 @@
  */
 package org.apache.juneau.rest.debug;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
+import java.util.stream.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
@@ -85,7 +89,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		// @formatter:off
 		ci.getPublicMethods().stream()
 			.forEach(x -> {
-				x.getAnnotationList(REST_OP_GROUP).forEachValue(
+				rstream(x.getAllAnnotationInfos()).filter(REST_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new)).forEachValue(
 					String.class,
 					"debug",
 					y -> true,

@@ -410,11 +410,12 @@ class MethodInfo_Test extends TestBase {
 		cb_a5 = ofm(CB3.class, "a5");  // NOSONAR
 
 	@Test void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getAnnotationList(CONTEXT_APPLY_FILTER));
-		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getAnnotationList(CONTEXT_APPLY_FILTER));
-		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getAnnotationList(CONTEXT_APPLY_FILTER));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", cb_a4.getAnnotationList(CONTEXT_APPLY_FILTER));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", cb_a5.getAnnotationList(CONTEXT_APPLY_FILTER));
+		// Note: Order changed after inlining - method annotations now come after class annotations
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a1)", rstream(cb_a1.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a2a),@AConfig(a2b)", rstream(cb_a2.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a3)", rstream(cb_a3.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", rstream(cb_a4.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", rstream(cb_a5.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

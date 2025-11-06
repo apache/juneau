@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.remote;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
@@ -24,6 +25,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
@@ -61,9 +63,9 @@ public class RemoteOperationMeta {
 
 			var mi = MethodInfo.of(m);
 
-		AnnotationList al = mi.getAnnotationList(REMOTE_OP_GROUP);
+		AnnotationList al = rstream(mi.getAllAnnotationInfos()).filter(REMOTE_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
 		if (al.isEmpty())
-			al = mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationList(REMOTE_OP_GROUP);
+			al = rstream(mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).filter(REMOTE_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
 
 		var _httpMethod = Value.<String>empty();
 		var _path = Value.<String>empty();

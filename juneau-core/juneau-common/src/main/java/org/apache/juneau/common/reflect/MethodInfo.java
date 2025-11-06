@@ -502,26 +502,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
-	 * Constructs an {@link AnnotationList} of all matching annotations found on this method.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * 	<li>On this method and matching methods ordered parent-to-child.
-	 * </ol>
-	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be added.  Can be <jk>null</jk>.
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		return AnnotationInfo.getAnnotationList(this, filter);
-	}
-
-	/**
 	 * Returns the first annotation in the specified list on this method.
 	 *
 	 * @param types The annotations to look for.

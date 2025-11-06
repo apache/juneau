@@ -29,6 +29,7 @@ import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -272,7 +273,7 @@ public class BasicSwaggerProviderSession {
 
 			Method m = sm.getJavaMethod();
 			var mi = MethodInfo.of(m);
-			AnnotationList al = mi.getAnnotationList(REST_OP_GROUP);
+			AnnotationList al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
 			String mn = m.getName();
 
 			// Get the operation from the existing swagger so far.

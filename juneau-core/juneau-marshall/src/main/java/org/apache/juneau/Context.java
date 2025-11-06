@@ -26,6 +26,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -673,13 +674,13 @@ public abstract class Context implements AnnotationProvider {
 		private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
 			CollectionUtils.traverse(x, y -> {
 				if (x instanceof Class<?> x2)
-					work.add(ClassInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));
+					work.add(rstream(ClassInfo.of(x2).getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
 				else if (x instanceof ClassInfo x2)
-					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
+					work.add(rstream(x2.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
 				else if (x instanceof Method x2)
-					work.add(MethodInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));
+					work.add(rstream(MethodInfo.of(x2).getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
 				else if (x instanceof MethodInfo x2)
-					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
+					work.add(rstream(x2.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
 				else
 					illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
 			});

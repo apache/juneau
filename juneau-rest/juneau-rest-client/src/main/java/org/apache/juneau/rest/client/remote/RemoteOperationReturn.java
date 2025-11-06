@@ -16,11 +16,13 @@
  */
 package org.apache.juneau.rest.client.remote;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
@@ -47,9 +49,9 @@ public class RemoteOperationReturn {
 	RemoteOperationReturn(MethodInfo m) {
 		ClassInfo rt = m.getReturnType();
 
-		AnnotationList al = m.getAnnotationList(REMOTE_OP_GROUP);
+		AnnotationList al = rstream(m.getAllAnnotationInfos()).filter(REMOTE_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
 		if (al.isEmpty())
-			al = m.getReturnType().unwrap(Value.class, Optional.class).getAnnotationList(REMOTE_OP_GROUP);
+			al = rstream(m.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).filter(REMOTE_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
 
 		RemoteReturn rv = null;
 
