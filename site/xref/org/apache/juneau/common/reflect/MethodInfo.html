@@ -614,352 +614,358 @@
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L607" href="#L607">607</a> 	@Override
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type) {
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		<strong class="jxr_keyword">return</strong> hasAnnotation(AnnotationProvider.DEFAULT, type);
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	}
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if at least one of the specified annotation is present on this method.</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">	 * @param types The annotation to look for.</em>
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if at least one of the specified annotation is present on this method.</em>
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	@SafeVarargs
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> hasAnyAnnotations(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;...types) {
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : types)
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			<strong class="jxr_keyword">if</strong> (hasAnnotation(a))
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 	}
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has the specified parameter.</em>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">	 * Method may or may not have additional parameters besides the one specified.</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 * @param requiredParam The parameter type to check for.</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has at least the specified parameter.</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasArg(Class&lt;?&gt; requiredParam) {
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">return</strong> hasAllArgs(requiredParam);
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	}
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is not present on this method.</em>
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type to look for.</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">	 * @param annotationProvider The annotation provider.</em>
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> <em class="jxr_javadoccomment">	 * @param type The annotation to look for.</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is not present on this method.</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasNoAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">return</strong> ! hasAnnotation(annotationProvider, type);
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	}
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is not present on this method or any matching methods in parent classes/interfaces.</em>
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type to look for.</em>
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 * @param type The annotation to look for.</em>
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is not present on this method.</em>
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	@Override
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasNoAnnotation(Class&lt;A&gt; type) {
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">return</strong> !hasAnnotation(type);
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	}
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has this return type.</em>
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 * @param c The return type to test for.</em>
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this return type.</em>
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnType(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<strong class="jxr_keyword">return</strong> m.getReturnType() == c;
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	}
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has this return type.</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 * @param ci The return type to test for.</em>
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this return type.</em>
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnType(ClassInfo ci) {
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">return</strong> hasReturnType(ci.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 	}
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has this parent return type.</em>
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">	 * @param c The return type to test for.</em>
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this parent return type.</em>
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnTypeParent(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<strong class="jxr_keyword">return</strong> ClassInfo.of(c).isParentOf(m.getReturnType());
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	}
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has this parent return type.</em>
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> <em class="jxr_javadoccomment">	 * @param ci The return type to test for.</em>
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this parent return type.</em>
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnTypeParent(ClassInfo ci) {
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 		<strong class="jxr_keyword">return</strong> hasReturnTypeParent(ci.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	}
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 * Returns the wrapped method.</em>
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * @return The wrapped method.</em>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<strong class="jxr_keyword">public</strong> Method <strong class="jxr_keyword">inner</strong>() {
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	}
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 * Shortcut for calling the invoke method on the underlying method.</em>
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The method return type.</em>
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">	 * @param obj the object the underlying method is invoked from.</em>
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">	 * @param args the arguments used for the method call</em>
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">	 * @return The object returned from the method.</em>
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T invoke(Object obj, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 			<strong class="jxr_keyword">return</strong> (T)m.invoke(obj, args);
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalAccessException e) {
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		} <strong class="jxr_keyword">catch</strong> (InvocationTargetException e) {
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e.getTargetException());
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		}
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 	}
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">	 * Invokes the specified method using lenient argument matching.</em>
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">	 * Lenient matching allows arguments to be matched to parameters based on parameter types.</em>
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Arguments can be in any order.</em>
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Extra arguments will be ignored.</em>
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Missing arguments will be left &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		<em class="jxr_comment">// Inline implementation using reflection directly instead of delegating to AnnotationProvider.DEFAULT</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">if</strong> (!nn(type))
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : matchingCache.get())
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">if</strong> (m2.<strong class="jxr_keyword">inner</strong>().getAnnotation(type) != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	}
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if at least one of the specified annotation is present on this method.</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 * @param types The annotation to look for.</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if at least one of the specified annotation is present on this method.</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 	@SafeVarargs
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> hasAnyAnnotations(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;...types) {
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : types)
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			<strong class="jxr_keyword">if</strong> (hasAnnotation(a))
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	}
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has the specified parameter.</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * Method may or may not have additional parameters besides the one specified.</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">	 * @param requiredParam The parameter type to check for.</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has at least the specified parameter.</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasArg(Class&lt;?&gt; requiredParam) {
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">return</strong> hasAllArgs(requiredParam);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	}
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is not present on this method.</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type to look for.</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">	 * @param annotationProvider The annotation provider.</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 * @param type The annotation to look for.</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is not present on this method.</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasNoAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		<strong class="jxr_keyword">return</strong> ! hasAnnotation(annotationProvider, type);
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	}
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is not present on this method or any matching methods in parent classes/interfaces.</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type to look for.</em>
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">	 * @param type The annotation to look for.</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is not present on this method.</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	@Override
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasNoAnnotation(Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		<strong class="jxr_keyword">return</strong> !hasAnnotation(type);
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	}
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has this return type.</em>
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * @param c The return type to test for.</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this return type.</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnType(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">return</strong> m.getReturnType() == c;
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has this return type.</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 * @param ci The return type to test for.</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this return type.</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnType(ClassInfo ci) {
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		<strong class="jxr_keyword">return</strong> hasReturnType(ci.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 	}
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has this parent return type.</em>
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> <em class="jxr_javadoccomment">	 * @param c The return type to test for.</em>
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this parent return type.</em>
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnTypeParent(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		<strong class="jxr_keyword">return</strong> ClassInfo.of(c).isParentOf(m.getReturnType());
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 	}
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has this parent return type.</em>
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 * @param ci The return type to test for.</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this parent return type.</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnTypeParent(ClassInfo ci) {
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 		<strong class="jxr_keyword">return</strong> hasReturnTypeParent(ci.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	}
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 * Returns the wrapped method.</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 * @return The wrapped method.</em>
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 	<strong class="jxr_keyword">public</strong> Method <strong class="jxr_keyword">inner</strong>() {
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 	}
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * Shortcut for calling the invoke method on the underlying method.</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The method return type.</em>
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">	 * @param obj the object the underlying method is invoked from.</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">	 * @param args the arguments used for the method call</em>
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> <em class="jxr_javadoccomment">	 * @return The object returned from the method.</em>
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T invoke(Object obj, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 			<strong class="jxr_keyword">return</strong> (T)m.invoke(obj, args);
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalAccessException e) {
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 		} <strong class="jxr_keyword">catch</strong> (InvocationTargetException e) {
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e.getTargetException());
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		}
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 	}
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 * Invokes the specified method using lenient argument matching.</em>
 <a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">	 * Note that this only works for methods that have distinguishable argument types.</em>
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;It's not going to work on methods with generic argument types like &lt;c&gt;Object&lt;/c&gt;</em>
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> <em class="jxr_javadoccomment">	 * @param pojo</em>
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> <em class="jxr_javadoccomment">	 * 	The POJO the method is being called on.</em>
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; for static methods.</em>
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> <em class="jxr_javadoccomment">	 * @param args</em>
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> <em class="jxr_javadoccomment">	 * 	The arguments to pass to the method.</em>
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">	 * 	The results of the method invocation.</em>
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">	 * @deprecated Use {@link #invokeLenient(Object, Object...)}</em>
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 	@Deprecated
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 	<strong class="jxr_keyword">public</strong> Object invokeFuzzy(Object pojo, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">return</strong> invokeLenient(pojo, args);
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 	}
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> <em class="jxr_javadoccomment">	 * Invokes the specified method using lenient argument matching.</em>
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> <em class="jxr_javadoccomment">	 * Lenient matching allows arguments to be matched to parameters based on parameter types.</em>
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Arguments can be in any order.</em>
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Extra arguments will be ignored.</em>
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Missing arguments will be left &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">	 * Lenient matching allows arguments to be matched to parameters based on parameter types.</em>
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Arguments can be in any order.</em>
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Extra arguments will be ignored.</em>
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Missing arguments will be left &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> <em class="jxr_javadoccomment">	 * Note that this only works for methods that have distinguishable argument types.</em>
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;It's not going to work on methods with generic argument types like &lt;c&gt;Object&lt;/c&gt;</em>
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">	 * @param pojo</em>
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">	 * 	The POJO the method is being called on.</em>
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; for static methods.</em>
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">	 * @param args</em>
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">	 * 	The arguments to pass to the method.</em>
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">	 * 	The results of the method invocation.</em>
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 * @deprecated Use {@link #invokeLenient(Object, Object...)}</em>
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	@Deprecated
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<strong class="jxr_keyword">public</strong> Object invokeFuzzy(Object pojo, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		<strong class="jxr_keyword">return</strong> invokeLenient(pojo, args);
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 	}
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * Invokes the specified method using lenient argument matching.</em>
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">	 * Note that this only works for methods that have distinguishable argument types.</em>
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;It's not going to work on methods with generic argument types like &lt;c&gt;Object&lt;/c&gt;</em>
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">	 * @param pojo</em>
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> <em class="jxr_javadoccomment">	 * 	The POJO the method is being called on.</em>
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; for static methods.</em>
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 * @param args</em>
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> <em class="jxr_javadoccomment">	 * 	The arguments to pass to the method.</em>
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> <em class="jxr_javadoccomment">	 * 	The results of the method invocation.</em>
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 	<strong class="jxr_keyword">public</strong> Object invokeLenient(Object pojo, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			<strong class="jxr_keyword">return</strong> m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | InvocationTargetException e) {
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		}
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 	}
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	@Override
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> is(<a name="ElementFlag" href="../../../../../org/apache/juneau/common/reflect/ElementFlag.html#ElementFlag">ElementFlag</a> flag) {
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (flag) {
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 			<strong class="jxr_keyword">case</strong> BRIDGE -&gt; isBridge();
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 			<strong class="jxr_keyword">case</strong> NOT_BRIDGE -&gt; !isBridge();
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 			<strong class="jxr_keyword">case</strong> DEFAULT -&gt; isDefault();
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 			<strong class="jxr_keyword">case</strong> NOT_DEFAULT -&gt; !isDefault();
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 			<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">super</strong>.is(flag);
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		};
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 	}
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 	@Override
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAll(ElementFlag...flags) {
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<strong class="jxr_keyword">return</strong> stream(flags).allMatch(<strong class="jxr_keyword">this</strong>::is);
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 	}
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 	@Override
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAny(ElementFlag...flags) {
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		<strong class="jxr_keyword">return</strong> stream(flags).anyMatch(<strong class="jxr_keyword">this</strong>::is);
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 	}
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method is a bridge method.</em>
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method is a bridge method.</em>
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isBridge() { <strong class="jxr_keyword">return</strong> m.isBridge(); }
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> 
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method matches the specified method by name and parameter types.</em>
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 * @param m The method to compare against.</em>
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has the same name and parameter types as the specified method.</em>
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m) {
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 		<strong class="jxr_keyword">return</strong> hasName(m.getName()) &amp;&amp; hasMatchingParameters(m.getParameters());
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 	}
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> 	<em class="jxr_comment">// High Priority Methods (direct Method API compatibility)</em>
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> <em class="jxr_javadoccomment">	 * Returns a {@link Type} object that represents the formal return type of the method.</em>
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">	 * Same as calling {@link Method#getGenericReturnType()}.</em>
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> <em class="jxr_javadoccomment">	 * If the return type is a parameterized type, the {@link Type} object returned reflects the actual type parameters used in the source code.</em>
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">	 * Lenient matching allows arguments to be matched to parameters based on parameter types.</em>
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Arguments can be in any order.</em>
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Extra arguments will be ignored.</em>
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Missing arguments will be left &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 * Note that this only works for methods that have distinguishable argument types.</em>
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;It's not going to work on methods with generic argument types like &lt;c&gt;Object&lt;/c&gt;</em>
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> <em class="jxr_javadoccomment">	 * @param pojo</em>
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> <em class="jxr_javadoccomment">	 * 	The POJO the method is being called on.</em>
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; for static methods.</em>
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">	 * @param args</em>
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">	 * 	The arguments to pass to the method.</em>
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> <em class="jxr_javadoccomment">	 * 	The results of the method invocation.</em>
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 	<strong class="jxr_keyword">public</strong> Object invokeLenient(Object pojo, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 			<strong class="jxr_keyword">return</strong> m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | InvocationTargetException e) {
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		}
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 	}
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 	@Override
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> is(<a name="ElementFlag" href="../../../../../org/apache/juneau/common/reflect/ElementFlag.html#ElementFlag">ElementFlag</a> flag) {
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (flag) {
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 			<strong class="jxr_keyword">case</strong> BRIDGE -&gt; isBridge();
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 			<strong class="jxr_keyword">case</strong> NOT_BRIDGE -&gt; !isBridge();
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 			<strong class="jxr_keyword">case</strong> DEFAULT -&gt; isDefault();
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 			<strong class="jxr_keyword">case</strong> NOT_DEFAULT -&gt; !isDefault();
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 			<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">super</strong>.is(flag);
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		};
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 	}
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 	@Override
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAll(ElementFlag...flags) {
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		<strong class="jxr_keyword">return</strong> stream(flags).allMatch(<strong class="jxr_keyword">this</strong>::is);
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 	}
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 	@Override
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAny(ElementFlag...flags) {
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">return</strong> stream(flags).anyMatch(<strong class="jxr_keyword">this</strong>::is);
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	}
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method is a bridge method.</em>
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method is a bridge method.</em>
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isBridge() { <strong class="jxr_keyword">return</strong> m.isBridge(); }
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method matches the specified method by name and parameter types.</em>
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> <em class="jxr_javadoccomment">	 * @param m The method to compare against.</em>
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has the same name and parameter types as the specified method.</em>
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m) {
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		<strong class="jxr_keyword">return</strong> hasName(m.getName()) &amp;&amp; hasMatchingParameters(m.getParameters());
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 	}
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 	<em class="jxr_comment">// High Priority Methods (direct Method API compatibility)</em>
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> <em class="jxr_javadoccomment">	 * Returns a {@link Type} object that represents the formal return type of the method.</em>
 <a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// For method: public List&amp;lt;String&amp;gt; getValues()&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 * 	MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"getValues"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 * 	Type &lt;jv&gt;returnType&lt;/jv&gt; = &lt;jv&gt;mi&lt;/jv&gt;.getGenericReturnType();</em>
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;returnType&lt;/jv&gt; &lt;jk&gt;instanceof&lt;/jk&gt; ParameterizedType) {</em>
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 * 		ParameterizedType &lt;jv&gt;pType&lt;/jv&gt; = (ParameterizedType)&lt;jv&gt;returnType&lt;/jv&gt;;</em>
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// pType.getActualTypeArguments()[0] is String.class&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * 	}</em>
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 * @return A {@link Type} object representing the formal return type.</em>
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> <em class="jxr_javadoccomment">	 * @see Method#getGenericReturnType()</em>
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 	<strong class="jxr_keyword">public</strong> Type getGenericReturnType() {
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> 		<strong class="jxr_keyword">return</strong> m.getGenericReturnType();
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> 	}
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> 
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L860" href="#L860">860</a> <em class="jxr_javadoccomment">	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the return type of the method.</em>
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L862" href="#L862">862</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> <em class="jxr_javadoccomment">	 * Same as calling {@link Method#getAnnotatedReturnType()}.</em>
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L866" href="#L866">866</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// For method: public @NotNull String getName()&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L868" href="#L868">868</a> <em class="jxr_javadoccomment">	 * 	MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"getName"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> <em class="jxr_javadoccomment">	 * 	AnnotatedType &lt;jv&gt;aType&lt;/jv&gt; = &lt;jv&gt;mi&lt;/jv&gt;.getAnnotatedReturnType();</em>
-<a class="jxr_linenumber" name="L870" href="#L870">870</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Check for @NotNull on the return type&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L871" href="#L871">871</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L872" href="#L872">872</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L873" href="#L873">873</a> <em class="jxr_javadoccomment">	 * @return An {@link AnnotatedType} object representing the return type.</em>
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> <em class="jxr_javadoccomment">	 * @see Method#getAnnotatedReturnType()</em>
-<a class="jxr_linenumber" name="L875" href="#L875">875</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> 	<strong class="jxr_keyword">public</strong> AnnotatedType getAnnotatedReturnType() {
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 		<strong class="jxr_keyword">return</strong> m.getAnnotatedReturnType();
-<a class="jxr_linenumber" name="L878" href="#L878">878</a> 	}
-<a class="jxr_linenumber" name="L879" href="#L879">879</a> 
-<a class="jxr_linenumber" name="L880" href="#L880">880</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L881" href="#L881">881</a> <em class="jxr_javadoccomment">	 * Returns the default value for the annotation member represented by this method.</em>
-<a class="jxr_linenumber" name="L882" href="#L882">882</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L883" href="#L883">883</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L884" href="#L884">884</a> <em class="jxr_javadoccomment">	 * Same as calling {@link Method#getDefaultValue()}.</em>
-<a class="jxr_linenumber" name="L885" href="#L885">885</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;null&lt;/jk&gt; if this method is not an annotation member, or if the annotation member has no default value.</em>
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	 * Same as calling {@link Method#getGenericReturnType()}.</em>
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 * If the return type is a parameterized type, the {@link Type} object returned reflects the actual type parameters used in the source code.</em>
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// For method: public List&amp;lt;String&amp;gt; getValues()&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 * 	MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"getValues"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * 	Type &lt;jv&gt;returnType&lt;/jv&gt; = &lt;jv&gt;mi&lt;/jv&gt;.getGenericReturnType();</em>
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;returnType&lt;/jv&gt; &lt;jk&gt;instanceof&lt;/jk&gt; ParameterizedType) {</em>
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> <em class="jxr_javadoccomment">	 * 		ParameterizedType &lt;jv&gt;pType&lt;/jv&gt; = (ParameterizedType)&lt;jv&gt;returnType&lt;/jv&gt;;</em>
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// pType.getActualTypeArguments()[0] is String.class&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> <em class="jxr_javadoccomment">	 * 	}</em>
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> <em class="jxr_javadoccomment">	 * @return A {@link Type} object representing the formal return type.</em>
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> <em class="jxr_javadoccomment">	 * @see Method#getGenericReturnType()</em>
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">public</strong> Type getGenericReturnType() {
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		<strong class="jxr_keyword">return</strong> m.getGenericReturnType();
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 	}
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> <em class="jxr_javadoccomment">	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the return type of the method.</em>
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> <em class="jxr_javadoccomment">	 * Same as calling {@link Method#getAnnotatedReturnType()}.</em>
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// For method: public @NotNull String getName()&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> <em class="jxr_javadoccomment">	 * 	MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"getName"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> <em class="jxr_javadoccomment">	 * 	AnnotatedType &lt;jv&gt;aType&lt;/jv&gt; = &lt;jv&gt;mi&lt;/jv&gt;.getAnnotatedReturnType();</em>
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Check for @NotNull on the return type&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> <em class="jxr_javadoccomment">	 * @return An {@link AnnotatedType} object representing the return type.</em>
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> <em class="jxr_javadoccomment">	 * @see Method#getAnnotatedReturnType()</em>
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 	<strong class="jxr_keyword">public</strong> AnnotatedType getAnnotatedReturnType() {
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 		<strong class="jxr_keyword">return</strong> m.getAnnotatedReturnType();
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 	}
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> <em class="jxr_javadoccomment">	 * Returns the default value for the annotation member represented by this method.</em>
 <a class="jxr_linenumber" name="L888" href="#L888">888</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// For annotation: @interface MyAnnotation { String value() default "default"; }&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> <em class="jxr_javadoccomment">	 * 	MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"value"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> <em class="jxr_javadoccomment">	 * 	Object &lt;jv&gt;defaultValue&lt;/jv&gt; = &lt;jv&gt;mi&lt;/jv&gt;.getDefaultValue();</em>
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// defaultValue is "default"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> <em class="jxr_javadoccomment">	 * @return The default value, or &lt;jk&gt;null&lt;/jk&gt; if none.</em>
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> <em class="jxr_javadoccomment">	 * @see Method#getDefaultValue()</em>
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 	<strong class="jxr_keyword">public</strong> Object getDefaultValue() {
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		<strong class="jxr_keyword">return</strong> m.getDefaultValue();
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 	}
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method is a default method (Java 8+ interface default method).</em>
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> <em class="jxr_javadoccomment">	 * Same as calling {@link Method#isDefault()}.</em>
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment">	 * A default method is a public non-abstract instance method (i.e., non-static method with a body) declared in an interface.</em>
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> <em class="jxr_javadoccomment">	 * Same as calling {@link Method#getDefaultValue()}.</em>
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;null&lt;/jk&gt; if this method is not an annotation member, or if the annotation member has no default value.</em>
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// For annotation: @interface MyAnnotation { String value() default "default"; }&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> <em class="jxr_javadoccomment">	 * 	MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"value"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> <em class="jxr_javadoccomment">	 * 	Object &lt;jv&gt;defaultValue&lt;/jv&gt; = &lt;jv&gt;mi&lt;/jv&gt;.getDefaultValue();</em>
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// defaultValue is "default"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> <em class="jxr_javadoccomment">	 * @return The default value, or &lt;jk&gt;null&lt;/jk&gt; if none.</em>
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> <em class="jxr_javadoccomment">	 * @see Method#getDefaultValue()</em>
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<strong class="jxr_keyword">public</strong> Object getDefaultValue() {
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">return</strong> m.getDefaultValue();
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	}
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method is a default method (Java 8+ interface default method).</em>
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// For interface: interface MyInterface { default String getName() { return "default"; } }&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> <em class="jxr_javadoccomment">	 * 	MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyInterface.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"getName"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;mi&lt;/jv&gt;.isDefault()) {</em>
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// This is a default interface method&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">	 * 	}</em>
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method is a default method.</em>
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> <em class="jxr_javadoccomment">	 * @see Method#isDefault()</em>
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDefault() {
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		<strong class="jxr_keyword">return</strong> m.isDefault();
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 	}
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 	MethodInfo findMatchingOnClass(ClassInfo c) {
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : c.getDeclaredMethods())
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">if</strong> (hasName(m2.getName()) &amp;&amp; hasParameterTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::<strong class="jxr_keyword">new</strong>)))
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			<strong class="jxr_keyword">return</strong> m2;
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 	}
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 	<em class="jxr_comment">// Annotatable interface methods</em>
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotatableType" href="../../../../../org/apache/juneau/common/reflect/AnnotatableType.html#AnnotatableType">AnnotatableType</a> getAnnotatableType() {
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		<strong class="jxr_keyword">return</strong> AnnotatableType.METHOD_TYPE;
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	}
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 	<strong class="jxr_keyword">public</strong> ClassInfo getClassInfo() {
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<strong class="jxr_keyword">return</strong> getDeclaringClass();
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 	}
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	<strong class="jxr_keyword">public</strong> String getAnnotatableName() {
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		<strong class="jxr_keyword">return</strong> getShortName();
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 	}
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> }
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> <em class="jxr_javadoccomment">	 * Same as calling {@link Method#isDefault()}.</em>
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> <em class="jxr_javadoccomment">	 * A default method is a public non-abstract instance method (i.e., non-static method with a body) declared in an interface.</em>
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// For interface: interface MyInterface { default String getName() { return "default"; } }&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">	 * 	MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyInterface.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"getName"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;mi&lt;/jv&gt;.isDefault()) {</em>
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// This is a default interface method&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> <em class="jxr_javadoccomment">	 * 	}</em>
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method is a default method.</em>
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> <em class="jxr_javadoccomment">	 * @see Method#isDefault()</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDefault() {
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		<strong class="jxr_keyword">return</strong> m.isDefault();
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 	}
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 	MethodInfo findMatchingOnClass(ClassInfo c) {
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : c.getDeclaredMethods())
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 		<strong class="jxr_keyword">if</strong> (hasName(m2.getName()) &amp;&amp; hasParameterTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::<strong class="jxr_keyword">new</strong>)))
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 			<strong class="jxr_keyword">return</strong> m2;
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 	}
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<em class="jxr_comment">// Annotatable interface methods</em>
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotatableType" href="../../../../../org/apache/juneau/common/reflect/AnnotatableType.html#AnnotatableType">AnnotatableType</a> getAnnotatableType() {
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		<strong class="jxr_keyword">return</strong> AnnotatableType.METHOD_TYPE;
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 	}
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 	<strong class="jxr_keyword">public</strong> ClassInfo getClassInfo() {
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		<strong class="jxr_keyword">return</strong> getDeclaringClass();
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 	}
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 	<strong class="jxr_keyword">public</strong> String getAnnotatableName() {
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 		<strong class="jxr_keyword">return</strong> getShortName();
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 	}
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
