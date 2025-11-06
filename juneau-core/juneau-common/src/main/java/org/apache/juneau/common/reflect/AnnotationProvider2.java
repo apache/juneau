@@ -29,16 +29,124 @@ import java.util.stream.*;
 import org.apache.juneau.common.collections.*;
 
 /**
- * Enhanced annotation provider for classes that returns {@link AnnotationInfo} objects instead of raw {@link Annotation} objects.
+ * Enhanced annotation provider that returns {@link AnnotationInfo} objects and supports runtime annotations.
  *
  * <p>
- * This class provides a modern API for retrieving class annotations with the following benefits:
+ * This class provides a modern API for retrieving annotations with the following benefits:
  * <ul>
  * 	<li>Returns {@link AnnotationInfo} wrappers that provide additional methods and type safety
  * 	<li>Supports filtering by annotation type using streams
  * 	<li>Properly handles repeatable annotations
- * 	<li>Searches up the class hierarchy (class → parents → interfaces → package)
+ * 	<li>Searches up the class/method hierarchy with well-defined order of precedence
+ * 	<li>Supports runtime annotations (annotations added programmatically at runtime)
  * 	<li>Caches results for performance
+ * </ul>
+ *
+ * <h5 class='section'>Annotation Order of Precedence:</h5>
+ *
+ * <h6 class='topic'>For Classes ({@link #find(Class)}):</h6>
+ * <p>
+ * Annotations are returned in <b>child-to-parent</b> order with the following precedence:
+ * <ol>
+ * 	<li><b>Runtime annotations</b> on the class (highest priority)
+ * 	<li><b>Declared annotations</b> on the class
+ * 	<li><b>Runtime annotations</b> on parent classes (child-to-parent order)
+ * 	<li><b>Declared annotations</b> on parent classes (child-to-parent order)
+ * 	<li><b>Runtime annotations</b> on interfaces (child-to-parent order)
+ * 	<li><b>Declared annotations</b> on interfaces (child-to-parent order)
+ * 	<li><b>Declared annotations</b> on the package (lowest priority)
+ * </ol>
+ *
+ * <p class='bcode'>
+ * 	<jc>// Example: Given class Child extends Parent</jc>
+ * 	<jc>// Annotation order will be:</jc>
+ * 	<jc>// 1. Runtime annotations on Child</jc>
+ * 	<jc>// 2. @Annotation on Child</jc>
+ * 	<jc>// 3. Runtime annotations on Parent</jc>
+ * 	<jc>// 4. @Annotation on Parent</jc>
+ * 	<jc>// 5. Runtime annotations on IChild (if Child implements IChild)</jc>
+ * 	<jc>// 6. @Annotation on IChild</jc>
+ * 	<jc>// 7. @Annotation on package-info.java</jc>
+ * </p>
+ *
+ * <h6 class='topic'>For Methods ({@link #find(Method)}):</h6>
+ * <p>
+ * Annotations are returned in <b>child-to-parent</b> order with the following precedence:
+ * <ol>
+ * 	<li><b>Runtime annotations</b> on the method (highest priority)
+ * 	<li><b>Declared annotations</b> on the method
+ * 	<li><b>Runtime annotations</b> on overridden parent methods (child-to-parent order)
+ * 	<li><b>Declared annotations</b> on overridden parent methods (child-to-parent order)
+ * </ol>
+ *
+ * <h6 class='topic'>For Fields ({@link #find(Field)}):</h6>
+ * <p>
+ * Annotations are returned with the following precedence:
+ * <ol>
+ * 	<li><b>Runtime annotations</b> on the field (highest priority)
+ * 	<li><b>Declared annotations</b> on the field
+ * </ol>
+ *
+ * <h6 class='topic'>For Constructors ({@link #find(Constructor)}):</h6>
+ * <p>
+ * Annotations are returned with the following precedence:
+ * <ol>
+ * 	<li><b>Runtime annotations</b> on the constructor (highest priority)
+ * 	<li><b>Declared annotations</b> on the constructor
+ * </ol>
+ *
+ * <h5 class='section'>Runtime Annotations:</h5>
+ * <p>
+ * Runtime annotations are concrete objects that implement annotation interfaces, added programmatically via the
+ * builder's {@link Builder#addRuntimeAnnotations(List)} method. They allow you to dynamically apply annotations
+ * to classes, methods, fields, and constructors at runtime without modifying source code.
+ *
+ * <p>
+ * <b>How Runtime Annotations Work:</b>
+ * <ul>
+ * 	<li>Runtime annotations are Java objects that implement annotation interfaces (e.g., {@code @Bean})
+ * 	<li>They use special methods like {@code on()} or {@code onClass()} to specify their targets
+ * 	<li>They always take precedence over declared annotations at the same level
+ * 	<li>They are particularly useful for applying annotations to classes you don't control
+ * </ul>
+ *
+ * <p class='bjava'>
+ * 	<jc>// Example: Creating a runtime annotation</jc>
+ * 	Bean <jv>runtimeAnnotation</jv> = BeanAnnotation
+ * 		.<jsm>create</jsm>()
+ * 		.onClass(MyClass.<jk>class</jk>)  <jc>// Target class</jc>
+ * 		.typeName(<js>"MyType"</js>)         <jc>// Annotation property</jc>
+ * 		.build();
+ *
+ * 	<jc>// Add to provider</jc>
+ * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2
+ * 		.<jsm>create</jsm>()
+ * 		.addRuntimeAnnotations(<jv>runtimeAnnotation</jv>)
+ * 		.build();
+ *
+ * 	<jc>// Now MyClass will be found with @Bean annotation</jc>
+ * 	Stream&lt;AnnotationInfo&lt;Bean&gt;&gt; <jv>annotations</jv> = <jv>provider</jv>.find(Bean.<jk>class</jk>, MyClass.<jk>class</jk>);
+ * </p>
+ *
+ * <p>
+ * <b>Targeting Methods:</b>
+ * <ul>
+ * 	<li>{@code on()} - String array of fully-qualified names (e.g., {@code "com.example.MyClass.myMethod"})
+ * 	<li>{@code onClass()} - Class array for type-safe targeting
+ * </ul>
+ *
+ * <p>
+ * Runtime annotations are evaluated before declared annotations at each level, giving them higher priority.
+ * For example, a runtime {@code @Bean} annotation on a class will be found before any {@code @Bean} annotation
+ * declared directly on that class.
+ *
+ * <h5 class='section'>Comparison with ElementInfo Methods:</h5>
+ * <p>
+ * The methods in this class differ from {@link ClassInfo#getAnnotationInfos()}, {@link MethodInfo#getAnnotationInfos()}, etc.:
+ * <ul>
+ * 	<li><b>Runtime Annotations</b>: ElementInfo methods return ONLY declared annotations. This class includes runtime annotations.
+ * 	<li><b>Hierarchy</b>: ElementInfo methods may have different traversal logic. This class uses a consistent approach.
+ * 	<li><b>Precedence</b>: Runtime annotations are inserted at each level with higher priority than declared annotations.
  * </ul>
  *
  * <h5 class='section'>Usage:</h5>
@@ -46,17 +154,25 @@ import org.apache.juneau.common.collections.*;
  * 	<jc>// Create with default settings</jc>
  * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2.<jsm>create</jsm>().build();
  *
- * 	<jc>// Create with caching disabled</jc>
+ * 	<jc>// Create with runtime annotations</jc>
  * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2
  * 		.<jsm>create</jsm>()
- * 		.disableCaching()
+ * 		.annotations(<jk>new</jk> MyAnnotationImpl())
  * 		.build();
+ *
+ * 	<jc>// Find all annotations on a class</jc>
+ * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>annotations</jv> = <jv>provider</jv>.find(MyClass.<jk>class</jk>);
+ *
+ * 	<jc>// Find specific annotation type on a class</jc>
+ * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>myAnnotations</jv> = <jv>provider</jv>.find(MyAnnotation.<jk>class</jk>, MyClass.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link AnnotationProvider}
  * 	<li class='jc'>{@link AnnotationInfo}
+ * 	<li class='jc'>{@link ClassInfo}
+ * 	<li class='jc'>{@link MethodInfo}
  * </ul>
  */
 public class AnnotationProvider2 {
@@ -132,18 +248,83 @@ public class AnnotationProvider2 {
 			return this;
 		}
 
-		/**
-		 * Adds runtime annotations to be applied to classes and methods.
-		 *
-		 * <p>
-		 * Annotations must define either an {@code onClass()} method that returns a {@code Class[]} array,
-		 * or an {@code on()} method that returns a {@code String[]} array to specify the targets.
-		 *
-		 * @param annotations The annotations to add.
-		 * @return This object for method chaining.
-		 * @throws BeanRuntimeException If the annotations are invalid.
-		 */
-		public Builder addRuntimeAnnotations(List<Annotation> annotations) {
+	/**
+	 * Adds runtime annotations to be applied to classes, methods, fields, and constructors.
+	 *
+	 * <p>
+	 * Runtime annotations are concrete Java objects that implement annotation interfaces (e.g., {@code @Bean}).
+	 * They allow you to dynamically apply annotations to code elements at runtime without modifying source code.
+	 *
+	 * <p>
+	 * <b>How It Works:</b>
+	 * <ol>
+	 * 	<li>Create annotation objects using builder classes (e.g., {@code BeanAnnotation.create()})
+	 * 	<li>Specify targets using {@code on()} or {@code onClass()} methods
+	 * 	<li>Set annotation properties (e.g., {@code typeName()}, {@code properties()})
+	 * 	<li>Build the annotation object
+	 * 	<li>Add to the provider via this method
+	 * </ol>
+	 *
+	 * <p>
+	 * <b>Targeting Requirements:</b>
+	 * <ul>
+	 * 	<li>Annotations MUST define an {@code onClass()} method returning {@code Class[]} for type-safe targeting
+	 * 	<li>OR an {@code on()} method returning {@code String[]} for string-based targeting
+	 * 	<li>The {@code on()} method accepts fully-qualified names:
+	 * 		<ul>
+	 * 			<li>{@code "com.example.MyClass"} - targets a class
+	 * 			<li>{@code "com.example.MyClass.myMethod"} - targets a method
+	 * 			<li>{@code "com.example.MyClass.myField"} - targets a field
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <p class='bjava'>
+	 * 	<jc>// Example 1: Target a specific class using type-safe targeting</jc>
+	 * 	Bean <jv>beanAnnotation</jv> = BeanAnnotation
+	 * 		.<jsm>create</jsm>()
+	 * 		.onClass(MyClass.<jk>class</jk>)  <jc>// Targets MyClass</jc>
+	 * 		.typeName(<js>"MyType"</js>)
+	 * 		.properties(<js>"id,name"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Example 2: Target multiple classes</jc>
+	 * 	Bean <jv>multiAnnotation</jv> = BeanAnnotation
+	 * 		.<jsm>create</jsm>()
+	 * 		.onClass(MyClass.<jk>class</jk>, OtherClass.<jk>class</jk>)
+	 * 		.sort(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Example 3: Target using string names (useful for dynamic/reflection scenarios)</jc>
+	 * 	Bean <jv>stringAnnotation</jv> = BeanAnnotation
+	 * 		.<jsm>create</jsm>()
+	 * 		.on(<js>"com.example.MyClass"</js>)
+	 * 		.findFluentSetters(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Example 4: Target a specific method</jc>
+	 * 	Swap <jv>swapAnnotation</jv> = SwapAnnotation
+	 * 		.<jsm>create</jsm>()
+	 * 		.on(<js>"com.example.MyClass.getValue"</js>)
+	 * 		.value(MySwap.<jk>class</jk>)
+	 * 		.build();
+	 *
+ * 	<jc>// Add all runtime annotations to the provider</jc>
+ * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2
+ * 		.<jsm>create</jsm>()
+ * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>multiAnnotation</jv>, <jv>stringAnnotation</jv>, <jv>swapAnnotation</jv>)
+ * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * <b>Priority:</b> Runtime annotations always take precedence over declared annotations at the same level.
+	 * They are evaluated first when searching for annotations.
+	 *
+	 * @param annotations The list of runtime annotation objects to add.
+	 * @return This object for method chaining.
+	 * @throws BeanRuntimeException If any annotation is invalid (missing {@code on()} or {@code onClass()} methods,
+	 * 	or if the methods return incorrect types).
+	 */
+	public Builder addRuntimeAnnotations(List<Annotation> annotations) {
 
 			for (var a : annotations) {
 				try {
@@ -174,6 +355,38 @@ public class AnnotationProvider2 {
 			return this;
 		}
 
+		/**
+		 * Adds runtime annotations to be applied to classes, methods, fields, and constructors.
+		 *
+		 * <p>
+		 * This is a convenience method that delegates to {@link #addRuntimeAnnotations(List)}.
+		 * See that method for detailed documentation on how runtime annotations work.
+		 *
+		 * <p class='bjava'>
+		 * 	<jc>// Example: Add multiple runtime annotations using varargs</jc>
+		 * 	Bean <jv>beanAnnotation</jv> = BeanAnnotation
+		 * 		.<jsm>create</jsm>()
+		 * 		.onClass(MyClass.<jk>class</jk>)
+		 * 		.typeName(<js>"MyType"</js>)
+		 * 		.build();
+		 *
+		 * 	Swap <jv>swapAnnotation</jv> = SwapAnnotation
+		 * 		.<jsm>create</jsm>()
+		 * 		.on(<js>"com.example.MyClass.getValue"</js>)
+		 * 		.value(MySwap.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2
+		 * 		.<jsm>create</jsm>()
+		 * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>swapAnnotation</jv>)  <jc>// Varargs</jc>
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param annotations The runtime annotation objects to add (varargs).
+		 * @return This object for method chaining.
+		 * @throws BeanRuntimeException If any annotation is invalid.
+		 * @see #addRuntimeAnnotations(List)
+		 */
 		public Builder addRuntimeAnnotations(Annotation...annotations) {
 			return addRuntimeAnnotations(l(annotations));
 		}
@@ -232,14 +445,33 @@ public class AnnotationProvider2 {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Finds all annotations on the specified class.
+	 * Finds all annotations on the specified class, including runtime annotations.
 	 *
 	 * <p>
-	 * Returns annotations in child-to-parent order.
+	 * Searches the class, its parent classes, interfaces, and package for annotations.
+	 * Returns annotations in <b>child-to-parent</b> order with runtime annotations
+	 * taking precedence at each level.
+	 *
+	 * <p>
+	 * <b>Order of precedence</b> (see class javadocs for details):
+	 * <ol>
+	 * 	<li>Runtime + declared annotations on this class
+	 * 	<li>Runtime + declared annotations on parent classes (child-to-parent)
+	 * 	<li>Runtime + declared annotations on interfaces (child-to-parent)
+	 * 	<li>Declared annotations on the package
+	 * </ol>
+	 *
+	 * <p>
+	 * <b>Comparison with {@link ClassInfo#getAnnotationInfos(Class)}:</b>
+	 * <ul>
+	 * 	<li>This method includes <b>runtime annotations</b>; ClassInfo does not
+	 * 	<li>Same traversal order (child-to-parent with interfaces and package)
+	 * 	<li>Runtime annotations are inserted with higher priority at each level
+	 * </ul>
 	 *
 	 * @param onClass The class to search on.
-	 * @return A list of {@link AnnotationInfo} objects representing annotations on the specified class and its parents.
-	 * 	Never <jk>null</jk>.
+	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the specified class,
+	 * 	its parents, interfaces, and package. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<Annotation>> find(Class<?> onClass) {
 		assertArgNotNull("onClass", onClass);
@@ -247,16 +479,29 @@ public class AnnotationProvider2 {
 	}
 
 	/**
-	 * Finds all annotations of the specified type on the specified class.
+	 * Finds all annotations of the specified type on the specified class, including runtime annotations.
 	 *
 	 * <p>
-	 * Returns annotations in child-to-parent order.
+	 * Searches the class, its parent classes, interfaces, and package for annotations of the specified type.
+	 * Returns annotations in <b>child-to-parent</b> order with runtime annotations
+	 * taking precedence at each level.
+	 *
+	 * <p>
+	 * This is a filtered version of {@link #find(Class)} that only returns annotations matching the specified type.
+	 *
+	 * <p>
+	 * <b>Comparison with {@link ClassInfo#getAnnotationInfos(Class)}:</b>
+	 * <ul>
+	 * 	<li>This method includes <b>runtime annotations</b>; ClassInfo does not
+	 * 	<li>Same traversal order (child-to-parent with interfaces and package)
+	 * 	<li>Runtime annotations are inserted with higher priority at each level
+	 * </ul>
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
 	 * @param onClass The class to search on.
-	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the specified class and its parents.
-	 * 	Never <jk>null</jk>.
+	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the
+	 * 	specified class, its parents, interfaces, and package. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, Class<?> onClass) {
@@ -267,11 +512,48 @@ public class AnnotationProvider2 {
 			.map(a -> (AnnotationInfo<A>)a);
 	}
 
+	/**
+	 * Finds annotations declared directly on the specified class, including runtime annotations.
+	 *
+	 * <p>
+	 * Unlike {@link #find(Class)}, this method only returns annotations declared directly on the specified class,
+	 * not on its parents, interfaces, or package.
+	 *
+	 * <p>
+	 * <b>Order of precedence</b>:
+	 * <ol>
+	 * 	<li>Runtime annotations on this class (highest priority)
+	 * 	<li>Declared annotations on this class
+	 * </ol>
+	 *
+	 * <p>
+	 * <b>Comparison with {@link ClassInfo#getDeclaredAnnotationInfos()}:</b>
+	 * <ul>
+	 * 	<li>This method includes <b>runtime annotations</b>; ClassInfo does not
+	 * 	<li>Runtime annotations are returned first (higher priority)
+	 * </ul>
+	 *
+	 * @param onClass The class to search on.
+	 * @return A list of {@link AnnotationInfo} objects representing annotations declared directly on the class.
+	 * 	Never <jk>null</jk>.
+	 */
 	public List<AnnotationInfo<Annotation>> findDeclared(Class<?> onClass) {
 		assertArgNotNull("onClass", onClass);
 		return classDeclaredAnnotations.get(onClass);
 	}
 
+	/**
+	 * Finds annotations of the specified type declared directly on the specified class, including runtime annotations.
+	 *
+	 * <p>
+	 * This is a filtered version of {@link #findDeclared(Class)} that only returns annotations matching the specified type.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param type The annotation type to find.
+	 * @param onClass The class to search on.
+	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type declared
+	 * 	directly on the class. Never <jk>null</jk>.
+	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findDeclared(Class<A> type, Class<?> onClass) {
 		assertArgNotNull("type", type);
@@ -286,9 +568,19 @@ public class AnnotationProvider2 {
 	 *
 	 * <p>
 	 * This method returns annotations in the opposite order from {@link #findDeclared(Class)}.
-	 * It processes parent/declared annotations first (lower priority), then runtime annotations (higher priority).
-	 * This is useful when you want to process multiple annotation values where child annotations
-	 * can override values from parent annotations.
+	 * Returns annotations in <b>parent-to-child</b> order with declared annotations coming before
+	 * runtime annotations at each level.
+	 *
+	 * <p>
+	 * <b>Order of precedence</b>:
+	 * <ol>
+	 * 	<li>Declared annotations on this class (lowest priority)
+	 * 	<li>Runtime annotations on this class (highest priority)
+	 * </ol>
+	 *
+	 * <p>
+	 * This is useful when you want to process multiple annotation values where runtime annotations
+	 * can override values from declared annotations.
 	 *
 	 * @param onClass The class to search on.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order.
@@ -320,11 +612,51 @@ public class AnnotationProvider2 {
 			.map(a -> (AnnotationInfo<A>)a);
 	}
 
+	/**
+	 * Finds all annotations on the specified method, including runtime annotations.
+	 *
+	 * <p>
+	 * Searches the method and all overridden parent methods for annotations.
+	 * Returns annotations in <b>child-to-parent</b> order with runtime annotations
+	 * taking precedence at each level.
+	 *
+	 * <p>
+	 * <b>Order of precedence</b> (see class javadocs for details):
+	 * <ol>
+	 * 	<li>Runtime annotations on this method (highest priority)
+	 * 	<li>Declared annotations on this method
+	 * 	<li>Runtime annotations on overridden parent methods (child-to-parent)
+	 * 	<li>Declared annotations on overridden parent methods (child-to-parent)
+	 * </ol>
+	 *
+	 * <p>
+	 * <b>Comparison with {@link MethodInfo#getAnnotationInfos()}:</b>
+	 * <ul>
+	 * 	<li>This method includes <b>runtime annotations</b>; MethodInfo does not
+	 * 	<li>Runtime annotations are inserted with higher priority at each level
+	 * </ul>
+	 *
+	 * @param onMethod The method to search on.
+	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the method and
+	 * 	overridden parent methods. Never <jk>null</jk>.
+	 */
 	public List<AnnotationInfo<Annotation>> find(Method onMethod) {
 		assertArgNotNull("onMethod", onMethod);
 		return methodAnnotations.get(onMethod);
 	}
 
+	/**
+	 * Finds all annotations of the specified type on the specified method, including runtime annotations.
+	 *
+	 * <p>
+	 * This is a filtered version of {@link #find(Method)} that only returns annotations matching the specified type.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param type The annotation type to find.
+	 * @param onMethod The method to search on.
+	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the
+	 * 	method and overridden parent methods. Never <jk>null</jk>.
+	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, Method onMethod) {
 		assertArgNotNull("type", type);
@@ -334,11 +666,44 @@ public class AnnotationProvider2 {
 			.map(a -> (AnnotationInfo<A>)a);
 	}
 
+	/**
+	 * Finds all annotations on the specified field, including runtime annotations.
+	 *
+	 * <p>
+	 * <b>Order of precedence</b>:
+	 * <ol>
+	 * 	<li>Runtime annotations on this field (highest priority)
+	 * 	<li>Declared annotations on this field
+	 * </ol>
+	 *
+	 * <p>
+	 * <b>Comparison with {@link FieldInfo#getAnnotationInfos()}:</b>
+	 * <ul>
+	 * 	<li>This method includes <b>runtime annotations</b>; FieldInfo does not
+	 * 	<li>Runtime annotations are returned first (higher priority)
+	 * </ul>
+	 *
+	 * @param onField The field to search on.
+	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the field.
+	 * 	Never <jk>null</jk>.
+	 */
 	public List<AnnotationInfo<Annotation>> find(Field onField) {
 		assertArgNotNull("onField", onField);
 		return fieldAnnotations.get(onField);
 	}
 
+	/**
+	 * Finds all annotations of the specified type on the specified field, including runtime annotations.
+	 *
+	 * <p>
+	 * This is a filtered version of {@link #find(Field)} that only returns annotations matching the specified type.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param type The annotation type to find.
+	 * @param onField The field to search on.
+	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the field.
+	 * 	Never <jk>null</jk>.
+	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, Field onField) {
 		assertArgNotNull("type", type);
@@ -348,11 +713,44 @@ public class AnnotationProvider2 {
 			.map(a -> (AnnotationInfo<A>)a);
 	}
 
+	/**
+	 * Finds all annotations on the specified constructor, including runtime annotations.
+	 *
+	 * <p>
+	 * <b>Order of precedence</b>:
+	 * <ol>
+	 * 	<li>Runtime annotations on this constructor (highest priority)
+	 * 	<li>Declared annotations on this constructor
+	 * </ol>
+	 *
+	 * <p>
+	 * <b>Comparison with {@link ConstructorInfo#getDeclaredAnnotationInfos()}:</b>
+	 * <ul>
+	 * 	<li>This method includes <b>runtime annotations</b>; ConstructorInfo does not
+	 * 	<li>Runtime annotations are returned first (higher priority)
+	 * </ul>
+	 *
+	 * @param onConstructor The constructor to search on.
+	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the constructor.
+	 * 	Never <jk>null</jk>.
+	 */
 	public List<AnnotationInfo<Annotation>> find(Constructor<?> onConstructor) {
 		assertArgNotNull("onConstructor", onConstructor);
 		return constructorAnnotations.get(onConstructor);
 	}
 
+	/**
+	 * Finds all annotations of the specified type on the specified constructor, including runtime annotations.
+	 *
+	 * <p>
+	 * This is a filtered version of {@link #find(Constructor)} that only returns annotations matching the specified type.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param type The annotation type to find.
+	 * @param onConstructor The constructor to search on.
+	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the constructor.
+	 * 	Never <jk>null</jk>.
+	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, Constructor<?> onConstructor) {
 		assertArgNotNull("type", type);
@@ -454,18 +852,5 @@ public class AnnotationProvider2 {
 		for (var a : forClass.getDeclaredAnnotations())
 			for (var a2 : splitRepeated(a))
 				appendTo.add(AnnotationInfo.of(ci, a2));
-	}
-
-	/**
-	 * Finds all annotations on the specified package and appends them to the list.
-	 *
-	 * @param appendTo The list to append to.
-	 * @param forPackage The package to find annotations on.
-	 */
-	private void findDeclaredAnnotations(List<AnnotationInfo<Annotation>> appendTo, Package forPackage) {
-		var pi = PackageInfo.of(forPackage);
-		for (var a : forPackage.getAnnotations())
-			for (var a2 : splitRepeated(a))
-				appendTo.add(AnnotationInfo.of(pi, a2));
 	}
 }
