@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<em class="jxr_comment">// Find @Rest annotation on the class</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		Rest restAnnotation = declaringClass.getAnnotation(Rest.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		Rest restAnnotation = declaringClass.getAnnotationInfos(Rest.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">if</strong> (restAnnotation == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_comment">// Get parameter-level @Query</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	Query paramQuery = opt(pi.findAnnotationInfo(Query.<strong class="jxr_keyword">class</strong>)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">if</strong> (paramQuery == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		paramQuery = pi.getParameterType().getAnnotation(Query.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		paramQuery = pi.getParameterType().getAnnotationInfos(Query.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (paramQuery == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<em class="jxr_comment">// No parameter-level @Query, use class-level as-is</em>

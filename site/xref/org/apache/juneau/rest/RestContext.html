@@ -4593,7 +4593,7 @@
 <a class="jxr_linenumber" name="L4585" href="#L4585">4585</a> 
 <a class="jxr_linenumber" name="L4586" href="#L4586">4586</a> 				<em class="jxr_comment">// Also include methods on @Rest-annotated interfaces.</em>
 <a class="jxr_linenumber" name="L4587" href="#L4587">4587</a> 				<strong class="jxr_keyword">if</strong> (al.isEmpty()) {
-<a class="jxr_linenumber" name="L4588" href="#L4588">4588</a> 					Predicate&lt;MethodInfo&gt; isRestAnnotatedInterface = x -&gt; x.getDeclaringClass().isInterface() &amp;&amp; nn(x.getDeclaringClass().getAnnotation(Rest.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L4588" href="#L4588">4588</a> 					Predicate&lt;MethodInfo&gt; isRestAnnotatedInterface = x -&gt; x.getDeclaringClass().isInterface() &amp;&amp; nn(x.getDeclaringClass().getAnnotationInfos(Rest.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L4589" href="#L4589">4589</a> 					mi.getMatching().filter(isRestAnnotatedInterface).forEach(x -&gt; al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 <a class="jxr_linenumber" name="L4590" href="#L4590">4590</a> 				}
 <a class="jxr_linenumber" name="L4591" href="#L4591">4591</a> 
@@ -5983,7 +5983,7 @@
 <a class="jxr_linenumber" name="L5975" href="#L5975">5975</a> 		<strong class="jxr_keyword">int</strong> code = 500;
 <a class="jxr_linenumber" name="L5976" href="#L5976">5976</a> 
 <a class="jxr_linenumber" name="L5977" href="#L5977">5977</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(e);
-<a class="jxr_linenumber" name="L5978" href="#L5978">5978</a> 		<strong class="jxr_keyword">var</strong> r = ci.getAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L5978" href="#L5978">5978</a> 		<strong class="jxr_keyword">var</strong> r = ci.getAnnotationInfos(StatusCode.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L5979" href="#L5979">5979</a> 		<strong class="jxr_keyword">if</strong> (nn(r))
 <a class="jxr_linenumber" name="L5980" href="#L5980">5980</a> 			<strong class="jxr_keyword">if</strong> (r.value().length &gt; 0)
 <a class="jxr_linenumber" name="L5981" href="#L5981">5981</a> 				code = r.value()[0];

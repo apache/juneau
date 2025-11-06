@@ -325,7 +325,7 @@
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 			op.appendIf(ne, <span class="jxr_string">"deprecated"</span>,
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 				firstNonEmpty(
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 					resolve(ms.deprecated()),
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 					(nn(m.getAnnotation(Deprecated.<strong class="jxr_keyword">class</strong>)) || nn(m.getDeclaringClass().getAnnotation(Deprecated.<strong class="jxr_keyword">class</strong>))) ? <span class="jxr_string">"true"</span> : <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 					(nn(m.getAnnotation(Deprecated.<strong class="jxr_keyword">class</strong>)) || nn(ClassInfo.of(m.getDeclaringClass()).getAnnotationInfos(Deprecated.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))) ? <span class="jxr_string">"true"</span> : <strong class="jxr_keyword">null</strong>
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 				)
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 			);
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			op.appendIf(nec, <span class="jxr_string">"tags"</span>,
@@ -458,7 +458,7 @@
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 						MethodInfo ecmi = methods.get(i);
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 						Header a = ecmi.getAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 						<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 							a = ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotation(Header.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 							a = ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 						<strong class="jxr_keyword">if</strong> (nn(a) &amp;&amp; ! isMulti(a)) {
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 							String ha = a.name();
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 							<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {

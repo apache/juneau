@@ -2464,7 +2464,7 @@
 <a class="jxr_linenumber" name="L2456" href="#L2456">2456</a> 		<strong class="jxr_keyword">var</strong> c = o.getClass();
 <a class="jxr_linenumber" name="L2457" href="#L2457">2457</a> 		<strong class="jxr_keyword">var</strong> pm = headerPartMetas.get(c);
 <a class="jxr_linenumber" name="L2458" href="#L2458">2458</a> 		<strong class="jxr_keyword">if</strong> (pm == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L2459" href="#L2459">2459</a> 			<strong class="jxr_keyword">var</strong> a = c.getAnnotation(Header.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L2459" href="#L2459">2459</a> 			<strong class="jxr_keyword">var</strong> a = ClassInfo.of(c).getAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2460" href="#L2460">2460</a> 			<strong class="jxr_keyword">if</strong> (nn(a)) {
 <a class="jxr_linenumber" name="L2461" href="#L2461">2461</a> 				<strong class="jxr_keyword">var</strong> schema = HttpPartSchema.create(a);
 <a class="jxr_linenumber" name="L2462" href="#L2462">2462</a> 				<strong class="jxr_keyword">var</strong> serializer = createPartSerializer(schema.getSerializer(), partSerializer);
