@@ -200,11 +200,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	// All superclasses of this class in child-to-parent order, starting with this class.
 	private final Supplier<List<ClassInfo>> parents = memoize(this::findParents);
 
-	// All annotations declared directly on this class.
-	private final Supplier<List<Annotation>> declaredAnnotations = memoize(() -> opt(c).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()));
-
 	// All annotations declared directly on this class, wrapped in AnnotationInfo.
-	private final Supplier<List<AnnotationInfo>> declaredAnnotations2 = memoize(() -> (List)declaredAnnotations.get().stream().map(a -> AnnotationInfo.of(this, a)).toList());
+	private final Supplier<List<AnnotationInfo>> declaredAnnotations2 = memoize(() -> (List)opt(c).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -> AnnotationInfo.of(this, a)).toList());
 
 	// Fully qualified class name with generics (e.g., "java.util.List<java.lang.String>").
 	private final Supplier<String> fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
@@ -2359,27 +2356,12 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns all annotations declared directly on this class.
-	 *
-	 * <p>
-	 * This includes annotations explicitly applied to the class declaration, but excludes inherited annotations
-	 * from parent classes.
-	 *
-	 * @return
-	 * 	An unmodifiable list of annotations declared directly on this class.
-	 * 	<br>List is empty if no annotations are declared.
-	 * 	<br>Results are in declaration order.
-	 */
-	public List<Annotation> getDeclaredAnnotations() {
-		return declaredAnnotations.get();
-	}
-
-	/**
 	 * Returns all annotations declared directly on this class, wrapped in {@link AnnotationInfo} objects.
 	 *
 	 * <p>
-	 * This is equivalent to {@link #getDeclaredAnnotations()} but with each annotation wrapped for additional
-	 * functionality such as annotation member access and metadata inspection.
+	 * This includes annotations explicitly applied to the class declaration, but excludes inherited annotations
+	 * from parent classes. Each annotation is wrapped for additional functionality such as annotation member
+	 * access and metadata inspection.
 	 *
 	 * @return
 	 * 	An unmodifiable list of {@link AnnotationInfo} wrappers for annotations declared directly on this class.
