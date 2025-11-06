@@ -572,26 +572,26 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getAnnotations() {
-		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotationInfos(A.class).toList()).map(AnnotationInfo::inner).toList());
-		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotationInfos(A.class).toList()).map(AnnotationInfo::inner).toList());
-		check("@A(3)", rstream(g5.getAnnotationInfos(A.class).toList()).map(AnnotationInfo::inner).toList());
+		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
+		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
+		check("@A(3)", rstream(g5.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
 	}
 
 	@Test void forEachAnnotation() {
 		var l1 = list();
-		g3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
-		assertList(l1, "2", "1", "3", "5", "6", "7");
+		rstream(g3.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l1.add(x.value()));
+		assertList(l1, "2", "1", "5", "3", "6", "7");
 
 		var l2 = list();
-		g4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
-		assertList(l2, "2", "1", "3", "5", "6", "7");
+		rstream(g4.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l2.add(x.value()));
+		assertList(l2, "2", "1", "5", "3", "6", "7");
 
 		var l3 = list();
-		g5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));
+		rstream(g5.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l3.add(x.value()));
 		assertList(l3, "3");
 
 		var l4 = list();
-		g3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
+		rstream(g3.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> x.value() == 5).forEach(x -> l4.add(x.value()));
 		assertList(l4, "5");
 	}
 

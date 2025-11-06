@@ -160,8 +160,8 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(ci.innerType());
-		ci.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
-		ci.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
+		rstream(ci.getAnnotationInfos()).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(ci.getAnnotationInfos()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
 		return b.build();
 	}
 

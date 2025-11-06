@@ -440,7 +440,7 @@ public class BasicSwaggerProviderSession {
 							JsonMap om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
 							JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-							eci.forEachAnnotation(Schema.class, x -> true, x -> merge(schema, x));
+							rstream(eci.getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
 							pushupSchemaFields(RESPONSE, om, schema);
 							om.appendIf(nem, "schema", schema);
 						}
@@ -504,7 +504,7 @@ public class BasicSwaggerProviderSession {
 				JsonMap om = responses.getMap("200", true);
 				var pt2 = ClassInfo.of(m.getGenericReturnType());
 				JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-				pt2.forEachAnnotation(Schema.class, x -> true, x -> merge(schema, x));
+				rstream(pt2.getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
 				pushupSchemaFields(RESPONSE, om, schema);
 				om.appendIf(nem, "schema", schema);
 				addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
@@ -518,10 +518,10 @@ public class BasicSwaggerProviderSession {
 				if (pt.is(Value.class) && (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class))) {
 					List<Header> la = list();
 					mpi.forEachAnnotation(Header.class, x -> true, x -> la.add(x));
-					pt.forEachAnnotation(Header.class, x -> true, x -> la.add(x));
+					rstream(pt.getAnnotationInfos()).map(x -> x.cast(Header.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la.add(x));
 					List<StatusCode> la2 = list();
 					mpi.forEachAnnotation(StatusCode.class, x -> true, x -> la2.add(x));
-					pt.forEachAnnotation(StatusCode.class, x -> true, x -> la2.add(x));
+					rstream(pt.getAnnotationInfos()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 200);
 					String name = HeaderAnnotation.findName(mpi).orElse(null);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
@@ -539,10 +539,10 @@ public class BasicSwaggerProviderSession {
 				} else if (mpi.hasAnnotation(Response.class) || pt.hasAnnotation(Response.class)) {
 					List<Response> la = list();
 					mpi.forEachAnnotation(Response.class, x -> true, x -> la.add(x));
-					pt.forEachAnnotation(Response.class, x -> true, x -> la.add(x));
+					rstream(pt.getAnnotationInfos()).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la.add(x));
 					List<StatusCode> la2 = list();
 					mpi.forEachAnnotation(StatusCode.class, x -> true, x -> la2.add(x));
-					pt.forEachAnnotation(StatusCode.class, x -> true, x -> la2.add(x));
+					rstream(pt.getAnnotationInfos()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 200);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (var a : la) {

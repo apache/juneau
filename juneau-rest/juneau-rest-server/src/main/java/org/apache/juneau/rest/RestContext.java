@@ -3851,7 +3851,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			// Apply @Rest(beanStore).
-			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotVoid(x.beanStore()), x -> v.get().type(x.beanStore()));
+			rstream(ClassInfo.of(resourceClass).getAnnotationInfos()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotVoid(x.beanStore())).forEach(x -> v.get().type(x.beanStore()));
 
 			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
 			// @formatter:off
@@ -3913,10 +3913,10 @@ public class RestContext extends Context {
 			var v = Value.<Config>empty();
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
-			var vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
-			var cfv = Value.<String>empty();
-			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
-			var cf = cfv.orElse("");
+		var vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
+		var cfv = Value.<String>empty();
+		rstream(ClassInfo.of(resourceClass).getAnnotationInfos()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.config())).forEach(x -> cfv.set(vr.resolve(x.config())));
+		var cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
 			if (v.isEmpty() && "SYSTEM_DEFAULT".equals(cf))
