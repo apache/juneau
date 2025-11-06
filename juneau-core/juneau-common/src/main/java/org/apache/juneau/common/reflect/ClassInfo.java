@@ -420,7 +420,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	public <A extends Annotation> ClassInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		if (annotationProvider == null)
-			annotationProvider = AnnotationProvider.DEFAULT;
+			throw unsupportedOp();
 		A t2 = getPackageAnnotation(type);
 		if (nn(t2))
 			consumeIf(filter, action, t2);
@@ -1663,7 +1663,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		if (annotationProvider == null)
-			annotationProvider = AnnotationProvider.DEFAULT;
+			throw unsupportedOp();
 		return nn(annotationProvider.firstAnnotation(type, c, x -> true));
 	}
 
@@ -2174,7 +2174,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	public <A extends Annotation> A lastAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter) {
 		if (annotationProvider == null)
-			annotationProvider = AnnotationProvider.DEFAULT;
+			throw unsupportedOp();
 		A x = null;
 		x = annotationProvider.lastAnnotation(type, inner(), filter);
 		if (nn(x) && test(filter, x))
@@ -2215,7 +2215,36 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return This object.
 	 */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Predicate<A> filter) {
-		return lastAnnotation(null, type, filter);
+		// Inline implementation using reflection directly instead of delegating to AnnotationProvider
+		if (!nn(type))
+			return null;
+		
+		// Search annotations using reflection (reverse order for "last")
+		var annotations = rstream(l(c.getAnnotationsByType(type)));
+		var result = annotations.filter(a -> test(filter, a)).findFirst().orElse(null);
+		if (nn(result))
+			return result;
+		
+		// Search parents
+		var parents2 = parents.get();
+		for (var parent : parents2) {
+			var parentAnnotations = rstream(l(parent.inner().getAnnotationsByType(type)));
+			result = parentAnnotations.filter(a -> test(filter, a)).findFirst().orElse(null);
+			if (nn(result))
+				return result;
+		}
+		
+		// Search interfaces
+		var interfaces2 = interfaces.get();
+		for (var iface : interfaces2) {
+			var ifaceAnnotations = rstream(l(iface.inner().getAnnotationsByType(type)));
+			result = ifaceAnnotations.filter(a -> test(filter, a)).findFirst().orElse(null);
+			if (nn(result))
+				return result;
+		}
+		
+		// Search package
+		return getPackageAnnotation(type);
 	}
 
 	/**
@@ -2309,7 +2338,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (a == null)
 			return null;
 		if (ap == null)
-			ap = AnnotationProvider.DEFAULT;
+			throw unsupportedOp();
 		A t = ap.firstDeclaredAnnotation(a, c, x -> true);
 		if (nn(t))
 			return t;

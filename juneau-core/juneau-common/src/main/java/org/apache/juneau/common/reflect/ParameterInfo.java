@@ -134,7 +134,59 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ParameterInfo forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		return forEachAnnotation(AnnotationProvider.DEFAULT, type, filter, action);
+		// Inline implementation using reflection directly instead of delegating to AnnotationProvider.DEFAULT
+		if (!nn(type))
+			return this;
+			
+		if (executable.isConstructor) {
+			// For constructors: search parameter type hierarchy and parameter annotations
+			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
+			// Search class hierarchy using reflection (package -> interfaces -> parents -> class)
+			var packageAnn = ci.getPackageAnnotation(type);
+			if (nn(packageAnn))
+				consumeIf(filter, action, packageAnn);
+			// Get annotations from interfaces (reverse order)
+			var interfaces2 = ci.getInterfaces();
+			for (int i = interfaces2.size() - 1; i >= 0; i--)
+				for (var ann : interfaces2.get(i).inner().getDeclaredAnnotationsByType(type))
+					consumeIf(filter, action, ann);
+			// Get annotations from parent classes (reverse order)
+			var parents2 = ci.getParents();
+			for (int i = parents2.size() - 1; i >= 0; i--)
+				for (var ann : parents2.get(i).inner().getDeclaredAnnotationsByType(type))
+					consumeIf(filter, action, ann);
+			// Get annotations directly from parameter
+			var annotationInfos = getAnnotationInfos();
+			for (var ai : annotationInfos)
+				if (type.isInstance(ai.inner()))
+					consumeIf(filter, action, type.cast(ai.inner()));
+		} else {
+			// For methods: search parameter type hierarchy and matching parent methods
+			var mi = (MethodInfo)executable;
+			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
+			// Search class hierarchy using reflection (package -> interfaces -> parents -> class)
+			var packageAnn = ci.getPackageAnnotation(type);
+			if (nn(packageAnn))
+				consumeIf(filter, action, packageAnn);
+			// Get annotations from interfaces (reverse order)
+			var interfaces2 = ci.getInterfaces();
+			for (int i = interfaces2.size() - 1; i >= 0; i--)
+				for (var ann : interfaces2.get(i).inner().getDeclaredAnnotationsByType(type))
+					consumeIf(filter, action, ann);
+			// Get annotations from parent classes (reverse order)
+			var parents2 = ci.getParents();
+			for (int i = parents2.size() - 1; i >= 0; i--)
+				for (var ann : parents2.get(i).inner().getDeclaredAnnotationsByType(type))
+					consumeIf(filter, action, ann);
+			// Get annotations from matching parent methods' parameters
+			mi.getMatchingParentFirst().forEach(x -> {
+				x.getParameter(index).getAnnotationInfos().stream()
+					.filter(ai -> type.isInstance(ai.inner()))
+					.map(ai -> type.cast(ai.inner()))
+					.forEach(ann -> consumeIf(filter, action, ann));
+			});
+		}
+		return this;
 	}
 
 	@SuppressWarnings("unchecked")

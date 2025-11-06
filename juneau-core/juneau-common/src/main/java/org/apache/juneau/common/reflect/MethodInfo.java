@@ -606,7 +606,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@Override
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return hasAnnotation(AnnotationProvider.DEFAULT, type);
+		// Inline implementation using reflection directly instead of delegating to AnnotationProvider.DEFAULT
+		if (!nn(type))
+			return false;
+		for (var m2 : matchingCache.get())
+			if (m2.inner().getAnnotation(type) != null)
+				return true;
+		return false;
 	}
 
 	/**
