@@ -18,7 +18,6 @@ package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -40,90 +39,6 @@ public interface AnnotationProvider {
 	 * Disable annotation caching.
 	 */
 	boolean DISABLE_ANNOTATION_CACHING = Boolean.getBoolean("juneau.disableAnnotationCaching");
-
-	/**
-	 * Default metadata provider.
-	 * 
-	 * <p>
-	 * This is no longer used. All callers have been updated to pass non-null AnnotationProvider instances.
-	 */
-	AnnotationProvider DEFAULT = new AnnotationProvider() {
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-
-		@Override /* Overridden from AnnotationProvider */
-		public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			throw unsupportedOp();
-		}
-	};
 
 	/**
 	 * Finds the first matching annotation on the specified class.
