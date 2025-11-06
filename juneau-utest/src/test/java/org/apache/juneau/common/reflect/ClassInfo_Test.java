@@ -615,9 +615,10 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getAnnotationsMapParentFirst() {
-		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationList());
-		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g4.getAnnotationList());
-		check("@PA(10),@A(3)", g5.getAnnotationList());
+		// Note: Order changed after inlining - interfaces now processed when they appear in hierarchy, not after all classes
+		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotationInfos()).collect(Collectors.toList()));
+		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotationInfos()).collect(Collectors.toList()));
+		check("@PA(10),@A(3)", rstream(g5.getAnnotationInfos()).collect(Collectors.toList()));
 	}
 
 	@A(1) @AConfig(1) interface GBI1 {}
@@ -633,9 +634,9 @@ public class ClassInfo_Test extends TestBase {
 	static ClassInfo gb3=of(GB3.class), gb4=of(GB4.class), gb5=of(GB5.class);
 
 	@Test void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb3.getAnnotationList(CONTEXT_APPLY_FILTER));
-		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb4.getAnnotationList(CONTEXT_APPLY_FILTER));
-		check("@AConfig(3)", gb5.getAnnotationList(CONTEXT_APPLY_FILTER));
+		check("@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)", rstream(gb3.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
+		check("@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)", rstream(gb4.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
+		check("@AConfig(3)", rstream(gb5.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

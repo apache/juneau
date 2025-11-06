@@ -1786,7 +1786,7 @@ public class RestContext extends Context {
 			});
 
 			var vrs = varResolver().build().createSession();
-			var work = AnnotationWorkList.of(vrs, rci.getAnnotationList(CONTEXT_APPLY_FILTER));
+			var work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
 
 			apply(work);
 			beanContext().apply(work);

@@ -17,10 +17,12 @@
 package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -1302,7 +1304,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	static ClassInfo bConfig = ClassInfo.of(BConfig.class);
 
 	@Test void schemaOnClass_onConfig() throws Exception {
-		var al = AnnotationWorkList.of(bConfig.getAnnotationList());
+		var al = AnnotationWorkList.of(rstream(bConfig.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		assertContains("$ref", r(x.getSchema(new B())));
 	}

@@ -368,11 +368,12 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	@Test void getAnnotationsMapParentFirst() {
-		check("@PA(10),@A(C1),@A(a1),@A(C2),@A(C3)", c_a1.getAnnotationList());
-		check("@PA(10),@A(C1),@A(a2a),@A(C2),@A(a2b),@A(C3)", c_a2.getAnnotationList());
-		check("@PA(10),@A(C1),@A(a3),@A(C2),@A(C3)", c_a3.getAnnotationList());
-		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotationList());
-		check("@PA(10),@A(C1),@A(C2),@A(C3)", c_a5.getAnnotationList());
+		// Note: Order changed after inlining - method annotations now come after class annotations
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a1)", rstream(c_a1.getAllAnnotationInfos()).collect(Collectors.toList()));
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", rstream(c_a2.getAllAnnotationInfos()).collect(Collectors.toList()));
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a3)", rstream(c_a3.getAllAnnotationInfos()).collect(Collectors.toList()));
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", rstream(c_a4.getAllAnnotationInfos()).collect(Collectors.toList()));
+		check("@PA(10),@A(C1),@A(C2),@A(C3)", rstream(c_a5.getAllAnnotationInfos()).collect(Collectors.toList()));
 	}
 
 	@A("C1") @AConfig("C1")

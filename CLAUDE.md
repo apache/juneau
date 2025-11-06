@@ -4,12 +4,20 @@ This document outlines the rules, guidelines, and best practices that Claude AI 
 
 **Note**: This file is referred to as "my rules" and serves as the definitive reference for all guidelines and conventions I follow when working on the Apache Juneau project.
 
+**Important**: Also read `CLAUDE_SESSION.md` to understand the current session's work context, what we're currently working on, and any recent changes or patterns established in this session.
+
+**Documentation Separation Rule**: `CLAUDE_SESSION.md` should only contain session-specific information that is not already covered in `CLAUDE.md`. General rules, permanent conventions, and best practices belong in `CLAUDE.md`. Session-specific work progress, current tasks, and temporary patterns belong in `CLAUDE_SESSION.md`.
+
 ## User Commands
 
 ### Shorthand Commands
 - **"c"** means **"continue"** - When the user sends just "c", continue with the current task or work
 - **"s"** means **"status"** - When the user sends just "s", give a status update on what you're currently working on
 - **"TODO-x"** means **"work on this TODO"** - When the user sends just "TODO-3", "TODO-67", etc., start working on that specific TODO item from the TODO.md file
+
+### Documentation Commands
+- **"store this rule in the session"** - Add the rule/information to `CLAUDE_SESSION.md` (session-specific)
+- **"store this rule in the context"** - Add the rule/information to `CLAUDE.md` (permanent/general)
 
 ## Core Working Principles
 
@@ -119,86 +127,100 @@ List<String> keys = map.keySet();
 // CORRECT - Use var
 var map = new HashMap<String,Integer>();
 var keys = map.keySet();
-
-// CORRECT - Keep explicit type when not obvious
-InputStream stream = resource.getStream();
-boolean isEmpty = list.isEmpty();
 ```
 
-#### Effectively Final Fields
-When declaring class fields that are non-final but only set once (in constructors):
+#### Final Fields and Memoization Pattern
+When declaring class fields, always use `final` to ensure true immutability:
 
-1. **Add a comment indicating the field is effectively final**:
-   - Use the comment `// Effectively final` on the same line as the field declaration
-   - This clarifies that the field is immutable after construction
-   - Helps reviewers understand why the field can be used in eager initialization
+1. **Always use `final` for fields**:
+   - All instance fields should be declared `final` whenever possible
+   - This provides compile-time immutability guarantees
+   - Prevents accidental modification after construction
 
-2. **Why this matters:**
-   - Makes the immutability contract explicit in the code
-   - Explains why the field can be safely used to initialize `final` fields or suppliers
-   - Documents thread-safety guarantees (effectively final fields are thread-safe)
-   - Prevents future modifications that might break the immutability assumption
+2. **Use `find` helper methods for memoized fields**:
+   - When memoized `Supplier` fields need constructor parameters, use helper methods
+   - Name helper methods with the `find` prefix (e.g., `findGenericInterfaces()`)
+   - Helper methods are called during field initialization and can access constructor parameters
+   - This allows final fields to depend on constructor parameters
 
-3. **When to use:**
-   - Fields that are only assigned in the constructor(s)
-   - Fields used to eagerly initialize other `final` fields or suppliers
-   - Fields that must be non-final to allow eager initialization of dependent fields
+3. **Why this matters:**
+   - Provides stronger immutability guarantees than "effectively final" comments
+   - Compiler enforces immutability rather than relying on conventions
+   - Makes the code more maintainable and less error-prone
+   - Documents thread-safety guarantees explicitly
 
 **Examples:**
 ```java
-// WRONG - No indication that 'c' is immutable after construction
-Class<?> c;
-
-// CORRECT - Clearly documents effectively final status
+// WRONG - Non-final field with comment
 Class<?> c;  // Effectively final
 
-// Example in context
+// CORRECT - Final field with helper method pattern
 public class ClassInfo {
-	Class<?> c;  // Effectively final (only set in constructor)
+	private final Class<?> c;
 	
-	// These final suppliers can safely reference 'c' because it's effectively final
-	private final Supplier<List<Type>> genericInterfacesCache = 
-		memoize(() -> c == null ? Collections.emptyList() : u(l(c.getGenericInterfaces())));
+	// Final supplier initialized using helper method that accesses constructor parameter
+	private final Supplier<List<Type>> genericInterfacesCache = memoize(this::findGenericInterfaces);
 	
 	public ClassInfo(Class<?> c) {
-		this.c = c;  // Only assignment point
+		this.c = c;
+	}
+	
+	// Helper method called during field initialization
+	private List<Type> findGenericInterfaces() {
+		return c == null ? Collections.emptyList() : u(l(c.getGenericInterfaces()));
 	}
 }
 ```
 
-**Why not just make it final?**
-- Java requires `final` fields to be initialized before other instance initializers run
-- When field initializers depend on constructor parameters, the field must be non-final
-- "Effectively final" provides the same immutability guarantee with more initialization flexibility
+**Pattern Summary:**
+1. Declare constructor parameters as `final` fields
+2. Create `find` helper methods that use those fields
+3. Initialize memoized `Supplier` fields with method references to the helper methods
+4. This allows all fields to be truly `final` while still supporting lazy initialization
 
 #### Git Operations and Reverts
 When working with git operations, especially reverting changes:
 
-1. **Always revert one file at a time** - Never use broad wildcards or multiple file paths in a single revert command:
-   - ✅ CORRECT: `git checkout -- path/to/specific/File.java`
-   - ❌ WRONG: `git checkout -- .` (reverts everything)
-   - ❌ WRONG: `git checkout -- module1/ module2/` (reverts multiple locations)
+1. **Always revert to staged version only** - Use `git restore --source=INDEX` to revert unstaged changes back to the staged (tested) version:
+   - ✅ CORRECT: `git restore --source=INDEX path/to/specific/File.java`
+   - ❌ WRONG: `git checkout -- path/to/file` (reverts to HEAD, loses staged changes)
+   - ❌ WRONG: `git restore path/to/file` (reverts to HEAD, loses staged changes)
 
-2. **Why this matters:**
-   - Prevents accidentally reverting good changes along with problematic ones
-   - Makes it easier to track which specific file had the issue
-   - Allows surgical fixes without losing other work
-   - Easier to recover if you revert the wrong file
+2. **Always revert one file at a time** - Never use broad wildcards or multiple file paths:
+   - ✅ CORRECT: `git restore --source=INDEX path/to/specific/File.java`
+   - ❌ WRONG: `git restore --source=INDEX .` (reverts everything)
+   - ❌ WRONG: `git restore --source=INDEX module1/ module2/` (reverts multiple locations)
 
-3. **Proper workflow when compilation fails:**
+3. **Why this matters:**
+   - **Preserves staged changes**: Staged changes have been tested and should not be lost
+   - **Surgical precision**: Only reverts the specific problematic file's unstaged changes
+   - **Safe recovery**: If a file is staged, it means it was working at that point
+   - **Prevents data loss**: Won't accidentally revert good changes along with bad ones
+
+4. **Proper workflow when compilation fails:**
    - Identify the specific file(s) causing the error
-   - Revert only that file: `git checkout -- path/to/ProblematicFile.java`
-   - Verify the revert fixed the issue
-   - Then address that specific file's conversion separately
+   - Revert only that file's unstaged changes: `git restore --source=INDEX path/to/ProblematicFile.java`
+   - Verify the revert fixed the issue (back to staged/tested version)
+   - Then address that specific file's changes separately
 
-**Example:**
+**Examples:**
 ```bash
-# WRONG - Reverts all changes
-git checkout -- .
+# WRONG - Reverts all unstaged changes everywhere
+git restore --source=INDEX .
 
-# CORRECT - Revert specific problematic file
-git checkout -- juneau-core/juneau-marshall/src/main/java/org/apache/juneau/objecttools/ObjectSearcher.java
+# WRONG - Reverts to HEAD, losing staged changes
+git checkout -- path/to/file
+git restore path/to/file
+
+# CORRECT - Revert specific file's unstaged changes to staged version
+git restore --source=INDEX juneau-core/juneau-marshall/src/main/java/org/apache/juneau/objecttools/ObjectSearcher.java
 ```
+
+**Understanding git restore --source=INDEX:**
+- `INDEX` refers to the staging area (where `git add` puts files)
+- This command reverts working directory changes back to what's staged
+- Staged changes remain intact and are not affected
+- If a file isn't staged, this command does nothing (which is safe)
 
 ### 2. Testing Standards
 - Ensure comprehensive test coverage for all changes
@@ -221,79 +243,79 @@ When compiling code using Maven and the user compiles through their IDE (Eclipse
 - Old code behavior persisting despite source changes
 - Stale class files causing incorrect results
 
+**Eclipse "Build Automatically" Setting:**
+The user typically has "Refresh using native hooks or polling" enabled in Eclipse, and may or may not have "Build Automatically" enabled.
+
+**If code changes don't appear to be taking effect or are getting overwritten:**
+1. **Ask the user to check if "Build Automatically" is enabled** (Project → Build Automatically menu)
+2. **If enabled, politely ask them to disable it**: "Could you please disable 'Build Automatically' in Eclipse (Project → Build Automatically)?"
+3. **Why this matters:**
+   - When "Build Automatically" is enabled, Eclipse may rebuild files immediately after saving
+   - This can conflict with Maven builds, causing files to be overwritten
+   - Disabling it gives you more control over when builds occur
+   - The user can manually build when needed using Ctrl+B or Project → Build Project
+
 **Resolution Strategy:**
 If you encounter situations where your code changes don't appear to be taking effect:
-1. **Immediately run** `mvn clean install` to clear all compiled artifacts and rebuild fresh
-2. This ensures Maven and IDE compiled code are synchronized
-3. Rerun tests after the clean build to verify changes are properly reflected
+1. **First, ask about Eclipse "Build Automatically"** and request it be disabled if enabled
+2. **Then run** `mvn clean install` to clear all compiled artifacts and rebuild fresh
+3. This ensures Maven and IDE compiled code are synchronized
+4. Rerun tests after the clean build to verify changes are properly reflected
 
 **When to suspect this issue:**
 - Tests fail in unexpected ways after code changes
 - Behavior doesn't match recent code modifications
 - Test results seem to reflect old code despite edits
 - Compilation succeeds but runtime behavior is wrong
+- Code changes appear to be getting overwritten or not taking effect
 
 **Java Runtime Location:**
 If you can't find Java on the file system using standard commands, look for it in the `~/jdk` folder. For example:
 - Java 17 can be found at: `~/jdk/openjdk_17.0.14.0.101_17.57.18_aarch64/bin/java`
 - Use this path when you need to run Java commands directly
 
-### 5. HTML5 Bean Enhancement Rules
+### 5. Helper Scripts
 
-#### Javadoc Enhancement for HTML5 Beans
-- **Class-level documentation**: Add comprehensive descriptions of the HTML element's purpose
-- **Attribute documentation**: Provide detailed descriptions of what each attribute does
-- **Enumerated values**: List all possible values for attributes that have them (e.g., `contenteditable` can have `true`, `false`, `plaintext-only`)
-- **Boolean attributes**: Document the deminimized behavior (e.g., `hidden(true)` produces `hidden='hidden'`)
-- **Examples**: Include multiple practical examples showing different use cases
+**Build and Test Script:**
+A reusable Python script is available at `scripts/build-and-test.py` for common Maven operations.
 
-#### HtmlBuilder Integration
-- **Javatree structure**: Add javatree documentation for HtmlBuilder creator methods
-- **Example refactoring**: Replace constructor-based examples with HtmlBuilder methods where appropriate
-- **Rule for examples**: Leave examples as-is if they use only strings and have no children defined
-- **Builder method references**: Use the specified javatree format for referencing HtmlBuilder methods
+**Usage:**
+```bash
+# Default: Clean build + run tests
+./scripts/build-and-test.py
 
-#### Javatree Format for HtmlBuilder Methods
-```java
-/**
- * <p>
- * The following convenience methods are provided for constructing instances of this bean:
- * <ul class='javatree'>
- * 	<li class='jc'>{@link HtmlBuilder}
- * 	<ul class='javatree'>
- * 		<li class='jm'>{@link HtmlBuilder#methodName() methodName()}
- * 		<li class='jm'>{@link HtmlBuilder#methodName(Object, Object...) methodName(Object, Object...)}
- * 	</ul>
- * </ul>
- * </p>
- */
+# Build only (skip tests)
+./scripts/build-and-test.py --build-only
+./scripts/build-and-test.py -b
+
+# Test only (no build)
+./scripts/build-and-test.py --test-only
+./scripts/build-and-test.py -t
+
+# Full build and test (explicit)
+./scripts/build-and-test.py --full
+./scripts/build-and-test.py -f
+
+# Verbose output (show full Maven output)
+./scripts/build-and-test.py --verbose
+./scripts/build-and-test.py -v
+
+# Help
+./scripts/build-and-test.py --help
+./scripts/build-and-test.py -h
 ```
 
-### 5. Swagger/OpenAPI3 Bean Testing Rules
+**What it does:**
+- `--build-only/-b`: Runs `mvn clean install -q -DskipTests`
+- `--test-only/-t`: Runs `mvn test -q -Drat.skip=true`
+- `--full/-f` (default): Runs both build and test in sequence
+- By default, shows only the last 50 lines of output
+- Use `--verbose/-v` to see full Maven output
 
-#### Collection Property Method Consistency
-All collection bean properties must have exactly 4 methods:
-1. `setX(X...)` - varargs setter
-2. `setX(Collection<X>)` - Collection setter  
-3. `addX(X...)` - varargs adder
-4. `addX(Collection<X>)` - Collection adder
-
-#### Test Structure for D_additionalMethods
-The `D_additionalMethods` test class should contain three tests:
-
-1. **d01_collectionSetters**: Tests `setX(Collection<X>)` methods
-2. **d02_varargAdders**: Tests `addX(X...)` methods, with each method called twice
-3. **d03_collectionAdders**: Tests `addX(Collection<X>)` methods, with each method called twice
-
-#### Varargs vs Collection Setter Testing
-- **A_basicTests**: Use varargs setters (e.g., `setTags("tag1", "tag2")`)
-- **D_additionalMethods**: Test Collection setters (e.g., `setTags(list("tag1", "tag2"))`)
-
-#### C_extraProperties Testing
-- Use `set("propertyName", value)` instead of fluent setters
-- Cover ALL the same properties as `A_basicTests`
-- Match values from `A_basicTests` exactly
-- Example: `set("basePath", "a")` instead of `setBasePath("a")`
+**When to use:**
+- Instead of manually typing out Maven commands repeatedly
+- When you need to verify both build and tests pass
+- During iterative development to quickly test changes
 
 ### 6. Error Handling and Validation
 - Use `assertThrowsWithMessage` for exception testing
@@ -315,7 +337,7 @@ The `D_additionalMethods` test class should contain three tests:
 
 ### 9. Documentation Links and References
 - Use hardcoded links to `https://juneau.apache.org/docs/topics/`
-- Include specification links for OpenAPI/Swagger properties
+- Include specification links for external standards where applicable
 - Use proper cross-references with `{@link}` tags
 - Maintain consistent link formatting
 
@@ -526,15 +548,15 @@ This document outlines the documentation conventions, formatting rules, and best
 ```java
 /**
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ModuleName">module-name</a>
  * </ul>
  */
 ```
 
-**OpenAPI/Swagger Specification Links**:
+**External Specification Links**:
 ```java
 /**
- * <a class="doclink" href="https://swagger.io/specification/v2/#operationObject">operation</a> object.
+ * <a class="doclink" href="https://example.com/specification/#property">property</a> description.
  */
 ```
 
@@ -546,7 +568,7 @@ This document outlines the documentation conventions, formatting rules, and best
 
 **External References**:
 - Use `<a class="doclink" href="URL">text</a>` for external links
-- Include specification links for OpenAPI/Swagger properties
+- Include specification links for external standards where applicable
 
 ## Code Examples
 
@@ -590,36 +612,24 @@ This document outlines the documentation conventions, formatting rules, and best
 
 ## Property Documentation
 
-### HTML5 Bean Properties
-
-**Standard Attribute Documentation**:
-```java
-/**
- * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-href">href</a> attribute.
- *
- * @param value The URL. Typically a {@link URL} or {@link String}.
- * @return This object.
- */
-```
-
-**Boolean Attribute Documentation**:
-```java
-/**
- * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
- *
- * @param value The readonly value.
- * @return This object.
- */
-```
-
-### Swagger/OpenAPI Properties
+### Bean Properties
 
 **Standard Property Documentation**:
 ```java
 /**
- * The <a class="doclink" href="https://swagger.io/specification/v2/#operationObject">operation</a> summary.
+ * The property description.
  *
- * @param value A brief description of the operation.
+ * @param value The new value for this property.
+ * @return This object.
+ */
+```
+
+**Property with External Link Documentation**:
+```java
+/**
+ * The <a class="doclink" href="https://example.com/spec#property">property</a> description.
+ *
+ * @param value A description of the parameter.
  * @return This object.
  */
 ```
@@ -722,13 +732,13 @@ public ClassName(Type1 param1, Type2 param2) {
 
 **Method Overrides**:
 ```java
-@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
+@Override /* <SimpleClassName> */
 public ClassName methodName(Type value) {
 ```
 
 **Interface Implementations**:
 ```java
-@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
+@Override /* <SimpleClassName> */
 public ClassName methodName(Type value) {
 ```
 
@@ -867,70 +877,117 @@ Swagger roundTrip = jsonRoundTrip(swagger, Swagger.class);
 
 ## Test Structure Patterns
 
-### Standard Test Class Structure
+### Test Class Naming Convention
+
+All test methods follow the pattern: `LNN_testName` where:
+- **L** is a letter from 'a'-'z' representing the test category
+- **NN** is a number from "00"-"99" for ordering tests within a category
+- **testName** is a descriptive name for what the test does
+
+**Examples:**
+- `a01_basicTest()` - First test in category 'a'
+- `b05_serializationTest()` - Fifth test in category 'b'
+- `c12_validationTest()` - Twelfth test in category 'c'
+
+### Simple Test Class Structure
+
+For test classes with a small number of tests:
 
 ```java
 public class BeanName_Test extends TestBase {
     
-    @Test void A_basicTests() {
-        // Test all bean properties using varargs setters
-        // Use SSLLC naming convention
-        // Use DPPAP for assertions
+    @Test void a01_basicPropertyTest() {
+        // Test basic properties
     }
     
-    @Test void B_serialization() {
-        // Test JSON serialization/deserialization
-        // Use TestUtils convenience methods
+    @Test void a02_fluentSetters() {
+        // Test fluent setter methods
     }
     
-    @Test void C_extraProperties() {
-        // Test set(String, Object) method
-        // Use set(String, Object) for ALL the same properties as A_basicTests
-        // Match values from A_basicTests exactly
-        // Use SSLLC naming convention
-        // Example: set("basePath", "a") instead of setBasePath("a")
+    @Test void b01_serialization() {
+        // Test JSON serialization
     }
     
-    @Test void D_additionalMethods() {
-        // Test additional methods like copyFrom()
-        // Use assertBean for property verification
-    }
-    
-    @Test void E_strictMode() {
-        // Test strict mode validation
-        // Use assertThrowsWithMessage for exception validation
-        // Combine invalid/valid tests into single test per validation method
-    }
-    
-    @Test void F_refs() {
-        // Test resolveRefs() methods where applicable
-        // Test valid refs, invalid refs, null/empty refs, not-found refs
-    }
-    
-    @Test void a08_otherGettersAndSetters() {
-        // Test additional getter/setter methods
-        // Use assertBean directly for getter tests
-        // Test collection variants vs varargs variants
-        // Follow SSLLC conventions
-    }
-    
-    @Test void a09_nullParameters() {
-        // Test null parameter validation
-        // Use assertThrowsWithMessage for validation
+    @Test void b02_deserialization() {
+        // Test JSON deserialization
     }
 }
 ```
 
-### Test Method Naming Conventions
+**Key Points:**
+- Tests are grouped by letter prefix (a, b, c, etc.)
+- Each group represents a general test category
+- Tests within a group are numbered sequentially
 
-- **A_basicTests**: Core functionality tests
-- **B_serialization**: Serialization/deserialization tests
-- **C_extraProperties**: Dynamic property setting tests
-- **D_additionalMethods**: Additional method tests
-- **E_strictMode**: Strict mode validation tests
-- **F_refs**: Reference resolution tests
-- **a08_otherGettersAndSetters**: Additional getter/setter tests
-- **a09_nullParameters**: Null parameter validation tests
+### Complex Test Class Structure
+
+For test classes with large numbers of tests that can be grouped into major categories:
+
+```java
+public class BeanName_Test extends TestBase {
+    
+    @Nested class A_basicTests extends TestBase {
+        @Test void a01_properties() {
+            // Test bean properties using varargs setters
+            // Use SSLLC naming convention
+            // Use DPPAP for assertions
+        }
+        
+        @Test void a02_fluentSetters() {
+            // Test fluent setter chaining
+        }
+    }
+    
+    @Nested class B_serialization extends TestBase {
+        @Test void b01_toJson() {
+            // Test JSON serialization
+            // Use TestUtils convenience methods
+        }
+        
+        @Test void b02_fromJson() {
+            // Test JSON deserialization
+        }
+    }
+    
+    @Nested class C_extraProperties extends TestBase {
+        @Test void c01_dynamicProperties() {
+            // Test set(String, Object) method
+            // Use set(String, Object) for ALL the same properties as A_basicTests
+            // Match values from A_basicTests exactly
+        }
+    }
+    
+    @Nested class D_additionalMethods extends TestBase {
+        @Test void d01_collectionSetters() {
+            // Test setX(Collection<X>) methods
+        }
+        
+        @Test void d02_varargAdders() {
+            // Test addX(X...) methods
+        }
+    }
+}
+```
+
+**Key Points:**
+- Use `@Nested` inner classes for major test categories
+- Each nested class name follows the pattern: `L_categoryName`
+- Tests within nested classes still use `LNN_testName` pattern
+- The letter in the nested class name matches the letter in the test method names
+
+### Common Test Categories
+
+While not prescriptive, common test category prefixes include:
+- **a**: Basic tests (properties, constructors, basic functionality)
+- **b**: Serialization/deserialization tests
+- **c**: Extra/dynamic properties tests
+- **d**: Additional methods tests
+- **e**: Validation/strict mode tests
+- **f**: Reference resolution tests (where applicable)
+
+Choose the structure (Simple vs Complex) based on:
+- **Simple**: < 20 tests, or tests don't naturally group into major categories
+- **Complex**: > 20 tests, especially when tests group into distinct functional areas
 
 ## Assertion Patterns
 
@@ -972,18 +1029,11 @@ assertThrowsWithMessage(IllegalArgumentException.class,
 
 ## Bean Testing Patterns
 
-### Swagger/OpenAPI3 Bean Testing
+### General Bean Testing
 
 **Property Coverage**: Ensure `A_basicTests` covers all bean properties and `C_extraProperties` covers the same properties using the `set()` method.
 
 **Getter/Setter Variants**: Test both collection variants and varargs variants where applicable.
-
-**Reference Resolution**: Test `resolveRefs()` methods with various scenarios:
-- Valid references
-- Invalid references  
-- Null/empty references
-- Not-found references
-- Type conversion
 
 ### Fluent Setter Testing
 

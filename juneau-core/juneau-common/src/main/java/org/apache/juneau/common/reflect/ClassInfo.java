@@ -545,25 +545,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Constructs an {@link AnnotationList} of all matching annotations on this class.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		return AnnotationInfo.getAnnotationList(this, filter);
-	}
-
-	/**
 	 * Returns all annotations of the specified type defined on this or parent classes/interfaces.
 	 *
 	 * <p>

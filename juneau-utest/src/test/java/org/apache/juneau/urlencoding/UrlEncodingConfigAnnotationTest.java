@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
@@ -25,6 +26,7 @@ import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.annotation.*;
 import org.junit.jupiter.api.*;
+import java.util.stream.*;
 
 /**
  * Tests the @UrlEncodingConfig annotation.
@@ -50,13 +52,13 @@ class UrlEncodingConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
 
 	@Test void basicParser() {
-		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
@@ -70,13 +72,13 @@ class UrlEncodingConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test void noValuesParser() {
-		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
@@ -89,13 +91,13 @@ class UrlEncodingConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}

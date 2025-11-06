@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -24,6 +25,7 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
+import java.util.stream.*;
 
 class Bean_Test extends TestBase {
 
@@ -71,7 +73,7 @@ class Bean_Test extends TestBase {
 	static ClassInfo a2ci = ClassInfo.of(A2Config.class);
 
 	@Test void a02_beanAnnotationOverridesPrivate_usingConfig() throws Exception {
-		var al = AnnotationWorkList.of(a2ci.getAnnotationList());
+		var al = AnnotationWorkList.of(rstream(a2ci.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
@@ -155,7 +157,7 @@ class Bean_Test extends TestBase {
 	static ClassInfo b2ci = ClassInfo.of(B2Config.class);
 
 	@Test void a04_beanxAnnotationOverridesPrivate_usingConfig() throws Exception {
-		var al = AnnotationWorkList.of(b2ci.getAnnotationList());
+		var al = AnnotationWorkList.of(rstream(b2ci.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
@@ -222,7 +224,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void d03_beanPropertiesExcludePropertiesCombined_beanConfigOverride() throws Exception {
-		var al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
+		var al = AnnotationWorkList.of(vr, rstream(dConfig.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
@@ -234,7 +236,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void d04_beanPXpCombined_beanConfigOverride() throws Exception {
-		var al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
+		var al = AnnotationWorkList.of(vr, rstream(dConfig.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
@@ -333,7 +335,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		var al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
+		var al = AnnotationWorkList.of(vr, rstream(eConfig.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
@@ -345,7 +347,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		var al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
+		var al = AnnotationWorkList.of(vr, rstream(eConfig.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 

@@ -18,9 +18,11 @@ package org.apache.juneau.common.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.lang.annotation.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.annotation.*;
@@ -51,7 +53,7 @@ class AnnotationInfoTest extends TestBase {
 
 	@Test void d01_isInGroup() {
 		var d = ClassInfo.of(D.class);
-		var l = d.getAnnotationList(x -> x.isInGroup(D1.class));
+		var l = rstream(d.getAnnotationInfos()).filter(x -> x.isInGroup(D1.class)).collect(Collectors.toCollection(AnnotationList::new));
 		assertSize(2, l);
 	}
 }

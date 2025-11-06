@@ -16,12 +16,14 @@
  */
 package org.apache.juneau.csv.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.common.reflect.*;
 import org.junit.jupiter.api.*;
+import java.util.stream.*;
 
 /**
  * Tests the @CsvConfig annotation.
@@ -37,12 +39,12 @@ class CsvConfig_Test extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void defaultsSerializer() {
-		var al = AnnotationWorkList.of(b.getAnnotationList());
+		var al = AnnotationWorkList.of(rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		assertDoesNotThrow(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void defaultsParser() {
-		var al = AnnotationWorkList.of(b.getAnnotationList());
+		var al = AnnotationWorkList.of(rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		assertDoesNotThrow(()->CsvParser.create().apply(al).build());
 	}
 
@@ -54,12 +56,12 @@ class CsvConfig_Test extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(b.getAnnotationList());
+		var al = AnnotationWorkList.of(rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		assertDoesNotThrow(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(b.getAnnotationList());
+		var al = AnnotationWorkList.of(rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		assertDoesNotThrow(()->CsvParser.create().apply(al).build());
 	}
 }

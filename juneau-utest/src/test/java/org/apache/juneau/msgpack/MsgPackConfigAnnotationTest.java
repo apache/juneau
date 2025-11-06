@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
@@ -25,6 +26,7 @@ import org.apache.juneau.msgpack.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
+import java.util.stream.*;
 
 /**
  * Tests the @MsgPackConfig annotation.
@@ -50,13 +52,13 @@ class MsgPackConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 	}
 
 	@Test void basicParser() {
-		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		assertDoesNotThrow(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 
@@ -69,13 +71,13 @@ class MsgPackConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test void noValuesParser() {
-		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		assertDoesNotThrow(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 
@@ -87,13 +89,13 @@ class MsgPackConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		assertDoesNotThrow(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 }

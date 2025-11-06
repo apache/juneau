@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
@@ -25,6 +26,7 @@ import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.annotation.*;
 import org.junit.jupiter.api.*;
+import java.util.stream.*;
 
 /**
  * Tests the @UonConfig annotation.
@@ -54,7 +56,7 @@ class UonConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UonSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEncoding());
@@ -62,7 +64,7 @@ class UonConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void basicParser() {
-		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UonParser.create().apply(al).build().getSession();
 		check("true", x.isDecoding());
 		check("true", x.isValidateEnd());
@@ -77,7 +79,7 @@ class UonConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -85,7 +87,7 @@ class UonConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void noValuesParser() {
-		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UonParser.create().apply(al).build().getSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());
@@ -99,7 +101,7 @@ class UonConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -107,7 +109,7 @@ class UonConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = UonParser.create().apply(al).build().getSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());

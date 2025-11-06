@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.soap;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
@@ -25,6 +26,7 @@ import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
+import java.util.stream.*;
 
 /**
  * Tests the @SoapXmlConfig annotation.
@@ -50,7 +52,7 @@ class SoapXmlConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basic() {
-		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("foo", x.getSoapAction());
 	}
@@ -64,7 +66,7 @@ class SoapXmlConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValues() {
-		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
@@ -77,7 +79,7 @@ class SoapXmlConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotation() {
-		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
 		var x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
