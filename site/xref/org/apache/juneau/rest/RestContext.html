@@ -1794,7 +1794,7 @@
 <a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> 			});
 <a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> 
 <a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> 			<strong class="jxr_keyword">var</strong> vrs = varResolver().build().createSession();
-<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> 			<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.of(vrs, rci.getAnnotationList(CONTEXT_APPLY_FILTER));
+<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> 			<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
 <a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> 
 <a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> 			apply(work);
 <a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> 			beanContext().apply(work);
