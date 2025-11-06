@@ -580,26 +580,26 @@
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 	@Test <strong class="jxr_keyword">void</strong> getAnnotations() {
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		check(<span class="jxr_string">"@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g3.getAnnotationInfos(A.<strong class="jxr_keyword">class</strong>).toList()).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList());
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		check(<span class="jxr_string">"@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g4.getAnnotationInfos(A.<strong class="jxr_keyword">class</strong>).toList()).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList());
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		check(<span class="jxr_string">"@A(3)"</span>, rstream(g5.getAnnotationInfos(A.<strong class="jxr_keyword">class</strong>).toList()).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList());
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		check(<span class="jxr_string">"@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g3.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(A.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList());
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		check(<span class="jxr_string">"@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g4.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(A.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList());
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		check(<span class="jxr_string">"@A(3)"</span>, rstream(g5.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(A.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList());
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 	}
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 	@Test <strong class="jxr_keyword">void</strong> forEachAnnotation() {
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">var</strong> l1 = list();
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		g3.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; l1.add(x.value()));
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		assertList(l1, <span class="jxr_string">"2"</span>, <span class="jxr_string">"1"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"5"</span>, <span class="jxr_string">"6"</span>, <span class="jxr_string">"7"</span>);
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		rstream(g3.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(A.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; l1.add(x.value()));
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		assertList(l1, <span class="jxr_string">"2"</span>, <span class="jxr_string">"1"</span>, <span class="jxr_string">"5"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"6"</span>, <span class="jxr_string">"7"</span>);
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<strong class="jxr_keyword">var</strong> l2 = list();
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		g4.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; l2.add(x.value()));
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		assertList(l2, <span class="jxr_string">"2"</span>, <span class="jxr_string">"1"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"5"</span>, <span class="jxr_string">"6"</span>, <span class="jxr_string">"7"</span>);
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		rstream(g4.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(A.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; l2.add(x.value()));
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		assertList(l2, <span class="jxr_string">"2"</span>, <span class="jxr_string">"1"</span>, <span class="jxr_string">"5"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"6"</span>, <span class="jxr_string">"7"</span>);
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">var</strong> l3 = list();
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		g5.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; l3.add(x.value()));
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		rstream(g5.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(A.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; l3.add(x.value()));
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 		assertList(l3, <span class="jxr_string">"3"</span>);
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">var</strong> l4 = list();
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		g3.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, x -&gt; x.value() == 5, x -&gt; l4.add(x.value()));
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		rstream(g3.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(A.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; x.value() == 5).forEach(x -&gt; l4.add(x.value()));
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 		assertList(l4, <span class="jxr_string">"5"</span>);
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 	}
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 

@@ -3859,7 +3859,7 @@
 <a class="jxr_linenumber" name="L3851" href="#L3851">3851</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L3852" href="#L3852">3852</a> 
 <a class="jxr_linenumber" name="L3853" href="#L3853">3853</a> 			<em class="jxr_comment">// Apply @Rest(beanStore).</em>
-<a class="jxr_linenumber" name="L3854" href="#L3854">3854</a> 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.<strong class="jxr_keyword">class</strong>, x -&gt; isNotVoid(x.beanStore()), x -&gt; v.get().type(x.beanStore()));
+<a class="jxr_linenumber" name="L3854" href="#L3854">3854</a> 			rstream(ClassInfo.of(resourceClass).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotVoid(x.beanStore())).forEach(x -&gt; v.get().type(x.beanStore()));
 <a class="jxr_linenumber" name="L3855" href="#L3855">3855</a> 
 <a class="jxr_linenumber" name="L3856" href="#L3856">3856</a> 			<em class="jxr_comment">// Replace with bean from:  @RestInject public [static] BeanStore xxx(&lt;args&gt;)</em>
 <a class="jxr_linenumber" name="L3857" href="#L3857">3857</a> 			<em class="jxr_comment">// @formatter:off</em>
@@ -3921,10 +3921,10 @@
 <a class="jxr_linenumber" name="L3913" href="#L3913">3913</a> 			<strong class="jxr_keyword">var</strong> v = Value.&lt;Config&gt;empty();
 <a class="jxr_linenumber" name="L3914" href="#L3914">3914</a> 
 <a class="jxr_linenumber" name="L3915" href="#L3915">3915</a> 			<em class="jxr_comment">// Find our config file.  It's the last non-empty @RestResource(config).</em>
-<a class="jxr_linenumber" name="L3916" href="#L3916">3916</a> 			<strong class="jxr_keyword">var</strong> vr = beanStore.getBean(VarResolver.<strong class="jxr_keyword">class</strong>).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"VarResolver not found."</span>));
-<a class="jxr_linenumber" name="L3917" href="#L3917">3917</a> 			<strong class="jxr_keyword">var</strong> cfv = Value.&lt;String&gt;empty();
-<a class="jxr_linenumber" name="L3918" href="#L3918">3918</a> 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.config()), x -&gt; cfv.set(vr.resolve(x.config())));
-<a class="jxr_linenumber" name="L3919" href="#L3919">3919</a> 			<strong class="jxr_keyword">var</strong> cf = cfv.orElse(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L3916" href="#L3916">3916</a> 		<strong class="jxr_keyword">var</strong> vr = beanStore.getBean(VarResolver.<strong class="jxr_keyword">class</strong>).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"VarResolver not found."</span>));
+<a class="jxr_linenumber" name="L3917" href="#L3917">3917</a> 		<strong class="jxr_keyword">var</strong> cfv = Value.&lt;String&gt;empty();
+<a class="jxr_linenumber" name="L3918" href="#L3918">3918</a> 		rstream(ClassInfo.of(resourceClass).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.config())).forEach(x -&gt; cfv.set(vr.resolve(x.config())));
+<a class="jxr_linenumber" name="L3919" href="#L3919">3919</a> 		<strong class="jxr_keyword">var</strong> cf = cfv.orElse(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L3920" href="#L3920">3920</a> 
 <a class="jxr_linenumber" name="L3921" href="#L3921">3921</a> 			<em class="jxr_comment">// If not specified or value is set to SYSTEM_DEFAULT, use system default config.</em>
 <a class="jxr_linenumber" name="L3922" href="#L3922">3922</a> 			<strong class="jxr_keyword">if</strong> (v.isEmpty() &amp;&amp; <span class="jxr_string">"SYSTEM_DEFAULT"</span>.equals(cf))
