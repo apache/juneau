@@ -499,22 +499,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Finds the annotation of the specified type defined on this class or parent class/interface.
-	 *
-	 * <p>
-	 * If the annotation cannot be found on the immediate class, searches methods with the same
-	 * signature on the parent classes or interfaces.
-	 * <br>The search is performed in child-to-parent order.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return The annotation if found, or <jk>null</jk> if not.
-	 */
-	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		return getAnnotation(null, type);
-	}
-
-	/**
 	 * Returns the first matching annotation of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
 	 * @param <A> The annotation type to look for.
@@ -2508,8 +2492,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			.filter(m -> {
 				var rct = m.getReturnType().getComponentType();
 				if (rct.hasAnnotation(Repeatable.class)) {
-					var r = rct.getAnnotation(Repeatable.class);
-					return r.value().equals(c);
+					var r = rct.getAnnotationInfos(Repeatable.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+					return r != null && r.value().equals(c);
 				}
 				return false;
 			})

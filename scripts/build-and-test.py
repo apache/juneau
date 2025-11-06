@@ -39,17 +39,22 @@ def run_command(cmd, verbose=False):
         result = subprocess.run(cmd, shell=True, cwd="/Users/james.bognar/git/juneau")
         return result.returncode
     else:
-        # Show only last lines
+        # Run command and capture all output, then show last lines
         result = subprocess.run(
-            f"{cmd} 2>&1 | tail -50",
+            cmd,
             shell=True,
             cwd="/Users/james.bognar/git/juneau",
             capture_output=True,
             text=True
         )
-        print(result.stdout)
-        if result.stderr:
-            print(result.stderr, file=sys.stderr)
+        # Combine stdout and stderr
+        output = result.stdout + result.stderr
+        # Show last 50 lines
+        lines = output.splitlines()
+        if len(lines) > 50:
+            print('\n'.join(lines[-50:]))
+        else:
+            print(output)
         return result.returncode
 
 def build(verbose=False):

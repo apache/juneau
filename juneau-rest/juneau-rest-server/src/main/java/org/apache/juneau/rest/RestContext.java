@@ -4585,7 +4585,7 @@ public class RestContext extends Context {
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {
-					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && nn(x.getDeclaringClass().getAnnotation(Rest.class));
+					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && nn(x.getDeclaringClass().getAnnotationInfos(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null));
 					mi.getMatching().filter(isRestAnnotatedInterface).forEach(x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 				}
 
@@ -5975,7 +5975,7 @@ public class RestContext extends Context {
 		int code = 500;
 
 		var ci = ClassInfo.of(e);
-		var r = ci.getAnnotation(StatusCode.class);
+		var r = ci.getAnnotationInfos(StatusCode.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (nn(r))
 			if (r.value().length > 0)
 				code = r.value()[0];

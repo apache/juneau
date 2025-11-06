@@ -84,7 +84,7 @@ public class FormDataArg implements RestOpArg {
 			return null;
 
 		// Find @Rest annotation on the class
-		Rest restAnnotation = declaringClass.getAnnotation(Rest.class);
+		Rest restAnnotation = declaringClass.getAnnotationInfos(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (restAnnotation == null)
 			return null;
 
@@ -104,7 +104,7 @@ public class FormDataArg implements RestOpArg {
 	// Get parameter-level @FormData
 	FormData paramFormData = opt(pi.findAnnotationInfo(FormData.class)).map(x -> x.inner()).orElse(null);
 	if (paramFormData == null)
-		paramFormData = pi.getParameterType().getAnnotation(FormData.class);
+		paramFormData = pi.getParameterType().getAnnotationInfos(FormData.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 
 		if (paramFormData == null) {
 			// No parameter-level @FormData, use class-level as-is

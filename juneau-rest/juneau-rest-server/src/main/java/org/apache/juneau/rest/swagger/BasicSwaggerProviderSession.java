@@ -317,7 +317,7 @@ public class BasicSwaggerProviderSession {
 			op.appendIf(ne, "deprecated",
 				firstNonEmpty(
 					resolve(ms.deprecated()),
-					(nn(m.getAnnotation(Deprecated.class)) || nn(m.getDeclaringClass().getAnnotation(Deprecated.class))) ? "true" : null
+					(nn(m.getAnnotation(Deprecated.class)) || nn(ClassInfo.of(m.getDeclaringClass()).getAnnotationInfos(Deprecated.class).findFirst().map(AnnotationInfo::inner).orElse(null))) ? "true" : null
 				)
 			);
 			op.appendIf(nec, "tags",
@@ -450,7 +450,7 @@ public class BasicSwaggerProviderSession {
 						MethodInfo ecmi = methods.get(i);
 						Header a = ecmi.getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (a == null)
-							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotation(Header.class);
+							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (nn(a) && ! isMulti(a)) {
 							String ha = a.name();
 							for (var code : codes) {

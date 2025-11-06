@@ -126,7 +126,7 @@ public class HeaderArg implements RestOpArg {
 			return null;
 
 		// Find @Rest annotation on the class
-		Rest restAnnotation = declaringClass.getAnnotation(Rest.class);
+		Rest restAnnotation = declaringClass.getAnnotationInfos(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (restAnnotation == null)
 			return null;
 
@@ -146,7 +146,7 @@ public class HeaderArg implements RestOpArg {
 	// Get parameter-level @Header
 	Header paramHeader = opt(pi.findAnnotationInfo(Header.class)).map(x -> x.inner()).orElse(null);
 	if (paramHeader == null)
-		paramHeader = pi.getParameterType().getAnnotation(Header.class);
+		paramHeader = pi.getParameterType().getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 
 		if (paramHeader == null) {
 			// No parameter-level @Header, use class-level as-is

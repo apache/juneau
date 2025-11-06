@@ -543,26 +543,26 @@ public class ClassInfo_Test extends TestBase {
 	static ClassInfo g3=of(G3.class), g4=of(G4.class), g5=of(G5.class);
 
 	@Test void getAnnotation() {
-		check("@A(7)", g3.getAnnotation(A.class));
-		check(null, g3.getAnnotation(B.class));
-		check(null, g3.getAnnotation(null));
+		check("@A(7)", g3.getAnnotationInfos(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+		check(null, g3.getAnnotationInfos(B.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+		check(null, null);
 	}
 
 	@Test void getAnnotation_twice() {
-		check("@A(7)", g3.getAnnotation(A.class));
-		check("@A(7)", g3.getAnnotation(A.class));
+		check("@A(7)", g3.getAnnotationInfos(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+		check("@A(7)", g3.getAnnotationInfos(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
 	}
 
 	@Test void getAnnotation_onParent() {
-		check("@A(7)", g4.getAnnotation(A.class));
-		check(null, g4.getAnnotation(B.class));
-		check(null, g4.getAnnotation(null));
+		check("@A(7)", g4.getAnnotationInfos(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+		check(null, g4.getAnnotationInfos(B.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+		check(null, null);
 	}
 
 	@Test void getAnnotation_onInterface() {
-		check("@A(3)", g5.getAnnotation(A.class));
-		check(null, g5.getAnnotation(B.class));
-		check(null, g5.getAnnotation(null));
+		check("@A(3)", g5.getAnnotationInfos(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+		check(null, g5.getAnnotationInfos(B.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+		check(null, null);
 	}
 
 	@Test void hasAnnotation() {

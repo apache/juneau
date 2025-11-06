@@ -83,7 +83,7 @@ public class PathArg implements RestOpArg {
 			return null;
 
 		// Find @Rest annotation on the class
-		Rest restAnnotation = declaringClass.getAnnotation(Rest.class);
+		Rest restAnnotation = declaringClass.getAnnotationInfos(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (restAnnotation == null)
 			return null;
 
@@ -103,7 +103,7 @@ public class PathArg implements RestOpArg {
 	// Get parameter-level @Path
 	Path paramPath = opt(pi.findAnnotationInfo(Path.class)).map(x -> x.inner()).orElse(null);
 	if (paramPath == null)
-		paramPath = pi.getParameterType().getAnnotation(Path.class);
+		paramPath = pi.getParameterType().getAnnotationInfos(Path.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 
 		if (paramPath == null) {
 			// No parameter-level @Path, use class-level as-is

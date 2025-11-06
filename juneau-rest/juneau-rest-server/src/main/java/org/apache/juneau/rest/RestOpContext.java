@@ -2456,7 +2456,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var c = o.getClass();
 		var pm = headerPartMetas.get(c);
 		if (pm == null) {
-			var a = c.getAnnotation(Header.class);
+			var a = ClassInfo.of(c).getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 			if (nn(a)) {
 				var schema = HttpPartSchema.create(a);
 				var serializer = createPartSerializer(schema.getSerializer(), partSerializer);
