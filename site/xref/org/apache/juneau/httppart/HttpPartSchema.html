@@ -2555,7 +2555,7 @@
 <a class="jxr_linenumber" name="L2547" href="#L2547">2547</a> 
 <a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 		Builder apply(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, java.lang.reflect.Type t) {
 <a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> 			<strong class="jxr_keyword">if</strong> (t instanceof Class&lt;?&gt;) {
-<a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 				ClassInfo.of((Class&lt;?&gt;)t).forEachAnnotation(c, x -&gt; <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">this</strong>::apply);
+<a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 				rstream(ClassInfo.of((Class&lt;?&gt;)t).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(c)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(<strong class="jxr_keyword">this</strong>::apply);
 <a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Value.isType(t)) {
 <a class="jxr_linenumber" name="L2552" href="#L2552">2552</a> 				apply(c, getValueParameterType(t));
 <a class="jxr_linenumber" name="L2553" href="#L2553">2553</a> 			}
