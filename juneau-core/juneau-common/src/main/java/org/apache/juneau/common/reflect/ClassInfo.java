@@ -268,7 +268,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * Finds all annotations on this class and parent classes/interfaces in child-to-parent order.
 	 *
 	 * <p>
-	 * This is similar to {@link org.apache.juneau.common.reflect.AnnotationProvider2#find(Class)} but without runtime annotations.
+	 * This is similar to {@link org.apache.juneau.common.reflect.AnnotationProvider#find(Class)} but without runtime annotations.
 	 *
 	 * <p>
 	 * Order of traversal:
@@ -418,7 +418,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ClassInfo forEachAnnotation(AnnotationProvider2 annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
+	public <A extends Annotation> ClassInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		if (annotationProvider == null)
 			throw unsupportedOp();
 		A t2 = getPackageAnnotation(type);
@@ -478,7 +478,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public <A extends Annotation> A getAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
+	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		return findAnnotation(annotationProvider, type);
 	}
 
@@ -493,7 +493,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation type to look for.
 	 * @return The matching annotations.
 	 */
-	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider2 annotationProvider, Class<A> type) {
+	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider annotationProvider, Class<A> type) {
 		List<A> l = list();
 		forEachAnnotation(annotationProvider, type, x -> true, x -> l.add(x));
 		return l;
@@ -817,7 +817,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * <p>
 	 * This does NOT include runtime annotations. For runtime annotation support, use
-	 * {@link org.apache.juneau.common.reflect.AnnotationProvider2}.
+	 * {@link org.apache.juneau.common.reflect.AnnotationProvider}.
 	 *
 	 * @return An unmodifiable list of all annotation infos.
 	 */
@@ -837,7 +837,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * <p>
 	 * This does NOT include runtime annotations. For runtime annotation support, use
-	 * {@link org.apache.juneau.common.reflect.AnnotationProvider2}.
+	 * {@link org.apache.juneau.common.reflect.AnnotationProvider}.
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to filter by.
@@ -1661,7 +1661,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation to look for.
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		if (annotationProvider == null)
 			throw unsupportedOp();
 		// Inline Context.firstAnnotation() call
@@ -2173,7 +2173,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public <A extends Annotation> A lastAnnotation(AnnotationProvider2 annotationProvider, Class<A> type, Predicate<A> filter) {
+	public <A extends Annotation> A lastAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter) {
 		if (annotationProvider == null)
 			throw unsupportedOp();
 		A x = null;
@@ -2335,7 +2335,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		return c == null ? null : of(c.componentType());
 	}
 
-	private <A extends Annotation> A findAnnotation(AnnotationProvider2 ap, Class<A> a) {
+	private <A extends Annotation> A findAnnotation(AnnotationProvider ap, Class<A> a) {
 		if (a == null)
 			return null;
 		if (ap == null)

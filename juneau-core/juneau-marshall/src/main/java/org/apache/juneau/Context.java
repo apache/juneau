@@ -758,7 +758,7 @@ public abstract class Context {
 	final List<Annotation> annotations;
 	final boolean debug;
 
-	private final AnnotationProvider2 annotationProvider;
+	private final AnnotationProvider annotationProvider;
 
 	/**
 	 * Constructor for this class.
@@ -769,7 +769,7 @@ public abstract class Context {
 		init(builder);
 		debug = builder.debug;
 		annotations = opt(builder.annotations).orElseGet(Collections::emptyList);
-		annotationProvider = AnnotationProvider2.create().addRuntimeAnnotations(annotations).build();
+		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
 	}
 
 	/**
@@ -783,7 +783,7 @@ public abstract class Context {
 		annotationProvider = copyFrom.annotationProvider;
 	}
 
-	public AnnotationProvider2 getAnnotationProvider() {
+	public AnnotationProvider getAnnotationProvider() {
 		return annotationProvider;
 	}
 

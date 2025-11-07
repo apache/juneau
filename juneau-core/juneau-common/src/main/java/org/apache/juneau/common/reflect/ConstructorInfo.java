@@ -134,7 +134,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		return nn(annotationProvider.find(type, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
 	}
 
@@ -146,7 +146,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this constructor.
 	 */
-	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		return ! hasAnnotation(annotationProvider, type);
 	}
 

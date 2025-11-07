@@ -119,7 +119,7 @@ import org.apache.juneau.common.collections.*;
  * 		.build();
  *
  * 	<jc>// Add to provider</jc>
- * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2
+ * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
  * 		.<jsm>create</jsm>()
  * 		.addRuntimeAnnotations(<jv>runtimeAnnotation</jv>)
  * 		.build();
@@ -152,10 +152,10 @@ import org.apache.juneau.common.collections.*;
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
  * 	<jc>// Create with default settings</jc>
- * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2.<jsm>create</jsm>().build();
+ * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider.<jsm>create</jsm>().build();
  *
  * 	<jc>// Create with runtime annotations</jc>
- * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2
+ * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
  * 		.<jsm>create</jsm>()
  * 		.annotations(<jk>new</jk> MyAnnotationImpl())
  * 		.build();
@@ -175,7 +175,7 @@ import org.apache.juneau.common.collections.*;
  * 	<li class='jc'>{@link MethodInfo}
  * </ul>
  */
-public class AnnotationProvider2 {
+public class AnnotationProvider {
 
 	/**
 	 * Disable annotation caching.
@@ -185,18 +185,18 @@ public class AnnotationProvider2 {
 	/**
 	 * Default instance.
 	 */
-	public static final AnnotationProvider2 INSTANCE = new AnnotationProvider2(create());
+	public static final AnnotationProvider INSTANCE = new AnnotationProvider(create());
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder for creating configured {@link AnnotationProvider2} instances.
+	 * Builder for creating configured {@link AnnotationProvider} instances.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2
+	 * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
 	 * 		.<jsm>create</jsm>()
 	 * 		.disableCaching()
 	 * 		.build();
@@ -204,7 +204,7 @@ public class AnnotationProvider2 {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link AnnotationProvider2#create()}
+	 * 	<li class='jm'>{@link AnnotationProvider#create()}
 	 * </ul>
 	 */
 	public static class Builder {
@@ -216,12 +216,12 @@ public class AnnotationProvider2 {
 		}
 
 		/**
-		 * Builds a new {@link AnnotationProvider2} instance with the configured settings.
+		 * Builds a new {@link AnnotationProvider} instance with the configured settings.
 		 *
-		 * @return A new immutable {@link AnnotationProvider2} instance.
+		 * @return A new immutable {@link AnnotationProvider} instance.
 		 */
-		public AnnotationProvider2 build() {
-			return new AnnotationProvider2(this);
+		public AnnotationProvider build() {
+			return new AnnotationProvider(this);
 		}
 
 		/**
@@ -309,7 +309,7 @@ public class AnnotationProvider2 {
 	 * 		.build();
 	 *
  * 	<jc>// Add all runtime annotations to the provider</jc>
- * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2
+ * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
  * 		.<jsm>create</jsm>()
  * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>multiAnnotation</jv>, <jv>stringAnnotation</jv>, <jv>swapAnnotation</jv>)
  * 		.build();
@@ -376,7 +376,7 @@ public class AnnotationProvider2 {
 		 * 		.value(MySwap.<jk>class</jk>)
 		 * 		.build();
 		 *
-		 * 	AnnotationProvider2 <jv>provider</jv> = AnnotationProvider2
+		 * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
 		 * 		.<jsm>create</jsm>()
 		 * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>swapAnnotation</jv>)  <jc>// Varargs</jc>
 		 * 		.build();
@@ -415,7 +415,7 @@ public class AnnotationProvider2 {
 	 *
 	 * @param builder The builder containing configuration settings.
 	 */
-	protected AnnotationProvider2(Builder builder) {
+	protected AnnotationProvider(Builder builder) {
 		this.classAnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findClassAnnotations)
 			.disableCaching(builder.disableCaching)

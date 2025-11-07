@@ -98,7 +98,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	public XmlFormat getXmlFormat() { return xmlFormat; }
 
-	private void findXmlInfo(Xml xml, AnnotationProvider2 mp) {
+	private void findXmlInfo(Xml xml, AnnotationProvider mp) {
 		if (xml == null)
 			return;
 		var bpm = getBeanPropertyMeta();

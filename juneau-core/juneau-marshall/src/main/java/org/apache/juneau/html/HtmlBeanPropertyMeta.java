@@ -76,7 +76,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * @param bpm The metadata of the bean property of this additional metadata.
 	 * @param mp HTML metadata provider (for finding information about other artifacts).
 	 */
-	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm, AnnotationProvider2 annotationProvider, HtmlMetaProvider mp) {
+	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm, AnnotationProvider annotationProvider, HtmlMetaProvider mp) {
 		super(bpm);
 
 		Builder b = new Builder();

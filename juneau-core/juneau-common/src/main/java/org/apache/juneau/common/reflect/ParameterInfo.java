@@ -806,7 +806,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		return list;
 	}
 
-	private <A extends Annotation> ParameterInfo forEachAnnotation(AnnotationProvider2 ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
+	private <A extends Annotation> ParameterInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (executable.isConstructor) {
 			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
 			var annotationInfos = getAnnotationInfos();
