@@ -81,10 +81,10 @@ public class PackageInfo implements Annotatable {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private Package p;  // Effectively final
+	private Package inner;  // Effectively final
 
 	// All annotations on this package, wrapped in AnnotationInfo. Repeated annotations have been unwrapped and are present as individual instances. Lazy-initialized in getter.
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(() -> opt(p).map(p -> stream(p.getAnnotations()).flatMap(a -> stream(splitRepeated(a))).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(() -> opt(inner).map(p -> stream(p.getAnnotations()).flatMap(a -> stream(splitRepeated(a))).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
 
 	/**
 	 * Constructor.
@@ -92,7 +92,7 @@ public class PackageInfo implements Annotatable {
 	 * @param p The package object.
 	 */
 	protected PackageInfo(Package p) {
-		this.p = p;
+		this.inner = p;
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class PackageInfo implements Annotatable {
 	 * @return The wrapped {@link Package} object.
 	 */
 	public Package inner() {
-		return p;
+		return inner;
 	}
 
 
@@ -125,7 +125,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#getName()
 	 */
 	public String getName() {
-		return p.getName();
+		return inner.getName();
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#getSpecificationTitle()
 	 */
 	public String getSpecificationTitle() {
-		return p.getSpecificationTitle();
+		return inner.getSpecificationTitle();
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#getSpecificationVersion()
 	 */
 	public String getSpecificationVersion() {
-		return p.getSpecificationVersion();
+		return inner.getSpecificationVersion();
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#getSpecificationVendor()
 	 */
 	public String getSpecificationVendor() {
-		return p.getSpecificationVendor();
+		return inner.getSpecificationVendor();
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#getImplementationTitle()
 	 */
 	public String getImplementationTitle() {
-		return p.getImplementationTitle();
+		return inner.getImplementationTitle();
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#getImplementationVersion()
 	 */
 	public String getImplementationVersion() {
-		return p.getImplementationVersion();
+		return inner.getImplementationVersion();
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#getImplementationVendor()
 	 */
 	public String getImplementationVendor() {
-		return p.getImplementationVendor();
+		return inner.getImplementationVendor();
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#isSealed()
 	 */
 	public boolean isSealed() {
-		return p.isSealed();
+		return inner.isSealed();
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#isSealed(URL)
 	 */
 	public boolean isSealed(URL url) {
-		return p.isSealed(url);
+		return inner.isSealed(url);
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#isCompatibleWith(String)
 	 */
 	public boolean isCompatibleWith(String desired) throws NumberFormatException {
-		return p.isCompatibleWith(desired);
+		return inner.isCompatibleWith(desired);
 	}
 
 	/**
@@ -326,7 +326,7 @@ public class PackageInfo implements Annotatable {
 	 */
 	@Override /* Object */
 	public int hashCode() {
-		return p.hashCode();
+		return inner.hashCode();
 	}
 
 	/**
@@ -341,8 +341,8 @@ public class PackageInfo implements Annotatable {
 	@Override /* Object */
 	public boolean equals(Object obj) {
 		if (obj instanceof PackageInfo)
-			return p.equals(((PackageInfo)obj).p);
-		return p.equals(obj);
+			return inner.equals(((PackageInfo)obj).inner);
+		return inner.equals(obj);
 	}
 
 	/**
@@ -362,7 +362,7 @@ public class PackageInfo implements Annotatable {
 	 */
 	@Override /* Object */
 	public String toString() {
-		return p.toString();
+		return inner.toString();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

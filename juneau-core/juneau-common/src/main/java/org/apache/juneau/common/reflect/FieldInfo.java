@@ -65,7 +65,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		return ClassInfo.of(f.getDeclaringClass()).getFieldInfo(f);
 	}
 
-	final Field f;
+	private final Field inner;
 	private final ClassInfo declaringClass;
 	private final Supplier<ClassInfo> type;
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
@@ -80,16 +80,16 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	protected FieldInfo(ClassInfo declaringClass, Field f) {
 		super(f, f.getModifiers());
 		this.declaringClass = declaringClass;
-		this.f = f;
+		this.inner = f;
 		this.type = memoize(() -> findType(f));
 	}
-	
+
 	private static ClassInfo findType(Field f) {
 		return ClassInfo.of(f.getType());
 	}
 
 	private List<AnnotationInfo<Annotation>> _findAnnotations() {
-		return stream(f.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
+		return stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
 	}
 
 	private String findFullName() {
@@ -152,8 +152,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	@SuppressWarnings("unchecked")
 	public <T> T get(Object o) throws BeanRuntimeException {
 		try {
-			f.setAccessible(true);
-			return (T)f.get(o);
+			inner.setAccessible(true);
+			return (T)inner.get(o);
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e);
 		}
@@ -185,7 +185,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * @return The name of this field.
 	 */
-	public String getName() { return f.getName(); }
+	public String getName() { return inner.getName(); }
 
 	/**
 	 * Returns the type of this field.
@@ -204,7 +204,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return f.isAnnotationPresent(type);
+		return inner.isAnnotationPresent(type);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return <jk>true</jk> if the field has the specified name.
 	 */
 	public boolean hasName(String name) {
-		return f.getName().equals(name);
+		return inner.getName().equals(name);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return The wrapped field.
 	 */
 	public Field inner() {
-		return f;
+		return inner;
 	}
 
 	/**
@@ -260,14 +260,14 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * @return <jk>true</jk> if this field has the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public boolean isDeprecated() { return f.isAnnotationPresent(Deprecated.class); }
+	public boolean isDeprecated() { return inner.isAnnotationPresent(Deprecated.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this field doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this field doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public boolean isNotDeprecated() { return ! f.isAnnotationPresent(Deprecated.class); }
+	public boolean isNotDeprecated() { return ! inner.isAnnotationPresent(Deprecated.class); }
 
 	/**
 	 * Identifies if the specified visibility matches this field.
@@ -276,7 +276,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this field.
 	 */
 	public boolean isVisible(Visibility v) {
-		return v.isVisible(f);
+		return v.isVisible(inner);
 	}
 
 	/**
@@ -288,8 +288,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	public void set(Object o, Object value) throws BeanRuntimeException {
 		try {
-			f.setAccessible(true);
-			f.set(o, value);
+			inner.setAccessible(true);
+			inner.set(o, value);
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e);
 		}
@@ -327,7 +327,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @see Field#isSynthetic()
 	 */
 	public boolean isSynthetic() {
-		return f.isSynthetic();
+		return inner.isSynthetic();
 	}
 
 	/**
@@ -349,7 +349,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @see Field#isEnumConstant()
 	 */
 	public boolean isEnumConstant() {
-		return f.isEnumConstant();
+		return inner.isEnumConstant();
 	}
 
 	/**
@@ -370,7 +370,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @see Field#getAnnotatedType()
 	 */
 	public AnnotatedType getAnnotatedType() {
-		return f.getAnnotatedType();
+		return inner.getAnnotatedType();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -395,12 +395,12 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @see Field#toGenericString()
 	 */
 	public String toGenericString() {
-		return f.toGenericString();
+		return inner.toGenericString();
 	}
 
 	@Override
 	public String toString() {
-		return cn(f.getDeclaringClass()) + "." + f.getName();
+		return cn(inner.getDeclaringClass()) + "." + inner.getName();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

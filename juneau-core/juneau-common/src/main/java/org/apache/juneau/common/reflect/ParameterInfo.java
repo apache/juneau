@@ -54,7 +54,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	static final ResettableSupplier<Boolean> DISABLE_PARAM_NAME_DETECTION = memoizeResettable(() -> Boolean.getBoolean("juneau.disableParamNameDetection"));
 
 	private final ExecutableInfo executable;
-	private final Parameter parameter;
+	private final Parameter inner;
 	private final int index;
 	private final ClassInfo type;
 
@@ -78,7 +78,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	protected ParameterInfo(ExecutableInfo eInfo, Parameter p, int index, ClassInfo type) {
 		super(p.getModifiers());
 		this.executable = eInfo;
-		this.parameter = p;
+		this.inner = p;
 		this.index = index;
 		this.type = type;
 	}
@@ -89,11 +89,11 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return The wrapped {@link Parameter} object.
 	 */
 	public Parameter inner() {
-		return parameter;
+		return inner;
 	}
 
 	private List<AnnotationInfo<Annotation>> _findAnnotations() {
-		return stream(parameter.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
+		return stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
 	}
 
 	/**
@@ -137,8 +137,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		// Inline implementation using reflection directly instead of delegating to AnnotationProvider.DEFAULT
 		if (!nn(type))
 			return this;
-			
-		if (executable.isConstructor) {
+
+		if (executable.isConstructor()) {
 			// For constructors: search parameter type hierarchy and parameter annotations
 			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
 			// Search class hierarchy using reflection (package -> interfaces -> parents -> class)
@@ -368,8 +368,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		}
 
 		// Fall back to bytecode parameter name if available and not disabled
-		if (!DISABLE_PARAM_NAME_DETECTION.get() && parameter.isNamePresent()) {
-			return parameter.getName();
+		if (!DISABLE_PARAM_NAME_DETECTION.get() && inner.isNamePresent()) {
+			return inner.getName();
 		}
 
 		return null;
@@ -430,7 +430,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	public String getName() {
 		String name = findName();
-		return name != null ? name : parameter.getName();
+		return name != null ? name : inner.getName();
 	}
 
 	/**
@@ -536,7 +536,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	@Override
 	public int getModifiers() {
-		return parameter.getModifiers();
+		return inner.getModifiers();
 	}
 
 	/**
@@ -563,7 +563,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see #hasName()
 	 */
 	public boolean isNamePresent() {
-		return parameter.isNamePresent();
+		return inner.isNamePresent();
 	}
 
 	/**
@@ -588,7 +588,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#isImplicit()
 	 */
 	public boolean isImplicit() {
-		return parameter.isImplicit();
+		return inner.isImplicit();
 	}
 
 	/**
@@ -610,7 +610,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#isSynthetic()
 	 */
 	public boolean isSynthetic() {
-		return parameter.isSynthetic();
+		return inner.isSynthetic();
 	}
 
 	@Override
@@ -656,7 +656,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#isVarArgs()
 	 */
 	public boolean isVarArgs() {
-		return parameter.isVarArgs();
+		return inner.isVarArgs();
 	}
 
 	/**
@@ -680,7 +680,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#getParameterizedType()
 	 */
 	public Type getParameterizedType() {
-		return parameter.getParameterizedType();
+		return inner.getParameterizedType();
 	}
 
 	/**
@@ -701,7 +701,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#getAnnotatedType()
 	 */
 	public AnnotatedType getAnnotatedType() {
-		return parameter.getAnnotatedType();
+		return inner.getAnnotatedType();
 	}
 
 	/**
@@ -725,7 +725,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#getDeclaredAnnotations()
 	 */
 	public Annotation[] getDeclaredAnnotations() {
-		return parameter.getDeclaredAnnotations();
+		return inner.getDeclaredAnnotations();
 	}
 
 	/**
@@ -750,7 +750,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#getAnnotationsByType(Class)
 	 */
 	public <A extends Annotation> A[] getAnnotationsByType(Class<A> annotationClass) {
-		return parameter.getAnnotationsByType(annotationClass);
+		return inner.getAnnotationsByType(annotationClass);
 	}
 
 	/**
@@ -776,7 +776,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#getDeclaredAnnotationsByType(Class)
 	 */
 	public <A extends Annotation> A[] getDeclaredAnnotationsByType(Class<A> annotationClass) {
-		return parameter.getDeclaredAnnotationsByType(annotationClass);
+		return inner.getDeclaredAnnotationsByType(annotationClass);
 	}
 
 	@Override
@@ -807,7 +807,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	private <A extends Annotation> ParameterInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
-		if (executable.isConstructor) {
+		if (executable.isConstructor()) {
 			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
 			var annotationInfos = getAnnotationInfos();
 			ci.forEachAnnotation(ap, a, filter, action);

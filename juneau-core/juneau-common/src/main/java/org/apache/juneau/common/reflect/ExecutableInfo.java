@@ -42,9 +42,9 @@ import java.util.stream.*;
  */
 public abstract class ExecutableInfo extends AccessibleInfo {
 
-	final ClassInfo declaringClass;
-	final Executable e;
-	final boolean isConstructor;
+	protected final ClassInfo declaringClass;
+	private final Executable inner;
+	private final boolean isConstructor;
 
 	private final Supplier<List<ParameterInfo>> parameters = memoize(this::findParameters);
 	private final Supplier<List<ClassInfo>> exceptions = memoize(this::findExceptions);
@@ -56,12 +56,12 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * Constructor.
 	 *
 	 * @param declaringClass The class that declares this method or constructor.
-	 * @param e The constructor or method that this info represents.
+	 * @param e The constructor orå method that this info represents.
 	 */
 	protected ExecutableInfo(ClassInfo declaringClass, Executable e) {
 		super(e, e.getModifiers());
 		this.declaringClass = declaringClass;
-		this.e = e;
+		this.inner = e;
 		this.isConstructor = e instanceof Constructor;
 	}
 
@@ -258,7 +258,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The number of parameters in this executable.
 	 */
-	public final int getParameterCount() { return e.getParameterCount(); }
+	public final int getParameterCount() { return inner.getParameterCount(); }
 
 	/**
 	 * Returns the parameters defined on this executable.
@@ -294,7 +294,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The simple name of the underlying method;
 	 */
-	public final String getSimpleName() { return isConstructor ? scn(e.getDeclaringClass()) : e.getName(); }
+	public final String getSimpleName() { return isConstructor ? scn(inner.getDeclaringClass()) : inner.getName(); }
 
 	/**
 	 * Returns <jk>true</jk> if this executable can accept the specified arguments in the specified order.
@@ -330,7 +330,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this executable can accept the specified arguments in the specified order.
 	 */
 	public final boolean canAccept(Object...args) {
-		Class<?>[] pt = e.getParameterTypes();
+		Class<?>[] pt = inner.getParameterTypes();
 		if (pt.length != args.length)
 			return false;
 		for (int i = 0; i < pt.length; i++)
@@ -531,7 +531,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has the {@link Deprecated @Deprecated} annotation on it.
 	 */
 	public final boolean isDeprecated() {
-		return e.isAnnotationPresent(Deprecated.class);
+		return inner.isAnnotationPresent(Deprecated.class);
 
 	}
 
@@ -541,7 +541,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 */
 	public final boolean isNotDeprecated() {
-		return ! e.isAnnotationPresent(Deprecated.class);
+		return ! inner.isAnnotationPresent(Deprecated.class);
 
 	}
 
@@ -552,7 +552,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this method.
 	 */
 	public final boolean isVisible(Visibility v) {
-		return v.isVisible(e);
+		return v.isVisible(inner);
 	}
 
 	/**
@@ -572,7 +572,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @see Executable#isSynthetic()
 	 */
 	public final boolean isSynthetic() {
-		return e.isSynthetic();
+		return inner.isSynthetic();
 	}
 
 	/**
@@ -592,7 +592,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @see Executable#isVarArgs()
 	 */
 	public final boolean isVarArgs() {
-		return e.isVarArgs();
+		return inner.isVarArgs();
 	}
 
 	/**
@@ -616,7 +616,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @see Executable#getTypeParameters()
 	 */
 	public final TypeVariable<?>[] getTypeParameters() {
-		return e.getTypeParameters();
+		return inner.getTypeParameters();
 	}
 
 	/**
@@ -640,7 +640,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @see Executable#toGenericString()
 	 */
 	public final String toGenericString() {
-		return e.toGenericString();
+		return inner.toGenericString();
 	}
 
 	/**
@@ -663,7 +663,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @see Executable#getAnnotatedReceiverType()
 	 */
 	public final AnnotatedType getAnnotatedReceiverType() {
-		return e.getAnnotatedReceiverType();
+		return inner.getAnnotatedReceiverType();
 	}
 
 	/**
@@ -686,7 +686,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @see Executable#getAnnotatedParameterTypes()
 	 */
 	public final AnnotatedType[] getAnnotatedParameterTypes() {
-		return e.getAnnotatedParameterTypes();
+		return inner.getAnnotatedParameterTypes();
 	}
 
 	/**
@@ -709,7 +709,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @see Executable#getAnnotatedExceptionTypes()
 	 */
 	public final AnnotatedType[] getAnnotatedExceptionTypes() {
-		return e.getAnnotatedExceptionTypes();
+		return inner.getAnnotatedExceptionTypes();
 	}
 
 	/**
@@ -720,8 +720,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	@Override
 	public final boolean setAccessible() {
 		try {
-			if (nn(e))
-				e.setAccessible(true);
+			if (nn(inner))
+				inner.setAccessible(true);
 			return true;
 		} catch (@SuppressWarnings("unused") SecurityException e) {
 			return false;
@@ -742,23 +742,23 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	private List<AnnotationInfo<Annotation>> findDeclaredAnnotations() {
-		return stream(e.getDeclaredAnnotations())
+		return stream(inner.getDeclaredAnnotations())
 			.map(a -> AnnotationInfo.of((Annotatable)this, a))
 			.toList();
 	}
 
 	private List<ClassInfo> findExceptions() {
-		return stream(e.getExceptionTypes())
+		return stream(inner.getExceptionTypes())
 			.map(ClassInfo::of)
 			.toList();
 	}
 
 	private List<ParameterInfo> findParameters() {
-		var rp = e.getParameters();
-		var ptc = e.getParameterTypes();
+		var rp = inner.getParameters();
+		var ptc = inner.getParameterTypes();
 		// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
 		// always return an empty array.  This appears to be fixed in Java 8 b75.
-		var ptt = e.getGenericParameterTypes();
+		var ptt = inner.getGenericParameterTypes();
 		Type[] genericTypes;
 		if (ptt.length != ptc.length) {
 			// Bug in javac: generic type array excludes enclosing instance parameter

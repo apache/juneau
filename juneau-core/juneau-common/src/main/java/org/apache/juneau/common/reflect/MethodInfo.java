@@ -88,13 +88,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		return l;
 	}
 
-	private final Method m;
+	private final Method inner;
 	private volatile ClassInfo returnType;
 
 	private final Supplier<List<MethodInfo>> matchingCache =
 		memoize(() -> findMatching(list(), this, getDeclaringClass()));
 
-	private final Supplier<List<MethodInfo>> matchingMethods = memoize(this::_findMatchingMethods);
+	private final Supplier<List<MethodInfo>> matchingMethods = memoize(this::findMatchingMethods);
 
 	// All annotations on this method and parent overridden methods in child-to-parent order.
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotationInfos = memoize(this::findAnnotationInfos);
@@ -110,7 +110,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	protected MethodInfo(ClassInfo declaringClass, Method m) {
 		super(declaringClass, m);
-		this.m = m;
+		this.inner = m;
 	}
 
 	/**
@@ -231,7 +231,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			.map(a -> (AnnotationInfo<A>)a);
 	}
 
-	private List<MethodInfo> _findMatchingMethods() {
+	private List<MethodInfo> findMatchingMethods() {
 		var result = new ArrayList<MethodInfo>();
 		result.add(this); // 1. This method
 
@@ -390,7 +390,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return The name of this method
 	 */
-	public String getName() { return m.getName(); }
+	public String getName() { return inner.getName(); }
 
 	/**
 	 * Returns the bean property name if this is a getter or setter.
@@ -398,7 +398,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return The bean property name, or <jk>null</jk> if this isn't a getter or setter.
 	 */
 	public String getPropertyName() {
-		String n = m.getName();
+		String n = inner.getName();
 		if ((n.startsWith("get") || n.startsWith("set")) && n.length() > 3)
 			return Introspector.decapitalize(n.substring(3));
 		if (n.startsWith("is") && n.length() > 2)
@@ -414,7 +414,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public ClassInfo getReturnType() {
 		if (returnType == null) {
 			synchronized (this) {
-				returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
+				returnType = ClassInfo.of(inner.getReturnType(), inner.getGenericReturnType());
 			}
 		}
 		return returnType;
@@ -432,7 +432,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public String getSignature() {
 		var sb = new StringBuilder(128);
-		sb.append(m.getName());
+		sb.append(inner.getName());
 		var params = getParameters();
 		if (params.size() > 0) {
 			sb.append('(');
@@ -550,7 +550,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if this method has this return type.
 	 */
 	public boolean hasReturnType(Class<?> c) {
-		return m.getReturnType() == c;
+		return inner.getReturnType() == c;
 	}
 
 	/**
@@ -570,7 +570,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if this method has this parent return type.
 	 */
 	public boolean hasReturnTypeParent(Class<?> c) {
-		return ClassInfo.of(c).isParentOf(m.getReturnType());
+		return ClassInfo.of(c).isParentOf(inner.getReturnType());
 	}
 
 	/**
@@ -589,7 +589,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return The wrapped method.
 	 */
 	public Method inner() {
-		return m;
+		return inner;
 	}
 
 	/**
@@ -604,7 +604,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	@SuppressWarnings("unchecked")
 	public <T> T invoke(Object obj, Object...args) throws ExecutableException {
 		try {
-			return (T)m.invoke(obj, args);
+			return (T)inner.invoke(obj, args);
 		} catch (IllegalAccessException e) {
 			throw new ExecutableException(e);
 		} catch (InvocationTargetException e) {
@@ -636,7 +636,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public Object invokeLenient(Object pojo, Object...args) throws ExecutableException {
 		try {
-			return m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
+			return inner.invoke(pojo, ClassUtils.getMatchingArgs(inner.getParameterTypes(), args));
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new ExecutableException(e);
 		}
@@ -668,7 +668,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return <jk>true</jk> if this method is a bridge method.
 	 */
-	public boolean isBridge() { return m.isBridge(); }
+	public boolean isBridge() { return inner.isBridge(); }
 
 	/**
 	 * Returns <jk>true</jk> if this method matches the specified method by name and parameter types.
@@ -708,7 +708,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @see Method#getGenericReturnType()
 	 */
 	public Type getGenericReturnType() {
-		return m.getGenericReturnType();
+		return inner.getGenericReturnType();
 	}
 
 	/**
@@ -729,7 +729,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @see Method#getAnnotatedReturnType()
 	 */
 	public AnnotatedType getAnnotatedReturnType() {
-		return m.getAnnotatedReturnType();
+		return inner.getAnnotatedReturnType();
 	}
 
 	/**
@@ -753,7 +753,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @see Method#getDefaultValue()
 	 */
 	public Object getDefaultValue() {
-		return m.getDefaultValue();
+		return inner.getDefaultValue();
 	}
 
 	/**
@@ -778,7 +778,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @see Method#isDefault()
 	 */
 	public boolean isDefault() {
-		return m.isDefault();
+		return inner.isDefault();
 	}
 
 	MethodInfo findMatchingOnClass(ClassInfo c) {

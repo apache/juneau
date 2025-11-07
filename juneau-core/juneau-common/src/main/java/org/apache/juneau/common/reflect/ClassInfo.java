@@ -183,7 +183,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private final Type t;
 
 	// The underlying Class object (null for non-class types like TypeVariable).  Effectively final.
-	private Class<?> c;
+	private Class<?> inner;
 
 	// True if this represents a ParameterizedType (e.g., List<String>).
 	private final boolean isParameterizedType;
@@ -195,13 +195,13 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private final Supplier<ClassInfo> componentType = memoize(this::findComponentType);
 
 	// The package this class belongs to (null for primitive types and arrays).
-	private final Supplier<PackageInfo> packageInfo = memoize(() -> opt(c).map(x -> PackageInfo.of(x.getPackage())).orElse(null));
+	private final Supplier<PackageInfo> packageInfo = memoize(() -> opt(inner).map(x -> PackageInfo.of(x.getPackage())).orElse(null));
 
 	// All superclasses of this class in child-to-parent order, starting with this class.
 	private final Supplier<List<ClassInfo>> parents = memoize(this::findParents);
 
 	// All annotations declared directly on this class, wrapped in AnnotationInfo.
-	private final Supplier<List<AnnotationInfo>> declaredAnnotations2 = memoize(() -> (List)opt(c).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -> AnnotationInfo.of(this, a)).toList());
+	private final Supplier<List<AnnotationInfo>> declaredAnnotations2 = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -> AnnotationInfo.of(this, a)).toList());
 
 	// Fully qualified class name with generics (e.g., "java.util.List<java.lang.String>").
 	private final Supplier<String> fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
@@ -213,7 +213,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private final Supplier<String> readableName = memoize(() -> getNameFormatted(SIMPLE, false, '$', WORD));
 
 	// All interfaces declared directly by this class.
-	private final Supplier<List<ClassInfo>> declaredInterfaces = memoize(() -> opt(c).map(x -> stream(x.getInterfaces()).map(ClassInfo::of).toList()).orElse(liste()));
+	private final Supplier<List<ClassInfo>> declaredInterfaces = memoize(() -> opt(inner).map(x -> stream(x.getInterfaces()).map(ClassInfo::of).toList()).orElse(liste()));
 
 	// All interfaces implemented by this class and its parents, in child-to-parent order.
 	private final Supplier<List<ClassInfo>> interfaces = memoize(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
@@ -310,25 +310,25 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotationInfos = memoize(this::findAnnotationInfos);
 
 	// All record components if this is a record class (Java 14+).
-	private final Supplier<List<RecordComponent>> recordComponents = memoize(() -> opt(c).filter(Class::isRecord).map(x -> u(l(x.getRecordComponents()))).orElse(liste()));
+	private final Supplier<List<RecordComponent>> recordComponents = memoize(() -> opt(inner).filter(Class::isRecord).map(x -> u(l(x.getRecordComponents()))).orElse(liste()));
 
 	// All generic interface types (e.g., List<String> implements Comparable<List<String>>).
-	private final Supplier<List<Type>> genericInterfaces = memoize(() -> opt(c).map(x -> u(l(x.getGenericInterfaces()))).orElse(liste()));
+	private final Supplier<List<Type>> genericInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getGenericInterfaces()))).orElse(liste()));
 
 	// All type parameters declared on this class (e.g., <T, U> in class Foo<T, U>).
-	private final Supplier<List<TypeVariable<?>>> typeParameters = memoize(() -> opt(c).map(x -> u(l((TypeVariable<?>[])x.getTypeParameters()))).orElse(liste()));
+	private final Supplier<List<TypeVariable<?>>> typeParameters = memoize(() -> opt(inner).map(x -> u(l((TypeVariable<?>[])x.getTypeParameters()))).orElse(liste()));
 
 	// All annotated interface types with their annotations.
-	private final Supplier<List<AnnotatedType>> annotatedInterfaces = memoize(() -> opt(c).map(x -> u(l(x.getAnnotatedInterfaces()))).orElse(liste()));
+	private final Supplier<List<AnnotatedType>> annotatedInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getAnnotatedInterfaces()))).orElse(liste()));
 
 	// All signers of this class (for signed JARs).
-	private final Supplier<List<Object>> signers = memoize(() -> opt(c).map(Class::getSigners).map(x -> u(l(x))).orElse(liste()));
+	private final Supplier<List<Object>> signers = memoize(() -> opt(inner).map(Class::getSigners).map(x -> u(l(x))).orElse(liste()));
 
 	// All public methods on this class and inherited, excluding Object methods.
-	private final Supplier<List<MethodInfo>> publicMethods = memoize(() -> opt(c).map(x -> stream(x.getMethods()).filter(m -> ne(m.getDeclaringClass(), Object.class)).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
+	private final Supplier<List<MethodInfo>> publicMethods = memoize(() -> opt(inner).map(x -> stream(x.getMethods()).filter(m -> ne(m.getDeclaringClass(), Object.class)).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
 
 	// All methods declared directly on this class (public, protected, package, private).
-	private final Supplier<List<MethodInfo>> declaredMethods = memoize(() -> opt(c).map(x -> stream(x.getDeclaredMethods()).filter(m -> ne("$jacocoInit", m.getName())).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
+	private final Supplier<List<MethodInfo>> declaredMethods = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredMethods()).filter(m -> ne("$jacocoInit", m.getName())).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
 
 	// All methods from this class and all parents, in child-to-parent order.
 	private final Supplier<List<MethodInfo>> allMethods = memoize(() -> allParents.get().stream().flatMap(c -> c.getDeclaredMethods().stream()).toList());
@@ -340,16 +340,16 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private final Supplier<List<FieldInfo>> publicFields = memoize(() -> parents.get().stream().flatMap(c -> c.getDeclaredFields().stream()).filter(f -> f.isPublic() && ne("$jacocoData", f.getName())).collect(toMap(FieldInfo::getName, x -> x, (a, b) -> a, LinkedHashMap::new)).values().stream().sorted().collect(toList()));
 
 	// All fields declared directly on this class (public, protected, package, private).
-	private final Supplier<List<FieldInfo>> declaredFields = memoize(() -> opt(c).map(x -> stream(x.getDeclaredFields()).filter(f -> ne("$jacocoData", f.getName())).map(this::getFieldInfo).sorted().toList()).orElse(liste()));
+	private final Supplier<List<FieldInfo>> declaredFields = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> ne("$jacocoData", f.getName())).map(this::getFieldInfo).sorted().toList()).orElse(liste()));
 
 	// All fields from this class and all parents, in parent-to-child order.
 	private final Supplier<List<FieldInfo>> allFields = memoize(() -> rstream(allParents.get()).flatMap(c -> c.getDeclaredFields().stream()).toList());
 
 	// All public constructors declared on this class.
-	private final Supplier<List<ConstructorInfo>> publicConstructors = memoize(() -> opt(c).map(x -> stream(x.getConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
+	private final Supplier<List<ConstructorInfo>> publicConstructors = memoize(() -> opt(inner).map(x -> stream(x.getConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
 
 	// All constructors declared on this class (public, protected, package, private).
-	private final Supplier<List<ConstructorInfo>> declaredConstructors = memoize(() -> opt(c).map(x -> stream(x.getDeclaredConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
+	private final Supplier<List<ConstructorInfo>> declaredConstructors = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
 
 	// The repeated annotation method (value()) if this class is a @Repeatable container.
 	private final Supplier<MethodInfo> repeatedAnnotationMethod = memoize(this::findRepeatedAnnotationMethod);
@@ -372,7 +372,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	protected ClassInfo(Class<?> c, Type t) {
 		super(c == null ? 0 : c.getModifiers());
 		this.t = t;
-		this.c = c;
+		this.inner = c;
 		this.isParameterizedType = t == null ? false : (t instanceof ParameterizedType);
 	}
 
@@ -383,9 +383,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this type can be used as a parameter for the specified object.
 	 */
 	public boolean canAcceptArg(Object child) {
-		if (c == null || child == null)
+		if (inner == null || child == null)
 			return false;
-		if (c.isInstance(child))
+		if (inner.isInstance(child))
 			return true;
 		if (this.isPrimitive() || child.getClass().isPrimitive()) {
 			return this.getWrapperIfPrimitive().isAssignableFrom(of(child).getWrapperIfPrimitive());
@@ -505,7 +505,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The class loader for this class, or <jk>null</jk> if it doesn't have one.
 	 */
 	public ClassLoader getClassLoader() {
-		return c == null ? null : c.getClassLoader();
+		return inner == null ? null : inner.getClassLoader();
 	}
 
 	/**
@@ -536,7 +536,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The declaring class, or <jk>null</jk> if this class is not a member of another class.
 	 */
 	public ClassInfo getDeclaringClass() {
-		return c == null ? null : of(c.getDeclaringClass());
+		return inner == null ? null : of(inner.getDeclaringClass());
 	}
 
 	/**
@@ -596,9 +596,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	<br>Returns an empty list if this class has no public member classes or interfaces.
 	 */
 	public List<ClassInfo> getClasses() {
-		if (c == null)
+		if (inner == null)
 			return u(l());
-		Class<?>[] classes = c.getClasses();
+		Class<?>[] classes = inner.getClasses();
 		List<ClassInfo> l = listOfSize(classes.length);
 		for (Class<?> cc : classes)
 			l.add(of(cc));
@@ -617,9 +617,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	<br>Returns an empty list if this class declares no classes or interfaces as members.
 	 */
 	public List<ClassInfo> getDeclaredClasses() {
-		if (c == null)
+		if (inner == null)
 			return u(l());
-		Class<?>[] classes = c.getDeclaredClasses();
+		Class<?>[] classes = inner.getDeclaredClasses();
 		List<ClassInfo> l = listOfSize(classes.length);
 		for (Class<?> cc : classes)
 			l.add(of(cc));
@@ -650,7 +650,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The enclosing class, or <jk>null</jk> if this is a top-level class.
 	 */
 	public ClassInfo getEnclosingClass() {
-		return c == null ? null : of(c.getEnclosingClass());
+		return inner == null ? null : of(inner.getEnclosingClass());
 	}
 
 	/**
@@ -663,9 +663,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The enclosing constructor, or <jk>null</jk> if this class was not declared within a constructor.
 	 */
 	public ConstructorInfo getEnclosingConstructor() {
-		if (c == null)
+		if (inner == null)
 			return null;
-		Constructor<?> ec = c.getEnclosingConstructor();
+		Constructor<?> ec = inner.getEnclosingConstructor();
 		return ec == null ? null : getConstructorInfo(ec);
 	}
 
@@ -679,9 +679,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The enclosing method, or <jk>null</jk> if this class was not declared within a method.
 	 */
 	public MethodInfo getEnclosingMethod() {
-		if (c == null)
+		if (inner == null)
 			return null;
-		Method em = c.getEnclosingMethod();
+		Method em = inner.getEnclosingMethod();
 		return em == null ? null : getMethodInfo(em);
 	}
 
@@ -908,7 +908,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The name of the underlying class in JVM format.
 	 */
-	public String getName() { return nn(c) ? c.getName() : t.getTypeName(); }
+	public String getName() { return nn(inner) ? inner.getName() : t.getTypeName(); }
 
 	/**
 	 * Returns the canonical name of the underlying class.
@@ -928,8 +928,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public String getNameCanonical() {
 		// For Class objects, delegate to Class.getCanonicalName() which handles local/anonymous classes
 		// For Type objects (ParameterizedType, etc.), compute the canonical name
-		if (c != null && !isParameterizedType) {
-			return c.getCanonicalName();
+		if (inner != null && !isParameterizedType) {
+			return inner.getCanonicalName();
 		}
 		// For ParameterizedType, we can't have a true canonical name with type parameters
 		// Return null to maintain consistency with Class.getCanonicalName() behavior
@@ -948,7 +948,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 		<li>{@link #getNameSimple()}
 	 * 	</ul>
 	 */
-	public String[] getNames() { return a(getNameFull(), c.getName(), getNameShort(), getNameSimple()); }
+	public String[] getNames() { return a(getNameFull(), inner.getName(), getNameShort(), getNameSimple()); }
 
 	/**
 	 * Returns the module that this class is a member of.
@@ -959,7 +959,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The module that this class is a member of.
 	 */
 	public Module getModule() {
-		return c == null ? null : c.getModule();
+		return inner == null ? null : inner.getModule();
 	}
 
 	/**
@@ -1021,11 +1021,11 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 		// We need to make up a mapping of type names.
 		var typeMap = new HashMap<Type,Type>();
-		Class<?> cc = c;
+		Class<?> cc = inner;
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", inner.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
@@ -1091,7 +1091,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The default value, or <jk>null</jk> if this is not a primitive class.
 	 */
-	public Object getPrimitiveDefault() { return primitiveDefaultMap.get(c); }
+	public Object getPrimitiveDefault() { return primitiveDefaultMap.get(inner); }
 
 	/**
 	 * If this class is a primitive wrapper (e.g. <code><jk>Integer</jk>.<jk>class</jk></code>) returns it's
@@ -1099,7 +1099,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The primitive class, or <jk>null</jk> if class is not a primitive wrapper.
 	 */
-	public Class<?> getPrimitiveForWrapper() { return pmap2.get(c); }
+	public Class<?> getPrimitiveForWrapper() { return pmap2.get(inner); }
 
 	/**
 	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
@@ -1107,7 +1107,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The wrapper class, or <jk>null</jk> if class is not a primitive.
 	 */
-	public Class<?> getPrimitiveWrapper() { return pmap1.get(c); }
+	public Class<?> getPrimitiveWrapper() { return pmap1.get(inner); }
 
 	/**
 	 * Returns the first matching public constructor on this class.
@@ -1224,7 +1224,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The simple name of the underlying class;
 	 */
-	public String getNameSimple() { return nn(c) ? c.getSimpleName() : t.getTypeName(); }
+	public String getNameSimple() { return nn(inner) ? inner.getSimpleName() : t.getTypeName(); }
 
 	/**
 	 * Returns a formatted class name with configurable options.
@@ -1340,7 +1340,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		}
 
 		// Get the raw class - for ParameterizedType, extract the raw type
-		var ct = c;
+		var ct = inner;
 		if (ct == null && isParameterizedType) {
 			var pt = (ParameterizedType)t;
 			ct = (Class<?>)pt.getRawType();
@@ -1419,7 +1419,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return
 	 * 	The parent class, or <jk>null</jk> if the class has no parent.
 	 */
-	public ClassInfo getSuperclass() { return c == null ? null : of(c.getSuperclass()); }
+	public ClassInfo getSuperclass() { return inner == null ? null : of(inner.getSuperclass()); }
 
 	/**
 	 * Returns the nest host of this class.
@@ -1431,7 +1431,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The nest host of this class.
 	 */
 	public ClassInfo getNestHost() {
-		return c == null ? null : of(c.getNestHost());
+		return inner == null ? null : of(inner.getNestHost());
 	}
 
 	/**
@@ -1443,9 +1443,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	<br>Returns an empty list if this object does not represent a class.
 	 */
 	public List<ClassInfo> getNestMembers() {
-		if (c == null)
+		if (inner == null)
 			return u(l());
-		var members = c.getNestMembers();
+		var members = inner.getNestMembers();
 		List<ClassInfo> l = listOfSize(members.length);
 		for (Class<?> cc : members)
 			l.add(of(cc));
@@ -1463,9 +1463,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	<br>Returns an empty list if this class is not sealed.
 	 */
 	public List<ClassInfo> getPermittedSubclasses() {
-		if (c == null || ! c.isSealed())
+		if (inner == null || ! inner.isSealed())
 			return u(l());
-		Class<?>[] permitted = c.getPermittedSubclasses();
+		Class<?>[] permitted = inner.getPermittedSubclasses();
 		List<ClassInfo> l = listOfSize(permitted.length);
 		for (Class<?> cc : permitted)
 			l.add(of(cc));
@@ -1498,7 +1498,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	or <jk>null</jk> if this class represents {@link Object}, an interface, a primitive type, or void.
 	 */
 	public Type getGenericSuperclass() {
-		return c == null ? null : c.getGenericSuperclass();
+		return inner == null ? null : inner.getGenericSuperclass();
 	}
 
 	/**
@@ -1544,7 +1544,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	or <jk>null</jk> if this class represents {@link Object}, an interface, a primitive type, or void.
 	 */
 	public AnnotatedType getAnnotatedSuperclass() {
-		return c == null ? null : c.getAnnotatedSuperclass();
+		return inner == null ? null : inner.getAnnotatedSuperclass();
 	}
 
 	/**
@@ -1573,7 +1573,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The {@link ProtectionDomain} of this class, or <jk>null</jk> if the class does not have a protection domain.
 	 */
 	public java.security.ProtectionDomain getProtectionDomain() {
-		return c == null ? null : c.getProtectionDomain();
+		return inner == null ? null : inner.getProtectionDomain();
 	}
 
 	/**
@@ -1598,7 +1598,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return A URL object for reading the resource, or <jk>null</jk> if the resource could not be found.
 	 */
 	public java.net.URL getResource(String name) {
-		return c == null ? null : c.getResource(name);
+		return inner == null ? null : inner.getResource(name);
 	}
 
 	/**
@@ -1611,7 +1611,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return An input stream for reading the resource, or <jk>null</jk> if the resource could not be found.
 	 */
 	public java.io.InputStream getResourceAsStream(String name) {
-		return c == null ? null : c.getResourceAsStream(name);
+		return inner == null ? null : inner.getResourceAsStream(name);
 	}
 
 	/**
@@ -1624,7 +1624,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The descriptor string of this class.
 	 */
 	public String descriptorString() {
-		return c == null ? null : c.descriptorString();
+		return inner == null ? null : inner.descriptorString();
 	}
 
 	/**
@@ -1634,9 +1634,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
 	 */
 	public Class<?> getWrapperIfPrimitive() {
-		if (nn(c) && ! c.isPrimitive())
-			return c;
-		return pmap1.get(c);
+		if (nn(inner) && ! inner.isPrimitive())
+			return inner;
+		return pmap1.get(inner);
 	}
 
 	/**
@@ -1645,9 +1645,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
 	 */
 	public ClassInfo getWrapperInfoIfPrimitive() {
-		if (c == null || ! c.isPrimitive())
+		if (inner == null || ! inner.isPrimitive())
 			return this;
-		return of(pmap1.get(c));
+		return of(pmap1.get(inner));
 	}
 
 	/**
@@ -1662,7 +1662,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (annotationProvider == null)
 			throw unsupportedOp();
 		// Inline Context.firstAnnotation() call
-		return nn(annotationProvider.find(type, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
+		return nn(annotationProvider.find(type, inner).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
 	}
 
 	/**
@@ -1707,7 +1707,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if the {@link #getPrimitiveWrapper()} method returns a value.
 	 */
 	public boolean hasPrimitiveWrapper() {
-		return pmap1.containsKey(c);
+		return pmap1.containsKey(inner);
 	}
 
 	/**
@@ -1717,7 +1717,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The wrapped class as a {@link Class}, or <jk>null</jk> if it's not a class (e.g. it's a {@link ParameterizedType}).
 	 */
 	public <T> Class<T> inner() {
-		return (Class<T>)c;
+		return (Class<T>)inner;
 	}
 
 	/**
@@ -1736,7 +1736,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if the specified class is the same as this one.
 	 */
 	public boolean is(Class<?> c) {
-		return nn(this.c) && this.c.equals(c);
+		return nn(this.inner) && this.inner.equals(c);
 	}
 
 	/**
@@ -1746,8 +1746,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if the specified class is the same as this one.
 	 */
 	public boolean is(ClassInfo c) {
-		if (nn(this.c))
-			return this.c.equals(c.inner());
+		if (nn(this.inner))
+			return this.inner.equals(c.inner());
 		return t.equals(c.t);
 	}
 
@@ -1799,7 +1799,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is an annotation.
 	 */
-	public boolean isAnnotation() { return nn(c) && c.isAnnotation(); }
+	public boolean isAnnotation() { return nn(inner) && inner.isAnnotation(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is an anonymous class.
@@ -1809,7 +1809,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is an anonymous class.
 	 */
-	public boolean isAnonymousClass() { return nn(c) && c.isAnonymousClass(); }
+	public boolean isAnonymousClass() { return nn(inner) && inner.isAnonymousClass(); }
 
 	@Override
 	public boolean isAny(ElementFlag...flags) {
@@ -1835,7 +1835,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is an array.
 	 */
-	public boolean isArray() { return nn(c) && c.isArray(); }
+	public boolean isArray() { return nn(inner) && inner.isArray(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a child or the same as <c>parent</c>.
@@ -1844,7 +1844,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this class is a child or the same as <c>parent</c>.
 	 */
 	public boolean isChildOf(Class<?> parent) {
-		return nn(c) && nn(parent) && parent.isAssignableFrom(c);
+		return nn(inner) && nn(parent) && parent.isAssignableFrom(inner);
 	}
 
 	/**
@@ -1887,28 +1887,28 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is not an interface.
 	 */
-	public boolean isClass() { return nn(c) && ! c.isInterface(); }
+	public boolean isClass() { return nn(inner) && ! inner.isInterface(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Collection} or an array.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Collection} or an array.
 	 */
-	public boolean isCollectionOrArray() { return nn(c) && (Collection.class.isAssignableFrom(c) || c.isArray()); }
+	public boolean isCollectionOrArray() { return nn(inner) && (Collection.class.isAssignableFrom(inner) || inner.isArray()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public boolean isDeprecated() { return nn(c) && c.isAnnotationPresent(Deprecated.class); }
+	public boolean isDeprecated() { return nn(inner) && inner.isAnnotationPresent(Deprecated.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is an enum.
 	 *
 	 * @return <jk>true</jk> if this class is an enum.
 	 */
-	public boolean isEnum() { return nn(c) && c.isEnum(); }
+	public boolean isEnum() { return nn(inner) && inner.isEnum(); }
 
 	/**
 	 * Returns <jk>true</jk> if the specified value is an instance of this class.
@@ -1917,8 +1917,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if the specified value is an instance of this class.
 	 */
 	public boolean isInstance(Object value) {
-		if (nn(this.c))
-			return c.isInstance(value);
+		if (nn(this.inner))
+			return inner.isInstance(value);
 		return false;
 	}
 
@@ -1927,14 +1927,14 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is a local class.
 	 */
-	public boolean isLocalClass() { return nn(c) && c.isLocalClass(); }
+	public boolean isLocalClass() { return nn(inner) && inner.isLocalClass(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a member class.
 	 *
 	 * @return <jk>true</jk> if this class is a member class.
 	 */
-	public boolean isMemberClass() { return nn(c) && c.isMemberClass(); }
+	public boolean isMemberClass() { return nn(inner) && inner.isMemberClass(); }
 
 	/**
 	 * Determines if this class and the specified class are nestmates.
@@ -1946,7 +1946,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this class and the specified class are nestmates.
 	 */
 	public boolean isNestmateOf(Class<?> c) {
-		return nn(this.c) && nn(c) && this.c.isNestmateOf(c);
+		return nn(this.inner) && nn(c) && this.inner.isNestmateOf(c);
 	}
 
 	/**
@@ -1954,28 +1954,28 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is a member class and not static.
 	 */
-	public boolean isNonStaticMemberClass() { return nn(c) && c.isMemberClass() && ! isStatic(); }
+	public boolean isNonStaticMemberClass() { return nn(inner) && inner.isMemberClass() && ! isStatic(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this class doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public boolean isNotDeprecated() { return c == null || ! c.isAnnotationPresent(Deprecated.class); }
+	public boolean isNotDeprecated() { return inner == null || ! inner.isAnnotationPresent(Deprecated.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a local class.
 	 *
 	 * @return <jk>true</jk> if this class is a local class.
 	 */
-	public boolean isNotLocalClass() { return c == null || ! c.isLocalClass(); }
+	public boolean isNotLocalClass() { return inner == null || ! inner.isLocalClass(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a member class.
 	 *
 	 * @return <jk>true</jk> if this class is a member class.
 	 */
-	public boolean isNotMemberClass() { return c == null || ! c.isMemberClass(); }
+	public boolean isNotMemberClass() { return inner == null || ! inner.isMemberClass(); }
 
 	/**
 	 * Returns <jk>false</jk> if this class is a member class and not static.
@@ -1989,7 +1989,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this is not a primitive class.
 	 */
-	public boolean isNotPrimitive() { return c == null || ! c.isPrimitive(); }
+	public boolean isNotPrimitive() { return inner == null || ! inner.isPrimitive(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
@@ -1998,7 +1998,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
 	public boolean isParentOf(Class<?> child) {
-		return nn(c) && nn(child) && c.isAssignableFrom(child);
+		return nn(inner) && nn(child) && inner.isAssignableFrom(child);
 	}
 
 	/**
@@ -2035,9 +2035,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
 	public boolean isParentOfLenient(Class<?> child) {
-		if (c == null || child == null)
+		if (inner == null || child == null)
 			return false;
-		if (c.isAssignableFrom(child))
+		if (inner.isAssignableFrom(child))
 			return true;
 		if (this.isPrimitive() || child.isPrimitive()) {
 			return this.getWrapperIfPrimitive().isAssignableFrom(of(child).getWrapperIfPrimitive());
@@ -2052,9 +2052,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
 	public boolean isParentOfLenient(ClassInfo child) {
-		if (c == null || child == null)
+		if (inner == null || child == null)
 			return false;
-		if (c.isAssignableFrom(child.inner()))
+		if (inner.isAssignableFrom(child.inner()))
 			return true;
 		if (this.isPrimitive() || child.isPrimitive()) {
 			return this.getWrapperIfPrimitive().isAssignableFrom(child.getWrapperIfPrimitive());
@@ -2079,7 +2079,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this is a primitive class.
 	 */
-	public boolean isPrimitive() { return nn(c) && c.isPrimitive(); }
+	public boolean isPrimitive() { return nn(inner) && inner.isPrimitive(); }
 
 	/**
 	 * Returns <jk>true</jk> if this is a repeated annotation class.
@@ -2110,7 +2110,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is a record class.
 	 */
-	public boolean isRecord() { return nn(c) && c.isRecord(); }
+	public boolean isRecord() { return nn(inner) && inner.isRecord(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a sealed class.
@@ -2120,7 +2120,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is a sealed class.
 	 */
-	public boolean isSealed() { return nn(c) && c.isSealed(); }
+	public boolean isSealed() { return nn(inner) && inner.isSealed(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a synthetic class.
@@ -2130,7 +2130,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is synthetic.
 	 */
-	public boolean isSynthetic() { return nn(c) && c.isSynthetic(); }
+	public boolean isSynthetic() { return nn(inner) && inner.isSynthetic(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a child of <c>parent</c>.
@@ -2139,7 +2139,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this class is a parent of <c>child</c>.
 	 */
 	public boolean isStrictChildOf(Class<?> parent) {
-		return nn(c) && nn(parent) && parent.isAssignableFrom(c) && ! c.equals(parent);
+		return nn(inner) && nn(parent) && parent.isAssignableFrom(inner) && ! inner.equals(parent);
 	}
 
 	/**
@@ -2149,7 +2149,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this constructor.
 	 */
 	public boolean isVisible(Visibility v) {
-		return nn(c) && v.isVisible(c);
+		return nn(inner) && v.isVisible(inner);
 	}
 
 	/**
@@ -2218,7 +2218,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			return null;
 		
 		// Search annotations using reflection (reverse order for "last")
-		var annotations = rstream(l(c.getAnnotationsByType(type)));
+		var annotations = rstream(l(inner.getAnnotationsByType(type)));
 		var result = annotations.filter(a -> test(filter, a)).findFirst().orElse(null);
 		if (nn(result))
 			return result;
@@ -2252,10 +2252,10 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public Object newInstance() throws ExecutableException {
-		if (c == null)
+		if (inner == null)
 			throw new ExecutableException("Type ''{0}'' cannot be instantiated", getNameFull());
 		try {
-			return c.getDeclaredConstructor().newInstance();
+			return inner.getDeclaredConstructor().newInstance();
 		} catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
 			throw new ExecutableException(e);
 		}
@@ -2292,7 +2292,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @throws ClassCastException If the object is not <jk>null</jk> and is not assignable to this class.
 	 */
 	public <T> T cast(Object obj) {
-		return c == null ? null : (T)c.cast(obj);
+		return inner == null ? null : (T)inner.cast(obj);
 	}
 
 	/**
@@ -2304,9 +2304,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @throws ClassCastException If this class is not assignable to the specified class.
 	 */
 	public <U> ClassInfo asSubclass(Class<U> clazz) {
-		if (c == null)
+		if (inner == null)
 			return null;
-		c.asSubclass(clazz);  // Throws ClassCastException if not assignable
+		inner.asSubclass(clazz);  // Throws ClassCastException if not assignable
 		return this;
 	}
 
@@ -2316,7 +2316,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return A {@link ClassInfo} representing an array type whose component type is this class.
 	 */
 	public ClassInfo arrayType() {
-		return c == null ? null : of(c.arrayType());
+		return inner == null ? null : of(inner.arrayType());
 	}
 
 	/**
@@ -2329,7 +2329,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The {@link ClassInfo} representing the component type, or <jk>null</jk> if this class does not represent an array type.
 	 */
 	public ClassInfo componentType() {
-		return c == null ? null : of(c.componentType());
+		return inner == null ? null : of(inner.componentType());
 	}
 
 
@@ -2392,7 +2392,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 	private List<ClassInfo> findParents() {
 		List<ClassInfo> l = list();
-		Class<?> pc = c;
+		Class<?> pc = inner;
 		while (nn(pc) && pc != Object.class) {
 			l.add(of(pc));
 			pc = pc.getSuperclass();
@@ -2408,7 +2408,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 				var rct = m.getReturnType().getComponentType();
 				if (rct.hasAnnotation(Repeatable.class)) {
 					var r = rct.getAnnotationInfos(Repeatable.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-					return r != null && r.value().equals(c);
+					return r != null && r.value().equals(inner);
 				}
 				return false;
 			})
@@ -2427,7 +2427,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		}
 
 		// Handle regular arrays
-		Class<?> cc = c;
+		Class<?> cc = inner;
 		while (nn(cc) && cc.isArray()) {
 			d++;
 			cc = cc.getComponentType();
@@ -2438,7 +2438,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 	private ClassInfo findComponentType() {
 		Type ct = t;
-		Class<?> cc = c;
+		Class<?> cc = inner;
 
 		// Handle GenericArrayType (e.g., List<String>[])
 		while (ct instanceof GenericArrayType gat) {
@@ -2453,7 +2453,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		// Return the deepest component type found
 		if (ct != t) {
 			return of(ct);
-		} else if (cc != c) {
+		} else if (cc != inner) {
 			return of(cc);
 		} else {
 			return this;
