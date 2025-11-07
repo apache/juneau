@@ -309,7 +309,7 @@ public class Mutaters {
 		// @formatter:off
 		return ic.getPublicMethod(
 			x -> x.isNotStatic()
-			&& x.hasNoParameters()
+			&& x.getParameterCount() == 0
 			&& x.getSimpleName().startsWith("to")
 			&& x.getSimpleName().substring(2).equalsIgnoreCase(tn)
 		);

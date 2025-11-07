@@ -108,7 +108,7 @@ public class RequestBeanMeta {
 	 */
 	public static RequestBeanMeta create(Class<?> c, AnnotationWorkList annotations) {
 		var ci = ClassInfo.of(c);
-		if (ci.hasNoAnnotation(Request.class))
+		if (! ci.hasAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(c).build();
 	}
@@ -121,7 +121,7 @@ public class RequestBeanMeta {
 	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
 	public static RequestBeanMeta create(ParameterInfo mpi, AnnotationWorkList annotations) {
-		if (mpi.hasNoAnnotation(Request.class))
+		if (! mpi.hasAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(mpi).build();
 	}

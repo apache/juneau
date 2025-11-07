@@ -134,7 +134,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class)
-			&& mi.hasNoAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
+			&& ! mi.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
 		// @formatter:on
 	}
 
@@ -157,7 +157,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& mi.hasNoAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
+			&& ! mi.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
 		// @formatter:on
 	}
 

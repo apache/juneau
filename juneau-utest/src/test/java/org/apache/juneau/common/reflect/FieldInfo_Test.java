@@ -289,13 +289,13 @@ class FieldInfo_Test extends TestBase {
 		e_a2 = e.getDeclaredField(x -> x.hasName("a2"));
 
 	@Test void getType() {
-		check("int", e_a1.getType());
-		check("int", e_a2.getType());
+		check("int", e_a1.getFieldType());
+		check("int", e_a2.getFieldType());
 	}
 
 	@Test void getType_twice() {
-		check("int", e_a1.getType());
-		check("int", e_a1.getType());
+		check("int", e_a1.getFieldType());
+		check("int", e_a1.getFieldType());
 	}
 
 	@Test void toString2() {

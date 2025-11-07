@@ -568,10 +568,10 @@ public class BeanMeta<T> {
 			// @formatter:off
 			c2.getDeclaredFields().stream()
 				.filter(x -> x.isNotStatic()
-			&& (x.isNotTransient() || noIgnoreTransients)
-			&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
-			&& x.hasNoAnnotation(ctx.getAnnotationProvider(), BeanIgnore.class)
-			&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx.getAnnotationProvider(), Beanp.class)))
+				&& (x.isNotTransient() || noIgnoreTransients)
+				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
+				&& ctx.getAnnotationProvider().find(BeanIgnore.class, x.inner()).findAny().isEmpty()
+				&& (v.isVisible(x.inner()) || ctx.getAnnotationProvider().find(Beanp.class, x.inner()).findAny().isPresent()))
 				.forEach(x -> l.add(x.inner())
 			);
 			// @formatter:on
@@ -704,10 +704,10 @@ public class BeanMeta<T> {
 			// @formatter:off
 			FieldInfo f = c2.getDeclaredField(
 				x -> x.isNotStatic()
-			&& (x.isNotTransient() || noIgnoreTransients)
-			&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
-			&& x.hasNoAnnotation(ctx.getAnnotationProvider(), BeanIgnore.class)
-			&& x.hasName(name)
+				&& (x.isNotTransient() || noIgnoreTransients)
+				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
+				&& ctx.getAnnotationProvider().find(BeanIgnore.class, x.inner()).findAny().isEmpty()
+				&& x.hasName(name)
 			);
 			// @formatter:on
 			if (nn(f))

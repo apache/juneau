@@ -144,7 +144,7 @@ public class BuilderSwap<T,B> {
 		// @formatter:off
 		return c.getDeclaredMethod(
 			x -> x.isNotStatic()
-			&& x.hasNoParameters()
+			&& x.getParameterCount() == 0
 			&& (!x.hasReturnType(void.class))
 			&& x.hasName("build")
 		);

@@ -255,7 +255,7 @@ public class BeanCreator<T> {
 				&& x.hasNumParameters(1)
 				&& x.getParameter(0).canAccept(builder)
 				&& x.hasReturnType(type)
-				&& x.hasNoAnnotation(BeanIgnore.class)
+				&& ! x.hasAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
 			);
 			// @formatter:on
@@ -269,9 +269,9 @@ public class BeanCreator<T> {
 			MethodInfo m = type.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
-				&& x.hasNoParameters()
+				&& x.getParameterCount() == 0
 				&& x.hasReturnType(type)
-				&& x.hasNoAnnotation(BeanIgnore.class)
+				&& ! x.hasAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
 			);
 			// @formatter:on
@@ -423,7 +423,7 @@ public class BeanCreator<T> {
 		return m.isStatic()
 			&& m.isNotDeprecated()
 			&& m.hasReturnType(type)
-			&& m.hasNoAnnotation(BeanIgnore.class)
+			&& ! m.hasAnnotation(BeanIgnore.class)
 			&& (m.hasName("create") || m.hasName("builder"));
 		// @formatter:on
 	}

@@ -65,9 +65,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		return ClassInfo.of(f.getDeclaringClass()).getFieldInfo(f);
 	}
 
-	Field f;  // Effectively final
+	final Field f;
 	private final ClassInfo declaringClass;
-	private final Supplier<ClassInfo> typeCache = memoize(() -> ClassInfo.of(f.getType()));
+	private final Supplier<ClassInfo> type;
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
 	private final Supplier<String> fullName = memoize(this::findFullName);
 
@@ -81,6 +81,11 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		super(f, f.getModifiers());
 		this.declaringClass = declaringClass;
 		this.f = f;
+		this.type = memoize(() -> findType(f));
+	}
+	
+	private static ClassInfo findType(Field f) {
+		return ClassInfo.of(f.getType());
 	}
 
 	private List<AnnotationInfo<Annotation>> _findAnnotations() {
@@ -119,17 +124,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		return annotations.get().stream()
 			.filter(x -> type.isInstance(x.inner()))
 			.map(x -> (AnnotationInfo<A>)x);
-	}
-
-	/**
-	 * Returns the first annotation of the specified type declared on this field.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type.
-	 * @return An optional containing the first matching annotation, or empty if not found.
-	 */
-	public <A extends Annotation> Optional<AnnotationInfo<A>> getAnnotationInfo(Class<A> type) {
-		return getAnnotationInfos(type).findFirst();
 	}
 
 	/**
@@ -194,36 +188,12 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	public String getName() { return f.getName(); }
 
 	/**
-	 * Same as {@link #get(Object)} but wraps the results in an {@link Optional}.
-	 *
-	 * @param o The object containing the field.
-	 * @param <T> The object type to retrieve.
-	 * @return The field value.
-	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
-	 */
-	public <T> Optional<T> getOptional(Object o) throws BeanRuntimeException {
-		return Optional.ofNullable(get(o));
-	}
-
-	/**
 	 * Returns the type of this field.
 	 *
 	 * @return The type of this field.
 	 */
-	public ClassInfo getType() {
-		return typeCache.get();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is present.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is present.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return nn(annotationProvider.find(type, f).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
+	public ClassInfo getFieldType() {
+		return type.get();
 	}
 
 	/**
@@ -245,29 +215,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	public boolean hasName(String name) {
 		return f.getName().equals(name);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is not present.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is not present.
-	 */
-	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return ! hasAnnotation(annotationProvider, type);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is not present on this field.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is not present on this field.
-	 */
-	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
-		return ! hasAnnotation(type);
 	}
 
 	/**

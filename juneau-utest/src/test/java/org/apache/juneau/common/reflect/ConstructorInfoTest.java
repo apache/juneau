@@ -107,7 +107,7 @@ class ConstructorInfoTest extends TestBase {
 	}
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ConstructorInfo
-		b_c1 = b.getPublicConstructor(ConstructorInfo::hasNoParameters),
+		b_c1 = b.getPublicConstructor(cons -> cons.getParameterCount() == 0),
 		b_c2 = b.getPublicConstructor(x -> x.hasParameterTypes(String.class)),
 		b_c3 = b.getDeclaredConstructor(x -> x.hasParameterTypes(int.class)),
 		b_c4 = b.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class));

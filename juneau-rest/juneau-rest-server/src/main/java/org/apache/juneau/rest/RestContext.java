@@ -1763,11 +1763,11 @@ public class RestContext extends Context {
 			// @formatter:off
 			rci.getAllFields().stream()
 				.filter(x -> x.hasAnnotation(RestInject.class))
-				.forEach(x -> x.getOptional(resource.get()).ifPresent(
+				.forEach(x -> opt(x.get(resource.get())).ifPresent(
 					y -> beanStore.add(
-						x.getType().inner(),
-						y,
-						RestInjectAnnotation.name(x.getAnnotationInfo(RestInject.class).map(AnnotationInfo::inner).orElse(null))
+					x.getFieldType().inner(),
+					y,
+					RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
 				)
 			));
 			// @formatter:on
@@ -1802,9 +1802,9 @@ public class RestContext extends Context {
 			.filter(x -> x.hasAnnotation(RestInject.class))
 			.forEach(x -> x.setIfNull(
 				resource.get(),
-				beanStore.getBean(
-					x.getType().inner(),
-					RestInjectAnnotation.name(x.getAnnotationInfo(RestInject.class).map(AnnotationInfo::inner).orElse(null))
+			beanStore.getBean(
+				x.getFieldType().inner(),
+				RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
 				).orElse(null)
 			));
 		// @formatter:on

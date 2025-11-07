@@ -93,7 +93,7 @@ public class ResponseBeanMeta {
 					assertReturnType(x, Header.class, int.class, Integer.class);
 					statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, x);
 				} else if (x.hasAnnotation(Content.class)) {
-					if (x.hasNoParameters())
+					if (x.getParameterCount() == 0)
 						assertReturnNotVoid(x, Header.class);
 					else
 						assertArgType(x, Header.class, OutputStream.class, Writer.class);
@@ -138,7 +138,7 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(ParameterInfo mpi, AnnotationWorkList annotations) {
-		if (mpi.hasNoAnnotation(Response.class))
+		if (! mpi.hasAnnotation(Response.class))
 			return null;
 		var b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
@@ -156,7 +156,7 @@ public class ResponseBeanMeta {
 	 */
 	public static ResponseBeanMeta create(Type t, AnnotationWorkList annotations) {
 		var ci = ClassInfo.of(t).unwrap(Value.class, Optional.class);
-		if (ci.hasNoAnnotation(Response.class))
+		if (! ci.hasAnnotation(Response.class))
 			return null;
 		var b = new Builder(annotations);
 		b.apply(ci.innerType());

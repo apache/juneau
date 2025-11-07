@@ -206,20 +206,20 @@ public class ClassMeta<T> implements Type {
 			.orElse(null);
 			// @formatter:on
 
-			ci.getAllFields().stream().filter(x -> x.hasAnnotation(bc.getAnnotationProvider(), ParentProperty.class)).forEach(x -> {
+			ci.getAllFields().stream().filter(x -> bc.getAnnotationProvider().find(ParentProperty.class, x.inner()).findAny().isPresent()).forEach(x -> {
 				if (x.isStatic())
 					throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid field ''{0}''.  Must be static.", x);
 				parentPropertyMethod = new Setter.FieldSetter(x.accessible().inner());
 			});
 
-			ci.getAllFields().stream().filter(x -> x.hasAnnotation(bc.getAnnotationProvider(), NameProperty.class)).forEach(x -> {
+			ci.getAllFields().stream().filter(x -> bc.getAnnotationProvider().find(NameProperty.class, x.inner()).findAny().isPresent()).forEach(x -> {
 				if (x.isStatic())
 					throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid field ''{0}''.  Must be static.", x);
 				namePropertyMethod = new Setter.FieldSetter(x.accessible().inner());
 			});
 
-			ci.getDeclaredFields().stream().filter(x -> x.hasAnnotation(bc.getAnnotationProvider(), Example.class)).forEach(x -> {
-				if (! (x.isStatic() && ci.isParentOf(x.getType().inner())))
+			ci.getDeclaredFields().stream().filter(x -> bc.getAnnotationProvider().find(Example.class, x.inner()).findAny().isPresent()).forEach(x -> {
+				if (! (x.isStatic() && ci.isParentOf(x.getFieldType().inner())))
 					throw new ClassMetaRuntimeException(c, "@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", x);
 				exampleField = x.accessible().inner();
 			});
@@ -296,7 +296,7 @@ public class ClassMeta<T> implements Type {
 
 			if (innerClass != Object.class) {
 				ClassInfo x = implClass == null ? ci : ClassInfo.of(implClass);
-				noArgConstructor = x.getPublicConstructor(ConstructorInfo::hasNoParameters);
+				noArgConstructor = x.getPublicConstructor(cons -> cons.getParameterCount() == 0);
 			}
 
 			try {

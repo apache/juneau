@@ -270,7 +270,7 @@ public class ResponseContent implements HttpEntity {
 
 					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
 					if (t == null && ! type.is(String.class)) {
-						ConstructorInfo c = type.getInfo().getPublicConstructor(ConstructorInfo::hasNoParameters);
+						ConstructorInfo c = type.getInfo().getPublicConstructor(cons -> cons.getParameterCount() == 0);
 						if (nn(c)) {
 							try {
 								return c.<T>newInstance();

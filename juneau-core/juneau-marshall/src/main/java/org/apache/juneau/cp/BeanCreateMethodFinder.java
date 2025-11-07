@@ -148,7 +148,7 @@ public class BeanCreateMethodFinder<T> {
 			method = ClassInfo.of(resourceClass).getPublicMethod(
 				x -> x.isNotDeprecated()
 				&& x.hasReturnType(beanType)
-				&& x.hasNoAnnotation(BeanIgnore.class)
+				&& ! x.hasAnnotation(BeanIgnore.class)
 				&& filter.test(x)
 				&& beanStore.hasAllParams(x)
 				&& (x.isStatic() || nn(resource))

@@ -133,7 +133,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(List.class)
 			&& mi.hasParameterTypesLenient(BeanSession.class)
-			&& mi.hasNoAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
+			&& ! mi.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
 		// @formatter:on
 	}
 
@@ -156,7 +156,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& mi.hasNoAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
+			&& ! mi.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
 		// @formatter:on
 	}
 

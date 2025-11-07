@@ -438,7 +438,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getPublicNoArgConstructor() {
-		check("E1()", e1.getPublicConstructor(ConstructorInfo::hasNoParameters));
+		check("E1()", e1.getPublicConstructor(cons -> cons.getParameterCount() == 0));
 	}
 
 	@Test void getConstructor() {

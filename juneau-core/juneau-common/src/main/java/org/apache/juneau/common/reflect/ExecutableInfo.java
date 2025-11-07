@@ -207,17 +207,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this executable does not have the specified annotation.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type.
-	 * @return <jk>true</jk> if this executable does not have the specified annotation.
-	 */
-	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
-		return !hasAnnotation(type);
-	}
-
-	/**
 	 * Returns the full name of this executable.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -390,18 +379,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this executable has no parameters.
-	 *
-	 * <p>
-	 * Same as calling {@link Executable#getParameterCount()} and comparing with zero.
-	 *
-	 * @return <jk>true</jk> if this executable has no parameters.
-	 */
-	public final boolean hasNoParameters() {
-		return getParameterCount() == 0;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this executable has this number of arguments.
 	 *
 	 * <p>
@@ -477,7 +454,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			case DEPRECATED -> isDeprecated();
 			case NOT_DEPRECATED -> isNotDeprecated();
 			case HAS_PARAMS -> hasParameters();
-			case HAS_NO_PARAMS -> hasNoParameters();
+			case HAS_NO_PARAMS -> getParameterCount() == 0;
 			case SYNTHETIC -> isSynthetic();
 			case NOT_SYNTHETIC -> !isSynthetic();
 			case VARARGS -> isVarArgs();

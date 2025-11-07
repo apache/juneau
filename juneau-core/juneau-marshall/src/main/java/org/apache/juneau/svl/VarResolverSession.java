@@ -267,7 +267,7 @@ public class VarResolverSession {
 				if (! containsVars(c))
 					return o;
 				Set c2 = null;
-				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.hasNoParameters());
+				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0);
 				if (ci != null) {
 					c2 = (Set)ci.inner().newInstance();
 				} else {
@@ -287,7 +287,7 @@ public class VarResolverSession {
 				if (! containsVars(c))
 					return o;
 				List c2 = null;
-				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.hasNoParameters());
+				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0);
 				if (ci != null) {
 					c2 = (List)ci.inner().newInstance();
 				} else {
@@ -307,7 +307,7 @@ public class VarResolverSession {
 				if (! containsVars(m))
 					return o;
 				Map m2 = null;
-				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.hasNoParameters());
+				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0);
 				if (ci != null) {
 					m2 = (Map)ci.inner().newInstance();
 				} else {
