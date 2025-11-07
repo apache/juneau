@@ -81,7 +81,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicWriterSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
@@ -105,7 +105,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void basicOutputStreamSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
@@ -135,7 +135,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesWriterSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
@@ -155,7 +155,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void noValuesOutputStreamSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
@@ -180,7 +180,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationWriterSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
@@ -200,7 +200,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void noAnnotationOutputStreamSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());

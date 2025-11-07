@@ -68,7 +68,7 @@ class JsonSchemaConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basic() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("BEAN", x.getAddDescriptionsTo());
 		check("BEAN", x.getAddExamplesTo());
@@ -88,7 +88,7 @@ class JsonSchemaConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValues() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());
@@ -107,7 +107,7 @@ class JsonSchemaConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotation() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());

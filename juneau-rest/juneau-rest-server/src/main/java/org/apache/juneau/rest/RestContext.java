@@ -1786,7 +1786,7 @@ public class RestContext extends Context {
 			});
 
 			var vrs = varResolver().build().createSession();
-			var work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+			var work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
 
 			apply(work);
 			beanContext().apply(work);
@@ -4581,7 +4581,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			for (var mi : rci.getPublicMethods()) {
-				AnnotationList al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
+				List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {

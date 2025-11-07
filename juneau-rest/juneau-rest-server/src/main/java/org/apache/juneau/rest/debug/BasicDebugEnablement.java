@@ -86,16 +86,18 @@ public class BasicDebugEnablement extends DebugEnablement {
 		// @formatter:off
 		ci.getPublicMethods().stream()
 			.forEach(x -> {
-				rstream(x.getAllAnnotationInfos()).filter(REST_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new)).forEachValue(
-					String.class,
-					"debug",
-					y -> true,
-					y -> {
-						String y2 = varResolver.resolve(y);
-						if (! y2.isEmpty())
-							b.enable(Enablement.fromString(y2), x.getFullName());
-					}
-				);
+				rstream(x.getAllAnnotationInfos()).filter(REST_OP_GROUP).forEach(ai -> {
+						ai.forEachValue(
+							String.class,
+							"debug",
+							y -> true,
+							y -> {
+								String y2 = varResolver.resolve(y);
+								if (! y2.isEmpty())
+									b.enable(Enablement.fromString(y2), x.getFullName());
+							}
+						);
+				});
 			}
 		);
 		// @formatter:on

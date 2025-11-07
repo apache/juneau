@@ -91,8 +91,6 @@ class MethodInfo_Test extends TestBase {
 				return "@PA(" + t2.value() + ")";
 			if (t instanceof AConfig t2)
 				return "@AConfig(" + t2.value() + ")";
-			if (t instanceof AnnotationList t2)
-				return t2.toString();
 			if (t instanceof ClassInfo t2)
 				return t2.getNameSimple();
 			return t.toString();
@@ -412,11 +410,11 @@ class MethodInfo_Test extends TestBase {
 
 	@Test void getConfigAnnotationsMapParentFirst() {
 		// Note: Order changed after inlining - method annotations now come after class annotations
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a1)", rstream(cb_a1.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a2a),@AConfig(a2b)", rstream(cb_a2.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a3)", rstream(cb_a3.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", rstream(cb_a4.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", rstream(cb_a5.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a1)", rstream(cb_a1.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a2a),@AConfig(a2b)", rstream(cb_a2.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a3)", rstream(cb_a3.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", rstream(cb_a4.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", rstream(cb_a5.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

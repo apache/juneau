@@ -1304,7 +1304,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	static ClassInfo bConfig = ClassInfo.of(BConfig.class);
 
 	@Test void schemaOnClass_onConfig() throws Exception {
-		var al = AnnotationWorkList.of(rstream(bConfig.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(rstream(bConfig.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		assertContains("$ref", r(x.getSchema(new B())));
 	}

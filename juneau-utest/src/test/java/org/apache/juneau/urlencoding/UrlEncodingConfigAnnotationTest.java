@@ -52,13 +52,13 @@ class UrlEncodingConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
 
 	@Test void basicParser() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
@@ -72,13 +72,13 @@ class UrlEncodingConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test void noValuesParser() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
@@ -91,13 +91,13 @@ class UrlEncodingConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}

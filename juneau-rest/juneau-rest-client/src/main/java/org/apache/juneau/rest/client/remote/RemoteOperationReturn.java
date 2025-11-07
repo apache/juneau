@@ -49,9 +49,9 @@ public class RemoteOperationReturn {
 	RemoteOperationReturn(MethodInfo m) {
 		ClassInfo rt = m.getReturnType();
 
-		AnnotationList al = rstream(m.getAllAnnotationInfos()).filter(REMOTE_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
+		List<AnnotationInfo<?>> al = rstream(m.getAllAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 		if (al.isEmpty())
-			al = rstream(m.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).filter(REMOTE_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
+			al = rstream(m.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 
 		RemoteReturn rv = null;
 
@@ -67,7 +67,7 @@ public class RemoteOperationReturn {
 			rv = RemoteReturn.NONE;
 		} else {
 			Value<RemoteReturn> v = Value.of(RemoteReturn.BODY);
-			al.forEachValue(RemoteReturn.class, "returns", x -> true, x -> v.set(x));
+			al.forEach(ai -> ai.forEachValue(RemoteReturn.class, "returns", x -> true, x -> v.set(x)));
 			rv = v.get();
 		}
 

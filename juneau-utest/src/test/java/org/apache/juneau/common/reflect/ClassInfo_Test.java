@@ -118,9 +118,6 @@ public class ClassInfo_Test extends TestBase {
 			return "@AConfig(" + ((AConfig)t).value() + ")";
 		if (t instanceof AnnotationInfo)
 			return ClassInfo_Test.TO_STRING.apply(((AnnotationInfo<?>)t).inner());
-		if (t instanceof AnnotationList al) {
-			return al.toString();
-		}
 		return t.toString();
 	};
 
@@ -572,26 +569,26 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getAnnotations() {
-		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
-		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
-		check("@A(3)", rstream(g5.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
+		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
+		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
+		check("@A(3)", rstream(g5.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
 	}
 
 	@Test void forEachAnnotation() {
 		var l1 = list();
-		rstream(g3.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l1.add(x.value()));
+		rstream(g3.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l1.add(x.value()));
 		assertList(l1, "2", "1", "5", "3", "6", "7");
 
 		var l2 = list();
-		rstream(g4.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l2.add(x.value()));
+		rstream(g4.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l2.add(x.value()));
 		assertList(l2, "2", "1", "5", "3", "6", "7");
 
 		var l3 = list();
-		rstream(g5.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l3.add(x.value()));
+		rstream(g5.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l3.add(x.value()));
 		assertList(l3, "3");
 
 		var l4 = list();
-		rstream(g3.getAnnotationInfos()).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> x.value() == 5).forEach(x -> l4.add(x.value()));
+		rstream(g3.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> x.value() == 5).forEach(x -> l4.add(x.value()));
 		assertList(l4, "5");
 	}
 
@@ -616,9 +613,9 @@ public class ClassInfo_Test extends TestBase {
 
 	@Test void getAnnotationsMapParentFirst() {
 		// Note: Order changed after inlining - interfaces now processed when they appear in hierarchy, not after all classes
-		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotationInfos()).collect(Collectors.toList()));
-		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotationInfos()).collect(Collectors.toList()));
-		check("@PA(10),@A(3)", rstream(g5.getAnnotationInfos()).collect(Collectors.toList()));
+		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList()));
+		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList()));
+		check("@PA(10),@A(3)", rstream(g5.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList()));
 	}
 
 	@A(1) @AConfig(1) interface GBI1 {}
@@ -634,9 +631,9 @@ public class ClassInfo_Test extends TestBase {
 	static ClassInfo gb3=of(GB3.class), gb4=of(GB4.class), gb5=of(GB5.class);
 
 	@Test void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)", rstream(gb3.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
-		check("@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)", rstream(gb4.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
-		check("@AConfig(3)", rstream(gb5.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
+		check("@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)", rstream(gb3.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
+		check("@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)", rstream(gb4.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
+		check("@AConfig(3)", rstream(gb5.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

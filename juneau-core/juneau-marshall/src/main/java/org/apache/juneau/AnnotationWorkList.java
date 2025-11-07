@@ -21,6 +21,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.reflect.*;
@@ -62,18 +63,18 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 * @param annotations The annotations to create work from.
 	 * @return A new list.
 	 */
-	public static AnnotationWorkList of(AnnotationList annotations) {
+	public static AnnotationWorkList of(Stream<AnnotationInfo<?>> annotations) {
 		return create().add(annotations);
 	}
 
 	/**
 	 * Static creator.
 	 *
-	 * @param annotations The annotations to create work from.
 	 * @param vrs The variable resolver.
+	 * @param annotations The annotations to create work from.
 	 * @return A new list.
 	 */
-	public static AnnotationWorkList of(VarResolverSession vrs, AnnotationList annotations) {
+	public static AnnotationWorkList of(VarResolverSession vrs, Stream<AnnotationInfo<?>> annotations) {
 		return create(vrs).add(annotations);
 	}
 
@@ -101,8 +102,8 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 * @param annotations The annotations to create work from.
 	 * @return This object.
 	 */
-	public AnnotationWorkList add(AnnotationList annotations) {
-		annotations.sort().forEach(x -> applyAnnotation(x));
+	public AnnotationWorkList add(Stream<AnnotationInfo<?>> annotations) {
+		annotations.sorted(Comparator.comparingInt(AnnotationInfo::getRank)).forEach(this::applyAnnotation);
 		return this;
 	}
 

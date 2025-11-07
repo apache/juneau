@@ -71,6 +71,18 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
+	 * Returns the rank of this annotation.
+	 * 
+	 * <p>
+	 * The rank is used for sorting annotations in order of precedence.
+	 * 
+	 * @return The rank of this annotation.
+	 */
+	public int getRank() {
+		return rank;
+	}
+
+	/**
 	 * Performs an action on all matching values on this annotation.
 	 *
 	 * @param <V> The annotation field type.
@@ -352,47 +364,6 @@ public class AnnotationInfo<T extends Annotation> {
 				}
 	}
 
-	/**
-	 * Constructs an {@link AnnotationList} of all annotations found on the specified class.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param classInfo The class to process.
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public static AnnotationList getAnnotationList(ClassInfo classInfo) {
-		return getAnnotationList(classInfo, x -> true);
-	}
-
-	/**
-	 * Constructs an {@link AnnotationList} of all matching annotations on the specified class.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param classInfo The class to process.
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public static AnnotationList getAnnotationList(ClassInfo classInfo, Predicate<AnnotationInfo<?>> filter) {
-		var l = new AnnotationList();
-		forEachAnnotationInfo(classInfo, filter, x -> l.add(x));
-		return l;
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static methods for MethodInfo
 	//-----------------------------------------------------------------------------------------------------------------
@@ -418,62 +389,6 @@ public class AnnotationInfo<T extends Annotation> {
 			forEachDeclaredAnnotationInfo(parents.get(i), filter, action);
 			forEachDeclaredMethodAnnotationInfo(methodInfo, parents.get(i), filter, action);
 		}
-	}
-
-	/**
-	 * Constructs an {@link AnnotationList} of all annotations found on the specified method.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * 	<li>On this method and matching methods ordered parent-to-child.
-	 * </ol>
-	 *
-	 * @param methodInfo The method to process.
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public static AnnotationList getAnnotationList(MethodInfo methodInfo) {
-		return getAnnotationList(methodInfo, x -> true);
-	}
-
-	/**
-	 * Constructs an {@link AnnotationList} of all matching annotations found on the specified method.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * 	<li>On this method and matching methods ordered parent-to-child.
-	 * </ol>
-	 *
-	 * @param methodInfo The method to process.
-	 * @param filter A predicate to apply to the entries to determine if value should be added.  Can be <jk>null</jk>.
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public static AnnotationList getAnnotationList(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter) {
-		var al = new AnnotationList();
-		forEachAnnotationInfo(methodInfo, filter, x -> al.add(x));
-		return al;
-	}
-
-	/**
-	 * Same as {@link #getAnnotationList(MethodInfo, Predicate)} except only returns annotations defined on methods.
-	 *
-	 * @param methodInfo The method to process.
-	 * @param filter A predicate to apply to the entries to determine if value should be added.  Can be <jk>null</jk>.
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public static AnnotationList getAnnotationListMethodOnly(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter) {
-		var al = new AnnotationList();
-		forEachAnnotationInfoMethodOnly(methodInfo, filter, x -> al.add(x));
-		return al;
 	}
 
 	/**

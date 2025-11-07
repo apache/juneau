@@ -335,7 +335,7 @@ public abstract class Context {
 		 * 	<jk>public class</jk> MyClass {...}
 		 *
 		 * 	<jc>// Find all annotations that themselves are annotated with @ContextPropertiesApply.</jc>
-		 * 	AnnotationList <jv>annotations</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getAnnotationList(<jsf>CONTEXT_APPLY_FILTER</jsf>);
+		 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getAnnotationInfos().stream().filter(<jsf>CONTEXT_APPLY_FILTER</jsf>);
 		 * 	VarResolverSession <jv>vrs</jv> = VarResolver.<jsf>DEFAULT</jsf>.createSession();
 		 * 	AnnotationWorkList <jv>work</jv> = AnnotationWorkList.of(<jv>vrs</jv>, <jv>annotations</jv>);
 		 *
@@ -674,13 +674,13 @@ public abstract class Context {
 		private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
 			CollectionUtils.traverse(x, y -> {
 				if (x instanceof Class<?> x2)
-					work.add(rstream(ClassInfo.of(x2).getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+					work.add(rstream(ClassInfo.of(x2).getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
 				else if (x instanceof ClassInfo x2)
-					work.add(rstream(x2.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+					work.add(rstream(x2.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
 				else if (x instanceof Method x2)
-					work.add(rstream(MethodInfo.of(x2).getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+					work.add(rstream(MethodInfo.of(x2).getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
 				else if (x instanceof MethodInfo x2)
-					work.add(rstream(x2.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new)));
+					work.add(rstream(x2.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
 				else
 					illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
 			});

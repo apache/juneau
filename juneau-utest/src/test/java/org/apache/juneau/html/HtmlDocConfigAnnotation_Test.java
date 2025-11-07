@@ -77,7 +77,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basic() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo", x.getAside());
 		check("foo", x.getFooter());
@@ -102,7 +102,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void defaults() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("", x.getAside());
 		check("", x.getFooter());
@@ -126,7 +126,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotation() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("", x.getAside());
 		check("", x.getFooter());
@@ -161,7 +161,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static ClassInfo d1 = ClassInfo.of(D1.class);
 
 	@Test void inheritance1() {
-		var al = AnnotationWorkList.of(sr, rstream(d1.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(d1.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo2,foo", x.getAside());
 		check("foo2,foo", x.getFooter());
@@ -189,7 +189,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static ClassInfo d2 = ClassInfo.of(D2.class);
 
 	@Test void inheritance2() {
-		var al = AnnotationWorkList.of(sr, rstream(d2.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(d2.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo,foo2", x.getAside());
 		check("foo,foo2", x.getFooter());
@@ -217,7 +217,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static ClassInfo d3 = ClassInfo.of(D3.class);
 
 	@Test void inheritance3() {
-		var al = AnnotationWorkList.of(sr, rstream(d3.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(d3.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo2", x.getAside());
 		check("foo2", x.getFooter());
@@ -245,7 +245,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static ClassInfo d4 = ClassInfo.of(D4.class);
 
 	@Test void inheritance4() {
-		var al = AnnotationWorkList.of(sr, rstream(d4.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(d4.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("", x.getAside());
 		check("", x.getFooter());
@@ -299,7 +299,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	}
 
 	@Test void widgets_basic() {
-		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("$W{E}", x.getAside());
 		check("$W{E}", x.getFooter());
@@ -316,7 +316,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	}
 
 	@Test void widgets_resolution() throws Exception {
-		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		var r = x.serialize(null).replaceAll("[\r\n]+", "|");
 		assertContainsAll(r, "<aside>xxx</aside>","<footer>xxx</footer>","<head>xxx","<style>@import \"xxx\"; xxx zzz</style>","<nav><ol><li>xxx</li></ol>xxx</nav>","<script>xxx| yyy|</script>");
@@ -362,31 +362,31 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	static ClassInfo f5 = ClassInfo.of(F5.class);
 
 	@Test void e01_rankedAnnotations_f1() {
-		var al = AnnotationWorkList.of(sr, rstream(f1.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(f1.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f1", x.getAside());
 	}
 
 	@Test void e02_rankedAnnotations_f2() {
-		var al = AnnotationWorkList.of(sr, rstream(f2.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(f2.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f1", x.getAside());
 	}
 
 	@Test void e03_rankedAnnotations_f3() {
-		var al = AnnotationWorkList.of(sr, rstream(f3.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(f3.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f3", x.getAside());
 	}
 
 	@Test void e04_rankedAnnotations_f4() {
-		var al = AnnotationWorkList.of(sr, rstream(f4.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(f4.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f3", x.getAside());
 	}
 
 	@Test void e05_rankedAnnotations_f5() {
-		var al = AnnotationWorkList.of(sr, rstream(f5.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(f5.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f5", x.getAside());
 	}

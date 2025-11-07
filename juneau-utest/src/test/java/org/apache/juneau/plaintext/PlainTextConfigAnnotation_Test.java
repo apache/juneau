@@ -42,12 +42,12 @@ class PlainTextConfigAnnotation_Test extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->PlainTextSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noValuesParser() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->PlainTextParser.create().apply(al).build().createSession());
 	}
 
@@ -59,12 +59,12 @@ class PlainTextConfigAnnotation_Test extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->PlainTextSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::new)));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->PlainTextParser.create().apply(al).build().createSession());
 	}
 }

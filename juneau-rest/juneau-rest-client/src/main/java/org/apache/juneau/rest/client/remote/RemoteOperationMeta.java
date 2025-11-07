@@ -64,20 +64,20 @@ public class RemoteOperationMeta {
 
 			var mi = MethodInfo.of(m);
 
-		AnnotationList al = rstream(mi.getAllAnnotationInfos()).filter(REMOTE_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
-		if (al.isEmpty())
-			al = rstream(mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).filter(REMOTE_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
+			List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+			if (al.isEmpty())
+				al = rstream(mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 
-		var _httpMethod = Value.<String>empty();
-		var _path = Value.<String>empty();
-		al.stream().map(x -> x.getName().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
-		al.forEachValue(String.class, "method", NOT_EMPTY, x -> _httpMethod.set(x.trim().toUpperCase()));
-		al.forEachValue(String.class, "path", NOT_EMPTY, x -> _path.set(x.trim()));
+			var _httpMethod = Value.<String>empty();
+			var _path = Value.<String>empty();
+			al.stream().map(x -> x.getName().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
+			al.forEach(ai -> ai.forEachValue(String.class, "method", NOT_EMPTY, x -> _httpMethod.set(x.trim().toUpperCase())));
+			al.forEach(ai -> ai.forEachValue(String.class, "path", NOT_EMPTY, x -> _path.set(x.trim())));
 			httpMethod = _httpMethod.orElse("").trim();
 			path = _path.orElse("").trim();
 
 			Value<String> value = Value.empty();
-			al.forEach(RemoteOp.class, x -> isNotEmpty(x.inner().value().trim()), x -> value.set(x.inner().value().trim()));
+			al.stream().filter(x -> x.isType(RemoteOp.class) && isNotEmpty(((RemoteOp)x.inner()).value().trim())).forEach(x -> value.set(((RemoteOp)x.inner()).value().trim()));
 
 			if (value.isPresent()) {
 				String v = value.get();
@@ -89,8 +89,8 @@ public class RemoteOperationMeta {
 					path = v.substring(i).trim();
 				}
 			} else {
-				al.forEach(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value", NOT_EMPTY).orElse("").trim()),
-					x -> value.set(x.getValue(String.class, "value", NOT_EMPTY).get().trim()));
+				al.stream().filter(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value", NOT_EMPTY).orElse("").trim()))
+					.forEach(x -> value.set(x.getValue(String.class, "value", NOT_EMPTY).get().trim()));
 				if (value.isPresent())
 					path = value.get();
 			}

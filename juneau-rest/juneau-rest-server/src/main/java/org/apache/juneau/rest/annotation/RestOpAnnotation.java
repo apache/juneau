@@ -609,7 +609,10 @@ public class RestOpAnnotation {
 	/** Default value */
 	public static final RestOp DEFAULT = create().build();
 	/**
-	 * Predicate that can be used with the {@link ClassInfo#getAnnotationList(Predicate)} and {@link MethodInfo#getAnnotationList(Predicate)}
+	 * Predicate that can be used to filter annotation streams.
+	 * 
+	 * <p>
+	 * Example: <c>classInfo.getAnnotationInfos().stream().filter(REST_OP_GROUP)</c>
 	 */
 	public static final Predicate<AnnotationInfo<?>> REST_OP_GROUP = x -> x.isInGroup(RestOp.class);
 

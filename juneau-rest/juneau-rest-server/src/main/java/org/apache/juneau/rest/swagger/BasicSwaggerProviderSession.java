@@ -273,7 +273,7 @@ public class BasicSwaggerProviderSession {
 
 			Method m = sm.getJavaMethod();
 			var mi = MethodInfo.of(m);
-			AnnotationList al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
+			List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 			String mn = m.getName();
 
 			// Get the operation from the existing swagger so far.
@@ -281,7 +281,7 @@ public class BasicSwaggerProviderSession {
 
 			// Add @RestOp(swagger)
 			Value<OpSwagger> _ms = Value.empty();
-			al.forEachValue(OpSwagger.class, "swagger", OpSwaggerAnnotation::notEmpty, x -> _ms.set(x));
+			al.forEach(ai -> ai.forEachValue(OpSwagger.class, "swagger", OpSwaggerAnnotation::notEmpty, x -> _ms.set(x)));
 			OpSwagger ms = _ms.orElseGet(() -> OpSwaggerAnnotation.create().build());
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
@@ -294,7 +294,7 @@ public class BasicSwaggerProviderSession {
 			);
 
 			Value<String> _summary = Value.empty();
-			al.forEachValue(String.class, "summary", NOT_EMPTY, x -> _summary.set(x));
+			al.forEach(ai -> ai.forEachValue(String.class, "summary", NOT_EMPTY, x -> _summary.set(x)));
 			op.appendIf(ne, "summary",
 				firstNonEmpty(
 					resolve(ms.summary()),
@@ -305,7 +305,7 @@ public class BasicSwaggerProviderSession {
 			);
 
 			Value<String[]> _description = Value.empty();
-			al.forEachValue(String[].class, "description", x -> x.length > 0, x -> _description.set(x));
+			al.forEach(ai -> ai.forEachValue(String[].class, "description", x -> x.length > 0, x -> _description.set(x)));
 			op.appendIf(ne, "description",
 				firstNonEmpty(
 					resolve(ms.description()),

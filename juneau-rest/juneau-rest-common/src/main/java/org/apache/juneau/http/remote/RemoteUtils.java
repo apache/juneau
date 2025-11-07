@@ -26,7 +26,10 @@ import org.apache.juneau.common.reflect.*;
 public class RemoteUtils {
 
 	/**
-	 * Predicate that can be used with the {@link ClassInfo#getAnnotationList(Predicate)} and {@link MethodInfo#getAnnotationList(Predicate)}
+	 * Predicate that can be used to filter annotation streams.
+	 * 
+	 * <p>
+	 * Example: <c>methodInfo.getAllAnnotationInfos().stream().filter(REMOTE_OP_GROUP)</c>
 	 */
 	public static final Predicate<AnnotationInfo<?>> REMOTE_OP_GROUP = x -> x.isInGroup(RemoteOp.class);
 }

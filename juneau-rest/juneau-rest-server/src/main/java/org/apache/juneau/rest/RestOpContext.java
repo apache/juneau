@@ -135,26 +135,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				var vr = context.getVarResolver();
 				var vrs = vr.createSession();
 
-//				var oldList = mi.getAnnotationList(CONTEXT_APPLY_FILTER);
-				var newList = rstream(mi.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::new));
-			
-//			if (!oldList.equals(newList)) {
-//				var sb = new StringBuilder();
-//				sb.append("\n=== ANNOTATION MISMATCH for method: ").append(mi.getFullName()).append(" ===\n");
-//				sb.append("OLD way size: ").append(oldList.size()).append("\n");
-//				sb.append("NEW way size: ").append(newList.size()).append("\n");
-//				sb.append("OLD way:\n");
-//				oldList.forEach(x -> sb.append("  ").append(x.toSimpleString()).append("\n"));
-//				sb.append("NEW way:\n");
-//				newList.forEach(x -> sb.append("  ").append(x.toSimpleString()).append("\n"));
-//				sb.append("In OLD but not NEW:\n");
-//				oldList.stream().filter(x -> !newList.contains(x)).forEach(x -> sb.append("  - ").append(x.toSimpleString()).append("\n"));
-//				sb.append("In NEW but not OLD:\n");
-//				newList.stream().filter(x -> !oldList.contains(x)).forEach(x -> sb.append("  + ").append(x.toSimpleString()).append("\n"));
-//				System.err.println(sb);
-//			}
-
-				var work = AnnotationWorkList.of(vrs, newList);
+				var work = AnnotationWorkList.of(vrs, rstream(mi.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
 
 				apply(work);
 
