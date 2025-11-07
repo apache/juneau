@@ -26,6 +26,7 @@ Release Notes - Juneau - Version 9.2.0
         For example: org.apache.juneau.http.annotation.Path.
         The current use case is for developers to further annotate their code with documentation.
     * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.0 to 3.14.1 #271.
+    * Bump org.jacoco:jacoco-maven-plugin from 0.8.13 to 0.8.14 #273.
 
 ** New Features - Multi-Key Cache and Concurrent Map Classes
 
