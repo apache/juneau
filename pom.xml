@@ -43,7 +43,7 @@
 		<juneauVersionNext>9.2.1</juneauVersionNext>
 		<junit.version>5.13.4</junit.version>
 		<javadoc.plugin.version>3.11.3</javadoc.plugin.version>
-		<jacoco.plugin.version>0.8.13</jacoco.plugin.version>
+		<jacoco.plugin.version>0.8.14</jacoco.plugin.version>
 		<jetty.version>12.1.3</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 	</properties>
