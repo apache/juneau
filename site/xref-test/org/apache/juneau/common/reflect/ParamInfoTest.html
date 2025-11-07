@@ -827,7 +827,7 @@
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Annotation&gt; List&lt;T&gt; annotations(ParameterInfo pi, Class&lt;T&gt; a) {
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> 		List&lt;T&gt; l = list();
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 		pi.forEachAnnotation(a, x -&gt; <strong class="jxr_keyword">true</strong>, l::add);
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 		rstream(pi.getAllAnnotationInfos(a)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(l::add);
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 	}
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> }

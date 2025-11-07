@@ -282,7 +282,7 @@
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Value&lt;String&gt; findDef(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		Value&lt;String&gt; n = Value.empty();
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		pi.forEachAnnotation(Header.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.def()), x -&gt; n.set(x.def()));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		rstream(pi.getAllAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.def())).forEach(x -&gt; n.set(x.def()));
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">return</strong> n;
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 
@@ -297,8 +297,8 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Value&lt;String&gt; findName(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 		Value&lt;String&gt; n = Value.empty();
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		pi.forEachAnnotation(Header.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.value()), x -&gt; n.set(x.value()));
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		pi.forEachAnnotation(Header.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.name()), x -&gt; n.set(x.name()));
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		rstream(pi.getAllAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.value())).forEach(x -&gt; n.set(x.value()));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		rstream(pi.getAllAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.name())).forEach(x -&gt; n.set(x.name()));
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">return</strong> n;
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 	}
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> }

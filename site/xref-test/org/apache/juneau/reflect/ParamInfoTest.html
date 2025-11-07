@@ -366,7 +366,7 @@
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Annotation&gt; List&lt;T&gt; annotations(ParameterInfo pi, Class&lt;T&gt; a) {
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		List&lt;T&gt; l = list();
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		pi.forEachAnnotation(a, x -&gt; <strong class="jxr_keyword">true</strong>, l::add);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		rstream(pi.getAllAnnotationInfos(a)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(l::add);
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> }
