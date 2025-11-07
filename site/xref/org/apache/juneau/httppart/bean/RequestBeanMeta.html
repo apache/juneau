@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		}
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		Builder apply(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> mpi) {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">return</strong> apply(mpi.getParameterType().<strong class="jxr_keyword">inner</strong>()).apply(opt(mpi.findAnnotationInfo(Request.<strong class="jxr_keyword">class</strong>)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">return</strong> apply(mpi.getParameterType().<strong class="jxr_keyword">inner</strong>()).apply(opt(mpi.getAllAnnotationInfo(Request.<strong class="jxr_keyword">class</strong>)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		}
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		Builder apply(Request a) {
