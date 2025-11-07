@@ -68,8 +68,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	private final Field inner;
 	private final ClassInfo declaringClass;
 	private final Supplier<ClassInfo> type;
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
-	private final Supplier<String> fullName = memoize(this::findFullName);
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations on this field.
+	private final Supplier<String> fullName;  // Fully qualified field name (declaring-class.field-name).
 
 	/**
 	 * Constructor.
@@ -81,15 +81,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		super(f, f.getModifiers());
 		this.declaringClass = declaringClass;
 		this.inner = f;
-		this.type = memoize(() -> findType(f));
-	}
-
-	private static ClassInfo findType(Field f) {
-		return ClassInfo.of(f.getType());
-	}
-
-	private List<AnnotationInfo<Annotation>> _findAnnotations() {
-		return stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
+		this.type = memoize(() -> ClassInfo.of(f.getType()));
+		this.annotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.fullName = memoize(this::findFullName);
 	}
 
 	private String findFullName() {

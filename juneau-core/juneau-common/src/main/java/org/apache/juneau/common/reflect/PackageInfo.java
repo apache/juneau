@@ -48,13 +48,13 @@ public class PackageInfo implements Annotatable {
 	/**
 	 * Returns a package info wrapper around the specified package object.
 	 *
-	 * @param p The package object.  Can be <jk>null</jk>.
+	 * @param inner The package object.  Can be <jk>null</jk>.
 	 * @return A package info wrapper, or <jk>null</jk> if the parameter was null.
 	 */
-	public static PackageInfo of(Package p) {
-		if (p == null)
+	public static PackageInfo of(Package inner) {
+		if (inner == null)
 			return null;
-		return CACHE.get(p, () -> new PackageInfo(p));
+		return CACHE.get(inner, () -> new PackageInfo(inner));
 	}
 
 	/**
@@ -82,9 +82,7 @@ public class PackageInfo implements Annotatable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private Package inner;  // Effectively final
-
-	// All annotations on this package, wrapped in AnnotationInfo. Repeated annotations have been unwrapped and are present as individual instances. Lazy-initialized in getter.
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(() -> opt(inner).map(p -> stream(p.getAnnotations()).flatMap(a -> stream(splitRepeated(a))).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations on this package, wrapped in AnnotationInfo. Repeated annotations have been unwrapped and are present as individual instances.
 
 	/**
 	 * Constructor.
@@ -93,6 +91,7 @@ public class PackageInfo implements Annotatable {
 	 */
 	protected PackageInfo(Package p) {
 		this.inner = p;
+		this.annotations = memoize(() -> opt(inner).map(pkg -> stream(pkg.getAnnotations()).flatMap(a -> stream(splitRepeated(a))).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
 	}
 
 	/**

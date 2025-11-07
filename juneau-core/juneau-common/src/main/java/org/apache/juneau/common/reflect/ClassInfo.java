@@ -179,189 +179,41 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		return c == null ? ClassInfo.of(o) : ClassInfo.of(c);
 	}
 
-	// The underlying Type object (may be Class, ParameterizedType, GenericArrayType, etc.).
-	private final Type t;
+	private final Type t;  // The underlying Type object (may be Class, ParameterizedType, GenericArrayType, etc.).
+	private Class<?> inner;  // The underlying Class object (null for non-class types like TypeVariable).  Effectively final.
+	private final boolean isParameterizedType;  // True if this represents a ParameterizedType (e.g., List<String>).
 
-	// The underlying Class object (null for non-class types like TypeVariable).  Effectively final.
-	private Class<?> inner;
-
-	// True if this represents a ParameterizedType (e.g., List<String>).
-	private final boolean isParameterizedType;
-
-	// Number of array dimensions (0 if not an array).
-	private final Supplier<Integer> dimensions = memoize(this::findDimensions);
-
-	// Base component type for arrays (e.g., String for String[][]), also handles GenericArrayType.  Cached and never null.
-	private final Supplier<ClassInfo> componentType = memoize(this::findComponentType);
-
-	// The package this class belongs to (null for primitive types and arrays).
-	private final Supplier<PackageInfo> packageInfo = memoize(() -> opt(inner).map(x -> PackageInfo.of(x.getPackage())).orElse(null));
-
-	// All superclasses of this class in child-to-parent order, starting with this class.
-	private final Supplier<List<ClassInfo>> parents = memoize(this::findParents);
-
-	// All annotations declared directly on this class, wrapped in AnnotationInfo.
-	private final Supplier<List<AnnotationInfo>> declaredAnnotations2 = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -> AnnotationInfo.of(this, a)).toList());
-
-	// Fully qualified class name with generics (e.g., "java.util.List<java.lang.String>").
-	private final Supplier<String> fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
-
-	// Simple class name with generics (e.g., "List<String>").
-	private final Supplier<String> shortName = memoize(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
-
-	// Human-readable class name without generics (e.g., "List").
-	private final Supplier<String> readableName = memoize(() -> getNameFormatted(SIMPLE, false, '$', WORD));
-
-	// All interfaces declared directly by this class.
-	private final Supplier<List<ClassInfo>> declaredInterfaces = memoize(() -> opt(inner).map(x -> stream(x.getInterfaces()).map(ClassInfo::of).toList()).orElse(liste()));
-
-	// All interfaces implemented by this class and its parents, in child-to-parent order.
-	private final Supplier<List<ClassInfo>> interfaces = memoize(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
-
-	// All parent classes and interfaces, classes first, then in child-to-parent order.
-	// TODO - Determine if this field is still needed now that we have parentsAndInterfaces which handles the hierarchy better.
-	private final Supplier<List<ClassInfo>> allParents = memoize(() -> concat(getParents().stream(), getInterfaces().stream()).toList());
-
-	// All parent classes and interfaces with proper traversal of interface hierarchy to avoid duplicates.
-	private final Supplier<List<ClassInfo>> parentsAndInterfaces = memoize(this::findParentsAndInterfaces);
-
-	/**
-	 * Finds all parent classes and interfaces with proper traversal of interface hierarchy.
-	 *
-	 * @return A list of all parent classes and interfaces without duplicates.
-	 */
-	private List<ClassInfo> findParentsAndInterfaces() {
-		var set = new LinkedHashSet<ClassInfo>();
-
-		// Process all parent classes (includes this class)
-		var parents = getParents();
-		for (int i = 0; i < parents.size(); i++) {
-			var parent = parents.get(i);
-			set.add(parent);
-
-			// Process interfaces declared on this parent (and their parent interfaces)
-			var declaredInterfaces = parent.getDeclaredInterfaces();
-			for (int j = 0; j < declaredInterfaces.size(); j++)
-				addInterfaceHierarchy(set, declaredInterfaces.get(j));
-		}
-
-		return u(new ArrayList<>(set));
-	}
-
-	/**
-	 * Helper method to recursively add an interface and its parent interfaces to the set.
-	 *
-	 * @param set The set to add to.
-	 * @param iface The interface to add.
-	 */
-	private void addInterfaceHierarchy(LinkedHashSet<ClassInfo> set, ClassInfo iface) {
-		if (!set.add(iface))
-			return;
-
-		// Process parent interfaces recursively
-		var parentInterfaces = iface.getDeclaredInterfaces();
-		for (int i = 0; i < parentInterfaces.size(); i++)
-			addInterfaceHierarchy(set, parentInterfaces.get(i));
-	}
-
-	/**
-	 * Finds all annotations on this class and parent classes/interfaces in child-to-parent order.
-	 *
-	 * <p>
-	 * This is similar to {@link org.apache.juneau.common.reflect.AnnotationProvider#find(Class)} but without runtime annotations.
-	 *
-	 * <p>
-	 * Order of traversal:
-	 * <ol>
-	 * 	<li>Annotations declared on this class
-	 * 	<li>Annotations declared on parent classes (child-to-parent order)
-	 * 	<li>For each parent class, annotations on interfaces declared on that class (child-to-parent interface hierarchy)
-	 * 	<li>Annotations on the package of this class
-	 * </ol>
-	 *
-	 * @return A list of all annotation infos in child-to-parent order.
-	 */
-	private List<AnnotationInfo<Annotation>> findAnnotationInfos() {
-		var list = new ArrayList<AnnotationInfo<Annotation>>();
-
-		// On all parent classes and interfaces (properly traversed to avoid duplicates)
-		var parentsAndInterfaces = getParentsAndInterfaces();
-		for (int i = 0; i < parentsAndInterfaces.size(); i++) {
-			var ci = parentsAndInterfaces.get(i);
-			// Add declared annotations from this class/interface
-			for (var a : ci.inner().getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a))
-					list.add(AnnotationInfo.of(ci, a2));
-		}
-
-		// On the package of this class
-		var pkg = getPackage();
-		if (nn(pkg)) {
-			var pi = PackageInfo.of(pkg.inner());
-			for (var a : pkg.inner().getAnnotations())
-				for (var a2 : splitRepeated(a))
-					list.add(AnnotationInfo.of(pi, a2));
-		}
-
-		return u(list);
-	}
-
-	// All annotations on this class and parent classes/interfaces in child-to-parent order.
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotationInfos = memoize(this::findAnnotationInfos);
-
-	// All record components if this is a record class (Java 14+).
-	private final Supplier<List<RecordComponent>> recordComponents = memoize(() -> opt(inner).filter(Class::isRecord).map(x -> u(l(x.getRecordComponents()))).orElse(liste()));
-
-	// All generic interface types (e.g., List<String> implements Comparable<List<String>>).
-	private final Supplier<List<Type>> genericInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getGenericInterfaces()))).orElse(liste()));
-
-	// All type parameters declared on this class (e.g., <T, U> in class Foo<T, U>).
-	private final Supplier<List<TypeVariable<?>>> typeParameters = memoize(() -> opt(inner).map(x -> u(l((TypeVariable<?>[])x.getTypeParameters()))).orElse(liste()));
-
-	// All annotated interface types with their annotations.
-	private final Supplier<List<AnnotatedType>> annotatedInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getAnnotatedInterfaces()))).orElse(liste()));
-
-	// All signers of this class (for signed JARs).
-	private final Supplier<List<Object>> signers = memoize(() -> opt(inner).map(Class::getSigners).map(x -> u(l(x))).orElse(liste()));
-
-	// All public methods on this class and inherited, excluding Object methods.
-	private final Supplier<List<MethodInfo>> publicMethods = memoize(() -> opt(inner).map(x -> stream(x.getMethods()).filter(m -> ne(m.getDeclaringClass(), Object.class)).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
-
-	// All methods declared directly on this class (public, protected, package, private).
-	private final Supplier<List<MethodInfo>> declaredMethods = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredMethods()).filter(m -> ne("$jacocoInit", m.getName())).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
-
-	// All methods from this class and all parents, in child-to-parent order.
-	private final Supplier<List<MethodInfo>> allMethods = memoize(() -> allParents.get().stream().flatMap(c -> c.getDeclaredMethods().stream()).toList());
-
-	// All methods from this class and all parents, in parent-to-child order.
-	private final Supplier<List<MethodInfo>> allMethodsParentFirst = memoize(() -> rstream(getAllParents()).flatMap(c -> c.getDeclaredMethods().stream()).toList());
-
-	// All public fields from this class and parents, deduplicated by name (child wins).
-	private final Supplier<List<FieldInfo>> publicFields = memoize(() -> parents.get().stream().flatMap(c -> c.getDeclaredFields().stream()).filter(f -> f.isPublic() && ne("$jacocoData", f.getName())).collect(toMap(FieldInfo::getName, x -> x, (a, b) -> a, LinkedHashMap::new)).values().stream().sorted().collect(toList()));
-
-	// All fields declared directly on this class (public, protected, package, private).
-	private final Supplier<List<FieldInfo>> declaredFields = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> ne("$jacocoData", f.getName())).map(this::getFieldInfo).sorted().toList()).orElse(liste()));
-
-	// All fields from this class and all parents, in parent-to-child order.
-	private final Supplier<List<FieldInfo>> allFields = memoize(() -> rstream(allParents.get()).flatMap(c -> c.getDeclaredFields().stream()).toList());
-
-	// All public constructors declared on this class.
-	private final Supplier<List<ConstructorInfo>> publicConstructors = memoize(() -> opt(inner).map(x -> stream(x.getConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
-
-	// All constructors declared on this class (public, protected, package, private).
-	private final Supplier<List<ConstructorInfo>> declaredConstructors = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
-
-	// The repeated annotation method (value()) if this class is a @Repeatable container.
-	private final Supplier<MethodInfo> repeatedAnnotationMethod = memoize(this::findRepeatedAnnotationMethod);
-
-	// Cache of wrapped Method objects.
-	private final Cache<Method,MethodInfo> methodCache = Cache.of(Method.class, MethodInfo.class).build();
-
-	// Cache of wrapped Field objects.
-	private final Cache<Field,FieldInfo> fieldCache = Cache.of(Field.class, FieldInfo.class).build();
-
-	// Cache of wrapped Constructor objects.
-	private final Cache<Constructor,ConstructorInfo> constructorCache = Cache.of(Constructor.class, ConstructorInfo.class).build();
+	private final Supplier<Integer> dimensions;  // Number of array dimensions (0 if not an array).
+	private final Supplier<ClassInfo> componentType;  // Base component type for arrays (e.g., String for String[][]), also handles GenericArrayType.  Cached and never null.
+	private final Supplier<PackageInfo> packageInfo;  // The package this class belongs to (null for primitive types and arrays).
+	private final Supplier<List<ClassInfo>> parents;  // All superclasses of this class in child-to-parent order, starting with this class.
+	private final Supplier<List<AnnotationInfo>> declaredAnnotations2;  // All annotations declared directly on this class, wrapped in AnnotationInfo.
+	private final Supplier<String> fullName;  // Fully qualified class name with generics (e.g., "java.util.List<java.lang.String>").
+	private final Supplier<String> shortName;  // Simple class name with generics (e.g., "List<String>").
+	private final Supplier<String> readableName;  // Human-readable class name without generics (e.g., "List").
+	private final Supplier<List<ClassInfo>> declaredInterfaces;  // All interfaces declared directly by this class.
+	private final Supplier<List<ClassInfo>> interfaces;  // All interfaces implemented by this class and its parents, in child-to-parent order.
+	private final Supplier<List<ClassInfo>> allParents;  // All parent classes and interfaces, classes first, then in child-to-parent order.
+	private final Supplier<List<ClassInfo>> parentsAndInterfaces;  // All parent classes and interfaces with proper traversal of interface hierarchy to avoid duplicates.
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotationInfos;  // All annotations on this class and parent classes/interfaces in child-to-parent order.
+	private final Supplier<List<RecordComponent>> recordComponents;  // All record components if this is a record class (Java 14+).
+	private final Supplier<List<Type>> genericInterfaces;  // All generic interface types (e.g., List<String> implements Comparable<List<String>>).
+	private final Supplier<List<TypeVariable<?>>> typeParameters;  // All type parameters declared on this class (e.g., <T, U> in class Foo<T, U>).
+	private final Supplier<List<AnnotatedType>> annotatedInterfaces;  // All annotated interface types with their annotations.
+	private final Supplier<List<Object>> signers;  // All signers of this class (for signed JARs).
+	private final Supplier<List<MethodInfo>> publicMethods;  // All public methods on this class and inherited, excluding Object methods.
+	private final Supplier<List<MethodInfo>> declaredMethods;  // All methods declared directly on this class (public, protected, package, private).
+	private final Supplier<List<MethodInfo>> allMethods;  // All methods from this class and all parents, in child-to-parent order.
+	private final Supplier<List<MethodInfo>> allMethodsParentFirst;  // All methods from this class and all parents, in parent-to-child order.
+	private final Supplier<List<FieldInfo>> publicFields;  // All public fields from this class and parents, deduplicated by name (child wins).
+	private final Supplier<List<FieldInfo>> declaredFields;  // All fields declared directly on this class (public, protected, package, private).
+	private final Supplier<List<FieldInfo>> allFields;  // All fields from this class and all parents, in parent-to-child order.
+	private final Supplier<List<ConstructorInfo>> publicConstructors;  // All public constructors declared on this class.
+	private final Supplier<List<ConstructorInfo>> declaredConstructors;  // All constructors declared on this class (public, protected, package, private).
+	private final Supplier<MethodInfo> repeatedAnnotationMethod;  // The repeated annotation method (value()) if this class is a @Repeatable container.
+	private final Cache<Method,MethodInfo> methodCache;  // Cache of wrapped Method objects.
+	private final Cache<Field,FieldInfo> fieldCache;  // Cache of wrapped Field objects.
+	private final Cache<Constructor,ConstructorInfo> constructorCache;  // Cache of wrapped Constructor objects.
 
 	/**
 	 * Constructor.
@@ -374,6 +226,37 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		this.t = t;
 		this.inner = c;
 		this.isParameterizedType = t == null ? false : (t instanceof ParameterizedType);
+		this.dimensions = memoize(this::findDimensions);
+		this.componentType = memoize(this::findComponentType);
+		this.packageInfo = memoize(() -> opt(inner).map(x -> PackageInfo.of(x.getPackage())).orElse(null));
+		this.parents = memoize(this::findParents);
+		this.declaredAnnotations2 = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -> AnnotationInfo.of(this, a)).toList());
+		this.fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
+		this.shortName = memoize(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
+		this.readableName = memoize(() -> getNameFormatted(SIMPLE, false, '$', WORD));
+		this.declaredInterfaces = memoize(() -> opt(inner).map(x -> stream(x.getInterfaces()).map(ClassInfo::of).toList()).orElse(liste()));
+		this.interfaces = memoize(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
+		this.allParents = memoize(() -> concat(getParents().stream(), getInterfaces().stream()).toList());
+		this.parentsAndInterfaces = memoize(this::findParentsAndInterfaces);
+		this.annotationInfos = memoize(this::findAnnotationInfos);
+		this.recordComponents = memoize(() -> opt(inner).filter(Class::isRecord).map(x -> u(l(x.getRecordComponents()))).orElse(liste()));
+		this.genericInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getGenericInterfaces()))).orElse(liste()));
+		this.typeParameters = memoize(() -> opt(inner).map(x -> u(l((TypeVariable<?>[])x.getTypeParameters()))).orElse(liste()));
+		this.annotatedInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getAnnotatedInterfaces()))).orElse(liste()));
+		this.signers = memoize(() -> opt(inner).map(Class::getSigners).map(x -> u(l(x))).orElse(liste()));
+		this.publicMethods = memoize(() -> opt(inner).map(x -> stream(x.getMethods()).filter(m -> ne(m.getDeclaringClass(), Object.class)).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
+		this.declaredMethods = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredMethods()).filter(m -> ne("$jacocoInit", m.getName())).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
+		this.allMethods = memoize(() -> allParents.get().stream().flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
+		this.allMethodsParentFirst = memoize(() -> rstream(getAllParents()).flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
+		this.publicFields = memoize(() -> parents.get().stream().flatMap(c2 -> c2.getDeclaredFields().stream()).filter(f -> f.isPublic() && ne("$jacocoData", f.getName())).collect(toMap(FieldInfo::getName, x -> x, (a, b) -> a, LinkedHashMap::new)).values().stream().sorted().collect(toList()));
+		this.declaredFields = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> ne("$jacocoData", f.getName())).map(this::getFieldInfo).sorted().toList()).orElse(liste()));
+		this.allFields = memoize(() -> rstream(allParents.get()).flatMap(c2 -> c2.getDeclaredFields().stream()).toList());
+		this.publicConstructors = memoize(() -> opt(inner).map(x -> stream(x.getConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
+		this.declaredConstructors = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
+		this.repeatedAnnotationMethod = memoize(this::findRepeatedAnnotationMethod);
+		this.methodCache = Cache.of(Method.class, MethodInfo.class).build();
+		this.fieldCache = Cache.of(Field.class, FieldInfo.class).build();
+		this.constructorCache = Cache.of(Constructor.class, ConstructorInfo.class).build();
 	}
 
 	/**
@@ -2458,6 +2341,91 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		} else {
 			return this;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Find methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Finds all parent classes and interfaces with proper traversal of interface hierarchy.
+	 *
+	 * @return A list of all parent classes and interfaces without duplicates.
+	 */
+	private List<ClassInfo> findParentsAndInterfaces() {
+		var set = new LinkedHashSet<ClassInfo>();
+
+		// Process all parent classes (includes this class)
+		var parents = getParents();
+		for (int i = 0; i < parents.size(); i++) {
+			var parent = parents.get(i);
+			set.add(parent);
+
+			// Process interfaces declared on this parent (and their parent interfaces)
+			var declaredInterfaces = parent.getDeclaredInterfaces();
+			for (int j = 0; j < declaredInterfaces.size(); j++)
+				addInterfaceHierarchy(set, declaredInterfaces.get(j));
+		}
+
+		return u(new ArrayList<>(set));
+	}
+
+	/**
+	 * Helper method to recursively add an interface and its parent interfaces to the set.
+	 *
+	 * @param set The set to add to.
+	 * @param iface The interface to add.
+	 */
+	private void addInterfaceHierarchy(LinkedHashSet<ClassInfo> set, ClassInfo iface) {
+		if (!set.add(iface))
+			return;
+
+		// Process parent interfaces recursively
+		var parentInterfaces = iface.getDeclaredInterfaces();
+		for (int i = 0; i < parentInterfaces.size(); i++)
+			addInterfaceHierarchy(set, parentInterfaces.get(i));
+	}
+
+	/**
+	 * Finds all annotations on this class and parent classes/interfaces in child-to-parent order.
+	 *
+	 * <p>
+	 * This is similar to {@link org.apache.juneau.common.reflect.AnnotationProvider#find(Class)} but without runtime annotations.
+	 *
+	 * <p>
+	 * Order of traversal:
+	 * <ol>
+	 * 	<li>Annotations declared on this class
+	 * 	<li>Annotations declared on parent classes (child-to-parent order)
+	 * 	<li>For each parent class, annotations on interfaces declared on that class (child-to-parent interface hierarchy)
+	 * 	<li>Annotations on the package of this class
+	 * </ol>
+	 *
+	 * @return A list of all annotation infos in child-to-parent order.
+	 */
+	private List<AnnotationInfo<Annotation>> findAnnotationInfos() {
+		var list = new ArrayList<AnnotationInfo<Annotation>>();
+
+		// On all parent classes and interfaces (properly traversed to avoid duplicates)
+		var parentsAndInterfaces = getParentsAndInterfaces();
+		for (int i = 0; i < parentsAndInterfaces.size(); i++) {
+			var ci = parentsAndInterfaces.get(i);
+			// Add declared annotations from this class/interface
+			for (var a : ci.inner().getDeclaredAnnotations())
+				for (var a2 : splitRepeated(a))
+					list.add(AnnotationInfo.of(ci, a2));
+		}
+
+		// On the package of this class
+		var pkg = getPackage();
+		if (nn(pkg)) {
+			var pi = PackageInfo.of(pkg.inner());
+			for (var a : pkg.inner().getAnnotations())
+				for (var a2 : splitRepeated(a))
+					list.add(AnnotationInfo.of(pi, a2));
+		}
+
+		return u(list);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

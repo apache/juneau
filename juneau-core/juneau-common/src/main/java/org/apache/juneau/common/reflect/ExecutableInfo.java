@@ -20,7 +20,6 @@ import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static java.util.stream.Collectors.*;
@@ -46,23 +45,28 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	private final Executable inner;
 	private final boolean isConstructor;
 
-	private final Supplier<List<ParameterInfo>> parameters = memoize(this::findParameters);
-	private final Supplier<List<ClassInfo>> exceptions = memoize(this::findExceptions);
-	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations = memoize(this::findDeclaredAnnotations);
-	private final Supplier<String> shortName = memoize(this::findShortName);
-	private final Supplier<String> fullName = memoize(this::findFullName);
+	private final Supplier<List<ParameterInfo>> parameters;  // All parameters of this executable.
+	private final Supplier<List<ClassInfo>> exceptions;  // All exceptions declared by this executable.
+	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations;  // All annotations declared directly on this executable.
+	private final Supplier<String> shortName;  // Short name (method/constructor name with parameters).
+	private final Supplier<String> fullName;  // Fully qualified name (declaring-class.method-name with parameters).
 
 	/**
 	 * Constructor.
 	 *
 	 * @param declaringClass The class that declares this method or constructor.
-	 * @param e The constructor orå method that this info represents.
+	 * @param e The constructor or method that this info represents.
 	 */
 	protected ExecutableInfo(ClassInfo declaringClass, Executable e) {
 		super(e, e.getModifiers());
 		this.declaringClass = declaringClass;
 		this.inner = e;
 		this.isConstructor = e instanceof Constructor;
+		this.parameters = memoize(this::findParameters);
+		this.exceptions = memoize(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).toList());
+		this.declaredAnnotations = memoize(() -> stream(inner.getDeclaredAnnotations()).map(a -> AnnotationInfo.of((Annotatable)this, a)).toList());
+		this.shortName = memoize(() -> f("{0}({1})", getSimpleName(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
+		this.fullName = memoize(this::findFullName);
 	}
 
 	/**
@@ -221,24 +225,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return fullName.get();
 	}
 
-	private String findFullName() {
-		var sb = new StringBuilder(128);
-		var dc = declaringClass;
-		var pi = dc.getPackage();
-		if (nn(pi))
-			sb.append(pi.getName()).append('.');
-		dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
-		if (! isConstructor)
-			sb.append('.').append(getSimpleName());
-		sb.append('(');
-		sb.append(getParameters().stream()
-			.map(p -> p.getParameterType().getNameFormatted(FULL, true, '$', BRACKETS))
-			.collect(joining(","))
-		);
-		sb.append(')');
-		return sb.toString();
-	}
-
 	/**
 	 * Returns parameter information at the specified index.
 	 *
@@ -283,10 +269,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final String getShortName() {
 		return shortName.get();
-	}
-
-	private String findShortName() {
-		return f("{0}({1})", getSimpleName(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(",")));
 	}
 
 	/**
@@ -741,18 +723,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			throw new IndexOutOfBoundsException(format("Invalid index ''{0}''.  Parameter count: {1}", index, pc));
 	}
 
-	private List<AnnotationInfo<Annotation>> findDeclaredAnnotations() {
-		return stream(inner.getDeclaredAnnotations())
-			.map(a -> AnnotationInfo.of((Annotatable)this, a))
-			.toList();
-	}
-
-	private List<ClassInfo> findExceptions() {
-		return stream(inner.getExceptionTypes())
-			.map(ClassInfo::of)
-			.toList();
-	}
-
 	private List<ParameterInfo> findParameters() {
 		var rp = inner.getParameters();
 		var ptc = inner.getParameterTypes();
@@ -778,5 +748,23 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return IntStream.range(0, rp.length)
 			.mapToObj(i -> new ParameterInfo(this, rp[i], i, ClassInfo.of(ptc[i], genericTypes[i])))
 			.toList();
+	}
+
+	private String findFullName() {
+		var sb = new StringBuilder(128);
+		var dc = declaringClass;
+		var pi = dc.getPackage();
+		if (nn(pi))
+			sb.append(pi.getName()).append('.');
+		dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
+		if (! isConstructor)
+			sb.append('.').append(getSimpleName());
+		sb.append('(');
+		sb.append(getParameters().stream()
+			.map(p -> p.getParameterType().getNameFormatted(FULL, true, '$', BRACKETS))
+			.collect(joining(","))
+		);
+		sb.append(')');
+		return sb.toString();
 	}
 }

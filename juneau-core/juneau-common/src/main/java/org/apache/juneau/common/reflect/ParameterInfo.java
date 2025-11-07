@@ -61,8 +61,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	@SuppressWarnings({"rawtypes","unchecked"})
 	private final Cache<Class,List<AnnotationInfo<Annotation>>> foundAnnotations = Cache.<Class,List<AnnotationInfo<Annotation>>>create().supplier((k) -> findAnnotationInfosInternal(k)).build();
 
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
-	private final Supplier<List<ParameterInfo>> matchingParameters = memoize(this::_findMatchingParameters);
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations on this parameter.
+	private final Supplier<List<ParameterInfo>> matchingParameters;  // Matching parameters in parent methods.
 	private final ResettableSupplier<String> foundName = memoizeResettable(this::findNameInternal);
 	private final ResettableSupplier<String> foundQualifier = memoizeResettable(this::findQualifierInternal);
 
@@ -81,6 +81,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		this.inner = p;
 		this.index = index;
 		this.type = type;
+		this.annotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.matchingParameters = memoize(this::findMatchingParameters);
 	}
 
 	/**
@@ -90,10 +92,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	public Parameter inner() {
 		return inner;
-	}
-
-	private List<AnnotationInfo<Annotation>> _findAnnotations() {
-		return stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
 	}
 
 	/**
@@ -226,7 +224,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		return matchingParameters.get();
 	}
 
-	private List<ParameterInfo> _findMatchingParameters() {
+	private List<ParameterInfo> findMatchingParameters() {
 		if (executable.isConstructor()) {
 			// For constructors: search parent class constructors for parameters with matching index and type
 			// Note: We match by index and type only, not by name, to avoid circular dependency
@@ -398,16 +396,13 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private String findQualifierInternal() {
 		// Search through matching parameters in hierarchy for @Named or javax.inject.Qualifier annotations
-		for (var mp : getMatchingParameters()) {
-			for (var ai : mp.getAnnotationInfos()) {
-				if (ai.hasSimpleName("Named") || ai.hasSimpleName("Qualifier")) {
-					String value = ai.getValue().orElse(null);
-					if (value != null)
-						return value;
-				}
-			}
-		}
-		return null;
+		return getMatchingParameters().stream()
+			.flatMap(mp -> mp.getAnnotationInfos().stream())
+			.filter(ai -> ai.hasSimpleName("Named") || ai.hasSimpleName("Qualifier"))
+			.map(ai -> ai.getValue().orElse(null))
+			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
 	}
 
 	/**
