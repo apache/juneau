@@ -181,46 +181,58 @@ public class ClassInfo {
 #### Git Operations and Reverts
 When working with git operations, especially reverting changes:
 
-1. **Always revert to staged version only** - Use `git restore --source=INDEX` to revert unstaged changes back to the staged (tested) version:
-   - ✅ CORRECT: `git restore --source=INDEX path/to/specific/File.java`
-   - ❌ WRONG: `git checkout -- path/to/file` (reverts to HEAD, loses staged changes)
-   - ❌ WRONG: `git restore path/to/file` (reverts to HEAD, loses staged changes)
+1. **Use helper scripts for reverting** - Always use the provided Python scripts instead of git commands directly:
+   - ✅ CORRECT: `./scripts/revert-unstaged.py path/to/specific/File.java` (reverts unstaged to staged)
+   - ✅ CORRECT: `./scripts/revert-staged.py path/to/specific/File.java` (reverts to HEAD, discards all changes)
+   - ❌ WRONG: Using `git restore`, `git checkout`, or any git commands directly
 
-2. **Always revert one file at a time** - Never use broad wildcards or multiple file paths:
-   - ✅ CORRECT: `git restore --source=INDEX path/to/specific/File.java`
-   - ❌ WRONG: `git restore --source=INDEX .` (reverts everything)
-   - ❌ WRONG: `git restore --source=INDEX module1/ module2/` (reverts multiple locations)
+2. **Revert Unstaged Changes Script** - `./scripts/revert-unstaged.py`
+   - Reverts working directory changes back to the staged (INDEX) version
+   - Preserves staged changes that have been tested
+   - Use this when you have staged changes you want to keep
+   - Command: `git restore --source=INDEX <file>`
 
-3. **Why this matters:**
+3. **Revert Staged Changes Script** - `./scripts/revert-staged.py`
+   - Reverts both staged AND unstaged changes back to HEAD (last commit)
+   - ⚠️  WARNING: Discards all changes (staged and unstaged)
+   - Use this when you want to completely discard all changes to a file
+   - Command: `git restore --source=HEAD <file>`
+
+4. **Always revert one file at a time** - Never use broad wildcards or multiple file paths:
+   - ✅ CORRECT: `./scripts/revert-unstaged.py path/to/specific/File.java`
+   - ❌ WRONG: Reverting multiple files or using wildcards
+
+5. **Why this matters:**
    - **Preserves staged changes**: Staged changes have been tested and should not be lost
-   - **Surgical precision**: Only reverts the specific problematic file's unstaged changes
+   - **Surgical precision**: Only reverts the specific problematic file's changes
    - **Safe recovery**: If a file is staged, it means it was working at that point
    - **Prevents data loss**: Won't accidentally revert good changes along with bad ones
+   - **User-friendly**: Scripts provide clear feedback and prevent common mistakes
 
-4. **Proper workflow when compilation fails:**
+6. **Proper workflow when compilation fails:**
    - Identify the specific file(s) causing the error
-   - Revert only that file's unstaged changes: `git restore --source=INDEX path/to/ProblematicFile.java`
+   - Revert only that file's unstaged changes: `./scripts/revert-unstaged.py path/to/ProblematicFile.java`
    - Verify the revert fixed the issue (back to staged/tested version)
    - Then address that specific file's changes separately
 
 **Examples:**
 ```bash
-# WRONG - Reverts all unstaged changes everywhere
-git restore --source=INDEX .
+# CORRECT - Revert unstaged changes only (preserves staged)
+./scripts/revert-unstaged.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/objecttools/ObjectSearcher.java
 
-# WRONG - Reverts to HEAD, losing staged changes
+# CORRECT - Revert all changes back to HEAD (discards everything)
+./scripts/revert-staged.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/objecttools/ObjectSearcher.java
+
+# WRONG - Don't use git commands directly
+git restore --source=INDEX path/to/file
 git checkout -- path/to/file
-git restore path/to/file
-
-# CORRECT - Revert specific file's unstaged changes to staged version
-git restore --source=INDEX juneau-core/juneau-marshall/src/main/java/org/apache/juneau/objecttools/ObjectSearcher.java
 ```
 
-**Understanding git restore --source=INDEX:**
-- `INDEX` refers to the staging area (where `git add` puts files)
-- This command reverts working directory changes back to what's staged
-- Staged changes remain intact and are not affected
-- If a file isn't staged, this command does nothing (which is safe)
+**Understanding the scripts:**
+- `revert-unstaged.py`: Uses `git restore --source=INDEX` to revert to staged version
+- `revert-staged.py`: Uses `git restore --source=HEAD` to revert to last commit
+- Both scripts handle one file at a time for safety
+- Both provide clear feedback about what they're doing
 
 ### 2. Testing Standards
 - Ensure comprehensive test coverage for all changes
