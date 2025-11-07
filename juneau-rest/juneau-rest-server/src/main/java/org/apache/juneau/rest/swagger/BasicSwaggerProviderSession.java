@@ -459,7 +459,7 @@ public class BasicSwaggerProviderSession {
 							String ha = a.name();
 							for (var code : codes) {
 								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-								ecmi.forEachAnnotation(context.getAnnotationProvider(), Schema.class, x -> true, x -> merge(header, x));
+								context.getAnnotationProvider().forEachMethodAnnotation(Schema.class, ecmi, x -> true, x -> merge(header, x));
 								rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Value.class, Optional.class).innerType(), bs));
 							}
@@ -470,16 +470,16 @@ public class BasicSwaggerProviderSession {
 
 			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class, Optional.class).hasAnnotation(Response.class)) {
 				List<Response> la = list();
-				mi.forEachAnnotation(context.getAnnotationProvider(), Response.class, x -> true, x -> la.add(x));
+				context.getAnnotationProvider().forEachMethodAnnotation(Response.class, mi, x -> true, x -> la.add(x));
 				List<StatusCode> la2 = list();
-				mi.forEachAnnotation(context.getAnnotationProvider(), StatusCode.class, x -> true, x -> la2.add(x));
+				context.getAnnotationProvider().forEachMethodAnnotation(StatusCode.class, mi, x -> true, x -> la2.add(x));
 				Set<Integer> codes = getCodes(la2, 200);
 				for (var a : la) {
 					for (var code : codes) {
 						JsonMap om = responses.getMap(String.valueOf(code), true);
 						merge(om, a);
 						JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-						mi.forEachAnnotation(context.getAnnotationProvider(), Schema.class, x -> true, x -> merge(schema, x));
+						context.getAnnotationProvider().forEachMethodAnnotation(Schema.class, mi, x -> true, x -> merge(schema, x));
 						pushupSchemaFields(RESPONSE, om, schema);
 						om.appendIf(nem, "schema", schema);
 						addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
@@ -495,7 +495,7 @@ public class BasicSwaggerProviderSession {
 							if (! isMulti(a)) {
 								for (var code : codes) {
 									JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-									ecmi.forEachAnnotation(context.getAnnotationProvider(), Schema.class, x -> true, x -> merge(header, x));
+									context.getAnnotationProvider().forEachMethodAnnotation(Schema.class, ecmi, x -> true, x -> merge(header, x));
 									rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
 									merge(header, a.schema());
 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));

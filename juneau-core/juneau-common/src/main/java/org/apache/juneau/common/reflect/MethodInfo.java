@@ -333,32 +333,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
-	 * Performs an action on all matching annotations defined on this method.
-	 *
-	 * <p>
-	 * Searches all methods with the same signature on the parent classes or interfaces
-	 * and the return type on the method.
-	 * <br>Results are parent-to-child ordered.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation type.
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 */
-	public <A extends Annotation> void forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
-		rstream(getMatchingMethods())
-			.flatMap(m -> m.getDeclaredAnnotationInfos().stream())
-			.map(AnnotationInfo::inner)
-			.filter(type::isInstance)
-			.map(type::cast)
-			.forEach(a -> consumeIf(filter, action, a));
-		getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
-	}
-
-
-	/**
 	 * Returns the name of this method.
 	 *
 	 * @return The name of this method

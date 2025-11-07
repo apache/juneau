@@ -19,11 +19,13 @@ package org.apache.juneau.common.reflect;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
@@ -852,5 +854,33 @@ public class AnnotationProvider {
 		for (var a : forClass.getDeclaredAnnotations())
 			for (var a2 : splitRepeated(a))
 				appendTo.add(AnnotationInfo.of(ci, a2));
+	}
+
+	/**
+	 * Iterates through annotations on a method, its declaring class hierarchy, and return type hierarchy.
+	 *
+	 * <p>
+	 * This traverses annotations in parent-first order from:
+	 * <ol>
+	 * 	<li>Declaring class hierarchy (via this AnnotationProvider)
+	 * 	<li>Method hierarchy (parent-first, declared annotations only)
+	 * 	<li>Return type hierarchy (via this AnnotationProvider)
+	 * </ol>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param mi The method info to traverse.
+	 * @param filter Optional filter to apply to annotations. Can be <jk>null</jk>.
+	 * @param action The action to perform on each matching annotation.
+	 */
+	public <A extends Annotation> void forEachMethodAnnotation(Class<A> type, MethodInfo mi, Predicate<A> filter, Consumer<A> action) {
+		mi.getDeclaringClass().forEachAnnotation(this, type, filter, action);
+		rstream(mi.getMatchingMethods())
+			.flatMap(m -> m.getDeclaredAnnotationInfos().stream())
+			.map(AnnotationInfo::inner)
+			.filter(type::isInstance)
+			.map(type::cast)
+			.forEach(a -> consumeIf(filter, action, a));
+		mi.getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(this, type, filter, action);
 	}
 }
