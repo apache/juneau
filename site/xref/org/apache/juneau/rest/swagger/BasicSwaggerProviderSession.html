@@ -164,7 +164,7 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			omSwagger = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_comment">// Combine it with @Rest(swagger)</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rr : rci.getAnnotations(context, Rest.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rr : rci.getAnnotations(context.getAnnotationProvider(), Rest.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			JsonMap sInfo = omSwagger.getMap(<span class="jxr_string">"info"</span>, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
@@ -440,8 +440,8 @@
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> eci : mi.getExceptionTypes()) {
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 				<strong class="jxr_keyword">if</strong> (eci.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 					List&lt;Response&gt; la = eci.getAnnotations(context, Response.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 					List&lt;StatusCode&gt; la2 = eci.getAnnotations(context, StatusCode.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 					List&lt;Response&gt; la = eci.getAnnotations(context.getAnnotationProvider(), Response.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 					List&lt;StatusCode&gt; la2 = eci.getAnnotations(context.getAnnotationProvider(), StatusCode.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 					Set&lt;Integer&gt; codes = getCodes(la2, 500);
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : la) {
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
@@ -463,7 +463,7 @@
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 							String ha = a.name();
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 							<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 								JsonMap header = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>).getMap(<span class="jxr_string">"headers"</span>, <strong class="jxr_keyword">true</strong>).getMap(ha, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 								ecmi.forEachAnnotation(context, Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 								ecmi.forEachAnnotation(context.getAnnotationProvider(), Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 								rstream(ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap(<span class="jxr_string">"schema"</span>), ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).innerType(), bs));
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 							}
@@ -474,16 +474,16 @@
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">if</strong> (mi.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>) || mi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).hasAnnotation(Response.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 				List&lt;Response&gt; la = list();
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 				mi.forEachAnnotation(context, Response.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la.add(x));
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 				mi.forEachAnnotation(context.getAnnotationProvider(), Response.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la.add(x));
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 				List&lt;StatusCode&gt; la2 = list();
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 				mi.forEachAnnotation(context, StatusCode.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la2.add(x));
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 				mi.forEachAnnotation(context.getAnnotationProvider(), StatusCode.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la2.add(x));
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 				Set&lt;Integer&gt; codes = getCodes(la2, 200);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : la) {
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 						JsonMap om = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 						merge(om, a);
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 						JsonMap schema = getSchema(om.getMap(<span class="jxr_string">"schema"</span>), m.getGenericReturnType(), bs);
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 						mi.forEachAnnotation(context, Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(schema, x));
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 						mi.forEachAnnotation(context.getAnnotationProvider(), Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(schema, x));
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 						pushupSchemaFields(RESPONSE, om, schema);
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 						om.appendIf(nem, <span class="jxr_string">"schema"</span>, schema);
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 						addBodyExamples(sm, om, <strong class="jxr_keyword">true</strong>, m.getGenericReturnType(), locale);
@@ -499,7 +499,7 @@
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 							<strong class="jxr_keyword">if</strong> (! isMulti(a)) {
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 								<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 									JsonMap header = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>).getMap(<span class="jxr_string">"headers"</span>, <strong class="jxr_keyword">true</strong>).getMap(ha, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 									ecmi.forEachAnnotation(context, Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 									ecmi.forEachAnnotation(context.getAnnotationProvider(), Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 									rstream(ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 									merge(header, a.schema());
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));

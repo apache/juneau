@@ -687,10 +687,10 @@
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 		BeanContext bc = beanContext;
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 			<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		getBeanMeta().getClassMeta().getInfo().forEachAnnotation(bc, a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		getBeanMeta().getClassMeta().getInfo().forEachAnnotation(bc.getAnnotationProvider(), a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">if</strong> (nn(field)) {
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> 			bc.getAnnotationProvider().find(a, field).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			ClassInfo.of(field.getType()).forEachAnnotation(bc, a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			ClassInfo.of(field.getType()).forEachAnnotation(bc.getAnnotationProvider(), a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 		}
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">if</strong> (nn(getter)) {
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the getter method</em>
@@ -698,7 +698,7 @@
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 				bc.getAnnotationProvider().find(a, parentGetter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 			});
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 			bc.getAnnotationProvider().find(a, getter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 			ClassInfo.of(getter.getReturnType()).forEachAnnotation(bc, a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 			ClassInfo.of(getter.getReturnType()).forEachAnnotation(bc.getAnnotationProvider(), a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> 		}
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">if</strong> (nn(setter)) {
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the setter method</em>
@@ -706,7 +706,7 @@
 <a class="jxr_linenumber" name="L698" href="#L698">698</a> 				bc.getAnnotationProvider().find(a, parentSetter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 			});
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 			bc.getAnnotationProvider().find(a, setter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			ClassInfo.of(setter.getReturnType()).forEachAnnotation(bc, a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			ClassInfo.of(setter.getReturnType()).forEachAnnotation(bc.getAnnotationProvider(), a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 		}
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<strong class="jxr_keyword">if</strong> (nn(extraKeys)) {
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the extraKeys method</em>
@@ -714,7 +714,7 @@
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 				bc.getAnnotationProvider().find(a, parentExtraKeys).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 			});
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 			bc.getAnnotationProvider().find(a, extraKeys).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			ClassInfo.of(extraKeys.getReturnType()).forEachAnnotation(bc, a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			ClassInfo.of(extraKeys.getReturnType()).forEachAnnotation(bc.getAnnotationProvider(), a, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 		}
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">return</strong> l;

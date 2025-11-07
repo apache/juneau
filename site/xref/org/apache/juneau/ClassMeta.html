@@ -171,7 +171,7 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 					cc = DATE;
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c.isArray())
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 					cc = ARRAY;
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ci.isChildOfAny(URL.<strong class="jxr_keyword">class</strong>, URI.<strong class="jxr_keyword">class</strong>) || ci.hasAnnotation(bc, Uri.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ci.isChildOfAny(URL.<strong class="jxr_keyword">class</strong>, URI.<strong class="jxr_keyword">class</strong>) || ci.hasAnnotation(bc.getAnnotationProvider(), Uri.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 					cc = URI;
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ci.isChildOf(Reader.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 					cc = READER;
@@ -214,19 +214,19 @@
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			ci.getAllFields().stream().filter(x -&gt; x.hasAnnotation(bc, ParentProperty.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			ci.getAllFields().stream().filter(x -&gt; x.hasAnnotation(bc.getAnnotationProvider(), ParentProperty.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">if</strong> (x.isStatic())
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@ParentProperty used on invalid field ''{0}''.  Must be static."</span>, x);
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 				parentPropertyMethod = <strong class="jxr_keyword">new</strong> Setter.FieldSetter(x.accessible().<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 			});
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			ci.getAllFields().stream().filter(x -&gt; x.hasAnnotation(bc, NameProperty.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			ci.getAllFields().stream().filter(x -&gt; x.hasAnnotation(bc.getAnnotationProvider(), NameProperty.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 				<strong class="jxr_keyword">if</strong> (x.isStatic())
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@NameProperty used on invalid field ''{0}''.  Must be static."</span>, x);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 				namePropertyMethod = <strong class="jxr_keyword">new</strong> Setter.FieldSetter(x.accessible().<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			});
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			ci.getDeclaredFields().stream().filter(x -&gt; x.hasAnnotation(bc, Example.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			ci.getDeclaredFields().stream().filter(x -&gt; x.hasAnnotation(bc.getAnnotationProvider(), Example.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 				<strong class="jxr_keyword">if</strong> (! (x.isStatic() &amp;&amp; ci.isParentOf(x.getType().<strong class="jxr_keyword">inner</strong>())))
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@Example used on invalid field ''{0}''.  Must be static and an instance of the type."</span>, x);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 				exampleField = x.accessible().<strong class="jxr_keyword">inner</strong>();
@@ -236,13 +236,13 @@
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 			List&lt;MethodInfo&gt; methods = ci.getMethods();
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = methods.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 				MethodInfo m = methods.get(i);
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				<strong class="jxr_keyword">if</strong> (m.hasAnnotation(bc, ParentProperty.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				<strong class="jxr_keyword">if</strong> (m.hasAnnotation(bc.getAnnotationProvider(), ParentProperty.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 					<strong class="jxr_keyword">if</strong> (m.isStatic() || ! m.hasNumParameters(1))
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument."</span>, m);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 					m.setAccessible();
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 					parentPropertyMethod = <strong class="jxr_keyword">new</strong> Setter.MethodSetter(m.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 				}
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 				<strong class="jxr_keyword">if</strong> (m.hasAnnotation(bc, NameProperty.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 				<strong class="jxr_keyword">if</strong> (m.hasAnnotation(bc.getAnnotationProvider(), NameProperty.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 					<strong class="jxr_keyword">if</strong> (m.isStatic() || ! m.hasNumParameters(1))
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument."</span>, m);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 					m.setAccessible();
@@ -250,7 +250,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 				}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 			}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			ci.getDeclaredMethods().stream().filter(m -&gt; m.hasAnnotation(bc, Example.<strong class="jxr_keyword">class</strong>)).forEach(m -&gt; {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			ci.getDeclaredMethods().stream().filter(m -&gt; m.hasAnnotation(bc.getAnnotationProvider(), Example.<strong class="jxr_keyword">class</strong>)).forEach(m -&gt; {
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 				<strong class="jxr_keyword">if</strong> (! (m.isStatic() &amp;&amp; m.hasParameterTypesLenient(BeanSession.<strong class="jxr_keyword">class</strong>) &amp;&amp; ci.isParentOf(m.getReturnType().<strong class="jxr_keyword">inner</strong>())))
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class."</span>, m.toString());
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 				m.setAccessible();
@@ -474,7 +474,7 @@
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">private</strong> <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> findBeanFilter(BeanContext bc) {
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 				List&lt;Bean&gt; ba = info.getAnnotations(bc, Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 				List&lt;Bean&gt; ba = info.getAnnotations(bc.getAnnotationProvider(), Bean.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 				<strong class="jxr_keyword">if</strong> (! ba.isEmpty())
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 					<strong class="jxr_keyword">return</strong> BeanFilter.create(innerClass).applyAnnotations(ba).build();
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -489,7 +489,7 @@
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">private</strong> <a name="MarshalledFilter" href="../../../org/apache/juneau/MarshalledFilter.html#MarshalledFilter">MarshalledFilter</a> findMarshalledFilter(BeanContext bc) {
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 				List&lt;Marshalled&gt; ba = info.getAnnotations(bc, Marshalled.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 				List&lt;Marshalled&gt; ba = info.getAnnotations(bc.getAnnotationProvider(), Marshalled.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 				<strong class="jxr_keyword">if</strong> (! ba.isEmpty())
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 					<strong class="jxr_keyword">return</strong> MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -1123,8 +1123,8 @@
 <a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 		Optional&lt;A&gt; o = (Optional&lt;A&gt;)annotationLastMap.get(a);
 <a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 			<strong class="jxr_keyword">if</strong> (beanContext == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 				<strong class="jxr_keyword">return</strong> info.getAnnotation(BeanContext.DEFAULT, a);
-<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 			o = opt(info.getAnnotation(beanContext, a));
+<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 				<strong class="jxr_keyword">return</strong> info.getAnnotation(BeanContext.DEFAULT.getAnnotationProvider(), a);
+<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 			o = opt(info.getAnnotation(beanContext.getAnnotationProvider(), a));
 <a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 			annotationLastMap.put(a, o);
 <a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		}
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		<strong class="jxr_keyword">return</strong> o.orElse(<strong class="jxr_keyword">null</strong>);
@@ -1769,7 +1769,7 @@
 <a class="jxr_linenumber" name="L1761" href="#L1761">1761</a> 		A[] array = annotationArray(type);
 <a class="jxr_linenumber" name="L1762" href="#L1762">1762</a> 		<strong class="jxr_keyword">if</strong> (array == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1763" href="#L1763">1763</a> 			<strong class="jxr_keyword">if</strong> (beanContext == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> 				<strong class="jxr_keyword">return</strong> Optional.ofNullable(info.lastAnnotation(BeanContext.DEFAULT, type, filter));
+<a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> 				<strong class="jxr_keyword">return</strong> Optional.ofNullable(info.lastAnnotation(type, filter));
 <a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> 			<strong class="jxr_keyword">return</strong> Optional.empty();
 <a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> 		}
 <a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = array.length - 1; i &gt;= 0; i--)
@@ -1943,7 +1943,7 @@
 <a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 		A[] array = (A[])annotationArrayMap.get(type);
 <a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 		<strong class="jxr_keyword">if</strong> (array == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(beanContext)) {
 <a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 			List&lt;A&gt; l = list();
-<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 			info.forEachAnnotation(beanContext, type, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 			info.forEachAnnotation(beanContext.getAnnotationProvider(), type, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> 			array = (A[])Array.newInstance(type, l.size());
 <a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; l.size(); i++)
 <a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 				Array.set(array, i, l.get(i));
