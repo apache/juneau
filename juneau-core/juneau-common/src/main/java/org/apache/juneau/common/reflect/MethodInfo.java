@@ -484,10 +484,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@SafeVarargs
 	public final boolean hasAnyAnnotations(Class<? extends Annotation>...types) {
-		for (var a : types)
-			if (hasAnnotation(a))
-				return true;
-		return false;
+		return getAnnotationInfos().stream().anyMatch(ai -> stream(types).anyMatch(t -> t.isInstance(ai.inner())));
 	}
 
 	/**
