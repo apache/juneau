@@ -844,22 +844,22 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
-		getAnnotationProvider().find(type, onConstructor).map(x -> x.inner()).filter(x -> filter.test(x)).forEach(x -> action.accept(x));
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
-		getAnnotationProvider().find(type, onField).map(x -> x.inner()).filter(x -> filter.test(x)).forEach(x -> action.accept(x));
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
-		getAnnotationProvider().find(type, onMethod).map(x -> x.inner()).filter(x -> filter.test(x)).forEach(x -> action.accept(x));
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-		getAnnotationProvider().findDeclaredParentFirst(type, onClass).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+		throw unsupportedOp();
 	}
 
 	/**
@@ -931,27 +931,27 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		return getAnnotationProvider().find(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-		return getAnnotationProvider().find(type, onConstructor).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-		return getAnnotationProvider().find(type, onField).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-		return getAnnotationProvider().find(type, onMethod).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		return getAnnotationProvider().findDeclared(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from Object */

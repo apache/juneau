@@ -246,7 +246,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			if (nn(getter)) {
 				List<Beanp> lp = list();
-				bc.forEachAnnotation(Beanp.class, getter, x -> true, x -> lp.add(x));
+				bc.getAnnotationProvider().find(Beanp.class, getter).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
@@ -261,12 +261,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (! x.wo().isEmpty())
 						writeOnly = Boolean.valueOf(x.wo());
 				});
-				bc.forEachAnnotation(Swap.class, getter, x -> true, x -> swap = getPropertySwap(x));
+				bc.getAnnotationProvider().find(Swap.class, getter).map(x -> x.inner()).filter(x -> true).forEach(x -> swap = getPropertySwap(x));
 			}
 
 			if (nn(setter)) {
 				List<Beanp> lp = list();
-				bc.forEachAnnotation(Beanp.class, setter, x -> true, x -> lp.add(x));
+				bc.getAnnotationProvider().find(Beanp.class, setter).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, setter));
@@ -281,7 +281,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (! x.wo().isEmpty())
 						writeOnly = Boolean.valueOf(x.wo());
 				});
-				bc.forEachAnnotation(Swap.class, setter, x -> true, x -> swap = getPropertySwap(x));
+				bc.getAnnotationProvider().find(Swap.class, setter).map(x -> x.inner()).filter(x -> true).forEach(x -> swap = getPropertySwap(x));
 			}
 
 			if (rawTypeMeta == null)
@@ -687,25 +687,25 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (nn(getter)) {
 			// Walk up the inheritance hierarchy for the getter method
 			forEachParentMethod(getter, parentGetter -> {
-				bc.forEachAnnotation(a, parentGetter, x -> true, x -> l.add(x));
+				bc.getAnnotationProvider().find(a, parentGetter).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			});
-			bc.forEachAnnotation(a, getter, x -> true, x -> l.add(x));
+			bc.getAnnotationProvider().find(a, getter).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			ClassInfo.of(getter.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
 		}
 		if (nn(setter)) {
 			// Walk up the inheritance hierarchy for the setter method
 			forEachParentMethod(setter, parentSetter -> {
-				bc.forEachAnnotation(a, parentSetter, x -> true, x -> l.add(x));
+				bc.getAnnotationProvider().find(a, parentSetter).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			});
-			bc.forEachAnnotation(a, setter, x -> true, x -> l.add(x));
+			bc.getAnnotationProvider().find(a, setter).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			ClassInfo.of(setter.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
 		}
 		if (nn(extraKeys)) {
 			// Walk up the inheritance hierarchy for the extraKeys method
 			forEachParentMethod(extraKeys, parentExtraKeys -> {
-				bc.forEachAnnotation(a, parentExtraKeys, x -> true, x -> l.add(x));
+				bc.getAnnotationProvider().find(a, parentExtraKeys).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			});
-			bc.forEachAnnotation(a, extraKeys, x -> true, x -> l.add(x));
+			bc.getAnnotationProvider().find(a, extraKeys).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			ClassInfo.of(extraKeys.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
 		}
 

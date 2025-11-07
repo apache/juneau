@@ -426,10 +426,10 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			consumeIf(filter, action, t2);
 		var interfaces2 = interfaces.get();
 		for (int i = interfaces2.size() - 1; i >= 0; i--)
-			annotationProvider.forEachDeclaredAnnotation(type, interfaces2.get(i).inner(), filter, action);
+			annotationProvider.getAnnotationProvider().findDeclaredParentFirst(type, interfaces2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 		var parents2 = parents.get();
 		for (int i = parents2.size() - 1; i >= 0; i--)
-			annotationProvider.forEachDeclaredAnnotation(type, parents2.get(i).inner(), filter, action);
+			annotationProvider.getAnnotationProvider().findDeclaredParentFirst(type, parents2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 		return this;
 	}
 
@@ -2177,18 +2177,18 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (annotationProvider == null)
 			throw unsupportedOp();
 		A x = null;
-		x = annotationProvider.lastAnnotation(type, inner(), filter);
+		x = annotationProvider.getAnnotationProvider().find(type, inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
 		if (nn(x) && test(filter, x))
 			return x;
 		var parents2 = parents.get();
 		for (var parent : parents2) {
-			x = annotationProvider.lastAnnotation(type, parent.inner(), filter);
+			x = annotationProvider.getAnnotationProvider().find(type, parent.inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
 			if (nn(x))
 				return x;
 		}
 		var interfaces2 = interfaces.get();
 		for (var element : interfaces2) {
-			x = annotationProvider.lastAnnotation(type, element.inner(), filter);
+			x = annotationProvider.getAnnotationProvider().find(type, element.inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
 			if (nn(x))
 				return x;
 		}

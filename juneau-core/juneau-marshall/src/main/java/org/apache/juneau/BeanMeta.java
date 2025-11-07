@@ -603,8 +603,8 @@ public class BeanMeta<T> {
 
 				List<Beanp> lp = list();
 				List<Name> ln = list();
-				ctx.forEachAnnotation(Beanp.class, m.inner(), x -> true, x -> lp.add(x));
-				ctx.forEachAnnotation(Name.class, m.inner(), x -> true, x -> ln.add(x));
+				ctx.getAnnotationProvider().find(Beanp.class, m.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
+				ctx.getAnnotationProvider().find(Name.class, m.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
 
 				// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does
 				// This ensures property names are inherited correctly, preventing duplicate property definitions
@@ -819,8 +819,8 @@ public class BeanMeta<T> {
 
 					if (paramsMatch) {
 						// Found a matching parent method - check for @Beanp and @Name annotations
-						ctx.forEachAnnotation(Beanp.class, parentMethod.inner(), x -> true, x -> lp.add(x));
-						ctx.forEachAnnotation(Name.class, parentMethod.inner(), x -> true, x -> ln.add(x));
+						ctx.getAnnotationProvider().find(Beanp.class, parentMethod.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
+						ctx.getAnnotationProvider().find(Name.class, parentMethod.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
 
 						// If we found annotations, we're done
 						if (! lp.isEmpty() || ! ln.isEmpty())
