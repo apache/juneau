@@ -2890,6 +2890,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		public Builder interceptors(Class<?>...values) throws Exception {
 			for (var c : values) {
+				if (c == null)
+					continue;
 				ClassInfo ci = ClassInfo.of(c);
 				if (nn(ci)) {
 					if (ci.isChildOfAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
@@ -2953,6 +2955,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		public Builder interceptors(Object...value) {
 			List<RestCallInterceptor> l = list();
 			for (var o : value) {
+				if (o == null)
+					continue;
 				ClassInfo ci = ClassInfo.of(o);
 				if (nn(ci)) {
 					if (! ci.isChildOfAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))

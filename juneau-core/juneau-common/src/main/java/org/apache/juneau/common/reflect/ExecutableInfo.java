@@ -58,7 +58,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param inner The constructor or method that this info represents.
 	 */
 	protected ExecutableInfo(ClassInfo declaringClass, Executable inner) {
-		super(inner, inner.getModifiers());
+		super(inner, assertArgNotNull("inner", inner).getModifiers());
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.isConstructor = inner instanceof Constructor;

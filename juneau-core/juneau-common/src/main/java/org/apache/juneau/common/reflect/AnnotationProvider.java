@@ -209,7 +209,7 @@ public class AnnotationProvider {
 	 */
 	public static class Builder {
 		boolean disableCaching;
-		ReflectionMap.Builder<Annotation> runtimeAnnotations = ReflectionMap.create(Annotation.class);
+		ReflectionMap2.Builder<Annotation> runtimeAnnotations = ReflectionMap2.create(Annotation.class);
 
 		Builder() {
 			disableCaching = DISABLE_ANNOTATION_CACHING;
@@ -407,7 +407,7 @@ public class AnnotationProvider {
 	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodAnnotations;
 	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldAnnotations;
 	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorAnnotations;
-	private final ReflectionMap<Annotation> runtimeAnnotations;
+	private final ReflectionMap2<Annotation> runtimeAnnotations;
 	// @formatter:on
 
 	/**

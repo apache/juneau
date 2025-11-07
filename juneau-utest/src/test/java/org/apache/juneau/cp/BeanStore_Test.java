@@ -786,7 +786,7 @@ class BeanStore_Test extends TestBase {
 		var bs = BeanStore.create().outer(new BeanStore_Test()).build();
 		assertNotNull(bs.createBean(D1a.class).run());
 		assertNotNull(bs.createBean(D1b.class).run());
-		assertNull(bs.createBean(null).run());
+		assertThrows(IllegalArgumentException.class, () -> bs.createBean(null).run());
 	}
 
 	public static class D2 {

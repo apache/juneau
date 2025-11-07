@@ -82,8 +82,8 @@ class ConstructorInfoTest extends TestBase {
 	}
 
 	@Test void of_null() {
-		check(null, ConstructorInfo.of(null));
-		check(null, ConstructorInfo.of(null, null));
+		assertThrows(IllegalArgumentException.class, () -> ConstructorInfo.of(null));
+		assertThrows(IllegalArgumentException.class, () -> ConstructorInfo.of(null, null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

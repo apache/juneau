@@ -30,14 +30,16 @@ import sys
 import os
 
 def run_command(cmd, verbose=False):
-    """Run a command and return exit code."""
+    """Run a command and return exit code and full output."""
     print(f"Running: {cmd}")
     print("-" * 80)
     
     if verbose:
         # Show full output
-        result = subprocess.run(cmd, shell=True, cwd="/Users/james.bognar/git/juneau")
-        return result.returncode
+        result = subprocess.run(cmd, shell=True, cwd="/Users/james.bognar/git/juneau", capture_output=True, text=True)
+        print(result.stdout)
+        print(result.stderr, file=sys.stderr)
+        return result.returncode, result.stdout + result.stderr
     else:
         # Run command and capture all output, then show last lines
         result = subprocess.run(
@@ -55,7 +57,7 @@ def run_command(cmd, verbose=False):
             print('\n'.join(lines[-50:]))
         else:
             print(output)
-        return result.returncode
+        return result.returncode, output
 
 def build(verbose=False):
     """Run Maven clean install without tests."""
@@ -64,6 +66,21 @@ def build(verbose=False):
 def test(verbose=False):
     """Run Maven tests."""
     return run_command("mvn test -q -Drat.skip=true", verbose)
+
+def parse_test_results(output):
+    """Parse Maven test output and extract failure/error counts."""
+    import re
+    # Look for the last occurrence of: [ERROR] Tests run: 25916, Failures: 0, Errors: 12, Skipped: 1
+    # This will be the total across all modules
+    matches = list(re.finditer(r'\[ERROR\]\s+Tests run:\s+(\d+),\s+Failures:\s+(\d+),\s+Errors:\s+(\d+)', output))
+    if matches:
+        # Use the last match (final total)
+        match = matches[-1]
+        total = int(match.group(1))
+        failures = int(match.group(2))
+        errors = int(match.group(3))
+        return total, failures, errors
+    return None, None, None
 
 def main():
     args = sys.argv[1:]
@@ -97,7 +114,7 @@ def main():
     exit_code = 0
     
     if build_only or full:
-        exit_code = build(verbose)
+        exit_code, output = build(verbose)
         if exit_code != 0:
             print("\n❌ Build failed!")
             return exit_code
@@ -106,9 +123,15 @@ def main():
     if test_only or full:
         if full:
             print("\n" + "=" * 80)
-        exit_code = test(verbose)
+        exit_code, output = test(verbose)
         if exit_code != 0:
-            print("\n❌ Tests failed!")
+            # Try to parse test results
+            total, failures, errors = parse_test_results(output)
+            if failures is not None and errors is not None:
+                failed_count = failures + errors
+                print(f"\n❌ Tests failed! ({failed_count} failed: {failures} failures, {errors} errors)")
+            else:
+                print("\n❌ Tests failed!")
             return exit_code
         print("\n✅ Tests passed!")
     

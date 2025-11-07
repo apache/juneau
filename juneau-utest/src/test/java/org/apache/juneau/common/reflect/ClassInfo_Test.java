@@ -155,9 +155,9 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void ofTypeOnNulls() {
-		check(null, of((Class<?>)null));
-		check(null, of((Type)null));
-		check(null, of((Object)null));
+		assertThrows(IllegalArgumentException.class, () -> of((Class<?>)null));
+		assertThrows(IllegalArgumentException.class, () -> of((Type)null));
+		assertThrows(NullPointerException.class, () -> of((Object)null));
 	}
 
 	@Test void inner() {

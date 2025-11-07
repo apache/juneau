@@ -18,17 +18,15 @@ package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.common.reflect.ClassNameFormat.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static java.util.Arrays.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
-
-import org.apache.juneau.common.collections.*;
 
 /**
  * Lightweight utility class for introspecting information about a field.
@@ -45,24 +43,22 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param inner The field being wrapped.
-	 * @return A new {@link FieldInfo} object, or <jk>null</jk> if the field was null.
+	 * @return A new {@link FieldInfo} object.
 	 */
 	public static FieldInfo of(ClassInfo declaringClass, Field inner) {
-		if (inner == null)
-			return null;
-		return ClassInfo.of(declaringClass).getFieldInfo(inner);
+		assertArgNotNull("declaringClass", declaringClass);
+		return declaringClass.getFieldInfo(inner);
 	}
 
 	/**
 	 * Convenience method for instantiating a {@link FieldInfo};
 	 *
-	 * @param f The field being wrapped.
-	 * @return A new {@link FieldInfo} object, or <jk>null</jk> if the field was null.
+	 * @param inner The field being wrapped.
+	 * @return A new {@link FieldInfo} object.
 	 */
-	public static FieldInfo of(Field f) {
-		if (f == null)
-			return null;
-		return ClassInfo.of(f.getDeclaringClass()).getFieldInfo(f);
+	public static FieldInfo of(Field inner) {
+		assertArgNotNull("inner", inner);
+		return ClassInfo.of(inner.getDeclaringClass()).getFieldInfo(inner);
 	}
 
 	private final Field inner;
@@ -75,13 +71,14 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * Constructor.
 	 *
 	 * @param declaringClass The class that declares this method.
-	 * @param f The field being wrapped.
+	 * @param inner The field being wrapped.
 	 */
-	protected FieldInfo(ClassInfo declaringClass, Field f) {
-		super(f, f.getModifiers());
+	protected FieldInfo(ClassInfo declaringClass, Field inner) {
+		super(inner, inner.getModifiers());
+		assertArgNotNull("inner", inner);
 		this.declaringClass = declaringClass;
-		this.inner = f;
-		this.type = memoize(() -> ClassInfo.of(f.getType()));
+		this.inner = inner;
+		this.type = memoize(() -> ClassInfo.of(inner.getType()));
 		this.declaredAnnotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());
 		this.fullName = memoize(this::findFullName);
 	}

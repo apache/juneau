@@ -92,8 +92,8 @@ class FieldInfo_Test extends TestBase {
 	}
 
 	@Test void of_null() {
-		check(null, FieldInfo.of(null));
-		check(null, FieldInfo.of(null, null));
+		assertThrows(IllegalArgumentException.class, () -> FieldInfo.of(null));
+		assertThrows(IllegalArgumentException.class, () -> FieldInfo.of(null, null));
 	}
 
 	@Test void getDeclaringClass() {

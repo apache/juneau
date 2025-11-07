@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -48,33 +49,31 @@ public class PackageInfo implements Annotatable {
 	/**
 	 * Returns a package info wrapper around the specified package object.
 	 *
-	 * @param inner The package object.  Can be <jk>null</jk>.
-	 * @return A package info wrapper, or <jk>null</jk> if the parameter was null.
+	 * @param inner The package object.
+	 * @return A package info wrapper.
 	 */
 	public static PackageInfo of(Package inner) {
-		if (inner == null)
-			return null;
 		return CACHE.get(inner, () -> new PackageInfo(inner));
 	}
 
 	/**
 	 * Returns a package info wrapper around the package of the specified class.
 	 *
-	 * @param c The class whose package to retrieve.  Can be <jk>null</jk>.
-	 * @return A package info wrapper, or <jk>null</jk> if the parameter was null or has no package.
+	 * @param childClass The class whose package to retrieve.
+	 * @return A package info wrapper.
 	 */
-	public static PackageInfo of(Class<?> c) {
-		return c == null ? null : of(c.getPackage());
+	public static PackageInfo of(Class<?> childClass) {
+		return of(childClass.getPackage());
 	}
 
 	/**
 	 * Returns a package info wrapper around the package of the specified class info.
 	 *
-	 * @param ci The class info whose package to retrieve.  Can be <jk>null</jk>.
-	 * @return A package info wrapper, or <jk>null</jk> if the parameter was null or has no package.
+	 * @param childClass The class info whose package to retrieve.
+	 * @return A package info wrapper.
 	 */
-	public static PackageInfo of(ClassInfo ci) {
-		return ci == null ? null : ci.getPackage();
+	public static PackageInfo of(ClassInfo childClass) {
+		return childClass.getPackage();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -87,10 +86,11 @@ public class PackageInfo implements Annotatable {
 	/**
 	 * Constructor.
 	 *
-	 * @param p The package object.
+	 * @param inner The package object.
 	 */
-	protected PackageInfo(Package p) {
-		this.inner = p;
+	protected PackageInfo(Package inner) {
+		assertArgNotNull("inner", inner);
+		this.inner = inner;
 		this.annotations = memoize(() -> opt(inner).map(pkg -> stream(pkg.getAnnotations()).flatMap(a -> stream(splitRepeated(a))).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
 	}
 

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.common.utils.*;
@@ -31,38 +33,36 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * Convenience method for instantiating a {@link ConstructorInfo};
 	 *
 	 * @param declaringClass The class that declares this method.
-	 * @param c The constructor being wrapped.
-	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
+	 * @param inner The constructor being wrapped.
+	 * @return A new {@link ConstructorInfo} object.
 	 */
-	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> c) {
-		if (c == null)
-			return null;
-		return ClassInfo.of(declaringClass).getConstructorInfo(c);
+	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> inner) {
+		assertArgNotNull("declaringClass", declaringClass);
+		return declaringClass.getConstructorInfo(inner);
 	}
 
 	/**
 	 * Convenience method for instantiating a {@link ConstructorInfo};
 	 *
-	 * @param c The constructor being wrapped.
-	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
+	 * @param inner The constructor being wrapped.
+	 * @return A new {@link ConstructorInfo} object.
 	 */
-	public static ConstructorInfo of(Constructor<?> c) {
-		if (c == null)
-			return null;
-		return ClassInfo.of(c.getDeclaringClass()).getConstructorInfo(c);
+	public static ConstructorInfo of(Constructor<?> inner) {
+		assertArgNotNull("inner", inner);
+		return ClassInfo.of(inner.getDeclaringClass()).getConstructorInfo(inner);
 	}
 
-	private final Constructor<?> c;
+	private final Constructor<?> inner;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param declaringClass The class that declares this method.
-	 * @param c The constructor being wrapped.
+	 * @param inner The constructor being wrapped.
 	 */
-	protected ConstructorInfo(ClassInfo declaringClass, Constructor<?> c) {
-		super(declaringClass, c);
-		this.c = c;
+	protected ConstructorInfo(ClassInfo declaringClass, Constructor<?> inner) {
+		super(declaringClass, inner);
+		this.inner = inner;
 	}
 
 	@Override /* Overridden from ExecutableInfo */
@@ -83,7 +83,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * 	met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.
 	 */
 	public ConstructorInfo accessible(Visibility v) {
-		if (v.transform(c) == null)
+		if (v.transform(inner) == null)
 			return null;
 		return this;
 	}
@@ -113,7 +113,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Constructor<T> inner() {
-		return (Constructor<T>)c;
+		return (Constructor<T>)inner;
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	@SuppressWarnings("unchecked")
 	public <T> T newInstance(Object...args) throws ExecutableException {
 		try {
-			return (T)c.newInstance(args);
+			return (T)inner.newInstance(args);
 		} catch (InvocationTargetException e) {
 			throw new ExecutableException(e.getTargetException());
 		} catch (Exception e) {
@@ -150,7 +150,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public <T> T newInstanceLenient(Object...args) throws ExecutableException {
-		return newInstance(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
+		return newInstance(ClassUtils.getMatchingArgs(inner.getParameterTypes(), args));
 	}
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotatable interface methods

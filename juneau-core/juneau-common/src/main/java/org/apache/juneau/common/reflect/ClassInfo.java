@@ -120,63 +120,57 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Returns a class info wrapper around the specified class type.
 	 *
-	 * @param c The class type.
-	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
+	 * @param inner The class type.
+	 * @return The constructed class info.
 	 */
-	public static ClassInfo of(Class<?> c) {
-		if (c == null)
-			return null;
-		return CACHE.get(c, () -> new ClassInfo(c, c));
+	public static ClassInfo of(Class<?> inner) {
+		return CACHE.get(inner, () -> new ClassInfo(inner, inner));
 	}
 
 	/**
 	 * Returns a class info wrapper around the specified class type.
 	 *
-	 * @param c The class type.
-	 * @param t The generic type (if parameterized type).
-	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
+	 * @param inner The class type.
+	 * @param innerType The generic type (if parameterized type).
+	 * @return The constructed class info.
 	 */
-	public static ClassInfo of(Class<?> c, Type t) {
-		if (c == t)
-			return of(c);
-		return new ClassInfo(c, t);
+	public static ClassInfo of(Class<?> inner, Type innerType) {
+		if (inner == innerType)
+			return of(inner);
+		return new ClassInfo(inner, innerType);
 	}
 
 	/**
 	 * Same as using the constructor, but operates on an object instance.
 	 *
-	 * @param o The class instance.
-	 * @return The constructed class info, or <jk>null</jk> if the object was <jk>null</jk>.
+	 * @param object The class instance.
+	 * @return The constructed class info.
 	 */
-	public static ClassInfo of(Object o) {
-		return of(o == null ? null : o instanceof Class ? (Class<?>)o : o.getClass());
+	public static ClassInfo of(Object object) {
+		return of(object instanceof Class ? (Class<?>)object : object.getClass());
 	}
 
 	/**
 	 * Returns a class info wrapper around the specified class type.
 	 *
-	 * @param t The class type.
-	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
+	 * @param innerType The class type.
+	 * @return The constructed class info.
 	 */
-	public static ClassInfo of(Type t) {
-		if (t == null)
-			return null;
-		if (t instanceof Class)
-			return of((Class<?>)t);
-		return new ClassInfo(toClass(t), t);
+	public static ClassInfo of(Type innerType) {
+		if (innerType instanceof Class)
+			return of((Class<?>)innerType);
+		return new ClassInfo(toClass(innerType), innerType);
 	}
 
 	/**
 	 * Same as {@link #of(Object)} but attempts to deproxify the object if it's wrapped in a CGLIB proxy.
 	 *
-	 * @param o The class instance.
-	 * @return The constructed class info, or <jk>null</jk> if the object was <jk>null</jk>.
+	 * @param object The class instance.
+	 * @return The constructed class info.
 	 */
-	public static ClassInfo ofProxy(Object o) {
-		if (o == null)
-			return null;
-		Class<?> c = getProxyFor(o);
-		return c == null ? ClassInfo.of(o) : ClassInfo.of(c);
+	public static ClassInfo ofProxy(Object object) {
+		Class<?> inner = getProxyFor(object);
+		return inner == null ? ClassInfo.of(object) : ClassInfo.of(inner);
 	}
 
 	private final Type innerType;  // The underlying Type object (may be Class, ParameterizedType, GenericArrayType, etc.).
@@ -223,12 +217,13 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	protected ClassInfo(Class<?> inner, Type innerType) {
 		super(inner == null ? 0 : inner.getModifiers());
+		assertArg(inner != null || innerType != null, "At least one of inner or innerType must be specified.");
 		this.innerType = innerType;
 		this.inner = inner;
 		this.isParameterizedType = innerType == null ? false : (innerType instanceof ParameterizedType);
 		this.dimensions = memoize(this::findDimensions);
 		this.componentType = memoize(this::findComponentType);
-		this.packageInfo = memoize(() -> opt(inner).map(x -> PackageInfo.of(x.getPackage())).orElse(null));
+		this.packageInfo = memoize(() -> opt(inner).map(x -> x.getPackage()).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.
 		this.parents = memoize(this::findParents);
 		this.declaredAnnotations = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -> AnnotationInfo.of(this, a)).toList());
 		this.fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
@@ -435,7 +430,10 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The declaring class, or <jk>null</jk> if this class is not a member of another class.
 	 */
 	public ClassInfo getDeclaringClass() {
-		return inner == null ? null : of(inner.getDeclaringClass());
+		if (inner == null)
+			return null;
+		Class<?> dc = inner.getDeclaringClass();
+		return dc == null ? null : of(dc);
 	}
 
 	/**
@@ -572,7 +570,10 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The enclosing class, or <jk>null</jk> if this is a top-level class.
 	 */
 	public ClassInfo getEnclosingClass() {
-		return inner == null ? null : of(inner.getEnclosingClass());
+		if (inner == null)
+			return null;
+		Class<?> ec = inner.getEnclosingClass();
+		return ec == null ? null : of(ec);
 	}
 
 	/**
@@ -1387,7 +1388,12 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return
 	 * 	The parent class, or <jk>null</jk> if the class has no parent.
 	 */
-	public ClassInfo getSuperclass() { return inner == null ? null : of(inner.getSuperclass()); }
+	public ClassInfo getSuperclass() {
+		if (inner == null)
+			return null;
+		Class<?> sc = inner.getSuperclass();
+		return sc == null ? null : of(sc);
+	}
 
 	/**
 	 * Returns the nest host of this class.
@@ -1399,7 +1405,10 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The nest host of this class.
 	 */
 	public ClassInfo getNestHost() {
-		return inner == null ? null : of(inner.getNestHost());
+		if (inner == null)
+			return null;
+		Class<?> nh = inner.getNestHost();
+		return nh == null ? null : of(nh);
 	}
 
 	/**
@@ -2230,7 +2239,10 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return A {@link ClassInfo} representing an array type whose component type is this class.
 	 */
 	public ClassInfo arrayType() {
-		return inner == null ? null : of(inner.arrayType());
+		if (inner == null)
+			return null;
+		Class<?> at = inner.arrayType();
+		return at == null ? null : of(at);
 	}
 
 	/**
@@ -2243,7 +2255,10 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The {@link ClassInfo} representing the component type, or <jk>null</jk> if this class does not represent an array type.
 	 */
 	public ClassInfo componentType() {
-		return inner == null ? null : of(inner.componentType());
+		if (inner == null)
+			return null;
+		Class<?> ct = inner.componentType();
+		return ct == null ? null : of(ct);
 	}
 
 

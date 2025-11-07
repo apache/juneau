@@ -42,38 +42,34 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * Convenience method for instantiating a {@link MethodInfo};
 	 *
 	 * @param declaringClass The class that declares this method.
-	 * @param m The method being wrapped.
-	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
+	 * @param inner The method being wrapped.
+	 * @return A new {@link MethodInfo} object.
 	 */
-	public static MethodInfo of(Class<?> declaringClass, Method m) {
-		if (m == null)
-			return null;
-		return ClassInfo.of(declaringClass).getMethodInfo(m);
+	public static MethodInfo of(Class<?> declaringClass, Method inner) {
+		return ClassInfo.of(declaringClass).getMethodInfo(inner);
 	}
 
 	/**
 	 * Convenience method for instantiating a {@link MethodInfo};
 	 *
 	 * @param declaringClass The class that declares this method.
-	 * @param m The method being wrapped.
-	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
+	 * @param inner The method being wrapped.
+	 * @return A new {@link MethodInfo} object.
 	 */
-	public static MethodInfo of(ClassInfo declaringClass, Method m) {
-		if (m == null)
-			return null;
-		return declaringClass.getMethodInfo(m);
+	public static MethodInfo of(ClassInfo declaringClass, Method inner) {
+		assertArgNotNull("declaringClass", declaringClass);
+		return declaringClass.getMethodInfo(inner);
 	}
 
 	/**
 	 * Convenience method for instantiating a {@link MethodInfo};
 	 *
-	 * @param m The method being wrapped.
-	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
+	 * @param inner The method being wrapped.
+	 * @return A new {@link MethodInfo} object.
 	 */
-	public static MethodInfo of(Method m) {
-		if (m == null)
-			return null;
-		return ClassInfo.of(m.getDeclaringClass()).getMethodInfo(m);
+	public static MethodInfo of(Method inner) {
+		assertArgNotNull("inner", inner);
+		return ClassInfo.of(inner.getDeclaringClass()).getMethodInfo(inner);
 	}
 
 	private final Method inner;

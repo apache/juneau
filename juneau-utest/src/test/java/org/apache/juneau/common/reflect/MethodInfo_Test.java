@@ -126,8 +126,8 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	@Test void of_null() {
-		check(null, MethodInfo.of(null));
-		check(null, MethodInfo.of((ClassInfo)null, null));
+		assertThrows(IllegalArgumentException.class, () -> MethodInfo.of(null));
+		assertThrows(IllegalArgumentException.class, () -> MethodInfo.of((ClassInfo)null, null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -388,7 +388,7 @@ public class BeanCreator<T> {
 	 * @return This object.
 	 */
 	public BeanCreator<T> type(Class<?> value) {
-		type = ClassInfo.of(value);
+		type = opt(value).map(x -> ClassInfo.of(x)).orElse(null);
 		return this;
 	}
 
