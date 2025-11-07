@@ -825,7 +825,7 @@ public class AnnotationProvider {
 
 		FieldInfo fi = FieldInfo.of(forField);
 		runtimeAnnotations.findMatching(forField).forEach(a -> list.add(AnnotationInfo.of(fi, a)));
-		list.addAll(fi.getAnnotationInfos());
+		list.addAll(fi.getDeclaredAnnotationInfos());
 
 		return u(list);
 	}

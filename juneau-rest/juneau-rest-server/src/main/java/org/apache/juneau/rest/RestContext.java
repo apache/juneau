@@ -1765,12 +1765,12 @@ public class RestContext extends Context {
 				.filter(x -> x.hasAnnotation(RestInject.class))
 				.forEach(x -> opt(x.get(resource.get())).ifPresent(
 					y -> beanStore.add(
-					x.getFieldType().inner(),
-					y,
-					RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
-				)
-			));
-		// @formatter:on
+						x.getFieldType().inner(),
+						y,
+						RestInjectAnnotation.name(x.getDeclaredAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
+					)
+				));
+			// @formatter:on
 
 		rci.getAllMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
 			var rt = x.getReturnType().<Object>inner();
@@ -1802,11 +1802,11 @@ public class RestContext extends Context {
 			.filter(x -> x.hasAnnotation(RestInject.class))
 			.forEach(x -> x.setIfNull(
 				resource.get(),
-			beanStore.getBean(
-				x.getFieldType().inner(),
-				RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
-				).orElse(null)
-			));
+				beanStore.getBean(
+					x.getFieldType().inner(),
+					RestInjectAnnotation.name(x.getDeclaredAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
+					).orElse(null)
+				));
 		// @formatter:on
 
 			return this;

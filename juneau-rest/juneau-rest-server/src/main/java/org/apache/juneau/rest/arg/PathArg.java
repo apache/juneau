@@ -101,7 +101,7 @@ public class PathArg implements RestOpArg {
 		return null;
 
 	// Get parameter-level @Path
-	Path paramPath = opt(pi.findAnnotationInfo(Path.class)).map(x -> x.inner()).orElse(null);
+	Path paramPath = opt(pi.getAllAnnotationInfo(Path.class)).map(x -> x.inner()).orElse(null);
 	if (paramPath == null)
 		paramPath = pi.getParameterType().getAnnotationInfos(Path.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 
@@ -201,7 +201,7 @@ public class PathArg implements RestOpArg {
 		MethodInfo mi = pi.getMethod();
 
 		for (int j = 0; j < i; j++)
-			if (nn(mi.getParameter(j).findAnnotationInfo(Path.class)))
+			if (nn(mi.getParameter(j).getAllAnnotationInfo(Path.class)))
 				idx++;
 
 			String[] vars = pathMatcher.getVars();

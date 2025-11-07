@@ -102,7 +102,7 @@ public class QueryArg implements RestOpArg {
 		return null;
 
 	// Get parameter-level @Query
-	Query paramQuery = opt(pi.findAnnotationInfo(Query.class)).map(x -> x.inner()).orElse(null);
+	Query paramQuery = opt(pi.getAllAnnotationInfo(Query.class)).map(x -> x.inner()).orElse(null);
 	if (paramQuery == null)
 		paramQuery = pi.getParameterType().getAnnotationInfos(Query.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 

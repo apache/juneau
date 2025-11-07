@@ -68,7 +68,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	private final Field inner;
 	private final ClassInfo declaringClass;
 	private final Supplier<ClassInfo> type;
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations on this field.
+	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations;  // All annotations declared directly on this field.
 	private final Supplier<String> fullName;  // Fully qualified field name (declaring-class.field-name).
 
 	/**
@@ -82,7 +82,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		this.declaringClass = declaringClass;
 		this.inner = f;
 		this.type = memoize(() -> ClassInfo.of(f.getType()));
-		this.annotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.declaredAnnotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());
 		this.fullName = memoize(this::findFullName);
 	}
 
@@ -102,8 +102,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * @return An unmodifiable list of all annotations declared on this field.
 	 */
-	public List<AnnotationInfo<Annotation>> getAnnotationInfos() {
-		return annotations.get();
+	public List<AnnotationInfo<Annotation>> getDeclaredAnnotationInfos() {
+		return declaredAnnotations.get();
 	}
 
 	/**
@@ -114,8 +114,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return A stream of all matching annotations.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotationInfos(Class<A> type) {
-		return annotations.get().stream()
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotationInfos(Class<A> type) {
+		return declaredAnnotations.get().stream()
 			.filter(x -> type.isInstance(x.inner()))
 			.map(x -> (AnnotationInfo<A>)x);
 	}

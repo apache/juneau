@@ -59,9 +59,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	private final ClassInfo type;
 
 	@SuppressWarnings({"rawtypes","unchecked"})
-	private final Cache<Class,List<AnnotationInfo<Annotation>>> foundAnnotations = Cache.<Class,List<AnnotationInfo<Annotation>>>create().supplier((k) -> findAnnotationInfosInternal(k)).build();
+	private final Cache<Class,List<AnnotationInfo<Annotation>>> allAnnotations = Cache.<Class,List<AnnotationInfo<Annotation>>>create().supplier((k) -> findAnnotationInfosInternal(k)).build();
 
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations on this parameter.
+	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations;  // All annotations declared directly on this parameter.
 	private final Supplier<List<ParameterInfo>> matchingParameters;  // Matching parameters in parent methods.
 	private final ResettableSupplier<String> foundName = memoizeResettable(this::findNameInternal);
 	private final ResettableSupplier<String> foundQualifier = memoizeResettable(this::findQualifierInternal);
@@ -81,7 +81,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		this.inner = inner;
 		this.index = index;
 		this.type = type;
-		this.annotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.declaredAnnotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());
 		this.matchingParameters = memoize(this::findMatchingParameters);
 	}
 
@@ -103,7 +103,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return An unmodifiable list of annotations on this parameter, never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<Annotation>> getAnnotationInfos() {
-		return annotations.get();
+		return declaredAnnotations.get();
 	}
 
 	/**
@@ -256,7 +256,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Finds all annotation infos of the specified type defined on this method parameter.
+	 * Returns all annotation infos of the specified type defined on this method parameter.
 	 *
 	 * <p>
 	 * Searches through matching parameters in the hierarchy and the parameter type.
@@ -266,12 +266,12 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return A list of annotation infos found, or an empty list if none found.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public <A extends Annotation> List<AnnotationInfo<A>> findAnnotationInfos(Class<A> type) {
-		return (List)foundAnnotations.get(type);
+	public <A extends Annotation> List<AnnotationInfo<A>> getAllAnnotationInfos(Class<A> type) {
+		return (List)allAnnotations.get(type);
 	}
 
 	/**
-	 * Finds the first annotation info of the specified type defined on this method parameter.
+	 * Returns the first annotation info of the specified type defined on this method parameter.
 	 *
 	 * <p>
 	 * Searches through matching parameters in the hierarchy and the parameter type.
@@ -280,8 +280,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation type to look for.
 	 * @return The annotation info if found, or <jk>null</jk> if not.
 	 */
-	public <A extends Annotation> AnnotationInfo<A> findAnnotationInfo(Class<A> type) {
-		var list = findAnnotationInfos(type);
+	public <A extends Annotation> AnnotationInfo<A> getAllAnnotationInfo(Class<A> type) {
+		var list = getAllAnnotationInfos(type);
 		return list.isEmpty() ? null : list.get(0);
 	}
 
@@ -444,7 +444,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * 	The <jk>true</jk> if annotation if found.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return nn(findAnnotationInfo(type));
+		return nn(getAllAnnotationInfo(type));
 	}
 
 	/**

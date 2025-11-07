@@ -144,7 +144,7 @@ public class HeaderArg implements RestOpArg {
 		return null;
 
 	// Get parameter-level @Header
-	Header paramHeader = opt(pi.findAnnotationInfo(Header.class)).map(x -> x.inner()).orElse(null);
+	Header paramHeader = opt(pi.getAllAnnotationInfo(Header.class)).map(x -> x.inner()).orElse(null);
 	if (paramHeader == null)
 		paramHeader = pi.getParameterType().getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 

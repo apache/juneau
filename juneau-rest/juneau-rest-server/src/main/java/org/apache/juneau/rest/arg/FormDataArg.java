@@ -102,7 +102,7 @@ public class FormDataArg implements RestOpArg {
 		return null;
 
 	// Get parameter-level @FormData
-	FormData paramFormData = opt(pi.findAnnotationInfo(FormData.class)).map(x -> x.inner()).orElse(null);
+	FormData paramFormData = opt(pi.getAllAnnotationInfo(FormData.class)).map(x -> x.inner()).orElse(null);
 	if (paramFormData == null)
 		paramFormData = pi.getParameterType().getAnnotationInfos(FormData.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 

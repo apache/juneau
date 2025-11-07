@@ -81,7 +81,7 @@ public class RequestBeanMeta {
 		}
 
 		Builder apply(ParameterInfo mpi) {
-			return apply(mpi.getParameterType().inner()).apply(opt(mpi.findAnnotationInfo(Request.class)).map(x -> x.inner()).orElse(null));
+			return apply(mpi.getParameterType().inner()).apply(opt(mpi.getAllAnnotationInfo(Request.class)).map(x -> x.inner()).orElse(null));
 		}
 
 		Builder apply(Request a) {
