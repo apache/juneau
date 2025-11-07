@@ -519,7 +519,7 @@
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 				<strong class="jxr_keyword">continue</strong> loop;
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<strong class="jxr_keyword">if</strong> (pt.is(Optional.<strong class="jxr_keyword">class</strong>) || pt.is(BeanStore.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 				<strong class="jxr_keyword">continue</strong> loop;
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			String beanName = pi.findQualifier();  <em class="jxr_comment">// Use @Named for bean injection</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			String beanName = pi.getResolvedQualifier();  <em class="jxr_comment">// Use @Named for bean injection</em>
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 			Class&lt;?&gt; ptc = pt.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 			<strong class="jxr_keyword">if</strong> (beanName == <strong class="jxr_keyword">null</strong> &amp;&amp; ! hasBean(ptc))
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 				l.add(pt.getNameSimple());
@@ -545,7 +545,7 @@
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (pt.is(BeanStore.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 				o[i] = <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 				String beanQualifier = pi.findQualifier();
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 				String beanQualifier = pi.getResolvedQualifier();
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 				Class&lt;?&gt; ptc = pt.unwrap(Optional.<strong class="jxr_keyword">class</strong>).<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 				Optional&lt;?&gt; o2 = beanQualifier == <strong class="jxr_keyword">null</strong> ? getBean(ptc) : getBean(ptc, beanQualifier);
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 				o[i] = pt.is(Optional.<strong class="jxr_keyword">class</strong>) ? o2 : o2.orElse(<strong class="jxr_keyword">null</strong>);
@@ -568,7 +568,7 @@
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 				<strong class="jxr_keyword">continue</strong> loop;
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 			<strong class="jxr_keyword">if</strong> (pt.is(Optional.<strong class="jxr_keyword">class</strong>) || pt.is(BeanStore.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 				<strong class="jxr_keyword">continue</strong> loop;
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			String beanQualifier = pi.findQualifier();
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			String beanQualifier = pi.getResolvedQualifier();
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 			Class&lt;?&gt; ptc = pt.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">if</strong> ((beanQualifier == <strong class="jxr_keyword">null</strong> &amp;&amp; ! hasBean(ptc)) || (nn(beanQualifier) &amp;&amp; ! hasBean(ptc, beanQualifier)))
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 				<strong class="jxr_keyword">return</strong> false;
