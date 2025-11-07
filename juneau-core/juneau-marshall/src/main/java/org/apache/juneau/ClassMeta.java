@@ -466,7 +466,8 @@ public class ClassMeta<T> implements Type {
 
 		private BeanFilter findBeanFilter(BeanContext bc) {
 			try {
-				List<Bean> ba = info.getAnnotations(bc.getAnnotationProvider(), Bean.class);
+				List<Bean> ba = list();
+				info.forEachAnnotation(bc.getAnnotationProvider(), Bean.class, x -> true, x -> ba.add(x));
 				if (! ba.isEmpty())
 					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
@@ -481,7 +482,8 @@ public class ClassMeta<T> implements Type {
 
 		private MarshalledFilter findMarshalledFilter(BeanContext bc) {
 			try {
-				List<Marshalled> ba = info.getAnnotations(bc.getAnnotationProvider(), Marshalled.class);
+				List<Marshalled> ba = list();
+				info.forEachAnnotation(bc.getAnnotationProvider(), Marshalled.class, x -> true, x -> ba.add(x));
 				if (! ba.isEmpty())
 					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {

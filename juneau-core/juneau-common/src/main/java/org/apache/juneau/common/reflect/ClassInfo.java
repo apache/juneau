@@ -187,7 +187,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private final Supplier<ClassInfo> componentType;  // Base component type for arrays (e.g., String for String[][]), also handles GenericArrayType.  Cached and never null.
 	private final Supplier<PackageInfo> packageInfo;  // The package this class belongs to (null for primitive types and arrays).
 	private final Supplier<List<ClassInfo>> parents;  // All superclasses of this class in child-to-parent order, starting with this class.
-	private final Supplier<List<AnnotationInfo>> declaredAnnotations2;  // All annotations declared directly on this class, wrapped in AnnotationInfo.
+	private final Supplier<List<AnnotationInfo>> declaredAnnotations;  // All annotations declared directly on this class, wrapped in AnnotationInfo.
 	private final Supplier<String> fullName;  // Fully qualified class name with generics (e.g., "java.util.List<java.lang.String>").
 	private final Supplier<String> shortName;  // Simple class name with generics (e.g., "List<String>").
 	private final Supplier<String> readableName;  // Human-readable class name without generics (e.g., "List").
@@ -230,7 +230,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		this.componentType = memoize(this::findComponentType);
 		this.packageInfo = memoize(() -> opt(inner).map(x -> PackageInfo.of(x.getPackage())).orElse(null));
 		this.parents = memoize(this::findParents);
-		this.declaredAnnotations2 = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -> AnnotationInfo.of(this, a)).toList());
+		this.declaredAnnotations = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -> AnnotationInfo.of(this, a)).toList());
 		this.fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
 		this.shortName = memoize(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
 		this.readableName = memoize(() -> getNameFormatted(SIMPLE, false, '$', WORD));
@@ -365,20 +365,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Returns all annotations of the specified type defined on this or parent classes/interfaces.
 	 *
-	 * <p>
-	 * Returns the list in reverse (parent-to-child) order.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation type to look for.
-	 * @return The matching annotations.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider annotationProvider, Class<A> type) {
-		List<A> l = list();
-		forEachAnnotation(annotationProvider, type, x -> true, x -> l.add(x));
-		return l;
-	}
-
 	/**
 	 * Returns the {@link ClassLoader} for this class.
 	 *
@@ -414,7 +400,22 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * represented by this class.
 	 *
 	 * <p>
-	 * Returns <jk>null</jk> if this class is not a member class.
+	 * This method returns the class in which this class is explicitly declared as a member.
+	 * It only returns non-null for <b>member classes</b> (static and non-static nested classes).
+	 *
+	 * <p>
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><c>class Outer { class Inner {} }</c> - <c>Inner.getDeclaringClass()</c> returns <c>Outer</c>
+	 * 	<li><c>class Outer { static class Nested {} }</c> - <c>Nested.getDeclaringClass()</c> returns <c>Outer</c>
+	 * 	<li><c>class Outer { void method() { class Local {} } }</c> - <c>Local.getDeclaringClass()</c> returns <jk>null</jk>
+	 * 	<li>Top-level class - <c>getDeclaringClass()</c> returns <jk>null</jk>
+	 * 	<li>Anonymous class - <c>getDeclaringClass()</c> returns <jk>null</jk>
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link #getEnclosingClass()} - Returns the immediately enclosing class (works for local and anonymous classes too)
+	 * </ul>
 	 *
 	 * @return The declaring class, or <jk>null</jk> if this class is not a member of another class.
 	 */
@@ -528,7 +529,30 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * Returns the immediately enclosing class of this class.
 	 *
 	 * <p>
-	 * Returns <jk>null</jk> if this class is a top-level class.
+	 * This method returns the lexically enclosing class, regardless of whether this class is a member,
+	 * local, or anonymous class. Unlike {@link #getDeclaringClass()}, this method works for all types of nested classes.
+	 *
+	 * <p>
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><c>class Outer { class Inner {} }</c> - <c>Inner.getEnclosingClass()</c> returns <c>Outer</c>
+	 * 	<li><c>class Outer { static class Nested {} }</c> - <c>Nested.getEnclosingClass()</c> returns <c>Outer</c>
+	 * 	<li><c>class Outer { void method() { class Local {} } }</c> - <c>Local.getEnclosingClass()</c> returns <c>Outer</c>
+	 * 	<li><c>class Outer { void method() { new Runnable() {...} } }</c> - Anonymous class <c>getEnclosingClass()</c> returns <c>Outer</c>
+	 * 	<li>Top-level class - <c>getEnclosingClass()</c> returns <jk>null</jk>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Differences from {@link #getDeclaringClass()}:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><c>getDeclaringClass()</c> - Returns non-null only for member classes (static or non-static nested classes)
+	 * 	<li><c>getEnclosingClass()</c> - Returns non-null for all nested classes (member, local, and anonymous)
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link #getDeclaringClass()} - Returns the declaring class (only for member classes)
+	 * 	<li class='ja'>{@link #getEnclosingConstructor()} - Returns the enclosing constructor (for classes defined in constructors)
+	 * 	<li class='ja'>{@link #getEnclosingMethod()} - Returns the enclosing method (for classes defined in methods)
+	 * </ul>
 	 *
 	 * @return The enclosing class, or <jk>null</jk> if this is a top-level class.
 	 */
@@ -2048,49 +2072,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * </ol>
 	 *
 	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public <A extends Annotation> A lastAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter) {
-		if (annotationProvider == null)
-			throw unsupportedOp();
-		A x = null;
-		x = annotationProvider.find(type, inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
-		if (nn(x) && test(filter, x))
-			return x;
-		var parents2 = parents.get();
-		for (var parent : parents2) {
-			x = annotationProvider.find(type, parent.inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
-			if (nn(x))
-				return x;
-		}
-		var interfaces2 = interfaces.get();
-		for (var element : interfaces2) {
-			x = annotationProvider.find(type, element.inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
-			if (nn(x))
-				return x;
-		}
-		x = getPackageAnnotation(type);
-		if (nn(x) && test(filter, x))
-			return x;
-		return null;
-	}
-
-	/**
-	 * Returns the last matching annotation on this class and superclasses/interfaces.
-	 *
-	 * <p>
-	 * Annotations are searched in the following orders:
-	 * <ol>
-	 * 	<li>On this class.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of this class.
-	 * </ol>
-	 *
-	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
 	 * @return This object.
@@ -2099,13 +2080,13 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		// Inline implementation using reflection directly instead of delegating to AnnotationProvider
 		if (!nn(type))
 			return null;
-		
+
 		// Search annotations using reflection (reverse order for "last")
 		var annotations = rstream(l(inner.getAnnotationsByType(type)));
 		var result = annotations.filter(a -> test(filter, a)).findFirst().orElse(null);
 		if (nn(result))
 			return result;
-		
+
 		// Search parents
 		var parents2 = parents.get();
 		for (var parent : parents2) {
@@ -2114,7 +2095,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			if (nn(result))
 				return result;
 		}
-		
+
 		// Search interfaces
 		var interfaces2 = interfaces.get();
 		for (var iface : interfaces2) {
@@ -2123,7 +2104,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			if (nn(result))
 				return result;
 		}
-		
+
 		// Search package
 		return getPackageAnnotation(type);
 	}
@@ -2258,17 +2239,59 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	<br>Results are in declaration order.
 	 */
 	public List<AnnotationInfo> getDeclaredAnnotationInfos() {
-		return declaredAnnotations2.get();
+		return declaredAnnotations.get();
 	}
 
+	/**
+	 * Returns a {@link ConstructorInfo} wrapper for the specified raw {@link Constructor} object.
+	 *
+	 * <p>
+	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.
+	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.
+	 *
+	 * <p>
+	 * This method is called internally when building the lists of constructors (public, declared, etc.)
+	 * and ensures that the same {@link Constructor} object always maps to the same {@link ConstructorInfo} instance.
+	 *
+	 * @param x The raw constructor to wrap.
+	 * @return The cached {@link ConstructorInfo} wrapper for this constructor.
+	 */
 	ConstructorInfo getConstructorInfo(Constructor<?> x) {
 		return constructorCache.get(x, () -> new ConstructorInfo(this, x));
 	}
 
+	/**
+	 * Returns a {@link FieldInfo} wrapper for the specified raw {@link Field} object.
+	 *
+	 * <p>
+	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.
+	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.
+	 *
+	 * <p>
+	 * This method is called internally when building the lists of fields (public, declared, all, etc.)
+	 * and ensures that the same {@link Field} object always maps to the same {@link FieldInfo} instance.
+	 *
+	 * @param x The raw field to wrap.
+	 * @return The cached {@link FieldInfo} wrapper for this field.
+	 */
 	FieldInfo getFieldInfo(Field x) {
 		return fieldCache.get(x, () -> new FieldInfo(this, x));
 	}
 
+	/**
+	 * Returns a {@link MethodInfo} wrapper for the specified raw {@link Method} object.
+	 *
+	 * <p>
+	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.
+	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.
+	 *
+	 * <p>
+	 * This method is called internally when building the lists of methods (public, declared, all, etc.)
+	 * and ensures that the same {@link Method} object always maps to the same {@link MethodInfo} instance.
+	 *
+	 * @param x The raw method to wrap.
+	 * @return The cached {@link MethodInfo} wrapper for this method.
+	 */
 	MethodInfo getMethodInfo(Method x) {
 		return methodCache.get(x, () -> new MethodInfo(this, x));
 	}

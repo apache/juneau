@@ -156,8 +156,10 @@ public class BasicSwaggerProviderSession {
 			omSwagger = new JsonMap();
 
 		// Combine it with @Rest(swagger)
-		for (var rr : rci.getAnnotations(context.getAnnotationProvider(), Rest.class)) {
-
+		List<Rest> restAnnotations = list();
+		rci.forEachAnnotation(context.getAnnotationProvider(), Rest.class, x -> true, x -> restAnnotations.add(x));
+		for (var rr : restAnnotations) {
+	
 			JsonMap sInfo = omSwagger.getMap("info", true);
 
 			sInfo
@@ -432,8 +434,10 @@ public class BasicSwaggerProviderSession {
 
 			for (var eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
-					List<Response> la = eci.getAnnotations(context.getAnnotationProvider(), Response.class);
-					List<StatusCode> la2 = eci.getAnnotations(context.getAnnotationProvider(), StatusCode.class);
+					List<Response> la = list();
+					eci.forEachAnnotation(context.getAnnotationProvider(), Response.class, x -> true, x -> la.add(x));
+					List<StatusCode> la2 = list();
+					eci.forEachAnnotation(context.getAnnotationProvider(), StatusCode.class, x -> true, x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 500);
 					for (var a : la) {
 						for (var code : codes) {
