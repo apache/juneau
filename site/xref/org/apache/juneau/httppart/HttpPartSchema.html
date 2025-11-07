@@ -2572,7 +2572,7 @@
 <a class="jxr_linenumber" name="L2564" href="#L2564">2564</a> 
 <a class="jxr_linenumber" name="L2565" href="#L2565">2565</a> 		Builder apply(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="ParameterInfo" href="../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> mpi) {
 <a class="jxr_linenumber" name="L2566" href="#L2566">2566</a> 			apply(c, mpi.getParameterType().innerType());
-<a class="jxr_linenumber" name="L2567" href="#L2567">2567</a> 			mpi.getAnnotations(c).forEach(x -&gt; apply(x.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L2567" href="#L2567">2567</a> 			mpi.getAnnotationInfos(c).forEach(x -&gt; apply(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L2568" href="#L2568">2568</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2569" href="#L2569">2569</a> 		}
 <a class="jxr_linenumber" name="L2570" href="#L2570">2570</a> 
