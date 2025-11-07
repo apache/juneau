@@ -679,10 +679,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
-		getBeanMeta().getClassMeta().getInfo().forEachAnnotation(bc.getAnnotationProvider(), a, x -> true, x -> l.add(x));
+		bc.getAnnotationProvider().forEachClassAnnotation(a, getBeanMeta().getClassMeta().getInfo(), x -> true, x -> l.add(x));
 		if (nn(field)) {
 			bc.getAnnotationProvider().find(a, field).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
-			ClassInfo.of(field.getType()).forEachAnnotation(bc.getAnnotationProvider(), a, x -> true, x -> l.add(x));
+			bc.getAnnotationProvider().forEachClassAnnotation(a, ClassInfo.of(field.getType()), x -> true, x -> l.add(x));
 		}
 		if (nn(getter)) {
 			// Walk up the inheritance hierarchy for the getter method
@@ -690,7 +690,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				bc.getAnnotationProvider().find(a, parentGetter).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			});
 			bc.getAnnotationProvider().find(a, getter).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
-			ClassInfo.of(getter.getReturnType()).forEachAnnotation(bc.getAnnotationProvider(), a, x -> true, x -> l.add(x));
+			bc.getAnnotationProvider().forEachClassAnnotation(a, ClassInfo.of(getter.getReturnType()), x -> true, x -> l.add(x));
 		}
 		if (nn(setter)) {
 			// Walk up the inheritance hierarchy for the setter method
@@ -698,7 +698,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				bc.getAnnotationProvider().find(a, parentSetter).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			});
 			bc.getAnnotationProvider().find(a, setter).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
-			ClassInfo.of(setter.getReturnType()).forEachAnnotation(bc.getAnnotationProvider(), a, x -> true, x -> l.add(x));
+			bc.getAnnotationProvider().forEachClassAnnotation(a, ClassInfo.of(setter.getReturnType()), x -> true, x -> l.add(x));
 		}
 		if (nn(extraKeys)) {
 			// Walk up the inheritance hierarchy for the extraKeys method
@@ -706,7 +706,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				bc.getAnnotationProvider().find(a, parentExtraKeys).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			});
 			bc.getAnnotationProvider().find(a, extraKeys).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
-			ClassInfo.of(extraKeys.getReturnType()).forEachAnnotation(bc.getAnnotationProvider(), a, x -> true, x -> l.add(x));
+			bc.getAnnotationProvider().forEachClassAnnotation(a, ClassInfo.of(extraKeys.getReturnType()), x -> true, x -> l.add(x));
 		}
 
 		return l;

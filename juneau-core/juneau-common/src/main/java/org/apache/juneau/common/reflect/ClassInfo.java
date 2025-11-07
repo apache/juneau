@@ -293,40 +293,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 
 	/**
-	 * Performs an action on all matching annotations on this class and superclasses/interfaces.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public <A extends Annotation> ClassInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		if (annotationProvider == null)
-			throw unsupportedOp();
-		A t2 = getPackageAnnotation(type);
-		if (nn(t2))
-			consumeIf(filter, action, t2);
-		var interfaces2 = interfaces.get();
-		for (int i = interfaces2.size() - 1; i >= 0; i--)
-			annotationProvider.findDeclaredParentFirst(type, interfaces2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
-		var parents2 = parents.get();
-		for (int i = parents2.size() - 1; i >= 0; i--)
-			annotationProvider.findDeclaredParentFirst(type, parents2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
-		return this;
-	}
-
-	/**
 	 * Returns all fields on this class and all parent classes.
 	 *
 	 * <p>

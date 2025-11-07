@@ -874,13 +874,42 @@ public class AnnotationProvider {
 	 * @param action The action to perform on each matching annotation.
 	 */
 	public <A extends Annotation> void forEachMethodAnnotation(Class<A> type, MethodInfo mi, Predicate<A> filter, Consumer<A> action) {
-		mi.getDeclaringClass().forEachAnnotation(this, type, filter, action);
+		forEachClassAnnotation(type, mi.getDeclaringClass(), filter, action);
 		rstream(mi.getMatchingMethods())
 			.flatMap(m -> m.getDeclaredAnnotationInfos().stream())
 			.map(AnnotationInfo::inner)
 			.filter(type::isInstance)
 			.map(type::cast)
 			.forEach(a -> consumeIf(filter, action, a));
-		mi.getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(this, type, filter, action);
+		forEachClassAnnotation(type, mi.getReturnType().unwrap(Value.class, Optional.class), filter, action);
+	}
+
+	/**
+	 * Iterates through annotations on a class hierarchy.
+	 *
+	 * <p>
+	 * This traverses annotations in parent-first order from:
+	 * <ol>
+	 * 	<li>Package annotations
+	 * 	<li>Interface hierarchy (parent-first)
+	 * 	<li>Class hierarchy (parent-first)
+	 * </ol>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param ci The class info to traverse.
+	 * @param filter Optional filter to apply to annotations. Can be <jk>null</jk>.
+	 * @param action The action to perform on each matching annotation.
+	 */
+	public <A extends Annotation> void forEachClassAnnotation(Class<A> type, ClassInfo ci, Predicate<A> filter, Consumer<A> action) {
+		A t2 = ci.getPackageAnnotation(type);
+		if (nn(t2))
+			consumeIf(filter, action, t2);
+		var interfaces2 = ci.getInterfaces();
+		for (int i = interfaces2.size() - 1; i >= 0; i--)
+			findDeclaredParentFirst(type, interfaces2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+		var parents2 = ci.getParents();
+		for (int i = parents2.size() - 1; i >= 0; i--)
+			findDeclaredParentFirst(type, parents2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 	}
 }
