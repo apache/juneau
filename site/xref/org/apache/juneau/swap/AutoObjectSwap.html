@@ -152,7 +152,7 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			cs.isNotDeprecated()
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			&amp;&amp; cs.isVisible(bc.getBeanConstructorVisibility())
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			&amp;&amp; cs.hasMatchingParameterTypes(rt)
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			&amp;&amp; cs.hasNoAnnotation(bc.getAnnotationProvider(), BeanIgnore.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			&amp;&amp; bc.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, cs.<strong class="jxr_keyword">inner</strong>()).findAny().isEmpty();
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 

@@ -281,7 +281,7 @@
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			Method m = sm.getJavaMethod();
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(m);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			AnnotationList al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>));
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			List&lt;AnnotationInfo&lt;?&gt;&gt; al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 			String mn = m.getName();
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<em class="jxr_comment">// Get the operation from the existing swagger so far.</em>
@@ -289,7 +289,7 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<em class="jxr_comment">// Add @RestOp(swagger)</em>
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 			Value&lt;OpSwagger&gt; _ms = Value.empty();
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			al.forEachValue(OpSwagger.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"swagger"</span>, OpSwaggerAnnotation::notEmpty, x -&gt; _ms.set(x));
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			al.forEach(ai -&gt; ai.forEachValue(OpSwagger.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"swagger"</span>, OpSwaggerAnnotation::notEmpty, x -&gt; _ms.set(x)));
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			OpSwagger ms = _ms.orElseGet(() -&gt; OpSwaggerAnnotation.create().build());
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			op.append(parseMap(ms.value(), <span class="jxr_string">"@OpSwagger(value) on class {0} method {1}"</span>, c, m));
@@ -302,7 +302,7 @@
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 			);
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			Value&lt;String&gt; _summary = Value.empty();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			al.forEachValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"summary"</span>, NOT_EMPTY, x -&gt; _summary.set(x));
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			al.forEach(ai -&gt; ai.forEachValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"summary"</span>, NOT_EMPTY, x -&gt; _summary.set(x)));
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			op.appendIf(ne, <span class="jxr_string">"summary"</span>,
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 				firstNonEmpty(
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 					resolve(ms.summary()),
@@ -313,7 +313,7 @@
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			);
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 			Value&lt;String[]&gt; _description = Value.empty();
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			al.forEachValue(String[].<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"description"</span>, x -&gt; x.length &gt; 0, x -&gt; _description.set(x));
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			al.forEach(ai -&gt; ai.forEachValue(String[].<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"description"</span>, x -&gt; x.length &gt; 0, x -&gt; _description.set(x)));
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			op.appendIf(ne, <span class="jxr_string">"description"</span>,
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 				firstNonEmpty(
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 					resolve(ms.description()),

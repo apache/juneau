@@ -153,7 +153,7 @@
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">static</strong> ClassInfo a = ClassInfo.of(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@Test <strong class="jxr_keyword">void</strong> a01_basic() {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> bs = JsonSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		check(<span class="jxr_string">"PRIVATE"</span>, bs.getBeanClassVisibility());
@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	@Test <strong class="jxr_keyword">void</strong> b01_noValues() {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> js = JsonSerializer.create().apply(al).build();
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> bc = js.getBeanContext();
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		check(<span class="jxr_string">"PUBLIC"</span>, bc.getBeanClassVisibility());
@@ -241,7 +241,7 @@
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<strong class="jxr_keyword">static</strong> ClassInfo c = ClassInfo.of(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Test <strong class="jxr_keyword">void</strong> c01_noAnnotation() {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> js = JsonSerializer.create().apply(al).build();
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">var</strong> bc = js.getBeanContext();
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		check(<span class="jxr_string">"PUBLIC"</span>, bc.getBeanClassVisibility());

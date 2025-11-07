@@ -94,38 +94,40 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		ci.getPublicMethods().stream()
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			.forEach(x -&gt; {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				rstream(x.getAllAnnotationInfos()).filter(REST_OP_GROUP).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)).forEachValue(
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  					String.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  					<span class="jxr_string">"debug"</span>,
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  					y -&gt; <strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  					y -&gt; {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  						String y2 = varResolver.resolve(y);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  						<strong class="jxr_keyword">if</strong> (! y2.isEmpty())
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  							b.enable(Enablement.fromString(y2), x.getFullName());
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  					}
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			}
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		);
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<em class="jxr_comment">// Gather @Rest(debugOn) settings.</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		rstream(ci.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			String x2 = varResolver.resolve(x.debugOn());
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : splitMap(x2, <strong class="jxr_keyword">true</strong>).entrySet()) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">var</strong> k = e.getKey();
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				<strong class="jxr_keyword">var</strong> v = e.getValue();
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">if</strong> (v.isEmpty())
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 					v = <span class="jxr_string">"ALWAYS"</span>;
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">if</strong> (! k.isEmpty())
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 					b.enable(Enablement.fromString(v), k);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			}
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		});
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">return</strong> b;
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				rstream(x.getAllAnnotationInfos()).filter(REST_OP_GROUP).forEach(ai -&gt; {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  						ai.forEachValue(
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  							String.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  							<span class="jxr_string">"debug"</span>,
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  							y -&gt; <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  							y -&gt; {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  								String y2 = varResolver.resolve(y);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  								<strong class="jxr_keyword">if</strong> (! y2.isEmpty())
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  									b.enable(Enablement.fromString(y2), x.getFullName());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  							}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  						);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				});
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<em class="jxr_comment">// Gather @Rest(debugOn) settings.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		rstream(ci.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			String x2 = varResolver.resolve(x.debugOn());
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : splitMap(x2, <strong class="jxr_keyword">true</strong>).entrySet()) {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">var</strong> k = e.getKey();
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				<strong class="jxr_keyword">var</strong> v = e.getValue();
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">if</strong> (v.isEmpty())
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 					v = <span class="jxr_string">"ALWAYS"</span>;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 				<strong class="jxr_keyword">if</strong> (! k.isEmpty())
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 					b.enable(Enablement.fromString(v), k);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		});
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">return</strong> b;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

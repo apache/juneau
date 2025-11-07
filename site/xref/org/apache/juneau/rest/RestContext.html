@@ -1794,7 +1794,7 @@
 <a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> 			});
 <a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> 
 <a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> 			<strong class="jxr_keyword">var</strong> vrs = varResolver().build().createSession();
-<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> 			<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> 			<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> 
 <a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> 			apply(work);
 <a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> 			beanContext().apply(work);
@@ -4589,7 +4589,7 @@
 <a class="jxr_linenumber" name="L4581" href="#L4581">4581</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L4582" href="#L4582">4582</a> 
 <a class="jxr_linenumber" name="L4583" href="#L4583">4583</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : rci.getPublicMethods()) {
-<a class="jxr_linenumber" name="L4584" href="#L4584">4584</a> 				AnnotationList al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>));
+<a class="jxr_linenumber" name="L4584" href="#L4584">4584</a> 				List&lt;AnnotationInfo&lt;?&gt;&gt; al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L4585" href="#L4585">4585</a> 
 <a class="jxr_linenumber" name="L4586" href="#L4586">4586</a> 				<em class="jxr_comment">// Also include methods on @Rest-annotated interfaces.</em>
 <a class="jxr_linenumber" name="L4587" href="#L4587">4587</a> 				<strong class="jxr_keyword">if</strong> (al.isEmpty()) {

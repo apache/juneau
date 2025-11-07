@@ -617,19 +617,22 @@
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<em class="jxr_javadoccomment">/** Default value */</em>
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="RestOp" href="../../../../../org/apache/juneau/rest/annotation/RestOp.html#RestOp">RestOp</a> DEFAULT = create().build();
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * Predicate that can be used with the {@link ClassInfo#getAnnotationList(Predicate)} and {@link MethodInfo#getAnnotationList(Predicate)}</em>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Predicate&lt;AnnotationInfo&lt;?&gt;&gt; REST_OP_GROUP = x -&gt; x.isInGroup(RestOp.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">	 * Instantiates a new builder for this class.</em>
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	}
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> }
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * Predicate that can be used to filter annotation streams.</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">	 * Example: &lt;c&gt;classInfo.getAnnotationInfos().stream().filter(REST_OP_GROUP)&lt;/c&gt;</em>
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Predicate&lt;AnnotationInfo&lt;?&gt;&gt; REST_OP_GROUP = x -&gt; x.isInGroup(RestOp.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 * Instantiates a new builder for this class.</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 	}
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

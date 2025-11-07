@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">static</strong> ClassInfo a = ClassInfo.of(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> basicReaderParser() {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> x = JsonParser.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		check(<span class="jxr_string">"true"</span>, x.isAutoCloseStreams());
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		check(<span class="jxr_string">"1"</span>, x.getDebugOutputLines());
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> basicInputStreamParser() {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> x = MsgPackParser.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		check(<span class="jxr_string">"true"</span>, x.isAutoCloseStreams());
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		check(<span class="jxr_string">"HEX"</span>, x.getBinaryFormat());
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> noValuesReaderParser() {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> x = JsonParser.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		check(<span class="jxr_string">"false"</span>, x.isAutoCloseStreams());
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		check(<span class="jxr_string">"5"</span>, x.getDebugOutputLines());
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	@Test <strong class="jxr_keyword">void</strong> noValuesInputStreamParser() {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> x = MsgPackParser.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		check(<span class="jxr_string">"false"</span>, x.isAutoCloseStreams());
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		check(<span class="jxr_string">"HEX"</span>, x.getBinaryFormat());
@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">static</strong> ClassInfo c = ClassInfo.of(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotationReaderParser() {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> x = JsonParser.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		check(<span class="jxr_string">"false"</span>, x.isAutoCloseStreams());
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		check(<span class="jxr_string">"5"</span>, x.getDebugOutputLines());
@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotationInputStreamParser() {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).collect(Collectors.toCollection(AnnotationList::<strong class="jxr_keyword">new</strong>)));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> x = MsgPackParser.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		check(<span class="jxr_string">"false"</span>, x.isAutoCloseStreams());
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		check(<span class="jxr_string">"HEX"</span>, x.getBinaryFormat());
