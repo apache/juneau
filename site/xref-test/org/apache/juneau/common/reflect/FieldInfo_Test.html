@@ -100,8 +100,8 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Test <strong class="jxr_keyword">void</strong> of_<strong class="jxr_keyword">null</strong>() {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		check(<strong class="jxr_keyword">null</strong>, FieldInfo.of(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		check(<strong class="jxr_keyword">null</strong>, FieldInfo.of(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; FieldInfo.of(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; FieldInfo.of(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> getDeclaringClass() {

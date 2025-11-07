@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * @param inner The constructor or method that this info represents.</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">protected</strong> <a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a>(ClassInfo declaringClass, Executable <strong class="jxr_keyword">inner</strong>) {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">super</strong>(<strong class="jxr_keyword">inner</strong>, <strong class="jxr_keyword">inner</strong>.getModifiers());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">super</strong>(<strong class="jxr_keyword">inner</strong>, assertArgNotNull(<span class="jxr_string">"inner"</span>, <strong class="jxr_keyword">inner</strong>).getModifiers());
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">this</strong>.declaringClass = declaringClass;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">this</strong>.isConstructor = <strong class="jxr_keyword">inner</strong> instanceof Constructor;

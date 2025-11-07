@@ -794,7 +794,7 @@
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">var</strong> bs = BeanStore.create().<strong class="jxr_keyword">outer</strong>(<strong class="jxr_keyword">new</strong> <a name="BeanStore_Test" href="../../../../org/apache/juneau/cp/BeanStore_Test.html#BeanStore_Test">BeanStore_Test</a>()).build();
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 		assertNotNull(bs.createBean(D1a.<strong class="jxr_keyword">class</strong>).run());
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 		assertNotNull(bs.createBean(D1b.<strong class="jxr_keyword">class</strong>).run());
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		assertNull(bs.createBean(<strong class="jxr_keyword">null</strong>).run());
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; bs.createBean(<strong class="jxr_keyword">null</strong>).run());
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 	}
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D2 {

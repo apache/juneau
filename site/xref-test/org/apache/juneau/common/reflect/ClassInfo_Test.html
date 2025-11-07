@@ -163,9 +163,9 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> ofTypeOnNulls() {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		check(<strong class="jxr_keyword">null</strong>, of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		check(<strong class="jxr_keyword">null</strong>, of((Type)<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		check(<strong class="jxr_keyword">null</strong>, of((Object)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; of((Type)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertThrows(NullPointerException.<strong class="jxr_keyword">class</strong>, () -&gt; of((Object)<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Test <strong class="jxr_keyword">void</strong> <strong class="jxr_keyword">inner</strong>() {
