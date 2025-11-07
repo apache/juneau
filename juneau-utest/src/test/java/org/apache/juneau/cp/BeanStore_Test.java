@@ -728,14 +728,14 @@ class BeanStore_Test extends TestBase {
 		b1p.add(A1.class, null);
 		assertString("createC1", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
 		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
-		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run());
-		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).run());
 
 		b1p.clear();
 		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run());
 		assertString("createC2", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run());
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run());
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).run());
 
 		assertString("X", b1c.createMethodFinder(String.class).withDefault("X").run());
 		assertString("X", b1c.createMethodFinder(String.class).withDefault(()->"X").run());
@@ -760,14 +760,14 @@ class BeanStore_Test extends TestBase {
 		b1p.add(A1.class, null);
 		assertString("createC1", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
 		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
-		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run());
-		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).run());
 
 		b1p.clear();
 		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run());
 		assertString("createC2", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run());
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run());
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).run());
 
 		assertString("X", b1c.createMethodFinder(String.class).withDefault("X").run());
 		assertString("X", b1c.createMethodFinder(String.class).withDefault(()->"X").run());

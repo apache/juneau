@@ -89,7 +89,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int getLenientParameterMatch(Class<?>...argTypes) {
+	public final int parameterMatchesLenientCount(Class<?>...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
@@ -117,7 +117,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int getLenientParameterMatch(ClassInfo...argTypes) {
+	public final int parameterMatchesLenientCount(ClassInfo...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
@@ -145,7 +145,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int getLenientParameterMatch(Object...argTypes) {
+	public final int parameterMatchesLenientCount(Object...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
@@ -297,6 +297,49 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final String getSimpleName() { return isConstructor ? scn(e.getDeclaringClass()) : e.getName(); }
 
 	/**
+	 * Returns <jk>true</jk> if this executable can accept the specified arguments in the specified order.
+	 *
+	 * <p>
+	 * This method checks if the provided arguments are compatible with the executable's parameter types
+	 * in exact order, using {@link Class#isInstance(Object)} for type checking.
+	 *
+	 * <p>
+	 * <strong>Important:</strong> For non-static inner class constructors, the first parameter is the
+	 * implicit outer class instance (e.g., {@code Outer.this}). This method checks against the
+	 * <em>actual</em> parameters including this implicit parameter.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular method</jc>
+	 * 	<jk>public void</jk> foo(String <jv>s</jv>, Integer <jv>i</jv>);
+	 * 	<jv>methodInfo</jv>.canAccept(<js>"hello"</js>, 42);  <jc>// true</jc>
+	 *
+	 * 	<jc>// Non-static inner class constructor</jc>
+	 * 	<jk>class</jk> Outer {
+	 * 		<jk>class</jk> Inner {
+	 * 			Inner(String <jv>s</jv>) {}
+	 * 		}
+	 * 	}
+	 * 	<jc>// Constructor actually has signature: Inner(Outer this$0, String s)</jc>
+	 * 	Outer <jv>outer</jv> = <jk>new</jk> Outer();
+	 * 	<jv>constructorInfo</jv>.canAccept(<js>"hello"</js>);  <jc>// false - missing outer instance</jc>
+	 * 	<jv>constructorInfo</jv>.canAccept(<jv>outer</jv>, <js>"hello"</js>);  <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param args The arguments to check.
+	 * @return <jk>true</jk> if this executable can accept the specified arguments in the specified order.
+	 */
+	public final boolean canAccept(Object...args) {
+		Class<?>[] pt = e.getParameterTypes();
+		if (pt.length != args.length)
+			return false;
+		for (int i = 0; i < pt.length; i++)
+			if (! pt[i].isInstance(args[i]))
+				return false;
+		return true;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this method has at most only these arguments using lenient matching.
 	 *
 	 * <p>
@@ -307,7 +350,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has at most only these arguments in any order.
 	 */
 	public final boolean hasParameterTypesLenient(Class<?>...args) {
-		return getLenientParameterMatch(args) != -1;
+		return parameterMatchesLenientCount(args) != -1;
 	}
 
 	/**
@@ -321,7 +364,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has at most only these arguments in any order.
 	 */
 	public final boolean hasParameterTypesLenient(ClassInfo...args) {
-		return getLenientParameterMatch(args) != -1;
+		return parameterMatchesLenientCount(args) != -1;
 	}
 
 	/**
@@ -330,7 +373,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasMatchingParameterTypes(Class<?>...args) {
+	public final boolean hasParameterTypeParents(Class<?>...args) {
 		var params = getParameters();
 		return params.size() == args.length
 			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfLenient(a)));
@@ -342,7 +385,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasMatchingParameterTypes(ClassInfo...args) {
+	public final boolean hasParameterTypeParents(ClassInfo...args) {
 		var params = getParameters();
 		return params.size() == args.length
 			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfLenient(a)));

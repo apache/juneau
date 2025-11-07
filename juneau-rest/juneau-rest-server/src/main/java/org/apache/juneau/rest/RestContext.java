@@ -3782,7 +3782,7 @@ public class RestContext extends Context {
 			var map = CollectionUtils.<String,MethodInfo>map();
 			// @formatter:off
 			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
-				.filter(y -> y.hasAnnotation(RestInit.class) && ! y.hasArg(RestOpContext.Builder.class))
+				.filter(y -> y.hasAnnotation(RestInit.class) && ! y.hasParameter(RestOpContext.Builder.class))
 				.forEach(y -> {
 					var sig = y.getSignature();
 					if (! map.containsKey(sig))
@@ -4572,7 +4572,7 @@ public class RestContext extends Context {
 			var initMap = CollectionUtils.<String,MethodInfo>map();
 			// @formatter:off
 			ClassInfo.ofProxy(resource.get()).getAllMethodsParentFirst().stream()
-				.filter(y -> y.hasAnnotation(RestInit.class) && y.hasArg(RestOpContext.Builder.class))
+				.filter(y -> y.hasAnnotation(RestInit.class) && y.hasParameter(RestOpContext.Builder.class))
 				.forEach(y -> {
 					String sig = y.getSignature();
 					if (! initMap.containsKey(sig))

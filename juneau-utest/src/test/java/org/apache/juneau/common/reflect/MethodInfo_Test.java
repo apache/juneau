@@ -487,10 +487,10 @@ class MethodInfo_Test extends TestBase {
 		assertEquals("a3", e_a3.getSignature());
 	}
 
-	@Test void argsOnlyOfType() {
-		assertTrue(e_a1.argsOnlyOfType(CharSequence.class));
-		assertTrue(e_a1.argsOnlyOfType(CharSequence.class, Map.class));
-		assertFalse(e_a1.argsOnlyOfType());
+	@Test void hasOnlyParameterTypes() {
+		assertTrue(e_a1.hasOnlyParameterTypes(CharSequence.class));
+		assertTrue(e_a1.hasOnlyParameterTypes(CharSequence.class, Map.class));
+		assertFalse(e_a1.hasOnlyParameterTypes());
 	}
 
 	public static class F {

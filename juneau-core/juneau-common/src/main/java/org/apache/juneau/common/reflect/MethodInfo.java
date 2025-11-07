@@ -321,15 +321,15 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * 	<jc>// Example method:</jc>
 	 * 	<jk>public void</jk> foo(String <jv>bar</jv>, Integer <jv>baz</jv>);
 	 *
-	 * 	argsOnlyOfType(<jv>fooMethod</jv>, String.<jk>class</jk>, Integer.<jk>class</jk>);  <jc>// True.</jc>
-	 * 	argsOnlyOfType(<jv>fooMethod</jv>, String.<jk>class</jk>, Integer.<jk>class</jk>, Map.<jk>class</jk>);  <jc>// True.</jc>
-	 * 	argsOnlyOfType(<jv>fooMethod</jv>, String.<jk>class</jk>);  <jc>// False.</jc>
+	 * 	<jv>fooMethod</jv>.hasOnlyParameterTypes(String.<jk>class</jk>, Integer.<jk>class</jk>);  <jc>// True.</jc>
+	 * 	<jv>fooMethod</jv>.hasOnlyParameterTypes(String.<jk>class</jk>, Integer.<jk>class</jk>, Map.<jk>class</jk>);  <jc>// True.</jc>
+	 * 	<jv>fooMethod</jv>.hasOnlyParameterTypes(String.<jk>class</jk>);  <jc>// False.</jc>
 	 * </p>
 	 *
 	 * @param args The valid class types (exact) for the arguments.
 	 * @return <jk>true</jk> if the method parameters only consist of the types specified in the list.
 	 */
-	public boolean argsOnlyOfType(Class<?>...args) {
+	public boolean hasOnlyParameterTypes(Class<?>...args) {
 		for (var param : getParameters()) {
 			var c1 = param.getParameterType().inner();
 			boolean foundMatch = false;
@@ -340,60 +340,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 				return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor can accept the specified arguments in the specified order.
-	 *
-	 * @param args The arguments to check.
-	 * @return <jk>true</jk> if this constructor can accept the specified arguments in the specified order.
-	 */
-	public boolean canAccept(Object...args) {
-		Class<?>[] pt = m.getParameterTypes();
-		if (pt.length != args.length)
-			return false;
-		for (int i = 0; i < pt.length; i++)
-			if (! pt[i].isInstance(args[i]))
-				return false;
-		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this method has at most only these parameter types using lenient matching.
-	 *
-	 * <p>
-	 * Lenient matching allows arguments to be matched to parameters based on type compatibility,
-	 * where arguments can be in any order.
-	 *
-	 * @param args The parameter types to test for.
-	 * @return <jk>true</jk> if this method has at most only these parameter types in any order.
-	 */
-	public boolean hasFuzzyParameterTypes(Class<?>...args) {
-		return hasParameterTypesLenient(args);
-	}
-
-	/**
-	 * Returns the number of matching arguments for this method using lenient matching.
-	 *
-	 * <p>
-	 * Lenient matching allows arguments to be matched to parameters based on type compatibility,
-	 * where arguments can be in any order, extra arguments are ignored, and missing arguments return -1.
-	 *
-	 * @param args The arguments to check.
-	 * @return The number of matching arguments for this method, or -1 if not all parameters can be matched.
-	 */
-	public int canAcceptLenient(Object...args) {
-		int matches = 0;
-		outer: for (var param : getParameters()) {
-			for (var a : args) {
-				if (param.getParameterType().canAcceptArg(a)) {
-					matches++;
-					continue outer;
-				}
-			}
-			return -1;
-		}
-		return matches;
 	}
 
 	@Override
@@ -545,7 +491,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param requiredParams The parameter types to check for.
 	 * @return <jk>true</jk> if this method has at least the specified parameters.
 	 */
-	public boolean hasAllArgs(Class<?>...requiredParams) {
+	public boolean hasAllParameters(Class<?>...requiredParams) {
 		var paramTypes = getParameters().stream()
 			.map(p -> p.getParameterType().inner())
 			.toList();
@@ -617,8 +563,8 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param requiredParam The parameter type to check for.
 	 * @return <jk>true</jk> if this method has at least the specified parameter.
 	 */
-	public boolean hasArg(Class<?> requiredParam) {
-		return hasAllArgs(requiredParam);
+	public boolean hasParameter(Class<?> requiredParam) {
+		return hasAllParameters(requiredParam);
 	}
 
 	/**

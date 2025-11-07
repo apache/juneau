@@ -88,22 +88,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		return this;
 	}
 
-	/**
-	 * Returns <jk>true</jk> if this constructor can accept the specified arguments in the specified order.
-	 *
-	 * @param args The arguments to check.
-	 * @return <jk>true</jk> if this constructor can accept the specified arguments in the specified order.
-	 */
-	public boolean canAccept(Object...args) {
-		Class<?>[] pt = c.getParameterTypes();
-		if (pt.length != args.length)
-			return false;
-		for (int i = 0; i < pt.length; i++)
-			if (! pt[i].isInstance(args[i]))
-				return false;
-		return true;
-	}
-
 	@Override
 	public int compareTo(ConstructorInfo o) {
 		int i = getSimpleName().compareTo(o.getSimpleName());

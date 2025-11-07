@@ -141,9 +141,9 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 		// @formatter:off
 		return
 			cs.isNotDeprecated()
-			&& cs.isVisible(bc.getBeanConstructorVisibility())
-			&& cs.hasMatchingParameterTypes(rt)
-			&& bc.getAnnotationProvider().find(BeanIgnore.class, cs.inner()).findAny().isEmpty();
+				&& cs.isVisible(bc.getBeanConstructorVisibility())
+				&& cs.hasParameterTypeParents(rt)
+				&& bc.getAnnotationProvider().find(BeanIgnore.class, cs.inner()).findAny().isEmpty();
 		// @formatter:on
 	}
 

@@ -381,12 +381,12 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	@Test void hasArgParents() {
-		assertTrue(e_hasStringParam.hasMatchingParameterTypes(String.class));
-		assertFalse(e_hasStringParam.hasMatchingParameterTypes(CharSequence.class));
-		assertFalse(e_hasStringParam.hasMatchingParameterTypes(StringBuilder.class));
-		assertFalse(e_hasStringParam.hasMatchingParameterTypes(new Class[0]));
-		assertFalse(e_hasStringParam.hasMatchingParameterTypes(String.class, String.class));
-		assertFalse(e_hasStringParam.hasMatchingParameterTypes(long.class));
+		assertTrue(e_hasStringParam.hasParameterTypeParents(String.class));
+		assertFalse(e_hasStringParam.hasParameterTypeParents(CharSequence.class));
+		assertFalse(e_hasStringParam.hasParameterTypeParents(StringBuilder.class));
+		assertFalse(e_hasStringParam.hasParameterTypeParents(new Class[0]));
+		assertFalse(e_hasStringParam.hasParameterTypeParents(String.class, String.class));
+		assertFalse(e_hasStringParam.hasParameterTypeParents(long.class));
 	}
 
 	@Test void hasFuzzyArgs() {
