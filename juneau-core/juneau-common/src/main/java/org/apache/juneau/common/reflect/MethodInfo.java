@@ -91,9 +91,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	private final Method inner;
 	private volatile ClassInfo returnType;
 
-	private final Supplier<List<MethodInfo>> matchingCache =
-		memoize(() -> findMatching(list(), this, getDeclaringClass()));
-
 	private final Supplier<List<MethodInfo>> matchingMethods = memoize(this::findMatchingMethods);
 
 	// All annotations on this method and parent overridden methods in child-to-parent order.
@@ -269,7 +266,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	private List<AnnotationInfo<Annotation>> findAnnotationInfos() {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
-		matchingCache.get().forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
+		getMatchingMethods().forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
 		return u(list);
 	}
 
@@ -282,13 +279,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		list.addAll(getDeclaredAnnotationInfos());
 
 		// 2. Parent methods in child-to-parent order
-		matchingCache.get().stream().skip(1).forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
+		getMatchingMethods().stream().skip(1).forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
 
 		// 3. Return type on current
 		returnType.getDeclaredAnnotationInfos().forEach(x -> list.add((AnnotationInfo<Annotation>)x));
 
 		// 4. Return type on parent methods in child-to-parent order
-		matchingCache.get().stream().skip(1).forEach(m -> {
+		getMatchingMethods().stream().skip(1).forEach(m -> {
 			m.getReturnType().unwrap(Value.class, Optional.class).getDeclaredAnnotationInfos().forEach(x -> list.add((AnnotationInfo<Annotation>)x));
 		});
 
@@ -375,7 +372,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public <A extends Annotation> void forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
-		rstream(matchingCache.get())
+		rstream(getMatchingMethods())
 			.flatMap(m -> m.getDeclaredAnnotationInfos().stream())
 			.map(AnnotationInfo::inner)
 			.filter(type::isInstance)
@@ -477,7 +474,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		// Inline Context.firstAnnotation() call
-		for (var m2 : matchingCache.get())
+		for (var m2 : getMatchingMethods())
 			if (nn(annotationProvider.find(type, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null)))
 				return true;
 		return false;
@@ -498,7 +495,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		// Inline implementation using reflection directly instead of delegating to AnnotationProvider.DEFAULT
 		if (!nn(type))
 			return false;
-		for (var m2 : matchingCache.get())
+		for (var m2 : getMatchingMethods())
 			if (m2.inner().getAnnotation(type) != null)
 				return true;
 		return false;
