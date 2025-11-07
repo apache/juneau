@@ -127,20 +127,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	/**
-	 * Finds the annotation of the specified type defined on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
-	 */
-	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		Value<A> t = Value.empty();
-		annotationProvider.getAnnotationProvider().find(type, c).map(x -> x.inner()).filter(x -> true).forEach(x -> t.set(x));
-		return t.orElse(null);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
 	 *
 	 * @param <A> The annotation type to look for.
@@ -148,9 +134,8 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		// Inline Context.firstAnnotation() call
-		return nn(annotationProvider.getAnnotationProvider().find(type, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
+		return nn(annotationProvider.find(type, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
 	}
 
 	/**
@@ -161,7 +146,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this constructor.
 	 */
-	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
 		return ! hasAnnotation(annotationProvider, type);
 	}
 

@@ -222,9 +222,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		// Inline Context.firstAnnotation() call
-		return nn(annotationProvider.getAnnotationProvider().find(type, f).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
+		return nn(annotationProvider.find(type, f).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
 	}
 
 	/**
@@ -256,7 +255,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present.
 	 */
-	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
 		return ! hasAnnotation(annotationProvider, type);
 	}
 

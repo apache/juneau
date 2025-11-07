@@ -230,8 +230,8 @@ public class BeanMeta<T> {
 
 				Map<String,BeanPropertyMeta.Builder> normalProps = map();
 
-				boolean hasBean = ci.hasAnnotation(ctx, Bean.class);
-				boolean hasBeanIgnore = ci.hasAnnotation(ctx, BeanIgnore.class);
+				boolean hasBean = ci.hasAnnotation(ctx.getAnnotationProvider(), Bean.class);
+				boolean hasBeanIgnore = ci.hasAnnotation(ctx.getAnnotationProvider(), BeanIgnore.class);
 
 				/// See if this class matches one the patterns in the exclude-class list.
 				if (ctx.isNotABean(c))
@@ -248,7 +248,7 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @Beanc constructor on public constructors.
-				ci.getPublicConstructors().stream().filter(x -> x.hasAnnotation(ctx, Beanc.class)).forEach(x -> {
+				ci.getPublicConstructors().stream().filter(x -> x.hasAnnotation(ctx.getAnnotationProvider(), Beanc.class)).forEach(x -> {
 					if (nn(constructor))
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
@@ -272,13 +272,13 @@ public class BeanMeta<T> {
 
 				// Look for @Beanc on all other constructors.
 				if (constructor == null) {
-					ci.getDeclaredConstructors().stream().filter(x -> x.hasAnnotation(ctx, Beanc.class)).forEach(x -> {
+					ci.getDeclaredConstructors().stream().filter(x -> x.hasAnnotation(ctx.getAnnotationProvider(), Beanc.class)).forEach(x -> {
 						if (nn(constructor))
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
 						// Inline Context.forEachAnnotation() call
-				ctx.getAnnotationProvider().find(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
+						ctx.getAnnotationProvider().find(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
 						if (! x.hasNumParameters(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -570,10 +570,10 @@ public class BeanMeta<T> {
 			// @formatter:off
 			c2.getDeclaredFields().stream()
 				.filter(x -> x.isNotStatic()
-				&& (x.isNotTransient() || noIgnoreTransients)
-				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
-				&& x.hasNoAnnotation(ctx, BeanIgnore.class)
-				&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx, Beanp.class)))
+			&& (x.isNotTransient() || noIgnoreTransients)
+			&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
+			&& x.hasNoAnnotation(ctx.getAnnotationProvider(), BeanIgnore.class)
+			&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx.getAnnotationProvider(), Beanp.class)))
 				.forEach(x -> l.add(x.inner())
 			);
 			// @formatter:on
@@ -595,9 +595,9 @@ public class BeanMeta<T> {
 
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
-				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.hasAnnotation(ctx, BeanIgnore.class))
+				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.hasAnnotation(ctx.getAnnotationProvider(), BeanIgnore.class))
 					continue;
-				Transient t = m.getAnnotation(ctx, Transient.class);
+				Transient t = m.getAnnotation(ctx.getAnnotationProvider(), Transient.class);
 				if (nn(t) && t.value())
 					continue;
 
@@ -706,10 +706,10 @@ public class BeanMeta<T> {
 			// @formatter:off
 			FieldInfo f = c2.getDeclaredField(
 				x -> x.isNotStatic()
-				&& (x.isNotTransient() || noIgnoreTransients)
-				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
-				&& x.hasNoAnnotation(ctx, BeanIgnore.class)
-				&& x.hasName(name)
+			&& (x.isNotTransient() || noIgnoreTransients)
+			&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
+			&& x.hasNoAnnotation(ctx.getAnnotationProvider(), BeanIgnore.class)
+			&& x.hasName(name)
 			);
 			// @formatter:on
 			if (nn(f))

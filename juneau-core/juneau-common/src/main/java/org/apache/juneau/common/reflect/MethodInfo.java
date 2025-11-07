@@ -427,7 +427,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> void forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
+	public <A extends Annotation> void forEachAnnotation(AnnotationProvider2 annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
 		rstream(matchingCache.get())
 			.flatMap(m -> m.getDeclaredAnnotationInfos().stream())
@@ -474,10 +474,10 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param type The annotation to look for.
 	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
-	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> A getAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
 		// Inline Context.firstAnnotation() call
 		return matchingCache.get().stream()
-			.map(m2 -> annotationProvider.getAnnotationProvider().find(type, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null))
+			.map(m2 -> annotationProvider.find(type, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null))
 			.filter(Objects::nonNull)
 			.findFirst()
 			.orElse(null);
@@ -588,10 +588,10 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
 		// Inline Context.firstAnnotation() call
 		for (var m2 : matchingCache.get())
-			if (nn(annotationProvider.getAnnotationProvider().find(type, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null)))
+			if (nn(annotationProvider.find(type, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null)))
 				return true;
 		return false;
 	}
@@ -652,7 +652,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this method.
 	 */
-	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
 		return ! hasAnnotation(annotationProvider, type);
 	}
 

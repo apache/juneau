@@ -418,7 +418,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ClassInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
+	public <A extends Annotation> ClassInfo forEachAnnotation(AnnotationProvider2 annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		if (annotationProvider == null)
 			throw unsupportedOp();
 		A t2 = getPackageAnnotation(type);
@@ -426,10 +426,10 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			consumeIf(filter, action, t2);
 		var interfaces2 = interfaces.get();
 		for (int i = interfaces2.size() - 1; i >= 0; i--)
-			annotationProvider.getAnnotationProvider().findDeclaredParentFirst(type, interfaces2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+			annotationProvider.findDeclaredParentFirst(type, interfaces2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 		var parents2 = parents.get();
 		for (int i = parents2.size() - 1; i >= 0; i--)
-			annotationProvider.getAnnotationProvider().findDeclaredParentFirst(type, parents2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+			annotationProvider.findDeclaredParentFirst(type, parents2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 		return this;
 	}
 
@@ -478,7 +478,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> A getAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
 		return findAnnotation(annotationProvider, type);
 	}
 
@@ -493,7 +493,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation type to look for.
 	 * @return The matching annotations.
 	 */
-	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider2 annotationProvider, Class<A> type) {
 		List<A> l = list();
 		forEachAnnotation(annotationProvider, type, x -> true, x -> l.add(x));
 		return l;
@@ -1661,11 +1661,11 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation to look for.
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider2 annotationProvider, Class<A> type) {
 		if (annotationProvider == null)
 			throw unsupportedOp();
 		// Inline Context.firstAnnotation() call
-		return nn(annotationProvider.getAnnotationProvider().find(type, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
+		return nn(annotationProvider.find(type, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
 	}
 
 	/**
@@ -2173,22 +2173,22 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public <A extends Annotation> A lastAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter) {
+	public <A extends Annotation> A lastAnnotation(AnnotationProvider2 annotationProvider, Class<A> type, Predicate<A> filter) {
 		if (annotationProvider == null)
 			throw unsupportedOp();
 		A x = null;
-		x = annotationProvider.getAnnotationProvider().find(type, inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
+		x = annotationProvider.find(type, inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
 		if (nn(x) && test(filter, x))
 			return x;
 		var parents2 = parents.get();
 		for (var parent : parents2) {
-			x = annotationProvider.getAnnotationProvider().find(type, parent.inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
+			x = annotationProvider.find(type, parent.inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
 			if (nn(x))
 				return x;
 		}
 		var interfaces2 = interfaces.get();
 		for (var element : interfaces2) {
-			x = annotationProvider.getAnnotationProvider().find(type, element.inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
+			x = annotationProvider.find(type, element.inner()).map(y -> y.inner()).filter(y -> filter.test(y)).findFirst().orElse(null);
 			if (nn(x))
 				return x;
 		}
@@ -2335,13 +2335,12 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		return c == null ? null : of(c.componentType());
 	}
 
-	private <A extends Annotation> A findAnnotation(AnnotationProvider ap, Class<A> a) {
+	private <A extends Annotation> A findAnnotation(AnnotationProvider2 ap, Class<A> a) {
 		if (a == null)
 			return null;
 		if (ap == null)
 			throw unsupportedOp();
-		// Inline Context.firstDeclaredAnnotation() call
-		A t = ap.getAnnotationProvider().findDeclared(a, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null);
+		A t = ap.findDeclared(a, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null);
 		if (nn(t))
 			return t;
 		ClassInfo sci = getSuperclass();

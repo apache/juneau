@@ -133,7 +133,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(Map.class)
 			&& mi.hasParameterTypesLenient(BeanSession.class)
-			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
+			&& mi.hasNoAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
 		// @formatter:on
 	}
 
@@ -143,7 +143,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			cs.isNotDeprecated()
 			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasMatchingParameterTypes(rt)
-			&& cs.hasNoAnnotation(bc, BeanIgnore.class);
+			&& cs.hasNoAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
 		// @formatter:on
 	}
 
@@ -156,12 +156,12 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
+			&& mi.hasNoAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
 		// @formatter:on
 	}
 
 	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
-		return ci.hasAnnotation(bc, BeanIgnore.class) || ci.isNonStaticMemberClass();
+		return ci.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.class) || ci.isNonStaticMemberClass();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

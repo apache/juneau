@@ -150,7 +150,7 @@ public class BeanRegistry {
 					});
 				} else {
 					Value<String> typeName = Value.empty();
-					ci.forEachAnnotation(beanContext, Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
+					ci.forEachAnnotation(beanContext.getAnnotationProvider(), Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
 					addToMap(typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", cn(c))),
 						beanContext.getClassMeta(c));
 				}
