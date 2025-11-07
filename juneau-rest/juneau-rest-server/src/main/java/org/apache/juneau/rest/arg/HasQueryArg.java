@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -81,7 +82,7 @@ public class HasQueryArg implements RestOpArg {
 	 */
 	protected HasQueryArg(ParameterInfo pi) {
 		Value<String> _name = Value.empty();
-		pi.forEachAnnotation(HasQuery.class, HasQueryArg::hasName, x -> _name.set(getName(x)));
+		rstream(pi.getAllAnnotationInfos(HasQuery.class)).map(AnnotationInfo::inner).filter(HasQueryArg::hasName).forEach(x -> _name.set(getName(x)));
 		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasQuery used without name or value"));
 		this.type = pi.getParameterType().innerType();
 	}

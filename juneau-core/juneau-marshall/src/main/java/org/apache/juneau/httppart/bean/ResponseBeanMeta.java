@@ -142,8 +142,8 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
-		mpi.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
-		mpi.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
+		rstream(mpi.getAllAnnotationInfos(Response.class)).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(mpi.getAllAnnotationInfos(StatusCode.class)).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
 		return b.build();
 	}
 

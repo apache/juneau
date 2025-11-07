@@ -358,7 +358,7 @@ class ParamInfoTest extends TestBase {
 
 	private static <T extends Annotation> List<T> annotations(ParameterInfo pi, Class<T> a) {
 		List<T> l = list();
-		pi.forEachAnnotation(a, x -> true, l::add);
+		rstream(pi.getAllAnnotationInfos(a)).map(AnnotationInfo::inner).forEach(l::add);
 		return l;
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -81,7 +82,7 @@ public class HasFormDataArg implements RestOpArg {
 	 */
 	protected HasFormDataArg(ParameterInfo pi) {
 		Value<String> _name = Value.empty();
-		pi.forEachAnnotation(HasFormData.class, HasFormDataArg::hasName, x -> _name.set(getName(x)));
+		rstream(pi.getAllAnnotationInfos(HasFormData.class)).map(AnnotationInfo::inner).filter(HasFormDataArg::hasName).forEach(x -> _name.set(getName(x)));
 		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasFormData used without name or value"));
 		this.type = pi.getParameterType().innerType();
 	}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.common.collections.*;
@@ -76,8 +77,8 @@ public class AttributeArg implements RestOpArg {
 
 	private static String getName(ParameterInfo paramInfo) {
 		Value<String> n = Value.empty();
-		paramInfo.forEachAnnotation(Attr.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
-		paramInfo.forEachAnnotation(Attr.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
+		rstream(paramInfo.getAllAnnotationInfos(Attr.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.name())).forEach(x -> n.set(x.name()));
+		rstream(paramInfo.getAllAnnotationInfos(Attr.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.value())).forEach(x -> n.set(x.value()));
 		if (n.isEmpty())
 			throw new ArgException(paramInfo, "@Attr used without name or value");
 		return n.get();
