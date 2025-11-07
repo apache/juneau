@@ -434,10 +434,10 @@
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			consumeIf(filter, action, t2);
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">var</strong> interfaces2 = interfaces.get();
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = interfaces2.size() - 1; i &gt;= 0; i--)
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			annotationProvider.forEachDeclaredAnnotation(type, interfaces2.get(i).<strong class="jxr_keyword">inner</strong>(), filter, action);
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			annotationProvider.getAnnotationProvider().findDeclaredParentFirst(type, interfaces2.get(i).<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter == <strong class="jxr_keyword">null</strong> || filter.test(x)).forEach(x -&gt; action.accept(x));
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">var</strong> parents2 = parents.get();
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parents2.size() - 1; i &gt;= 0; i--)
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			annotationProvider.forEachDeclaredAnnotation(type, parents2.get(i).<strong class="jxr_keyword">inner</strong>(), filter, action);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			annotationProvider.getAnnotationProvider().findDeclaredParentFirst(type, parents2.get(i).<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter == <strong class="jxr_keyword">null</strong> || filter.test(x)).forEach(x -&gt; action.accept(x));
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 
@@ -2185,18 +2185,18 @@
 <a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> 		<strong class="jxr_keyword">if</strong> (annotationProvider == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> 			<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> 		A x = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 		x = annotationProvider.lastAnnotation(type, <strong class="jxr_keyword">inner</strong>(), filter);
+<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 		x = annotationProvider.getAnnotationProvider().find(type, <strong class="jxr_keyword">inner</strong>()).map(y -&gt; y.<strong class="jxr_keyword">inner</strong>()).filter(y -&gt; filter.test(y)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 		<strong class="jxr_keyword">if</strong> (nn(x) &amp;&amp; test(filter, x))
 <a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> 			<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L2183" href="#L2183">2183</a> 		<strong class="jxr_keyword">var</strong> parents2 = parents.get();
 <a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> parent : parents2) {
-<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 			x = annotationProvider.lastAnnotation(type, parent.<strong class="jxr_keyword">inner</strong>(), filter);
+<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 			x = annotationProvider.getAnnotationProvider().find(type, parent.<strong class="jxr_keyword">inner</strong>()).map(y -&gt; y.<strong class="jxr_keyword">inner</strong>()).filter(y -&gt; filter.test(y)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> 			<strong class="jxr_keyword">if</strong> (nn(x))
 <a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 				<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 		}
 <a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> 		<strong class="jxr_keyword">var</strong> interfaces2 = interfaces.get();
 <a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> element : interfaces2) {
-<a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 			x = annotationProvider.lastAnnotation(type, element.<strong class="jxr_keyword">inner</strong>(), filter);
+<a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 			x = annotationProvider.getAnnotationProvider().find(type, element.<strong class="jxr_keyword">inner</strong>()).map(y -&gt; y.<strong class="jxr_keyword">inner</strong>()).filter(y -&gt; filter.test(y)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2192" href="#L2192">2192</a> 			<strong class="jxr_keyword">if</strong> (nn(x))
 <a class="jxr_linenumber" name="L2193" href="#L2193">2193</a> 				<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L2194" href="#L2194">2194</a> 		}

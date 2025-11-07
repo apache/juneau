@@ -88,11 +88,11 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		Builder b = <strong class="jxr_keyword">new</strong> Builder();
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">if</strong> (nn(bpm.getInnerField()))
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			mp.forEachAnnotation(Html.<strong class="jxr_keyword">class</strong>, bpm.getInnerField(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.findHtmlInfo(x));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			mp.getAnnotationProvider().find(Html.<strong class="jxr_keyword">class</strong>, bpm.getInnerField()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; b.findHtmlInfo(x));
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">if</strong> (nn(bpm.getGetter()))
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			mp.forEachAnnotation(Html.<strong class="jxr_keyword">class</strong>, bpm.getGetter(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.findHtmlInfo(x));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			mp.getAnnotationProvider().find(Html.<strong class="jxr_keyword">class</strong>, bpm.getGetter()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; b.findHtmlInfo(x));
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">if</strong> (nn(bpm.getSetter()))
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			mp.forEachAnnotation(Html.<strong class="jxr_keyword">class</strong>, bpm.getSetter(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.findHtmlInfo(x));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			mp.getAnnotationProvider().find(Html.<strong class="jxr_keyword">class</strong>, bpm.getSetter()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; b.findHtmlInfo(x));
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">this</strong>.format = b.format;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">this</strong>.noTables = b.noTables;

@@ -852,22 +852,22 @@
 <a class="jxr_linenumber" name="L844" href="#L844">844</a> 
 <a class="jxr_linenumber" name="L845" href="#L845">845</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L846" href="#L846">846</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> 		getAnnotationProvider().find(type, onConstructor).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter.test(x)).forEach(x -&gt; action.accept(x));
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> 	}
 <a class="jxr_linenumber" name="L849" href="#L849">849</a> 
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> 		getAnnotationProvider().find(type, onField).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter.test(x)).forEach(x -&gt; action.accept(x));
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 	}
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		getAnnotationProvider().find(type, onMethod).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter.test(x)).forEach(x -&gt; action.accept(x));
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 	}
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> 
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		getAnnotationProvider().findDeclaredParentFirst(type, onClass).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter == <strong class="jxr_keyword">null</strong> || filter.test(x)).forEach(x -&gt; action.accept(x));
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> 	}
 <a class="jxr_linenumber" name="L864" href="#L864">864</a> 
 <a class="jxr_linenumber" name="L865" href="#L865">865</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -939,27 +939,27 @@
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> 
 <a class="jxr_linenumber" name="L932" href="#L932">932</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		<strong class="jxr_keyword">return</strong> getAnnotationProvider().find(type, onClass).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter.test(x)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L935" href="#L935">935</a> 	}
 <a class="jxr_linenumber" name="L936" href="#L936">936</a> 
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		<strong class="jxr_keyword">return</strong> getAnnotationProvider().find(type, onConstructor).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter.test(x)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L940" href="#L940">940</a> 	}
 <a class="jxr_linenumber" name="L941" href="#L941">941</a> 
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		<strong class="jxr_keyword">return</strong> getAnnotationProvider().find(type, onField).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter.test(x)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> 	}
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> 
 <a class="jxr_linenumber" name="L947" href="#L947">947</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L948" href="#L948">948</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		<strong class="jxr_keyword">return</strong> getAnnotationProvider().find(type, onMethod).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter.test(x)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> 	}
 <a class="jxr_linenumber" name="L951" href="#L951">951</a> 
 <a class="jxr_linenumber" name="L952" href="#L952">952</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L953" href="#L953">953</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		<strong class="jxr_keyword">return</strong> getAnnotationProvider().findDeclared(type, onClass).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter.test(x)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L955" href="#L955">955</a> 	}
 <a class="jxr_linenumber" name="L956" href="#L956">956</a> 
 <a class="jxr_linenumber" name="L957" href="#L957">957</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>

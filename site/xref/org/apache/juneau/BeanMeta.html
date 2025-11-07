@@ -611,8 +611,8 @@
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 				List&lt;Beanp&gt; lp = list();
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 				List&lt;Name&gt; ln = list();
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 				ctx.forEachAnnotation(Beanp.<strong class="jxr_keyword">class</strong>, m.<strong class="jxr_keyword">inner</strong>(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; lp.add(x));
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 				ctx.forEachAnnotation(Name.<strong class="jxr_keyword">class</strong>, m.<strong class="jxr_keyword">inner</strong>(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; ln.add(x));
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 				ctx.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, m.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 				ctx.getAnnotationProvider().find(Name.<strong class="jxr_keyword">class</strong>, m.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; ln.add(x));
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 				<em class="jxr_comment">// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does</em>
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 				<em class="jxr_comment">// This ensures property names are inherited correctly, preventing duplicate property definitions</em>
@@ -827,8 +827,8 @@
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 					<strong class="jxr_keyword">if</strong> (paramsMatch) {
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> 						<em class="jxr_comment">// Found a matching parent method - check for @Beanp and @Name annotations</em>
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 						ctx.forEachAnnotation(Beanp.<strong class="jxr_keyword">class</strong>, parentMethod.<strong class="jxr_keyword">inner</strong>(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; lp.add(x));
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 						ctx.forEachAnnotation(Name.<strong class="jxr_keyword">class</strong>, parentMethod.<strong class="jxr_keyword">inner</strong>(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; ln.add(x));
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 						ctx.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, parentMethod.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 						ctx.getAnnotationProvider().find(Name.<strong class="jxr_keyword">class</strong>, parentMethod.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; ln.add(x));
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> 						<em class="jxr_comment">// If we found annotations, we're done</em>
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> 						<strong class="jxr_keyword">if</strong> (! lp.isEmpty() || ! ln.isEmpty())
