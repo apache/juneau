@@ -435,7 +435,7 @@
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(<a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a> annotationProvider, Class&lt;A&gt; type, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 		rstream(matchingCache.get())
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 			.flatMap(m -&gt; m.getDeclaredAnnotationInfos().stream())
@@ -482,7 +482,7 @@
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * @param type The annotation to look for.</em>
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * @return The first annotation found, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</em>
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A getAnnotation(<a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a> annotationProvider, Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A getAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<em class="jxr_comment">// Inline Context.firstAnnotation() call</em>
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">return</strong> matchingCache.get().stream()
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 			.map(m2 -&gt; annotationProvider.find(type, m2.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>))
@@ -596,7 +596,7 @@
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 * @param type The annotation to look for.</em>
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is present on this method.</em>
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(<a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a> annotationProvider, Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<em class="jxr_comment">// Inline Context.firstAnnotation() call</em>
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : matchingCache.get())
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 			<strong class="jxr_keyword">if</strong> (nn(annotationProvider.find(type, m2.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>)))
@@ -660,7 +660,7 @@
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 * @param type The annotation to look for.</em>
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is not present on this method.</em>
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasNoAnnotation(<a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a> annotationProvider, Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasNoAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">return</strong> ! hasAnnotation(annotationProvider, type);
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 	}
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 

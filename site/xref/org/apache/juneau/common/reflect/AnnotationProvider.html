@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title>AnnotationProvider2 xref</title>
+<title>AnnotationProvider xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/common/reflect/AnnotationProvider2.html">View Javadoc</a></div><pre>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/common/reflect/AnnotationProvider.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
@@ -127,7 +127,7 @@
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment"> * 		.build();</em>
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Add to provider&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment"> * 	AnnotationProvider2 &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider2</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment"> * 	AnnotationProvider &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment"> * 		.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment"> * 		.addRuntimeAnnotations(&lt;jv&gt;runtimeAnnotation&lt;/jv&gt;)</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment"> * 		.build();</em>
@@ -160,10 +160,10 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Create with default settings&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment"> * 	AnnotationProvider2 &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider2.&lt;jsm&gt;create&lt;/jsm&gt;().build();</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment"> * 	AnnotationProvider &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider.&lt;jsm&gt;create&lt;/jsm&gt;().build();</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Create with runtime annotations&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment"> * 	AnnotationProvider2 &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider2</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment"> * 	AnnotationProvider &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment"> * 		.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment"> * 		.annotations(&lt;jk&gt;new&lt;/jk&gt; MyAnnotationImpl())</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment"> * 		.build();</em>
@@ -183,7 +183,7 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link MethodInfo}</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a> {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * Disable annotation caching.</em>
@@ -193,18 +193,18 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * Default instance.</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a> INSTANCE = <strong class="jxr_keyword">new</strong> <a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a>(create());
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> INSTANCE = <strong class="jxr_keyword">new</strong> <a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a>(create());
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_comment">// Builder</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * Builder for creating configured {@link AnnotationProvider2} instances.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * Builder for creating configured {@link AnnotationProvider} instances.</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * 	AnnotationProvider2 &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider2</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * 	AnnotationProvider &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider</em>
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * 		.disableCaching()</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
@@ -212,7 +212,7 @@
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link AnnotationProvider2#create()}</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link AnnotationProvider#create()}</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
@@ -224,12 +224,12 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		}
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">		 * Builds a new {@link AnnotationProvider2} instance with the configured settings.</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">		 * Builds a new {@link AnnotationProvider} instance with the configured settings.</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">		 * @return A new immutable {@link AnnotationProvider2} instance.</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">		 * @return A new immutable {@link AnnotationProvider} instance.</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">public</strong> <a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a> build() {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">public</strong> <a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> build() {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		}
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Add all runtime annotations to the provider&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment"> * 	AnnotationProvider2 &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider2</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment"> * 	AnnotationProvider &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider</em>
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment"> * 		.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment"> * 		.addRuntimeAnnotations(&lt;jv&gt;beanAnnotation&lt;/jv&gt;, &lt;jv&gt;multiAnnotation&lt;/jv&gt;, &lt;jv&gt;stringAnnotation&lt;/jv&gt;, &lt;jv&gt;swapAnnotation&lt;/jv&gt;)</em>
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment"> * 		.build();</em>
@@ -384,7 +384,7 @@
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">		 * 		.value(MySwap.&lt;jk&gt;class&lt;/jk&gt;)</em>
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">		 * 	AnnotationProvider2 &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider2</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">		 * 	AnnotationProvider &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider</em>
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">		 * 		.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">		 * 		.addRuntimeAnnotations(&lt;jv&gt;beanAnnotation&lt;/jv&gt;, &lt;jv&gt;swapAnnotation&lt;/jv&gt;)  &lt;jc&gt;// Varargs&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
@@ -423,7 +423,7 @@
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * @param builder The builder containing configuration settings.</em>
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	<strong class="jxr_keyword">protected</strong> <a name="AnnotationProvider2" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a>(Builder builder) {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	<strong class="jxr_keyword">protected</strong> <a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a>(Builder builder) {
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">this</strong>.classAnnotations = Cache.&lt;Class&lt;?&gt;,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt;create()
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 			.supplier(<strong class="jxr_keyword">this</strong>::findClassAnnotations)
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 			.disableCaching(builder.disableCaching)

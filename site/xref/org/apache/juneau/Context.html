@@ -766,7 +766,7 @@
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 	<strong class="jxr_keyword">final</strong> List&lt;Annotation&gt; annotations;
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> debug;
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="AnnotationProvider2" href="../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a> annotationProvider;
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="AnnotationProvider" href="../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider;
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> <em class="jxr_javadoccomment">	 * Constructor for this class.</em>
@@ -777,7 +777,7 @@
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> 		init(builder);
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> 		debug = builder.debug;
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 		annotations = opt(builder.annotations).orElseGet(Collections::emptyList);
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		annotationProvider = AnnotationProvider2.create().addRuntimeAnnotations(annotations).build();
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 	}
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -791,7 +791,7 @@
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 		annotationProvider = copyFrom.annotationProvider;
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 	}
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotationProvider2" href="../../../org/apache/juneau/common/reflect/AnnotationProvider2.html#AnnotationProvider2">AnnotationProvider2</a> getAnnotationProvider() {
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotationProvider" href="../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> getAnnotationProvider() {
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<strong class="jxr_keyword">return</strong> annotationProvider;
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 	}
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> 
