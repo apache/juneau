@@ -783,14 +783,14 @@
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<strong class="jxr_keyword">if</strong> (executable.isConstructor()) {
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 			<strong class="jxr_keyword">var</strong> annotationInfos = getAnnotationInfos();
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 			ci.forEachAnnotation(ap, a, filter, action);
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 			ap.forEachClassAnnotation(a, ci, filter, action);
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ai : annotationInfos)
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 				<strong class="jxr_keyword">if</strong> (a.isInstance(ai.<strong class="jxr_keyword">inner</strong>()))
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 					consumeIf(filter, action, a.<strong class="jxr_keyword">cast</strong>(ai.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 			<strong class="jxr_keyword">var</strong> mi = (<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)executable;
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 			ci.forEachAnnotation(ap, a, filter, action);
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 			ap.forEachClassAnnotation(a, ci, filter, action);
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 			rstream(mi.getMatchingMethods()).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 				x.getParameter(index).getAnnotationInfos().stream()
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 					.filter(ai -&gt; a.isInstance(ai.<strong class="jxr_keyword">inner</strong>()))

@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_comment">// Combine it with @Rest(swagger)</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		List&lt;Rest&gt; restAnnotations = list();
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		rci.forEachAnnotation(context.getAnnotationProvider(), Rest.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; restAnnotations.add(x));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		context.getAnnotationProvider().forEachClassAnnotation(Rest.<strong class="jxr_keyword">class</strong>, rci, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; restAnnotations.add(x));
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rr : restAnnotations) {
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			JsonMap sInfo = omSwagger.getMap(<span class="jxr_string">"info"</span>, <strong class="jxr_keyword">true</strong>);
@@ -443,9 +443,9 @@
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> eci : mi.getExceptionTypes()) {
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 				<strong class="jxr_keyword">if</strong> (eci.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 					List&lt;Response&gt; la = list();
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 					eci.forEachAnnotation(context.getAnnotationProvider(), Response.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la.add(x));
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 					context.getAnnotationProvider().forEachClassAnnotation(Response.<strong class="jxr_keyword">class</strong>, eci, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la.add(x));
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 					List&lt;StatusCode&gt; la2 = list();
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 					eci.forEachAnnotation(context.getAnnotationProvider(), StatusCode.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la2.add(x));
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 					context.getAnnotationProvider().forEachClassAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>, eci, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la2.add(x));
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 					Set&lt;Integer&gt; codes = getCodes(la2, 500);
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : la) {
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {

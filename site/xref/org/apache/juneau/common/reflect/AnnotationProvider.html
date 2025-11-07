@@ -882,16 +882,45 @@
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> <em class="jxr_javadoccomment">	 * @param action The action to perform on each matching annotation.</em>
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L876" href="#L876">876</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachMethodAnnotation(Class&lt;A&gt; type, <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 		mi.getDeclaringClass().forEachAnnotation(<strong class="jxr_keyword">this</strong>, type, filter, action);
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 		forEachClassAnnotation(type, mi.getDeclaringClass(), filter, action);
 <a class="jxr_linenumber" name="L878" href="#L878">878</a> 		rstream(mi.getMatchingMethods())
 <a class="jxr_linenumber" name="L879" href="#L879">879</a> 			.flatMap(m -&gt; m.getDeclaredAnnotationInfos().stream())
 <a class="jxr_linenumber" name="L880" href="#L880">880</a> 			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L881" href="#L881">881</a> 			.filter(type::isInstance)
 <a class="jxr_linenumber" name="L882" href="#L882">882</a> 			.map(type::<strong class="jxr_keyword">cast</strong>)
 <a class="jxr_linenumber" name="L883" href="#L883">883</a> 			.forEach(a -&gt; consumeIf(filter, action, a));
-<a class="jxr_linenumber" name="L884" href="#L884">884</a> 		mi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).forEachAnnotation(<strong class="jxr_keyword">this</strong>, type, filter, action);
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 		forEachClassAnnotation(type, mi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>), filter, action);
 <a class="jxr_linenumber" name="L885" href="#L885">885</a> 	}
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> }
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> <em class="jxr_javadoccomment">	 * Iterates through annotations on a class hierarchy.</em>
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> <em class="jxr_javadoccomment">	 * This traverses annotations in parent-first order from:</em>
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Package annotations</em>
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Interface hierarchy (parent-first)</em>
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Class hierarchy (parent-first)</em>
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> <em class="jxr_javadoccomment">	 * @param ci The class info to traverse.</em>
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> <em class="jxr_javadoccomment">	 * @param filter Optional filter to apply to annotations. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> <em class="jxr_javadoccomment">	 * @param action The action to perform on each matching annotation.</em>
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachClassAnnotation(Class&lt;A&gt; type, ClassInfo ci, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		A t2 = ci.getPackageAnnotation(type);
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">if</strong> (nn(t2))
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 			consumeIf(filter, action, t2);
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">var</strong> interfaces2 = ci.getInterfaces();
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = interfaces2.size() - 1; i &gt;= 0; i--)
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 			findDeclaredParentFirst(type, interfaces2.get(i).<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter == <strong class="jxr_keyword">null</strong> || filter.test(x)).forEach(x -&gt; action.accept(x));
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">var</strong> parents2 = ci.getParents();
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parents2.size() - 1; i &gt;= 0; i--)
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 			findDeclaredParentFirst(type, parents2.get(i).<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; filter == <strong class="jxr_keyword">null</strong> || filter.test(x)).forEach(x -&gt; action.accept(x));
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	}
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
