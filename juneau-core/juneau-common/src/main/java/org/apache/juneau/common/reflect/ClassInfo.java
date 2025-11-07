@@ -262,12 +262,27 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Returns <jk>true</jk> if this type can be used as a parameter for the specified object.
 	 *
+	 * <p>
+	 * For null values, returns <jk>true</jk> unless this type is a primitive
+	 * (since primitives cannot accept null values in Java).
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><c>ClassInfo.of(String.class).canAcceptArg("foo")</c> - returns <jk>true</jk>
+	 * 	<li><c>ClassInfo.of(String.class).canAcceptArg(null)</c> - returns <jk>true</jk>
+	 * 	<li><c>ClassInfo.of(int.class).canAcceptArg(5)</c> - returns <jk>true</jk>
+	 * 	<li><c>ClassInfo.of(int.class).canAcceptArg(null)</c> - returns <jk>false</jk> (primitives can't be null)
+	 * 	<li><c>ClassInfo.of(Integer.class).canAcceptArg(null)</c> - returns <jk>true</jk>
+	 * </ul>
+	 *
 	 * @param child The argument to check.
 	 * @return <jk>true</jk> if this type can be used as a parameter for the specified object.
 	 */
 	public boolean canAcceptArg(Object child) {
-		if (inner == null || child == null)
+		if (inner == null)
 			return false;
+		if (child == null)
+			return ! isPrimitive();  // Primitives can't accept null, all other types can
 		if (inner.isInstance(child))
 			return true;
 		if (this.isPrimitive() || child.getClass().isPrimitive()) {
