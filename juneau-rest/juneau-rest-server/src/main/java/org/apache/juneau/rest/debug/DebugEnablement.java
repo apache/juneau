@@ -45,7 +45,7 @@ public abstract class DebugEnablement {
 	 */
 	public static class Builder {
 
-		ReflectionMap2.Builder<Enablement> mapBuilder;
+		ReflectionMap.Builder<Enablement> mapBuilder;
 		Enablement defaultEnablement = NEVER;
 		Predicate<HttpServletRequest> conditional;
 		BeanCreator<DebugEnablement> creator;
@@ -56,7 +56,7 @@ public abstract class DebugEnablement {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
-			mapBuilder = ReflectionMap2.create(Enablement.class);
+			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
 			conditional = x -> "true".equalsIgnoreCase(x.getHeader("Debug"));
 			creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class).builder(Builder.class, this);
@@ -211,7 +211,7 @@ public abstract class DebugEnablement {
 	}
 
 	private final Enablement defaultEnablement;
-	private final ReflectionMap2<Enablement> enablementMap;
+	private final ReflectionMap<Enablement> enablementMap;
 	private final Predicate<HttpServletRequest> conditionalPredicate;
 
 	/**

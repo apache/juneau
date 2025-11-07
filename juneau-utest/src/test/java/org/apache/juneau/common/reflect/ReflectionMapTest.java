@@ -32,10 +32,10 @@ class ReflectionMapTest extends TestBase {
 	}
 
 	private static void checkEntries(ReflectionMap<?> m, boolean hasClass, boolean hasMethods, boolean hasFields, boolean hasConstructors) {
-		assertEquals(m.classEntries.length == 0, ! hasClass);
-		assertEquals(m.methodEntries.length == 0, ! hasMethods);
-		assertEquals(m.fieldEntries.length == 0, ! hasFields);
-		assertEquals(m.constructorEntries.length == 0, ! hasConstructors);
+		assertEquals(m.classEntries.size() == 0, ! hasClass);
+		assertEquals(m.methodEntries.size() == 0, ! hasMethods);
+		assertEquals(m.fieldEntries.size() == 0, ! hasFields);
+		assertEquals(m.constructorEntries.size() == 0, ! hasConstructors);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
