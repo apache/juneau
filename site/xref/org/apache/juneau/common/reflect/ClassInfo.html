@@ -187,8 +187,8 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">return</strong> c == <strong class="jxr_keyword">null</strong> ? ClassInfo.of(o) : ClassInfo.of(c);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Type t;  <em class="jxr_comment">// The underlying Type object (may be Class, ParameterizedType, GenericArrayType, etc.).</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">private</strong> Class&lt;?&gt; <strong class="jxr_keyword">inner</strong>;  <em class="jxr_comment">// The underlying Class object (null for non-class types like TypeVariable).  Effectively final.</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Type innerType;  <em class="jxr_comment">// The underlying Type object (may be Class, ParameterizedType, GenericArrayType, etc.).</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; <strong class="jxr_keyword">inner</strong>;  <em class="jxr_comment">// The underlying Class object (null for non-class types like TypeVariable).</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isParameterizedType;  <em class="jxr_comment">// True if this represents a ParameterizedType (e.g., List&lt;String&gt;).</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;Integer&gt; dimensions;  <em class="jxr_comment">// Number of array dimensions (0 if not an array).</em>
@@ -226,14 +226,14 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 * @param c The class type.</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * @param t The generic type (if parameterized type).</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 * @param inner The class type.</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * @param innerType The generic type (if parameterized type).</em>
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">protected</strong> ClassInfo(Class&lt;?&gt; c, Type t) {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">super</strong>(c == <strong class="jxr_keyword">null</strong> ? 0 : c.getModifiers());
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">this</strong>.t = t;
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = c;
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">this</strong>.isParameterizedType = t == <strong class="jxr_keyword">null</strong> ? false : (t instanceof ParameterizedType);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">protected</strong> ClassInfo(Class&lt;?&gt; <strong class="jxr_keyword">inner</strong>, Type innerType) {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">super</strong>(<strong class="jxr_keyword">inner</strong> == <strong class="jxr_keyword">null</strong> ? 0 : <strong class="jxr_keyword">inner</strong>.getModifiers());
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">this</strong>.innerType = innerType;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">this</strong>.isParameterizedType = innerType == <strong class="jxr_keyword">null</strong> ? false : (innerType instanceof ParameterizedType);
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">this</strong>.dimensions = memoize(<strong class="jxr_keyword">this</strong>::findDimensions);
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">this</strong>.componentType = memoize(<strong class="jxr_keyword">this</strong>::findComponentType);
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">this</strong>.packageInfo = memoize(() -&gt; opt(<strong class="jxr_keyword">inner</strong>).map(x -&gt; PackageInfo.of(x.getPackage())).orElse(<strong class="jxr_keyword">null</strong>));
@@ -286,7 +286,7 @@
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 	@Override
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">return</strong> (o instanceof ClassInfo o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.t, y.t));
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">return</strong> (o instanceof ClassInfo o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.innerType, y.innerType));
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 	}
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 
@@ -486,7 +486,7 @@
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * 	An unmodifiable list of all public member classes and interfaces declared by this class.</em>
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Returns an empty list if this class has no public member classes or interfaces.</em>
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getClasses() {
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getMemberClasses() {
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">inner</strong> == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<strong class="jxr_keyword">return</strong> u(l());
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 		Class&lt;?&gt;[] classes = <strong class="jxr_keyword">inner</strong>.getClasses();
@@ -507,7 +507,7 @@
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 * 	An unmodifiable list of all classes and interfaces declared as members of this class.</em>
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Returns an empty list if this class declares no classes or interfaces as members.</em>
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getDeclaredClasses() {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getDeclaredMemberClasses() {
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">inner</strong> == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 			<strong class="jxr_keyword">return</strong> u(l());
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 		Class&lt;?&gt;[] classes = <strong class="jxr_keyword">inner</strong>.getDeclaredClasses();
@@ -799,7 +799,7 @@
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> <em class="jxr_javadoccomment">	 * @return The name of the underlying class in JVM format.</em>
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 	<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">inner</strong>) ? <strong class="jxr_keyword">inner</strong>.getName() : t.getTypeName(); }
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 	<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">inner</strong>) ? <strong class="jxr_keyword">inner</strong>.getName() : innerType.getTypeName(); }
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> <em class="jxr_javadoccomment">	 * Returns the canonical name of the underlying class.</em>
@@ -1115,7 +1115,7 @@
 <a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> <em class="jxr_javadoccomment">	 * @return The simple name of the underlying class;</em>
 <a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 	<strong class="jxr_keyword">public</strong> String getNameSimple() { <strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">inner</strong>) ? <strong class="jxr_keyword">inner</strong>.getSimpleName() : t.getTypeName(); }
+<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 	<strong class="jxr_keyword">public</strong> String getNameSimple() { <strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">inner</strong>) ? <strong class="jxr_keyword">inner</strong>.getSimpleName() : innerType.getTypeName(); }
 <a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 
 <a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> <em class="jxr_javadoccomment">	 * Returns a formatted class name with configurable options.</em>
@@ -1233,7 +1233,7 @@
 <a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 		<em class="jxr_comment">// Get the raw class - for ParameterizedType, extract the raw type</em>
 <a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 		<strong class="jxr_keyword">var</strong> ct = <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 		<strong class="jxr_keyword">if</strong> (ct == <strong class="jxr_keyword">null</strong> &amp;&amp; isParameterizedType) {
-<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 			<strong class="jxr_keyword">var</strong> pt = (ParameterizedType)t;
+<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 			<strong class="jxr_keyword">var</strong> pt = (ParameterizedType)innerType;
 <a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 			ct = (Class&lt;?&gt;)pt.getRawType();
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 		}
 <a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 
@@ -1251,7 +1251,7 @@
 <a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 						}
 <a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 					}
 <a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 					sb.append(t.getTypeName());
+<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 					sb.append(innerType.getTypeName());
 <a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 				}
 <a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 				<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 
@@ -1273,7 +1273,7 @@
 <a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 						sb.append(ct.getSimpleName());
 <a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 					}
 <a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 					sb.append(t.getTypeName());
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 					sb.append(innerType.getTypeName());
 <a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 				}
 <a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 				<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 
@@ -1282,14 +1282,14 @@
 <a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 				<strong class="jxr_keyword">if</strong> (nn(ct)) {
 <a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 					sb.append(ct.getSimpleName());
 <a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 					sb.append(t.getTypeName());
+<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 					sb.append(innerType.getTypeName());
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 				}
 <a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 				<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		}
 <a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 		<em class="jxr_comment">// Append type parameters if requested</em>
 <a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 		<strong class="jxr_keyword">if</strong> (includeTypeParams &amp;&amp; isParameterizedType) {
-<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 			<strong class="jxr_keyword">var</strong> pt = (ParameterizedType)t;
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 			<strong class="jxr_keyword">var</strong> pt = (ParameterizedType)innerType;
 <a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 			sb.append('&lt;');
 <a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 			<strong class="jxr_keyword">var</strong> first = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t2 : pt.getActualTypeArguments()) {
@@ -1569,7 +1569,7 @@
 <a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> 
 <a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> 	@Override
 <a class="jxr_linenumber" name="L1563" href="#L1563">1563</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a> 		<strong class="jxr_keyword">return</strong> t.hashCode();
+<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a> 		<strong class="jxr_keyword">return</strong> innerType.hashCode();
 <a class="jxr_linenumber" name="L1565" href="#L1565">1565</a> 	}
 <a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> 
 <a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1617,7 +1617,7 @@
 <a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">	 * @return The wrapped class as a {@link Type}.</em>
 <a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> 	<strong class="jxr_keyword">public</strong> Type innerType() {
-<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 		<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 		<strong class="jxr_keyword">return</strong> innerType;
 <a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 	}
 <a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> 
 <a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1639,7 +1639,7 @@
 <a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> is(ClassInfo c) {
 <a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> 		<strong class="jxr_keyword">if</strong> (nn(<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong>))
 <a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong>.equals(c.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 		<strong class="jxr_keyword">return</strong> t.equals(c.t);
+<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 		<strong class="jxr_keyword">return</strong> innerType.equals(c.innerType);
 <a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> 	}
 <a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> 
 <a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -2154,7 +2154,7 @@
 <a class="jxr_linenumber" name="L2146" href="#L2146">2146</a> 
 <a class="jxr_linenumber" name="L2147" href="#L2147">2147</a> 	@Override
 <a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 		<strong class="jxr_keyword">return</strong> t.toString();
+<a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 		<strong class="jxr_keyword">return</strong> innerType.toString();
 <a class="jxr_linenumber" name="L2150" href="#L2150">2150</a> 	}
 <a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> 
 <a class="jxr_linenumber" name="L2152" href="#L2152">2152</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -2231,11 +2231,11 @@
 <a class="jxr_linenumber" name="L2223" href="#L2223">2223</a> <em class="jxr_javadoccomment">	 * @return The first type parameter, or &lt;jk&gt;null&lt;/jk&gt; if not parameterized or no parameters exist.</em>
 <a class="jxr_linenumber" name="L2224" href="#L2224">2224</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2225" href="#L2225">2225</a> 	<strong class="jxr_keyword">private</strong> Type getFirstParameterType(Class&lt;?&gt; parameterizedType) {
-<a class="jxr_linenumber" name="L2226" href="#L2226">2226</a> 		<strong class="jxr_keyword">if</strong> (t instanceof ParameterizedType pt) {
+<a class="jxr_linenumber" name="L2226" href="#L2226">2226</a> 		<strong class="jxr_keyword">if</strong> (innerType instanceof ParameterizedType pt) {
 <a class="jxr_linenumber" name="L2227" href="#L2227">2227</a> 			<strong class="jxr_keyword">var</strong> ta = pt.getActualTypeArguments();
 <a class="jxr_linenumber" name="L2228" href="#L2228">2228</a> 			<strong class="jxr_keyword">if</strong> (ta.length &gt; 0)
 <a class="jxr_linenumber" name="L2229" href="#L2229">2229</a> 				<strong class="jxr_keyword">return</strong> ta[0];
-<a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t instanceof Class&lt;?&gt; c) <em class="jxr_comment">/* Class that extends Optional&lt;T&gt; */</em> {
+<a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (innerType instanceof Class&lt;?&gt; c) <em class="jxr_comment">/* Class that extends Optional&lt;T&gt; */</em> {
 <a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> 			<strong class="jxr_keyword">if</strong> (c != parameterizedType &amp;&amp; parameterizedType.isAssignableFrom(c))
 <a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 				<strong class="jxr_keyword">return</strong> ClassInfo.of(c).getParameterType(0, parameterizedType);
 <a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 		}
@@ -2249,7 +2249,7 @@
 <a class="jxr_linenumber" name="L2241" href="#L2241">2241</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this is Optional&amp;lt;T&amp;gt; or a subclass like MyOptional extends Optional&amp;lt;String&amp;gt;.</em>
 <a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2243" href="#L2243">2243</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isParameterizedTypeOf(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> 		<strong class="jxr_keyword">return</strong> (t instanceof ParameterizedType t2 &amp;&amp; t2.getRawType() == c) || (t instanceof Class &amp;&amp; c.isAssignableFrom((Class&lt;?&gt;)t));
+<a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> 		<strong class="jxr_keyword">return</strong> (innerType instanceof ParameterizedType t2 &amp;&amp; t2.getRawType() == c) || (innerType instanceof Class &amp;&amp; c.isAssignableFrom((Class&lt;?&gt;)innerType));
 <a class="jxr_linenumber" name="L2245" href="#L2245">2245</a> 	}
 <a class="jxr_linenumber" name="L2246" href="#L2246">2246</a> 
 <a class="jxr_linenumber" name="L2247" href="#L2247">2247</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -2309,7 +2309,7 @@
 <a class="jxr_linenumber" name="L2301" href="#L2301">2301</a> 
 <a class="jxr_linenumber" name="L2302" href="#L2302">2302</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> findDimensions() {
 <a class="jxr_linenumber" name="L2303" href="#L2303">2303</a> 		<strong class="jxr_keyword">int</strong> d = 0;
-<a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> 		Type ct = t;
+<a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> 		Type ct = innerType;
 <a class="jxr_linenumber" name="L2305" href="#L2305">2305</a> 
 <a class="jxr_linenumber" name="L2306" href="#L2306">2306</a> 		<em class="jxr_comment">// Handle GenericArrayType (e.g., List&lt;String&gt;[])</em>
 <a class="jxr_linenumber" name="L2307" href="#L2307">2307</a> 		<strong class="jxr_keyword">while</strong> (ct instanceof GenericArrayType gat) {
@@ -2328,7 +2328,7 @@
 <a class="jxr_linenumber" name="L2320" href="#L2320">2320</a> 	}
 <a class="jxr_linenumber" name="L2321" href="#L2321">2321</a> 
 <a class="jxr_linenumber" name="L2322" href="#L2322">2322</a> 	<strong class="jxr_keyword">private</strong> ClassInfo findComponentType() {
-<a class="jxr_linenumber" name="L2323" href="#L2323">2323</a> 		Type ct = t;
+<a class="jxr_linenumber" name="L2323" href="#L2323">2323</a> 		Type ct = innerType;
 <a class="jxr_linenumber" name="L2324" href="#L2324">2324</a> 		Class&lt;?&gt; cc = <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L2325" href="#L2325">2325</a> 
 <a class="jxr_linenumber" name="L2326" href="#L2326">2326</a> 		<em class="jxr_comment">// Handle GenericArrayType (e.g., List&lt;String&gt;[])</em>
@@ -2342,7 +2342,7 @@
 <a class="jxr_linenumber" name="L2334" href="#L2334">2334</a> 		}
 <a class="jxr_linenumber" name="L2335" href="#L2335">2335</a> 
 <a class="jxr_linenumber" name="L2336" href="#L2336">2336</a> 		<em class="jxr_comment">// Return the deepest component type found</em>
-<a class="jxr_linenumber" name="L2337" href="#L2337">2337</a> 		<strong class="jxr_keyword">if</strong> (ct != t) {
+<a class="jxr_linenumber" name="L2337" href="#L2337">2337</a> 		<strong class="jxr_keyword">if</strong> (ct != innerType) {
 <a class="jxr_linenumber" name="L2338" href="#L2338">2338</a> 			<strong class="jxr_keyword">return</strong> of(ct);
 <a class="jxr_linenumber" name="L2339" href="#L2339">2339</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cc != <strong class="jxr_keyword">inner</strong>) {
 <a class="jxr_linenumber" name="L2340" href="#L2340">2340</a> 			<strong class="jxr_keyword">return</strong> of(cc);

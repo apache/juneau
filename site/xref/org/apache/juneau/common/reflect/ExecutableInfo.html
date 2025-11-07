@@ -63,13 +63,13 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * @param declaringClass The class that declares this method or constructor.</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * @param e The constructor or method that this info represents.</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * @param inner The constructor or method that this info represents.</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">protected</strong> <a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a>(ClassInfo declaringClass, Executable e) {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">super</strong>(e, e.getModifiers());
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">protected</strong> <a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a>(ClassInfo declaringClass, Executable <strong class="jxr_keyword">inner</strong>) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">super</strong>(<strong class="jxr_keyword">inner</strong>, <strong class="jxr_keyword">inner</strong>.getModifiers());
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">this</strong>.declaringClass = declaringClass;
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = e;
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">this</strong>.isConstructor = e instanceof Constructor;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">this</strong>.isConstructor = <strong class="jxr_keyword">inner</strong> instanceof Constructor;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">this</strong>.parameters = memoize(<strong class="jxr_keyword">this</strong>::findParameters);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">this</strong>.exceptions = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getExceptionTypes()).map(ClassInfo::of).toList());
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">this</strong>.declaredAnnotations = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getDeclaredAnnotations()).map(a -&gt; AnnotationInfo.of((<a name="Annotatable" href="../../../../../org/apache/juneau/common/reflect/Annotatable.html#Annotatable">Annotatable</a>)<strong class="jxr_keyword">this</strong>, a)).toList());

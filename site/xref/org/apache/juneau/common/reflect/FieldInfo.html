@@ -52,13 +52,13 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">	 * Convenience method for instantiating a {@link FieldInfo};</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 * @param declaringClass The class that declares this method.</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * @param f The field being wrapped.</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * @param inner The field being wrapped.</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 * @return A new {@link FieldInfo} object, or &lt;jk&gt;null&lt;/jk&gt; if the field was null.</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> of(ClassInfo declaringClass, Field f) {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> of(ClassInfo declaringClass, Field <strong class="jxr_keyword">inner</strong>) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">inner</strong> == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">return</strong> ClassInfo.of(declaringClass).getFieldInfo(f);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">return</strong> ClassInfo.of(declaringClass).getFieldInfo(<strong class="jxr_keyword">inner</strong>);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<em class="jxr_javadoccomment">/**</em>

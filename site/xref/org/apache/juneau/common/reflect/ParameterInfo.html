@@ -77,16 +77,16 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * @param eInfo The constructor or method wrapper.</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * @param p The parameter being wrapped.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * @param executable The constructor or method wrapper.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * @param inner The parameter being wrapped.</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * @param index The parameter index.</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * @param type The parameter type.</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<em class="jxr_comment">// TODO - Investigate if we can construct ClassInfo directly from parameter.</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">protected</strong> <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a>(<a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> eInfo, Parameter p, <strong class="jxr_keyword">int</strong> index, ClassInfo type) {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">super</strong>(p.getModifiers());
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">this</strong>.executable = eInfo;
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = p;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">protected</strong> <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a>(<a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> executable, Parameter <strong class="jxr_keyword">inner</strong>, <strong class="jxr_keyword">int</strong> index, ClassInfo type) {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">super</strong>(<strong class="jxr_keyword">inner</strong>.getModifiers());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">this</strong>.executable = executable;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">this</strong>.index = index;
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">this</strong>.type = type;
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">this</strong>.annotations = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getAnnotations()).map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList());

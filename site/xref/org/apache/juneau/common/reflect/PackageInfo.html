@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<em class="jxr_comment">// Instance</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> Package <strong class="jxr_keyword">inner</strong>;  <em class="jxr_comment">// Effectively final</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Package <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; annotations;  <em class="jxr_comment">// All annotations on this package, wrapped in AnnotationInfo. Repeated annotations have been unwrapped and are present as individual instances.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_javadoccomment">/**</em>

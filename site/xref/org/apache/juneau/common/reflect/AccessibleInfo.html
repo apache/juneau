@@ -40,16 +40,16 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="AccessibleInfo" href="../../../../../org/apache/juneau/common/reflect/AccessibleInfo.html#AccessibleInfo">AccessibleInfo</a> <strong class="jxr_keyword">extends</strong> <a name="ElementInfo" href="../../../../../org/apache/juneau/common/reflect/ElementInfo.html#ElementInfo">ElementInfo</a> {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	AccessibleObject ao;  <em class="jxr_comment">// Effectively final</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AccessibleObject <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 * @param ao The {@link AccessibleObject} being wrapped.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 * @param inner The {@link AccessibleObject} being wrapped.</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">protected</strong> <a name="AccessibleInfo" href="../../../../../org/apache/juneau/common/reflect/AccessibleInfo.html#AccessibleInfo">AccessibleInfo</a>(AccessibleObject ao, <strong class="jxr_keyword">int</strong> modifiers) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">protected</strong> <a name="AccessibleInfo" href="../../../../../org/apache/juneau/common/reflect/AccessibleInfo.html#AccessibleInfo">AccessibleInfo</a>(AccessibleObject <strong class="jxr_keyword">inner</strong>, <strong class="jxr_keyword">int</strong> modifiers) {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">super</strong>(modifiers);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">this</strong>.ao = ao;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
@@ -63,8 +63,8 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> setAccessible() {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			<strong class="jxr_keyword">if</strong> (nn(ao))
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  				ao.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			<strong class="jxr_keyword">if</strong> (nn(<strong class="jxr_keyword">inner</strong>))
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  				<strong class="jxr_keyword">inner</strong>.setAccessible(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) SecurityException e) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">return</strong> false;
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAccessible() {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">boolean</strong>) AccessibleObject.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"isAccessible"</span>).invoke(ao);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">boolean</strong>) AccessibleObject.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"isAccessible"</span>).invoke(<strong class="jxr_keyword">inner</strong>);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception ex) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		}
