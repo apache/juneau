@@ -511,7 +511,7 @@ public class BeanStore {
 				continue loop;
 			if (pt.is(Optional.class) || pt.is(BeanStore.class))
 				continue loop;
-			String beanName = pi.findQualifier();  // Use @Named for bean injection
+			String beanName = pi.getResolvedQualifier();  // Use @Named for bean injection
 			Class<?> ptc = pt.inner();
 			if (beanName == null && ! hasBean(ptc))
 				l.add(pt.getNameSimple());
@@ -537,7 +537,7 @@ public class BeanStore {
 			} else if (pt.is(BeanStore.class)) {
 				o[i] = this;
 			} else {
-				String beanQualifier = pi.findQualifier();
+				String beanQualifier = pi.getResolvedQualifier();
 				Class<?> ptc = pt.unwrap(Optional.class).inner();
 				Optional<?> o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);
 				o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
@@ -560,7 +560,7 @@ public class BeanStore {
 				continue loop;
 			if (pt.is(Optional.class) || pt.is(BeanStore.class))
 				continue loop;
-			String beanQualifier = pi.findQualifier();
+			String beanQualifier = pi.getResolvedQualifier();
 			Class<?> ptc = pt.inner();
 			if ((beanQualifier == null && ! hasBean(ptc)) || (nn(beanQualifier) && ! hasBean(ptc, beanQualifier)))
 				return false;

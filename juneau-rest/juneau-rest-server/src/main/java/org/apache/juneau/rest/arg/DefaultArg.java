@@ -66,7 +66,7 @@ public class DefaultArg implements RestOpArg {
 	protected DefaultArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().inner();
 		this.paramInfo = paramInfo;
-		this.qualifier = paramInfo.findQualifier();
+		this.qualifier = paramInfo.getResolvedQualifier();
 	}
 
 	@Override /* Overridden from RestOpArg */

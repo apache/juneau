@@ -63,8 +63,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations;  // All annotations declared directly on this parameter.
 	private final Supplier<List<ParameterInfo>> matchingParameters;  // Matching parameters in parent methods.
-	private final ResettableSupplier<String> foundName = memoizeResettable(this::findNameInternal);
-	private final ResettableSupplier<String> foundQualifier = memoizeResettable(this::findQualifierInternal);
+	private final ResettableSupplier<String> resolvedName = memoizeResettable(this::findNameInternal);  // Resolved name from @Name annotation or bytecode.
+	private final ResettableSupplier<String> resolvedQualifier = memoizeResettable(this::findQualifierInternal);  // Resolved qualifier from @Named annotation.
 
 	/**
 	 * Constructor.
@@ -336,15 +336,15 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * This method is used for mapping constructor parameters to bean properties.
 	 *
 	 * <p>
-	 * <b>Note:</b> This is different from {@link #findQualifier()} which looks for {@link org.apache.juneau.annotation.Named @Named}
+	 * <b>Note:</b> This is different from {@link #getResolvedQualifier()} which looks for {@link org.apache.juneau.annotation.Named @Named}
 	 * annotations for bean injection purposes.
 	 *
 	 * @return The parameter name if found, or <jk>null</jk> if not available.
-	 * @see #findQualifier()
+	 * @see #getResolvedQualifier()
 	 * @see #getName()
 	 */
-	public String findName() {
-		return foundName.get();
+	public String getResolvedName() {
+		return resolvedName.get();
 	}
 
 	static void reset() {
@@ -384,14 +384,14 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * This method is used by the {@link org.apache.juneau.cp.BeanStore} for bean injection.
 	 *
 	 * <p>
-	 * <b>Note:</b> This is different from {@link #findName()} which looks for {@link org.apache.juneau.annotation.Name @Name}
+	 * <b>Note:</b> This is different from {@link #getResolvedName()} which looks for {@link org.apache.juneau.annotation.Name @Name}
 	 * annotations for bean property mapping.
 	 *
 	 * @return The bean qualifier name if {@code @Named} annotation is found, or <jk>null</jk> if not annotated.
-	 * @see #findName()
+	 * @see #getResolvedName()
 	 */
-	public String findQualifier() {
-		return foundQualifier.get();
+	public String getResolvedQualifier() {
+		return resolvedQualifier.get();
 	}
 
 	private String findQualifierInternal() {
@@ -424,7 +424,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#getName()
 	 */
 	public String getName() {
-		String name = findName();
+		String name = getResolvedName();
 		return name != null ? name : inner.getName();
 	}
 
@@ -457,7 +457,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if the parameter has a name.
 	 */
 	public boolean hasName() {
-		return findName() != null;
+		return getResolvedName() != null;
 	}
 
 	/**
