@@ -26,11 +26,11 @@ import org.apache.juneau.common.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */
-public class DebugEnablementMap extends ReflectionMap<Enablement> {
+public class DebugEnablementMap extends ReflectionMap2<Enablement> {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ReflectionMap.Builder<Enablement> {
+	public static class Builder extends ReflectionMap2.Builder<Enablement> {
 
 		/**
 		 * Constructor.

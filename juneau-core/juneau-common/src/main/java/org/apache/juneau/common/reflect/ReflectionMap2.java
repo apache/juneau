@@ -509,6 +509,246 @@ public class ReflectionMap2<V> {
 		return constructorEntries.stream().filter(x -> x.matches(c)).map(x -> x.value);
 	}
 
+	/**
+	 * Finds first value in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Class<?> c) {
+		return find(c, null);
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Class<?> c, Class<? extends V> ofType) {
+		return opt(findMatching(c).filter(x -> x != null && (ofType == null || ofType.isInstance(x))).findFirst().orElse(null));
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Constructor<?> c) {
+		return find(c, null);
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Constructor<?> c, Class<? extends V> ofType) {
+		return opt(findMatching(c).filter(x -> x != null && (ofType == null || ofType.isInstance(x))).findFirst().orElse(null));
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Field f) {
+		return find(f, null);
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Field f, Class<? extends V> ofType) {
+		return opt(findMatching(f).filter(x -> x != null && (ofType == null || ofType.isInstance(x))).findFirst().orElse(null));
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Method m) {
+		return find(m, null);
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Method m, Class<? extends V> ofType) {
+		return opt(findMatching(m).filter(x -> x != null && (ofType == null || ofType.isInstance(x))).findFirst().orElse(null));
+	}
+
+	/**
+	 * Finds all values in this map that match the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @return The matching objects.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Class<?> c) {
+		return findAll(c, null);
+	}
+
+	/**
+	 * Finds all values in this map that match the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching objects.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Class<?> c, Class<? extends V> ofType) {
+		return findMatching(c).filter(x -> ofType == null || ofType.isInstance(x)).toList();
+	}
+
+	/**
+	 * Finds all values in this map that match the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @return The matching objects.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Constructor<?> c) {
+		return findAll(c, null);
+	}
+
+	/**
+	 * Finds all values in this map that match the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching objects.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Constructor<?> c, Class<? extends V> ofType) {
+		return findMatching(c).filter(x -> ofType == null || ofType.isInstance(x)).toList();
+	}
+
+	/**
+	 * Finds all values in this map that match the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @return The matching objects.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Field f) {
+		return findAll(f, null);
+	}
+
+	/**
+	 * Finds all values in this map that match the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching objects.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Field f, Class<? extends V> ofType) {
+		return findMatching(f).filter(x -> ofType == null || ofType.isInstance(x)).toList();
+	}
+
+	/**
+	 * Finds all values in this map that match the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @return The matching objects.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Method m) {
+		return findAll(m, null);
+	}
+
+	/**
+	 * Finds all values in this map that match the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching objects.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Method m, Class<? extends V> ofType) {
+		return findMatching(m).filter(x -> ofType == null || ofType.isInstance(x)).toList();
+	}
+
+	/**
+	 * Finds all values in this map that match the specified class and appends them to the specified array.
+	 *
+	 * @param c The class to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param array The array to append to.
+	 * @return The array with matching objects appended.
+	 */
+	public V[] appendAll(Class<?> c, Class<? extends V> ofType, V[] array) {
+		var list = findAll(c, ofType);
+		if (list.isEmpty())
+			return array;
+		var newArray = Arrays.copyOf(array, array.length + list.size());
+		for (int i = 0; i < list.size(); i++)
+			newArray[array.length + i] = list.get(i);
+		return newArray;
+	}
+
+	/**
+	 * Finds all values in this map that match the specified constructor and appends them to the specified array.
+	 *
+	 * @param c The constructor to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param array The array to append to.
+	 * @return The array with matching objects appended.
+	 */
+	public V[] appendAll(Constructor<?> c, Class<? extends V> ofType, V[] array) {
+		var list = findAll(c, ofType);
+		if (list.isEmpty())
+			return array;
+		var newArray = Arrays.copyOf(array, array.length + list.size());
+		for (int i = 0; i < list.size(); i++)
+			newArray[array.length + i] = list.get(i);
+		return newArray;
+	}
+
+	/**
+	 * Finds all values in this map that match the specified field and appends them to the specified array.
+	 *
+	 * @param f The field to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param array The array to append to.
+	 * @return The array with matching objects appended.
+	 */
+	public V[] appendAll(Field f, Class<? extends V> ofType, V[] array) {
+		var list = findAll(f, ofType);
+		if (list.isEmpty())
+			return array;
+		var newArray = Arrays.copyOf(array, array.length + list.size());
+		for (int i = 0; i < list.size(); i++)
+			newArray[array.length + i] = list.get(i);
+		return newArray;
+	}
+
+	/**
+	 * Finds all values in this map that match the specified method and appends them to the specified array.
+	 *
+	 * @param m The method to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param array The array to append to.
+	 * @return The array with matching objects appended.
+	 */
+	public V[] appendAll(Method m, Class<? extends V> ofType, V[] array) {
+		var list = findAll(m, ofType);
+		if (list.isEmpty())
+			return array;
+		var newArray = Arrays.copyOf(array, array.length + list.size());
+		for (int i = 0; i < list.size(); i++)
+			newArray[array.length + i] = list.get(i);
+		return newArray;
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		// @formatter:off
