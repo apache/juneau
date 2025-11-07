@@ -687,7 +687,7 @@
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 			<strong class="jxr_keyword">return</strong> HtmlBeanPropertyMeta.DEFAULT;
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> 		HtmlBeanPropertyMeta m = htmlBeanPropertyMetas.get(bpm);
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 			m = <strong class="jxr_keyword">new</strong> <a name="HtmlBeanPropertyMeta" href="../../../../org/apache/juneau/html/HtmlBeanPropertyMeta.html#HtmlBeanPropertyMeta">HtmlBeanPropertyMeta</a>(bpm.getDelegateFor(), <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 			m = <strong class="jxr_keyword">new</strong> <a name="HtmlBeanPropertyMeta" href="../../../../org/apache/juneau/html/HtmlBeanPropertyMeta.html#HtmlBeanPropertyMeta">HtmlBeanPropertyMeta</a>(bpm.getDelegateFor(), <strong class="jxr_keyword">this</strong>.getAnnotationProvider(), <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 			htmlBeanPropertyMetas.put(bpm, m);
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> 		}
 <a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">return</strong> m;
