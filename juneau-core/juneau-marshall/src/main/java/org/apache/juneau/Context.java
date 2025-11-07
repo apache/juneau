@@ -76,7 +76,7 @@ import org.apache.juneau.xml.annotation.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public abstract class Context implements AnnotationProvider {
+public abstract class Context {
 	/**
 	 * Builder class.
 	 */
