@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		ReflectionMap2.Builder&lt;Enablement&gt; mapBuilder;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		ReflectionMap.Builder&lt;Enablement&gt; mapBuilder;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		Enablement defaultEnablement = NEVER;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		Predicate&lt;HttpServletRequest&gt; conditional;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		BeanCreator&lt;DebugEnablement&gt; creator;
@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">		 * @param beanStore The bean store to use for creating beans.</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">protected</strong> Builder(<a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			mapBuilder = ReflectionMap2.create(Enablement.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			mapBuilder = ReflectionMap.create(Enablement.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			defaultEnablement = NEVER;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			conditional = x -&gt; <span class="jxr_string">"true"</span>.equalsIgnoreCase(x.getHeader(<span class="jxr_string">"Debug"</span>));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			creator = beanStore.createBean(DebugEnablement.<strong class="jxr_keyword">class</strong>).type(BasicDebugEnablement.<strong class="jxr_keyword">class</strong>).builder(Builder.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>);
@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Enablement" href="../../../../../org/apache/juneau/Enablement.html#Enablement">Enablement</a> defaultEnablement;
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ReflectionMap2&lt;Enablement&gt; enablementMap;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ReflectionMap&lt;Enablement&gt; enablementMap;
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Predicate&lt;HttpServletRequest&gt; conditionalPredicate;
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_javadoccomment">/**</em>
