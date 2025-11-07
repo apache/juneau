@@ -179,8 +179,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		return c == null ? ClassInfo.of(o) : ClassInfo.of(c);
 	}
 
-	private final Type t;  // The underlying Type object (may be Class, ParameterizedType, GenericArrayType, etc.).
-	private Class<?> inner;  // The underlying Class object (null for non-class types like TypeVariable).  Effectively final.
+	private final Type innerType;  // The underlying Type object (may be Class, ParameterizedType, GenericArrayType, etc.).
+	private final Class<?> inner;  // The underlying Class object (null for non-class types like TypeVariable).
 	private final boolean isParameterizedType;  // True if this represents a ParameterizedType (e.g., List<String>).
 
 	private final Supplier<Integer> dimensions;  // Number of array dimensions (0 if not an array).
@@ -218,14 +218,14 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The class type.
-	 * @param t The generic type (if parameterized type).
+	 * @param inner The class type.
+	 * @param innerType The generic type (if parameterized type).
 	 */
-	protected ClassInfo(Class<?> c, Type t) {
-		super(c == null ? 0 : c.getModifiers());
-		this.t = t;
-		this.inner = c;
-		this.isParameterizedType = t == null ? false : (t instanceof ParameterizedType);
+	protected ClassInfo(Class<?> inner, Type innerType) {
+		super(inner == null ? 0 : inner.getModifiers());
+		this.innerType = innerType;
+		this.inner = inner;
+		this.isParameterizedType = innerType == null ? false : (innerType instanceof ParameterizedType);
 		this.dimensions = memoize(this::findDimensions);
 		this.componentType = memoize(this::findComponentType);
 		this.packageInfo = memoize(() -> opt(inner).map(x -> PackageInfo.of(x.getPackage())).orElse(null));
@@ -278,7 +278,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 	@Override
 	public boolean equals(Object o) {
-		return (o instanceof ClassInfo o2) && eq(this, o2, (x, y) -> eq(x.t, y.t));
+		return (o instanceof ClassInfo o2) && eq(this, o2, (x, y) -> eq(x.innerType, y.innerType));
 	}
 
 
@@ -478,7 +478,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	An unmodifiable list of all public member classes and interfaces declared by this class.
 	 * 	<br>Returns an empty list if this class has no public member classes or interfaces.
 	 */
-	public List<ClassInfo> getClasses() {
+	public List<ClassInfo> getMemberClasses() {
 		if (inner == null)
 			return u(l());
 		Class<?>[] classes = inner.getClasses();
@@ -499,7 +499,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	An unmodifiable list of all classes and interfaces declared as members of this class.
 	 * 	<br>Returns an empty list if this class declares no classes or interfaces as members.
 	 */
-	public List<ClassInfo> getDeclaredClasses() {
+	public List<ClassInfo> getDeclaredMemberClasses() {
 		if (inner == null)
 			return u(l());
 		Class<?>[] classes = inner.getDeclaredClasses();
@@ -791,7 +791,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The name of the underlying class in JVM format.
 	 */
-	public String getName() { return nn(inner) ? inner.getName() : t.getTypeName(); }
+	public String getName() { return nn(inner) ? inner.getName() : innerType.getTypeName(); }
 
 	/**
 	 * Returns the canonical name of the underlying class.
@@ -1107,7 +1107,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The simple name of the underlying class;
 	 */
-	public String getNameSimple() { return nn(inner) ? inner.getSimpleName() : t.getTypeName(); }
+	public String getNameSimple() { return nn(inner) ? inner.getSimpleName() : innerType.getTypeName(); }
 
 	/**
 	 * Returns a formatted class name with configurable options.
@@ -1225,7 +1225,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		// Get the raw class - for ParameterizedType, extract the raw type
 		var ct = inner;
 		if (ct == null && isParameterizedType) {
-			var pt = (ParameterizedType)t;
+			var pt = (ParameterizedType)innerType;
 			ct = (Class<?>)pt.getRawType();
 		}
 
@@ -1243,7 +1243,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 						}
 					}
 				} else {
-					sb.append(t.getTypeName());
+					sb.append(innerType.getTypeName());
 				}
 				break;
 
@@ -1265,7 +1265,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 						sb.append(ct.getSimpleName());
 					}
 				} else {
-					sb.append(t.getTypeName());
+					sb.append(innerType.getTypeName());
 				}
 				break;
 
@@ -1274,14 +1274,14 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 				if (nn(ct)) {
 					sb.append(ct.getSimpleName());
 				} else {
-					sb.append(t.getTypeName());
+					sb.append(innerType.getTypeName());
 				}
 				break;
 		}
 
 		// Append type parameters if requested
 		if (includeTypeParams && isParameterizedType) {
-			var pt = (ParameterizedType)t;
+			var pt = (ParameterizedType)innerType;
 			sb.append('<');
 			var first = true;
 			for (var t2 : pt.getActualTypeArguments()) {
@@ -1561,7 +1561,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 	@Override
 	public int hashCode() {
-		return t.hashCode();
+		return innerType.hashCode();
 	}
 
 	/**
@@ -1609,7 +1609,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The wrapped class as a {@link Type}.
 	 */
 	public Type innerType() {
-		return t;
+		return innerType;
 	}
 
 	/**
@@ -1631,7 +1631,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public boolean is(ClassInfo c) {
 		if (nn(this.inner))
 			return this.inner.equals(c.inner());
-		return t.equals(c.t);
+		return innerType.equals(c.innerType);
 	}
 
 	/**
@@ -2146,7 +2146,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 	@Override
 	public String toString() {
-		return t.toString();
+		return innerType.toString();
 	}
 
 	/**
@@ -2223,11 +2223,11 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The first type parameter, or <jk>null</jk> if not parameterized or no parameters exist.
 	 */
 	private Type getFirstParameterType(Class<?> parameterizedType) {
-		if (t instanceof ParameterizedType pt) {
+		if (innerType instanceof ParameterizedType pt) {
 			var ta = pt.getActualTypeArguments();
 			if (ta.length > 0)
 				return ta[0];
-		} else if (t instanceof Class<?> c) /* Class that extends Optional<T> */ {
+		} else if (innerType instanceof Class<?> c) /* Class that extends Optional<T> */ {
 			if (c != parameterizedType && parameterizedType.isAssignableFrom(c))
 				return ClassInfo.of(c).getParameterType(0, parameterizedType);
 		}
@@ -2241,7 +2241,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this is Optional&lt;T&gt; or a subclass like MyOptional extends Optional&lt;String&gt;.
 	 */
 	private boolean isParameterizedTypeOf(Class<?> c) {
-		return (t instanceof ParameterizedType t2 && t2.getRawType() == c) || (t instanceof Class && c.isAssignableFrom((Class<?>)t));
+		return (innerType instanceof ParameterizedType t2 && t2.getRawType() == c) || (innerType instanceof Class && c.isAssignableFrom((Class<?>)innerType));
 	}
 
 	/**
@@ -2301,7 +2301,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 	private int findDimensions() {
 		int d = 0;
-		Type ct = t;
+		Type ct = innerType;
 
 		// Handle GenericArrayType (e.g., List<String>[])
 		while (ct instanceof GenericArrayType gat) {
@@ -2320,7 +2320,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	private ClassInfo findComponentType() {
-		Type ct = t;
+		Type ct = innerType;
 		Class<?> cc = inner;
 
 		// Handle GenericArrayType (e.g., List<String>[])
@@ -2334,7 +2334,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		}
 
 		// Return the deepest component type found
-		if (ct != t) {
+		if (ct != innerType) {
 			return of(ct);
 		} else if (cc != inner) {
 			return of(cc);

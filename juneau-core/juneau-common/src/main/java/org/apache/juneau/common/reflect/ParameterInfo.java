@@ -69,16 +69,16 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Constructor.
 	 *
-	 * @param eInfo The constructor or method wrapper.
-	 * @param p The parameter being wrapped.
+	 * @param executable The constructor or method wrapper.
+	 * @param inner The parameter being wrapped.
 	 * @param index The parameter index.
 	 * @param type The parameter type.
 	 */
 	// TODO - Investigate if we can construct ClassInfo directly from parameter.
-	protected ParameterInfo(ExecutableInfo eInfo, Parameter p, int index, ClassInfo type) {
-		super(p.getModifiers());
-		this.executable = eInfo;
-		this.inner = p;
+	protected ParameterInfo(ExecutableInfo executable, Parameter inner, int index, ClassInfo type) {
+		super(inner.getModifiers());
+		this.executable = executable;
+		this.inner = inner;
 		this.index = index;
 		this.type = type;
 		this.annotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());

@@ -55,13 +55,13 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * Constructor.
 	 *
 	 * @param declaringClass The class that declares this method or constructor.
-	 * @param e The constructor or method that this info represents.
+	 * @param inner The constructor or method that this info represents.
 	 */
-	protected ExecutableInfo(ClassInfo declaringClass, Executable e) {
-		super(e, e.getModifiers());
+	protected ExecutableInfo(ClassInfo declaringClass, Executable inner) {
+		super(inner, inner.getModifiers());
 		this.declaringClass = declaringClass;
-		this.inner = e;
-		this.isConstructor = e instanceof Constructor;
+		this.inner = inner;
+		this.isConstructor = inner instanceof Constructor;
 		this.parameters = memoize(this::findParameters);
 		this.exceptions = memoize(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).toList());
 		this.declaredAnnotations = memoize(() -> stream(inner.getDeclaredAnnotations()).map(a -> AnnotationInfo.of((Annotatable)this, a)).toList());

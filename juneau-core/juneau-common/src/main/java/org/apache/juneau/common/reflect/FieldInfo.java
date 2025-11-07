@@ -44,13 +44,13 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * Convenience method for instantiating a {@link FieldInfo};
 	 *
 	 * @param declaringClass The class that declares this method.
-	 * @param f The field being wrapped.
+	 * @param inner The field being wrapped.
 	 * @return A new {@link FieldInfo} object, or <jk>null</jk> if the field was null.
 	 */
-	public static FieldInfo of(ClassInfo declaringClass, Field f) {
-		if (f == null)
+	public static FieldInfo of(ClassInfo declaringClass, Field inner) {
+		if (inner == null)
 			return null;
-		return ClassInfo.of(declaringClass).getFieldInfo(f);
+		return ClassInfo.of(declaringClass).getFieldInfo(inner);
 	}
 
 	/**

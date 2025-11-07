@@ -81,7 +81,7 @@ public class PackageInfo implements Annotatable {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private Package inner;  // Effectively final
+	private final Package inner;
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations on this package, wrapped in AnnotationInfo. Repeated annotations have been unwrapped and are present as individual instances.
 
 	/**

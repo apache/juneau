@@ -32,16 +32,16 @@ import java.lang.reflect.*;
  */
 public abstract class AccessibleInfo extends ElementInfo {
 
-	AccessibleObject ao;  // Effectively final
+	private final AccessibleObject inner;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ao The {@link AccessibleObject} being wrapped.
+	 * @param inner The {@link AccessibleObject} being wrapped.
 	 */
-	protected AccessibleInfo(AccessibleObject ao, int modifiers) {
+	protected AccessibleInfo(AccessibleObject inner, int modifiers) {
 		super(modifiers);
-		this.ao = ao;
+		this.inner = inner;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -55,8 +55,8 @@ public abstract class AccessibleInfo extends ElementInfo {
 	 */
 	public boolean setAccessible() {
 		try {
-			if (nn(ao))
-				ao.setAccessible(true);
+			if (nn(inner))
+				inner.setAccessible(true);
 			return true;
 		} catch (@SuppressWarnings("unused") SecurityException e) {
 			return false;
@@ -81,7 +81,7 @@ public abstract class AccessibleInfo extends ElementInfo {
 	 */
 	public boolean isAccessible() {
 		try {
-			return (boolean) AccessibleObject.class.getMethod("isAccessible").invoke(ao);
+			return (boolean) AccessibleObject.class.getMethod("isAccessible").invoke(inner);
 		} catch (@SuppressWarnings("unused") Exception ex) {
 			return false;
 		}
