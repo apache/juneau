@@ -478,9 +478,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return findAnnotation(annotationProvider, type);
-	}
 
 	/**
 	 * Returns all annotations of the specified type defined on this or parent classes/interfaces.
@@ -2335,27 +2332,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		return c == null ? null : of(c.componentType());
 	}
 
-	private <A extends Annotation> A findAnnotation(AnnotationProvider ap, Class<A> a) {
-		if (a == null)
-			return null;
-		if (ap == null)
-			throw unsupportedOp();
-		A t = ap.findDeclared(a, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null);
-		if (nn(t))
-			return t;
-		ClassInfo sci = getSuperclass();
-		if (nn(sci)) {
-			t = sci.getAnnotation(ap, a);
-			if (nn(t))
-				return t;
-		}
-		for (var c2 : interfaces.get()) {
-			t = c2.getAnnotation(ap, a);
-			if (nn(t))
-				return t;
-		}
-		return null;
-	}
 
 	/**
 	 * Returns the first type parameter of this type if it's parameterized (e.g., T in Optional&lt;T&gt;).

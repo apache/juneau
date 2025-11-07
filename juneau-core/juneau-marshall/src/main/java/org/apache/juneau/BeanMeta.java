@@ -595,7 +595,11 @@ public class BeanMeta<T> {
 			for (var m : c2.getDeclaredMethods()) {
 				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.hasAnnotation(ctx.getAnnotationProvider(), BeanIgnore.class))
 					continue;
-				Transient t = m.getAnnotation(ctx.getAnnotationProvider(), Transient.class);
+				Transient t = m.getMatchingMethods().stream()
+					.map(m2 -> ctx.getAnnotationProvider().find(Transient.class, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null))
+					.filter(Objects::nonNull)
+					.findFirst()
+					.orElse(null);
 				if (nn(t) && t.value())
 					continue;
 

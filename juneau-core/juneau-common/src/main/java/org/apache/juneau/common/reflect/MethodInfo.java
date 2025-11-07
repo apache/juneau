@@ -386,42 +386,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 
 	/**
-	 * Finds the annotation of the specified type defined on this method.
-	 *
-	 * <p>
-	 * Searches all methods with the same signature on the parent classes or interfaces
-	 * and the return type on the method.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
-	 */
-	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		// Inline Context.firstAnnotation() call
-		return matchingCache.get().stream()
-			.map(m2 -> annotationProvider.find(type, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null))
-			.filter(Objects::nonNull)
-			.findFirst()
-			.orElse(null);
-	}
-
-	/**
-	 * Returns the first annotation in the specified list on this method.
-	 *
-	 * @param types The annotations to look for.
-	 * @return The first matching annotation.
-	 */
-	@SafeVarargs
-	public final Annotation getAnyAnnotation(Class<? extends Annotation>...types) {
-		return Arrays.stream(types)
-			.map(t -> getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null))
-			.filter(Objects::nonNull)
-			.findFirst()
-			.orElse(null);
-	}
-
-	/**
 	 * Returns the name of this method.
 	 *
 	 * @return The name of this method

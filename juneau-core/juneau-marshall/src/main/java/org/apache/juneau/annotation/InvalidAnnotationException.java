@@ -19,6 +19,7 @@ package org.apache.juneau.annotation;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.reflect.*;
@@ -44,7 +45,11 @@ public class InvalidAnnotationException extends BasicRuntimeException {
 	 */
 	@SafeVarargs
 	public static void assertNoInvalidAnnotations(MethodInfo onMethod, Class<? extends Annotation>...types) throws InvalidAnnotationException {
-		Annotation a = onMethod.getAnyAnnotation(types);
+		Annotation a = Arrays.stream(types)
+			.map(t -> onMethod.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null))
+			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
 		if (nn(a))
 			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", scn(a), scn(onMethod.getDeclaringClass()), onMethod);
 	}

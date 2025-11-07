@@ -358,11 +358,11 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	@Test void getAnnotationAny() {
-		check("@A(a1)", c_a1.getAnyAnnotation(AX.class, A.class));
-		check("@A(a2b)", c_a2.getAnyAnnotation(AX.class, A.class));
-		check("@A(a3)", c_a3.getAnyAnnotation(AX.class, A.class));
-		check("@A(a4)", c_a4.getAnyAnnotation(AX.class, A.class));
-		check(null, c_a5.getAnyAnnotation(AX.class, A.class));
+		check("@A(a1)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a1.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
+		check("@A(a2b)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a2.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
+		check("@A(a3)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a3.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
+		check("@A(a4)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a4.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
+		check(null, Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a5.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
 	}
 
 	@Test void getAnnotationsMapParentFirst() {

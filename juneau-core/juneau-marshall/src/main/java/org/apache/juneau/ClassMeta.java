@@ -1115,8 +1115,8 @@ public class ClassMeta<T> implements Type {
 		Optional<A> o = (Optional<A>)annotationLastMap.get(a);
 		if (o == null) {
 			if (beanContext == null)
-				return info.getAnnotation(BeanContext.DEFAULT.getAnnotationProvider(), a);
-			o = opt(info.getAnnotation(beanContext.getAnnotationProvider(), a));
+				return BeanContext.DEFAULT.getAnnotationProvider().find(a, info.inner()).findFirst().map(x -> x.inner()).orElse(null);
+			o = opt(beanContext.getAnnotationProvider().find(a, info.inner()).findFirst().map(x -> x.inner()).orElse(null));
 			annotationLastMap.put(a, o);
 		}
 		return o.orElse(null);
@@ -1935,7 +1935,7 @@ public class ClassMeta<T> implements Type {
 		A[] array = (A[])annotationArrayMap.get(type);
 		if (array == null && nn(beanContext)) {
 			List<A> l = list();
-			info.forEachAnnotation(beanContext.getAnnotationProvider(), type, x -> true, x -> l.add(x));
+			beanContext.getAnnotationProvider().find(type, info.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			array = (A[])Array.newInstance(type, l.size());
 			for (int i = 0; i < l.size(); i++)
 				Array.set(array, i, l.get(i));
