@@ -161,8 +161,8 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> findMatchingMethods() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(B3.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"foo"</span>, <strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;MethodInfo&gt;();
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		mi.getMatching().forEach(l::add);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		check(<span class="jxr_string">"B3.foo(int),B2.foo(int),B1.foo(int)"</span>, l);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		mi.getMatchingMethods().stream().forEach(l::add);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		check(<span class="jxr_string">"B3.foo(int),B1.foo(int),B2.foo(int)"</span>, l);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
@@ -360,7 +360,7 @@
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;A&gt; annotations(MethodInfo mi, Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; a) {
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;A&gt;();
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		mi.getAllAnnotationInfosParentFirst(a).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		rstream(mi.getAllAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(a)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 			.forEach(x -&gt; l.add((A)x));
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}

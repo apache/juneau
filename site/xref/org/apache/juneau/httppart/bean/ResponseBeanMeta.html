@@ -133,8 +133,8 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> Builder(annotations);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		b.apply(m.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).innerType());
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		m.getAllAnnotationInfosParentFirst(Response.<strong class="jxr_keyword">class</strong>).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; b.apply(x));
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		m.getAllAnnotationInfosParentFirst(StatusCode.<strong class="jxr_keyword">class</strong>).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; b.apply(x));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		rstream(m.getAllAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Response.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; b.apply(x));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		rstream(m.getAllAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(StatusCode.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; b.apply(x));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">return</strong> b.build();
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 

@@ -186,13 +186,13 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parents2.size() - 1; i &gt;= 0; i--)
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ann : parents2.get(i).<strong class="jxr_keyword">inner</strong>().getDeclaredAnnotationsByType(type))
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 					consumeIf(filter, action, ann);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<em class="jxr_comment">// Get annotations from matching parent methods' parameters</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			mi.getMatchingParentFirst().forEach(x -&gt; {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				x.getParameter(index).getAnnotationInfos().stream()
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 					.filter(ai -&gt; type.isInstance(ai.<strong class="jxr_keyword">inner</strong>()))
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 					.map(ai -&gt; type.<strong class="jxr_keyword">cast</strong>(ai.<strong class="jxr_keyword">inner</strong>()))
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 					.forEach(ann -&gt; consumeIf(filter, action, ann));
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			});
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				<em class="jxr_comment">// Get annotations from matching parent methods' parameters</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				rstream(mi.getMatchingMethods()).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 					x.getParameter(index).getAnnotationInfos().stream()
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 						.filter(ai -&gt; type.isInstance(ai.<strong class="jxr_keyword">inner</strong>()))
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 						.map(ai -&gt; type.<strong class="jxr_keyword">cast</strong>(ai.<strong class="jxr_keyword">inner</strong>()))
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 						.forEach(ann -&gt; consumeIf(filter, action, ann));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				});
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
@@ -826,7 +826,7 @@
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 			<strong class="jxr_keyword">var</strong> mi = (<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)executable;
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 			ci.forEachAnnotation(ap, a, filter, action);
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> 			mi.getMatchingParentFirst().forEach(x -&gt; {
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 			rstream(mi.getMatchingMethods()).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> 				x.getParameter(index).getAnnotationInfos().stream()
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 					.filter(ai -&gt; a.isInstance(ai.<strong class="jxr_keyword">inner</strong>()))
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 					.map(ai -&gt; a.<strong class="jxr_keyword">cast</strong>(ai.<strong class="jxr_keyword">inner</strong>()))

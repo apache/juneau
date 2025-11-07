@@ -213,7 +213,7 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 				.filter(y -&gt; y.hasAnnotation(annotation))
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				.forEach(y -&gt; y.getAllAnnotationInfosParentFirst(annotation).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				.forEach(y -&gt; rstream(y.getAllAnnotationInfos()).map(ai -&gt; ai.<strong class="jxr_keyword">cast</strong>(annotation)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 					.filter(z -&gt; predicate == <strong class="jxr_keyword">null</strong> || predicate.test(z))
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 					.forEach(z -&gt; x.put(y.getSignature(), y.accessible().<strong class="jxr_keyword">inner</strong>())));
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -4594,7 +4594,7 @@
 <a class="jxr_linenumber" name="L4586" href="#L4586">4586</a> 				<em class="jxr_comment">// Also include methods on @Rest-annotated interfaces.</em>
 <a class="jxr_linenumber" name="L4587" href="#L4587">4587</a> 				<strong class="jxr_keyword">if</strong> (al.isEmpty()) {
 <a class="jxr_linenumber" name="L4588" href="#L4588">4588</a> 					Predicate&lt;MethodInfo&gt; isRestAnnotatedInterface = x -&gt; x.getDeclaringClass().isInterface() &amp;&amp; nn(x.getDeclaringClass().getAnnotationInfos(Rest.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L4589" href="#L4589">4589</a> 					mi.getMatching().filter(isRestAnnotatedInterface).forEach(x -&gt; al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
+<a class="jxr_linenumber" name="L4589" href="#L4589">4589</a> 					mi.getMatchingMethods().stream().filter(isRestAnnotatedInterface).forEach(x -&gt; al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 <a class="jxr_linenumber" name="L4590" href="#L4590">4590</a> 				}
 <a class="jxr_linenumber" name="L4591" href="#L4591">4591</a> 
 <a class="jxr_linenumber" name="L4592" href="#L4592">4592</a> 				<strong class="jxr_keyword">if</strong> (al.size() &gt; 0) {

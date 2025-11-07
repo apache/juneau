@@ -1957,7 +1957,7 @@
 <a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> 				httpMethod = <span class="jxr_string">"delete"</span>;
 <a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mi.hasAnnotation(RestOp.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> 				<strong class="jxr_keyword">var</strong> _httpMethod = Value.&lt;String&gt;empty();
-<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 				mi.getAllAnnotationInfosParentFirst(RestOp.<strong class="jxr_keyword">class</strong>).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 				rstream(mi.getAllAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(RestOp.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> 					.filter(x -&gt; isNotEmpty(x.method()))
 <a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> 					.forEach(x -&gt; _httpMethod.set(x.method()));
 <a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 				httpMethod = _httpMethod.orElse(<strong class="jxr_keyword">null</strong>);
