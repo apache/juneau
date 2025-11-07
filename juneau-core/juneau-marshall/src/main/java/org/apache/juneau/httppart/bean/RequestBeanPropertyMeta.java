@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.httppart.bean;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -64,8 +65,8 @@ public class RequestBeanPropertyMeta {
 
 	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, MethodInfo m) {
 		HttpPartSchema.Builder sb = HttpPartSchema.create().name(m.getPropertyName());
-		m.getAllAnnotationInfosParentFirst(Schema.class).map(AnnotationInfo::inner).forEach(x -> sb.apply(x));
-		m.getAllAnnotationInfosParentFirst(c).map(AnnotationInfo::inner).forEach(x -> sb.apply(x));
+		rstream(m.getAllAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> sb.apply(x));
+		rstream(m.getAllAnnotationInfos()).map(x -> x.cast(c)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> sb.apply(x));
 		return new Builder().partType(partType).schema(sb.build()).getter(m.inner());
 	}
 

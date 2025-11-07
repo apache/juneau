@@ -1949,7 +1949,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				httpMethod = "delete";
 			else if (mi.hasAnnotation(RestOp.class)) {
 				var _httpMethod = Value.<String>empty();
-				mi.getAllAnnotationInfosParentFirst(RestOp.class).map(AnnotationInfo::inner)
+				rstream(mi.getAllAnnotationInfos()).map(x -> x.cast(RestOp.class)).filter(Objects::nonNull).map(AnnotationInfo::inner)
 					.filter(x -> isNotEmpty(x.method()))
 					.forEach(x -> _httpMethod.set(x.method()));
 				httpMethod = _httpMethod.orElse(null);

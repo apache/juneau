@@ -269,7 +269,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	private List<AnnotationInfo<Annotation>> findAnnotationInfos() {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
-		getMatching().forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
+		matchingCache.get().forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
 		return u(list);
 	}
 
@@ -282,13 +282,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		list.addAll(getDeclaredAnnotationInfos());
 
 		// 2. Parent methods in child-to-parent order
-		getMatching().skip(1).forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
+		matchingCache.get().stream().skip(1).forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
 
 		// 3. Return type on current
 		returnType.getDeclaredAnnotationInfos().forEach(x -> list.add((AnnotationInfo<Annotation>)x));
 
 		// 4. Return type on parent methods in child-to-parent order
-		getMatching().skip(1).forEach(m -> {
+		matchingCache.get().stream().skip(1).forEach(m -> {
 			m.getReturnType().unwrap(Value.class, Optional.class).getDeclaredAnnotationInfos().forEach(x -> list.add((AnnotationInfo<Annotation>)x));
 		});
 
@@ -438,29 +438,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
 	}
 
-	/**
-	 * Returns a stream of annotations of the specified type in parent-to-child order.
-	 *
-	 * <p>
-	 * 	This is the same as {@link #getAllAnnotationInfos(Class)} but returns results in reversed (parent-to-child) order.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to filter by.
-	 * @return A stream of matching annotation infos in parent-to-child order.
-	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAllAnnotationInfosParentFirst(Class<A> type) {
-		return rstream(getAllAnnotationInfos())
-			.map(x -> x.cast(type))
-			.filter(Objects::nonNull);
-	}
-
-	public Stream<MethodInfo> getMatching() {
-		return matchingCache.get().stream();
-	}
-
-	public Stream<MethodInfo> getMatchingParentFirst() {
-		return rstream(matchingCache.get());
-	}
 
 	/**
 	 * Finds the annotation of the specified type defined on this method.
@@ -723,34 +700,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		} catch (InvocationTargetException e) {
 			throw new ExecutableException(e.getTargetException());
 		}
-	}
-
-	/**
-	 * Invokes the specified method using lenient argument matching.
-	 *
-	 * <p>
-	 * Lenient matching allows arguments to be matched to parameters based on parameter types.
-	 * <br>Arguments can be in any order.
-	 * <br>Extra arguments will be ignored.
-	 * <br>Missing arguments will be left <jk>null</jk>.
-	 *
-	 * <p>
-	 * Note that this only works for methods that have distinguishable argument types.
-	 * <br>It's not going to work on methods with generic argument types like <c>Object</c>
-	 *
-	 * @param pojo
-	 * 	The POJO the method is being called on.
-	 * 	<br>Can be <jk>null</jk> for static methods.
-	 * @param args
-	 * 	The arguments to pass to the method.
-	 * @return
-	 * 	The results of the method invocation.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
-	 * @deprecated Use {@link #invokeLenient(Object, Object...)}
-	 */
-	@Deprecated
-	public Object invokeFuzzy(Object pojo, Object...args) throws ExecutableException {
-		return invokeLenient(pojo, args);
 	}
 
 	/**

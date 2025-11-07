@@ -178,13 +178,13 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			for (int i = parents2.size() - 1; i >= 0; i--)
 				for (var ann : parents2.get(i).inner().getDeclaredAnnotationsByType(type))
 					consumeIf(filter, action, ann);
-			// Get annotations from matching parent methods' parameters
-			mi.getMatchingParentFirst().forEach(x -> {
-				x.getParameter(index).getAnnotationInfos().stream()
-					.filter(ai -> type.isInstance(ai.inner()))
-					.map(ai -> type.cast(ai.inner()))
-					.forEach(ann -> consumeIf(filter, action, ann));
-			});
+				// Get annotations from matching parent methods' parameters
+				rstream(mi.getMatchingMethods()).forEach(x -> {
+					x.getParameter(index).getAnnotationInfos().stream()
+						.filter(ai -> type.isInstance(ai.inner()))
+						.map(ai -> type.cast(ai.inner()))
+						.forEach(ann -> consumeIf(filter, action, ann));
+				});
 		}
 		return this;
 	}
@@ -818,7 +818,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			var mi = (MethodInfo)executable;
 			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
 			ci.forEachAnnotation(ap, a, filter, action);
-			mi.getMatchingParentFirst().forEach(x -> {
+			rstream(mi.getMatchingMethods()).forEach(x -> {
 				x.getParameter(index).getAnnotationInfos().stream()
 					.filter(ai -> a.isInstance(ai.inner()))
 					.map(ai -> a.cast(ai.inner()))

@@ -205,7 +205,7 @@ public class RestContext extends Context {
 			// @formatter:off
 			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
 				.filter(y -> y.hasAnnotation(annotation))
-				.forEach(y -> y.getAllAnnotationInfosParentFirst(annotation).map(AnnotationInfo::inner)
+				.forEach(y -> rstream(y.getAllAnnotationInfos()).map(ai -> ai.cast(annotation)).filter(Objects::nonNull).map(AnnotationInfo::inner)
 					.filter(z -> predicate == null || predicate.test(z))
 					.forEach(z -> x.put(y.getSignature(), y.accessible().inner())));
 			// @formatter:on
@@ -4586,7 +4586,7 @@ public class RestContext extends Context {
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {
 					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && nn(x.getDeclaringClass().getAnnotationInfos(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-					mi.getMatching().filter(isRestAnnotatedInterface).forEach(x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
+					mi.getMatchingMethods().stream().filter(isRestAnnotatedInterface).forEach(x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 				}
 
 				if (al.size() > 0) {

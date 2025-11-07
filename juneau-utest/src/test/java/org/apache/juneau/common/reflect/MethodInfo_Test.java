@@ -153,8 +153,8 @@ class MethodInfo_Test extends TestBase {
 	@Test void findMatchingMethods() throws Exception {
 		var mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
 		var l = new ArrayList<MethodInfo>();
-		mi.getMatching().forEach(l::add);
-		check("B3.foo(int),B2.foo(int),B1.foo(int)", l);
+		mi.getMatchingMethods().stream().forEach(l::add);
+		check("B3.foo(int),B1.foo(int),B2.foo(int)", l);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ class MethodInfo_Test extends TestBase {
 
 	private static List<A> annotations(MethodInfo mi, Class<? extends Annotation> a) {
 		var l = new ArrayList<A>();
-		mi.getAllAnnotationInfosParentFirst(a).map(AnnotationInfo::inner)
+		rstream(mi.getAllAnnotationInfos()).map(x -> x.cast(a)).filter(Objects::nonNull).map(AnnotationInfo::inner)
 			.forEach(x -> l.add((A)x));
 		return l;
 	}
