@@ -187,8 +187,15 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		return this;
 	}
 
+	/**
+	 * Returns a stream of annotation infos of the specified type declared on this parameter.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type.
+	 * @return A stream of annotation infos, never <jk>null</jk>.
+	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotationInfos(Class<A> type) {
 		return getAnnotationInfos().stream().filter(x -> x.isType(type)).map(x -> (AnnotationInfo<A>)x);
 	}
 
@@ -461,18 +468,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this parameter doesn't have the specified annotation.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @return
-	 * 	The <jk>true</jk> if annotation if not found.
-	 */
-	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
-		return ! hasAnnotation(type);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the parameter type is an exact match for the specified class.
 	 *
 	 * @param c The type to check.
@@ -721,31 +716,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	public Annotation[] getDeclaredAnnotations() {
 		return inner.getDeclaredAnnotations();
-	}
-
-	/**
-	 * Returns this element's annotations of the specified type (including repeated annotations).
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#getAnnotationsByType(Class)}.
-	 *
-	 * <p>
-	 * This method handles repeatable annotations by "looking through" container annotations.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get all @Author annotations (including repeated): @Authors({@Author(...), @Author(...)})</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	Author[] <jv>authors</jv> = <jv>pi</jv>.getAnnotationsByType(Author.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <A> The annotation type.
-	 * @param annotationClass The Class object corresponding to the annotation type.
-	 * @return All this element's annotations of the specified type, or an empty array if there are none.
-	 * @see Parameter#getAnnotationsByType(Class)
-	 */
-	public <A extends Annotation> A[] getAnnotationsByType(Class<A> annotationClass) {
-		return inner.getAnnotationsByType(annotationClass);
 	}
 
 	/**

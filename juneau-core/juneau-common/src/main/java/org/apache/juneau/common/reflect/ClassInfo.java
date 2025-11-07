@@ -1650,17 +1650,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class doesn't have the specified annotation.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return The <jk>true</jk> if annotation if not found.
-	 */
-	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
-		return ! hasAnnotation(type);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this class is not in the root package.
 	 *
 	 * @return <jk>true</jk> if this class is not in the root package.

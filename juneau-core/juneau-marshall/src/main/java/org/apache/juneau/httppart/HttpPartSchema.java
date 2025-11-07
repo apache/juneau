@@ -2564,7 +2564,7 @@ public class HttpPartSchema {
 
 		Builder apply(Class<? extends Annotation> c, ParameterInfo mpi) {
 			apply(c, mpi.getParameterType().innerType());
-			mpi.getAnnotations(c).forEach(x -> apply(x.inner()));
+			mpi.getAnnotationInfos(c).forEach(x -> apply(x.inner()));
 			return this;
 		}
 

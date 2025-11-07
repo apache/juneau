@@ -210,7 +210,7 @@ class ParamInfoTest extends TestBase {
 	}
 
 	private static <T extends Annotation> List<T> declaredAnnotations(ParameterInfo pi, Class<T> type) {
-		return pi.getAnnotations(type).map(x -> x.inner()).toList();
+		return pi.getAnnotationInfos(type).map(x -> x.inner()).toList();
 	}
 
 	@Test void getDeclaredAnnotation() {
