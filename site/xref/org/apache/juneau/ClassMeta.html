@@ -1123,8 +1123,8 @@
 <a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 		Optional&lt;A&gt; o = (Optional&lt;A&gt;)annotationLastMap.get(a);
 <a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 			<strong class="jxr_keyword">if</strong> (beanContext == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 				<strong class="jxr_keyword">return</strong> info.getAnnotation(BeanContext.DEFAULT.getAnnotationProvider(), a);
-<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 			o = opt(info.getAnnotation(beanContext.getAnnotationProvider(), a));
+<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 				<strong class="jxr_keyword">return</strong> BeanContext.DEFAULT.getAnnotationProvider().find(a, info.<strong class="jxr_keyword">inner</strong>()).findFirst().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 			o = opt(beanContext.getAnnotationProvider().find(a, info.<strong class="jxr_keyword">inner</strong>()).findFirst().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 			annotationLastMap.put(a, o);
 <a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		}
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		<strong class="jxr_keyword">return</strong> o.orElse(<strong class="jxr_keyword">null</strong>);
@@ -1943,7 +1943,7 @@
 <a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 		A[] array = (A[])annotationArrayMap.get(type);
 <a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 		<strong class="jxr_keyword">if</strong> (array == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(beanContext)) {
 <a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 			List&lt;A&gt; l = list();
-<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 			info.forEachAnnotation(beanContext.getAnnotationProvider(), type, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 			beanContext.getAnnotationProvider().find(type, info.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> 			array = (A[])Array.newInstance(type, l.size());
 <a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; l.size(); i++)
 <a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 				Array.set(array, i, l.get(i));
