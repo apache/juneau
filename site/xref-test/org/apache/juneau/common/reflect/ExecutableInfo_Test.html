@@ -389,12 +389,12 @@
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 	}
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 	@Test <strong class="jxr_keyword">void</strong> hasArgParents() {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertTrue(e_hasStringParam.hasMatchingParameterTypes(String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(CharSequence.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(StringBuilder.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertTrue(e_hasStringParam.hasParameterTypeParents(String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		assertFalse(e_hasStringParam.hasParameterTypeParents(CharSequence.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertFalse(e_hasStringParam.hasParameterTypeParents(StringBuilder.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertFalse(e_hasStringParam.hasParameterTypeParents(<strong class="jxr_keyword">new</strong> Class[0]));
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertFalse(e_hasStringParam.hasParameterTypeParents(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertFalse(e_hasStringParam.hasParameterTypeParents(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 	@Test <strong class="jxr_keyword">void</strong> hasFuzzyArgs() {

@@ -3790,7 +3790,7 @@
 <a class="jxr_linenumber" name="L3782" href="#L3782">3782</a> 			<strong class="jxr_keyword">var</strong> map = CollectionUtils.&lt;String,MethodInfo&gt;map();
 <a class="jxr_linenumber" name="L3783" href="#L3783">3783</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L3784" href="#L3784">3784</a> 			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
-<a class="jxr_linenumber" name="L3785" href="#L3785">3785</a> 				.filter(y -&gt; y.hasAnnotation(RestInit.<strong class="jxr_keyword">class</strong>) &amp;&amp; ! y.hasArg(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L3785" href="#L3785">3785</a> 				.filter(y -&gt; y.hasAnnotation(RestInit.<strong class="jxr_keyword">class</strong>) &amp;&amp; ! y.hasParameter(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L3786" href="#L3786">3786</a> 				.forEach(y -&gt; {
 <a class="jxr_linenumber" name="L3787" href="#L3787">3787</a> 					<strong class="jxr_keyword">var</strong> sig = y.getSignature();
 <a class="jxr_linenumber" name="L3788" href="#L3788">3788</a> 					<strong class="jxr_keyword">if</strong> (! map.containsKey(sig))
@@ -4580,7 +4580,7 @@
 <a class="jxr_linenumber" name="L4572" href="#L4572">4572</a> 			<strong class="jxr_keyword">var</strong> initMap = CollectionUtils.&lt;String,MethodInfo&gt;map();
 <a class="jxr_linenumber" name="L4573" href="#L4573">4573</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L4574" href="#L4574">4574</a> 			ClassInfo.ofProxy(resource.get()).getAllMethodsParentFirst().stream()
-<a class="jxr_linenumber" name="L4575" href="#L4575">4575</a> 				.filter(y -&gt; y.hasAnnotation(RestInit.<strong class="jxr_keyword">class</strong>) &amp;&amp; y.hasArg(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L4575" href="#L4575">4575</a> 				.filter(y -&gt; y.hasAnnotation(RestInit.<strong class="jxr_keyword">class</strong>) &amp;&amp; y.hasParameter(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L4576" href="#L4576">4576</a> 				.forEach(y -&gt; {
 <a class="jxr_linenumber" name="L4577" href="#L4577">4577</a> 					String sig = y.getSignature();
 <a class="jxr_linenumber" name="L4578" href="#L4578">4578</a> 					<strong class="jxr_keyword">if</strong> (! initMap.containsKey(sig))

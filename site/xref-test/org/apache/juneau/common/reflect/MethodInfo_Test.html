@@ -495,10 +495,10 @@
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 		assertEquals(<span class="jxr_string">"a3"</span>, e_a3.getSignature());
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 	}
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	@Test <strong class="jxr_keyword">void</strong> argsOnlyOfType() {
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		assertTrue(e_a1.argsOnlyOfType(CharSequence.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		assertTrue(e_a1.argsOnlyOfType(CharSequence.<strong class="jxr_keyword">class</strong>, Map.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		assertFalse(e_a1.argsOnlyOfType());
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	@Test <strong class="jxr_keyword">void</strong> hasOnlyParameterTypes() {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		assertTrue(e_a1.hasOnlyParameterTypes(CharSequence.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		assertTrue(e_a1.hasOnlyParameterTypes(CharSequence.<strong class="jxr_keyword">class</strong>, Map.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		assertFalse(e_a1.hasOnlyParameterTypes());
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 	}
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F {
