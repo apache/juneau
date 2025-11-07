@@ -446,7 +446,7 @@
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 	@Test <strong class="jxr_keyword">void</strong> getPublicNoArgConstructor() {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		check(<span class="jxr_string">"E1()"</span>, e1.getPublicConstructor(ConstructorInfo::hasNoParameters));
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		check(<span class="jxr_string">"E1()"</span>, e1.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0));
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 	}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 	@Test <strong class="jxr_keyword">void</strong> getConstructor() {

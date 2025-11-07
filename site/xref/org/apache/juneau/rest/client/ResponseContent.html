@@ -278,7 +278,7 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 					<em class="jxr_comment">// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 					<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> &amp;&amp; ! type.is(String.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 						ConstructorInfo c = type.getInfo().getPublicConstructor(ConstructorInfo::hasNoParameters);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 						ConstructorInfo c = type.getInfo().getPublicConstructor(cons -&gt; cons.getParameterCount() == 0);
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 						<strong class="jxr_keyword">if</strong> (nn(c)) {
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 							<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 								<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance();

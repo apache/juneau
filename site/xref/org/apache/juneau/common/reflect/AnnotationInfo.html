@@ -423,7 +423,7 @@
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> findRank(Object a) {
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">return</strong> ClassInfo.of(a).getMethods().stream()
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			.filter(m -&gt; m.hasName(<span class="jxr_string">"rank"</span>) &amp;&amp; m.hasNoParameters() &amp;&amp; m.hasReturnType(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			.filter(m -&gt; m.hasName(<span class="jxr_string">"rank"</span>) &amp;&amp; m.getParameterCount() == 0 &amp;&amp; m.hasReturnType(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 			.findFirst()
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 			.map(m -&gt; safe(() -&gt; (<strong class="jxr_keyword">int</strong>)m.invoke(a)))
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 			.orElse(0);

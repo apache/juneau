@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  					assertReturnType(x, Header.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  					statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, x);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x.hasAnnotation(Content.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  					<strong class="jxr_keyword">if</strong> (x.hasNoParameters())
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  					<strong class="jxr_keyword">if</strong> (x.getParameterCount() == 0)
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  						assertReturnNotVoid(x, Header.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  					<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  						assertArgType(x, Header.<strong class="jxr_keyword">class</strong>, OutputStream.<strong class="jxr_keyword">class</strong>, Writer.<strong class="jxr_keyword">class</strong>);
@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * @return Metadata about the class, or &lt;jk&gt;null&lt;/jk&gt; if class not annotated with {@link Response}.</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ResponseBeanMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> create(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> mpi, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">if</strong> (mpi.hasNoAnnotation(Response.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">if</strong> (! mpi.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> Builder(annotations);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		b.apply(mpi.getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).innerType());
@@ -164,7 +164,7 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ResponseBeanMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> create(Type t, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(t).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">if</strong> (ci.hasNoAnnotation(Response.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">if</strong> (! ci.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> Builder(annotations);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		b.apply(ci.innerType());

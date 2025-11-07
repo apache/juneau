@@ -82,12 +82,12 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">static</strong> ClassInfo a = ClassInfo.of(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> isConstructor() {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertTrue(a.getPublicConstructor(ConstructorInfo::hasNoParameters).isConstructor());
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertTrue(a.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).isConstructor());
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertFalse(a.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>)).isConstructor());
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test <strong class="jxr_keyword">void</strong> getDeclaringClass() {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		check(<span class="jxr_string">"A"</span>, a.getPublicConstructor(ConstructorInfo::hasNoParameters).getDeclaringClass());
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		check(<span class="jxr_string">"A"</span>, a.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).getDeclaringClass());
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		check(<span class="jxr_string">"A"</span>, a.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>)).getDeclaringClass());
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
@@ -103,9 +103,9 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">static</strong> ExecutableInfo
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		b_c1 = b.getPublicConstructor(ConstructorInfo::hasNoParameters),
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		b_c1 = b.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0),
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		b_c2 = b.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)),
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		b_m1 = b.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>) &amp;&amp; x.hasNoParameters()),
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		b_m1 = b.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>) &amp;&amp; x.getParameterCount() == 0),
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		b_m2 = b.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	;
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
@@ -124,10 +124,10 @@
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Test <strong class="jxr_keyword">void</strong> hasNoParams() {
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, b_c1.hasNoParameters());
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertEquals(false, b_c2.hasNoParameters());
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, b_m1.hasNoParameters());
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertEquals(false, b_m2.hasNoParameters());
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, b_c1.getParameterCount() == 0);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertEquals(false, b_c2.getParameterCount() == 0);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, b_m1.getParameterCount() == 0);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertEquals(false, b_m2.getParameterCount() == 0);
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> hasNumParams() {
@@ -168,7 +168,7 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@Test <strong class="jxr_keyword">void</strong> getParam_indexOutOfBounds_noCache() {
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> b2 = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertThrowsWithMessage(IndexOutOfBoundsException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid index '0'.  No parameters."</span>, ()-&gt;b2.getPublicConstructor(ConstructorInfo::hasNoParameters).getParameter(0));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertThrowsWithMessage(IndexOutOfBoundsException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid index '0'.  No parameters."</span>, ()-&gt;b2.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).getParameter(0));
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertThrowsWithMessage(IndexOutOfBoundsException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid index '-1'.  Parameter count: 1"</span>, ()-&gt;b2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getParameter(-1));
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertThrowsWithMessage(IndexOutOfBoundsException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid index '1'.  Parameter count: 1"</span>, ()-&gt;b2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getParameter(1));
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
@@ -256,12 +256,12 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">static</strong> ClassInfo c = ClassInfo.of(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">static</strong> ConstructorInfo
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		c_c1=c.getPublicConstructor(ConstructorInfo::hasNoParameters),
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		c_c1=c.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0),
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		c_c2=c.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)),
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		c_c3=c.getPublicConstructor(x -&gt; x.hasParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 	;
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">static</strong> MethodInfo
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		c_m1=c.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>) &amp;&amp; x.hasNoParameters()),
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		c_m1=c.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>) &amp;&amp; x.getParameterCount() == 0),
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		c_m2=c.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)),
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		c_m3=c.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>) &amp;&amp; x.hasParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 	;
@@ -300,7 +300,7 @@
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">static</strong> ClassInfo d = ClassInfo.of(D.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<strong class="jxr_keyword">static</strong> ExecutableInfo
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		d_c=d.getPublicConstructor(ConstructorInfo::hasNoParameters),
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		d_c=d.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0),
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 		d_m=d.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>))
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 	;
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 
@@ -507,37 +507,37 @@
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 	<strong class="jxr_keyword">static</strong> ClassInfo x2 = ClassInfo.of(X.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 	@Test <strong class="jxr_keyword">void</strong> getFullName_method() {
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParameters()).getFullName());
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.getParameterCount() == 0).getFullName());
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo(java.lang.String)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 	}
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 	@Test <strong class="jxr_keyword">void</strong> getFullName_constructor() {
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X()"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParameters).getFullName());
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X()"</span>, x2.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).getFullName());
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X(java.lang.String)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 	}
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 	@Test <strong class="jxr_keyword">void</strong> getShortName_method() {
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		assertEquals(<span class="jxr_string">"foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParameters()).getShortName());
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		assertEquals(<span class="jxr_string">"foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.getParameterCount() == 0).getShortName());
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 		assertEquals(<span class="jxr_string">"foo(String)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getShortName());
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 		assertEquals(<span class="jxr_string">"foo(Map)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getShortName());
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 	}
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 	@Test <strong class="jxr_keyword">void</strong> getShortName_constructor() {
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		assertEquals(<span class="jxr_string">"X()"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParameters).getShortName());
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		assertEquals(<span class="jxr_string">"X()"</span>, x2.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).getShortName());
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 		assertEquals(<span class="jxr_string">"X(String)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getShortName());
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 		assertEquals(<span class="jxr_string">"X(Map)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getShortName());
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 	}
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 	@Test <strong class="jxr_keyword">void</strong> getSimpleName_method() {
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParameters()).getSimpleName());
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.getParameterCount() == 0).getSimpleName());
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getSimpleName());
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getSimpleName());
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 	}
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 	@Test <strong class="jxr_keyword">void</strong> getSimpleName_constructor() {
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParameters).getSimpleName());
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).getSimpleName());
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getSimpleName());
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getSimpleName());
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 	}

@@ -263,7 +263,7 @@
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 				&amp;&amp; x.hasNumParameters(1)
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 				&amp;&amp; x.getParameter(0).canAccept(builder)
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 				&amp;&amp; x.hasReturnType(type)
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 				&amp;&amp; x.hasNoAnnotation(BeanIgnore.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 				&amp;&amp; ! x.hasAnnotation(BeanIgnore.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 				&amp;&amp; x.hasName(<span class="jxr_string">"getInstance"</span>)
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 			);
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -277,9 +277,9 @@
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 			MethodInfo m = type.getPublicMethod(
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 				x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 				&amp;&amp; x.isNotDeprecated()
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				&amp;&amp; x.hasNoParameters()
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				&amp;&amp; x.getParameterCount() == 0
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 				&amp;&amp; x.hasReturnType(type)
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				&amp;&amp; x.hasNoAnnotation(BeanIgnore.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				&amp;&amp; ! x.hasAnnotation(BeanIgnore.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 				&amp;&amp; x.hasName(<span class="jxr_string">"getInstance"</span>)
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -431,7 +431,7 @@
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">return</strong> m.isStatic()
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			&amp;&amp; m.isNotDeprecated()
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			&amp;&amp; m.hasReturnType(type)
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			&amp;&amp; m.hasNoAnnotation(BeanIgnore.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			&amp;&amp; ! m.hasAnnotation(BeanIgnore.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 			&amp;&amp; (m.hasName(<span class="jxr_string">"create"</span>) || m.hasName(<span class="jxr_string">"builder"</span>));
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}

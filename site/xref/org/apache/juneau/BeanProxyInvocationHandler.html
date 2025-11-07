@@ -83,10 +83,10 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.beanProps.equals(bean);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		}
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">if</strong> (mi.hasName(<span class="jxr_string">"hashCode"</span>) &amp;&amp; mi.hasNoParameters())
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">if</strong> (mi.hasName(<span class="jxr_string">"hashCode"</span>) &amp;&amp; mi.getParameterCount() == 0)
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">return</strong> Integer.valueOf(<strong class="jxr_keyword">this</strong>.beanProps.hashCode());
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">if</strong> (mi.hasName(<span class="jxr_string">"toString"</span>) &amp;&amp; mi.hasNoParameters())
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">if</strong> (mi.hasName(<span class="jxr_string">"toString"</span>) &amp;&amp; mi.getParameterCount() == 0)
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">return</strong> Json5Serializer.DEFAULT.toString(<strong class="jxr_keyword">this</strong>.beanProps);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		String prop = <strong class="jxr_keyword">this</strong>.meta.getterProps.get(method);

@@ -392,7 +392,7 @@
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Class) {
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 				<em class="jxr_comment">// Check for no-arg constructor.</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				ConstructorInfo ci = ClassInfo.of((Class&lt;?&gt;)o).getPublicConstructor(ConstructorInfo::hasNoParameters);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				ConstructorInfo ci = ClassInfo.of((Class&lt;?&gt;)o).getPublicConstructor(c -&gt; c.getParameterCount() == 0);
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 				<strong class="jxr_keyword">if</strong> (nn(ci))
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 					<strong class="jxr_keyword">return</strong> ci.newInstance();
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 

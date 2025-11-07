@@ -576,10 +576,10 @@
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 			c2.getDeclaredFields().stream()
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 				.filter(x -&gt; x.isNotStatic()
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			&amp;&amp; (x.isNotTransient() || noIgnoreTransients)
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			&amp;&amp; (x.hasNoAnnotation(Transient.<strong class="jxr_keyword">class</strong>) || noIgnoreTransients)
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			&amp;&amp; x.hasNoAnnotation(ctx.getAnnotationProvider(), BeanIgnore.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 			&amp;&amp; (v.isVisible(x.<strong class="jxr_keyword">inner</strong>()) || x.hasAnnotation(ctx.getAnnotationProvider(), Beanp.<strong class="jxr_keyword">class</strong>)))
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 				&amp;&amp; (x.isNotTransient() || noIgnoreTransients)
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 				&amp;&amp; (! x.hasAnnotation(Transient.<strong class="jxr_keyword">class</strong>) || noIgnoreTransients)
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 				&amp;&amp; ctx.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isEmpty()
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 				&amp;&amp; (v.isVisible(x.<strong class="jxr_keyword">inner</strong>()) || ctx.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()))
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 				.forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>())
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 			);
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -712,10 +712,10 @@
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 			FieldInfo f = c2.getDeclaredField(
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 				x -&gt; x.isNotStatic()
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 			&amp;&amp; (x.isNotTransient() || noIgnoreTransients)
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 			&amp;&amp; (x.hasNoAnnotation(Transient.<strong class="jxr_keyword">class</strong>) || noIgnoreTransients)
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			&amp;&amp; x.hasNoAnnotation(ctx.getAnnotationProvider(), BeanIgnore.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			&amp;&amp; x.hasName(name)
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 				&amp;&amp; (x.isNotTransient() || noIgnoreTransients)
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 				&amp;&amp; (! x.hasAnnotation(Transient.<strong class="jxr_keyword">class</strong>) || noIgnoreTransients)
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 				&amp;&amp; ctx.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isEmpty()
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 				&amp;&amp; x.hasName(name)
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 			);
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 			<strong class="jxr_keyword">if</strong> (nn(f))

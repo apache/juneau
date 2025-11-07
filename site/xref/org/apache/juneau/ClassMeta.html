@@ -214,20 +214,20 @@
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			ci.getAllFields().stream().filter(x -&gt; x.hasAnnotation(bc.getAnnotationProvider(), ParentProperty.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			ci.getAllFields().stream().filter(x -&gt; bc.getAnnotationProvider().find(ParentProperty.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">if</strong> (x.isStatic())
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@ParentProperty used on invalid field ''{0}''.  Must be static."</span>, x);
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 				parentPropertyMethod = <strong class="jxr_keyword">new</strong> Setter.FieldSetter(x.accessible().<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 			});
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			ci.getAllFields().stream().filter(x -&gt; x.hasAnnotation(bc.getAnnotationProvider(), NameProperty.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			ci.getAllFields().stream().filter(x -&gt; bc.getAnnotationProvider().find(NameProperty.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 				<strong class="jxr_keyword">if</strong> (x.isStatic())
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@NameProperty used on invalid field ''{0}''.  Must be static."</span>, x);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 				namePropertyMethod = <strong class="jxr_keyword">new</strong> Setter.FieldSetter(x.accessible().<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			});
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			ci.getDeclaredFields().stream().filter(x -&gt; x.hasAnnotation(bc.getAnnotationProvider(), Example.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				<strong class="jxr_keyword">if</strong> (! (x.isStatic() &amp;&amp; ci.isParentOf(x.getType().<strong class="jxr_keyword">inner</strong>())))
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			ci.getDeclaredFields().stream().filter(x -&gt; bc.getAnnotationProvider().find(Example.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				<strong class="jxr_keyword">if</strong> (! (x.isStatic() &amp;&amp; ci.isParentOf(x.getFieldType().<strong class="jxr_keyword">inner</strong>())))
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@Example used on invalid field ''{0}''.  Must be static and an instance of the type."</span>, x);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 				exampleField = x.accessible().<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 			});
@@ -304,7 +304,7 @@
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">if</strong> (innerClass != Object.<strong class="jxr_keyword">class</strong>) {
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 				ClassInfo x = implClass == <strong class="jxr_keyword">null</strong> ? ci : ClassInfo.of(implClass);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 				noArgConstructor = x.getPublicConstructor(ConstructorInfo::hasNoParameters);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 				noArgConstructor = x.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0);
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			}
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">try</strong> {

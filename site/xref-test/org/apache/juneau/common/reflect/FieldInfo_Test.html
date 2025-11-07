@@ -297,13 +297,13 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		e_a2 = e.getDeclaredField(x -&gt; x.hasName(<span class="jxr_string">"a2"</span>));
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 	@Test <strong class="jxr_keyword">void</strong> getType() {
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		check(<span class="jxr_string">"int"</span>, e_a1.getType());
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		check(<span class="jxr_string">"int"</span>, e_a2.getType());
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		check(<span class="jxr_string">"int"</span>, e_a1.getFieldType());
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		check(<span class="jxr_string">"int"</span>, e_a2.getFieldType());
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> getType_twice() {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		check(<span class="jxr_string">"int"</span>, e_a1.getType());
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		check(<span class="jxr_string">"int"</span>, e_a1.getType());
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		check(<span class="jxr_string">"int"</span>, e_a1.getFieldType());
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		check(<span class="jxr_string">"int"</span>, e_a1.getFieldType());
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 	}
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 	@Test <strong class="jxr_keyword">void</strong> toString2() {
