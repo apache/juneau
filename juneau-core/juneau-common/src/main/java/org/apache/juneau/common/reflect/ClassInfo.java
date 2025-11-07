@@ -2511,12 +2511,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	@Override /* Annotatable */
-	public ClassInfo getClassInfo() {
-		return this;
-	}
-
-	@Override /* Annotatable */
-	public String getAnnotatableName() {
+	public String getLabel() {
 		return getNameSimple();
 	}
 }

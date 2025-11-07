@@ -374,12 +374,7 @@ public class PackageInfo implements Annotatable {
 	}
 
 	@Override /* Annotatable */
-	public ClassInfo getClassInfo() {
-		return null;  // Package has no declaring class
-	}
-
-	@Override /* Annotatable */
-	public String getAnnotatableName() {
+	public String getLabel() {
 		return getName();
 	}
 }

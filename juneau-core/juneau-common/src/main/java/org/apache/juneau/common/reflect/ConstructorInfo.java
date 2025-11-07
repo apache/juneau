@@ -162,12 +162,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	@Override /* Annotatable */
-	public ClassInfo getClassInfo() {
-		return getDeclaringClass();
-	}
-
-	@Override /* Annotatable */
-	public String getAnnotatableName() {
-		return getShortName();
+	public String getLabel() {
+		return getDeclaringClass().getNameSimple() + "." + getShortName();
 	}
 }

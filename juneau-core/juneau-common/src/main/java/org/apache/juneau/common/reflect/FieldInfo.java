@@ -407,12 +407,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	}
 
 	@Override /* Annotatable */
-	public ClassInfo getClassInfo() {
-		return getDeclaringClass();
-	}
-
-	@Override /* Annotatable */
-	public String getAnnotatableName() {
-		return getName();
+	public String getLabel() {
+		return getDeclaringClass().getNameSimple() + "." + getName();
 	}
 }

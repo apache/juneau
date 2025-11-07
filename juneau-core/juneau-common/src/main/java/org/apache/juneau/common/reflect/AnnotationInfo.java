@@ -187,7 +187,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	public LinkedHashMap<String, Object> toMap() {
 		var jm = new LinkedHashMap<String, Object>();
-		jm.put(s(annotatable.getAnnotatableType()), annotatable.getAnnotatableName());
+		jm.put(s(annotatable.getAnnotatableType()), annotatable.getLabel());
 		var ja = new LinkedHashMap<String, Object>();
 		var ca = ClassInfo.of(a.annotationType());
 		ca.getDeclaredMethods().stream().forEach(x -> {
@@ -287,22 +287,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return A simple string representation of this annotation.
 	 */
 	public String toSimpleString() {
-		var location = new StringBuilder();
-		var ci = annotatable.getClassInfo();
-
-		if (nn(ci)) {
-			location.append(ci.getNameSimple());
-			var type = annotatable.getAnnotatableType();
-			if (type == AnnotatableType.METHOD_TYPE || type == AnnotatableType.FIELD_TYPE ||
-				type == AnnotatableType.CONSTRUCTOR_TYPE || type == AnnotatableType.PARAMETER_TYPE) {
-				location.append('.').append(annotatable.getAnnotatableName());
-			}
-		} else {
-			// Package
-			location.append(annotatable.getAnnotatableName());
-		}
-
-		return "@" + scn(a.annotationType()) + "(on=" + location + ")";
+		return "@" + scn(a.annotationType()) + "(on=" + annotatable.getLabel() + ")";
 	}
 
 	/**

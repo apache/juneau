@@ -44,30 +44,20 @@ public interface Annotatable {
 	AnnotatableType getAnnotatableType();
 
 	/**
-	 * Returns the class info associated with this annotatable element.
+	 * Returns a human-readable label for this annotatable element.
 	 *
 	 * <p>
-	 * Returns the declaring class from whichever context this annotatable belongs to.
-	 *
-	 * @return The class info, or <jk>null</jk> if this is a package.
-	 */
-	ClassInfo getClassInfo();
-
-	/**
-	 * Returns a human-readable name for this annotatable element.
-	 *
-	 * <p>
-	 * The name format depends on the type of annotatable:
+	 * The label format depends on the type of annotatable:
 	 * <ul>
-	 * 	<li>{@link AnnotatableType#CLASS CLASS} - Simple class name
-	 * 	<li>{@link AnnotatableType#METHOD METHOD} - Short method name (with parameter types)
-	 * 	<li>{@link AnnotatableType#FIELD FIELD} - Field name
-	 * 	<li>{@link AnnotatableType#CONSTRUCTOR CONSTRUCTOR} - Short constructor name (with parameter types)
-	 * 	<li>{@link AnnotatableType#PARAMETER PARAMETER} - Parameter name
-	 * 	<li>{@link AnnotatableType#PACKAGE PACKAGE} - Package name
+	 * 	<li>{@link AnnotatableType#CLASS CLASS} - Simple class name (e.g., <js>"MyClass"</js>)
+	 * 	<li>{@link AnnotatableType#METHOD METHOD} - Class and method with parameter types (e.g., <js>"MyClass.myMethod(String,int)"</js>)
+	 * 	<li>{@link AnnotatableType#FIELD FIELD} - Class and field name (e.g., <js>"MyClass.myField"</js>)
+	 * 	<li>{@link AnnotatableType#CONSTRUCTOR CONSTRUCTOR} - Class and constructor with parameter types (e.g., <js>"MyClass.MyClass(String)"</js>)
+	 * 	<li>{@link AnnotatableType#PARAMETER PARAMETER} - Class, method/constructor, and parameter index (e.g., <js>"MyClass.myMethod[0]"</js>)
+	 * 	<li>{@link AnnotatableType#PACKAGE PACKAGE} - Package name (e.g., <js>"com.example.package"</js>)
 	 * </ul>
 	 *
-	 * @return The annotatable name.
+	 * @return The human-readable label for this annotatable element.
 	 */
-	String getAnnotatableName();
+	String getLabel();
 }

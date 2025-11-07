@@ -803,12 +803,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	@Override /* Annotatable */
-	public ClassInfo getClassInfo() {
-		return getDeclaringExecutable().getDeclaringClass();
-	}
-
-	@Override /* Annotatable */
-	public String getAnnotatableName() {
-		return getName();
+	public String getLabel() {
+		var exec = getDeclaringExecutable();
+		var label = exec.getDeclaringClass().getNameSimple() + "." + exec.getShortName();
+		return label + "[" + index + "]";
 	}
 }
