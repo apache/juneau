@@ -25,6 +25,7 @@ Release Notes - Juneau - Version 9.2.0
     * Annotations associated with a subclass of org.apache.juneau.annotation.AnnotationBuilder that didn't carry an `String[] description()` attribute now do.
         For example: org.apache.juneau.http.annotation.Path.
         The current use case is for developers to further annotate their code with documentation.
+    * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.0 to 3.14.1 #271.
 
 ** New Features - Multi-Key Cache and Concurrent Map Classes
 
