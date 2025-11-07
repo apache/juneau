@@ -52,33 +52,23 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	AnnotatableType getAnnotatableType();
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * Returns the class info associated with this annotatable element.</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * Returns a human-readable label for this annotatable element.</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 * Returns the declaring class from whichever context this annotatable belongs to.</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * @return The class info, or &lt;jk&gt;null&lt;/jk&gt; if this is a package.</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	ClassInfo getClassInfo();
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * Returns a human-readable name for this annotatable element.</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * The name format depends on the type of annotatable:</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#CLASS CLASS} - Simple class name</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#METHOD METHOD} - Short method name (with parameter types)</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#FIELD FIELD} - Field name</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#CONSTRUCTOR CONSTRUCTOR} - Short constructor name (with parameter types)</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#PARAMETER PARAMETER} - Parameter name</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#PACKAGE PACKAGE} - Package name</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * @return The annotatable name.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	String getAnnotatableName();
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 * The label format depends on the type of annotatable:</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#CLASS CLASS} - Simple class name (e.g., &lt;js&gt;"MyClass"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#METHOD METHOD} - Class and method with parameter types (e.g., &lt;js&gt;"MyClass.myMethod(String,int)"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#FIELD FIELD} - Class and field name (e.g., &lt;js&gt;"MyClass.myField"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#CONSTRUCTOR CONSTRUCTOR} - Class and constructor with parameter types (e.g., &lt;js&gt;"MyClass.MyClass(String)"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#PARAMETER PARAMETER} - Class, method/constructor, and parameter index (e.g., &lt;js&gt;"MyClass.myMethod[0]"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotatableType#PACKAGE PACKAGE} - Package name (e.g., &lt;js&gt;"com.example.package"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * @return The human-readable label for this annotatable element.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	String getLabel();
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
