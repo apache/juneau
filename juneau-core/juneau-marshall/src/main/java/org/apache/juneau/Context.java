@@ -812,56 +812,6 @@ public abstract class Context implements AnnotationProvider {
 		throw unsupportedOp();
 	}
 
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-		throw unsupportedOp();
-	}
-
 	/**
 	 * Returns a session to use for this context.
 	 *
@@ -928,31 +878,6 @@ public abstract class Context implements AnnotationProvider {
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
 	public boolean isDebug() { return debug; }
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		throw unsupportedOp();
-	}
 
 	@Override /* Overridden from Object */
 	public String toString() {

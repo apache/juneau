@@ -136,7 +136,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 */
 	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		Value<A> t = Value.empty();
-		annotationProvider.forEachAnnotation(type, c, x -> true, x -> t.set(x));
+		annotationProvider.getAnnotationProvider().find(type, c).map(x -> x.inner()).filter(x -> true).forEach(x -> t.set(x));
 		return t.orElse(null);
 	}
 
