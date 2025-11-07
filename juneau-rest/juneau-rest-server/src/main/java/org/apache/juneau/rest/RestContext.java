@@ -1770,11 +1770,11 @@ public class RestContext extends Context {
 					RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
 				)
 			));
-			// @formatter:on
+		// @formatter:on
 
-			rci.getMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
-				var rt = x.getReturnType().<Object>inner();
-				var name = RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+		rci.getAllMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
+			var rt = x.getReturnType().<Object>inner();
+			var name = RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
 				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
 					// @formatter:off
 					beanStore

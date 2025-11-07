@@ -105,9 +105,9 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 		if (shouldIgnore(bc, ci))
 			return null;
 
-		// Find swap() method if present.
-		for (var m : ci.getMethods()) {
-			if (isSwapMethod(bc, m)) {
+	// Find swap() method if present.
+	for (var m : ci.getAllMethods()) {
+		if (isSwapMethod(bc, m)) {
 
 				ClassInfo rt = m.getReturnType();
 

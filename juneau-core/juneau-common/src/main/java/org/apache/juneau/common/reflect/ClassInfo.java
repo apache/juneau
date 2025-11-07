@@ -623,8 +623,24 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Returns all methods declared on this class.
 	 *
+	 * <p>
+	 * This method returns methods of <b>all visibility levels</b> (public, protected, package-private, and private)
+	 * declared directly on this class only (does not include inherited methods).
+	 *
+	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link #getDeclaredMethods()} - Returns all declared methods on this class only (all visibility levels) ← This method
+	 * 	<li>{@link #getAllMethods()} - Returns all declared methods on this class and parents (all visibility levels)
+	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Unlike Java's {@link Class#getDeclaredMethods()}, results are filtered to exclude synthetic methods like <c>$jacocoInit</c>.
+	 * </ul>
+	 *
 	 * @return
-	 * 	All methods declared on this class.
+	 * 	All methods declared on this class (all visibility levels).
 	 * 	<br>Results are ordered alphabetically.
 	 * 	<br>List is unmodifiable.
 	 */
@@ -785,12 +801,28 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Returns all declared methods on this class and all parent classes.
 	 *
+	 * <p>
+	 * This method returns methods of <b>all visibility levels</b> (public, protected, package-private, and private).
+	 *
+	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link #getDeclaredMethods()} - Returns all declared methods on this class only (all visibility levels)
+	 * 	<li>{@link #getAllMethods()} - Returns all declared methods on this class and parents (all visibility levels) ← This method
+	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Unlike Java's {@link Class#getMethods()}, this returns methods of all visibility levels, not just public ones.
+	 * 	<li>Methods from {@link Object} class are excluded from the results.
+	 * </ul>
+	 *
 	 * @return
-	 * 	All declared methods on this class and all parent classes.
+	 * 	All declared methods on this class and all parent classes (all visibility levels).
 	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<MethodInfo> getMethods() { return allMethods.get(); }
+	public List<MethodInfo> getAllMethods() { return allMethods.get(); }
 
 	/**
 	 * Returns the name of the underlying class.
@@ -1091,14 +1123,28 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns all public methods on this class.
+	 * Returns all public methods on this class and parent classes.
 	 *
 	 * <p>
-	 * Methods defined on the {@link Object} class are excluded from the results.
+	 * This method returns <b>public methods only</b>, from this class and all parent classes and interfaces.
+	 *
+	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link #getDeclaredMethods()} - Returns all declared methods on this class only (all visibility levels)
+	 * 	<li>{@link #getAllMethods()} - Returns all declared methods on this class and parents (all visibility levels)
+	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents ← This method
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>This method behaves similarly to Java's {@link Class#getMethods()}, returning only public methods.
+	 * 	<li>Methods defined on the {@link Object} class are excluded from the results.
+	 * </ul>
 	 *
 	 * @return
-	 * 	All public methods on this class.
+	 * 	All public methods on this class and parent classes.
 	 * 	<br>Results are ordered alphabetically.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getPublicMethods() { return publicMethods.get(); }
 

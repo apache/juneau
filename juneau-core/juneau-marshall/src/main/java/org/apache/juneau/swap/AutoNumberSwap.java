@@ -126,10 +126,10 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		if (shouldIgnore(bc, ci))
 			return null;
 
-		// Find swap() method if present.
-		for (var m : ci.getMethods()) {
+	// Find swap() method if present.
+	for (var m : ci.getAllMethods()) {
 
-			if (isSwapMethod(bc, m)) {
+		if (isSwapMethod(bc, m)) {
 
 				ClassInfo rt = m.getReturnType();
 

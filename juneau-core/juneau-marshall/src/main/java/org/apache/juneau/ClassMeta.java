@@ -224,10 +224,10 @@ public class ClassMeta<T> implements Type {
 				exampleField = x.accessible().inner();
 			});
 
-			// Find @NameProperty and @ParentProperty methods if present.
-			List<MethodInfo> methods = ci.getMethods();
-			for (int i = methods.size() - 1; i >= 0; i--) {
-				MethodInfo m = methods.get(i);
+		// Find @NameProperty and @ParentProperty methods if present.
+		List<MethodInfo> methods = ci.getAllMethods();
+		for (int i = methods.size() - 1; i >= 0; i--) {
+			MethodInfo m = methods.get(i);
 				if (m.hasAnnotation(bc.getAnnotationProvider(), ParentProperty.class)) {
 					if (m.isStatic() || ! m.hasNumParameters(1))
 						throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);

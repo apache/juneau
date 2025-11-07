@@ -447,11 +447,11 @@ public class BasicSwaggerProviderSession {
 							rstream(eci.getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
 							pushupSchemaFields(RESPONSE, om, schema);
 							om.appendIf(nem, "schema", schema);
-						}
 					}
-					List<MethodInfo> methods = eci.getMethods();
-					for (int i = methods.size() - 1; i >= 0; i--) {
-						MethodInfo ecmi = methods.get(i);
+				}
+				List<MethodInfo> methods = eci.getAllMethods();
+				for (int i = methods.size() - 1; i >= 0; i--) {
+					MethodInfo ecmi = methods.get(i);
 						Header a = ecmi.getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (a == null)
 							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
@@ -484,11 +484,11 @@ public class BasicSwaggerProviderSession {
 						om.appendIf(nem, "schema", schema);
 						addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 					}
-				}
-				if (mi.getReturnType().hasAnnotation(Response.class)) {
-					List<MethodInfo> methods = mi.getReturnType().getMethods();
-					for (int i = methods.size() - 1; i >= 0; i--) {
-						MethodInfo ecmi = methods.get(i);
+			}
+			if (mi.getReturnType().hasAnnotation(Response.class)) {
+				List<MethodInfo> methods = mi.getReturnType().getAllMethods();
+				for (int i = methods.size() - 1; i >= 0; i--) {
+					MethodInfo ecmi = methods.get(i);
 						if (ecmi.hasAnnotation(Header.class)) {
 							Header a = ecmi.getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 							String ha = a.name();
