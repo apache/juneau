@@ -248,13 +248,12 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @Beanc constructor on public constructors.
-				ci.getPublicConstructors().stream().filter(x -> x.hasAnnotation(ctx.getAnnotationProvider(), Beanc.class)).forEach(x -> {
+				ci.getPublicConstructors().stream().filter(x -> ctx.getAnnotationProvider().find(Beanc.class, x.inner()).findAny().isPresent()).forEach(x -> {
 					if (nn(constructor))
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
-					// Inline Context.forEachAnnotation() call
-				ctx.getAnnotationProvider().find(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
+					ctx.getAnnotationProvider().find(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
 					if (! x.hasNumParameters(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 						throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -272,12 +271,11 @@ public class BeanMeta<T> {
 
 				// Look for @Beanc on all other constructors.
 				if (constructor == null) {
-					ci.getDeclaredConstructors().stream().filter(x -> x.hasAnnotation(ctx.getAnnotationProvider(), Beanc.class)).forEach(x -> {
+					ci.getDeclaredConstructors().stream().filter(x -> ctx.getAnnotationProvider().find(Beanc.class, x.inner()).findAny().isPresent()).forEach(x -> {
 						if (nn(constructor))
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						// Inline Context.forEachAnnotation() call
 						ctx.getAnnotationProvider().find(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
 						if (! x.hasNumParameters(constructorArgs.length)) {
 							if (constructorArgs.length != 0)

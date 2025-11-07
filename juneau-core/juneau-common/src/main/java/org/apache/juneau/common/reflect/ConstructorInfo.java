@@ -16,14 +16,8 @@
  */
 package org.apache.juneau.common.reflect;
 
-import static org.apache.juneau.common.utils.PredicateUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
-
-import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.util.function.*;
 
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -126,29 +120,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		return i;
 	}
 
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return nn(annotationProvider.find(type, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is not present on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is not present on this constructor.
-	 */
-	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return ! hasAnnotation(annotationProvider, type);
-	}
 
 	/**
 	 * Returns the wrapped method.

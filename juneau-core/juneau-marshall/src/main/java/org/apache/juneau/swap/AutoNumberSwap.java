@@ -168,7 +168,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			cs.isNotDeprecated()
 			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasMatchingParameterTypes(rt)
-			&& cs.hasNoAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
+			&& bc.getAnnotationProvider().find(BeanIgnore.class, cs.inner()).findAny().isEmpty();
 		// @formatter:on
 	}
 
