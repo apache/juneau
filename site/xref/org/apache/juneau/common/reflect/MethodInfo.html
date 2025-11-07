@@ -96,13 +96,13 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method m;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> ClassInfo returnType;
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;MethodInfo&gt;&gt; matchingCache =
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		memoize(() -&gt; findMatching(list(), <strong class="jxr_keyword">this</strong>, getDeclaringClass()));
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;MethodInfo&gt;&gt; matchingMethods = memoize(<strong class="jxr_keyword">this</strong>::_findMatchingMethods);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;MethodInfo&gt;&gt; matchingMethods = memoize(<strong class="jxr_keyword">this</strong>::findMatchingMethods);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<em class="jxr_comment">// All annotations on this method and parent overridden methods in child-to-parent order.</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; annotationInfos = memoize(<strong class="jxr_keyword">this</strong>::findAnnotationInfos);
@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">protected</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>(ClassInfo declaringClass, Method m) {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">super</strong>(declaringClass, m);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">this</strong>.m = m;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = m;
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -239,7 +239,7 @@
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			.map(a -&gt; (AnnotationInfo&lt;A&gt;)a);
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">private</strong> List&lt;MethodInfo&gt; _findMatchingMethods() {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">private</strong> List&lt;MethodInfo&gt; findMatchingMethods() {
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> result = <strong class="jxr_keyword">new</strong> ArrayList&lt;MethodInfo&gt;();
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		result.add(<strong class="jxr_keyword">this</strong>); <em class="jxr_comment">// 1. This method</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 
@@ -398,7 +398,7 @@
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 * @return The name of this method</em>
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> m.getName(); }
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getName(); }
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 * Returns the bean property name if this is a getter or setter.</em>
@@ -406,7 +406,7 @@
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * @return The bean property name, or &lt;jk&gt;null&lt;/jk&gt; if this isn't a getter or setter.</em>
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 	<strong class="jxr_keyword">public</strong> String getPropertyName() {
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		String n = m.getName();
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		String n = <strong class="jxr_keyword">inner</strong>.getName();
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">if</strong> ((n.startsWith(<span class="jxr_string">"get"</span>) || n.startsWith(<span class="jxr_string">"set"</span>)) &amp;&amp; n.length() &gt; 3)
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">return</strong> Introspector.decapitalize(n.substring(3));
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">if</strong> (n.startsWith(<span class="jxr_string">"is"</span>) &amp;&amp; n.length() &gt; 2)
@@ -422,7 +422,7 @@
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<strong class="jxr_keyword">public</strong> ClassInfo getReturnType() {
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">if</strong> (returnType == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 				returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 				returnType = ClassInfo.of(<strong class="jxr_keyword">inner</strong>.getReturnType(), <strong class="jxr_keyword">inner</strong>.getGenericReturnType());
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 			}
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 		}
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">return</strong> returnType;
@@ -440,7 +440,7 @@
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">public</strong> String getSignature() {
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		sb.append(m.getName());
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		sb.append(<strong class="jxr_keyword">inner</strong>.getName());
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">var</strong> params = getParameters();
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">if</strong> (params.size() &gt; 0) {
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 			sb.append('(');
@@ -558,7 +558,7 @@
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this return type.</em>
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnType(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">return</strong> m.getReturnType() == c;
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getReturnType() == c;
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 	}
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -578,7 +578,7 @@
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method has this parent return type.</em>
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasReturnTypeParent(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">return</strong> ClassInfo.of(c).isParentOf(m.getReturnType());
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">return</strong> ClassInfo.of(c).isParentOf(<strong class="jxr_keyword">inner</strong>.getReturnType());
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 	}
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -597,7 +597,7 @@
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 * @return The wrapped method.</em>
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 	<strong class="jxr_keyword">public</strong> Method <strong class="jxr_keyword">inner</strong>() {
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -612,7 +612,7 @@
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T invoke(Object obj, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 			<strong class="jxr_keyword">return</strong> (T)m.invoke(obj, args);
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 			<strong class="jxr_keyword">return</strong> (T)<strong class="jxr_keyword">inner</strong>.invoke(obj, args);
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalAccessException e) {
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 		} <strong class="jxr_keyword">catch</strong> (InvocationTargetException e) {
@@ -644,7 +644,7 @@
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 	<strong class="jxr_keyword">public</strong> Object invokeLenient(Object pojo, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<strong class="jxr_keyword">return</strong> m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.invoke(pojo, ClassUtils.getMatchingArgs(<strong class="jxr_keyword">inner</strong>.getParameterTypes(), args));
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | InvocationTargetException e) {
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 		}
@@ -676,7 +676,7 @@
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this method is a bridge method.</em>
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isBridge() { <strong class="jxr_keyword">return</strong> m.isBridge(); }
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isBridge() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isBridge(); }
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> 
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method matches the specified method by name and parameter types.</em>
@@ -716,7 +716,7 @@
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 * @see Method#getGenericReturnType()</em>
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 	<strong class="jxr_keyword">public</strong> Type getGenericReturnType() {
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">return</strong> m.getGenericReturnType();
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getGenericReturnType();
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 	}
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -737,7 +737,7 @@
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * @see Method#getAnnotatedReturnType()</em>
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 	<strong class="jxr_keyword">public</strong> AnnotatedType getAnnotatedReturnType() {
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		<strong class="jxr_keyword">return</strong> m.getAnnotatedReturnType();
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getAnnotatedReturnType();
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 	}
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 
 <a class="jxr_linenumber" name="L735" href="#L735">735</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -761,7 +761,7 @@
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">	 * @see Method#getDefaultValue()</em>
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 	<strong class="jxr_keyword">public</strong> Object getDefaultValue() {
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">return</strong> m.getDefaultValue();
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getDefaultValue();
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 	}
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -786,7 +786,7 @@
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 * @see Method#isDefault()</em>
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDefault() {
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<strong class="jxr_keyword">return</strong> m.isDefault();
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isDefault();
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 	}
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 	MethodInfo findMatchingOnClass(ClassInfo c) {

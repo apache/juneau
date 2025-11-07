@@ -89,10 +89,10 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<em class="jxr_comment">// Instance</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> Package p;  <em class="jxr_comment">// Effectively final</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> Package <strong class="jxr_keyword">inner</strong>;  <em class="jxr_comment">// Effectively final</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_comment">// All annotations on this package, wrapped in AnnotationInfo. Repeated annotations have been unwrapped and are present as individual instances. Lazy-initialized in getter.</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; annotations = memoize(() -&gt; opt(p).map(p -&gt; stream(p.getAnnotations()).flatMap(a -&gt; stream(splitRepeated(a))).map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList()).orElse(liste()));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; annotations = memoize(() -&gt; opt(<strong class="jxr_keyword">inner</strong>).map(p -&gt; stream(p.getAnnotations()).flatMap(a -&gt; stream(splitRepeated(a))).map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList()).orElse(liste()));
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * @param p The package object.</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">protected</strong> <a name="PackageInfo" href="../../../../../org/apache/juneau/common/reflect/PackageInfo.html#PackageInfo">PackageInfo</a>(Package p) {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">this</strong>.p = p;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = p;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * @return The wrapped {@link Package} object.</em>
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">public</strong> Package <strong class="jxr_keyword">inner</strong>() {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">return</strong> p;
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 
@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * @see Package#getName()</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">public</strong> String getName() {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">return</strong> p.getName();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getName();
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * @see Package#getSpecificationTitle()</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">public</strong> String getSpecificationTitle() {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">return</strong> p.getSpecificationTitle();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getSpecificationTitle();
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -163,7 +163,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * @see Package#getSpecificationVersion()</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<strong class="jxr_keyword">public</strong> String getSpecificationVersion() {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">return</strong> p.getSpecificationVersion();
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getSpecificationVersion();
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * @see Package#getSpecificationVendor()</em>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">public</strong> String getSpecificationVendor() {
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">return</strong> p.getSpecificationVendor();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getSpecificationVendor();
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -189,7 +189,7 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * @see Package#getImplementationTitle()</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">public</strong> String getImplementationTitle() {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">return</strong> p.getImplementationTitle();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getImplementationTitle();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * @see Package#getImplementationVersion()</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">public</strong> String getImplementationVersion() {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">return</strong> p.getImplementationVersion();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getImplementationVersion();
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -215,7 +215,7 @@
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * @see Package#getImplementationVendor()</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">public</strong> String getImplementationVendor() {
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">return</strong> p.getImplementationVendor();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getImplementationVendor();
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -228,7 +228,7 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * @see Package#isSealed()</em>
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSealed() {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">return</strong> p.isSealed();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isSealed();
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * @see Package#isSealed(URL)</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSealed(URL url) {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">return</strong> p.isSealed(url);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isSealed(url);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * @see Package#isCompatibleWith(String)</em>
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isCompatibleWith(String desired) <strong class="jxr_keyword">throws</strong> NumberFormatException {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">return</strong> p.isCompatibleWith(desired);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isCompatibleWith(desired);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 	}
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -334,7 +334,7 @@
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Override <em class="jxr_comment">/* Object */</em>
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">return</strong> p.hashCode();
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.hashCode();
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -349,8 +349,8 @@
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 	@Override <em class="jxr_comment">/* Object */</em>
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object obj) {
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">if</strong> (obj instanceof <a name="PackageInfo" href="../../../../../org/apache/juneau/common/reflect/PackageInfo.html#PackageInfo">PackageInfo</a>)
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">return</strong> p.equals(((<a name="PackageInfo" href="../../../../../org/apache/juneau/common/reflect/PackageInfo.html#PackageInfo">PackageInfo</a>)obj).p);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">return</strong> p.equals(obj);
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.equals(((<a name="PackageInfo" href="../../../../../org/apache/juneau/common/reflect/PackageInfo.html#PackageInfo">PackageInfo</a>)obj).<strong class="jxr_keyword">inner</strong>);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.equals(obj);
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -370,7 +370,7 @@
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 	@Override <em class="jxr_comment">/* Object */</em>
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">return</strong> p.toString();
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.toString();
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 	}
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>

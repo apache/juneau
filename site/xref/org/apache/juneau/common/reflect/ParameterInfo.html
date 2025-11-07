@@ -62,7 +62,7 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ResettableSupplier&lt;Boolean&gt; DISABLE_PARAM_NAME_DETECTION = memoizeResettable(() -&gt; Boolean.getBoolean(<span class="jxr_string">"juneau.disableParamNameDetection"</span>));
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> executable;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Parameter parameter;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Parameter <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index;
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ClassInfo type;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
@@ -86,7 +86,7 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">protected</strong> <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a>(<a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> eInfo, Parameter p, <strong class="jxr_keyword">int</strong> index, ClassInfo type) {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">super</strong>(p.getModifiers());
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">this</strong>.executable = eInfo;
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">this</strong>.parameter = p;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = p;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">this</strong>.index = index;
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">this</strong>.type = type;
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
@@ -97,11 +97,11 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * @return The wrapped {@link Parameter} object.</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> Parameter <strong class="jxr_keyword">inner</strong>() {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">return</strong> parameter;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">private</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; _findAnnotations() {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">return</strong> stream(parameter.getAnnotations()).map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList();
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">return</strong> stream(<strong class="jxr_keyword">inner</strong>.getAnnotations()).map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList();
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -145,8 +145,8 @@
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<em class="jxr_comment">// Inline implementation using reflection directly instead of delegating to AnnotationProvider.DEFAULT</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">if</strong> (!nn(type))
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">if</strong> (executable.isConstructor) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">if</strong> (executable.isConstructor()) {
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<em class="jxr_comment">// For constructors: search parameter type hierarchy and parameter annotations</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<em class="jxr_comment">// Search class hierarchy using reflection (package -&gt; interfaces -&gt; parents -&gt; class)</em>
@@ -376,8 +376,8 @@
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		}
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<em class="jxr_comment">// Fall back to bytecode parameter name if available and not disabled</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">if</strong> (!DISABLE_PARAM_NAME_DETECTION.get() &amp;&amp; parameter.isNamePresent()) {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">return</strong> parameter.getName();
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">if</strong> (!DISABLE_PARAM_NAME_DETECTION.get() &amp;&amp; <strong class="jxr_keyword">inner</strong>.isNamePresent()) {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getName();
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		}
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -438,7 +438,7 @@
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<strong class="jxr_keyword">public</strong> String getName() {
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 		String name = findName();
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">return</strong> name != <strong class="jxr_keyword">null</strong> ? name : parameter.getName();
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">return</strong> name != <strong class="jxr_keyword">null</strong> ? name : <strong class="jxr_keyword">inner</strong>.getName();
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -544,7 +544,7 @@
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 	@Override
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getModifiers() {
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">return</strong> parameter.getModifiers();
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getModifiers();
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 	}
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -571,7 +571,7 @@
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 * @see #hasName()</em>
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isNamePresent() {
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">return</strong> parameter.isNamePresent();
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isNamePresent();
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 	}
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -596,7 +596,7 @@
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 * @see Parameter#isImplicit()</em>
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isImplicit() {
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">return</strong> parameter.isImplicit();
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isImplicit();
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 	}
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -618,7 +618,7 @@
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 * @see Parameter#isSynthetic()</em>
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSynthetic() {
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">return</strong> parameter.isSynthetic();
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isSynthetic();
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 	}
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 	@Override
@@ -664,7 +664,7 @@
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">	 * @see Parameter#isVarArgs()</em>
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isVarArgs() {
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">return</strong> parameter.isVarArgs();
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isVarArgs();
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 	}
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -688,7 +688,7 @@
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 * @see Parameter#getParameterizedType()</em>
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 	<strong class="jxr_keyword">public</strong> Type getParameterizedType() {
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">return</strong> parameter.getParameterizedType();
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getParameterizedType();
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> 	}
 <a class="jxr_linenumber" name="L685" href="#L685">685</a> 
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -709,7 +709,7 @@
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * @see Parameter#getAnnotatedType()</em>
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<strong class="jxr_keyword">public</strong> AnnotatedType getAnnotatedType() {
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<strong class="jxr_keyword">return</strong> parameter.getAnnotatedType();
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getAnnotatedType();
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 	}
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -733,7 +733,7 @@
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 * @see Parameter#getDeclaredAnnotations()</em>
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L727" href="#L727">727</a> 	<strong class="jxr_keyword">public</strong> Annotation[] getDeclaredAnnotations() {
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">return</strong> parameter.getDeclaredAnnotations();
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getDeclaredAnnotations();
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> 	}
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -758,7 +758,7 @@
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">	 * @see Parameter#getAnnotationsByType(Class)</em>
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] getAnnotationsByType(Class&lt;A&gt; annotationClass) {
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		<strong class="jxr_keyword">return</strong> parameter.getAnnotationsByType(annotationClass);
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getAnnotationsByType(annotationClass);
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 	}
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -784,7 +784,7 @@
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 * @see Parameter#getDeclaredAnnotationsByType(Class)</em>
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] getDeclaredAnnotationsByType(Class&lt;A&gt; annotationClass) {
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">return</strong> parameter.getDeclaredAnnotationsByType(annotationClass);
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.getDeclaredAnnotationsByType(annotationClass);
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 	}
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 	@Override
@@ -815,7 +815,7 @@
 <a class="jxr_linenumber" name="L807" href="#L807">807</a> 	}
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> forEachAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> ap, Class&lt;A&gt; a, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		<strong class="jxr_keyword">if</strong> (executable.isConstructor) {
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		<strong class="jxr_keyword">if</strong> (executable.isConstructor()) {
 <a class="jxr_linenumber" name="L811" href="#L811">811</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 			<strong class="jxr_keyword">var</strong> annotationInfos = getAnnotationInfos();
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 			ci.forEachAnnotation(ap, a, filter, action);
