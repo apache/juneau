@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">boolean</strong> disableCaching;
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		ReflectionMap2.Builder&lt;Annotation&gt; runtimeAnnotations = ReflectionMap2.create(Annotation.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		ReflectionMap.Builder&lt;Annotation&gt; runtimeAnnotations = ReflectionMap.create(Annotation.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		Builder() {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			disableCaching = DISABLE_ANNOTATION_CACHING;
@@ -417,7 +417,7 @@
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Method,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; methodAnnotations;
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Field,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; fieldAnnotations;
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Constructor&lt;?&gt;,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; constructorAnnotations;
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ReflectionMap2&lt;Annotation&gt; runtimeAnnotations;
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ReflectionMap&lt;Annotation&gt; runtimeAnnotations;
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 	<em class="jxr_javadoccomment">/**</em>
