@@ -25,7 +25,7 @@ import org.apache.juneau.common.reflect.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public interface PlainTextMetaProvider extends AnnotationProvider {
+public interface PlainTextMetaProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified bean property.

@@ -26,7 +26,7 @@ import org.apache.juneau.common.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
  * </ul>
  */
-public interface JsonMetaProvider extends AnnotationProvider {
+public interface JsonMetaProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified bean property.

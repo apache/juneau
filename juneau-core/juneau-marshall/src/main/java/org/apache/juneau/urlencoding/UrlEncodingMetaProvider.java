@@ -26,7 +26,7 @@ import org.apache.juneau.common.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-public interface UrlEncodingMetaProvider extends AnnotationProvider {
+public interface UrlEncodingMetaProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified bean property.

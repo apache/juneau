@@ -26,7 +26,7 @@ import org.apache.juneau.common.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
  * </ul>
  */
-public interface OpenApiMetaProvider extends AnnotationProvider {
+public interface OpenApiMetaProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified bean property.

@@ -26,7 +26,7 @@ import org.apache.juneau.common.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
-public interface JsonSchemaMetaProvider extends AnnotationProvider {
+public interface JsonSchemaMetaProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified bean property.

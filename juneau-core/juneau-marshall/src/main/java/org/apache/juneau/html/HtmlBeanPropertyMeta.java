@@ -19,6 +19,7 @@ package org.apache.juneau.html;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.annotation.*;
 
@@ -75,16 +76,16 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * @param bpm The metadata of the bean property of this additional metadata.
 	 * @param mp HTML metadata provider (for finding information about other artifacts).
 	 */
-	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm, HtmlMetaProvider mp) {
+	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm, AnnotationProvider2 annotationProvider, HtmlMetaProvider mp) {
 		super(bpm);
 
 		Builder b = new Builder();
 		if (nn(bpm.getInnerField()))
-			mp.getAnnotationProvider().find(Html.class, bpm.getInnerField()).map(x -> x.inner()).filter(x -> true).forEach(x -> b.findHtmlInfo(x));
+			annotationProvider.find(Html.class, bpm.getInnerField()).map(x -> x.inner()).filter(x -> true).forEach(x -> b.findHtmlInfo(x));
 		if (nn(bpm.getGetter()))
-			mp.getAnnotationProvider().find(Html.class, bpm.getGetter()).map(x -> x.inner()).filter(x -> true).forEach(x -> b.findHtmlInfo(x));
+			annotationProvider.find(Html.class, bpm.getGetter()).map(x -> x.inner()).filter(x -> true).forEach(x -> b.findHtmlInfo(x));
 		if (nn(bpm.getSetter()))
-			mp.getAnnotationProvider().find(Html.class, bpm.getSetter()).map(x -> x.inner()).filter(x -> true).forEach(x -> b.findHtmlInfo(x));
+			annotationProvider.find(Html.class, bpm.getSetter()).map(x -> x.inner()).filter(x -> true).forEach(x -> b.findHtmlInfo(x));
 
 		this.format = b.format;
 		this.noTables = b.noTables;

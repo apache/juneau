@@ -1463,7 +1463,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			return HtmlBeanPropertyMeta.DEFAULT;
 		HtmlBeanPropertyMeta m = htmlBeanPropertyMetas.get(bpm);
 		if (m == null) {
-			m = new HtmlBeanPropertyMeta(bpm.getDelegateFor(), this);
+			m = new HtmlBeanPropertyMeta(bpm.getDelegateFor(), this.getAnnotationProvider(), this);
 			htmlBeanPropertyMetas.put(bpm, m);
 		}
 		return m;

@@ -52,7 +52,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		super(bpm);
 		this.xmlMetaProvider = mp;
 
-		bpm.forEachAnnotation(Xml.class, x -> true, x -> findXmlInfo(x, mp));
+		bpm.forEachAnnotation(Xml.class, x -> true, x -> findXmlInfo(x, bpm.getClassMeta().getBeanContext().getAnnotationProvider()));
 
 		if (namespace == null)
 			namespace = mp.getXmlClassMeta(bpm.getBeanMeta().getClassMeta()).getNamespace();
@@ -98,7 +98,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	public XmlFormat getXmlFormat() { return xmlFormat; }
 
-	private void findXmlInfo(Xml xml, AnnotationProvider mp) {
+	private void findXmlInfo(Xml xml, AnnotationProvider2 mp) {
 		if (xml == null)
 			return;
 		var bpm = getBeanPropertyMeta();
