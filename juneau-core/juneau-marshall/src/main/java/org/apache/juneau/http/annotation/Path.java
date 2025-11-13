@@ -18,6 +18,7 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.Constants.*;
 
 import java.lang.annotation.*;
 
@@ -94,7 +95,7 @@ public @interface Path {
 	 *
 	 * @return The annotation value.
 	 */
-	String def() default "";
+	String def() default NONE;
 
 	/**
 	 * Optional description for the exposed API.

@@ -24,6 +24,7 @@ import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.isEmpty;
+import static org.apache.juneau.Constants.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
 
@@ -2666,7 +2667,9 @@ public class HttpPartSchema {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
-			_default(a.def());
+			String def = a.def();
+			if (ne(NONE, def))
+				_default = def;  // Set directly to allow empty strings as valid defaults
 			parser(a.parser());
 			serializer(a.serializer());
 
@@ -2675,7 +2678,8 @@ public class HttpPartSchema {
 				allowEmptyValue();
 				required(false);
 			} else if (required == null) {
-				required(true);
+				// Path parameters with default values are not required
+				required(eq(NONE, def));
 			}
 
 			return this;

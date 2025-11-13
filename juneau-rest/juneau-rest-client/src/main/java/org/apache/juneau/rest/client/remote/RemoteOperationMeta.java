@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.remote;
 
+import static org.apache.juneau.Constants.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -233,7 +234,7 @@ public class RemoteOperationMeta {
 				.forEach(p -> {
 					String name = firstNonEmpty(p.name(), p.value());
 					String def = p.def();
-					if (isNotEmpty(name) && isNotEmpty(def)) {
+					if (isNotEmpty(name) && ne(NONE, def)) {
 						defaults.put(name, def);
 					}
 				});
@@ -245,13 +246,13 @@ public class RemoteOperationMeta {
 					for (var p : x.value()) {
 						String name = firstNonEmpty(p.name(), p.value());
 						String def = p.def();
-						if (isNotEmpty(name) && isNotEmpty(def)) {
+						if (isNotEmpty(name) && ne(NONE, def)) {
 							defaults.put(name, def);
 						}
 					}
 				});
 		}
-	
+
 		private static void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(Query.class))

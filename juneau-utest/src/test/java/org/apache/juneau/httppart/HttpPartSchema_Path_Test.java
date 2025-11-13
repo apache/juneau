@@ -814,4 +814,80 @@ class HttpPartSchema_Path_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT));
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Path with default values - required flag behavior
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Path(name="x")
+	public static class E01 {}
+
+	@Test void e01_required_noDefault() {
+		var s = HttpPartSchema.create().applyAll(Path.class, E01.class).build();
+		// Path parameters without default values should be required
+		assertTrue(s.isRequired());
+	}
+
+	@Path(name="x", def="defaultValue")
+	public static class E02 {}
+
+	@Test void e02_notRequired_withDefault() {
+		var s = HttpPartSchema.create().applyAll(Path.class, E02.class).build();
+		// Path parameters with default values should NOT be required
+		assertFalse(s.isRequired());
+		assertEquals("defaultValue", s.getDefault());
+	}
+
+	@Path(name="x", def="")
+	public static class E03 {}
+
+	@Test void e03_notRequired_withEmptyDefault() {
+		var s = HttpPartSchema.create().applyAll(Path.class, E03.class).build();
+		// Path parameters with empty string default should NOT be required
+		assertFalse(s.isRequired());
+		assertEquals("", s.getDefault());
+	}
+
+	public static class E04 {
+		public void a(
+				@Path(name = "logger", def = "") String loggerName,
+				@Path(name = "level", def = "INFO") String levelName
+			) {
+			/* no-op */
+		}
+	}
+
+	@Test void e04_multiplePathParamsWithDefaults() throws Exception {
+		var loggerParam = MethodInfo.of(E04.class.getMethod("a", String.class, String.class)).getParameter(0);
+		var levelParam = MethodInfo.of(E04.class.getMethod("a", String.class, String.class)).getParameter(1);
+
+		var loggerSchema = HttpPartSchema.create().applyAll(Path.class, loggerParam).build();
+		var levelSchema = HttpPartSchema.create().applyAll(Path.class, levelParam).build();
+
+		// Both should not be required since they have defaults
+		assertFalse(loggerSchema.isRequired());
+		assertFalse(levelSchema.isRequired());
+
+		// Verify defaults are set correctly
+		assertEquals("", loggerSchema.getDefault());
+		assertEquals("INFO", levelSchema.getDefault());
+
+		// Verify names are set correctly
+		assertEquals("logger", loggerSchema.getName());
+		assertEquals("level", levelSchema.getName());
+
+		// This should not throw the regression error:
+		// "Cannot specify a default value on a required value."
+		assertDoesNotThrow(() -> loggerSchema.validateInput("test"));
+		assertDoesNotThrow(() -> levelSchema.validateInput("DEBUG"));
+	}
+
+	@Path(value="/remainder")
+	public static class E05 {}
+
+	@Test void e05_pathRemainder_notRequired() {
+		var s = HttpPartSchema.create().applyAll(Path.class, E05.class).build();
+		// Path remainders (starting with '/') should never be required
+		assertFalse(s.isRequired());
+	}
 }

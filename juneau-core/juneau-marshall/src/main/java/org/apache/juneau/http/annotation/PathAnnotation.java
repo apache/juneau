@@ -18,6 +18,7 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.Constants.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -89,7 +90,7 @@ public class PathAnnotation {
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String name = "", value = "", def = "";
+		String name = "", value = "", def = NONE;
 
 		/**
 		 * Constructor.
@@ -274,7 +275,7 @@ public class PathAnnotation {
 	 */
 	public static Value<String> findDef(ParameterInfo pi) {
 		Value<String> n = Value.empty();
-		rstream(pi.getAllAnnotationInfos(Path.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.def())).forEach(x -> n.set(x.def()));
+		rstream(pi.getAllAnnotationInfos(Path.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.def()) && ne(NONE, x.def())).forEach(x -> n.set(x.def()));
 		return n;
 	}
 

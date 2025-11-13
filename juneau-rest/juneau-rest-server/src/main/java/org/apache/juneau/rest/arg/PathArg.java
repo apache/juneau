@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.Constants.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.annotation.PathAnnotation.*;
@@ -172,7 +173,8 @@ public class PathArg implements RestOpArg {
 		Path mergedPath = getMergedPath(paramInfo, name);
 
 		// Use merged path annotation for all lookups
-		this.def = nn(mergedPath) && ! mergedPath.def().isEmpty() ? mergedPath.def() : findDef(paramInfo).orElse(null);
+		String pathDef = nn(mergedPath) ? mergedPath.def() : null;
+		this.def = nn(pathDef) && ne(NONE, pathDef) ? pathDef : findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = nn(mergedPath) ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
 		Class<? extends HttpPartParser> pp = schema.getParser();
