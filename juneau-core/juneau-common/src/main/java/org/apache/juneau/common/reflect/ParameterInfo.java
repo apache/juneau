@@ -17,8 +17,10 @@
 package org.apache.juneau.common.reflect;
 
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -126,6 +128,69 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotationInfos(Class<A> type) {
 		return getAnnotationInfos().stream().filter(x -> x.isType(type)).map(x -> (AnnotationInfo<A>)x);
+	}
+
+	/**
+	 * Finds annotations on this parameter using the specified traversal settings.
+	 *
+	 * <p>
+	 * This method allows flexible annotation traversal across different scopes using {@link AnnotationTraversal} enums.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Search parameter only</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
+	 * 		<jv>pi</jv>.findAnnotations(MyAnnotation.<jk>class</jk>, SELF);
+	 *
+	 * 	<jc>// Search parameter and matching parameters in parent methods</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s2</jv> =
+	 * 		<jv>pi</jv>.findAnnotations(MyAnnotation.<jk>class</jk>, SELF, MATCHING_PARAMETERS);
+	 *
+	 * 	<jc>// Search parameter, matching parameters, and parameter type</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s3</jv> =
+	 * 		<jv>pi</jv>.findAnnotations(MyAnnotation.<jk>class</jk>, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
+	 * </p>
+	 *
+	 * <p>
+	 * This does NOT include runtime annotations. For runtime annotation support, use
+	 * {@link org.apache.juneau.common.reflect.AnnotationProvider}.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param traversals The traversal settings defining what to search (e.g., SELF, MATCHING_PARAMETERS, PARAMETER_TYPE).
+	 * @return A stream of annotation infos matching the specified type and traversal settings.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == AnnotationTraversal.SELF) {
+					return getAnnotationInfos(type);
+				} else if (traversal == AnnotationTraversal.MATCHING_PARAMETERS) {
+					return getMatchingParameters().stream().skip(1).flatMap(x -> x.getAnnotationInfos(type));
+				} else if (traversal == AnnotationTraversal.PARAMETER_TYPE) {
+					return getParameterType().unwrap(Value.class, Optional.class).findAnnotations(type, AnnotationTraversal.PARENTS, AnnotationTraversal.PACKAGE);
+				}
+				throw illegalArg("Invalid traversal type for parameter annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Finds annotations on this parameter using the specified traversal settings in parent-first order.
+	 *
+	 * <p>
+	 * This method is identical to {@link #findAnnotations(Class, AnnotationTraversal...)} but returns
+	 * results in parent-to-child order.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param traversals The traversal settings defining what to search (e.g., SELF, MATCHING_PARAMETERS, PARAMETER_TYPE).
+	 * @return A stream of annotation infos matching the specified type and traversal settings in parent-first order.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, AnnotationTraversal... traversals) {
+		return rstream(findAnnotations(type, traversals).toList());
 	}
 
 	/**

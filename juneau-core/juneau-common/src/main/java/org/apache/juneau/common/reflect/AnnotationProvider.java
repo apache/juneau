@@ -20,7 +20,9 @@ import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -911,5 +913,289 @@ public class AnnotationProvider {
 		var parents2 = ci.getParents();
 		for (int i = parents2.size() - 1; i >= 0; i--)
 			findDeclaredParentFirst(type, parents2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Stream-based traversal methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Streams annotations from a class using configurable traversal options.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing annotations without creating intermediate lists.
+	 * It uses {@link AnnotationTraversal} enums to configure what elements to search and in what order.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Search class only</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
+	 * 		search(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF);
+	 *
+	 * 	<jc>// Search class and parents</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s2</jv> =
+	 * 		search(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF, PARENTS);
+	 *
+	 * 	<jc>// Search class, parents, and package (parent-first order using rstream)</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s3</jv> =
+	 * 		rstream(search(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF, PARENTS, PACKAGE).toList());
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param clazz The class to search.
+	 * @param traversals The traversal options (what to search and order).
+	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("clazz", clazz);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return findDeclared(type, clazz.inner());
+				} else if (traversal == PARENTS) {
+					return clazz.getParentsAndInterfaces().stream().flatMap(x -> findDeclared(type, x.inner()));
+				} else if (traversal == PACKAGE) {
+					A packageAnn = clazz.getPackageAnnotation(type);
+					return nn(packageAnn) ? Stream.of(AnnotationInfo.of(clazz, packageAnn)) : Stream.empty();
+				}
+				throw illegalArg("Invalid traversal type for class annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a class using configurable traversal options in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findAnnotations(Class, ClassInfo, AnnotationTraversal...)} 
+	 * and reversing the result.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param clazz The class to search.
+	 * @param traversals The traversal options (what to search and order).
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
+		return rstream(findAnnotations(type, clazz, traversals).toList());
+	}
+
+	/**
+	 * Streams annotations from a method using configurable traversal options.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing method annotations without creating intermediate lists.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Search method and matching parent methods</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
+	 * 		findAnnotations(MyAnnotation.<jk>class</jk>, <jv>mi</jv>, SELF, MATCHING_METHODS);
+	 *
+	 * 	<jc>// Search method, matching methods, and return type (parent-first using findAnnotationsParentFirst)</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s2</jv> =
+	 * 		findAnnotationsParentFirst(MyAnnotation.<jk>class</jk>, <jv>mi</jv>, SELF, MATCHING_METHODS, RETURN_TYPE);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param method The method to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("method", method);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return find(type, method.inner());
+				} else if (traversal == MATCHING_METHODS) {
+					return method.getMatchingMethods().stream().skip(1).flatMap(x -> find(type, x.inner()));
+				} else if (traversal == RETURN_TYPE) {
+					return findAnnotations(type, method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
+				}
+				throw illegalArg("Invalid traversal type for method annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a method using configurable traversal options in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findAnnotations(Class, MethodInfo, AnnotationTraversal...)} 
+	 * and reversing the result.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param method The method to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
+		return rstream(findAnnotations(type, method, traversals).toList());
+	}
+
+	/**
+	 * Streams annotations from a parameter using configurable traversal options.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing parameter annotations without creating intermediate lists.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Search parameter, matching parameters, and parameter type</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
+	 * 		findAnnotations(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
+	 *
+	 * 	<jc>// Search in parent-first order using findAnnotationsParentFirst</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s2</jv> =
+	 * 		findAnnotationsParentFirst(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param parameter The parameter to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("parameter", parameter);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return parameter.getAnnotationInfos(type);
+				} else if (traversal == MATCHING_PARAMETERS) {
+					return parameter.getMatchingParameters().stream().skip(1).flatMap(x -> x.getAnnotationInfos(type));
+				} else if (traversal == PARAMETER_TYPE) {
+					return findAnnotations(type, parameter.getParameterType().unwrap(Value.class, Optional.class), PARENTS, PACKAGE);
+				}
+				throw illegalArg("Invalid traversal type for parameter annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a parameter using configurable traversal options in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findAnnotations(Class, ParameterInfo, AnnotationTraversal...)} 
+	 * and reversing the result.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param parameter The parameter to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
+		return rstream(findAnnotations(type, parameter, traversals).toList());
+	}
+
+	/**
+	 * Streams annotations from a field using configurable traversal options.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing field annotations without creating intermediate lists.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Search field annotations</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
+	 * 		findAnnotations(MyAnnotation.<jk>class</jk>, <jv>fi</jv>, SELF);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param field The field to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("field", field);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return find(type, field.inner());
+				}
+				throw illegalArg("Invalid traversal type for field annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a field using configurable traversal options in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findAnnotations(Class, FieldInfo, AnnotationTraversal...)} 
+	 * and reversing the result.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param field The field to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
+		return rstream(findAnnotations(type, field, traversals).toList());
+	}
+
+	/**
+	 * Streams annotations from a constructor using configurable traversal options.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing constructor annotations without creating intermediate lists.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Search constructor annotations</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
+	 * 		findAnnotations(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param constructor The constructor to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("constructor", constructor);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return find(type, constructor.inner());
+				}
+				throw illegalArg("Invalid traversal type for constructor annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a constructor using configurable traversal options in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findAnnotations(Class, ConstructorInfo, AnnotationTraversal...)} 
+	 * and reversing the result.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param constructor The constructor to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		return rstream(findAnnotations(type, constructor, traversals).toList());
 	}
 }
