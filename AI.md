@@ -1,12 +1,12 @@
-# Claude AI Assistant Rules for Apache Juneau
+# AI Assistant Rules for Apache Juneau
 
-This document outlines the rules, guidelines, and best practices that Claude AI follows when working on the Apache Juneau project.
+This document outlines the rules, guidelines, and best practices that AI assistants follow when working on the Apache Juneau project.
 
 **Note**: This file is referred to as "my rules" and serves as the definitive reference for all guidelines and conventions I follow when working on the Apache Juneau project.
 
-**Important**: Also read `CLAUDE_SESSION.md` to understand the current session's work context, what we're currently working on, and any recent changes or patterns established in this session.
+**Important**: Also read `AI_SESSION.md` to understand the current session's work context, what we're currently working on, and any recent changes or patterns established in this session.
 
-**Documentation Separation Rule**: `CLAUDE_SESSION.md` should only contain session-specific information that is not already covered in `CLAUDE.md`. General rules, permanent conventions, and best practices belong in `CLAUDE.md`. Session-specific work progress, current tasks, and temporary patterns belong in `CLAUDE_SESSION.md`.
+**Documentation Separation Rule**: `AI_SESSION.md` should only contain session-specific information that is not already covered in `AI.md`. General rules, permanent conventions, and best practices belong in `AI.md`. Session-specific work progress, current tasks, and temporary patterns belong in `AI_SESSION.md`.
 
 ## User Commands
 
@@ -15,9 +15,19 @@ This document outlines the rules, guidelines, and best practices that Claude AI 
 - **"s"** means **"status"** - When the user sends just "s", give a status update on what you're currently working on
 - **"TODO-x"** means **"work on this TODO"** - When the user sends just "TODO-3", "TODO-67", etc., start working on that specific TODO item from the TODO.md file
 
+### Script Shortcut Commands
+- **"start docs"** or **"start docusaurus"** - Runs `scripts/start-docusaurus.py`
+- **"revert staged"** - Runs `scripts/revert-staged.py`
+- **"revert unstaged"** - Runs `scripts/revert-unstaged.py`
+- **"start jetty"** - Runs `scripts/start-examples-rest-jetty.py`
+- **"start springboot"** - Runs `scripts/start-examples-springboot.py`
+- **"push [commit message]"** - Runs `scripts/build-and-push.py` with the commit message. Example: "push Added Algolia search"
+- **"test"** - Runs `scripts/build-and-test.py`
+
 ### Documentation Commands
-- **"store this rule in the session"** - Add the rule/information to `CLAUDE_SESSION.md` (session-specific)
-- **"store this rule in the context"** - Add the rule/information to `CLAUDE.md` (permanent/general)
+- **"save a rule"** or **"save this rule"** - Add the rule/information to `AI.md` (permanent/general)
+- **"store this rule in the session"** - Add the rule/information to `AI_SESSION.md` (session-specific)
+- **"store this rule in the context"** - Add the rule/information to `AI.md` (permanent/general)
 
 ## Core Working Principles
 
