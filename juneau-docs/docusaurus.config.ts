@@ -93,7 +93,7 @@ const config: Config = {
       // Public API key: it is safe to commit it
       apiKey: 'db9fd10aa92e0ad212e08340e37293c0',
 
-      indexName: 'juneau_docs',
+      indexName: 'juneau_docsJuneau Website',
 
       // Optional: see doc section below
       contextualSearch: true,
