@@ -11,11 +11,169 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type {GiscusProps} from '@giscus/react';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+type GiscusThemeConfig = Partial<GiscusProps>;
+
+type ThemeConfigWithGiscus = Preset.ThemeConfig & {
+  giscus?: GiscusThemeConfig;
+};
+
+const giscusConfig: GiscusThemeConfig = {
+  repo: 'apache/juneau',
+  repoId: process.env.GISCUS_REPO_ID ?? 'MDEwOlJlcG9zaXRvcnk2NDczMjY2NQ==',
+  category: process.env.GISCUS_CATEGORY ?? 'Announcements',
+  categoryId: process.env.GISCUS_CATEGORY_ID ?? 'DIC_kwDOA9u9-c4CvzB6',
+  mapping: 'pathname',
+  reactionsEnabled: '1',
+  emitMetadata: '0',
+  strict: '0',
+  inputPosition: 'top',
+  theme: 'preferred_color_scheme',
+  lang: 'en',
+  loading: 'lazy',
+};
+
+const baseThemeConfig: Preset.ThemeConfig = {
+  // Replace with your project's social card
+  image: 'img/docusaurus-social-card.jpg',
+  algolia: {
+    // The application ID provided by Algolia
+    appId: 'DVIGEYTUK7',
+
+    // Public API key: it is safe to commit it
+    apiKey: 'db9fd10aa92e0ad212e08340e37293c0',
+
+    indexName: 'juneau_docsJuneau Website',
+
+    // Optional: see doc section below
+    contextualSearch: true,
+
+    // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+    // externalUrlRegex: 'external\\.com|domain\\.com',
+
+    // Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl. You can use regexp or string in the `from` param. For example: localhost:3000 vs myCompany.com/docs
+    // replaceSearchResultPathname: {
+    //   from: '/docs/', // or as RegExp: /\/docs\//
+    //   to: '/',
+    // },
+
+    // Optional: Algolia search parameters
+    searchParameters: {},
+
+    // Optional: path for search page that enabled by default (`false` to disable it)
+    searchPagePath: 'search',
+
+    // Optional: whether the insights feature is enabled or not on Docsearch (`false` by default)
+    insights: false,
+  },
+  navbar: {
+    title: 'Apache Juneau',
+    logo: {
+      alt: 'Apache Juneau',
+      src: 'img/oakleaf.svg',
+    },
+    items: [
+      {to: '/about', label: 'About', position: 'left'},
+      {
+        type: 'docSidebar',
+        sidebarId: 'mainSidebar',
+        position: 'left',
+        label: 'Documentation',
+      },
+      {to: '/downloads', label: 'Downloads', position: 'left'},
+      {to: '/security', label: 'Security', position: 'left'},
+      {to: '/apache', label: 'Apache', position: 'left'},
+      {
+        href: 'https://github.com/apache/juneau',
+        label: 'GitHub',
+        position: 'right',
+      },
+      {
+        href: 'https://github.com/apache/juneau/wiki',
+        label: 'Wiki',
+        position: 'right',
+      },
+      {
+        href: '/javadocs/',
+        label: 'Javadocs',
+        position: 'right',
+      },
+    ],
+  },
+  footer: {
+    style: 'dark',
+    links: [
+      {
+        title: 'Documentation',
+        items: [
+          {
+            label: 'About',
+            to: '/about',
+          },
+          {
+            label: 'Downloads',
+            to: '/downloads',
+          },
+          {
+            label: 'Javadocs',
+            href: '/site/apidocs/index.html',
+          },
+        ],
+      },
+      {
+        title: 'Community',
+        items: [
+          {
+            label: 'GitHub',
+            href: 'https://github.com/apache/juneau',
+          },
+          {
+            label: 'Wiki',
+            href: 'https://github.com/apache/juneau/wiki',
+          },
+          {
+            label: 'Mailing List',
+            href: 'mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question',
+          },
+        ],
+      },
+      {
+        title: 'Apache',
+        items: [
+          {
+            label: 'Apache Foundation',
+            href: 'http://www.apache.org/foundation',
+          },
+          {
+            label: 'License',
+            href: 'http://www.apache.org/licenses/',
+          },
+          {
+            label: 'Security',
+            href: 'http://www.apache.org/security',
+          },
+        ],
+      },
+    ],
+    copyright: `Copyright © ${new Date().getFullYear()} The Apache Software Foundation. Licensed under the Apache License, Version 2.0. Apache, Apache Juneau, and the Apache feather logo are trademarks of The Apache Software Foundation.`,
+  },
+  prism: {
+    theme: {plain: {}, styles: []}, // Use custom Eclipse colors instead of default theme
+    darkTheme: {plain: {}, styles: []}, // Use custom Eclipse colors for dark mode too
+    additionalLanguages: ['java', 'json', 'yaml', 'bash', 'properties', 'ini'],
+    defaultLanguage: 'java',
+  },
+} satisfies Preset.ThemeConfig;
+
+const themeConfig: ThemeConfigWithGiscus = {
+  ...baseThemeConfig,
+  giscus: giscusConfig,
+};
 
 const config: Config = {
   title: 'Apache Juneau',
@@ -83,137 +241,7 @@ const config: Config = {
     ],
   ],
 
-  themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
-    algolia: {
-      // The application ID provided by Algolia
-      appId: 'DVIGEYTUK7',
-
-      // Public API key: it is safe to commit it
-      apiKey: 'db9fd10aa92e0ad212e08340e37293c0',
-
-      indexName: 'juneau_docsJuneau Website',
-
-      // Optional: see doc section below
-      contextualSearch: true,
-
-      // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
-      // externalUrlRegex: 'external\\.com|domain\\.com',
-
-      // Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl. You can use regexp or string in the `from` param. For example: localhost:3000 vs myCompany.com/docs
-      // replaceSearchResultPathname: {
-      //   from: '/docs/', // or as RegExp: /\/docs\//
-      //   to: '/',
-      // },
-
-      // Optional: Algolia search parameters
-      searchParameters: {},
-
-      // Optional: path for search page that enabled by default (`false` to disable it)
-      searchPagePath: 'search',
-
-      // Optional: whether the insights feature is enabled or not on Docsearch (`false` by default)
-      insights: false,
-    },
-    navbar: {
-      title: 'Apache Juneau',
-      logo: {
-        alt: 'Apache Juneau',
-        src: 'img/oakleaf.svg',
-      },
-      items: [
-        {to: '/about', label: 'About', position: 'left'},
-        {
-          type: 'docSidebar',
-          sidebarId: 'mainSidebar',
-          position: 'left',
-          label: 'Documentation',
-        },
-        {to: '/downloads', label: 'Downloads', position: 'left'},
-        {to: '/security', label: 'Security', position: 'left'},
-        {to: '/apache', label: 'Apache', position: 'left'},
-        {
-          href: 'https://github.com/apache/juneau',
-          label: 'GitHub',
-          position: 'right',
-        },
-        {
-          href: 'https://github.com/apache/juneau/wiki',
-          label: 'Wiki',
-          position: 'right',
-        },
-        {
-          href: '/javadocs/',
-          label: 'Javadocs',
-          position: 'right',
-        },
-      ],
-    },
-    footer: {
-      style: 'dark',
-      links: [
-        {
-          title: 'Documentation',
-          items: [
-            {
-              label: 'About',
-              to: '/about',
-            },
-            {
-              label: 'Downloads',
-              to: '/downloads',
-            },
-            {
-              label: 'Javadocs',
-              href: '/site/apidocs/index.html',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/apache/juneau',
-            },
-            {
-              label: 'Wiki',
-              href: 'https://github.com/apache/juneau/wiki',
-            },
-            {
-              label: 'Mailing List',
-              href: 'mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question',
-            },
-          ],
-        },
-        {
-          title: 'Apache',
-          items: [
-            {
-              label: 'Apache Foundation',
-              href: 'http://www.apache.org/foundation',
-            },
-            {
-              label: 'License',
-              href: 'http://www.apache.org/licenses/',
-            },
-            {
-              label: 'Security',
-              href: 'http://www.apache.org/security',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} The Apache Software Foundation. Licensed under the Apache License, Version 2.0. Apache, Apache Juneau, and the Apache feather logo are trademarks of The Apache Software Foundation.`,
-    },
-    prism: {
-      theme: {plain: {}, styles: []}, // Use custom Eclipse colors instead of default theme
-      darkTheme: {plain: {}, styles: []}, // Use custom Eclipse colors for dark mode too
-      additionalLanguages: ['java', 'json', 'yaml', 'bash', 'properties', 'ini'],
-      defaultLanguage: 'java',
-    },
-  } satisfies Preset.ThemeConfig,
+  themeConfig,
 };
 
 export default config;

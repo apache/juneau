@@ -531,3 +531,34 @@ java-method-private::before { color: #CCB404; content: '\25c6\00a0'; font-weight
 java-method-annotation::before { color: #00ced1; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
 java-project::before { color: #ff6b35; content: '\1f4c2\00a0'; font-weight: bolder; font-size: x-large; }
 java-doc::before { color: #4a90e2; content: '\1f4d6\00a0'; font-weight: bolder; font-size: x-large; }
+
+.giscus-comments {
+  margin-block-start: 4rem;
+  margin-block-end: 4rem;
+}
+
+.giscus-comments__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-block-end: 0.5rem;
+}
+
+.giscus-comments__divider {
+  flex: 1;
+  border: 0;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.giscus-comments__label {
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-500);
+}
+
+.giscus-comments__description {
+  margin: 0 0 1rem;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.95rem;
+}
