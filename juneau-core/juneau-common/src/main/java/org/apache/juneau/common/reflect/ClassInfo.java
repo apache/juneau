@@ -198,7 +198,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private final Supplier<List<MethodInfo>> publicMethods;  // All public methods on this class and inherited, excluding Object methods.
 	private final Supplier<List<MethodInfo>> declaredMethods;  // All methods declared directly on this class (public, protected, package, private).
 	private final Supplier<List<MethodInfo>> allMethods;  // All methods from this class and all parents, in child-to-parent order.
-	private final Supplier<List<MethodInfo>> allMethodsParentFirst;  // All methods from this class and all parents, in parent-to-child order.
+	private final Supplier<List<MethodInfo>> allMethodsTopDown;  // All methods from this class and all parents, in parent-to-child order.
 	private final Supplier<List<FieldInfo>> publicFields;  // All public fields from this class and parents, deduplicated by name (child wins).
 	private final Supplier<List<FieldInfo>> declaredFields;  // All fields declared directly on this class (public, protected, package, private).
 	private final Supplier<List<FieldInfo>> allFields;  // All fields from this class and all parents, in parent-to-child order.
@@ -242,7 +242,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		this.publicMethods = memoize(() -> opt(inner).map(x -> stream(x.getMethods()).filter(m -> ne(m.getDeclaringClass(), Object.class)).map(this::getMethod).sorted().toList()).orElse(liste()));
 		this.declaredMethods = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredMethods()).filter(m -> ne("$jacocoInit", m.getName())).map(this::getMethod).sorted().toList()).orElse(liste()));
 		this.allMethods = memoize(() -> allParents.get().stream().flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
-		this.allMethodsParentFirst = memoize(() -> rstream(getAllParents()).flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
+		this.allMethodsTopDown = memoize(() -> rstream(getAllParents()).flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
 		this.publicFields = memoize(() -> parents.get().stream().flatMap(c2 -> c2.getDeclaredFields().stream()).filter(f -> f.isPublic() && ne("$jacocoData", f.getName())).collect(toMap(FieldInfo::getName, x -> x, (a, b) -> a, LinkedHashMap::new)).values().stream().sorted().collect(toList()));
 		this.declaredFields = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> ne("$jacocoData", f.getName())).map(this::getField).sorted().toList()).orElse(liste()));
 		this.allFields = memoize(() -> rstream(allParents.get()).flatMap(c2 -> c2.getDeclaredFields().stream()).toList());
@@ -305,14 +305,59 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public List<FieldInfo> getAllFields() { return allFields.get(); }
 
 	/**
-	 * Returns all declared methods on this class and all parent classes.
+	 * Returns all declared methods on this class and all parent classes in <b>parent-to-child order</b>.
+	 *
+	 * <p>
+	 * This method returns methods of <b>all visibility levels</b> (public, protected, package-private, and private).
+	 *
+	 * <p>
+	 * Methods are returned in <b>parent-to-child order</b> - methods from the most distant ancestor appear first,
+	 * followed by methods from each subsequent child class, ending with methods from the current class. Within
+	 * each class, methods are sorted alphabetically.
+	 *
+	 * <p>
+	 * This ordering is useful for initialization hooks and lifecycle methods where parent methods should execute
+	 * before child methods (e.g., <c>@RestInit</c>, <c>@PostConstruct</c>, etc.).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Given class hierarchy:</jc>
+	 * 	<jk>class</jk> Parent {
+	 * 		<jk>void</jk> method1() {}
+	 * 		<jk>void</jk> method2() {}
+	 * 	}
+	 * 	<jk>class</jk> Child <jk>extends</jk> Parent {
+	 * 		<jk>void</jk> method3() {}
+	 * 		<jk>void</jk> method4() {}
+	 * 	}
+	 * 	
+	 * 	<jc>// getAllMethodsParentFirst() returns in parent-to-child order:</jc>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>);
+	 * 	List&lt;MethodInfo&gt; <jv>methods</jv> = <jv>ci</jv>.getAllMethodsParentFirst();
+	 * 	<jc>// Returns: [method1, method2, method3, method4]</jc>
+	 * 	<jc>//          ^Parent methods^  ^Child methods^</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link #getDeclaredMethods()} - Returns methods declared on this class only (all visibility levels)
+	 * 	<li>{@link #getAllMethods()} - Returns all methods in <b>child-to-parent order</b>
+	 * 	<li>{@link #getAllMethodsTopDown()} - Returns all methods in <b>parent-to-child order</b> ← This method
+	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Methods from {@link Object} class are excluded from the results.
+	 * 	<li>Use {@link #getAllMethods()} if you need child methods to appear before parent methods.
+	 * </ul>
 	 *
 	 * @return
-	 * 	All declared methods on this class and all parent classes.
+	 * 	All declared methods on this class and all parent classes (all visibility levels).
 	 * 	<br>Results are ordered parent-to-child, and then alphabetically per class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<MethodInfo> getAllMethodsParentFirst() { return allMethodsParentFirst.get(); }
+	public List<MethodInfo> getAllMethodsTopDown() { return allMethodsTopDown.get(); }
 
 	/**
 	 * Returns a list including this class and all parent classes and interfaces.
@@ -880,15 +925,40 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns all declared methods on this class and all parent classes.
+	 * Returns all declared methods on this class and all parent classes in <b>child-to-parent order</b>.
 	 *
 	 * <p>
 	 * This method returns methods of <b>all visibility levels</b> (public, protected, package-private, and private).
 	 *
+	 * <p>
+	 * Methods are returned in <b>child-to-parent order</b> - methods from the current class appear first,
+	 * followed by methods from the immediate parent, then grandparent, etc. Within each class, methods
+	 * are sorted alphabetically.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Given class hierarchy:</jc>
+	 * 	<jk>class</jk> Parent {
+	 * 		<jk>void</jk> method1() {}
+	 * 		<jk>void</jk> method2() {}
+	 * 	}
+	 * 	<jk>class</jk> Child <jk>extends</jk> Parent {
+	 * 		<jk>void</jk> method3() {}
+	 * 		<jk>void</jk> method4() {}
+	 * 	}
+	 * 	
+	 * 	<jc>// getAllMethods() returns in child-to-parent order:</jc>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>);
+	 * 	List&lt;MethodInfo&gt; <jv>methods</jv> = <jv>ci</jv>.getAllMethods();
+	 * 	<jc>// Returns: [method3, method4, method1, method2]</jc>
+	 * 	<jc>//          ^Child methods^   ^Parent methods^</jc>
+	 * </p>
+	 *
 	 * <h5 class='section'>Comparison with Similar Methods:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>{@link #getDeclaredMethods()} - Returns all declared methods on this class only (all visibility levels)
-	 * 	<li>{@link #getAllMethods()} - Returns all declared methods on this class and parents (all visibility levels) ← This method
+	 * 	<li>{@link #getDeclaredMethods()} - Returns methods declared on this class only (all visibility levels)
+	 * 	<li>{@link #getAllMethods()} - Returns all methods in <b>child-to-parent order</b> ← This method
+	 * 	<li>{@link #getAllMethodsTopDown()} - Returns all methods in <b>parent-to-child order</b>
 	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
 	 * </ul>
 	 *
@@ -896,6 +966,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * <ul class='spaced-list'>
 	 * 	<li>Unlike Java's {@link Class#getMethods()}, this returns methods of all visibility levels, not just public ones.
 	 * 	<li>Methods from {@link Object} class are excluded from the results.
+	 * 	<li>Use {@link #getAllMethodsTopDown()} if you need parent methods to appear before child methods.
 	 * </ul>
 	 *
 	 * @return

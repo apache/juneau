@@ -203,7 +203,7 @@ public class RestContext extends Context {
 			var r = resource.get();
 
 			// @formatter:off
-			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
+			ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
 				.filter(y -> y.hasAnnotation(annotation))
 				.forEach(y -> rstream(y.getAllAnnotations()).map(ai -> ai.cast(annotation)).filter(Objects::nonNull).map(AnnotationInfo::inner)
 					.filter(z -> predicate == null || predicate.test(z))
@@ -3781,7 +3781,7 @@ public class RestContext extends Context {
 
 			var map = CollectionUtils.<String,MethodInfo>map();
 			// @formatter:off
-			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
+			ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
 				.filter(y -> y.hasAnnotation(RestInit.class) && ! y.hasParameter(RestOpContext.Builder.class))
 				.forEach(y -> {
 					var sig = y.getSignature();
@@ -4571,7 +4571,7 @@ public class RestContext extends Context {
 
 			var initMap = CollectionUtils.<String,MethodInfo>map();
 			// @formatter:off
-			ClassInfo.ofProxy(resource.get()).getAllMethodsParentFirst().stream()
+			ClassInfo.ofProxy(resource.get()).getAllMethodsTopDown().stream()
 				.filter(y -> y.hasAnnotation(RestInit.class) && y.hasParameter(RestOpContext.Builder.class))
 				.forEach(y -> {
 					String sig = y.getSignature();
