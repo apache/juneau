@@ -233,21 +233,21 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		this.interfaces = memoize(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
 		this.allParents = memoize(() -> concat(getParents().stream(), getInterfaces().stream()).toList());
 		this.parentsAndInterfaces = memoize(this::findParentsAndInterfaces);
-		this.annotationInfos = memoize(this::findAnnotationInfos);
+		this.annotationInfos = memoize(this::findAnnotations);
 		this.recordComponents = memoize(() -> opt(inner).filter(Class::isRecord).map(x -> u(l(x.getRecordComponents()))).orElse(liste()));
 		this.genericInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getGenericInterfaces()))).orElse(liste()));
 		this.typeParameters = memoize(() -> opt(inner).map(x -> u(l((TypeVariable<?>[])x.getTypeParameters()))).orElse(liste()));
 		this.annotatedInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getAnnotatedInterfaces()))).orElse(liste()));
 		this.signers = memoize(() -> opt(inner).map(Class::getSigners).map(x -> u(l(x))).orElse(liste()));
-		this.publicMethods = memoize(() -> opt(inner).map(x -> stream(x.getMethods()).filter(m -> ne(m.getDeclaringClass(), Object.class)).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
-		this.declaredMethods = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredMethods()).filter(m -> ne("$jacocoInit", m.getName())).map(this::getMethodInfo).sorted().toList()).orElse(liste()));
+		this.publicMethods = memoize(() -> opt(inner).map(x -> stream(x.getMethods()).filter(m -> ne(m.getDeclaringClass(), Object.class)).map(this::getMethod).sorted().toList()).orElse(liste()));
+		this.declaredMethods = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredMethods()).filter(m -> ne("$jacocoInit", m.getName())).map(this::getMethod).sorted().toList()).orElse(liste()));
 		this.allMethods = memoize(() -> allParents.get().stream().flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
 		this.allMethodsParentFirst = memoize(() -> rstream(getAllParents()).flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
 		this.publicFields = memoize(() -> parents.get().stream().flatMap(c2 -> c2.getDeclaredFields().stream()).filter(f -> f.isPublic() && ne("$jacocoData", f.getName())).collect(toMap(FieldInfo::getName, x -> x, (a, b) -> a, LinkedHashMap::new)).values().stream().sorted().collect(toList()));
-		this.declaredFields = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> ne("$jacocoData", f.getName())).map(this::getFieldInfo).sorted().toList()).orElse(liste()));
+		this.declaredFields = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> ne("$jacocoData", f.getName())).map(this::getField).sorted().toList()).orElse(liste()));
 		this.allFields = memoize(() -> rstream(allParents.get()).flatMap(c2 -> c2.getDeclaredFields().stream()).toList());
-		this.publicConstructors = memoize(() -> opt(inner).map(x -> stream(x.getConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
-		this.declaredConstructors = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredConstructors()).map(this::getConstructorInfo).sorted().toList()).orElse(liste()));
+		this.publicConstructors = memoize(() -> opt(inner).map(x -> stream(x.getConstructors()).map(this::getConstructor).sorted().toList()).orElse(liste()));
+		this.declaredConstructors = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredConstructors()).map(this::getConstructor).sorted().toList()).orElse(liste()));
 		this.repeatedAnnotationMethod = memoize(this::findRepeatedAnnotationMethod);
 		this.methodCache = Cache.of(Method.class, MethodInfo.class).build();
 		this.fieldCache = Cache.of(Field.class, FieldInfo.class).build();
@@ -555,7 +555,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (inner == null)
 			return null;
 		Constructor<?> ec = inner.getEnclosingConstructor();
-		return ec == null ? null : getConstructorInfo(ec);
+		return ec == null ? null : getConstructor(ec);
 	}
 
 	/**
@@ -571,7 +571,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (inner == null)
 			return null;
 		Method em = inner.getEnclosingMethod();
-		return em == null ? null : getMethodInfo(em);
+		return em == null ? null : getMethod(em);
 	}
 
 	/**
@@ -723,7 +723,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return An unmodifiable list of all annotation infos.
 	 */
-	public List<AnnotationInfo<Annotation>> getAnnotationInfos() { return annotationInfos.get(); }
+	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotationInfos.get(); }
 
 	/**
 	 * Returns all annotations of the specified type on this class and parent classes/interfaces in child-to-parent order.
@@ -745,9 +745,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation type to filter by.
 	 * @return A stream of annotation infos of the specified type.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotationInfos(Class<A> type) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		assertArgNotNull("type", type);
-		return getAnnotationInfos().stream()
+		return getAnnotations().stream()
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}
@@ -768,7 +768,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public ClassInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+	public ClassInfo forEachAnnotation(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		var pi = getPackage();
 		if (nn(pi))
 			for (var ai : pi.getAnnotations())
@@ -1730,7 +1730,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return getAnnotationInfos(type).findFirst().isPresent();
+		return getAnnotations(type).findFirst().isPresent();
 	}
 
 	@Override
@@ -2383,7 +2383,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	<br>List is empty if no annotations are declared.
 	 * 	<br>Results are in declaration order.
 	 */
-	public List<AnnotationInfo> getDeclaredAnnotationInfos() {
+	public List<AnnotationInfo> getDeclaredAnnotations() {
 		return declaredAnnotations.get();
 	}
 
@@ -2401,7 +2401,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param x The raw constructor to wrap.
 	 * @return The cached {@link ConstructorInfo} wrapper for this constructor.
 	 */
-	ConstructorInfo getConstructorInfo(Constructor<?> x) {
+	ConstructorInfo getConstructor(Constructor<?> x) {
 		return constructorCache.get(x, () -> new ConstructorInfo(this, x));
 	}
 
@@ -2419,7 +2419,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param x The raw field to wrap.
 	 * @return The cached {@link FieldInfo} wrapper for this field.
 	 */
-	FieldInfo getFieldInfo(Field x) {
+	FieldInfo getField(Field x) {
 		return fieldCache.get(x, () -> new FieldInfo(this, x));
 	}
 
@@ -2437,7 +2437,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param x The raw method to wrap.
 	 * @return The cached {@link MethodInfo} wrapper for this method.
 	 */
-	MethodInfo getMethodInfo(Method x) {
+	MethodInfo getMethod(Method x) {
 		return methodCache.get(x, () -> new MethodInfo(this, x));
 	}
 
@@ -2458,7 +2458,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			.filter(m -> {
 				var rct = m.getReturnType().getComponentType();
 				if (rct.hasAnnotation(Repeatable.class)) {
-					var r = rct.getAnnotationInfos(Repeatable.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+					var r = rct.getAnnotations(Repeatable.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 					return r != null && r.value().equals(inner);
 				}
 				return false;
@@ -2571,7 +2571,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return A list of all annotation infos in child-to-parent order.
 	 */
-	private List<AnnotationInfo<Annotation>> findAnnotationInfos() {
+	private List<AnnotationInfo<Annotation>> findAnnotations() {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
 
 		// On all parent classes and interfaces (properly traversed to avoid duplicates)

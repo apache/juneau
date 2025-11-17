@@ -75,7 +75,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @Rest(debug) settings.
 		// @formatter:off
-		rstream(ci.getAnnotationInfos()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> {
+		rstream(ci.getAnnotations()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> {
 			String x2 = varResolver.resolve(x.debug());
 			if (! x2.isEmpty())
 				b.enable(Enablement.fromString(x2), ci.getNameFull());
@@ -86,7 +86,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		// @formatter:off
 		ci.getPublicMethods().stream()
 			.forEach(x -> 
-				rstream(x.getAllAnnotationInfos())
+				rstream(x.getAllAnnotations())
 					.filter(REST_OP_GROUP)
 					.flatMap(ai -> ai.getValue(String.class, "debug").stream())
 					.map(varResolver::resolve)
@@ -97,7 +97,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @Rest(debugOn) settings.
 		// @formatter:off
-		rstream(ci.getAnnotationInfos()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> {
+		rstream(ci.getAnnotations()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> {
 			String x2 = varResolver.resolve(x.debugOn());
 			for (var e : splitMap(x2, true).entrySet()) {
 				var k = e.getKey();

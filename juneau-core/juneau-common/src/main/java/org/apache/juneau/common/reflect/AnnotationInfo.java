@@ -45,7 +45,7 @@ import org.apache.juneau.common.annotation.*;
  * 	<jc>// Get annotation info from a class</jc>
  * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
  * 	Optional&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>ai</jv> = 
- * 		<jv>ci</jv>.getAnnotationInfos(MyAnnotation.<jk>class</jk>).findFirst();
+ * 		<jv>ci</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).findFirst();
  * 	
  * 	<jc>// Access annotation values</jc>
  * 	<jv>ai</jv>.ifPresent(<jv>x</jv> -&gt; {

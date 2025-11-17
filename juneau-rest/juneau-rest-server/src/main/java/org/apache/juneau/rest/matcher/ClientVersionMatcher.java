@@ -51,7 +51,7 @@ public class ClientVersionMatcher extends RestMatcher {
 	public ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
 		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "Client-Version" : clientVersionHeader;
 		Value<String> clientVersion = Value.empty();
-		rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).forEach(ai -> ai.getValue(String.class, "clientVersion").filter(NOT_EMPTY).ifPresent(x -> clientVersion.set(x)));
+		rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).forEach(ai -> ai.getValue(String.class, "clientVersion").filter(NOT_EMPTY).ifPresent(x -> clientVersion.set(x)));
 		range = new VersionRange(clientVersion.orElse(null));
 	}
 

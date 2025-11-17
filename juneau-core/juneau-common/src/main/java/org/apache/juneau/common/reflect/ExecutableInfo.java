@@ -182,7 +182,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The declared annotations on this executable as {@link AnnotationInfo} objects.
 	 */
-	public final List<AnnotationInfo<Annotation>> getDeclaredAnnotationInfos() { return declaredAnnotations.get(); }
+	public final List<AnnotationInfo<Annotation>> getDeclaredAnnotations() { return declaredAnnotations.get(); }
 
 	/**
 	 * Returns the declared annotations of the specified type on this executable.
@@ -192,7 +192,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return A stream of matching annotations.
 	 */
 	@SuppressWarnings("unchecked")
-	public final <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotationInfos(Class<A> type) {
+	public final <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotations(Class<A> type) {
 		assertArgNotNull("type", type);
 		return declaredAnnotations.get().stream()
 			.filter(x -> type.isInstance(x.inner()))
@@ -207,7 +207,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this executable has the specified annotation.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return getDeclaredAnnotationInfos(type).findFirst().isPresent();
+		return getDeclaredAnnotations(type).findFirst().isPresent();
 	}
 
 	/**

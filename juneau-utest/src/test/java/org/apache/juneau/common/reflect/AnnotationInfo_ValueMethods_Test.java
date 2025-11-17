@@ -56,7 +56,7 @@ public class AnnotationInfo_ValueMethods_Test {
 
 	private AnnotationInfo<TestAnnotation> getTestAnnotationInfo() {
 		var ci = ClassInfo.of(AnnotatedClass.class);
-		return ci.getAnnotationInfos(TestAnnotation.class).findFirst().orElse(null);
+		return ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 	}
 
 	@Test

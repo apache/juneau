@@ -82,7 +82,7 @@ public class HasFormDataArg implements RestOpArg {
 	 */
 	protected HasFormDataArg(ParameterInfo pi) {
 		Value<String> _name = Value.empty();
-		rstream(pi.getAllAnnotationInfos(HasFormData.class)).map(AnnotationInfo::inner).filter(HasFormDataArg::hasName).forEach(x -> _name.set(getName(x)));
+		rstream(pi.getAllAnnotations(HasFormData.class)).map(AnnotationInfo::inner).filter(HasFormDataArg::hasName).forEach(x -> _name.set(getName(x)));
 		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasFormData used without name or value"));
 		this.type = pi.getParameterType().innerType();
 	}

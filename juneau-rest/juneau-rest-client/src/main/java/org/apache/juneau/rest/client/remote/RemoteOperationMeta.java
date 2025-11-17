@@ -65,9 +65,9 @@ public class RemoteOperationMeta {
 
 			var mi = MethodInfo.of(m);
 
-			List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+			List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotations()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 			if (al.isEmpty())
-				al = rstream(mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+				al = rstream(mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotations()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 
 			var _httpMethod = Value.<String>empty();
 			var _path = Value.<String>empty();
@@ -146,7 +146,7 @@ public class RemoteOperationMeta {
 		// These handle both individual annotations and repeated annotation arrays
 
 		private void processContentDefaults(MethodInfo mi) {
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(Content.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
@@ -156,7 +156,7 @@ public class RemoteOperationMeta {
 						contentDefault = def;
 					}
 				});
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(ContentAnnotation.Array.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
@@ -171,7 +171,7 @@ public class RemoteOperationMeta {
 		}
 
 		private static void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(FormData.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
@@ -182,7 +182,7 @@ public class RemoteOperationMeta {
 						defaults.put(name, def);
 					}
 				});
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(FormDataAnnotation.Array.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
@@ -199,7 +199,7 @@ public class RemoteOperationMeta {
 
 		private static void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
 			// Check for individual @Header annotations
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(Header.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
@@ -211,7 +211,7 @@ public class RemoteOperationMeta {
 					}
 				});
 			// Check for @Header.Array (repeated annotations)
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(HeaderAnnotation.Array.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
@@ -227,7 +227,7 @@ public class RemoteOperationMeta {
 		}
 	
 		private static void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(Path.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
@@ -238,7 +238,7 @@ public class RemoteOperationMeta {
 						defaults.put(name, def);
 					}
 				});
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(PathAnnotation.Array.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
@@ -254,7 +254,7 @@ public class RemoteOperationMeta {
 		}
 
 		private static void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(Query.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
@@ -265,7 +265,7 @@ public class RemoteOperationMeta {
 						defaults.put(name, def);
 					}
 				});
-			rstream(mi.getAllAnnotationInfos())
+			rstream(mi.getAllAnnotations())
 				.map(x -> x.cast(QueryAnnotation.Array.class))
 				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)

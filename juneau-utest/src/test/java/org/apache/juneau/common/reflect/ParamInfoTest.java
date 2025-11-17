@@ -210,7 +210,7 @@ class ParamInfoTest extends TestBase {
 	}
 
 	private static <T extends Annotation> List<T> declaredAnnotations(ParameterInfo pi, Class<T> type) {
-		return pi.getAnnotationInfos(type).map(x -> x.inner()).toList();
+		return pi.getAnnotations(type).map(x -> x.inner()).toList();
 	}
 
 	@Test void getDeclaredAnnotation() {
@@ -260,34 +260,34 @@ class ParamInfoTest extends TestBase {
 	}
 
 	@Test void getAllAnnotationInfo() {
-		check("@CA(5)", cb_a1.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(5)", cb_a2.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(5)", cc_a1.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(6)", cc_a2.getAllAnnotationInfo(CA.class).inner());
+		check("@CA(5)", cb_a1.getAllAnnotation(CA.class).inner());
+		check("@CA(5)", cb_a2.getAllAnnotation(CA.class).inner());
+		check("@CA(5)", cc_a1.getAllAnnotation(CA.class).inner());
+		check("@CA(6)", cc_a2.getAllAnnotation(CA.class).inner());
 	}
 
 	@Test void getAllAnnotationInfo_notFound() {
-		var ai = cb_a1.getAllAnnotationInfo(DA.class);
+		var ai = cb_a1.getAllAnnotation(DA.class);
 		check(null, ai == null ? null : ai.inner());
 	}
 
 	@Test void getAllAnnotationInfo_constructor() {
-		check("@CA(9)", cc_cc.getAllAnnotationInfo(CA.class).inner());
+		check("@CA(9)", cc_cc.getAllAnnotation(CA.class).inner());
 	}
 
 	@Test void getAllAnnotationInfo_notFound_constructor() {
-		var ai = cc_cc.getAllAnnotationInfo(DA.class);
+		var ai = cc_cc.getAllAnnotation(DA.class);
 		check(null, ai == null ? null : ai.inner());
 	}
 
 	@Test void getAllAnnotationInfo_twice() {
-		check("@CA(5)", cb_a1.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(5)", cb_a1.getAllAnnotationInfo(CA.class).inner());
+		check("@CA(5)", cb_a1.getAllAnnotation(CA.class).inner());
+		check("@CA(5)", cb_a1.getAllAnnotation(CA.class).inner());
 	}
 
 	@Test void getAllAnnotationInfo_twice_constructor() {
-		check("@CA(9)", cc_cc.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(9)", cc_cc.getAllAnnotationInfo(CA.class).inner());
+		check("@CA(9)", cc_cc.getAllAnnotation(CA.class).inner());
+		check("@CA(9)", cc_cc.getAllAnnotation(CA.class).inner());
 	}
 
 	@Test void hasAnnotation() {
@@ -339,12 +339,12 @@ class ParamInfoTest extends TestBase {
 	}
 
 	@Test void getAllAnnotationInfo_inherited() {
-		check("@DA(0)", db_a1.getAllAnnotationInfo(DA.class).inner());
-		check("@DA(5)", dc_a1.getAllAnnotationInfo(DA.class).inner());
+		check("@DA(0)", db_a1.getAllAnnotation(DA.class).inner());
+		check("@DA(5)", dc_a1.getAllAnnotation(DA.class).inner());
 	}
 
 	@Test void getAllAnnotationInfo_inherited_notFound() {
-		var ai = db_a1.getAllAnnotationInfo(CA.class);
+		var ai = db_a1.getAllAnnotation(CA.class);
 		check(null, ai == null ? null : ai.inner());
 	}
 
@@ -652,11 +652,11 @@ class ParamInfoTest extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// getAllAnnotationInfos() / getAllAnnotationInfo()
+	// getAllAnnotations() / getAllAnnotation()
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Nested
-	class FindAnnotationInfosTests {
+	class FindAnnotationsTests {
 
 		// Annotations for testing
 		@Documented
@@ -681,7 +681,7 @@ class ParamInfoTest extends TestBase {
 		@Test void findOnParameter() throws Exception {
 			var mi = MethodInfo.of(F1.class.getMethod("test", String.class));
 			var pi = mi.getParameter(0);
-			var infos = pi.getAllAnnotationInfos(FA1.class);
+			var infos = pi.getAllAnnotations(FA1.class);
 			assertEquals(1, infos.size());
 			assertEquals(1, infos.get(0).inner().value());
 		}
@@ -689,7 +689,7 @@ class ParamInfoTest extends TestBase {
 		@Test void findOnParameter_single() throws Exception {
 			var mi = MethodInfo.of(F1.class.getMethod("test", String.class));
 			var pi = mi.getParameter(0);
-			var info = pi.getAllAnnotationInfo(FA1.class);
+			var info = pi.getAllAnnotation(FA1.class);
 			assertNotNull(info);
 			assertEquals(1, info.inner().value());
 		}
@@ -706,7 +706,7 @@ class ParamInfoTest extends TestBase {
 		@Test void findFromMatchingMethod() throws Exception {
 			var mi = MethodInfo.of(F3.class.getMethod("test", String.class));
 			var pi = mi.getParameter(0);
-			var infos = pi.getAllAnnotationInfos(FA1.class);
+			var infos = pi.getAllAnnotations(FA1.class);
 			assertEquals(1, infos.size());
 			assertEquals(2, infos.get(0).inner().value());
 		}
@@ -722,7 +722,7 @@ class ParamInfoTest extends TestBase {
 		@Test void findFromParameterType() throws Exception {
 			var mi = MethodInfo.of(F5.class.getMethod("test", F4Type.class));
 			var pi = mi.getParameter(0);
-			var infos = pi.getAllAnnotationInfos(FA1.class);
+			var infos = pi.getAllAnnotations(FA1.class);
 			assertEquals(1, infos.size());
 			assertEquals(3, infos.get(0).inner().value());
 		}
@@ -743,7 +743,7 @@ class ParamInfoTest extends TestBase {
 		@Test void findMultipleFromHierarchy() throws Exception {
 			var mi = MethodInfo.of(F8.class.getMethod("test", String.class));
 			var pi = mi.getParameter(0);
-			var infos = pi.getAllAnnotationInfos(FA1.class);
+			var infos = pi.getAllAnnotations(FA1.class);
 			assertEquals(3, infos.size());
 			assertEquals(6, infos.get(0).inner().value()); // F8
 			assertEquals(4, infos.get(1).inner().value()); // F6
@@ -753,7 +753,7 @@ class ParamInfoTest extends TestBase {
 		@Test void findMultipleFromHierarchy_single() throws Exception {
 			var mi = MethodInfo.of(F8.class.getMethod("test", String.class));
 			var pi = mi.getParameter(0);
-			var info = pi.getAllAnnotationInfo(FA1.class);
+			var info = pi.getAllAnnotation(FA1.class);
 			assertNotNull(info);
 			assertEquals(6, info.inner().value()); // Returns first (F8)
 		}
@@ -770,7 +770,7 @@ class ParamInfoTest extends TestBase {
 		@Test void findFromMatchingConstructor() throws Exception {
 			var ci = ConstructorInfo.of(F10.class.getConstructor(String.class));
 			var pi = ci.getParameter(0);
-			var infos = pi.getAllAnnotationInfos(FA1.class);
+			var infos = pi.getAllAnnotations(FA1.class);
 			assertEquals(2, infos.size());
 			assertEquals(8, infos.get(0).inner().value()); // F10
 			assertEquals(7, infos.get(1).inner().value()); // F9
@@ -784,14 +784,14 @@ class ParamInfoTest extends TestBase {
 		@Test void notFound() throws Exception {
 			var mi = MethodInfo.of(F11.class.getMethod("test", String.class));
 			var pi = mi.getParameter(0);
-			var infos = pi.getAllAnnotationInfos(FA1.class);
+			var infos = pi.getAllAnnotations(FA1.class);
 			assertEquals(0, infos.size());
 		}
 
 		@Test void notFound_single() throws Exception {
 			var mi = MethodInfo.of(F11.class.getMethod("test", String.class));
 			var pi = mi.getParameter(0);
-			var info = pi.getAllAnnotationInfo(FA1.class);
+			var info = pi.getAllAnnotation(FA1.class);
 			assertNull(info);
 		}
 
@@ -806,7 +806,7 @@ class ParamInfoTest extends TestBase {
 		@Test void parameterAnnotationBeforeTypeAnnotation() throws Exception {
 			var mi = MethodInfo.of(F13.class.getMethod("test", F12Type.class));
 			var pi = mi.getParameter(0);
-			var infos = pi.getAllAnnotationInfos(FA1.class);
+			var infos = pi.getAllAnnotations(FA1.class);
 			assertEquals(2, infos.size());
 			assertEquals(10, infos.get(0).inner().value()); // Parameter annotation first
 			assertEquals(9, infos.get(1).inner().value());  // Type annotation second
@@ -819,7 +819,7 @@ class ParamInfoTest extends TestBase {
 
 	private static <T extends Annotation> List<T> annotations(ParameterInfo pi, Class<T> a) {
 		List<T> l = list();
-		rstream(pi.getAllAnnotationInfos(a)).map(AnnotationInfo::inner).forEach(l::add);
+		rstream(pi.getAllAnnotations(a)).map(AnnotationInfo::inner).forEach(l::add);
 		return l;
 	}
 }

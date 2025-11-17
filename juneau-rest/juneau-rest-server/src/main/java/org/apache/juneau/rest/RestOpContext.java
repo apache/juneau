@@ -135,7 +135,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				var vr = context.getVarResolver();
 				var vrs = vr.createSession();
 
-				var work = AnnotationWorkList.of(vrs, rstream(mi.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
+				var work = AnnotationWorkList.of(vrs, rstream(mi.getAllAnnotations()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
 
 				apply(work);
 
@@ -1308,7 +1308,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 	private boolean matches(MethodInfo annotated) {
-		var a = annotated.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		var a = annotated.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (nn(a)) {
 			for (var n : a.methodScope()) {
 				if ("*".equals(n) || restMethod.getName().equals(n))
@@ -1319,7 +1319,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	private boolean matches(MethodInfo annotated, String beanName) {
-		var a = annotated.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		var a = annotated.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (nn(a)) {
 			if (! a.name().equals(beanName))
 				return false;
@@ -1949,7 +1949,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				httpMethod = "delete";
 			else if (mi.hasAnnotation(RestOp.class)) {
 				var _httpMethod = Value.<String>empty();
-				rstream(mi.getAllAnnotationInfos()).map(x -> x.cast(RestOp.class)).filter(Objects::nonNull).map(AnnotationInfo::inner)
+				rstream(mi.getAllAnnotations()).map(x -> x.cast(RestOp.class)).filter(Objects::nonNull).map(AnnotationInfo::inner)
 					.filter(x -> isNotEmpty(x.method()))
 					.forEach(x -> _httpMethod.set(x.method()));
 				httpMethod = _httpMethod.orElse(null);
@@ -2437,7 +2437,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var c = o.getClass();
 		var pm = headerPartMetas.get(c);
 		if (pm == null) {
-			var a = ClassInfo.of(c).getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+			var a = ClassInfo.of(c).getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 			if (nn(a)) {
 				var schema = HttpPartSchema.create(a);
 				var serializer = createPartSerializer(schema.getSerializer(), partSerializer);

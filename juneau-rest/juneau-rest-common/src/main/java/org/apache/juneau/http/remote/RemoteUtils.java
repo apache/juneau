@@ -29,7 +29,7 @@ public class RemoteUtils {
 	 * Predicate that can be used to filter annotation streams.
 	 * 
 	 * <p>
-	 * Example: <c>methodInfo.getAllAnnotationInfos().stream().filter(REMOTE_OP_GROUP)</c>
+	 * Example: <c>methodInfo.getAllAnnotations().stream().filter(REMOTE_OP_GROUP)</c>
 	 */
 	public static final Predicate<AnnotationInfo<?>> REMOTE_OP_GROUP = x -> x.isInGroup(RemoteOp.class);
 }

@@ -102,7 +102,7 @@ class XmlConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = XmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddNamespaceUrisToRoot());
@@ -113,7 +113,7 @@ class XmlConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void basicParser() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = XmlParser.create().apply(al).build().getSession();
 		check("AA", x.getEventAllocator());
 		check("true", x.isPreserveRootElement());
@@ -131,7 +131,7 @@ class XmlConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
@@ -142,7 +142,7 @@ class XmlConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void noValuesParser() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());
 		check("false", x.isPreserveRootElement());
@@ -159,7 +159,7 @@ class XmlConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
@@ -170,7 +170,7 @@ class XmlConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());
 		check("false", x.isPreserveRootElement());

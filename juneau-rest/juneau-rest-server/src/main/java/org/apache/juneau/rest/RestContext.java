@@ -205,7 +205,7 @@ public class RestContext extends Context {
 			// @formatter:off
 			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
 				.filter(y -> y.hasAnnotation(annotation))
-				.forEach(y -> rstream(y.getAllAnnotationInfos()).map(ai -> ai.cast(annotation)).filter(Objects::nonNull).map(AnnotationInfo::inner)
+				.forEach(y -> rstream(y.getAllAnnotations()).map(ai -> ai.cast(annotation)).filter(Objects::nonNull).map(AnnotationInfo::inner)
 					.filter(z -> predicate == null || predicate.test(z))
 					.forEach(z -> x.put(y.getSignature(), y.accessible().inner())));
 			// @formatter:on
@@ -215,12 +215,12 @@ public class RestContext extends Context {
 		}
 
 		private static boolean isRestBeanMethod(MethodInfo mi) {
-			var x = mi.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+			var x = mi.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 			return nn(x) && x.methodScope().length == 0;
 		}
 
 		private static boolean isRestBeanMethod(MethodInfo mi, String name) {
-			var x = mi.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+			var x = mi.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 			return nn(x) && x.methodScope().length == 0 && x.name().equals(name);
 		}
 
@@ -1767,14 +1767,14 @@ public class RestContext extends Context {
 					y -> beanStore.add(
 						x.getFieldType().inner(),
 						y,
-						RestInjectAnnotation.name(x.getDeclaredAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
+						RestInjectAnnotation.name(x.getDeclaredAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
 					)
 				));
 			// @formatter:on
 
 		rci.getAllMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
 			var rt = x.getReturnType().<Object>inner();
-			var name = RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+			var name = RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
 				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
 					// @formatter:off
 					beanStore
@@ -1786,7 +1786,7 @@ public class RestContext extends Context {
 			});
 
 			var vrs = varResolver().build().createSession();
-			var work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
+			var work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotations()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
 
 			apply(work);
 			beanContext().apply(work);
@@ -1804,7 +1804,7 @@ public class RestContext extends Context {
 				resource.get(),
 				beanStore.getBean(
 					x.getFieldType().inner(),
-					RestInjectAnnotation.name(x.getDeclaredAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
+					RestInjectAnnotation.name(x.getDeclaredAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
 					).orElse(null)
 				));
 		// @formatter:on
@@ -3851,7 +3851,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			// Apply @Rest(beanStore).
-			rstream(ClassInfo.of(resourceClass).getAnnotationInfos()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotVoid(x.beanStore())).forEach(x -> v.get().type(x.beanStore()));
+			rstream(ClassInfo.of(resourceClass).getAnnotations()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotVoid(x.beanStore())).forEach(x -> v.get().type(x.beanStore()));
 
 			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
 			// @formatter:off
@@ -3915,7 +3915,7 @@ public class RestContext extends Context {
 			// Find our config file.  It's the last non-empty @RestResource(config).
 		var vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
 		var cfv = Value.<String>empty();
-		rstream(ClassInfo.of(resourceClass).getAnnotationInfos()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.config())).forEach(x -> cfv.set(vr.resolve(x.config())));
+		rstream(ClassInfo.of(resourceClass).getAnnotations()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.config())).forEach(x -> cfv.set(vr.resolve(x.config())));
 		var cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
@@ -4581,11 +4581,11 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			for (var mi : rci.getPublicMethods()) {
-				List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+				List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {
-					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && nn(x.getDeclaringClass().getAnnotationInfos(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && nn(x.getDeclaringClass().getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null));
 					mi.getMatchingMethods().stream().filter(isRestAnnotatedInterface).forEach(x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 				}
 
@@ -5975,7 +5975,7 @@ public class RestContext extends Context {
 		int code = 500;
 
 		var ci = ClassInfo.of(e);
-		var r = ci.getAnnotationInfos(StatusCode.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		var r = ci.getAnnotations(StatusCode.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (nn(r))
 			if (r.value().length > 0)
 				code = r.value()[0];

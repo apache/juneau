@@ -146,7 +146,7 @@ import org.apache.juneau.common.collections.*;
  *
  * <h5 class='section'>Comparison with ElementInfo Methods:</h5>
  * <p>
- * The methods in this class differ from {@link ClassInfo#getAnnotationInfos()}, {@link MethodInfo#getAnnotationInfos()}, etc.:
+ * The methods in this class differ from {@link ClassInfo#getAnnotations()}, {@link MethodInfo#getAnnotations()}, etc.:
  * <ul>
  * 	<li><b>Runtime Annotations</b>: ElementInfo methods return ONLY declared annotations. This class includes runtime annotations.
  * 	<li><b>Hierarchy</b>: ElementInfo methods may have different traversal logic. This class uses a consistent approach.
@@ -466,7 +466,7 @@ public class AnnotationProvider {
 	 * </ol>
 	 *
 	 * <p>
-	 * <b>Comparison with {@link ClassInfo#getAnnotationInfos(Class)}:</b>
+	 * <b>Comparison with {@link ClassInfo#getAnnotations(Class)}:</b>
 	 * <ul>
 	 * 	<li>This method includes <b>runtime annotations</b>; ClassInfo does not
 	 * 	<li>Same traversal order (child-to-parent with interfaces and package)
@@ -494,7 +494,7 @@ public class AnnotationProvider {
 	 * This is a filtered version of {@link #find(Class)} that only returns annotations matching the specified type.
 	 *
 	 * <p>
-	 * <b>Comparison with {@link ClassInfo#getAnnotationInfos(Class)}:</b>
+	 * <b>Comparison with {@link ClassInfo#getAnnotations(Class)}:</b>
 	 * <ul>
 	 * 	<li>This method includes <b>runtime annotations</b>; ClassInfo does not
 	 * 	<li>Same traversal order (child-to-parent with interfaces and package)
@@ -531,7 +531,7 @@ public class AnnotationProvider {
 	 * </ol>
 	 *
 	 * <p>
-	 * <b>Comparison with {@link ClassInfo#getDeclaredAnnotationInfos()}:</b>
+	 * <b>Comparison with {@link ClassInfo#getDeclaredAnnotations()}:</b>
 	 * <ul>
 	 * 	<li>This method includes <b>runtime annotations</b>; ClassInfo does not
 	 * 	<li>Runtime annotations are returned first (higher priority)
@@ -634,7 +634,7 @@ public class AnnotationProvider {
 	 * </ol>
 	 *
 	 * <p>
-	 * <b>Comparison with {@link MethodInfo#getAnnotationInfos()}:</b>
+	 * <b>Comparison with {@link MethodInfo#getAnnotations()}:</b>
 	 * <ul>
 	 * 	<li>This method includes <b>runtime annotations</b>; MethodInfo does not
 	 * 	<li>Runtime annotations are inserted with higher priority at each level
@@ -681,7 +681,7 @@ public class AnnotationProvider {
 	 * </ol>
 	 *
 	 * <p>
-	 * <b>Comparison with {@link FieldInfo#getAnnotationInfos()}:</b>
+	 * <b>Comparison with {@link FieldInfo#getAnnotations()}:</b>
 	 * <ul>
 	 * 	<li>This method includes <b>runtime annotations</b>; FieldInfo does not
 	 * 	<li>Runtime annotations are returned first (higher priority)
@@ -728,7 +728,7 @@ public class AnnotationProvider {
 	 * </ol>
 	 *
 	 * <p>
-	 * <b>Comparison with {@link ConstructorInfo#getDeclaredAnnotationInfos()}:</b>
+	 * <b>Comparison with {@link ConstructorInfo#getDeclaredAnnotations()}:</b>
 	 * <ul>
 	 * 	<li>This method includes <b>runtime annotations</b>; ConstructorInfo does not
 	 * 	<li>Runtime annotations are returned first (higher priority)
@@ -818,7 +818,7 @@ public class AnnotationProvider {
 
 		MethodInfo.of(forMethod).getMatchingMethods().forEach(m -> {
 			runtimeAnnotations.findMatching(m.inner()).forEach(a -> list.add(AnnotationInfo.of(m, a)));
-			list.addAll(m.getDeclaredAnnotationInfos());
+			list.addAll(m.getDeclaredAnnotations());
 		});
 
 		return u(list);
@@ -829,7 +829,7 @@ public class AnnotationProvider {
 
 		FieldInfo fi = FieldInfo.of(forField);
 		runtimeAnnotations.findMatching(forField).forEach(a -> list.add(AnnotationInfo.of(fi, a)));
-		list.addAll(fi.getDeclaredAnnotationInfos());
+		list.addAll(fi.getDeclaredAnnotations());
 
 		return u(list);
 	}
@@ -839,7 +839,7 @@ public class AnnotationProvider {
 
 		ConstructorInfo ci = ConstructorInfo.of(forConstructor);
 		runtimeAnnotations.findMatching(forConstructor).forEach(a -> list.add(AnnotationInfo.of(ci, a)));
-		list.addAll(ci.getDeclaredAnnotationInfos());
+		list.addAll(ci.getDeclaredAnnotations());
 
 		return u(list);
 	}
@@ -878,7 +878,7 @@ public class AnnotationProvider {
 	public <A extends Annotation> void forEachMethodAnnotation(Class<A> type, MethodInfo mi, Predicate<A> filter, Consumer<A> action) {
 		forEachClassAnnotation(type, mi.getDeclaringClass(), filter, action);
 		rstream(mi.getMatchingMethods())
-			.flatMap(m -> m.getDeclaredAnnotationInfos().stream())
+			.flatMap(m -> m.getDeclaredAnnotations().stream())
 			.map(AnnotationInfo::inner)
 			.filter(type::isInstance)
 			.map(type::cast)
@@ -1072,9 +1072,9 @@ public class AnnotationProvider {
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
-					return parameter.getAnnotationInfos(type);
+					return parameter.getAnnotations(type);
 				} else if (traversal == MATCHING_PARAMETERS) {
-					return parameter.getMatchingParameters().stream().skip(1).flatMap(x -> x.getAnnotationInfos(type));
+					return parameter.getMatchingParameters().stream().skip(1).flatMap(x -> x.getAnnotations(type));
 				} else if (traversal == PARAMETER_TYPE) {
 					return findAnnotations(type, parameter.getParameterType().unwrap(Value.class, Optional.class), PARENTS, PACKAGE);
 				}

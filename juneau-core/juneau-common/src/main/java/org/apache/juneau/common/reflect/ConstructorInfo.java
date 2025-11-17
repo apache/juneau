@@ -45,7 +45,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 */
 	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> inner) {
 		assertArgNotNull("declaringClass", declaringClass);
-		return declaringClass.getConstructorInfo(inner);
+		return declaringClass.getConstructor(inner);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 */
 	public static ConstructorInfo of(Constructor<?> inner) {
 		assertArgNotNull("inner", inner);
-		return ClassInfo.of(inner.getDeclaringClass()).getConstructorInfo(inner);
+		return ClassInfo.of(inner.getDeclaringClass()).getConstructor(inner);
 	}
 
 	private final Constructor<?> inner;

@@ -71,7 +71,7 @@ class ParserConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicReaderParser() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
 		check("1", x.getDebugOutputLines());
@@ -84,7 +84,7 @@ class ParserConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void basicInputStreamParser() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
@@ -104,7 +104,7 @@ class ParserConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesReaderParser() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
@@ -117,7 +117,7 @@ class ParserConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void noValuesInputStreamParser() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
@@ -136,7 +136,7 @@ class ParserConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationReaderParser() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
@@ -149,7 +149,7 @@ class ParserConfigAnnotationTest extends TestBase {
 	}
 
 	@Test void noAnnotationInputStreamParser() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());

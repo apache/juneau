@@ -58,7 +58,7 @@ class HtmlConfigAnnotation_Test extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddKeyValueTableHeaders());
@@ -69,7 +69,7 @@ class HtmlConfigAnnotation_Test extends TestBase {
 	}
 
 	@Test void basicParser() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->HtmlParser.create().apply(al).build().createSession());
 	}
 
@@ -82,7 +82,7 @@ class HtmlConfigAnnotation_Test extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void defaultsSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
@@ -93,7 +93,7 @@ class HtmlConfigAnnotation_Test extends TestBase {
 	}
 
 	@Test void defaultsParser() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->HtmlParser.create().apply(al).build().createSession());
 	}
 
@@ -105,7 +105,7 @@ class HtmlConfigAnnotation_Test extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		var x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
@@ -116,7 +116,7 @@ class HtmlConfigAnnotation_Test extends TestBase {
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->HtmlParser.create().apply(al).build().createSession());
 	}
 }

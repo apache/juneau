@@ -49,9 +49,9 @@ public class RemoteOperationReturn {
 	RemoteOperationReturn(MethodInfo m) {
 		ClassInfo rt = m.getReturnType();
 
-		List<AnnotationInfo<?>> al = rstream(m.getAllAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+		List<AnnotationInfo<?>> al = rstream(m.getAllAnnotations()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 		if (al.isEmpty())
-			al = rstream(m.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+			al = rstream(m.getReturnType().unwrap(Value.class, Optional.class).getAnnotations()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 
 		RemoteReturn rv = null;
 

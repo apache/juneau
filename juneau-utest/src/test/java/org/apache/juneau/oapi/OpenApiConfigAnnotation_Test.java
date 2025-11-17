@@ -43,12 +43,12 @@ class OpenApiConfigAnnotation_Test extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->OpenApiSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noValuesParser() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->OpenApiParser.create().apply(al).build().createSession());
 	}
 
@@ -60,12 +60,12 @@ class OpenApiConfigAnnotation_Test extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->OpenApiSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->OpenApiParser.create().apply(al).build().createSession());
 	}
 }

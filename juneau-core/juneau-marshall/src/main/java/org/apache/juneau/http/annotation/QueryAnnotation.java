@@ -274,7 +274,7 @@ public class QueryAnnotation {
 	 */
 	public static Value<String> findDef(ParameterInfo pi) {
 		Value<String> n = Value.empty();
-		rstream(pi.getAllAnnotationInfos(Query.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.def())).forEach(x -> n.set(x.def()));
+		rstream(pi.getAllAnnotations(Query.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.def())).forEach(x -> n.set(x.def()));
 		return n;
 	}
 
@@ -286,8 +286,8 @@ public class QueryAnnotation {
 	 */
 	public static Value<String> findName(ParameterInfo pi) {
 		Value<String> n = Value.empty();
-		rstream(pi.getAllAnnotationInfos(Query.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.value())).forEach(x -> n.set(x.value()));
-		rstream(pi.getAllAnnotationInfos(Query.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.name())).forEach(x -> n.set(x.name()));
+		rstream(pi.getAllAnnotations(Query.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.value())).forEach(x -> n.set(x.value()));
+		rstream(pi.getAllAnnotations(Query.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.name())).forEach(x -> n.set(x.name()));
 		return n;
 	}
 }

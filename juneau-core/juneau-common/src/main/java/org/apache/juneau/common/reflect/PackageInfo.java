@@ -275,7 +275,7 @@ public class PackageInfo implements Annotatable {
 	 * @return This package's annotation for the specified annotation type wrapped in AnnotationInfo, or <jk>null</jk> if not present.
 	 */
 	public <A extends Annotation> AnnotationInfo<A> getAnnotation(Class<A> annotationClass) {
-		return getAnnotationInfos(annotationClass)
+		return getAnnotations(annotationClass)
 			.findFirst()
 			.orElse(null);
 	}
@@ -304,7 +304,7 @@ public class PackageInfo implements Annotatable {
 	 * @return A stream of annotation infos of the specified type, never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotationInfos(Class<A> type) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		return getAnnotations().stream()
 			.filter(ai -> type.isInstance(ai.inner()))
 			.map(ai -> (AnnotationInfo<A>)ai);

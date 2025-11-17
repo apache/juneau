@@ -187,7 +187,7 @@ class ParamInfoTest extends TestBase {
 	}
 
 	private static <T extends Annotation> List<T> declaredAnnotations(ParameterInfo pi, Class<T> type) {
-		return pi.getAnnotationInfos(type).map(x -> x.inner()).toList();
+		return pi.getAnnotations(type).map(x -> x.inner()).toList();
 	}
 
 	@Test void getDeclaredAnnotation() {
@@ -237,34 +237,34 @@ class ParamInfoTest extends TestBase {
 	}
 
 	@Test void getAllAnnotationInfo() {
-		check("@CA(5)", cb_a1.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(5)", cb_a2.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(5)", cc_a1.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(6)", cc_a2.getAllAnnotationInfo(CA.class).inner());
+		check("@CA(5)", cb_a1.getAllAnnotation(CA.class).inner());
+		check("@CA(5)", cb_a2.getAllAnnotation(CA.class).inner());
+		check("@CA(5)", cc_a1.getAllAnnotation(CA.class).inner());
+		check("@CA(6)", cc_a2.getAllAnnotation(CA.class).inner());
 	}
 
 	@Test void getAllAnnotationInfo_notFound() {
-		var ai = cb_a1.getAllAnnotationInfo(DA.class);
+		var ai = cb_a1.getAllAnnotation(DA.class);
 		check(null, ai == null ? null : ai.inner());
 	}
 
 	@Test void getAllAnnotationInfo_constructor() {
-		check("@CA(9)", cc_cc.getAllAnnotationInfo(CA.class).inner());
+		check("@CA(9)", cc_cc.getAllAnnotation(CA.class).inner());
 	}
 
 	@Test void getAllAnnotationInfo_notFound_constructor() {
-		var ai = cc_cc.getAllAnnotationInfo(DA.class);
+		var ai = cc_cc.getAllAnnotation(DA.class);
 		check(null, ai == null ? null : ai.inner());
 	}
 
 	@Test void getAllAnnotationInfo_twice() {
-		check("@CA(5)", cb_a1.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(5)", cb_a1.getAllAnnotationInfo(CA.class).inner());
+		check("@CA(5)", cb_a1.getAllAnnotation(CA.class).inner());
+		check("@CA(5)", cb_a1.getAllAnnotation(CA.class).inner());
 	}
 
 	@Test void getAllAnnotationInfo_twice_constructor() {
-		check("@CA(9)", cc_cc.getAllAnnotationInfo(CA.class).inner());
-		check("@CA(9)", cc_cc.getAllAnnotationInfo(CA.class).inner());
+		check("@CA(9)", cc_cc.getAllAnnotation(CA.class).inner());
+		check("@CA(9)", cc_cc.getAllAnnotation(CA.class).inner());
 	}
 
 	@Test void hasAnnotation() {
@@ -316,12 +316,12 @@ class ParamInfoTest extends TestBase {
 	}
 
 	@Test void getAllAnnotationInfo_inherited() {
-		check("@DA(0)", db_a1.getAllAnnotationInfo(DA.class).inner());
-		check("@DA(5)", dc_a1.getAllAnnotationInfo(DA.class).inner());
+		check("@DA(0)", db_a1.getAllAnnotation(DA.class).inner());
+		check("@DA(5)", dc_a1.getAllAnnotation(DA.class).inner());
 	}
 
 	@Test void getAllAnnotationInfo_inherited_notFound() {
-		var ai = db_a1.getAllAnnotationInfo(CA.class);
+		var ai = db_a1.getAllAnnotation(CA.class);
 		check(null, ai == null ? null : ai.inner());
 	}
 
@@ -358,7 +358,7 @@ class ParamInfoTest extends TestBase {
 
 	private static <T extends Annotation> List<T> annotations(ParameterInfo pi, Class<T> a) {
 		List<T> l = list();
-		rstream(pi.getAllAnnotationInfos(a)).map(AnnotationInfo::inner).forEach(l::add);
+		rstream(pi.getAllAnnotations(a)).map(AnnotationInfo::inner).forEach(l::add);
 		return l;
 	}
 }

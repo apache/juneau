@@ -2548,7 +2548,7 @@ public class HttpPartSchema {
 
 		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
 			if (t instanceof Class<?>) {
-				rstream(ClassInfo.of((Class<?>)t).getAnnotationInfos()).map(x -> x.cast(c)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(this::apply);
+				rstream(ClassInfo.of((Class<?>)t).getAnnotations()).map(x -> x.cast(c)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(this::apply);
 			} else if (Value.isType(t)) {
 				apply(c, getValueParameterType(t));
 			}
@@ -2565,7 +2565,7 @@ public class HttpPartSchema {
 
 		Builder apply(Class<? extends Annotation> c, ParameterInfo mpi) {
 			apply(c, mpi.getParameterType().innerType());
-			mpi.getAnnotationInfos(c).forEach(x -> apply(x.inner()));
+			mpi.getAnnotations(c).forEach(x -> apply(x.inner()));
 			return this;
 		}
 

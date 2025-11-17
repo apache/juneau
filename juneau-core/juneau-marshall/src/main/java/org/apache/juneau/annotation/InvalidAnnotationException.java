@@ -46,7 +46,7 @@ public class InvalidAnnotationException extends BasicRuntimeException {
 	@SafeVarargs
 	public static void assertNoInvalidAnnotations(MethodInfo onMethod, Class<? extends Annotation>...types) throws InvalidAnnotationException {
 		Annotation a = Arrays.stream(types)
-			.map(t -> onMethod.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null))
+			.map(t -> onMethod.getAnnotations(t).findFirst().map(AnnotationInfo::inner).orElse(null))
 			.filter(Objects::nonNull)
 			.findFirst()
 			.orElse(null);

@@ -612,7 +612,7 @@ public class RestOpAnnotation {
 	 * Predicate that can be used to filter annotation streams.
 	 * 
 	 * <p>
-	 * Example: <c>classInfo.getAnnotationInfos().stream().filter(REST_OP_GROUP)</c>
+	 * Example: <c>classInfo.getAnnotations().stream().filter(REST_OP_GROUP)</c>
 	 */
 	public static final Predicate<AnnotationInfo<?>> REST_OP_GROUP = x -> x.isInGroup(RestOp.class);
 

@@ -86,7 +86,7 @@ public class ResponseBeanMeta {
 				if (x.hasAnnotation(Header.class)) {
 					assertNoArgs(x, Header.class);
 					assertReturnNotVoid(x, Header.class);
-					var s = HttpPartSchema.create(x.getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null), x.getPropertyName());
+					var s = HttpPartSchema.create(x.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null), x.getPropertyName());
 					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, x));
 				} else if (x.hasAnnotation(StatusCode.class)) {
 					assertNoArgs(x, Header.class);
@@ -125,8 +125,8 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
-		rstream(m.getAllAnnotationInfos()).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
-		rstream(m.getAllAnnotationInfos()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(m.getAllAnnotations()).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(m.getAllAnnotations()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
 		return b.build();
 	}
 
@@ -142,8 +142,8 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
-		rstream(mpi.getAllAnnotationInfos(Response.class)).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
-		rstream(mpi.getAllAnnotationInfos(StatusCode.class)).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(mpi.getAllAnnotations(Response.class)).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(mpi.getAllAnnotations(StatusCode.class)).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
 		return b.build();
 	}
 
@@ -160,8 +160,8 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(ci.innerType());
-		rstream(ci.getAnnotationInfos()).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
-		rstream(ci.getAnnotationInfos()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(ci.getAnnotations()).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(ci.getAnnotations()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
 		return b.build();
 	}
 

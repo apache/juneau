@@ -263,7 +263,7 @@ public class PathRemainderAnnotation {
 	 */
 	public static Value<String> findDef(ParameterInfo pi) {
 		Value<String> n = Value.empty();
-		rstream(pi.getAllAnnotationInfos(PathRemainder.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.def())).forEach(x -> n.set(x.def()));
+		rstream(pi.getAllAnnotations(PathRemainder.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.def())).forEach(x -> n.set(x.def()));
 		return n;
 	}
 }

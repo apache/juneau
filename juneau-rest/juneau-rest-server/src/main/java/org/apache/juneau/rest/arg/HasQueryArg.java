@@ -82,7 +82,7 @@ public class HasQueryArg implements RestOpArg {
 	 */
 	protected HasQueryArg(ParameterInfo pi) {
 		Value<String> _name = Value.empty();
-		rstream(pi.getAllAnnotationInfos(HasQuery.class)).map(AnnotationInfo::inner).filter(HasQueryArg::hasName).forEach(x -> _name.set(getName(x)));
+		rstream(pi.getAllAnnotations(HasQuery.class)).map(AnnotationInfo::inner).filter(HasQueryArg::hasName).forEach(x -> _name.set(getName(x)));
 		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasQuery used without name or value"));
 		this.type = pi.getParameterType().innerType();
 	}

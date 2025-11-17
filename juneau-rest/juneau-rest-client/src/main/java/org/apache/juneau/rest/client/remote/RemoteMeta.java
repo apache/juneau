@@ -62,7 +62,7 @@ public class RemoteMeta {
 		var path = "";
 
 		var ci = ClassInfo.of(c);
-		var remotes = rstream(ci.getAnnotationInfos(Remote.class).toList()).map(AnnotationInfo::inner).toList();
+		var remotes = rstream(ci.getAnnotations(Remote.class).toList()).map(AnnotationInfo::inner).toList();
 
 		var versionHeader = "Client-Version";
 		var clientVersion = (String)null;

@@ -49,7 +49,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	public static FieldInfo of(ClassInfo declaringClass, Field inner) {
 		assertArgNotNull("declaringClass", declaringClass);
-		return declaringClass.getFieldInfo(inner);
+		return declaringClass.getField(inner);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	public static FieldInfo of(Field inner) {
 		assertArgNotNull("inner", inner);
-		return ClassInfo.of(inner.getDeclaringClass()).getFieldInfo(inner);
+		return ClassInfo.of(inner.getDeclaringClass()).getField(inner);
 	}
 
 	private final Field inner;
@@ -101,7 +101,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * @return An unmodifiable list of all annotations declared on this field.
 	 */
-	public List<AnnotationInfo<Annotation>> getDeclaredAnnotationInfos() {
+	public List<AnnotationInfo<Annotation>> getDeclaredAnnotations() {
 		return declaredAnnotations.get();
 	}
 
@@ -113,7 +113,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return A stream of all matching annotations.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotationInfos(Class<A> type) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotations(Class<A> type) {
 		return declaredAnnotations.get().stream()
 			.filter(x -> type.isInstance(x.inner()))
 			.map(x -> (AnnotationInfo<A>)x);

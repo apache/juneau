@@ -352,26 +352,26 @@ class MethodInfo_Test extends TestBase {
 
 	private static List<A> annotations(MethodInfo mi, Class<? extends Annotation> a) {
 		var l = new ArrayList<A>();
-		rstream(mi.getAllAnnotationInfos()).map(x -> x.cast(a)).filter(Objects::nonNull).map(AnnotationInfo::inner)
+		rstream(mi.getAllAnnotations()).map(x -> x.cast(a)).filter(Objects::nonNull).map(AnnotationInfo::inner)
 			.forEach(x -> l.add((A)x));
 		return l;
 	}
 
 	@Test void getAnnotationAny() {
-		check("@A(a1)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a1.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
-		check("@A(a2b)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a2.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
-		check("@A(a3)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a3.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
-		check("@A(a4)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a4.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
-		check(null, Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a5.getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
+		check("@A(a1)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a1.getAnnotations(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
+		check("@A(a2b)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a2.getAnnotations(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
+		check("@A(a3)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a3.getAnnotations(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
+		check("@A(a4)", Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a4.getAnnotations(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
+		check(null, Stream.<Class<? extends Annotation>>of(AX.class, A.class).map(t -> c_a5.getAnnotations(t).findFirst().map(AnnotationInfo::inner).orElse(null)).filter(Objects::nonNull).findFirst().orElse(null));
 	}
 
 	@Test void getAnnotationsMapParentFirst() {
 		// Note: Order changed after inlining - method annotations now come after class annotations
-		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a1)", rstream(c_a1.getAllAnnotationInfos()).collect(Collectors.toList()));
-		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", rstream(c_a2.getAllAnnotationInfos()).collect(Collectors.toList()));
-		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a3)", rstream(c_a3.getAllAnnotationInfos()).collect(Collectors.toList()));
-		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", rstream(c_a4.getAllAnnotationInfos()).collect(Collectors.toList()));
-		check("@PA(10),@A(C1),@A(C2),@A(C3)", rstream(c_a5.getAllAnnotationInfos()).collect(Collectors.toList()));
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a1)", rstream(c_a1.getAllAnnotations()).collect(Collectors.toList()));
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", rstream(c_a2.getAllAnnotations()).collect(Collectors.toList()));
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a3)", rstream(c_a3.getAllAnnotations()).collect(Collectors.toList()));
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", rstream(c_a4.getAllAnnotations()).collect(Collectors.toList()));
+		check("@PA(10),@A(C1),@A(C2),@A(C3)", rstream(c_a5.getAllAnnotations()).collect(Collectors.toList()));
 	}
 
 	@A("C1") @AConfig("C1")
@@ -410,11 +410,11 @@ class MethodInfo_Test extends TestBase {
 
 	@Test void getConfigAnnotationsMapParentFirst() {
 		// Note: Order changed after inlining - method annotations now come after class annotations
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a1)", rstream(cb_a1.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a2a),@AConfig(a2b)", rstream(cb_a2.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a3)", rstream(cb_a3.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", rstream(cb_a4.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", rstream(cb_a5.getAllAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).toList());
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a1)", rstream(cb_a1.getAllAnnotations()).filter(CONTEXT_APPLY_FILTER).toList());
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a2a),@AConfig(a2b)", rstream(cb_a2.getAllAnnotations()).filter(CONTEXT_APPLY_FILTER).toList());
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a3)", rstream(cb_a3.getAllAnnotations()).filter(CONTEXT_APPLY_FILTER).toList());
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", rstream(cb_a4.getAllAnnotations()).filter(CONTEXT_APPLY_FILTER).toList());
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", rstream(cb_a5.getAllAnnotations()).filter(CONTEXT_APPLY_FILTER).toList());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

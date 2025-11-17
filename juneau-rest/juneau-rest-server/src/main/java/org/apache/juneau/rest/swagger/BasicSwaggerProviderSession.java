@@ -275,7 +275,7 @@ public class BasicSwaggerProviderSession {
 
 			Method m = sm.getJavaMethod();
 			var mi = MethodInfo.of(m);
-			List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+			List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 			String mn = m.getName();
 
 			// Get the operation from the existing swagger so far.
@@ -319,7 +319,7 @@ public class BasicSwaggerProviderSession {
 			op.appendIf(ne, "deprecated",
 				firstNonEmpty(
 					resolve(ms.deprecated()),
-					(nn(m.getAnnotation(Deprecated.class)) || nn(ClassInfo.of(m.getDeclaringClass()).getAnnotationInfos(Deprecated.class).findFirst().map(AnnotationInfo::inner).orElse(null))) ? "true" : null
+					(nn(m.getAnnotation(Deprecated.class)) || nn(ClassInfo.of(m.getDeclaringClass()).getAnnotations(Deprecated.class).findFirst().map(AnnotationInfo::inner).orElse(null))) ? "true" : null
 				)
 			);
 			op.appendIf(nec, "tags",
@@ -385,8 +385,8 @@ public class BasicSwaggerProviderSession {
 				if (mpi.hasAnnotation(Content.class) || pt.hasAnnotation(Content.class)) {
 					JsonMap param = paramMap.getMap(BODY + ".body", true).append("in", BODY);
 					JsonMap schema = getSchema(param.getMap("schema"), type, bs);
-					rstream(mpi.getAllAnnotationInfos(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
-					rstream(mpi.getAllAnnotationInfos(Content.class)).map(AnnotationInfo::inner).forEach(x -> merge(schema, x.schema()));
+					rstream(mpi.getAllAnnotations(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
+					rstream(mpi.getAllAnnotations(Content.class)).map(AnnotationInfo::inner).forEach(x -> merge(schema, x.schema()));
 					pushupSchemaFields(BODY, param, schema);
 					param.appendIf(nem, "schema", schema);
 					param.putIfAbsent("required", true);
@@ -395,32 +395,32 @@ public class BasicSwaggerProviderSession {
 				} else if (mpi.hasAnnotation(Query.class) || pt.hasAnnotation(Query.class)) {
 					String name = QueryAnnotation.findName(mpi).orElse(null);
 					JsonMap param = paramMap.getMap(QUERY + "." + name, true).append("name", name).append("in", QUERY);
-					rstream(mpi.getAllAnnotationInfos(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
-					rstream(mpi.getAllAnnotationInfos(Query.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
+					rstream(mpi.getAllAnnotations(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
+					rstream(mpi.getAllAnnotations(Query.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
 					pushupSchemaFields(QUERY, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, QUERY, type);
 
 				} else if (mpi.hasAnnotation(FormData.class) || pt.hasAnnotation(FormData.class)) {
 					String name = FormDataAnnotation.findName(mpi).orElse(null);
 					JsonMap param = paramMap.getMap(FORM_DATA + "." + name, true).append("name", name).append("in", FORM_DATA);
-					rstream(mpi.getAllAnnotationInfos(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
-					rstream(mpi.getAllAnnotationInfos(FormData.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
+					rstream(mpi.getAllAnnotations(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
+					rstream(mpi.getAllAnnotations(FormData.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
 					pushupSchemaFields(FORM_DATA, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, FORM_DATA, type);
 
 				} else if (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class)) {
 					String name = HeaderAnnotation.findName(mpi).orElse(null);
 					JsonMap param = paramMap.getMap(HEADER + "." + name, true).append("name", name).append("in", HEADER);
-					rstream(mpi.getAllAnnotationInfos(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
-					rstream(mpi.getAllAnnotationInfos(Header.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
+					rstream(mpi.getAllAnnotations(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
+					rstream(mpi.getAllAnnotations(Header.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
 					pushupSchemaFields(HEADER, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, HEADER, type);
 
 				} else if (mpi.hasAnnotation(Path.class) || pt.hasAnnotation(Path.class)) {
 					String name = PathAnnotation.findName(mpi).orElse(null);
 					JsonMap param = paramMap.getMap(PATH + "." + name, true).append("name", name).append("in", PATH);
-					rstream(mpi.getAllAnnotationInfos(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
-					rstream(mpi.getAllAnnotationInfos(Path.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
+					rstream(mpi.getAllAnnotations(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
+					rstream(mpi.getAllAnnotations(Path.class)).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
 					pushupSchemaFields(PATH, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, PATH, type);
 					param.putIfAbsent("required", true);
@@ -444,7 +444,7 @@ public class BasicSwaggerProviderSession {
 							JsonMap om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
 							JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-							rstream(eci.getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
+							rstream(eci.getAnnotations()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
 							pushupSchemaFields(RESPONSE, om, schema);
 							om.appendIf(nem, "schema", schema);
 					}
@@ -452,15 +452,15 @@ public class BasicSwaggerProviderSession {
 				List<MethodInfo> methods = eci.getAllMethods();
 				for (int i = methods.size() - 1; i >= 0; i--) {
 					MethodInfo ecmi = methods.get(i);
-						Header a = ecmi.getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+						Header a = ecmi.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (a == null)
-							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (nn(a) && ! isMulti(a)) {
 							String ha = a.name();
 							for (var code : codes) {
 								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
 								context.getAnnotationProvider().forEachMethodAnnotation(Schema.class, ecmi, x -> true, x -> merge(header, x));
-								rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
+								rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotations()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Value.class, Optional.class).innerType(), bs));
 							}
 						}
@@ -490,13 +490,13 @@ public class BasicSwaggerProviderSession {
 				for (int i = methods.size() - 1; i >= 0; i--) {
 					MethodInfo ecmi = methods.get(i);
 						if (ecmi.hasAnnotation(Header.class)) {
-							Header a = ecmi.getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+							Header a = ecmi.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 							String ha = a.name();
 							if (! isMulti(a)) {
 								for (var code : codes) {
 									JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
 									context.getAnnotationProvider().forEachMethodAnnotation(Schema.class, ecmi, x -> true, x -> merge(header, x));
-									rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
+									rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotations()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
 									merge(header, a.schema());
 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 								}
@@ -508,7 +508,7 @@ public class BasicSwaggerProviderSession {
 				JsonMap om = responses.getMap("200", true);
 				var pt2 = ClassInfo.of(m.getGenericReturnType());
 				JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-				rstream(pt2.getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
+				rstream(pt2.getAnnotations()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
 				pushupSchemaFields(RESPONSE, om, schema);
 				om.appendIf(nem, "schema", schema);
 				addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
@@ -521,11 +521,11 @@ public class BasicSwaggerProviderSession {
 
 				if (pt.is(Value.class) && (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class))) {
 					List<Header> la = list();
-					rstream(mpi.getAllAnnotationInfos(Header.class)).map(AnnotationInfo::inner).forEach(x -> la.add(x));
-					rstream(pt.getAnnotationInfos()).map(x -> x.cast(Header.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la.add(x));
+					rstream(mpi.getAllAnnotations(Header.class)).map(AnnotationInfo::inner).forEach(x -> la.add(x));
+					rstream(pt.getAnnotations()).map(x -> x.cast(Header.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la.add(x));
 					List<StatusCode> la2 = list();
-					rstream(mpi.getAllAnnotationInfos(StatusCode.class)).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
-					rstream(pt.getAnnotationInfos()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
+					rstream(mpi.getAllAnnotations(StatusCode.class)).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
+					rstream(pt.getAnnotations()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 200);
 					String name = HeaderAnnotation.findName(mpi).orElse(null);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
@@ -533,7 +533,7 @@ public class BasicSwaggerProviderSession {
 						if (! isMulti(a)) {
 							for (var code : codes) {
 								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
-								rstream(mpi.getAllAnnotationInfos(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
+								rstream(mpi.getAllAnnotations(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
 								merge(header, a.schema());
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, type, bs));
 							}
@@ -542,11 +542,11 @@ public class BasicSwaggerProviderSession {
 	
 				} else if (mpi.hasAnnotation(Response.class) || pt.hasAnnotation(Response.class)) {
 					List<Response> la = list();
-					rstream(mpi.getAllAnnotationInfos(Response.class)).map(AnnotationInfo::inner).forEach(x -> la.add(x));
-					rstream(pt.getAnnotationInfos()).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la.add(x));
+					rstream(mpi.getAllAnnotations(Response.class)).map(AnnotationInfo::inner).forEach(x -> la.add(x));
+					rstream(pt.getAnnotations()).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la.add(x));
 					List<StatusCode> la2 = list();
-					rstream(mpi.getAllAnnotationInfos(StatusCode.class)).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
-					rstream(pt.getAnnotationInfos()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
+					rstream(mpi.getAllAnnotations(StatusCode.class)).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
+					rstream(pt.getAnnotations()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 200);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (var a : la) {
@@ -554,7 +554,7 @@ public class BasicSwaggerProviderSession {
 							JsonMap om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
 							JsonMap schema = getSchema(om.getMap("schema"), type, bs);
-							rstream(mpi.getAllAnnotationInfos(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
+							rstream(mpi.getAllAnnotations(Schema.class)).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
 							la.forEach(x -> merge(schema, x.schema()));
 							pushupSchemaFields(RESPONSE, om, schema);
 							om.appendIf(nem, "schema", schema);

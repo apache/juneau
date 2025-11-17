@@ -84,7 +84,7 @@ public class QueryArg implements RestOpArg {
 			return null;
 
 		// Find @Rest annotation on the class
-		Rest restAnnotation = declaringClass.getAnnotationInfos(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		Rest restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (restAnnotation == null)
 			return null;
 
@@ -102,9 +102,9 @@ public class QueryArg implements RestOpArg {
 		return null;
 
 	// Get parameter-level @Query
-	Query paramQuery = opt(pi.getAllAnnotationInfo(Query.class)).map(x -> x.inner()).orElse(null);
+	Query paramQuery = opt(pi.getAllAnnotation(Query.class)).map(x -> x.inner()).orElse(null);
 	if (paramQuery == null)
-		paramQuery = pi.getParameterType().getAnnotationInfos(Query.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		paramQuery = pi.getParameterType().getAnnotations(Query.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 
 		if (paramQuery == null) {
 			// No parameter-level @Query, use class-level as-is

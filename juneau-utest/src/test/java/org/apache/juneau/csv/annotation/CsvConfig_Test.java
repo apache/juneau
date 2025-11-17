@@ -39,12 +39,12 @@ class CsvConfig_Test extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void defaultsSerializer() {
-		var al = AnnotationWorkList.of(rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void defaultsParser() {
-		var al = AnnotationWorkList.of(rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->CsvParser.create().apply(al).build());
 	}
 
@@ -56,12 +56,12 @@ class CsvConfig_Test extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		var al = AnnotationWorkList.of(rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void noAnnotationParser() {
-		var al = AnnotationWorkList.of(rstream(b.getAnnotationInfos()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
 		assertDoesNotThrow(()->CsvParser.create().apply(al).build());
 	}
 }

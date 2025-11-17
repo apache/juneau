@@ -48,7 +48,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return A new {@link MethodInfo} object.
 	 */
 	public static MethodInfo of(Class<?> declaringClass, Method inner) {
-		return ClassInfo.of(declaringClass).getMethodInfo(inner);
+		return ClassInfo.of(declaringClass).getMethod(inner);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public static MethodInfo of(ClassInfo declaringClass, Method inner) {
 		assertArgNotNull("declaringClass", declaringClass);
-		return declaringClass.getMethodInfo(inner);
+		return declaringClass.getMethod(inner);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public static MethodInfo of(Method inner) {
 		assertArgNotNull("inner", inner);
-		return ClassInfo.of(inner.getDeclaringClass()).getMethodInfo(inner);
+		return ClassInfo.of(inner.getDeclaringClass()).getMethod(inner);
 	}
 
 	private final Method inner;
@@ -91,7 +91,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		this.inner = inner;
 		this.returnType = memoize(() -> ClassInfo.of(inner.getReturnType(), inner.getGenericReturnType()));
 		this.matchingMethods = memoize(this::findMatchingMethods);
-		this.annotationInfos = memoize(() -> getMatchingMethods().stream().flatMap(m -> m.getDeclaredAnnotationInfos().stream()).toList());
+		this.annotationInfos = memoize(() -> getMatchingMethods().stream().flatMap(m -> m.getDeclaredAnnotations().stream()).toList());
 		this.allAnnotationInfos = memoize(this::findAllAnnotationInfos);
 	}
 
@@ -152,7 +152,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return A list of all annotations on this method and overridden methods.
 	 */
-	public List<AnnotationInfo<Annotation>> getAnnotationInfos() {
+	public List<AnnotationInfo<Annotation>> getAnnotations() {
 		return annotationInfos.get();
 	}
 
@@ -164,9 +164,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return A stream of matching annotation infos.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotationInfos(Class<A> type) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		assertArgNotNull("type", type);
-		return getAnnotationInfos().stream()
+		return getAnnotations().stream()
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}
@@ -186,18 +186,18 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public MethodInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+	public MethodInfo forEachAnnotation(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		var c = getDeclaringClass();
-		forEachDeclaredAnnotationInfo(c.getPackage(), filter, action);
+		forEachDeclaredAnnotation(c.getPackage(), filter, action);
 		var interfaces = c.getInterfaces();
 		for (int i = interfaces.size() - 1; i >= 0; i--) {
-			forEachDeclaredAnnotationInfo(interfaces.get(i), filter, action);
-			forEachDeclaredMethodAnnotationInfo(this, interfaces.get(i), filter, action);
+			forEachDeclaredAnnotation(interfaces.get(i), filter, action);
+			forEachDeclaredMethodAnnotation(this, interfaces.get(i), filter, action);
 		}
 		var parents = c.getParents();
 		for (int i = parents.size() - 1; i >= 0; i--) {
-			forEachDeclaredAnnotationInfo(parents.get(i), filter, action);
-			forEachDeclaredMethodAnnotationInfo(this, parents.get(i), filter, action);
+			forEachDeclaredAnnotation(parents.get(i), filter, action);
+			forEachDeclaredMethodAnnotation(this, parents.get(i), filter, action);
 		}
 		return this;
 	}
@@ -216,14 +216,14 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public MethodInfo forEachAnnotationInfoMethodOnly(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+	public MethodInfo forEachAnnotationMethodOnly(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		var c = getDeclaringClass();
 		var interfaces = c.getInterfaces();
 		for (int i = interfaces.size() - 1; i >= 0; i--)
-			forEachDeclaredMethodAnnotationInfo(this, interfaces.get(i), filter, action);
+			forEachDeclaredMethodAnnotation(this, interfaces.get(i), filter, action);
 		var parents = c.getParents();
 		for (int i = parents.size() - 1; i >= 0; i--)
-			forEachDeclaredMethodAnnotationInfo(this, parents.get(i), filter, action);
+			forEachDeclaredMethodAnnotation(this, parents.get(i), filter, action);
 		return this;
 	}
 
@@ -319,7 +319,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return A list of all annotations.
 	 */
-	public List<AnnotationInfo<Annotation>> getAllAnnotationInfos() {
+	public List<AnnotationInfo<Annotation>> getAllAnnotations() {
 		return allAnnotationInfos.get();
 	}
 
@@ -327,16 +327,16 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * Returns all annotations of the specified type on the declaring class, this method and parent overridden methods, return type, and declaring class's package.
 	 *
 	 * <p>
-	 * 	See {@link #getAllAnnotationInfos()} for ordering details.
+	 * 	See {@link #getAllAnnotations()} for ordering details.
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to filter by.
 	 * @return A stream of matching annotation infos.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAllAnnotationInfos(Class<A> type) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAllAnnotations(Class<A> type) {
 		assertArgNotNull("type", type);
-		return getAllAnnotationInfos().stream()
+		return getAllAnnotations().stream()
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}
@@ -383,24 +383,24 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		var returnType = getReturnType().unwrap(Value.class, Optional.class);
 
 		// 1. Current method
-		list.addAll(getDeclaredAnnotationInfos());
+		list.addAll(getDeclaredAnnotations());
 
 		// 2. Parent methods in child-to-parent order
-		getMatchingMethods().stream().skip(1).forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
+		getMatchingMethods().stream().skip(1).forEach(m -> list.addAll(m.getDeclaredAnnotations()));
 
 		// 3. Return type on current
-		returnType.getDeclaredAnnotationInfos().forEach(x -> list.add(x));
+		returnType.getDeclaredAnnotations().forEach(x -> list.add(x));
 
 		// 4. Return type on parent methods in child-to-parent order
 		getMatchingMethods().stream().skip(1).forEach(m -> {
-			m.getReturnType().unwrap(Value.class, Optional.class).getDeclaredAnnotationInfos().forEach(x -> list.add(x));
+			m.getReturnType().unwrap(Value.class, Optional.class).getDeclaredAnnotations().forEach(x -> list.add(x));
 		});
 
 		// 5. Current class
-		declaringClass.getDeclaredAnnotationInfos().forEach(x -> list.add(x));
+		declaringClass.getDeclaredAnnotations().forEach(x -> list.add(x));
 
 		// 6. Parent classes/interfaces in child-to-parent order
-		declaringClass.getParentsAndInterfaces().stream().skip(1).forEach(c -> c.getDeclaredAnnotationInfos().forEach(x -> list.add(x)));
+		declaringClass.getParentsAndInterfaces().stream().skip(1).forEach(c -> c.getDeclaredAnnotations().forEach(x -> list.add(x)));
 
 		// 7. Package annotations
 		var pkg = declaringClass.getPackage();
@@ -584,7 +584,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@SafeVarargs
 	public final boolean hasAnyAnnotations(Class<? extends Annotation>...types) {
-		return getAnnotationInfos().stream().anyMatch(ai -> stream(types).anyMatch(t -> t.isInstance(ai.inner())));
+		return getAnnotations().stream().anyMatch(ai -> stream(types).anyMatch(t -> t.isInstance(ai.inner())));
 	}
 
 	/**
@@ -846,27 +846,27 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods for forEachAnnotationInfo
+	// Helper methods for forEachAnnotation
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+	private static void forEachDeclaredAnnotation(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (nn(ci))
-			for (var ai : ci.getDeclaredAnnotationInfos())
+			for (var ai : ci.getDeclaredAnnotations())
 				if (filter == null || filter.test(ai))
 					action.accept(ai);
 	}
 
-	private static void forEachDeclaredAnnotationInfo(PackageInfo pi, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+	private static void forEachDeclaredAnnotation(PackageInfo pi, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (nn(pi))
 			for (var ai : pi.getAnnotations())
 				if (filter == null || filter.test(ai))
 					action.accept(ai);
 	}
 
-	private static void forEachDeclaredMethodAnnotationInfo(MethodInfo methodInfo, ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+	private static void forEachDeclaredMethodAnnotation(MethodInfo methodInfo, ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		MethodInfo mi = methodInfo.findMatchingOnClass(ci);
 		if (nn(mi))
-			mi.getDeclaredAnnotationInfos().forEach(ai -> {
+			mi.getDeclaredAnnotations().forEach(ai -> {
 				if (filter == null || filter.test(ai))
 					action.accept(ai);
 			});
