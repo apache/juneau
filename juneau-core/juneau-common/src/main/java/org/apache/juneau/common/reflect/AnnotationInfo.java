@@ -19,7 +19,6 @@ package org.apache.juneau.common.reflect;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -83,24 +82,6 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
-	 * Performs an action on all matching values on this annotation.
-	 *
-	 * @param <V> The annotation field type.
-	 * @param type The annotation field type.
-	 * @param name The annotation field name.
-	 * @param test A predicate to apply to the value to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the value.
-	 * @return This object.
-	 */
-	@SuppressWarnings("unchecked")
-	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
-		methods.get().stream()
-			.filter(m -> eq(m.getName(), name) && eq(m.getReturnType().inner(), type))
-			.forEach(m -> safe(() -> consumeIf(test, action, (V)m.invoke(a))));
-		return this;
-	}
-
-	/**
 	 * Returns the class name of the annotation.
 	 *
 	 * @return The simple class name of the annotation.
@@ -113,15 +94,13 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param <V> The annotation field type.
 	 * @param type The annotation field type.
 	 * @param name The annotation field name.
-	 * @param test A predicate to apply to the value to determine if value should be used.  Can be <jk>null</jk>.
-	 * @return This object.
+	 * @return An optional containing the value, or empty if not found.
 	 */
 	@SuppressWarnings("unchecked")
-	public <V> Optional<V> getValue(Class<V> type, String name, Predicate<V> test) {
+	public <V> Optional<V> getValue(Class<V> type, String name) {
 		return methods.get().stream()
 			.filter(m -> eq(m.getName(), name) && eq(m.getReturnType().inner(), type))
 			.map(m -> safe(() -> (V)m.invoke(a)))
-			.filter(v -> test(test, v))
 			.findFirst();
 	}
 

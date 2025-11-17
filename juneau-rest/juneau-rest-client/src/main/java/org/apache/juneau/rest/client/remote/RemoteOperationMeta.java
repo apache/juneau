@@ -72,8 +72,8 @@ public class RemoteOperationMeta {
 			var _httpMethod = Value.<String>empty();
 			var _path = Value.<String>empty();
 			al.stream().map(x -> x.getName().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
-			al.forEach(ai -> ai.forEachValue(String.class, "method", NOT_EMPTY, x -> _httpMethod.set(x.trim().toUpperCase())));
-			al.forEach(ai -> ai.forEachValue(String.class, "path", NOT_EMPTY, x -> _path.set(x.trim())));
+			al.forEach(ai -> ai.getValue(String.class, "method").filter(NOT_EMPTY).ifPresent(x -> _httpMethod.set(x.trim().toUpperCase())));
+			al.forEach(ai -> ai.getValue(String.class, "path").filter(NOT_EMPTY).ifPresent(x -> _path.set(x.trim())));
 			httpMethod = _httpMethod.orElse("").trim();
 			path = _path.orElse("").trim();
 
@@ -90,8 +90,8 @@ public class RemoteOperationMeta {
 					path = v.substring(i).trim();
 				}
 			} else {
-				al.stream().filter(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value", NOT_EMPTY).orElse("").trim()))
-					.forEach(x -> value.set(x.getValue(String.class, "value", NOT_EMPTY).get().trim()));
+				al.stream().filter(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value").filter(NOT_EMPTY).orElse("").trim()))
+					.forEach(x -> value.set(x.getValue(String.class, "value").filter(NOT_EMPTY).get().trim()));
 				if (value.isPresent())
 					path = value.get();
 			}
