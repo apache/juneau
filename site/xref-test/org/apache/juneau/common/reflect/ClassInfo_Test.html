@@ -1044,27 +1044,27 @@
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 	@Test <strong class="jxr_keyword">void</strong> getWrapperIfPrimitive() {
 <a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; primitives.size(); i++)
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive(), primitiveWrappers.get(i));
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		assertEquals(of(String.<strong class="jxr_keyword">class</strong>).getWrapperIfPrimitive(), String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>(), primitiveWrappers.get(i));
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		assertEquals(of(String.<strong class="jxr_keyword">class</strong>).getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>(), String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 	}
 <a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 
 <a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 	@Test <strong class="jxr_keyword">void</strong> getWrapperIfPrimitive_onType() {
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 		assertEquals(<span class="jxr_string">"class org.apache.juneau.common.reflect.ClassInfo_Test$A1"</span>, aTypeInfo.getWrapperIfPrimitive().toString());
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		assertEquals(<span class="jxr_string">"interface java.util.Map"</span>, pTypeInfo.getWrapperIfPrimitive().toString());
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 		assertEquals(<span class="jxr_string">"interface java.util.Map"</span>, pTypeDimensionalInfo.getWrapperIfPrimitive().toString());
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 		assertEquals(<span class="jxr_string">"class java.util.AbstractMap"</span>, pTypeGenericInfo.getWrapperIfPrimitive().toString());
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		assertEquals(<strong class="jxr_keyword">null</strong>, pTypeGenericArgInfo.getWrapperIfPrimitive());
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 		assertEquals(<span class="jxr_string">"class org.apache.juneau.common.reflect.ClassInfo_Test$A1"</span>, aTypeInfo.getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>().toString());
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		assertEquals(<span class="jxr_string">"interface java.util.Map"</span>, pTypeInfo.getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>().toString());
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 		assertEquals(<span class="jxr_string">"interface java.util.Map"</span>, pTypeDimensionalInfo.getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>().toString());
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 		assertEquals(<span class="jxr_string">"class java.util.AbstractMap"</span>, pTypeGenericInfo.getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>().toString());
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		assertEquals(<strong class="jxr_keyword">null</strong>, pTypeGenericArgInfo.getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 	}
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 
-<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 	@Test <strong class="jxr_keyword">void</strong> getWrapperInfoIfPrimitive() {
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 	@Test <strong class="jxr_keyword">void</strong> getWrapperIfPrimitive_asClassInfo() {
 <a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; primitives.size(); i++)
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 			assertEquals(of(primitives.get(i)).getWrapperInfoIfPrimitive().<strong class="jxr_keyword">inner</strong>(), primitiveWrappers.get(i));
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		assertEquals(of(String.<strong class="jxr_keyword">class</strong>).getWrapperInfoIfPrimitive().<strong class="jxr_keyword">inner</strong>(), String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>(), primitiveWrappers.get(i));
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		assertEquals(of(String.<strong class="jxr_keyword">class</strong>).getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>(), String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 	}
 <a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 	@Test <strong class="jxr_keyword">void</strong> getWrapperInfoIfPrimitive_onType() {
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 		assertEquals(aTypeInfo.getWrapperInfoIfPrimitive().innerType(), aType);
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		check(<span class="jxr_string">"V"</span>, pTypeGenericArgInfo.getWrapperInfoIfPrimitive());
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 	@Test <strong class="jxr_keyword">void</strong> getWrapperIfPrimitive_asClassInfo_onType() {
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 		assertEquals(aTypeInfo.getWrapperIfPrimitive().innerType(), aType);
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		check(<span class="jxr_string">"V"</span>, pTypeGenericArgInfo.getWrapperIfPrimitive());
 <a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 	}
 <a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 
 <a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 	@Test <strong class="jxr_keyword">void</strong> getPrimitiveDefault() {
@@ -1286,7 +1286,7 @@
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 	}
 <a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 
 <a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 	@Test <strong class="jxr_keyword">void</strong> isParentOf_<strong class="jxr_keyword">null</strong>() {
-<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		assertFalse(ka.isParentOf(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		assertFalse(ka.isParentOf((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 	}
 <a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 
 <a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 	@Test <strong class="jxr_keyword">void</strong> isParentOf_type() {
