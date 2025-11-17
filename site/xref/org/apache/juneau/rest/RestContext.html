@@ -211,7 +211,7 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">var</strong> r = resource.get();
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 				.filter(y -&gt; y.hasAnnotation(annotation))
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 				.forEach(y -&gt; rstream(y.getAllAnnotations()).map(ai -&gt; ai.<strong class="jxr_keyword">cast</strong>(annotation)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 					.filter(z -&gt; predicate == <strong class="jxr_keyword">null</strong> || predicate.test(z))
@@ -3789,7 +3789,7 @@
 <a class="jxr_linenumber" name="L3781" href="#L3781">3781</a> 
 <a class="jxr_linenumber" name="L3782" href="#L3782">3782</a> 			<strong class="jxr_keyword">var</strong> map = CollectionUtils.&lt;String,MethodInfo&gt;map();
 <a class="jxr_linenumber" name="L3783" href="#L3783">3783</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L3784" href="#L3784">3784</a> 			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
+<a class="jxr_linenumber" name="L3784" href="#L3784">3784</a> 			ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
 <a class="jxr_linenumber" name="L3785" href="#L3785">3785</a> 				.filter(y -&gt; y.hasAnnotation(RestInit.<strong class="jxr_keyword">class</strong>) &amp;&amp; ! y.hasParameter(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L3786" href="#L3786">3786</a> 				.forEach(y -&gt; {
 <a class="jxr_linenumber" name="L3787" href="#L3787">3787</a> 					<strong class="jxr_keyword">var</strong> sig = y.getSignature();
@@ -4579,7 +4579,7 @@
 <a class="jxr_linenumber" name="L4571" href="#L4571">4571</a> 
 <a class="jxr_linenumber" name="L4572" href="#L4572">4572</a> 			<strong class="jxr_keyword">var</strong> initMap = CollectionUtils.&lt;String,MethodInfo&gt;map();
 <a class="jxr_linenumber" name="L4573" href="#L4573">4573</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L4574" href="#L4574">4574</a> 			ClassInfo.ofProxy(resource.get()).getAllMethodsParentFirst().stream()
+<a class="jxr_linenumber" name="L4574" href="#L4574">4574</a> 			ClassInfo.ofProxy(resource.get()).getAllMethodsTopDown().stream()
 <a class="jxr_linenumber" name="L4575" href="#L4575">4575</a> 				.filter(y -&gt; y.hasAnnotation(RestInit.<strong class="jxr_keyword">class</strong>) &amp;&amp; y.hasParameter(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L4576" href="#L4576">4576</a> 				.forEach(y -&gt; {
 <a class="jxr_linenumber" name="L4577" href="#L4577">4577</a> 					String sig = y.getSignature();
