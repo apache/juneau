@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">public</strong> <a name="ClientVersionMatcher" href="../../../../../org/apache/juneau/rest/matcher/ClientVersionMatcher.html#ClientVersionMatcher">ClientVersionMatcher</a>(String clientVersionHeader, <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi) {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">this</strong>.clientVersionHeader = isEmpty(clientVersionHeader) ? <span class="jxr_string">"Client-Version"</span> : clientVersionHeader;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		Value&lt;String&gt; clientVersion = Value.empty();
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).forEach(ai -&gt; ai.getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"clientVersion"</span>).filter(NOT_EMPTY).ifPresent(x -&gt; clientVersion.set(x)));
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).forEach(ai -&gt; ai.getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"clientVersion"</span>).filter(NOT_EMPTY).ifPresent(x -&gt; clientVersion.set(x)));
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		range = <strong class="jxr_keyword">new</strong> <a name="VersionRange" href="../../../../../org/apache/juneau/common/utils/VersionRange.html#VersionRange">VersionRange</a>(clientVersion.orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  

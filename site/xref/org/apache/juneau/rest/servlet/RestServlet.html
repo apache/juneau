@@ -123,7 +123,7 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">return</strong> context.getFullPath();
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(getClass());
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		Value&lt;String&gt; path = Value.empty();
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		rstream(ci.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.path())).forEach(x -&gt; path.set(trimSlashes(x.path())));
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		rstream(ci.getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.path())).forEach(x -&gt; path.set(trimSlashes(x.path())));
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">return</strong> path.orElse(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 

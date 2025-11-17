@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">static</strong> ClassInfo a = ClassInfo.of(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> basicWriterSerializer() {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> x = JsonSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		check(<span class="jxr_string">"true"</span>, ((SerializerSession)x).isAddBeanTypes());
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		check(<span class="jxr_string">"true"</span>, x.isAddRootType());
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	@Test <strong class="jxr_keyword">void</strong> basicOutputStreamSerializer() {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> x = MsgPackSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		check(<span class="jxr_string">"true"</span>, ((SerializerSession)x).isAddBeanTypes());
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		check(<span class="jxr_string">"true"</span>, x.isAddRootType());
@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Test <strong class="jxr_keyword">void</strong> noValuesWriterSerializer() {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> x = JsonSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		check(<span class="jxr_string">"false"</span>, ((SerializerSession)x).isAddBeanTypes());
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		check(<span class="jxr_string">"false"</span>, x.isAddRootType());
@@ -163,7 +163,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> noValuesOutputStreamSerializer() {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> x = MsgPackSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		check(<span class="jxr_string">"false"</span>, ((SerializerSession)x).isAddBeanTypes());
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		check(<span class="jxr_string">"false"</span>, x.isAddRootType());
@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<strong class="jxr_keyword">static</strong> ClassInfo c = ClassInfo.of(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotationWriterSerializer() {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> x = JsonSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		check(<span class="jxr_string">"false"</span>, ((SerializerSession)x).isAddBeanTypes());
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		check(<span class="jxr_string">"false"</span>, x.isAddRootType());
@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotationOutputStreamSerializer() {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> x = MsgPackSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		check(<span class="jxr_string">"false"</span>, ((SerializerSession)x).isAddBeanTypes());
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		check(<span class="jxr_string">"false"</span>, x.isAddRootType());

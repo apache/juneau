@@ -267,17 +267,17 @@
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 	;
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@Test <strong class="jxr_keyword">void</strong> getParameterAnnotations() {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		check(<span class="jxr_string">""</span>, c_c1.getParameters().stream().map(p -&gt; p.getAnnotationInfos()).toArray());
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		check(<span class="jxr_string">"@CA()"</span>, c_c2.getParameters().stream().map(p -&gt; p.getAnnotationInfos()).toArray());
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		check(<span class="jxr_string">""</span>, c_c3.getParameters().stream().map(p -&gt; p.getAnnotationInfos()).toArray());
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		check(<span class="jxr_string">""</span>, c_m1.getParameters().stream().map(p -&gt; p.getAnnotationInfos()).toArray());
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		check(<span class="jxr_string">"@CA()"</span>, c_m2.getParameters().stream().map(p -&gt; p.getAnnotationInfos()).toArray());
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		check(<span class="jxr_string">""</span>, c_m3.getParameters().stream().map(p -&gt; p.getAnnotationInfos()).toArray());
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		check(<span class="jxr_string">""</span>, c_c1.getParameters().stream().map(p -&gt; p.getAnnotations()).toArray());
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		check(<span class="jxr_string">"@CA()"</span>, c_c2.getParameters().stream().map(p -&gt; p.getAnnotations()).toArray());
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		check(<span class="jxr_string">""</span>, c_c3.getParameters().stream().map(p -&gt; p.getAnnotations()).toArray());
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		check(<span class="jxr_string">""</span>, c_m1.getParameters().stream().map(p -&gt; p.getAnnotations()).toArray());
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		check(<span class="jxr_string">"@CA()"</span>, c_m2.getParameters().stream().map(p -&gt; p.getAnnotations()).toArray());
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		check(<span class="jxr_string">""</span>, c_m3.getParameters().stream().map(p -&gt; p.getAnnotations()).toArray());
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	}
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 	@Test <strong class="jxr_keyword">void</strong> getParameterAnnotations_atIndex() {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		check(<span class="jxr_string">"@CA()"</span>, c_c2.getParameter(0).getAnnotationInfos());
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		check(<span class="jxr_string">"@CA()"</span>, c_m2.getParameter(0).getAnnotationInfos());
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		check(<span class="jxr_string">"@CA()"</span>, c_c2.getParameter(0).getAnnotations());
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		check(<span class="jxr_string">"@CA()"</span>, c_m2.getParameter(0).getAnnotations());
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 	@Test <strong class="jxr_keyword">void</strong> hasAnnotation() {

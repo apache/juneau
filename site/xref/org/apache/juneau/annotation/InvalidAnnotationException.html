@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@SafeVarargs
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertNoInvalidAnnotations(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> onMethod, Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;...types) <strong class="jxr_keyword">throws</strong> <a name="InvalidAnnotationException" href="../../../../org/apache/juneau/annotation/InvalidAnnotationException.html#InvalidAnnotationException">InvalidAnnotationException</a> {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		Annotation a = Arrays.stream(types)
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.map(t -&gt; onMethod.getAnnotationInfos(t).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.map(t -&gt; onMethod.getAnnotations(t).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			.findFirst()
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  			.orElse(<strong class="jxr_keyword">null</strong>);

@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">protected</strong> <a name="HasQueryArg" href="../../../../../org/apache/juneau/rest/arg/HasQueryArg.html#HasQueryArg">HasQueryArg</a>(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		Value&lt;String&gt; _name = Value.empty();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		rstream(pi.getAllAnnotationInfos(HasQuery.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(HasQueryArg::hasName).forEach(x -&gt; _name.set(getName(x)));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		rstream(pi.getAllAnnotations(HasQuery.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(HasQueryArg::hasName).forEach(x -&gt; _name.set(getName(x)));
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">this</strong>.name = _name.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"@HasQuery used without name or value"</span>));
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">this</strong>.type = pi.getParameterType().innerType();
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}

@@ -213,7 +213,7 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 				.filter(y -&gt; y.hasAnnotation(annotation))
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				.forEach(y -&gt; rstream(y.getAllAnnotationInfos()).map(ai -&gt; ai.<strong class="jxr_keyword">cast</strong>(annotation)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				.forEach(y -&gt; rstream(y.getAllAnnotations()).map(ai -&gt; ai.<strong class="jxr_keyword">cast</strong>(annotation)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 					.filter(z -&gt; predicate == <strong class="jxr_keyword">null</strong> || predicate.test(z))
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 					.forEach(z -&gt; x.put(y.getSignature(), y.accessible().<strong class="jxr_keyword">inner</strong>())));
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -223,12 +223,12 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		}
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isRestBeanMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi) {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">var</strong> x = mi.getAnnotationInfos(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">var</strong> x = mi.getAnnotations(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">return</strong> nn(x) &amp;&amp; x.methodScope().length == 0;
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		}
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isRestBeanMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, String name) {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">var</strong> x = mi.getAnnotationInfos(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">var</strong> x = mi.getAnnotations(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">return</strong> nn(x) &amp;&amp; x.methodScope().length == 0 &amp;&amp; x.name().equals(name);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		}
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 
@@ -1775,14 +1775,14 @@
 <a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 					y -&gt; beanStore.add(
 <a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 						x.getFieldType().<strong class="jxr_keyword">inner</strong>(),
 <a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 						y,
-<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 						RestInjectAnnotation.name(x.getDeclaredAnnotationInfos(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 						RestInjectAnnotation.name(x.getDeclaredAnnotations(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 					)
 <a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 				));
 <a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L1774" href="#L1774">1774</a> 
 <a class="jxr_linenumber" name="L1775" href="#L1775">1775</a> 		rci.getAllMethods().stream().filter(x -&gt; x.hasAnnotation(RestInject.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> 			<strong class="jxr_keyword">var</strong> rt = x.getReturnType().&lt;Object&gt;<strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L1777" href="#L1777">1777</a> 			<strong class="jxr_keyword">var</strong> name = RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1777" href="#L1777">1777</a> 			<strong class="jxr_keyword">var</strong> name = RestInjectAnnotation.name(x.getAnnotations(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1778" href="#L1778">1778</a> 				<strong class="jxr_keyword">if</strong> (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
 <a class="jxr_linenumber" name="L1779" href="#L1779">1779</a> 					<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L1780" href="#L1780">1780</a> 					beanStore
@@ -1794,7 +1794,7 @@
 <a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> 			});
 <a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> 
 <a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> 			<strong class="jxr_keyword">var</strong> vrs = varResolver().build().createSession();
-<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> 			<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotationInfos()).filter(CONTEXT_APPLY_FILTER).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> 			<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotations()).filter(CONTEXT_APPLY_FILTER).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> 
 <a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> 			apply(work);
 <a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> 			beanContext().apply(work);
@@ -1812,7 +1812,7 @@
 <a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 				resource.get(),
 <a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 				beanStore.getBean(
 <a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 					x.getFieldType().<strong class="jxr_keyword">inner</strong>(),
-<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 					RestInjectAnnotation.name(x.getDeclaredAnnotationInfos(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 					RestInjectAnnotation.name(x.getDeclaredAnnotations(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> 					).orElse(<strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> 				));
 <a class="jxr_linenumber" name="L1810" href="#L1810">1810</a> 		<em class="jxr_comment">// @formatter:on</em>
@@ -3859,7 +3859,7 @@
 <a class="jxr_linenumber" name="L3851" href="#L3851">3851</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L3852" href="#L3852">3852</a> 
 <a class="jxr_linenumber" name="L3853" href="#L3853">3853</a> 			<em class="jxr_comment">// Apply @Rest(beanStore).</em>
-<a class="jxr_linenumber" name="L3854" href="#L3854">3854</a> 			rstream(ClassInfo.of(resourceClass).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotVoid(x.beanStore())).forEach(x -&gt; v.get().type(x.beanStore()));
+<a class="jxr_linenumber" name="L3854" href="#L3854">3854</a> 			rstream(ClassInfo.of(resourceClass).getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotVoid(x.beanStore())).forEach(x -&gt; v.get().type(x.beanStore()));
 <a class="jxr_linenumber" name="L3855" href="#L3855">3855</a> 
 <a class="jxr_linenumber" name="L3856" href="#L3856">3856</a> 			<em class="jxr_comment">// Replace with bean from:  @RestInject public [static] BeanStore xxx(&lt;args&gt;)</em>
 <a class="jxr_linenumber" name="L3857" href="#L3857">3857</a> 			<em class="jxr_comment">// @formatter:off</em>
@@ -3923,7 +3923,7 @@
 <a class="jxr_linenumber" name="L3915" href="#L3915">3915</a> 			<em class="jxr_comment">// Find our config file.  It's the last non-empty @RestResource(config).</em>
 <a class="jxr_linenumber" name="L3916" href="#L3916">3916</a> 		<strong class="jxr_keyword">var</strong> vr = beanStore.getBean(VarResolver.<strong class="jxr_keyword">class</strong>).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"VarResolver not found."</span>));
 <a class="jxr_linenumber" name="L3917" href="#L3917">3917</a> 		<strong class="jxr_keyword">var</strong> cfv = Value.&lt;String&gt;empty();
-<a class="jxr_linenumber" name="L3918" href="#L3918">3918</a> 		rstream(ClassInfo.of(resourceClass).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.config())).forEach(x -&gt; cfv.set(vr.resolve(x.config())));
+<a class="jxr_linenumber" name="L3918" href="#L3918">3918</a> 		rstream(ClassInfo.of(resourceClass).getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Rest.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.config())).forEach(x -&gt; cfv.set(vr.resolve(x.config())));
 <a class="jxr_linenumber" name="L3919" href="#L3919">3919</a> 		<strong class="jxr_keyword">var</strong> cf = cfv.orElse(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L3920" href="#L3920">3920</a> 
 <a class="jxr_linenumber" name="L3921" href="#L3921">3921</a> 			<em class="jxr_comment">// If not specified or value is set to SYSTEM_DEFAULT, use system default config.</em>
@@ -4589,11 +4589,11 @@
 <a class="jxr_linenumber" name="L4581" href="#L4581">4581</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L4582" href="#L4582">4582</a> 
 <a class="jxr_linenumber" name="L4583" href="#L4583">4583</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : rci.getPublicMethods()) {
-<a class="jxr_linenumber" name="L4584" href="#L4584">4584</a> 				List&lt;AnnotationInfo&lt;?&gt;&gt; al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
+<a class="jxr_linenumber" name="L4584" href="#L4584">4584</a> 				List&lt;AnnotationInfo&lt;?&gt;&gt; al = rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L4585" href="#L4585">4585</a> 
 <a class="jxr_linenumber" name="L4586" href="#L4586">4586</a> 				<em class="jxr_comment">// Also include methods on @Rest-annotated interfaces.</em>
 <a class="jxr_linenumber" name="L4587" href="#L4587">4587</a> 				<strong class="jxr_keyword">if</strong> (al.isEmpty()) {
-<a class="jxr_linenumber" name="L4588" href="#L4588">4588</a> 					Predicate&lt;MethodInfo&gt; isRestAnnotatedInterface = x -&gt; x.getDeclaringClass().isInterface() &amp;&amp; nn(x.getDeclaringClass().getAnnotationInfos(Rest.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L4588" href="#L4588">4588</a> 					Predicate&lt;MethodInfo&gt; isRestAnnotatedInterface = x -&gt; x.getDeclaringClass().isInterface() &amp;&amp; nn(x.getDeclaringClass().getAnnotations(Rest.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L4589" href="#L4589">4589</a> 					mi.getMatchingMethods().stream().filter(isRestAnnotatedInterface).forEach(x -&gt; al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 <a class="jxr_linenumber" name="L4590" href="#L4590">4590</a> 				}
 <a class="jxr_linenumber" name="L4591" href="#L4591">4591</a> 
@@ -5983,7 +5983,7 @@
 <a class="jxr_linenumber" name="L5975" href="#L5975">5975</a> 		<strong class="jxr_keyword">int</strong> code = 500;
 <a class="jxr_linenumber" name="L5976" href="#L5976">5976</a> 
 <a class="jxr_linenumber" name="L5977" href="#L5977">5977</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(e);
-<a class="jxr_linenumber" name="L5978" href="#L5978">5978</a> 		<strong class="jxr_keyword">var</strong> r = ci.getAnnotationInfos(StatusCode.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L5978" href="#L5978">5978</a> 		<strong class="jxr_keyword">var</strong> r = ci.getAnnotations(StatusCode.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L5979" href="#L5979">5979</a> 		<strong class="jxr_keyword">if</strong> (nn(r))
 <a class="jxr_linenumber" name="L5980" href="#L5980">5980</a> 			<strong class="jxr_keyword">if</strong> (r.value().length &gt; 0)
 <a class="jxr_linenumber" name="L5981" href="#L5981">5981</a> 				code = r.value()[0];

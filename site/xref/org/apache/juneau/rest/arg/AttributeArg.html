@@ -85,8 +85,8 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getName(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> paramInfo) {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		Value&lt;String&gt; n = Value.empty();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		rstream(paramInfo.getAllAnnotationInfos(Attr.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.name())).forEach(x -&gt; n.set(x.name()));
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		rstream(paramInfo.getAllAnnotationInfos(Attr.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.value())).forEach(x -&gt; n.set(x.value()));
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		rstream(paramInfo.getAllAnnotations(Attr.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.name())).forEach(x -&gt; n.set(x.name()));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		rstream(paramInfo.getAllAnnotations(Attr.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; isNotEmpty(x.value())).forEach(x -&gt; n.set(x.value()));
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">if</strong> (n.isEmpty())
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(paramInfo, <span class="jxr_string">"@Attr used without name or value"</span>);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">return</strong> n.get();

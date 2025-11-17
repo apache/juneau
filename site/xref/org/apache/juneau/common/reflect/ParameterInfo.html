@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list of annotations on this parameter, never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">public</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; getAnnotationInfos() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">public</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; getAnnotations() {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">return</strong> declaredAnnotations.get();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
@@ -134,8 +134,8 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * @return A stream of annotation infos, never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; getAnnotationInfos(Class&lt;A&gt; type) {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">return</strong> getAnnotationInfos().stream().filter(x -&gt; x.isType(type)).map(x -&gt; (AnnotationInfo&lt;A&gt;)x);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; getAnnotations(Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">return</strong> getAnnotations().stream().filter(x -&gt; x.isType(type)).map(x -&gt; (AnnotationInfo&lt;A&gt;)x);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -175,9 +175,9 @@
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			.flatMap(traversal -&gt; {
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<strong class="jxr_keyword">if</strong> (traversal == AnnotationTraversal.SELF) {
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 					<strong class="jxr_keyword">return</strong> getAnnotationInfos(type);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 					<strong class="jxr_keyword">return</strong> getAnnotations(type);
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == AnnotationTraversal.MATCHING_PARAMETERS) {
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 					<strong class="jxr_keyword">return</strong> getMatchingParameters().stream().skip(1).flatMap(x -&gt; x.getAnnotationInfos(type));
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 					<strong class="jxr_keyword">return</strong> getMatchingParameters().stream().skip(1).flatMap(x -&gt; x.getAnnotations(type));
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == AnnotationTraversal.PARAMETER_TYPE) {
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 					<strong class="jxr_keyword">return</strong> getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).findAnnotations(type, AnnotationTraversal.PARENTS, AnnotationTraversal.PACKAGE);
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 				}
@@ -299,7 +299,7 @@
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search order for Child.method parameter:&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * 	ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(Child.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"method"&lt;/js&gt;, String.&lt;jk&gt;class&lt;/jk&gt;).getParameter(0);</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * 	List&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;annotations&lt;/jv&gt; = &lt;jv&gt;pi&lt;/jv&gt;.getAllAnnotationInfos(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;);</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * 	List&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;annotations&lt;/jv&gt; = &lt;jv&gt;pi&lt;/jv&gt;.getAllAnnotations(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Returns (in order):&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;//   1. @MyAnnotation on Child.method parameter&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;//   2. @MyAnnotation on Parent.method parameter&lt;/jc&gt;</em>
@@ -312,7 +312,7 @@
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list of annotation infos in child-to-parent order, or an empty list if none found.</em>
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; List&lt;AnnotationInfo&lt;A&gt;&gt; getAllAnnotationInfos(Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; List&lt;AnnotationInfo&lt;A&gt;&gt; getAllAnnotations(Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">return</strong> (List)allAnnotations.get(type);
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 
@@ -320,7 +320,7 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * Returns the first annotation info of the specified type defined on this parameter.</em>
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * This is a convenience method that returns the first result from {@link #getAllAnnotationInfos(Class)}.</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * This is a convenience method that returns the first result from {@link #getAllAnnotations(Class)}.</em>
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 * Performs a comprehensive search through the parameter hierarchy and parameter type hierarchy</em>
@@ -329,10 +329,10 @@
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type to look for.</em>
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to look for.</em>
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * @return The first annotation info if found (closest to this parameter), or &lt;jk&gt;null&lt;/jk&gt; if not found.</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * @see #getAllAnnotationInfos(Class)</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * @see #getAllAnnotations(Class)</em>
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; AnnotationInfo&lt;A&gt; getAllAnnotationInfo(Class&lt;A&gt; type) {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> list = getAllAnnotationInfos(type);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; AnnotationInfo&lt;A&gt; getAllAnnotation(Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> list = getAllAnnotations(type);
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">return</strong> list.isEmpty() ? <strong class="jxr_keyword">null</strong> : list.get(0);
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 
@@ -352,7 +352,7 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A getDeclaredAnnotation(Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">if</strong> (nn(type))
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ai : getAnnotationInfos())
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ai : getAnnotations())
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<strong class="jxr_keyword">if</strong> (type.isInstance(ai.<strong class="jxr_keyword">inner</strong>()))
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 					<strong class="jxr_keyword">return</strong> type.<strong class="jxr_keyword">cast</strong>(ai.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -407,7 +407,7 @@
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<em class="jxr_comment">// Note: We intentionally prioritize @Name annotations over bytecode parameter names</em>
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<em class="jxr_comment">// because bytecode names are unreliable - users may or may not compile with -parameters flag.</em>
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mp : getMatchingParameters()) {
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ai : mp.getAnnotationInfos()) {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ai : mp.getAnnotations()) {
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 				<strong class="jxr_keyword">if</strong> (ai.hasSimpleName(<span class="jxr_string">"Name"</span>)) {
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 					String value = ai.getValue().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 					<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
@@ -448,7 +448,7 @@
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<strong class="jxr_keyword">private</strong> String findQualifierInternal() {
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<em class="jxr_comment">// Search through matching parameters in hierarchy for @Named or javax.inject.Qualifier annotations</em>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">return</strong> getMatchingParameters().stream()
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			.flatMap(mp -&gt; mp.getAnnotationInfos().stream())
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			.flatMap(mp -&gt; mp.getAnnotations().stream())
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 			.filter(ai -&gt; ai.hasSimpleName(<span class="jxr_string">"Named"</span>) || ai.hasSimpleName(<span class="jxr_string">"Qualifier"</span>))
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 			.map(ai -&gt; ai.getValue().orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			.filter(Objects::nonNull)
@@ -495,7 +495,7 @@
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * 	The &lt;jk&gt;true&lt;/jk&gt; if annotation if found.</em>
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type) {
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">return</strong> nn(getAllAnnotationInfo(type));
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">return</strong> nn(getAllAnnotation(type));
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 	}
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -746,7 +746,7 @@
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Note:&lt;/b&gt; This returns the simple array of declared annotations.</em>
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">	 * For Juneau's enhanced annotation searching, use {@link #findAnnotationInfo(Class)} instead.</em>
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">	 * For Juneau's enhanced annotation searching, use {@link #findAnnotations(Class, AnnotationTraversal...)} instead.</em>
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
@@ -799,7 +799,7 @@
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 		<em class="jxr_comment">// Search through matching parameters in hierarchy (child-to-parent order)</em>
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mp : getMatchingParameters()) {
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 			mp.getAnnotationInfos().stream()
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 			mp.getAnnotations().stream()
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 				.filter(x -&gt; x.isType(type))
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 				.map(x -&gt; (AnnotationInfo&lt;A&gt;)x)
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 				.forEach(list::add);
@@ -811,7 +811,7 @@
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<em class="jxr_comment">// Traverse parent classes and interfaces (child-to-parent, interleaved)</em>
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<strong class="jxr_keyword">var</strong> parentsAndInterfaces = paramType.getParentsAndInterfaces();
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parentsAndInterfaces.size(); i++) {
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 			parentsAndInterfaces.get(i).getDeclaredAnnotationInfos().stream()
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 			parentsAndInterfaces.get(i).getDeclaredAnnotations().stream()
 <a class="jxr_linenumber" name="L807" href="#L807">807</a> 				.filter(x -&gt; x.isType(type))
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 				.map(x -&gt; (AnnotationInfo&lt;A&gt;)x)
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 				.forEach(list::add);

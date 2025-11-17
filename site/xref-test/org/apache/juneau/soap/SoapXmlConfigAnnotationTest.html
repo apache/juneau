@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">static</strong> ClassInfo a = ClassInfo.of(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@Test <strong class="jxr_keyword">void</strong> basic() {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> x = SoapXmlSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		check(<span class="jxr_string">"foo"</span>, x.getSoapAction());
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Test <strong class="jxr_keyword">void</strong> noValues() {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> x = SoapXmlSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		check(<span class="jxr_string">"http://www.w3.org/2003/05/soap-envelope"</span>, x.getSoapAction());
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">static</strong> ClassInfo c = ClassInfo.of(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test <strong class="jxr_keyword">void</strong> noAnnotation() {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> x = SoapXmlSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		check(<span class="jxr_string">"http://www.w3.org/2003/05/soap-envelope"</span>, x.getSoapAction());
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}

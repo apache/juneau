@@ -283,7 +283,7 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			Method m = sm.getJavaMethod();
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(m);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			List&lt;AnnotationInfo&lt;?&gt;&gt; al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			List&lt;AnnotationInfo&lt;?&gt;&gt; al = rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			String mn = m.getName();
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<em class="jxr_comment">// Get the operation from the existing swagger so far.</em>
@@ -327,7 +327,7 @@
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 			op.appendIf(ne, <span class="jxr_string">"deprecated"</span>,
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 				firstNonEmpty(
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 					resolve(ms.deprecated()),
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 					(nn(m.getAnnotation(Deprecated.<strong class="jxr_keyword">class</strong>)) || nn(ClassInfo.of(m.getDeclaringClass()).getAnnotationInfos(Deprecated.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))) ? <span class="jxr_string">"true"</span> : <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 					(nn(m.getAnnotation(Deprecated.<strong class="jxr_keyword">class</strong>)) || nn(ClassInfo.of(m.getDeclaringClass()).getAnnotations(Deprecated.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))) ? <span class="jxr_string">"true"</span> : <strong class="jxr_keyword">null</strong>
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 				)
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 			);
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			op.appendIf(nec, <span class="jxr_string">"tags"</span>,
@@ -393,8 +393,8 @@
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 				<strong class="jxr_keyword">if</strong> (mpi.hasAnnotation(Content.<strong class="jxr_keyword">class</strong>) || pt.hasAnnotation(Content.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 					JsonMap param = paramMap.getMap(BODY + <span class="jxr_string">".body"</span>, <strong class="jxr_keyword">true</strong>).append(<span class="jxr_string">"in"</span>, BODY);
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 					JsonMap schema = getSchema(param.getMap(<span class="jxr_string">"schema"</span>), type, bs);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 					rstream(mpi.getAllAnnotationInfos(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x));
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 					rstream(mpi.getAllAnnotationInfos(Content.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x.schema()));
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 					rstream(mpi.getAllAnnotations(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 					rstream(mpi.getAllAnnotations(Content.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x.schema()));
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 					pushupSchemaFields(BODY, param, schema);
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 					param.appendIf(nem, <span class="jxr_string">"schema"</span>, schema);
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 					param.putIfAbsent(<span class="jxr_string">"required"</span>, <strong class="jxr_keyword">true</strong>);
@@ -403,32 +403,32 @@
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mpi.hasAnnotation(Query.<strong class="jxr_keyword">class</strong>) || pt.hasAnnotation(Query.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 					String name = QueryAnnotation.findName(mpi).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 					JsonMap param = paramMap.getMap(QUERY + <span class="jxr_string">"."</span> + name, <strong class="jxr_keyword">true</strong>).append(<span class="jxr_string">"name"</span>, name).append(<span class="jxr_string">"in"</span>, QUERY);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 					rstream(mpi.getAllAnnotationInfos(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x));
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 					rstream(mpi.getAllAnnotationInfos(Query.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x.schema()));
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 					rstream(mpi.getAllAnnotations(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 					rstream(mpi.getAllAnnotations(Query.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x.schema()));
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 					pushupSchemaFields(QUERY, param, getSchema(param.getMap(<span class="jxr_string">"schema"</span>), type, bs));
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 					addParamExample(sm, param, QUERY, type);
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mpi.hasAnnotation(FormData.<strong class="jxr_keyword">class</strong>) || pt.hasAnnotation(FormData.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 					String name = FormDataAnnotation.findName(mpi).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 					JsonMap param = paramMap.getMap(FORM_DATA + <span class="jxr_string">"."</span> + name, <strong class="jxr_keyword">true</strong>).append(<span class="jxr_string">"name"</span>, name).append(<span class="jxr_string">"in"</span>, FORM_DATA);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 					rstream(mpi.getAllAnnotationInfos(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x));
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 					rstream(mpi.getAllAnnotationInfos(FormData.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x.schema()));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 					rstream(mpi.getAllAnnotations(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x));
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 					rstream(mpi.getAllAnnotations(FormData.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x.schema()));
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 					pushupSchemaFields(FORM_DATA, param, getSchema(param.getMap(<span class="jxr_string">"schema"</span>), type, bs));
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 					addParamExample(sm, param, FORM_DATA, type);
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mpi.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>) || pt.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 					String name = HeaderAnnotation.findName(mpi).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 					JsonMap param = paramMap.getMap(HEADER + <span class="jxr_string">"."</span> + name, <strong class="jxr_keyword">true</strong>).append(<span class="jxr_string">"name"</span>, name).append(<span class="jxr_string">"in"</span>, HEADER);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 					rstream(mpi.getAllAnnotationInfos(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x));
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					rstream(mpi.getAllAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x.schema()));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 					rstream(mpi.getAllAnnotations(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x));
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					rstream(mpi.getAllAnnotations(Header.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x.schema()));
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 					pushupSchemaFields(HEADER, param, getSchema(param.getMap(<span class="jxr_string">"schema"</span>), type, bs));
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 					addParamExample(sm, param, HEADER, type);
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mpi.hasAnnotation(Path.<strong class="jxr_keyword">class</strong>) || pt.hasAnnotation(Path.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 					String name = PathAnnotation.findName(mpi).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 					JsonMap param = paramMap.getMap(PATH + <span class="jxr_string">"."</span> + name, <strong class="jxr_keyword">true</strong>).append(<span class="jxr_string">"name"</span>, name).append(<span class="jxr_string">"in"</span>, PATH);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 					rstream(mpi.getAllAnnotationInfos(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x));
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 					rstream(mpi.getAllAnnotationInfos(Path.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x.schema()));
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 					rstream(mpi.getAllAnnotations(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x));
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 					rstream(mpi.getAllAnnotations(Path.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(param, x.schema()));
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 					pushupSchemaFields(PATH, param, getSchema(param.getMap(<span class="jxr_string">"schema"</span>), type, bs));
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 					addParamExample(sm, param, PATH, type);
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 					param.putIfAbsent(<span class="jxr_string">"required"</span>, <strong class="jxr_keyword">true</strong>);
@@ -452,7 +452,7 @@
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 							JsonMap om = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 							merge(om, a);
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 							JsonMap schema = getSchema(om.getMap(<span class="jxr_string">"schema"</span>), m.getGenericReturnType(), bs);
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 							rstream(eci.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x));
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 							rstream(eci.getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x));
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 							pushupSchemaFields(RESPONSE, om, schema);
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 							om.appendIf(nem, <span class="jxr_string">"schema"</span>, schema);
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 					}
@@ -460,15 +460,15 @@
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 				List&lt;MethodInfo&gt; methods = eci.getAllMethods();
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = methods.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 					MethodInfo ecmi = methods.get(i);
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 						Header a = ecmi.getAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 						Header a = ecmi.getAnnotations(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 						<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 							a = ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 							a = ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotations(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 						<strong class="jxr_keyword">if</strong> (nn(a) &amp;&amp; ! isMulti(a)) {
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 							String ha = a.name();
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 							<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 								JsonMap header = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>).getMap(<span class="jxr_string">"headers"</span>, <strong class="jxr_keyword">true</strong>).getMap(ha, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 								context.getAnnotationProvider().forEachMethodAnnotation(Schema.<strong class="jxr_keyword">class</strong>, ecmi, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 								rstream(ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(header, x));
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 								rstream(ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap(<span class="jxr_string">"schema"</span>), ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).innerType(), bs));
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 							}
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 						}
@@ -498,13 +498,13 @@
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = methods.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 					MethodInfo ecmi = methods.get(i);
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 						<strong class="jxr_keyword">if</strong> (ecmi.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 							Header a = ecmi.getAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 							Header a = ecmi.getAnnotations(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 							String ha = a.name();
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 							<strong class="jxr_keyword">if</strong> (! isMulti(a)) {
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 								<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 									JsonMap header = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>).getMap(<span class="jxr_string">"headers"</span>, <strong class="jxr_keyword">true</strong>).getMap(ha, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 									context.getAnnotationProvider().forEachMethodAnnotation(Schema.<strong class="jxr_keyword">class</strong>, ecmi, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 									rstream(ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(header, x));
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 									rstream(ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 									merge(header, a.schema());
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 								}
@@ -516,7 +516,7 @@
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 				JsonMap om = responses.getMap(<span class="jxr_string">"200"</span>, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 				<strong class="jxr_keyword">var</strong> pt2 = ClassInfo.of(m.getGenericReturnType());
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 				JsonMap schema = getSchema(om.getMap(<span class="jxr_string">"schema"</span>), m.getGenericReturnType(), bs);
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 				rstream(pt2.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x));
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 				rstream(pt2.getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Schema.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x));
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 				pushupSchemaFields(RESPONSE, om, schema);
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 				om.appendIf(nem, <span class="jxr_string">"schema"</span>, schema);
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 				addBodyExamples(sm, om, <strong class="jxr_keyword">true</strong>, m.getGenericReturnType(), locale);
@@ -529,11 +529,11 @@
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 				<strong class="jxr_keyword">if</strong> (pt.is(Value.<strong class="jxr_keyword">class</strong>) &amp;&amp; (mpi.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>) || pt.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>))) {
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 					List&lt;Header&gt; la = list();
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 					rstream(mpi.getAllAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la.add(x));
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 					rstream(pt.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Header.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la.add(x));
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 					rstream(mpi.getAllAnnotations(Header.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la.add(x));
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 					rstream(pt.getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Header.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la.add(x));
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 					List&lt;StatusCode&gt; la2 = list();
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 					rstream(mpi.getAllAnnotationInfos(StatusCode.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la2.add(x));
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 					rstream(pt.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(StatusCode.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la2.add(x));
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 					rstream(mpi.getAllAnnotations(StatusCode.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la2.add(x));
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 					rstream(pt.getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(StatusCode.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la2.add(x));
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 					Set&lt;Integer&gt; codes = getCodes(la2, 200);
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 					String name = HeaderAnnotation.findName(mpi).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 					Type type = Value.unwrap(mpi.getParameterType().innerType());
@@ -541,7 +541,7 @@
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 						<strong class="jxr_keyword">if</strong> (! isMulti(a)) {
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 							<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 								JsonMap header = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>).getMap(<span class="jxr_string">"headers"</span>, <strong class="jxr_keyword">true</strong>).getMap(name, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 								rstream(mpi.getAllAnnotationInfos(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(header, x));
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 								rstream(mpi.getAllAnnotations(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 								merge(header, a.schema());
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, type, bs));
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 							}
@@ -550,11 +550,11 @@
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 	
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mpi.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>) || pt.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 					List&lt;Response&gt; la = list();
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 					rstream(mpi.getAllAnnotationInfos(Response.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la.add(x));
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 					rstream(pt.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Response.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la.add(x));
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 					rstream(mpi.getAllAnnotations(Response.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la.add(x));
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 					rstream(pt.getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Response.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la.add(x));
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 					List&lt;StatusCode&gt; la2 = list();
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 					rstream(mpi.getAllAnnotationInfos(StatusCode.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la2.add(x));
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 					rstream(pt.getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(StatusCode.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la2.add(x));
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 					rstream(mpi.getAllAnnotations(StatusCode.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la2.add(x));
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 					rstream(pt.getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(StatusCode.<strong class="jxr_keyword">class</strong>)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; la2.add(x));
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 					Set&lt;Integer&gt; codes = getCodes(la2, 200);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 					Type type = Value.unwrap(mpi.getParameterType().innerType());
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : la) {
@@ -562,7 +562,7 @@
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 							JsonMap om = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 							merge(om, a);
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 							JsonMap schema = getSchema(om.getMap(<span class="jxr_string">"schema"</span>), type, bs);
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 							rstream(mpi.getAllAnnotationInfos(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x));
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 							rstream(mpi.getAllAnnotations(Schema.<strong class="jxr_keyword">class</strong>)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; merge(schema, x));
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 							la.forEach(x -&gt; merge(schema, x.schema()));
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 							pushupSchemaFields(RESPONSE, om, schema);
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 							om.appendIf(nem, <span class="jxr_string">"schema"</span>, schema);

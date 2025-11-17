@@ -57,7 +57,7 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> of(ClassInfo declaringClass, Field <strong class="jxr_keyword">inner</strong>) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertArgNotNull(<span class="jxr_string">"declaringClass"</span>, declaringClass);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">return</strong> declaringClass.getFieldInfo(<strong class="jxr_keyword">inner</strong>);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">return</strong> declaringClass.getField(<strong class="jxr_keyword">inner</strong>);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> of(Field <strong class="jxr_keyword">inner</strong>) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertArgNotNull(<span class="jxr_string">"inner"</span>, <strong class="jxr_keyword">inner</strong>);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> ClassInfo.of(<strong class="jxr_keyword">inner</strong>.getDeclaringClass()).getFieldInfo(<strong class="jxr_keyword">inner</strong>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> ClassInfo.of(<strong class="jxr_keyword">inner</strong>.getDeclaringClass()).getField(<strong class="jxr_keyword">inner</strong>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Field <strong class="jxr_keyword">inner</strong>;
@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list of all annotations declared on this field.</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">public</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; getDeclaredAnnotationInfos() {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">public</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; getDeclaredAnnotations() {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">return</strong> declaredAnnotations.get();
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 
@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * @return A stream of all matching annotations.</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; getDeclaredAnnotationInfos(Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; getDeclaredAnnotations(Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">return</strong> declaredAnnotations.get().stream()
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			.filter(x -&gt; type.isInstance(x.<strong class="jxr_keyword">inner</strong>()))
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			.map(x -&gt; (AnnotationInfo&lt;A&gt;)x);

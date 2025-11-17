@@ -2556,7 +2556,7 @@
 <a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 
 <a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> 		Builder apply(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, java.lang.reflect.Type t) {
 <a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 			<strong class="jxr_keyword">if</strong> (t instanceof Class&lt;?&gt;) {
-<a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> 				rstream(ClassInfo.of((Class&lt;?&gt;)t).getAnnotationInfos()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(c)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(<strong class="jxr_keyword">this</strong>::apply);
+<a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> 				rstream(ClassInfo.of((Class&lt;?&gt;)t).getAnnotations()).map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(c)).filter(Objects::nonNull).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(<strong class="jxr_keyword">this</strong>::apply);
 <a class="jxr_linenumber" name="L2552" href="#L2552">2552</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Value.isType(t)) {
 <a class="jxr_linenumber" name="L2553" href="#L2553">2553</a> 				apply(c, getValueParameterType(t));
 <a class="jxr_linenumber" name="L2554" href="#L2554">2554</a> 			}
@@ -2573,7 +2573,7 @@
 <a class="jxr_linenumber" name="L2565" href="#L2565">2565</a> 
 <a class="jxr_linenumber" name="L2566" href="#L2566">2566</a> 		Builder apply(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="ParameterInfo" href="../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> mpi) {
 <a class="jxr_linenumber" name="L2567" href="#L2567">2567</a> 			apply(c, mpi.getParameterType().innerType());
-<a class="jxr_linenumber" name="L2568" href="#L2568">2568</a> 			mpi.getAnnotationInfos(c).forEach(x -&gt; apply(x.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L2568" href="#L2568">2568</a> 			mpi.getAnnotations(c).forEach(x -&gt; apply(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L2569" href="#L2569">2569</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2570" href="#L2570">2570</a> 		}
 <a class="jxr_linenumber" name="L2571" href="#L2571">2571</a> 

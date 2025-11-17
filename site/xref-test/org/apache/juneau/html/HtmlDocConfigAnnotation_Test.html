@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">static</strong> ClassInfo a = ClassInfo.of(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Test <strong class="jxr_keyword">void</strong> basic() {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		check(<span class="jxr_string">"foo"</span>, x.getAside());
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		check(<span class="jxr_string">"foo"</span>, x.getFooter());
@@ -110,7 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> defaults() {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		check(<span class="jxr_string">""</span>, x.getAside());
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		check(<span class="jxr_string">""</span>, x.getFooter());
@@ -134,7 +134,7 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<strong class="jxr_keyword">static</strong> ClassInfo c = ClassInfo.of(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotation() {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		check(<span class="jxr_string">""</span>, x.getAside());
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		check(<span class="jxr_string">""</span>, x.getFooter());
@@ -169,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<strong class="jxr_keyword">static</strong> ClassInfo d1 = ClassInfo.of(D1.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Test <strong class="jxr_keyword">void</strong> inheritance1() {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(d1.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(d1.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		check(<span class="jxr_string">"foo2,foo"</span>, x.getAside());
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		check(<span class="jxr_string">"foo2,foo"</span>, x.getFooter());
@@ -197,7 +197,7 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<strong class="jxr_keyword">static</strong> ClassInfo d2 = ClassInfo.of(D2.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	@Test <strong class="jxr_keyword">void</strong> inheritance2() {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(d2.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(d2.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		check(<span class="jxr_string">"foo,foo2"</span>, x.getAside());
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		check(<span class="jxr_string">"foo,foo2"</span>, x.getFooter());
@@ -225,7 +225,7 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">static</strong> ClassInfo d3 = ClassInfo.of(D3.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	@Test <strong class="jxr_keyword">void</strong> inheritance3() {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(d3.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(d3.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		check(<span class="jxr_string">"foo2"</span>, x.getAside());
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 		check(<span class="jxr_string">"foo2"</span>, x.getFooter());
@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">static</strong> ClassInfo d4 = ClassInfo.of(D4.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 	@Test <strong class="jxr_keyword">void</strong> inheritance4() {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(d4.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(d4.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		check(<span class="jxr_string">""</span>, x.getAside());
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		check(<span class="jxr_string">""</span>, x.getFooter());
@@ -307,7 +307,7 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 	}
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 	@Test <strong class="jxr_keyword">void</strong> widgets_basic() {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(e.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(e.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		check(<span class="jxr_string">"$W{E}"</span>, x.getAside());
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 		check(<span class="jxr_string">"$W{E}"</span>, x.getFooter());
@@ -324,7 +324,7 @@
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 	}
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 	@Test <strong class="jxr_keyword">void</strong> widgets_resolution() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(e.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(e.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">var</strong> r = x.serialize(<strong class="jxr_keyword">null</strong>).replaceAll(<span class="jxr_string">"[\r\n]+"</span>, <span class="jxr_string">"|"</span>);
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 		assertContainsAll(r, <span class="jxr_string">"&lt;aside&gt;xxx&lt;/aside&gt;"</span>,<span class="jxr_string">"&lt;footer&gt;xxx&lt;/footer&gt;"</span>,<span class="jxr_string">"&lt;head&gt;xxx"</span>,<span class="jxr_string">"&lt;style&gt;@import \&quot;xxx\&quot;; xxx zzz&lt;/style&gt;"</span>,<span class="jxr_string">"&lt;nav&gt;&lt;ol&gt;&lt;li&gt;xxx&lt;/li&gt;&lt;/ol&gt;xxx&lt;/nav&gt;"</span>,<span class="jxr_string">"&lt;script&gt;xxx| yyy|&lt;/script&gt;"</span>);
@@ -370,31 +370,31 @@
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<strong class="jxr_keyword">static</strong> ClassInfo f5 = ClassInfo.of(F5.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test <strong class="jxr_keyword">void</strong> e01_rankedAnnotations_f1() {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f1.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f1.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 		check(<span class="jxr_string">"f1"</span>, x.getAside());
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test <strong class="jxr_keyword">void</strong> e02_rankedAnnotations_f2() {
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f2.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f2.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		check(<span class="jxr_string">"f1"</span>, x.getAside());
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 	@Test <strong class="jxr_keyword">void</strong> e03_rankedAnnotations_f3() {
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f3.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f3.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 		check(<span class="jxr_string">"f3"</span>, x.getAside());
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 	@Test <strong class="jxr_keyword">void</strong> e04_rankedAnnotations_f4() {
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f4.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f4.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		check(<span class="jxr_string">"f3"</span>, x.getAside());
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 	}
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 	@Test <strong class="jxr_keyword">void</strong> e05_rankedAnnotations_f5() {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f5.getAnnotationInfos()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(f5.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">var</strong> x = HtmlDocSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 		check(<span class="jxr_string">"f5"</span>, x.getAside());
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 	}

@@ -73,9 +73,9 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(m);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			List&lt;AnnotationInfo&lt;?&gt;&gt; al = rstream(mi.getAllAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			List&lt;AnnotationInfo&lt;?&gt;&gt; al = rstream(mi.getAllAnnotations()).filter(REMOTE_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">if</strong> (al.isEmpty())
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				al = rstream(mi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotationInfos()).filter(REMOTE_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				al = rstream(mi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotations()).filter(REMOTE_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">var</strong> _httpMethod = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			<strong class="jxr_keyword">var</strong> _path = Value.&lt;String&gt;empty();
@@ -154,7 +154,7 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<em class="jxr_comment">// These handle both individual annotations and repeated annotation arrays</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> processContentDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi) {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Content.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
@@ -164,7 +164,7 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 						contentDefault = def;
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 					}
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 				});
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(ContentAnnotation.Array.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
@@ -179,7 +179,7 @@
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		}
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processFormDataDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(FormData.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
@@ -190,7 +190,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 						defaults.put(name, def);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 					}
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				});
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(FormDataAnnotation.Array.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
@@ -207,7 +207,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processHeaderDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<em class="jxr_comment">// Check for individual @Header annotations</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Header.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 					}
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 				});
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<em class="jxr_comment">// Check for @Header.Array (repeated annotations)</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(HeaderAnnotation.Array.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
@@ -235,7 +235,7 @@
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		}
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 	
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processPathDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Path.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
@@ -246,7 +246,7 @@
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 						defaults.put(name, def);
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 					}
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 				});
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(PathAnnotation.Array.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
@@ -262,7 +262,7 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		}
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processQueryDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(Query.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
@@ -273,7 +273,7 @@
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 						defaults.put(name, def);
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 					}
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 				});
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			rstream(mi.getAllAnnotationInfos())
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			rstream(mi.getAllAnnotations())
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 				.map(x -&gt; x.<strong class="jxr_keyword">cast</strong>(QueryAnnotation.Array.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 				.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
