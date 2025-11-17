@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			rv = RemoteReturn.NONE;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			Value&lt;RemoteReturn&gt; v = Value.of(RemoteReturn.BODY);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			al.forEach(ai -&gt; ai.forEachValue(RemoteReturn.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"returns"</span>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; v.set(x)));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			al.forEach(ai -&gt; ai.getValue(RemoteReturn.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"returns"</span>).ifPresent(x -&gt; v.set(x)));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			rv = v.get();
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		}
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
