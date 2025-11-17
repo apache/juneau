@@ -1036,27 +1036,27 @@ public class ClassInfo_Test extends TestBase {
 
 	@Test void getWrapperIfPrimitive() {
 		for (int i = 0; i < primitives.size(); i++)
-			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive(), primitiveWrappers.get(i));
-		assertEquals(of(String.class).getWrapperIfPrimitive(), String.class);
+			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().inner(), primitiveWrappers.get(i));
+		assertEquals(of(String.class).getWrapperIfPrimitive().inner(), String.class);
 	}
 
 	@Test void getWrapperIfPrimitive_onType() {
-		assertEquals("class org.apache.juneau.common.reflect.ClassInfo_Test$A1", aTypeInfo.getWrapperIfPrimitive().toString());
-		assertEquals("interface java.util.Map", pTypeInfo.getWrapperIfPrimitive().toString());
-		assertEquals("interface java.util.Map", pTypeDimensionalInfo.getWrapperIfPrimitive().toString());
-		assertEquals("class java.util.AbstractMap", pTypeGenericInfo.getWrapperIfPrimitive().toString());
-		assertEquals(null, pTypeGenericArgInfo.getWrapperIfPrimitive());
+		assertEquals("class org.apache.juneau.common.reflect.ClassInfo_Test$A1", aTypeInfo.getWrapperIfPrimitive().inner().toString());
+		assertEquals("interface java.util.Map", pTypeInfo.getWrapperIfPrimitive().inner().toString());
+		assertEquals("interface java.util.Map", pTypeDimensionalInfo.getWrapperIfPrimitive().inner().toString());
+		assertEquals("class java.util.AbstractMap", pTypeGenericInfo.getWrapperIfPrimitive().inner().toString());
+		assertEquals(null, pTypeGenericArgInfo.getWrapperIfPrimitive().inner());
 	}
 
-	@Test void getWrapperInfoIfPrimitive() {
+	@Test void getWrapperIfPrimitive_asClassInfo() {
 		for (int i = 0; i < primitives.size(); i++)
-			assertEquals(of(primitives.get(i)).getWrapperInfoIfPrimitive().inner(), primitiveWrappers.get(i));
-		assertEquals(of(String.class).getWrapperInfoIfPrimitive().inner(), String.class);
+			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().inner(), primitiveWrappers.get(i));
+		assertEquals(of(String.class).getWrapperIfPrimitive().inner(), String.class);
 	}
 
-	@Test void getWrapperInfoIfPrimitive_onType() {
-		assertEquals(aTypeInfo.getWrapperInfoIfPrimitive().innerType(), aType);
-		check("V", pTypeGenericArgInfo.getWrapperInfoIfPrimitive());
+	@Test void getWrapperIfPrimitive_asClassInfo_onType() {
+		assertEquals(aTypeInfo.getWrapperIfPrimitive().innerType(), aType);
+		check("V", pTypeGenericArgInfo.getWrapperIfPrimitive());
 	}
 
 	@Test void getPrimitiveDefault() {
@@ -1278,7 +1278,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void isParentOf_null() {
-		assertFalse(ka.isParentOf(null));
+		assertFalse(ka.isParentOf((Class<?>)null));
 	}
 
 	@Test void isParentOf_type() {

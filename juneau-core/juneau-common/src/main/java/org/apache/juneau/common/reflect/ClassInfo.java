@@ -281,7 +281,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (inner.isInstance(child))
 			return true;
 		if (this.isPrimitive() || child.getClass().isPrimitive()) {
-			return this.getWrapperIfPrimitive().isAssignableFrom(of(child).getWrapperIfPrimitive());
+			return this.getWrapperIfPrimitive().isParentOf(of(child).getWrapperIfPrimitive());
 		}
 		return false;
 	}
@@ -1685,23 +1685,25 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
-	 * (e.g. <code>Integer.<jk>class</jk></code>).
+	 * Returns the wrapper class if this is a primitive, otherwise returns this class.
 	 *
-	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
-	 */
-	public Class<?> getWrapperIfPrimitive() {
-		if (nn(inner) && ! inner.isPrimitive())
-			return inner;
-		return pmap1.get(inner);
-	}
-
-	/**
-	 * Same as {@link #getWrapperIfPrimitive()} but wraps it in a {@link ClassInfo}.
+	 * <p>
+	 * If this class is a primitive (e.g. {@code int.class}), returns its wrapper class
+	 * (e.g. {@code Integer.class}) wrapped in a {@link ClassInfo}.
+	 * Otherwise, returns this {@link ClassInfo} instance.
 	 *
-	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ClassInfo <jv>intClass</jv> = ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>);
+	 * 	ClassInfo <jv>wrapper</jv> = <jv>intClass</jv>.getWrapperIfPrimitive();  <jc>// Returns ClassInfo for Integer.class</jc>
+	 * 	
+	 * 	ClassInfo <jv>stringClass</jv> = ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>);
+	 * 	ClassInfo <jv>same</jv> = <jv>stringClass</jv>.getWrapperIfPrimitive();  <jc>// Returns same ClassInfo</jc>
+	 * </p>
+	 *
+	 * @return The wrapper {@link ClassInfo} if this is a primitive, or this {@link ClassInfo} if not a primitive.
 	 */
-	public ClassInfo getWrapperInfoIfPrimitive() {
+	public ClassInfo getWrapperIfPrimitive() {
 		if (inner == null || ! inner.isPrimitive())
 			return this;
 		return of(pmap1.get(inner));
@@ -2063,6 +2065,26 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 *
 	 * <p>
+	 * Same as {@link #isParentOf(Class)} but takes in a {@link ClassInfo}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ClassInfo <jv>parent</jv> = ClassInfo.<jsm>of</jsm>(List.<jk>class</jk>);
+	 * 	ClassInfo <jv>child</jv> = ClassInfo.<jsm>of</jsm>(ArrayList.<jk>class</jk>);
+	 * 	<jk>boolean</jk> <jv>b</jv> = <jv>parent</jv>.isParentOf(<jv>child</jv>);  <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
+	 */
+	public boolean isParentOf(ClassInfo child) {
+		return nn(inner) && nn(child) && inner.isAssignableFrom(child.inner());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
+	 *
+	 * <p>
 	 * Primitive classes are converted to wrapper classes and compared.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -2086,7 +2108,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (inner.isAssignableFrom(child))
 			return true;
 		if (this.isPrimitive() || child.isPrimitive()) {
-			return this.getWrapperIfPrimitive().isAssignableFrom(of(child).getWrapperIfPrimitive());
+			return this.getWrapperIfPrimitive().isParentOf(of(child).getWrapperIfPrimitive());
 		}
 		return false;
 	}
@@ -2103,7 +2125,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (inner.isAssignableFrom(child.inner()))
 			return true;
 		if (this.isPrimitive() || child.isPrimitive()) {
-			return this.getWrapperIfPrimitive().isAssignableFrom(child.getWrapperIfPrimitive());
+			return this.getWrapperIfPrimitive().isParentOf(child.getWrapperIfPrimitive());
 		}
 		return false;
 	}

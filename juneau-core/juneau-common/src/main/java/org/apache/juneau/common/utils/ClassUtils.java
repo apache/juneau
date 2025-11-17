@@ -290,7 +290,7 @@ public class ClassUtils {
 			return args;
 		var params = new Object[paramTypes.length];
 		for (var i = 0; i < paramTypes.length; i++) {
-			var pt = ClassInfo.of(paramTypes[i]).getWrapperInfoIfPrimitive();
+			var pt = ClassInfo.of(paramTypes[i]).getWrapperIfPrimitive();
 			for (var arg : args) {
 				if (nn(arg) && pt.isParentOf(arg.getClass())) {
 					params[i] = arg;
