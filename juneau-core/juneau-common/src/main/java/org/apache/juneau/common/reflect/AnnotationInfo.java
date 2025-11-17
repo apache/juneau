@@ -29,9 +29,38 @@ import java.util.function.*;
 import org.apache.juneau.common.annotation.*;
 
 /**
- * Represents an annotation instance on a class and the class it was found on.
+ * Encapsulates information about an annotation instance and the element it's declared on.
+ *
+ * <p>
+ * This class provides a convenient wrapper around Java annotations that allows you to:
+ * <ul>
+ * 	<li>Access annotation values in a type-safe manner
+ * 	<li>Query annotation properties without reflection boilerplate
+ * 	<li>Track where the annotation was found (class, method, field, etc.)
+ * 	<li>Sort annotations by precedence using ranks
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Get annotation info from a class</jc>
+ * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ * 	Optional&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>ai</jv> = 
+ * 		<jv>ci</jv>.getAnnotationInfos(MyAnnotation.<jk>class</jk>).findFirst();
+ * 	
+ * 	<jc>// Access annotation values</jc>
+ * 	<jv>ai</jv>.ifPresent(<jv>x</jv> -&gt; {
+ * 		String <jv>value</jv> = <jv>x</jv>.getValue(String.<jk>class</jk>, <js>"value"</js>).orElse(<js>"default"</js>);
+ * 		<jk>int</jk> <jv>priority</jv> = <jv>x</jv>.getInt(<js>"priority"</js>).orElse(0);
+ * 	});
+ * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link ClassInfo}
+ * 	<li class='jc'>{@link MethodInfo}
+ * 	<li class='jc'>{@link FieldInfo}
+ * 	<li class='jc'>{@link ConstructorInfo}
+ * 	<li class='jc'>{@link ParameterInfo}
+ * 	<li class='jc'>{@link PackageInfo}
  * </ul>
  *
  * @param <T> The annotation type.
@@ -39,12 +68,20 @@ import org.apache.juneau.common.annotation.*;
 public class AnnotationInfo<T extends Annotation> {
 
 	/**
-	 * Convenience constructor for creating an annotation info object.
+	 * Creates a new annotation info object.
 	 *
-	 * @param <A> The annotation class.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create annotation info for a class annotation</jc>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+	 * 	MyAnnotation <jv>annotation</jv> = <jv>ci</jv>.inner().getAnnotation(MyAnnotation.<jk>class</jk>);
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = AnnotationInfo.<jsm>of</jsm>(<jv>ci</jv>, <jv>annotation</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
 	 * @param on The annotatable object where the annotation was found (class, method, field, constructor, parameter, or package).
-	 * @param value The annotation found.
-	 * @return A new {@link AnnotationInfo} object.
+	 * @param value The annotation instance. Must not be <jk>null</jk>.
+	 * @return A new {@link AnnotationInfo} object wrapping the annotation.
 	 */
 	public static <A extends Annotation> AnnotationInfo<A> of(Annotatable on, A value) {
 		return new AnnotationInfo<>(on, value);
@@ -58,10 +95,10 @@ public class AnnotationInfo<T extends Annotation> {
 	private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(ClassInfo.of(a.annotationType()), m)).toList());
 
 	/**
-	 * Constructor for class annotations.
+	 * Constructor.
 	 *
-	 * @param c The class where the annotation was found.
-	 * @param a The annotation found.
+	 * @param on The annotatable object where the annotation was found.
+	 * @param a The annotation instance.
 	 */
 	AnnotationInfo(Annotatable on, T a) {
 		this.annotatable = on;  // TODO - Shouldn't allow null.
@@ -70,31 +107,69 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
-	 * Returns the rank of this annotation.
+	 * Returns the rank of this annotation for sorting by precedence.
 	 * 
 	 * <p>
-	 * The rank is used for sorting annotations in order of precedence.
+	 * The rank is determined by checking if the annotation has a {@code rank()} method that returns an {@code int}.
+	 * If found, that value is used; otherwise the rank defaults to {@code 0}.
 	 * 
-	 * @return The rank of this annotation.
+	 * <p>
+	 * Higher rank values indicate higher precedence when multiple annotations of the same type are present.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Annotation with rank method</jc>
+	 * 	<ja>@interface</ja> MyAnnotation {
+	 * 		<jk>int</jk> rank() <jk>default</jk> 0;
+	 * 	}
+	 * 	
+	 * 	<jc>// Get rank from annotation info</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	<jk>int</jk> <jv>rank</jv> = <jv>ai</jv>.getRank();  <jc>// Returns value from rank() method</jc>
+	 * </p>
+	 * 
+	 * @return The rank of this annotation, or {@code 0} if no rank method exists.
 	 */
 	public int getRank() {
 		return rank;
 	}
 
 	/**
-	 * Returns the class name of the annotation.
+	 * Returns the simple class name of this annotation.
 	 *
-	 * @return The simple class name of the annotation.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	String <jv>name</jv> = <jv>ai</jv>.getName();  <jc>// Returns "MyAnnotation"</jc>
+	 * </p>
+	 *
+	 * @return The simple class name of the annotation (e.g., {@code "Override"} for {@code @Override}).
 	 */
 	public String getName() { return scn(a.annotationType()); }
 
 	/**
-	 * Returns a matching value on this annotation.
+	 * Returns the value of a specific annotation method.
 	 *
-	 * @param <V> The annotation field type.
-	 * @param type The annotation field type.
-	 * @param name The annotation field name.
-	 * @return An optional containing the value, or empty if not found.
+	 * <p>
+	 * This method provides type-safe access to annotation field values without requiring
+	 * explicit reflection calls or casting.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @interface MyAnnotation { String value(); int priority(); }</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	
+	 * 	<jc>// Get string value</jc>
+	 * 	Optional&lt;String&gt; <jv>value</jv> = <jv>ai</jv>.getValue(String.<jk>class</jk>, <js>"value"</js>);
+	 * 	
+	 * 	<jc>// Get int value</jc>
+	 * 	Optional&lt;Integer&gt; <jv>priority</jv> = <jv>ai</jv>.getValue(Integer.<jk>class</jk>, <js>"priority"</js>);
+	 * </p>
+	 *
+	 * @param <V> The expected type of the annotation field value.
+	 * @param type The expected class of the annotation field value.
+	 * @param name The name of the annotation method (field).
+	 * @return An {@link Optional} containing the value if found and type matches, empty otherwise.
 	 */
 	@SuppressWarnings("unchecked")
 	public <V> Optional<V> getValue(Class<V> type, String name) {
@@ -107,9 +182,23 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Casts this annotation info to a specific annotation type.
 	 *
+	 * <p>
+	 * This is useful when you have an {@code AnnotationInfo<?>} and need to narrow it to a specific type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	AnnotationInfo&lt;?&gt; <jv>ai</jv> = ...;
+	 * 	
+	 * 	<jc>// Safe cast</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>myAi</jv> = <jv>ai</jv>.cast(MyAnnotation.<jk>class</jk>);
+	 * 	<jk>if</jk> (<jv>myAi</jv> != <jk>null</jk>) {
+	 * 		<jc>// Use strongly-typed annotation info</jc>
+	 * 	}
+	 * </p>
+	 *
 	 * @param <A> The annotation type to cast to.
 	 * @param type The annotation type to cast to.
-	 * @return This annotation info cast to the specified type, or <jk>null</jk> if the cast is not valid.
+	 * @return This annotation info cast to the specified type, or <jk>null</jk> if the annotation is not of the specified type.
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> AnnotationInfo<A> cast(Class<A> type) {
@@ -117,31 +206,70 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this annotation has the specified annotation defined on it.
+	 * Returns <jk>true</jk> if this annotation is itself annotated with the specified annotation.
 	 *
-	 * @param <A> The annotation class.
-	 * @param type The annotation to test for.
-	 * @return <jk>true</jk> if this annotation has the specified annotation defined on it.
+	 * <p>
+	 * This checks for meta-annotations on the annotation type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if @MyAnnotation is annotated with @Documented</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	<jk>boolean</jk> <jv>isDocumented</jv> = <jv>ai</jv>.hasAnnotation(Documented.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <A> The meta-annotation type.
+	 * @param type The meta-annotation to test for.
+	 * @return <jk>true</jk> if this annotation is annotated with the specified annotation.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
 		return nn(this.a.annotationType().getAnnotation(type));
 	}
 
 	/**
-	 * Returns the annotation found.
+	 * Returns the wrapped annotation instance.
 	 *
-	 * @return The annotation found.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	MyAnnotation <jv>annotation</jv> = <jv>ai</jv>.inner();
+	 * 	
+	 * 	<jc>// Access annotation methods directly</jc>
+	 * 	String <jv>value</jv> = <jv>annotation</jv>.value();
+	 * </p>
+	 *
+	 * @return The wrapped annotation instance.
 	 */
 	public T inner() {
 		return a;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this annotation is in the specified {@link AnnotationGroup group}.
+	 * Returns <jk>true</jk> if this annotation is in the specified {@link AnnotationGroup}.
 	 *
-	 * @param <A> The annotation class.
-	 * @param group The group annotation.
-	 * @return <jk>true</jk> if this annotation is in the specified {@link AnnotationGroup group}.
+	 * <p>
+	 * Annotation groups are used to logically group related annotations together.
+	 * This checks if the annotation is annotated with {@link AnnotationGroup} and if
+	 * the group value matches the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Define an annotation group</jc>
+	 * 	<ja>@interface</ja> MyGroup {}
+	 * 	
+	 * 	<jc>// Annotation in the group</jc>
+	 * 	<ja>@AnnotationGroup</ja>(MyGroup.<jk>class</jk>)
+	 * 	<ja>@interface</ja> MyAnnotation {}
+	 * 	
+	 * 	<jc>// Check if annotation is in group</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	<jk>boolean</jk> <jv>inGroup</jv> = <jv>ai</jv>.isInGroup(MyGroup.<jk>class</jk>);  <jc>// Returns true</jc>
+	 * </p>
+	 *
+	 * @param <A> The group annotation type.
+	 * @param group The group annotation class to test for.
+	 * @return <jk>true</jk> if this annotation is in the specified group.
+	 * @see AnnotationGroup
 	 */
 	public <A extends Annotation> boolean isInGroup(Class<A> group) {
 		var x = a.annotationType().getAnnotation(AnnotationGroup.class);
@@ -149,20 +277,46 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this annotation is the specified type.
+	 * Returns <jk>true</jk> if this annotation is of the specified type.
 	 *
-	 * @param <A> The annotation class.
-	 * @param type The type to test against.
-	 * @return <jk>true</jk> if this annotation is the specified type.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	AnnotationInfo&lt;?&gt; <jv>ai</jv> = ...;
+	 * 	
+	 * 	<jk>if</jk> (<jv>ai</jv>.isType(MyAnnotation.<jk>class</jk>)) {
+	 * 		<jc>// Handle MyAnnotation specifically</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @param <A> The annotation type to test for.
+	 * @param type The annotation type to test against.
+	 * @return <jk>true</jk> if this annotation's type is exactly the specified type.
 	 */
 	public <A extends Annotation> boolean isType(Class<A> type) {
 		return this.a.annotationType() == type;
 	}
 
 	/**
-	 * Converts this object to a readable map for debugging purposes.
+	 * Converts this annotation info to a map representation for debugging purposes.
 	 *
-	 * @return A new map showing the attributes of this object.
+	 * <p>
+	 * The returned map contains:
+	 * <ul>
+	 * 	<li>The annotatable element's type and label (e.g., {@code "CLASS_TYPE" -> "com.example.MyClass"})
+	 * 	<li>A nested map with the annotation's simple name as key and its non-default values
+	 * </ul>
+	 *
+	 * <p>
+	 * Only annotation values that differ from their default values are included.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	LinkedHashMap&lt;String,Object&gt; <jv>map</jv> = <jv>ai</jv>.toMap();
+	 * 	<jc>// Returns: {"CLASS_TYPE": "MyClass", "@MyAnnotation": {"value": "foo", "priority": 5}}</jc>
+	 * </p>
+	 *
+	 * @return A new map showing the attributes of this annotation info.
 	 */
 	public LinkedHashMap<String, Object> toMap() {
 		var jm = new LinkedHashMap<String, Object>();
@@ -328,17 +482,34 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the method with the specified name on this annotation.
 	 *
-	 * @param methodName The method name.
-	 * @return An optional containing the method, or empty if method not found.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	Optional&lt;MethodInfo&gt; <jv>method</jv> = <jv>ai</jv>.getMethod(<js>"value"</js>);
+	 * 	<jv>method</jv>.ifPresent(<jv>m</jv> -&gt; System.<jsf>out</jsf>.println(<jv>m</jv>.getReturnType()));
+	 * </p>
+	 *
+	 * @param methodName The method name to look for.
+	 * @return An {@link Optional} containing the method info, or empty if method not found.
 	 */
 	public Optional<MethodInfo> getMethod(String methodName) {
 		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName())).findFirst();
 	}
 
 	/**
-	 * Returns the value of the <c>value()</c> method on this annotation as a string.
+	 * Returns the value of the {@code value()} method on this annotation as a string.
 	 *
-	 * @return An optional containing the value of the <c>value()</c> method, or empty if not found or not a string.
+	 * <p>
+	 * This is a convenience method equivalent to calling {@link #getString(String) getString("value")}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation("foo")</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	String <jv>value</jv> = <jv>ai</jv>.getValue().orElse(<js>"default"</js>);  <jc>// Returns "foo"</jc>
+	 * </p>
+	 *
+	 * @return An {@link Optional} containing the value of the {@code value()} method, or empty if not found or not a string.
 	 */
 	public Optional<String> getValue() {
 		return getString("value");
@@ -347,8 +518,15 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a string.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation(name="John", age=30)</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	String <jv>name</jv> = <jv>ai</jv>.getString(<js>"name"</js>).orElse(<js>"unknown"</js>);  <jc>// Returns "John"</jc>
+	 * </p>
+	 *
 	 * @param methodName The method name.
-	 * @return An optional containing the value of the specified method, or empty if not found or not a string.
+	 * @return An {@link Optional} containing the value as a string, or empty if not found or not a string type.
 	 */
 	public Optional<String> getString(String methodName) {
 		return getMethod(methodName).filter(x -> x.hasReturnType(String.class)).map(x -> s(x.invoke(a)));
@@ -357,8 +535,15 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as an integer.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation(priority=5)</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	<jk>int</jk> <jv>priority</jv> = <jv>ai</jv>.getInt(<js>"priority"</js>).orElse(0);  <jc>// Returns 5</jc>
+	 * </p>
+	 *
 	 * @param methodName The method name.
-	 * @return An optional containing the value of the specified method, or empty if not found or not an integer.
+	 * @return An {@link Optional} containing the value as an integer, or empty if not found or not an {@code int} type.
 	 */
 	public Optional<Integer> getInt(String methodName) {
 		return getMethod(methodName).filter(x -> x.hasReturnType(int.class)).map(x -> (Integer)x.invoke(a));
@@ -367,8 +552,15 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a boolean.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation(enabled=true)</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	<jk>boolean</jk> <jv>enabled</jv> = <jv>ai</jv>.getBoolean(<js>"enabled"</js>).orElse(<jk>false</jk>);  <jc>// Returns true</jc>
+	 * </p>
+	 *
 	 * @param methodName The method name.
-	 * @return An optional containing the value of the specified method, or empty if not found or not a boolean.
+	 * @return An {@link Optional} containing the value as a boolean, or empty if not found or not a {@code boolean} type.
 	 */
 	public Optional<Boolean> getBoolean(String methodName) {
 		return getMethod(methodName).filter(x -> x.hasReturnType(boolean.class)).map(x -> (Boolean)x.invoke(a));
@@ -377,8 +569,15 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a long.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation(timestamp=1234567890L)</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	<jk>long</jk> <jv>timestamp</jv> = <jv>ai</jv>.getLong(<js>"timestamp"</js>).orElse(0L);  <jc>// Returns 1234567890L</jc>
+	 * </p>
+	 *
 	 * @param methodName The method name.
-	 * @return An optional containing the value of the specified method, or empty if not found or not a long.
+	 * @return An {@link Optional} containing the value as a long, or empty if not found or not a {@code long} type.
 	 */
 	public Optional<Long> getLong(String methodName) {
 		return getMethod(methodName).filter(x -> x.hasReturnType(long.class)).map(x -> (Long)x.invoke(a));
@@ -387,8 +586,15 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a double.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation(threshold=0.95)</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	<jk>double</jk> <jv>threshold</jv> = <jv>ai</jv>.getDouble(<js>"threshold"</js>).orElse(0.0);  <jc>// Returns 0.95</jc>
+	 * </p>
+	 *
 	 * @param methodName The method name.
-	 * @return An optional containing the value of the specified method, or empty if not found or not a double.
+	 * @return An {@link Optional} containing the value as a double, or empty if not found or not a {@code double} type.
 	 */
 	public Optional<Double> getDouble(String methodName) {
 		return getMethod(methodName).filter(x -> x.hasReturnType(double.class)).map(x -> (Double)x.invoke(a));
@@ -397,8 +603,15 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a float.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation(weight=0.5f)</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	<jk>float</jk> <jv>weight</jv> = <jv>ai</jv>.getFloat(<js>"weight"</js>).orElse(0.0f);  <jc>// Returns 0.5f</jc>
+	 * </p>
+	 *
 	 * @param methodName The method name.
-	 * @return An optional containing the value of the specified method, or empty if not found or not a float.
+	 * @return An {@link Optional} containing the value as a float, or empty if not found or not a {@code float} type.
 	 */
 	public Optional<Float> getFloat(String methodName) {
 		return getMethod(methodName).filter(x -> x.hasReturnType(float.class)).map(x -> (Float)x.invoke(a));
@@ -407,8 +620,18 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a class.
 	 *
+	 * <p>
+	 * For type-safe access to a class of a specific supertype, use {@link #getClassValue(String, Class)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation(type=String.class)</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	Class&lt;?&gt; <jv>type</jv> = <jv>ai</jv>.getClassValue(<js>"type"</js>).orElse(<jk>null</jk>);  <jc>// Returns String.class</jc>
+	 * </p>
+	 *
 	 * @param methodName The method name.
-	 * @return An optional containing the value of the specified method, or empty if not found or not a class.
+	 * @return An {@link Optional} containing the class value, or empty if not found or not a {@link Class} type.
 	 */
 	@SuppressWarnings("unchecked")
 	public Optional<Class<?>> getClassValue(String methodName) {
@@ -443,8 +666,15 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a string array.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation(tags={"foo", "bar"})</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	String[] <jv>tags</jv> = <jv>ai</jv>.getStringArray(<js>"tags"</js>).orElse(<jk>new</jk> String[0]);  <jc>// Returns ["foo", "bar"]</jc>
+	 * </p>
+	 *
 	 * @param methodName The method name.
-	 * @return An optional containing the value of the specified method, or empty if not found or not a string array.
+	 * @return An {@link Optional} containing the string array value, or empty if not found or not a {@code String[]} type.
 	 */
 	public Optional<String[]> getStringArray(String methodName) {
 		return getMethod(methodName).filter(x -> x.hasReturnType(String[].class)).map(x -> (String[])x.invoke(a));
@@ -453,8 +683,18 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a class array.
 	 *
+	 * <p>
+	 * For type-safe access to an array of classes of a specific supertype, use {@link #getClassArray(String, Class)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @MyAnnotation(types={String.class, Integer.class})</jc>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	Class&lt;?&gt;[] <jv>types</jv> = <jv>ai</jv>.getClassArray(<js>"types"</js>).orElse(<jk>new</jk> Class[0]);  <jc>// Returns [String.class, Integer.class]</jc>
+	 * </p>
+	 *
 	 * @param methodName The method name.
-	 * @return An optional containing the value of the specified method, or empty if not found or not a class array.
+	 * @return An {@link Optional} containing the class array value, or empty if not found or not a {@code Class[]} type.
 	 */
 	@SuppressWarnings("unchecked")
 	public Optional<Class<?>[]> getClassArray(String methodName) {
