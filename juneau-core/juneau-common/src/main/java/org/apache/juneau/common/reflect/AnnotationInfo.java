@@ -530,6 +530,31 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
+	 * Returns the value of the specified method on this annotation as a class of a specific type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get a serializer class from an annotation</jc>
+	 * 	Optional&lt;Class&lt;? <jk>extends</jk> Serializer&gt;&gt; <jv>serializerClass</jv> = 
+	 * 		<jv>annotationInfo</jv>.getClassValue(<js>"serializer"</js>, Serializer.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The expected supertype of the class.
+	 * @param methodName The method name.
+	 * @param type The expected supertype of the class value.
+	 * @return An optional containing the value of the specified method cast to the expected type, 
+	 *         or empty if not found, not a class, or not assignable to the expected type.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Optional<Class<? extends T>> getClassValue(String methodName, Class<T> type) {
+		return getMethod(methodName)
+			.filter(x -> x.hasReturnType(Class.class))
+			.map(x -> (Class<?>)x.invoke(a))
+			.filter(type::isAssignableFrom)
+			.map(x -> (Class<? extends T>)x);
+	}
+
+	/**
 	 * Returns the value of the specified method on this annotation as a string array.
 	 *
 	 * @param methodName The method name.
@@ -548,6 +573,37 @@ public class AnnotationInfo<T extends Annotation> {
 	@SuppressWarnings("unchecked")
 	public Optional<Class<?>[]> getClassArray(String methodName) {
 		return (Optional<Class<?>[]>)(Optional<?>)getMethod(methodName).filter(x -> x.hasReturnType(Class[].class)).map(x -> x.invoke(a));
+	}
+
+	/**
+	 * Returns the value of the specified method on this annotation as a class array of a specific type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get an array of serializer classes from an annotation</jc>
+	 * 	Optional&lt;Class&lt;? <jk>extends</jk> Serializer&gt;[]&gt; <jv>serializerClasses</jv> = 
+	 * 		<jv>annotationInfo</jv>.getClassArray(<js>"serializers"</js>, Serializer.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The expected supertype of the classes.
+	 * @param methodName The method name.
+	 * @param type The expected supertype of the class values.
+	 * @return An optional containing the value of the specified method cast to the expected type, 
+	 *         or empty if not found, not a class array, or any element is not assignable to the expected type.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Optional<Class<? extends T>[]> getClassArray(String methodName, Class<T> type) {
+		return getMethod(methodName)
+			.filter(x -> x.hasReturnType(Class[].class))
+			.map(x -> (Class<?>[])x.invoke(a))
+			.filter(arr -> {
+				for (var c : arr) {
+					if (!type.isAssignableFrom(c))
+						return false;
+				}
+				return true;
+			})
+			.map(x -> (Class<? extends T>[])x);
 	}
 
 	/**
