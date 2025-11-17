@@ -284,96 +284,6 @@ public class AnnotationInfo<T extends Annotation> {
 
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Static methods for ClassInfo
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Performs an action on all matching annotations on the specified class/parents/package.
-	 *
-	 * <p>
-	 * Annotations are consumed in the following order:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param classInfo The class to process.
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 */
-	// TODO: Once ClassInfo arrays are converted to Lists, convert reverse iterations to rstream() and nested loops to flatMap()
-	public static void forEachAnnotationInfo(ClassInfo classInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		var pi = classInfo.getPackage();
-		if (nn(pi))
-			for (var ai : pi.getAnnotations())
-				if (filter == null || filter.test(ai))
-					action.accept(ai);
-		var interfaces = classInfo.getInterfaces();
-		for (int i = interfaces.size() - 1; i >= 0; i--)
-			for (var a : interfaces.get(i).inner().getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a)) {
-					var ai = AnnotationInfo.of(interfaces.get(i), a2);
-					if (filter == null || filter.test(ai))
-						action.accept(ai);
-				}
-		var parents = classInfo.getParents();
-		for (int i = parents.size() - 1; i >= 0; i--)
-			for (var a : parents.get(i).inner().getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a)) {
-					var ai = AnnotationInfo.of(parents.get(i), a2);
-					if (filter == null || filter.test(ai))
-						action.accept(ai);
-				}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static methods for MethodInfo
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Performs an action on all matching annotations on the specified method.
-	 *
-	 * @param methodInfo The method to process.
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 */
-	// TODO: Once ClassInfo arrays are converted to Lists, convert reverse iterations to rstream()
-	public static void forEachAnnotationInfo(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		var c = methodInfo.getDeclaringClass();
-		forEachDeclaredAnnotationInfo(c.getPackage(), filter, action);
-		var interfaces = c.getInterfaces();
-		for (int i = interfaces.size() - 1; i >= 0; i--) {
-			forEachDeclaredAnnotationInfo(interfaces.get(i), filter, action);
-			forEachDeclaredMethodAnnotationInfo(methodInfo, interfaces.get(i), filter, action);
-		}
-		var parents = c.getParents();
-		for (int i = parents.size() - 1; i >= 0; i--) {
-			forEachDeclaredAnnotationInfo(parents.get(i), filter, action);
-			forEachDeclaredMethodAnnotationInfo(methodInfo, parents.get(i), filter, action);
-		}
-	}
-
-	/**
-	 * Performs an action on all matching annotations on methods only.
-	 *
-	 * @param methodInfo The method to process.
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 */
-	// TODO: Once ClassInfo arrays are converted to Lists, convert reverse iterations to rstream()
-	public static void forEachAnnotationInfoMethodOnly(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		var c = methodInfo.getDeclaringClass();
-		var interfaces = c.getInterfaces();
-		for (int i = interfaces.size() - 1; i >= 0; i--)
-			forEachDeclaredMethodAnnotationInfo(methodInfo, interfaces.get(i), filter, action);
-		var parents = c.getParents();
-		for (int i = parents.size() - 1; i >= 0; i--)
-			forEachDeclaredMethodAnnotationInfo(methodInfo, parents.get(i), filter, action);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Private helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -383,30 +293,6 @@ public class AnnotationInfo<T extends Annotation> {
 			.findFirst()
 			.map(m -> safe(() -> (int)m.invoke(a)))
 			.orElse(0);
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		if (nn(ci))
-			for (var ai : ci.getDeclaredAnnotationInfos())
-				if (filter == null || filter.test(ai))
-					action.accept(ai);
-	}
-
-	private static void forEachDeclaredAnnotationInfo(PackageInfo pi, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		if (nn(pi))
-			for (var ai : pi.getAnnotations())
-				if (filter == null || filter.test(ai))
-					action.accept(ai);
-	}
-
-	private static void forEachDeclaredMethodAnnotationInfo(MethodInfo methodInfo, ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		MethodInfo mi = methodInfo.findMatchingOnClass(ci);
-		if (nn(mi))
-			mi.getDeclaredAnnotationInfos().forEach(ai -> {
-				if (filter == null || filter.test(ai))
-					action.accept(ai);
-			});
 	}
 
 	/**

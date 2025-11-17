@@ -172,6 +172,62 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
+	 * Performs an action on all matching annotations on this method.
+	 *
+	 * <p>
+	 * Processes annotations on:
+	 * <ul>
+	 * 	<li>Package of the declaring class
+	 * 	<li>Interfaces (and their methods) in parent-to-child order
+	 * 	<li>Parent classes (and their methods) in parent-to-child order
+	 * </ul>
+	 *
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
+	 * @return This object.
+	 */
+	public MethodInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		var c = getDeclaringClass();
+		forEachDeclaredAnnotationInfo(c.getPackage(), filter, action);
+		var interfaces = c.getInterfaces();
+		for (int i = interfaces.size() - 1; i >= 0; i--) {
+			forEachDeclaredAnnotationInfo(interfaces.get(i), filter, action);
+			forEachDeclaredMethodAnnotationInfo(this, interfaces.get(i), filter, action);
+		}
+		var parents = c.getParents();
+		for (int i = parents.size() - 1; i >= 0; i--) {
+			forEachDeclaredAnnotationInfo(parents.get(i), filter, action);
+			forEachDeclaredMethodAnnotationInfo(this, parents.get(i), filter, action);
+		}
+		return this;
+	}
+
+	/**
+	 * Performs an action on all matching annotations on methods only.
+	 *
+	 * <p>
+	 * Processes annotations on:
+	 * <ul>
+	 * 	<li>Matching methods in interfaces in parent-to-child order
+	 * 	<li>Matching methods in parent classes in parent-to-child order
+	 * </ul>
+	 *
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
+	 * @return This object.
+	 */
+	public MethodInfo forEachAnnotationInfoMethodOnly(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		var c = getDeclaringClass();
+		var interfaces = c.getInterfaces();
+		for (int i = interfaces.size() - 1; i >= 0; i--)
+			forEachDeclaredMethodAnnotationInfo(this, interfaces.get(i), filter, action);
+		var parents = c.getParents();
+		for (int i = parents.size() - 1; i >= 0; i--)
+			forEachDeclaredMethodAnnotationInfo(this, parents.get(i), filter, action);
+		return this;
+	}
+
+	/**
 	 * Finds annotations on this method using the specified traversal settings.
 	 *
 	 * <p>
@@ -787,6 +843,33 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		if (hasName(m2.getName()) && hasParameterTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
 			return m2;
 		return null;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods for forEachAnnotationInfo
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		if (nn(ci))
+			for (var ai : ci.getDeclaredAnnotationInfos())
+				if (filter == null || filter.test(ai))
+					action.accept(ai);
+	}
+
+	private static void forEachDeclaredAnnotationInfo(PackageInfo pi, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		if (nn(pi))
+			for (var ai : pi.getAnnotations())
+				if (filter == null || filter.test(ai))
+					action.accept(ai);
+	}
+
+	private static void forEachDeclaredMethodAnnotationInfo(MethodInfo methodInfo, ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		MethodInfo mi = methodInfo.findMatchingOnClass(ci);
+		if (nn(mi))
+			mi.getDeclaredAnnotationInfos().forEach(ai -> {
+				if (filter == null || filter.test(ai))
+					action.accept(ai);
+			});
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

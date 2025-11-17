@@ -753,6 +753,47 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
+	 * Performs an action on all matching annotations on this class and parent classes/interfaces.
+	 *
+	 * <p>
+	 * Annotations are consumed in the following order:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
+	 * @return This object.
+	 */
+	public ClassInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		var pi = getPackage();
+		if (nn(pi))
+			for (var ai : pi.getAnnotations())
+				if (filter == null || filter.test(ai))
+					action.accept(ai);
+		var interfaces = getInterfaces();
+		for (int i = interfaces.size() - 1; i >= 0; i--)
+			for (var a : interfaces.get(i).inner().getDeclaredAnnotations())
+				for (var a2 : splitRepeated(a)) {
+					var ai = AnnotationInfo.of(interfaces.get(i), a2);
+					if (filter == null || filter.test(ai))
+						action.accept(ai);
+				}
+		var parents = getParents();
+		for (int i = parents.size() - 1; i >= 0; i--)
+			for (var a : parents.get(i).inner().getDeclaredAnnotations())
+				for (var a2 : splitRepeated(a)) {
+					var ai = AnnotationInfo.of(parents.get(i), a2);
+					if (filter == null || filter.test(ai))
+						action.accept(ai);
+				}
+		return this;
+	}
+
+	/**
 	 * Finds annotations on this class using the specified traversal settings.
 	 *
 	 * <p>
