@@ -19,6 +19,7 @@ package org.apache.juneau.common.reflect;
 import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -79,7 +80,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.type = memoize(() -> ClassInfo.of(inner.getType()));
-		this.declaredAnnotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.declaredAnnotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList());
 		this.fullName = memoize(this::findFullName);
 	}
 
@@ -97,7 +98,15 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	/**
 	 * Returns all annotations declared on this field.
 	 *
-	 * @return An unmodifiable list of all annotations declared on this field.
+	 * <p>
+	 * <b>Note on Repeatable Annotations:</b>
+	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * expanded into their individual annotation instances. For example, if a field has multiple {@code @Bean} annotations,
+	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
+	 *
+	 * @return
+	 * 	An unmodifiable list of all annotations declared on this field.
+	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
 	public List<AnnotationInfo<Annotation>> getDeclaredAnnotations() {
 		return declaredAnnotations.get();

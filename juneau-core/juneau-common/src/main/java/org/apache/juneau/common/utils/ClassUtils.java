@@ -25,6 +25,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
@@ -485,45 +486,39 @@ public class ClassUtils {
 	}
 
 	/**
-	 * If the annotation is an array of other annotations, returns the inner annotations.
+	 * Returns a stream of nested annotations in a repeated annotation if the specified annotation is a repeated annotation,
+	 * or a singleton stream with the same annotation if not.
 	 *
 	 * <p>
-	 * This is used to handle repeated annotations where a container annotation holds multiple instances
-	 * of the same annotation type.
+	 * This method is a stream-based alternative to {@link #splitRepeated(Annotation)} that avoids creating intermediate arrays.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <p>
+	 * <b>Example:</b>
 	 * <p class='bjava'>
-	 * 	<ja>@Repeatable</ja>(Authors.<jk>class</jk>)
-	 * 	<ja>@interface</ja> Author {
-	 * 		String value();
-	 * 	}
+	 * 	<jc>// Given an annotation that may be repeatable</jc>
+	 * 	Annotation <jv>annotation</jv> = ...;
 	 *
-	 * 	<ja>@interface</ja> Authors {
-	 * 		Author[] value();
-	 * 	}
-	 *
-	 * 	<jc>// Given a class with repeated annotations:</jc>
-	 * 	<ja>@Author</ja>(<js>"John"</js>)
-	 * 	<ja>@Author</ja>(<js>"Jane"</js>)
-	 * 	<jk>class</jk> MyClass {}
-	 *
-	 * 	<jc>// At runtime, this becomes an Authors annotation containing an array</jc>
-	 * 	<jc>// splitRepeated() extracts the individual Author annotations</jc>
+	 * 	<jc>// Stream individual annotations (expanded if repeatable)</jc>
+	 * 	streamRepeated(<jv>annotation</jv>)
+	 * 		.forEach(<jv>a</jv> -&gt; System.<jsf>out</jsf>.println(<jv>a</jv>));
 	 * </p>
 	 *
-	 * @param a The annotation to split if repeated.
-	 * @return The nested annotations, or a singleton array of the same annotation if it's not repeated.
+	 * @param a The annotation to split.
+	 * @return A stream of nested annotations, or a singleton stream with the same annotation if it's not repeated.
+	 * 	Never <jk>null</jk>.
 	 */
-	public static Annotation[] splitRepeated(Annotation a) {
+	public static Stream<Annotation> streamRepeated(Annotation a) {
 		try {
 			var ci = ClassInfo.of(a.annotationType());
 			var mi = ci.getRepeatedAnnotationMethod();
-			if (nn(mi))
-				return mi.invoke(a);
+			if (nn(mi)) {
+				Annotation[] annotations = mi.invoke(a);
+				return Arrays.stream(annotations);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return a(a);
+		return Stream.of(a);
 	}
 
 	/**

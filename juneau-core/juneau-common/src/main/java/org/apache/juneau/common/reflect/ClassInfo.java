@@ -225,7 +225,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		this.componentType = memoize(this::findComponentType);
 		this.packageInfo = memoize(() -> opt(inner).map(x -> x.getPackage()).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.
 		this.parents = memoize(this::findParents);
-		this.declaredAnnotations = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -> AnnotationInfo.of(this, a)).toList());
+		this.declaredAnnotations = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList());
 		this.fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
 		this.shortName = memoize(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
 		this.readableName = memoize(() -> getNameFormatted(SIMPLE, false, '$', WORD));
@@ -2270,10 +2270,17 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * from parent classes. Each annotation is wrapped for additional functionality such as annotation member
 	 * access and metadata inspection.
 	 *
+	 * <p>
+	 * <b>Note on Repeatable Annotations:</b>
+	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * expanded into their individual annotation instances. For example, if a class has multiple {@code @Bean} annotations,
+	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
+	 *
 	 * @return
 	 * 	An unmodifiable list of {@link AnnotationInfo} wrappers for annotations declared directly on this class.
 	 * 	<br>List is empty if no annotations are declared.
 	 * 	<br>Results are in declaration order.
+	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
 	public List<AnnotationInfo> getDeclaredAnnotations() {
 		return declaredAnnotations.get();
@@ -2472,8 +2479,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			var ci = parentsAndInterfaces.get(i);
 			// Add declared annotations from this class/interface
 			for (var a : ci.inner().getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a))
-					list.add(AnnotationInfo.of(ci, a2));
+				streamRepeated(a).forEach(a2 -> list.add(AnnotationInfo.of(ci, a2)));
 		}
 
 		// On the package of this class
@@ -2481,8 +2487,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (nn(pkg)) {
 			var pi = PackageInfo.of(pkg.inner());
 			for (var a : pkg.inner().getAnnotations())
-				for (var a2 : splitRepeated(a))
-					list.add(AnnotationInfo.of(pi, a2));
+				streamRepeated(a).forEach(a2 -> list.add(AnnotationInfo.of(pi, a2)));
 		}
 
 		return u(list);

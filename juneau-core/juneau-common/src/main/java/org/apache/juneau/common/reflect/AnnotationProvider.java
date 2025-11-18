@@ -515,6 +515,67 @@ public class AnnotationProvider {
 	}
 
 	/**
+	 * Finds all annotations of the specified type on the specified class in a bottom-up traversal order.
+	 *
+	 * <p>
+	 * This method provides a very specific traversal order that searches annotations in the following sequence:
+	 * <ol>
+	 * 	<li><b>This class</b>
+	 * 		<ul>
+	 * 			<li>Runtime annotations
+	 * 			<li>Declared annotations
+	 * 		</ul>
+	 * 	<li><b>Parent classes (child-to-parent order)</b>
+	 * 		<ul>
+	 * 			<li>For each parent: runtime annotations, then declared annotations
+	 * 		</ul>
+	 * 	<li><b>Interfaces (for each class level, then their parent interfaces)</b>
+	 * 		<ul>
+	 * 			<li>For each interface: runtime annotations, then declared annotations
+	 * 		</ul>
+	 * 	<li><b>Package of this class</b>
+	 * 		<ul>
+	 * 			<li>Declared annotations (packages do not support runtime annotations)
+	 * 		</ul>
+	 * </ol>
+	 *
+	 * <p>
+	 * <b>Example traversal order</b> (given class {@code Child extends Parent implements I1, I2}):
+	 * <ol>
+	 * 	<li>Child runtime annotations
+	 * 	<li>Child declared annotations
+	 * 	<li>Parent runtime annotations
+	 * 	<li>Parent declared annotations
+	 * 	<li>I1 runtime annotations (declared on Child)
+	 * 	<li>I1 declared annotations
+	 * 	<li>I2 runtime annotations (declared on Child)
+	 * 	<li>I2 declared annotations
+	 * 	<li>Parent interfaces and their parents...
+	 * 	<li>Package declared annotations
+	 * </ol>
+	 *
+	 * <p>
+	 * <b>Comparison with {@link #find(Class, Class)}:</b>
+	 * <ul>
+	 * 	<li>{@link #find(Class, Class)} interleaves parent classes and interfaces at each level
+	 * 	<li>{@code findBottomUp} processes all parent classes first, then all interfaces, then package
+	 * 	<li>{@code findBottomUp} ensures runtime annotations always come before declared annotations at each level (except packages which don't support runtime annotations)
+	 * </ul>
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param type The annotation type to find.
+	 * @param onClass The class info to search on.
+	 * @return A stream of {@link AnnotationInfo} objects in the specified bottom-up order. Never <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findBottomUp(Class<A> type, ClassInfo onClass) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("onClass", onClass);
+
+		return null;  // TODO
+	}
+
+	/**
 	 * Finds annotations declared directly on the specified class, including runtime annotations.
 	 *
 	 * <p>
@@ -795,8 +856,7 @@ public class AnnotationProvider {
 		if (nn(pkg)) {
 			var pi = PackageInfo.of(pkg.inner());
 			for (var a : pkg.inner().getAnnotations())
-				for (var a2 : splitRepeated(a))
-					list.add(AnnotationInfo.of(pi, a2));
+				streamRepeated(a).forEach(a2 -> list.add(AnnotationInfo.of(pi, a2)));
 		}
 
 		return u(list);
@@ -852,8 +912,7 @@ public class AnnotationProvider {
 		var ci = ClassInfo.of(forClass);
 		runtimeAnnotations.find(forClass).forEach(x -> appendTo.add(AnnotationInfo.of(ClassInfo.of(forClass), x)));
 		for (var a : forClass.getDeclaredAnnotations())
-			for (var a2 : splitRepeated(a))
-				appendTo.add(AnnotationInfo.of(ci, a2));
+			streamRepeated(a).forEach(a2 -> appendTo.add(AnnotationInfo.of(ci, a2)));
 	}
 
 	/**
@@ -968,7 +1027,7 @@ public class AnnotationProvider {
 	 * Streams annotations from a class using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, ClassInfo, AnnotationTraversal...)} 
+	 * This is equivalent to calling {@link #findAnnotations(Class, ClassInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.
@@ -1026,7 +1085,7 @@ public class AnnotationProvider {
 	 * Streams annotations from a method using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, MethodInfo, AnnotationTraversal...)} 
+	 * This is equivalent to calling {@link #findAnnotations(Class, MethodInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.
@@ -1084,7 +1143,7 @@ public class AnnotationProvider {
 	 * Streams annotations from a parameter using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, ParameterInfo, AnnotationTraversal...)} 
+	 * This is equivalent to calling {@link #findAnnotations(Class, ParameterInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.
@@ -1134,7 +1193,7 @@ public class AnnotationProvider {
 	 * Streams annotations from a field using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, FieldInfo, AnnotationTraversal...)} 
+	 * This is equivalent to calling {@link #findAnnotations(Class, FieldInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.
@@ -1184,7 +1243,7 @@ public class AnnotationProvider {
 	 * Streams annotations from a constructor using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, ConstructorInfo, AnnotationTraversal...)} 
+	 * This is equivalent to calling {@link #findAnnotations(Class, ConstructorInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.

@@ -17,6 +17,7 @@
 package org.apache.juneau.common.reflect;
 
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -80,7 +81,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		this.inner = inner;
 		this.index = index;
 		this.type = type;
-		this.declaredAnnotations = memoize(() -> stream(inner.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.declaredAnnotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList());
 		this.matchingParameters = memoize(this::findMatchingParameters);
 	}
 
@@ -99,7 +100,15 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * Returns annotations directly declared on this parameter, wrapped as {@link AnnotationInfo} objects.
 	 *
-	 * @return An unmodifiable list of annotations on this parameter, never <jk>null</jk>.
+	 * <p>
+	 * <b>Note on Repeatable Annotations:</b>
+	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * expanded into their individual annotation instances. For example, if a parameter has multiple {@code @Bean} annotations,
+	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
+	 *
+	 * @return
+	 * 	An unmodifiable list of annotations on this parameter, never <jk>null</jk>.
+	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
 	public List<AnnotationInfo<Annotation>> getAnnotations() {
 		return declaredAnnotations.get();

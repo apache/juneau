@@ -180,7 +180,15 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	/**
 	 * Returns the declared annotations on this executable.
 	 *
-	 * @return The declared annotations on this executable as {@link AnnotationInfo} objects.
+	 * <p>
+	 * <b>Note on Repeatable Annotations:</b>
+	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * expanded into their individual annotation instances. For example, if a method has multiple {@code @Bean} annotations,
+	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
+	 *
+	 * @return
+	 * 	The declared annotations on this executable as {@link AnnotationInfo} objects.
+	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
 	public final List<AnnotationInfo<Annotation>> getDeclaredAnnotations() { return declaredAnnotations.get(); }
 
