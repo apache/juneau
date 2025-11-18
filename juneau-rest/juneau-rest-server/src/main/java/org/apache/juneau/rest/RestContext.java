@@ -4496,7 +4496,7 @@ public class RestContext extends Context {
 
 				RestContext cc = cb.init(so).build();
 
-				MethodInfo mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class));
+				MethodInfo mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 				if (nn(mi))
 					mi.accessible().invoke(so.get(), cc);
 
@@ -5765,7 +5765,7 @@ public class RestContext extends Context {
 		if (initialized.get())
 			return this;
 		var resource = getResource();
-		var mi = ClassInfo.of(getResource()).getPublicMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class));
+		var mi = ClassInfo.of(getResource()).getPublicMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 		if (nn(mi)) {
 			try {
 				mi.accessible().invoke(resource, this);

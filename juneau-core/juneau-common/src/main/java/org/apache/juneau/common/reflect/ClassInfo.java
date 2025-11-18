@@ -330,7 +330,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 		<jk>void</jk> method3() {}
 	 * 		<jk>void</jk> method4() {}
 	 * 	}
-	 * 	
+	 *
 	 * 	<jc>// getAllMethodsParentFirst() returns in parent-to-child order:</jc>
 	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>);
 	 * 	List&lt;MethodInfo&gt; <jv>methods</jv> = <jv>ci</jv>.getAllMethodsParentFirst();
@@ -453,11 +453,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The declared constructor that matches the specified predicate.
 	 */
-	public ConstructorInfo getDeclaredConstructor(Predicate<ConstructorInfo> filter) {
-		for (var ci : declaredConstructors.get())
-			if (test(filter, ci))
-				return ci;
-		return null;
+	public Optional<ConstructorInfo> getDeclaredConstructor(Predicate<ConstructorInfo> filter) {
+		return declaredConstructors.get().stream().filter(x -> test(filter, x)).findFirst();
 	}
 
 	/**
@@ -475,11 +472,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The declared field, or <jk>null</jk> if not found.
 	 */
-	public FieldInfo getDeclaredField(Predicate<FieldInfo> filter) {
-		for (var f : declaredFields.get())
-			if (test(filter, f))
-				return f;
-		return null;
+	public Optional<FieldInfo> getDeclaredField(Predicate<FieldInfo> filter) {
+		return declaredFields.get().stream().filter(x -> test(filter, x)).findFirst();
 	}
 
 	/**
@@ -625,11 +619,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
-	public MethodInfo getDeclaredMethod(Predicate<MethodInfo> filter) {
-		for (var mi : declaredMethods.get())
-			if (test(filter, mi))
-				return mi;
-		return null;
+	public Optional<MethodInfo> getDeclaredMethod(Predicate<MethodInfo> filter) {
+		return declaredMethods.get().stream().filter(x -> test(filter, x)).findFirst();
 	}
 
 	/**
@@ -798,57 +789,13 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Performs an action on all matching annotations on this class and parent classes/interfaces.
-	 *
-	 * <p>
-	 * Annotations are consumed in the following order:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachAnnotation(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		var pi = getPackage();
-		if (nn(pi))
-			for (var ai : pi.getAnnotations())
-				if (filter == null || filter.test(ai))
-					action.accept(ai);
-		var interfaces = getInterfaces();
-		for (int i = interfaces.size() - 1; i >= 0; i--)
-			for (var a : interfaces.get(i).inner().getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a)) {
-					var ai = AnnotationInfo.of(interfaces.get(i), a2);
-					if (filter == null || filter.test(ai))
-						action.accept(ai);
-				}
-		var parents = getParents();
-		for (int i = parents.size() - 1; i >= 0; i--)
-			for (var a : parents.get(i).inner().getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a)) {
-					var ai = AnnotationInfo.of(parents.get(i), a2);
-					if (filter == null || filter.test(ai))
-						action.accept(ai);
-				}
-		return this;
-	}
-
-	/**
 	 * Returns the first matching method on this class.
 	 *
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
-	public MethodInfo getMethod(Predicate<MethodInfo> filter) {
-		for (var mi : allMethods.get())
-			if (test(filter, mi))
-				return mi;
-		return null;
+	public Optional<MethodInfo> getMethod(Predicate<MethodInfo> filter) {
+		return allMethods.get().stream().filter(x -> test(filter, x)).findFirst();
 	}
 
 	/**
@@ -873,7 +820,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 		<jk>void</jk> method3() {}
 	 * 		<jk>void</jk> method4() {}
 	 * 	}
-	 * 	
+	 *
 	 * 	<jc>// getAllMethods() returns in child-to-parent order:</jc>
 	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>);
 	 * 	List&lt;MethodInfo&gt; <jv>methods</jv> = <jv>ci</jv>.getAllMethods();
@@ -1006,16 +953,15 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param v The minimum visibility.
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
 	 */
-	public ConstructorInfo getNoArgConstructor(Visibility v) {
+	public Optional<ConstructorInfo> getNoArgConstructor(Visibility v) {
 		if (isAbstract())
-			return null;
+			return Optional.empty();
 		int expectedParams = isNonStaticMemberClass() ? 1 : 0;
 		return getDeclaredConstructors().stream()
 			.filter(cc -> cc.hasNumParameters(expectedParams))
 			.filter(cc -> cc.isVisible(v))
 			.map(cc -> cc.accessible(v))
-			.findFirst()
-			.orElse(null);
+			.findFirst();
 	}
 
 	/**
@@ -1148,11 +1094,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The public constructor that matches the specified predicate.
 	 */
-	public ConstructorInfo getPublicConstructor(Predicate<ConstructorInfo> filter) {
-		for (var ci : publicConstructors.get())
-			if (test(filter, ci))
-				return ci;
-		return null;
+	public Optional<ConstructorInfo> getPublicConstructor(Predicate<ConstructorInfo> filter) {
+		return publicConstructors.get().stream().filter(x -> test(filter, x)).findFirst();
 	}
 
 	/**
@@ -1168,11 +1111,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The public field, or <jk>null</jk> if not found.
 	 */
-	public FieldInfo getPublicField(Predicate<FieldInfo> filter) {
-		for (var f : publicFields.get())
-			if (test(filter, f))
-				return f;
-		return null;
+	public Optional<FieldInfo> getPublicField(Predicate<FieldInfo> filter) {
+		return publicFields.get().stream().filter(x -> test(filter, x)).findFirst();
 	}
 
 	/**
@@ -1194,11 +1134,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
-	public MethodInfo getPublicMethod(Predicate<MethodInfo> filter) {
-		for (var mi : publicMethods.get())
-			if (test(filter, mi))
-				return mi;
-		return null;
+	public Optional<MethodInfo> getPublicMethod(Predicate<MethodInfo> filter) {
+		return publicMethods.get().stream().filter(x -> test(filter, x)).findFirst();
 	}
 
 	/**
@@ -1694,7 +1631,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * <p class='bjava'>
 	 * 	ClassInfo <jv>intClass</jv> = ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>);
 	 * 	ClassInfo <jv>wrapper</jv> = <jv>intClass</jv>.getWrapperIfPrimitive();  <jc>// Returns ClassInfo for Integer.class</jc>
-	 * 	
+	 *
 	 * 	ClassInfo <jv>stringClass</jv> = ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>);
 	 * 	ClassInfo <jv>same</jv> = <jv>stringClass</jv>.getWrapperIfPrimitive();  <jc>// Returns same ClassInfo</jc>
 	 * </p>

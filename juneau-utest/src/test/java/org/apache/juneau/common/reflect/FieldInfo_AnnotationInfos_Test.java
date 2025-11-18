@@ -55,9 +55,9 @@ public class FieldInfo_AnnotationInfos_Test {
 	@Test
 	public void testGetAnnotationInfos() {
 		var ci = ClassInfo.of(TestClass.class);
-		var field1 = ci.getPublicField(x -> x.getName().equals("field1"));
-		var field2 = ci.getPublicField(x -> x.getName().equals("field2"));
-		var field3 = ci.getPublicField(x -> x.getName().equals("field3"));
+		var field1 = ci.getPublicField(x -> x.getName().equals("field1")).get();
+		var field2 = ci.getPublicField(x -> x.getName().equals("field2")).get();
+		var field3 = ci.getPublicField(x -> x.getName().equals("field3")).get();
 
 		// field1 has 2 annotations
 		var annotations1 = field1.getDeclaredAnnotations();
@@ -78,8 +78,8 @@ public class FieldInfo_AnnotationInfos_Test {
 	@Test
 	public void testGetAnnotationInfosTyped() {
 		var ci = ClassInfo.of(TestClass.class);
-		var field1 = ci.getPublicField(x -> x.getName().equals("field1"));
-		var field2 = ci.getPublicField(x -> x.getName().equals("field2"));
+		var field1 = ci.getPublicField(x -> x.getName().equals("field1")).get();
+		var field2 = ci.getPublicField(x -> x.getName().equals("field2")).get();
 
 		// Test filtering by type for field1
 		var ann1_type1 = field1.getDeclaredAnnotations(TestAnnotation1.class).toList();
@@ -106,7 +106,7 @@ public class FieldInfo_AnnotationInfos_Test {
 	@Test
 	public void testGetAnnotationInfosMemoization() {
 		var ci = ClassInfo.of(TestClass.class);
-		var field1 = ci.getPublicField(x -> x.getName().equals("field1"));
+		var field1 = ci.getPublicField(x -> x.getName().equals("field1")).get();
 
 		// Calling getDeclaredAnnotationInfos() multiple times should return the same list instance
 		var annotations1 = field1.getDeclaredAnnotations();

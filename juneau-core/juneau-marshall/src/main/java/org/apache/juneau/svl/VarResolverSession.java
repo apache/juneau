@@ -266,13 +266,9 @@ public class VarResolverSession {
 			try {
 				if (! containsVars(c))
 					return o;
-				Set c2 = null;
-				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0);
-				if (ci != null) {
-					c2 = (Set)ci.inner().newInstance();
-				} else {
-					c2 = new LinkedHashSet<>();
-				}
+				Set c2 = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
+					.map(ci -> safe(() -> (Set)ci.inner().newInstance()))
+					.orElseGet(LinkedHashSet::new);
 				Set c3 = c2;
 				c.forEach(x -> c3.add(resolve(x)));
 				return (T)c2;
@@ -286,13 +282,9 @@ public class VarResolverSession {
 			try {
 				if (! containsVars(c))
 					return o;
-				List c2 = null;
-				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0);
-				if (ci != null) {
-					c2 = (List)ci.inner().newInstance();
-				} else {
-					c2 = list();
-				}
+				List c2 = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
+					.map(ci -> safe(() -> (List)ci.inner().newInstance()))
+					.orElseGet(() -> list());
 				List c3 = c2;
 				c.forEach(x -> c3.add(resolve(x)));
 				return (T)c2;
@@ -306,13 +298,9 @@ public class VarResolverSession {
 			try {
 				if (! containsVars(m))
 					return o;
-				Map m2 = null;
-				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0);
-				if (ci != null) {
-					m2 = (Map)ci.inner().newInstance();
-				} else {
-					m2 = new LinkedHashMap<>();
-				}
+				Map m2 = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
+					.map(ci -> safe(() -> (Map)ci.inner().newInstance()))
+					.orElseGet(LinkedHashMap::new);
 				Map m3 = m2;
 				m.forEach((k, v) -> m3.put(k, resolve(v)));
 				return (T)m2;

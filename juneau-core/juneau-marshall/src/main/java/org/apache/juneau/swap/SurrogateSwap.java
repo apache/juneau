@@ -58,8 +58,9 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 			var pt = x.getParameter(0).getParameterType().inner();
 			if (! pt.equals(c.getDeclaringClass())) {
 				// Find the unswap method if there is one.
-				var mi = ci.getPublicMethod(y -> y.hasReturnType(pt));
-				Method unswapMethod = nn(mi) ? mi.inner() : null;
+				Method unswapMethod = ci.getPublicMethod(y -> y.hasReturnType(pt))
+					.map(MethodInfo::inner)
+					.orElse(null);
 				l.add(new SurrogateSwap(pt, x.inner(), unswapMethod));
 			}
 		});

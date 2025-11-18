@@ -69,11 +69,11 @@ public class BuilderSwap<T,B> {
 
 		var pci = ClassInfo.of(objectClass);
 
-		objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass));
+		objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass)).orElse(null);
 		if (objectConstructor == null)
 			return null;
 
-		builderConstructor = bci.getNoArgConstructor(cVis);
+		builderConstructor = bci.getNoArgConstructor(cVis).orElse(null);
 		createBuilderMethod = getBuilderCreateMethod(pci);
 		if (builderConstructor == null && createBuilderMethod == null)
 			return null;
@@ -112,7 +112,7 @@ public class BuilderSwap<T,B> {
 				x -> x.isVisible(cVis)
 				&& x.hasNumParameters(1)
 				&& x.getParameter(0).getParameterType().isChildOf(Builder.class)
-			);
+			).orElse(null);
 			// @formatter:on
 			if (nn(cc)) {
 				objectConstructor = cc;
@@ -124,14 +124,14 @@ public class BuilderSwap<T,B> {
 			return null;
 
 		var bci = ClassInfo.of(builderClass.get());
-		builderConstructor = bci.getNoArgConstructor(cVis);
+		builderConstructor = bci.getNoArgConstructor(cVis).orElse(null);
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 
 		objectCreateMethod = getBuilderBuildMethod(bci);
 		var builderClass2 = builderClass.get();
 		if (objectConstructor == null)
-			objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass2));
+			objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass2)).orElse(null);
 
 		if (objectConstructor == null && objectCreateMethod == null)
 			return null;
@@ -147,7 +147,7 @@ public class BuilderSwap<T,B> {
 			&& x.getParameterCount() == 0
 			&& (!x.hasReturnType(void.class))
 			&& x.hasName("build")
-		);
+		).orElse(null);
 		// @formatter:on
 	}
 
@@ -158,7 +158,7 @@ public class BuilderSwap<T,B> {
 			&& (x.hasName("create") || x.hasName("builder"))
 			&& ! x.hasReturnType(c)
 			&& hasConstructorThatTakesType(c, x.getReturnType())
-		);
+		).orElse(null);
 		// @formatter:on
 	}
 

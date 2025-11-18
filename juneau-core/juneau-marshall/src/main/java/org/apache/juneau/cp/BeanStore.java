@@ -116,23 +116,25 @@ public class BeanStore {
 			var c = ClassInfo.of(type);
 
 			// @formatter:off
-			MethodInfo m = c.getDeclaredMethod(
+			Optional<BeanStore> result = c.getDeclaredMethod(
 				x -> x.isPublic()
 				&& x.getParameterCount() == 0
 				&& x.isStatic()
 				&& x.hasName("getInstance")
-			);
+			).map(m -> m.<BeanStore>invoke(null));
 			// @formatter:on
-			if (nn(m))
-				return m.invoke(null);
+			if (result.isPresent())
+				return result.get();
 
-			ConstructorInfo ci = c.getPublicConstructor(x -> x.canAccept(this));
-			if (nn(ci))
-				return ci.newInstance(this);
+			result = c.getPublicConstructor(x -> x.canAccept(this))
+				.map(ci -> ci.<BeanStore>newInstance(this));
+			if (result.isPresent())
+				return result.get();
 
-			ci = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this));
-			if (nn(ci))
-				return ci.accessible().newInstance(this);
+			result = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this))
+				.map(ci -> ci.accessible().<BeanStore>newInstance(this));
+			if (result.isPresent())
+				return result.get();
 
 			throw runtimeException("Could not find a way to instantiate class {0}", cn(type));
 		}

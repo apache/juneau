@@ -339,17 +339,16 @@ public class TemporalSwap extends StringSwap<Temporal> {
 		Method m = FROM_METHODS.get(c);
 		if (m == null) {
 			// @formatter:off
-			MethodInfo mi = ClassInfo.of(c).getPublicMethod(
+			m = ClassInfo.of(c).getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasName("from")
 				&& x.hasReturnType(c)
 				&& x.hasParameterTypes(TemporalAccessor.class)
-			);
+			)
+			.map(MethodInfo::inner)
+			.orElseThrow(() -> new ExecutableException("Parse method not found on temporal class ''{0}''", c.getSimpleName()));
 			// @formatter:on
-			if (mi == null)
-				throw new ExecutableException("Parse method not found on temporal class ''{0}''", c.getSimpleName());
-			m = mi.inner();
 			FROM_METHODS.put(c, m);
 		}
 		return m;

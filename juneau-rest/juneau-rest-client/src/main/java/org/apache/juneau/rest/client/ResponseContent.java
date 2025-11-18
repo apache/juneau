@@ -233,14 +233,10 @@ public class ResponseContent implements HttpEntity {
 			if (type.is(HttpResource.class))
 				type = (ClassMeta<T>)getClassMeta(BasicResource.class);
 
-			ConstructorInfo ci = type.getInfo().getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class));
-			if (nn(ci)) {
-				try {
-					return (T)ci.newInstance(response);
-				} catch (ExecutableException e) {
-					throw toRuntimeException(e);
-				}
-			}
+			var result = type.getInfo().getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class))
+				.map(ci -> safe(() -> (T)ci.newInstance(response)));
+			if (result.isPresent())
+				return result.get();
 
 			var ct = firstNonEmpty(response.getHeader("Content-Type").orElse("text/plain"));
 
@@ -270,14 +266,10 @@ public class ResponseContent implements HttpEntity {
 
 					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
 					if (t == null && ! type.is(String.class)) {
-						ConstructorInfo c = type.getInfo().getPublicConstructor(cons -> cons.getParameterCount() == 0);
-						if (nn(c)) {
-							try {
-								return c.<T>newInstance();
-							} catch (ExecutableException e) {
-								throw new ParseException(e);
-							}
-						}
+						var result2 = type.getInfo().getPublicConstructor(cons -> cons.getParameterCount() == 0)
+							.map(c -> safe(() -> c.<T>newInstance()));
+						if (result2.isPresent())
+							return result2.get();
 					}
 
 					return t;

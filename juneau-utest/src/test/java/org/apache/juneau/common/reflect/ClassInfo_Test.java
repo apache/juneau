@@ -180,10 +180,10 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void resolvedParams() {
-		var mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1"));
+		var mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1")).get();
 		check("A1", mi2.getParameter(0).getParameterType().unwrap(Optional.class));
 		check("A1", mi2.getReturnType().unwrap(Optional.class));
-		mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2"));
+		mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2")).get();
 		check("A1", mi2.getParameter(0).getParameterType().unwrap(Value.class));
 		check("A1", mi2.getReturnType().unwrap(Value.class));
 	}
@@ -411,43 +411,43 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getPublicConstructor_classArgs() {
-		check("E1(String)", e1.getPublicConstructor(x -> x.hasParameterTypes(String.class)));
+		check("E1(String)", e1.getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null));
 	}
 
 	@Test void getPublicConstructor_objectArgs() {
-		check("E1(String)", e1.getPublicConstructor(x -> x.canAccept("foo")));
+		check("E1(String)", e1.getPublicConstructor(x -> x.canAccept("foo")).orElse(null));
 	}
 
 	@Test void getNoArgConstructor() {
-		check("E2()", e2.getNoArgConstructor(Visibility.PRIVATE));
-		check("E2()", e2.getNoArgConstructor(Visibility.PROTECTED));
-		check("E2()", e2.getNoArgConstructor(Visibility.DEFAULT));
-		check(null, e2.getNoArgConstructor(Visibility.PUBLIC));
+		check("E2()", e2.getNoArgConstructor(Visibility.PRIVATE).orElse(null));
+		check("E2()", e2.getNoArgConstructor(Visibility.PROTECTED).orElse(null));
+		check("E2()", e2.getNoArgConstructor(Visibility.DEFAULT).orElse(null));
+		check(null, e2.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
 	}
 
 	@Test void getNoArgConstructor_abstractClass() {
-		check(null, e3.getNoArgConstructor(Visibility.PUBLIC));
+		check(null, e3.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
 	}
 
 	@Test void getNoArgConstructor_innerClass() {
-		check("E4(ClassInfo_Test)", e4.getNoArgConstructor(Visibility.PUBLIC));
+		check("E4(ClassInfo_Test)", e4.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
 	}
 
 	@Test void getNoArgConstructor_noConstructor() {
-		check(null, e6.getNoArgConstructor(Visibility.PUBLIC));
+		check(null, e6.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
 	}
 
 	@Test void getPublicNoArgConstructor() {
-		check("E1()", e1.getPublicConstructor(cons -> cons.getParameterCount() == 0));
+		check("E1()", e1.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null));
 	}
 
 	@Test void getConstructor() {
-		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PROTECTED) && x.hasParameterTypes(int.class)));
-		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PRIVATE) && x.hasParameterTypes(int.class)));
-		check(null, e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC) && x.hasParameterTypes(int.class)));
-		check("E3()", e3.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)));
-		check("E4(ClassInfo_Test)", e4.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)));
-		check("E5()", e5.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)));
+		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PROTECTED) && x.hasParameterTypes(int.class)).orElse(null));
+		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PRIVATE) && x.hasParameterTypes(int.class)).orElse(null));
+		check(null, e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC) && x.hasParameterTypes(int.class)).orElse(null));
+		check("E3()", e3.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)).orElse(null));
+		check("E4(ClassInfo_Test)", e4.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)).orElse(null));
+		check("E5()", e5.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)).orElse(null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -512,15 +512,15 @@ public class ClassInfo_Test extends TestBase {
 	static ClassInfo f3=of(F3.class);
 
 	@Test void getPublicField() {
-		check("F3.a1", f3.getPublicField(x -> x.hasName("a1")));
-		check(null, f3.getPublicField(x -> x.hasName("a2")));
-		check(null, f3.getPublicField(x -> x.hasName("a3")));
+		check("F3.a1", f3.getPublicField(x -> x.hasName("a1")).orElse(null));
+		check(null, f3.getPublicField(x -> x.hasName("a2")).orElse(null));
+		check(null, f3.getPublicField(x -> x.hasName("a3")).orElse(null));
 	}
 
 	@Test void getDeclaredField() {
-		check("F3.a1", f3.getDeclaredField(x -> x.hasName("a1")));
-		check("F3.a2", f3.getDeclaredField(x -> x.hasName("a2")));
-		check(null, f3.getDeclaredField(x -> x.hasName("a3")));
+		check("F3.a1", f3.getDeclaredField(x -> x.hasName("a1")).orElse(null));
+		check("F3.a2", f3.getDeclaredField(x -> x.hasName("a2")).orElse(null));
+		check(null, f3.getDeclaredField(x -> x.hasName("a3")).orElse(null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

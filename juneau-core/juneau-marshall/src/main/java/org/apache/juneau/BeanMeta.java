@@ -298,7 +298,7 @@ public class BeanMeta<T> {
 					constructor = implClassConstructor;
 
 				if (constructor == null)
-					constructor = ci.getNoArgConstructor(hasBean ? Visibility.PRIVATE : conVis);
+					constructor = ci.getNoArgConstructor(hasBean ? Visibility.PRIVATE : conVis).orElse(null);
 
 				if (constructor == null && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
 					return "Class does not have the required no-arg constructor";
@@ -706,16 +706,14 @@ public class BeanMeta<T> {
 		Value<Field> value = Value.empty();
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			// @formatter:off
-			FieldInfo f = c2.getDeclaredField(
+			c2.getDeclaredField(
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
 				&& ctx.getAnnotationProvider().find(BeanIgnore.class, x.inner()).findAny().isEmpty()
-				&& x.hasName(name)
-			);
+				&& x.hasName(name))
+			.ifPresent(f -> value.set(f.inner()));
 			// @formatter:on
-			if (nn(f))
-				value.set(f.inner());
 		});
 		return value.get();
 	}

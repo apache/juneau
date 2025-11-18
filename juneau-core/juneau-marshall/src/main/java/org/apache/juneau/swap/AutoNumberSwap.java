@@ -131,13 +131,13 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 
 		if (isSwapMethod(bc, m)) {
 
-				ClassInfo rt = m.getReturnType();
+				var rt = m.getReturnType();
 
-				MethodInfo mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt));
+				var mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt)).orElse(null);
 				if (nn(mi))
 					return new AutoNumberSwap(bc, ci, m, mi, null);
 
-				ConstructorInfo cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt));
+				var cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt)).orElse(null);
 				if (nn(cs))
 					return new AutoNumberSwap(bc, ci, m, null, cs);
 

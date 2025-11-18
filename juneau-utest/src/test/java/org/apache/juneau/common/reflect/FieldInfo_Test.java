@@ -142,14 +142,14 @@ class FieldInfo_Test extends TestBase {
 	}
 	static ClassInfo c = ClassInfo.of(C.class);
 	static FieldInfo
-		c_deprecated = c.getPublicField(x -> x.hasName("deprecated")),
-		c_notDeprecated = c.getPublicField(x -> x.hasName("notDeprecated")),
-		c_isPublic = c.getPublicField(x -> x.hasName("isPublic")),
-		c_isNotPublic = c.getDeclaredField(x -> x.hasName("isNotPublic")),
-		c_isStatic = c.getPublicField(x -> x.hasName("isStatic")),
-		c_isNotStatic = c.getPublicField(x -> x.hasName("isNotStatic")),
-		c_isTransient = c.getPublicField(x -> x.hasName("isTransient")),
-		c_isNotTransient = c.getPublicField(x -> x.hasName("isNotTransient"))
+		c_deprecated = c.getPublicField(x -> x.hasName("deprecated")).get(),
+		c_notDeprecated = c.getPublicField(x -> x.hasName("notDeprecated")).get(),
+		c_isPublic = c.getPublicField(x -> x.hasName("isPublic")).get(),
+		c_isNotPublic = c.getDeclaredField(x -> x.hasName("isNotPublic")).get(),
+		c_isStatic = c.getPublicField(x -> x.hasName("isStatic")).get(),
+		c_isNotStatic = c.getPublicField(x -> x.hasName("isNotStatic")).get(),
+		c_isTransient = c.getPublicField(x -> x.hasName("isTransient")).get(),
+		c_isNotTransient = c.getPublicField(x -> x.hasName("isNotTransient")).get()
 	;
 
 	@Test void isAll() {
@@ -240,10 +240,10 @@ class FieldInfo_Test extends TestBase {
 	}
 	static ClassInfo d = ClassInfo.of(D.class);
 	static FieldInfo
-		d_isPublic = d.getPublicField(x -> x.hasName("isPublic")),
-		d_isProtected = d.getDeclaredField(x -> x.hasName("isProtected")),
-		d_isPrivate = d.getDeclaredField(x -> x.hasName("isPrivate")),
-		d_isDefault = d.getDeclaredField(x -> x.hasName("isDefault"));
+		d_isPublic = d.getPublicField(x -> x.hasName("isPublic")).get(),
+		d_isProtected = d.getDeclaredField(x -> x.hasName("isProtected")).get(),
+		d_isPrivate = d.getDeclaredField(x -> x.hasName("isPrivate")).get(),
+		d_isDefault = d.getDeclaredField(x -> x.hasName("isDefault")).get();
 
 	@Test void setAccessible() {
 		assertDoesNotThrow(()->d_isPublic.setAccessible());
@@ -285,8 +285,8 @@ class FieldInfo_Test extends TestBase {
 
 	static ClassInfo e = ClassInfo.of(E.class);
 	static FieldInfo
-		e_a1 = e.getPublicField(x -> x.hasName("a1")),
-		e_a2 = e.getDeclaredField(x -> x.hasName("a2"));
+		e_a1 = e.getPublicField(x -> x.hasName("a1")).get(),
+		e_a2 = e.getDeclaredField(x -> x.hasName("a2")).get();
 
 	@Test void getType() {
 		check("int", e_a1.getFieldType());

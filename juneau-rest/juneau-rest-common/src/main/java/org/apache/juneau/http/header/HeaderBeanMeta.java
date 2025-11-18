@@ -95,14 +95,12 @@ public class HeaderBeanMeta<T> {
 
 		var ci = ClassInfo.of(type);
 
-		ConstructorInfo cci = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class));
-		if (cci == null)
-			cci = ci.getPublicConstructor(x -> x.hasParameterTypes(Object.class));
-		if (cci == null)
-			cci = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class));
-		if (cci == null)
-			cci = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, Object.class));
-		constructor = cci == null ? null : cci.inner();
+		constructor = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class))
+			.or(() -> ci.getPublicConstructor(x -> x.hasParameterTypes(Object.class)))
+			.or(() -> ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class)))
+			.or(() -> ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, Object.class)))
+			.map(x -> x.<T>inner())
+			.orElse(null);
 
 		this.schema = HttpPartSchema.create(org.apache.juneau.http.annotation.Header.class, type);
 	}

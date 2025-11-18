@@ -650,10 +650,8 @@ public abstract class Context {
 				cci = ClassInfo.of(type).getPublicConstructor(
 					x -> x.hasNumParameters(1)
 					&& x.getParameter(0).canAccept(this)
-				);
+				).orElseThrow(() -> runtimeException("Public constructor not found: {0}({1})", cn(type), cn(this)));
 				// @formatter:on
-				if (cci == null)
-					throw runtimeException("Public constructor not found: {0}({1})", cn(type), cn(this));
 				CONTEXT_CONSTRUCTORS.put(type, cci);
 			}
 			return cci;
@@ -735,7 +733,7 @@ public abstract class Context {
 							&& x.isNotDeprecated()
 							&& x.hasName("create")
 							&& x.hasReturnType(ci.getParameter(0).getParameterType())
-						);
+						).orElse(null);
 						// @formatter:on
 						if (nn(mi))
 							break;

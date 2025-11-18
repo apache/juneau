@@ -249,7 +249,7 @@ public class BeanCreator<T> {
 		// Look for getInstance(Builder).
 		if (nn(builder)) {
 			// @formatter:off
-			MethodInfo m = type.getPublicMethod(
+			var result = type.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasNumParameters(1)
@@ -257,26 +257,26 @@ public class BeanCreator<T> {
 				&& x.hasReturnType(type)
 				&& ! x.hasAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
-			);
+			).map(m -> m.<T>invoke(null, builder));
 			// @formatter:on
-			if (nn(m))
-				return m.invoke(null, builder);
+			if (result.isPresent())
+				return result.get();
 		}
 
 		// Look for getInstance().
 		if (builder == null) {
 			// @formatter:off
-			MethodInfo m = type.getPublicMethod(
+			var result = type.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.getParameterCount() == 0
 				&& x.hasReturnType(type)
 				&& ! x.hasAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
-			);
+			).map(m -> m.<T>invoke(null));
 			// @formatter:on
-			if (nn(m))
-				return m.invoke(null);
+			if (result.isPresent())
+				return result.get();
 		}
 
 		if (builder == null) {
@@ -331,14 +331,16 @@ public class BeanCreator<T> {
 		if (builder == null) {
 			// Look for static-builder/protected-constructor pair.
 			Value<T> value = Value.empty();
-			type.getDeclaredConstructors().stream().filter(x -> x.hasNumParameters(1) && x.isVisible(PROTECTED)).forEach(x -> {
-				Class<?> pt = x.getParameter(0).getParameterType().inner();
-				MethodInfo m = type.getPublicMethod(y -> isStaticCreateMethod(y, pt));
-				if (nn(m)) {
-					Object builder = m.invoke(null);
-					value.set(x.accessible().newInstance(builder));
-				}
-			});
+			type.getDeclaredConstructors().stream()
+				.filter(x -> x.hasNumParameters(1) && x.isVisible(PROTECTED))
+				.forEach(x -> {
+					Class<?> pt = x.getParameter(0).getParameterType().inner();
+					type.getPublicMethod(y -> isStaticCreateMethod(y, pt))
+						.ifPresent(m -> {
+							Object b = m.invoke(null);
+							value.set(x.accessible().newInstance(b));
+						});
+				});
 			if (value.isPresent())
 				return value.get();
 		}

@@ -111,11 +111,11 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 
 				ClassInfo rt = m.getReturnType();
 
-				MethodInfo mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt));
+				MethodInfo mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt)).orElse(null);
 				if (nn(mi))
 					return new AutoObjectSwap(bc, ci, m, mi, null);
 
-				ConstructorInfo cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt));
+				ConstructorInfo cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt)).orElse(null);
 				if (nn(cs))
 					return new AutoObjectSwap(bc, ci, m, null, cs);
 

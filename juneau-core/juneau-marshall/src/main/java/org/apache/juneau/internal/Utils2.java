@@ -48,9 +48,8 @@ public class Utils2 extends Utils {
 			var methods2 = new LinkedHashMap<String,MethodInfo>();
 			do {
 				String cname = ci.getNameShort();
-				MethodInfo mi = ci.getDeclaredMethod(x -> x.hasName("properties"));
-				if (nn(mi))
-					methods2.put(cname, mi.accessible());
+				ci.getDeclaredMethod(x -> x.hasName("properties"))
+					.ifPresent(mi -> methods2.put(cname, mi.accessible()));
 				ci = ci.getSuperclass();
 			} while (nn(ci));
 			methods = methods2;

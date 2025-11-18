@@ -145,16 +145,17 @@ public class BeanCreateMethodFinder<T> {
 	public BeanCreateMethodFinder<T> find(Predicate<MethodInfo> filter) {
 		// @formatter:off
 		if (method == null) {
-			method = ClassInfo.of(resourceClass).getPublicMethod(
+			ClassInfo.of(resourceClass).getPublicMethod(
 				x -> x.isNotDeprecated()
 				&& x.hasReturnType(beanType)
 				&& ! x.hasAnnotation(BeanIgnore.class)
 				&& filter.test(x)
 				&& beanStore.hasAllParams(x)
 				&& (x.isStatic() || nn(resource))
-			);
-			if (nn(method))
-				args = beanStore.getParams(method);
+			).ifPresent(m -> {
+				method = m;
+				args = beanStore.getParams(m);
+			});
 		}
 		return this;
 		// @formatter:on

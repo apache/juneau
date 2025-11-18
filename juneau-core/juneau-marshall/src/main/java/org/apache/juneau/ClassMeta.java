@@ -183,27 +183,25 @@ public class ClassMeta<T> implements Type {
 			// forName() is used by Class and Charset
 			String[] fromStringMethodNames = {"fromString","fromValue","valueOf","parse","parseString","forName","forString"};
 			// @formatter:off
-			fromStringMethod = opt(
-				ci.getPublicMethod(
+			fromStringMethod = ci.getPublicMethod(
 					x -> x.isStatic()
 					&& x.isNotDeprecated()
 					&& x.hasReturnType(c)
 					&& x.hasParameterTypes(String.class)
 					&& contains(x.getName(), fromStringMethodNames))
-			).map(MethodInfo::inner)
-			.orElse(null);
+				.map(x -> x.inner())
+				.orElse(null);
 			// @formatter:on
 
 			// Find example() method if present.
 			// @formatter:off
-			exampleMethod = opt(
-				ci.getPublicMethod(
+			exampleMethod = ci.getPublicMethod(
 					x -> x.isStatic()
 					&& x.isNotDeprecated()
 					&& x.hasName("example")
 					&& x.hasParameterTypesLenient(BeanSession.class))
-			).map(MethodInfo::inner)
-			.orElse(null);
+				.map(x -> x.inner())
+				.orElse(null);
 			// @formatter:on
 
 			ci.getAllFields().stream().filter(x -> bc.getAnnotationProvider().find(ParentProperty.class, x.inner()).findAny().isPresent()).forEach(x -> {
@@ -296,7 +294,7 @@ public class ClassMeta<T> implements Type {
 
 			if (innerClass != Object.class) {
 				ClassInfo x = implClass == null ? ci : ClassInfo.of(implClass);
-				noArgConstructor = x.getPublicConstructor(cons -> cons.getParameterCount() == 0);
+				noArgConstructor = x.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null);
 			}
 
 			try {
@@ -554,15 +552,14 @@ public class ClassMeta<T> implements Type {
 			return null;
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
 		// @formatter:off
-		ConstructorInfo cc = ci.getPublicConstructor(
+		return ci.getPublicConstructor(
 			x -> x.isVisible(v)
 			&& x.isNotDeprecated()
 			&& x.hasNumParameters(isMemberClass ? 1 : 0)
-		);
+		)
+		.map(cc -> (Constructor<? extends T>)v.transform(cc.inner()))
+		.orElse(null);
 		// @formatter:on
-		if (nn(cc))
-			return (Constructor<? extends T>)v.transform(cc.inner());
-		return null;
 	}
 
 	final Class<T> innerClass;                              // The class being wrapped.
@@ -1066,7 +1063,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	public ConstructorInfo getImplClassConstructor(Visibility conVis) {
 		if (nn(implClass))
-			return ClassInfo.of(implClass).getNoArgConstructor(conVis);
+			return ClassInfo.of(implClass).getNoArgConstructor(conVis).orElse(null);
 		return null;
 	}
 
