@@ -1648,21 +1648,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * Returns <jk>true</jk> if this class has the specified annotation.
 	 *
 	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return The <jk>true</jk> if annotation if found.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		if (annotationProvider == null)
-			throw unsupportedOp();
-		// Inline Context.firstAnnotation() call
-		return nn(annotationProvider.find(type, inner).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class has the specified annotation.
-	 *
-	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return The <jk>true</jk> if annotation if found.
 	 */

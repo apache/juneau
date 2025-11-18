@@ -465,22 +465,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified annotation is present on this method.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is present on this method.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		// Inline Context.firstAnnotation() call
-		for (var m2 : getMatchingMethods())
-			if (nn(annotationProvider.find(type, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null)))
-				return true;
-		return false;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this method or any matching methods in parent classes/interfaces.
 	 *
 	 * <p>

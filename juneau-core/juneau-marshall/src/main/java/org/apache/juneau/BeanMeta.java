@@ -230,8 +230,8 @@ public class BeanMeta<T> {
 
 				Map<String,BeanPropertyMeta.Builder> normalProps = map();
 
-				boolean hasBean = ci.hasAnnotation(ctx.getAnnotationProvider(), Bean.class);
-				boolean hasBeanIgnore = ci.hasAnnotation(ctx.getAnnotationProvider(), BeanIgnore.class);
+				boolean hasBean = ctx.getAnnotationProvider().find(Bean.class, ci.inner()).findFirst().isPresent();
+				boolean hasBeanIgnore = ctx.getAnnotationProvider().find(BeanIgnore.class, ci.inner()).findFirst().isPresent();
 
 				/// See if this class matches one the patterns in the exclude-class list.
 				if (ctx.isNotABean(c))
@@ -593,7 +593,7 @@ public class BeanMeta<T> {
 
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
-				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.hasAnnotation(ctx.getAnnotationProvider(), BeanIgnore.class))
+				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.getMatchingMethods().stream().anyMatch(m2 -> ctx.getAnnotationProvider().find(BeanIgnore.class, m2.inner()).findFirst().isPresent()))
 					continue;
 				Transient t = m.getMatchingMethods().stream()
 					.map(m2 -> ctx.getAnnotationProvider().find(Transient.class, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null))

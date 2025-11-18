@@ -163,7 +163,7 @@ public class ClassMeta<T> implements Type {
 					cc = DATE;
 				else if (c.isArray())
 					cc = ARRAY;
-				else if (ci.isChildOfAny(URL.class, URI.class) || ci.hasAnnotation(bc.getAnnotationProvider(), Uri.class))
+				else if (ci.isChildOfAny(URL.class, URI.class) || bc.getAnnotationProvider().find(Uri.class, ci.inner()).findFirst().isPresent())
 					cc = URI;
 				else if (ci.isChildOf(Reader.class))
 					cc = READER;
@@ -226,13 +226,13 @@ public class ClassMeta<T> implements Type {
 		List<MethodInfo> methods = ci.getAllMethods();
 		for (int i = methods.size() - 1; i >= 0; i--) {
 			MethodInfo m = methods.get(i);
-				if (m.hasAnnotation(bc.getAnnotationProvider(), ParentProperty.class)) {
+				if (m.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(ParentProperty.class, m2.inner()).findFirst().isPresent())) {
 					if (m.isStatic() || ! m.hasNumParameters(1))
 						throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					parentPropertyMethod = new Setter.MethodSetter(m.inner());
 				}
-				if (m.hasAnnotation(bc.getAnnotationProvider(), NameProperty.class)) {
+				if (m.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(NameProperty.class, m2.inner()).findFirst().isPresent())) {
 					if (m.isStatic() || ! m.hasNumParameters(1))
 						throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
@@ -240,7 +240,7 @@ public class ClassMeta<T> implements Type {
 				}
 			}
 
-			ci.getDeclaredMethods().stream().filter(m -> m.hasAnnotation(bc.getAnnotationProvider(), Example.class)).forEach(m -> {
+			ci.getDeclaredMethods().stream().filter(m -> m.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(Example.class, m2.inner()).findFirst().isPresent())).forEach(m -> {
 				if (! (m.isStatic() && m.hasParameterTypesLenient(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 					throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m.toString());
 				m.setAccessible();

@@ -134,7 +134,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class)
-			&& ! mi.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
+			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(BeanIgnore.class, m2.inner()).findFirst().isPresent());
 		// @formatter:on
 	}
 
@@ -157,12 +157,12 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& ! mi.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.class);
+			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(BeanIgnore.class, m2.inner()).findFirst().isPresent());
 		// @formatter:on
 	}
 
 	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
-		return ci.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.class) || ci.isNonStaticMemberClass();
+		return bc.getAnnotationProvider().find(BeanIgnore.class, ci.inner()).findFirst().isPresent() || ci.isNonStaticMemberClass();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
