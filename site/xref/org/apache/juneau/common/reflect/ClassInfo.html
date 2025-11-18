@@ -968,7 +968,7 @@
 <a class="jxr_linenumber" name="L960" href="#L960">960</a> 		<strong class="jxr_keyword">return</strong> getDeclaredConstructors().stream()
 <a class="jxr_linenumber" name="L961" href="#L961">961</a> 			.filter(cc -&gt; cc.hasNumParameters(expectedParams))
 <a class="jxr_linenumber" name="L962" href="#L962">962</a> 			.filter(cc -&gt; cc.isVisible(v))
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 			.map(cc -&gt; cc.accessible(v))
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 			.map(cc -&gt; cc.accessible())
 <a class="jxr_linenumber" name="L964" href="#L964">964</a> 			.findFirst();
 <a class="jxr_linenumber" name="L965" href="#L965">965</a> 	}
 <a class="jxr_linenumber" name="L966" href="#L966">966</a> 
