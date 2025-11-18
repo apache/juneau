@@ -191,6 +191,40 @@ class ReflectionMap_Test extends TestBase {
 			test(B2.class.getMethod("m1"), false, false, false, false, false, false, false, false, false, false, false, false);
 			test(null, false, false, false, false, false, false, false, false, false, false, false, false);
 		}
+	
+		// Test for generic parameters in method signatures (lines 409-411)
+		@Test void a03_generics() throws Exception {
+			ReflectionMap<Number> rm = create().append("B1.m1(List<String>)", 1).build();
+			// Generic parameters should be stripped, so this should match m1(List)
+			// Note: We can't easily test this because Java doesn't preserve generic info at runtime,
+			// but we can verify the pattern was parsed without error
+			assertEquals(1, rm.methodEntries.size());
+		}
+	
+		// Test for array parameters in method signatures (lines 414-424)
+		static class B3 {
+			public void m1(String[] x) { /* no-op */ }
+			public void m2(String[][] x) { /* no-op */ }
+			public void m3(int[] x) { /* no-op */ }
+		}
+	
+		@Test void a04_arrayParams() throws Exception {
+			// Single-dimensional array with simple name
+			ReflectionMap<Number> rm1 = create().append("B3.m1(String[])", 1).build();
+			assertTrue(rm1.find(B3.class.getMethod("m1", String[].class)).findAny().isPresent());
+	
+			// Single-dimensional array with full name
+			ReflectionMap<Number> rm1b = create().append("B3.m1(java.lang.String[])", 1).build();
+			assertTrue(rm1b.find(B3.class.getMethod("m1", String[].class)).findAny().isPresent());
+	
+			// Multi-dimensional array
+			ReflectionMap<Number> rm2 = create().append("B3.m2(String[][])", 2).build();
+			assertTrue(rm2.find(B3.class.getMethod("m2", String[][].class)).findAny().isPresent());
+	
+			// Primitive array
+			ReflectionMap<Number> rm3 = create().append("B3.m3(int[])", 3).build();
+			assertTrue(rm3.find(B3.class.getMethod("m3", int[].class)).findAny().isPresent());
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

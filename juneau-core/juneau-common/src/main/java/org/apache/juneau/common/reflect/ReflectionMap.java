@@ -404,25 +404,10 @@ public class ReflectionMap<V> {
 			this.args = i == -1 ? null : splitMethodArgs(name.substring(i + 1, name.length() - 1));
 			if (nn(args)) {
 				for (int j = 0; j < args.length; j++) {
-
 					// Strip off generic parameters.
 					int k = args[j].indexOf('<');
 					if (k > 0)
 						args[j] = args[j].substring(0, k);
-
-					// Convert from xxx[][] to [[Lxxx; notation.
-					if (args[j].endsWith("[]")) {
-						int l = 0;
-						while (args[j].endsWith("[]")) {
-							l++;
-							args[j] = args[j].substring(0, args[j].length() - 2);
-						}
-						var sb = new StringBuilder(args[j].length() + l + 2);
-						for (int m = 0; m < l; m++)
-							sb.append('[');
-						sb.append('L').append(args[j]).append(';');
-						args[j] = sb.toString();
-					}
 				}
 			}
 			name = i == -1 ? name : name.substring(0, i);
@@ -488,12 +473,39 @@ public class ReflectionMap<V> {
 		if (names.length != args.length)
 			return false;
 		for (int i = 0; i < args.length; i++) {
-			var n = names[i];
-			var a = args[i];
-			if (! (eq(n, a.getSimpleName()) || eq(n, a.getName())))
+			if (!argMatches(names[i], args[i]))
 				return false;
 		}
 		return true;
+	}
+
+	private static boolean argMatches(String pattern, Class<?> type) {
+		// Extract base type and dimensions from pattern
+		var patternDims = 0;
+		var patternBase = pattern;
+		while (patternBase.endsWith("[]")) {
+			patternDims++;
+			patternBase = patternBase.substring(0, patternBase.length() - 2);
+		}
+
+		// Extract base type and dimensions from actual type
+		var typeDims = 0;
+		var typeBase = type;
+		while (typeBase.isArray()) {
+			typeDims++;
+			typeBase = typeBase.getComponentType();
+		}
+
+		// Array dimensions must match
+		if (patternDims != typeDims)
+			return false;
+
+		// If non-array, use simple comparison
+		if (patternDims == 0)
+			return eq(pattern, type.getSimpleName()) || eq(pattern, type.getName());
+
+		// For arrays, compare the component types (simple name or full name)
+		return eq(patternBase, typeBase.getSimpleName()) || eq(patternBase, typeBase.getName());
 	}
 
 	private static boolean classMatches(String simpleName, String fullName, Class<?> c) {
