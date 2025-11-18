@@ -825,7 +825,7 @@
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;AnnotationInfo&lt;Annotation&gt;&gt;();
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 		MethodInfo.of(forMethod).getMatchingMethods().forEach(m -&gt; {
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> 			runtimeAnnotations.findMatching(m.<strong class="jxr_keyword">inner</strong>()).forEach(a -&gt; list.add(AnnotationInfo.of(m, a)));
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 			runtimeAnnotations.find(m.<strong class="jxr_keyword">inner</strong>()).forEach(a -&gt; list.add(AnnotationInfo.of(m, a)));
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> 			list.addAll(m.getDeclaredAnnotations());
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> 		});
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 
@@ -836,7 +836,7 @@
 <a class="jxr_linenumber" name="L828" href="#L828">828</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;AnnotationInfo&lt;Annotation&gt;&gt;();
 <a class="jxr_linenumber" name="L829" href="#L829">829</a> 
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 		FieldInfo fi = FieldInfo.of(forField);
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		runtimeAnnotations.findMatching(forField).forEach(a -&gt; list.add(AnnotationInfo.of(fi, a)));
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		runtimeAnnotations.find(forField).forEach(a -&gt; list.add(AnnotationInfo.of(fi, a)));
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 		list.addAll(fi.getDeclaredAnnotations());
 <a class="jxr_linenumber" name="L833" href="#L833">833</a> 
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 		<strong class="jxr_keyword">return</strong> u(list);
@@ -846,7 +846,7 @@
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;AnnotationInfo&lt;Annotation&gt;&gt;();
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> 
 <a class="jxr_linenumber" name="L840" href="#L840">840</a> 		ConstructorInfo ci = ConstructorInfo.of(forConstructor);
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> 		runtimeAnnotations.findMatching(forConstructor).forEach(a -&gt; list.add(AnnotationInfo.of(ci, a)));
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 		runtimeAnnotations.find(forConstructor).forEach(a -&gt; list.add(AnnotationInfo.of(ci, a)));
 <a class="jxr_linenumber" name="L842" href="#L842">842</a> 		list.addAll(ci.getDeclaredAnnotations());
 <a class="jxr_linenumber" name="L843" href="#L843">843</a> 
 <a class="jxr_linenumber" name="L844" href="#L844">844</a> 		<strong class="jxr_keyword">return</strong> u(list);
@@ -860,7 +860,7 @@
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> findDeclaredAnnotations(List&lt;AnnotationInfo&lt;Annotation&gt;&gt; appendTo, Class&lt;?&gt; forClass) {
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(forClass);
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 		runtimeAnnotations.findMatching(forClass).forEach(x -&gt; appendTo.add(AnnotationInfo.of(ClassInfo.of(forClass), x)));
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 		runtimeAnnotations.find(forClass).forEach(x -&gt; appendTo.add(AnnotationInfo.of(ClassInfo.of(forClass), x)));
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : forClass.getDeclaredAnnotations())
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a2 : splitRepeated(a))
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 				appendTo.add(AnnotationInfo.of(ci, a2));
