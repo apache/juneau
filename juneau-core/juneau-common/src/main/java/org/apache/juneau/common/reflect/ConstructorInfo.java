@@ -69,23 +69,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		return this;
 	}
 
-	/**
-	 * Makes constructor accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
-	 *
-	 * <p>
-	 * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.
-	 *
-	 * @param v The minimum visibility.
-	 * @return
-	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
-	 * 	met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.
-	 */
-	public ConstructorInfo accessible(Visibility v) {
-		if (v.transform(inner) == null)
-			return null;
-		return this;
-	}
-
 	@Override
 	public int compareTo(ConstructorInfo o) {
 		int i = getSimpleName().compareTo(o.getSimpleName());

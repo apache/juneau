@@ -118,7 +118,7 @@ class ConstructorInfoTest extends TestBase {
 	}
 
 	@Test void accessible() throws Exception {
-		b_c3.accessible(Visibility.PROTECTED);
+		b_c3.accessible();
 		assertEquals(null, b_c3.newInstanceLenient(123).toString());
 	}
 

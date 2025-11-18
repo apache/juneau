@@ -960,7 +960,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		return getDeclaredConstructors().stream()
 			.filter(cc -> cc.hasNumParameters(expectedParams))
 			.filter(cc -> cc.isVisible(v))
-			.map(cc -> cc.accessible(v))
+			.map(cc -> cc.accessible())
 			.findFirst();
 	}
 
