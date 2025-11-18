@@ -208,23 +208,11 @@ public class ReflectionMap<V> {
 			classEntries = list();
 			methodEntries = list();
 			fieldEntries = list();
-			constructorEntries = list();
-		}
+		constructorEntries = list();
+	}
 
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The builder to copy from.
-		 */
-		protected Builder(Builder<V> copyFrom) {
-			classEntries = copyOf(copyFrom.classEntries);
-			methodEntries = copyOf(copyFrom.methodEntries);
-			fieldEntries = copyOf(copyFrom.fieldEntries);
-			constructorEntries = copyOf(copyFrom.constructorEntries);
-		}
-
-		/**
-		 * Adds one or more mappings to this builder.
+	/**
+	 * Adds one or more mappings to this builder.
 		 *
 		 * <p>
 		 * This method accepts pattern strings that identify classes, methods, fields, or constructors,
@@ -304,33 +292,9 @@ public class ReflectionMap<V> {
 		 *
 		 * @return A new immutable {@link ReflectionMap} instance.
 		 */
-		public ReflectionMap<V> build() {
-			return new ReflectionMap<>(this);
-		}
-
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * <p>
-		 * Useful for creating variations of a base configuration without modifying the original builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	Builder&lt;String&gt; <jv>base</jv> = ReflectionMap
-		 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
-		 * 		.append(<js>"com.foo.*"</js>, <js>"baseValue"</js>);
-		 *
-		 * 	<jc>// Create a variation without modifying base</jc>
-		 * 	ReflectionMap&lt;String&gt; <jv>map1</jv> = <jv>base</jv>.copy()
-		 * 		.append(<js>"com.bar.*"</js>, <js>"additionalValue"</js>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @return A copy of this builder with all current mappings.
-		 */
-		public Builder<V> copy() {
-			return new Builder<>(this);
-		}
+	public ReflectionMap<V> build() {
+		return new ReflectionMap<>(this);
+	}
 	}
 
 	private static class ClassEntry<V> {
