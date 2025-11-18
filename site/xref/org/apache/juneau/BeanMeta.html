@@ -238,8 +238,8 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 				Map&lt;String,BeanPropertyMeta.Builder&gt; normalProps = map();
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">boolean</strong> hasBean = ci.hasAnnotation(ctx.getAnnotationProvider(), Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<strong class="jxr_keyword">boolean</strong> hasBeanIgnore = ci.hasAnnotation(ctx.getAnnotationProvider(), BeanIgnore.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">boolean</strong> hasBean = ctx.getAnnotationProvider().find(Bean.<strong class="jxr_keyword">class</strong>, ci.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent();
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<strong class="jxr_keyword">boolean</strong> hasBeanIgnore = ctx.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, ci.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent();
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 				<em class="jxr_comment">/// See if this class matches one the patterns in the exclude-class list.</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 				<strong class="jxr_keyword">if</strong> (ctx.isNotABean(c))
@@ -601,7 +601,7 @@
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 		forEachClass(ClassInfo.of(c), stopClass, c2 -&gt; {
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : c2.getDeclaredMethods()) {
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 				<strong class="jxr_keyword">if</strong> (m.isStatic() || m.isBridge() || m.getParameterCount() &gt; 2 || m.hasAnnotation(ctx.getAnnotationProvider(), BeanIgnore.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 				<strong class="jxr_keyword">if</strong> (m.isStatic() || m.isBridge() || m.getParameterCount() &gt; 2 || m.getMatchingMethods().stream().anyMatch(m2 -&gt; ctx.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent()))
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 					<strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 				Transient t = m.getMatchingMethods().stream()
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 					.map(m2 -&gt; ctx.getAnnotationProvider().find(Transient.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>))

@@ -142,7 +142,7 @@
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			&amp;&amp; mi.isVisible(bc.getBeanMethodVisibility())
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			&amp;&amp; mi.hasAnyName(SWAP_METHOD_NAMES)
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			&amp;&amp; mi.hasParameterTypesLenient(BeanSession.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			&amp;&amp; ! mi.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			&amp;&amp; ! mi.getMatchingMethods().stream().anyMatch(m2 -&gt; bc.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent());
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
@@ -165,12 +165,12 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			&amp;&amp; mi.hasAnyName(UNSWAP_METHOD_NAMES)
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			&amp;&amp; mi.hasParameterTypesLenient(BeanSession.<strong class="jxr_keyword">class</strong>, rt.<strong class="jxr_keyword">inner</strong>())
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			&amp;&amp; mi.hasReturnTypeParent(ci)
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			&amp;&amp; ! mi.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			&amp;&amp; ! mi.getMatchingMethods().stream().anyMatch(m2 -&gt; bc.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent());
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> shouldIgnore(BeanContext bc, ClassInfo ci) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> ci.hasAnnotation(bc.getAnnotationProvider(), BeanIgnore.<strong class="jxr_keyword">class</strong>) || ci.isNonStaticMemberClass();
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> bc.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, ci.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent() || ci.isNonStaticMemberClass();
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>

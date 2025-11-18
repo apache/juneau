@@ -171,7 +171,7 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 					cc = DATE;
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c.isArray())
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 					cc = ARRAY;
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ci.isChildOfAny(URL.<strong class="jxr_keyword">class</strong>, URI.<strong class="jxr_keyword">class</strong>) || ci.hasAnnotation(bc.getAnnotationProvider(), Uri.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ci.isChildOfAny(URL.<strong class="jxr_keyword">class</strong>, URI.<strong class="jxr_keyword">class</strong>) || bc.getAnnotationProvider().find(Uri.<strong class="jxr_keyword">class</strong>, ci.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent())
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 					cc = URI;
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ci.isChildOf(Reader.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 					cc = READER;
@@ -234,13 +234,13 @@
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		List&lt;MethodInfo&gt; methods = ci.getAllMethods();
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = methods.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 			MethodInfo m = methods.get(i);
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 				<strong class="jxr_keyword">if</strong> (m.hasAnnotation(bc.getAnnotationProvider(), ParentProperty.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 				<strong class="jxr_keyword">if</strong> (m.getMatchingMethods().stream().anyMatch(m2 -&gt; bc.getAnnotationProvider().find(ParentProperty.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent())) {
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 					<strong class="jxr_keyword">if</strong> (m.isStatic() || ! m.hasNumParameters(1))
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument."</span>, m);
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 					m.setAccessible();
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 					parentPropertyMethod = <strong class="jxr_keyword">new</strong> Setter.MethodSetter(m.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 				}
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">if</strong> (m.hasAnnotation(bc.getAnnotationProvider(), NameProperty.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">if</strong> (m.getMatchingMethods().stream().anyMatch(m2 -&gt; bc.getAnnotationProvider().find(NameProperty.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent())) {
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 					<strong class="jxr_keyword">if</strong> (m.isStatic() || ! m.hasNumParameters(1))
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument."</span>, m);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 					m.setAccessible();
@@ -248,7 +248,7 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 				}
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			}
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			ci.getDeclaredMethods().stream().filter(m -&gt; m.hasAnnotation(bc.getAnnotationProvider(), Example.<strong class="jxr_keyword">class</strong>)).forEach(m -&gt; {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			ci.getDeclaredMethods().stream().filter(m -&gt; m.getMatchingMethods().stream().anyMatch(m2 -&gt; bc.getAnnotationProvider().find(Example.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent())).forEach(m -&gt; {
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 				<strong class="jxr_keyword">if</strong> (! (m.isStatic() &amp;&amp; m.hasParameterTypesLenient(BeanSession.<strong class="jxr_keyword">class</strong>) &amp;&amp; ci.isParentOf(m.getReturnType().<strong class="jxr_keyword">inner</strong>())))
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class."</span>, m.toString());
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 				m.setAccessible();
