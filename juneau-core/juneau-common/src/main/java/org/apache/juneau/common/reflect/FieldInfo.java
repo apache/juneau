@@ -19,9 +19,7 @@ package org.apache.juneau.common.reflect;
 import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -117,61 +115,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		return declaredAnnotations.get().stream()
 			.filter(x -> type.isInstance(x.inner()))
 			.map(x -> (AnnotationInfo<A>)x);
-	}
-
-	/**
-	 * Finds annotations on this field using the specified traversal settings.
-	 *
-	 * <p>
-	 * This method allows flexible annotation traversal across different scopes using {@link AnnotationTraversal} enums.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Search field only</jc>
-	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
-	 * 		<jv>fi</jv>.findAnnotations(MyAnnotation.<jk>class</jk>, SELF);
-	 * </p>
-	 *
-	 * <p>
-	 * This does NOT include runtime annotations. For runtime annotation support, use
-	 * {@link org.apache.juneau.common.reflect.AnnotationProvider}.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param traversals The traversal settings defining what to search (currently only SELF is supported for fields).
-	 * @return A stream of annotation infos matching the specified type and traversal settings.
-	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, AnnotationTraversal... traversals) {
-		assertArgNotNull("type", type);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == AnnotationTraversal.SELF) {
-					return Arrays.stream(inner.getDeclaredAnnotations())
-						.flatMap(a -> Arrays.stream(splitRepeated(a)))
-						.map(a -> AnnotationInfo.of(this, a))
-						.filter(a -> a.isType(type))
-						.map(a -> (AnnotationInfo<A>)a);
-				}
-				throw illegalArg("Invalid traversal type for field annotations: {0}", traversal);
-			});
-	}
-
-	/**
-	 * Finds annotations on this field using the specified traversal settings in parent-first order.
-	 *
-	 * <p>
-	 * This method is identical to {@link #findAnnotations(Class, AnnotationTraversal...)} but returns
-	 * results in parent-to-child order.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param traversals The traversal settings defining what to search (currently only SELF is supported for fields).
-	 * @return A stream of annotation infos matching the specified type and traversal settings in parent-first order.
-	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, AnnotationTraversal... traversals) {
-		return rstream(findAnnotations(type, traversals).toList());
 	}
 
 	/**

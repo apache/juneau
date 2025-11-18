@@ -34,8 +34,6 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
-import java.util.stream.*;
-
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;

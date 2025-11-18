@@ -18,13 +18,11 @@ package org.apache.juneau.rest.debug;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import java.util.*;
-import java.util.stream.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
@@ -90,8 +88,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 					.filter(REST_OP_GROUP)
 					.flatMap(ai -> ai.getValue(String.class, "debug").stream())
 					.map(varResolver::resolve)
-					.filter(y -> ! y.isEmpty())
-					.forEach(y -> b.enable(Enablement.fromString(y), x.getFullName()))
+					.forEach(y -> opt(Enablement.fromString(y)).ifPresent(e -> b.enable(e, x.getFullName())))
 			);
 		// @formatter:on
 
@@ -105,7 +102,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 				if (v.isEmpty())
 					v = "ALWAYS";
 				if (! k.isEmpty())
-					b.enable(Enablement.fromString(v), k);
+					opt(Enablement.fromString(v)).ifPresent(en -> b.enable(en, k));
 			}
 		});
 		// @formatter:on

@@ -20,8 +20,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
-import java.util.stream.*;
-
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.common.reflect.*;

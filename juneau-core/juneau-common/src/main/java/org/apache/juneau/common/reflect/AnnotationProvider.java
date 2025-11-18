@@ -817,7 +817,7 @@ public class AnnotationProvider {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
 
 		MethodInfo.of(forMethod).getMatchingMethods().forEach(m -> {
-			runtimeAnnotations.findMatching(m.inner()).forEach(a -> list.add(AnnotationInfo.of(m, a)));
+			runtimeAnnotations.find(m.inner()).forEach(a -> list.add(AnnotationInfo.of(m, a)));
 			list.addAll(m.getDeclaredAnnotations());
 		});
 
@@ -828,7 +828,7 @@ public class AnnotationProvider {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
 
 		FieldInfo fi = FieldInfo.of(forField);
-		runtimeAnnotations.findMatching(forField).forEach(a -> list.add(AnnotationInfo.of(fi, a)));
+		runtimeAnnotations.find(forField).forEach(a -> list.add(AnnotationInfo.of(fi, a)));
 		list.addAll(fi.getDeclaredAnnotations());
 
 		return u(list);
@@ -838,7 +838,7 @@ public class AnnotationProvider {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
 
 		ConstructorInfo ci = ConstructorInfo.of(forConstructor);
-		runtimeAnnotations.findMatching(forConstructor).forEach(a -> list.add(AnnotationInfo.of(ci, a)));
+		runtimeAnnotations.find(forConstructor).forEach(a -> list.add(AnnotationInfo.of(ci, a)));
 		list.addAll(ci.getDeclaredAnnotations());
 
 		return u(list);
@@ -852,7 +852,7 @@ public class AnnotationProvider {
 	 */
 	private void findDeclaredAnnotations(List<AnnotationInfo<Annotation>> appendTo, Class<?> forClass) {
 		var ci = ClassInfo.of(forClass);
-		runtimeAnnotations.findMatching(forClass).forEach(x -> appendTo.add(AnnotationInfo.of(ClassInfo.of(forClass), x)));
+		runtimeAnnotations.find(forClass).forEach(x -> appendTo.add(AnnotationInfo.of(ClassInfo.of(forClass), x)));
 		for (var a : forClass.getDeclaredAnnotations())
 			for (var a2 : splitRepeated(a))
 				appendTo.add(AnnotationInfo.of(ci, a2));

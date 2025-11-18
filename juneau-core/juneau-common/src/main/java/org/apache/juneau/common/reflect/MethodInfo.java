@@ -17,10 +17,7 @@
 package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.PredicateUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.beans.*;
@@ -225,78 +222,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		for (int i = parents.size() - 1; i >= 0; i--)
 			forEachDeclaredMethodAnnotation(this, parents.get(i), filter, action);
 		return this;
-	}
-
-	/**
-	 * Finds annotations on this method using the specified traversal settings.
-	 *
-	 * <p>
-	 * This method allows flexible annotation traversal across different scopes using {@link AnnotationTraversal} enums.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Search method only</jc>
-	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
-	 * 		<jv>mi</jv>.findAnnotations(MyAnnotation.<jk>class</jk>, SELF);
-	 *
-	 * 	<jc>// Search method and matching methods in parent classes</jc>
-	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s2</jv> =
-	 * 		<jv>mi</jv>.findAnnotations(MyAnnotation.<jk>class</jk>, SELF, MATCHING_METHODS);
-	 *
-	 * 	<jc>// Search method, matching methods, and return type</jc>
-	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s3</jv> =
-	 * 		<jv>mi</jv>.findAnnotations(MyAnnotation.<jk>class</jk>, SELF, MATCHING_METHODS, RETURN_TYPE);
-	 * </p>
-	 *
-	 * <p>
-	 * This does NOT include runtime annotations. For runtime annotation support, use
-	 * {@link org.apache.juneau.common.reflect.AnnotationProvider}.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param traversals The traversal settings defining what to search (e.g., SELF, MATCHING_METHODS, RETURN_TYPE).
-	 * @return A stream of annotation infos matching the specified type and traversal settings.
-	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, AnnotationTraversal... traversals) {
-		assertArgNotNull("type", type);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == AnnotationTraversal.SELF) {
-					return Arrays.stream(inner.getDeclaredAnnotations())
-						.flatMap(a -> Arrays.stream(splitRepeated(a)))
-						.map(a -> AnnotationInfo.of(this, a))
-						.filter(a -> a.isType(type))
-						.map(a -> (AnnotationInfo<A>)a);
-				} else if (traversal == AnnotationTraversal.MATCHING_METHODS) {
-					return getMatchingMethods().stream().skip(1)
-						.flatMap(x -> Arrays.stream(x.inner().getDeclaredAnnotations())
-							.flatMap(a -> Arrays.stream(splitRepeated(a)))
-							.map(a -> AnnotationInfo.of(x, a))
-							.filter(a -> a.isType(type))
-							.map(a -> (AnnotationInfo<A>)a));
-				} else if (traversal == AnnotationTraversal.RETURN_TYPE) {
-					return getReturnType().unwrap(Value.class, Optional.class).findAnnotations(type, AnnotationTraversal.PARENTS);
-				}
-				throw illegalArg("Invalid traversal type for method annotations: {0}", traversal);
-			});
-	}
-
-	/**
-	 * Finds annotations on this method using the specified traversal settings in parent-first order.
-	 *
-	 * <p>
-	 * This method is identical to {@link #findAnnotations(Class, AnnotationTraversal...)} but returns
-	 * results in parent-to-child order.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param traversals The traversal settings defining what to search (e.g., SELF, MATCHING_METHODS, RETURN_TYPE).
-	 * @return A stream of annotation infos matching the specified type and traversal settings in parent-first order.
-	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, AnnotationTraversal... traversals) {
-		return rstream(findAnnotations(type, traversals).toList());
 	}
 
 	/**

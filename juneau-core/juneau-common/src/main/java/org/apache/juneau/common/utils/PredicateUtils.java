@@ -18,10 +18,7 @@ package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.Utils.*;
 
-import java.lang.annotation.*;
 import java.util.function.*;
-import java.util.stream.*;
-
 import org.apache.juneau.common.reflect.*;
 
 /**

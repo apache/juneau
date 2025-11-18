@@ -253,7 +253,7 @@ public abstract class DebugEnablement {
 	 */
 	public boolean isDebug(RestContext context, HttpServletRequest req) {
 		Class<?> c = context.getResourceClass();
-		Enablement e = enablementMap.find(c).orElse(defaultEnablement);
+		Enablement e = enablementMap.find(c).findFirst().orElse(defaultEnablement);
 		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));
 	}
 
@@ -270,7 +270,8 @@ public abstract class DebugEnablement {
 	 */
 	public boolean isDebug(RestOpContext context, HttpServletRequest req) {
 		Method m = context.getJavaMethod();
-		Enablement e = enablementMap.find(m).orElse(enablementMap.find(m.getDeclaringClass()).orElse(defaultEnablement));
+		Enablement e = enablementMap.find(m).findFirst()
+			.orElseGet(() -> enablementMap.find(m.getDeclaringClass()).findFirst().orElse(defaultEnablement));
 		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));
 	}
 

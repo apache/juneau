@@ -30,12 +30,35 @@ import java.util.stream.*;
 import org.apache.juneau.common.utils.*;
 
 /**
- * Allows arbitrary objects to be mapped to classes and methods base on class/method name keys.
+ * Maps arbitrary values to classes, methods, fields, and constructors based on name-based patterns.
  *
  * <p>
- * The valid pattern matches are:
+ * This utility allows you to create flexible mappings between reflection elements and custom values.
+ * It supports various pattern formats for identifying classes and their members, with intelligent
+ * matching that handles inner classes, method signatures, and field names.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a map that associates visibility levels with specific classes/methods</jc>
+ * 	ReflectionMap&lt;Visibility&gt; <jv>map</jv> = ReflectionMap
+ * 		.<jsm>create</jsm>(Visibility.<jk>class</jk>)
+ * 		.append(<js>"com.foo.MyClass"</js>, Visibility.<jsf>PUBLIC</jsf>)
+ * 		.append(<js>"com.foo.MyClass.secretMethod"</js>, Visibility.<jsf>PRIVATE</jsf>)
+ * 		.append(<js>"com.foo.MyClass.internalField"</js>, Visibility.<jsf>PACKAGE</jsf>)
+ * 		.build();
+ *
+ * 	<jc>// Find values for specific reflection elements</jc>
+ * 	Stream&lt;Visibility&gt; <jv>classVisibility</jv> = <jv>map</jv>.find(MyClass.<jk>class</jk>);
+ * 	Stream&lt;Visibility&gt; <jv>methodVisibility</jv> = <jv>map</jv>.find(<jv>secretMethod</jv>);
+ * </p>
+ *
+ * <h5 class='section'>Supported Pattern Formats:</h5>
+ *
+ * <p>
+ * The following pattern formats are supported for mapping keys:
+ *
  * <ul class='spaced-list'>
- *  <li>Classes:
+ *  <li><b>Classes:</b>
  * 		<ul>
  * 			<li>Fully qualified:
  * 				<ul>
@@ -45,18 +68,22 @@ import org.apache.juneau.common.utils.*;
  * 				<ul>
  * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
  * 				</ul>
- * 			<li>Simple:
+ * 			<li>Simple class name:
  * 				<ul>
  * 					<li><js>"MyClass"</js>
  * 				</ul>
- * 			<li>Simple inner:
+ * 			<li>Simple inner class:
  * 				<ul>
  * 					<li><js>"MyClass$Inner1$Inner2"</js>
  * 					<li><js>"Inner1$Inner2"</js>
  * 					<li><js>"Inner2"</js>
  * 				</ul>
+ * 			<li>All classes wildcard:
+ * 				<ul>
+ * 					<li><js>"*"</js>
+ * 				</ul>
  * 		</ul>
- * 	<li>Methods:
+ * 	<li><b>Methods:</b>
  * 		<ul>
  * 			<li>Fully qualified with args:
  * 				<ul>
@@ -64,7 +91,7 @@ import org.apache.juneau.common.utils.*;
  * 					<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js>
  * 					<li><js>"com.foo.MyClass.myMethod()"</js>
  * 				</ul>
- * 			<li>Fully qualified:
+ * 			<li>Fully qualified without args (matches any args):
  * 				<ul>
  * 					<li><js>"com.foo.MyClass.myMethod"</js>
  * 				</ul>
@@ -74,7 +101,7 @@ import org.apache.juneau.common.utils.*;
  * 					<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
  * 					<li><js>"MyClass.myMethod()"</js>
  * 				</ul>
- * 			<li>Simple:
+ * 			<li>Simple without args (matches any args):
  * 				<ul>
  * 					<li><js>"MyClass.myMethod"</js>
  * 				</ul>
@@ -85,7 +112,7 @@ import org.apache.juneau.common.utils.*;
  * 					<li><js>"Inner2.myMethod"</js>
  * 				</ul>
  * 		</ul>
- * 	<li>Fields:
+ * 	<li><b>Fields:</b>
  * 		<ul>
  * 			<li>Fully qualified:
  * 				<ul>
@@ -102,7 +129,7 @@ import org.apache.juneau.common.utils.*;
  * 					<li><js>"Inner2.myField"</js>
  * 				</ul>
  * 		</ul>
- * 	<li>Constructors:
+ * 	<li><b>Constructors:</b>
  * 		<ul>
  * 			<li>Fully qualified with args:
  * 				<ul>
@@ -123,19 +150,50 @@ import org.apache.juneau.common.utils.*;
  * 					<li><js>"Inner2()"</js>
  * 				</ul>
  * 		</ul>
- * 	<li>A comma-delimited list of anything on this list.
+ * 	<li><b>Multiple patterns:</b>
+ * 		<ul>
+ * 			<li>A comma-delimited list of any patterns above:
+ * 				<ul>
+ * 					<li><js>"com.foo.MyClass, com.bar.OtherClass"</js>
+ * 					<li><js>"MyClass.method1, MyClass.method2, MyClass.field1"</js>
+ * 				</ul>
+ * 		</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h5 class='section'>Notes:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Method and constructor patterns without parentheses match any method signature.
+ * 	<li>Method and constructor argument types can be specified with simple or fully qualified names.
+ * 	<li>Array types in signatures use either <js>"Type[]"</js> or JVM notation like <js>"[LType;"</js>.
+ * 	<li>Generic type parameters are stripped from method signatures during matching.
+ * 	<li>Patterns are case-sensitive.
  * </ul>
  *
- * @param <V> The type of object in this map.
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='seealso'>
+ * 	<li class='jc'>{@link ClassInfo}
+ * 	<li class='jc'>{@link MethodInfo}
+ * 	<li class='jc'>{@link FieldInfo}
+ * 	<li class='jc'>{@link ConstructorInfo}
+ * </ul>
+ *
+ * @param <V> The type of values stored in this map.
  */
 public class ReflectionMap<V> {
 
 	/**
-	 * Builder class.
-	 * @param <V> The type of object in this map.
+	 * Builder for creating {@link ReflectionMap} instances.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
+	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.append(<js>"MyClass"</js>, <js>"value1"</js>)
+	 * 		.append(<js>"MyClass.myMethod"</js>, <js>"value2"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param <V> The type of values stored in this map.
 	 */
 	public static class Builder<V> {
 		final List<ClassEntry<V>> classEntries;
@@ -156,7 +214,7 @@ public class ReflectionMap<V> {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder<V> copyFrom) {
 			classEntries = copyOf(copyFrom.classEntries);
@@ -166,21 +224,45 @@ public class ReflectionMap<V> {
 		}
 
 		/**
-		 * Adds a mapping to this builder.
+		 * Adds one or more mappings to this builder.
+		 *
+		 * <p>
+		 * This method accepts pattern strings that identify classes, methods, fields, or constructors,
+		 * and associates them with the specified value. Multiple patterns can be specified in a single
+		 * key using comma-delimited format.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	Builder&lt;String&gt; <jv>builder</jv> = ReflectionMap.<jsm>create</jsm>(String.<jk>class</jk>);
+		 *
+		 * 	<jc>// Map a class</jc>
+		 * 	<jv>builder</jv>.append(<js>"com.foo.MyClass"</js>, <js>"classValue"</js>);
+		 *
+		 * 	<jc>// Map a specific method</jc>
+		 * 	<jv>builder</jv>.append(<js>"MyClass.myMethod(String,int)"</js>, <js>"methodValue"</js>);
+		 *
+		 * 	<jc>// Map multiple patterns at once</jc>
+		 * 	<jv>builder</jv>.append(<js>"MyClass.field1, MyClass.field2, MyClass.field3"</js>, <js>"fieldValue"</js>);
+		 * </p>
 		 *
 		 * @param key
-		 * 	The mapping key.
+		 * 	The mapping key pattern(s).
 		 * 	<br>Can be any of the following:
 		 * 	<ul>
-		 * 		<li>Full class name (e.g. <js>"com.foo.MyClass"</js>).
-		 * 		<li>Simple class name (e.g. <js>"MyClass"</js>).
-		 * 		<li>All classes (e.g. <js>"*"</js>).
-		 * 		<li>Full method name (e.g. <js>"com.foo.MyClass.myMethod"</js>).
-		 * 		<li>Simple method name (e.g. <js>"MyClass.myMethod"</js>).
-		 * 		<li>A comma-delimited list of anything on this list.
+		 * 		<li>Fully qualified class name (e.g., <js>"com.foo.MyClass"</js>)
+		 * 		<li>Simple class name (e.g., <js>"MyClass"</js>)
+		 * 		<li>All classes wildcard (e.g., <js>"*"</js>)
+		 * 		<li>Method with signature (e.g., <js>"com.foo.MyClass.myMethod(String,int)"</js>)
+		 * 		<li>Method without signature (e.g., <js>"MyClass.myMethod"</js>) - matches any signature
+		 * 		<li>Field (e.g., <js>"MyClass.myField"</js>)
+		 * 		<li>Constructor (e.g., <js>"MyClass(String,int)"</js>)
+		 * 		<li>Comma-delimited list of any of the above (e.g., <js>"MyClass, MyClass.method1, MyClass.field1"</js>)
 		 * 	</ul>
-		 * @param value The value for this mapping.
+		 * @param value
+		 * 	The value to associate with the matching reflection element(s).
+		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
+		 * @throws RuntimeException If the key pattern is invalid or empty.
 		 */
 		public Builder<V> append(String key, V value) {
 			if (StringUtils.isEmpty(key))
@@ -215,9 +297,12 @@ public class ReflectionMap<V> {
 		}
 
 		/**
-		 * Create new instance of {@link ReflectionMap} based on the contents of this builder.
+		 * Builds a new {@link ReflectionMap} from the current state of this builder.
 		 *
-		 * @return A new {@link ReflectionMap} object.
+		 * <p>
+		 * Multiple calls to this method will create independent copies of the map.
+		 *
+		 * @return A new immutable {@link ReflectionMap} instance.
 		 */
 		public ReflectionMap<V> build() {
 			return new ReflectionMap<>(this);
@@ -226,14 +311,29 @@ public class ReflectionMap<V> {
 		/**
 		 * Creates a copy of this builder.
 		 *
-		 * @return A copy of this builder.
+		 * <p>
+		 * Useful for creating variations of a base configuration without modifying the original builder.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	Builder&lt;String&gt; <jv>base</jv> = ReflectionMap
+		 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
+		 * 		.append(<js>"com.foo.*"</js>, <js>"baseValue"</js>);
+		 *
+		 * 	<jc>// Create a variation without modifying base</jc>
+		 * 	ReflectionMap&lt;String&gt; <jv>map1</jv> = <jv>base</jv>.copy()
+		 * 		.append(<js>"com.bar.*"</js>, <js>"additionalValue"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @return A copy of this builder with all current mappings.
 		 */
 		public Builder<V> copy() {
 			return new Builder<>(this);
 		}
 	}
 
-	static class ClassEntry<V> {
+	private static class ClassEntry<V> {
 		final String simpleName, fullName;
 		final V value;
 
@@ -256,12 +356,13 @@ public class ReflectionMap<V> {
 				.add("simpleName", simpleName)
 				.add("fullName", fullName)
 				.add("value", value)
+				.build()
 				.toString();
 			// @formatter:on
 		}
 	}
 
-	static class ConstructorEntry<V> {
+	private static class ConstructorEntry<V> {
 		String simpleClassName, fullClassName, args[];
 		V value;
 
@@ -289,12 +390,13 @@ public class ReflectionMap<V> {
 				.add("fullClassName", fullClassName)
 				.add("args", args)
 				.add("value", value)
+				.build()
 				.toString();
 			// @formatter:on
 		}
 	}
 
-	static class FieldEntry<V> {
+	private static class FieldEntry<V> {
 		String simpleClassName, fullClassName, fieldName;
 		V value;
 
@@ -323,12 +425,13 @@ public class ReflectionMap<V> {
 				.add("fullClassName", fullClassName)
 				.add("fieldName", fieldName)
 				.add("value", value)
+				.build()
 				.toString();
 			// @formatter:on
 		}
 	}
 
-	static class MethodEntry<V> {
+	private static class MethodEntry<V> {
 		String simpleClassName, fullClassName, methodName, args[];
 		V value;
 
@@ -387,25 +490,35 @@ public class ReflectionMap<V> {
 				.add("simpleClassName", simpleClassName)
 				.add("fullClassName", fullClassName)
 				.add("methodName", methodName)
-				.add("args", args)
+				.add("args", opt(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
 				.add("value", value)
+				.build()
 				.toString();
 			// @formatter:on
 		}
 	}
 
 	/**
-	 * Static builder creator.
+	 * Creates a new builder for constructing a {@link ReflectionMap}.
 	 *
-	 * @param <V> The type of object in this map.
-	 * @param c The type of object in this map.
-	 * @return A new instance of this object.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
+	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.append(<js>"com.foo.MyClass"</js>, <js>"value1"</js>)
+	 * 		.append(<js>"com.foo.MyClass.myMethod"</js>, <js>"value2"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param <V> The type of values stored in the map.
+	 * @param c The class type of values (used for type safety, not stored).
+	 * @return A new builder instance.
 	 */
 	public static <V> Builder<V> create(Class<V> c) {
 		return new Builder<>();
 	}
 
-	static boolean argsMatch(String[] names, Class<?>[] args) {
+	private static boolean argsMatch(String[] names, Class<?>[] args) {
 		if (names == null)
 			return true;
 		if (names.length != args.length)
@@ -419,7 +532,7 @@ public class ReflectionMap<V> {
 		return true;
 	}
 
-	static boolean classMatches(String simpleName, String fullName, Class<?> c) {
+	private static boolean classMatches(String simpleName, String fullName, Class<?> c) {
 		// For class org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder
 		// c.getSimpleName() == "Builder"
 		// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"
@@ -445,14 +558,14 @@ public class ReflectionMap<V> {
 		return false;
 	}
 
-	static String simpleClassName(String name) {
+	private static String simpleClassName(String name) {
 		int i = name.indexOf('.');
 		if (i == -1)
 			return name;
 		return null;
 	}
 
-	static void splitNames(String key, Consumer<String> consumer) {
+	private static void splitNames(String key, Consumer<String> consumer) {
 		if (key.indexOf(',') == -1) {
 			consumer.accept(key);
 		} else {
@@ -474,17 +587,14 @@ public class ReflectionMap<V> {
 	}
 
 	final List<ClassEntry<V>> classEntries;
-
 	final List<MethodEntry<V>> methodEntries;
-
 	final List<FieldEntry<V>> fieldEntries;
-
 	final List<ConstructorEntry<V>> constructorEntries;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param b Initializer object.
+	 * @param b The builder containing the mappings to initialize this map with.
 	 */
 	protected ReflectionMap(Builder<V> b) {
 		this.classEntries = u(copyOf(b.classEntries));
@@ -493,260 +603,111 @@ public class ReflectionMap<V> {
 		this.constructorEntries = u(copyOf(b.constructorEntries));
 	}
 
-	public Stream<V> findMatching(Class<?> c) {
+	/**
+	 * Finds all values associated with the specified class.
+	 *
+	 * <p>
+	 * This method searches for mappings that match the given class, including patterns for
+	 * the fully qualified name, simple name, inner class names, and wildcard patterns.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
+	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.append(<js>"com.foo.MyClass"</js>, <js>"value1"</js>)
+	 * 		.append(<js>"MyClass"</js>, <js>"value2"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Find all values for MyClass</jc>
+	 * 	Stream&lt;String&gt; <jv>values</jv> = <jv>map</jv>.find(MyClass.<jk>class</jk>);
+	 * 	<jc>// Returns stream containing ["value1", "value2"]</jc>
+	 * </p>
+	 *
+	 * @param c The class to find mappings for. Can be <jk>null</jk>.
+	 * @return A stream of all values associated with the class. Empty stream if no matches found.
+	 */
+	public Stream<V> find(Class<?> c) {
 		return classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value);
 	}
 
-	public Stream<V> findMatching(Method m) {
-		return methodEntries.stream().filter(x -> x.matches(m)).map(x -> x.value);
-	}
-
-	public Stream<V> findMatching(Field f) {
-		return fieldEntries.stream().filter(x -> x.matches(f)).map(x -> x.value);
-	}
-
-	public Stream<V> findMatching(Constructor c) {
+	/**
+	 * Finds all values associated with the specified constructor.
+	 *
+	 * <p>
+	 * This method searches for mappings that match the given constructor, considering both
+	 * the declaring class and parameter types.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
+	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.append(<js>"MyClass(String,int)"</js>, <js>"value1"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Find value for specific constructor</jc>
+	 * 	Constructor&lt;?&gt; <jv>ctor</jv> = MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
+	 * 	Stream&lt;String&gt; <jv>values</jv> = <jv>map</jv>.find(<jv>ctor</jv>);
+	 * </p>
+	 *
+	 * @param c The constructor to find mappings for. Can be <jk>null</jk>.
+	 * @return A stream of all values associated with the constructor. Empty stream if no matches found.
+	 */
+	public Stream<V> find(Constructor<?> c) {
 		return constructorEntries.stream().filter(x -> x.matches(c)).map(x -> x.value);
 	}
 
 	/**
-	 * Finds first value in this map that matches the specified class.
+	 * Finds all values associated with the specified field.
 	 *
-	 * @param c The class to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
+	 * <p>
+	 * This method searches for mappings that match the given field, considering both
+	 * the declaring class and field name.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
+	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.append(<js>"MyClass.myField"</js>, <js>"value1"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Find value for specific field</jc>
+	 * 	Field <jv>field</jv> = MyClass.<jk>class</jk>.getField(<js>"myField"</js>);
+	 * 	Stream&lt;String&gt; <jv>values</jv> = <jv>map</jv>.find(<jv>field</jv>);
+	 * </p>
+	 *
+	 * @param f The field to find mappings for. Can be <jk>null</jk>.
+	 * @return A stream of all values associated with the field. Empty stream if no matches found.
 	 */
-	public Optional<V> find(Class<?> c) {
-		return find(c, null);
+	public Stream<V> find(Field f) {
+		return fieldEntries.stream().filter(x -> x.matches(f)).map(x -> x.value);
 	}
 
 	/**
-	 * Finds first value in this map that matches the specified class.
+	 * Finds all values associated with the specified method.
 	 *
-	 * @param c The class to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Class<?> c, Class<? extends V> ofType) {
-		return opt(findMatching(c).filter(x -> x != null && (ofType == null || ofType.isInstance(x))).findFirst().orElse(null));
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified constructor.
+	 * <p>
+	 * This method searches for mappings that match the given method, considering the
+	 * declaring class, method name, and parameter types.
 	 *
-	 * @param c The constructor to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Constructor<?> c) {
-		return find(c, null);
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified constructor.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
+	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.append(<js>"MyClass.myMethod"</js>, <js>"value1"</js>)
+	 * 		.append(<js>"MyClass.myMethod(String)"</js>, <js>"value2"</js>)
+	 * 		.build();
 	 *
-	 * @param c The constructor to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Constructor<?> c, Class<? extends V> ofType) {
-		return opt(findMatching(c).filter(x -> x != null && (ofType == null || ofType.isInstance(x))).findFirst().orElse(null));
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified field.
+	 * 	<jc>// Find values for specific method</jc>
+	 * 	Method <jv>method</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>, String.<jk>class</jk>);
+	 * 	Stream&lt;String&gt; <jv>values</jv> = <jv>map</jv>.find(<jv>method</jv>);
+	 * 	<jc>// Returns stream containing ["value1", "value2"] - first matches any signature</jc>
+	 * </p>
 	 *
-	 * @param f The field to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
+	 * @param m The method to find mappings for. Can be <jk>null</jk>.
+	 * @return A stream of all values associated with the method. Empty stream if no matches found.
 	 */
-	public Optional<V> find(Field f) {
-		return find(f, null);
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified field.
-	 *
-	 * @param f The field to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Field f, Class<? extends V> ofType) {
-		return opt(findMatching(f).filter(x -> x != null && (ofType == null || ofType.isInstance(x))).findFirst().orElse(null));
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Method m) {
-		return find(m, null);
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Method m, Class<? extends V> ofType) {
-		return opt(findMatching(m).filter(x -> x != null && (ofType == null || ofType.isInstance(x))).findFirst().orElse(null));
-	}
-
-	/**
-	 * Finds all values in this map that match the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @return The matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Class<?> c) {
-		return findAll(c, null);
-	}
-
-	/**
-	 * Finds all values in this map that match the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Class<?> c, Class<? extends V> ofType) {
-		return findMatching(c).filter(x -> ofType == null || ofType.isInstance(x)).toList();
-	}
-
-	/**
-	 * Finds all values in this map that match the specified constructor.
-	 *
-	 * @param c The constructor to test for.
-	 * @return The matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Constructor<?> c) {
-		return findAll(c, null);
-	}
-
-	/**
-	 * Finds all values in this map that match the specified constructor.
-	 *
-	 * @param c The constructor to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Constructor<?> c, Class<? extends V> ofType) {
-		return findMatching(c).filter(x -> ofType == null || ofType.isInstance(x)).toList();
-	}
-
-	/**
-	 * Finds all values in this map that match the specified field.
-	 *
-	 * @param f The field to test for.
-	 * @return The matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Field f) {
-		return findAll(f, null);
-	}
-
-	/**
-	 * Finds all values in this map that match the specified field.
-	 *
-	 * @param f The field to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Field f, Class<? extends V> ofType) {
-		return findMatching(f).filter(x -> ofType == null || ofType.isInstance(x)).toList();
-	}
-
-	/**
-	 * Finds all values in this map that match the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @return The matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Method m) {
-		return findAll(m, null);
-	}
-
-	/**
-	 * Finds all values in this map that match the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Method m, Class<? extends V> ofType) {
-		return findMatching(m).filter(x -> ofType == null || ofType.isInstance(x)).toList();
-	}
-
-	/**
-	 * Finds all values in this map that match the specified class and appends them to the specified array.
-	 *
-	 * @param c The class to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @param array The array to append to.
-	 * @return The array with matching objects appended.
-	 */
-	public V[] appendAll(Class<?> c, Class<? extends V> ofType, V[] array) {
-		var list = findAll(c, ofType);
-		if (list.isEmpty())
-			return array;
-		var newArray = Arrays.copyOf(array, array.length + list.size());
-		for (int i = 0; i < list.size(); i++)
-			newArray[array.length + i] = list.get(i);
-		return newArray;
-	}
-
-	/**
-	 * Finds all values in this map that match the specified constructor and appends them to the specified array.
-	 *
-	 * @param c The constructor to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @param array The array to append to.
-	 * @return The array with matching objects appended.
-	 */
-	public V[] appendAll(Constructor<?> c, Class<? extends V> ofType, V[] array) {
-		var list = findAll(c, ofType);
-		if (list.isEmpty())
-			return array;
-		var newArray = Arrays.copyOf(array, array.length + list.size());
-		for (int i = 0; i < list.size(); i++)
-			newArray[array.length + i] = list.get(i);
-		return newArray;
-	}
-
-	/**
-	 * Finds all values in this map that match the specified field and appends them to the specified array.
-	 *
-	 * @param f The field to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @param array The array to append to.
-	 * @return The array with matching objects appended.
-	 */
-	public V[] appendAll(Field f, Class<? extends V> ofType, V[] array) {
-		var list = findAll(f, ofType);
-		if (list.isEmpty())
-			return array;
-		var newArray = Arrays.copyOf(array, array.length + list.size());
-		for (int i = 0; i < list.size(); i++)
-			newArray[array.length + i] = list.get(i);
-		return newArray;
-	}
-
-	/**
-	 * Finds all values in this map that match the specified method and appends them to the specified array.
-	 *
-	 * @param m The method to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @param array The array to append to.
-	 * @return The array with matching objects appended.
-	 */
-	public V[] appendAll(Method m, Class<? extends V> ofType, V[] array) {
-		var list = findAll(m, ofType);
-		if (list.isEmpty())
-			return array;
-		var newArray = Arrays.copyOf(array, array.length + list.size());
-		for (int i = 0; i < list.size(); i++)
-			newArray[array.length + i] = list.get(i);
-		return newArray;
+	public Stream<V> find(Method m) {
+		return methodEntries.stream().filter(x -> x.matches(m)).map(x -> x.value);
 	}
 
 	@Override /* Overridden from Object */
@@ -757,6 +718,7 @@ public class ReflectionMap<V> {
 			.add("methodEntries", methodEntries)
 			.add("fieldEntries", fieldEntries)
 			.add("constructorEntries", constructorEntries)
+			.build()
 			.toString();
 		// @formatter:on
 	}

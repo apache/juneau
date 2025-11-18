@@ -17,7 +17,6 @@
 package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -44,9 +43,9 @@ import org.apache.juneau.common.annotation.*;
  * <p class='bjava'>
  * 	<jc>// Get annotation info from a class</jc>
  * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
- * 	Optional&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>ai</jv> = 
+ * 	Optional&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>ai</jv> =
  * 		<jv>ci</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).findFirst();
- * 	
+ *
  * 	<jc>// Access annotation values</jc>
  * 	<jv>ai</jv>.ifPresent(<jv>x</jv> -&gt; {
  * 		String <jv>value</jv> = <jv>x</jv>.getValue(String.<jk>class</jk>, <js>"value"</js>).orElse(<js>"default"</js>);
@@ -108,11 +107,11 @@ public class AnnotationInfo<T extends Annotation> {
 
 	/**
 	 * Returns the rank of this annotation for sorting by precedence.
-	 * 
+	 *
 	 * <p>
 	 * The rank is determined by checking if the annotation has a {@code rank()} method that returns an {@code int}.
 	 * If found, that value is used; otherwise the rank defaults to {@code 0}.
-	 * 
+	 *
 	 * <p>
 	 * Higher rank values indicate higher precedence when multiple annotations of the same type are present.
 	 *
@@ -122,12 +121,12 @@ public class AnnotationInfo<T extends Annotation> {
 	 * 	<ja>@interface</ja> MyAnnotation {
 	 * 		<jk>int</jk> rank() <jk>default</jk> 0;
 	 * 	}
-	 * 	
+	 *
 	 * 	<jc>// Get rank from annotation info</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
 	 * 	<jk>int</jk> <jv>rank</jv> = <jv>ai</jv>.getRank();  <jc>// Returns value from rank() method</jc>
 	 * </p>
-	 * 
+	 *
 	 * @return The rank of this annotation, or {@code 0} if no rank method exists.
 	 */
 	public int getRank() {
@@ -158,10 +157,10 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @interface MyAnnotation { String value(); int priority(); }</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
-	 * 	
+	 *
 	 * 	<jc>// Get string value</jc>
 	 * 	Optional&lt;String&gt; <jv>value</jv> = <jv>ai</jv>.getValue(String.<jk>class</jk>, <js>"value"</js>);
-	 * 	
+	 *
 	 * 	<jc>// Get int value</jc>
 	 * 	Optional&lt;Integer&gt; <jv>priority</jv> = <jv>ai</jv>.getValue(Integer.<jk>class</jk>, <js>"priority"</js>);
 	 * </p>
@@ -188,7 +187,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;?&gt; <jv>ai</jv> = ...;
-	 * 	
+	 *
 	 * 	<jc>// Safe cast</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>myAi</jv> = <jv>ai</jv>.cast(MyAnnotation.<jk>class</jk>);
 	 * 	<jk>if</jk> (<jv>myAi</jv> != <jk>null</jk>) {
@@ -233,7 +232,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
 	 * 	MyAnnotation <jv>annotation</jv> = <jv>ai</jv>.inner();
-	 * 	
+	 *
 	 * 	<jc>// Access annotation methods directly</jc>
 	 * 	String <jv>value</jv> = <jv>annotation</jv>.value();
 	 * </p>
@@ -256,11 +255,11 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p class='bjava'>
 	 * 	<jc>// Define an annotation group</jc>
 	 * 	<ja>@interface</ja> MyGroup {}
-	 * 	
+	 *
 	 * 	<jc>// Annotation in the group</jc>
 	 * 	<ja>@AnnotationGroup</ja>(MyGroup.<jk>class</jk>)
 	 * 	<ja>@interface</ja> MyAnnotation {}
-	 * 	
+	 *
 	 * 	<jc>// Check if annotation is in group</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
 	 * 	<jk>boolean</jk> <jv>inGroup</jv> = <jv>ai</jv>.isInGroup(MyGroup.<jk>class</jk>);  <jc>// Returns true</jc>
@@ -282,7 +281,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;?&gt; <jv>ai</jv> = ...;
-	 * 	
+	 *
 	 * 	<jk>if</jk> (<jv>ai</jv>.isType(MyAnnotation.<jk>class</jk>)) {
 	 * 		<jc>// Handle MyAnnotation specifically</jc>
 	 * 	}
@@ -644,17 +643,17 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Get a serializer class from an annotation</jc>
-	 * 	Optional&lt;Class&lt;? <jk>extends</jk> Serializer&gt;&gt; <jv>serializerClass</jv> = 
+	 * 	Optional&lt;Class&lt;? <jk>extends</jk> Serializer&gt;&gt; <jv>serializerClass</jv> =
 	 * 		<jv>annotationInfo</jv>.getClassValue(<js>"serializer"</js>, Serializer.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The expected supertype of the class.
 	 * @param methodName The method name.
 	 * @param type The expected supertype of the class value.
-	 * @return An optional containing the value of the specified method cast to the expected type, 
+	 * @return An optional containing the value of the specified method cast to the expected type,
 	 *         or empty if not found, not a class, or not assignable to the expected type.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "hiding" })
 	public <T> Optional<Class<? extends T>> getClassValue(String methodName, Class<T> type) {
 		return getMethod(methodName)
 			.filter(x -> x.hasReturnType(Class.class))
@@ -707,17 +706,17 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Get an array of serializer classes from an annotation</jc>
-	 * 	Optional&lt;Class&lt;? <jk>extends</jk> Serializer&gt;[]&gt; <jv>serializerClasses</jv> = 
+	 * 	Optional&lt;Class&lt;? <jk>extends</jk> Serializer&gt;[]&gt; <jv>serializerClasses</jv> =
 	 * 		<jv>annotationInfo</jv>.getClassArray(<js>"serializers"</js>, Serializer.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The expected supertype of the classes.
 	 * @param methodName The method name.
 	 * @param type The expected supertype of the class values.
-	 * @return An optional containing the value of the specified method cast to the expected type, 
+	 * @return An optional containing the value of the specified method cast to the expected type,
 	 *         or empty if not found, not a class array, or any element is not assignable to the expected type.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "hiding" })
 	public <T> Optional<Class<? extends T>[]> getClassArray(String methodName, Class<T> type) {
 		return getMethod(methodName)
 			.filter(x -> x.hasReturnType(Class[].class))
