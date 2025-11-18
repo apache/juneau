@@ -1768,287 +1768,290 @@
 <a class="jxr_linenumber" name="L1760" href="#L1760">1760</a> 		A[] array = annotationArray(type);
 <a class="jxr_linenumber" name="L1761" href="#L1761">1761</a> 		<strong class="jxr_keyword">if</strong> (array == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1762" href="#L1762">1762</a> 			<strong class="jxr_keyword">if</strong> (beanContext == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1763" href="#L1763">1763</a> 				<strong class="jxr_keyword">return</strong> Optional.ofNullable(info.lastAnnotation(type, filter));
-<a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> 			<strong class="jxr_keyword">return</strong> Optional.empty();
-<a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> 		}
-<a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = array.length - 1; i &gt;= 0; i--)
-<a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 			<strong class="jxr_keyword">if</strong> (test(filter, array[i]))
-<a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 				<strong class="jxr_keyword">return</strong> Optional.of(array[i]);
-<a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 		<strong class="jxr_keyword">return</strong> Optional.empty();
-<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 	}
-<a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 
-<a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> <em class="jxr_javadoccomment">	 * Transforms the specified object into an instance of this class.</em>
-<a class="jxr_linenumber" name="L1774" href="#L1774">1774</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1775" href="#L1775">1775</a> <em class="jxr_javadoccomment">	 * @param o The object to transform.</em>
-<a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> <em class="jxr_javadoccomment">	 * @return The transformed object.</em>
-<a class="jxr_linenumber" name="L1777" href="#L1777">1777</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1778" href="#L1778">1778</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L1779" href="#L1779">1779</a> 	<strong class="jxr_keyword">public</strong> T mutateFrom(Object o) {
-<a class="jxr_linenumber" name="L1780" href="#L1780">1780</a> 		Mutater t = getFromMutater(o.getClass());
-<a class="jxr_linenumber" name="L1781" href="#L1781">1781</a> 		<strong class="jxr_keyword">return</strong> (T)(t == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : t.mutate(o));
-<a class="jxr_linenumber" name="L1782" href="#L1782">1782</a> 	}
-<a class="jxr_linenumber" name="L1783" href="#L1783">1783</a> 
-<a class="jxr_linenumber" name="L1784" href="#L1784">1784</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a> <em class="jxr_javadoccomment">	 * Transforms the specified object into an instance of this class.</em>
-<a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> <em class="jxr_javadoccomment">	 * @param &lt;O&gt; The transform-to class.</em>
-<a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> <em class="jxr_javadoccomment">	 * @param o The object to transform.</em>
-<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> <em class="jxr_javadoccomment">	 * @param c The class</em>
-<a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> <em class="jxr_javadoccomment">	 * @return The transformed object.</em>
-<a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L1793" href="#L1793">1793</a> 	<strong class="jxr_keyword">public</strong> &lt;O&gt; O mutateTo(Object o, Class&lt;O&gt; c) {
-<a class="jxr_linenumber" name="L1794" href="#L1794">1794</a> 		Mutater t = getToMutater(c);
-<a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> 		<strong class="jxr_keyword">return</strong> (O)(t == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : t.mutate(o));
-<a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 	}
-<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> 
-<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> <em class="jxr_javadoccomment">	 * Transforms the specified object into an instance of this class.</em>
-<a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> <em class="jxr_javadoccomment">	 * @param &lt;O&gt; The transform-to class.</em>
-<a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> <em class="jxr_javadoccomment">	 * @param o The object to transform.</em>
-<a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> <em class="jxr_javadoccomment">	 * @param c The class</em>
-<a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> <em class="jxr_javadoccomment">	 * @return The transformed object.</em>
-<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 	<strong class="jxr_keyword">public</strong> &lt;O&gt; O mutateTo(Object o, ClassMeta&lt;O&gt; c) {
-<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 		<strong class="jxr_keyword">return</strong> mutateTo(o, c.getInnerClass());
-<a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> 	}
-<a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> 
-<a class="jxr_linenumber" name="L1810" href="#L1810">1810</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1811" href="#L1811">1811</a> <em class="jxr_javadoccomment">	 * Create a new instance of the main class of this declared type.</em>
-<a class="jxr_linenumber" name="L1812" href="#L1812">1812</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1813" href="#L1813">1813</a> <em class="jxr_javadoccomment">	 * @return A new instance of the object, or &lt;jk&gt;null&lt;/jk&gt; if there is no no-arg constructor on the object.</em>
-<a class="jxr_linenumber" name="L1814" href="#L1814">1814</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
-<a class="jxr_linenumber" name="L1815" href="#L1815">1815</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1816" href="#L1816">1816</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1817" href="#L1817">1817</a> 	<strong class="jxr_keyword">public</strong> T newInstance() <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L1818" href="#L1818">1818</a> 		<strong class="jxr_keyword">if</strong> (isArray())
-<a class="jxr_linenumber" name="L1819" href="#L1819">1819</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(getInnerClass().getComponentType(), 0);
-<a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 		ConstructorInfo c = getConstructor();
-<a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 		<strong class="jxr_keyword">if</strong> (nn(c))
-<a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance();
-<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 		InvocationHandler h = getProxyInvocationHandler();
-<a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 		<strong class="jxr_keyword">if</strong> (nn(h))
-<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader(), a(getInnerClass(), java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
-<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 		<strong class="jxr_keyword">if</strong> (isArray())
-<a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(<strong class="jxr_keyword">this</strong>.elementType.innerClass, 0);
-<a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> 	}
-<a class="jxr_linenumber" name="L1830" href="#L1830">1830</a> 
-<a class="jxr_linenumber" name="L1831" href="#L1831">1831</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1832" href="#L1832">1832</a> <em class="jxr_javadoccomment">	 * Same as {@link #newInstance()} except for instantiating non-static member classes.</em>
-<a class="jxr_linenumber" name="L1833" href="#L1833">1833</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1834" href="#L1834">1834</a> <em class="jxr_javadoccomment">	 * @param outer</em>
-<a class="jxr_linenumber" name="L1835" href="#L1835">1835</a> <em class="jxr_javadoccomment">	 * 	The instance of the owning object of the member class instance.</em>
-<a class="jxr_linenumber" name="L1836" href="#L1836">1836</a> <em class="jxr_javadoccomment">	 * 	Can be &lt;jk&gt;null&lt;/jk&gt; if instantiating a non-member or static class.</em>
-<a class="jxr_linenumber" name="L1837" href="#L1837">1837</a> <em class="jxr_javadoccomment">	 * @return A new instance of the object, or &lt;jk&gt;null&lt;/jk&gt; if there is no no-arg constructor on the object.</em>
-<a class="jxr_linenumber" name="L1838" href="#L1838">1838</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
-<a class="jxr_linenumber" name="L1839" href="#L1839">1839</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1840" href="#L1840">1840</a> 	<strong class="jxr_keyword">public</strong> T newInstance(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L1841" href="#L1841">1841</a> 		<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L1842" href="#L1842">1842</a> 			<strong class="jxr_keyword">return</strong> noArgConstructor.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>);
-<a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 		<strong class="jxr_keyword">return</strong> newInstance();
-<a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 	}
-<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 
-<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> <em class="jxr_javadoccomment">	 * Create a new instance of the main class of this declared type from a &lt;c&gt;String&lt;/c&gt; input.</em>
-<a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> <em class="jxr_javadoccomment">	 * In order to use this method, the class must have one of the following methods:</em>
-<a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;code&gt;&lt;jk&gt;public static&lt;/jk&gt; T valueOf(String in);&lt;/code&gt;</em>
-<a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;code&gt;&lt;jk&gt;public static&lt;/jk&gt; T fromString(String in);&lt;/code&gt;</em>
-<a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;code&gt;&lt;jk&gt;public&lt;/jk&gt; T(String in);&lt;/code&gt;</em>
-<a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1856" href="#L1856">1856</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> <em class="jxr_javadoccomment">	 * @param outer</em>
-<a class="jxr_linenumber" name="L1858" href="#L1858">1858</a> <em class="jxr_javadoccomment">	 * 	The outer class object for non-static member classes.  Can be &lt;jk&gt;null&lt;/jk&gt; for non-member or static classes.</em>
-<a class="jxr_linenumber" name="L1859" href="#L1859">1859</a> <em class="jxr_javadoccomment">	 * @param arg The input argument value.</em>
-<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> <em class="jxr_javadoccomment">	 * @return A new instance of the object, or &lt;jk&gt;null&lt;/jk&gt; if there is no string constructor on the object.</em>
-<a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
-<a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> 	<strong class="jxr_keyword">public</strong> T newInstanceFromString(Object <strong class="jxr_keyword">outer</strong>, String arg) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> 
-<a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> 		<strong class="jxr_keyword">if</strong> (isEnum()) {
-<a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> 			T t = (T)enumValues.getKey(arg);
-<a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> 			<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> &amp;&amp; ! beanContext.isIgnoreUnknownEnumValues())
-<a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve enum value '"</span> + arg + <span class="jxr_string">"' on class '"</span> + getInnerClass().getName() + <span class="jxr_string">"'"</span>);
-<a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> 			<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> 		}
-<a class="jxr_linenumber" name="L1872" href="#L1872">1872</a> 
-<a class="jxr_linenumber" name="L1873" href="#L1873">1873</a> 		Method m = fromStringMethod;
-<a class="jxr_linenumber" name="L1874" href="#L1874">1874</a> 		<strong class="jxr_keyword">if</strong> (nn(m)) {
-<a class="jxr_linenumber" name="L1875" href="#L1875">1875</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1876" href="#L1876">1876</a> 				<strong class="jxr_keyword">return</strong> (T)m.invoke(<strong class="jxr_keyword">null</strong>, arg);
-<a class="jxr_linenumber" name="L1877" href="#L1877">1877</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-<a class="jxr_linenumber" name="L1878" href="#L1878">1878</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
-<a class="jxr_linenumber" name="L1879" href="#L1879">1879</a> 			}
-<a class="jxr_linenumber" name="L1880" href="#L1880">1880</a> 		}
-<a class="jxr_linenumber" name="L1881" href="#L1881">1881</a> 		ConstructorInfo c = stringConstructor;
-<a class="jxr_linenumber" name="L1882" href="#L1882">1882</a> 		<strong class="jxr_keyword">if</strong> (nn(c)) {
-<a class="jxr_linenumber" name="L1883" href="#L1883">1883</a> 			<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L1884" href="#L1884">1884</a> 				<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>, arg);
-<a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance(arg);
-<a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 		}
-<a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"No string constructor or valueOf(String) method found for class '"</span> + getInnerClass().getName() + <span class="jxr_string">"'"</span>);
-<a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 	}
-<a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> 
-<a class="jxr_linenumber" name="L1890" href="#L1890">1890</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1891" href="#L1891">1891</a> <em class="jxr_javadoccomment">	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.</em>
-<a class="jxr_linenumber" name="L1892" href="#L1892">1892</a> <em class="jxr_javadoccomment">	 * (e.g. &lt;jk&gt;boolean&lt;/jk&gt; == &lt;c&gt;Boolean&lt;/c&gt;).</em>
-<a class="jxr_linenumber" name="L1893" href="#L1893">1893</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1894" href="#L1894">1894</a> <em class="jxr_javadoccomment">	 * @param cm The class meta to compare to.</em>
-<a class="jxr_linenumber" name="L1895" href="#L1895">1895</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class-meta is equivalent to this one.</em>
-<a class="jxr_linenumber" name="L1896" href="#L1896">1896</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1897" href="#L1897">1897</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> same(ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L1898" href="#L1898">1898</a> 		<strong class="jxr_keyword">if</strong> (equals(cm))
-<a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> 		<strong class="jxr_keyword">return</strong> (isPrimitive() &amp;&amp; cc == cm.cc);
-<a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> 	}
-<a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> 
-<a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> 		<strong class="jxr_keyword">return</strong> toString(false);
-<a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> 	}
-<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 
-<a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> <em class="jxr_javadoccomment">	 * Same as {@link #toString()} except use simple class names.</em>
-<a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> <em class="jxr_javadoccomment">	 * @param simple Print simple class names only (no package).</em>
-<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> <em class="jxr_javadoccomment">	 * @return A new string.</em>
-<a class="jxr_linenumber" name="L1913" href="#L1913">1913</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> 	<strong class="jxr_keyword">public</strong> String toString(<strong class="jxr_keyword">boolean</strong> simple) {
-<a class="jxr_linenumber" name="L1915" href="#L1915">1915</a> 		<strong class="jxr_keyword">return</strong> toString(<strong class="jxr_keyword">new</strong> StringBuilder(), simple).toString();
-<a class="jxr_linenumber" name="L1916" href="#L1916">1916</a> 	}
-<a class="jxr_linenumber" name="L1917" href="#L1917">1917</a> 
-<a class="jxr_linenumber" name="L1918" href="#L1918">1918</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1919" href="#L1919">1919</a> <em class="jxr_javadoccomment">	 * Converts the specified object to a string.</em>
-<a class="jxr_linenumber" name="L1920" href="#L1920">1920</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> <em class="jxr_javadoccomment">	 * @param t The object to convert.</em>
-<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> <em class="jxr_javadoccomment">	 * @return The object converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the object was null.</em>
-<a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> 	<strong class="jxr_keyword">public</strong> String toString(Object t) {
-<a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 		<strong class="jxr_keyword">if</strong> (isEnum() &amp;&amp; beanContext.isUseEnumNames())
-<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 			<strong class="jxr_keyword">return</strong> ((Enum&lt;?&gt;)t).name();
-<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 		<strong class="jxr_keyword">return</strong> t.toString();
-<a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 	}
-<a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 
-<a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotationArray(Class&lt;A&gt; type) {
-<a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> 		A[] array = (A[])annotationArrayMap.get(type);
-<a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 		<strong class="jxr_keyword">if</strong> (array == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(beanContext)) {
-<a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 			List&lt;A&gt; l = list();
-<a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 			beanContext.getAnnotationProvider().find(type, info.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 			array = (A[])Array.newInstance(type, l.size());
-<a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; l.size(); i++)
-<a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 				Array.set(array, i, l.get(i));
-<a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 			annotationArrayMap.put(type, array);
-<a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 		}
-<a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 		<strong class="jxr_keyword">return</strong> array;
-<a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 	}
-<a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 
-<a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> <em class="jxr_javadoccomment">	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the normal class of one of the</em>
-<a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> <em class="jxr_javadoccomment">	 * child POJO swaps associated with this class.</em>
-<a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> <em class="jxr_javadoccomment">	 * @param normalClass The normal class being resolved.</em>
-<a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
-<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForSwap(Class&lt;?&gt; normalClass) {
-<a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> 		<strong class="jxr_keyword">if</strong> (nn(childSwapMap)) {
-<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 			ObjectSwap&lt;?,?&gt; s = childSwapMap.get(normalClass);
-<a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : childSwaps)
-<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 					<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> &amp;&amp; f.getNormalClass().isParentOf(normalClass))
-<a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 						s = f;
-<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> 					s = ObjectSwap.NULL;
-<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> 				ObjectSwap&lt;?,?&gt; s2 = childSwapMap.putIfAbsent(normalClass, s);
-<a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> 				<strong class="jxr_keyword">if</strong> (nn(s2))
-<a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> 					s = s2;
-<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> 			}
-<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> 			<strong class="jxr_keyword">if</strong> (s == ObjectSwap.NULL)
-<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 			<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 		}
-<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> 	}
-<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> 
-<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1974" href="#L1974">1974</a> <em class="jxr_javadoccomment">	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the swap class of one of the child</em>
-<a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> <em class="jxr_javadoccomment">	 * POJO swaps associated with this class.</em>
-<a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> <em class="jxr_javadoccomment">	 * @param swapClass The swap class being resolved.</em>
-<a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
-<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForUnswap(Class&lt;?&gt; swapClass) {
-<a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> 		<strong class="jxr_keyword">if</strong> (nn(childUnswapMap)) {
-<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> 			ObjectSwap&lt;?,?&gt; s = childUnswapMap.get(swapClass);
-<a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : childSwaps)
-<a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 					<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> &amp;&amp; f.getSwapClass().isParentOf(swapClass))
-<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 						s = f;
-<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 					s = ObjectSwap.NULL;
-<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 				ObjectSwap&lt;?,?&gt; s2 = childUnswapMap.putIfAbsent(swapClass, s);
-<a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 				<strong class="jxr_keyword">if</strong> (nn(s2))
-<a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 					s = s2;
-<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 			}
-<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 			<strong class="jxr_keyword">if</strong> (s == ObjectSwap.NULL)
-<a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> 			<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> 		}
-<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> 	}
-<a class="jxr_linenumber" name="L1999" href="#L1999">1999</a> 
-<a class="jxr_linenumber" name="L2000" href="#L2000">2000</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2001" href="#L2001">2001</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</em>
-<a class="jxr_linenumber" name="L2002" href="#L2002">2002</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2004" href="#L2004">2004</a> <em class="jxr_javadoccomment">	 * Used when transforming bean properties to prevent having to look up transforms if we know for certain that no</em>
-<a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> <em class="jxr_javadoccomment">	 * transforms are associated with a bean property.</em>
-<a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2007" href="#L2007">2007</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</em>
-<a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> hasChildSwaps() {
-<a class="jxr_linenumber" name="L2010" href="#L2010">2010</a> 		<strong class="jxr_keyword">return</strong> nn(childSwaps);
-<a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> 	}
-<a class="jxr_linenumber" name="L2012" href="#L2012">2012</a> 
-<a class="jxr_linenumber" name="L2013" href="#L2013">2013</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> <em class="jxr_javadoccomment">	 * Appends this object as a readable string to the specified string builder.</em>
-<a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2016" href="#L2016">2016</a> <em class="jxr_javadoccomment">	 * @param sb The string builder to append this object to.</em>
-<a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> <em class="jxr_javadoccomment">	 * @param simple Print simple class names only (no package).</em>
-<a class="jxr_linenumber" name="L2018" href="#L2018">2018</a> <em class="jxr_javadoccomment">	 * @return The passed-in string builder.</em>
-<a class="jxr_linenumber" name="L2019" href="#L2019">2019</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2020" href="#L2020">2020</a> 	<strong class="jxr_keyword">protected</strong> StringBuilder toString(StringBuilder sb, <strong class="jxr_keyword">boolean</strong> simple) {
-<a class="jxr_linenumber" name="L2021" href="#L2021">2021</a> 		String n = innerClass.getName();
-<a class="jxr_linenumber" name="L2022" href="#L2022">2022</a> 		<strong class="jxr_keyword">if</strong> (simple) {
-<a class="jxr_linenumber" name="L2023" href="#L2023">2023</a> 			<strong class="jxr_keyword">int</strong> i = n.lastIndexOf('.');
-<a class="jxr_linenumber" name="L2024" href="#L2024">2024</a> 			n = n.substring(i == -1 ? 0 : i + 1).replace('$', '.');
-<a class="jxr_linenumber" name="L2025" href="#L2025">2025</a> 		}
-<a class="jxr_linenumber" name="L2026" href="#L2026">2026</a> 		<strong class="jxr_keyword">if</strong> (cc == ARRAY)
-<a class="jxr_linenumber" name="L2027" href="#L2027">2027</a> 			<strong class="jxr_keyword">return</strong> elementType.toString(sb, simple).append('[').append(']');
-<a class="jxr_linenumber" name="L2028" href="#L2028">2028</a> 		<strong class="jxr_keyword">if</strong> (cc == MAP)
-<a class="jxr_linenumber" name="L2029" href="#L2029">2029</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(keyType.isObject() &amp;&amp; valueType.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + keyType.toString(simple) + <span class="jxr_string">","</span> + valueType.toString(simple) + <span class="jxr_string">"&gt;"</span>);
-<a class="jxr_linenumber" name="L2030" href="#L2030">2030</a> 		<strong class="jxr_keyword">if</strong> (cc == BEANMAP)
-<a class="jxr_linenumber" name="L2031" href="#L2031">2031</a> 			<strong class="jxr_keyword">return</strong> sb.append(cn(BeanMap.<strong class="jxr_keyword">class</strong>)).append('&lt;').append(n).append('&gt;');
-<a class="jxr_linenumber" name="L2032" href="#L2032">2032</a> 		<strong class="jxr_keyword">if</strong> (cc == COLLECTION || cc == OPTIONAL)
-<a class="jxr_linenumber" name="L2033" href="#L2033">2033</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(elementType.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + elementType.toString(simple) + <span class="jxr_string">"&gt;"</span>);
-<a class="jxr_linenumber" name="L2034" href="#L2034">2034</a> 		<strong class="jxr_keyword">return</strong> sb.append(n);
-<a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> 	}
-<a class="jxr_linenumber" name="L2036" href="#L2036">2036</a> 
-<a class="jxr_linenumber" name="L2037" href="#L2037">2037</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2038" href="#L2038">2038</a> <em class="jxr_javadoccomment">	 * Causes thread to wait until constructor has exited.</em>
-<a class="jxr_linenumber" name="L2039" href="#L2039">2039</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2040" href="#L2040">2040</a> 	<strong class="jxr_keyword">void</strong> waitForInit() {
-<a class="jxr_linenumber" name="L2041" href="#L2041">2041</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.read()) {}
-<a class="jxr_linenumber" name="L2042" href="#L2042">2042</a> 	}
-<a class="jxr_linenumber" name="L2043" href="#L2043">2043</a> }
+<a class="jxr_linenumber" name="L1763" href="#L1763">1763</a> 				<strong class="jxr_keyword">return</strong> AnnotationProvider.INSTANCE.find(type, info.<strong class="jxr_keyword">inner</strong>())
+<a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> 					.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> 					.filter(a -&gt; test(filter, a))
+<a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> 					.findFirst();  <em class="jxr_comment">// AnnotationProvider returns child-to-parent, so first is "last"</em>
+<a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 			<strong class="jxr_keyword">return</strong> Optional.empty();
+<a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 		}
+<a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = array.length - 1; i &gt;= 0; i--)
+<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 			<strong class="jxr_keyword">if</strong> (test(filter, array[i]))
+<a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 				<strong class="jxr_keyword">return</strong> Optional.of(array[i]);
+<a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 		<strong class="jxr_keyword">return</strong> Optional.empty();
+<a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> 	}
+<a class="jxr_linenumber" name="L1774" href="#L1774">1774</a> 
+<a class="jxr_linenumber" name="L1775" href="#L1775">1775</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> <em class="jxr_javadoccomment">	 * Transforms the specified object into an instance of this class.</em>
+<a class="jxr_linenumber" name="L1777" href="#L1777">1777</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1778" href="#L1778">1778</a> <em class="jxr_javadoccomment">	 * @param o The object to transform.</em>
+<a class="jxr_linenumber" name="L1779" href="#L1779">1779</a> <em class="jxr_javadoccomment">	 * @return The transformed object.</em>
+<a class="jxr_linenumber" name="L1780" href="#L1780">1780</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1781" href="#L1781">1781</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L1782" href="#L1782">1782</a> 	<strong class="jxr_keyword">public</strong> T mutateFrom(Object o) {
+<a class="jxr_linenumber" name="L1783" href="#L1783">1783</a> 		Mutater t = getFromMutater(o.getClass());
+<a class="jxr_linenumber" name="L1784" href="#L1784">1784</a> 		<strong class="jxr_keyword">return</strong> (T)(t == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : t.mutate(o));
+<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a> 	}
+<a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> 
+<a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> <em class="jxr_javadoccomment">	 * Transforms the specified object into an instance of this class.</em>
+<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> <em class="jxr_javadoccomment">	 * @param &lt;O&gt; The transform-to class.</em>
+<a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> <em class="jxr_javadoccomment">	 * @param o The object to transform.</em>
+<a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> <em class="jxr_javadoccomment">	 * @param c The class</em>
+<a class="jxr_linenumber" name="L1793" href="#L1793">1793</a> <em class="jxr_javadoccomment">	 * @return The transformed object.</em>
+<a class="jxr_linenumber" name="L1794" href="#L1794">1794</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 	<strong class="jxr_keyword">public</strong> &lt;O&gt; O mutateTo(Object o, Class&lt;O&gt; c) {
+<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> 		Mutater t = getToMutater(c);
+<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 		<strong class="jxr_keyword">return</strong> (O)(t == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : t.mutate(o));
+<a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> 	}
+<a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> 
+<a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> <em class="jxr_javadoccomment">	 * Transforms the specified object into an instance of this class.</em>
+<a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> <em class="jxr_javadoccomment">	 * @param &lt;O&gt; The transform-to class.</em>
+<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> <em class="jxr_javadoccomment">	 * @param o The object to transform.</em>
+<a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> <em class="jxr_javadoccomment">	 * @param c The class</em>
+<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> <em class="jxr_javadoccomment">	 * @return The transformed object.</em>
+<a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> 	<strong class="jxr_keyword">public</strong> &lt;O&gt; O mutateTo(Object o, ClassMeta&lt;O&gt; c) {
+<a class="jxr_linenumber" name="L1810" href="#L1810">1810</a> 		<strong class="jxr_keyword">return</strong> mutateTo(o, c.getInnerClass());
+<a class="jxr_linenumber" name="L1811" href="#L1811">1811</a> 	}
+<a class="jxr_linenumber" name="L1812" href="#L1812">1812</a> 
+<a class="jxr_linenumber" name="L1813" href="#L1813">1813</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1814" href="#L1814">1814</a> <em class="jxr_javadoccomment">	 * Create a new instance of the main class of this declared type.</em>
+<a class="jxr_linenumber" name="L1815" href="#L1815">1815</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1816" href="#L1816">1816</a> <em class="jxr_javadoccomment">	 * @return A new instance of the object, or &lt;jk&gt;null&lt;/jk&gt; if there is no no-arg constructor on the object.</em>
+<a class="jxr_linenumber" name="L1817" href="#L1817">1817</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
+<a class="jxr_linenumber" name="L1818" href="#L1818">1818</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1819" href="#L1819">1819</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 	<strong class="jxr_keyword">public</strong> T newInstance() <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 		<strong class="jxr_keyword">if</strong> (isArray())
+<a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(getInnerClass().getComponentType(), 0);
+<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 		ConstructorInfo c = getConstructor();
+<a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 		<strong class="jxr_keyword">if</strong> (nn(c))
+<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance();
+<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 		InvocationHandler h = getProxyInvocationHandler();
+<a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> 		<strong class="jxr_keyword">if</strong> (nn(h))
+<a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader(), a(getInnerClass(), java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
+<a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> 		<strong class="jxr_keyword">if</strong> (isArray())
+<a class="jxr_linenumber" name="L1830" href="#L1830">1830</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(<strong class="jxr_keyword">this</strong>.elementType.innerClass, 0);
+<a class="jxr_linenumber" name="L1831" href="#L1831">1831</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1832" href="#L1832">1832</a> 	}
+<a class="jxr_linenumber" name="L1833" href="#L1833">1833</a> 
+<a class="jxr_linenumber" name="L1834" href="#L1834">1834</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1835" href="#L1835">1835</a> <em class="jxr_javadoccomment">	 * Same as {@link #newInstance()} except for instantiating non-static member classes.</em>
+<a class="jxr_linenumber" name="L1836" href="#L1836">1836</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1837" href="#L1837">1837</a> <em class="jxr_javadoccomment">	 * @param outer</em>
+<a class="jxr_linenumber" name="L1838" href="#L1838">1838</a> <em class="jxr_javadoccomment">	 * 	The instance of the owning object of the member class instance.</em>
+<a class="jxr_linenumber" name="L1839" href="#L1839">1839</a> <em class="jxr_javadoccomment">	 * 	Can be &lt;jk&gt;null&lt;/jk&gt; if instantiating a non-member or static class.</em>
+<a class="jxr_linenumber" name="L1840" href="#L1840">1840</a> <em class="jxr_javadoccomment">	 * @return A new instance of the object, or &lt;jk&gt;null&lt;/jk&gt; if there is no no-arg constructor on the object.</em>
+<a class="jxr_linenumber" name="L1841" href="#L1841">1841</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
+<a class="jxr_linenumber" name="L1842" href="#L1842">1842</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 	<strong class="jxr_keyword">public</strong> T newInstance(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 		<strong class="jxr_keyword">if</strong> (isMemberClass)
+<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 			<strong class="jxr_keyword">return</strong> noArgConstructor.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>);
+<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 		<strong class="jxr_keyword">return</strong> newInstance();
+<a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 	}
+<a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 
+<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> <em class="jxr_javadoccomment">	 * Create a new instance of the main class of this declared type from a &lt;c&gt;String&lt;/c&gt; input.</em>
+<a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> <em class="jxr_javadoccomment">	 * In order to use this method, the class must have one of the following methods:</em>
+<a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;code&gt;&lt;jk&gt;public static&lt;/jk&gt; T valueOf(String in);&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="L1856" href="#L1856">1856</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;code&gt;&lt;jk&gt;public static&lt;/jk&gt; T fromString(String in);&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;code&gt;&lt;jk&gt;public&lt;/jk&gt; T(String in);&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="L1858" href="#L1858">1858</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1859" href="#L1859">1859</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> <em class="jxr_javadoccomment">	 * @param outer</em>
+<a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> <em class="jxr_javadoccomment">	 * 	The outer class object for non-static member classes.  Can be &lt;jk&gt;null&lt;/jk&gt; for non-member or static classes.</em>
+<a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> <em class="jxr_javadoccomment">	 * @param arg The input argument value.</em>
+<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> <em class="jxr_javadoccomment">	 * @return A new instance of the object, or &lt;jk&gt;null&lt;/jk&gt; if there is no string constructor on the object.</em>
+<a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
+<a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span> })
+<a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> 	<strong class="jxr_keyword">public</strong> T newInstanceFromString(Object <strong class="jxr_keyword">outer</strong>, String arg) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> 
+<a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> 		<strong class="jxr_keyword">if</strong> (isEnum()) {
+<a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> 			T t = (T)enumValues.getKey(arg);
+<a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> 			<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> &amp;&amp; ! beanContext.isIgnoreUnknownEnumValues())
+<a class="jxr_linenumber" name="L1872" href="#L1872">1872</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve enum value '"</span> + arg + <span class="jxr_string">"' on class '"</span> + getInnerClass().getName() + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L1873" href="#L1873">1873</a> 			<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L1874" href="#L1874">1874</a> 		}
+<a class="jxr_linenumber" name="L1875" href="#L1875">1875</a> 
+<a class="jxr_linenumber" name="L1876" href="#L1876">1876</a> 		Method m = fromStringMethod;
+<a class="jxr_linenumber" name="L1877" href="#L1877">1877</a> 		<strong class="jxr_keyword">if</strong> (nn(m)) {
+<a class="jxr_linenumber" name="L1878" href="#L1878">1878</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1879" href="#L1879">1879</a> 				<strong class="jxr_keyword">return</strong> (T)m.invoke(<strong class="jxr_keyword">null</strong>, arg);
+<a class="jxr_linenumber" name="L1880" href="#L1880">1880</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+<a class="jxr_linenumber" name="L1881" href="#L1881">1881</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
+<a class="jxr_linenumber" name="L1882" href="#L1882">1882</a> 			}
+<a class="jxr_linenumber" name="L1883" href="#L1883">1883</a> 		}
+<a class="jxr_linenumber" name="L1884" href="#L1884">1884</a> 		ConstructorInfo c = stringConstructor;
+<a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> 		<strong class="jxr_keyword">if</strong> (nn(c)) {
+<a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 			<strong class="jxr_keyword">if</strong> (isMemberClass)
+<a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 				<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>, arg);
+<a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance(arg);
+<a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> 		}
+<a class="jxr_linenumber" name="L1890" href="#L1890">1890</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"No string constructor or valueOf(String) method found for class '"</span> + getInnerClass().getName() + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L1891" href="#L1891">1891</a> 	}
+<a class="jxr_linenumber" name="L1892" href="#L1892">1892</a> 
+<a class="jxr_linenumber" name="L1893" href="#L1893">1893</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1894" href="#L1894">1894</a> <em class="jxr_javadoccomment">	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.</em>
+<a class="jxr_linenumber" name="L1895" href="#L1895">1895</a> <em class="jxr_javadoccomment">	 * (e.g. &lt;jk&gt;boolean&lt;/jk&gt; == &lt;c&gt;Boolean&lt;/c&gt;).</em>
+<a class="jxr_linenumber" name="L1896" href="#L1896">1896</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1897" href="#L1897">1897</a> <em class="jxr_javadoccomment">	 * @param cm The class meta to compare to.</em>
+<a class="jxr_linenumber" name="L1898" href="#L1898">1898</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class-meta is equivalent to this one.</em>
+<a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> same(ClassMeta&lt;?&gt; cm) {
+<a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> 		<strong class="jxr_keyword">if</strong> (equals(cm))
+<a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> 		<strong class="jxr_keyword">return</strong> (isPrimitive() &amp;&amp; cc == cm.cc);
+<a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> 	}
+<a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> 
+<a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 		<strong class="jxr_keyword">return</strong> toString(false);
+<a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> 	}
+<a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> 
+<a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> <em class="jxr_javadoccomment">	 * Same as {@link #toString()} except use simple class names.</em>
+<a class="jxr_linenumber" name="L1913" href="#L1913">1913</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> <em class="jxr_javadoccomment">	 * @param simple Print simple class names only (no package).</em>
+<a class="jxr_linenumber" name="L1915" href="#L1915">1915</a> <em class="jxr_javadoccomment">	 * @return A new string.</em>
+<a class="jxr_linenumber" name="L1916" href="#L1916">1916</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1917" href="#L1917">1917</a> 	<strong class="jxr_keyword">public</strong> String toString(<strong class="jxr_keyword">boolean</strong> simple) {
+<a class="jxr_linenumber" name="L1918" href="#L1918">1918</a> 		<strong class="jxr_keyword">return</strong> toString(<strong class="jxr_keyword">new</strong> StringBuilder(), simple).toString();
+<a class="jxr_linenumber" name="L1919" href="#L1919">1919</a> 	}
+<a class="jxr_linenumber" name="L1920" href="#L1920">1920</a> 
+<a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> <em class="jxr_javadoccomment">	 * Converts the specified object to a string.</em>
+<a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> <em class="jxr_javadoccomment">	 * @param t The object to convert.</em>
+<a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> <em class="jxr_javadoccomment">	 * @return The object converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the object was null.</em>
+<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 	<strong class="jxr_keyword">public</strong> String toString(Object t) {
+<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 		<strong class="jxr_keyword">if</strong> (isEnum() &amp;&amp; beanContext.isUseEnumNames())
+<a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 			<strong class="jxr_keyword">return</strong> ((Enum&lt;?&gt;)t).name();
+<a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 		<strong class="jxr_keyword">return</strong> t.toString();
+<a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 	}
+<a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> 
+<a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotationArray(Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 		A[] array = (A[])annotationArrayMap.get(type);
+<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 		<strong class="jxr_keyword">if</strong> (array == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(beanContext)) {
+<a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> 			List&lt;A&gt; l = list();
+<a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 			beanContext.getAnnotationProvider().find(type, info.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 			array = (A[])Array.newInstance(type, l.size());
+<a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; l.size(); i++)
+<a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 				Array.set(array, i, l.get(i));
+<a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 			annotationArrayMap.put(type, array);
+<a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 		}
+<a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 		<strong class="jxr_keyword">return</strong> array;
+<a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> 	}
+<a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> 
+<a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> <em class="jxr_javadoccomment">	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the normal class of one of the</em>
+<a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> <em class="jxr_javadoccomment">	 * child POJO swaps associated with this class.</em>
+<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> <em class="jxr_javadoccomment">	 * @param normalClass The normal class being resolved.</em>
+<a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
+<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForSwap(Class&lt;?&gt; normalClass) {
+<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 		<strong class="jxr_keyword">if</strong> (nn(childSwapMap)) {
+<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 			ObjectSwap&lt;?,?&gt; s = childSwapMap.get(normalClass);
+<a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : childSwaps)
+<a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> 					<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> &amp;&amp; f.getNormalClass().isParentOf(normalClass))
+<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> 						s = f;
+<a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> 					s = ObjectSwap.NULL;
+<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> 				ObjectSwap&lt;?,?&gt; s2 = childSwapMap.putIfAbsent(normalClass, s);
+<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> 				<strong class="jxr_keyword">if</strong> (nn(s2))
+<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> 					s = s2;
+<a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 			}
+<a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 			<strong class="jxr_keyword">if</strong> (s == ObjectSwap.NULL)
+<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> 			<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> 		}
+<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1974" href="#L1974">1974</a> 	}
+<a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> 
+<a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> <em class="jxr_javadoccomment">	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the swap class of one of the child</em>
+<a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> <em class="jxr_javadoccomment">	 * POJO swaps associated with this class.</em>
+<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> <em class="jxr_javadoccomment">	 * @param swapClass The swap class being resolved.</em>
+<a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
+<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForUnswap(Class&lt;?&gt; swapClass) {
+<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> 		<strong class="jxr_keyword">if</strong> (nn(childUnswapMap)) {
+<a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 			ObjectSwap&lt;?,?&gt; s = childUnswapMap.get(swapClass);
+<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : childSwaps)
+<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 					<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> &amp;&amp; f.getSwapClass().isParentOf(swapClass))
+<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 						s = f;
+<a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 					s = ObjectSwap.NULL;
+<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 				ObjectSwap&lt;?,?&gt; s2 = childUnswapMap.putIfAbsent(swapClass, s);
+<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 				<strong class="jxr_keyword">if</strong> (nn(s2))
+<a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> 					s = s2;
+<a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> 			}
+<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> 			<strong class="jxr_keyword">if</strong> (s == ObjectSwap.NULL)
+<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> 			<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L1999" href="#L1999">1999</a> 		}
+<a class="jxr_linenumber" name="L2000" href="#L2000">2000</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L2001" href="#L2001">2001</a> 	}
+<a class="jxr_linenumber" name="L2002" href="#L2002">2002</a> 
+<a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2004" href="#L2004">2004</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</em>
+<a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2007" href="#L2007">2007</a> <em class="jxr_javadoccomment">	 * Used when transforming bean properties to prevent having to look up transforms if we know for certain that no</em>
+<a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> <em class="jxr_javadoccomment">	 * transforms are associated with a bean property.</em>
+<a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2010" href="#L2010">2010</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</em>
+<a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2012" href="#L2012">2012</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> hasChildSwaps() {
+<a class="jxr_linenumber" name="L2013" href="#L2013">2013</a> 		<strong class="jxr_keyword">return</strong> nn(childSwaps);
+<a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> 	}
+<a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> 
+<a class="jxr_linenumber" name="L2016" href="#L2016">2016</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> <em class="jxr_javadoccomment">	 * Appends this object as a readable string to the specified string builder.</em>
+<a class="jxr_linenumber" name="L2018" href="#L2018">2018</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2019" href="#L2019">2019</a> <em class="jxr_javadoccomment">	 * @param sb The string builder to append this object to.</em>
+<a class="jxr_linenumber" name="L2020" href="#L2020">2020</a> <em class="jxr_javadoccomment">	 * @param simple Print simple class names only (no package).</em>
+<a class="jxr_linenumber" name="L2021" href="#L2021">2021</a> <em class="jxr_javadoccomment">	 * @return The passed-in string builder.</em>
+<a class="jxr_linenumber" name="L2022" href="#L2022">2022</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2023" href="#L2023">2023</a> 	<strong class="jxr_keyword">protected</strong> StringBuilder toString(StringBuilder sb, <strong class="jxr_keyword">boolean</strong> simple) {
+<a class="jxr_linenumber" name="L2024" href="#L2024">2024</a> 		String n = innerClass.getName();
+<a class="jxr_linenumber" name="L2025" href="#L2025">2025</a> 		<strong class="jxr_keyword">if</strong> (simple) {
+<a class="jxr_linenumber" name="L2026" href="#L2026">2026</a> 			<strong class="jxr_keyword">int</strong> i = n.lastIndexOf('.');
+<a class="jxr_linenumber" name="L2027" href="#L2027">2027</a> 			n = n.substring(i == -1 ? 0 : i + 1).replace('$', '.');
+<a class="jxr_linenumber" name="L2028" href="#L2028">2028</a> 		}
+<a class="jxr_linenumber" name="L2029" href="#L2029">2029</a> 		<strong class="jxr_keyword">if</strong> (cc == ARRAY)
+<a class="jxr_linenumber" name="L2030" href="#L2030">2030</a> 			<strong class="jxr_keyword">return</strong> elementType.toString(sb, simple).append('[').append(']');
+<a class="jxr_linenumber" name="L2031" href="#L2031">2031</a> 		<strong class="jxr_keyword">if</strong> (cc == MAP)
+<a class="jxr_linenumber" name="L2032" href="#L2032">2032</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(keyType.isObject() &amp;&amp; valueType.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + keyType.toString(simple) + <span class="jxr_string">","</span> + valueType.toString(simple) + <span class="jxr_string">"&gt;"</span>);
+<a class="jxr_linenumber" name="L2033" href="#L2033">2033</a> 		<strong class="jxr_keyword">if</strong> (cc == BEANMAP)
+<a class="jxr_linenumber" name="L2034" href="#L2034">2034</a> 			<strong class="jxr_keyword">return</strong> sb.append(cn(BeanMap.<strong class="jxr_keyword">class</strong>)).append('&lt;').append(n).append('&gt;');
+<a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> 		<strong class="jxr_keyword">if</strong> (cc == COLLECTION || cc == OPTIONAL)
+<a class="jxr_linenumber" name="L2036" href="#L2036">2036</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(elementType.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + elementType.toString(simple) + <span class="jxr_string">"&gt;"</span>);
+<a class="jxr_linenumber" name="L2037" href="#L2037">2037</a> 		<strong class="jxr_keyword">return</strong> sb.append(n);
+<a class="jxr_linenumber" name="L2038" href="#L2038">2038</a> 	}
+<a class="jxr_linenumber" name="L2039" href="#L2039">2039</a> 
+<a class="jxr_linenumber" name="L2040" href="#L2040">2040</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2041" href="#L2041">2041</a> <em class="jxr_javadoccomment">	 * Causes thread to wait until constructor has exited.</em>
+<a class="jxr_linenumber" name="L2042" href="#L2042">2042</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2043" href="#L2043">2043</a> 	<strong class="jxr_keyword">void</strong> waitForInit() {
+<a class="jxr_linenumber" name="L2044" href="#L2044">2044</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.read()) {}
+<a class="jxr_linenumber" name="L2045" href="#L2045">2045</a> 	}
+<a class="jxr_linenumber" name="L2046" href="#L2046">2046</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
