@@ -347,114 +347,113 @@
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 		Method m = FROM_METHODS.get(c);
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			MethodInfo mi = ClassInfo.of(c).getPublicMethod(
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			m = ClassInfo.of(c).getPublicMethod(
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 				x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 				&amp;&amp; x.isNotDeprecated()
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 				&amp;&amp; x.hasName(<span class="jxr_string">"from"</span>)
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 				&amp;&amp; x.hasReturnType(c)
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 				&amp;&amp; x.hasParameterTypes(TemporalAccessor.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">if</strong> (mi == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Parse method not found on temporal class ''{0}''"</span>, c.getSimpleName());
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			m = mi.<strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			FROM_METHODS.put(c, m);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		}
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> DateTimeFormatter formatter;
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> zoneOptional;
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * @param pattern The timestamp format or name of predefined {@link DateTimeFormatter}.</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * @param zoneOptional &lt;jk&gt;true&lt;/jk&gt; if the time zone on the pattern is optional.</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<strong class="jxr_keyword">public</strong> <a name="TemporalSwap" href="../../../../org/apache/juneau/swaps/TemporalSwap.html#TemporalSwap">TemporalSwap</a>(String pattern, <strong class="jxr_keyword">boolean</strong> zoneOptional) {
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">super</strong>(Temporal.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">this</strong>.formatter = getDateTimeFormatter(pattern);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">this</strong>.zoneOptional = zoneOptional;
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	}
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<strong class="jxr_keyword">public</strong> String swap(BeanSession session, Temporal o) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		o = convertToSerializable(session, o);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">return</strong> formatter.format(o);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<strong class="jxr_keyword">public</strong> Temporal unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">if</strong> (hint == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			hint = session.getClassMeta(Instant.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> tc = (Class&lt;? <strong class="jxr_keyword">extends</strong> Temporal&gt;)hint.getInnerClass();
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		ZoneId offset = session.getTimeZoneId();
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">if</strong> (tc == Instant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			offset = Z;
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		Method parseMethod = findParseMethod(tc);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		TemporalAccessor ta = defaulting(formatter.parse(f), offset);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">return</strong> (Temporal)parseMethod.invoke(<strong class="jxr_keyword">null</strong>, ta);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> TemporalAccessor defaulting(TemporalAccessor t, ZoneId zoneId) {
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DefaultingTemporalAccessor" href="../../../../org/apache/juneau/swaps/DefaultingTemporalAccessor.html#DefaultingTemporalAccessor">DefaultingTemporalAccessor</a>(t, zoneId);
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * Converts the specified temporal object to a form suitable to be serialized using any pattern.</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * @param session The current bean session.</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * @param t The temporal object to convert.</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * @return The converted temporal object.</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">protected</strong> Temporal convertToSerializable(BeanSession session, Temporal t) {
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		ZoneId zoneId = session.getTimeZoneId();
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		Class&lt;? <strong class="jxr_keyword">extends</strong> Temporal&gt; tc = t.getClass();
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<em class="jxr_comment">// Instant is always serialized in GMT.</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">if</strong> (tc == Instant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">return</strong> ZonedDateTime.from(defaulting(t, Z));
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<em class="jxr_comment">// These can handle any pattern.</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">if</strong> (tc == ZonedDateTime.<strong class="jxr_keyword">class</strong> || tc == OffsetDateTime.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<em class="jxr_comment">// Pattern optionally includes a time zone, so zoned and local date-times are good.</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">if</strong> (zoneOptional()) {
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">if</strong> (tc == LocalDateTime.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">if</strong> (tc == OffsetTime.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 				<strong class="jxr_keyword">return</strong> ZonedDateTime.from(defaulting(t, zoneId));
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<strong class="jxr_keyword">return</strong> LocalDateTime.from(defaulting(t, zoneId));
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		}
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">return</strong> ZonedDateTime.from(defaulting(t, zoneId));
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the time zone on the pattern is optional.</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * If it's not optional, then local dates/times must be converted into zoned times using the session time zone.</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * Otherwise, local date/times are fine.</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the time zone on the pattern is optional.</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> zoneOptional() {
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">return</strong> zoneOptional;
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 	}
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> }
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			)
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			.map(MethodInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Parse method not found on temporal class ''{0}''"</span>, c.getSimpleName()));
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			FROM_METHODS.put(c, m);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> DateTimeFormatter formatter;
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> zoneOptional;
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * @param pattern The timestamp format or name of predefined {@link DateTimeFormatter}.</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * @param zoneOptional &lt;jk&gt;true&lt;/jk&gt; if the time zone on the pattern is optional.</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<strong class="jxr_keyword">public</strong> <a name="TemporalSwap" href="../../../../org/apache/juneau/swaps/TemporalSwap.html#TemporalSwap">TemporalSwap</a>(String pattern, <strong class="jxr_keyword">boolean</strong> zoneOptional) {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">super</strong>(Temporal.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">this</strong>.formatter = getDateTimeFormatter(pattern);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">this</strong>.zoneOptional = zoneOptional;
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">public</strong> String swap(BeanSession session, Temporal o) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		o = convertToSerializable(session, o);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">return</strong> formatter.format(o);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	}
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<strong class="jxr_keyword">public</strong> Temporal unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">if</strong> (hint == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			hint = session.getClassMeta(Instant.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> tc = (Class&lt;? <strong class="jxr_keyword">extends</strong> Temporal&gt;)hint.getInnerClass();
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		ZoneId offset = session.getTimeZoneId();
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">if</strong> (tc == Instant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			offset = Z;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		Method parseMethod = findParseMethod(tc);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		TemporalAccessor ta = defaulting(formatter.parse(f), offset);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">return</strong> (Temporal)parseMethod.invoke(<strong class="jxr_keyword">null</strong>, ta);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	}
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> TemporalAccessor defaulting(TemporalAccessor t, ZoneId zoneId) {
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DefaultingTemporalAccessor" href="../../../../org/apache/juneau/swaps/DefaultingTemporalAccessor.html#DefaultingTemporalAccessor">DefaultingTemporalAccessor</a>(t, zoneId);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * Converts the specified temporal object to a form suitable to be serialized using any pattern.</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * @param session The current bean session.</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * @param t The temporal object to convert.</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * @return The converted temporal object.</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<strong class="jxr_keyword">protected</strong> Temporal convertToSerializable(BeanSession session, Temporal t) {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		ZoneId zoneId = session.getTimeZoneId();
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		Class&lt;? <strong class="jxr_keyword">extends</strong> Temporal&gt; tc = t.getClass();
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<em class="jxr_comment">// Instant is always serialized in GMT.</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">if</strong> (tc == Instant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">return</strong> ZonedDateTime.from(defaulting(t, Z));
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<em class="jxr_comment">// These can handle any pattern.</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">if</strong> (tc == ZonedDateTime.<strong class="jxr_keyword">class</strong> || tc == OffsetDateTime.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<em class="jxr_comment">// Pattern optionally includes a time zone, so zoned and local date-times are good.</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">if</strong> (zoneOptional()) {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">if</strong> (tc == LocalDateTime.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">if</strong> (tc == OffsetTime.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 				<strong class="jxr_keyword">return</strong> ZonedDateTime.from(defaulting(t, zoneId));
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">return</strong> LocalDateTime.from(defaulting(t, zoneId));
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">return</strong> ZonedDateTime.from(defaulting(t, zoneId));
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the time zone on the pattern is optional.</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * If it's not optional, then local dates/times must be converted into zoned times using the session time zone.</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * Otherwise, local date/times are fine.</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the time zone on the pattern is optional.</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> zoneOptional() {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> zoneOptional;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

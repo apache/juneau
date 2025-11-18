@@ -37,8 +37,8 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  	@Test
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGetFullName() {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(TestClass.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>));
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">var</strong> field2 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field2"</span>));
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>)).get();
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">var</strong> field2 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field2"</span>)).get();
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<em class="jxr_comment">// Verify full names are correct</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		String fullName1 = field1.getFullName();
@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Test
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGetFullNameMemoization() {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(TestClass.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>)).get();
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<em class="jxr_comment">// Calling getFullName() multiple times should return the same String instance (memoized)</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		String name1 = field1.getFullName();
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Test
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGetFullNameWithInnerClass() {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(InnerClass.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> field = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"innerField"</span>));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> field = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"innerField"</span>)).get();
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		String fullName = field.getFullName();
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		

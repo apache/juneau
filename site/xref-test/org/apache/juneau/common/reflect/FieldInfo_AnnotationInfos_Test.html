@@ -63,9 +63,9 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	@Test
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGetAnnotationInfos() {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(TestClass.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>));
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> field2 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field2"</span>));
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> field3 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field3"</span>));
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>)).get();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> field2 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field2"</span>)).get();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> field3 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field3"</span>)).get();
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<em class="jxr_comment">// field1 has 2 annotations</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> annotations1 = field1.getDeclaredAnnotations();
@@ -86,8 +86,8 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGetAnnotationInfosTyped() {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(TestClass.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>));
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> field2 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field2"</span>));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>)).get();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> field2 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field2"</span>)).get();
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<em class="jxr_comment">// Test filtering by type for field1</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> ann1_type1 = field1.getDeclaredAnnotations(TestAnnotation1.<strong class="jxr_keyword">class</strong>).toList();
@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGetAnnotationInfosMemoization() {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(TestClass.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> field1 = ci.getPublicField(x -&gt; x.getName().equals(<span class="jxr_string">"field1"</span>)).get();
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<em class="jxr_comment">// Calling getDeclaredAnnotationInfos() multiple times should return the same list instance</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> annotations1 = field1.getDeclaredAnnotations();

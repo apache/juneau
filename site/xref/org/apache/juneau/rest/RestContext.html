@@ -4504,7 +4504,7 @@
 <a class="jxr_linenumber" name="L4496" href="#L4496">4496</a> 
 <a class="jxr_linenumber" name="L4497" href="#L4497">4497</a> 				RestContext cc = cb.init(so).build();
 <a class="jxr_linenumber" name="L4498" href="#L4498">4498</a> 
-<a class="jxr_linenumber" name="L4499" href="#L4499">4499</a> 				MethodInfo mi = ClassInfo.of(so.get()).getMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParameterTypes(RestContext.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L4499" href="#L4499">4499</a> 				MethodInfo mi = ClassInfo.of(so.get()).getMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParameterTypes(RestContext.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L4500" href="#L4500">4500</a> 				<strong class="jxr_keyword">if</strong> (nn(mi))
 <a class="jxr_linenumber" name="L4501" href="#L4501">4501</a> 					mi.accessible().invoke(so.get(), cc);
 <a class="jxr_linenumber" name="L4502" href="#L4502">4502</a> 
@@ -5773,7 +5773,7 @@
 <a class="jxr_linenumber" name="L5765" href="#L5765">5765</a> 		<strong class="jxr_keyword">if</strong> (initialized.get())
 <a class="jxr_linenumber" name="L5766" href="#L5766">5766</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L5767" href="#L5767">5767</a> 		<strong class="jxr_keyword">var</strong> resource = getResource();
-<a class="jxr_linenumber" name="L5768" href="#L5768">5768</a> 		<strong class="jxr_keyword">var</strong> mi = ClassInfo.of(getResource()).getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParameterTypes(RestContext.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L5768" href="#L5768">5768</a> 		<strong class="jxr_keyword">var</strong> mi = ClassInfo.of(getResource()).getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParameterTypes(RestContext.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L5769" href="#L5769">5769</a> 		<strong class="jxr_keyword">if</strong> (nn(mi)) {
 <a class="jxr_linenumber" name="L5770" href="#L5770">5770</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5771" href="#L5771">5771</a> 				mi.accessible().invoke(resource, <strong class="jxr_keyword">this</strong>);

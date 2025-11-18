@@ -228,7 +228,7 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 				&amp;&amp; x.hasReturnType(oc2)
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 				&amp;&amp; x.hasParameterTypes(ic)
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 				&amp;&amp; (x.hasName(<span class="jxr_string">"forName"</span>) || isStaticCreateMethodName(x, ic))
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">if</strong> (oc2.isEnum() &amp;&amp; createMethod == <strong class="jxr_keyword">null</strong>) {
@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 				&amp;&amp; x.hasReturnType(oc)
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 				&amp;&amp; x.hasParameterTypes(ic)
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 				&amp;&amp; isStaticCreateMethodName(x, ic)
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">if</strong> (nn(createMethod)) {
@@ -278,7 +278,7 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 			}
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		}
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		ConstructorInfo c = oci.getPublicConstructor(x -&gt; x.hasParameterTypes(ic));
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		ConstructorInfo c = oci.getPublicConstructor(x -&gt; x.hasParameterTypes(ic)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">if</strong> (nn(c) &amp;&amp; c.isNotDeprecated()) {
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">boolean</strong> isMemberClass = oci.isNonStaticMemberClass();
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Mutater" href="../../../../org/apache/juneau/reflect/Mutater.html#Mutater">Mutater</a>() {
@@ -320,7 +320,7 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 			&amp;&amp; x.getParameterCount() == 0
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			&amp;&amp; x.getSimpleName().startsWith(<span class="jxr_string">"to"</span>)
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			&amp;&amp; x.getSimpleName().substring(2).equalsIgnoreCase(tn)
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 

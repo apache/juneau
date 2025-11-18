@@ -139,13 +139,13 @@
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">if</strong> (isSwapMethod(bc, m)) {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 				ClassInfo rt = m.getReturnType();
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 				<strong class="jxr_keyword">var</strong> rt = m.getReturnType();
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 				MethodInfo mi = ci.getMethod(x -&gt; isUnswapMethod(bc, x, ci, rt));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 				<strong class="jxr_keyword">var</strong> mi = ci.getMethod(x -&gt; isUnswapMethod(bc, x, ci, rt)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 				<strong class="jxr_keyword">if</strong> (nn(mi))
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AutoNumberSwap" href="../../../../org/apache/juneau/swap/AutoNumberSwap.html#AutoNumberSwap">AutoNumberSwap</a>(bc, ci, m, mi, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 				ConstructorInfo cs = ci.getDeclaredConstructor(x -&gt; isUnswapConstructor(bc, x, rt));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 				<strong class="jxr_keyword">var</strong> cs = ci.getDeclaredConstructor(x -&gt; isUnswapConstructor(bc, x, rt)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 				<strong class="jxr_keyword">if</strong> (nn(cs))
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AutoNumberSwap" href="../../../../org/apache/juneau/swap/AutoNumberSwap.html#AutoNumberSwap">AutoNumberSwap</a>(bc, ci, m, <strong class="jxr_keyword">null</strong>, cs);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 

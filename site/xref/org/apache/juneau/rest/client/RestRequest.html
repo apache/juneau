@@ -1951,16 +1951,16 @@
 <a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 					<strong class="jxr_keyword">if</strong> (t.getName().equals(className)) {
 <a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 						ConstructorInfo c = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 						<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(t);
-<a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 						c = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(HttpResponse.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 						c = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(HttpResponse.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> 						<strong class="jxr_keyword">if</strong> (nn(c))
 <a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> 							<strong class="jxr_keyword">throw</strong> c.&lt;Throwable&gt;newInstance(response);
-<a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> 						c = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> 						c = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> 						<strong class="jxr_keyword">if</strong> (nn(c))
 <a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> 							<strong class="jxr_keyword">throw</strong> c.&lt;Throwable&gt;newInstance(nn(message) ? message : response.getContent().asString());
-<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 						c = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>, Throwable.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 						c = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>, Throwable.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> 						<strong class="jxr_keyword">if</strong> (nn(c))
 <a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> 							<strong class="jxr_keyword">throw</strong> c.&lt;Throwable&gt;newInstance(nn(message) ? message : response.getContent().asString(), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 						c = ci.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0);
+<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 						c = ci.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 						<strong class="jxr_keyword">if</strong> (nn(c))
 <a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 							<strong class="jxr_keyword">throw</strong> c.&lt;Throwable&gt;newInstance();
 <a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 					}

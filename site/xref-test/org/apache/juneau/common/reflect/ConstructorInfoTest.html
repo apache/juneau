@@ -115,10 +115,10 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">static</strong> ConstructorInfo
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		b_c1 = b.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0),
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		b_c2 = b.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)),
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		b_c3 = b.getDeclaredConstructor(x -&gt; x.hasParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>)),
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		b_c4 = b.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		b_c1 = b.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).get(),
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		b_c2 = b.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).get(),
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		b_c3 = b.getDeclaredConstructor(x -&gt; x.hasParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>)).get(),
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		b_c4 = b.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)).get();
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@Test <strong class="jxr_keyword">void</strong> invoke() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertEquals(<strong class="jxr_keyword">null</strong>, b_c1.newInstanceLenient().toString());

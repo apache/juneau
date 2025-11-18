@@ -77,11 +77,11 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> pci = ClassInfo.of(objectClass);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		objectConstructor = pci.getDeclaredConstructor(x -&gt; x.isVisible(cVis) &amp;&amp; x.hasParameterTypes(builderClass));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		objectConstructor = pci.getDeclaredConstructor(x -&gt; x.isVisible(cVis) &amp;&amp; x.hasParameterTypes(builderClass)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (objectConstructor == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		builderConstructor = bci.getNoArgConstructor(cVis);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		builderConstructor = bci.getNoArgConstructor(cVis).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		createBuilderMethod = getBuilderCreateMethod(pci);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">if</strong> (builderConstructor == <strong class="jxr_keyword">null</strong> &amp;&amp; createBuilderMethod == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 				x -&gt; x.isVisible(cVis)
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 				&amp;&amp; x.hasNumParameters(1)
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 				&amp;&amp; x.getParameter(0).getParameterType().isChildOf(Builder.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">if</strong> (nn(cc)) {
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 				objectConstructor = cc;
@@ -132,14 +132,14 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> bci = ClassInfo.of(builderClass.get());
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		builderConstructor = bci.getNoArgConstructor(cVis);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		builderConstructor = bci.getNoArgConstructor(cVis).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">if</strong> (builderConstructor == <strong class="jxr_keyword">null</strong> &amp;&amp; builderCreateMethod == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		objectCreateMethod = getBuilderBuildMethod(bci);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> builderClass2 = builderClass.get();
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">if</strong> (objectConstructor == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			objectConstructor = pci.getDeclaredConstructor(x -&gt; x.isVisible(cVis) &amp;&amp; x.hasParameterTypes(builderClass2));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			objectConstructor = pci.getDeclaredConstructor(x -&gt; x.isVisible(cVis) &amp;&amp; x.hasParameterTypes(builderClass2)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">if</strong> (objectConstructor == <strong class="jxr_keyword">null</strong> &amp;&amp; objectCreateMethod == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -155,7 +155,7 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			&amp;&amp; x.getParameterCount() == 0
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 			&amp;&amp; (!x.hasReturnType(<strong class="jxr_keyword">void</strong>.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			&amp;&amp; x.hasName(<span class="jxr_string">"build"</span>)
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			&amp;&amp; (x.hasName(<span class="jxr_string">"create"</span>) || x.hasName(<span class="jxr_string">"builder"</span>))
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			&amp;&amp; ! x.hasReturnType(c)
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			&amp;&amp; hasConstructorThatTakesType(c, x.getReturnType())
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 

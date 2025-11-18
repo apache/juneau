@@ -117,11 +117,11 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">var</strong> rt = m.getReturnType();
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">var</strong> mi = ci.getMethod(x -&gt; isUnswapMethod(bc, x, ci, rt));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">var</strong> mi = ci.getMethod(x -&gt; isUnswapMethod(bc, x, ci, rt)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 				<strong class="jxr_keyword">if</strong> (nn(mi))
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AutoListSwap" href="../../../../org/apache/juneau/swap/AutoListSwap.html#AutoListSwap">AutoListSwap</a>(bc, ci, m, mi, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<strong class="jxr_keyword">var</strong> cs = ci.getDeclaredConstructor(x -&gt; isUnswapConstructor(bc, x, rt));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<strong class="jxr_keyword">var</strong> cs = ci.getDeclaredConstructor(x -&gt; isUnswapConstructor(bc, x, rt)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 				<strong class="jxr_keyword">if</strong> (nn(cs))
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AutoListSwap" href="../../../../org/apache/juneau/swap/AutoListSwap.html#AutoListSwap">AutoListSwap</a>(bc, ci, m, <strong class="jxr_keyword">null</strong>, cs);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
