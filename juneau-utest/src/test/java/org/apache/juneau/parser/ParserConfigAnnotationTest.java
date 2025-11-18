@@ -29,7 +29,6 @@ import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
-import java.util.stream.*;
 
 /**
  * Tests the @ParserConfig annotation.

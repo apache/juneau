@@ -25,7 +25,6 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
-import java.util.stream.*;
 
 class Bean_Test extends TestBase {
 

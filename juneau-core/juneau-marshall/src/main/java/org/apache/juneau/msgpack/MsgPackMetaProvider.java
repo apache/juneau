@@ -17,7 +17,6 @@
 package org.apache.juneau.msgpack;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Interface for providing access to {@link MsgPackClassMeta} and {@link MsgPackBeanPropertyMeta} objects.

@@ -28,7 +28,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
 import org.apache.juneau.annotation.Name;

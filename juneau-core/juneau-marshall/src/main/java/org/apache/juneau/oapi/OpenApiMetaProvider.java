@@ -17,7 +17,6 @@
 package org.apache.juneau.oapi;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Interface for providing access to {@link OpenApiClassMeta} and {@link OpenApiBeanPropertyMeta} objects.

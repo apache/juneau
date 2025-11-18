@@ -208,11 +208,11 @@ public class ReflectionMap<V> {
 			classEntries = list();
 			methodEntries = list();
 			fieldEntries = list();
-		constructorEntries = list();
-	}
+			constructorEntries = list();
+		}
 
-	/**
-	 * Adds one or more mappings to this builder.
+		/**
+		 * Adds one or more mappings to this builder.
 		 *
 		 * <p>
 		 * This method accepts pattern strings that identify classes, methods, fields, or constructors,
@@ -292,9 +292,9 @@ public class ReflectionMap<V> {
 		 *
 		 * @return A new immutable {@link ReflectionMap} instance.
 		 */
-	public ReflectionMap<V> build() {
-		return new ReflectionMap<>(this);
-	}
+		public ReflectionMap<V> build() {
+			return new ReflectionMap<>(this);
+		}
 	}
 
 	private static class ClassEntry<V> {
@@ -332,7 +332,11 @@ public class ReflectionMap<V> {
 
 		ConstructorEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = splita(name.substring(i + 1, name.length() - 1));
+			this.args = splitMethodArgs(name.substring(i + 1, name.length() - 1));
+			for (int j = 0; j < args.length; j++) {
+				// Strip off generic parameters (e.g., "List<String>[]" -> "List[]")
+				args[j] = stripGenerics(args[j]);
+			}
 			name = name.substring(0, i).trim();
 			this.simpleClassName = simpleClassName(name);
 			this.fullClassName = name;
@@ -404,10 +408,8 @@ public class ReflectionMap<V> {
 			this.args = i == -1 ? null : splitMethodArgs(name.substring(i + 1, name.length() - 1));
 			if (nn(args)) {
 				for (int j = 0; j < args.length; j++) {
-					// Strip off generic parameters.
-					int k = args[j].indexOf('<');
-					if (k > 0)
-						args[j] = args[j].substring(0, k);
+					// Strip off generic parameters (e.g., "List<String>[]" -> "List[]")
+					args[j] = stripGenerics(args[j]);
 				}
 			}
 			name = i == -1 ? name : name.substring(0, i);
@@ -508,6 +510,24 @@ public class ReflectionMap<V> {
 		return eq(patternBase, typeBase.getSimpleName()) || eq(patternBase, typeBase.getName());
 	}
 
+	private static String stripGenerics(String type) {
+		if (type.indexOf('<') == -1)
+			return type;
+		var sb = new StringBuilder(type.length());
+		int depth = 0;
+		for (int i = 0; i < type.length(); i++) {
+			char c = type.charAt(i);
+			if (c == '<') {
+				depth++;
+			} else if (c == '>') {
+				depth--;
+			} else if (depth == 0) {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
 	private static boolean classMatches(String simpleName, String fullName, Class<?> c) {
 		// For class org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder
 		// c.getSimpleName() == "Builder"
@@ -538,6 +558,9 @@ public class ReflectionMap<V> {
 		int i = name.indexOf('.');
 		if (i == -1)
 			return name;
+		// Return null for fully qualified names to ensure they only match by fullName, not by simpleName.
+		// This prevents ambiguous matches where a simple name pattern might accidentally match
+		// a fully qualified pattern's simple part.
 		return null;
 	}
 

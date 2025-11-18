@@ -17,7 +17,6 @@
 package org.apache.juneau.json;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Interface for providing access to {@link JsonClassMeta} and {@link JsonBeanPropertyMeta} objects.

@@ -14,31 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.csv;
 
-import org.apache.juneau.*;
+// This class is intentionally in the default package to test line 588 false branch
+// where a class has $ (is an inner class) but has no package
 
-/**
- * Interface for providing access to {@link CsvClassMeta} and {@link CsvBeanPropertyMeta} objects.
- *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
- */
-public interface CsvMetaProvider {
-
-	/**
-	 * Returns the language-specific metadata on the specified bean property.
-	 *
-	 * @param bpm The bean property to return the metadata on.
-	 * @return The metadata.
-	 */
-	CsvBeanPropertyMeta getCsvBeanPropertyMeta(BeanPropertyMeta bpm);
-
-	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	CsvClassMeta getCsvClassMeta(ClassMeta<?> cm);
+public class DefaultPackageTestClass {
+	public static class InnerClass {
+		public static class NestedInner {}
+	}
 }
+

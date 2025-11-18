@@ -17,7 +17,6 @@
 package org.apache.juneau.uon;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Interface for providing access to {@link UonClassMeta} and {@link UonBeanPropertyMeta} objects.

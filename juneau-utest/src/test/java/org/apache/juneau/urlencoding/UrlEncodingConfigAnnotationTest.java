@@ -26,7 +26,6 @@ import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.annotation.*;
 import org.junit.jupiter.api.*;
-import java.util.stream.*;
 
 /**
  * Tests the @UrlEncodingConfig annotation.

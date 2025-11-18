@@ -19,8 +19,6 @@ package org.apache.juneau.oapi;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.stream.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.oapi.annotation.*;
 import org.apache.juneau.common.reflect.*;

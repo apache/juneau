@@ -23,7 +23,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.common.reflect.*;
 import org.junit.jupiter.api.*;
-import java.util.stream.*;
 
 /**
  * Tests the @CsvConfig annotation.

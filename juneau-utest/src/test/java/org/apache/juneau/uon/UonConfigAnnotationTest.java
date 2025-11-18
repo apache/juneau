@@ -26,7 +26,6 @@ import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.annotation.*;
 import org.junit.jupiter.api.*;
-import java.util.stream.*;
 
 /**
  * Tests the @UonConfig annotation.

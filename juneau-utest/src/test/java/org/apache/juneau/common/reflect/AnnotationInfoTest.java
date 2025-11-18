@@ -22,8 +22,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.lang.annotation.*;
-import java.util.stream.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.common.annotation.*;
 import org.junit.jupiter.api.*;

@@ -17,7 +17,6 @@
 package org.apache.juneau.xml;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Interface for providing access to {@link XmlClassMeta}, {@link XmlBeanMeta}, and {@link XmlBeanPropertyMeta} objects.
