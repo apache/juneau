@@ -2156,56 +2156,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns the last matching annotation on this class and superclasses/interfaces.
-	 *
-	 * <p>
-	 * Annotations are searched in the following orders:
-	 * <ol>
-	 * 	<li>On this class.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of this class.
-	 * </ol>
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public <A extends Annotation> A lastAnnotation(Class<A> type, Predicate<A> filter) {
-		// Inline implementation using reflection directly instead of delegating to AnnotationProvider
-		if (!nn(type))
-			return null;
-
-		// Search annotations using reflection (reverse order for "last")
-		var annotations = rstream(l(inner.getAnnotationsByType(type)));
-		var result = annotations.filter(a -> test(filter, a)).findFirst().orElse(null);
-		if (nn(result))
-			return result;
-
-		// Search parents
-		var parents2 = parents.get();
-		for (var parent : parents2) {
-			var parentAnnotations = rstream(l(parent.inner().getAnnotationsByType(type)));
-			result = parentAnnotations.filter(a -> test(filter, a)).findFirst().orElse(null);
-			if (nn(result))
-				return result;
-		}
-
-		// Search interfaces
-		var interfaces2 = interfaces.get();
-		for (var iface : interfaces2) {
-			var ifaceAnnotations = rstream(l(iface.inner().getAnnotationsByType(type)));
-			result = ifaceAnnotations.filter(a -> test(filter, a)).findFirst().orElse(null);
-			if (nn(result))
-				return result;
-		}
-
-		// Search package
-		return getPackageAnnotation(type);
-	}
-
-	/**
 	 * Shortcut for calling <c>Class.getDeclaredConstructor().newInstance()</c> on the underlying class.
 	 *
 	 * @return A new instance of the underlying class

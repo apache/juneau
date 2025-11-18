@@ -1760,7 +1760,10 @@ public class ClassMeta<T> implements Type {
 		A[] array = annotationArray(type);
 		if (array == null) {
 			if (beanContext == null)
-				return Optional.ofNullable(info.lastAnnotation(type, filter));
+				return AnnotationProvider.INSTANCE.find(type, info.inner())
+					.map(AnnotationInfo::inner)
+					.filter(a -> test(filter, a))
+					.findFirst();  // AnnotationProvider returns child-to-parent, so first is "last"
 			return Optional.empty();
 		}
 		for (int i = array.length - 1; i >= 0; i--)
