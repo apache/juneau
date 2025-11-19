@@ -406,9 +406,13 @@ public class AnnotationProvider {
 	// @formatter:off
 	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classAnnotations;
 	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classDeclaredAnnotations;
+	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classRuntimeAnnotations;
 	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodAnnotations;
+	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodRuntimeAnnotations;
 	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldAnnotations;
+	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldRuntimeAnnotations;
 	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorAnnotations;
+	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorRuntimeAnnotations;
 	private final ReflectionMap<Annotation> runtimeAnnotations;
 	// @formatter:on
 
@@ -426,16 +430,32 @@ public class AnnotationProvider {
 			.supplier(this::findClassDeclaredAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
+		this.classRuntimeAnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findClassRuntimeAnnotations)
+			.disableCaching(builder.disableCaching)
+			.build();
 		this.methodAnnotations = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findMethodAnnotations)
+			.disableCaching(builder.disableCaching)
+			.build();
+		this.methodRuntimeAnnotations = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findMethodRuntimeAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
 		this.fieldAnnotations = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findFieldAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
+		this.fieldRuntimeAnnotations = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findFieldRuntimeAnnotations)
+			.disableCaching(builder.disableCaching)
+			.build();
 		this.constructorAnnotations = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findConstructorAnnotations)
+			.disableCaching(builder.disableCaching)
+			.build();
+		this.constructorRuntimeAnnotations = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findConstructorRuntimeAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
 		this.runtimeAnnotations = builder.runtimeAnnotations.build();
@@ -834,6 +854,11 @@ public class AnnotationProvider {
 		return u(list);
 	}
 
+	private List<AnnotationInfo<Annotation>> findClassRuntimeAnnotations(Class<?> forClass) {
+		ClassInfo ci = ClassInfo.of(forClass);
+		return runtimeAnnotations.find(forClass).map(a -> AnnotationInfo.of(ci, a)).toList();
+	}
+
 	private List<AnnotationInfo<Annotation>> findMethodAnnotations(Method forMethod) {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
 
@@ -843,6 +868,11 @@ public class AnnotationProvider {
 		});
 
 		return u(list);
+	}
+
+	private List<AnnotationInfo<Annotation>> findMethodRuntimeAnnotations(Method forMethod) {
+		MethodInfo mi = MethodInfo.of(forMethod);
+		return runtimeAnnotations.find(forMethod).map(a -> AnnotationInfo.of(mi, a)).toList();
 	}
 
 	private List<AnnotationInfo<Annotation>> findFieldAnnotations(Field forField) {
@@ -855,6 +885,11 @@ public class AnnotationProvider {
 		return u(list);
 	}
 
+	private List<AnnotationInfo<Annotation>> findFieldRuntimeAnnotations(Field forField) {
+		FieldInfo fi = FieldInfo.of(forField);
+		return runtimeAnnotations.find(forField).map(a -> AnnotationInfo.of(fi, a)).toList();
+	}
+
 	private List<AnnotationInfo<Annotation>> findConstructorAnnotations(Constructor<?> forConstructor) {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
 
@@ -863,6 +898,11 @@ public class AnnotationProvider {
 		list.addAll(ci.getDeclaredAnnotations());
 
 		return u(list);
+	}
+
+	private List<AnnotationInfo<Annotation>> findConstructorRuntimeAnnotations(Constructor<?> forConstructor) {
+		ConstructorInfo ci = ConstructorInfo.of(forConstructor);
+		return runtimeAnnotations.find(forConstructor).map(a -> AnnotationInfo.of(ci, a)).toList();
 	}
 
 	/**
