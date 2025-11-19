@@ -542,7 +542,9 @@ public class AnnotationProvider {
 	 * @param onClass The class to search on.
 	 * @return A list of {@link AnnotationInfo} objects representing annotations declared directly on the class.
 	 * 	Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(ClassInfo, AnnotationTraversal...)} with {@link AnnotationTraversal#SELF SELF} instead.
 	 */
+	@Deprecated
 	public List<AnnotationInfo<Annotation>> xfindDeclared(Class<?> onClass) {
 		assertArgNotNull("onClass", onClass);
 		return classDeclaredAnnotations.get(onClass);
@@ -559,7 +561,9 @@ public class AnnotationProvider {
 	 * @param onClass The class to search on.
 	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type declared
 	 * 	directly on the class. Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(Class, ClassInfo, AnnotationTraversal...)} with {@link AnnotationTraversal#SELF SELF} instead.
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> xfindDeclared(Class<A> type, Class<?> onClass) {
 		assertArgNotNull("type", type);
@@ -590,7 +594,9 @@ public class AnnotationProvider {
 	 *
 	 * @param onClass The class to search on.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order.
+	 * @deprecated Use {@link #findTopDown(ClassInfo, AnnotationTraversal...)} with {@link AnnotationTraversal#SELF SELF} instead.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<Annotation>> xfindDeclaredParentFirst(Class<?> onClass) {
 		assertArgNotNull("onClass", onClass);
 		var list = classDeclaredAnnotations.get(onClass);
@@ -608,7 +614,9 @@ public class AnnotationProvider {
 	 * @param type The annotation type to find.
 	 * @param onClass The class to search on.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order.
+	 * @deprecated Use {@link #findTopDown(Class, ClassInfo, AnnotationTraversal...)} with {@link AnnotationTraversal#SELF SELF} instead.
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> xfindDeclaredParentFirst(Class<A> type, Class<?> onClass) {
 		assertArgNotNull("type", type);
@@ -886,7 +894,9 @@ public class AnnotationProvider {
 	 * @param mi The method info to traverse.
 	 * @param filter Optional filter to apply to annotations. Can be <jk>null</jk>.
 	 * @param action The action to perform on each matching annotation.
+	 * @deprecated Use {@link #findTopDown(Class, MethodInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	public <A extends Annotation> void xforEachMethodAnnotation(Class<A> type, MethodInfo mi, Predicate<A> filter, Consumer<A> action) {
 		xforEachClassAnnotation(type, mi.getDeclaringClass(), filter, action);
 		rstream(mi.getMatchingMethods())
@@ -914,7 +924,9 @@ public class AnnotationProvider {
 	 * @param ci The class info to traverse.
 	 * @param filter Optional filter to apply to annotations. Can be <jk>null</jk>.
 	 * @param action The action to perform on each matching annotation.
+	 * @deprecated Use {@link #findTopDown(Class, ClassInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	public <A extends Annotation> void xforEachClassAnnotation(Class<A> type, ClassInfo ci, Predicate<A> filter, Consumer<A> action) {
 		A t2 = ci.getPackageAnnotation(type);
 		if (nn(t2))
