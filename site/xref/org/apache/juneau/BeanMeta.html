@@ -191,8 +191,8 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			List&lt;Beanp&gt; lp = list();
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			List&lt;Name&gt; ln = list();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<em class="jxr_comment">// Inline Context.forEachAnnotation() calls</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			ctx.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, f).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			ctx.getAnnotationProvider().find(Name.<strong class="jxr_keyword">class</strong>, f).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; ln.add(x));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			ctx.getAnnotationProvider().xfind(Beanp.<strong class="jxr_keyword">class</strong>, f).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			ctx.getAnnotationProvider().xfind(Name.<strong class="jxr_keyword">class</strong>, f).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; ln.add(x));
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 			String name = bpName(lp, ln);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(name))
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 				<strong class="jxr_keyword">return</strong> name;
@@ -238,8 +238,8 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 				Map&lt;String,BeanPropertyMeta.Builder&gt; normalProps = map();
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">boolean</strong> hasBean = ctx.getAnnotationProvider().find(Bean.<strong class="jxr_keyword">class</strong>, ci.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent();
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<strong class="jxr_keyword">boolean</strong> hasBeanIgnore = ctx.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, ci.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent();
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">boolean</strong> hasBean = ctx.getAnnotationProvider().xfind(Bean.<strong class="jxr_keyword">class</strong>, ci.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent();
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<strong class="jxr_keyword">boolean</strong> hasBeanIgnore = ctx.getAnnotationProvider().xfind(BeanIgnore.<strong class="jxr_keyword">class</strong>, ci.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent();
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 				<em class="jxr_comment">/// See if this class matches one the patterns in the exclude-class list.</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 				<strong class="jxr_keyword">if</strong> (ctx.isNotABean(c))
@@ -256,12 +256,12 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Class is not serializable"</span>;
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				<em class="jxr_comment">// Look for @Beanc constructor on public constructors.</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 				ci.getPublicConstructors().stream().filter(x -&gt; ctx.getAnnotationProvider().find(Beanc.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 				ci.getPublicConstructors().stream().filter(x -&gt; ctx.getAnnotationProvider().xfind(Beanc.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 					<strong class="jxr_keyword">if</strong> (nn(constructor))
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Multiple instances of '@Beanc' found."</span>);
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 					constructor = x;
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 					constructorArgs = <strong class="jxr_keyword">new</strong> String[0];
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 					ctx.getAnnotationProvider().find(Beanc.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).map(x2 -&gt; x2.<strong class="jxr_keyword">inner</strong>()).filter(y -&gt; ! y.properties().isEmpty()).forEach(z -&gt; constructorArgs = splita(z.properties()));
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 					ctx.getAnnotationProvider().xfind(Beanc.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).map(x2 -&gt; x2.<strong class="jxr_keyword">inner</strong>()).filter(y -&gt; ! y.properties().isEmpty()).forEach(z -&gt; constructorArgs = splita(z.properties()));
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 					<strong class="jxr_keyword">if</strong> (! x.hasNumParameters(constructorArgs.length)) {
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 						<strong class="jxr_keyword">if</strong> (constructorArgs.length != 0)
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor."</span>);
@@ -279,12 +279,12 @@
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 				<em class="jxr_comment">// Look for @Beanc on all other constructors.</em>
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 				<strong class="jxr_keyword">if</strong> (constructor == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 					ci.getDeclaredConstructors().stream().filter(x -&gt; ctx.getAnnotationProvider().find(Beanc.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 					ci.getDeclaredConstructors().stream().filter(x -&gt; ctx.getAnnotationProvider().xfind(Beanc.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 						<strong class="jxr_keyword">if</strong> (nn(constructor))
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Multiple instances of '@Beanc' found."</span>);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 						constructor = x;
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 						constructorArgs = <strong class="jxr_keyword">new</strong> String[0];
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 						ctx.getAnnotationProvider().find(Beanc.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).map(x2 -&gt; x2.<strong class="jxr_keyword">inner</strong>()).filter(y -&gt; ! y.properties().isEmpty()).forEach(z -&gt; constructorArgs = splita(z.properties()));
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 						ctx.getAnnotationProvider().xfind(Beanc.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).map(x2 -&gt; x2.<strong class="jxr_keyword">inner</strong>()).filter(y -&gt; ! y.properties().isEmpty()).forEach(z -&gt; constructorArgs = splita(z.properties()));
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 						<strong class="jxr_keyword">if</strong> (! x.hasNumParameters(constructorArgs.length)) {
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 							<strong class="jxr_keyword">if</strong> (constructorArgs.length != 0)
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor."</span>);
@@ -578,8 +578,8 @@
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 				.filter(x -&gt; x.isNotStatic()
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 				&amp;&amp; (x.isNotTransient() || noIgnoreTransients)
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 				&amp;&amp; (! x.hasAnnotation(Transient.<strong class="jxr_keyword">class</strong>) || noIgnoreTransients)
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 				&amp;&amp; ctx.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isEmpty()
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 				&amp;&amp; (v.isVisible(x.<strong class="jxr_keyword">inner</strong>()) || ctx.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()))
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 				&amp;&amp; ctx.getAnnotationProvider().xfind(BeanIgnore.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isEmpty()
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 				&amp;&amp; (v.isVisible(x.<strong class="jxr_keyword">inner</strong>()) || ctx.getAnnotationProvider().xfind(Beanp.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isPresent()))
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 				.forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>())
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 			);
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -601,10 +601,10 @@
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 		forEachClass(ClassInfo.of(c), stopClass, c2 -&gt; {
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : c2.getDeclaredMethods()) {
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 				<strong class="jxr_keyword">if</strong> (m.isStatic() || m.isBridge() || m.getParameterCount() &gt; 2 || m.getMatchingMethods().stream().anyMatch(m2 -&gt; ctx.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent()))
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 				<strong class="jxr_keyword">if</strong> (m.isStatic() || m.isBridge() || m.getParameterCount() &gt; 2 || m.getMatchingMethods().stream().anyMatch(m2 -&gt; ctx.getAnnotationProvider().xfind(BeanIgnore.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent()))
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 					<strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 				Transient t = m.getMatchingMethods().stream()
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 					.map(m2 -&gt; ctx.getAnnotationProvider().find(Transient.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 					.map(m2 -&gt; ctx.getAnnotationProvider().xfind(Transient.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 					.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 					.findFirst()
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> 					.orElse(<strong class="jxr_keyword">null</strong>);
@@ -613,8 +613,8 @@
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 				List&lt;Beanp&gt; lp = list();
 <a class="jxr_linenumber" name="L607" href="#L607">607</a> 				List&lt;Name&gt; ln = list();
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 				ctx.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, m.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 				ctx.getAnnotationProvider().find(Name.<strong class="jxr_keyword">class</strong>, m.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; ln.add(x));
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 				ctx.getAnnotationProvider().xfind(Beanp.<strong class="jxr_keyword">class</strong>, m.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 				ctx.getAnnotationProvider().xfind(Name.<strong class="jxr_keyword">class</strong>, m.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; ln.add(x));
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 				<em class="jxr_comment">// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does</em>
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 				<em class="jxr_comment">// This ensures property names are inherited correctly, preventing duplicate property definitions</em>
@@ -718,7 +718,7 @@
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 				x -&gt; x.isNotStatic()
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 				&amp;&amp; (x.isNotTransient() || noIgnoreTransients)
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 				&amp;&amp; (! x.hasAnnotation(Transient.<strong class="jxr_keyword">class</strong>) || noIgnoreTransients)
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 				&amp;&amp; ctx.getAnnotationProvider().find(BeanIgnore.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isEmpty()
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 				&amp;&amp; ctx.getAnnotationProvider().xfind(BeanIgnore.<strong class="jxr_keyword">class</strong>, x.<strong class="jxr_keyword">inner</strong>()).findAny().isEmpty()
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 				&amp;&amp; x.hasName(name))
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> 			.ifPresent(f -&gt; value.set(f.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -827,8 +827,8 @@
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 					<strong class="jxr_keyword">if</strong> (paramsMatch) {
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> 						<em class="jxr_comment">// Found a matching parent method - check for @Beanp and @Name annotations</em>
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 						ctx.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, parentMethod.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 						ctx.getAnnotationProvider().find(Name.<strong class="jxr_keyword">class</strong>, parentMethod.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; ln.add(x));
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 						ctx.getAnnotationProvider().xfind(Beanp.<strong class="jxr_keyword">class</strong>, parentMethod.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 						ctx.getAnnotationProvider().xfind(Name.<strong class="jxr_keyword">class</strong>, parentMethod.<strong class="jxr_keyword">inner</strong>()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; ln.add(x));
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> 						<em class="jxr_comment">// If we found annotations, we're done</em>
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> 						<strong class="jxr_keyword">if</strong> (! lp.isEmpty() || ! ln.isEmpty())

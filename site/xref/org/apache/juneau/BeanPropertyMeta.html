@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">if</strong> (nn(innerField)) {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 				List&lt;Beanp&gt; lp = list();
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 				<em class="jxr_comment">// Inline Context.forEachAnnotation() call</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				bc.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, innerField).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				bc.getAnnotationProvider().xfind(Beanp.<strong class="jxr_keyword">class</strong>, innerField).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 				<strong class="jxr_keyword">if</strong> (nn(field) || isNotEmpty(lp)) {
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 					<em class="jxr_comment">// Only use field type if it's a bean property or has @Beanp annotation.</em>
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 					<em class="jxr_comment">// Otherwise, we want to infer the type from the getter or setter.</em>
@@ -248,13 +248,13 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 						writeOnly = Boolean.valueOf(x.wo());
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 				});
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 				<em class="jxr_comment">// Inline Context.forEachAnnotation() call</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				bc.getAnnotationProvider().find(Swap.<strong class="jxr_keyword">class</strong>, innerField).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; swap = getPropertySwap(x));
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				isUri |= nn(bc.getAnnotationProvider().find(Uri.<strong class="jxr_keyword">class</strong>, innerField).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				bc.getAnnotationProvider().xfind(Swap.<strong class="jxr_keyword">class</strong>, innerField).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; swap = getPropertySwap(x));
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				isUri |= nn(bc.getAnnotationProvider().xfind(Uri.<strong class="jxr_keyword">class</strong>, innerField).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 			}
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) {
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 				List&lt;Beanp&gt; lp = list();
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 				bc.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, getter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 				bc.getAnnotationProvider().xfind(Beanp.<strong class="jxr_keyword">class</strong>, getter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				<strong class="jxr_keyword">if</strong> (rawTypeMeta == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.<strong class="jxr_keyword">class</strong>, getter));
@@ -269,12 +269,12 @@
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 					<strong class="jxr_keyword">if</strong> (! x.wo().isEmpty())
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 						writeOnly = Boolean.valueOf(x.wo());
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 				});
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				bc.getAnnotationProvider().find(Swap.<strong class="jxr_keyword">class</strong>, getter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; swap = getPropertySwap(x));
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				bc.getAnnotationProvider().xfind(Swap.<strong class="jxr_keyword">class</strong>, getter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; swap = getPropertySwap(x));
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 			}
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (nn(setter)) {
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 				List&lt;Beanp&gt; lp = list();
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				bc.getAnnotationProvider().find(Beanp.<strong class="jxr_keyword">class</strong>, setter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				bc.getAnnotationProvider().xfind(Beanp.<strong class="jxr_keyword">class</strong>, setter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; lp.add(x));
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 				<strong class="jxr_keyword">if</strong> (rawTypeMeta == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.<strong class="jxr_keyword">class</strong>, setter));
@@ -289,7 +289,7 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 					<strong class="jxr_keyword">if</strong> (! x.wo().isEmpty())
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 						writeOnly = Boolean.valueOf(x.wo());
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 				});
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				bc.getAnnotationProvider().find(Swap.<strong class="jxr_keyword">class</strong>, setter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; swap = getPropertySwap(x));
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				bc.getAnnotationProvider().xfind(Swap.<strong class="jxr_keyword">class</strong>, setter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; swap = getPropertySwap(x));
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			}
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">if</strong> (rawTypeMeta == <strong class="jxr_keyword">null</strong>)
@@ -645,9 +645,9 @@
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; BeanPropertyMeta forEachAnnotation(Class&lt;A&gt; a, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 		BeanContext bc = beanContext;
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">if</strong> (nn(a)) {
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">if</strong> (nn(field)) bc.getAnnotationProvider().find(a, field).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) bc.getAnnotationProvider().find(a, getter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 			<strong class="jxr_keyword">if</strong> (nn(setter)) bc.getAnnotationProvider().find(a, setter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">if</strong> (nn(field)) bc.getAnnotationProvider().xfind(a, field).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) bc.getAnnotationProvider().xfind(a, getter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 			<strong class="jxr_keyword">if</strong> (nn(setter)) bc.getAnnotationProvider().xfind(a, setter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 		}
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 	}
@@ -687,34 +687,34 @@
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 		BeanContext bc = beanContext;
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 			<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		bc.getAnnotationProvider().forEachClassAnnotation(a, getBeanMeta().getClassMeta().getInfo(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		bc.getAnnotationProvider().xforEachClassAnnotation(a, getBeanMeta().getClassMeta().getInfo(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">if</strong> (nn(field)) {
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			bc.getAnnotationProvider().find(a, field).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			bc.getAnnotationProvider().forEachClassAnnotation(a, ClassInfo.of(field.getType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			bc.getAnnotationProvider().xfind(a, field).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			bc.getAnnotationProvider().xforEachClassAnnotation(a, ClassInfo.of(field.getType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 		}
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">if</strong> (nn(getter)) {
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the getter method</em>
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 			forEachParentMethod(getter, parentGetter -&gt; {
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 				bc.getAnnotationProvider().find(a, parentGetter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 				bc.getAnnotationProvider().xfind(a, parentGetter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 			});
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			bc.getAnnotationProvider().find(a, getter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 			bc.getAnnotationProvider().forEachClassAnnotation(a, ClassInfo.of(getter.getReturnType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			bc.getAnnotationProvider().xfind(a, getter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 			bc.getAnnotationProvider().xforEachClassAnnotation(a, ClassInfo.of(getter.getReturnType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> 		}
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">if</strong> (nn(setter)) {
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the setter method</em>
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 			forEachParentMethod(setter, parentSetter -&gt; {
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 				bc.getAnnotationProvider().find(a, parentSetter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 				bc.getAnnotationProvider().xfind(a, parentSetter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 			});
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			bc.getAnnotationProvider().find(a, setter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			bc.getAnnotationProvider().forEachClassAnnotation(a, ClassInfo.of(setter.getReturnType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			bc.getAnnotationProvider().xfind(a, setter).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			bc.getAnnotationProvider().xforEachClassAnnotation(a, ClassInfo.of(setter.getReturnType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 		}
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<strong class="jxr_keyword">if</strong> (nn(extraKeys)) {
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the extraKeys method</em>
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 			forEachParentMethod(extraKeys, parentExtraKeys -&gt; {
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 				bc.getAnnotationProvider().find(a, parentExtraKeys).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 				bc.getAnnotationProvider().xfind(a, parentExtraKeys).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 			});
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 			bc.getAnnotationProvider().find(a, extraKeys).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			bc.getAnnotationProvider().forEachClassAnnotation(a, ClassInfo.of(extraKeys.getReturnType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 			bc.getAnnotationProvider().xfind(a, extraKeys).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			bc.getAnnotationProvider().xforEachClassAnnotation(a, ClassInfo.of(extraKeys.getReturnType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 		}
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">return</strong> l;
