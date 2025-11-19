@@ -1016,6 +1016,8 @@ public class AnnotationProvider {
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("clazz", clazz);
+		if (traversals.length == 0)
+			traversals = a(SELF, PARENTS, PACKAGE);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -1065,6 +1067,8 @@ public class AnnotationProvider {
 	@SuppressWarnings("unchecked")
 	public Stream<AnnotationInfo<Annotation>> find(ClassInfo clazz, AnnotationTraversal... traversals) {
 		assertArgNotNull("clazz", clazz);
+		if (traversals.length == 0)
+			traversals = a(SELF, PARENTS, PACKAGE);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -1106,6 +1110,61 @@ public class AnnotationProvider {
 	}
 
 	/**
+	 * Streams all annotations from a class using configurable traversal options in parent-first order, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #find(ClassInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * @param clazz The class to search.
+	 * @param traversals The traversal options (what to search and order).
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public Stream<AnnotationInfo<Annotation>> findTopDown(ClassInfo clazz, AnnotationTraversal... traversals) {
+		return rstream(find(clazz, traversals).toList());
+	}
+
+	/**
+	 * Checks if a class has the specified annotation.
+	 *
+	 * <p>
+	 * This is a convenience method equivalent to:
+	 * <p class='bjava'>
+	 * 	find(<jv>type</jv>, <jv>clazz</jv>, <jv>traversals</jv>).findFirst().isPresent()
+	 * </p>
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this class
+	 * 	<li>{@link AnnotationTraversal#PARENTS PARENTS} - Parent classes and interfaces (child-to-parent order)
+	 * 	<li>{@link AnnotationTraversal#PACKAGE PACKAGE} - The package annotations
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, PARENTS, PACKAGE}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if class has @MyAnnotation anywhere in hierarchy</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
+	 *
+	 * 	<jc>// Check only on the class itself</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt2</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param clazz The class to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, PARENTS, PACKAGE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#PARENTS PARENTS}, {@link AnnotationTraversal#PACKAGE PACKAGE}
+	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
+	 */
+	public <A extends Annotation> boolean has(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
+		return find(type, clazz, traversals).findFirst().isPresent();
+	}
+
+	/**
 	 * Streams annotations from a method using configurable traversal options.
 	 *
 	 * <p>
@@ -1133,7 +1192,7 @@ public class AnnotationProvider {
 		assertArgNotNull("type", type);
 		assertArgNotNull("method", method);
 		if (traversals.length == 0)
-			traversals = new AnnotationTraversal[]{SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE};
+			traversals = a(SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -1184,7 +1243,7 @@ public class AnnotationProvider {
 	public Stream<AnnotationInfo<Annotation>> find(MethodInfo method, AnnotationTraversal... traversals) {
 		assertArgNotNull("method", method);
 		if (traversals.length == 0)
-			traversals = new AnnotationTraversal[]{SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE};
+			traversals = a(SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -1225,6 +1284,62 @@ public class AnnotationProvider {
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
 		return rstream(find(type, method, traversals).toList());
+	}
+
+	/**
+	 * Streams all annotations from a method using configurable traversal options in parent-first order, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #find(MethodInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * @param method The method to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public Stream<AnnotationInfo<Annotation>> findTopDown(MethodInfo method, AnnotationTraversal... traversals) {
+		return rstream(find(method, traversals).toList());
+	}
+
+	/**
+	 * Checks if a method has the specified annotation.
+	 *
+	 * <p>
+	 * This is a convenience method equivalent to:
+	 * <p class='bjava'>
+	 * 	find(<jv>type</jv>, <jv>method</jv>, <jv>traversals</jv>).findFirst().isPresent()
+	 * </p>
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this method
+	 * 	<li>{@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS} - Matching methods in parent classes (child-to-parent)
+	 * 	<li>{@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE} - The return type hierarchy (includes class parents and package)
+	 * 	<li>{@link AnnotationTraversal#PACKAGE PACKAGE} - The declaring class's package annotations
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if method has @MyAnnotation anywhere in hierarchy</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>mi</jv>);
+	 *
+	 * 	<jc>// Check only on the method itself</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt2</jv> = has(MyAnnotation.<jk>class</jk>, <jv>mi</jv>, SELF);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param method The method to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS}, {@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE}, {@link AnnotationTraversal#PACKAGE PACKAGE}
+	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
+	 */
+	public <A extends Annotation> boolean has(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
+		return find(type, method, traversals).findFirst().isPresent();
 	}
 
 	/**
@@ -1270,7 +1385,7 @@ public class AnnotationProvider {
 		assertArgNotNull("type", type);
 		assertArgNotNull("parameter", parameter);
 		if (traversals.length == 0)
-			traversals = new AnnotationTraversal[]{SELF, MATCHING_PARAMETERS, PARAMETER_TYPE};
+			traversals = a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -1323,6 +1438,76 @@ public class AnnotationProvider {
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
 		return rstream(find(type, parameter, traversals).toList());
+	}
+
+	/**
+	 * Streams all annotations from a parameter using configurable traversal options, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing all parameter annotations without creating intermediate lists.
+	 * Unlike {@link #find(Class, ParameterInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
+	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)
+	 * 	<li>{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations from parameter, matching parameters, and parameter type</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
+	 * 		find(<jv>pi</jv>, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
+	 *
+	 * 	<jc>// Just get annotations from this parameter</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s2</jv> =
+	 * 		find(<jv>pi</jv>, SELF);
+	 * </p>
+	 *
+	 * @param parameter The parameter to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
+	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
+	 */
+	public Stream<AnnotationInfo<Annotation>> find(ParameterInfo parameter, AnnotationTraversal... traversals) {
+		assertArgNotNull("parameter", parameter);
+		if (traversals.length == 0)
+			traversals = a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return parameter.getAnnotations().stream();
+				} else if (traversal == MATCHING_PARAMETERS) {
+					return parameter.getMatchingParameters().stream().skip(1).flatMap(x -> x.getAnnotations().stream());
+				} else if (traversal == PARAMETER_TYPE) {
+					return find(parameter.getParameterType().unwrap(Value.class, Optional.class), PARENTS, PACKAGE);
+				}
+				throw illegalArg("Invalid traversal type for parameter annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams all annotations from a parameter using configurable traversal options in parent-first order, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #find(ParameterInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * @param parameter The parameter to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
+	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never <jk>null</jk>.
+	 */
+	public Stream<AnnotationInfo<Annotation>> findTopDown(ParameterInfo parameter, AnnotationTraversal... traversals) {
+		return rstream(find(parameter, traversals).toList());
 	}
 
 	/**
@@ -1384,15 +1569,57 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
+	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("field", field);
+		if (traversals.length == 0)
+			traversals = a(SELF);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
-					return xfind(type, field.inner());
+					return concat(
+						fieldRuntimeAnnotations.get(field.inner()).stream(),
+						field.getAnnotations().stream()
+					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
+				}
+				throw illegalArg("Invalid traversal type for field annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams all annotations from a field using configurable traversal options, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing all field annotations without creating intermediate lists.
+	 * Unlike {@link #find(Class, FieldInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations from field</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
+	 * 		find(<jv>fi</jv>, SELF);
+	 * </p>
+	 *
+	 * @param field The field to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public Stream<AnnotationInfo<Annotation>> find(FieldInfo field, AnnotationTraversal... traversals) {
+		assertArgNotNull("field", field);
+		if (traversals.length == 0)
+			traversals = a(SELF);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return concat(
+						fieldRuntimeAnnotations.get(field.inner()).stream(),
+						field.getAnnotations().stream()
+					);
 				}
 				throw illegalArg("Invalid traversal type for field annotations: {0}", traversal);
 			});
@@ -1416,6 +1643,56 @@ public class AnnotationProvider {
 	}
 
 	/**
+	 * Streams all annotations from a field using configurable traversal options in parent-first order, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #find(FieldInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * @param field The field to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public Stream<AnnotationInfo<Annotation>> findTopDown(FieldInfo field, AnnotationTraversal... traversals) {
+		return rstream(find(field, traversals).toList());
+	}
+
+	/**
+	 * Checks if a field has the specified annotation.
+	 *
+	 * <p>
+	 * This is a convenience method equivalent to:
+	 * <p class='bjava'>
+	 * 	find(<jv>type</jv>, <jv>field</jv>, <jv>traversals</jv>).findFirst().isPresent()
+	 * </p>
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this field
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if field has @MyAnnotation</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>fi</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param field The field to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
+	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
+	 */
+	public <A extends Annotation> boolean has(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
+		return find(type, field, traversals).findFirst().isPresent();
+	}
+
+	/**
 	 * Streams annotations from a constructor using configurable traversal options.
 	 *
 	 * <p>
@@ -1434,15 +1711,57 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
+	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("constructor", constructor);
+		if (traversals.length == 0)
+			traversals = a(SELF);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
-					return xfind(type, constructor.inner());
+					return concat(
+						constructorRuntimeAnnotations.get(constructor.inner()).stream(),
+						constructor.getDeclaredAnnotations().stream()
+					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
+				}
+				throw illegalArg("Invalid traversal type for constructor annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams all annotations from a constructor using configurable traversal options, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing all constructor annotations without creating intermediate lists.
+	 * Unlike {@link #find(Class, ConstructorInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations from constructor</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
+	 * 		find(<jv>ci</jv>, SELF);
+	 * </p>
+	 *
+	 * @param constructor The constructor to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public Stream<AnnotationInfo<Annotation>> find(ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		assertArgNotNull("constructor", constructor);
+		if (traversals.length == 0)
+			traversals = a(SELF);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return concat(
+						constructorRuntimeAnnotations.get(constructor.inner()).stream(),
+						constructor.getDeclaredAnnotations().stream()
+					);
 				}
 				throw illegalArg("Invalid traversal type for constructor annotations: {0}", traversal);
 			});
@@ -1463,5 +1782,55 @@ public class AnnotationProvider {
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
 		return rstream(find(type, constructor, traversals).toList());
+	}
+
+	/**
+	 * Streams all annotations from a constructor using configurable traversal options in parent-first order, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #find(ConstructorInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * @param constructor The constructor to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public Stream<AnnotationInfo<Annotation>> findTopDown(ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		return rstream(find(constructor, traversals).toList());
+	}
+
+	/**
+	 * Checks if a constructor has the specified annotation.
+	 *
+	 * <p>
+	 * This is a convenience method equivalent to:
+	 * <p class='bjava'>
+	 * 	find(<jv>type</jv>, <jv>constructor</jv>, <jv>traversals</jv>).findFirst().isPresent()
+	 * </p>
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this constructor
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if constructor has @MyAnnotation</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param constructor The constructor to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
+	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
+	 */
+	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		return find(type, constructor, traversals).findFirst().isPresent();
 	}
 }
