@@ -201,11 +201,12 @@ public class RestContext extends Context {
 		private static <T extends Annotation> MethodList getAnnotatedMethods(Supplier<?> resource, Class<T> annotation, Predicate<T> predicate) {
 			Map<String,Method> x = map();
 			var r = resource.get();
+			AnnotationProvider ap = AnnotationProvider.INSTANCE;
 
 			// @formatter:off
 			ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
 				.filter(y -> y.hasAnnotation(annotation))
-				.forEach(y -> rstream(y.getAllAnnotations()).map(ai -> ai.cast(annotation)).filter(Objects::nonNull).map(AnnotationInfo::inner)
+				.forEach(y -> ap.findTopDown(y).map(ai -> ai.cast(annotation)).filter(Objects::nonNull).map(AnnotationInfo::inner)
 					.filter(z -> predicate == null || predicate.test(z))
 					.forEach(z -> x.put(y.getSignature(), y.accessible().inner())));
 			// @formatter:on
@@ -4566,6 +4567,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			Value<RestOperations.Builder> v = Value.of(RestOperations.create(beanStore));
+			var ap = restContext.getBeanContext().getAnnotationProvider();
 
 			var rci = ClassInfo.of(resource.get());
 
@@ -4581,7 +4583,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			for (var mi : rci.getPublicMethods()) {
-				List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+				List<AnnotationInfo<?>> al = ap.findTopDown(mi).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {

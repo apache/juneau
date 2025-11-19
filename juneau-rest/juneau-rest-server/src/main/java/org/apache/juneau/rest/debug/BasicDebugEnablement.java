@@ -64,6 +64,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		RestContext.Builder builder = beanStore.getBean(RestContext.Builder.class).get();
 		ResourceSupplier resource = beanStore.getBean(ResourceSupplier.class).get();
 		VarResolver varResolver = beanStore.getBean(VarResolver.class).get();
+		var ap = AnnotationProvider.INSTANCE;
 
 		// Default debug enablement if not overridden at class/method level.
 		Enablement debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(builder.isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
@@ -83,7 +84,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		// Gather @RestOp(debug) settings.
 		// @formatter:off
 		ci.getPublicMethods().stream()
-			.forEach(x -> 
+			.forEach(x ->
 				rstream(x.getAllAnnotations())
 					.filter(REST_OP_GROUP)
 					.flatMap(ai -> ai.getValue(String.class, "debug").stream())

@@ -160,6 +160,27 @@ public enum AnnotationTraversal {
 	RETURN_TYPE(30),
 
 	/**
+	 * Include the declaring class hierarchy in the traversal.
+	 *
+	 * <p>
+	 * For methods, fields, and constructors: Searches annotations on the declaring class and its parent hierarchy.
+	 * Automatically includes the declaring class and all its parents and interfaces.
+	 *
+	 * <h5 class='section'>Applicable to:</h5>
+	 * Methods, fields, and constructors.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Given: class Child extends Parent { void method() {...} }</jc>
+	 * 	<jc>// Searches: Child hierarchy (Child, Parent, interfaces, etc.)</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Order:</h5>
+	 * Precedence: 35
+	 */
+	DECLARING_CLASS(35),
+
+	/**
 	 * Include the parameter type in the traversal.
 	 *
 	 * <p>

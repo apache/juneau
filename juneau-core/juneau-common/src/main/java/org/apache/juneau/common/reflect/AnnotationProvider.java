@@ -519,6 +519,101 @@ public class AnnotationProvider {
 	}
 
 	/**
+	 * Streams annotations from a class that belong to the specified annotation group.
+	 *
+	 * <p>
+	 * This method is similar to {@link #find(Class, ClassInfo, AnnotationTraversal...)} but filters
+	 * annotations based on their {@link org.apache.juneau.annotation.AnnotationGroup} membership rather
+	 * than their exact type.
+	 *
+	 * <p>
+	 * An annotation belongs to a group if it has an {@code @AnnotationGroup} meta-annotation with the
+	 * specified group class. This allows you to find all annotations that are logically related.
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this class
+	 * 	<li>{@link AnnotationTraversal#PARENTS PARENTS} - Parent classes and interfaces (child-to-parent order)
+	 * 	<li>{@link AnnotationTraversal#PACKAGE PACKAGE} - The package annotations
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code PARENTS, PACKAGE}
+	 * <br>Note: {@code PARENTS} includes the class itself plus all parent classes and interfaces.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Find all bean-related annotations (that belong to the Bean group)</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroup(Bean.<jk>class</jk>, <jv>classInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param clazz The class to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code PARENTS, PACKAGE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#PARENTS PARENTS}, 
+	 * 	{@link AnnotationTraversal#PACKAGE PACKAGE}
+	 * @return A stream of {@link AnnotationInfo} objects belonging to the specified group. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroup(Class<A> group, ClassInfo clazz, AnnotationTraversal... traversals) {
+		assertArgNotNull("group", group);
+		assertArgNotNull("clazz", clazz);
+		if (traversals.length == 0)
+			traversals = a(PARENTS, PACKAGE);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return concat(
+						classAnnnotations.get(clazz.inner()).stream(),
+						clazz.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<?>)a)
+					)
+					.filter(a -> a.isInGroup(group));
+				} else if (traversal == PARENTS) {
+					return clazz.getParentsAndInterfaces().stream().flatMap(x ->
+						concat(
+							classAnnnotations.get(x.inner()).stream(),
+							x.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<?>)a)
+						).filter(a -> a.isInGroup(group))
+					);
+				} else if (traversal == PACKAGE) {
+					return opt(clazz.getPackage()).map(x -> x.getAnnotations().stream().map(a -> (AnnotationInfo<?>)a).filter(a -> a.isInGroup(group))).orElse(Stream.empty());
+				}
+				throw illegalArg("Invalid traversal type for class annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a class that belong to the specified annotation group in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findGroup(Class, ClassInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * <p>
+	 * Use this when you need parent annotations to take precedence over child annotations.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get bean-group annotations in parent-first order</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroupTopDown(Bean.<jk>class</jk>, <jv>classInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param clazz The class to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroupTopDown(Class<A> group, ClassInfo clazz, AnnotationTraversal... traversals) {
+		return rstream(findGroup(group, clazz, traversals).toList());
+	}
+
+	/**
 	 * Streams all annotations from a class using configurable traversal options, without filtering by annotation type.
 	 *
 	 * <p>
@@ -686,6 +781,8 @@ public class AnnotationProvider {
 							m.getDeclaredAnnotations().stream()
 						).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)
 					);
+				} else if (traversal == DECLARING_CLASS) {
+					return find(type, method.getDeclaringClass(), PARENTS);
 				} else if (traversal == RETURN_TYPE) {
 					return find(type, method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
 				} else if (traversal == PACKAGE) {
@@ -693,6 +790,106 @@ public class AnnotationProvider {
 				}
 				throw illegalArg("Invalid traversal type for method annotations: {0}", traversal);
 			});
+	}
+
+	/**
+	 * Streams annotations from a method that belong to the specified annotation group.
+	 *
+	 * <p>
+	 * This method is similar to {@link #find(Class, MethodInfo, AnnotationTraversal...)} but filters
+	 * annotations based on their {@link org.apache.juneau.annotation.AnnotationGroup} membership rather
+	 * than their exact type.
+	 *
+	 * <p>
+	 * An annotation belongs to a group if it has an {@code @AnnotationGroup} meta-annotation with the
+	 * specified group class. This allows you to find all annotations that are logically related.
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this method
+	 * 	<li>{@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS} - Matching methods in parent classes (child-to-parent)
+	 * 	<li>{@link AnnotationTraversal#DECLARING_CLASS DECLARING_CLASS} - The declaring class hierarchy
+	 * 	<li>{@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE} - The return type hierarchy (includes class parents and package)
+	 * 	<li>{@link AnnotationTraversal#PACKAGE PACKAGE} - The declaring class's package annotations
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Find all REST operation annotations (that belong to the RestOp group)</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroup(RestOp.<jk>class</jk>, <jv>methodInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param method The method to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS}, 
+	 * 	{@link AnnotationTraversal#DECLARING_CLASS DECLARING_CLASS}, {@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE}, 
+	 * 	{@link AnnotationTraversal#PACKAGE PACKAGE}
+	 * @return A stream of {@link AnnotationInfo} objects belonging to the specified group. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroup(Class<A> group, MethodInfo method, AnnotationTraversal... traversals) {
+		assertArgNotNull("group", group);
+		assertArgNotNull("method", method);
+		if (traversals.length == 0)
+			traversals = a(SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return concat(
+						methodAnnotations.get(method.inner()).stream(),
+						method.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<?>)a)
+					).filter(a -> a.isInGroup(group));
+				} else if (traversal == MATCHING_METHODS) {
+					return method.getMatchingMethods().stream().skip(1).flatMap(m ->
+						concat(
+							methodAnnotations.get(m.inner()).stream(),
+							m.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<?>)a)
+						).filter(a -> a.isInGroup(group))
+					);
+				} else if (traversal == DECLARING_CLASS) {
+					return findGroup(group, method.getDeclaringClass(), PARENTS);
+				} else if (traversal == RETURN_TYPE) {
+					return findGroup(group, method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
+				} else if (traversal == PACKAGE) {
+					return opt(method.getDeclaringClass().getPackage()).map(x -> x.getAnnotations().stream().map(a -> (AnnotationInfo<?>)a).filter(a -> a.isInGroup(group))).orElse(Stream.empty());
+				}
+				throw illegalArg("Invalid traversal type for method annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a method that belong to the specified annotation group in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findGroup(Class, MethodInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * <p>
+	 * Use this when you need parent annotations to take precedence over child annotations.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get REST operation annotations in parent-first order</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroupTopDown(RestOp.<jk>class</jk>, <jv>methodInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param method The method to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroupTopDown(Class<A> group, MethodInfo method, AnnotationTraversal... traversals) {
+		return rstream(findGroup(group, method, traversals).toList());
 	}
 
 	/**
@@ -720,7 +917,7 @@ public class AnnotationProvider {
 	public Stream<AnnotationInfo<Annotation>> find(MethodInfo method, AnnotationTraversal... traversals) {
 		assertArgNotNull("method", method);
 		if (traversals.length == 0)
-			traversals = a(SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE);
+			traversals = a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -737,6 +934,8 @@ public class AnnotationProvider {
 							m.getDeclaredAnnotations().stream()
 						);
 					});
+				} else if (traversal == DECLARING_CLASS) {
+					return find(method.getDeclaringClass(), PARENTS);
 				} else if (traversal == RETURN_TYPE) {
 					return find(method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
 				} else if (traversal == PACKAGE) {
@@ -876,6 +1075,91 @@ public class AnnotationProvider {
 				}
 				throw illegalArg("Invalid traversal type for parameter annotations: {0}", traversal);
 			});
+	}
+
+	/**
+	 * Streams annotations from a parameter that belong to the specified annotation group.
+	 *
+	 * <p>
+	 * This method is similar to {@link #find(Class, ParameterInfo, AnnotationTraversal...)} but filters
+	 * annotations based on their {@link org.apache.juneau.annotation.AnnotationGroup} membership rather
+	 * than their exact type.
+	 *
+	 * <p>
+	 * An annotation belongs to a group if it has an {@code @AnnotationGroup} meta-annotation with the
+	 * specified group class. This allows you to find all annotations that are logically related.
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
+	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)
+	 * 	<li>{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Find all REST parameter annotations (that belong to a group)</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroup(Query.<jk>class</jk>, <jv>parameterInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param parameter The parameter to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, 
+	 * 	{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
+	 * @return A stream of {@link AnnotationInfo} objects belonging to the specified group. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroup(Class<A> group, ParameterInfo parameter, AnnotationTraversal... traversals) {
+		assertArgNotNull("group", group);
+		assertArgNotNull("parameter", parameter);
+		if (traversals.length == 0)
+			traversals = a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return parameter.getAnnotations().stream().map(a -> (AnnotationInfo<?>)a).filter(a -> a.isInGroup(group));
+				} else if (traversal == MATCHING_PARAMETERS) {
+					return parameter.getMatchingParameters().stream().skip(1).flatMap(x -> x.getAnnotations().stream().map(a -> (AnnotationInfo<?>)a).filter(a -> a.isInGroup(group)));
+				} else if (traversal == PARAMETER_TYPE) {
+					return findGroup(group, parameter.getParameterType().unwrap(Value.class, Optional.class), PARENTS, PACKAGE);
+				}
+				throw illegalArg("Invalid traversal type for parameter annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a parameter that belong to the specified annotation group in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findGroup(Class, ParameterInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * <p>
+	 * Use this when you need parent annotations to take precedence over child annotations.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get parameter annotations in parent-first order</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroupTopDown(Query.<jk>class</jk>, <jv>parameterInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param parameter The parameter to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroupTopDown(Class<A> group, ParameterInfo parameter, AnnotationTraversal... traversals) {
+		return rstream(findGroup(group, parameter, traversals).toList());
 	}
 
 	/**
@@ -1067,6 +1351,87 @@ public class AnnotationProvider {
 	}
 
 	/**
+	 * Streams annotations from a field that belong to the specified annotation group.
+	 *
+	 * <p>
+	 * This method is similar to {@link #find(Class, FieldInfo, AnnotationTraversal...)} but filters
+	 * annotations based on their {@link org.apache.juneau.annotation.AnnotationGroup} membership rather
+	 * than their exact type.
+	 *
+	 * <p>
+	 * An annotation belongs to a group if it has an {@code @AnnotationGroup} meta-annotation with the
+	 * specified group class. This allows you to find all annotations that are logically related.
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this field
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Find all bean property annotations (that belong to the Beanp group)</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroup(Beanp.<jk>class</jk>, <jv>fieldInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param field The field to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
+	 * @return A stream of {@link AnnotationInfo} objects belonging to the specified group. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroup(Class<A> group, FieldInfo field, AnnotationTraversal... traversals) {
+		assertArgNotNull("group", group);
+		assertArgNotNull("field", field);
+		if (traversals.length == 0)
+			traversals = a(SELF);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return concat(
+						fieldAnnotations.get(field.inner()).stream(),
+						field.getAnnotations().stream().map(a -> (AnnotationInfo<?>)a)
+					).filter(a -> a.isInGroup(group));
+				}
+				throw illegalArg("Invalid traversal type for field annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a field that belong to the specified annotation group in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findGroup(Class, FieldInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * <p>
+	 * Use this when you need parent annotations to take precedence over child annotations.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get bean property annotations in parent-first order</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroupTopDown(Beanp.<jk>class</jk>, <jv>fieldInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param field The field to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroupTopDown(Class<A> group, FieldInfo field, AnnotationTraversal... traversals) {
+		return rstream(findGroup(group, field, traversals).toList());
+	}
+
+	/**
 	 * Streams all annotations from a field using configurable traversal options, without filtering by annotation type.
 	 *
 	 * <p>
@@ -1206,6 +1571,87 @@ public class AnnotationProvider {
 				}
 				throw illegalArg("Invalid traversal type for constructor annotations: {0}", traversal);
 			});
+	}
+
+	/**
+	 * Streams annotations from a constructor that belong to the specified annotation group.
+	 *
+	 * <p>
+	 * This method is similar to {@link #find(Class, ConstructorInfo, AnnotationTraversal...)} but filters
+	 * annotations based on their {@link org.apache.juneau.annotation.AnnotationGroup} membership rather
+	 * than their exact type.
+	 *
+	 * <p>
+	 * An annotation belongs to a group if it has an {@code @AnnotationGroup} meta-annotation with the
+	 * specified group class. This allows you to find all annotations that are logically related.
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this constructor
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Find all bean-related annotations on constructor</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroup(Bean.<jk>class</jk>, <jv>constructorInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param constructor The constructor to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
+	 * @return A stream of {@link AnnotationInfo} objects belonging to the specified group. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroup(Class<A> group, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		assertArgNotNull("group", group);
+		assertArgNotNull("constructor", constructor);
+		if (traversals.length == 0)
+			traversals = a(SELF);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return concat(
+						constructorAnnotations.get(constructor.inner()).stream(),
+						constructor.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<?>)a)
+					).filter(a -> a.isInGroup(group));
+				}
+				throw illegalArg("Invalid traversal type for constructor annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams annotations from a constructor that belong to the specified annotation group in parent-first order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #findGroup(Class, ConstructorInfo, AnnotationTraversal...)}
+	 * and reversing the result.
+	 *
+	 * <p>
+	 * Use this when you need parent annotations to take precedence over child annotations.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get bean-related annotations in parent-first order</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;?&gt;&gt; <jv>annotations</jv> = 
+	 * 		annotationProvider.findGroupTopDown(Bean.<jk>class</jk>, <jv>constructorInfo</jv>);
+	 * </p>
+	 *
+	 * @param <A> The annotation group type.
+	 * @param group The annotation group class to filter by.
+	 * @param constructor The constructor to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<?>> findGroupTopDown(Class<A> group, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		return rstream(findGroup(group, constructor, traversals).toList());
 	}
 
 	/**

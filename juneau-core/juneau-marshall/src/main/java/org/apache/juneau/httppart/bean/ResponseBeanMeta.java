@@ -127,8 +127,9 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
-		rstream(m.getAllAnnotations()).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
-		rstream(m.getAllAnnotations()).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		AnnotationProvider ap = AnnotationProvider.INSTANCE;
+		ap.findTopDown(m).map(x -> x.cast(Response.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		ap.findTopDown(m).map(x -> x.cast(StatusCode.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
 		return b.build();
 	}
 

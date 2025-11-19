@@ -17,6 +17,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.compare;
@@ -126,6 +127,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			this.restMethod = method;
 
 			this.beanStore = BeanStore.of(context.getBeanStore(), context.builder.resource().get()).addBean(java.lang.reflect.Method.class, method);
+			var ap = context.getBeanContext().getAnnotationProvider();
 
 			var mi = MethodInfo.of(context.getResourceClass(), method);
 
@@ -133,7 +135,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				var vr = context.getVarResolver();
 				var vrs = vr.createSession();
 
-				var work = AnnotationWorkList.of(vrs, rstream(mi.getAllAnnotations()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
+				var work = AnnotationWorkList.of(vrs, ap.findTopDown(mi, SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
 
 				apply(work);
 
@@ -1921,37 +1923,37 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The path matchers for this method.
 		 */
-	protected UrlPathMatcherList getPathMatchers() {
+		protected UrlPathMatcherList getPathMatchers() {
 
-		var v = Value.of(UrlPathMatcherList.create());
+			var v = Value.of(UrlPathMatcherList.create());
 
-		if (nn(path)) {
-			for (var p : path) {
-					if (dotAll && ! p.endsWith("/*"))
-						p += "/*";
-					v.get().add(UrlPathMatcher.of(p));
+			if (nn(path)) {
+				for (var p : path) {
+						if (dotAll && ! p.endsWith("/*"))
+							p += "/*";
+						v.get().add(UrlPathMatcher.of(p));
+					}
 				}
-			}
 
-		if (v.get().isEmpty()) {
-			var mi = MethodInfo.of(restMethod);
-			String p = null;
-			String httpMethod = null;
-			if (mi.hasAnnotation(RestGet.class))
-				httpMethod = "get";
-			else if (mi.hasAnnotation(RestPut.class))
-				httpMethod = "put";
-			else if (mi.hasAnnotation(RestPost.class))
-				httpMethod = "post";
-			else if (mi.hasAnnotation(RestDelete.class))
-				httpMethod = "delete";
-			else if (mi.hasAnnotation(RestOp.class)) {
-				var _httpMethod = Value.<String>empty();
-				rstream(mi.getAllAnnotations()).map(x -> x.cast(RestOp.class)).filter(Objects::nonNull).map(AnnotationInfo::inner)
-					.filter(x -> isNotEmpty(x.method()))
-					.forEach(x -> _httpMethod.set(x.method()));
-				httpMethod = _httpMethod.orElse(null);
-			}
+			if (v.get().isEmpty()) {
+				var mi = MethodInfo.of(restMethod);
+				String p = null;
+				String httpMethod = null;
+				if (mi.hasAnnotation(RestGet.class))
+					httpMethod = "get";
+				else if (mi.hasAnnotation(RestPut.class))
+					httpMethod = "put";
+				else if (mi.hasAnnotation(RestPost.class))
+					httpMethod = "post";
+				else if (mi.hasAnnotation(RestDelete.class))
+					httpMethod = "delete";
+				else if (mi.hasAnnotation(RestOp.class)) {
+					httpMethod = AnnotationProvider.INSTANCE.find(RestOp.class, mi)
+						.map(x -> x.inner().method())
+						.filter(x -> isNotEmpty(x))
+						.findFirst()
+						.orElse(null);
+				}
 
 				p = HttpUtils.detectHttpPath(restMethod, httpMethod);
 

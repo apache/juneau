@@ -223,24 +223,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		return allAnnotationInfos.get();
 	}
 
-	/**
-	 * Returns all annotations of the specified type on the declaring class, this method and parent overridden methods, return type, and declaring class's package.
-	 *
-	 * <p>
-	 * 	See {@link #getAllAnnotations()} for ordering details.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to filter by.
-	 * @return A stream of matching annotation infos.
-	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAllAnnotations(Class<A> type) {
-		assertArgNotNull("type", type);
-		return getAllAnnotations().stream()
-			.filter(a -> a.isType(type))
-			.map(a -> (AnnotationInfo<A>)a);
-	}
-
 	private List<MethodInfo> findMatchingMethods() {
 		var result = new ArrayList<MethodInfo>();
 		result.add(this); // 1. This method
