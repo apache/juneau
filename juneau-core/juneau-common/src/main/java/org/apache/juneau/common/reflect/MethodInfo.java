@@ -74,7 +74,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	private final Method inner;
 	private final Supplier<ClassInfo> returnType;
 	private final Supplier<List<MethodInfo>> matchingMethods;
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotationInfos;
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;
 	private final Supplier<List<AnnotationInfo<Annotation>>> allAnnotationInfos;
 
 	/**
@@ -88,7 +88,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		this.inner = inner;
 		this.returnType = memoize(() -> ClassInfo.of(inner.getReturnType(), inner.getGenericReturnType()));
 		this.matchingMethods = memoize(this::findMatchingMethods);
-		this.annotationInfos = memoize(() -> getMatchingMethods().stream().flatMap(m -> m.getDeclaredAnnotations().stream()).toList());
+		this.annotations = memoize(() -> getMatchingMethods().stream().flatMap(m -> m.getDeclaredAnnotations().stream()).toList());
 		this.allAnnotationInfos = memoize(this::findAllAnnotationInfos);
 	}
 
@@ -137,7 +137,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * Returns all annotations on this method and parent overridden methods in child-to-parent order.
 	 *
 	 * <p>
-	 * 	Results include annotations from:
+	 * Results include annotations from:
 	 * <ul>
 	 * 	<li>This method
 	 * 	<li>Matching methods in parent classes
@@ -145,20 +145,51 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * </ul>
 	 *
 	 * <p>
-	 * 	List is unmodifiable.
+	 * <b>Note on Repeatable Annotations:</b>
+	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * expanded into their individual annotation instances. For example, if a method has multiple {@code @Bean} annotations,
+	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
 	 *
-	 * @return A list of all annotations on this method and overridden methods.
+	 * <p>
+	 * List is unmodifiable.
+	 *
+	 * @return
+	 * 	A list of all annotations on this method and overridden methods.
+	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
 	public List<AnnotationInfo<Annotation>> getAnnotations() {
-		return annotationInfos.get();
+		return annotations.get();
 	}
 
 	/**
-	 * Returns all annotations of the specified type on this method and parent overridden methods.
+	 * Returns all annotations of the specified type on this method and parent overridden methods in child-to-parent order.
+	 *
+	 * <p>
+	 * Results include annotations from:
+	 * <ul>
+	 * 	<li>This method
+	 * 	<li>Matching methods in parent classes
+	 * 	<li>Matching methods in interfaces
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Note on Repeatable Annotations:</b>
+	 * If the specified annotation type is repeatable (marked with {@link java.lang.annotation.Repeatable @Repeatable}),
+	 * this method automatically expands container annotations into individual instances. This allows you to filter for
+	 * a repeatable annotation and get back all individual occurrences without manually handling the container.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all @Bean annotations on this method and overridden methods</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Bean&gt;&gt; <jv>beans</jv> = <jv>methodInfo</jv>.getAnnotations(Bean.<jk>class</jk>);
+	 * 	<jc>// If method has @Beans({@Bean(...), @Bean(...)}), both individual @Bean instances are returned</jc>
+	 * </p>
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to filter by.
-	 * @return A stream of matching annotation infos.
+	 * @return
+	 * 	A stream of matching annotation infos in child-to-parent order.
+	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
