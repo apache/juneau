@@ -40,6 +40,8 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class MethodArg implements RestOpArg {
 
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -47,7 +49,7 @@ public class MethodArg implements RestOpArg {
 	 * @return A new {@link MethodArg}, or <jk>null</jk> if the parameter isn't annotated with {@link Method}.
 	 */
 	public static MethodArg create(ParameterInfo paramInfo) {
-		if (paramInfo.hasAnnotation(Method.class))
+		if (AP.has(Method.class, paramInfo))
 			return new MethodArg();
 		return null;
 	}

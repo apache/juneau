@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.ResettableSupplier;
 
 /**
@@ -58,10 +57,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	private final int index;
 	private final ClassInfo type;
 
-	@SuppressWarnings({"rawtypes","unchecked"})
-	private final Cache<Class,List<AnnotationInfo<Annotation>>> allAnnotations = Cache.<Class,List<AnnotationInfo<Annotation>>>create().supplier((k) -> findAllAnnotationInfos(k)).build();
-
-	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations;  // All annotations declared directly on this parameter.
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations declared directly on this parameter.
 	private final Supplier<List<ParameterInfo>> matchingParameters;  // Matching parameters in parent methods.
 	private final ResettableSupplier<String> resolvedName = memoizeResettable(this::findNameInternal);  // Resolved name from @Name annotation or bytecode.
 	private final ResettableSupplier<String> resolvedQualifier = memoizeResettable(this::findQualifierInternal);  // Resolved qualifier from @Named annotation.
@@ -81,7 +77,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		this.inner = inner;
 		this.index = index;
 		this.type = type;
-		this.declaredAnnotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList());
 		this.matchingParameters = memoize(this::findMatchingParameters);
 	}
 
@@ -111,7 +107,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
 	public List<AnnotationInfo<Annotation>> getAnnotations() {
-		return declaredAnnotations.get();
+		return annotations.get();
 	}
 
 	/**
@@ -200,98 +196,11 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns all annotation infos of the specified type defined on this parameter.
-	 *
-	 * <p>
-	 * Performs a comprehensive search through the parameter hierarchy and parameter type hierarchy.
-	 *
-	 * <h5 class='section'>Search Order (child-to-parent):</h5>
-	 * <ol>
-	 * 	<li><b>Matching parameters in hierarchy</b>
-	 * 		<ul>
-	 * 			<li>For methods: This parameter → parent method parameters (via {@link #getMatchingParameters()})
-	 * 			<li>For constructors: This parameter → parent constructor parameters (via {@link #getMatchingParameters()})
-	 * 		</ul>
-	 * 	<li><b>Parameter type hierarchy</b> (via {@link ClassInfo#getParentsAndInterfaces()})
-	 * 		<ul>
-	 * 			<li>Parameter's class and its interfaces (interleaved)
-	 * 			<li>Parameter's parent classes and their interfaces (interleaved)
-	 * 			<li>Continues up to Object class
-	 * 		</ul>
-	 * 	<li><b>Package annotation</b> - Package of the parameter type
-	 * </ol>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Given:</jc>
-	 * 	<jk>class</jk> Parent {
-	 * 		<jk>void</jk> method(@MyAnnotation String <jv>param</jv>) {}
-	 * 	}
-	 * 	<jk>class</jk> Child <jk>extends</jk> Parent {
-	 * 		<ja>@Override</ja>
-	 * 		<jk>void</jk> method(@MyAnnotation String <jv>param</jv>) {}
-	 * 	}
-	 *
-	 * 	<jc>// Search order for Child.method parameter:</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>).getMethod(<js>"method"</js>, String.<jk>class</jk>).getParameter(0);
-	 * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> = <jv>pi</jv>.getAllAnnotations(MyAnnotation.<jk>class</jk>);
-	 * 	<jc>// Returns (in order):</jc>
-	 * 	<jc>//   1. @MyAnnotation on Child.method parameter</jc>
-	 * 	<jc>//   2. @MyAnnotation on Parent.method parameter</jc>
-	 * 	<jc>//   3. Any @MyAnnotation on String class hierarchy</jc>
-	 * 	<jc>//   4. Any @MyAnnotation on java.lang package</jc>
-	 * </p>
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @return An unmodifiable list of annotation infos in child-to-parent order, or an empty list if none found.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public <A extends Annotation> List<AnnotationInfo<A>> getAllAnnotations(Class<A> type) {
-		return (List)allAnnotations.get(type);
-	}
-
-	/**
-	 * Returns the first annotation info of the specified type defined on this parameter.
-	 *
-	 * <p>
-	 * This is a convenience method that returns the first result from {@link #getAllAnnotations(Class)}.
-	 *
-	 * <p>
-	 * Performs a comprehensive search through the parameter hierarchy and parameter type hierarchy
-	 * in child-to-parent order, returning the first annotation found.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @return The first annotation info if found (closest to this parameter), or <jk>null</jk> if not found.
-	 * @see #getAllAnnotations(Class)
-	 */
-	public <A extends Annotation> AnnotationInfo<A> getAllAnnotation(Class<A> type) {
-		var list = getAllAnnotations(type);
-		return list.isEmpty() ? null : list.get(0);
-	}
-
-	/**
 	 * Returns the constructor that this parameter belongs to.
 	 *
 	 * @return The constructor that this parameter belongs to, or <jk>null</jk> if it belongs to a method.
 	 */
 	public ConstructorInfo getConstructor() { return executable.isConstructor() ? (ConstructorInfo)executable : null; }
-
-	/**
-	 * Returns the specified parameter annotation declared on this parameter.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @return The specified parameter annotation declared on this parameter, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type) {
-		if (nn(type))
-			for (var ai : getAnnotations())
-				if (type.isInstance(ai.inner()))
-					return type.cast(ai.inner());
-		return null;
-	}
 
 	/**
 	 * Returns the index position of this parameter.
@@ -420,18 +329,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return The class type of this parameter.
 	 */
 	public ClassInfo getParameterType() { return type; }
-
-	/**
-	 * Returns <jk>true</jk> if this parameter has the specified annotation.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @return
-	 * 	The <jk>true</jk> if annotation if found.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return nn(getAllAnnotation(type));
-	}
 
 	/**
 	 * Returns <jk>true</jk> if the parameter has a name.
@@ -673,91 +570,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		return inner.getAnnotatedType();
 	}
 
-	/**
-	 * Returns annotations that are <em>directly present</em> on this parameter.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#getDeclaredAnnotations()}.
-	 *
-	 * <p>
-	 * <b>Note:</b> This returns the simple array of declared annotations.
-	 * For Juneau's enhanced annotation searching, use {@link #findAnnotations(Class, AnnotationTraversal...)} instead.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get declared annotations on parameter</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	Annotation[] <jv>annotations</jv> = <jv>pi</jv>.getDeclaredAnnotations();
-	 * </p>
-	 *
-	 * @return Annotations directly present on this parameter, or an empty array if there are none.
-	 * @see Parameter#getDeclaredAnnotations()
-	 */
-	public Annotation[] getDeclaredAnnotations() {
-		return inner.getDeclaredAnnotations();
-	}
-
-	/**
-	 * Returns this element's declared annotations of the specified type (including repeated annotations).
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#getDeclaredAnnotationsByType(Class)}.
-	 *
-	 * <p>
-	 * This method handles repeatable annotations by "looking through" container annotations,
-	 * but only examines annotations directly declared on this parameter (not inherited).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get declared @Author annotations (including repeated)</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	Author[] <jv>authors</jv> = <jv>pi</jv>.getDeclaredAnnotationsByType(Author.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <A> The annotation type.
-	 * @param annotationClass The Class object corresponding to the annotation type.
-	 * @return All this element's declared annotations of the specified type, or an empty array if there are none.
-	 * @see Parameter#getDeclaredAnnotationsByType(Class)
-	 */
-	public <A extends Annotation> A[] getDeclaredAnnotationsByType(Class<A> annotationClass) {
-		return inner.getDeclaredAnnotationsByType(annotationClass);
-	}
-
 	@Override
 	public String toString() {
 		return (executable.getSimpleName()) + "[" + index + "]";
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> List<AnnotationInfo<A>> findAllAnnotationInfos(Class<A> type) {
-		var list = new ArrayList<AnnotationInfo<A>>();
-
-		// Search through matching parameters in hierarchy (child-to-parent order)
-		for (var mp : getMatchingParameters()) {
-			mp.getAnnotations().stream()
-				.filter(x -> x.isType(type))
-				.map(x -> (AnnotationInfo<A>)x)
-				.forEach(list::add);
-		}
-
-		// Search parameter type hierarchy in child-to-parent order (interleaved classes and interfaces)
-		var paramType = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
-		
-		// Traverse parent classes and interfaces (child-to-parent, interleaved)
-		var parentsAndInterfaces = paramType.getParentsAndInterfaces();
-		for (int i = 0; i < parentsAndInterfaces.size(); i++) {
-			parentsAndInterfaces.get(i).getDeclaredAnnotations().stream()
-				.filter(x -> x.isType(type))
-				.map(x -> (AnnotationInfo<A>)x)
-				.forEach(list::add);
-		}
-		
-		// Package annotation (last)
-		var packageAnn = paramType.getPackageAnnotation(type);
-		if (nn(packageAnn))
-			list.add(AnnotationInfo.of(paramType, packageAnn));
-
-		return list;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

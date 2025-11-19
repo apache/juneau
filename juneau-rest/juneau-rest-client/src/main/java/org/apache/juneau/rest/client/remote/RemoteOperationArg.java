@@ -35,22 +35,24 @@ import org.apache.juneau.common.reflect.*;
  */
 public class RemoteOperationArg {
 
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	static RemoteOperationArg create(ParameterInfo mpi) {
 		int i = mpi.getIndex();
-		if (mpi.hasAnnotation(Header.class)) {
+		if (AP.has(Header.class, mpi)) {
 			return new RemoteOperationArg(i, HEADER, HttpPartSchema.create(Header.class, mpi));
-		} else if (mpi.hasAnnotation(Query.class)) {
+		} else if (AP.has(Query.class, mpi)) {
 			return new RemoteOperationArg(i, QUERY, HttpPartSchema.create(Query.class, mpi));
-		} else if (mpi.hasAnnotation(FormData.class)) {
+		} else if (AP.has(FormData.class, mpi)) {
 			return new RemoteOperationArg(i, FORMDATA, HttpPartSchema.create(FormData.class, mpi));
-		} else if (mpi.hasAnnotation(PathRemainder.class)) {
+		} else if (AP.has(PathRemainder.class, mpi)) {
 			// PathRemainder is equivalent to @Path("/*")
 			// Create with schema properties but override name to "/*"
 			var schema = HttpPartSchema.create(PathRemainder.class, mpi);
 			return new RemoteOperationArg(i, PATH, schema, "/*");
-		} else if (mpi.hasAnnotation(Path.class)) {
+		} else if (AP.has(Path.class, mpi)) {
 			return new RemoteOperationArg(i, PATH, HttpPartSchema.create(Path.class, mpi));
-		} else if (mpi.hasAnnotation(Content.class)) {
+		} else if (AP.has(Content.class, mpi)) {
 			return new RemoteOperationArg(i, BODY, HttpPartSchema.create(Content.class, mpi));
 		}
 		return null;

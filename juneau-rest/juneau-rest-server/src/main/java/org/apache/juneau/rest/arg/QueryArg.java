@@ -57,6 +57,9 @@ import org.apache.juneau.rest.httppart.*;
  * </ul>
  */
 public class QueryArg implements RestOpArg {
+
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -65,7 +68,7 @@ public class QueryArg implements RestOpArg {
 	 * @return A new {@link QueryArg}, or <jk>null</jk> if the parameter is not annotated with {@link Query}.
 	 */
 	public static QueryArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
-		if (paramInfo.hasAnnotation(Query.class) || paramInfo.getParameterType().hasAnnotation(Query.class))
+		if (AP.has(Query.class, paramInfo))
 			return new QueryArg(paramInfo, annotations);
 		return null;
 	}
@@ -79,12 +82,12 @@ public class QueryArg implements RestOpArg {
 	 */
 	private static Query getMergedQuery(ParameterInfo pi, String paramName) {
 		// Get the declaring class
-		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
+		var declaringClass = pi.getMethod().getDeclaringClass();
 		if (declaringClass == null)
 			return null;
 
 		// Find @Rest annotation on the class
-		Rest restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (restAnnotation == null)
 			return null;
 
@@ -98,13 +101,11 @@ public class QueryArg implements RestOpArg {
 			}
 		}
 
-	if (classLevelQuery == null)
-		return null;
+		if (classLevelQuery == null)
+			return null;
 
-	// Get parameter-level @Query
-	Query paramQuery = opt(pi.getAllAnnotation(Query.class)).map(x -> x.inner()).orElse(null);
-	if (paramQuery == null)
-		paramQuery = pi.getParameterType().getAnnotations(Query.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		// Get parameter-level @Query
+		var paramQuery = AP.find(Query.class, pi).findFirst().map(x -> x.inner()).orElse(null);
 
 		if (paramQuery == null) {
 			// No parameter-level @Query, use class-level as-is
@@ -151,13 +152,9 @@ public class QueryArg implements RestOpArg {
 	}
 
 	private final boolean multi;
-
 	private final HttpPartParser partParser;
-
 	private final HttpPartSchema schema;
-
 	private final String name, def;
-
 	private final ClassInfo type;
 
 	/**
@@ -171,13 +168,13 @@ public class QueryArg implements RestOpArg {
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
 
 		// Check for class-level defaults and merge if found
-		Query mergedQuery = getMergedQuery(pi, name);
+		var mergedQuery = getMergedQuery(pi, name);
 
 		// Use merged query annotation for all lookups
 		this.def = nn(mergedQuery) && ! mergedQuery.def().isEmpty() ? mergedQuery.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
 		this.schema = nn(mergedQuery) ? HttpPartSchema.create(mergedQuery) : HttpPartSchema.create(Query.class, pi);
-		Class<? extends HttpPartParser> pp = schema.getParser();
+		var pp = schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
@@ -188,14 +185,14 @@ public class QueryArg implements RestOpArg {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		RestRequest req = opSession.getRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
-		RequestQueryParams rh = req.getQueryParams();
-		BeanSession bs = req.getBeanSession();
-		ClassMeta<?> cm = bs.getClassMeta(type.innerType());
+		var req = opSession.getRequest();
+		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
+		var rh = req.getQueryParams();
+		var bs = req.getBeanSession();
+		var cm = bs.getClassMeta(type.innerType());
 
 		if (multi) {
-			Collection c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());
+			var c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());
 			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
 			return cm.isArray() ? toArray(c, cm.getElementType().getInnerClass()) : c;
 		}

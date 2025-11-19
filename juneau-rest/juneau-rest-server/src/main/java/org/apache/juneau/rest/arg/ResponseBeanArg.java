@@ -42,6 +42,9 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  */
 public class ResponseBeanArg implements RestOpArg {
+
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -50,7 +53,7 @@ public class ResponseBeanArg implements RestOpArg {
 	 * @return A new {@link ResponseBeanArg}, or <jk>null</jk> if the parameter is not annotated with {@link Response}.
 	 */
 	public static ResponseBeanArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
-		if (paramInfo.hasAnnotation(Response.class) || paramInfo.getParameterType().hasAnnotation(Response.class))
+		if (AP.has(Response.class, paramInfo))
 			return new ResponseBeanArg(paramInfo, annotations);
 		return null;
 	}
@@ -68,7 +71,7 @@ public class ResponseBeanArg implements RestOpArg {
 	protected ResponseBeanArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		this.type = paramInfo.getParameterType().innerType();
 		this.meta = ResponseBeanMeta.create(paramInfo, annotations);
-		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
+		var c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)
 			throw new ArgException(paramInfo, "Type must be Value<?> on parameter annotated with @Response annotation");
 	}

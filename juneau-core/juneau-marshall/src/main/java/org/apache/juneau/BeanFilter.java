@@ -76,17 +76,17 @@ public class BeanFilter {
 		public Builder applyAnnotations(List<Bean> annotations) {
 
 			annotations.forEach(x -> {
-				if (isNotEmpty(x.properties()) || isNotEmpty(x.p()))
+				if (isAnyNotEmpty(x.properties(), x.p()))
 					properties(x.properties(), x.p());
 				if (x.sort())
 					sortProperties(true);
 				if (x.findFluentSetters())
 					findFluentSetters();
-				if (isNotEmpty(x.excludeProperties()) || isNotEmpty(x.xp()))
+				if (isAnyNotEmpty(x.excludeProperties(), x.xp()))
 					excludeProperties(x.excludeProperties(), x.xp());
-				if (isNotEmpty(x.readOnlyProperties()) || isNotEmpty(x.ro()))
+				if (isAnyNotEmpty(x.readOnlyProperties(), x.ro()))
 					readOnlyProperties(x.readOnlyProperties(), x.ro());
-				if (isNotEmpty(x.writeOnlyProperties()) || isNotEmpty(x.wo()))
+				if (isAnyNotEmpty(x.writeOnlyProperties(), x.wo()))
 					writeOnlyProperties(x.writeOnlyProperties(), x.wo());
 				if (isNotEmpty(x.typeName()))
 					typeName(x.typeName());

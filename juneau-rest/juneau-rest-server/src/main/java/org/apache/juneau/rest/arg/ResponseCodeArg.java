@@ -35,6 +35,8 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class ResponseCodeArg implements RestOpArg {
 
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -42,7 +44,7 @@ public class ResponseCodeArg implements RestOpArg {
 	 * @return A new {@link ResponseCodeArg}, or <jk>null</jk> if the parameter is not annotated with {@link StatusCode}.
 	 */
 	public static ResponseCodeArg create(ParameterInfo paramInfo) {
-		if (paramInfo.hasAnnotation(StatusCode.class) || paramInfo.getParameterType().hasAnnotation(StatusCode.class))
+		if (AP.has(StatusCode.class, paramInfo))
 			return new ResponseCodeArg(paramInfo);
 		return null;
 	}

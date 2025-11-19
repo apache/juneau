@@ -47,6 +47,8 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class ContentArg implements RestOpArg {
 
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -54,7 +56,7 @@ public class ContentArg implements RestOpArg {
 	 * @return A new {@link ContentArg}, or <jk>null</jk> if the parameter is not annotated with {@link Content}.
 	 */
 	public static ContentArg create(ParameterInfo paramInfo) {
-		if (paramInfo.hasAnnotation(Content.class) || paramInfo.getParameterType().hasAnnotation(Content.class))
+		if (AP.has(Content.class, paramInfo))
 			return new ContentArg(paramInfo);
 		return null;
 	}

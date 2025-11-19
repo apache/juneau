@@ -59,6 +59,9 @@ import org.apache.juneau.rest.util.*;
  * @since 9.2.0
  */
 public class PathRemainderArg implements RestOpArg {
+
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -68,7 +71,7 @@ public class PathRemainderArg implements RestOpArg {
 	 * @return A new {@link PathRemainderArg}, or <jk>null</jk> if the parameter is not annotated with {@link PathRemainder}.
 	 */
 	public static PathRemainderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
-		if (paramInfo.hasAnnotation(PathRemainder.class) || paramInfo.getParameterType().hasAnnotation(PathRemainder.class))
+		if (AP.has(PathRemainder.class, paramInfo))
 			return new PathRemainderArg(paramInfo, annotations);
 		return null;
 	}
@@ -89,14 +92,14 @@ public class PathRemainderArg implements RestOpArg {
 		this.def = findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(PathRemainder.class, paramInfo);
-		Class<? extends HttpPartParser> pp = schema.getParser();
+		var pp = schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		RestRequest req = opSession.getRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
+		var req = opSession.getRequest();
+		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		// The path remainder is stored under the name "/*"
 		return req.getPathParams().get("/*").parser(ps).schema(schema).def(def).as(type).orElse(null);
 	}

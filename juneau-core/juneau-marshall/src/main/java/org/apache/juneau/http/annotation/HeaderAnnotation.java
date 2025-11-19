@@ -19,13 +19,14 @@ package org.apache.juneau.http.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -37,6 +38,9 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class HeaderAnnotation {
+
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Applies targeted {@link Header} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
@@ -53,7 +57,7 @@ public class HeaderAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Header> ai, BeanContext.Builder b) {
-			Header a = ai.inner();
+			var a = ai.inner();
 			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
@@ -270,12 +274,14 @@ public class HeaderAnnotation {
 	 * Finds the default value from the specified list of annotations.
 	 *
 	 * @param pi The parameter.
-	 * @return The last matching default value, or {@link Value#empty()} if not found.
+	 * @return The last matching default value, or empty if not found.
 	 */
-	public static Value<String> findDef(ParameterInfo pi) {
-		Value<String> n = Value.empty();
-		rstream(pi.getAllAnnotations(Header.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.def())).forEach(x -> n.set(x.def()));
-		return n;
+	public static Optional<String> findDef(ParameterInfo pi) {
+		return AP.find(Header.class, pi)
+			.map(AnnotationInfo::inner)
+			.filter(x -> isNotEmpty(x.def()))
+			.findFirst()
+			.map(x -> x.def());
 	}
 
 	/**
@@ -285,12 +291,13 @@ public class HeaderAnnotation {
 	 * The last matching name found is returned.
 	 *
 	 * @param pi The parameter.
-	 * @return The last matching name, or {@link Value#empty()} if not found.
+	 * @return The last matching name, or empty if not found.
 	 */
-	public static Value<String> findName(ParameterInfo pi) {
-		Value<String> n = Value.empty();
-		rstream(pi.getAllAnnotations(Header.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.value())).forEach(x -> n.set(x.value()));
-		rstream(pi.getAllAnnotations(Header.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.name())).forEach(x -> n.set(x.name()));
-		return n;
+	public static Optional<String> findName(ParameterInfo pi) {
+		return AP.find(Header.class, pi)
+			.map(AnnotationInfo::inner)
+			.filter(x -> isAnyNotBlank(x.value(), x.name()))
+			.findFirst()
+			.map(x -> firstNonBlank(x.name(), x.value()));
 	}
 }

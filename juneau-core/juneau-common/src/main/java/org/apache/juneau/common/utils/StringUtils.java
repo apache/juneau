@@ -1352,6 +1352,126 @@ public class StringUtils {
 	}
 
 	/**
+	 * Checks if any of the provided strings are not empty (not null and not zero-length).
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if at least one string is not null and has a length greater than zero.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isAnyNotEmpty(<jk>null</jk>, <jk>null</jk>);             <jc>// false</jc>
+	 * 	isAnyNotEmpty(<js>""</js>, <js>""</js>);                 <jc>// false</jc>
+	 * 	isAnyNotEmpty(<jk>null</jk>, <js>"hello"</js>);          <jc>// true</jc>
+	 * 	isAnyNotEmpty(<js>""</js>, <js>"   "</js>);              <jc>// true</jc>
+	 * 	isAnyNotEmpty(<js>"hello"</js>, <js>"world"</js>);       <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param values The strings to check.
+	 * @return <jk>true</jk> if at least one string is not null and not empty.
+	 */
+	public static boolean isAnyNotEmpty(CharSequence...values) {
+		if (values == null)
+			return false;
+		for (CharSequence value : values)
+			if (value != null && !value.isEmpty())
+				return true;
+		return false;
+	}
+
+	/**
+	 * Checks if any of the provided strings are not blank (not null, not empty, and not whitespace only).
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if at least one string is not null, not empty, and contains non-whitespace characters.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isAnyNotBlank(<jk>null</jk>, <jk>null</jk>);             <jc>// false</jc>
+	 * 	isAnyNotBlank(<js>""</js>, <js>""</js>);                 <jc>// false</jc>
+	 * 	isAnyNotBlank(<js>"   "</js>, <js>"   "</js>);           <jc>// false</jc>
+	 * 	isAnyNotBlank(<jk>null</jk>, <js>"hello"</js>);          <jc>// true</jc>
+	 * 	isAnyNotBlank(<js>""</js>, <js>"   "</js>, <js>"x"</js>);<jc>// true</jc>
+	 * 	isAnyNotBlank(<js>"hello"</js>, <js>"world"</js>);       <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param values The strings to check.
+	 * @return <jk>true</jk> if at least one string is not null, not empty, and contains non-whitespace characters.
+	 */
+	public static boolean isAnyNotBlank(CharSequence...values) {
+		if (values == null)
+			return false;
+		for (CharSequence value : values)
+			if (isNotBlank(value))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Checks if all of the provided strings are not empty (not null and not zero-length).
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> only if all strings are not null and have a length greater than zero.
+	 * Returns <jk>false</jk> if the array is null or empty, or if any string is null or empty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isAllNotEmpty();                                     <jc>// false</jc>
+	 * 	isAllNotEmpty(<jk>null</jk>);                        <jc>// false</jc>
+	 * 	isAllNotEmpty(<jk>null</jk>, <jk>null</jk>);         <jc>// false</jc>
+	 * 	isAllNotEmpty(<js>""</js>, <js>""</js>);             <jc>// false</jc>
+	 * 	isAllNotEmpty(<jk>null</jk>, <js>"hello"</js>);      <jc>// false</jc>
+	 * 	isAllNotEmpty(<js>""</js>, <js>"   "</js>);          <jc>// false</jc>
+	 * 	isAllNotEmpty(<js>"hello"</js>);                     <jc>// true</jc>
+	 * 	isAllNotEmpty(<js>"hello"</js>, <js>"world"</js>);   <jc>// true</jc>
+	 * 	isAllNotEmpty(<js>"hello"</js>, <js>"   "</js>);     <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param values The strings to check.
+	 * @return <jk>true</jk> if all strings are not null and not empty, <jk>false</jk> otherwise.
+	 */
+	public static boolean isAllNotEmpty(CharSequence...values) {
+		if (values == null || values.length == 0)
+			return false;
+		for (CharSequence value : values)
+			if (value == null || value.isEmpty())
+				return false;
+		return true;
+	}
+
+	/**
+	 * Checks if all of the provided strings are not blank (not null, not empty, and not whitespace only).
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> only if all strings are not null, not empty, and contain non-whitespace characters.
+	 * Returns <jk>false</jk> if the array is null or empty, or if any string is null, empty, or whitespace only.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isAllNotBlank();                                     <jc>// false</jc>
+	 * 	isAllNotBlank(<jk>null</jk>);                        <jc>// false</jc>
+	 * 	isAllNotBlank(<jk>null</jk>, <jk>null</jk>);         <jc>// false</jc>
+	 * 	isAllNotBlank(<js>""</js>, <js>""</js>);             <jc>// false</jc>
+	 * 	isAllNotBlank(<js>"   "</js>, <js>"   "</js>);       <jc>// false</jc>
+	 * 	isAllNotBlank(<jk>null</jk>, <js>"hello"</js>);      <jc>// false</jc>
+	 * 	isAllNotBlank(<js>""</js>, <js>"   "</js>);          <jc>// false</jc>
+	 * 	isAllNotBlank(<js>"hello"</js>, <js>"   "</js>);     <jc>// false</jc>
+	 * 	isAllNotBlank(<js>"hello"</js>);                     <jc>// true</jc>
+	 * 	isAllNotBlank(<js>"hello"</js>, <js>"world"</js>);   <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param values The strings to check.
+	 * @return <jk>true</jk> if all strings are not null, not empty, and not whitespace only, <jk>false</jk> otherwise.
+	 */
+	public static boolean isAllNotBlank(CharSequence...values) {
+		if (values == null || values.length == 0)
+			return false;
+		for (CharSequence value : values)
+			if (! isNotBlank(value))
+				return false;
+		return true;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified character is a valid number character.
 	 *
 	 * @param c The character to check.

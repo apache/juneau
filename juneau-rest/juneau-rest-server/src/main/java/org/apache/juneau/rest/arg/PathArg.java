@@ -26,7 +26,6 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.common.reflect.*;
@@ -56,6 +55,9 @@ import org.apache.juneau.rest.util.*;
  * </ul>
  */
 public class PathArg implements RestOpArg {
+
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -65,7 +67,7 @@ public class PathArg implements RestOpArg {
 	 * @return A new {@link PathArg}, or <jk>null</jk> if the parameter is not annotated with {@link Path}.
 	 */
 	public static PathArg create(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
-		if (paramInfo.hasAnnotation(Path.class) || paramInfo.getParameterType().hasAnnotation(Path.class))
+		if (AP.has(Path.class, paramInfo))
 			return new PathArg(paramInfo, annotations, pathMatcher);
 		return null;
 	}
@@ -79,12 +81,12 @@ public class PathArg implements RestOpArg {
 	 */
 	private static Path getMergedPath(ParameterInfo pi, String paramName) {
 		// Get the declaring class
-		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
+		var declaringClass = pi.getMethod().getDeclaringClass();
 		if (declaringClass == null)
 			return null;
 
 		// Find @Rest annotation on the class
-		Rest restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (restAnnotation == null)
 			return null;
 
@@ -98,13 +100,11 @@ public class PathArg implements RestOpArg {
 			}
 		}
 
-	if (classLevelPath == null)
-		return null;
+		if (classLevelPath == null)
+			return null;
 
-	// Get parameter-level @Path
-	Path paramPath = opt(pi.getAllAnnotation(Path.class)).map(x -> x.inner()).orElse(null);
-	if (paramPath == null)
-		paramPath = pi.getParameterType().getAnnotations(Path.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		// Get parameter-level @Path
+		var paramPath = AP.find(Path.class, pi).findFirst().map(x -> x.inner()).orElse(null);
 
 		if (paramPath == null) {
 			// No parameter-level @Path, use class-level as-is
@@ -151,11 +151,8 @@ public class PathArg implements RestOpArg {
 	}
 
 	private final HttpPartParser partParser;
-
 	private final HttpPartSchema schema;
-
 	private final String name, def;
-
 	private final Type type;
 
 	/**
@@ -170,50 +167,52 @@ public class PathArg implements RestOpArg {
 		this.name = getName(paramInfo, pathMatcher);
 
 		// Check for class-level defaults and merge if found
-		Path mergedPath = getMergedPath(paramInfo, name);
+		var mergedPath = getMergedPath(paramInfo, name);
 
 		// Use merged path annotation for all lookups
-		String pathDef = nn(mergedPath) ? mergedPath.def() : null;
+		var pathDef = nn(mergedPath) ? mergedPath.def() : null;
 		this.def = nn(pathDef) && ne(NONE, pathDef) ? pathDef : findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = nn(mergedPath) ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
-		Class<? extends HttpPartParser> pp = schema.getParser();
+		var pp = schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		RestRequest req = opSession.getRequest();
+		var req = opSession.getRequest();
 		if (name.equals("*")) {
 			var m = new JsonMap();
 			req.getPathParams().stream().forEach(x -> m.put(x.getName(), x.getValue()));
 			return req.getBeanSession().convertToType(m, type);
 		}
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
+		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		return req.getPathParams().get(name).parser(ps).schema(schema).def(def).as(type).orElse(null);
 	}
 
 	private static String getName(ParameterInfo pi, UrlPathMatcher pathMatcher) {
-		String p = findName(pi).orElse(null);
+		var p = findName(pi).orElse(null);
 		if (nn(p))
 			return p;
 		if (nn(pathMatcher)) {
-		int idx = 0;
-		int i = pi.getIndex();
-		MethodInfo mi = pi.getMethod();
+			int idx = 0;
+			int i = pi.getIndex();
+			var mi = pi.getMethod();
 
-		for (int j = 0; j < i; j++)
-			if (nn(mi.getParameter(j).getAllAnnotation(Path.class)))
-				idx++;
+			for (int j = 0; j < i; j++) {
+				var hasAnnotation = AnnotationProvider.INSTANCE.find(Path.class, mi.getParameter(j)).findAny().isPresent();
+				if (hasAnnotation)
+					idx++;
+			}
 
-			String[] vars = pathMatcher.getVars();
+			var vars = pathMatcher.getVars();
 			if (vars.length <= idx)
 				throw new ArgException(pi, "Number of attribute parameters exceeds the number of URL pattern variables.  vars.length={0}, idx={1}", vars.length, idx);
 
 			// Check for {#} variables.
 			var idxs = String.valueOf(idx);
 			for (var var : vars)
-				if (StringUtils.isNumeric(var) && var.equals(idxs))
+				if (isNumeric(var) && var.equals(idxs))
 					return var;
 
 			return pathMatcher.getVars()[idx];

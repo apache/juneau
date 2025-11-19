@@ -42,6 +42,8 @@ import org.apache.juneau.common.reflect.*;
  */
 public class ResponseBeanMeta {
 
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	static class Builder {
 		ClassMeta<?> cm;
 		int code;
@@ -78,9 +80,9 @@ public class ResponseBeanMeta {
 		}
 
 		Builder apply(Type t) {
-			Class<?> c = toClass(t);
+			var c = toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			ClassInfo ci = cm.getInfo();
+			var ci = cm.getInfo();
 			ci.getPublicMethods().stream().forEach(x -> {
 				assertNoInvalidAnnotations(x, Query.class, FormData.class);
 				if (x.hasAnnotation(Header.class)) {
@@ -138,12 +140,12 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(ParameterInfo mpi, AnnotationWorkList annotations) {
-		if (! mpi.hasAnnotation(Response.class))
+		if (! AP.has(Response.class, mpi))
 			return null;
 		var b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
-		rstream(mpi.getAllAnnotations(Response.class)).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
-		rstream(mpi.getAllAnnotations(StatusCode.class)).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		AP.findTopDown(Response.class, mpi).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		AP.findTopDown(StatusCode.class, mpi).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
 		return b.build();
 	}
 

@@ -515,67 +515,6 @@ public class AnnotationProvider {
 	}
 
 	/**
-	 * Finds all annotations of the specified type on the specified class in a bottom-up traversal order.
-	 *
-	 * <p>
-	 * This method provides a very specific traversal order that searches annotations in the following sequence:
-	 * <ol>
-	 * 	<li><b>This class</b>
-	 * 		<ul>
-	 * 			<li>Runtime annotations
-	 * 			<li>Declared annotations
-	 * 		</ul>
-	 * 	<li><b>Parent classes (child-to-parent order)</b>
-	 * 		<ul>
-	 * 			<li>For each parent: runtime annotations, then declared annotations
-	 * 		</ul>
-	 * 	<li><b>Interfaces (for each class level, then their parent interfaces)</b>
-	 * 		<ul>
-	 * 			<li>For each interface: runtime annotations, then declared annotations
-	 * 		</ul>
-	 * 	<li><b>Package of this class</b>
-	 * 		<ul>
-	 * 			<li>Declared annotations (packages do not support runtime annotations)
-	 * 		</ul>
-	 * </ol>
-	 *
-	 * <p>
-	 * <b>Example traversal order</b> (given class {@code Child extends Parent implements I1, I2}):
-	 * <ol>
-	 * 	<li>Child runtime annotations
-	 * 	<li>Child declared annotations
-	 * 	<li>Parent runtime annotations
-	 * 	<li>Parent declared annotations
-	 * 	<li>I1 runtime annotations (declared on Child)
-	 * 	<li>I1 declared annotations
-	 * 	<li>I2 runtime annotations (declared on Child)
-	 * 	<li>I2 declared annotations
-	 * 	<li>Parent interfaces and their parents...
-	 * 	<li>Package declared annotations
-	 * </ol>
-	 *
-	 * <p>
-	 * <b>Comparison with {@link #find(Class, Class)}:</b>
-	 * <ul>
-	 * 	<li>{@link #find(Class, Class)} interleaves parent classes and interfaces at each level
-	 * 	<li>{@code findBottomUp} processes all parent classes first, then all interfaces, then package
-	 * 	<li>{@code findBottomUp} ensures runtime annotations always come before declared annotations at each level (except packages which don't support runtime annotations)
-	 * </ul>
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param type The annotation type to find.
-	 * @param onClass The class info to search on.
-	 * @return A stream of {@link AnnotationInfo} objects in the specified bottom-up order. Never <jk>null</jk>.
-	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findBottomUp(Class<A> type, ClassInfo onClass) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("onClass", onClass);
-
-		return null;  // TODO
-	}
-
-	/**
 	 * Finds annotations declared directly on the specified class, including runtime annotations.
 	 *
 	 * <p>
@@ -887,7 +826,7 @@ public class AnnotationProvider {
 
 		FieldInfo fi = FieldInfo.of(forField);
 		runtimeAnnotations.find(forField).forEach(a -> list.add(AnnotationInfo.of(fi, a)));
-		list.addAll(fi.getDeclaredAnnotations());
+		list.addAll(fi.getAnnotations());
 
 		return u(list);
 	}
@@ -1099,31 +1038,49 @@ public class AnnotationProvider {
 	}
 
 	/**
-	 * Streams annotations from a parameter using configurable traversal options.
+	 * Streams annotations from a parameter using configurable traversal options in child-to-parent order.
 	 *
 	 * <p>
 	 * This method provides a flexible, stream-based API for traversing parameter annotations without creating intermediate lists.
 	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
+	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)
+	 * 	<li>{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Search parameter, matching parameters, and parameter type</jc>
+	 * 	<jc>// Search parameter, matching parameters, and parameter type (child-to-parent)</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
-	 * 		findAnnotations(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
+	 * 		find(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
 	 *
-	 * 	<jc>// Search in parent-first order using findAnnotationsParentFirst</jc>
+	 * 	<jc>// Just search this parameter</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s2</jv> =
-	 * 		findAnnotationsParentFirst(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
+	 * 		find(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF);
+	 *
+	 * 	<jc>// Search in parent-to-child order using findTopDown</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s3</jv> =
+	 * 		findTopDown(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
 	 * @param parameter The parameter to search.
-	 * @param traversals The traversal options.
-	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
+	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("parameter", parameter);
+		if (traversals.length == 0)
+			traversals = new AnnotationTraversal[]{SELF, MATCHING_PARAMETERS, PARAMETER_TYPE};
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -1140,10 +1097,89 @@ public class AnnotationProvider {
 	}
 
 	/**
+	 * Streams annotations from a parameter using configurable traversal options in parent-to-child order.
+	 *
+	 * <p>
+	 * This is equivalent to calling {@link #find(Class, ParameterInfo, AnnotationTraversal...)} and reversing the result.
+	 * Use this when you need parent annotations to take precedence over child annotations.
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
+	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (parent-to-child)
+	 * 	<li>{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Search in parent-to-child order</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s</jv> =
+	 * 		findTopDown(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
+	 *
+	 * 	<jc>// Get first annotation (from parent)</jc>
+	 * 	Optional&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>first</jv> = <jv>s</jv>.findFirst();
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param parameter The parameter to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
+	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
+		return rstream(find(type, parameter, traversals).toList());
+	}
+
+	/**
+	 * Checks if a parameter has the specified annotation.
+	 *
+	 * <p>
+	 * This is a convenience method equivalent to:
+	 * <p class='bjava'>
+	 * 	find(<jv>type</jv>, <jv>parameter</jv>, <jv>traversals</jv>).findFirst().isPresent()
+	 * </p>
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
+	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)
+	 * 	<li>{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if parameter has @MyAnnotation anywhere in hierarchy</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>pi</jv>);
+	 *
+	 * 	<jc>// Check only on the parameter itself</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt2</jv> = has(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param parameter The parameter to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
+	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
+	 */
+	public <A extends Annotation> boolean has(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
+		return find(type, parameter, traversals).findFirst().isPresent();
+	}
+
+	/**
 	 * Streams annotations from a parameter using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, ParameterInfo, AnnotationTraversal...)}
+	 * This is equivalent to calling {@link #find(Class, ParameterInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.
@@ -1153,7 +1189,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
-		return rstream(findAnnotations(type, parameter, traversals).toList());
+		return rstream(find(type, parameter, traversals).toList());
 	}
 
 	/**

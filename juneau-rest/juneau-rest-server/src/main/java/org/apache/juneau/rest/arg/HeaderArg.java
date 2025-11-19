@@ -33,7 +33,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.httppart.*;
 
 /**
  * Resolves method parameters and parameter types annotated with {@link Header} on {@link RestOp}-annotated Java methods.
@@ -99,6 +98,9 @@ import org.apache.juneau.rest.httppart.*;
  * </ul>
  */
 public class HeaderArg implements RestOpArg {
+
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -107,7 +109,7 @@ public class HeaderArg implements RestOpArg {
 	 * @return A new {@link HeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
 	public static HeaderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
-		if ((! paramInfo.getParameterType().is(Value.class)) && (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class)))
+		if ((! paramInfo.getParameterType().is(Value.class)) && AP.has(Header.class, paramInfo))
 			return new HeaderArg(paramInfo, annotations);
 		return null;
 	}
@@ -121,12 +123,12 @@ public class HeaderArg implements RestOpArg {
 	 */
 	private static Header getMergedHeader(ParameterInfo pi, String paramName) {
 		// Get the declaring class
-		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
+		var declaringClass = pi.getMethod().getDeclaringClass();
 		if (declaringClass == null)
 			return null;
 
 		// Find @Rest annotation on the class
-		Rest restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (restAnnotation == null)
 			return null;
 
@@ -140,13 +142,11 @@ public class HeaderArg implements RestOpArg {
 			}
 		}
 
-	if (classLevelHeader == null)
-		return null;
+		if (classLevelHeader == null)
+			return null;
 
-	// Get parameter-level @Header
-	Header paramHeader = opt(pi.getAllAnnotation(Header.class)).map(x -> x.inner()).orElse(null);
-	if (paramHeader == null)
-		paramHeader = pi.getParameterType().getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		// Get parameter-level @Header
+		var paramHeader = AnnotationProvider.INSTANCE.find(Header.class, pi).findFirst().map(x -> x.inner()).orElse(null);
 
 		if (paramHeader == null) {
 			// No parameter-level @Header, use class-level as-is
@@ -213,13 +213,13 @@ public class HeaderArg implements RestOpArg {
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
 
 		// Check for class-level defaults and merge if found
-		Header mergedHeader = getMergedHeader(pi, name);
+		var mergedHeader = getMergedHeader(pi, name);
 
 		// Use merged header annotation for all lookups
 		this.def = nn(mergedHeader) && ! mergedHeader.def().isEmpty() ? mergedHeader.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
 		this.schema = nn(mergedHeader) ? HttpPartSchema.create(mergedHeader) : HttpPartSchema.create(Header.class, pi);
-		Class<? extends HttpPartParser> pp = schema.getParser();
+		var pp = schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
@@ -230,14 +230,14 @@ public class HeaderArg implements RestOpArg {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		RestRequest req = opSession.getRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
-		RequestHeaders rh = req.getHeaders();
-		BeanSession bs = req.getBeanSession();
-		ClassMeta<?> cm = bs.getClassMeta(type.innerType());
+		var req = opSession.getRequest();
+		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
+		var rh = req.getHeaders();
+		var bs = req.getBeanSession();
+		var cm = bs.getClassMeta(type.innerType());
 
 		if (multi) {
-			Collection c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());
+			var c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());
 			rh.stream(name).map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
 			return cm.isArray() ? toArray(c, cm.getElementType().getInnerClass()) : c;
 		}

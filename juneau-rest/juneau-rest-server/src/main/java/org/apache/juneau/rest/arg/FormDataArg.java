@@ -57,6 +57,9 @@ import org.apache.juneau.rest.httppart.*;
  * </ul>
  */
 public class FormDataArg implements RestOpArg {
+
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -65,7 +68,7 @@ public class FormDataArg implements RestOpArg {
 	 * @return A new {@link FormDataArg}, or <jk>null</jk> if the parameter is not annotated with {@link FormData}.
 	 */
 	public static FormDataArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
-		if (paramInfo.hasAnnotation(FormData.class) || paramInfo.getParameterType().hasAnnotation(FormData.class))
+		if (AP.has(FormData.class, paramInfo))
 			return new FormDataArg(paramInfo, annotations);
 		return null;
 	}
@@ -79,32 +82,30 @@ public class FormDataArg implements RestOpArg {
 	 */
 	private static FormData getMergedFormData(ParameterInfo pi, String paramName) {
 		// Get the declaring class
-		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
+		var declaringClass = pi.getMethod().getDeclaringClass();
 		if (declaringClass == null)
 			return null;
 
 		// Find @Rest annotation on the class
-		Rest restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (restAnnotation == null)
 			return null;
 
 		// Find matching @FormData from class-level formDataParams array
 		FormData classLevelFormData = null;
 		for (var f : restAnnotation.formDataParams()) {
-			String fName = firstNonEmpty(f.name(), f.value());
-			if (paramName.equals(fName)) {
+			var fName = firstNonEmpty(f.name(), f.value());
+			if (eq(paramName, fName)) {
 				classLevelFormData = f;
 				break;
 			}
 		}
 
-	if (classLevelFormData == null)
-		return null;
+		if (classLevelFormData == null)
+			return null;
 
-	// Get parameter-level @FormData
-	FormData paramFormData = opt(pi.getAllAnnotation(FormData.class)).map(x -> x.inner()).orElse(null);
-	if (paramFormData == null)
-		paramFormData = pi.getParameterType().getAnnotations(FormData.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		// Get parameter-level @FormData
+		var paramFormData = AP.find(FormData.class, pi).findFirst().map(x -> x.inner()).orElse(null);
 
 		if (paramFormData == null) {
 			// No parameter-level @FormData, use class-level as-is

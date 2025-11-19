@@ -48,6 +48,9 @@ import org.apache.juneau.rest.httppart.*;
  * </ul>
  */
 public class ResponseHeaderArg implements RestOpArg {
+
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -56,7 +59,7 @@ public class ResponseHeaderArg implements RestOpArg {
 	 * @return A new {@link ResponseHeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
 	public static ResponseHeaderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
-		if (paramInfo.getParameterType().is(Value.class) && (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class)))
+		if (paramInfo.getParameterType().is(Value.class) && AP.has(Header.class, paramInfo))
 			return new ResponseHeaderArg(paramInfo, annotations);
 		return null;
 	}
@@ -77,10 +80,10 @@ public class ResponseHeaderArg implements RestOpArg {
 		this.type = pi.getParameterType().innerType();
 		var schema = HttpPartSchema.create(Header.class, pi);
 
-		Class<? extends HttpPartSerializer> ps = schema.getSerializer();
+		var ps = schema.getSerializer();
 		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, nn(ps) ? HttpPartSerializer.creator().type(ps).apply(annotations).create() : null);
 
-		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
+		var c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)
 			throw new ArgException(pi, "Type must be Value<?> on parameter annotated with @Header annotation");
 	}
@@ -90,12 +93,12 @@ public class ResponseHeaderArg implements RestOpArg {
 	public Object resolve(final RestOpSession opSession) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(o -> {
-			RestRequest req = opSession.getRequest();
-			RestResponse res = opSession.getResponse();
-			ResponsePartMeta rpm = req.getOpContext().getResponseHeaderMeta(o);
+			var req = opSession.getRequest();
+			var res = opSession.getResponse();
+			var rpm = req.getOpContext().getResponseHeaderMeta(o);
 			if (rpm == null)
 				rpm = ResponseHeaderArg.this.meta;
-			HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
+			var pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
 			res.setHeader(new SerializedHeader(name, o, pss, rpm.getSchema(), false));
 		});
 		return v;

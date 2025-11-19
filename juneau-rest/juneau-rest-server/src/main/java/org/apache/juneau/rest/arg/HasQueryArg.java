@@ -16,14 +16,10 @@
  */
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
@@ -51,6 +47,8 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class HasQueryArg implements RestOpArg {
 
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -58,7 +56,7 @@ public class HasQueryArg implements RestOpArg {
 	 * @return A new {@link HasQueryArg}, or <jk>null</jk> if the parameter is not annotated with {@link HasQuery}.
 	 */
 	public static HasQueryArg create(ParameterInfo paramInfo) {
-		if (paramInfo.hasAnnotation(HasQuery.class))
+		if (AP.has(HasQuery.class, paramInfo))
 			return new HasQueryArg(paramInfo);
 		return null;
 	}
@@ -68,7 +66,7 @@ public class HasQueryArg implements RestOpArg {
 	}
 
 	private static boolean hasName(HasQuery x) {
-		return isNotEmpty(x.name()) || isNotEmpty(x.value());
+		return isAnyNotBlank(x.name(), x.value());
 	}
 
 	private final String name;
@@ -81,16 +79,19 @@ public class HasQueryArg implements RestOpArg {
 	 * @param pi The Java method parameter being resolved.
 	 */
 	protected HasQueryArg(ParameterInfo pi) {
-		Value<String> _name = Value.empty();
-		rstream(pi.getAllAnnotations(HasQuery.class)).map(AnnotationInfo::inner).filter(HasQueryArg::hasName).forEach(x -> _name.set(getName(x)));
-		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasQuery used without name or value"));
+		this.name = AP.find(HasQuery.class, pi)
+			.map(AnnotationInfo::inner)
+			.filter(HasQueryArg::hasName)
+			.findFirst()
+			.map(HasQueryArg::getName)
+			.orElseThrow(() -> new ArgException(pi, "@HasQuery used without name or value"));
 		this.type = pi.getParameterType().innerType();
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		RestRequest req = opSession.getRequest();
-		BeanSession bs = req.getBeanSession();
+		var req = opSession.getRequest();
+		var bs = req.getBeanSession();
 		return bs.convertToType(req.getQueryParams().contains(name), bs.getClassMeta(type));
 	}
 }

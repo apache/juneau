@@ -16,14 +16,10 @@
  */
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
@@ -51,6 +47,8 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class HasFormDataArg implements RestOpArg {
 
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -58,7 +56,7 @@ public class HasFormDataArg implements RestOpArg {
 	 * @return A new {@link HasFormDataArg}, or <jk>null</jk> if the parameter is not annotated with {@link HasFormData}.
 	 */
 	public static HasFormDataArg create(ParameterInfo paramInfo) {
-		if (paramInfo.hasAnnotation(HasFormData.class))
+		if (AP.has(HasFormData.class, paramInfo))
 			return new HasFormDataArg(paramInfo);
 		return null;
 	}
@@ -68,11 +66,10 @@ public class HasFormDataArg implements RestOpArg {
 	}
 
 	private static boolean hasName(HasFormData x) {
-		return isNotEmpty(x.name()) || isNotEmpty(x.value());
+		return isAnyNotBlank(x.name(), x.value());
 	}
 
 	private final String name;
-
 	private final Type type;
 
 	/**
@@ -81,16 +78,19 @@ public class HasFormDataArg implements RestOpArg {
 	 * @param pi The Java method parameter being resolved.
 	 */
 	protected HasFormDataArg(ParameterInfo pi) {
-		Value<String> _name = Value.empty();
-		rstream(pi.getAllAnnotations(HasFormData.class)).map(AnnotationInfo::inner).filter(HasFormDataArg::hasName).forEach(x -> _name.set(getName(x)));
-		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasFormData used without name or value"));
+		this.name = AP.find(HasFormData.class, pi)
+			.map(AnnotationInfo::inner)
+			.filter(HasFormDataArg::hasName)
+			.findFirst()
+			.map(HasFormDataArg::getName)
+			.orElseThrow(() -> new ArgException(pi, "@HasFormData used without name or value"));
 		this.type = pi.getParameterType().innerType();
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		RestRequest req = opSession.getRequest();
-		BeanSession bs = req.getBeanSession();
+		var req = opSession.getRequest();
+		var bs = req.getBeanSession();
 		return bs.convertToType(req.getFormParams().contains(name), bs.getClassMeta(type));
 	}
 }

@@ -42,6 +42,9 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  */
 public class RequestBeanArg implements RestOpArg {
+
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -50,7 +53,7 @@ public class RequestBeanArg implements RestOpArg {
 	 * @return A new {@link RequestBeanArg}, or <jk>null</jk> if the parameter is not annotated with {@link Request}.
 	 */
 	public static RequestBeanArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
-		if (paramInfo.hasAnnotation(Request.class))
+		if (AP.has(Request.class, paramInfo))
 			return new RequestBeanArg(paramInfo, annotations);
 		return null;
 	}

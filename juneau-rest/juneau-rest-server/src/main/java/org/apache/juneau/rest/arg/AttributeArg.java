@@ -16,10 +16,8 @@
  */
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -44,6 +42,8 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class AttributeArg implements RestOpArg {
 
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Static creator.
 	 *
@@ -51,7 +51,7 @@ public class AttributeArg implements RestOpArg {
 	 * @return A new {@link AttributeArg}, or <jk>null</jk> if the parameter is not annotated with {@link Attr}.
 	 */
 	public static AttributeArg create(ParameterInfo paramInfo) {
-		if (paramInfo.hasAnnotation(Attr.class) || paramInfo.getParameterType().hasAnnotation(Attr.class))
+		if (AP.has(Attr.class, paramInfo))
 			return new AttributeArg(paramInfo);
 		return null;
 	}
@@ -76,11 +76,11 @@ public class AttributeArg implements RestOpArg {
 	}
 
 	private static String getName(ParameterInfo paramInfo) {
-		Value<String> n = Value.empty();
-		rstream(paramInfo.getAllAnnotations(Attr.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.name())).forEach(x -> n.set(x.name()));
-		rstream(paramInfo.getAllAnnotations(Attr.class)).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.value())).forEach(x -> n.set(x.value()));
-		if (n.isEmpty())
-			throw new ArgException(paramInfo, "@Attr used without name or value");
-		return n.get();
+		return AP.find(Attr.class, paramInfo)
+			.map(AnnotationInfo::inner)
+			.filter(x -> isAnyNotBlank(x.value(), x.name()))
+			.findFirst()
+			.map(x -> firstNonBlank(x.name(), x.value()))
+			.orElseThrow(() -> new ArgException(paramInfo, "@Attr used without name or value"));
 	}
 }

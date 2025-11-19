@@ -39,6 +39,8 @@ import org.apache.juneau.common.reflect.*;
  */
 public class RequestBeanMeta {
 
+	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	static class Builder {
 		ClassMeta<?> cm;
 		AnnotationWorkList annotations;
@@ -54,7 +56,7 @@ public class RequestBeanMeta {
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			apply(cm.getLastAnnotation(Request.class));
 			cm.getInfo().getPublicMethods().stream().forEach(x -> {
-				String n = x.getSimpleName();
+				var n = x.getSimpleName();
 				if (x.hasAnnotation(Header.class)) {
 					assertNoArgs(x, Header.class);
 					assertReturnNotVoid(x, Header.class);
@@ -81,7 +83,7 @@ public class RequestBeanMeta {
 		}
 
 		Builder apply(ParameterInfo mpi) {
-			return apply(mpi.getParameterType().inner()).apply(opt(mpi.getAllAnnotation(Request.class)).map(x -> x.inner()).orElse(null));
+			return apply(mpi.getParameterType().inner()).apply(AP.find(Request.class, mpi).findFirst().map(x -> x.inner()).orElse(null));
 		}
 
 		Builder apply(Request a) {
@@ -121,7 +123,7 @@ public class RequestBeanMeta {
 	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
 	public static RequestBeanMeta create(ParameterInfo mpi, AnnotationWorkList annotations) {
-		if (! mpi.hasAnnotation(Request.class))
+		if (! AP.has(Request.class, mpi))
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(mpi).build();
 	}

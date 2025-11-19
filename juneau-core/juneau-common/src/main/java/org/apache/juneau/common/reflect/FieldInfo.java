@@ -65,7 +65,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	private final Field inner;
 	private final ClassInfo declaringClass;
 	private final Supplier<ClassInfo> type;
-	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations;  // All annotations declared directly on this field.
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations declared directly on this field.
 	private final Supplier<String> fullName;  // Fully qualified field name (declaring-class.field-name).
 
 	/**
@@ -80,7 +80,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.type = memoize(() -> ClassInfo.of(inner.getType()));
-		this.declaredAnnotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList());
 		this.fullName = memoize(this::findFullName);
 	}
 
@@ -108,8 +108,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * 	An unmodifiable list of all annotations declared on this field.
 	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
-	public List<AnnotationInfo<Annotation>> getDeclaredAnnotations() {
-		return declaredAnnotations.get();
+	public List<AnnotationInfo<Annotation>> getAnnotations() {
+		return annotations.get();
 	}
 
 	/**
@@ -120,8 +120,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return A stream of all matching annotations.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotations(Class<A> type) {
-		return declaredAnnotations.get().stream()
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
+		return annotations.get().stream()
 			.filter(x -> type.isInstance(x.inner()))
 			.map(x -> (AnnotationInfo<A>)x);
 	}
@@ -204,7 +204,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return inner.isAnnotationPresent(type);
+		return getAnnotations(type).findAny().isPresent();
 	}
 
 	/**
