@@ -401,13 +401,11 @@ public class AnnotationProvider {
 		return new Builder();
 	}
 
-	// @formatter:off
-	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classRuntimeAnnotations;
-	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodRuntimeAnnotations;
-	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldRuntimeAnnotations;
-	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorRuntimeAnnotations;
-	private final ReflectionMap<Annotation> runtimeAnnotations;
-	// @formatter:on
+	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classAnnnotations;
+	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodAnnotations;
+	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldAnnotations;
+	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorAnnotations;
+	private final ReflectionMap<Annotation> annotationMap;
 
 	/**
 	 * Constructor.
@@ -415,47 +413,47 @@ public class AnnotationProvider {
 	 * @param builder The builder containing configuration settings.
 	 */
 	protected AnnotationProvider(Builder builder) {
-		this.classRuntimeAnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findClassRuntimeAnnotations)
+		this.classAnnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findClassAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
-		this.methodRuntimeAnnotations = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findMethodRuntimeAnnotations)
+		this.methodAnnotations = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findMethodAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
-		this.fieldRuntimeAnnotations = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findFieldRuntimeAnnotations)
+		this.fieldAnnotations = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findFieldAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
-		this.constructorRuntimeAnnotations = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findConstructorRuntimeAnnotations)
+		this.constructorAnnotations = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findConstructorAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
-		this.runtimeAnnotations = builder.runtimeAnnotations.build();
+		this.annotationMap = builder.runtimeAnnotations.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Private implementation
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private List<AnnotationInfo<Annotation>> findClassRuntimeAnnotations(Class<?> forClass) {
-		ClassInfo ci = ClassInfo.of(forClass);
-		return runtimeAnnotations.find(forClass).map(a -> AnnotationInfo.of(ci, a)).toList();
+	private List<AnnotationInfo<Annotation>> findClassAnnotations(Class<?> forClass) {
+		var ci = ClassInfo.of(forClass);
+		return annotationMap.find(forClass).map(a -> AnnotationInfo.of(ci, a)).toList();
 	}
 
-	private List<AnnotationInfo<Annotation>> findMethodRuntimeAnnotations(Method forMethod) {
-		MethodInfo mi = MethodInfo.of(forMethod);
-		return runtimeAnnotations.find(forMethod).map(a -> AnnotationInfo.of(mi, a)).toList();
+	private List<AnnotationInfo<Annotation>> findMethodAnnotations(Method forMethod) {
+		var mi = MethodInfo.of(forMethod);
+		return annotationMap.find(forMethod).map(a -> AnnotationInfo.of(mi, a)).toList();
 	}
 
-	private List<AnnotationInfo<Annotation>> findFieldRuntimeAnnotations(Field forField) {
-		FieldInfo fi = FieldInfo.of(forField);
-		return runtimeAnnotations.find(forField).map(a -> AnnotationInfo.of(fi, a)).toList();
+	private List<AnnotationInfo<Annotation>> findFieldAnnotations(Field forField) {
+		var fi = FieldInfo.of(forField);
+		return annotationMap.find(forField).map(a -> AnnotationInfo.of(fi, a)).toList();
 	}
 
-	private List<AnnotationInfo<Annotation>> findConstructorRuntimeAnnotations(Constructor<?> forConstructor) {
-		ConstructorInfo ci = ConstructorInfo.of(forConstructor);
-		return runtimeAnnotations.find(forConstructor).map(a -> AnnotationInfo.of(ci, a)).toList();
+	private List<AnnotationInfo<Annotation>> findConstructorAnnotations(Constructor<?> forConstructor) {
+		var ci = ConstructorInfo.of(forConstructor);
+		return annotationMap.find(forConstructor).map(a -> AnnotationInfo.of(ci, a)).toList();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -502,14 +500,14 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						classRuntimeAnnotations.get(clazz.inner()).stream(),
+						classAnnnotations.get(clazz.inner()).stream(),
 						clazz.getDeclaredAnnotations().stream()
 					)
 					.filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				} else if (traversal == PARENTS) {
 					return clazz.getParentsAndInterfaces().stream().flatMap(x ->
 						concat(
-							classRuntimeAnnotations.get(x.inner()).stream(),
+							classAnnnotations.get(x.inner()).stream(),
 							x.getDeclaredAnnotations().stream()
 						).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)
 					);
@@ -553,13 +551,13 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						classRuntimeAnnotations.get(clazz.inner()).stream(),
+						classAnnnotations.get(clazz.inner()).stream(),
 						clazz.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<Annotation>)a)
 					);
 				} else if (traversal == PARENTS) {
 					return clazz.getParentsAndInterfaces().stream().flatMap(x -> {
 						return concat(
-							classRuntimeAnnotations.get(x.inner()).stream(),
+							classAnnnotations.get(x.inner()).stream(),
 							x.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<Annotation>)a)
 						);
 					});
@@ -678,13 +676,13 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						methodRuntimeAnnotations.get(method.inner()).stream(),
+						methodAnnotations.get(method.inner()).stream(),
 						method.getDeclaredAnnotations().stream()
 					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				} else if (traversal == MATCHING_METHODS) {
 					return method.getMatchingMethods().stream().skip(1).flatMap(m ->
 						concat(
-							methodRuntimeAnnotations.get(m.inner()).stream(),
+							methodAnnotations.get(m.inner()).stream(),
 							m.getDeclaredAnnotations().stream()
 						).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)
 					);
@@ -729,13 +727,13 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						methodRuntimeAnnotations.get(method.inner()).stream(),
+						methodAnnotations.get(method.inner()).stream(),
 						method.getDeclaredAnnotations().stream()
 					);
 				} else if (traversal == MATCHING_METHODS) {
 					return method.getMatchingMethods().stream().skip(1).flatMap(m -> {
 						return concat(
-							methodRuntimeAnnotations.get(m.inner()).stream(),
+							methodAnnotations.get(m.inner()).stream(),
 							m.getDeclaredAnnotations().stream()
 						);
 					});
@@ -1060,7 +1058,7 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						fieldRuntimeAnnotations.get(field.inner()).stream(),
+						fieldAnnotations.get(field.inner()).stream(),
 						field.getAnnotations().stream()
 					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				}
@@ -1096,7 +1094,7 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						fieldRuntimeAnnotations.get(field.inner()).stream(),
+						fieldAnnotations.get(field.inner()).stream(),
 						field.getAnnotations().stream()
 					);
 				}
@@ -1202,7 +1200,7 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						constructorRuntimeAnnotations.get(constructor.inner()).stream(),
+						constructorAnnotations.get(constructor.inner()).stream(),
 						constructor.getDeclaredAnnotations().stream()
 					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				}
@@ -1238,7 +1236,7 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						constructorRuntimeAnnotations.get(constructor.inner()).stream(),
+						constructorAnnotations.get(constructor.inner()).stream(),
 						constructor.getDeclaredAnnotations().stream()
 					);
 				}
