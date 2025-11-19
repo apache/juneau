@@ -474,7 +474,9 @@ public class AnnotationProvider {
 	 * @param onClass The class to search on.
 	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the specified class,
 	 * 	its parents, interfaces, and package. Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(ClassInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	public List<AnnotationInfo<Annotation>> xfind(Class<?> onClass) {
 		assertArgNotNull("onClass", onClass);
 		return classAnnotations.get(onClass);
@@ -504,7 +506,9 @@ public class AnnotationProvider {
 	 * @param onClass The class to search on.
 	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the
 	 * 	specified class, its parents, interfaces, and package. Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(Class, ClassInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Class<?> onClass) {
 		assertArgNotNull("type", type);
@@ -641,7 +645,9 @@ public class AnnotationProvider {
 	 * @param onMethod The method to search on.
 	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the method and
 	 * 	overridden parent methods. Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(MethodInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	public List<AnnotationInfo<Annotation>> xfind(Method onMethod) {
 		assertArgNotNull("onMethod", onMethod);
 		return methodAnnotations.get(onMethod);
@@ -658,7 +664,9 @@ public class AnnotationProvider {
 	 * @param onMethod The method to search on.
 	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the
 	 * 	method and overridden parent methods. Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(Class, MethodInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Method onMethod) {
 		assertArgNotNull("type", type);
@@ -688,7 +696,9 @@ public class AnnotationProvider {
 	 * @param onField The field to search on.
 	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the field.
 	 * 	Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(FieldInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	public List<AnnotationInfo<Annotation>> xfind(Field onField) {
 		assertArgNotNull("onField", onField);
 		return fieldAnnotations.get(onField);
@@ -705,7 +715,9 @@ public class AnnotationProvider {
 	 * @param onField The field to search on.
 	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the field.
 	 * 	Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(Class, FieldInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Field onField) {
 		assertArgNotNull("type", type);
@@ -735,7 +747,9 @@ public class AnnotationProvider {
 	 * @param onConstructor The constructor to search on.
 	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the constructor.
 	 * 	Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(ConstructorInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	public List<AnnotationInfo<Annotation>> xfind(Constructor<?> onConstructor) {
 		assertArgNotNull("onConstructor", onConstructor);
 		return constructorAnnotations.get(onConstructor);
@@ -752,7 +766,9 @@ public class AnnotationProvider {
 	 * @param onConstructor The constructor to search on.
 	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the constructor.
 	 * 	Never <jk>null</jk>.
+	 * @deprecated Use {@link #find(Class, ConstructorInfo, AnnotationTraversal...)} instead.
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Constructor<?> onConstructor) {
 		assertArgNotNull("type", type);
