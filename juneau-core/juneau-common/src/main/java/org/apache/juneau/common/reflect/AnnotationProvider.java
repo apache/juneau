@@ -23,6 +23,7 @@ import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
+import static java.util.stream.Stream.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -1011,6 +1012,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
+	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("clazz", clazz);
@@ -1019,12 +1021,68 @@ public class AnnotationProvider {
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
-					return xfindDeclared(type, clazz.inner());
+					return concat(
+						classRuntimeAnnotations.get(clazz.inner()).stream(),
+						clazz.getDeclaredAnnotations().stream()
+					)
+					.filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				} else if (traversal == PARENTS) {
-					return clazz.getParentsAndInterfaces().stream().flatMap(x -> xfindDeclared(type, x.inner()));
+					return clazz.getParentsAndInterfaces().stream().flatMap(x ->
+						concat(
+							classRuntimeAnnotations.get(x.inner()).stream(),
+							x.getDeclaredAnnotations().stream()
+						).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)
+					);
 				} else if (traversal == PACKAGE) {
-					A packageAnn = clazz.getPackageAnnotation(type);
-					return nn(packageAnn) ? Stream.of(AnnotationInfo.of(clazz, packageAnn)) : Stream.empty();
+					return opt(clazz.getPackage()).map(x -> x.getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)).orElse(Stream.empty());
+				}
+				throw illegalArg("Invalid traversal type for class annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams all annotations from a class using configurable traversal options, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing all class annotations without creating intermediate lists.
+	 * Unlike {@link #find(Class, ClassInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations from class only</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
+	 * 		find(<jv>ci</jv>, SELF);
+	 *
+	 * 	<jc>// Get all annotations from class and parents</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s2</jv> =
+	 * 		find(<jv>ci</jv>, SELF, PARENTS);
+	 * </p>
+	 *
+	 * @param clazz The class to search.
+	 * @param traversals The traversal options (what to search and order).
+	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	public Stream<AnnotationInfo<Annotation>> find(ClassInfo clazz, AnnotationTraversal... traversals) {
+		assertArgNotNull("clazz", clazz);
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return concat(
+						classRuntimeAnnotations.get(clazz.inner()).stream(),
+						clazz.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<Annotation>)a)
+					);
+				} else if (traversal == PARENTS) {
+					return clazz.getParentsAndInterfaces().stream().flatMap(x -> {
+						return concat(
+							classRuntimeAnnotations.get(x.inner()).stream(),
+							x.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<Annotation>)a)
+						);
+					});
+				} else if (traversal == PACKAGE) {
+					return opt(clazz.getPackage()).map(x -> x.getAnnotations().stream()).orElse(Stream.empty());
 				}
 				throw illegalArg("Invalid traversal type for class annotations: {0}", traversal);
 			});
@@ -1070,6 +1128,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
+	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("method", method);
@@ -1080,15 +1139,72 @@ public class AnnotationProvider {
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
-					return xfind(type, method.inner());
+					return concat(
+						methodRuntimeAnnotations.get(method.inner()).stream(),
+						method.getDeclaredAnnotations().stream()
+					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				} else if (traversal == MATCHING_METHODS) {
-					return method.getMatchingMethods().stream().skip(1).flatMap(x -> xfind(type, x.inner()));
+					return method.getMatchingMethods().stream().skip(1).flatMap(m ->
+						concat(
+							methodRuntimeAnnotations.get(m.inner()).stream(),
+							m.getDeclaredAnnotations().stream()
+						).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)
+					);
 				} else if (traversal == RETURN_TYPE) {
 					return find(type, method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
 				} else if (traversal == PACKAGE) {
-					var c = method.getDeclaringClass();
-					A packageAnn = c.getPackageAnnotation(type);
-					return nn(packageAnn) ? Stream.of(AnnotationInfo.of(c, packageAnn)) : Stream.empty();
+					return opt(method.getDeclaringClass().getPackage()).map(x -> x.getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)).orElse(Stream.empty());
+				}
+				throw illegalArg("Invalid traversal type for method annotations: {0}", traversal);
+			});
+	}
+
+	/**
+	 * Streams all annotations from a method using configurable traversal options, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing all method annotations without creating intermediate lists.
+	 * Unlike {@link #find(Class, MethodInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations from method and matching parent methods</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
+	 * 		find(<jv>mi</jv>, SELF, MATCHING_METHODS);
+	 *
+	 * 	<jc>// Get all annotations from method, matching methods, and return type</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s2</jv> =
+	 * 		find(<jv>mi</jv>, SELF, MATCHING_METHODS, RETURN_TYPE);
+	 * </p>
+	 *
+	 * @param method The method to search.
+	 * @param traversals The traversal options.
+	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public Stream<AnnotationInfo<Annotation>> find(MethodInfo method, AnnotationTraversal... traversals) {
+		assertArgNotNull("method", method);
+		if (traversals.length == 0)
+			traversals = new AnnotationTraversal[]{SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE};
+
+		return Arrays.stream(traversals)
+			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+			.flatMap(traversal -> {
+				if (traversal == SELF) {
+					return concat(
+						methodRuntimeAnnotations.get(method.inner()).stream(),
+						method.getDeclaredAnnotations().stream()
+					);
+				} else if (traversal == MATCHING_METHODS) {
+					return method.getMatchingMethods().stream().skip(1).flatMap(m -> {
+						return concat(
+							methodRuntimeAnnotations.get(m.inner()).stream(),
+							m.getDeclaredAnnotations().stream()
+						);
+					});
+				} else if (traversal == RETURN_TYPE) {
+					return find(method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
+				} else if (traversal == PACKAGE) {
+					return opt(method.getDeclaringClass().getPackage()).map(x -> x.getAnnotations().stream()).orElse(Stream.empty());
 				}
 				throw illegalArg("Invalid traversal type for method annotations: {0}", traversal);
 			});
