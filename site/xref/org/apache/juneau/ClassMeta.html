@@ -475,7 +475,7 @@
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">private</strong> <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> findBeanFilter(BeanContext bc) {
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 				List&lt;Bean&gt; ba = list();
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 				bc.getAnnotationProvider().xforEachClassAnnotation(Bean.<strong class="jxr_keyword">class</strong>, info, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; ba.add(x));
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 				bc.getAnnotationProvider().findTopDown(Bean.<strong class="jxr_keyword">class</strong>, info).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; ba.add(x));
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 				<strong class="jxr_keyword">if</strong> (! ba.isEmpty())
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 					<strong class="jxr_keyword">return</strong> BeanFilter.create(innerClass).applyAnnotations(ba).build();
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -491,7 +491,7 @@
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">private</strong> <a name="MarshalledFilter" href="../../../org/apache/juneau/MarshalledFilter.html#MarshalledFilter">MarshalledFilter</a> findMarshalledFilter(BeanContext bc) {
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 				List&lt;Marshalled&gt; ba = list();
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 				bc.getAnnotationProvider().xforEachClassAnnotation(Marshalled.<strong class="jxr_keyword">class</strong>, info, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; ba.add(x));
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 				bc.getAnnotationProvider().findTopDown(Marshalled.<strong class="jxr_keyword">class</strong>, info).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; ba.add(x));
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 				<strong class="jxr_keyword">if</strong> (! ba.isEmpty())
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 					<strong class="jxr_keyword">return</strong> MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {

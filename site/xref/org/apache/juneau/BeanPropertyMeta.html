@@ -696,10 +696,10 @@
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">var</strong> si = setter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : MethodInfo.of(setter);
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 			<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		ap.xforEachClassAnnotation(a, getBeanMeta().getClassMeta().getInfo(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		ap.findTopDown(a, getBeanMeta().getClassMeta().getInfo()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<strong class="jxr_keyword">if</strong> (nn(field)) {
 <a class="jxr_linenumber" name="L693" href="#L693">693</a> 			ap.find(a, fi).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 			ap.xforEachClassAnnotation(a, ClassInfo.of(field.getType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 			ap.findTopDown(a, ClassInfo.of(field.getType())).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 		}
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 		<strong class="jxr_keyword">if</strong> (nn(gi)) {
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the getter method</em>
@@ -707,7 +707,7 @@
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 				ap.find(a, MethodInfo.of(parentGetter)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 			});
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 			ap.find(a, gi).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 			ap.xforEachClassAnnotation(a, gi.getReturnType(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 			ap.findTopDown(a, gi.getReturnType()).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 		}
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<strong class="jxr_keyword">if</strong> (nn(setter)) {
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the setter method</em>
@@ -715,7 +715,7 @@
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 				ap.find(a, MethodInfo.of(parentSetter)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 			});
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> 			ap.find(a, si).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			ap.xforEachClassAnnotation(a, ClassInfo.of(setter.getReturnType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			ap.findTopDown(a, ClassInfo.of(setter.getReturnType())).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 		}
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">if</strong> (nn(extraKeys)) {
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 			MethodInfo eki = MethodInfo.of(extraKeys);
@@ -724,7 +724,7 @@
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 				ap.find(a, MethodInfo.of(parentExtraKeys)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 			});
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 			ap.find(a, eki).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; <strong class="jxr_keyword">true</strong>).forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 			ap.xforEachClassAnnotation(a, ClassInfo.of(extraKeys.getReturnType()), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 			ap.findTopDown(a, ClassInfo.of(extraKeys.getReturnType())).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> 		}
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> 
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> 		<strong class="jxr_keyword">return</strong> l;

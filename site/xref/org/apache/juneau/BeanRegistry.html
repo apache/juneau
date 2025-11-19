@@ -158,34 +158,35 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 					});
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 					Value&lt;String&gt; typeName = Value.empty();
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 					beanContext.getAnnotationProvider().xforEachClassAnnotation(Bean.<strong class="jxr_keyword">class</strong>, ci, x -&gt; isNotEmpty(x.typeName()), x -&gt; typeName.set(x.typeName()));
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 					addToMap(typeName.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined."</span>, cn(c))),
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 						beanContext.getClassMeta(c));
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				}
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			}
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		}
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addToMap(String typeName, ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		map.put(typeName, cm);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		reverseMap.put(cm.innerClass, typeName);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">private</strong> ClassMeta&lt;?&gt; getTypedClassMeta(Object array) {
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">int</strong> len = Array.getLength(array);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">if</strong> (len == 0)
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Map entry had an empty array value."</span>);
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> type = (Type)Array.get(array, 0);
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		Type[] args = <strong class="jxr_keyword">new</strong> Type[len - 1];
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt; len; i++)
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			args[i - 1] = (Type)Array.get(array, i);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">return</strong> beanContext.getClassMeta(type, args);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> }
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 					<em class="jxr_comment">//beanContext.getAnnotationProvider().xforEachClassAnnotation(Bean.class, ci, x -&gt; isNotEmpty(x.typeName()), x -&gt; typeName.set(x.typeName()));</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 					beanContext.getAnnotationProvider().findTopDown(Bean.<strong class="jxr_keyword">class</strong>, ci).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typeName()).filter(x -&gt; isNotEmpty(x)).forEach(x -&gt; typeName.set(x));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 					addToMap(typeName.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined."</span>, cn(c))),
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 						beanContext.getClassMeta(c));
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				}
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			}
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addToMap(String typeName, ClassMeta&lt;?&gt; cm) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		map.put(typeName, cm);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		reverseMap.put(cm.innerClass, typeName);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">private</strong> ClassMeta&lt;?&gt; getTypedClassMeta(Object array) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">int</strong> len = Array.getLength(array);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">if</strong> (len == 0)
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Map entry had an empty array value."</span>);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> type = (Type)Array.get(array, 0);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		Type[] args = <strong class="jxr_keyword">new</strong> Type[len - 1];
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt; len; i++)
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			args[i - 1] = (Type)Array.get(array, i);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">return</strong> beanContext.getClassMeta(type, args);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
