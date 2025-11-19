@@ -33,6 +33,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.reflect.Visibility;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
@@ -192,17 +193,15 @@ public class BeanMeta<T> {
 		}
 
 		String init(BeanMeta<T> beanMeta) {
-			Class<?> c = classMeta.getInnerClass();
-			ClassInfo ci = classMeta.getInfo();
+			var c = classMeta.getInnerClass();
+			var ci = classMeta.getInfo();
+			var ap = ctx.getAnnotationProvider();
 
 			try {
-				// @formatter:off
-				Visibility
-					conVis = ctx.getBeanConstructorVisibility(),
-					cVis = ctx.getBeanClassVisibility(),
-					mVis = ctx.getBeanMethodVisibility(),
-					fVis = ctx.getBeanFieldVisibility();
-				// @formatter:on
+				var conVis = ctx.getBeanConstructorVisibility();
+				var cVis = ctx.getBeanClassVisibility();
+				var mVis = ctx.getBeanMethodVisibility();
+				var fVis = ctx.getBeanFieldVisibility();
 
 				List<Class<?>> bdClasses = list();
 				if (nn(beanFilter) && nn(beanFilter.getBeanDictionary()))
@@ -230,8 +229,8 @@ public class BeanMeta<T> {
 
 				Map<String,BeanPropertyMeta.Builder> normalProps = map();
 
-				boolean hasBean = ctx.getAnnotationProvider().xfind(Bean.class, ci.inner()).findFirst().isPresent();
-				boolean hasBeanIgnore = ctx.getAnnotationProvider().xfind(BeanIgnore.class, ci.inner()).findFirst().isPresent();
+				var hasBean = ap.has(Bean.class, ci);
+				var hasBeanIgnore = ap.has(BeanIgnore.class, ci);
 
 				/// See if this class matches one the patterns in the exclude-class list.
 				if (ctx.isNotABean(c))
@@ -248,12 +247,12 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @Beanc constructor on public constructors.
-				ci.getPublicConstructors().stream().filter(x -> ctx.getAnnotationProvider().xfind(Beanc.class, x.inner()).findAny().isPresent()).forEach(x -> {
+				ci.getPublicConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
 					if (nn(constructor))
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
-					ctx.getAnnotationProvider().xfind(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
+					ap.find(Beanc.class, x).map(x2 -> x2.inner().properties()).filter(StringUtils::isNotBlank).forEach(z -> constructorArgs = splita(z));
 					if (! x.hasNumParameters(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 						throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
