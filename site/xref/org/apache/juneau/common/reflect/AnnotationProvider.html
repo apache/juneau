@@ -1013,293 +1013,299 @@
 <a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotations(Class&lt;A&gt; type, <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
 <a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		assertArgNotNull(<span class="jxr_string">"method"</span>, method);
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(traversals)
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 			.flatMap(traversal -&gt; {
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 				<strong class="jxr_keyword">if</strong> (traversal == SELF) {
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 					<strong class="jxr_keyword">return</strong> find(type, method.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == MATCHING_METHODS) {
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 					<strong class="jxr_keyword">return</strong> method.getMatchingMethods().stream().skip(1).flatMap(x -&gt; find(type, x.<strong class="jxr_keyword">inner</strong>()));
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == RETURN_TYPE) {
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 					<strong class="jxr_keyword">return</strong> findAnnotations(type, method.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>), PARENTS);
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 				}
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 				<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid traversal type for method annotations: {0}"</span>, traversal);
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 			});
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 	}
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">	 * Streams annotations from a method using configurable traversal options in parent-first order.</em>
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #findAnnotations(Class, MethodInfo, AnnotationTraversal...)}</em>
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">	 * and reversing the result.</em>
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">	 * @param method The method to search.</em>
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotationsParentFirst(Class&lt;A&gt; type, <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method, AnnotationTraversal... traversals) {
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 		<strong class="jxr_keyword">return</strong> rstream(findAnnotations(type, method, traversals).toList());
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 	}
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> <em class="jxr_javadoccomment">	 * Streams annotations from a parameter using configurable traversal options in child-to-parent order.</em>
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> <em class="jxr_javadoccomment">	 * This method provides a flexible, stream-based API for traversing parameter annotations without creating intermediate lists.</em>
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter</em>
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)</em>
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)</em>
-<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}</em>
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search parameter, matching parameters, and parameter type (child-to-parent)&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</em>
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> <em class="jxr_javadoccomment">	 * 		find(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);</em>
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		<strong class="jxr_keyword">if</strong> (traversals.length == 0)
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 			traversals = <strong class="jxr_keyword">new</strong> <a name="AnnotationTraversal" href="../../../../../org/apache/juneau/common/reflect/AnnotationTraversal.html#AnnotationTraversal">AnnotationTraversal</a>[]{SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE};
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(traversals)
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 			.flatMap(traversal -&gt; {
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 				<strong class="jxr_keyword">if</strong> (traversal == SELF) {
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 					<strong class="jxr_keyword">return</strong> find(type, method.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == MATCHING_METHODS) {
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 					<strong class="jxr_keyword">return</strong> method.getMatchingMethods().stream().skip(1).flatMap(x -&gt; find(type, x.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == RETURN_TYPE) {
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 					<strong class="jxr_keyword">return</strong> findAnnotations(type, method.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>), PARENTS);
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == PACKAGE) {
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 					<strong class="jxr_keyword">var</strong> c = method.getDeclaringClass();
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 					A packageAnn = c.getPackageAnnotation(type);
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 					<strong class="jxr_keyword">return</strong> nn(packageAnn) ? Stream.of(AnnotationInfo.of(c, packageAnn)) : Stream.empty();
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 				}
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 				<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid traversal type for method annotations: {0}"</span>, traversal);
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 			});
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 	}
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * Streams annotations from a method using configurable traversal options in parent-first order.</em>
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #findAnnotations(Class, MethodInfo, AnnotationTraversal...)}</em>
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * and reversing the result.</em>
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">	 * @param method The method to search.</em>
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotationsParentFirst(Class&lt;A&gt; type, <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		<strong class="jxr_keyword">return</strong> rstream(findAnnotations(type, method, traversals).toList());
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	}
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> <em class="jxr_javadoccomment">	 * Streams annotations from a parameter using configurable traversal options in child-to-parent order.</em>
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> <em class="jxr_javadoccomment">	 * This method provides a flexible, stream-based API for traversing parameter annotations without creating intermediate lists.</em>
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter</em>
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)</em>
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)</em>
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}</em>
 <a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Just search this parameter&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s2&lt;/jv&gt; =</em>
-<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> <em class="jxr_javadoccomment">	 * 		find(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF);</em>
-<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search in parent-to-child order using findTopDown&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s3&lt;/jv&gt; =</em>
-<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> <em class="jxr_javadoccomment">	 * 		findTopDown(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);</em>
-<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
-<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
-<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> <em class="jxr_javadoccomment">	 * @param parameter The parameter to search.</em>
-<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> <em class="jxr_javadoccomment">	 * @param traversals</em>
-<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> <em class="jxr_javadoccomment">	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.</em>
-<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}</em>
-<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; find(Class&lt;A&gt; type, <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
-<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
-<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 		assertArgNotNull(<span class="jxr_string">"parameter"</span>, parameter);
-<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 		<strong class="jxr_keyword">if</strong> (traversals.length == 0)
-<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 			traversals = <strong class="jxr_keyword">new</strong> <a name="AnnotationTraversal" href="../../../../../org/apache/juneau/common/reflect/AnnotationTraversal.html#AnnotationTraversal">AnnotationTraversal</a>[]{SELF, MATCHING_PARAMETERS, PARAMETER_TYPE};
-<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 
-<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(traversals)
-<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 			.flatMap(traversal -&gt; {
-<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 				<strong class="jxr_keyword">if</strong> (traversal == SELF) {
-<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 					<strong class="jxr_keyword">return</strong> parameter.getAnnotations(type);
-<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == MATCHING_PARAMETERS) {
-<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 					<strong class="jxr_keyword">return</strong> parameter.getMatchingParameters().stream().skip(1).flatMap(x -&gt; x.getAnnotations(type));
-<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == PARAMETER_TYPE) {
-<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 					<strong class="jxr_keyword">return</strong> findAnnotations(type, parameter.getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>), PARENTS, PACKAGE);
-<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 				}
-<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 				<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid traversal type for parameter annotations: {0}"</span>, traversal);
-<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 			});
-<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 	}
-<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 
-<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> <em class="jxr_javadoccomment">	 * Streams annotations from a parameter using configurable traversal options in parent-to-child order.</em>
-<a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #find(Class, ParameterInfo, AnnotationTraversal...)} and reversing the result.</em>
-<a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> <em class="jxr_javadoccomment">	 * Use this when you need parent annotations to take precedence over child annotations.</em>
-<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter</em>
-<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (parent-to-child)</em>
-<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)</em>
-<a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}</em>
-<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search in parent-to-child order&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s&lt;/jv&gt; =</em>
-<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> <em class="jxr_javadoccomment">	 * 		findTopDown(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);</em>
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search parameter, matching parameters, and parameter type (child-to-parent)&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</em>
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> <em class="jxr_javadoccomment">	 * 		find(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);</em>
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Just search this parameter&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s2&lt;/jv&gt; =</em>
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> <em class="jxr_javadoccomment">	 * 		find(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF);</em>
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search in parent-to-child order using findTopDown&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s3&lt;/jv&gt; =</em>
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> <em class="jxr_javadoccomment">	 * 		findTopDown(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);</em>
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> <em class="jxr_javadoccomment">	 * @param parameter The parameter to search.</em>
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> <em class="jxr_javadoccomment">	 * @param traversals</em>
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> <em class="jxr_javadoccomment">	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.</em>
+<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}</em>
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; find(Class&lt;A&gt; type, <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 		assertArgNotNull(<span class="jxr_string">"parameter"</span>, parameter);
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 		<strong class="jxr_keyword">if</strong> (traversals.length == 0)
+<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 			traversals = <strong class="jxr_keyword">new</strong> <a name="AnnotationTraversal" href="../../../../../org/apache/juneau/common/reflect/AnnotationTraversal.html#AnnotationTraversal">AnnotationTraversal</a>[]{SELF, MATCHING_PARAMETERS, PARAMETER_TYPE};
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(traversals)
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 			.flatMap(traversal -&gt; {
+<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 				<strong class="jxr_keyword">if</strong> (traversal == SELF) {
+<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 					<strong class="jxr_keyword">return</strong> parameter.getAnnotations(type);
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == MATCHING_PARAMETERS) {
+<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 					<strong class="jxr_keyword">return</strong> parameter.getMatchingParameters().stream().skip(1).flatMap(x -&gt; x.getAnnotations(type));
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (traversal == PARAMETER_TYPE) {
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 					<strong class="jxr_keyword">return</strong> findAnnotations(type, parameter.getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>), PARENTS, PACKAGE);
+<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 				}
+<a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 				<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid traversal type for parameter annotations: {0}"</span>, traversal);
+<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 			});
+<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 	}
+<a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 
+<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> <em class="jxr_javadoccomment">	 * Streams annotations from a parameter using configurable traversal options in parent-to-child order.</em>
+<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #find(Class, ParameterInfo, AnnotationTraversal...)} and reversing the result.</em>
+<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> <em class="jxr_javadoccomment">	 * Use this when you need parent annotations to take precedence over child annotations.</em>
+<a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter</em>
+<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (parent-to-child)</em>
+<a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)</em>
+<a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}</em>
 <a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Get first annotation (from parent)&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> <em class="jxr_javadoccomment">	 * 	Optional&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;first&lt;/jv&gt; = &lt;jv&gt;s&lt;/jv&gt;.findFirst();</em>
-<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
-<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
-<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> <em class="jxr_javadoccomment">	 * @param parameter The parameter to search.</em>
-<a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> <em class="jxr_javadoccomment">	 * @param traversals</em>
-<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> <em class="jxr_javadoccomment">	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.</em>
-<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}</em>
-<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findTopDown(Class&lt;A&gt; type, <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
-<a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 		<strong class="jxr_keyword">return</strong> rstream(find(type, parameter, traversals).toList());
-<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 	}
-<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 
-<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> <em class="jxr_javadoccomment">	 * Checks if a parameter has the specified annotation.</em>
-<a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> <em class="jxr_javadoccomment">	 * This is a convenience method equivalent to:</em>
-<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> <em class="jxr_javadoccomment">	 * 	find(&lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;parameter&lt;/jv&gt;, &lt;jv&gt;traversals&lt;/jv&gt;).findFirst().isPresent()</em>
-<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search in parent-to-child order&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s&lt;/jv&gt; =</em>
+<a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> <em class="jxr_javadoccomment">	 * 		findTopDown(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);</em>
+<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Get first annotation (from parent)&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> <em class="jxr_javadoccomment">	 * 	Optional&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;first&lt;/jv&gt; = &lt;jv&gt;s&lt;/jv&gt;.findFirst();</em>
+<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> <em class="jxr_javadoccomment">	 * @param parameter The parameter to search.</em>
+<a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> <em class="jxr_javadoccomment">	 * @param traversals</em>
+<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> <em class="jxr_javadoccomment">	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.</em>
+<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}</em>
+<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findTopDown(Class&lt;A&gt; type, <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 		<strong class="jxr_keyword">return</strong> rstream(find(type, parameter, traversals).toList());
+<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> 	}
+<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 
+<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> <em class="jxr_javadoccomment">	 * Checks if a parameter has the specified annotation.</em>
 <a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter</em>
-<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)</em>
-<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)</em>
-<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}</em>
-<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Check if parameter has @MyAnnotation anywhere in hierarchy&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;hasIt&lt;/jv&gt; = has(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;);</em>
-<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Check only on the parameter itself&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;hasIt2&lt;/jv&gt; = has(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF);</em>
-<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
-<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
-<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> <em class="jxr_javadoccomment">	 * @param parameter The parameter to search.</em>
-<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> <em class="jxr_javadoccomment">	 * @param traversals</em>
-<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> <em class="jxr_javadoccomment">	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.</em>
-<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}</em>
-<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation is found, &lt;jk&gt;false&lt;/jk&gt; otherwise.</em>
-<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> has(Class&lt;A&gt; type, <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
-<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 		<strong class="jxr_keyword">return</strong> find(type, parameter, traversals).findFirst().isPresent();
-<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 	}
-<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 
-<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> <em class="jxr_javadoccomment">	 * Streams annotations from a parameter using configurable traversal options in parent-first order.</em>
-<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #find(Class, ParameterInfo, AnnotationTraversal...)}</em>
-<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> <em class="jxr_javadoccomment">	 * and reversing the result.</em>
-<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
-<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
-<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> <em class="jxr_javadoccomment">	 * @param parameter The parameter to search.</em>
-<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
-<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotationsParentFirst(Class&lt;A&gt; type, <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
-<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 		<strong class="jxr_keyword">return</strong> rstream(find(type, parameter, traversals).toList());
-<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 	}
-<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 
-<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> <em class="jxr_javadoccomment">	 * Streams annotations from a field using configurable traversal options.</em>
-<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> <em class="jxr_javadoccomment">	 * This method provides a flexible, stream-based API for traversing field annotations without creating intermediate lists.</em>
-<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search field annotations&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</em>
-<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> <em class="jxr_javadoccomment">	 * 		findAnnotations(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;fi&lt;/jv&gt;, SELF);</em>
-<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
-<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
-<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> <em class="jxr_javadoccomment">	 * @param field The field to search.</em>
-<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
-<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotations(Class&lt;A&gt; type, <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> field, AnnotationTraversal... traversals) {
-<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
-<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 		assertArgNotNull(<span class="jxr_string">"field"</span>, field);
-<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 
-<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(traversals)
-<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 			.flatMap(traversal -&gt; {
-<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 				<strong class="jxr_keyword">if</strong> (traversal == SELF) {
-<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 					<strong class="jxr_keyword">return</strong> find(type, field.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 				}
-<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 				<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid traversal type for field annotations: {0}"</span>, traversal);
-<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 			});
-<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 	}
-<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 
-<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> <em class="jxr_javadoccomment">	 * Streams annotations from a field using configurable traversal options in parent-first order.</em>
-<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #findAnnotations(Class, FieldInfo, AnnotationTraversal...)}</em>
-<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> <em class="jxr_javadoccomment">	 * and reversing the result.</em>
-<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
-<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
-<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> <em class="jxr_javadoccomment">	 * @param field The field to search.</em>
-<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
-<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotationsParentFirst(Class&lt;A&gt; type, <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> field, AnnotationTraversal... traversals) {
-<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 		<strong class="jxr_keyword">return</strong> rstream(findAnnotations(type, field, traversals).toList());
-<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 	}
-<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 
-<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> <em class="jxr_javadoccomment">	 * Streams annotations from a constructor using configurable traversal options.</em>
-<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> <em class="jxr_javadoccomment">	 * This method provides a flexible, stream-based API for traversing constructor annotations without creating intermediate lists.</em>
-<a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search constructor annotations&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</em>
-<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> <em class="jxr_javadoccomment">	 * 		findAnnotations(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;ci&lt;/jv&gt;, SELF);</em>
-<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
-<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
-<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> <em class="jxr_javadoccomment">	 * @param constructor The constructor to search.</em>
-<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
-<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotations(Class&lt;A&gt; type, <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor, AnnotationTraversal... traversals) {
-<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
-<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 		assertArgNotNull(<span class="jxr_string">"constructor"</span>, constructor);
-<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 
-<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(traversals)
-<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 			.flatMap(traversal -&gt; {
-<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 				<strong class="jxr_keyword">if</strong> (traversal == SELF) {
-<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 					<strong class="jxr_keyword">return</strong> find(type, constructor.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 				}
-<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 				<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid traversal type for constructor annotations: {0}"</span>, traversal);
-<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 			});
-<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 	}
-<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 
-<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> <em class="jxr_javadoccomment">	 * Streams annotations from a constructor using configurable traversal options in parent-first order.</em>
-<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #findAnnotations(Class, ConstructorInfo, AnnotationTraversal...)}</em>
-<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> <em class="jxr_javadoccomment">	 * and reversing the result.</em>
-<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
-<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
-<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> <em class="jxr_javadoccomment">	 * @param constructor The constructor to search.</em>
-<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
-<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotationsParentFirst(Class&lt;A&gt; type, <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor, AnnotationTraversal... traversals) {
-<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 		<strong class="jxr_keyword">return</strong> rstream(findAnnotations(type, constructor, traversals).toList());
-<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 	}
-<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> }
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> <em class="jxr_javadoccomment">	 * This is a convenience method equivalent to:</em>
+<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> <em class="jxr_javadoccomment">	 * 	find(&lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;parameter&lt;/jv&gt;, &lt;jv&gt;traversals&lt;/jv&gt;).findFirst().isPresent()</em>
+<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter</em>
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)</em>
+<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)</em>
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}</em>
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Check if parameter has @MyAnnotation anywhere in hierarchy&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;hasIt&lt;/jv&gt; = has(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Check only on the parameter itself&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;hasIt2&lt;/jv&gt; = has(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;, SELF);</em>
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> <em class="jxr_javadoccomment">	 * @param parameter The parameter to search.</em>
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> <em class="jxr_javadoccomment">	 * @param traversals</em>
+<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> <em class="jxr_javadoccomment">	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.</em>
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}</em>
+<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation is found, &lt;jk&gt;false&lt;/jk&gt; otherwise.</em>
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> has(Class&lt;A&gt; type, <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 		<strong class="jxr_keyword">return</strong> find(type, parameter, traversals).findFirst().isPresent();
+<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 	}
+<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 
+<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> <em class="jxr_javadoccomment">	 * Streams annotations from a parameter using configurable traversal options in parent-first order.</em>
+<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #find(Class, ParameterInfo, AnnotationTraversal...)}</em>
+<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> <em class="jxr_javadoccomment">	 * and reversing the result.</em>
+<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> <em class="jxr_javadoccomment">	 * @param parameter The parameter to search.</em>
+<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
+<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotationsParentFirst(Class&lt;A&gt; type, <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		<strong class="jxr_keyword">return</strong> rstream(find(type, parameter, traversals).toList());
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 	}
+<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> <em class="jxr_javadoccomment">	 * Streams annotations from a field using configurable traversal options.</em>
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> <em class="jxr_javadoccomment">	 * This method provides a flexible, stream-based API for traversing field annotations without creating intermediate lists.</em>
+<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search field annotations&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</em>
+<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> <em class="jxr_javadoccomment">	 * 		findAnnotations(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;fi&lt;/jv&gt;, SELF);</em>
+<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> <em class="jxr_javadoccomment">	 * @param field The field to search.</em>
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
+<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotations(Class&lt;A&gt; type, <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> field, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
+<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 		assertArgNotNull(<span class="jxr_string">"field"</span>, field);
+<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 
+<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(traversals)
+<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 			.flatMap(traversal -&gt; {
+<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 				<strong class="jxr_keyword">if</strong> (traversal == SELF) {
+<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 					<strong class="jxr_keyword">return</strong> find(type, field.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 				}
+<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 				<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid traversal type for field annotations: {0}"</span>, traversal);
+<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 			});
+<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 	}
+<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 
+<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> <em class="jxr_javadoccomment">	 * Streams annotations from a field using configurable traversal options in parent-first order.</em>
+<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #findAnnotations(Class, FieldInfo, AnnotationTraversal...)}</em>
+<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> <em class="jxr_javadoccomment">	 * and reversing the result.</em>
+<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> <em class="jxr_javadoccomment">	 * @param field The field to search.</em>
+<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
+<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotationsParentFirst(Class&lt;A&gt; type, <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> field, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 		<strong class="jxr_keyword">return</strong> rstream(findAnnotations(type, field, traversals).toList());
+<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 	}
+<a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 
+<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> <em class="jxr_javadoccomment">	 * Streams annotations from a constructor using configurable traversal options.</em>
+<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> <em class="jxr_javadoccomment">	 * This method provides a flexible, stream-based API for traversing constructor annotations without creating intermediate lists.</em>
+<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Search constructor annotations&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</em>
+<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> <em class="jxr_javadoccomment">	 * 		findAnnotations(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;ci&lt;/jv&gt;, SELF);</em>
+<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> <em class="jxr_javadoccomment">	 * @param constructor The constructor to search.</em>
+<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotations(Class&lt;A&gt; type, <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
+<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 		assertArgNotNull(<span class="jxr_string">"constructor"</span>, constructor);
+<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 
+<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(traversals)
+<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
+<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 			.flatMap(traversal -&gt; {
+<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 				<strong class="jxr_keyword">if</strong> (traversal == SELF) {
+<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 					<strong class="jxr_keyword">return</strong> find(type, constructor.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 				}
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 				<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid traversal type for constructor annotations: {0}"</span>, traversal);
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 			});
+<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 	}
+<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> <em class="jxr_javadoccomment">	 * Streams annotations from a constructor using configurable traversal options in parent-first order.</em>
+<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> <em class="jxr_javadoccomment">	 * This is equivalent to calling {@link #findAnnotations(Class, ConstructorInfo, AnnotationTraversal...)}</em>
+<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> <em class="jxr_javadoccomment">	 * and reversing the result.</em>
+<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation type.</em>
+<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to search for.</em>
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> <em class="jxr_javadoccomment">	 * @param constructor The constructor to search.</em>
+<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
+<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Stream&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotationsParentFirst(Class&lt;A&gt; type, <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 		<strong class="jxr_keyword">return</strong> rstream(findAnnotations(type, constructor, traversals).toList());
+<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 	}
+<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
