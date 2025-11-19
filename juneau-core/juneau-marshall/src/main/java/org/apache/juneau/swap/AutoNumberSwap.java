@@ -158,7 +158,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			&& (rt.isChildOf(Number.class) || (rt.isPrimitive() && rt.isAny(int.class, short.class, long.class, float.class, double.class, byte.class)))
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class)
-			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().xfind(BeanIgnore.class, m2.inner()).findFirst().isPresent());
+			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
 		// @formatter:on
 	}
 
@@ -168,7 +168,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			cs.isNotDeprecated()
 			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasParameterTypeParents(rt)
-			&& bc.getAnnotationProvider().xfind(BeanIgnore.class, cs.inner()).findAny().isEmpty();
+			&& ! bc.getAnnotationProvider().has(BeanIgnore.class, cs);
 		// @formatter:on
 	}
 
@@ -181,17 +181,17 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().xfind(BeanIgnore.class, m2.inner()).findFirst().isPresent());
+			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
 		// @formatter:on
 	}
 
 	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
 		// @formatter:off
 		return
-			bc.getAnnotationProvider().xfind(BeanIgnore.class, ci.inner()).findFirst().isPresent()
-			|| ci.isNonStaticMemberClass()
+			ci.isNonStaticMemberClass()
 			|| ci.isPrimitive()
-			|| ci.isChildOf(Number.class);
+			|| ci.isChildOf(Number.class)
+			|| bc.getAnnotationProvider().has(BeanIgnore.class, ci);
 		// @formatter:on
 	}
 

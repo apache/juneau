@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
+import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -864,7 +865,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	public <A extends Annotation> ClassMeta<T> forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		if (beanContext != null) {
-			beanContext.getAnnotationProvider().xfind(type, info.inner()).map(x -> x.inner()).filter(x -> x != null).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+			beanContext.getAnnotationProvider().find(type, info).map(x -> x.inner()).filter(x -> x != null).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 		}
 		return this;
 	}
@@ -1115,8 +1116,8 @@ public class ClassMeta<T> implements Type {
 		Optional<A> o = (Optional<A>)annotationLastMap.get(a);
 		if (o == null) {
 			if (beanContext == null)
-				return BeanContext.DEFAULT.getAnnotationProvider().xfind(a, info.inner()).findFirst().map(x -> x.inner()).orElse(null);
-			o = opt(beanContext.getAnnotationProvider().xfind(a, info.inner()).findFirst().map(x -> x.inner()).orElse(null));
+				return AnnotationProvider.INSTANCE.find(a, info).findFirst().map(x -> x.inner()).orElse(null);
+			o = beanContext.getAnnotationProvider().find(a, info).findFirst().map(x -> x.inner());
 			annotationLastMap.put(a, o);
 		}
 		return o.orElse(null);
@@ -1761,7 +1762,7 @@ public class ClassMeta<T> implements Type {
 		A[] array = annotationArray(type);
 		if (array == null) {
 			if (beanContext == null)
-				return AnnotationProvider.INSTANCE.xfind(type, info.inner())
+				return AnnotationProvider.INSTANCE.find(type, info)
 					.map(AnnotationInfo::inner)
 					.filter(a -> test(filter, a))
 					.findFirst();  // AnnotationProvider returns child-to-parent, so first is "last"

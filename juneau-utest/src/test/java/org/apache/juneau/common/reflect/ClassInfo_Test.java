@@ -595,10 +595,10 @@ public class ClassInfo_Test extends TestBase {
 	@Test void lastAnnotation() {
 		// Use AnnotationProvider to get last annotation (first in child-to-parent order stream)
 		var ap = org.apache.juneau.common.reflect.AnnotationProvider.INSTANCE;
-		assertEquals(7, ap.xfind(A.class, g3.inner()).map(x -> x.inner()).findFirst().get().value());
-		assertEquals(7, ap.xfind(A.class, g4.inner()).map(x -> x.inner()).findFirst().get().value());
-		assertEquals(3, ap.xfind(A.class, g5.inner()).map(x -> x.inner()).findFirst().get().value());
-		assertEquals(5, ap.xfind(A.class, g3.inner()).map(x -> x.inner()).filter(x -> x.value() == 5).findFirst().get().value());
+		assertEquals(7, ap.find(A.class, g3).map(x -> x.inner()).findFirst().get().value());
+		assertEquals(7, ap.find(A.class, g4).map(x -> x.inner()).findFirst().get().value());
+		assertEquals(3, ap.find(A.class, g5).map(x -> x.inner()).findFirst().get().value());
+		assertEquals(5, ap.find(A.class, g3).map(x -> x.inner()).filter(x -> x.value() == 5).findFirst().get().value());
 	}
 
 	@Test void getPackageAnnotation() {
@@ -1872,7 +1872,7 @@ public class ClassInfo_Test extends TestBase {
 	void getParentsAndInterfaces_includesAllInterfaces() {
 		var ci = ClassInfo.of(Child.class);
 		var parentsAndInterfaces = ci.getParentsAndInterfaces();
-		
+
 		// Should include:
 		// 1. Child itself
 		// 2. IChild (direct interface on Child)
@@ -1882,16 +1882,16 @@ public class ClassInfo_Test extends TestBase {
 		// 6. GrandParent (parent's parent)
 		// 7. IGrandParent (direct interface on GrandParent)
 		// 8. ISuperGrandParent (parent interface of IGrandParent)
-		
+
 		var names = parentsAndInterfaces.stream()
 			.map(ClassInfo::getNameSimple)
 			.collect(Collectors.toList());
-		
+
 		// Verify all expected classes/interfaces are present
 		assertTrue(names.contains("Child"), "Should include Child itself");
 		assertTrue(names.contains("Parent"), "Should include Parent");
 		assertTrue(names.contains("GrandParent"), "Should include GrandParent");
-		
+
 		assertTrue(names.contains("IChild"), "Should include IChild");
 		assertTrue(names.contains("IParent"), "Should include IParent from Parent");
 		assertTrue(names.contains("ISuperParent"), "Should include ISuperParent from IParent hierarchy");

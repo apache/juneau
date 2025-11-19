@@ -81,11 +81,11 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 		Builder b = new Builder();
 		if (nn(bpm.getInnerField()))
-			annotationProvider.xfind(Html.class, bpm.getInnerField()).map(x -> x.inner()).filter(x -> true).forEach(x -> b.findHtmlInfo(x));
+			annotationProvider.find(Html.class, FieldInfo.of(bpm.getInnerField())).map(x -> x.inner()).forEach(x -> b.findHtmlInfo(x));
 		if (nn(bpm.getGetter()))
-			annotationProvider.xfind(Html.class, bpm.getGetter()).map(x -> x.inner()).filter(x -> true).forEach(x -> b.findHtmlInfo(x));
+			annotationProvider.find(Html.class, MethodInfo.of(bpm.getGetter())).map(x -> x.inner()).forEach(x -> b.findHtmlInfo(x));
 		if (nn(bpm.getSetter()))
-			annotationProvider.xfind(Html.class, bpm.getSetter()).map(x -> x.inner()).filter(x -> true).forEach(x -> b.findHtmlInfo(x));
+			annotationProvider.find(Html.class, MethodInfo.of(bpm.getSetter())).map(x -> x.inner()).forEach(x -> b.findHtmlInfo(x));
 
 		this.format = b.format;
 		this.noTables = b.noTables;

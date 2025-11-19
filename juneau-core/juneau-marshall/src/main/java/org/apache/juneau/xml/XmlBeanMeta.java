@@ -43,11 +43,12 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 		XmlFormat contentFormat = DEFAULT;
 
 		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
-			Class<?> c = beanMeta.getClassMeta().getInnerClass();
+			var c = beanMeta.getClassMeta().getInnerClass();
+			var ci = beanMeta.getClassMeta().getInfo();
 			Value<XmlFormat> defaultFormat = Value.empty();
 
-			beanMeta.getClassMeta().getBeanContext().getAnnotationProvider().xfind(Xml.class, c).map(x -> x.inner()).filter(x -> true).forEach(x -> {
-				XmlFormat xf = x.format();
+			beanMeta.getClassMeta().getBeanContext().getAnnotationProvider().find(Xml.class, ci).map(x -> x.inner()).forEach(x -> {
+				var xf = x.format();
 				if (xf == ATTRS)
 					defaultFormat.set(XmlFormat.ATTR);
 				else if (xf.isOneOf(ELEMENTS, DEFAULT))
@@ -60,8 +61,8 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 			});
 
 			beanMeta.forEachProperty(null, p -> {
-				XmlFormat xf = mp.getXmlBeanPropertyMeta(p).getXmlFormat();
-				ClassMeta<?> pcm = p.getClassMeta();
+				var xf = mp.getXmlBeanPropertyMeta(p).getXmlFormat();
+				var pcm = p.getClassMeta();
 				if (xf == ATTR) {
 					attrs.put(p.getName(), p);
 				} else if (xf == ELEMENT) {

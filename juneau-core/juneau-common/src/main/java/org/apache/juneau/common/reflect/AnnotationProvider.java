@@ -405,14 +405,10 @@ public class AnnotationProvider {
 	}
 
 	// @formatter:off
-	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classAnnotations;
 	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classDeclaredAnnotations;
 	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classRuntimeAnnotations;
-	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodAnnotations;
 	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodRuntimeAnnotations;
-	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldAnnotations;
 	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldRuntimeAnnotations;
-	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorAnnotations;
 	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorRuntimeAnnotations;
 	private final ReflectionMap<Annotation> runtimeAnnotations;
 	// @formatter:on
@@ -423,10 +419,6 @@ public class AnnotationProvider {
 	 * @param builder The builder containing configuration settings.
 	 */
 	protected AnnotationProvider(Builder builder) {
-		this.classAnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findClassAnnotations)
-			.disableCaching(builder.disableCaching)
-			.build();
 		this.classDeclaredAnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findClassDeclaredAnnotations)
 			.disableCaching(builder.disableCaching)
@@ -435,24 +427,12 @@ public class AnnotationProvider {
 			.supplier(this::findClassRuntimeAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
-		this.methodAnnotations = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findMethodAnnotations)
-			.disableCaching(builder.disableCaching)
-			.build();
 		this.methodRuntimeAnnotations = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findMethodRuntimeAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
-		this.fieldAnnotations = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findFieldAnnotations)
-			.disableCaching(builder.disableCaching)
-			.build();
 		this.fieldRuntimeAnnotations = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findFieldRuntimeAnnotations)
-			.disableCaching(builder.disableCaching)
-			.build();
-		this.constructorAnnotations = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findConstructorAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
 		this.constructorRuntimeAnnotations = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
@@ -466,133 +446,6 @@ public class AnnotationProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Public API
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Finds all annotations on the specified class, including runtime annotations.
-	 *
-	 * <p>
-	 * Searches the class, its parent classes, interfaces, and package for annotations.
-	 * Returns annotations in <b>child-to-parent</b> order with runtime annotations
-	 * taking precedence at each level.
-	 *
-	 * <p>
-	 * <b>Order of precedence</b> (see class javadocs for details):
-	 * <ol>
-	 * 	<li>Runtime + declared annotations on this class
-	 * 	<li>Runtime + declared annotations on parent classes (child-to-parent)
-	 * 	<li>Runtime + declared annotations on interfaces (child-to-parent)
-	 * 	<li>Declared annotations on the package
-	 * </ol>
-	 *
-	 * <p>
-	 * <b>Comparison with {@link ClassInfo#getAnnotations(Class)}:</b>
-	 * <ul>
-	 * 	<li>This method includes <b>runtime annotations</b>; ClassInfo does not
-	 * 	<li>Same traversal order (child-to-parent with interfaces and package)
-	 * 	<li>Runtime annotations are inserted with higher priority at each level
-	 * </ul>
-	 *
-	 * @param onClass The class to search on.
-	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the specified class,
-	 * 	its parents, interfaces, and package. Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(ClassInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	public List<AnnotationInfo<Annotation>> xfind(Class<?> onClass) {
-		assertArgNotNull("onClass", onClass);
-		return classAnnotations.get(onClass);
-	}
-
-	/**
-	 * Finds all annotations of the specified type on the specified class, including runtime annotations.
-	 *
-	 * <p>
-	 * Searches the class, its parent classes, interfaces, and package for annotations of the specified type.
-	 * Returns annotations in <b>child-to-parent</b> order with runtime annotations
-	 * taking precedence at each level.
-	 *
-	 * <p>
-	 * This is a filtered version of {@link #xfind(Class)} that only returns annotations matching the specified type.
-	 *
-	 * <p>
-	 * <b>Comparison with {@link ClassInfo#getAnnotations(Class)}:</b>
-	 * <ul>
-	 * 	<li>This method includes <b>runtime annotations</b>; ClassInfo does not
-	 * 	<li>Same traversal order (child-to-parent with interfaces and package)
-	 * 	<li>Runtime annotations are inserted with higher priority at each level
-	 * </ul>
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param type The annotation type to find.
-	 * @param onClass The class to search on.
-	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the
-	 * 	specified class, its parents, interfaces, and package. Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(Class, ClassInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Class<?> onClass) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("onClass", onClass);
-		return xfind(onClass).stream()
-			.filter(a -> a.isType(type))
-			.map(a -> (AnnotationInfo<A>)a);
-	}
-
-	/**
-	 * Finds annotations declared directly on the specified class, including runtime annotations.
-	 *
-	 * <p>
-	 * Unlike {@link #xfind(Class)}, this method only returns annotations declared directly on the specified class,
-	 * not on its parents, interfaces, or package.
-	 *
-	 * <p>
-	 * <b>Order of precedence</b>:
-	 * <ol>
-	 * 	<li>Runtime annotations on this class (highest priority)
-	 * 	<li>Declared annotations on this class
-	 * </ol>
-	 *
-	 * <p>
-	 * <b>Comparison with {@link ClassInfo#getDeclaredAnnotations()}:</b>
-	 * <ul>
-	 * 	<li>This method includes <b>runtime annotations</b>; ClassInfo does not
-	 * 	<li>Runtime annotations are returned first (higher priority)
-	 * </ul>
-	 *
-	 * @param onClass The class to search on.
-	 * @return A list of {@link AnnotationInfo} objects representing annotations declared directly on the class.
-	 * 	Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(ClassInfo, AnnotationTraversal...)} with {@link AnnotationTraversal#SELF SELF} instead.
-	 */
-	@Deprecated
-	public List<AnnotationInfo<Annotation>> xfindDeclared(Class<?> onClass) {
-		assertArgNotNull("onClass", onClass);
-		return classDeclaredAnnotations.get(onClass);
-	}
-
-	/**
-	 * Finds annotations of the specified type declared directly on the specified class, including runtime annotations.
-	 *
-	 * <p>
-	 * This is a filtered version of {@link #xfindDeclared(Class)} that only returns annotations matching the specified type.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param type The annotation type to find.
-	 * @param onClass The class to search on.
-	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type declared
-	 * 	directly on the class. Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(Class, ClassInfo, AnnotationTraversal...)} with {@link AnnotationTraversal#SELF SELF} instead.
-	 */
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> xfindDeclared(Class<A> type, Class<?> onClass) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("onClass", onClass);
-		return xfindDeclared(onClass).stream()
-			.filter(a -> a.isType(type))
-			.map(a -> (AnnotationInfo<A>)a);
-	}
 
 	/**
 	 * Finds all declared annotations on the specified class in parent-to-child order (reversed).
@@ -647,204 +500,9 @@ public class AnnotationProvider {
 			.map(a -> (AnnotationInfo<A>)a);
 	}
 
-	/**
-	 * Finds all annotations on the specified method, including runtime annotations.
-	 *
-	 * <p>
-	 * Searches the method and all overridden parent methods for annotations.
-	 * Returns annotations in <b>child-to-parent</b> order with runtime annotations
-	 * taking precedence at each level.
-	 *
-	 * <p>
-	 * <b>Order of precedence</b> (see class javadocs for details):
-	 * <ol>
-	 * 	<li>Runtime annotations on this method (highest priority)
-	 * 	<li>Declared annotations on this method
-	 * 	<li>Runtime annotations on overridden parent methods (child-to-parent)
-	 * 	<li>Declared annotations on overridden parent methods (child-to-parent)
-	 * </ol>
-	 *
-	 * <p>
-	 * <b>Comparison with {@link MethodInfo#getAnnotations()}:</b>
-	 * <ul>
-	 * 	<li>This method includes <b>runtime annotations</b>; MethodInfo does not
-	 * 	<li>Runtime annotations are inserted with higher priority at each level
-	 * </ul>
-	 *
-	 * @param onMethod The method to search on.
-	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the method and
-	 * 	overridden parent methods. Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(MethodInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	public List<AnnotationInfo<Annotation>> xfind(Method onMethod) {
-		assertArgNotNull("onMethod", onMethod);
-		return methodAnnotations.get(onMethod);
-	}
-
-	/**
-	 * Finds all annotations of the specified type on the specified method, including runtime annotations.
-	 *
-	 * <p>
-	 * This is a filtered version of {@link #xfind(Method)} that only returns annotations matching the specified type.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param type The annotation type to find.
-	 * @param onMethod The method to search on.
-	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the
-	 * 	method and overridden parent methods. Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(Class, MethodInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Method onMethod) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("onMethod", onMethod);
-		return xfind(onMethod).stream()
-			.filter(a -> a.isType(type))
-			.map(a -> (AnnotationInfo<A>)a);
-	}
-
-	/**
-	 * Finds all annotations on the specified field, including runtime annotations.
-	 *
-	 * <p>
-	 * <b>Order of precedence</b>:
-	 * <ol>
-	 * 	<li>Runtime annotations on this field (highest priority)
-	 * 	<li>Declared annotations on this field
-	 * </ol>
-	 *
-	 * <p>
-	 * <b>Comparison with {@link FieldInfo#getAnnotations()}:</b>
-	 * <ul>
-	 * 	<li>This method includes <b>runtime annotations</b>; FieldInfo does not
-	 * 	<li>Runtime annotations are returned first (higher priority)
-	 * </ul>
-	 *
-	 * @param onField The field to search on.
-	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the field.
-	 * 	Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(FieldInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	public List<AnnotationInfo<Annotation>> xfind(Field onField) {
-		assertArgNotNull("onField", onField);
-		return fieldAnnotations.get(onField);
-	}
-
-	/**
-	 * Finds all annotations of the specified type on the specified field, including runtime annotations.
-	 *
-	 * <p>
-	 * This is a filtered version of {@link #xfind(Field)} that only returns annotations matching the specified type.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param type The annotation type to find.
-	 * @param onField The field to search on.
-	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the field.
-	 * 	Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(Class, FieldInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Field onField) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("onField", onField);
-		return xfind(onField).stream()
-			.filter(a -> a.isType(type))
-			.map(a -> (AnnotationInfo<A>)a);
-	}
-
-	/**
-	 * Finds all annotations on the specified constructor, including runtime annotations.
-	 *
-	 * <p>
-	 * <b>Order of precedence</b>:
-	 * <ol>
-	 * 	<li>Runtime annotations on this constructor (highest priority)
-	 * 	<li>Declared annotations on this constructor
-	 * </ol>
-	 *
-	 * <p>
-	 * <b>Comparison with {@link ConstructorInfo#getDeclaredAnnotations()}:</b>
-	 * <ul>
-	 * 	<li>This method includes <b>runtime annotations</b>; ConstructorInfo does not
-	 * 	<li>Runtime annotations are returned first (higher priority)
-	 * </ul>
-	 *
-	 * @param onConstructor The constructor to search on.
-	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the constructor.
-	 * 	Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(ConstructorInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	public List<AnnotationInfo<Annotation>> xfind(Constructor<?> onConstructor) {
-		assertArgNotNull("onConstructor", onConstructor);
-		return constructorAnnotations.get(onConstructor);
-	}
-
-	/**
-	 * Finds all annotations of the specified type on the specified constructor, including runtime annotations.
-	 *
-	 * <p>
-	 * This is a filtered version of {@link #xfind(Constructor)} that only returns annotations matching the specified type.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param type The annotation type to find.
-	 * @param onConstructor The constructor to search on.
-	 * @return A stream of {@link AnnotationInfo} objects representing annotations of the specified type on the constructor.
-	 * 	Never <jk>null</jk>.
-	 * @deprecated Use {@link #find(Class, ConstructorInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Constructor<?> onConstructor) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("onConstructor", onConstructor);
-		return xfind(onConstructor).stream()
-			.filter(a -> a.isType(type))
-			.map(a -> (AnnotationInfo<A>)a);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Private implementation
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Finds all annotations on the specified class in child-to-parent order.
-	 *
-	 * <p>
-	 * Annotations are appended in the following order:
-	 * <ol>
-	 * 	<li>On this class.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of this class.
-	 * </ol>
-	 *
-	 * @param forClass The class to find annotations on.
-	 * @return A list of {@link AnnotationInfo} objects in child-to-parent order.
-	 */
-	private List<AnnotationInfo<Annotation>> findClassAnnotations(Class<?> forClass) {
-		var ci = ClassInfo.of(forClass);
-		var list = new ArrayList<AnnotationInfo<Annotation>>();
-
-		// On all parent classes and interfaces (properly traversed to avoid duplicates)
-		var parentsAndInterfaces = ci.getParentsAndInterfaces();
-		for (int i = 0; i < parentsAndInterfaces.size(); i++)
-			findDeclaredAnnotations(list, parentsAndInterfaces.get(i).inner());
-
-		// On the package of this class
-		var pkg = ci.getPackage();
-		if (nn(pkg)) {
-			var pi = PackageInfo.of(pkg.inner());
-			for (var a : pkg.inner().getAnnotations())
-				streamRepeated(a).forEach(a2 -> list.add(AnnotationInfo.of(pi, a2)));
-		}
-
-		return u(list);
-	}
 
 	private List<AnnotationInfo<Annotation>> findClassDeclaredAnnotations(Class<?> forClass) {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
@@ -860,45 +518,14 @@ public class AnnotationProvider {
 		return runtimeAnnotations.find(forClass).map(a -> AnnotationInfo.of(ci, a)).toList();
 	}
 
-	private List<AnnotationInfo<Annotation>> findMethodAnnotations(Method forMethod) {
-		var list = new ArrayList<AnnotationInfo<Annotation>>();
-
-		MethodInfo.of(forMethod).getMatchingMethods().forEach(m -> {
-			runtimeAnnotations.find(m.inner()).forEach(a -> list.add(AnnotationInfo.of(m, a)));
-			list.addAll(m.getDeclaredAnnotations());
-		});
-
-		return u(list);
-	}
-
 	private List<AnnotationInfo<Annotation>> findMethodRuntimeAnnotations(Method forMethod) {
 		MethodInfo mi = MethodInfo.of(forMethod);
 		return runtimeAnnotations.find(forMethod).map(a -> AnnotationInfo.of(mi, a)).toList();
 	}
 
-	private List<AnnotationInfo<Annotation>> findFieldAnnotations(Field forField) {
-		var list = new ArrayList<AnnotationInfo<Annotation>>();
-
-		FieldInfo fi = FieldInfo.of(forField);
-		runtimeAnnotations.find(forField).forEach(a -> list.add(AnnotationInfo.of(fi, a)));
-		list.addAll(fi.getAnnotations());
-
-		return u(list);
-	}
-
 	private List<AnnotationInfo<Annotation>> findFieldRuntimeAnnotations(Field forField) {
 		FieldInfo fi = FieldInfo.of(forField);
 		return runtimeAnnotations.find(forField).map(a -> AnnotationInfo.of(fi, a)).toList();
-	}
-
-	private List<AnnotationInfo<Annotation>> findConstructorAnnotations(Constructor<?> forConstructor) {
-		var list = new ArrayList<AnnotationInfo<Annotation>>();
-
-		ConstructorInfo ci = ConstructorInfo.of(forConstructor);
-		runtimeAnnotations.find(forConstructor).forEach(a -> list.add(AnnotationInfo.of(ci, a)));
-		list.addAll(ci.getDeclaredAnnotations());
-
-		return u(list);
 	}
 
 	private List<AnnotationInfo<Annotation>> findConstructorRuntimeAnnotations(Constructor<?> forConstructor) {
@@ -1017,7 +644,7 @@ public class AnnotationProvider {
 		assertArgNotNull("type", type);
 		assertArgNotNull("clazz", clazz);
 		if (traversals.length == 0)
-			traversals = a(SELF, PARENTS, PACKAGE);
+			traversals = a(PARENTS, PACKAGE);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -1068,7 +695,7 @@ public class AnnotationProvider {
 	public Stream<AnnotationInfo<Annotation>> find(ClassInfo clazz, AnnotationTraversal... traversals) {
 		assertArgNotNull("clazz", clazz);
 		if (traversals.length == 0)
-			traversals = a(SELF, PARENTS, PACKAGE);
+			traversals = a(PARENTS, PACKAGE);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -1141,7 +768,8 @@ public class AnnotationProvider {
 	 * </ul>
 	 *
 	 * <p>
-	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, PARENTS, PACKAGE}
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code PARENTS, PACKAGE}
+	 * <br>Note: {@code PARENTS} includes the class itself plus all parent classes and interfaces.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

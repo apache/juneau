@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.BeanMeta.MethodType.*;
+import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -131,6 +132,7 @@ public class BeanMeta<T> {
 	private static class Builder<T> {
 		ClassMeta<T> classMeta;
 		BeanContext ctx;
+		AnnotationProvider ap;
 		BeanFilter beanFilter;
 		String[] pNames;
 		Map<String,BeanPropertyMeta> properties;
@@ -150,6 +152,7 @@ public class BeanMeta<T> {
 		Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
 			this.classMeta = classMeta;
 			this.ctx = ctx;
+			this.ap = ctx.getAnnotationProvider();
 			this.beanFilter = beanFilter;
 			this.pNames = pNames;
 			this.implClassConstructor = implClassConstructor;
@@ -180,12 +183,12 @@ public class BeanMeta<T> {
 		 * Returns the property name of the specified field if it's a valid property.
 		 * Returns null if the field isn't a valid property.
 		 */
-		private String findPropertyName(Field f) {
+		private String findPropertyName(FieldInfo f) {
 			List<Beanp> lp = list();
 			List<Name> ln = list();
 			// Inline Context.forEachAnnotation() calls
-			ctx.getAnnotationProvider().xfind(Beanp.class, f).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
-			ctx.getAnnotationProvider().xfind(Name.class, f).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
+			ap.find(Beanp.class, f).map(x -> x.inner()).forEach(x -> lp.add(x));
+			ap.find(Name.class, f).map(x -> x.inner()).forEach(x -> ln.add(x));
 			String name = bpName(lp, ln);
 			if (isNotEmpty(name))
 				return name;
@@ -270,12 +273,12 @@ public class BeanMeta<T> {
 
 				// Look for @Beanc on all other constructors.
 				if (constructor == null) {
-					ci.getDeclaredConstructors().stream().filter(x -> ctx.getAnnotationProvider().xfind(Beanc.class, x.inner()).findAny().isPresent()).forEach(x -> {
+					ci.getDeclaredConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
 						if (nn(constructor))
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						ctx.getAnnotationProvider().xfind(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
+						ap.find(Beanc.class, x).map(x2 -> x2.inner().properties()).filter(y -> isNotEmpty(y)).forEach(z -> constructorArgs = splita(z));
 						if (! x.hasNumParameters(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -358,7 +361,7 @@ public class BeanMeta<T> {
 				} else /* Use 'better' introspection */ {
 
 					findBeanFields(ctx, c2, stopClass, fVis).forEach(x -> {
-						String name = findPropertyName(x);
+						String name = findPropertyName(FieldInfo.of(x));
 						if (nn(name)) {
 							if (! normalProps.containsKey(name))
 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
@@ -372,6 +375,7 @@ public class BeanMeta<T> {
 					bms.forEach(x -> {
 						String pn = x.propertyName;
 						Method m = x.method;
+						MethodInfo mi = MethodInfo.of(m);
 						if (! normalProps.containsKey(pn))
 							normalProps.put(pn, new BeanPropertyMeta.Builder(beanMeta, pn));
 						BeanPropertyMeta.Builder bpm = normalProps.get(pn);
@@ -379,7 +383,7 @@ public class BeanMeta<T> {
 							// Two getters.  Pick the best.
 							if (nn(bpm.getter)) {
 
-								if (! ctx.hasAnnotation(Beanp.class, m) && ctx.hasAnnotation(Beanp.class, bpm.getter))
+								if (! ap.has(Beanp.class, mi) && ap.has(Beanp.class, MethodInfo.of(bpm.getter)))
 									m = bpm.getter;  // @Beanp annotated method takes precedence.
 
 								else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get"))
@@ -569,8 +573,8 @@ public class BeanMeta<T> {
 				.filter(x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
-				&& ctx.getAnnotationProvider().xfind(BeanIgnore.class, x.inner()).findAny().isEmpty()
-				&& (v.isVisible(x.inner()) || ctx.getAnnotationProvider().xfind(Beanp.class, x.inner()).findAny().isPresent()))
+				&& ! ctx.getAnnotationProvider().has(BeanIgnore.class, x)
+				&& (v.isVisible(x.inner()) || ctx.getAnnotationProvider().has(Beanp.class, x)))
 				.forEach(x -> l.add(x.inner())
 			);
 			// @formatter:on
@@ -589,13 +593,14 @@ public class BeanMeta<T> {
 	 */
 	static final List<BeanMethod> findBeanMethods(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, PropertyNamer pn, boolean fluentSetters) {
 		List<BeanMethod> l = new LinkedList<>();
+		var ap = ctx.getAnnotationProvider();
 
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
-				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.getMatchingMethods().stream().anyMatch(m2 -> ctx.getAnnotationProvider().xfind(BeanIgnore.class, m2.inner()).findFirst().isPresent()))
+				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.getMatchingMethods().stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF, MATCHING_METHODS)))
 					continue;
 				Transient t = m.getMatchingMethods().stream()
-					.map(m2 -> ctx.getAnnotationProvider().xfind(Transient.class, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null))
+					.map(m2 -> ap.find(Transient.class, m2).map(x -> x.inner()).findFirst().orElse(null))
 					.filter(Objects::nonNull)
 					.findFirst()
 					.orElse(null);
@@ -604,8 +609,8 @@ public class BeanMeta<T> {
 
 				List<Beanp> lp = list();
 				List<Name> ln = list();
-				ctx.getAnnotationProvider().xfind(Beanp.class, m.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
-				ctx.getAnnotationProvider().xfind(Name.class, m.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
+				ap.find(Beanp.class, m).map(x -> x.inner()).forEach(x -> lp.add(x));
+				ap.find(Name.class, m).map(x -> x.inner()).forEach(x -> ln.add(x));
 
 				// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does
 				// This ensures property names are inherited correctly, preventing duplicate property definitions
@@ -709,7 +714,7 @@ public class BeanMeta<T> {
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
-				&& ctx.getAnnotationProvider().xfind(BeanIgnore.class, x.inner()).findAny().isEmpty()
+				&& ! ctx.getAnnotationProvider().has(BeanIgnore.class, x)
 				&& x.hasName(name))
 			.ifPresent(f -> value.set(f.inner()));
 			// @formatter:on
@@ -794,32 +799,33 @@ public class BeanMeta<T> {
 		if (! lp.isEmpty() || ! ln.isEmpty())
 			return;
 
-	String methodName = method.getSimpleName();
-	List<ParameterInfo> params = method.getParameters();
+		String methodName = method.getSimpleName();
+		List<ParameterInfo> params = method.getParameters();
+		var ap = ctx.getAnnotationProvider();
 
-	// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name
-	var currentClass = ClassInfo.of(c);
-	ClassInfo sc = currentClass.getSuperclass();
+		// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name
+		var currentClass = ClassInfo.of(c);
+		ClassInfo sc = currentClass.getSuperclass();
 
-	while (nn(sc) && ! sc.is(stopClass) && ! sc.is(Object.class)) {
-		// Look for a method with the same signature in the parent class
-		for (var parentMethod : sc.getDeclaredMethods()) {
-			if (parentMethod.getSimpleName().equals(methodName) && params.size() == parentMethod.getParameters().size()) {
+		while (nn(sc) && ! sc.is(stopClass) && ! sc.is(Object.class)) {
+			// Look for a method with the same signature in the parent class
+			for (var parentMethod : sc.getDeclaredMethods()) {
+				if (parentMethod.getSimpleName().equals(methodName) && params.size() == parentMethod.getParameters().size()) {
 
-				// Check if parameter types match
-				boolean paramsMatch = true;
-				List<ParameterInfo> parentParams = parentMethod.getParameters();
-				for (int i = 0; i < params.size(); i++) {
-					if (! params.get(i).getParameterType().is(parentParams.get(i).getParameterType().inner())) {
-						paramsMatch = false;
-						break;
+					// Check if parameter types match
+					boolean paramsMatch = true;
+					List<ParameterInfo> parentParams = parentMethod.getParameters();
+					for (int i = 0; i < params.size(); i++) {
+						if (! params.get(i).getParameterType().is(parentParams.get(i).getParameterType().inner())) {
+							paramsMatch = false;
+							break;
+						}
 					}
-				}
 
 					if (paramsMatch) {
 						// Found a matching parent method - check for @Beanp and @Name annotations
-						ctx.getAnnotationProvider().xfind(Beanp.class, parentMethod.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
-						ctx.getAnnotationProvider().xfind(Name.class, parentMethod.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
+						ap.find(Beanp.class, parentMethod).map(x -> x.inner()).forEach(x -> lp.add(x));
+						ap.find(Name.class, parentMethod).map(x -> x.inner()).forEach(x -> ln.add(x));
 
 						// If we found annotations, we're done
 						if (! lp.isEmpty() || ! ln.isEmpty())

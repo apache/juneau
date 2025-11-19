@@ -820,54 +820,6 @@ public abstract class Context {
 	public ContextSession getSession() { return createSession().build(); }
 
 	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
-	 *
-	 * @param <A> The annotation being checked for.
-	 * @param type The annotation being checked for.
-	 * @param onClass The class being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified class.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Class<?> onClass) {
-		return getAnnotationProvider().xfind(type, onClass).map(x -> x.inner()).findFirst().isPresent();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
-	 *
-	 * @param <A> The annotation being checked for.
-	 * @param type The annotation being checked for.
-	 * @param onConstructor The constructor being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified field.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Constructor<?> onConstructor) {
-		return getAnnotationProvider().xfind(type, onConstructor).map(x -> x.inner()).findFirst().isPresent();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,f)</c> returns a non-null value.
-	 *
-	 * @param <A> The annotation being checked for.
-	 * @param type The annotation being checked for.
-	 * @param onField The field being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified field.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Field onField) {
-		return getAnnotationProvider().xfind(type, onField).map(x -> x.inner()).findFirst().isPresent();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,m)</c> returns a non-null value.
-	 *
-	 * @param <A> The annotation being checked for.
-	 * @param type The annotation being checked for.
-	 * @param onMethod The method being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified method.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Method onMethod) {
-		return getAnnotationProvider().xfind(type, onMethod).map(x -> x.inner()).findFirst().isPresent();
-	}
-
-	/**
 	 * Debug mode.
 	 *
 	 * @see Context.Builder#debug()
