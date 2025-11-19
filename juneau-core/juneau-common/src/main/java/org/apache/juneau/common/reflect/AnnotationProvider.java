@@ -1005,6 +1005,8 @@ public class AnnotationProvider {
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("method", method);
+		if (traversals.length == 0)
+			traversals = new AnnotationTraversal[]{SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE};
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
@@ -1015,6 +1017,10 @@ public class AnnotationProvider {
 					return method.getMatchingMethods().stream().skip(1).flatMap(x -> find(type, x.inner()));
 				} else if (traversal == RETURN_TYPE) {
 					return findAnnotations(type, method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
+				} else if (traversal == PACKAGE) {
+					var c = method.getDeclaringClass();
+					A packageAnn = c.getPackageAnnotation(type);
+					return nn(packageAnn) ? Stream.of(AnnotationInfo.of(c, packageAnn)) : Stream.empty();
 				}
 				throw illegalArg("Invalid traversal type for method annotations: {0}", traversal);
 			});
