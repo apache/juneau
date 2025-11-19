@@ -2457,7 +2457,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * Finds all annotations on this class and parent classes/interfaces in child-to-parent order.
 	 *
 	 * <p>
-	 * This is similar to {@link org.apache.juneau.common.reflect.AnnotationProvider#find(Class)} but without runtime annotations.
+	 * This is similar to {@link org.apache.juneau.common.reflect.AnnotationProvider#xfind(Class)} but without runtime annotations.
 	 *
 	 * <p>
 	 * Order of traversal:

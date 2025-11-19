@@ -81,6 +81,7 @@ public abstract class Context {
 	public abstract static class Builder {
 
 		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
+		private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 		boolean debug;
 		Class<? extends Context> type;
@@ -827,7 +828,7 @@ public abstract class Context {
 	 * @return <jk>true</jk> if the annotation exists on the specified class.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Class<?> onClass) {
-		return getAnnotationProvider().find(type, onClass).map(x -> x.inner()).findFirst().isPresent();
+		return getAnnotationProvider().xfind(type, onClass).map(x -> x.inner()).findFirst().isPresent();
 	}
 
 	/**
@@ -839,7 +840,7 @@ public abstract class Context {
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Constructor<?> onConstructor) {
-		return getAnnotationProvider().find(type, onConstructor).map(x -> x.inner()).findFirst().isPresent();
+		return getAnnotationProvider().xfind(type, onConstructor).map(x -> x.inner()).findFirst().isPresent();
 	}
 
 	/**
@@ -851,7 +852,7 @@ public abstract class Context {
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Field onField) {
-		return getAnnotationProvider().find(type, onField).map(x -> x.inner()).findFirst().isPresent();
+		return getAnnotationProvider().xfind(type, onField).map(x -> x.inner()).findFirst().isPresent();
 	}
 
 	/**
@@ -863,7 +864,7 @@ public abstract class Context {
 	 * @return <jk>true</jk> if the annotation exists on the specified method.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Method onMethod) {
-		return getAnnotationProvider().find(type, onMethod).map(x -> x.inner()).findFirst().isPresent();
+		return getAnnotationProvider().xfind(type, onMethod).map(x -> x.inner()).findFirst().isPresent();
 	}
 
 	/**

@@ -48,7 +48,7 @@ import org.apache.juneau.common.collections.*;
  *
  * <h5 class='section'>Annotation Order of Precedence:</h5>
  *
- * <h6 class='topic'>For Classes ({@link #find(Class)}):</h6>
+ * <h6 class='topic'>For Classes ({@link #xfind(Class)}):</h6>
  * <p>
  * Annotations are returned in <b>child-to-parent</b> order with the following precedence:
  * <ol>
@@ -73,7 +73,7 @@ import org.apache.juneau.common.collections.*;
  * 	<jc>// 7. @Annotation on package-info.java</jc>
  * </p>
  *
- * <h6 class='topic'>For Methods ({@link #find(Method)}):</h6>
+ * <h6 class='topic'>For Methods ({@link #xfind(Method)}):</h6>
  * <p>
  * Annotations are returned in <b>child-to-parent</b> order with the following precedence:
  * <ol>
@@ -83,7 +83,7 @@ import org.apache.juneau.common.collections.*;
  * 	<li><b>Declared annotations</b> on overridden parent methods (child-to-parent order)
  * </ol>
  *
- * <h6 class='topic'>For Fields ({@link #find(Field)}):</h6>
+ * <h6 class='topic'>For Fields ({@link #xfind(Field)}):</h6>
  * <p>
  * Annotations are returned with the following precedence:
  * <ol>
@@ -91,7 +91,7 @@ import org.apache.juneau.common.collections.*;
  * 	<li><b>Declared annotations</b> on the field
  * </ol>
  *
- * <h6 class='topic'>For Constructors ({@link #find(Constructor)}):</h6>
+ * <h6 class='topic'>For Constructors ({@link #xfind(Constructor)}):</h6>
  * <p>
  * Annotations are returned with the following precedence:
  * <ol>
@@ -475,7 +475,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the specified class,
 	 * 	its parents, interfaces, and package. Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<Annotation>> find(Class<?> onClass) {
+	public List<AnnotationInfo<Annotation>> xfind(Class<?> onClass) {
 		assertArgNotNull("onClass", onClass);
 		return classAnnotations.get(onClass);
 	}
@@ -489,7 +489,7 @@ public class AnnotationProvider {
 	 * taking precedence at each level.
 	 *
 	 * <p>
-	 * This is a filtered version of {@link #find(Class)} that only returns annotations matching the specified type.
+	 * This is a filtered version of {@link #xfind(Class)} that only returns annotations matching the specified type.
 	 *
 	 * <p>
 	 * <b>Comparison with {@link ClassInfo#getAnnotations(Class)}:</b>
@@ -506,10 +506,10 @@ public class AnnotationProvider {
 	 * 	specified class, its parents, interfaces, and package. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, Class<?> onClass) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Class<?> onClass) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("onClass", onClass);
-		return find(onClass).stream()
+		return xfind(onClass).stream()
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}
@@ -518,7 +518,7 @@ public class AnnotationProvider {
 	 * Finds annotations declared directly on the specified class, including runtime annotations.
 	 *
 	 * <p>
-	 * Unlike {@link #find(Class)}, this method only returns annotations declared directly on the specified class,
+	 * Unlike {@link #xfind(Class)}, this method only returns annotations declared directly on the specified class,
 	 * not on its parents, interfaces, or package.
 	 *
 	 * <p>
@@ -539,7 +539,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects representing annotations declared directly on the class.
 	 * 	Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<Annotation>> findDeclared(Class<?> onClass) {
+	public List<AnnotationInfo<Annotation>> xfindDeclared(Class<?> onClass) {
 		assertArgNotNull("onClass", onClass);
 		return classDeclaredAnnotations.get(onClass);
 	}
@@ -548,7 +548,7 @@ public class AnnotationProvider {
 	 * Finds annotations of the specified type declared directly on the specified class, including runtime annotations.
 	 *
 	 * <p>
-	 * This is a filtered version of {@link #findDeclared(Class)} that only returns annotations matching the specified type.
+	 * This is a filtered version of {@link #xfindDeclared(Class)} that only returns annotations matching the specified type.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
@@ -557,10 +557,10 @@ public class AnnotationProvider {
 	 * 	directly on the class. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findDeclared(Class<A> type, Class<?> onClass) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> xfindDeclared(Class<A> type, Class<?> onClass) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("onClass", onClass);
-		return findDeclared(onClass).stream()
+		return xfindDeclared(onClass).stream()
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}
@@ -569,7 +569,7 @@ public class AnnotationProvider {
 	 * Finds all declared annotations on the specified class in parent-to-child order (reversed).
 	 *
 	 * <p>
-	 * This method returns annotations in the opposite order from {@link #findDeclared(Class)}.
+	 * This method returns annotations in the opposite order from {@link #xfindDeclared(Class)}.
 	 * Returns annotations in <b>parent-to-child</b> order with declared annotations coming before
 	 * runtime annotations at each level.
 	 *
@@ -587,7 +587,7 @@ public class AnnotationProvider {
 	 * @param onClass The class to search on.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order.
 	 */
-	public Stream<AnnotationInfo<Annotation>> findDeclaredParentFirst(Class<?> onClass) {
+	public Stream<AnnotationInfo<Annotation>> xfindDeclaredParentFirst(Class<?> onClass) {
 		assertArgNotNull("onClass", onClass);
 		var list = classDeclaredAnnotations.get(onClass);
 		// Iterate backwards to get parent-to-child order
@@ -598,7 +598,7 @@ public class AnnotationProvider {
 	 * Finds all declared annotations of the specified type on the specified class in parent-to-child order (reversed).
 	 *
 	 * <p>
-	 * This method returns annotations in the opposite order from {@link #findDeclared(Class, Class)}.
+	 * This method returns annotations in the opposite order from {@link #xfindDeclared(Class, Class)}.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
@@ -606,10 +606,10 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findDeclaredParentFirst(Class<A> type, Class<?> onClass) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> xfindDeclaredParentFirst(Class<A> type, Class<?> onClass) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("onClass", onClass);
-		return findDeclaredParentFirst(onClass)
+		return xfindDeclaredParentFirst(onClass)
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}
@@ -642,7 +642,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the method and
 	 * 	overridden parent methods. Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<Annotation>> find(Method onMethod) {
+	public List<AnnotationInfo<Annotation>> xfind(Method onMethod) {
 		assertArgNotNull("onMethod", onMethod);
 		return methodAnnotations.get(onMethod);
 	}
@@ -651,7 +651,7 @@ public class AnnotationProvider {
 	 * Finds all annotations of the specified type on the specified method, including runtime annotations.
 	 *
 	 * <p>
-	 * This is a filtered version of {@link #find(Method)} that only returns annotations matching the specified type.
+	 * This is a filtered version of {@link #xfind(Method)} that only returns annotations matching the specified type.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
@@ -660,10 +660,10 @@ public class AnnotationProvider {
 	 * 	method and overridden parent methods. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, Method onMethod) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Method onMethod) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("onMethod", onMethod);
-		return find(onMethod).stream()
+		return xfind(onMethod).stream()
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}
@@ -689,7 +689,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the field.
 	 * 	Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<Annotation>> find(Field onField) {
+	public List<AnnotationInfo<Annotation>> xfind(Field onField) {
 		assertArgNotNull("onField", onField);
 		return fieldAnnotations.get(onField);
 	}
@@ -698,7 +698,7 @@ public class AnnotationProvider {
 	 * Finds all annotations of the specified type on the specified field, including runtime annotations.
 	 *
 	 * <p>
-	 * This is a filtered version of {@link #find(Field)} that only returns annotations matching the specified type.
+	 * This is a filtered version of {@link #xfind(Field)} that only returns annotations matching the specified type.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
@@ -707,10 +707,10 @@ public class AnnotationProvider {
 	 * 	Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, Field onField) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Field onField) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("onField", onField);
-		return find(onField).stream()
+		return xfind(onField).stream()
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}
@@ -736,7 +736,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects representing all annotations on the constructor.
 	 * 	Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<Annotation>> find(Constructor<?> onConstructor) {
+	public List<AnnotationInfo<Annotation>> xfind(Constructor<?> onConstructor) {
 		assertArgNotNull("onConstructor", onConstructor);
 		return constructorAnnotations.get(onConstructor);
 	}
@@ -745,7 +745,7 @@ public class AnnotationProvider {
 	 * Finds all annotations of the specified type on the specified constructor, including runtime annotations.
 	 *
 	 * <p>
-	 * This is a filtered version of {@link #find(Constructor)} that only returns annotations matching the specified type.
+	 * This is a filtered version of {@link #xfind(Constructor)} that only returns annotations matching the specified type.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
@@ -754,10 +754,10 @@ public class AnnotationProvider {
 	 * 	Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, Constructor<?> onConstructor) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> xfind(Class<A> type, Constructor<?> onConstructor) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("onConstructor", onConstructor);
-		return find(onConstructor).stream()
+		return xfind(onConstructor).stream()
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}
@@ -871,15 +871,15 @@ public class AnnotationProvider {
 	 * @param filter Optional filter to apply to annotations. Can be <jk>null</jk>.
 	 * @param action The action to perform on each matching annotation.
 	 */
-	public <A extends Annotation> void forEachMethodAnnotation(Class<A> type, MethodInfo mi, Predicate<A> filter, Consumer<A> action) {
-		forEachClassAnnotation(type, mi.getDeclaringClass(), filter, action);
+	public <A extends Annotation> void xforEachMethodAnnotation(Class<A> type, MethodInfo mi, Predicate<A> filter, Consumer<A> action) {
+		xforEachClassAnnotation(type, mi.getDeclaringClass(), filter, action);
 		rstream(mi.getMatchingMethods())
 			.flatMap(m -> m.getDeclaredAnnotations().stream())
 			.map(AnnotationInfo::inner)
 			.filter(type::isInstance)
 			.map(type::cast)
 			.forEach(a -> consumeIf(filter, action, a));
-		forEachClassAnnotation(type, mi.getReturnType().unwrap(Value.class, Optional.class), filter, action);
+		xforEachClassAnnotation(type, mi.getReturnType().unwrap(Value.class, Optional.class), filter, action);
 	}
 
 	/**
@@ -899,16 +899,16 @@ public class AnnotationProvider {
 	 * @param filter Optional filter to apply to annotations. Can be <jk>null</jk>.
 	 * @param action The action to perform on each matching annotation.
 	 */
-	public <A extends Annotation> void forEachClassAnnotation(Class<A> type, ClassInfo ci, Predicate<A> filter, Consumer<A> action) {
+	public <A extends Annotation> void xforEachClassAnnotation(Class<A> type, ClassInfo ci, Predicate<A> filter, Consumer<A> action) {
 		A t2 = ci.getPackageAnnotation(type);
 		if (nn(t2))
 			consumeIf(filter, action, t2);
 		var interfaces2 = ci.getInterfaces();
 		for (int i = interfaces2.size() - 1; i >= 0; i--)
-			findDeclaredParentFirst(type, interfaces2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+			xfindDeclaredParentFirst(type, interfaces2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 		var parents2 = ci.getParents();
 		for (int i = parents2.size() - 1; i >= 0; i--)
-			findDeclaredParentFirst(type, parents2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+			xfindDeclaredParentFirst(type, parents2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -943,7 +943,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("clazz", clazz);
 
@@ -951,9 +951,9 @@ public class AnnotationProvider {
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
-					return findDeclared(type, clazz.inner());
+					return xfindDeclared(type, clazz.inner());
 				} else if (traversal == PARENTS) {
-					return clazz.getParentsAndInterfaces().stream().flatMap(x -> findDeclared(type, x.inner()));
+					return clazz.getParentsAndInterfaces().stream().flatMap(x -> xfindDeclared(type, x.inner()));
 				} else if (traversal == PACKAGE) {
 					A packageAnn = clazz.getPackageAnnotation(type);
 					return nn(packageAnn) ? Stream.of(AnnotationInfo.of(clazz, packageAnn)) : Stream.empty();
@@ -966,7 +966,7 @@ public class AnnotationProvider {
 	 * Streams annotations from a class using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, ClassInfo, AnnotationTraversal...)}
+	 * This is equivalent to calling {@link #find(Class, ClassInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.
@@ -975,8 +975,8 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
-		return rstream(findAnnotations(type, clazz, traversals).toList());
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
+		return rstream(find(type, clazz, traversals).toList());
 	}
 
 	/**
@@ -1002,7 +1002,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("method", method);
 		if (traversals.length == 0)
@@ -1012,11 +1012,11 @@ public class AnnotationProvider {
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
-					return find(type, method.inner());
+					return xfind(type, method.inner());
 				} else if (traversal == MATCHING_METHODS) {
-					return method.getMatchingMethods().stream().skip(1).flatMap(x -> find(type, x.inner()));
+					return method.getMatchingMethods().stream().skip(1).flatMap(x -> xfind(type, x.inner()));
 				} else if (traversal == RETURN_TYPE) {
-					return findAnnotations(type, method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
+					return find(type, method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
 				} else if (traversal == PACKAGE) {
 					var c = method.getDeclaringClass();
 					A packageAnn = c.getPackageAnnotation(type);
@@ -1030,7 +1030,7 @@ public class AnnotationProvider {
 	 * Streams annotations from a method using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, MethodInfo, AnnotationTraversal...)}
+	 * This is equivalent to calling {@link #find(Class, MethodInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.
@@ -1039,8 +1039,8 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
-		return rstream(findAnnotations(type, method, traversals).toList());
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
+		return rstream(find(type, method, traversals).toList());
 	}
 
 	/**
@@ -1096,7 +1096,7 @@ public class AnnotationProvider {
 				} else if (traversal == MATCHING_PARAMETERS) {
 					return parameter.getMatchingParameters().stream().skip(1).flatMap(x -> x.getAnnotations(type));
 				} else if (traversal == PARAMETER_TYPE) {
-					return findAnnotations(type, parameter.getParameterType().unwrap(Value.class, Optional.class), PARENTS, PACKAGE);
+					return find(type, parameter.getParameterType().unwrap(Value.class, Optional.class), PARENTS, PACKAGE);
 				}
 				throw illegalArg("Invalid traversal type for parameter annotations: {0}", traversal);
 			});
@@ -1182,23 +1182,6 @@ public class AnnotationProvider {
 	}
 
 	/**
-	 * Streams annotations from a parameter using configurable traversal options in parent-first order.
-	 *
-	 * <p>
-	 * This is equivalent to calling {@link #find(Class, ParameterInfo, AnnotationTraversal...)}
-	 * and reversing the result.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param parameter The parameter to search.
-	 * @param traversals The traversal options.
-	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
-	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
-		return rstream(find(type, parameter, traversals).toList());
-	}
-
-	/**
 	 * Streams annotations from a field using configurable traversal options.
 	 *
 	 * <p>
@@ -1217,7 +1200,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("field", field);
 
@@ -1225,7 +1208,7 @@ public class AnnotationProvider {
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
-					return find(type, field.inner());
+					return xfind(type, field.inner());
 				}
 				throw illegalArg("Invalid traversal type for field annotations: {0}", traversal);
 			});
@@ -1235,7 +1218,7 @@ public class AnnotationProvider {
 	 * Streams annotations from a field using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, FieldInfo, AnnotationTraversal...)}
+	 * This is equivalent to calling {@link #find(Class, FieldInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.
@@ -1244,8 +1227,8 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
-		return rstream(findAnnotations(type, field, traversals).toList());
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
+		return rstream(find(type, field, traversals).toList());
 	}
 
 	/**
@@ -1267,7 +1250,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("constructor", constructor);
 
@@ -1275,7 +1258,7 @@ public class AnnotationProvider {
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
-					return find(type, constructor.inner());
+					return xfind(type, constructor.inner());
 				}
 				throw illegalArg("Invalid traversal type for constructor annotations: {0}", traversal);
 			});
@@ -1285,7 +1268,7 @@ public class AnnotationProvider {
 	 * Streams annotations from a constructor using configurable traversal options in parent-first order.
 	 *
 	 * <p>
-	 * This is equivalent to calling {@link #findAnnotations(Class, ConstructorInfo, AnnotationTraversal...)}
+	 * This is equivalent to calling {@link #find(Class, ConstructorInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
 	 * @param <A> The annotation type.
@@ -1294,7 +1277,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotationsParentFirst(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
-		return rstream(findAnnotations(type, constructor, traversals).toList());
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		return rstream(find(type, constructor, traversals).toList());
 	}
 }

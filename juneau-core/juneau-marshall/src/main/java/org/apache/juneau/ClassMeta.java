@@ -163,7 +163,7 @@ public class ClassMeta<T> implements Type {
 					cc = DATE;
 				else if (c.isArray())
 					cc = ARRAY;
-				else if (ci.isChildOfAny(URL.class, URI.class) || bc.getAnnotationProvider().find(Uri.class, ci.inner()).findFirst().isPresent())
+				else if (ci.isChildOfAny(URL.class, URI.class) || bc.getAnnotationProvider().xfind(Uri.class, ci.inner()).findFirst().isPresent())
 					cc = URI;
 				else if (ci.isChildOf(Reader.class))
 					cc = READER;
@@ -204,19 +204,19 @@ public class ClassMeta<T> implements Type {
 				.orElse(null);
 			// @formatter:on
 
-			ci.getAllFields().stream().filter(x -> bc.getAnnotationProvider().find(ParentProperty.class, x.inner()).findAny().isPresent()).forEach(x -> {
+			ci.getAllFields().stream().filter(x -> bc.getAnnotationProvider().xfind(ParentProperty.class, x.inner()).findAny().isPresent()).forEach(x -> {
 				if (x.isStatic())
 					throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid field ''{0}''.  Must be static.", x);
 				parentPropertyMethod = new Setter.FieldSetter(x.accessible().inner());
 			});
 
-			ci.getAllFields().stream().filter(x -> bc.getAnnotationProvider().find(NameProperty.class, x.inner()).findAny().isPresent()).forEach(x -> {
+			ci.getAllFields().stream().filter(x -> bc.getAnnotationProvider().xfind(NameProperty.class, x.inner()).findAny().isPresent()).forEach(x -> {
 				if (x.isStatic())
 					throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid field ''{0}''.  Must be static.", x);
 				namePropertyMethod = new Setter.FieldSetter(x.accessible().inner());
 			});
 
-			ci.getDeclaredFields().stream().filter(x -> bc.getAnnotationProvider().find(Example.class, x.inner()).findAny().isPresent()).forEach(x -> {
+			ci.getDeclaredFields().stream().filter(x -> bc.getAnnotationProvider().xfind(Example.class, x.inner()).findAny().isPresent()).forEach(x -> {
 				if (! (x.isStatic() && ci.isParentOf(x.getFieldType().inner())))
 					throw new ClassMetaRuntimeException(c, "@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", x);
 				exampleField = x.accessible().inner();
@@ -226,13 +226,13 @@ public class ClassMeta<T> implements Type {
 		List<MethodInfo> methods = ci.getAllMethods();
 		for (int i = methods.size() - 1; i >= 0; i--) {
 			MethodInfo m = methods.get(i);
-				if (m.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(ParentProperty.class, m2.inner()).findFirst().isPresent())) {
+				if (m.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().xfind(ParentProperty.class, m2.inner()).findFirst().isPresent())) {
 					if (m.isStatic() || ! m.hasNumParameters(1))
 						throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					parentPropertyMethod = new Setter.MethodSetter(m.inner());
 				}
-				if (m.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(NameProperty.class, m2.inner()).findFirst().isPresent())) {
+				if (m.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().xfind(NameProperty.class, m2.inner()).findFirst().isPresent())) {
 					if (m.isStatic() || ! m.hasNumParameters(1))
 						throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
@@ -240,7 +240,7 @@ public class ClassMeta<T> implements Type {
 				}
 			}
 
-			ci.getDeclaredMethods().stream().filter(m -> m.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(Example.class, m2.inner()).findFirst().isPresent())).forEach(m -> {
+			ci.getDeclaredMethods().stream().filter(m -> m.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().xfind(Example.class, m2.inner()).findFirst().isPresent())).forEach(m -> {
 				if (! (m.isStatic() && m.hasParameterTypesLenient(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 					throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m.toString());
 				m.setAccessible();
@@ -361,7 +361,7 @@ public class ClassMeta<T> implements Type {
 
 			if (nn(bc)) {
 				// Inline Context.forEachAnnotation() call
-				bc.getAnnotationProvider().find(Bean.class, c).map(x -> x.inner()).filter(x -> true).forEach(x -> {
+				bc.getAnnotationProvider().xfind(Bean.class, c).map(x -> x.inner()).filter(x -> true).forEach(x -> {
 					if (x.dictionary().length != 0)
 						beanRegistry = new BeanRegistry(bc, null, x.dictionary());
 					// This could be a non-bean POJO with a type name.
@@ -372,7 +372,7 @@ public class ClassMeta<T> implements Type {
 
 			if (example == null && nn(bc)) {
 				// Inline Context.forEachAnnotation() call
-				bc.getAnnotationProvider().find(Example.class, c).map(x -> x.inner()).filter(x -> ! x.value().isEmpty()).forEach(x -> example = x.value());
+				bc.getAnnotationProvider().xfind(Example.class, c).map(x -> x.inner()).filter(x -> ! x.value().isEmpty()).forEach(x -> example = x.value());
 			}
 
 			if (example == null) {
@@ -465,7 +465,7 @@ public class ClassMeta<T> implements Type {
 		private BeanFilter findBeanFilter(BeanContext bc) {
 			try {
 				List<Bean> ba = list();
-				bc.getAnnotationProvider().forEachClassAnnotation(Bean.class, info, x -> true, x -> ba.add(x));
+				bc.getAnnotationProvider().xforEachClassAnnotation(Bean.class, info, x -> true, x -> ba.add(x));
 				if (! ba.isEmpty())
 					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
@@ -481,7 +481,7 @@ public class ClassMeta<T> implements Type {
 		private MarshalledFilter findMarshalledFilter(BeanContext bc) {
 			try {
 				List<Marshalled> ba = list();
-				bc.getAnnotationProvider().forEachClassAnnotation(Marshalled.class, info, x -> true, x -> ba.add(x));
+				bc.getAnnotationProvider().xforEachClassAnnotation(Marshalled.class, info, x -> true, x -> ba.add(x));
 				if (! ba.isEmpty())
 					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
@@ -498,7 +498,7 @@ public class ClassMeta<T> implements Type {
 
 		if (nn(bc))
 			// Inline Context.forEachAnnotation() call
-			bc.getAnnotationProvider().find(Swap.class, innerClass).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(createSwap(x)));
+			bc.getAnnotationProvider().xfind(Swap.class, innerClass).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(createSwap(x)));
 
 			ObjectSwap defaultSwap = DefaultSwaps.find(ci);
 			if (defaultSwap == null)
@@ -863,7 +863,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	public <A extends Annotation> ClassMeta<T> forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		if (beanContext != null) {
-			beanContext.getAnnotationProvider().find(type, info.inner()).map(x -> x.inner()).filter(x -> x != null).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+			beanContext.getAnnotationProvider().xfind(type, info.inner()).map(x -> x.inner()).filter(x -> x != null).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 		}
 		return this;
 	}
@@ -1114,8 +1114,8 @@ public class ClassMeta<T> implements Type {
 		Optional<A> o = (Optional<A>)annotationLastMap.get(a);
 		if (o == null) {
 			if (beanContext == null)
-				return BeanContext.DEFAULT.getAnnotationProvider().find(a, info.inner()).findFirst().map(x -> x.inner()).orElse(null);
-			o = opt(beanContext.getAnnotationProvider().find(a, info.inner()).findFirst().map(x -> x.inner()).orElse(null));
+				return BeanContext.DEFAULT.getAnnotationProvider().xfind(a, info.inner()).findFirst().map(x -> x.inner()).orElse(null);
+			o = opt(beanContext.getAnnotationProvider().xfind(a, info.inner()).findFirst().map(x -> x.inner()).orElse(null));
 			annotationLastMap.put(a, o);
 		}
 		return o.orElse(null);
@@ -1760,7 +1760,7 @@ public class ClassMeta<T> implements Type {
 		A[] array = annotationArray(type);
 		if (array == null) {
 			if (beanContext == null)
-				return AnnotationProvider.INSTANCE.find(type, info.inner())
+				return AnnotationProvider.INSTANCE.xfind(type, info.inner())
 					.map(AnnotationInfo::inner)
 					.filter(a -> test(filter, a))
 					.findFirst();  // AnnotationProvider returns child-to-parent, so first is "last"
@@ -1937,7 +1937,7 @@ public class ClassMeta<T> implements Type {
 		A[] array = (A[])annotationArrayMap.get(type);
 		if (array == null && nn(beanContext)) {
 			List<A> l = list();
-			beanContext.getAnnotationProvider().find(type, info.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
+			beanContext.getAnnotationProvider().xfind(type, info.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			array = (A[])Array.newInstance(type, l.size());
 			for (int i = 0; i < l.size(); i++)
 				Array.set(array, i, l.get(i));

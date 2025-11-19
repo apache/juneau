@@ -183,8 +183,8 @@ public class BeanMeta<T> {
 			List<Beanp> lp = list();
 			List<Name> ln = list();
 			// Inline Context.forEachAnnotation() calls
-			ctx.getAnnotationProvider().find(Beanp.class, f).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
-			ctx.getAnnotationProvider().find(Name.class, f).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
+			ctx.getAnnotationProvider().xfind(Beanp.class, f).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
+			ctx.getAnnotationProvider().xfind(Name.class, f).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
 			String name = bpName(lp, ln);
 			if (isNotEmpty(name))
 				return name;
@@ -230,8 +230,8 @@ public class BeanMeta<T> {
 
 				Map<String,BeanPropertyMeta.Builder> normalProps = map();
 
-				boolean hasBean = ctx.getAnnotationProvider().find(Bean.class, ci.inner()).findFirst().isPresent();
-				boolean hasBeanIgnore = ctx.getAnnotationProvider().find(BeanIgnore.class, ci.inner()).findFirst().isPresent();
+				boolean hasBean = ctx.getAnnotationProvider().xfind(Bean.class, ci.inner()).findFirst().isPresent();
+				boolean hasBeanIgnore = ctx.getAnnotationProvider().xfind(BeanIgnore.class, ci.inner()).findFirst().isPresent();
 
 				/// See if this class matches one the patterns in the exclude-class list.
 				if (ctx.isNotABean(c))
@@ -248,12 +248,12 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @Beanc constructor on public constructors.
-				ci.getPublicConstructors().stream().filter(x -> ctx.getAnnotationProvider().find(Beanc.class, x.inner()).findAny().isPresent()).forEach(x -> {
+				ci.getPublicConstructors().stream().filter(x -> ctx.getAnnotationProvider().xfind(Beanc.class, x.inner()).findAny().isPresent()).forEach(x -> {
 					if (nn(constructor))
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
-					ctx.getAnnotationProvider().find(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
+					ctx.getAnnotationProvider().xfind(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
 					if (! x.hasNumParameters(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 						throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -271,12 +271,12 @@ public class BeanMeta<T> {
 
 				// Look for @Beanc on all other constructors.
 				if (constructor == null) {
-					ci.getDeclaredConstructors().stream().filter(x -> ctx.getAnnotationProvider().find(Beanc.class, x.inner()).findAny().isPresent()).forEach(x -> {
+					ci.getDeclaredConstructors().stream().filter(x -> ctx.getAnnotationProvider().xfind(Beanc.class, x.inner()).findAny().isPresent()).forEach(x -> {
 						if (nn(constructor))
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						ctx.getAnnotationProvider().find(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
+						ctx.getAnnotationProvider().xfind(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
 						if (! x.hasNumParameters(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -570,8 +570,8 @@ public class BeanMeta<T> {
 				.filter(x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
-				&& ctx.getAnnotationProvider().find(BeanIgnore.class, x.inner()).findAny().isEmpty()
-				&& (v.isVisible(x.inner()) || ctx.getAnnotationProvider().find(Beanp.class, x.inner()).findAny().isPresent()))
+				&& ctx.getAnnotationProvider().xfind(BeanIgnore.class, x.inner()).findAny().isEmpty()
+				&& (v.isVisible(x.inner()) || ctx.getAnnotationProvider().xfind(Beanp.class, x.inner()).findAny().isPresent()))
 				.forEach(x -> l.add(x.inner())
 			);
 			// @formatter:on
@@ -593,10 +593,10 @@ public class BeanMeta<T> {
 
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
-				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.getMatchingMethods().stream().anyMatch(m2 -> ctx.getAnnotationProvider().find(BeanIgnore.class, m2.inner()).findFirst().isPresent()))
+				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.getMatchingMethods().stream().anyMatch(m2 -> ctx.getAnnotationProvider().xfind(BeanIgnore.class, m2.inner()).findFirst().isPresent()))
 					continue;
 				Transient t = m.getMatchingMethods().stream()
-					.map(m2 -> ctx.getAnnotationProvider().find(Transient.class, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null))
+					.map(m2 -> ctx.getAnnotationProvider().xfind(Transient.class, m2.inner()).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null))
 					.filter(Objects::nonNull)
 					.findFirst()
 					.orElse(null);
@@ -605,8 +605,8 @@ public class BeanMeta<T> {
 
 				List<Beanp> lp = list();
 				List<Name> ln = list();
-				ctx.getAnnotationProvider().find(Beanp.class, m.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
-				ctx.getAnnotationProvider().find(Name.class, m.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
+				ctx.getAnnotationProvider().xfind(Beanp.class, m.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
+				ctx.getAnnotationProvider().xfind(Name.class, m.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
 
 				// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does
 				// This ensures property names are inherited correctly, preventing duplicate property definitions
@@ -710,7 +710,7 @@ public class BeanMeta<T> {
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
-				&& ctx.getAnnotationProvider().find(BeanIgnore.class, x.inner()).findAny().isEmpty()
+				&& ctx.getAnnotationProvider().xfind(BeanIgnore.class, x.inner()).findAny().isEmpty()
 				&& x.hasName(name))
 			.ifPresent(f -> value.set(f.inner()));
 			// @formatter:on
@@ -819,8 +819,8 @@ public class BeanMeta<T> {
 
 					if (paramsMatch) {
 						// Found a matching parent method - check for @Beanp and @Name annotations
-						ctx.getAnnotationProvider().find(Beanp.class, parentMethod.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
-						ctx.getAnnotationProvider().find(Name.class, parentMethod.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
+						ctx.getAnnotationProvider().xfind(Beanp.class, parentMethod.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
+						ctx.getAnnotationProvider().xfind(Name.class, parentMethod.inner()).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
 
 						// If we found annotations, we're done
 						if (! lp.isEmpty() || ! ln.isEmpty())

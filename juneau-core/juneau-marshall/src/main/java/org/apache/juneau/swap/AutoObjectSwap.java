@@ -134,7 +134,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class)
-			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(BeanIgnore.class, m2.inner()).findFirst().isPresent());
+			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().xfind(BeanIgnore.class, m2.inner()).findFirst().isPresent());
 		// @formatter:on
 	}
 
@@ -144,7 +144,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			cs.isNotDeprecated()
 				&& cs.isVisible(bc.getBeanConstructorVisibility())
 				&& cs.hasParameterTypeParents(rt)
-				&& bc.getAnnotationProvider().find(BeanIgnore.class, cs.inner()).findAny().isEmpty();
+				&& bc.getAnnotationProvider().xfind(BeanIgnore.class, cs.inner()).findAny().isEmpty();
 		// @formatter:on
 	}
 
@@ -157,12 +157,12 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().find(BeanIgnore.class, m2.inner()).findFirst().isPresent());
+			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().xfind(BeanIgnore.class, m2.inner()).findFirst().isPresent());
 		// @formatter:on
 	}
 
 	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
-		return bc.getAnnotationProvider().find(BeanIgnore.class, ci.inner()).findFirst().isPresent() || ci.isNonStaticMemberClass();
+		return bc.getAnnotationProvider().xfind(BeanIgnore.class, ci.inner()).findFirst().isPresent() || ci.isNonStaticMemberClass();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
