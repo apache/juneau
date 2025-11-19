@@ -17,9 +17,7 @@
 package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
@@ -28,7 +26,6 @@ import static java.util.stream.Stream.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
@@ -405,7 +402,6 @@ public class AnnotationProvider {
 	}
 
 	// @formatter:off
-	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classDeclaredAnnotations;
 	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classRuntimeAnnotations;
 	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodRuntimeAnnotations;
 	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldRuntimeAnnotations;
@@ -419,10 +415,6 @@ public class AnnotationProvider {
 	 * @param builder The builder containing configuration settings.
 	 */
 	protected AnnotationProvider(Builder builder) {
-		this.classDeclaredAnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findClassDeclaredAnnotations)
-			.disableCaching(builder.disableCaching)
-			.build();
 		this.classRuntimeAnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findClassRuntimeAnnotations)
 			.disableCaching(builder.disableCaching)
@@ -442,76 +434,9 @@ public class AnnotationProvider {
 		this.runtimeAnnotations = builder.runtimeAnnotations.build();
 	}
 
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Public API
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Finds all declared annotations on the specified class in parent-to-child order (reversed).
-	 *
-	 * <p>
-	 * This method returns annotations in the opposite order from {@link #xfindDeclared(Class)}.
-	 * Returns annotations in <b>parent-to-child</b> order with declared annotations coming before
-	 * runtime annotations at each level.
-	 *
-	 * <p>
-	 * <b>Order of precedence</b>:
-	 * <ol>
-	 * 	<li>Declared annotations on this class (lowest priority)
-	 * 	<li>Runtime annotations on this class (highest priority)
-	 * </ol>
-	 *
-	 * <p>
-	 * This is useful when you want to process multiple annotation values where runtime annotations
-	 * can override values from declared annotations.
-	 *
-	 * @param onClass The class to search on.
-	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order.
-	 * @deprecated Use {@link #findTopDown(ClassInfo, AnnotationTraversal...)} with {@link AnnotationTraversal#SELF SELF} instead.
-	 */
-	@Deprecated
-	public Stream<AnnotationInfo<Annotation>> xfindDeclaredParentFirst(Class<?> onClass) {
-		assertArgNotNull("onClass", onClass);
-		var list = classDeclaredAnnotations.get(onClass);
-		// Iterate backwards to get parent-to-child order
-		return rstream(list);
-	}
-
-	/**
-	 * Finds all declared annotations of the specified type on the specified class in parent-to-child order (reversed).
-	 *
-	 * <p>
-	 * This method returns annotations in the opposite order from {@link #xfindDeclared(Class, Class)}.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param type The annotation type to find.
-	 * @param onClass The class to search on.
-	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order.
-	 * @deprecated Use {@link #findTopDown(Class, ClassInfo, AnnotationTraversal...)} with {@link AnnotationTraversal#SELF SELF} instead.
-	 */
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> xfindDeclaredParentFirst(Class<A> type, Class<?> onClass) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("onClass", onClass);
-		return xfindDeclaredParentFirst(onClass)
-			.filter(a -> a.isType(type))
-			.map(a -> (AnnotationInfo<A>)a);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Private implementation
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private List<AnnotationInfo<Annotation>> findClassDeclaredAnnotations(Class<?> forClass) {
-		var list = new ArrayList<AnnotationInfo<Annotation>>();
-
-		// On this class
-		findDeclaredAnnotations(list, forClass);
-
-		return u(list);
-	}
 
 	private List<AnnotationInfo<Annotation>> findClassRuntimeAnnotations(Class<?> forClass) {
 		ClassInfo ci = ClassInfo.of(forClass);
@@ -531,80 +456,6 @@ public class AnnotationProvider {
 	private List<AnnotationInfo<Annotation>> findConstructorRuntimeAnnotations(Constructor<?> forConstructor) {
 		ConstructorInfo ci = ConstructorInfo.of(forConstructor);
 		return runtimeAnnotations.find(forConstructor).map(a -> AnnotationInfo.of(ci, a)).toList();
-	}
-
-	/**
-	 * Finds all declared annotations on the specified class and appends them to the list.
-	 *
-	 * @param appendTo The list to append to.
-	 * @param forClass The class to find declared annotations on.
-	 */
-	private void findDeclaredAnnotations(List<AnnotationInfo<Annotation>> appendTo, Class<?> forClass) {
-		var ci = ClassInfo.of(forClass);
-		runtimeAnnotations.find(forClass).forEach(x -> appendTo.add(AnnotationInfo.of(ClassInfo.of(forClass), x)));
-		for (var a : forClass.getDeclaredAnnotations())
-			streamRepeated(a).forEach(a2 -> appendTo.add(AnnotationInfo.of(ci, a2)));
-	}
-
-	/**
-	 * Iterates through annotations on a method, its declaring class hierarchy, and return type hierarchy.
-	 *
-	 * <p>
-	 * This traverses annotations in parent-first order from:
-	 * <ol>
-	 * 	<li>Declaring class hierarchy (via this AnnotationProvider)
-	 * 	<li>Method hierarchy (parent-first, declared annotations only)
-	 * 	<li>Return type hierarchy (via this AnnotationProvider)
-	 * </ol>
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param mi The method info to traverse.
-	 * @param filter Optional filter to apply to annotations. Can be <jk>null</jk>.
-	 * @param action The action to perform on each matching annotation.
-	 * @deprecated Use {@link #findTopDown(Class, MethodInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	public <A extends Annotation> void xforEachMethodAnnotation(Class<A> type, MethodInfo mi, Predicate<A> filter, Consumer<A> action) {
-		xforEachClassAnnotation(type, mi.getDeclaringClass(), filter, action);
-		rstream(mi.getMatchingMethods())
-			.flatMap(m -> m.getDeclaredAnnotations().stream())
-			.map(AnnotationInfo::inner)
-			.filter(type::isInstance)
-			.map(type::cast)
-			.forEach(a -> consumeIf(filter, action, a));
-		xforEachClassAnnotation(type, mi.getReturnType().unwrap(Value.class, Optional.class), filter, action);
-	}
-
-	/**
-	 * Iterates through annotations on a class hierarchy.
-	 *
-	 * <p>
-	 * This traverses annotations in parent-first order from:
-	 * <ol>
-	 * 	<li>Package annotations
-	 * 	<li>Interface hierarchy (parent-first)
-	 * 	<li>Class hierarchy (parent-first)
-	 * </ol>
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param ci The class info to traverse.
-	 * @param filter Optional filter to apply to annotations. Can be <jk>null</jk>.
-	 * @param action The action to perform on each matching annotation.
-	 * @deprecated Use {@link #findTopDown(Class, ClassInfo, AnnotationTraversal...)} instead.
-	 */
-	@Deprecated
-	public <A extends Annotation> void xforEachClassAnnotation(Class<A> type, ClassInfo ci, Predicate<A> filter, Consumer<A> action) {
-		A t2 = ci.getPackageAnnotation(type);
-		if (nn(t2))
-			consumeIf(filter, action, t2);
-		var interfaces2 = ci.getInterfaces();
-		for (int i = interfaces2.size() - 1; i >= 0; i--)
-			xfindDeclaredParentFirst(type, interfaces2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
-		var parents2 = ci.getParents();
-		for (int i = parents2.size() - 1; i >= 0; i--)
-			xfindDeclaredParentFirst(type, parents2.get(i).inner()).map(x -> x.inner()).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

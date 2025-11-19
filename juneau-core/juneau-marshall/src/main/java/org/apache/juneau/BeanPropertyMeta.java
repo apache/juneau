@@ -688,10 +688,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		var si = setter == null ? null : MethodInfo.of(setter);
 		if (a == null)
 			return l;
-		ap.xforEachClassAnnotation(a, getBeanMeta().getClassMeta().getInfo(), x -> true, x -> l.add(x));
+		ap.findTopDown(a, getBeanMeta().getClassMeta().getInfo()).map(x -> x.inner()).forEach(x -> l.add(x));
 		if (nn(field)) {
 			ap.find(a, fi).map(x -> x.inner()).forEach(x -> l.add(x));
-			ap.xforEachClassAnnotation(a, ClassInfo.of(field.getType()), x -> true, x -> l.add(x));
+			ap.findTopDown(a, ClassInfo.of(field.getType())).map(x -> x.inner()).forEach(x -> l.add(x));
 		}
 		if (nn(gi)) {
 			// Walk up the inheritance hierarchy for the getter method
@@ -699,7 +699,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				ap.find(a, MethodInfo.of(parentGetter)).map(x -> x.inner()).forEach(x -> l.add(x));
 			});
 			ap.find(a, gi).map(x -> x.inner()).forEach(x -> l.add(x));
-			ap.xforEachClassAnnotation(a, gi.getReturnType(), x -> true, x -> l.add(x));
+			ap.findTopDown(a, gi.getReturnType()).map(x -> x.inner()).forEach(x -> l.add(x));
 		}
 		if (nn(setter)) {
 			// Walk up the inheritance hierarchy for the setter method
@@ -707,7 +707,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				ap.find(a, MethodInfo.of(parentSetter)).map(x -> x.inner()).forEach(x -> l.add(x));
 			});
 			ap.find(a, si).map(x -> x.inner()).forEach(x -> l.add(x));
-			ap.xforEachClassAnnotation(a, ClassInfo.of(setter.getReturnType()), x -> true, x -> l.add(x));
+			ap.findTopDown(a, ClassInfo.of(setter.getReturnType())).map(x -> x.inner()).forEach(x -> l.add(x));
 		}
 		if (nn(extraKeys)) {
 			MethodInfo eki = MethodInfo.of(extraKeys);
@@ -716,7 +716,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				ap.find(a, MethodInfo.of(parentExtraKeys)).map(x -> x.inner()).forEach(x -> l.add(x));
 			});
 			ap.find(a, eki).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
-			ap.xforEachClassAnnotation(a, ClassInfo.of(extraKeys.getReturnType()), x -> true, x -> l.add(x));
+			ap.findTopDown(a, ClassInfo.of(extraKeys.getReturnType())).map(x -> x.inner()).forEach(x -> l.add(x));
 		}
 
 		return l;

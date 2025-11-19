@@ -33,7 +33,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.annotation.Items;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
@@ -159,7 +158,7 @@ public class BasicSwaggerProviderSession {
 
 		// Combine it with @Rest(swagger)
 		List<Rest> restAnnotations = list();
-		context.getAnnotationProvider().xforEachClassAnnotation(Rest.class, rci, x -> true, x -> restAnnotations.add(x));
+		ap.findTopDown(Rest.class, rci).map(x -> x.inner()).forEach(x -> restAnnotations.add(x));
 		for (var rr : restAnnotations) {
 
 			JsonMap sInfo = omSwagger.getMap("info", true);
@@ -437,9 +436,9 @@ public class BasicSwaggerProviderSession {
 			for (var eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
 					List<Response> la = list();
-					context.getAnnotationProvider().xforEachClassAnnotation(Response.class, eci, x -> true, x -> la.add(x));
+					ap.findTopDown(Response.class, eci).map(x -> x.inner()).forEach(x -> la.add(x));
 					List<StatusCode> la2 = list();
-					context.getAnnotationProvider().xforEachClassAnnotation(StatusCode.class, eci, x -> true, x -> la2.add(x));
+					ap.findTopDown(StatusCode.class, eci).map(x -> x.inner()).forEach(x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 500);
 					for (var a : la) {
 						for (var code : codes) {
@@ -461,7 +460,8 @@ public class BasicSwaggerProviderSession {
 							String ha = a.name();
 							for (var code : codes) {
 								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-								context.getAnnotationProvider().xforEachMethodAnnotation(Schema.class, ecmi, x -> true, x -> merge(header, x));
+								ap.findTopDown(Schema.class, ecmi).map(x -> x.inner()).forEach(x -> merge(header, x));
+							//	context.getAnnotationProvider().xforEachMethodAnnotation(Schema.class, ecmi, x -> true, x -> merge(header, x));
 								rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotations()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Value.class, Optional.class).innerType(), bs));
 							}
@@ -472,16 +472,19 @@ public class BasicSwaggerProviderSession {
 
 			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class, Optional.class).hasAnnotation(Response.class)) {
 				List<Response> la = list();
-				context.getAnnotationProvider().xforEachMethodAnnotation(Response.class, mi, x -> true, x -> la.add(x));
+				ap.findTopDown(Response.class, mi).map(x -> x.inner()).forEach(x -> la.add(x));
+				//context.getAnnotationProvider().xforEachMethodAnnotation(Response.class, mi, x -> true, x -> la.add(x));
 				List<StatusCode> la2 = list();
-				context.getAnnotationProvider().xforEachMethodAnnotation(StatusCode.class, mi, x -> true, x -> la2.add(x));
+				//context.getAnnotationProvider().xforEachMethodAnnotation(StatusCode.class, mi, x -> true, x -> la2.add(x));
+				ap.findTopDown(StatusCode.class, mi).map(x -> x.inner()).forEach(x -> la2.add(x));
 				Set<Integer> codes = getCodes(la2, 200);
 				for (var a : la) {
 					for (var code : codes) {
 						JsonMap om = responses.getMap(String.valueOf(code), true);
 						merge(om, a);
 						JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-						context.getAnnotationProvider().xforEachMethodAnnotation(Schema.class, mi, x -> true, x -> merge(schema, x));
+						ap.findTopDown(Schema.class, mi).map(x -> x.inner()).forEach(x -> merge(schema, x));
+						//context.getAnnotationProvider().xforEachMethodAnnotation(Schema.class, mi, x -> true, x -> merge(schema, x));
 						pushupSchemaFields(RESPONSE, om, schema);
 						om.appendIf(nem, "schema", schema);
 						addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
@@ -497,7 +500,8 @@ public class BasicSwaggerProviderSession {
 							if (! isMulti(a)) {
 								for (var code : codes) {
 									JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-									context.getAnnotationProvider().xforEachMethodAnnotation(Schema.class, ecmi, x -> true, x -> merge(header, x));
+									//context.getAnnotationProvider().xforEachMethodAnnotation(Schema.class, ecmi, x -> true, x -> merge(header, x));
+									ap.findTopDown(Schema.class, ecmi).map(x -> x.inner()).forEach(x -> merge(header, x));
 									rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotations()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
 									merge(header, a.schema());
 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));
