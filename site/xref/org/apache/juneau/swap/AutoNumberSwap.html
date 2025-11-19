@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			&amp;&amp; (rt.isChildOf(Number.<strong class="jxr_keyword">class</strong>) || (rt.isPrimitive() &amp;&amp; rt.isAny(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">short</strong>.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">float</strong>.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">double</strong>.<strong class="jxr_keyword">class</strong>, byte.<strong class="jxr_keyword">class</strong>)))
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			&amp;&amp; mi.hasAnyName(SWAP_METHOD_NAMES)
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			&amp;&amp; mi.hasParameterTypesLenient(BeanSession.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			&amp;&amp; ! mi.getMatchingMethods().stream().anyMatch(m2 -&gt; bc.getAnnotationProvider().xfind(BeanIgnore.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent());
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			&amp;&amp; ! mi.getMatchingMethods().stream().anyMatch(m2 -&gt; bc.getAnnotationProvider().has(BeanIgnore.<strong class="jxr_keyword">class</strong>, m2));
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			cs.isNotDeprecated()
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			&amp;&amp; cs.isVisible(bc.getBeanConstructorVisibility())
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			&amp;&amp; cs.hasParameterTypeParents(rt)
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			&amp;&amp; bc.getAnnotationProvider().xfind(BeanIgnore.<strong class="jxr_keyword">class</strong>, cs.<strong class="jxr_keyword">inner</strong>()).findAny().isEmpty();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			&amp;&amp; ! bc.getAnnotationProvider().has(BeanIgnore.<strong class="jxr_keyword">class</strong>, cs);
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 
@@ -189,17 +189,17 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			&amp;&amp; mi.hasAnyName(UNSWAP_METHOD_NAMES)
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 			&amp;&amp; mi.hasParameterTypesLenient(BeanSession.<strong class="jxr_keyword">class</strong>, rt.<strong class="jxr_keyword">inner</strong>())
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			&amp;&amp; mi.hasReturnTypeParent(ci)
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			&amp;&amp; ! mi.getMatchingMethods().stream().anyMatch(m2 -&gt; bc.getAnnotationProvider().xfind(BeanIgnore.<strong class="jxr_keyword">class</strong>, m2.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent());
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			&amp;&amp; ! mi.getMatchingMethods().stream().anyMatch(m2 -&gt; bc.getAnnotationProvider().has(BeanIgnore.<strong class="jxr_keyword">class</strong>, m2));
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> shouldIgnore(BeanContext bc, ClassInfo ci) {
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">return</strong>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			bc.getAnnotationProvider().xfind(BeanIgnore.<strong class="jxr_keyword">class</strong>, ci.<strong class="jxr_keyword">inner</strong>()).findFirst().isPresent()
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			|| ci.isNonStaticMemberClass()
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			|| ci.isPrimitive()
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			|| ci.isChildOf(Number.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			ci.isNonStaticMemberClass()
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			|| ci.isPrimitive()
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			|| ci.isChildOf(Number.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			|| bc.getAnnotationProvider().has(BeanIgnore.<strong class="jxr_keyword">class</strong>, ci);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
