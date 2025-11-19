@@ -233,7 +233,7 @@
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">this</strong>.componentType = memoize(<strong class="jxr_keyword">this</strong>::findComponentType);
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">this</strong>.packageInfo = memoize(() -&gt; opt(<strong class="jxr_keyword">inner</strong>).map(x -&gt; x.getPackage()).filter(p -&gt; p != <strong class="jxr_keyword">null</strong>).map(PackageInfo::of).orElse(<strong class="jxr_keyword">null</strong>));  <em class="jxr_comment">// PackageInfo may be null for primitive types and arrays.</em>
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">this</strong>.parents = memoize(<strong class="jxr_keyword">this</strong>::findParents);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">this</strong>.declaredAnnotations = memoize(() -&gt; (List)opt(<strong class="jxr_keyword">inner</strong>).map(x -&gt; u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList());
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">this</strong>.declaredAnnotations = memoize(() -&gt; (List)opt(<strong class="jxr_keyword">inner</strong>).map(x -&gt; u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().flatMap(a -&gt; streamRepeated(a)).map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList());
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">this</strong>.fullName = memoize(() -&gt; getNameFormatted(FULL, <strong class="jxr_keyword">true</strong>, '$', BRACKETS));
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">this</strong>.shortName = memoize(() -&gt; getNameFormatted(SHORT, <strong class="jxr_keyword">true</strong>, '$', BRACKETS));
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">this</strong>.readableName = memoize(() -&gt; getNameFormatted(SIMPLE, false, '$', WORD));
@@ -2278,238 +2278,243 @@
 <a class="jxr_linenumber" name="L2270" href="#L2270">2270</a> <em class="jxr_javadoccomment">	 * from parent classes. Each annotation is wrapped for additional functionality such as annotation member</em>
 <a class="jxr_linenumber" name="L2271" href="#L2271">2271</a> <em class="jxr_javadoccomment">	 * access and metadata inspection.</em>
 <a class="jxr_linenumber" name="L2272" href="#L2272">2272</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2273" href="#L2273">2273</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L2274" href="#L2274">2274</a> <em class="jxr_javadoccomment">	 * 	An unmodifiable list of {@link AnnotationInfo} wrappers for annotations declared directly on this class.</em>
-<a class="jxr_linenumber" name="L2275" href="#L2275">2275</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is empty if no annotations are declared.</em>
-<a class="jxr_linenumber" name="L2276" href="#L2276">2276</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are in declaration order.</em>
-<a class="jxr_linenumber" name="L2277" href="#L2277">2277</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2278" href="#L2278">2278</a> 	<strong class="jxr_keyword">public</strong> List&lt;AnnotationInfo&gt; getDeclaredAnnotations() {
-<a class="jxr_linenumber" name="L2279" href="#L2279">2279</a> 		<strong class="jxr_keyword">return</strong> declaredAnnotations.get();
-<a class="jxr_linenumber" name="L2280" href="#L2280">2280</a> 	}
-<a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> 
-<a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> <em class="jxr_javadoccomment">	 * Returns a {@link ConstructorInfo} wrapper for the specified raw {@link Constructor} object.</em>
-<a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2285" href="#L2285">2285</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> <em class="jxr_javadoccomment">	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.</em>
-<a class="jxr_linenumber" name="L2287" href="#L2287">2287</a> <em class="jxr_javadoccomment">	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.</em>
-<a class="jxr_linenumber" name="L2288" href="#L2288">2288</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> <em class="jxr_javadoccomment">	 * This method is called internally when building the lists of constructors (public, declared, etc.)</em>
-<a class="jxr_linenumber" name="L2291" href="#L2291">2291</a> <em class="jxr_javadoccomment">	 * and ensures that the same {@link Constructor} object always maps to the same {@link ConstructorInfo} instance.</em>
-<a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2293" href="#L2293">2293</a> <em class="jxr_javadoccomment">	 * @param x The raw constructor to wrap.</em>
-<a class="jxr_linenumber" name="L2294" href="#L2294">2294</a> <em class="jxr_javadoccomment">	 * @return The cached {@link ConstructorInfo} wrapper for this constructor.</em>
-<a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2296" href="#L2296">2296</a> 	ConstructorInfo getConstructor(Constructor&lt;?&gt; x) {
-<a class="jxr_linenumber" name="L2297" href="#L2297">2297</a> 		<strong class="jxr_keyword">return</strong> constructorCache.get(x, () -&gt; <strong class="jxr_keyword">new</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>(<strong class="jxr_keyword">this</strong>, x));
-<a class="jxr_linenumber" name="L2298" href="#L2298">2298</a> 	}
-<a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> 
-<a class="jxr_linenumber" name="L2300" href="#L2300">2300</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2301" href="#L2301">2301</a> <em class="jxr_javadoccomment">	 * Returns a {@link FieldInfo} wrapper for the specified raw {@link Field} object.</em>
-<a class="jxr_linenumber" name="L2302" href="#L2302">2302</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2303" href="#L2303">2303</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> <em class="jxr_javadoccomment">	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.</em>
-<a class="jxr_linenumber" name="L2305" href="#L2305">2305</a> <em class="jxr_javadoccomment">	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.</em>
-<a class="jxr_linenumber" name="L2306" href="#L2306">2306</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2307" href="#L2307">2307</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2308" href="#L2308">2308</a> <em class="jxr_javadoccomment">	 * This method is called internally when building the lists of fields (public, declared, all, etc.)</em>
-<a class="jxr_linenumber" name="L2309" href="#L2309">2309</a> <em class="jxr_javadoccomment">	 * and ensures that the same {@link Field} object always maps to the same {@link FieldInfo} instance.</em>
-<a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> <em class="jxr_javadoccomment">	 * @param x The raw field to wrap.</em>
-<a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> <em class="jxr_javadoccomment">	 * @return The cached {@link FieldInfo} wrapper for this field.</em>
-<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2314" href="#L2314">2314</a> 	FieldInfo getField(Field x) {
-<a class="jxr_linenumber" name="L2315" href="#L2315">2315</a> 		<strong class="jxr_keyword">return</strong> fieldCache.get(x, () -&gt; <strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>(<strong class="jxr_keyword">this</strong>, x));
-<a class="jxr_linenumber" name="L2316" href="#L2316">2316</a> 	}
-<a class="jxr_linenumber" name="L2317" href="#L2317">2317</a> 
-<a class="jxr_linenumber" name="L2318" href="#L2318">2318</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2319" href="#L2319">2319</a> <em class="jxr_javadoccomment">	 * Returns a {@link MethodInfo} wrapper for the specified raw {@link Method} object.</em>
-<a class="jxr_linenumber" name="L2320" href="#L2320">2320</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2321" href="#L2321">2321</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2322" href="#L2322">2322</a> <em class="jxr_javadoccomment">	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.</em>
-<a class="jxr_linenumber" name="L2323" href="#L2323">2323</a> <em class="jxr_javadoccomment">	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.</em>
-<a class="jxr_linenumber" name="L2324" href="#L2324">2324</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2325" href="#L2325">2325</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2326" href="#L2326">2326</a> <em class="jxr_javadoccomment">	 * This method is called internally when building the lists of methods (public, declared, all, etc.)</em>
-<a class="jxr_linenumber" name="L2327" href="#L2327">2327</a> <em class="jxr_javadoccomment">	 * and ensures that the same {@link Method} object always maps to the same {@link MethodInfo} instance.</em>
-<a class="jxr_linenumber" name="L2328" href="#L2328">2328</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2329" href="#L2329">2329</a> <em class="jxr_javadoccomment">	 * @param x The raw method to wrap.</em>
-<a class="jxr_linenumber" name="L2330" href="#L2330">2330</a> <em class="jxr_javadoccomment">	 * @return The cached {@link MethodInfo} wrapper for this method.</em>
-<a class="jxr_linenumber" name="L2331" href="#L2331">2331</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> 	MethodInfo getMethod(Method x) {
-<a class="jxr_linenumber" name="L2333" href="#L2333">2333</a> 		<strong class="jxr_keyword">return</strong> methodCache.get(x, () -&gt; <strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>(<strong class="jxr_keyword">this</strong>, x));
-<a class="jxr_linenumber" name="L2334" href="#L2334">2334</a> 	}
-<a class="jxr_linenumber" name="L2335" href="#L2335">2335</a> 
-<a class="jxr_linenumber" name="L2336" href="#L2336">2336</a> 	<strong class="jxr_keyword">private</strong> List&lt;ClassInfo&gt; findParents() {
-<a class="jxr_linenumber" name="L2337" href="#L2337">2337</a> 		List&lt;ClassInfo&gt; l = list();
-<a class="jxr_linenumber" name="L2338" href="#L2338">2338</a> 		Class&lt;?&gt; pc = <strong class="jxr_keyword">inner</strong>;
-<a class="jxr_linenumber" name="L2339" href="#L2339">2339</a> 		<strong class="jxr_keyword">while</strong> (nn(pc) &amp;&amp; pc != Object.<strong class="jxr_keyword">class</strong>) {
-<a class="jxr_linenumber" name="L2340" href="#L2340">2340</a> 			l.add(of(pc));
-<a class="jxr_linenumber" name="L2341" href="#L2341">2341</a> 			pc = pc.getSuperclass();
-<a class="jxr_linenumber" name="L2342" href="#L2342">2342</a> 		}
-<a class="jxr_linenumber" name="L2343" href="#L2343">2343</a> 		<strong class="jxr_keyword">return</strong> u(l);
-<a class="jxr_linenumber" name="L2344" href="#L2344">2344</a> 	}
-<a class="jxr_linenumber" name="L2345" href="#L2345">2345</a> 
-<a class="jxr_linenumber" name="L2346" href="#L2346">2346</a> 	<strong class="jxr_keyword">private</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> findRepeatedAnnotationMethod() {
-<a class="jxr_linenumber" name="L2347" href="#L2347">2347</a> 		<strong class="jxr_keyword">return</strong> getPublicMethods().stream()
-<a class="jxr_linenumber" name="L2348" href="#L2348">2348</a> 			.filter(m -&gt; m.hasName(<span class="jxr_string">"value"</span>))
-<a class="jxr_linenumber" name="L2349" href="#L2349">2349</a> 			.filter(m -&gt; m.getReturnType().isArray())
-<a class="jxr_linenumber" name="L2350" href="#L2350">2350</a> 			.filter(m -&gt; {
-<a class="jxr_linenumber" name="L2351" href="#L2351">2351</a> 				<strong class="jxr_keyword">var</strong> rct = m.getReturnType().getComponentType();
-<a class="jxr_linenumber" name="L2352" href="#L2352">2352</a> 				<strong class="jxr_keyword">if</strong> (rct.hasAnnotation(Repeatable.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L2353" href="#L2353">2353</a> 					<strong class="jxr_keyword">var</strong> r = rct.getAnnotations(Repeatable.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2354" href="#L2354">2354</a> 					<strong class="jxr_keyword">return</strong> r != <strong class="jxr_keyword">null</strong> &amp;&amp; r.value().equals(<strong class="jxr_keyword">inner</strong>);
-<a class="jxr_linenumber" name="L2355" href="#L2355">2355</a> 				}
-<a class="jxr_linenumber" name="L2356" href="#L2356">2356</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L2357" href="#L2357">2357</a> 			})
-<a class="jxr_linenumber" name="L2358" href="#L2358">2358</a> 			.findFirst()
-<a class="jxr_linenumber" name="L2359" href="#L2359">2359</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2360" href="#L2360">2360</a> 	}
-<a class="jxr_linenumber" name="L2361" href="#L2361">2361</a> 
-<a class="jxr_linenumber" name="L2362" href="#L2362">2362</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> findDimensions() {
-<a class="jxr_linenumber" name="L2363" href="#L2363">2363</a> 		<strong class="jxr_keyword">int</strong> d = 0;
-<a class="jxr_linenumber" name="L2364" href="#L2364">2364</a> 		Type ct = innerType;
-<a class="jxr_linenumber" name="L2365" href="#L2365">2365</a> 
-<a class="jxr_linenumber" name="L2366" href="#L2366">2366</a> 		<em class="jxr_comment">// Handle GenericArrayType (e.g., List&lt;String&gt;[])</em>
-<a class="jxr_linenumber" name="L2367" href="#L2367">2367</a> 		<strong class="jxr_keyword">while</strong> (ct instanceof GenericArrayType gat) {
-<a class="jxr_linenumber" name="L2368" href="#L2368">2368</a> 			d++;
-<a class="jxr_linenumber" name="L2369" href="#L2369">2369</a> 			ct = gat.getGenericComponentType();
-<a class="jxr_linenumber" name="L2370" href="#L2370">2370</a> 		}
-<a class="jxr_linenumber" name="L2371" href="#L2371">2371</a> 
-<a class="jxr_linenumber" name="L2372" href="#L2372">2372</a> 		<em class="jxr_comment">// Handle regular arrays</em>
-<a class="jxr_linenumber" name="L2373" href="#L2373">2373</a> 		Class&lt;?&gt; cc = <strong class="jxr_keyword">inner</strong>;
-<a class="jxr_linenumber" name="L2374" href="#L2374">2374</a> 		<strong class="jxr_keyword">while</strong> (nn(cc) &amp;&amp; cc.isArray()) {
+<a class="jxr_linenumber" name="L2273" href="#L2273">2273</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2274" href="#L2274">2274</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Note on Repeatable Annotations:&lt;/b&gt;</em>
+<a class="jxr_linenumber" name="L2275" href="#L2275">2275</a> <em class="jxr_javadoccomment">	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically</em>
+<a class="jxr_linenumber" name="L2276" href="#L2276">2276</a> <em class="jxr_javadoccomment">	 * expanded into their individual annotation instances. For example, if a class has multiple {@code @Bean} annotations,</em>
+<a class="jxr_linenumber" name="L2277" href="#L2277">2277</a> <em class="jxr_javadoccomment">	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.</em>
+<a class="jxr_linenumber" name="L2278" href="#L2278">2278</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2279" href="#L2279">2279</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L2280" href="#L2280">2280</a> <em class="jxr_javadoccomment">	 * 	An unmodifiable list of {@link AnnotationInfo} wrappers for annotations declared directly on this class.</em>
+<a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is empty if no annotations are declared.</em>
+<a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are in declaration order.</em>
+<a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Repeatable annotations are expanded into individual instances.</em>
+<a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2285" href="#L2285">2285</a> 	<strong class="jxr_keyword">public</strong> List&lt;AnnotationInfo&gt; getDeclaredAnnotations() {
+<a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 		<strong class="jxr_keyword">return</strong> declaredAnnotations.get();
+<a class="jxr_linenumber" name="L2287" href="#L2287">2287</a> 	}
+<a class="jxr_linenumber" name="L2288" href="#L2288">2288</a> 
+<a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> <em class="jxr_javadoccomment">	 * Returns a {@link ConstructorInfo} wrapper for the specified raw {@link Constructor} object.</em>
+<a class="jxr_linenumber" name="L2291" href="#L2291">2291</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2293" href="#L2293">2293</a> <em class="jxr_javadoccomment">	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.</em>
+<a class="jxr_linenumber" name="L2294" href="#L2294">2294</a> <em class="jxr_javadoccomment">	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.</em>
+<a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2296" href="#L2296">2296</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2297" href="#L2297">2297</a> <em class="jxr_javadoccomment">	 * This method is called internally when building the lists of constructors (public, declared, etc.)</em>
+<a class="jxr_linenumber" name="L2298" href="#L2298">2298</a> <em class="jxr_javadoccomment">	 * and ensures that the same {@link Constructor} object always maps to the same {@link ConstructorInfo} instance.</em>
+<a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2300" href="#L2300">2300</a> <em class="jxr_javadoccomment">	 * @param x The raw constructor to wrap.</em>
+<a class="jxr_linenumber" name="L2301" href="#L2301">2301</a> <em class="jxr_javadoccomment">	 * @return The cached {@link ConstructorInfo} wrapper for this constructor.</em>
+<a class="jxr_linenumber" name="L2302" href="#L2302">2302</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2303" href="#L2303">2303</a> 	ConstructorInfo getConstructor(Constructor&lt;?&gt; x) {
+<a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> 		<strong class="jxr_keyword">return</strong> constructorCache.get(x, () -&gt; <strong class="jxr_keyword">new</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>(<strong class="jxr_keyword">this</strong>, x));
+<a class="jxr_linenumber" name="L2305" href="#L2305">2305</a> 	}
+<a class="jxr_linenumber" name="L2306" href="#L2306">2306</a> 
+<a class="jxr_linenumber" name="L2307" href="#L2307">2307</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2308" href="#L2308">2308</a> <em class="jxr_javadoccomment">	 * Returns a {@link FieldInfo} wrapper for the specified raw {@link Field} object.</em>
+<a class="jxr_linenumber" name="L2309" href="#L2309">2309</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> <em class="jxr_javadoccomment">	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.</em>
+<a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> <em class="jxr_javadoccomment">	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.</em>
+<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2314" href="#L2314">2314</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2315" href="#L2315">2315</a> <em class="jxr_javadoccomment">	 * This method is called internally when building the lists of fields (public, declared, all, etc.)</em>
+<a class="jxr_linenumber" name="L2316" href="#L2316">2316</a> <em class="jxr_javadoccomment">	 * and ensures that the same {@link Field} object always maps to the same {@link FieldInfo} instance.</em>
+<a class="jxr_linenumber" name="L2317" href="#L2317">2317</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2318" href="#L2318">2318</a> <em class="jxr_javadoccomment">	 * @param x The raw field to wrap.</em>
+<a class="jxr_linenumber" name="L2319" href="#L2319">2319</a> <em class="jxr_javadoccomment">	 * @return The cached {@link FieldInfo} wrapper for this field.</em>
+<a class="jxr_linenumber" name="L2320" href="#L2320">2320</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2321" href="#L2321">2321</a> 	FieldInfo getField(Field x) {
+<a class="jxr_linenumber" name="L2322" href="#L2322">2322</a> 		<strong class="jxr_keyword">return</strong> fieldCache.get(x, () -&gt; <strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>(<strong class="jxr_keyword">this</strong>, x));
+<a class="jxr_linenumber" name="L2323" href="#L2323">2323</a> 	}
+<a class="jxr_linenumber" name="L2324" href="#L2324">2324</a> 
+<a class="jxr_linenumber" name="L2325" href="#L2325">2325</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2326" href="#L2326">2326</a> <em class="jxr_javadoccomment">	 * Returns a {@link MethodInfo} wrapper for the specified raw {@link Method} object.</em>
+<a class="jxr_linenumber" name="L2327" href="#L2327">2327</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2328" href="#L2328">2328</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2329" href="#L2329">2329</a> <em class="jxr_javadoccomment">	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.</em>
+<a class="jxr_linenumber" name="L2330" href="#L2330">2330</a> <em class="jxr_javadoccomment">	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.</em>
+<a class="jxr_linenumber" name="L2331" href="#L2331">2331</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2333" href="#L2333">2333</a> <em class="jxr_javadoccomment">	 * This method is called internally when building the lists of methods (public, declared, all, etc.)</em>
+<a class="jxr_linenumber" name="L2334" href="#L2334">2334</a> <em class="jxr_javadoccomment">	 * and ensures that the same {@link Method} object always maps to the same {@link MethodInfo} instance.</em>
+<a class="jxr_linenumber" name="L2335" href="#L2335">2335</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2336" href="#L2336">2336</a> <em class="jxr_javadoccomment">	 * @param x The raw method to wrap.</em>
+<a class="jxr_linenumber" name="L2337" href="#L2337">2337</a> <em class="jxr_javadoccomment">	 * @return The cached {@link MethodInfo} wrapper for this method.</em>
+<a class="jxr_linenumber" name="L2338" href="#L2338">2338</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2339" href="#L2339">2339</a> 	MethodInfo getMethod(Method x) {
+<a class="jxr_linenumber" name="L2340" href="#L2340">2340</a> 		<strong class="jxr_keyword">return</strong> methodCache.get(x, () -&gt; <strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>(<strong class="jxr_keyword">this</strong>, x));
+<a class="jxr_linenumber" name="L2341" href="#L2341">2341</a> 	}
+<a class="jxr_linenumber" name="L2342" href="#L2342">2342</a> 
+<a class="jxr_linenumber" name="L2343" href="#L2343">2343</a> 	<strong class="jxr_keyword">private</strong> List&lt;ClassInfo&gt; findParents() {
+<a class="jxr_linenumber" name="L2344" href="#L2344">2344</a> 		List&lt;ClassInfo&gt; l = list();
+<a class="jxr_linenumber" name="L2345" href="#L2345">2345</a> 		Class&lt;?&gt; pc = <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L2346" href="#L2346">2346</a> 		<strong class="jxr_keyword">while</strong> (nn(pc) &amp;&amp; pc != Object.<strong class="jxr_keyword">class</strong>) {
+<a class="jxr_linenumber" name="L2347" href="#L2347">2347</a> 			l.add(of(pc));
+<a class="jxr_linenumber" name="L2348" href="#L2348">2348</a> 			pc = pc.getSuperclass();
+<a class="jxr_linenumber" name="L2349" href="#L2349">2349</a> 		}
+<a class="jxr_linenumber" name="L2350" href="#L2350">2350</a> 		<strong class="jxr_keyword">return</strong> u(l);
+<a class="jxr_linenumber" name="L2351" href="#L2351">2351</a> 	}
+<a class="jxr_linenumber" name="L2352" href="#L2352">2352</a> 
+<a class="jxr_linenumber" name="L2353" href="#L2353">2353</a> 	<strong class="jxr_keyword">private</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> findRepeatedAnnotationMethod() {
+<a class="jxr_linenumber" name="L2354" href="#L2354">2354</a> 		<strong class="jxr_keyword">return</strong> getPublicMethods().stream()
+<a class="jxr_linenumber" name="L2355" href="#L2355">2355</a> 			.filter(m -&gt; m.hasName(<span class="jxr_string">"value"</span>))
+<a class="jxr_linenumber" name="L2356" href="#L2356">2356</a> 			.filter(m -&gt; m.getReturnType().isArray())
+<a class="jxr_linenumber" name="L2357" href="#L2357">2357</a> 			.filter(m -&gt; {
+<a class="jxr_linenumber" name="L2358" href="#L2358">2358</a> 				<strong class="jxr_keyword">var</strong> rct = m.getReturnType().getComponentType();
+<a class="jxr_linenumber" name="L2359" href="#L2359">2359</a> 				<strong class="jxr_keyword">if</strong> (rct.hasAnnotation(Repeatable.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L2360" href="#L2360">2360</a> 					<strong class="jxr_keyword">var</strong> r = rct.getAnnotations(Repeatable.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L2361" href="#L2361">2361</a> 					<strong class="jxr_keyword">return</strong> r != <strong class="jxr_keyword">null</strong> &amp;&amp; r.value().equals(<strong class="jxr_keyword">inner</strong>);
+<a class="jxr_linenumber" name="L2362" href="#L2362">2362</a> 				}
+<a class="jxr_linenumber" name="L2363" href="#L2363">2363</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L2364" href="#L2364">2364</a> 			})
+<a class="jxr_linenumber" name="L2365" href="#L2365">2365</a> 			.findFirst()
+<a class="jxr_linenumber" name="L2366" href="#L2366">2366</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L2367" href="#L2367">2367</a> 	}
+<a class="jxr_linenumber" name="L2368" href="#L2368">2368</a> 
+<a class="jxr_linenumber" name="L2369" href="#L2369">2369</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> findDimensions() {
+<a class="jxr_linenumber" name="L2370" href="#L2370">2370</a> 		<strong class="jxr_keyword">int</strong> d = 0;
+<a class="jxr_linenumber" name="L2371" href="#L2371">2371</a> 		Type ct = innerType;
+<a class="jxr_linenumber" name="L2372" href="#L2372">2372</a> 
+<a class="jxr_linenumber" name="L2373" href="#L2373">2373</a> 		<em class="jxr_comment">// Handle GenericArrayType (e.g., List&lt;String&gt;[])</em>
+<a class="jxr_linenumber" name="L2374" href="#L2374">2374</a> 		<strong class="jxr_keyword">while</strong> (ct instanceof GenericArrayType gat) {
 <a class="jxr_linenumber" name="L2375" href="#L2375">2375</a> 			d++;
-<a class="jxr_linenumber" name="L2376" href="#L2376">2376</a> 			cc = cc.getComponentType();
+<a class="jxr_linenumber" name="L2376" href="#L2376">2376</a> 			ct = gat.getGenericComponentType();
 <a class="jxr_linenumber" name="L2377" href="#L2377">2377</a> 		}
 <a class="jxr_linenumber" name="L2378" href="#L2378">2378</a> 
-<a class="jxr_linenumber" name="L2379" href="#L2379">2379</a> 		<strong class="jxr_keyword">return</strong> d;
-<a class="jxr_linenumber" name="L2380" href="#L2380">2380</a> 	}
-<a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> 
-<a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> 	<strong class="jxr_keyword">private</strong> ClassInfo findComponentType() {
-<a class="jxr_linenumber" name="L2383" href="#L2383">2383</a> 		Type ct = innerType;
-<a class="jxr_linenumber" name="L2384" href="#L2384">2384</a> 		Class&lt;?&gt; cc = <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L2379" href="#L2379">2379</a> 		<em class="jxr_comment">// Handle regular arrays</em>
+<a class="jxr_linenumber" name="L2380" href="#L2380">2380</a> 		Class&lt;?&gt; cc = <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> 		<strong class="jxr_keyword">while</strong> (nn(cc) &amp;&amp; cc.isArray()) {
+<a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> 			d++;
+<a class="jxr_linenumber" name="L2383" href="#L2383">2383</a> 			cc = cc.getComponentType();
+<a class="jxr_linenumber" name="L2384" href="#L2384">2384</a> 		}
 <a class="jxr_linenumber" name="L2385" href="#L2385">2385</a> 
-<a class="jxr_linenumber" name="L2386" href="#L2386">2386</a> 		<em class="jxr_comment">// Handle GenericArrayType (e.g., List&lt;String&gt;[])</em>
-<a class="jxr_linenumber" name="L2387" href="#L2387">2387</a> 		<strong class="jxr_keyword">while</strong> (ct instanceof GenericArrayType gat) {
-<a class="jxr_linenumber" name="L2388" href="#L2388">2388</a> 			ct = gat.getGenericComponentType();
-<a class="jxr_linenumber" name="L2389" href="#L2389">2389</a> 		}
-<a class="jxr_linenumber" name="L2390" href="#L2390">2390</a> 
-<a class="jxr_linenumber" name="L2391" href="#L2391">2391</a> 		<em class="jxr_comment">// Handle regular arrays</em>
-<a class="jxr_linenumber" name="L2392" href="#L2392">2392</a> 		<strong class="jxr_keyword">while</strong> (nn(cc) &amp;&amp; cc.isArray()) {
-<a class="jxr_linenumber" name="L2393" href="#L2393">2393</a> 			cc = cc.getComponentType();
-<a class="jxr_linenumber" name="L2394" href="#L2394">2394</a> 		}
-<a class="jxr_linenumber" name="L2395" href="#L2395">2395</a> 
-<a class="jxr_linenumber" name="L2396" href="#L2396">2396</a> 		<em class="jxr_comment">// Return the deepest component type found</em>
-<a class="jxr_linenumber" name="L2397" href="#L2397">2397</a> 		<strong class="jxr_keyword">if</strong> (ct != innerType) {
-<a class="jxr_linenumber" name="L2398" href="#L2398">2398</a> 			<strong class="jxr_keyword">return</strong> of(ct);
-<a class="jxr_linenumber" name="L2399" href="#L2399">2399</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cc != <strong class="jxr_keyword">inner</strong>) {
-<a class="jxr_linenumber" name="L2400" href="#L2400">2400</a> 			<strong class="jxr_keyword">return</strong> of(cc);
-<a class="jxr_linenumber" name="L2401" href="#L2401">2401</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L2402" href="#L2402">2402</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L2403" href="#L2403">2403</a> 		}
-<a class="jxr_linenumber" name="L2404" href="#L2404">2404</a> 	}
-<a class="jxr_linenumber" name="L2405" href="#L2405">2405</a> 
-<a class="jxr_linenumber" name="L2406" href="#L2406">2406</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L2407" href="#L2407">2407</a> 	<em class="jxr_comment">// Find methods</em>
-<a class="jxr_linenumber" name="L2408" href="#L2408">2408</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L2409" href="#L2409">2409</a> 
-<a class="jxr_linenumber" name="L2410" href="#L2410">2410</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2411" href="#L2411">2411</a> <em class="jxr_javadoccomment">	 * Finds all parent classes and interfaces with proper traversal of interface hierarchy.</em>
-<a class="jxr_linenumber" name="L2412" href="#L2412">2412</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2413" href="#L2413">2413</a> <em class="jxr_javadoccomment">	 * @return A list of all parent classes and interfaces without duplicates.</em>
-<a class="jxr_linenumber" name="L2414" href="#L2414">2414</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2415" href="#L2415">2415</a> 	<strong class="jxr_keyword">private</strong> List&lt;ClassInfo&gt; findParentsAndInterfaces() {
-<a class="jxr_linenumber" name="L2416" href="#L2416">2416</a> 		<strong class="jxr_keyword">var</strong> set = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;ClassInfo&gt;();
-<a class="jxr_linenumber" name="L2417" href="#L2417">2417</a> 
-<a class="jxr_linenumber" name="L2418" href="#L2418">2418</a> 		<em class="jxr_comment">// Process all parent classes (includes this class)</em>
-<a class="jxr_linenumber" name="L2419" href="#L2419">2419</a> 		<strong class="jxr_keyword">var</strong> parents = getParents();
-<a class="jxr_linenumber" name="L2420" href="#L2420">2420</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parents.size(); i++) {
-<a class="jxr_linenumber" name="L2421" href="#L2421">2421</a> 			<strong class="jxr_keyword">var</strong> parent = parents.get(i);
-<a class="jxr_linenumber" name="L2422" href="#L2422">2422</a> 			set.add(parent);
-<a class="jxr_linenumber" name="L2423" href="#L2423">2423</a> 
-<a class="jxr_linenumber" name="L2424" href="#L2424">2424</a> 			<em class="jxr_comment">// Process interfaces declared on this parent (and their parent interfaces)</em>
-<a class="jxr_linenumber" name="L2425" href="#L2425">2425</a> 			<strong class="jxr_keyword">var</strong> declaredInterfaces = parent.getDeclaredInterfaces();
-<a class="jxr_linenumber" name="L2426" href="#L2426">2426</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; declaredInterfaces.size(); j++)
-<a class="jxr_linenumber" name="L2427" href="#L2427">2427</a> 				addInterfaceHierarchy(set, declaredInterfaces.get(j));
-<a class="jxr_linenumber" name="L2428" href="#L2428">2428</a> 		}
-<a class="jxr_linenumber" name="L2429" href="#L2429">2429</a> 
-<a class="jxr_linenumber" name="L2430" href="#L2430">2430</a> 		<strong class="jxr_keyword">return</strong> u(<strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(set));
-<a class="jxr_linenumber" name="L2431" href="#L2431">2431</a> 	}
-<a class="jxr_linenumber" name="L2432" href="#L2432">2432</a> 
-<a class="jxr_linenumber" name="L2433" href="#L2433">2433</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2434" href="#L2434">2434</a> <em class="jxr_javadoccomment">	 * Helper method to recursively add an interface and its parent interfaces to the set.</em>
-<a class="jxr_linenumber" name="L2435" href="#L2435">2435</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2436" href="#L2436">2436</a> <em class="jxr_javadoccomment">	 * @param set The set to add to.</em>
-<a class="jxr_linenumber" name="L2437" href="#L2437">2437</a> <em class="jxr_javadoccomment">	 * @param iface The interface to add.</em>
-<a class="jxr_linenumber" name="L2438" href="#L2438">2438</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2439" href="#L2439">2439</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addInterfaceHierarchy(LinkedHashSet&lt;ClassInfo&gt; set, ClassInfo iface) {
-<a class="jxr_linenumber" name="L2440" href="#L2440">2440</a> 		<strong class="jxr_keyword">if</strong> (!set.add(iface))
-<a class="jxr_linenumber" name="L2441" href="#L2441">2441</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L2442" href="#L2442">2442</a> 
-<a class="jxr_linenumber" name="L2443" href="#L2443">2443</a> 		<em class="jxr_comment">// Process parent interfaces recursively</em>
-<a class="jxr_linenumber" name="L2444" href="#L2444">2444</a> 		<strong class="jxr_keyword">var</strong> parentInterfaces = iface.getDeclaredInterfaces();
-<a class="jxr_linenumber" name="L2445" href="#L2445">2445</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parentInterfaces.size(); i++)
-<a class="jxr_linenumber" name="L2446" href="#L2446">2446</a> 			addInterfaceHierarchy(set, parentInterfaces.get(i));
-<a class="jxr_linenumber" name="L2447" href="#L2447">2447</a> 	}
-<a class="jxr_linenumber" name="L2448" href="#L2448">2448</a> 
-<a class="jxr_linenumber" name="L2449" href="#L2449">2449</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2450" href="#L2450">2450</a> <em class="jxr_javadoccomment">	 * Finds all annotations on this class and parent classes/interfaces in child-to-parent order.</em>
-<a class="jxr_linenumber" name="L2451" href="#L2451">2451</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2452" href="#L2452">2452</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2453" href="#L2453">2453</a> <em class="jxr_javadoccomment">	 * This is similar to {@link org.apache.juneau.common.reflect.AnnotationProvider#find(Class)} but without runtime annotations.</em>
-<a class="jxr_linenumber" name="L2454" href="#L2454">2454</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2455" href="#L2455">2455</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2456" href="#L2456">2456</a> <em class="jxr_javadoccomment">	 * Order of traversal:</em>
-<a class="jxr_linenumber" name="L2457" href="#L2457">2457</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
-<a class="jxr_linenumber" name="L2458" href="#L2458">2458</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Annotations declared on this class</em>
-<a class="jxr_linenumber" name="L2459" href="#L2459">2459</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Annotations declared on parent classes (child-to-parent order)</em>
-<a class="jxr_linenumber" name="L2460" href="#L2460">2460</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For each parent class, annotations on interfaces declared on that class (child-to-parent interface hierarchy)</em>
-<a class="jxr_linenumber" name="L2461" href="#L2461">2461</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Annotations on the package of this class</em>
-<a class="jxr_linenumber" name="L2462" href="#L2462">2462</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
-<a class="jxr_linenumber" name="L2463" href="#L2463">2463</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2464" href="#L2464">2464</a> <em class="jxr_javadoccomment">	 * @return A list of all annotation infos in child-to-parent order.</em>
-<a class="jxr_linenumber" name="L2465" href="#L2465">2465</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2466" href="#L2466">2466</a> 	<strong class="jxr_keyword">private</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; findAnnotations() {
-<a class="jxr_linenumber" name="L2467" href="#L2467">2467</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;AnnotationInfo&lt;Annotation&gt;&gt;();
-<a class="jxr_linenumber" name="L2468" href="#L2468">2468</a> 
-<a class="jxr_linenumber" name="L2469" href="#L2469">2469</a> 		<em class="jxr_comment">// On all parent classes and interfaces (properly traversed to avoid duplicates)</em>
-<a class="jxr_linenumber" name="L2470" href="#L2470">2470</a> 		<strong class="jxr_keyword">var</strong> parentsAndInterfaces = getParentsAndInterfaces();
-<a class="jxr_linenumber" name="L2471" href="#L2471">2471</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parentsAndInterfaces.size(); i++) {
-<a class="jxr_linenumber" name="L2472" href="#L2472">2472</a> 			<strong class="jxr_keyword">var</strong> ci = parentsAndInterfaces.get(i);
-<a class="jxr_linenumber" name="L2473" href="#L2473">2473</a> 			<em class="jxr_comment">// Add declared annotations from this class/interface</em>
-<a class="jxr_linenumber" name="L2474" href="#L2474">2474</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : ci.<strong class="jxr_keyword">inner</strong>().getDeclaredAnnotations())
-<a class="jxr_linenumber" name="L2475" href="#L2475">2475</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a2 : splitRepeated(a))
-<a class="jxr_linenumber" name="L2476" href="#L2476">2476</a> 					list.add(AnnotationInfo.of(ci, a2));
-<a class="jxr_linenumber" name="L2477" href="#L2477">2477</a> 		}
-<a class="jxr_linenumber" name="L2478" href="#L2478">2478</a> 
-<a class="jxr_linenumber" name="L2479" href="#L2479">2479</a> 		<em class="jxr_comment">// On the package of this class</em>
-<a class="jxr_linenumber" name="L2480" href="#L2480">2480</a> 		<strong class="jxr_keyword">var</strong> pkg = getPackage();
-<a class="jxr_linenumber" name="L2481" href="#L2481">2481</a> 		<strong class="jxr_keyword">if</strong> (nn(pkg)) {
-<a class="jxr_linenumber" name="L2482" href="#L2482">2482</a> 			<strong class="jxr_keyword">var</strong> pi = PackageInfo.of(pkg.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L2483" href="#L2483">2483</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : pkg.<strong class="jxr_keyword">inner</strong>().getAnnotations())
-<a class="jxr_linenumber" name="L2484" href="#L2484">2484</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a2 : splitRepeated(a))
-<a class="jxr_linenumber" name="L2485" href="#L2485">2485</a> 					list.add(AnnotationInfo.of(pi, a2));
-<a class="jxr_linenumber" name="L2486" href="#L2486">2486</a> 		}
-<a class="jxr_linenumber" name="L2487" href="#L2487">2487</a> 
-<a class="jxr_linenumber" name="L2488" href="#L2488">2488</a> 		<strong class="jxr_keyword">return</strong> u(list);
-<a class="jxr_linenumber" name="L2489" href="#L2489">2489</a> 	}
-<a class="jxr_linenumber" name="L2490" href="#L2490">2490</a> 
-<a class="jxr_linenumber" name="L2491" href="#L2491">2491</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L2492" href="#L2492">2492</a> 	<em class="jxr_comment">// Annotatable interface methods</em>
-<a class="jxr_linenumber" name="L2493" href="#L2493">2493</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L2494" href="#L2494">2494</a> 
-<a class="jxr_linenumber" name="L2495" href="#L2495">2495</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
-<a class="jxr_linenumber" name="L2496" href="#L2496">2496</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotatableType" href="../../../../../org/apache/juneau/common/reflect/AnnotatableType.html#AnnotatableType">AnnotatableType</a> getAnnotatableType() {
-<a class="jxr_linenumber" name="L2497" href="#L2497">2497</a> 		<strong class="jxr_keyword">return</strong> AnnotatableType.CLASS_TYPE;
-<a class="jxr_linenumber" name="L2498" href="#L2498">2498</a> 	}
+<a class="jxr_linenumber" name="L2386" href="#L2386">2386</a> 		<strong class="jxr_keyword">return</strong> d;
+<a class="jxr_linenumber" name="L2387" href="#L2387">2387</a> 	}
+<a class="jxr_linenumber" name="L2388" href="#L2388">2388</a> 
+<a class="jxr_linenumber" name="L2389" href="#L2389">2389</a> 	<strong class="jxr_keyword">private</strong> ClassInfo findComponentType() {
+<a class="jxr_linenumber" name="L2390" href="#L2390">2390</a> 		Type ct = innerType;
+<a class="jxr_linenumber" name="L2391" href="#L2391">2391</a> 		Class&lt;?&gt; cc = <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L2392" href="#L2392">2392</a> 
+<a class="jxr_linenumber" name="L2393" href="#L2393">2393</a> 		<em class="jxr_comment">// Handle GenericArrayType (e.g., List&lt;String&gt;[])</em>
+<a class="jxr_linenumber" name="L2394" href="#L2394">2394</a> 		<strong class="jxr_keyword">while</strong> (ct instanceof GenericArrayType gat) {
+<a class="jxr_linenumber" name="L2395" href="#L2395">2395</a> 			ct = gat.getGenericComponentType();
+<a class="jxr_linenumber" name="L2396" href="#L2396">2396</a> 		}
+<a class="jxr_linenumber" name="L2397" href="#L2397">2397</a> 
+<a class="jxr_linenumber" name="L2398" href="#L2398">2398</a> 		<em class="jxr_comment">// Handle regular arrays</em>
+<a class="jxr_linenumber" name="L2399" href="#L2399">2399</a> 		<strong class="jxr_keyword">while</strong> (nn(cc) &amp;&amp; cc.isArray()) {
+<a class="jxr_linenumber" name="L2400" href="#L2400">2400</a> 			cc = cc.getComponentType();
+<a class="jxr_linenumber" name="L2401" href="#L2401">2401</a> 		}
+<a class="jxr_linenumber" name="L2402" href="#L2402">2402</a> 
+<a class="jxr_linenumber" name="L2403" href="#L2403">2403</a> 		<em class="jxr_comment">// Return the deepest component type found</em>
+<a class="jxr_linenumber" name="L2404" href="#L2404">2404</a> 		<strong class="jxr_keyword">if</strong> (ct != innerType) {
+<a class="jxr_linenumber" name="L2405" href="#L2405">2405</a> 			<strong class="jxr_keyword">return</strong> of(ct);
+<a class="jxr_linenumber" name="L2406" href="#L2406">2406</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cc != <strong class="jxr_keyword">inner</strong>) {
+<a class="jxr_linenumber" name="L2407" href="#L2407">2407</a> 			<strong class="jxr_keyword">return</strong> of(cc);
+<a class="jxr_linenumber" name="L2408" href="#L2408">2408</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L2409" href="#L2409">2409</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L2410" href="#L2410">2410</a> 		}
+<a class="jxr_linenumber" name="L2411" href="#L2411">2411</a> 	}
+<a class="jxr_linenumber" name="L2412" href="#L2412">2412</a> 
+<a class="jxr_linenumber" name="L2413" href="#L2413">2413</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2414" href="#L2414">2414</a> 	<em class="jxr_comment">// Find methods</em>
+<a class="jxr_linenumber" name="L2415" href="#L2415">2415</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2416" href="#L2416">2416</a> 
+<a class="jxr_linenumber" name="L2417" href="#L2417">2417</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2418" href="#L2418">2418</a> <em class="jxr_javadoccomment">	 * Finds all parent classes and interfaces with proper traversal of interface hierarchy.</em>
+<a class="jxr_linenumber" name="L2419" href="#L2419">2419</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2420" href="#L2420">2420</a> <em class="jxr_javadoccomment">	 * @return A list of all parent classes and interfaces without duplicates.</em>
+<a class="jxr_linenumber" name="L2421" href="#L2421">2421</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2422" href="#L2422">2422</a> 	<strong class="jxr_keyword">private</strong> List&lt;ClassInfo&gt; findParentsAndInterfaces() {
+<a class="jxr_linenumber" name="L2423" href="#L2423">2423</a> 		<strong class="jxr_keyword">var</strong> set = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;ClassInfo&gt;();
+<a class="jxr_linenumber" name="L2424" href="#L2424">2424</a> 
+<a class="jxr_linenumber" name="L2425" href="#L2425">2425</a> 		<em class="jxr_comment">// Process all parent classes (includes this class)</em>
+<a class="jxr_linenumber" name="L2426" href="#L2426">2426</a> 		<strong class="jxr_keyword">var</strong> parents = getParents();
+<a class="jxr_linenumber" name="L2427" href="#L2427">2427</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parents.size(); i++) {
+<a class="jxr_linenumber" name="L2428" href="#L2428">2428</a> 			<strong class="jxr_keyword">var</strong> parent = parents.get(i);
+<a class="jxr_linenumber" name="L2429" href="#L2429">2429</a> 			set.add(parent);
+<a class="jxr_linenumber" name="L2430" href="#L2430">2430</a> 
+<a class="jxr_linenumber" name="L2431" href="#L2431">2431</a> 			<em class="jxr_comment">// Process interfaces declared on this parent (and their parent interfaces)</em>
+<a class="jxr_linenumber" name="L2432" href="#L2432">2432</a> 			<strong class="jxr_keyword">var</strong> declaredInterfaces = parent.getDeclaredInterfaces();
+<a class="jxr_linenumber" name="L2433" href="#L2433">2433</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; declaredInterfaces.size(); j++)
+<a class="jxr_linenumber" name="L2434" href="#L2434">2434</a> 				addInterfaceHierarchy(set, declaredInterfaces.get(j));
+<a class="jxr_linenumber" name="L2435" href="#L2435">2435</a> 		}
+<a class="jxr_linenumber" name="L2436" href="#L2436">2436</a> 
+<a class="jxr_linenumber" name="L2437" href="#L2437">2437</a> 		<strong class="jxr_keyword">return</strong> u(<strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(set));
+<a class="jxr_linenumber" name="L2438" href="#L2438">2438</a> 	}
+<a class="jxr_linenumber" name="L2439" href="#L2439">2439</a> 
+<a class="jxr_linenumber" name="L2440" href="#L2440">2440</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2441" href="#L2441">2441</a> <em class="jxr_javadoccomment">	 * Helper method to recursively add an interface and its parent interfaces to the set.</em>
+<a class="jxr_linenumber" name="L2442" href="#L2442">2442</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2443" href="#L2443">2443</a> <em class="jxr_javadoccomment">	 * @param set The set to add to.</em>
+<a class="jxr_linenumber" name="L2444" href="#L2444">2444</a> <em class="jxr_javadoccomment">	 * @param iface The interface to add.</em>
+<a class="jxr_linenumber" name="L2445" href="#L2445">2445</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2446" href="#L2446">2446</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addInterfaceHierarchy(LinkedHashSet&lt;ClassInfo&gt; set, ClassInfo iface) {
+<a class="jxr_linenumber" name="L2447" href="#L2447">2447</a> 		<strong class="jxr_keyword">if</strong> (!set.add(iface))
+<a class="jxr_linenumber" name="L2448" href="#L2448">2448</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L2449" href="#L2449">2449</a> 
+<a class="jxr_linenumber" name="L2450" href="#L2450">2450</a> 		<em class="jxr_comment">// Process parent interfaces recursively</em>
+<a class="jxr_linenumber" name="L2451" href="#L2451">2451</a> 		<strong class="jxr_keyword">var</strong> parentInterfaces = iface.getDeclaredInterfaces();
+<a class="jxr_linenumber" name="L2452" href="#L2452">2452</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parentInterfaces.size(); i++)
+<a class="jxr_linenumber" name="L2453" href="#L2453">2453</a> 			addInterfaceHierarchy(set, parentInterfaces.get(i));
+<a class="jxr_linenumber" name="L2454" href="#L2454">2454</a> 	}
+<a class="jxr_linenumber" name="L2455" href="#L2455">2455</a> 
+<a class="jxr_linenumber" name="L2456" href="#L2456">2456</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2457" href="#L2457">2457</a> <em class="jxr_javadoccomment">	 * Finds all annotations on this class and parent classes/interfaces in child-to-parent order.</em>
+<a class="jxr_linenumber" name="L2458" href="#L2458">2458</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2459" href="#L2459">2459</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2460" href="#L2460">2460</a> <em class="jxr_javadoccomment">	 * This is similar to {@link org.apache.juneau.common.reflect.AnnotationProvider#find(Class)} but without runtime annotations.</em>
+<a class="jxr_linenumber" name="L2461" href="#L2461">2461</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2462" href="#L2462">2462</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2463" href="#L2463">2463</a> <em class="jxr_javadoccomment">	 * Order of traversal:</em>
+<a class="jxr_linenumber" name="L2464" href="#L2464">2464</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L2465" href="#L2465">2465</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Annotations declared on this class</em>
+<a class="jxr_linenumber" name="L2466" href="#L2466">2466</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Annotations declared on parent classes (child-to-parent order)</em>
+<a class="jxr_linenumber" name="L2467" href="#L2467">2467</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For each parent class, annotations on interfaces declared on that class (child-to-parent interface hierarchy)</em>
+<a class="jxr_linenumber" name="L2468" href="#L2468">2468</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Annotations on the package of this class</em>
+<a class="jxr_linenumber" name="L2469" href="#L2469">2469</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L2470" href="#L2470">2470</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2471" href="#L2471">2471</a> <em class="jxr_javadoccomment">	 * @return A list of all annotation infos in child-to-parent order.</em>
+<a class="jxr_linenumber" name="L2472" href="#L2472">2472</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2473" href="#L2473">2473</a> 	<strong class="jxr_keyword">private</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; findAnnotations() {
+<a class="jxr_linenumber" name="L2474" href="#L2474">2474</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;AnnotationInfo&lt;Annotation&gt;&gt;();
+<a class="jxr_linenumber" name="L2475" href="#L2475">2475</a> 
+<a class="jxr_linenumber" name="L2476" href="#L2476">2476</a> 		<em class="jxr_comment">// On all parent classes and interfaces (properly traversed to avoid duplicates)</em>
+<a class="jxr_linenumber" name="L2477" href="#L2477">2477</a> 		<strong class="jxr_keyword">var</strong> parentsAndInterfaces = getParentsAndInterfaces();
+<a class="jxr_linenumber" name="L2478" href="#L2478">2478</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parentsAndInterfaces.size(); i++) {
+<a class="jxr_linenumber" name="L2479" href="#L2479">2479</a> 			<strong class="jxr_keyword">var</strong> ci = parentsAndInterfaces.get(i);
+<a class="jxr_linenumber" name="L2480" href="#L2480">2480</a> 			<em class="jxr_comment">// Add declared annotations from this class/interface</em>
+<a class="jxr_linenumber" name="L2481" href="#L2481">2481</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : ci.<strong class="jxr_keyword">inner</strong>().getDeclaredAnnotations())
+<a class="jxr_linenumber" name="L2482" href="#L2482">2482</a> 				streamRepeated(a).forEach(a2 -&gt; list.add(AnnotationInfo.of(ci, a2)));
+<a class="jxr_linenumber" name="L2483" href="#L2483">2483</a> 		}
+<a class="jxr_linenumber" name="L2484" href="#L2484">2484</a> 
+<a class="jxr_linenumber" name="L2485" href="#L2485">2485</a> 		<em class="jxr_comment">// On the package of this class</em>
+<a class="jxr_linenumber" name="L2486" href="#L2486">2486</a> 		<strong class="jxr_keyword">var</strong> pkg = getPackage();
+<a class="jxr_linenumber" name="L2487" href="#L2487">2487</a> 		<strong class="jxr_keyword">if</strong> (nn(pkg)) {
+<a class="jxr_linenumber" name="L2488" href="#L2488">2488</a> 			<strong class="jxr_keyword">var</strong> pi = PackageInfo.of(pkg.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L2489" href="#L2489">2489</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : pkg.<strong class="jxr_keyword">inner</strong>().getAnnotations())
+<a class="jxr_linenumber" name="L2490" href="#L2490">2490</a> 				streamRepeated(a).forEach(a2 -&gt; list.add(AnnotationInfo.of(pi, a2)));
+<a class="jxr_linenumber" name="L2491" href="#L2491">2491</a> 		}
+<a class="jxr_linenumber" name="L2492" href="#L2492">2492</a> 
+<a class="jxr_linenumber" name="L2493" href="#L2493">2493</a> 		<strong class="jxr_keyword">return</strong> u(list);
+<a class="jxr_linenumber" name="L2494" href="#L2494">2494</a> 	}
+<a class="jxr_linenumber" name="L2495" href="#L2495">2495</a> 
+<a class="jxr_linenumber" name="L2496" href="#L2496">2496</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2497" href="#L2497">2497</a> 	<em class="jxr_comment">// Annotatable interface methods</em>
+<a class="jxr_linenumber" name="L2498" href="#L2498">2498</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L2499" href="#L2499">2499</a> 
 <a class="jxr_linenumber" name="L2500" href="#L2500">2500</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
-<a class="jxr_linenumber" name="L2501" href="#L2501">2501</a> 	<strong class="jxr_keyword">public</strong> String getLabel() {
-<a class="jxr_linenumber" name="L2502" href="#L2502">2502</a> 		<strong class="jxr_keyword">return</strong> getNameSimple();
+<a class="jxr_linenumber" name="L2501" href="#L2501">2501</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotatableType" href="../../../../../org/apache/juneau/common/reflect/AnnotatableType.html#AnnotatableType">AnnotatableType</a> getAnnotatableType() {
+<a class="jxr_linenumber" name="L2502" href="#L2502">2502</a> 		<strong class="jxr_keyword">return</strong> AnnotatableType.CLASS_TYPE;
 <a class="jxr_linenumber" name="L2503" href="#L2503">2503</a> 	}
-<a class="jxr_linenumber" name="L2504" href="#L2504">2504</a> }
+<a class="jxr_linenumber" name="L2504" href="#L2504">2504</a> 
+<a class="jxr_linenumber" name="L2505" href="#L2505">2505</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
+<a class="jxr_linenumber" name="L2506" href="#L2506">2506</a> 	<strong class="jxr_keyword">public</strong> String getLabel() {
+<a class="jxr_linenumber" name="L2507" href="#L2507">2507</a> 		<strong class="jxr_keyword">return</strong> getNameSimple();
+<a class="jxr_linenumber" name="L2508" href="#L2508">2508</a> 	}
+<a class="jxr_linenumber" name="L2509" href="#L2509">2509</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
