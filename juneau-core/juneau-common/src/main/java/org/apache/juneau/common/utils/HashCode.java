@@ -71,12 +71,40 @@ public class HashCode {
 	/**
 	 * Hashes the hashcode of the specified object into this object.
 	 *
+	 * <p>
+	 * Arrays are handled specially to use content-based hashing via {@link java.util.Arrays#hashCode(Object[])}
+	 * instead of identity-based hashing.
+	 *
 	 * @param o The object whose hashcode will be hashed with this object.
 	 * @return This object.
 	 */
 	public HashCode add(Object o) {
 		o = unswap(o);
-		add(o == null ? 0 : o.hashCode());
+		if (o == null) {
+			add(0);
+		} else if (o.getClass().isArray()) {
+			// Use content-based hashcode for arrays
+			if (o instanceof Object[])
+				add(java.util.Arrays.hashCode((Object[])o));
+			else if (o instanceof int[])
+				add(java.util.Arrays.hashCode((int[])o));
+			else if (o instanceof long[])
+				add(java.util.Arrays.hashCode((long[])o));
+			else if (o instanceof short[])
+				add(java.util.Arrays.hashCode((short[])o));
+			else if (o instanceof byte[])
+				add(java.util.Arrays.hashCode((byte[])o));
+			else if (o instanceof char[])
+				add(java.util.Arrays.hashCode((char[])o));
+			else if (o instanceof boolean[])
+				add(java.util.Arrays.hashCode((boolean[])o));
+			else if (o instanceof float[])
+				add(java.util.Arrays.hashCode((float[])o));
+			else if (o instanceof double[])
+				add(java.util.Arrays.hashCode((double[])o));
+		} else {
+			add(o.hashCode());
+		}
 		return this;
 	}
 

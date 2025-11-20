@@ -33,6 +33,8 @@ import org.apache.juneau.common.function.*;
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
  * 	<li><b>Four-Part Keys:</b> Values are indexed by four keys (K1, K2, K3, K4) instead of a single key
+ * 	<li><b>Content-Based Keys:</b> Keys use content-based equality via {@link Tuple4}
+ * 	<li><b>Array Support:</b> Arrays can be used as key components with proper content-based hashing and equality
  * 	<li><b>Thread-Safe:</b> Inherits all thread-safety guarantees from {@link ConcurrentHashMap}
  * 	<li><b>Null Keys Supported:</b> All key parts can be <jk>null</jk>
  * 	<li><b>Optional Caching:</b> Can be disabled to always invoke a supplier function instead of caching
@@ -92,15 +94,17 @@ import org.apache.juneau.common.function.*;
  * 	<li>Caching query results indexed by database, schema, table, and query type
  * </ul>
  *
+ * <h5 class='section'>Array Support:</h5>
+ * <p>
+ * Unlike standard {@link java.util.HashMap} which uses identity-based equality for array keys,
+ * this class properly handles arrays using content-based comparison via {@link Tuple4}.
+ *
  * <h5 class='section'>Key Hashing:</h5>
  * <p>
- * The composite key is hashed using the formula:
- * <p class='bjava'>
- * 	hash = 31 * (31 * (31 * k1.hashCode() + k2.hashCode()) + k3.hashCode()) + k4.hashCode()
- * </p>
- * <p>
- * Null keys are treated as having a hash code of 0. Keys are considered equal if all components
- * are equal according to {@link Object#equals(Object)}.
+ * Keys are wrapped in {@link Tuple4} which provides content-based hashing.
+ * For arrays, {@link java.util.Arrays#hashCode(Object[])} is used to ensure
+ * consistent hashing based on array contents rather than identity. Keys are considered equal if all components
+ * are equal according to content-based comparison (via {@link org.apache.juneau.common.utils.Utils#eq(Object, Object)}).
  *
  * <h5 class='section'>Thread Safety:</h5>
  * <p>
@@ -116,16 +120,17 @@ import org.apache.juneau.common.function.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='jc'>{@link ConcurrentHashMap1Key}
  * 	<li class='jc'>{@link ConcurrentHashMap2Key}
  * 	<li class='jc'>{@link ConcurrentHashMap3Key}
  * 	<li class='jc'>{@link ConcurrentHashMap5Key}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">Overview &gt; juneau-common</a>
  * </ul>
  *
- * @param <K1> The first key component type.
- * @param <K2> The second key component type.
- * @param <K3> The third key component type.
- * @param <K4> The fourth key component type.
+ * @param <K1> The first key component type. Can be an array type for content-based key matching.
+ * @param <K2> The second key component type. Can be an array type for content-based key matching.
+ * @param <K3> The third key component type. Can be an array type for content-based key matching.
+ * @param <K4> The fourth key component type. Can be an array type for content-based key matching.
  * @param <V> The value type.
  * @serial exclude
  */

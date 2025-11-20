@@ -24,12 +24,14 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.function.*;
+
 /**
  * Simple in-memory cache for storing and retrieving objects by key.
  *
  * <h5 class='section'>Overview:</h5>
  * <p>
- * This class extends {@link ConcurrentHashMap} to provide a thread-safe caching layer with automatic
+ * This class uses {@link ConcurrentHashMap1Key} internally to provide a thread-safe caching layer with automatic
  * value computation, cache eviction, and statistics tracking. It's designed for caching expensive-to-compute
  * or frequently-accessed objects to improve performance.
  *
@@ -42,6 +44,7 @@ import java.util.function.*;
  * 	<li>Built-in hit/miss statistics tracking
  * 	<li>Optional logging of cache statistics on JVM shutdown
  * 	<li>Can be disabled entirely via builder or system property
+ * 	<li><b>Array Support:</b> Arrays can be used as keys with proper content-based hashing and equality
  * </ul>
  *
  * <h5 class='section'>Usage:</h5>
@@ -58,6 +61,18 @@ import java.util.function.*;
  *
  * 	<jc>// Or override the supplier</jc>
  * 	Pattern <jv>pattern2</jv> = <jv>patternCache</jv>.get(<js>"[0-9]+"</js>, () -&gt; Pattern.compile(<js>"[0-9]+"</js>, Pattern.CASE_INSENSITIVE));
+ * </p>
+ *
+ * <h5 class='section'>Array Support:</h5>
+ * <p>
+ * Unlike standard {@link java.util.HashMap} which uses identity-based equality for array keys,
+ * this class properly handles arrays using content-based comparison via {@link ConcurrentHashMap1Key}:
+ *
+ * <p class='bjava'>
+ * 	<jc>// Arrays work correctly as keys</jc>
+ * 	Cache&lt;String[],Result&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(String[].<jk>class</jk>, Result.<jk>class</jk>).build();
+ * 	<jv>cache</jv>.get(<jk>new</jk> String[]{<js>"a"</js>, <js>"b"</js>}, () -&gt; computeResult());
+ * 	Result <jv>r</jv> = <jv>cache</jv>.get(<jk>new</jk> String[]{<js>"a"</js>, <js>"b"</js>}, () -&gt; computeResult());  <jc>// Cache hit!</jc>
  * </p>
  *
  * <h5 class='section'>Cache Behavior:</h5>
@@ -96,6 +111,7 @@ import java.util.function.*;
  * 		to minimize redundant computation in concurrent scenarios
  * 	<li>When max size is exceeded, the entire cache is cleared in a single operation
  * 	<li>Statistics tracking uses {@link AtomicInteger} for thread-safe counting without locking
+ * 	<li>For arrays, content-based hashing via {@link java.util.Arrays#hashCode(Object[])} ensures proper cache hits
  * </ul>
  *
  * <h5 class='section'>Examples:</h5>
@@ -125,15 +141,16 @@ import java.util.function.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='jc'>{@link ConcurrentHashMap1Key}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">Overview &gt; juneau-common</a>
  * </ul>
  *
- * @param <K> The key type.
+ * @param <K> The key type. Can be an array type for content-based key matching.
  * @param <V> The value type.
  */
-public class Cache<K,V> extends ConcurrentHashMap<K,V> {
+public class Cache<K,V> implements java.util.Map<K,V> {
 
-	private static final long serialVersionUID = 1L;
+	private final ConcurrentHashMap1Key<K,V> map = new ConcurrentHashMap1Key<>();
 
 	/**
 	 * Builder for creating configured {@link Cache} instances.
@@ -421,7 +438,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	@Override /* ConcurrentHashMap */
+	@Override /* Map */
 	public V get(Object key) {
 		assertArgNotNull("key", key);
 		return get((K)key, () -> supplier.apply((K)key));
@@ -446,6 +463,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	 * 	<li>Thread-safe: Multiple threads can safely call this method concurrently
 	 * 	<li>The supplier may be called multiple times for the same key in concurrent scenarios
 	 * 		(due to {@link ConcurrentHashMap#putIfAbsent(Object, Object)} semantics)
+	 * 	<li><b>Array Keys:</b> Arrays are matched by content, not identity
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -470,7 +488,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 		assertArgNotNull("key", key);
 		if (disableCaching)
 			return supplier.get();
-		V v = super.get(key);
+		V v = map.getKey(key);
 		if (v == null) {
 			if (size() > maxSize)
 				clear();
@@ -478,7 +496,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 			if (v == null)
 				remove(key);
 			else
-				putIfAbsent(key, v);
+				map.put(Tuple1.of(key), v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
@@ -501,10 +519,9 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping for the key.
 	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
-	@Override /* ConcurrentHashMap */
 	public V put(K key, V value) {
 		assertArgNotNull("key", key);
-		return super.put(key, value);
+		return map.putKey(key, value);
 	}
 
 	/**
@@ -534,4 +551,81 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	 * @return The total number of cache hits since creation.
 	 */
 	public int getCacheHits() { return cacheHits.get(); }
+
+	/**
+	 * Returns the number of entries currently in the cache.
+	 *
+	 * @return The number of cached entries.
+	 */
+	public int size() {
+		return map.size();
+	}
+
+	/**
+	 * Returns a collection view of the values contained in this cache.
+	 *
+	 * @return A collection view of the values.
+	 */
+	public java.util.Collection<V> values() {
+		return map.values();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this cache contains no entries.
+	 *
+	 * @return <jk>true</jk> if this cache contains no entries.
+	 */
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
+
+	/**
+	 * Removes all entries from the cache.
+	 *
+	 * <p>
+	 * Note: This does not reset the cache hit counter.
+	 */
+	public void clear() {
+		map.clear();
+	}
+
+	/**
+	 * Removes the specified key from the cache.
+	 *
+	 * @param key The key to remove. Must not be <jk>null</jk>.
+	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if key is <jk>null</jk>.
+	 */
+	@Override /* Map */
+	public V remove(Object key) {
+		assertArgNotNull("key", key);
+		return map.remove(Tuple1.of(key));
+	}
+
+	@Override /* Map */
+	public boolean containsKey(Object key) {
+		return map.containsKey(Tuple1.of(key));
+	}
+
+	@Override /* Map */
+	public boolean containsValue(Object value) {
+		return map.containsValue(value);
+	}
+
+	@Override /* Map */
+	public void putAll(java.util.Map<? extends K, ? extends V> m) {
+		m.forEach((k, v) -> put(k, v));
+	}
+
+	@Override /* Map */
+	public java.util.Set<K> keySet() {
+		return map.keySet().stream().map(Tuple1::getA).collect(java.util.stream.Collectors.toSet());
+	}
+
+	@Override /* Map */
+	public java.util.Set<java.util.Map.Entry<K, V>> entrySet() {
+		return map.entrySet().stream()
+			.map(e -> new java.util.AbstractMap.SimpleEntry<>(e.getKey().getA(), e.getValue()))
+			.collect(java.util.stream.Collectors.toSet());
+	}
 }

@@ -190,6 +190,46 @@ public class AnnotationProvider {
 	public static final AnnotationProvider INSTANCE = new AnnotationProvider(create());
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Performance instrumentation
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final Map<String, Long> methodCallCounts = new java.util.concurrent.ConcurrentHashMap<>();
+	private static final boolean ENABLE_INSTRUMENTATION = Boolean.getBoolean("juneau.instrumentAnnotationProvider");
+	private static final boolean ENABLE_NEW_CODE = Boolean.getBoolean("juneau.annotationProvider.enableNewCode");
+
+	static {
+		if (ENABLE_INSTRUMENTATION) {
+			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+				try {
+					java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("/tmp/annotation-provider-stats.txt"));
+					pw.println("\n=== AnnotationProvider Method Call Statistics ===");
+					pw.println(String.format("%-65s %12s", "Method", "Calls"));
+					pw.println("=".repeat(80));
+					
+					methodCallCounts.entrySet().stream()
+						.sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+						.forEach(e -> pw.println(String.format("%-65s %,12d", e.getKey(), e.getValue())));
+					
+					long totalCalls = methodCallCounts.values().stream().mapToLong(Long::longValue).sum();
+					pw.println("=".repeat(80));
+					pw.println(String.format("%-65s %,12d", "TOTAL", totalCalls));
+					pw.println("=== Total methods instrumented: " + methodCallCounts.size() + " ===\n");
+					pw.close();
+					System.err.println("\n=== AnnotationProvider statistics written to /tmp/annotation-provider-stats.txt ===\n");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}));
+		}
+	}
+
+	private static void trackCall(String methodSignature) {
+		if (ENABLE_INSTRUMENTATION) {
+			methodCallCounts.merge(methodSignature, 1L, Long::sum);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -490,6 +530,10 @@ public class AnnotationProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
+		trackCall("find(Class, ClassInfo, AnnotationTraversal...)");
+		if (ENABLE_NEW_CODE)
+			return findNew(type, clazz, traversals).stream();
+		
 		assertArgNotNull("type", type);
 		assertArgNotNull("clazz", clazz);
 		if (traversals.length == 0)
@@ -519,6 +563,17 @@ public class AnnotationProvider {
 	}
 
 	/**
+	 * New optimized implementation of find(Class, ClassInfo, AnnotationTraversal...).
+	 * Returns a List for better performance.
+	 * Enable with -Djuneau.annotationProvider.enableNewCode=true
+	 */
+	@SuppressWarnings("unchecked")
+	private <A extends Annotation> List<AnnotationInfo<A>> findNew(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
+		// TODO: Implement optimized version
+		throw new UnsupportedOperationException("New implementation not yet available");
+	}
+
+	/**
 	 * Streams all annotations from a class using configurable traversal options, without filtering by annotation type.
 	 *
 	 * <p>
@@ -542,6 +597,7 @@ public class AnnotationProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	public Stream<AnnotationInfo<? extends Annotation>> find(ClassInfo clazz, AnnotationTraversal... traversals) {
+		trackCall("find(ClassInfo, AnnotationTraversal...)");
 		assertArgNotNull("clazz", clazz);
 		if (traversals.length == 0)
 			traversals = a(PARENTS, PACKAGE);
@@ -582,6 +638,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(Class, ClassInfo, AnnotationTraversal...)");
 		return rstream(find(type, clazz, traversals).toList());
 	}
 
@@ -597,6 +654,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ClassInfo clazz, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(ClassInfo, AnnotationTraversal...)");
 		return rstream(find(clazz, traversals).toList());
 	}
 
@@ -638,6 +696,7 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
+		trackCall("has(Class, ClassInfo, AnnotationTraversal...)");
 		return find(type, clazz, traversals).findFirst().isPresent();
 	}
 
@@ -666,6 +725,7 @@ public class AnnotationProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
+		trackCall("find(Class, MethodInfo, AnnotationTraversal...)");
 		assertArgNotNull("type", type);
 		assertArgNotNull("method", method);
 		if (traversals.length == 0)
@@ -720,6 +780,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public Stream<AnnotationInfo<? extends Annotation>> find(MethodInfo method, AnnotationTraversal... traversals) {
+		trackCall("find(MethodInfo, AnnotationTraversal...)");
 		assertArgNotNull("method", method);
 		if (traversals.length == 0)
 			traversals = a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE);
@@ -764,6 +825,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(Class, MethodInfo, AnnotationTraversal...)");
 		return rstream(find(type, method, traversals).toList());
 	}
 
@@ -779,6 +841,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(MethodInfo method, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(MethodInfo, AnnotationTraversal...)");
 		return rstream(find(method, traversals).toList());
 	}
 
@@ -820,6 +883,7 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
+		trackCall("has(Class, MethodInfo, AnnotationTraversal...)");
 		return find(type, method, traversals).findFirst().isPresent();
 	}
 
@@ -863,6 +927,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
+		trackCall("find(Class, ParameterInfo, AnnotationTraversal...)");
 		assertArgNotNull("type", type);
 		assertArgNotNull("parameter", parameter);
 		if (traversals.length == 0)
@@ -918,6 +983,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(Class, ParameterInfo, AnnotationTraversal...)");
 		return rstream(find(type, parameter, traversals).toList());
 	}
 
@@ -956,6 +1022,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
 	public Stream<AnnotationInfo<? extends Annotation>> find(ParameterInfo parameter, AnnotationTraversal... traversals) {
+		trackCall("find(ParameterInfo, AnnotationTraversal...)");
 		assertArgNotNull("parameter", parameter);
 		if (traversals.length == 0)
 			traversals = a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
@@ -988,6 +1055,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never <jk>null</jk>.
 	 */
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ParameterInfo parameter, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(ParameterInfo, AnnotationTraversal...)");
 		return rstream(find(parameter, traversals).toList());
 	}
 
@@ -1028,6 +1096,7 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
+		trackCall("has(Class, ParameterInfo, AnnotationTraversal...)");
 		return find(type, parameter, traversals).findFirst().isPresent();
 	}
 
@@ -1052,6 +1121,7 @@ public class AnnotationProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
+		trackCall("find(Class, FieldInfo, AnnotationTraversal...)");
 		assertArgNotNull("type", type);
 		assertArgNotNull("field", field);
 		if (traversals.length == 0)
@@ -1089,6 +1159,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public Stream<AnnotationInfo<? extends Annotation>> find(FieldInfo field, AnnotationTraversal... traversals) {
+		trackCall("find(FieldInfo, AnnotationTraversal...)");
 		assertArgNotNull("field", field);
 		if (traversals.length == 0)
 			traversals = a(SELF);
@@ -1120,6 +1191,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(Class, FieldInfo, AnnotationTraversal...)");
 		return rstream(find(type, field, traversals).toList());
 	}
 
@@ -1135,6 +1207,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(FieldInfo field, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(FieldInfo, AnnotationTraversal...)");
 		return rstream(find(field, traversals).toList());
 	}
 
@@ -1170,6 +1243,7 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
+		trackCall("has(Class, FieldInfo, AnnotationTraversal...)");
 		return find(type, field, traversals).findFirst().isPresent();
 	}
 
@@ -1194,6 +1268,7 @@ public class AnnotationProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		trackCall("find(Class, ConstructorInfo, AnnotationTraversal...)");
 		assertArgNotNull("type", type);
 		assertArgNotNull("constructor", constructor);
 		if (traversals.length == 0)
@@ -1231,6 +1306,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public Stream<AnnotationInfo<? extends Annotation>> find(ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		trackCall("find(ConstructorInfo, AnnotationTraversal...)");
 		assertArgNotNull("constructor", constructor);
 		if (traversals.length == 0)
 			traversals = a(SELF);
@@ -1262,6 +1338,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(Class, ConstructorInfo, AnnotationTraversal...)");
 		return rstream(find(type, constructor, traversals).toList());
 	}
 
@@ -1277,6 +1354,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		trackCall("findTopDown(ConstructorInfo, AnnotationTraversal...)");
 		return rstream(find(constructor, traversals).toList());
 	}
 
@@ -1312,9 +1390,10 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
+		trackCall("has(Class, ConstructorInfo, AnnotationTraversal...)");
 		return find(type, constructor, traversals).findFirst().isPresent();
 	}
-
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------

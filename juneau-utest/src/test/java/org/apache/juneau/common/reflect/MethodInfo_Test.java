@@ -352,7 +352,7 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	private static List<A> annotations(MethodInfo mi, Class<? extends Annotation> a) {
-		return AnnotationProvider.INSTANCE.findTopDown(a, mi).map(AnnotationInfo::inner).map(PredicateUtils.peek()).map(x -> (A)x).collect(Collectors.toList());
+		return AnnotationProvider.INSTANCE.findTopDown(a, mi).map(AnnotationInfo::inner).map(x -> (A)x).collect(Collectors.toList());
 	}
 
 	@Test void getAnnotationAny() {

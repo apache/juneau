@@ -23,7 +23,21 @@ import org.apache.juneau.common.utils.*;
 /**
  * Represents a simple tuple of 5 objects.
  *
+ * <p>
+ * This class is useful when you need a five-value composite key for HashMap lookups that properly implements
+ * {@link #equals(Object)} and {@link #hashCode()} based on content rather than identity.
+ *
+ * <h5 class='section'>Array Support:</h5>
+ * <p>
+ * Unlike using arrays directly as HashMap keys, this class properly handles arrays by using
+ * content-based equality and hashing via {@link HashCode#of(Object...)} which internally uses
+ * {@link java.util.Arrays#hashCode(Object[])} for arrays.
+ *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link Tuple1}
+ * 	<li class='jc'>{@link Tuple2}
+ * 	<li class='jc'>{@link Tuple3}
+ * 	<li class='jc'>{@link Tuple4}
  * </ul>
  *
  * @param <A> Object 1 type.

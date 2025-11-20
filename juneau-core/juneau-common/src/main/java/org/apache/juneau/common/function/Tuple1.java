@@ -21,11 +21,13 @@ import static org.apache.juneau.common.utils.Utils.*;
 import org.apache.juneau.common.utils.*;
 
 /**
- * Represents a simple tuple of 3 objects.
+ * Represents a simple tuple of 1 object.
  *
  * <p>
- * This class is useful when you need a three-value composite key for HashMap lookups that properly implements
+ * This class is useful when you need a single-value wrapper that properly implements
  * {@link #equals(Object)} and {@link #hashCode()} based on content rather than identity.
+ * This is particularly useful for HashMap keys when you want to use an array or need
+ * a wrapper that uses content-based equality.
  *
  * <h5 class='section'>Array Support:</h5>
  * <p>
@@ -33,81 +35,65 @@ import org.apache.juneau.common.utils.*;
  * content-based equality and hashing via {@link HashCode#of(Object...)} which internally uses
  * {@link java.util.Arrays#hashCode(Object[])} for arrays.
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Using arrays as keys via Tuple1</jc>
+ * 	Map&lt;Tuple1&lt;String[]&gt;,Integer&gt; <jv>map</jv> = <jk>new</jk> HashMap&lt;&gt;();
+ * 	<jv>map</jv>.put(Tuple1.<jsm>of</jsm>(<jk>new</jk> String[]{<js>"a"</js>,<js>"b"</js>}), 1);
+ * 	<jv>map</jv>.put(Tuple1.<jsm>of</jsm>(<jk>new</jk> String[]{<js>"a"</js>,<js>"b"</js>}), 2);  <jc>// Replaces first entry</jc>
+ * 	System.<jsf>out</jsf>.println(<jv>map</jv>.size());  <jc>// Prints "1"</jc>
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link Tuple1}
  * 	<li class='jc'>{@link Tuple2}
+ * 	<li class='jc'>{@link Tuple3}
  * 	<li class='jc'>{@link Tuple4}
  * 	<li class='jc'>{@link Tuple5}
  * </ul>
  *
- * @param <A> Object 1 type.
- * @param <B> Object 2 type.
- * @param <C> Object 3 type.
+ * @param <A> Object type.
  */
-public class Tuple3<A,B,C> {
+public class Tuple1<A> {
 
 	/**
 	 * Static creator.
 	 *
-	 * @param <A> Object 1 type.
-	 * @param <B> Object 2 type.
-	 * @param <C> Object 3 type.
-	 * @param a Object 1.
-	 * @param b Object 2.
-	 * @param c Object 3.
+	 * @param <A> Object type.
+	 * @param a Object value.
 	 * @return A new tuple object.
 	 */
-	public static <A,B,C> Tuple3<A,B,C> of(A a, B b, C c) {
-		return new Tuple3<>(a, b, c);
+	public static <A> Tuple1<A> of(A a) {
+		return new Tuple1<>(a);
 	}
 
 	private final A a;
-	private final B b;
-	private final C c;
 	private final int hashCode;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param a Object 1.
-	 * @param b Object 2.
-	 * @param c Object 3.
+	 * @param a Object value.
 	 */
-	public Tuple3(A a, B b, C c) {
+	public Tuple1(A a) {
 		this.a = a;
-		this.b = b;
-		this.c = c;
-		this.hashCode = HashCode.of(a, b, c);
+		this.hashCode = HashCode.of(a);
 	}
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple3<?,?,?> o2 && eq(this, o2, (x, y) -> eq(x.a, y.a) && eq(x.b, y.b) && eq(x.c, y.c));
+		return o instanceof Tuple1<?> o2 && eq(this, o2, (x, y) -> eq(x.a, y.a));
 	}
 
 	/**
-	 * Returns the first object in this tuple.
+	 * Returns the object in this tuple.
 	 *
-	 * @return The first object in this tuple.
+	 * @return The object in this tuple.
 	 */
 	public A getA() { return a; }
-
-	/**
-	 * Returns the second object in this tuple.
-	 *
-	 * @return The second object in this tuple.
-	 */
-	public B getB() { return b; }
-
-	/**
-	 * Returns the third object in this tuple.
-	 *
-	 * @return The third object in this tuple.
-	 */
-	public C getC() { return c; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
 		return hashCode;
 	}
 }
+

@@ -33,6 +33,8 @@ import org.apache.juneau.common.function.*;
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
  * 	<li><b>Five-Part Keys:</b> Values are indexed by five keys (K1, K2, K3, K4, K5) instead of a single key
+ * 	<li><b>Content-Based Keys:</b> Keys use content-based equality via {@link Tuple5}
+ * 	<li><b>Array Support:</b> Arrays can be used as key components with proper content-based hashing and equality
  * 	<li><b>Thread-Safe:</b> Inherits all thread-safety guarantees from {@link ConcurrentHashMap}
  * 	<li><b>Null Keys Supported:</b> All key parts can be <jk>null</jk>
  * 	<li><b>Optional Caching:</b> Can be disabled to always invoke a supplier function instead of caching
@@ -93,17 +95,18 @@ import org.apache.juneau.common.function.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link ConcurrentTwoKeyHashMap}
- * 	<li class='jc'>{@link ConcurrentThreeKeyHashMap}
- * 	<li class='jc'>{@link ConcurrentFourKeyHashMap}
+ * 	<li class='jc'>{@link ConcurrentHashMap1Key}
+ * 	<li class='jc'>{@link ConcurrentHashMap2Key}
+ * 	<li class='jc'>{@link ConcurrentHashMap3Key}
+ * 	<li class='jc'>{@link ConcurrentHashMap4Key}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">Overview &gt; juneau-common</a>
  * </ul>
  *
- * @param <K1> The first key component type.
- * @param <K2> The second key component type.
- * @param <K3> The third key component type.
- * @param <K4> The fourth key component type.
- * @param <K5> The fifth key component type.
+ * @param <K1> The first key component type. Can be an array type for content-based key matching.
+ * @param <K2> The second key component type. Can be an array type for content-based key matching.
+ * @param <K3> The third key component type. Can be an array type for content-based key matching.
+ * @param <K4> The fourth key component type. Can be an array type for content-based key matching.
+ * @param <K5> The fifth key component type. Can be an array type for content-based key matching.
  * @param <V> The value type.
  * @serial exclude
  */
