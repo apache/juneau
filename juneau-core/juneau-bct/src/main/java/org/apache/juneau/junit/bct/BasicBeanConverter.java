@@ -30,6 +30,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -273,6 +274,7 @@ public class BasicBeanConverter implements BeanConverter {
 		private Map<String,Object> settings = map();
 		private List<StringifierEntry<?>> stringifiers = list();
 		private List<ListifierEntry<?>> listifiers = list();
+		private List<SizerEntry<?>> sizers = list();
 		private List<SwapperEntry<?>> swappers = list();
 		private List<PropertyExtractor> propertyExtractors = list();
 
@@ -288,6 +290,20 @@ public class BasicBeanConverter implements BeanConverter {
 		 * @return This builder for method chaining
 		 */
 		public <T> Builder addListifier(Class<T> c, Listifier<T> l) { listifiers.add(new ListifierEntry<>(c, l)); return this; }
+
+		/**
+		 * Registers a custom sizer for a specific type.
+		 *
+		 * <p>Sizers compute the size of collection-like objects for test assertions.
+		 * The function receives the object to size and the converter instance for accessing
+		 * additional utilities if needed.</p>
+		 *
+		 * @param <T> The type to handle
+		 * @param c The class to register the sizer for
+		 * @param s The sizing function
+		 * @return This builder for method chaining
+		 */
+		public <T> Builder addSizer(Class<T> c, Sizer<T> s) { sizers.add(new SizerEntry<>(c, s)); return this; }
 
 		/**
 		 * Registers a custom property extractor for specialized property access logic.
@@ -494,6 +510,16 @@ public class BasicBeanConverter implements BeanConverter {
 		}
 	}
 
+	static class SizerEntry<T> {
+		private Class<T> forClass;
+		private Sizer<T> function;
+
+		private SizerEntry(Class<T> forClass, Sizer<T> function) {
+			this.forClass = forClass;
+			this.function = function;
+		}
+	}
+
 	/**
 	 * Default converter instance with standard settings and handlers.
 	 *
@@ -677,6 +703,7 @@ public class BasicBeanConverter implements BeanConverter {
 
 	private final List<StringifierEntry<?>> stringifiers;
 	private final List<ListifierEntry<?>> listifiers;
+	private final List<SizerEntry<?>> sizers;
 	private final List<SwapperEntry<?>> swappers;
 
 	private final List<PropertyExtractor> propertyExtractors;
@@ -687,11 +714,14 @@ public class BasicBeanConverter implements BeanConverter {
 
 	private final ConcurrentHashMap<Class,Optional<Listifier<?>>> listifierMap = new ConcurrentHashMap<>();
 
+	private final ConcurrentHashMap<Class,Optional<Sizer<?>>> sizerMap = new ConcurrentHashMap<>();
+
 	private final ConcurrentHashMap<Class,Optional<Swapper<?>>> swapperMap = new ConcurrentHashMap<>();
 
 	protected BasicBeanConverter(Builder b) {
 		stringifiers = copyOf(b.stringifiers);
 		listifiers = copyOf(b.listifiers);
+		sizers = copyOf(b.sizers);
 		swappers = copyOf(b.swappers);
 		propertyExtractors = copyOf(b.propertyExtractors);
 		settings = copyOf(b.settings);
@@ -741,7 +771,10 @@ public class BasicBeanConverter implements BeanConverter {
 	@Override
 	public Object getProperty(Object object, String name) {
 		var o = swap(object);
-		return propertyExtractors.stream().filter(x -> x.canExtract(this, o, name)).findFirst()
+		return propertyExtractors
+			.stream()
+			.filter(x -> x.canExtract(this, o, name))
+			.findFirst()
 			.orElseThrow(() -> runtimeException("Could not find extractor for object of type {0}", cn(o))).extract(this, o, name);
 	}
 
@@ -755,23 +788,77 @@ public class BasicBeanConverter implements BeanConverter {
 	@SuppressWarnings("unchecked")
 	public List<Object> listify(Object o) {
 		assertArgNotNull("o", o);
+
 		o = swap(o);
-		if (o instanceof List)
-			return (List<Object>)o;
+
+		if (o instanceof List) return (List<Object>)o;
+		if (o.getClass().isArray()) return arrayToList(o);
+
 		var c = o.getClass();
-		if (c.isArray())
-			return arrayToList(o);
 		var o2 = o;
-		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2))
+		return listifierMap
+			.computeIfAbsent(c, this::findListifier)
+			.map(x -> (Listifier)x)
+			.map(x -> (List<Object>)x.apply(this, o2))
 			.orElseThrow(() -> illegalArg("Object of type {0} could not be converted to a list.", scn(o2)));
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public String stringify(Object o) {
+	public int size(Object o) {
+		assertArgNotNull("o", o);
+
+		// Checks for Optional before unpacking.
+		if (o instanceof Optional) return ((Optional)o).isEmpty() ? 0 : 1;
+
 		o = swap(o);
-		if (o == null)
-			return getSetting(SETTING_nullValue, null);
+
+		// Check standard object types.
+		if (o == null) return 0;
+		if (o instanceof Collection) return ((Collection<?>)o).size();
+		if (o instanceof Map) return ((Map<?,?>)o).size();
+		if (o.getClass().isArray()) return Array.getLength(o);
+		if (o instanceof String) return ((String)o).length();
+
+		// Check for registered custom Sizer
+		var c = o.getClass();
+		var o2 = o;
+		var sizer = sizerMap.computeIfAbsent(c, this::findSizer);
+		if (sizer.isPresent()) return ((Sizer)sizer.get()).size(o2, this);
+
+		// Try to find size() or length() method via reflection
+		var sizeResult = ClassInfo.of(c).getPublicMethods().stream()
+			.filter(m -> ! m.hasParameters())
+			.filter(m -> m.hasAnyName("size", "length"))
+			.filter(m -> m.getReturnType().isAny(int.class, Integer.class))
+			.findFirst()
+			.map(m -> safe(() -> (int) m.invoke(o2)))
+			.filter(Objects::nonNull);
+		if (sizeResult.isPresent()) return sizeResult.get();
+
+		// Fall back to listify
+		if (canListify(o)) return listify(o).size();
+
+		// Try to find isEmpty() method via reflection
+		var isEmpty = ClassInfo.of(o).getPublicMethods().stream()
+			.filter(m -> ! m.hasParameters())
+			.filter(m -> m.hasName("isEmpty"))
+			.filter(m -> m.getReturnType().isAny(boolean.class, Boolean.class))
+			.map(m -> safe(() -> (Boolean)m.invoke(o2)))
+			.findFirst();
+		if (isEmpty.isPresent()) return isEmpty.get() ? 0 : 1;
+
+		throw illegalArg("Object of type {0} does not have a determinable size.", scn(o));
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public String stringify(Object o) {
+
+		o = swap(o);
+
+		if (o == null) return getSetting(SETTING_nullValue, null);
+
 		var c = o.getClass();
 		var stringifier = stringifierMap.computeIfAbsent(c, this::findStringifier);
 		if (stringifier.isEmpty()) {
@@ -854,6 +941,15 @@ public class BasicBeanConverter implements BeanConverter {
 		if (nn(l))
 			return of(l.function);
 		return findListifier(c.getSuperclass());
+	}
+
+	private Optional<Sizer<?>> findSizer(Class<?> c) {
+		if (c == null)
+			return empty();
+		var s = sizers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
+		if (nn(s))
+			return of(s.function);
+		return findSizer(c.getSuperclass());
 	}
 
 	private Optional<Stringifier<?>> findStringifier(Class<?> c) {

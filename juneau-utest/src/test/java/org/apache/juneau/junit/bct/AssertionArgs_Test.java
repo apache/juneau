@@ -421,11 +421,18 @@ class AssertionArgs_Test extends TestBase {
 				return String.valueOf(o);
 			}
 
-		@Override
-		public List<Object> listify(Object o) {
-			if (o instanceof List) return (List<Object>) o;
-			return l(o);
-		}
+			@Override
+			public List<Object> listify(Object o) {
+				if (o instanceof List) return (List<Object>) o;
+				return l(o);
+			}
+
+			@Override
+			public int size(Object o) {
+				if (o instanceof List) return ((List<?>) o).size();
+				if (o instanceof String) return ((String) o).length();
+				return 1;
+			}
 
 			@Override
 			public boolean canListify(Object o) {
@@ -473,11 +480,18 @@ class AssertionArgs_Test extends TestBase {
 				return String.valueOf(o);
 			}
 
-		@Override
-		public List<Object> listify(Object o) {
-			if (o instanceof List) return (List<Object>) o;
-			return l(o);
-		}
+			@Override
+			public List<Object> listify(Object o) {
+				if (o instanceof List) return (List<Object>) o;
+				return l(o);
+			}
+
+			@Override
+			public int size(Object o) {
+				if (o instanceof List) return ((List<?>) o).size();
+				if (o instanceof String) return ((String) o).length();
+				return 1;
+			}
 
 			@Override
 			public boolean canListify(Object o) {

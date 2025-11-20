@@ -310,7 +310,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void g03_notEmpty() {
 			var e = assertThrows(AssertionFailedError.class, () -> assertEmpty(l("item")));
-			assertContains("Collection was not empty", e.getMessage());
+			assertContains("Value was not empty", e.getMessage());
 		}
 
 		@Test
@@ -579,7 +579,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void i03_actuallyEmpty() {
 			var e = assertThrows(AssertionFailedError.class, () -> assertNotEmpty(l()));
-			assertContains("Collection was empty", e.getMessage());
+			assertContains("Value was empty", e.getMessage());
 		}
 
 		@Test

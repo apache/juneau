@@ -23,12 +23,10 @@ import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.opentest4j.*;
 
@@ -603,24 +601,8 @@ public class BctAssertions {
 	public static void assertEmpty(AssertionArgs args, Object value) {
 		assertArgNotNull("args", args);
 		assertNotNull(value, "Value was null.");
-
-		if (value instanceof String s) {
-			assertTrue(s.isEmpty(), args.getMessage("String was not empty.  value: <{0}>", s));
-		} else if (value instanceof Optional<?> v2) {
-			assertTrue(v2.isEmpty(), args.getMessage("Optional was not empty"));
-		} else if (value instanceof Value<?> v2) {
-			assertTrue(v2.isEmpty(), args.getMessage("Value was not empty"));
-		} else if (value instanceof Map<?,?> v2) {
-			assertTrue(v2.isEmpty(), args.getMessage("Map was not empty"));
-		} else if (value instanceof Collection<?> v2) {
-			assertTrue(v2.isEmpty(), args.getMessage("Collection was not empty"));
-		} else if (value.getClass().isArray()) {
-			assertEquals(0, Array.getLength(value), args.getMessage("Array was not empty."));
-		} else {
-			var converter = args.getBeanConverter().orElse(DEFAULT_CONVERTER);
-			assertTrue(converter.canListify(value), args.getMessage("Value cannot be converted to a list.  Class=<{0}>", scn(value)));
-			assertTrue(converter.listify(value).isEmpty(), args.getMessage("Value was not empty."));
-		}
+		var size = args.getBeanConverter().orElse(DEFAULT_CONVERTER).size(value);
+		assertEquals(0, size, args.getMessage("Value was not empty. Size=<{0}>", size));
 	}
 
 	/**
@@ -982,22 +964,8 @@ public class BctAssertions {
 	public static void assertNotEmpty(AssertionArgs args, Object value) {
 		assertArgNotNull("args", args);
 		assertNotNull(value, "Value was null.");
-
-		if (value instanceof String s) {
-			assertFalse(s.isEmpty(), args.getMessage("String was empty."));
-		} else if (value instanceof Optional<?> v2) {
-			assertFalse(v2.isEmpty(), args.getMessage("Optional was empty"));
-		} else if (value instanceof Value<?> v2) {
-			assertFalse(v2.isEmpty(), args.getMessage("Value was empty"));
-		} else if (value instanceof Map<?,?> v2) {
-			assertFalse(v2.isEmpty(), args.getMessage("Map was empty"));
-		} else if (value instanceof Collection<?> v2) {
-			assertFalse(v2.isEmpty(), args.getMessage("Collection was empty"));
-		} else if (value.getClass().isArray()) {
-			assertTrue(Array.getLength(value) > 0, args.getMessage("Array was empty."));
-		} else {
-			assertFalse(args.getBeanConverter().orElse(DEFAULT_CONVERTER).listify(value).isEmpty(), args.getMessage("Value was empty."));
-		}
+		var size = args.getBeanConverter().orElse(DEFAULT_CONVERTER).size(value);
+		assertTrue(size > 0, args.getMessage("Value was empty."));
 	}
 
 	/**
@@ -1061,13 +1029,7 @@ public class BctAssertions {
 	public static void assertSize(AssertionArgs args, int expected, Object actual) {
 		assertArgNotNull("args", args);
 		assertNotNull(actual, "Value was null.");
-
-		if (actual instanceof String a) {
-			assertEquals(expected, a.length(), args.getMessage("Value not expected size.  value: <{0}>", a));
-			return;
-		}
-
-		var size = args.getBeanConverter().orElse(DEFAULT_CONVERTER).listify(actual).size();
+		var size = args.getBeanConverter().orElse(DEFAULT_CONVERTER).size(actual);
 		assertEquals(expected, size, args.getMessage("Value not expected size."));
 	}
 

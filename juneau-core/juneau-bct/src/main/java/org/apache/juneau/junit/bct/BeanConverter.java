@@ -106,6 +106,20 @@ public interface BeanConverter {
 	List<Object> listify(Object o);
 
 	/**
+	 * Computes the size of an object.
+	 *
+	 * <p>
+	 * This method determines the size of collection-like objects for test assertions.
+	 * The size is computed based on registered {@link Sizer} implementations, with
+	 * built-in support for collections, maps, arrays, and strings.
+	 *
+	 * @param o The object to compute the size of. Must not be <jk>null</jk>.
+	 * @return The size of the object.
+	 * @throws IllegalArgumentException if the object's size cannot be determined.
+	 */
+	int size(Object o);
+
+	/**
 	 * Converts an object to its string representation for testing purposes.
 	 *
 	 * @param o The object to stringify
