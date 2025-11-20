@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -643,8 +644,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		BeanContext bc = beanContext;
 		if (nn(a)) {
 			if (nn(field)) bc.getAnnotationProvider().find(a, FieldInfo.of(field)).map(x -> x.inner()).filter(filter).forEach(action);
-			if (nn(getter)) bc.getAnnotationProvider().find(a, MethodInfo.of(getter)).map(x -> x.inner()).filter(filter).forEach(action);
-			if (nn(setter)) bc.getAnnotationProvider().find(a, MethodInfo.of(setter)).map(x -> x.inner()).filter(filter).forEach(action);
+			if (nn(getter)) bc.getAnnotationProvider().find(a, MethodInfo.of(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).filter(filter).forEach(action);
+			if (nn(setter)) bc.getAnnotationProvider().find(a, MethodInfo.of(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).filter(filter).forEach(action);
 		}
 		return this;
 	}
@@ -696,26 +697,26 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (nn(gi)) {
 			// Walk up the inheritance hierarchy for the getter method
 			forEachParentMethod(getter, parentGetter -> {
-				ap.find(a, MethodInfo.of(parentGetter)).map(x -> x.inner()).forEach(x -> l.add(x));
+				ap.find(a, MethodInfo.of(parentGetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).forEach(x -> l.add(x));
 			});
-			ap.find(a, gi).map(x -> x.inner()).forEach(x -> l.add(x));
+			ap.find(a, gi, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).forEach(x -> l.add(x));
 			ap.findTopDown(a, gi.getReturnType()).map(x -> x.inner()).forEach(x -> l.add(x));
 		}
 		if (nn(setter)) {
 			// Walk up the inheritance hierarchy for the setter method
 			forEachParentMethod(setter, parentSetter -> {
-				ap.find(a, MethodInfo.of(parentSetter)).map(x -> x.inner()).forEach(x -> l.add(x));
+				ap.find(a, MethodInfo.of(parentSetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).forEach(x -> l.add(x));
 			});
-			ap.find(a, si).map(x -> x.inner()).forEach(x -> l.add(x));
+			ap.find(a, si, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).forEach(x -> l.add(x));
 			ap.findTopDown(a, ClassInfo.of(setter.getReturnType())).map(x -> x.inner()).forEach(x -> l.add(x));
 		}
 		if (nn(extraKeys)) {
 			MethodInfo eki = MethodInfo.of(extraKeys);
 			// Walk up the inheritance hierarchy for the extraKeys method
 			forEachParentMethod(extraKeys, parentExtraKeys -> {
-				ap.find(a, MethodInfo.of(parentExtraKeys)).map(x -> x.inner()).forEach(x -> l.add(x));
+				ap.find(a, MethodInfo.of(parentExtraKeys), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).forEach(x -> l.add(x));
 			});
-			ap.find(a, eki).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
+			ap.find(a, eki, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			ap.findTopDown(a, ClassInfo.of(extraKeys.getReturnType())).map(x -> x.inner()).forEach(x -> l.add(x));
 		}
 

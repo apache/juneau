@@ -669,7 +669,7 @@ public class AnnotationProvider {
 		assertArgNotNull("type", type);
 		assertArgNotNull("method", method);
 		if (traversals.length == 0)
-			traversals = a(SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE);
+			traversals = a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE);
 
 		return Arrays.stream(traversals)
 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
