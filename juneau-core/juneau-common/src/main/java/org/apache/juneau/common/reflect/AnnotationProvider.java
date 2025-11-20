@@ -438,22 +438,22 @@ public class AnnotationProvider {
 
 	private List<AnnotationInfo<Annotation>> findClassAnnotations(Class<?> forClass) {
 		var ci = ClassInfo.of(forClass);
-		return annotationMap.find(forClass).map(a -> AnnotationInfo.of(ci, a)).toList();
+		return annotationMap.find(forClass).map(a -> ai(ci, a)).toList();
 	}
 
 	private List<AnnotationInfo<Annotation>> findMethodAnnotations(Method forMethod) {
 		var mi = MethodInfo.of(forMethod);
-		return annotationMap.find(forMethod).map(a -> AnnotationInfo.of(mi, a)).toList();
+		return annotationMap.find(forMethod).map(a -> ai(mi, a)).toList();
 	}
 
 	private List<AnnotationInfo<Annotation>> findFieldAnnotations(Field forField) {
 		var fi = FieldInfo.of(forField);
-		return annotationMap.find(forField).map(a -> AnnotationInfo.of(fi, a)).toList();
+		return annotationMap.find(forField).map(a -> ai(fi, a)).toList();
 	}
 
 	private List<AnnotationInfo<Annotation>> findConstructorAnnotations(Constructor<?> forConstructor) {
 		var ci = ConstructorInfo.of(forConstructor);
-		return annotationMap.find(forConstructor).map(a -> AnnotationInfo.of(ci, a)).toList();
+		return annotationMap.find(forConstructor).map(a -> ai(ci, a)).toList();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1313,5 +1313,13 @@ public class AnnotationProvider {
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
 		return find(type, constructor, traversals).findFirst().isPresent();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private <A extends Annotation> AnnotationInfo<A> ai(Annotatable on, A value) {
+		return AnnotationInfo.of(on, value);
 	}
 }

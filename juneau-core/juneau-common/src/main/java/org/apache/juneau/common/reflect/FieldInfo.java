@@ -80,7 +80,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.type = memoize(() -> ClassInfo.of(inner.getType()));
-		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> ai(this, a)).toList());
 		this.fullName = memoize(this::findFullName);
 	}
 

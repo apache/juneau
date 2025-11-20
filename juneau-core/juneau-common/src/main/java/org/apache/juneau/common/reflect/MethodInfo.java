@@ -378,17 +378,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
-	 * Returns <jk>true</jk> if at least one of the specified annotation is present on this method.
-	 *
-	 * @param types The annotation to look for.
-	 * @return <jk>true</jk> if at least one of the specified annotation is present on this method.
-	 */
-	@SafeVarargs
-	public final boolean hasAnyAnnotations(Class<? extends Annotation>...types) {
-		return getAnnotations().stream().anyMatch(ai -> stream(types).anyMatch(t -> t.isInstance(ai.inner())));
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this method has the specified parameter.
 	 *
 	 * <p>

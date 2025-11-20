@@ -255,32 +255,6 @@ public class PackageInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns this package's annotation for the specified type wrapped in an {@link AnnotationInfo}, else <jk>null</jk>.
-	 *
-	 * <p>
-	 * Searches the memoized annotations list for the first matching annotation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if package has @Deprecated annotation</jc>
-	 * 	PackageInfo <jv>pi</jv> = PackageInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
-	 * 	AnnotationInfo&lt;Deprecated&gt; <jv>d</jv> = <jv>pi</jv>.getAnnotation(Deprecated.<jk>class</jk>);
-	 * 	<jk>if</jk> (<jv>d</jv> != <jk>null</jk>) {
-	 * 		<jc>// Package is deprecated</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @param <A> The annotation type.
-	 * @param annotationClass The Class object corresponding to the annotation type.
-	 * @return This package's annotation for the specified annotation type wrapped in AnnotationInfo, or <jk>null</jk> if not present.
-	 */
-	public <A extends Annotation> AnnotationInfo<A> getAnnotation(Class<A> annotationClass) {
-		return getAnnotations(annotationClass)
-			.findFirst()
-			.orElse(null);
-	}
-
-	/**
 	 * Returns all annotations on this package, wrapped in {@link AnnotationInfo} objects.
 	 *
 	 * <p>

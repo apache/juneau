@@ -19,6 +19,7 @@ package org.apache.juneau.common.reflect;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.Modifier;
 
 /**
@@ -333,5 +334,13 @@ public abstract class ElementInfo {
 	 */
 	public boolean isNotStrict() {
 		return !Modifier.isStrict(modifiers);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	protected <A extends Annotation> AnnotationInfo<A> ai(Annotatable on, A value) {
+		return AnnotationInfo.of(on, value);
 	}
 }

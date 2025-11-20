@@ -225,7 +225,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		this.componentType = memoize(this::findComponentType);
 		this.packageInfo = memoize(() -> opt(inner).map(x -> x.getPackage()).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.
 		this.parents = memoize(this::findParents);
-		this.declaredAnnotations = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList());
+		this.declaredAnnotations = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().flatMap(a -> streamRepeated(a)).map(a -> ai(this, a)).toList());
 		this.fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
 		this.shortName = memoize(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
 		this.readableName = memoize(() -> getNameFormatted(SIMPLE, false, '$', WORD));
@@ -984,7 +984,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		PackageInfo pi = getPackage();
 		if (pi == null)
 			return null;
-		var ai = pi.getAnnotation(type);
+		var ai = pi.getAnnotations(type).findFirst().orElse(null);
 		return ai == null ? null : ai.inner();
 	}
 
@@ -2479,7 +2479,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			var ci = parentsAndInterfaces.get(i);
 			// Add declared annotations from this class/interface
 			for (var a : ci.inner().getDeclaredAnnotations())
-				streamRepeated(a).forEach(a2 -> list.add(AnnotationInfo.of(ci, a2)));
+				streamRepeated(a).forEach(a2 -> list.add(ai(ci, a2)));
 		}
 
 		// On the package of this class
@@ -2487,7 +2487,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (nn(pkg)) {
 			var pi = PackageInfo.of(pkg.inner());
 			for (var a : pkg.inner().getAnnotations())
-				streamRepeated(a).forEach(a2 -> list.add(AnnotationInfo.of(pi, a2)));
+				streamRepeated(a).forEach(a2 -> list.add(ai(pi, a2)));
 		}
 
 		return u(list);
