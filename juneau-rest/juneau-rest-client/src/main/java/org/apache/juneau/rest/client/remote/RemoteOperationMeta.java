@@ -146,9 +146,7 @@ public class RemoteOperationMeta {
 		// These handle both individual annotations and repeated annotation arrays
 
 		private void processContentDefaults(MethodInfo mi) {
-			AnnotationProvider.INSTANCE.find(mi)
-				.map(x -> x.cast(Content.class))
-				.filter(Objects::nonNull)
+			AnnotationProvider.INSTANCE.find(Content.class, mi)
 				.map(x -> x.inner().def())
 				.filter(x -> isNotBlank(x))
 				.findFirst()
@@ -156,36 +154,28 @@ public class RemoteOperationMeta {
 		}
 
 		private static void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
-			AnnotationProvider.INSTANCE.findTopDown(mi)
-				.map(x -> x.cast(FormData.class))
-				.filter(Objects::nonNull)
+			AnnotationProvider.INSTANCE.findTopDown(FormData.class, mi)
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 		}
 
 		private static void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
-			AnnotationProvider.INSTANCE.findTopDown(mi)
-				.map(x -> x.cast(Header.class))
-				.filter(Objects::nonNull)
+			AnnotationProvider.INSTANCE.findTopDown(Header.class, mi)
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 		}
 
 		private static void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
-			AnnotationProvider.INSTANCE.findTopDown(mi)
-				.map(x -> x.cast(Path.class))
-				.filter(Objects::nonNull)
+			AnnotationProvider.INSTANCE.findTopDown(Path.class, mi)
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(NONE, x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 		}
 
 		private static void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
-			AnnotationProvider.INSTANCE.findTopDown(mi)
-				.map(x -> x.cast(Query.class))
-				.filter(Objects::nonNull)
+			AnnotationProvider.INSTANCE.findTopDown(Query.class, mi)
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));

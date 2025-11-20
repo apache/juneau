@@ -206,7 +206,7 @@ public class RestContext extends Context {
 			// @formatter:off
 			ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
 				.filter(y -> y.hasAnnotation(annotation))
-				.forEach(y -> ap.findTopDown(y).map(ai -> ai.cast(annotation)).filter(Objects::nonNull).map(AnnotationInfo::inner)
+				.forEach(y -> ap.findTopDown(annotation, y).map(AnnotationInfo::inner)
 					.filter(z -> predicate == null || predicate.test(z))
 					.forEach(z -> x.put(y.getSignature(), y.accessible().inner())));
 			// @formatter:on
@@ -3852,7 +3852,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			// Apply @Rest(beanStore).
-			rstream(ClassInfo.of(resourceClass).getAnnotations()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotVoid(x.beanStore())).forEach(x -> v.get().type(x.beanStore()));
+			AnnotationProvider.INSTANCE.findTopDown(Rest.class, ClassInfo.of(resourceClass)).map(x -> x.inner().beanStore()).filter(x -> isNotVoid(x)).forEach(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
 			// @formatter:off
@@ -3914,10 +3914,10 @@ public class RestContext extends Context {
 			var v = Value.<Config>empty();
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
-		var vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
-		var cfv = Value.<String>empty();
-		rstream(ClassInfo.of(resourceClass).getAnnotations()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.config())).forEach(x -> cfv.set(vr.resolve(x.config())));
-		var cf = cfv.orElse("");
+			var vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
+			var cfv = Value.<String>empty();
+			AnnotationProvider.INSTANCE.findTopDown(Rest.class, ClassInfo.of(resourceClass)).map(x -> x.inner().config()).filter(x -> isNotEmpty(x)).forEach(x -> cfv.set(vr.resolve(x)));
+			var cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
 			if (v.isEmpty() && "SYSTEM_DEFAULT".equals(cf))

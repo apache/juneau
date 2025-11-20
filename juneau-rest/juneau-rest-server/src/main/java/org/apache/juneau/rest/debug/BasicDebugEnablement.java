@@ -74,7 +74,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @Rest(debug) settings.
 		// @formatter:off
-		rstream(ci.getAnnotations()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> {
+		ap.findTopDown(Rest.class, ci).map(AnnotationInfo::inner).forEach(x -> {
 			String x2 = varResolver.resolve(x.debug());
 			if (! x2.isEmpty())
 				b.enable(Enablement.fromString(x2), ci.getNameFull());
@@ -95,7 +95,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @Rest(debugOn) settings.
 		// @formatter:off
-		rstream(ci.getAnnotations()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> {
+		ap.findTopDown(Rest.class, ci).map(AnnotationInfo::inner).forEach(x -> {
 			String x2 = varResolver.resolve(x.debugOn());
 			for (var e : splitMap(x2, true).entrySet()) {
 				var k = e.getKey();

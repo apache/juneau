@@ -2548,7 +2548,7 @@ public class HttpPartSchema {
 
 		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
 			if (t instanceof Class<?>) {
-				rstream(ClassInfo.of((Class<?>)t).getAnnotations()).map(x -> x.cast(c)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(this::apply);
+				AnnotationProvider.INSTANCE.findTopDown(c, ClassInfo.of((Class<?>)t)).map(AnnotationInfo::inner).forEach(this::apply);
 			} else if (Value.isType(t)) {
 				apply(c, getValueParameterType(t));
 			}

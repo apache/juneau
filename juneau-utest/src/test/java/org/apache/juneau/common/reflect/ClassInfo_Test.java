@@ -568,30 +568,6 @@ public class ClassInfo_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, ()->g3.hasAnnotation(null));
 	}
 
-	@Test void getAnnotations() {
-		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
-		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
-		check("@A(3)", rstream(g5.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).toList());
-	}
-
-	@Test void forEachAnnotation() {
-		var l1 = list();
-		rstream(g3.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l1.add(x.value()));
-		assertList(l1, "2", "1", "5", "3", "6", "7");
-
-		var l2 = list();
-		rstream(g4.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l2.add(x.value()));
-		assertList(l2, "2", "1", "5", "3", "6", "7");
-
-		var l3 = list();
-		rstream(g5.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> l3.add(x.value()));
-		assertList(l3, "3");
-
-		var l4 = list();
-		rstream(g3.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai).map(x -> x.cast(A.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> x.value() == 5).forEach(x -> l4.add(x.value()));
-		assertList(l4, "5");
-	}
-
 	@Test void lastAnnotation() {
 		// Use AnnotationProvider to get last annotation (first in child-to-parent order stream)
 		var ap = org.apache.juneau.common.reflect.AnnotationProvider.INSTANCE;

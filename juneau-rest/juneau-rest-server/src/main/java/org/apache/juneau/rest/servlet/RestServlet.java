@@ -114,9 +114,12 @@ public abstract class RestServlet extends HttpServlet {
 		if (nn(context))
 			return context.getFullPath();
 		var ci = ClassInfo.of(getClass());
-		Value<String> path = Value.empty();
-		rstream(ci.getAnnotations()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.path())).forEach(x -> path.set(trimSlashes(x.path())));
-		return path.orElse("");
+		return AnnotationProvider.INSTANCE.findTopDown(Rest.class, ci)
+			.map(x -> x.inner().path())
+			.filter(x -> isNotEmpty(x))
+			.map(x -> trimSlashes(x))
+			.findFirst()
+			.orElse("");
 	}
 
 	/**
