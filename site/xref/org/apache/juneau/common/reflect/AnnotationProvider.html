@@ -677,7 +677,7 @@
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 		assertArgNotNull(<span class="jxr_string">"method"</span>, method);
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<strong class="jxr_keyword">if</strong> (traversals.length == 0)
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			traversals = a(SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE);
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			traversals = a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE);
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> 
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(traversals)
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
