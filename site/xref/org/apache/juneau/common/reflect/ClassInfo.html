@@ -233,7 +233,7 @@
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">this</strong>.componentType = memoize(<strong class="jxr_keyword">this</strong>::findComponentType);
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">this</strong>.packageInfo = memoize(() -&gt; opt(<strong class="jxr_keyword">inner</strong>).map(x -&gt; x.getPackage()).filter(p -&gt; p != <strong class="jxr_keyword">null</strong>).map(PackageInfo::of).orElse(<strong class="jxr_keyword">null</strong>));  <em class="jxr_comment">// PackageInfo may be null for primitive types and arrays.</em>
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">this</strong>.parents = memoize(<strong class="jxr_keyword">this</strong>::findParents);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">this</strong>.declaredAnnotations = memoize(() -&gt; (List)opt(<strong class="jxr_keyword">inner</strong>).map(x -&gt; u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().flatMap(a -&gt; streamRepeated(a)).map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList());
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">this</strong>.declaredAnnotations = memoize(() -&gt; (List)opt(<strong class="jxr_keyword">inner</strong>).map(x -&gt; u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().flatMap(a -&gt; streamRepeated(a)).map(a -&gt; ai(<strong class="jxr_keyword">this</strong>, a)).toList());
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">this</strong>.fullName = memoize(() -&gt; getNameFormatted(FULL, <strong class="jxr_keyword">true</strong>, '$', BRACKETS));
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">this</strong>.shortName = memoize(() -&gt; getNameFormatted(SHORT, <strong class="jxr_keyword">true</strong>, '$', BRACKETS));
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">this</strong>.readableName = memoize(() -&gt; getNameFormatted(SIMPLE, false, '$', WORD));
@@ -992,7 +992,7 @@
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 		PackageInfo pi = getPackage();
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 		<strong class="jxr_keyword">if</strong> (pi == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L986" href="#L986">986</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<strong class="jxr_keyword">var</strong> ai = pi.getAnnotation(type);
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<strong class="jxr_keyword">var</strong> ai = pi.getAnnotations(type).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L988" href="#L988">988</a> 		<strong class="jxr_keyword">return</strong> ai == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : ai.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> 	}
 <a class="jxr_linenumber" name="L990" href="#L990">990</a> 
@@ -2487,7 +2487,7 @@
 <a class="jxr_linenumber" name="L2479" href="#L2479">2479</a> 			<strong class="jxr_keyword">var</strong> ci = parentsAndInterfaces.get(i);
 <a class="jxr_linenumber" name="L2480" href="#L2480">2480</a> 			<em class="jxr_comment">// Add declared annotations from this class/interface</em>
 <a class="jxr_linenumber" name="L2481" href="#L2481">2481</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : ci.<strong class="jxr_keyword">inner</strong>().getDeclaredAnnotations())
-<a class="jxr_linenumber" name="L2482" href="#L2482">2482</a> 				streamRepeated(a).forEach(a2 -&gt; list.add(AnnotationInfo.of(ci, a2)));
+<a class="jxr_linenumber" name="L2482" href="#L2482">2482</a> 				streamRepeated(a).forEach(a2 -&gt; list.add(ai(ci, a2)));
 <a class="jxr_linenumber" name="L2483" href="#L2483">2483</a> 		}
 <a class="jxr_linenumber" name="L2484" href="#L2484">2484</a> 
 <a class="jxr_linenumber" name="L2485" href="#L2485">2485</a> 		<em class="jxr_comment">// On the package of this class</em>
@@ -2495,7 +2495,7 @@
 <a class="jxr_linenumber" name="L2487" href="#L2487">2487</a> 		<strong class="jxr_keyword">if</strong> (nn(pkg)) {
 <a class="jxr_linenumber" name="L2488" href="#L2488">2488</a> 			<strong class="jxr_keyword">var</strong> pi = PackageInfo.of(pkg.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L2489" href="#L2489">2489</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : pkg.<strong class="jxr_keyword">inner</strong>().getAnnotations())
-<a class="jxr_linenumber" name="L2490" href="#L2490">2490</a> 				streamRepeated(a).forEach(a2 -&gt; list.add(AnnotationInfo.of(pi, a2)));
+<a class="jxr_linenumber" name="L2490" href="#L2490">2490</a> 				streamRepeated(a).forEach(a2 -&gt; list.add(ai(pi, a2)));
 <a class="jxr_linenumber" name="L2491" href="#L2491">2491</a> 		}
 <a class="jxr_linenumber" name="L2492" href="#L2492">2492</a> 
 <a class="jxr_linenumber" name="L2493" href="#L2493">2493</a> 		<strong class="jxr_keyword">return</strong> u(list);

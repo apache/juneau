@@ -446,22 +446,22 @@
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<strong class="jxr_keyword">private</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; findClassAnnotations(Class&lt;?&gt; forClass) {
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(forClass);
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">return</strong> annotationMap.find(forClass).map(a -&gt; AnnotationInfo.of(ci, a)).toList();
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">return</strong> annotationMap.find(forClass).map(a -&gt; ai(ci, a)).toList();
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 	}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">private</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; findMethodAnnotations(Method forMethod) {
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(forMethod);
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> annotationMap.find(forMethod).map(a -&gt; AnnotationInfo.of(mi, a)).toList();
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> annotationMap.find(forMethod).map(a -&gt; ai(mi, a)).toList();
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 	<strong class="jxr_keyword">private</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; findFieldAnnotations(Field forField) {
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">var</strong> fi = FieldInfo.of(forField);
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">return</strong> annotationMap.find(forField).map(a -&gt; AnnotationInfo.of(fi, a)).toList();
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">return</strong> annotationMap.find(forField).map(a -&gt; ai(fi, a)).toList();
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 	}
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<strong class="jxr_keyword">private</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; findConstructorAnnotations(Constructor&lt;?&gt; forConstructor) {
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">var</strong> ci = ConstructorInfo.of(forConstructor);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">return</strong> annotationMap.find(forConstructor).map(a -&gt; AnnotationInfo.of(ci, a)).toList();
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">return</strong> annotationMap.find(forConstructor).map(a -&gt; ai(ci, a)).toList();
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 	}
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
@@ -1322,7 +1322,15 @@
 <a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> has(Class&lt;A&gt; type, <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 		<strong class="jxr_keyword">return</strong> find(type, constructor, traversals).findFirst().isPresent();
 <a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 	}
-<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> }
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 	<em class="jxr_comment">// Helper methods</em>
+<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 
+<a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; AnnotationInfo&lt;A&gt; ai(<a name="Annotatable" href="../../../../../org/apache/juneau/common/reflect/Annotatable.html#Annotatable">Annotatable</a> on, A value) {
+<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> 		<strong class="jxr_keyword">return</strong> AnnotationInfo.of(on, value);
+<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> 	}
+<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

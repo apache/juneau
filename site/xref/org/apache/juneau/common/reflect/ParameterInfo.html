@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">this</strong>.index = index;
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">this</strong>.type = type;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">this</strong>.annotations = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getAnnotations()).flatMap(a -&gt; streamRepeated(a)).map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">this</strong>.annotations = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getAnnotations()).flatMap(a -&gt; streamRepeated(a)).map(a -&gt; ai(<strong class="jxr_keyword">this</strong>, a)).toList());
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">this</strong>.matchingParameters = memoize(<strong class="jxr_keyword">this</strong>::findMatchingParameters);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  

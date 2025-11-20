@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">this</strong>.declaringClass = declaringClass;
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">this</strong>.type = memoize(() -&gt; ClassInfo.of(<strong class="jxr_keyword">inner</strong>.getType()));
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">this</strong>.annotations = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getAnnotations()).flatMap(a -&gt; streamRepeated(a)).map(a -&gt; AnnotationInfo.of(<strong class="jxr_keyword">this</strong>, a)).toList());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">this</strong>.annotations = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getAnnotations()).flatMap(a -&gt; streamRepeated(a)).map(a -&gt; ai(<strong class="jxr_keyword">this</strong>, a)).toList());
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">this</strong>.fullName = memoize(<strong class="jxr_keyword">this</strong>::findFullName);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
