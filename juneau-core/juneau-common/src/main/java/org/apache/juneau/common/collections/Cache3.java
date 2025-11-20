@@ -74,9 +74,10 @@ import org.apache.juneau.common.function.*;
  * @param <K3> The third key type.
  * @param <V> The value type.
  */
-public class Cache3<K1,K2,K3,V> extends ConcurrentHashMap3Key<K1,K2,K3,V> {
+public class Cache3<K1,K2,K3,V> {
 
-	private static final long serialVersionUID = 1L;
+	// Internal map with Tuple3 keys for content-based equality (especially for arrays)
+	private final java.util.concurrent.ConcurrentHashMap<Tuple3<K1,K2,K3>,V> map = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * Builder for creating configured {@link Cache3} instances.
@@ -245,7 +246,6 @@ public class Cache3<K1,K2,K3,V> extends ConcurrentHashMap3Key<K1,K2,K3,V> {
 	 * @throws NullPointerException if no default supplier was configured.
 	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
-	@Override /* ConcurrentHashMap3Key */
 	public V get(K1 key1, K2 key2, K3 key3) {
 		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		return get(key1, key2, key3, () -> supplier.apply(key1, key2, key3));
@@ -265,16 +265,93 @@ public class Cache3<K1,K2,K3,V> extends ConcurrentHashMap3Key<K1,K2,K3,V> {
 		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		if (disableCaching)
 			return supplier.get();
-		V v = super.get(key1, key2, key3);
+		Tuple3<K1,K2,K3> wrapped = Tuple3.of(key1, key2, key3);
+		V v = map.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
-			super.put(key1, key2, key3, v);
+			map.putIfAbsent(wrapped, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
 		return v;
+	}
+
+	/**
+	 * Associates the specified value with the specified key triplet.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param key3 The third key.
+	 * @param value The value to associate with the key triplet.
+	 * @return The previous value associated with the key triplet, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 */
+	public V put(K1 key1, K2 key2, K3 key3, V value) {
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
+		return map.put(Tuple3.of(key1, key2, key3), value);
+	}
+
+	/**
+	 * Removes the entry for the specified key triplet from the cache.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param key3 The third key.
+	 * @return The previous value associated with the key triplet, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 */
+	public V remove(K1 key1, K2 key2, K3 key3) {
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
+		return map.remove(Tuple3.of(key1, key2, key3));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key triplet.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param key3 The third key.
+	 * @return <jk>true</jk> if the cache contains the key triplet.
+	 */
+	public boolean containsKey(K1 key1, K2 key2, K3 key3) {
+		return map.containsKey(Tuple3.of(key1, key2, key3));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the cache contains the value.
+	 */
+	public boolean containsValue(V value) {
+		return map.containsValue(value);
+	}
+
+	/**
+	 * Returns the number of entries in the cache.
+	 *
+	 * @return The number of cached entries.
+	 */
+	public int size() {
+		return map.size();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains no entries.
+	 *
+	 * @return <jk>true</jk> if the cache is empty.
+	 */
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
+
+	/**
+	 * Removes all entries from the cache.
+	 */
+	public void clear() {
+		map.clear();
 	}
 
 	/**

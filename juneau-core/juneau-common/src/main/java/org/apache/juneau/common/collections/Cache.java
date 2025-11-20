@@ -19,10 +19,14 @@ package org.apache.juneau.common.collections;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static java.util.Collections.*;
 
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
+
+import org.apache.juneau.common.function.*;
 
 /**
  * Simple in-memory cache for storing and retrieving objects by key.
@@ -139,16 +143,39 @@ import java.util.function.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link ConcurrentHashMap1Key}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">Overview &gt; juneau-common</a>
  * </ul>
  *
  * @param <K> The key type. Can be an array type for content-based key matching.
  * @param <V> The value type.
  */
-public class Cache<K,V> implements java.util.Map<K,V> {
+public class Cache<K,V> {
 
-	private final ConcurrentHashMap1Key<K,V> map = new ConcurrentHashMap1Key<>();
+	// Internal map with Tuple1 keys for content-based equality (especially for arrays)
+	private final ConcurrentHashMap<Tuple1<K>,V> map = new ConcurrentHashMap<>();
+
+	/**
+	 * Cache of Tuple1 wrapper objects to minimize object creation on repeated get/put calls.
+	 *
+	 * <p>
+	 * Uses WeakHashMap so wrappers can be GC'd when keys are no longer referenced.
+	 * This provides a significant performance improvement for caches with repeated key access.
+	 */
+	private final Map<K,Tuple1<K>> wrapperCache = synchronizedMap(new WeakHashMap<>());
+
+	/**
+	 * Gets or creates a Tuple1 wrapper for the given key.
+	 *
+	 * <p>
+	 * The Tuple1 wrapper provides content-based equality for arrays and other objects.
+	 * By caching these wrappers, we avoid creating new Tuple1 objects on every cache access.
+	 *
+	 * @param key The key to wrap.
+	 * @return A cached or new Tuple1 wrapper for the key.
+	 */
+	private Tuple1<K> wrap(K key) {
+		return wrapperCache.computeIfAbsent(key, k -> Tuple1.of(k));
+	}
 
 	/**
 	 * Builder for creating configured {@link Cache} instances.
@@ -435,11 +462,9 @@ public class Cache<K,V> implements java.util.Map<K,V> {
 	 * @throws NullPointerException if no default supplier was configured.
 	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
-	@Override /* Map */
-	public V get(Object key) {
+	public V get(K key) {
 		assertArgNotNull("key", key);
-		return get((K)key, () -> supplier.apply((K)key));
+		return get(key, () -> supplier.apply(key));
 	}
 
 	/**
@@ -486,15 +511,16 @@ public class Cache<K,V> implements java.util.Map<K,V> {
 		assertArgNotNull("key", key);
 		if (disableCaching)
 			return supplier.get();
-		V v = map.getKey(key);
+		Tuple1<K> wrapped = wrap(key);
+		V v = map.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
 			if (v == null)
-				remove(key);
+				map.remove(wrapped);
 			else
-				map.putKey(key, v);
+				map.putIfAbsent(wrapped, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
@@ -504,24 +530,15 @@ public class Cache<K,V> implements java.util.Map<K,V> {
 	/**
 	 * Associates the specified value with the specified key in this cache.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Cache&lt;String,Pattern&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(String.<jk>class</jk>, Pattern.<jk>class</jk>).build();
-	 *
-	 * 	Pattern <jv>pattern</jv> = Pattern.compile(<js>"[0-9]+"</js>);
-	 * 	<jv>cache</jv>.put(<js>"digits"</js>, <jv>pattern</jv>);
-	 * </p>
-	 *
 	 * @param key The cache key. Must not be <jk>null</jk>.
 	 * @param value The value to associate with the key.
-	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping for the key.
+	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
 	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
 	public V put(K key, V value) {
 		assertArgNotNull("key", key);
-		return map.putKey(key, value);
+		return map.put(wrap(key), value);
 	}
-
 
 	/**
 	 * Returns the total number of cache hits since this cache was created.
@@ -549,86 +566,75 @@ public class Cache<K,V> implements java.util.Map<K,V> {
 	 *
 	 * @return The total number of cache hits since creation.
 	 */
+	/**
+	 * Returns the number of cache hits since creation.
+	 *
+	 * <p>
+	 * A cache hit occurs when a value is retrieved from the cache without needing to call the supplier.
+	 *
+	 * @return The number of cache hits.
+	 */
 	public int getCacheHits() { return cacheHits.get(); }
 
 	/**
-	 * Returns the number of entries currently in the cache.
+	 * Returns the number of entries in the cache.
 	 *
 	 * @return The number of cached entries.
 	 */
-	@Override /* Map */
 	public int size() {
 		return map.size();
 	}
 
 	/**
-	 * Returns a collection view of the values contained in this cache.
+	 * Returns <jk>true</jk> if the cache contains no entries.
 	 *
-	 * @return A collection view of the values.
+	 * @return <jk>true</jk> if the cache is empty.
 	 */
-	@Override /* Map */
-	public java.util.Collection<V> values() {
-		return map.values();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this cache contains no entries.
-	 *
-	 * @return <jk>true</jk> if this cache contains no entries.
-	 */
-	@Override /* Map */
 	public boolean isEmpty() {
 		return map.isEmpty();
 	}
 
 	/**
-	 * Removes all entries from the cache.
+	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key.
 	 *
-	 * <p>
-	 * Note: This does not reset the cache hit counter.
+	 * @param key The key to check.
+	 * @return <jk>true</jk> if the cache contains the key.
 	 */
-	@Override /* Map */
-	public void clear() {
-		map.clear();
+	public boolean containsKey(K key) {
+		return map.containsKey(wrap(key));
 	}
 
 	/**
-	 * Removes the specified key from the cache.
+	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
 	 *
-	 * @param key The key to remove. Must not be <jk>null</jk>.
-	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if key is <jk>null</jk>.
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the cache contains the value.
 	 */
-	@Override /* Map */
-	public V remove(Object key) {
-		assertArgNotNull("key", key);
-		return map.remove(org.apache.juneau.common.function.Tuple1.of(key));
-	}
-
-	@Override /* Map */
-	public boolean containsKey(Object key) {
-		return map.containsKey(org.apache.juneau.common.function.Tuple1.of(key));
-	}
-
-	@Override /* Map */
-	public boolean containsValue(Object value) {
+	public boolean containsValue(V value) {
 		return map.containsValue(value);
 	}
 
-	@Override /* Map */
-	public void putAll(java.util.Map<? extends K, ? extends V> m) {
-		m.forEach((k, v) -> put(k, v));
+	/**
+	 * Removes the entry for the specified key from the cache.
+	 *
+	 * @param key The key to remove.
+	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if key is <jk>null</jk>.
+	 */
+	public V remove(K key) {
+		assertArgNotNull("key", key);
+		Tuple1<K> wrapped = wrap(key);
+		V result = map.remove(wrapped);
+		wrapperCache.remove(key); // Clean up wrapper cache
+		return result;
 	}
 
-	@Override /* Map */
-	public java.util.Set<K> keySet() {
-		return map.keySet().stream().map(org.apache.juneau.common.function.Tuple1::getA).collect(java.util.stream.Collectors.toSet());
-	}
-
-	@Override /* Map */
-	public java.util.Set<java.util.Map.Entry<K, V>> entrySet() {
-		return map.entrySet().stream()
-			.map(e -> new java.util.AbstractMap.SimpleEntry<>(e.getKey().getA(), e.getValue()))
-			.collect(java.util.stream.Collectors.toSet());
+	/**
+	 * Removes all entries from the cache.
+	 */
+	public void clear() {
+		map.clear();
+		wrapperCache.clear(); // Clean up wrapper cache
 	}
 }
+

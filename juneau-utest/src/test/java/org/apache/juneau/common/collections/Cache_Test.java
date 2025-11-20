@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.common.collections;
 
-import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
@@ -42,7 +41,7 @@ class Cache_Test extends TestBase {
 
 		assertEquals("value1", result);
 		assertEquals(1, callCount.get());
-		assertSize(1, cache);
+		assertEquals(1, cache.size());
 		assertEquals(0, cache.getCacheHits());
 	}
 
@@ -66,7 +65,7 @@ class Cache_Test extends TestBase {
 		assertEquals("value1", result2);
 		assertSame(result1, result2); // Same instance
 		assertEquals(1, callCount.get()); // Supplier only called once
-		assertSize(1, cache);
+		assertEquals(1, cache.size());
 		assertEquals(1, cache.getCacheHits());
 	}
 
@@ -80,7 +79,7 @@ class Cache_Test extends TestBase {
 		assertEquals(1, v1);
 		assertEquals(2, v2);
 		assertEquals(3, v3);
-		assertSize(3, cache);
+		assertEquals(3, cache.size());
 		assertEquals(0, cache.getCacheHits());
 
 		// Verify all cached
@@ -113,20 +112,20 @@ class Cache_Test extends TestBase {
 	@Test void a06_size() {
 		var cache = Cache.of(String.class, Integer.class).build();
 
-		assertEmpty(cache);
+		assertTrue(cache.isEmpty());
 
 		cache.get("one", () -> 1);
-		assertSize(1, cache);
+		assertEquals(1, cache.size());
 
 		cache.get("two", () -> 2);
-		assertSize(2, cache);
+		assertEquals(2, cache.size());
 
 		cache.get("three", () -> 3);
-		assertSize(3, cache);
+		assertEquals(3, cache.size());
 
 		// Accessing existing key doesn't change size
 		cache.get("one", () -> 999);
-		assertSize(3, cache);
+		assertEquals(3, cache.size());
 	}
 
 	@Test void a07_clear() {
@@ -136,18 +135,18 @@ class Cache_Test extends TestBase {
 		cache.get("two", () -> 2);
 		cache.get("one", () -> 999); // Cache hit
 
-		assertSize(2, cache);
+		assertEquals(2, cache.size());
 		assertEquals(1, cache.getCacheHits());
 
 		cache.clear();
 
-		assertEmpty(cache);
+		assertTrue(cache.isEmpty());
 		assertEquals(1, cache.getCacheHits()); // Hits not cleared
 
 		// Values must be recomputed after clear
 		var v1 = cache.get("one", () -> 10);
 		assertEquals(10, v1);
-		assertSize(1, cache);
+		assertEquals(1, cache.size());
 	}
 
 	//====================================================================================================
@@ -162,15 +161,15 @@ class Cache_Test extends TestBase {
 		cache.get("one", () -> 1);
 		cache.get("two", () -> 2);
 		cache.get("three", () -> 3);
-		assertSize(3, cache);
+		assertEquals(3, cache.size());
 
 		// 4th item doesn't trigger eviction (size > maxSize means 4 > 3)
 		cache.get("four", () -> 4);
-		assertSize(4, cache);
+		assertEquals(4, cache.size());
 
 		// 5th item triggers eviction (size=4, 4 > 3, so clear then add)
 		cache.get("five", () -> 5);
-		assertSize(1, cache); // Only the new item
+		assertEquals(1, cache.size()); // Only the new item
 	}
 
 	@Test void a09_maxSize_custom() {
@@ -182,15 +181,15 @@ class Cache_Test extends TestBase {
 			final int index = i;
 			cache.get("key" + index, () -> "value" + index);
 		}
-		assertSize(5, cache);
+		assertEquals(5, cache.size());
 
 		// 6th item doesn't trigger clear yet (5 > 5 is false)
 		cache.get("key6", () -> "value6");
-		assertSize(6, cache);
+		assertEquals(6, cache.size());
 
 		// 7th item triggers clear (6 > 5 is true)
 		cache.get("key7", () -> "value7");
-		assertSize(1, cache);
+		assertEquals(1, cache.size());
 	}
 
 	//====================================================================================================
@@ -216,7 +215,7 @@ class Cache_Test extends TestBase {
 		assertEquals("value1", result1);
 		assertEquals("value2", result2);
 		assertEquals(2, callCount.get()); // Always calls supplier
-		assertEmpty(cache);
+		assertTrue(cache.isEmpty());
 		assertEquals(0, cache.getCacheHits());
 	}
 
@@ -229,7 +228,7 @@ class Cache_Test extends TestBase {
 		cache.get("two", () -> 2);
 		cache.get("three", () -> 3);
 
-		assertEmpty(cache);
+		assertTrue(cache.isEmpty());
 	}
 
 	@Test void a12_disabled_clearHasNoEffect() {
@@ -238,7 +237,7 @@ class Cache_Test extends TestBase {
 			.build();
 
 		cache.clear(); // Should not throw
-		assertEmpty(cache);
+		assertTrue(cache.isEmpty());
 	}
 
 	//====================================================================================================
@@ -250,7 +249,7 @@ class Cache_Test extends TestBase {
 
 		// Should work with defaults
 		cache.get("key1", () -> "value1");
-		assertSize(1, cache);
+		assertEquals(1, cache.size());
 	}
 
 	@Test void a14_builder_chaining() {
@@ -261,7 +260,7 @@ class Cache_Test extends TestBase {
 
 		// Disabled takes precedence
 		cache.get("key1", () -> "value1");
-		assertEmpty(cache);
+		assertTrue(cache.isEmpty());
 	}
 
 	//====================================================================================================
@@ -328,7 +327,7 @@ class Cache_Test extends TestBase {
 		// Supplier might be called multiple times due to putIfAbsent semantics,
 		// but should be much less than 100
 		assertTrue(callCount.get() < 10, "Supplier called " + callCount.get() + " times");
-		assertSize(1, cache);
+		assertEquals(1, cache.size());
 
 		executor.shutdown();
 	}
@@ -349,7 +348,7 @@ class Cache_Test extends TestBase {
 		// Wait for all tasks to complete
 		CompletableFuture.allOf(futures).get(5, TimeUnit.SECONDS);
 
-		assertSize(10, cache);
+		assertEquals(10, cache.size());
 
 		executor.shutdown();
 	}
@@ -365,7 +364,7 @@ class Cache_Test extends TestBase {
 		cache.get(2, () -> "two");
 
 		assertEquals("one", cache.get(1, () -> "should not call"));
-		assertSize(2, cache);
+		assertEquals(2, cache.size());
 		assertEquals(1, cache.getCacheHits());
 	}
 
@@ -376,7 +375,7 @@ class Cache_Test extends TestBase {
 		cache.get(Integer.class, () -> "Integer");
 
 		assertEquals("String", cache.get(String.class, () -> "should not call"));
-		assertSize(2, cache);
+		assertEquals(2, cache.size());
 	}
 
 	//====================================================================================================
@@ -391,16 +390,16 @@ class Cache_Test extends TestBase {
 
 		assertEquals("first", result1);
 		assertEquals("first", result2); // Returns cached, not "second"
-		assertSize(1, cache);
+		assertEquals(1, cache.size());
 	}
 
 	@Test void a22_emptyCache_operations() {
 		var cache = Cache.of(String.class, String.class).build();
 
-		assertEmpty(cache);
+		assertTrue(cache.isEmpty());
 		assertEquals(0, cache.getCacheHits());
 		cache.clear(); // Should not throw on empty cache
-		assertEmpty(cache);
+		assertTrue(cache.isEmpty());
 	}
 
 	@Test void a23_maxSize_exactBoundary() {
@@ -412,12 +411,12 @@ class Cache_Test extends TestBase {
 		cache.get(2, () -> "two");
 		cache.get(3, () -> "three");
 
-		assertSize(3, cache);
+		assertEquals(3, cache.size());
 
 		// Accessing existing keys shouldn't trigger eviction
 		cache.get(1, () -> "should not call");
 		cache.get(2, () -> "should not call");
-		assertSize(3, cache);
+		assertEquals(3, cache.size());
 		assertEquals(2, cache.getCacheHits());
 	}
 }

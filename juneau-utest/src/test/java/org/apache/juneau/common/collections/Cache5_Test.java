@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.common.collections;
 
-import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;
@@ -88,7 +87,7 @@ class Cache5_Test extends TestBase {
 		x.get("en", "US", "west", "formal", 1);
 
 		assertEquals(2, callCount.get()); // Called twice
-		assertEmpty(x);
+		assertTrue(x.isEmpty());
 	}
 
 	@Test
@@ -100,13 +99,13 @@ class Cache5_Test extends TestBase {
 
 		x.get("en", "US", "west", "formal", 1);
 		x.get("fr", "FR", "north", "formal", 2);
-		assertSize(2, x);
+		assertEquals(2, x.size());
 
 		x.get("de", "DE", "south", "formal", 3); // Doesn't exceed yet
-		assertSize(3, x);
+		assertEquals(3, x.size());
 
 		x.get("es", "ES", "east", "formal", 4); // Exceeds max (3 > 2), triggers clear
-		assertSize(1, x); // Cleared
+		assertEquals(1, x.size()); // Cleared
 	}
 
 	@Test

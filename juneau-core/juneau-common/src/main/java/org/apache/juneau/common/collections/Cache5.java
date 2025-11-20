@@ -62,9 +62,10 @@ import org.apache.juneau.common.function.*;
  * @param <K5> The fifth key type.
  * @param <V> The value type.
  */
-public class Cache5<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap5Key<K1,K2,K3,K4,K5,V> {
+public class Cache5<K1,K2,K3,K4,K5,V> {
 
-	private static final long serialVersionUID = 1L;
+	// Internal map with Tuple5 keys for content-based equality (especially for arrays)
+	private final java.util.concurrent.ConcurrentHashMap<Tuple5<K1,K2,K3,K4,K5>,V> map = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * Builder for creating configured {@link Cache5} instances.
@@ -243,7 +244,6 @@ public class Cache5<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap5Key<K1,K2,K3,K4,
 	 * @throws NullPointerException if no default supplier was configured.
 	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
-	@Override /* ConcurrentHashMap5Key */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
 		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		return get(key1, key2, key3, key4, key5, () -> supplier.apply(key1, key2, key3, key4, key5));
@@ -265,16 +265,99 @@ public class Cache5<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap5Key<K1,K2,K3,K4,
 		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		if (disableCaching)
 			return supplier.get();
-		V v = super.get(key1, key2, key3, key4, key5);
+		Tuple5<K1,K2,K3,K4,K5> wrapped = Tuple5.of(key1, key2, key3, key4, key5);
+		V v = map.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
-			super.put(key1, key2, key3, key4, key5, v);
+			map.putIfAbsent(wrapped, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
 		return v;
+	}
+
+	/**
+	 * Associates the specified value with the specified five-part key.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param key3 The third key.
+	 * @param key4 The fourth key.
+	 * @param key5 The fifth key.
+	 * @param value The value to associate with the five-part key.
+	 * @return The previous value associated with the five-part key, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 */
+	public V put(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5, V value) {
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
+		return map.put(Tuple5.of(key1, key2, key3, key4, key5), value);
+	}
+
+	/**
+	 * Removes the entry for the specified five-part key from the cache.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param key3 The third key.
+	 * @param key4 The fourth key.
+	 * @param key5 The fifth key.
+	 * @return The previous value associated with the five-part key, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 */
+	public V remove(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
+		return map.remove(Tuple5.of(key1, key2, key3, key4, key5));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains a mapping for the specified five-part key.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param key3 The third key.
+	 * @param key4 The fourth key.
+	 * @param key5 The fifth key.
+	 * @return <jk>true</jk> if the cache contains the five-part key.
+	 */
+	public boolean containsKey(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
+		return map.containsKey(Tuple5.of(key1, key2, key3, key4, key5));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the cache contains the value.
+	 */
+	public boolean containsValue(V value) {
+		return map.containsValue(value);
+	}
+
+	/**
+	 * Returns the number of entries in the cache.
+	 *
+	 * @return The number of cached entries.
+	 */
+	public int size() {
+		return map.size();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains no entries.
+	 *
+	 * @return <jk>true</jk> if the cache is empty.
+	 */
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
+
+	/**
+	 * Removes all entries from the cache.
+	 */
+	public void clear() {
+		map.clear();
 	}
 
 	/**

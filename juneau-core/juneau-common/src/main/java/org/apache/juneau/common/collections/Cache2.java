@@ -123,17 +123,17 @@ import org.apache.juneau.common.function.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link Cache}
- * 	<li class='jc'>{@link ConcurrentHashMap2Key}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">Overview &gt; juneau-common</a>
  * </ul>
  *
- * @param <K1> The first key type.
- * @param <K2> The second key type.
+ * @param <K1> The first key type. Can be an array type for content-based key matching.
+ * @param <K2> The second key type. Can be an array type for content-based key matching.
  * @param <V> The value type.
  */
-public class Cache2<K1,K2,V> extends ConcurrentHashMap2Key<K1,K2,V> {
+public class Cache2<K1,K2,V> {
 
-	private static final long serialVersionUID = 1L;
+	// Internal map with Tuple2 keys for content-based equality (especially for arrays)
+	private final java.util.concurrent.ConcurrentHashMap<Tuple2<K1,K2>,V> map = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * Builder for creating configured {@link Cache2} instances.
@@ -419,7 +419,6 @@ public class Cache2<K1,K2,V> extends ConcurrentHashMap2Key<K1,K2,V> {
 	 * @throws NullPointerException if no default supplier was configured.
 	 * @throws IllegalArgumentException if key1 or key2 is <jk>null</jk>.
 	 */
-	@Override /* ConcurrentHashMap2Key */
 	public V get(K1 key1, K2 key2) {
 		assertArgsNotNull("key1", key1, "key2", key2);
 		return get(key1, key2, () -> supplier.apply(key1, key2));
@@ -470,16 +469,90 @@ public class Cache2<K1,K2,V> extends ConcurrentHashMap2Key<K1,K2,V> {
 		assertArgsNotNull("key1", key1, "key2", key2);
 		if (disableCaching)
 			return supplier.get();
-		V v = super.get(key1, key2);
+		Tuple2<K1,K2> wrapped = Tuple2.of(key1, key2);
+		V v = map.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
-			super.put(key1, key2, v);
+			map.putIfAbsent(wrapped, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
 		return v;
+	}
+
+	/**
+	 * Associates the specified value with the specified key pair.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param value The value to associate with the key pair.
+	 * @return The previous value associated with the key pair, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if key1 or key2 is <jk>null</jk>.
+	 */
+	public V put(K1 key1, K2 key2, V value) {
+		assertArgsNotNull("key1", key1, "key2", key2);
+		return map.put(Tuple2.of(key1, key2), value);
+	}
+
+	/**
+	 * Removes the entry for the specified key pair from the cache.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @return The previous value associated with the key pair, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if key1 or key2 is <jk>null</jk>.
+	 */
+	public V remove(K1 key1, K2 key2) {
+		assertArgsNotNull("key1", key1, "key2", key2);
+		return map.remove(Tuple2.of(key1, key2));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key pair.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @return <jk>true</jk> if the cache contains the key pair.
+	 */
+	public boolean containsKey(K1 key1, K2 key2) {
+		return map.containsKey(Tuple2.of(key1, key2));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the cache contains the value.
+	 */
+	public boolean containsValue(V value) {
+		return map.containsValue(value);
+	}
+
+	/**
+	 * Returns the number of entries in the cache.
+	 *
+	 * @return The number of cached entries.
+	 */
+	public int size() {
+		return map.size();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains no entries.
+	 *
+	 * @return <jk>true</jk> if the cache is empty.
+	 */
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
+
+	/**
+	 * Removes all entries from the cache.
+	 */
+	public void clear() {
+		map.clear();
 	}
 
 	/**

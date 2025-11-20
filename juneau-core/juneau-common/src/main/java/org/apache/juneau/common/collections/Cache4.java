@@ -60,9 +60,10 @@ import org.apache.juneau.common.function.*;
  * @param <K4> The fourth key type.
  * @param <V> The value type.
  */
-public class Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V> {
+public class Cache4<K1,K2,K3,K4,V> {
 
-	private static final long serialVersionUID = 1L;
+	// Internal map with Tuple4 keys for content-based equality (especially for arrays)
+	private final java.util.concurrent.ConcurrentHashMap<Tuple4<K1,K2,K3,K4>,V> map = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * Builder for creating configured {@link Cache4} instances.
@@ -236,7 +237,6 @@ public class Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V> 
 	 * @throws NullPointerException if no default supplier was configured.
 	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
-	@Override /* ConcurrentHashMap4Key */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4) {
 		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4);
 		return get(key1, key2, key3, key4, () -> supplier.apply(key1, key2, key3, key4));
@@ -257,16 +257,96 @@ public class Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V> 
 		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4);
 		if (disableCaching)
 			return supplier.get();
-		V v = super.get(key1, key2, key3, key4);
+		Tuple4<K1,K2,K3,K4> wrapped = Tuple4.of(key1, key2, key3, key4);
+		V v = map.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
-			super.put(key1, key2, key3, key4, v);
+			map.putIfAbsent(wrapped, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
 		return v;
+	}
+
+	/**
+	 * Associates the specified value with the specified four-part key.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param key3 The third key.
+	 * @param key4 The fourth key.
+	 * @param value The value to associate with the four-part key.
+	 * @return The previous value associated with the four-part key, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 */
+	public V put(K1 key1, K2 key2, K3 key3, K4 key4, V value) {
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4);
+		return map.put(Tuple4.of(key1, key2, key3, key4), value);
+	}
+
+	/**
+	 * Removes the entry for the specified four-part key from the cache.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param key3 The third key.
+	 * @param key4 The fourth key.
+	 * @return The previous value associated with the four-part key, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 */
+	public V remove(K1 key1, K2 key2, K3 key3, K4 key4) {
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4);
+		return map.remove(Tuple4.of(key1, key2, key3, key4));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains a mapping for the specified four-part key.
+	 *
+	 * @param key1 The first key.
+	 * @param key2 The second key.
+	 * @param key3 The third key.
+	 * @param key4 The fourth key.
+	 * @return <jk>true</jk> if the cache contains the four-part key.
+	 */
+	public boolean containsKey(K1 key1, K2 key2, K3 key3, K4 key4) {
+		return map.containsKey(Tuple4.of(key1, key2, key3, key4));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the cache contains the value.
+	 */
+	public boolean containsValue(V value) {
+		return map.containsValue(value);
+	}
+
+	/**
+	 * Returns the number of entries in the cache.
+	 *
+	 * @return The number of cached entries.
+	 */
+	public int size() {
+		return map.size();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains no entries.
+	 *
+	 * @return <jk>true</jk> if the cache is empty.
+	 */
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
+
+	/**
+	 * Removes all entries from the cache.
+	 */
+	public void clear() {
+		map.clear();
 	}
 
 	/**
