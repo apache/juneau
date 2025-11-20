@@ -1773,9 +1773,9 @@ public class RestContext extends Context {
 				));
 			// @formatter:on
 
-		rci.getAllMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
-			var rt = x.getReturnType().<Object>inner();
-			var name = RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+			rci.getAllMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
+				var rt = x.getReturnType().<Object>inner();
+				var name = RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
 				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
 					// @formatter:off
 					beanStore
@@ -1787,7 +1787,7 @@ public class RestContext extends Context {
 			});
 
 			var vrs = varResolver().build().createSession();
-			var work = AnnotationWorkList.of(vrs, rstream(rci.getAnnotations()).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
+			var work = AnnotationWorkList.of(vrs, AnnotationProvider.INSTANCE.findTopDown(rci).filter(CONTEXT_APPLY_FILTER));
 
 			apply(work);
 			beanContext().apply(work);
@@ -4583,7 +4583,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			for (var mi : rci.getPublicMethods()) {
-				List<AnnotationInfo<?>> al = ap.findTopDown(mi).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+				List<AnnotationInfo<?>> al = ap.findTopDown(mi).filter(REST_OP_GROUP).collect(Collectors.toList());
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {

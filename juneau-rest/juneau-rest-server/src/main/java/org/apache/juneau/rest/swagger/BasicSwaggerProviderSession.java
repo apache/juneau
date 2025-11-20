@@ -276,7 +276,7 @@ public class BasicSwaggerProviderSession {
 
 			Method m = sm.getJavaMethod();
 			var mi = MethodInfo.of(m);
-			List<AnnotationInfo<?>> al = rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+			List<AnnotationInfo<?>> al = ap.findTopDown(mi).filter(REST_OP_GROUP).collect(Collectors.toList());
 			String mn = m.getName();
 
 			// Get the operation from the existing swagger so far.

@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
@@ -85,11 +86,14 @@ public class BasicDebugEnablement extends DebugEnablement {
 		// @formatter:off
 		ci.getPublicMethods().stream()
 			.forEach(x ->
-				rstream(x.getAllAnnotations())
+				ap.findTopDown(x)
 					.filter(REST_OP_GROUP)
 					.flatMap(ai -> ai.getValue(String.class, "debug").stream())
+					.filter(Utils::isNotEmpty)
 					.map(varResolver::resolve)
-					.forEach(y -> opt(Enablement.fromString(y)).ifPresent(e -> b.enable(e, x.getFullName())))
+					.map(Enablement::fromString)
+					.filter(Objects::nonNull)
+					.forEach(e -> b.enable(e, x.getFullName()))
 			);
 		// @formatter:on
 

@@ -45,13 +45,13 @@ public class InvalidAnnotationException extends BasicRuntimeException {
 	 */
 	@SafeVarargs
 	public static void assertNoInvalidAnnotations(MethodInfo onMethod, Class<? extends Annotation>...types) throws InvalidAnnotationException {
-		Annotation a = Arrays.stream(types)
+		Arrays.stream(types)
 			.map(t -> onMethod.getAnnotations(t).findFirst().map(AnnotationInfo::inner).orElse(null))
 			.filter(Objects::nonNull)
 			.findFirst()
-			.orElse(null);
-		if (nn(a))
-			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", scn(a), scn(onMethod.getDeclaringClass()), onMethod);
+			.ifPresent(a -> {
+				throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", scn(a), scn(onMethod.getDeclaringClass()), onMethod);
+			});
 	}
 
 	/**

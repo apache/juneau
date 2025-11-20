@@ -135,7 +135,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				var vr = context.getVarResolver();
 				var vrs = vr.createSession();
 
-				var work = AnnotationWorkList.of(vrs, ap.findTopDown(mi, SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
+				var work = AnnotationWorkList.of(vrs, ap.findTopDown(mi, SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE).filter(CONTEXT_APPLY_FILTER));
 
 				apply(work);
 

@@ -541,7 +541,7 @@ public class AnnotationProvider {
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	public Stream<AnnotationInfo<Annotation>> find(ClassInfo clazz, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> find(ClassInfo clazz, AnnotationTraversal... traversals) {
 		assertArgNotNull("clazz", clazz);
 		if (traversals.length == 0)
 			traversals = a(PARENTS, PACKAGE);
@@ -596,7 +596,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<Annotation>> findTopDown(ClassInfo clazz, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ClassInfo clazz, AnnotationTraversal... traversals) {
 		return rstream(find(clazz, traversals).toList());
 	}
 
@@ -719,7 +719,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<Annotation>> find(MethodInfo method, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> find(MethodInfo method, AnnotationTraversal... traversals) {
 		assertArgNotNull("method", method);
 		if (traversals.length == 0)
 			traversals = a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE);
@@ -778,7 +778,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<Annotation>> findTopDown(MethodInfo method, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(MethodInfo method, AnnotationTraversal... traversals) {
 		return rstream(find(method, traversals).toList());
 	}
 
@@ -955,7 +955,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<Annotation>> find(ParameterInfo parameter, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> find(ParameterInfo parameter, AnnotationTraversal... traversals) {
 		assertArgNotNull("parameter", parameter);
 		if (traversals.length == 0)
 			traversals = a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
@@ -987,7 +987,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<Annotation>> findTopDown(ParameterInfo parameter, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ParameterInfo parameter, AnnotationTraversal... traversals) {
 		return rstream(find(parameter, traversals).toList());
 	}
 
@@ -1088,7 +1088,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<Annotation>> find(FieldInfo field, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> find(FieldInfo field, AnnotationTraversal... traversals) {
 		assertArgNotNull("field", field);
 		if (traversals.length == 0)
 			traversals = a(SELF);
@@ -1134,7 +1134,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<Annotation>> findTopDown(FieldInfo field, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(FieldInfo field, AnnotationTraversal... traversals) {
 		return rstream(find(field, traversals).toList());
 	}
 
@@ -1230,7 +1230,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<Annotation>> find(ConstructorInfo constructor, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> find(ConstructorInfo constructor, AnnotationTraversal... traversals) {
 		assertArgNotNull("constructor", constructor);
 		if (traversals.length == 0)
 			traversals = a(SELF);
@@ -1276,7 +1276,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<Annotation>> findTopDown(ConstructorInfo constructor, AnnotationTraversal... traversals) {
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ConstructorInfo constructor, AnnotationTraversal... traversals) {
 		return rstream(find(constructor, traversals).toList());
 	}
 

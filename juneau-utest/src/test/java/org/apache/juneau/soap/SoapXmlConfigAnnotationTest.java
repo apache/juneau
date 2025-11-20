@@ -51,7 +51,7 @@ class SoapXmlConfigAnnotationTest extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basic() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("foo", x.getSoapAction());
 	}
@@ -65,7 +65,7 @@ class SoapXmlConfigAnnotationTest extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValues() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
@@ -78,7 +78,7 @@ class SoapXmlConfigAnnotationTest extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotation() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}

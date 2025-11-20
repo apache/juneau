@@ -65,9 +65,9 @@ public class RemoteOperationMeta {
 			var mi = MethodInfo.of(m);
 			AnnotationProvider ap = AnnotationProvider.INSTANCE;
 
-			List<AnnotationInfo<?>> al = ap.findTopDown(mi).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+			List<AnnotationInfo<?>> al = ap.findTopDown(mi).filter(REMOTE_OP_GROUP).collect(Collectors.toList());
 			if (al.isEmpty())
-				al = rstream(mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotations()).filter(REMOTE_OP_GROUP).map(ai -> (AnnotationInfo<?>)ai).collect(Collectors.toList());
+				al = ap.findTopDown(mi.getReturnType().unwrap(Value.class, Optional.class)).filter(REMOTE_OP_GROUP).collect(Collectors.toList());
 
 			var _httpMethod = Value.<String>empty();
 			var _path = Value.<String>empty();

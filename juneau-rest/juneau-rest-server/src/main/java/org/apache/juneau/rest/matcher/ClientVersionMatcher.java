@@ -16,13 +16,11 @@
  */
 package org.apache.juneau.rest.matcher;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.utils.*;
 
 import jakarta.servlet.http.*;
 
@@ -48,9 +46,13 @@ public class ClientVersionMatcher extends RestMatcher {
 	 */
 	public ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
 		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "Client-Version" : clientVersionHeader;
-		Value<String> clientVersion = Value.empty();
-		rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).forEach(ai -> ai.getValue(String.class, "clientVersion").filter(NOT_EMPTY).ifPresent(x -> clientVersion.set(x)));
-		range = new VersionRange(clientVersion.orElse(null));
+		var clientVersion = AnnotationProvider.INSTANCE.find(mi)
+			.filter(REST_OP_GROUP)
+			.flatMap(ai -> ai.getValue(String.class, "clientVersion").stream())
+			.filter(NOT_EMPTY)
+			.findFirst()
+			.orElse(null);
+		range = new VersionRange(clientVersion);
 	}
 
 	@Override /* Overridden from RestMatcher */

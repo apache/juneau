@@ -75,7 +75,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	private final Supplier<ClassInfo> returnType;
 	private final Supplier<List<MethodInfo>> matchingMethods;
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;
-	private final Supplier<List<AnnotationInfo<Annotation>>> allAnnotationInfos;
 
 	/**
 	 * Constructor.
@@ -89,7 +88,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		this.returnType = memoize(() -> ClassInfo.of(inner.getReturnType(), inner.getGenericReturnType()));
 		this.matchingMethods = memoize(this::findMatchingMethods);
 		this.annotations = memoize(() -> getMatchingMethods().stream().flatMap(m -> m.getDeclaredAnnotations().stream()).toList());
-		this.allAnnotationInfos = memoize(this::findAllAnnotationInfos);
 	}
 
 	/**
@@ -199,30 +197,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			.map(a -> (AnnotationInfo<A>)a);
 	}
 
-	/**
-	 * Returns all annotations on the declaring class, this method and parent overridden methods, return type, and package in child-to-parent order.
-	 *
-	 * <p>
-	 * 	Annotations are ordered as follows:
-	 * <ol>
-	 * 	<li>Current method
-	 * 	<li>Parent methods (child-to-parent order)
-	 * 	<li>Return type on current method
-	 * 	<li>Return type on parent methods (child-to-parent order)
-	 * 	<li>Current class
-	 * 	<li>Parent classes/interfaces (child-to-parent order)
-	 * 	<li>Package annotations on the declaring class's package
-	 * </ol>
-	 *
-	 * <p>
-	 * 	List is unmodifiable.
-	 *
-	 * @return A list of all annotations.
-	 */
-	public List<AnnotationInfo<Annotation>> getAllAnnotations() {
-		return allAnnotationInfos.get();
-	}
-
 	private List<MethodInfo> findMatchingMethods() {
 		var result = new ArrayList<MethodInfo>();
 		result.add(this); // 1. This method
@@ -257,39 +231,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		// Recursively search parent interfaces
 		iface.getDeclaredInterfaces().stream()
 			.forEach(pi -> addMatchingMethodsFromInterface(result, pi));
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<AnnotationInfo<Annotation>> findAllAnnotationInfos() {
-		var list = new ArrayList<AnnotationInfo<Annotation>>();
-		var returnType = getReturnType().unwrap(Value.class, Optional.class);
-
-		// 1. Current method
-		list.addAll(getDeclaredAnnotations());
-
-		// 2. Parent methods in child-to-parent order
-		getMatchingMethods().stream().skip(1).forEach(m -> list.addAll(m.getDeclaredAnnotations()));
-
-		// 3. Return type on current
-		returnType.getDeclaredAnnotations().forEach(x -> list.add(x));
-
-		// 4. Return type on parent methods in child-to-parent order
-		getMatchingMethods().stream().skip(1).forEach(m -> {
-			m.getReturnType().unwrap(Value.class, Optional.class).getDeclaredAnnotations().forEach(x -> list.add(x));
-		});
-
-		// 5. Current class
-		declaringClass.getDeclaredAnnotations().forEach(x -> list.add(x));
-
-		// 6. Parent classes/interfaces in child-to-parent order
-		declaringClass.getParentsAndInterfaces().stream().skip(1).forEach(c -> c.getDeclaredAnnotations().forEach(x -> list.add(x)));
-
-		// 7. Package annotations
-		var pkg = declaringClass.getPackage();
-		if (nn(pkg))
-			pkg.getAnnotations().forEach(x -> list.add(x));
-
-		return u(list);
 	}
 
 	@Override /* Overridden from ExecutableInfo */
@@ -433,13 +374,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@Override
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		// Inline implementation using reflection directly instead of delegating to AnnotationProvider.DEFAULT
-		if (!nn(type))
-			return false;
-		for (var m2 : getMatchingMethods())
-			if (m2.inner().getAnnotation(type) != null)
-				return true;
-		return false;
+		return getAnnotations(type).findAny().isPresent();
 	}
 
 	/**

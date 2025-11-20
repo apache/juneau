@@ -672,13 +672,13 @@ public abstract class Context {
 			AnnotationProvider ap = AnnotationProvider.INSTANCE;
 			CollectionUtils.traverse(x, y -> {
 				if (x instanceof Class<?> x2)
-					work.add(ap.findTopDown(ClassInfo.of(x2)).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
+					work.add(ap.findTopDown(ClassInfo.of(x2)).filter(CONTEXT_APPLY_FILTER));
 				else if (x instanceof ClassInfo x2)
-					work.add(ap.findTopDown(x2).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
+					work.add(ap.findTopDown(x2).filter(CONTEXT_APPLY_FILTER));
 				else if (x instanceof Method x2)
-					work.add(ap.findTopDown(MethodInfo.of(x2)).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
+					work.add(ap.findTopDown(MethodInfo.of(x2)).filter(CONTEXT_APPLY_FILTER));
 				else if (x instanceof MethodInfo x2)
-					work.add(ap.findTopDown(x2).filter(CONTEXT_APPLY_FILTER).map(ai -> (AnnotationInfo<?>)ai));
+					work.add(ap.findTopDown(x2).filter(CONTEXT_APPLY_FILTER));
 				else
 					illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
 			});

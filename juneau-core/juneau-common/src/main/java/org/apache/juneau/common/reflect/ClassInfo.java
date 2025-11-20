@@ -189,7 +189,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private final Supplier<List<ClassInfo>> interfaces;  // All interfaces implemented by this class and its parents, in child-to-parent order.
 	private final Supplier<List<ClassInfo>> allParents;  // All parent classes and interfaces, classes first, then in child-to-parent order.
 	private final Supplier<List<ClassInfo>> parentsAndInterfaces;  // All parent classes and interfaces with proper traversal of interface hierarchy to avoid duplicates.
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotationInfos;  // All annotations on this class and parent classes/interfaces in child-to-parent order.
+	private final Supplier<List<AnnotationInfo<? extends Annotation>>> annotationInfos;  // All annotations on this class and parent classes/interfaces in child-to-parent order.
 	private final Supplier<List<RecordComponent>> recordComponents;  // All record components if this is a record class (Java 14+).
 	private final Supplier<List<Type>> genericInterfaces;  // All generic interface types (e.g., List<String> implements Comparable<List<String>>).
 	private final Supplier<List<TypeVariable<?>>> typeParameters;  // All type parameters declared on this class (e.g., <T, U> in class Foo<T, U>).
@@ -759,7 +759,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return An unmodifiable list of all annotation infos.
 	 */
-	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotationInfos.get(); }
+	public List<AnnotationInfo<? extends Annotation>> getAnnotations() { return annotationInfos.get(); }
 
 	/**
 	 * Returns all annotations of the specified type on this class and parent classes/interfaces in child-to-parent order.
@@ -2470,7 +2470,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return A list of all annotation infos in child-to-parent order.
 	 */
-	private List<AnnotationInfo<Annotation>> findAnnotations() {
+	private List<AnnotationInfo<? extends Annotation>> findAnnotations() {
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
 
 		// On all parent classes and interfaces (properly traversed to avoid duplicates)

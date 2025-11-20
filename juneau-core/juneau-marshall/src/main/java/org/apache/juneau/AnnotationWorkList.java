@@ -63,7 +63,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 * @param annotations The annotations to create work from.
 	 * @return A new list.
 	 */
-	public static AnnotationWorkList of(Stream<AnnotationInfo<?>> annotations) {
+	public static AnnotationWorkList of(Stream<AnnotationInfo<? extends Annotation>> annotations) {
 		return create().add(annotations);
 	}
 
@@ -74,7 +74,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 * @param annotations The annotations to create work from.
 	 * @return A new list.
 	 */
-	public static AnnotationWorkList of(VarResolverSession vrs, Stream<AnnotationInfo<?>> annotations) {
+	public static AnnotationWorkList of(VarResolverSession vrs, Stream<AnnotationInfo<? extends Annotation>> annotations) {
 		return create(vrs).add(annotations);
 	}
 
@@ -102,7 +102,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 * @param annotations The annotations to create work from.
 	 * @return This object.
 	 */
-	public AnnotationWorkList add(Stream<AnnotationInfo<?>> annotations) {
+	public AnnotationWorkList add(Stream<AnnotationInfo<? extends Annotation>> annotations) {
 		annotations.sorted(Comparator.comparingInt(AnnotationInfo::getRank)).forEach(this::applyAnnotation);
 		return this;
 	}
@@ -118,7 +118,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 			Annotation a = ai.inner();
 			ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
 			Constructor<? extends AnnotationApplier<?,?>>[] applyConstructors;
-			
+
 			if (cpa == null) {
 				applyConstructors = a(AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class));
 			} else {
@@ -126,7 +126,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 				for (int i = 0; i < cpa.value().length; i++)
 					applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>)cpa.value()[i].getConstructor(VarResolverSession.class);
 			}
-			
+
 			for (var applyConstructor : applyConstructors) {
 				AnnotationApplier<Annotation,Object> applier = (AnnotationApplier<Annotation,Object>)applyConstructor.newInstance(vrs);
 				add(ai, applier);

@@ -51,7 +51,7 @@ class AnnotationInfoTest extends TestBase {
 
 	@Test void d01_isInGroup() {
 		var d = ClassInfo.of(D.class);
-		var l = rstream(d.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai).filter(x -> x.isInGroup(D1.class));
+		var l = rstream(d.getAnnotations()).filter(x -> x.isInGroup(D1.class));
 		assertSize(2, l);
 	}
 }

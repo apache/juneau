@@ -145,7 +145,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void a01_basic() {
-		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var bs = JsonSerializer.create().apply(al).build().getSession();
 
 		check("PRIVATE", bs.getBeanClassVisibility());
@@ -188,7 +188,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void b01_noValues() {
-		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var js = JsonSerializer.create().apply(al).build();
 		var bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
@@ -233,7 +233,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void c01_noAnnotation() {
-		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -> (AnnotationInfo<?>)ai));
+		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var js = JsonSerializer.create().apply(al).build();
 		var bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
