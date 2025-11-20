@@ -360,7 +360,7 @@
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 	}
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;A&gt; annotations(MethodInfo mi, Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; a) {
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">return</strong> AnnotationProvider.INSTANCE.findTopDown(a, mi).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).map(PredicateUtils.peek()).map(x -&gt; (A)x).collect(Collectors.toList());
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">return</strong> AnnotationProvider.INSTANCE.findTopDown(a, mi).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).map(x -&gt; (A)x).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 	@Test <strong class="jxr_keyword">void</strong> getAnnotationAny() {
