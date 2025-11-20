@@ -24,8 +24,6 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.function.*;
-
 /**
  * Simple in-memory cache for storing and retrieving objects by key.
  *
@@ -148,9 +146,9 @@ import org.apache.juneau.common.function.*;
  * @param <K> The key type. Can be an array type for content-based key matching.
  * @param <V> The value type.
  */
-public class Cache<K,V> implements java.util.Map<K,V> {
+public class Cache<K,V> extends ConcurrentHashMap1Key<K,V> {
 
-	private final ConcurrentHashMap1Key<K,V> map = new ConcurrentHashMap1Key<>();
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Builder for creating configured {@link Cache} instances.
@@ -488,41 +486,21 @@ public class Cache<K,V> implements java.util.Map<K,V> {
 		assertArgNotNull("key", key);
 		if (disableCaching)
 			return supplier.get();
-		V v = map.getKey(key);
+		V v = getKey(key);
 		if (v == null) {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
 			if (v == null)
-				remove(key);
+				super.remove(org.apache.juneau.common.function.Tuple1.of(key));
 			else
-				map.put(Tuple1.of(key), v);
+				putKey(key, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
 		return v;
 	}
 
-	/**
-	 * Associates the specified value with the specified key in this cache.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Cache&lt;String,Pattern&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(String.<jk>class</jk>, Pattern.<jk>class</jk>).build();
-	 *
-	 * 	Pattern <jv>pattern</jv> = Pattern.compile(<js>"[0-9]+"</js>);
-	 * 	<jv>cache</jv>.put(<js>"digits"</js>, <jv>pattern</jv>);
-	 * </p>
-	 *
-	 * @param key The cache key. Must not be <jk>null</jk>.
-	 * @param value The value to associate with the key.
-	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping for the key.
-	 * @throws IllegalArgumentException if key is <jk>null</jk>.
-	 */
-	public V put(K key, V value) {
-		assertArgNotNull("key", key);
-		return map.putKey(key, value);
-	}
 
 	/**
 	 * Returns the total number of cache hits since this cache was created.
@@ -551,81 +529,4 @@ public class Cache<K,V> implements java.util.Map<K,V> {
 	 * @return The total number of cache hits since creation.
 	 */
 	public int getCacheHits() { return cacheHits.get(); }
-
-	/**
-	 * Returns the number of entries currently in the cache.
-	 *
-	 * @return The number of cached entries.
-	 */
-	public int size() {
-		return map.size();
-	}
-
-	/**
-	 * Returns a collection view of the values contained in this cache.
-	 *
-	 * @return A collection view of the values.
-	 */
-	public java.util.Collection<V> values() {
-		return map.values();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this cache contains no entries.
-	 *
-	 * @return <jk>true</jk> if this cache contains no entries.
-	 */
-	public boolean isEmpty() {
-		return map.isEmpty();
-	}
-
-	/**
-	 * Removes all entries from the cache.
-	 *
-	 * <p>
-	 * Note: This does not reset the cache hit counter.
-	 */
-	public void clear() {
-		map.clear();
-	}
-
-	/**
-	 * Removes the specified key from the cache.
-	 *
-	 * @param key The key to remove. Must not be <jk>null</jk>.
-	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if key is <jk>null</jk>.
-	 */
-	@Override /* Map */
-	public V remove(Object key) {
-		assertArgNotNull("key", key);
-		return map.remove(Tuple1.of(key));
-	}
-
-	@Override /* Map */
-	public boolean containsKey(Object key) {
-		return map.containsKey(Tuple1.of(key));
-	}
-
-	@Override /* Map */
-	public boolean containsValue(Object value) {
-		return map.containsValue(value);
-	}
-
-	@Override /* Map */
-	public void putAll(java.util.Map<? extends K, ? extends V> m) {
-		m.forEach((k, v) -> put(k, v));
-	}
-
-	@Override /* Map */
-	public java.util.Set<K> keySet() {
-		return map.keySet().stream().map(Tuple1::getA).collect(java.util.stream.Collectors.toSet());
-	}
-
-	@Override /* Map */
-	public java.util.Set<java.util.Map.Entry<K, V>> entrySet() {
-		return map.entrySet().stream()
-			.map(e -> new java.util.AbstractMap.SimpleEntry<>(e.getKey().getA(), e.getValue()))
-			.collect(java.util.stream.Collectors.toSet());
-	}
 }
