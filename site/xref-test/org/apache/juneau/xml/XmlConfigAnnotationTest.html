@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">static</strong> ClassInfo a = ClassInfo.of(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Test <strong class="jxr_keyword">void</strong> basicSerializer() {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> x = XmlSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		check(<span class="jxr_string">"true"</span>, x.isAddBeanTypes());
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		check(<span class="jxr_string">"true"</span>, x.isAddNamespaceUrisToRoot());
@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@Test <strong class="jxr_keyword">void</strong> basicParser() {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> x = XmlParser.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		check(<span class="jxr_string">"AA"</span>, x.getEventAllocator());
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		check(<span class="jxr_string">"true"</span>, x.isPreserveRootElement());
@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Test <strong class="jxr_keyword">void</strong> noValuesSerializer() {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> x = XmlSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		check(<span class="jxr_string">"false"</span>, x.isAddBeanTypes());
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		check(<span class="jxr_string">"false"</span>, x.isAddNamespaceUrisToRoot());
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> noValuesParser() {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> x = XmlParser.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		check(<strong class="jxr_keyword">null</strong>, x.getEventAllocator());
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		check(<span class="jxr_string">"false"</span>, x.isPreserveRootElement());
@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">static</strong> ClassInfo c = ClassInfo.of(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotationSerializer() {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> x = XmlSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		check(<span class="jxr_string">"false"</span>, x.isAddBeanTypes());
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		check(<span class="jxr_string">"false"</span>, x.isAddNamespaceUrisToRoot());
@@ -177,7 +177,7 @@
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotationParser() {
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> x = XmlParser.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		check(<strong class="jxr_keyword">null</strong>, x.getEventAllocator());
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		check(<span class="jxr_string">"false"</span>, x.isPreserveRootElement());

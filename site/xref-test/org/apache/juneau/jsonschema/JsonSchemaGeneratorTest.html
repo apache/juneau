@@ -1310,7 +1310,7 @@
 <a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 	<strong class="jxr_keyword">static</strong> ClassInfo bConfig = ClassInfo.of(BConfig.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 
 <a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 	@Test <strong class="jxr_keyword">void</strong> schemaOnClass_onConfig() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(rstream(bConfig.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(rstream(bConfig.getAnnotations()));
 <a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 		<strong class="jxr_keyword">var</strong> x = JsonSchemaGenerator.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 		assertContains(<span class="jxr_string">"$ref"</span>, r(x.getSchema(<strong class="jxr_keyword">new</strong> B())));
 <a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 	}

@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">static</strong> ClassInfo a = ClassInfo.of(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	@Test <strong class="jxr_keyword">void</strong> basicSerializer() {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> x = HtmlSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		check(<span class="jxr_string">"true"</span>, x.isAddBeanTypes());
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		check(<span class="jxr_string">"true"</span>, x.isAddKeyValueTableHeaders());
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Test <strong class="jxr_keyword">void</strong> basicParser() {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertDoesNotThrow(()-&gt;HtmlParser.create().apply(al).build().createSession());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> defaultsSerializer() {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> x = HtmlSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		check(<span class="jxr_string">"false"</span>, x.isAddBeanTypes());
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		check(<span class="jxr_string">"false"</span>, x.isAddKeyValueTableHeaders());
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Test <strong class="jxr_keyword">void</strong> defaultsParser() {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertDoesNotThrow(()-&gt;HtmlParser.create().apply(al).build().createSession());
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">static</strong> ClassInfo c = ClassInfo.of(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotationSerializer() {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> x = HtmlSerializer.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		check(<span class="jxr_string">"false"</span>, x.isAddBeanTypes());
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		check(<span class="jxr_string">"false"</span>, x.isAddKeyValueTableHeaders());
@@ -123,7 +123,7 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotationParser() {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertDoesNotThrow(()-&gt;HtmlParser.create().apply(al).build().createSession());
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> }

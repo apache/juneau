@@ -284,7 +284,7 @@
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 			Method m = sm.getJavaMethod();
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(m);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			List&lt;AnnotationInfo&lt;?&gt;&gt; al = rstream(mi.getAllAnnotations()).filter(REST_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			List&lt;AnnotationInfo&lt;?&gt;&gt; al = ap.findTopDown(mi).filter(REST_OP_GROUP).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			String mn = m.getName();
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<em class="jxr_comment">// Get the operation from the existing swagger so far.</em>

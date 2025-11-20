@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">static</strong> ClassInfo a = ClassInfo.of(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Test <strong class="jxr_keyword">void</strong> basic() {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> x = JsonSchemaGenerator.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		check(<span class="jxr_string">"BEAN"</span>, x.getAddDescriptionsTo());
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		check(<span class="jxr_string">"BEAN"</span>, x.getAddExamplesTo());
@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">static</strong> ClassInfo b = ClassInfo.of(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> noValues() {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> x = JsonSchemaGenerator.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		check(<span class="jxr_string">""</span>, x.getAddDescriptionsTo());
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		check(<span class="jxr_string">""</span>, x.getAddExamplesTo());
@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">static</strong> ClassInfo c = ClassInfo.of(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Test <strong class="jxr_keyword">void</strong> noAnnotation() {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> x = JsonSchemaGenerator.create().apply(al).build().getSession();
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		check(<span class="jxr_string">""</span>, x.getAddDescriptionsTo());
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		check(<span class="jxr_string">""</span>, x.getAddExamplesTo());

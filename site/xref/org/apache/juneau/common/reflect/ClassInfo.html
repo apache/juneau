@@ -197,7 +197,7 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;ClassInfo&gt;&gt; interfaces;  <em class="jxr_comment">// All interfaces implemented by this class and its parents, in child-to-parent order.</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;ClassInfo&gt;&gt; allParents;  <em class="jxr_comment">// All parent classes and interfaces, classes first, then in child-to-parent order.</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;ClassInfo&gt;&gt; parentsAndInterfaces;  <em class="jxr_comment">// All parent classes and interfaces with proper traversal of interface hierarchy to avoid duplicates.</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; annotationInfos;  <em class="jxr_comment">// All annotations on this class and parent classes/interfaces in child-to-parent order.</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt;&gt; annotationInfos;  <em class="jxr_comment">// All annotations on this class and parent classes/interfaces in child-to-parent order.</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;RecordComponent&gt;&gt; recordComponents;  <em class="jxr_comment">// All record components if this is a record class (Java 14+).</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;Type&gt;&gt; genericInterfaces;  <em class="jxr_comment">// All generic interface types (e.g., List&lt;String&gt; implements Comparable&lt;List&lt;String&gt;&gt;).</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;TypeVariable&lt;?&gt;&gt;&gt; typeParameters;  <em class="jxr_comment">// All type parameters declared on this class (e.g., &lt;T, U&gt; in class Foo&lt;T, U&gt;).</em>
@@ -767,7 +767,7 @@
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list of all annotation infos.</em>
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<strong class="jxr_keyword">public</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; getAnnotations() { <strong class="jxr_keyword">return</strong> annotationInfos.get(); }
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<strong class="jxr_keyword">public</strong> List&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; getAnnotations() { <strong class="jxr_keyword">return</strong> annotationInfos.get(); }
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L765" href="#L765">765</a> <em class="jxr_javadoccomment">	 * Returns all annotations of the specified type on this class and parent classes/interfaces in child-to-parent order.</em>
@@ -2478,7 +2478,7 @@
 <a class="jxr_linenumber" name="L2470" href="#L2470">2470</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2471" href="#L2471">2471</a> <em class="jxr_javadoccomment">	 * @return A list of all annotation infos in child-to-parent order.</em>
 <a class="jxr_linenumber" name="L2472" href="#L2472">2472</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2473" href="#L2473">2473</a> 	<strong class="jxr_keyword">private</strong> List&lt;AnnotationInfo&lt;Annotation&gt;&gt; findAnnotations() {
+<a class="jxr_linenumber" name="L2473" href="#L2473">2473</a> 	<strong class="jxr_keyword">private</strong> List&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; findAnnotations() {
 <a class="jxr_linenumber" name="L2474" href="#L2474">2474</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;AnnotationInfo&lt;Annotation&gt;&gt;();
 <a class="jxr_linenumber" name="L2475" href="#L2475">2475</a> 
 <a class="jxr_linenumber" name="L2476" href="#L2476">2476</a> 		<em class="jxr_comment">// On all parent classes and interfaces (properly traversed to avoid duplicates)</em>

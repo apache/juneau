@@ -599,9 +599,9 @@
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 	@Test <strong class="jxr_keyword">void</strong> getAnnotationsMapParentFirst() {
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<em class="jxr_comment">// Note: Order changed after inlining - interfaces now processed when they appear in hierarchy, not after all classes</em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		check(<span class="jxr_string">"@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g3.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList()));
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		check(<span class="jxr_string">"@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g4.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList()));
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		check(<span class="jxr_string">"@PA(10),@A(3)"</span>, rstream(g5.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList()));
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		check(<span class="jxr_string">"@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g3.getAnnotations()).collect(Collectors.toList()));
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		check(<span class="jxr_string">"@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g4.getAnnotations()).collect(Collectors.toList()));
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		check(<span class="jxr_string">"@PA(10),@A(3)"</span>, rstream(g5.getAnnotations()).collect(Collectors.toList()));
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 	}
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 	@A(1) @AConfig(1) <strong class="jxr_keyword">interface</strong> GBI1 {}
@@ -617,9 +617,9 @@
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<strong class="jxr_keyword">static</strong> ClassInfo gb3=of(GB3.<strong class="jxr_keyword">class</strong>), gb4=of(GB4.<strong class="jxr_keyword">class</strong>), gb5=of(GB5.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 	@Test <strong class="jxr_keyword">void</strong> getConfigAnnotationsMapParentFirst() {
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		check(<span class="jxr_string">"@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)"</span>, rstream(gb3.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		check(<span class="jxr_string">"@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)"</span>, rstream(gb4.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		check(<span class="jxr_string">"@AConfig(3)"</span>, rstream(gb5.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		check(<span class="jxr_string">"@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)"</span>, rstream(gb3.getAnnotations()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		check(<span class="jxr_string">"@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)"</span>, rstream(gb4.getAnnotations()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		check(<span class="jxr_string">"@AConfig(3)"</span>, rstream(gb5.getAnnotations()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 	}
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>

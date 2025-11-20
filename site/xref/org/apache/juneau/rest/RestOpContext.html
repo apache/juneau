@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 				<strong class="jxr_keyword">var</strong> vr = context.getVarResolver();
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 				<strong class="jxr_keyword">var</strong> vrs = vr.createSession();
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 				<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.of(vrs, ap.findTopDown(mi, SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE).filter(CONTEXT_APPLY_FILTER).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 				<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.of(vrs, ap.findTopDown(mi, SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE).filter(CONTEXT_APPLY_FILTER));
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 				apply(work);
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 

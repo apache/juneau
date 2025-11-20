@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	@Test <strong class="jxr_keyword">void</strong> d01_isInGroup() {
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">var</strong> d = ClassInfo.of(D.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> l = rstream(d.getAnnotations()).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).filter(x -&gt; x.isInGroup(D1.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> l = rstream(d.getAnnotations()).filter(x -&gt; x.isInGroup(D1.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertSize(2, l);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  }

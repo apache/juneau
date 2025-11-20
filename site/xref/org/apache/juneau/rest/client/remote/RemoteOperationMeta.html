@@ -73,9 +73,9 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(m);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			AnnotationProvider ap = AnnotationProvider.INSTANCE;
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			List&lt;AnnotationInfo&lt;?&gt;&gt; al = ap.findTopDown(mi).filter(REMOTE_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			List&lt;AnnotationInfo&lt;?&gt;&gt; al = ap.findTopDown(mi).filter(REMOTE_OP_GROUP).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">if</strong> (al.isEmpty())
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				al = rstream(mi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotations()).filter(REMOTE_OP_GROUP).map(ai -&gt; (AnnotationInfo&lt;?&gt;)ai).collect(Collectors.toList());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				al = ap.findTopDown(mi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>)).filter(REMOTE_OP_GROUP).collect(Collectors.toList());
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">var</strong> _httpMethod = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			<strong class="jxr_keyword">var</strong> _path = Value.&lt;String&gt;empty();

@@ -549,7 +549,7 @@
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; find(ClassInfo clazz, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; find(ClassInfo clazz, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 		assertArgNotNull(<span class="jxr_string">"clazz"</span>, clazz);
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">if</strong> (traversals.length == 0)
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 			traversals = a(PARENTS, PACKAGE);
@@ -604,7 +604,7 @@
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options (what to search and order).</em>
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; findTopDown(ClassInfo clazz, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; findTopDown(ClassInfo clazz, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<strong class="jxr_keyword">return</strong> rstream(find(clazz, traversals).toList());
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 	}
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> 
@@ -727,7 +727,7 @@
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; find(<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; find(<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 		assertArgNotNull(<span class="jxr_string">"method"</span>, method);
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 		<strong class="jxr_keyword">if</strong> (traversals.length == 0)
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 			traversals = a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE);
@@ -786,7 +786,7 @@
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; findTopDown(<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; findTopDown(<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 		<strong class="jxr_keyword">return</strong> rstream(find(method, traversals).toList());
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 	}
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 
@@ -963,7 +963,7 @@
 <a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}</em>
 <a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; find(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; find(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L959" href="#L959">959</a> 		assertArgNotNull(<span class="jxr_string">"parameter"</span>, parameter);
 <a class="jxr_linenumber" name="L960" href="#L960">960</a> 		<strong class="jxr_keyword">if</strong> (traversals.length == 0)
 <a class="jxr_linenumber" name="L961" href="#L961">961</a> 			traversals = a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
@@ -995,7 +995,7 @@
 <a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}</em>
 <a class="jxr_linenumber" name="L988" href="#L988">988</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; findTopDown(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; findTopDown(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> parameter, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">return</strong> rstream(find(parameter, traversals).toList());
 <a class="jxr_linenumber" name="L992" href="#L992">992</a> 	}
 <a class="jxr_linenumber" name="L993" href="#L993">993</a> 
@@ -1096,7 +1096,7 @@
 <a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; find(<a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> field, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; find(<a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> field, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		assertArgNotNull(<span class="jxr_string">"field"</span>, field);
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 		<strong class="jxr_keyword">if</strong> (traversals.length == 0)
 <a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 			traversals = a(SELF);
@@ -1142,7 +1142,7 @@
 <a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
 <a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; findTopDown(<a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> field, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; findTopDown(<a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> field, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 		<strong class="jxr_keyword">return</strong> rstream(find(field, traversals).toList());
 <a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> 	}
 <a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> 
@@ -1238,7 +1238,7 @@
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
 <a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; find(<a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; find(<a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 		assertArgNotNull(<span class="jxr_string">"constructor"</span>, constructor);
 <a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 		<strong class="jxr_keyword">if</strong> (traversals.length == 0)
 <a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 			traversals = a(SELF);
@@ -1284,7 +1284,7 @@
 <a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> <em class="jxr_javadoccomment">	 * @param traversals The traversal options.</em>
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> <em class="jxr_javadoccomment">	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; findTopDown(<a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor, AnnotationTraversal... traversals) {
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 	<strong class="jxr_keyword">public</strong> Stream&lt;AnnotationInfo&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;&gt; findTopDown(<a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor, AnnotationTraversal... traversals) {
 <a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		<strong class="jxr_keyword">return</strong> rstream(find(constructor, traversals).toList());
 <a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 	}
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 
