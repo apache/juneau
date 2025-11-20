@@ -729,7 +729,7 @@ public class ClassUtils {
 		if (b == null) {
 			var name = c.getName();
 			b = (! name.contains("Immutable") && ! name.contains("Unmodifiable") && ! name.contains("Arrays$ArrayList"));
-			MODIFIABLE_COLLECTION_TYPES.putKey(c, b);
+			MODIFIABLE_COLLECTION_TYPES.put(c, b);
 		}
 		return b;
 	}
