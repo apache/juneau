@@ -207,7 +207,7 @@ public class AnnotationProvider {
 	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
 	 * <br>Default: <c>FALSE</c>
 	 */
-	private static final boolean LOG_ON_EXIT = true;//b(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
+	private static final boolean LOG_ON_EXIT = b(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
 
 	/**
 	 * Default instance.
