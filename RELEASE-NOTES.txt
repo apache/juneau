@@ -20,13 +20,14 @@ Release Notes - Juneau - Version 9.2.0
     * Bump org.apache:apache from 34 to 35 #220.
     * Bump org.eclipse.jgit:org.eclipse.jgit from 7.2.1.202505142326-r to 7.3.0.202506031305-r #221.
     * Bump jetty.version from 12.0.21 to 12.1.4 #222, #228, #229, #275.
-    * Bump org.junit.vintage:junit-vintage-engine from 5.12.2 to 6.0.0 #223, #257.
+    * Bump org.junit.vintage:junit-vintage-engine from 5.12.2 to 6.0.1 #223, #257, #280.
     * Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.11.2 to 3.12.0 #237m #255.
     * Annotations associated with a subclass of org.apache.juneau.annotation.AnnotationBuilder that didn't carry an `String[] description()` attribute now do.
         For example: org.apache.juneau.http.annotation.Path.
         The current use case is for developers to further annotate their code with documentation.
     * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.0 to 3.14.1 #271.
     * Bump org.jacoco:jacoco-maven-plugin from 0.8.13 to 0.8.14 #273.
+    * Bump js-yaml from 3.14.1 to 3.14.2 in /juneau-docs #282.
 
 ** New Features - Multi-Key Cache and Concurrent Map Classes
 
