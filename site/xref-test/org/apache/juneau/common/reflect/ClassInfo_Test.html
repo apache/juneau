@@ -579,10 +579,10 @@
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 	@Test <strong class="jxr_keyword">void</strong> lastAnnotation() {
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<em class="jxr_comment">// Use AnnotationProvider to get last annotation (first in child-to-parent order stream)</em>
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">var</strong> ap = org.apache.juneau.common.reflect.AnnotationProvider.INSTANCE;
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		assertEquals(7, ap.find(A.<strong class="jxr_keyword">class</strong>, g3).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).findFirst().get().value());
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		assertEquals(7, ap.find(A.<strong class="jxr_keyword">class</strong>, g4).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).findFirst().get().value());
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		assertEquals(3, ap.find(A.<strong class="jxr_keyword">class</strong>, g5).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).findFirst().get().value());
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		assertEquals(5, ap.find(A.<strong class="jxr_keyword">class</strong>, g3).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(x -&gt; x.value() == 5).findFirst().get().value());
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		assertEquals(7, ap.find(A.<strong class="jxr_keyword">class</strong>, g3).stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).findFirst().get().value());
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		assertEquals(7, ap.find(A.<strong class="jxr_keyword">class</strong>, g4).stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).findFirst().get().value());
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		assertEquals(3, ap.find(A.<strong class="jxr_keyword">class</strong>, g5).stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).findFirst().get().value());
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		assertEquals(5, ap.find(A.<strong class="jxr_keyword">class</strong>, g3).stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(x -&gt; x.value() == 5).findFirst().get().value());
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 	}
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 	@Test <strong class="jxr_keyword">void</strong> getPackageAnnotation() {
