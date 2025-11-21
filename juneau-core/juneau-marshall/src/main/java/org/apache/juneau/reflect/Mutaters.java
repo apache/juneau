@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -202,16 +203,16 @@ public class Mutaters {
 			};
 		}
 
-		var ici = ClassInfo.of(ic);
-		var oci = ClassInfo.of(oc);
+	var ici = info(ic);
+	var oci = info(oc);
 
 		ClassInfo pic = ici.getAllParents().stream().filter(x -> nn(m.get(x.inner()))).findFirst().orElse(null);
 		if (nn(pic))
 			return m.get(pic.inner());
 
 		if (ic == String.class) {
-			Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
-			var oc2i = ClassInfo.of(oc2);
+		Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
+		var oc2i = info(oc2);
 
 			// @formatter:off
 			final MethodInfo createMethod = oc2i.getPublicMethod(

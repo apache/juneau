@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.common.reflect.*;
@@ -52,9 +53,9 @@ public class ClassUtils2 {
 		if (! needsShuffle)
 			return args;
 		Object[] params = new Object[paramTypes.length];
-		for (int i = 0; i < paramTypes.length; i++) {
-			var pt = ClassInfo.of(paramTypes[i]).getWrapperIfPrimitive();
-			for (var arg : args) {
+	for (int i = 0; i < paramTypes.length; i++) {
+		var pt = info(paramTypes[i]).getWrapperIfPrimitive();
+		for (var arg : args) {
 				if (nn(arg) && pt.isParentOf(arg.getClass())) {
 					params[i] = arg;
 					break;

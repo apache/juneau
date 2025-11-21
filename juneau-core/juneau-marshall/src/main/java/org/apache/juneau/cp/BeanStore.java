@@ -19,6 +19,7 @@ package org.apache.juneau.cp;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -113,7 +114,7 @@ public class BeanStore {
 			if (type == null || type == BeanStore.class)
 				return new BeanStore(this);
 
-			var c = ClassInfo.of(type);
+		var c = info(type);
 
 			// @formatter:off
 			Optional<BeanStore> result = c.getDeclaredMethod(

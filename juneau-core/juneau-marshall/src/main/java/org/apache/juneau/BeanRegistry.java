@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -125,9 +126,9 @@ public class BeanRegistry {
 
 	private void addClass(Class<?> c) {
 		try {
-			if (nn(c)) {
-				var ci = ClassInfo.of(c);
-				if (ci.isChildOf(Collection.class)) {
+		if (nn(c)) {
+			var ci = info(c);
+			if (ci.isChildOf(Collection.class)) {
 					Collection<?> cc = BeanCreator.of(Collection.class).type(c).run();
 					cc.forEach(x -> {
 						if (x instanceof Class)

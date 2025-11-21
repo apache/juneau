@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.swaps;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.DateUtils.*;
 
 import java.lang.reflect.*;
@@ -338,9 +339,9 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	private static Method findParseMethod(Class<? extends Temporal> c) throws ExecutableException {
 		Method m = FROM_METHODS.get(c);
 		if (m == null) {
-			// @formatter:off
-			m = ClassInfo.of(c).getPublicMethod(
-				x -> x.isStatic()
+		// @formatter:off
+		m = info(c).getPublicMethod(
+			x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasName("from")
 				&& x.hasReturnType(c)

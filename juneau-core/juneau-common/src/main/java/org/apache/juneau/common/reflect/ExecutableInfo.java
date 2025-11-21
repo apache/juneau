@@ -18,6 +18,7 @@ package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.common.reflect.ClassNameFormat.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
@@ -754,9 +755,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		} else {
 			genericTypes = ptt;
 		}
-		return IntStream.range(0, rp.length)
-			.mapToObj(i -> new ParameterInfo(this, rp[i], i, ClassInfo.of(ptc[i], genericTypes[i])))
-			.toList();
+	return IntStream.range(0, rp.length)
+		.mapToObj(i -> new ParameterInfo(this, rp[i], i, ClassInfo.of(ptc[i], genericTypes[i])))
+		.toList();
 	}
 
 	private String findFullName() {

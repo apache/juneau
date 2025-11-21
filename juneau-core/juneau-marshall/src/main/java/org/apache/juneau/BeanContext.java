@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.reflect.Visibility.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
@@ -3520,9 +3521,9 @@ public class BeanContext extends Context {
 		swaps.forEach(x -> {
 			if (x instanceof ObjectSwap) {
 				_swaps.add((ObjectSwap<?,?>)x);
-			} else {
-				var ci = ClassInfo.of((Class<?>)x);
-				if (ci.isChildOf(ObjectSwap.class))
+		} else {
+			var ci = info((Class<?>)x);
+			if (ci.isChildOf(ObjectSwap.class))
 					_swaps.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
 				else if (ci.isChildOf(Surrogate.class))
 					_swaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
@@ -4189,9 +4190,9 @@ public class BeanContext extends Context {
 			for (var p2 : notBeanPackagePrefixes)
 				if (p.getName().startsWith(p2))
 					return true;
-		}
-		var ci = ClassInfo.of(c);
-		for (var exclude : notBeanClassesArray)
+	}
+	var ci = info(c);
+	for (var exclude : notBeanClassesArray)
 			if (ci.isChildOf(exclude))
 				return true;
 		return false;

@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.BeanMeta.MethodType.*;
 import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -82,10 +83,10 @@ public class BeanMeta<T> {
 			this.propertyName = propertyName;
 			this.methodType = type;
 			this.method = method;
-			if (type == MethodType.SETTER)
-				this.type = ClassInfo.of(method.getParameterTypes()[0]);
-			else
-				this.type = ClassInfo.of(method.getReturnType());
+		if (type == MethodType.SETTER)
+			this.type = info(method.getParameterTypes()[0]);
+		else
+			this.type = info(method.getReturnType());
 		}
 
 		@Override /* Overridden from Object */
@@ -255,7 +256,7 @@ public class BeanMeta<T> {
 						throw bex(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
-					ap.find(Beanc.class, x).map(x2 -> x2.inner().properties()).filter(StringUtils::isNotBlank).forEach(z -> constructorArgs = splita(z));
+					ap.find(Beanc.class, x).stream().map(x2 -> x2.inner().properties()).filter(StringUtils::isNotBlank).findFirst().ifPresent(z -> constructorArgs = splita(z));
 					if (! x.hasNumParameters(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 						throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -278,7 +279,7 @@ public class BeanMeta<T> {
 							throw bex(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						ap.find(Beanc.class, x).map(x2 -> x2.inner().properties()).filter(y -> isNotEmpty(y)).forEach(z -> constructorArgs = splita(z));
+						ap.find(Beanc.class, x).stream().map(x2 -> x2.inner().properties()).filter(y -> isNotEmpty(y)).findFirst().ifPresent(z -> constructorArgs = splita(z));
 						if (! x.hasNumParameters(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 							throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -360,9 +361,9 @@ public class BeanMeta<T> {
 
 				} else /* Use 'better' introspection */ {
 
-					findBeanFields(ctx, c2, stopClass, fVis).forEach(x -> {
-						String name = findPropertyName(FieldInfo.of(x));
-						if (nn(name)) {
+				findBeanFields(ctx, c2, stopClass, fVis).forEach(x -> {
+					String name = findPropertyName(info(x));
+					if (nn(name)) {
 							if (! normalProps.containsKey(name))
 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
 							normalProps.get(name).setField(x);
@@ -374,17 +375,17 @@ public class BeanMeta<T> {
 					// Iterate through all the getters.
 					bms.forEach(x -> {
 						String pn = x.propertyName;
-						Method m = x.method;
-						MethodInfo mi = MethodInfo.of(m);
-						if (! normalProps.containsKey(pn))
+					Method m = x.method;
+					MethodInfo mi = info(m);
+					if (! normalProps.containsKey(pn))
 							normalProps.put(pn, new BeanPropertyMeta.Builder(beanMeta, pn));
 						BeanPropertyMeta.Builder bpm = normalProps.get(pn);
 						if (x.methodType == GETTER) {
 							// Two getters.  Pick the best.
 							if (nn(bpm.getter)) {
 
-								if (! ap.has(Beanp.class, mi) && ap.has(Beanp.class, MethodInfo.of(bpm.getter)))
-									m = bpm.getter;  // @Beanp annotated method takes precedence.
+							if (! ap.has(Beanp.class, mi) && ap.has(Beanp.class, info(bpm.getter)))
+								m = bpm.getter;  // @Beanp annotated method takes precedence.
 
 								else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get"))
 									m = bpm.getter;  // getX() overrides isX().
@@ -566,8 +567,8 @@ public class BeanMeta<T> {
 
 	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v) {
 		List<Field> l = new LinkedList<>();
-		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
-		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
+	boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
+	forEachClass(info(c), stopClass, c2 -> {
 			// @formatter:off
 			c2.getDeclaredFields().stream()
 				.filter(x -> x.isNotStatic()
@@ -595,8 +596,8 @@ public class BeanMeta<T> {
 		List<BeanMethod> l = new LinkedList<>();
 		var ap = ctx.getAnnotationProvider();
 
-		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
-			for (var m : c2.getDeclaredMethods()) {
+	forEachClass(info(c), stopClass, c2 -> {
+		for (var m : c2.getDeclaredMethods()) {
 				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.getMatchingMethods().stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF, MATCHING_METHODS)))
 					continue;
 				Transient t = m.getMatchingMethods().stream()
@@ -707,8 +708,8 @@ public class BeanMeta<T> {
 
 	static final Field findInnerBeanField(BeanContext ctx, Class<?> c, Class<?> stopClass, String name) {
 		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
-		Value<Field> value = Value.empty();
-		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
+	Value<Field> value = Value.empty();
+	forEachClass(info(c), stopClass, c2 -> {
 			// @formatter:off
 			c2.getDeclaredField(
 				x -> x.isNotStatic()
@@ -803,9 +804,9 @@ public class BeanMeta<T> {
 		List<ParameterInfo> params = method.getParameters();
 		var ap = ctx.getAnnotationProvider();
 
-		// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name
-		var currentClass = ClassInfo.of(c);
-		ClassInfo sc = currentClass.getSuperclass();
+	// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name
+	var currentClass = info(c);
+	ClassInfo sc = currentClass.getSuperclass();
 
 		while (nn(sc) && ! sc.is(stopClass) && ! sc.is(Object.class)) {
 			// Look for a method with the same signature in the parent class

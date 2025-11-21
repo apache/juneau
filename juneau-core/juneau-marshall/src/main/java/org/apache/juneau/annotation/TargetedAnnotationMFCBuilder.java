@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.annotation;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -46,7 +48,7 @@ public class TargetedAnnotationMFCBuilder extends TargetedAnnotationMFBuilder<Ta
 	 */
 	public TargetedAnnotationMFCBuilder on(Constructor<?>...value) {
 		for (var v : value)
-			on(ConstructorInfo.of(v).getFullName());
+			on(info(v).getFullName());
 		return this;
 	}
 }

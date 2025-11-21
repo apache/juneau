@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -647,9 +648,9 @@ public abstract class Context {
 		private ConstructorInfo getContextConstructor() {
 			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
 			if (cci == null) {
-				// @formatter:off
-				cci = ClassInfo.of(type).getPublicConstructor(
-					x -> x.hasNumParameters(1)
+			// @formatter:off
+			cci = info(type).getPublicConstructor(
+				x -> x.hasNumParameters(1)
 					&& x.getParameter(0).canAccept(this)
 				).orElseThrow(() -> rex("Public constructor not found: {0}({1})", cn(type), cn(this)));
 				// @formatter:on
@@ -671,13 +672,13 @@ public abstract class Context {
 		private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
 			AnnotationProvider ap = AnnotationProvider.INSTANCE;
 			CollectionUtils.traverse(x, y -> {
-				if (x instanceof Class<?> x2)
-					work.add(ap.findTopDown(ClassInfo.of(x2)).filter(CONTEXT_APPLY_FILTER));
-				else if (x instanceof ClassInfo x2)
+			if (x instanceof Class<?> x2)
+				work.add(ap.findTopDown(info(x2)).filter(CONTEXT_APPLY_FILTER));
+			else if (x instanceof ClassInfo x2)
 					work.add(ap.findTopDown(x2).filter(CONTEXT_APPLY_FILTER));
-				else if (x instanceof Method x2)
-					work.add(ap.findTopDown(MethodInfo.of(x2)).filter(CONTEXT_APPLY_FILTER));
-				else if (x instanceof MethodInfo x2)
+			else if (x instanceof Method x2)
+				work.add(ap.findTopDown(info(x2)).filter(CONTEXT_APPLY_FILTER));
+			else if (x instanceof MethodInfo x2)
 					work.add(ap.findTopDown(x2).filter(CONTEXT_APPLY_FILTER));
 				else
 					illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
@@ -725,9 +726,9 @@ public abstract class Context {
 	public static Builder createBuilder(Class<? extends Context> type) {
 		try {
 			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
-			if (mi == null) {
-				var c = ClassInfo.of(type);
-				for (var ci : c.getPublicConstructors()) {
+		if (mi == null) {
+			var c = info(type);
+			for (var ci : c.getPublicConstructors()) {
 					if (ci.hasNumParameters(1) && ! ci.getParameter(0).getParameterType().is(type)) {
 						// @formatter:off
 						mi = c.getPublicMethod(

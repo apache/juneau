@@ -18,6 +18,7 @@ package org.apache.juneau.junit.bct;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -827,7 +828,7 @@ public class BasicBeanConverter implements BeanConverter {
 		if (sizer.isPresent()) return ((Sizer)sizer.get()).size(o2, this);
 
 		// Try to find size() or length() method via reflection
-		var sizeResult = ClassInfo.of(c).getPublicMethods().stream()
+		var sizeResult = info(c).getPublicMethods().stream()
 			.filter(m -> ! m.hasParameters())
 			.filter(m -> m.hasAnyName("size", "length"))
 			.filter(m -> m.getReturnType().isAny(int.class, Integer.class))
@@ -840,7 +841,7 @@ public class BasicBeanConverter implements BeanConverter {
 		if (canListify(o)) return listify(o).size();
 
 		// Try to find isEmpty() method via reflection
-		var isEmpty = ClassInfo.of(o).getPublicMethods().stream()
+		var isEmpty = info(o).getPublicMethods().stream()
 			.filter(m -> ! m.hasParameters())
 			.filter(m -> m.hasName("isEmpty"))
 			.filter(m -> m.getReturnType().isAny(boolean.class, Boolean.class))

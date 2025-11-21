@@ -16,11 +16,12 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -549,6 +550,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("c", c);
@@ -566,6 +568,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ClassInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("c", c);
 		return rstream(cache.get(null, c, traversals));
@@ -635,10 +638,17 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, MethodInfo m, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("m", m);
 		return cache.get(type, m, traversals).stream();
+	}
+
+	public <A extends Annotation> List<AnnotationInfo<A>> find2(Class<A> type, MethodInfo m, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("m", m);
+		return cache.get(type, m, traversals);
 	}
 
 	/**
@@ -663,9 +673,15 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<? extends Annotation>> find(MethodInfo m, AnnotationTraversal... traversals) {
 		assertArgNotNull("m", m);
 		return cache.get(null, m, traversals).stream();
+	}
+
+	public List<AnnotationInfo<? extends Annotation>> find2(MethodInfo m, AnnotationTraversal... traversals) {
+		assertArgNotNull("m", m);
+		return cache.get(null, m, traversals);
 	}
 
 	/**
@@ -681,6 +697,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, MethodInfo m, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("m", m);
@@ -698,6 +715,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(MethodInfo m, AnnotationTraversal... traversals) {
 		assertArgNotNull("m", m);
 		return rstream(cache.get(null, m, traversals));
@@ -741,7 +759,7 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, MethodInfo m, AnnotationTraversal... traversals) {
-		return find(type, m, traversals).findFirst().isPresent();
+		return ! find2(type, m, traversals).isEmpty();
 	}
 
 	/**
@@ -783,10 +801,17 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ParameterInfo p, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("p", p);
 		return cache.get(type, p, traversals).stream();
+	}
+
+	public <A extends Annotation> List<AnnotationInfo<A>> find2(Class<A> type, ParameterInfo p, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("p", p);
+		return cache.get(type, p, traversals);
 	}
 
 	/**
@@ -824,6 +849,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ParameterInfo p, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("p", p);
@@ -864,9 +890,15 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<? extends Annotation>> find(ParameterInfo p, AnnotationTraversal... traversals) {
 		assertArgNotNull("p", p);
 		return cache.get(null, p, traversals).stream();
+	}
+
+	public List<AnnotationInfo<? extends Annotation>> find2(ParameterInfo p, AnnotationTraversal... traversals) {
+		assertArgNotNull("p", p);
+		return cache.get(null, p, traversals);
 	}
 
 	/**
@@ -882,6 +914,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ParameterInfo p, AnnotationTraversal... traversals) {
 		assertArgNotNull("p", p);
 		return rstream(cache.get(null, p, traversals));
@@ -924,7 +957,7 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, ParameterInfo p, AnnotationTraversal... traversals) {
-		return find(type, p, traversals).findFirst().isPresent();
+		return ! find2(type, p, traversals).isEmpty();
 	}
 
 	/**
@@ -946,10 +979,17 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, FieldInfo f, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("f", f);
 		return cache.get(type, f, traversals).stream();
+	}
+
+	public <A extends Annotation> List<AnnotationInfo<A>> find2(Class<A> type, FieldInfo f, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("f", f);
+		return cache.get(type, f, traversals);
 	}
 
 	/**
@@ -970,9 +1010,15 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<? extends Annotation>> find(FieldInfo f, AnnotationTraversal... traversals) {
 		assertArgNotNull("f", f);
 		return cache.get(null, f, traversals).stream();
+	}
+
+	public List<AnnotationInfo<? extends Annotation>> find2(FieldInfo f, AnnotationTraversal... traversals) {
+		assertArgNotNull("f", f);
+		return cache.get(null, f, traversals);
 	}
 
 	/**
@@ -988,6 +1034,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, FieldInfo f, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("f", f);
@@ -1005,6 +1052,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(FieldInfo f, AnnotationTraversal... traversals) {
 		assertArgNotNull("f", f);
 		return rstream(cache.get(null, f, traversals));
@@ -1042,7 +1090,7 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, FieldInfo f, AnnotationTraversal... traversals) {
-		return find(type, f, traversals).findFirst().isPresent();
+		return ! find2(type, f, traversals).isEmpty();
 	}
 
 	/**
@@ -1064,10 +1112,10 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo c, AnnotationTraversal... traversals) {
+	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("c", c);
-		return cache.get(type, c, traversals).stream();
+		return cache.get(type, c, traversals);
 	}
 
 	/**
@@ -1088,9 +1136,15 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<? extends Annotation>> find(ConstructorInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("c", c);
 		return cache.get(null, c, traversals).stream();
+	}
+
+	public List<AnnotationInfo<? extends Annotation>> find2(ConstructorInfo c, AnnotationTraversal... traversals) {
+		assertArgNotNull("c", c);
+		return cache.get(null, c, traversals);
 	}
 
 	/**
@@ -1106,6 +1160,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ConstructorInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("c", c);
@@ -1123,6 +1178,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
+	@Deprecated
 	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ConstructorInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("c", c);
 		return rstream(cache.get(null, c, traversals));
@@ -1160,7 +1216,7 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo c, AnnotationTraversal... traversals) {
-		return find(type, c, traversals).findFirst().isPresent();
+		return ! find(type, c, traversals).isEmpty();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1172,18 +1228,18 @@ public class AnnotationProvider {
 			var ci = ClassInfo.of(c);
 			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
 		}
-		if (o instanceof Method m) {
-			var mi = MethodInfo.of(m);
-			return annotationMap == null ? liste() : annotationMap.find(mi.inner()).map(a -> ai(mi, a)).toList();
-		}
-		if (o instanceof Field f) {
-			var fi = FieldInfo.of(f);
-			return annotationMap == null ? liste() : annotationMap.find(fi.inner()).map(a -> ai(fi, a)).toList();
-		}
-		if (o instanceof Constructor c) {
-			var ci = ConstructorInfo.of(c);
-			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
-		}
+	if (o instanceof Method m) {
+		var mi = info(m);
+		return annotationMap == null ? liste() : annotationMap.find(mi.inner()).map(a -> ai(mi, a)).toList();
+	}
+	if (o instanceof Field f) {
+		var fi = info(f);
+		return annotationMap == null ? liste() : annotationMap.find(fi.inner()).map(a -> ai(fi, a)).toList();
+	}
+	if (o instanceof Constructor c) {
+		var ci = info(c);
+		return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
+	}
 		throw unsupportedOp();
 	}
 

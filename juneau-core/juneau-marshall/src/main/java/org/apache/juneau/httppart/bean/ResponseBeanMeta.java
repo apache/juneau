@@ -17,6 +17,7 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.annotation.InvalidAnnotationException.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -158,7 +159,7 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(Type t, AnnotationWorkList annotations) {
-		var ci = ClassInfo.of(t).unwrap(Value.class, Optional.class);
+		var ci = info(t).unwrap(Value.class, Optional.class);
 		if (! ci.hasAnnotation(Response.class))
 			return null;
 		var b = new Builder(annotations);

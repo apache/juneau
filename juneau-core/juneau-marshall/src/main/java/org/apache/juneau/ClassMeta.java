@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -112,8 +113,8 @@ public class ClassMeta<T> implements Type {
 				this.childUnswapMap = new ConcurrentHashMap<>();
 			}
 
-			Class<T> c = innerClass;
-			ci = ClassInfo.of(c);
+		Class<T> c = innerClass;
+		ci = info(c);
 
 			if (c.isPrimitive()) {
 				if (c == Boolean.TYPE)
@@ -293,9 +294,9 @@ public class ClassMeta<T> implements Type {
 					implClass = (Class<? extends T>)marshalledFilter.getImplClass();
 			}
 
-			if (innerClass != Object.class) {
-				ClassInfo x = implClass == null ? ci : ClassInfo.of(implClass);
-				noArgConstructor = x.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null);
+		if (innerClass != Object.class) {
+			ClassInfo x = implClass == null ? ci : info(implClass);
+			noArgConstructor = x.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null);
 			}
 
 			try {
@@ -440,8 +441,8 @@ public class ClassMeta<T> implements Type {
 		private ObjectSwap<T,?> createSwap(Swap s) {
 			Class<?> c = s.value();
 			if (ClassUtils.isVoid(c))
-				c = s.impl();
-			ClassInfo ci = ClassInfo.of(c);
+			c = s.impl();
+		ClassInfo ci = info(c);
 
 			if (ci.isChildOf(ObjectSwap.class)) {
 				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
@@ -461,33 +462,35 @@ public class ClassMeta<T> implements Type {
 			throw new ClassMetaRuntimeException(c, "Invalid swap class ''{0}'' specified.  Must extend from ObjectSwap or Surrogate.", c);
 		}
 
-		private BeanFilter findBeanFilter(BeanContext bc) {
-			try {
-				List<Bean> ba = list();
-				rstream(bc.getAnnotationProvider().find(Bean.class, info)).forEach(x -> ba.add(x.inner()));
-				if (! ba.isEmpty())
-					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
-			} catch (Exception e) {
-				throw toRex(e);
-			}
-			return null;
+	private BeanFilter findBeanFilter(BeanContext bc) {
+		try {
+			var ba = rstream(bc.getAnnotationProvider().find(Bean.class, info))
+				.map(AnnotationInfo::inner)
+				.toList();
+			if (! ba.isEmpty())
+				return BeanFilter.create(innerClass).applyAnnotations(ba).build();
+		} catch (Exception e) {
+			throw toRex(e);
 		}
+		return null;
+	}
 
 		private ClassMeta<?> findClassMeta(Class<?> c) {
 			return beanContext.getClassMeta(c, false);
 		}
 
-		private MarshalledFilter findMarshalledFilter(BeanContext bc) {
-			try {
-				List<Marshalled> ba = list();
-				bc.getAnnotationProvider().findTopDown(Marshalled.class, info).map(x -> x.inner()).forEach(x -> ba.add(x));
-				if (! ba.isEmpty())
-					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
-			} catch (Exception e) {
-				throw toRex(e);
-			}
-			return null;
+	private MarshalledFilter findMarshalledFilter(BeanContext bc) {
+		try {
+			var ba = rstream(bc.getAnnotationProvider().find(Marshalled.class, info))
+				.map(AnnotationInfo::inner)
+				.toList();
+			if (! ba.isEmpty())
+				return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
+		} catch (Exception e) {
+			throw toRex(e);
 		}
+		return null;
+	}
 
 		private ClassMeta<?>[] findParameters() {
 			return beanContext.findParameters(innerClass, innerClass);
@@ -546,7 +549,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings({ "unchecked" })
 	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<?> c, Visibility v) {
-		ClassInfo ci = ClassInfo.of(c);
+		ClassInfo ci = info(c);
 		if (ci.isAbstract())
 			return null;
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
@@ -629,9 +632,9 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
-		this.innerClass = innerClass;
-		this.info = ClassInfo.of(innerClass);
-		this.beanContext = beanContext;
+	this.innerClass = innerClass;
+	this.info = info(innerClass);
+	this.beanContext = beanContext;
 		String notABeanReason = null;
 
 		try (SimpleLock x = lock.write()) {
@@ -687,9 +690,9 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
-		this.innerClass = (Class<T>)Object[].class;
-		this.info = ClassInfo.of(innerClass);
-		this.args = args;
+	this.innerClass = (Class<T>)Object[].class;
+	this.info = info(innerClass);
+	this.args = args;
 		this.implClass = null;
 		this.childSwaps = null;
 		this.childSwapMap = null;
@@ -985,9 +988,9 @@ public class ClassMeta<T> implements Type {
 		try {
 			if (nn(example))
 				return jpSession.parse(example, this);
-			if (nn(exampleMethod))
-				return (T)MethodInfo.of(exampleMethod).invokeLenient(null, session);
-			if (nn(exampleField))
+		if (nn(exampleMethod))
+			return (T)info(exampleMethod).invokeLenient(null, session);
+		if (nn(exampleField))
 				return (T)exampleField.get(null);
 
 			if (isCollection()) {
@@ -1061,9 +1064,9 @@ public class ClassMeta<T> implements Type {
 	 * @return The no-arg constructor for this class, or <jk>null</jk> if it does not exist.
 	 */
 	public ConstructorInfo getImplClassConstructor(Visibility conVis) {
-		if (nn(implClass))
-			return ClassInfo.of(implClass).getNoArgConstructor(conVis).orElse(null);
-		return null;
+	if (nn(implClass))
+		return info(implClass).getNoArgConstructor(conVis).orElse(null);
+	return null;
 	}
 
 	/**

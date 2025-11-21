@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -43,9 +45,9 @@ public class Utils2 extends Utils {
 		if (o == null)
 			return null;
 		Map<String,MethodInfo> methods = PROPERTIES_METHODS.get(o.getClass());
-		if (methods == null) {
-			var ci = ClassInfo.of(o);
-			var methods2 = new LinkedHashMap<String,MethodInfo>();
+	if (methods == null) {
+		var ci = info(o);
+		var methods2 = new LinkedHashMap<String,MethodInfo>();
 			do {
 				String cname = ci.getNameShort();
 				ci.getDeclaredMethod(x -> x.hasName("properties"))

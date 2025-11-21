@@ -17,6 +17,7 @@
 package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.reflect.Visibility.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -160,7 +161,7 @@ public class BeanCreator<T> {
 	 * @param store The bean store creating this creator.
 	 */
 	protected BeanCreator(Class<T> type, BeanStore store) {
-		this.type = ClassInfo.of(type);
+		this.type = info(type);
 		this.store = BeanStore.of(store, store.outer.orElse(null));
 	}
 
@@ -390,7 +391,7 @@ public class BeanCreator<T> {
 	 * @return This object.
 	 */
 	public BeanCreator<T> type(Class<?> value) {
-		type = opt(value).map(x -> ClassInfo.of(x)).orElse(null);
+		type = opt(value).map(x -> info(x)).orElse(null);
 		return this;
 	}
 

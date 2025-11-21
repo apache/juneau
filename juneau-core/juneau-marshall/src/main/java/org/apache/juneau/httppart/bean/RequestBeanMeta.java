@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.httppart.bean;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -109,7 +110,7 @@ public class RequestBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Request}.
 	 */
 	public static RequestBeanMeta create(Class<?> c, AnnotationWorkList annotations) {
-		var ci = ClassInfo.of(c);
+		var ci = info(c);
 		if (! ci.hasAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(c).build();

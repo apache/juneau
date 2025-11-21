@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.swap;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -122,11 +123,11 @@ public abstract class ObjectSwap<T,S> {
 	 * Constructor.
 	 */
 	protected ObjectSwap() {
-		var ci = ClassInfo.of(this.getClass());
+		var ci = info(this.getClass());
 		normalClass = (Class<T>)ci.getParameterType(0, ObjectSwap.class);
 		swapClass = ci.getParameterType(1, ObjectSwap.class);
-		normalClassInfo = ClassInfo.of(normalClass);
-		swapClassInfo = ClassInfo.of(swapClass);
+		normalClassInfo = info(normalClass);
+		swapClassInfo = info(swapClass);
 		forMediaTypes = forMediaTypes();
 		template = withTemplate();
 	}
@@ -139,10 +140,10 @@ public abstract class ObjectSwap<T,S> {
 	 */
 	protected ObjectSwap(Class<T> normalClass, Class<?> swapClass) {
 		this.normalClass = normalClass;
-		this.swapClass = swapClass;
-		normalClassInfo = opt(normalClass).map(x -> ClassInfo.of(x)).orElse(null);
-		swapClassInfo = opt(swapClass).map(x -> ClassInfo.of(x)).orElse(null);
-		this.forMediaTypes = forMediaTypes();
+	this.swapClass = swapClass;
+	normalClassInfo = opt(normalClass).map(x -> info(x)).orElse(null);
+	swapClassInfo = opt(swapClass).map(x -> info(x)).orElse(null);
+	this.forMediaTypes = forMediaTypes();
 		this.template = withTemplate();
 	}
 

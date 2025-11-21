@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -265,9 +266,9 @@ public class VarResolverSession {
 		if (o instanceof Set c) {
 			try {
 				if (! containsVars(c))
-					return o;
-				Set c2 = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
-					.map(ci -> safe(() -> (Set)ci.inner().newInstance()))
+				return o;
+			Set c2 = info(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
+				.map(ci -> safe(() -> (Set)ci.inner().newInstance()))
 					.orElseGet(LinkedHashSet::new);
 				Set c3 = c2;
 				c.forEach(x -> c3.add(resolve(x)));
@@ -281,9 +282,9 @@ public class VarResolverSession {
 		if (o instanceof List c) {
 			try {
 				if (! containsVars(c))
-					return o;
-				List c2 = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
-					.map(ci -> safe(() -> (List)ci.inner().newInstance()))
+				return o;
+			List c2 = info(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
+				.map(ci -> safe(() -> (List)ci.inner().newInstance()))
 					.orElseGet(() -> list());
 				List c3 = c2;
 				c.forEach(x -> c3.add(resolve(x)));
@@ -297,9 +298,9 @@ public class VarResolverSession {
 		if (o instanceof Map m) {
 			try {
 				if (! containsVars(m))
-					return o;
-				Map m2 = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
-					.map(ci -> safe(() -> (Map)ci.inner().newInstance()))
+				return o;
+			Map m2 = info(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
+				.map(ci -> safe(() -> (Map)ci.inner().newInstance()))
 					.orElseGet(LinkedHashMap::new);
 				Map m3 = m2;
 				m.forEach((k, v) -> m3.put(k, resolve(v)));

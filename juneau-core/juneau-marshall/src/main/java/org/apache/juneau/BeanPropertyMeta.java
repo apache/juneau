@@ -147,9 +147,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (isVoid(c))
 				c = s.impl();
 			if (isVoid(c))
-				return null;
-			var ci = ClassInfo.of(c);
-			if (ci.isChildOf(ObjectSwap.class)) {
+			return null;
+		var ci = info(c);
+		if (ci.isChildOf(ObjectSwap.class)) {
 				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
 				if (nn(ps.forMediaTypes()))
 					throw unsupportedOp("TODO - Media types on swaps not yet supported on bean properties.");
@@ -221,9 +221,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			canRead |= (nn(field) || nn(getter));
 			canWrite |= (nn(field ) || nn(setter));
 
-			var ifi = innerField == null ? null : FieldInfo.of(innerField);
-			var gi = getter == null ? null : MethodInfo.of(getter);
-			var si = setter == null ? null : MethodInfo.of(setter);
+		var ifi = innerField == null ? null : info(innerField);
+		var gi = getter == null ? null : info(getter);
+		var si = setter == null ? null : info(setter);
 
 			if (nn(innerField)) {
 				List<Beanp> lp = list();
@@ -329,9 +329,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				}
 			}
 			if (nn(field)) {
-				if (isDyna) {
-					if (! ClassInfo.of(field.getType()).isChildOf(Map.class))
-						return false;
+			if (isDyna) {
+				if (! info(field.getType()).isChildOf(Map.class))
+					return false;
 				} else {
 					if (! ci.isChildOf(field.getType()))
 						return false;
@@ -644,10 +644,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		BeanContext bc = beanContext;
 		if (nn(a)) {
-			if (nn(field)) bc.getAnnotationProvider().find(a, FieldInfo.of(field)).map(x -> x.inner()).filter(filter).forEach(action);
-			if (nn(getter)) bc.getAnnotationProvider().find(a, MethodInfo.of(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).filter(filter).forEach(action);
-			if (nn(setter)) bc.getAnnotationProvider().find(a, MethodInfo.of(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).filter(filter).forEach(action);
-		}
+		if (nn(field)) bc.getAnnotationProvider().find(a, info(field)).map(x -> x.inner()).filter(filter).forEach(action);
+		if (nn(getter)) bc.getAnnotationProvider().find(a, info(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).filter(filter).forEach(action);
+		if (nn(setter)) bc.getAnnotationProvider().find(a, info(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).filter(filter).forEach(action);
+	}
 		return this;
 	}
 
@@ -686,10 +686,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		List<A> l = new LinkedList<>();
 		BeanContext bc = beanContext;
 		var ap = bc.getAnnotationProvider();
-		var fi = field == null ? null : FieldInfo.of(field);
-		var gi = getter == null ? null : MethodInfo.of(getter);
-		var si = setter == null ? null : MethodInfo.of(setter);
-		if (a == null)
+	var fi = field == null ? null : info(field);
+	var gi = getter == null ? null : info(getter);
+	var si = setter == null ? null : info(setter);
+	if (a == null)
 			return l;
 		rstream(ap.find(a, getBeanMeta().getClassMeta().getInfo())).forEach(x -> l.add(x.inner()));
 		if (nn(field)) {
@@ -698,23 +698,23 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 		if (nn(gi)) {
 			// Walk up the inheritance hierarchy for the getter method
-			forEachParentMethod(getter, parentGetter -> {
-				ap.find(a, MethodInfo.of(parentGetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			});
+		forEachParentMethod(getter, parentGetter -> {
+			ap.find(a, info(parentGetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
+		});
 			ap.find(a, gi, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, gi.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(setter)) {
 			// Walk up the inheritance hierarchy for the setter method
-			forEachParentMethod(setter, parentSetter -> {
-				ap.find(a, MethodInfo.of(parentSetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			});
+		forEachParentMethod(setter, parentSetter -> {
+			ap.find(a, info(parentSetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
+		});
 			ap.find(a, si, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, info(setter.getReturnType()))).forEach(x -> l.add(x.inner()));
 		}
-		if (nn(extraKeys)) {
-			MethodInfo eki = MethodInfo.of(extraKeys);
-			// Walk up the inheritance hierarchy for the extraKeys method
+	if (nn(extraKeys)) {
+		MethodInfo eki = info(extraKeys);
+		// Walk up the inheritance hierarchy for the extraKeys method
 			forEachParentMethod(extraKeys, parentExtraKeys -> {
 				ap.find(a, info(parentExtraKeys), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			});

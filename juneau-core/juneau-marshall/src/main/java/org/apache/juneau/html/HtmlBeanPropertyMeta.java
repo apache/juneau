@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.html;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.*;
@@ -80,12 +81,12 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		super(bpm);
 
 		Builder b = new Builder();
-		if (nn(bpm.getInnerField()))
-			annotationProvider.find(Html.class, FieldInfo.of(bpm.getInnerField())).map(x -> x.inner()).forEach(x -> b.findHtmlInfo(x));
-		if (nn(bpm.getGetter()))
-			annotationProvider.find(Html.class, MethodInfo.of(bpm.getGetter())).map(x -> x.inner()).forEach(x -> b.findHtmlInfo(x));
-		if (nn(bpm.getSetter()))
-			annotationProvider.find(Html.class, MethodInfo.of(bpm.getSetter())).map(x -> x.inner()).forEach(x -> b.findHtmlInfo(x));
+	if (nn(bpm.getInnerField()))
+		annotationProvider.find(Html.class, info(bpm.getInnerField())).map(x -> x.inner()).forEach(x -> b.findHtmlInfo(x));
+	if (nn(bpm.getGetter()))
+		annotationProvider.find(Html.class, info(bpm.getGetter())).map(x -> x.inner()).forEach(x -> b.findHtmlInfo(x));
+	if (nn(bpm.getSetter()))
+		annotationProvider.find(Html.class, info(bpm.getSetter())).map(x -> x.inner()).forEach(x -> b.findHtmlInfo(x));
 
 		this.format = b.format;
 		this.noTables = b.noTables;

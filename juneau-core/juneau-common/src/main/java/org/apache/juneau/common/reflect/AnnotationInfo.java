@@ -16,16 +16,26 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+import org.apache.juneau.common.utils.*;
+
+import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.annotation.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Encapsulates information about an annotation instance and the element it's declared on.
@@ -91,7 +101,7 @@ public class AnnotationInfo<T extends Annotation> {
 	final int rank;
 	private T a;  // Effectively final
 
-	private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(ClassInfo.of(a.annotationType()), m)).toList());
+private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
 
 	/**
 	 * Constructor.
@@ -321,7 +331,7 @@ public class AnnotationInfo<T extends Annotation> {
 		var jm = new LinkedHashMap<String, Object>();
 		jm.put(s(annotatable.getAnnotatableType()), annotatable.getLabel());
 		var ja = new LinkedHashMap<String, Object>();
-		var ca = ClassInfo.of(a.annotationType());
+		var ca = info(a.annotationType());
 		ca.getDeclaredMethods().stream().forEach(x -> {
 			try {
 				var v = x.invoke(a);

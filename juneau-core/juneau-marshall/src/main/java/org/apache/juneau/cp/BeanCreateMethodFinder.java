@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -144,9 +145,9 @@ public class BeanCreateMethodFinder<T> {
 	 */
 	public BeanCreateMethodFinder<T> find(Predicate<MethodInfo> filter) {
 		// @formatter:off
-		if (method == null) {
-			ClassInfo.of(resourceClass).getPublicMethod(
-				x -> x.isNotDeprecated()
+	if (method == null) {
+		info(resourceClass).getPublicMethod(
+			x -> x.isNotDeprecated()
 				&& x.hasReturnType(beanType)
 				&& ! x.hasAnnotation(BeanIgnore.class)
 				&& filter.test(x)

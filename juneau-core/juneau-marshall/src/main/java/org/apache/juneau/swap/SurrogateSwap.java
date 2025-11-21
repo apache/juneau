@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.swap;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -52,9 +53,9 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, BeanContext bc) {
-		List<SurrogateSwap<?,?>> l = new LinkedList<>();
-		var ci = ClassInfo.of(c);
-		ci.getPublicConstructors().stream().filter(x -> ! bc.getAnnotationProvider().has(BeanIgnore.class, x) && x.hasNumParameters(1) && x.isPublic()).forEach(x -> {
+	List<SurrogateSwap<?,?>> l = new LinkedList<>();
+	var ci = info(c);
+	ci.getPublicConstructors().stream().filter(x -> ! bc.getAnnotationProvider().has(BeanIgnore.class, x) && x.hasNumParameters(1) && x.isPublic()).forEach(x -> {
 			var pt = x.getParameter(0).getParameterType().inner();
 			if (! pt.equals(c.getDeclaringClass())) {
 				// Find the unswap method if there is one.

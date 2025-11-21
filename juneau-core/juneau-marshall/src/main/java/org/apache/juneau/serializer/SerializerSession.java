@@ -17,6 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -376,16 +377,16 @@ public class SerializerSession extends BeanTraverseSession {
 			if (cm.isArray() || (cm.isObject() && isArray(value))) {
 				if (((Object[])value).length == 0)
 					return true;
-			}
-			if (cm.isCollection() || (cm.isObject() && ClassInfo.of(value).isChildOf(Collection.class))) {
-				if (((Collection<?>)value).isEmpty())
+		}
+		if (cm.isCollection() || (cm.isObject() && info(value).isChildOf(Collection.class))) {
+			if (((Collection<?>)value).isEmpty())
 					return true;
 			}
 		}
 
-		if (isTrimEmptyMaps()) {
-			if (cm.isMap() || (cm.isObject() && ClassInfo.of(value).isChildOf(Map.class))) {
-				if (((Map<?,?>)value).isEmpty())
+	if (isTrimEmptyMaps()) {
+		if (cm.isMap() || (cm.isObject() && info(value).isChildOf(Map.class))) {
+			if (((Map<?,?>)value).isEmpty())
 					return true;
 			}
 		}
@@ -652,9 +653,9 @@ public class SerializerSession extends BeanTraverseSession {
 	public final String toString(Object o) {
 		if (o == null)
 			return null;
-		if (o.getClass() == Class.class)
-			return ClassInfo.of((Class<?>)o).getNameFull();
-		if (o.getClass() == ClassInfo.class)
+	if (o.getClass() == Class.class)
+		return info((Class<?>)o).getNameFull();
+	if (o.getClass() == ClassInfo.class)
 			return ((ClassInfo)o).getNameFull();
 		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);

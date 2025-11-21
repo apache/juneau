@@ -17,6 +17,7 @@
 package org.apache.juneau.httppart;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.list;
@@ -84,6 +85,9 @@ import org.apache.juneau.common.reflect.*;
  * </ul>
  */
 public class HttpPartSchema {
+
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Builder class.
 	 */
@@ -2547,8 +2551,8 @@ public class HttpPartSchema {
 		}
 
 		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
-			if (t instanceof Class<?>) {
-				AnnotationProvider.INSTANCE.findTopDown(c, ClassInfo.of((Class<?>)t)).map(AnnotationInfo::inner).forEach(this::apply);
+			if (t instanceof Class<?> c2) {
+				rstream(AP.find(c, info(c2))).forEach(x -> apply(x.inner()));
 			} else if (Value.isType(t)) {
 				apply(c, getValueParameterType(t));
 			}

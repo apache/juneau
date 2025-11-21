@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -289,9 +290,9 @@ public class ClassUtils {
 		if (! needsShuffle)
 			return args;
 		var params = new Object[paramTypes.length];
-		for (var i = 0; i < paramTypes.length; i++) {
-			var pt = ClassInfo.of(paramTypes[i]).getWrapperIfPrimitive();
-			for (var arg : args) {
+	for (var i = 0; i < paramTypes.length; i++) {
+		var pt = info(paramTypes[i]).getWrapperIfPrimitive();
+		for (var arg : args) {
 				if (nn(arg) && pt.isParentOf(arg.getClass())) {
 					params[i] = arg;
 					break;
@@ -428,9 +429,9 @@ public class ClassUtils {
 		// Pattern: com.example.MyClass$$EnhancerBySpringCGLIB$$abc123
 		if (s.contains("$$EnhancerBySpringCGLIB$$")) {
 			// Try to invoke getTargetClass() if available (Spring specific)
-			Value<Class<?>> v = Value.empty();
-			ClassInfo.of(c).getPublicMethods().stream().filter(m -> m.hasName("getTargetClass") && m.getParameterCount() == 0 && m.hasReturnType(Class.class)).forEach(m -> safe(() -> v.set(m.invoke(o))));
-			return v.isPresent() ? v.get() : c.getSuperclass();
+		Value<Class<?>> v = Value.empty();
+		info(c).getPublicMethods().stream().filter(m -> m.hasName("getTargetClass") && m.getParameterCount() == 0 && m.hasReturnType(Class.class)).forEach(m -> safe(() -> v.set(m.invoke(o))));
+		return v.isPresent() ? v.get() : c.getSuperclass();
 		}
 
 		// Javassist Proxy: Created by Javassist ProxyFactory
@@ -507,9 +508,9 @@ public class ClassUtils {
 	 * 	Never <jk>null</jk>.
 	 */
 	public static Stream<Annotation> streamRepeated(Annotation a) {
-		try {
-			var ci = ClassInfo.of(a.annotationType());
-			var mi = ci.getRepeatedAnnotationMethod();
+	try {
+		var ci = info(a.annotationType());
+		var mi = ci.getRepeatedAnnotationMethod();
 			if (nn(mi)) {
 				Annotation[] annotations = mi.invoke(a);
 				return Arrays.stream(annotations);

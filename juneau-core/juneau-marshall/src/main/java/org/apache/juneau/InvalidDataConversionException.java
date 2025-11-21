@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
@@ -41,11 +42,11 @@ public class InvalidDataConversionException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	private static String name(Class<?> c) {
-		return ClassInfo.of(c).getNameFull();
+		return info(c).getNameFull();
 	}
 
 	private static String name(Object o) {
-		return ClassInfo.of(o).getNameFull();
+		return info(o).getNameFull();
 	}
 
 	private static String value(Object o) {

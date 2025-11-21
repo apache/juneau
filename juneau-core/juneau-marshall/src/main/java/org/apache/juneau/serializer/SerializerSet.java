@@ -17,6 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -383,9 +384,9 @@ public class SerializerSet {
 		private Object createBuilder(Object o) {
 			if (o instanceof Class) {
 
-				// Check for no-arg constructor.
-				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor(c -> c.getParameterCount() == 0).orElse(null);
-				if (nn(ci))
+			// Check for no-arg constructor.
+			ConstructorInfo ci = info((Class<?>)o).getPublicConstructor(c -> c.getParameterCount() == 0).orElse(null);
+			if (nn(ci))
 					return ci.newInstance();
 
 				// Check for builder create method.
