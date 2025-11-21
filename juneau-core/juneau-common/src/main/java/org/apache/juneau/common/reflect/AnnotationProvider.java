@@ -503,10 +503,10 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
+	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("c", c);
-		return cache.get(type, c, traversals).stream();
+		return cache.get(type, c, traversals);
 	}
 
 	public <A extends Annotation> List<AnnotationInfo<A>> find2(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
@@ -620,7 +620,7 @@ public class AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
 	public <A extends Annotation> boolean has(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
-		return find(type, c, traversals).findFirst().isPresent();
+		return ! find(type, c, traversals).isEmpty();
 	}
 
 	/**
