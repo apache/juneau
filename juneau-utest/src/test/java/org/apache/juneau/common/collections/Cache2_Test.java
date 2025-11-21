@@ -147,21 +147,31 @@ class Cache2_Test extends TestBase {
 	@Test
 	void c01_nullKeys_defaultSupplier() {
 		var x = Cache2.of(String.class, Integer.class, String.class)
-			.supplier((k1, k2) -> "value")
+			.supplier((k1, k2) -> "value-" + k1 + "-" + k2)
 			.build();
 
-		assertThrows(IllegalArgumentException.class, () -> x.get(null, 123));
-		assertThrows(IllegalArgumentException.class, () -> x.get("user", null));
-		assertThrows(IllegalArgumentException.class, () -> x.get(null, null));
+		// Null keys are now allowed
+		assertEquals("value-null-123", x.get(null, 123));
+		assertEquals("value-user-null", x.get("user", null));
+		assertEquals("value-null-null", x.get(null, null));
+
+		// Cached values should be returned on subsequent calls
+		assertEquals("value-null-123", x.get(null, 123));
+		assertEquals("value-user-null", x.get("user", null));
 	}
 
 	@Test
 	void c02_nullKeys_overrideSupplier() {
 		var x = Cache2.of(String.class, Integer.class, String.class).build();
 
-		assertThrows(IllegalArgumentException.class, () -> x.get(null, 123, () -> "value"));
-		assertThrows(IllegalArgumentException.class, () -> x.get("user", null, () -> "value"));
-		assertThrows(IllegalArgumentException.class, () -> x.get(null, null, () -> "value"));
+		// Null keys are now allowed
+		assertEquals("value", x.get(null, 123, () -> "value"));
+		assertEquals("value", x.get("user", null, () -> "value"));
+		assertEquals("value", x.get(null, null, () -> "value"));
+
+		// Cached values should be returned on subsequent calls
+		assertEquals("value", x.get(null, 123, () -> "should-not-be-called"));
+		assertEquals("value", x.get("user", null, () -> "should-not-be-called"));
 	}
 
 	//====================================================================================================

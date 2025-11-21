@@ -18,7 +18,6 @@ package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.collections.CacheMode.*;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -236,32 +235,30 @@ public class Cache4<K1,K2,K3,K4,V> {
 	/**
 	 * Retrieves a cached value by four-part key using the default supplier.
 	 *
-	 * @param key1 First key component. Must not be <jk>null</jk>.
-	 * @param key2 Second key component. Must not be <jk>null</jk>.
-	 * @param key3 Third key component. Must not be <jk>null</jk>.
-	 * @param key4 Fourth key component. Must not be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk>.
+	 * @param key2 Second key component. Can be <jk>null</jk>.
+	 * @param key3 Third key component. Can be <jk>null</jk>.
+	 * @param key4 Fourth key component. Can be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 * @throws NullPointerException if no default supplier was configured.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 * 
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4);
 		return get(key1, key2, key3, key4, () -> supplier.apply(key1, key2, key3, key4));
 	}
 
 	/**
 	 * Retrieves a cached value by four-part key, computing it if necessary using the provided supplier.
 	 *
-	 * @param key1 First key component. Must not be <jk>null</jk>.
-	 * @param key2 Second key component. Must not be <jk>null</jk>.
-	 * @param key3 Third key component. Must not be <jk>null</jk>.
-	 * @param key4 Fourth key component. Must not be <jk>null</jk>.
-	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk>.
+	 * @param key2 Second key component. Can be <jk>null</jk>.
+	 * @param key3 Third key component. Can be <jk>null</jk>.
+	 * @param key4 Fourth key component. Can be <jk>null</jk>.
+	 * @param supplier The supplier to compute the value if it's not in the cache. Can be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 * 
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, java.util.function.Supplier<V> supplier) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4);
 		if (cacheMode == NONE)
 			return supplier.get();
 		Tuple4<K1,K2,K3,K4> wrapped = Tuple4.of(key1, key2, key3, key4);
@@ -286,10 +283,9 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 * @param key4 The fourth key.
 	 * @param value The value to associate with the four-part key.
 	 * @return The previous value associated with the four-part key, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 * 
 	 */
 	public V put(K1 key1, K2 key2, K3 key3, K4 key4, V value) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4);
 		return map.put(Tuple4.of(key1, key2, key3, key4), value);
 	}
 
@@ -301,10 +297,9 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 * @param key3 The third key.
 	 * @param key4 The fourth key.
 	 * @return The previous value associated with the four-part key, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 * 
 	 */
 	public V remove(K1 key1, K2 key2, K3 key3, K4 key4) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4);
 		return map.remove(Tuple4.of(key1, key2, key3, key4));
 	}
 

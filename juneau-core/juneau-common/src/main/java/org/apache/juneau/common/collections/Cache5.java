@@ -18,7 +18,6 @@ package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.collections.CacheMode.*;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -242,34 +241,32 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	/**
 	 * Retrieves a cached value by five-part key using the default supplier.
 	 *
-	 * @param key1 First key component. Must not be <jk>null</jk>.
-	 * @param key2 Second key component. Must not be <jk>null</jk>.
-	 * @param key3 Third key component. Must not be <jk>null</jk>.
-	 * @param key4 Fourth key component. Must not be <jk>null</jk>.
-	 * @param key5 Fifth key component. Must not be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk>.
+	 * @param key2 Second key component. Can be <jk>null</jk>.
+	 * @param key3 Third key component. Can be <jk>null</jk>.
+	 * @param key4 Fourth key component. Can be <jk>null</jk>.
+	 * @param key5 Fifth key component. Can be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 * @throws NullPointerException if no default supplier was configured.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 * 
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		return get(key1, key2, key3, key4, key5, () -> supplier.apply(key1, key2, key3, key4, key5));
 	}
 
 	/**
 	 * Retrieves a cached value by five-part key, computing it if necessary using the provided supplier.
 	 *
-	 * @param key1 First key component. Must not be <jk>null</jk>.
-	 * @param key2 Second key component. Must not be <jk>null</jk>.
-	 * @param key3 Third key component. Must not be <jk>null</jk>.
-	 * @param key4 Fourth key component. Must not be <jk>null</jk>.
-	 * @param key5 Fifth key component. Must not be <jk>null</jk>.
-	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk>.
+	 * @param key2 Second key component. Can be <jk>null</jk>.
+	 * @param key3 Third key component. Can be <jk>null</jk>.
+	 * @param key4 Fourth key component. Can be <jk>null</jk>.
+	 * @param key5 Fifth key component. Can be <jk>null</jk>.
+	 * @param supplier The supplier to compute the value if it's not in the cache. Can be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 * 
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5, java.util.function.Supplier<V> supplier) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		if (cacheMode == NONE)
 			return supplier.get();
 		Tuple5<K1,K2,K3,K4,K5> wrapped = Tuple5.of(key1, key2, key3, key4, key5);
@@ -295,10 +292,9 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	 * @param key5 The fifth key.
 	 * @param value The value to associate with the five-part key.
 	 * @return The previous value associated with the five-part key, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 * 
 	 */
 	public V put(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5, V value) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		return map.put(Tuple5.of(key1, key2, key3, key4, key5), value);
 	}
 
@@ -311,10 +307,9 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	 * @param key4 The fourth key.
 	 * @param key5 The fifth key.
 	 * @return The previous value associated with the five-part key, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
+	 * 
 	 */
 	public V remove(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		return map.remove(Tuple5.of(key1, key2, key3, key4, key5));
 	}
 

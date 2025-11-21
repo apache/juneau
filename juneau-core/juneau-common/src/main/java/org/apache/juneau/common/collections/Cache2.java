@@ -18,7 +18,6 @@ package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.collections.CacheMode.*;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -393,14 +392,12 @@ public class Cache2<K1,K2,V> {
 	 * 	User <jv>u</jv> = <jv>cache</jv>.get(<js>"tenant1"</js>, 123);
 	 * </p>
 	 *
-	 * @param key1 First key component. Must not be <jk>null</jk>.
-	 * @param key2 Second key component. Must not be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk>.
+	 * @param key2 Second key component. Can be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 * @throws NullPointerException if no default supplier was configured.
-	 * @throws IllegalArgumentException if key1 or key2 is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2) {
-		assertArgsNotNull("key1", key1, "key2", key2);
 		return get(key1, key2, () -> supplier.apply(key1, key2));
 	}
 
@@ -439,14 +436,12 @@ public class Cache2<K1,K2,V> {
 	 * 	<jsm>assert</jsm> <jv>u1</jv> == <jv>u2</jv>;  <jc>// Same instance</jc>
 	 * </p>
 	 *
-	 * @param key1 First key component. Must not be <jk>null</jk>.
-	 * @param key2 Second key component. Must not be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk>.
+	 * @param key2 Second key component. Can be <jk>null</jk>.
 	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
-	 * @throws IllegalArgumentException if key1 or key2 is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, java.util.function.Supplier<V> supplier) {
-		assertArgsNotNull("key1", key1, "key2", key2);
 		if (cacheMode == NONE)
 			return supplier.get();
 		Tuple2<K1,K2> wrapped = Tuple2.of(key1, key2);
@@ -465,35 +460,31 @@ public class Cache2<K1,K2,V> {
 	/**
 	 * Associates the specified value with the specified key pair.
 	 *
-	 * @param key1 The first key.
-	 * @param key2 The second key.
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
 	 * @param value The value to associate with the key pair.
 	 * @return The previous value associated with the key pair, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if key1 or key2 is <jk>null</jk>.
 	 */
 	public V put(K1 key1, K2 key2, V value) {
-		assertArgsNotNull("key1", key1, "key2", key2);
 		return map.put(Tuple2.of(key1, key2), value);
 	}
 
 	/**
 	 * Removes the entry for the specified key pair from the cache.
 	 *
-	 * @param key1 The first key.
-	 * @param key2 The second key.
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
 	 * @return The previous value associated with the key pair, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if key1 or key2 is <jk>null</jk>.
 	 */
 	public V remove(K1 key1, K2 key2) {
-		assertArgsNotNull("key1", key1, "key2", key2);
 		return map.remove(Tuple2.of(key1, key2));
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key pair.
 	 *
-	 * @param key1 The first key.
-	 * @param key2 The second key.
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the cache contains the key pair.
 	 */
 	public boolean containsKey(K1 key1, K2 key2) {

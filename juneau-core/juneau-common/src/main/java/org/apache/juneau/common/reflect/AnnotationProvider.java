@@ -229,7 +229,7 @@ public class AnnotationProvider {
 	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
 	 * <br>Default: <c>FALSE</c>
 	 */
-	private static final boolean ENABLE_NEW_CODE = b(System.getProperty("juneau.annotationProvider.useNewCode"));
+	private static final boolean ENABLE_NEW_CODE = true;
 
 	/**
 	 * Default instance.
@@ -713,6 +713,9 @@ public class AnnotationProvider {
 	@SuppressWarnings("unchecked")
 	public Stream<AnnotationInfo<? extends Annotation>> find(ClassInfo clazz, AnnotationTraversal... traversals) {
 		trackCall("find(ClassInfo, AnnotationTraversal...)");
+		if (ENABLE_NEW_CODE)
+			return (Stream<AnnotationInfo<? extends Annotation>>)(Stream<?>)findNew(null, clazz, traversals).stream();
+
 		assertArgNotNull("clazz", clazz);
 		if (traversals.length == 0)
 			traversals = a(PARENTS, PACKAGE);

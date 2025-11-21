@@ -18,7 +18,6 @@ package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.collections.CacheMode.*;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -246,30 +245,26 @@ public class Cache3<K1,K2,K3,V> {
 	/**
 	 * Retrieves a cached value by key triplet using the default supplier.
 	 *
-	 * @param key1 First key component. Must not be <jk>null</jk>.
-	 * @param key2 Second key component. Must not be <jk>null</jk>.
-	 * @param key3 Third key component. Must not be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk>.
+	 * @param key2 Second key component. Can be <jk>null</jk>.
+	 * @param key3 Third key component. Can be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 * @throws NullPointerException if no default supplier was configured.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, K3 key3) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		return get(key1, key2, key3, () -> supplier.apply(key1, key2, key3));
 	}
 
 	/**
 	 * Retrieves a cached value by key triplet, computing it if necessary using the provided supplier.
 	 *
-	 * @param key1 First key component. Must not be <jk>null</jk>.
-	 * @param key2 Second key component. Must not be <jk>null</jk>.
-	 * @param key3 Third key component. Must not be <jk>null</jk>.
+	 * @param key1 First key component. Can be <jk>null</jk>.
+	 * @param key2 Second key component. Can be <jk>null</jk>.
+	 * @param key3 Third key component. Can be <jk>null</jk>.
 	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, java.util.function.Supplier<V> supplier) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		if (cacheMode == NONE)
 			return supplier.get();
 		Tuple3<K1,K2,K3> wrapped = Tuple3.of(key1, key2, key3);
@@ -288,38 +283,34 @@ public class Cache3<K1,K2,K3,V> {
 	/**
 	 * Associates the specified value with the specified key triplet.
 	 *
-	 * @param key1 The first key.
-	 * @param key2 The second key.
-	 * @param key3 The third key.
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @param key3 The third key. Can be <jk>null</jk>.
 	 * @param value The value to associate with the key triplet.
 	 * @return The previous value associated with the key triplet, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
 	public V put(K1 key1, K2 key2, K3 key3, V value) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		return map.put(Tuple3.of(key1, key2, key3), value);
 	}
 
 	/**
 	 * Removes the entry for the specified key triplet from the cache.
 	 *
-	 * @param key1 The first key.
-	 * @param key2 The second key.
-	 * @param key3 The third key.
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @param key3 The third key. Can be <jk>null</jk>.
 	 * @return The previous value associated with the key triplet, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
 	public V remove(K1 key1, K2 key2, K3 key3) {
-		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		return map.remove(Tuple3.of(key1, key2, key3));
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key triplet.
 	 *
-	 * @param key1 The first key.
-	 * @param key2 The second key.
-	 * @param key3 The third key.
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @param key3 The third key. Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the cache contains the key triplet.
 	 */
 	public boolean containsKey(K1 key1, K2 key2, K3 key3) {

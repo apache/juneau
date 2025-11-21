@@ -65,14 +65,20 @@ class Cache5_Test extends TestBase {
 	@Test
 	void a03_nullKeys() {
 		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
-			.supplier((k1, k2, k3, k4, k5) -> "value")
+			.supplier((k1, k2, k3, k4, k5) -> "value-" + k1 + "-" + k2 + "-" + k3 + "-" + k4 + "-" + k5)
 			.build();
 
-		assertThrows(IllegalArgumentException.class, () -> x.get(null, "US", "west", "formal", 1));
-		assertThrows(IllegalArgumentException.class, () -> x.get("en", null, "west", "formal", 1));
-		assertThrows(IllegalArgumentException.class, () -> x.get("en", "US", null, "formal", 1));
-		assertThrows(IllegalArgumentException.class, () -> x.get("en", "US", "west", null, 1));
-		assertThrows(IllegalArgumentException.class, () -> x.get("en", "US", "west", "formal", null));
+		// Null keys are now allowed
+		assertEquals("value-null-US-west-formal-1", x.get(null, "US", "west", "formal", 1));
+		assertEquals("value-en-null-west-formal-1", x.get("en", null, "west", "formal", 1));
+		assertEquals("value-en-US-null-formal-1", x.get("en", "US", null, "formal", 1));
+		assertEquals("value-en-US-west-null-1", x.get("en", "US", "west", null, 1));
+		assertEquals("value-en-US-west-formal-null", x.get("en", "US", "west", "formal", null));
+		assertEquals("value-null-null-null-null-null", x.get(null, null, null, null, null));
+
+		// Cached values should be returned on subsequent calls
+		assertEquals("value-null-US-west-formal-1", x.get(null, "US", "west", "formal", 1));
+		assertEquals("value-en-null-west-formal-1", x.get("en", null, "west", "formal", 1));
 	}
 
 	@Test

@@ -17,7 +17,6 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.collections.CacheMode.*;
-import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static java.util.Collections.*;
@@ -454,13 +453,11 @@ public class Cache<K,V> {
 	 * 	Pattern <jv>p</jv> = <jv>cache</jv>.get(<js>"[0-9]+"</js>);
 	 * </p>
 	 *
-	 * @param key The cache key. Must not be <jk>null</jk>.
+	 * @param key The cache key. Can be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 * @throws NullPointerException if no default supplier was configured.
-	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
 	public V get(K key) {
-		assertArgNotNull("key", key);
 		return get(key, () -> supplier.apply(key));
 	}
 
@@ -499,13 +496,11 @@ public class Cache<K,V> {
 	 * 	<jsm>assert</jsm> <jv>p1</jv> == <jv>p2</jv>;  <jc>// Same instance</jc>
 	 * </p>
 	 *
-	 * @param key The cache key. Must not be <jk>null</jk>.
+	 * @param key The cache key. Can be <jk>null</jk>.
 	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
-	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
 	public V get(K key, Supplier<V> supplier) {
-		assertArgNotNull("key", key);
 		if (disableCaching)
 			return supplier.get();
 		Tuple1<K> wrapped = wrap(key);
@@ -527,13 +522,11 @@ public class Cache<K,V> {
 	/**
 	 * Associates the specified value with the specified key in this cache.
 	 *
-	 * @param key The cache key. Must not be <jk>null</jk>.
+	 * @param key The cache key. Can be <jk>null</jk>.
 	 * @param value The value to associate with the key.
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
 	public V put(K key, V value) {
-		assertArgNotNull("key", key);
 		return map.put(wrap(key), value);
 	}
 
@@ -614,12 +607,10 @@ public class Cache<K,V> {
 	/**
 	 * Removes the entry for the specified key from the cache.
 	 *
-	 * @param key The key to remove.
+	 * @param key The key to remove. Can be <jk>null</jk>.
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
-	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
 	public V remove(K key) {
-		assertArgNotNull("key", key);
 		Tuple1<K> wrapped = wrap(key);
 		V result = map.remove(wrapped);
 		wrapperCache.remove(key); // Clean up wrapper cache

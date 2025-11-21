@@ -100,12 +100,20 @@ class Cache_Test extends TestBase {
 	// Null key handling
 	//====================================================================================================
 
-	@Test void a04_nullKey_throwsException() {
-		var cache = Cache.of(String.class, String.class).build();
+	@Test void a04_nullKey_allowed() {
+		var cache = Cache.of(String.class, String.class)
+			.supplier(k -> "value-" + k)
+			.build();
 
-		// Null keys are not allowed and throw IllegalArgumentException
-		assertThrows(IllegalArgumentException.class, () -> cache.get(null, () -> "value"));
-		assertThrows(IllegalArgumentException.class, () -> cache.get(null));
+		// Null keys are now allowed
+		assertEquals("value-null", cache.get(null, () -> "value-null"));
+		
+		// Verify caching works with null keys
+		assertEquals("value-null", cache.get(null)); // Cached (hit #1)
+		assertEquals(1, cache.getCacheHits());
+		
+		assertEquals("value-null", cache.get(null)); // Cached (hit #2)
+		assertEquals(2, cache.getCacheHits());
 	}
 
 	//====================================================================================================
