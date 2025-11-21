@@ -73,67 +73,73 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">void</strong> a03_nullKeys() {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value-"</span> + k1 + <span class="jxr_string">"-"</span> + k2 + <span class="jxr_string">"-"</span> + k3 + <span class="jxr_string">"-"</span> + k4 + <span class="jxr_string">"-"</span> + k5)
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			.build();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.get(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.get(<span class="jxr_string">"en"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"formal"</span>, 1));
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <strong class="jxr_keyword">null</strong>, 1));
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">void</strong> a04_disableCaching() {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.cacheMode(NONE)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.supplier((k1, k2, k3, k4, k5) -&gt; {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  				callCount.incrementAndGet();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"value"</span>;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			})
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.build();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(2, callCount.get()); <em class="jxr_comment">// Called twice</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertEmpty(x);
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">void</strong> a05_maxSize() {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			.maxSize(2)
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			.build();
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 2);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertSize(2, x);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		x.get(<span class="jxr_string">"de"</span>, <span class="jxr_string">"DE"</span>, <span class="jxr_string">"south"</span>, <span class="jxr_string">"formal"</span>, 3); <em class="jxr_comment">// Doesn't exceed yet</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertSize(3, x);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		x.get(<span class="jxr_string">"es"</span>, <span class="jxr_string">"ES"</span>, <span class="jxr_string">"east"</span>, <span class="jxr_string">"formal"</span>, 4); <em class="jxr_comment">// Exceeds max (3 &gt; 2), triggers clear</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertSize(1, x); <em class="jxr_comment">// Cleared</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@Test
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">void</strong> a06_cacheHitsTracking() {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			.build();
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<em class="jxr_comment">// Null keys are now allowed</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEquals(<span class="jxr_string">"value-null-US-west-formal-1"</span>, x.get(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(<span class="jxr_string">"value-en-null-west-formal-1"</span>, x.get(<span class="jxr_string">"en"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEquals(<span class="jxr_string">"value-en-US-null-formal-1"</span>, x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEquals(<span class="jxr_string">"value-en-US-west-null-1"</span>, x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <strong class="jxr_keyword">null</strong>, 1));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(<span class="jxr_string">"value-en-US-west-formal-null"</span>, x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(<span class="jxr_string">"value-null-null-null-null-null"</span>, x.get(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<em class="jxr_comment">// Cached values should be returned on subsequent calls</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertEquals(<span class="jxr_string">"value-null-US-west-formal-1"</span>, x.get(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertEquals(<span class="jxr_string">"value-en-null-west-formal-1"</span>, x.get(<span class="jxr_string">"en"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">void</strong> a04_disableCaching() {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			.cacheMode(NONE)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			.supplier((k1, k2, k3, k4, k5) -&gt; {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  				callCount.incrementAndGet();
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"value"</span>;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			})
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			.build();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(2, callCount.get()); <em class="jxr_comment">// Called twice</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEmpty(x);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">void</strong> a05_maxSize() {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			.maxSize(2)
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			.build();
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 2);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertSize(2, x);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		x.get(<span class="jxr_string">"de"</span>, <span class="jxr_string">"DE"</span>, <span class="jxr_string">"south"</span>, <span class="jxr_string">"formal"</span>, 3); <em class="jxr_comment">// Doesn't exceed yet</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertSize(3, x);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		x.get(<span class="jxr_string">"es"</span>, <span class="jxr_string">"ES"</span>, <span class="jxr_string">"east"</span>, <span class="jxr_string">"formal"</span>, 4); <em class="jxr_comment">// Exceeds max (3 &gt; 2), triggers clear</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertSize(1, x); <em class="jxr_comment">// Cleared</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1); <em class="jxr_comment">// Miss</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertEquals(0, x.getCacheHits());
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1); <em class="jxr_comment">// Hit</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1); <em class="jxr_comment">// Hit</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertEquals(2, x.getCacheHits());
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> }
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	@Test
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">void</strong> a06_cacheHitsTracking() {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			.build();
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1); <em class="jxr_comment">// Miss</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertEquals(0, x.getCacheHits());
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1); <em class="jxr_comment">// Hit</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1); <em class="jxr_comment">// Hit</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(2, x.getCacheHits());
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> }
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
