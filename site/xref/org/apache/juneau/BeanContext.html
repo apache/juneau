@@ -3521,7 +3521,7 @@
 <a class="jxr_linenumber" name="L3513" href="#L3513">3513</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3514" href="#L3514">3514</a> 			propertyNamerBean = propertyNamer.getDeclaredConstructor().newInstance();
 <a class="jxr_linenumber" name="L3515" href="#L3515">3515</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L3516" href="#L3516">3516</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L3516" href="#L3516">3516</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L3517" href="#L3517">3517</a> 		}
 <a class="jxr_linenumber" name="L3518" href="#L3518">3518</a> 
 <a class="jxr_linenumber" name="L3519" href="#L3519">3519</a> 		LinkedList&lt;ObjectSwap&lt;?,?&gt;&gt; _swaps = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
@@ -3535,7 +3535,7 @@
 <a class="jxr_linenumber" name="L3527" href="#L3527">3527</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ci.isChildOf(Surrogate.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L3528" href="#L3528">3528</a> 					_swaps.addAll(SurrogateSwap.findObjectSwaps(ci.<strong class="jxr_keyword">inner</strong>(), <strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L3529" href="#L3529">3529</a> 				<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L3530" href="#L3530">3530</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate."</span>, cn(ci.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L3530" href="#L3530">3530</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate."</span>, cn(ci.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L3531" href="#L3531">3531</a> 			}
 <a class="jxr_linenumber" name="L3532" href="#L3532">3532</a> 		});
 <a class="jxr_linenumber" name="L3533" href="#L3533">3533</a> 		swapArray = _swaps.toArray(<strong class="jxr_keyword">new</strong> ObjectSwap[_swaps.size()]);
@@ -4275,7 +4275,7 @@
 <a class="jxr_linenumber" name="L4267" href="#L4267">4267</a> 			<strong class="jxr_keyword">if</strong> (cm2.isMap()) {
 <a class="jxr_linenumber" name="L4268" href="#L4268">4268</a> 				Class&lt;?&gt;[] pParams = (p.params().length == 0 ? a(Object.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>) : p.params());
 <a class="jxr_linenumber" name="L4269" href="#L4269">4269</a> 				<strong class="jxr_keyword">if</strong> (pParams.length != 2)
-<a class="jxr_linenumber" name="L4270" href="#L4270">4270</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid number of parameters specified for Map (must be 2): {0}"</span>, pParams.length);
+<a class="jxr_linenumber" name="L4270" href="#L4270">4270</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid number of parameters specified for Map (must be 2): {0}"</span>, pParams.length);
 <a class="jxr_linenumber" name="L4271" href="#L4271">4271</a> 				ClassMeta&lt;?&gt; keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
 <a class="jxr_linenumber" name="L4272" href="#L4272">4272</a> 				ClassMeta&lt;?&gt; valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 <a class="jxr_linenumber" name="L4273" href="#L4273">4273</a> 				<strong class="jxr_keyword">if</strong> (keyType.isObject() &amp;&amp; valueType.isObject())
@@ -4286,7 +4286,7 @@
 <a class="jxr_linenumber" name="L4278" href="#L4278">4278</a> 			<strong class="jxr_keyword">if</strong> (cm2.isCollection() || cm2.isOptional()) {
 <a class="jxr_linenumber" name="L4279" href="#L4279">4279</a> 				Class&lt;?&gt;[] pParams = (p.params().length == 0 ? a(Object.<strong class="jxr_keyword">class</strong>) : p.params());
 <a class="jxr_linenumber" name="L4280" href="#L4280">4280</a> 			<strong class="jxr_keyword">if</strong> (pParams.length != 1)
-<a class="jxr_linenumber" name="L4281" href="#L4281">4281</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid number of parameters specified for {1} (must be 1): {0}"</span>, pParams.length,
+<a class="jxr_linenumber" name="L4281" href="#L4281">4281</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid number of parameters specified for {1} (must be 1): {0}"</span>, pParams.length,
 <a class="jxr_linenumber" name="L4282" href="#L4282">4282</a> 					(cm2.isCollection() ? <span class="jxr_string">"Collection"</span> : cm2.isOptional() ? <span class="jxr_string">"Optional"</span> : <span class="jxr_string">"Array"</span>));
 <a class="jxr_linenumber" name="L4283" href="#L4283">4283</a> 				ClassMeta&lt;?&gt; elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 <a class="jxr_linenumber" name="L4284" href="#L4284">4284</a> 				<strong class="jxr_keyword">if</strong> (elementType.isObject())

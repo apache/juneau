@@ -257,7 +257,7 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">private</strong> String getElementAsString(<a name="XmlReader" href="../../../../org/apache/juneau/xml/XmlReader.html#XmlReader">XmlReader</a> r) {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">int</strong> t = r.getEventType();
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">if</strong> (t &gt; 2)
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid event type on stream reader for elementToString() method: ''{0}''"</span>, XmlUtils.toReadableEvent(r));
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid event type on stream reader for elementToString() method: ''{0}''"</span>, XmlUtils.toReadableEvent(r));
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		rsb.setLength(0);
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		rsb.append(<span class="jxr_string">"&lt;"</span>).append(t == 1 ? <span class="jxr_string">""</span> : <span class="jxr_string">"/"</span>).append(r.getLocalName());
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (t == 1)

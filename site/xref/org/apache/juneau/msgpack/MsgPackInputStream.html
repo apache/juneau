@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	DataType readDataType() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">int</strong> i = read();
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">if</strong> (i == -1)
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">throw</strong> ioException(<span class="jxr_string">"Unexpected end of file found at position {0}"</span>, pos);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Unexpected end of file found at position {0}"</span>, pos);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		currentDataType = TYPES[i];
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">switch</strong> (currentDataType) {
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">case</strong> NULL:
@@ -435,7 +435,7 @@
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 			}
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 				<strong class="jxr_keyword">throw</strong> ioException(<span class="jxr_string">"Invalid flag 0xC1 detected in stream."</span>);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 				<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Invalid flag 0xC1 detected in stream."</span>);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 		}
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">return</strong> currentDataType;
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}

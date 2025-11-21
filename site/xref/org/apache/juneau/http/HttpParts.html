@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Map.Entry e) {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">return</strong> BasicPart.of(s(e.getKey()), e.getValue());
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		}
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Object of type {0} could not be converted to a Part."</span>, cn(o));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Object of type {0} could not be converted to a Part."</span>, cn(o));
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<em class="jxr_javadoccomment">/**</em>

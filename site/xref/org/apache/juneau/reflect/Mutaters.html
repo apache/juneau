@@ -247,7 +247,7 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 						<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 							<strong class="jxr_keyword">return</strong> createMethod.invoke(<strong class="jxr_keyword">null</strong>, in);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 						} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 							<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 							<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 						}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 					}
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 				};
@@ -271,7 +271,7 @@
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 						<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 							<strong class="jxr_keyword">return</strong> cm.invoke(<strong class="jxr_keyword">null</strong>, in);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 						} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 							<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 							<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 						}
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 					}
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 				};
@@ -289,7 +289,7 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 							<strong class="jxr_keyword">return</strong> c.newInstance(<strong class="jxr_keyword">outer</strong>, in);
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 						<strong class="jxr_keyword">return</strong> c.newInstance(in);
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 					} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 						<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 						<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 					}
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 				}
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			};
@@ -303,7 +303,7 @@
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 						<strong class="jxr_keyword">return</strong> toXMethod.invoke(in);
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 					} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 						<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 						<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 					}
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 				}
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 			};

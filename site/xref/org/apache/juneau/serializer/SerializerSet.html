@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 				<strong class="jxr_keyword">if</strong> (Serializer.<strong class="jxr_keyword">class</strong>.isAssignableFrom(e)) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 					l.add(createBuilder(e));
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid type passed to SerializeGroup.Builder.add(): {0}"</span>, cn(e));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid type passed to SerializeGroup.Builder.add(): {0}"</span>, cn(e));
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			entries.addAll(0, l);
@@ -353,7 +353,7 @@
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Serializer.<strong class="jxr_keyword">class</strong>.isAssignableFrom(e)) {
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 					l.add(createBuilder(e));
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid type passed to SerializeGroup.Builder.set(): {0}"</span>, cn(e));
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid type passed to SerializeGroup.Builder.set(): {0}"</span>, cn(e));
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 				}
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 			}
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 			entries = l;
@@ -379,7 +379,7 @@
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Serializer.Builder x) {
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			Serializer.Builder x2 = x.copy();
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">if</strong> (ne(x.getClass(), x2.getClass()))
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Copy method not implemented on class {0}"</span>, cn(x));
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Copy method not implemented on class {0}"</span>, cn(x));
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 			x = x2;
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 				<strong class="jxr_keyword">if</strong> (nn(bcBuilder))
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 					x.beanContext(bcBuilder);

@@ -535,7 +535,7 @@
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Map.Entry e) {
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 			<strong class="jxr_keyword">return</strong> BasicHeader.of(s(e.getKey()), s(e.getValue()));
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 		}
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Object of type {0} could not be converted to a Header."</span>, cn(o));
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Object of type {0} could not be converted to a Header."</span>, cn(o));
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 	}
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 	<em class="jxr_javadoccomment">/**</em>

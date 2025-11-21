@@ -783,7 +783,7 @@
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 			.stream()
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 			.filter(x -&gt; x.canExtract(<strong class="jxr_keyword">this</strong>, o, name))
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 			.findFirst()
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 			.orElseThrow(() -&gt; runtimeException(<span class="jxr_string">"Could not find extractor for object of type {0}"</span>, cn(o))).extract(<strong class="jxr_keyword">this</strong>, o, name);
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 			.orElseThrow(() -&gt; rex(<span class="jxr_string">"Could not find extractor for object of type {0}"</span>, cn(o))).extract(<strong class="jxr_keyword">this</strong>, o, name);
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 	}
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 	@Override

@@ -291,7 +291,7 @@
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<strong class="jxr_keyword">private</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> appendHex(<strong class="jxr_keyword">int</strong> b) {
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">if</strong> (b &gt; 255)
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value passed to appendHex.  Must be in the range 0-255.  Value={0}"</span>, b);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed to appendHex.  Must be in the range 0-255.  Value={0}"</span>, b);
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		w('%').w(hexArray[b &gt;&gt;&gt; 4]).w(hexArray[b &amp; 0x0F]);
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}

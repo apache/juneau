@@ -869,7 +869,7 @@
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 			beanDefMapperBean = beanDefMapper.getDeclaredConstructor().newInstance();
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L865" href="#L865">865</a> 		}
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> 
 <a class="jxr_linenumber" name="L867" href="#L867">867</a> 		jsonSerializer = builder.jsonSerializerBuilder.build();

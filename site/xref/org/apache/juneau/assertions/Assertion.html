@@ -238,7 +238,7 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 					.run();
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<em class="jxr_comment">// If we couldn't create requested exception, just throw a RuntimeException.</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(cause, msg);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">throw</strong> rex(cause, msg);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			}
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		}
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BasicAssertionError" href="../../../../org/apache/juneau/BasicAssertionError.html#BasicAssertionError">BasicAssertionError</a>(cause, msg);

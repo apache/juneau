@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">if</strong> (Parser.<strong class="jxr_keyword">class</strong>.isAssignableFrom(v)) {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 					l.add(createBuilder(v));
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! v.getSimpleName().equals(<span class="jxr_string">"NoInherit"</span>)) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid type passed to ParserSet.Builder.add(): {0}"</span>, cn(v));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid type passed to ParserSet.Builder.add(): {0}"</span>, cn(v));
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 				}
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			}
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			entries.addAll(0, l);
@@ -357,7 +357,7 @@
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Parser.<strong class="jxr_keyword">class</strong>.isAssignableFrom(v)) {
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 					l.add(createBuilder(v));
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid type passed to ParserGrouup.Builder.set(): {0}"</span>, cn(v));
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid type passed to ParserGrouup.Builder.set(): {0}"</span>, cn(v));
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 				}
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 			}
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 			entries = l;
@@ -383,7 +383,7 @@
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Parser.Builder x) {
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 			Parser.Builder x2 = x.copy();
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">if</strong> (ne(x.getClass(), x2.getClass()))
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Copy method not implemented on class {0}"</span>, cn(x));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Copy method not implemented on class {0}"</span>, cn(x));
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 			x = x2;
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<strong class="jxr_keyword">if</strong> (nn(bcBuilder))
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 					x.beanContext(bcBuilder);

@@ -659,7 +659,7 @@
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 				cci = ClassInfo.of(type).getPublicConstructor(
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 					x -&gt; x.hasNumParameters(1)
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 					&amp;&amp; x.getParameter(0).canAccept(<strong class="jxr_keyword">this</strong>)
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 				).orElseThrow(() -&gt; runtimeException(<span class="jxr_string">"Public constructor not found: {0}({1})"</span>, cn(type), cn(<strong class="jxr_keyword">this</strong>)));
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 				).orElseThrow(() -&gt; rex(<span class="jxr_string">"Public constructor not found: {0}({1})"</span>, cn(type), cn(<strong class="jxr_keyword">this</strong>)));
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 				<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 				CONTEXT_CONSTRUCTORS.put(type, cci);
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 			}
@@ -668,7 +668,7 @@
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">private</strong> <a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a> innerBuild() {
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 			<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Type not specified for context builder {0}"</span>, cn(getClass()));
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Type not specified for context builder {0}"</span>, cn(getClass()));
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 			<strong class="jxr_keyword">if</strong> (nn(impl) &amp;&amp; type.isInstance(impl))
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 				<strong class="jxr_keyword">return</strong> type.<strong class="jxr_keyword">cast</strong>(impl);
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 			<strong class="jxr_keyword">if</strong> (nn(cache))
@@ -750,14 +750,14 @@
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> 					}
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 				}
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> 				<strong class="jxr_keyword">if</strong> (mi == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Could not find builder create method on class {0}"</span>, cn(type));
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Could not find builder create method on class {0}"</span>, cn(type));
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> 				BUILDER_CREATE_METHODS.put(type, mi);
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> 			}
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> 			<strong class="jxr_keyword">var</strong> b = (Builder)mi.invoke(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L749" href="#L749">749</a> 			b.type(type);
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 			<strong class="jxr_keyword">return</strong> b;
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 		}
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 	}
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 

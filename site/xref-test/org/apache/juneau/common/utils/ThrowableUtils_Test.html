@@ -123,26 +123,26 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">void</strong> c01_ioException_noArgs() {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		IOException ex = ioException(<span class="jxr_string">"File not found"</span>);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		IOException ex = ioex(<span class="jxr_string">"File not found"</span>);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(<span class="jxr_string">"File not found"</span>, ex.getMessage());
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertInstanceOf(IOException.<strong class="jxr_keyword">class</strong>, ex);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Test
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">void</strong> c02_ioException_withArgs() {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		IOException ex = ioException(<span class="jxr_string">"Failed to read file {0} at line {1}"</span>, <span class="jxr_string">"/tmp/test.txt"</span>, 42);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		IOException ex = ioex(<span class="jxr_string">"Failed to read file {0} at line {1}"</span>, <span class="jxr_string">"/tmp/test.txt"</span>, 42);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertEquals(<span class="jxr_string">"Failed to read file /tmp/test.txt at line 42"</span>, ex.getMessage());
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	@Test
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">void</strong> c03_ioException_emptyArgs() {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		IOException ex = ioException(<span class="jxr_string">"No formatting"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		IOException ex = ioex(<span class="jxr_string">"No formatting"</span>);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(<span class="jxr_string">"No formatting"</span>, ex.getMessage());
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@Test
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">void</strong> c04_ioException_throwable() {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		IOException ex = ioException(<span class="jxr_string">"Cannot write to {0}"</span>, <span class="jxr_string">"readonly.txt"</span>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		IOException ex = ioex(<span class="jxr_string">"Cannot write to {0}"</span>, <span class="jxr_string">"readonly.txt"</span>);
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; {
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">throw</strong> ex;
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		});
@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">void</strong> c05_ioException_multipleArgs() {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		IOException ex = ioException(<span class="jxr_string">"Error at position {0}:{1} in file {2}"</span>, 10, 25, <span class="jxr_string">"data.csv"</span>);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		IOException ex = ioex(<span class="jxr_string">"Error at position {0}:{1} in file {2}"</span>, 10, 25, <span class="jxr_string">"data.csv"</span>);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(<span class="jxr_string">"Error at position 10:25 in file data.csv"</span>, ex.getMessage());
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Test
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">void</strong> d02_runtimeException_withCause() {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> cause = <strong class="jxr_keyword">new</strong> SQLException(<span class="jxr_string">"Database error"</span>);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		RuntimeException ex = runtimeException(cause, <span class="jxr_string">"Failed to process {0} at {1}"</span>, <span class="jxr_string">"user"</span>, <span class="jxr_string">"login"</span>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		RuntimeException ex = rex(cause, <span class="jxr_string">"Failed to process {0} at {1}"</span>, <span class="jxr_string">"user"</span>, <span class="jxr_string">"login"</span>);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertEquals(<span class="jxr_string">"Failed to process user at login"</span>, ex.getMessage());
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertSame(cause, ex.getCause());
@@ -190,7 +190,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">void</strong> d04_ioException_withCause() {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> cause = <strong class="jxr_keyword">new</strong> FileNotFoundException(<span class="jxr_string">"config.xml"</span>);
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		IOException ex = ioException(cause, <span class="jxr_string">"Failed to load {0}"</span>, <span class="jxr_string">"configuration"</span>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		IOException ex = ioex(cause, <span class="jxr_string">"Failed to load {0}"</span>, <span class="jxr_string">"configuration"</span>);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertEquals(<span class="jxr_string">"Failed to load configuration"</span>, ex.getMessage());
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertSame(cause, ex.getCause());
@@ -200,7 +200,7 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	@Test
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">void</strong> d05_runtimeException_withCause_noArgs() {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> cause = <strong class="jxr_keyword">new</strong> NullPointerException(<span class="jxr_string">"value was null"</span>);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		RuntimeException ex = runtimeException(cause, <span class="jxr_string">"Processing failed"</span>);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		RuntimeException ex = rex(cause, <span class="jxr_string">"Processing failed"</span>);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertEquals(<span class="jxr_string">"Processing failed"</span>, ex.getMessage());
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertSame(cause, ex.getCause());
@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 	@Test
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">void</strong> d06_ioException_withCause_multipleArgs() {
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> cause = <strong class="jxr_keyword">new</strong> SocketException(<span class="jxr_string">"Connection reset"</span>);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		IOException ex = ioException(cause, <span class="jxr_string">"Network error at {0}:{1} for host {2}"</span>, <span class="jxr_string">"192.168.1.1"</span>, <span class="jxr_string">"8080"</span>, <span class="jxr_string">"server"</span>);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		IOException ex = ioex(cause, <span class="jxr_string">"Network error at {0}:{1} for host {2}"</span>, <span class="jxr_string">"192.168.1.1"</span>, <span class="jxr_string">"8080"</span>, <span class="jxr_string">"server"</span>);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertEquals(<span class="jxr_string">"Network error at 192.168.1.1:8080 for host server"</span>, ex.getMessage());
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertSame(cause, ex.getCause());
@@ -218,7 +218,7 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@Test
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<strong class="jxr_keyword">void</strong> d07_exception_withCause_chaining() {
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> rootCause = <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"disk full"</span>);
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		RuntimeException wrappedException = runtimeException(rootCause, <span class="jxr_string">"Cannot write file {0}"</span>, <span class="jxr_string">"output.txt"</span>);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		RuntimeException wrappedException = rex(rootCause, <span class="jxr_string">"Cannot write file {0}"</span>, <span class="jxr_string">"output.txt"</span>);
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		IllegalArgumentException topException = illegalArg(wrappedException, <span class="jxr_string">"Invalid operation"</span>);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertEquals(<span class="jxr_string">"Invalid operation"</span>, topException.getMessage());

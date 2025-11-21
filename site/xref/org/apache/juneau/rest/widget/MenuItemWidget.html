@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">try</strong> (Reader r = (Reader)o; Writer w = <strong class="jxr_keyword">new</strong> <a name="StringBuilderWriter" href="../../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>(sb)) {
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 				pipe(r, w);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			}
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o instanceof CharSequence) {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			sb.append((CharSequence)o);
@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 				session.serialize(o, sb);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		}
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<em class="jxr_comment">// @formatter:off</em>

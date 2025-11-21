@@ -4612,7 +4612,7 @@
 <a class="jxr_linenumber" name="L4604" href="#L4604">4604</a> 			<strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(s))
 <a class="jxr_linenumber" name="L4605" href="#L4605">4605</a> 				rootUrl = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L4606" href="#L4606">4606</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (s.indexOf(<span class="jxr_string">"://"</span>) == -1)
-<a class="jxr_linenumber" name="L4607" href="#L4607">4607</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL."</span>, value);
+<a class="jxr_linenumber" name="L4607" href="#L4607">4607</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL."</span>, value);
 <a class="jxr_linenumber" name="L4608" href="#L4608">4608</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L4609" href="#L4609">4609</a> 				rootUrl = s;
 <a class="jxr_linenumber" name="L4610" href="#L4610">4610</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -6968,7 +6968,7 @@
 <a class="jxr_linenumber" name="L6960" href="#L6960">6960</a> 						} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L6961" href="#L6961">6961</a> 							<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L6962" href="#L6962">6962</a> 						} <strong class="jxr_keyword">catch</strong> (Throwable e) {
-<a class="jxr_linenumber" name="L6963" href="#L6963">6963</a> 							<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L6963" href="#L6963">6963</a> 							<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L6964" href="#L6964">6964</a> 						}
 <a class="jxr_linenumber" name="L6965" href="#L6965">6965</a> 					});
 <a class="jxr_linenumber" name="L6966" href="#L6966">6966</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ror.isCompletableFuture()) {
@@ -7118,7 +7118,7 @@
 <a class="jxr_linenumber" name="L7110" href="#L7110">7110</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t2 : method.getExceptionTypes())
 <a class="jxr_linenumber" name="L7111" href="#L7111">7111</a> 						<strong class="jxr_keyword">if</strong> (t2.isInstance(e))
 <a class="jxr_linenumber" name="L7112" href="#L7112">7112</a> 							<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L7113" href="#L7113">7113</a> 					<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L7113" href="#L7113">7113</a> 					<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L7114" href="#L7114">7114</a> 				}
 <a class="jxr_linenumber" name="L7115" href="#L7115">7115</a> 			}
 <a class="jxr_linenumber" name="L7116" href="#L7116">7116</a> 		});
@@ -7624,7 +7624,7 @@
 <a class="jxr_linenumber" name="L7616" href="#L7616">7616</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L7617" href="#L7617">7617</a> 				x = beanStore.createBean(c).run();
 <a class="jxr_linenumber" name="L7618" href="#L7618">7618</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
-<a class="jxr_linenumber" name="L7619" href="#L7619">7619</a> 				<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L7619" href="#L7619">7619</a> 				<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L7620" href="#L7620">7620</a> 			}
 <a class="jxr_linenumber" name="L7621" href="#L7621">7621</a> 			partParsers.put(c, x);
 <a class="jxr_linenumber" name="L7622" href="#L7622">7622</a> 		}
@@ -7650,7 +7650,7 @@
 <a class="jxr_linenumber" name="L7642" href="#L7642">7642</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L7643" href="#L7643">7643</a> 				x = beanStore.createBean(c).run();
 <a class="jxr_linenumber" name="L7644" href="#L7644">7644</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
-<a class="jxr_linenumber" name="L7645" href="#L7645">7645</a> 				<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L7645" href="#L7645">7645</a> 				<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L7646" href="#L7646">7646</a> 			}
 <a class="jxr_linenumber" name="L7647" href="#L7647">7647</a> 			partSerializers.put(c, x);
 <a class="jxr_linenumber" name="L7648" href="#L7648">7648</a> 		}
@@ -7920,7 +7920,7 @@
 <a class="jxr_linenumber" name="L7912" href="#L7912">7912</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t2 : method.getExceptionTypes())
 <a class="jxr_linenumber" name="L7913" href="#L7913">7913</a> 				<strong class="jxr_keyword">if</strong> (t2.isInstance(t))
 <a class="jxr_linenumber" name="L7914" href="#L7914">7914</a> 					<strong class="jxr_keyword">throw</strong> t;
-<a class="jxr_linenumber" name="L7915" href="#L7915">7915</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L7915" href="#L7915">7915</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L7916" href="#L7916">7916</a> 		}
 <a class="jxr_linenumber" name="L7917" href="#L7917">7917</a> 	}
 <a class="jxr_linenumber" name="L7918" href="#L7918">7918</a> 

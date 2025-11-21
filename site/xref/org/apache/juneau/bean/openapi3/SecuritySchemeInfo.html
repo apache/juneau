@@ -350,7 +350,7 @@
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">public</strong> <a name="SecuritySchemeInfo" href="../../../../../org/apache/juneau/bean/openapi3/SecuritySchemeInfo.html#SecuritySchemeInfo">SecuritySchemeInfo</a> setIn(String value) {
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_IN))
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value passed in to setIn(String).  Value=''{0}'', valid values=[{1}]"</span>, value, toCdl(VALID_IN));
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setIn(String).  Value=''{0}'', valid values=[{1}]"</span>, value, toCdl(VALID_IN));
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 		in = value;
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 	}
@@ -440,7 +440,7 @@
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">public</strong> <a name="SecuritySchemeInfo" href="../../../../../org/apache/juneau/bean/openapi3/SecuritySchemeInfo.html#SecuritySchemeInfo">SecuritySchemeInfo</a> setType(String value) {
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_TYPES))
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values=[{1}]"</span>, value, toCdl(VALID_TYPES));
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values=[{1}]"</span>, value, toCdl(VALID_TYPES));
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 		type = value;
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}

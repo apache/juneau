@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">return</strong> 10 + c - 'a';
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">if</strong> (c &gt;= 'A' &amp;&amp; c &lt;= 'F')
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<strong class="jxr_keyword">return</strong> 10 + c - 'A';
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">throw</strong> ioException(<span class="jxr_string">"Invalid hex character ''{0}'' found in escape pattern."</span>, c);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Invalid hex character ''{0}'' found in escape pattern."</span>, c);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> decodeChars;
@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (b0 &lt; 192) {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 					<em class="jxr_comment">// 10xxxxxx</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 					<strong class="jxr_keyword">throw</strong> ioException(<span class="jxr_string">"Invalid hex value for first escape pattern in UTF-8 sequence: {0}"</span>, b0);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 					<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Invalid hex value for first escape pattern in UTF-8 sequence: {0}"</span>, b0);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (b0 &lt; 224) {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 					<em class="jxr_comment">// 110xxxxx	10xxxxxx</em>
@@ -168,7 +168,7 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 					}
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				} <strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 					<strong class="jxr_keyword">throw</strong> ioException(<span class="jxr_string">"Invalid hex value for first escape pattern in UTF-8 sequence: {0}"</span>, b0);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 					<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Invalid hex value for first escape pattern in UTF-8 sequence: {0}"</span>, b0);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 				<strong class="jxr_keyword">if</strong> (cx &lt; 0x10000)
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 					cbuf[off + i++] = (<strong class="jxr_keyword">char</strong>)cx;
@@ -190,7 +190,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> readEncodedByte() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">if</strong> (iEnd &lt;= iCurrent + 1)
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">throw</strong> ioException(<span class="jxr_string">"Incomplete trailing escape pattern"</span>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Incomplete trailing escape pattern"</span>);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">int</strong> h = buff[iCurrent++];
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">int</strong> l = buff[iCurrent++];
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		h = fromHexChar(h);
@@ -201,7 +201,7 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> readHex() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> c = buff[iCurrent++];
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (c != '%')
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">throw</strong> ioException(<span class="jxr_string">"Did not find expected '%' character in UTF-8 sequence."</span>);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Did not find expected '%' character in UTF-8 sequence."</span>);
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">return</strong> readEncodedByte();
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 

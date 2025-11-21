@@ -350,7 +350,7 @@
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 				watchService.close();
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 				<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 				<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 			} <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 				<strong class="jxr_keyword">super</strong>.interrupt();
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 			}
@@ -371,7 +371,7 @@
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 						<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 				}
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 				<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 				<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 			}
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		}
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 
@@ -433,7 +433,7 @@
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">if</strong> (nn(watcher))
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 				watcher.start();
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 		}
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 	}
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 
@@ -558,7 +558,7 @@
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 			<strong class="jxr_keyword">if</strong> (! Files.exists(p)) {
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 				Files.createDirectories(p.getParent());
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 				<strong class="jxr_keyword">if</strong> (! Files.exists(p) &amp;&amp; ! p.toFile().createNewFile()) {
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 					<strong class="jxr_keyword">throw</strong> ioException(<span class="jxr_string">"Could not create file: {0}"</span>, p);
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 					<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Could not create file: {0}"</span>, p);
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 				}
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 			}
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException e) {

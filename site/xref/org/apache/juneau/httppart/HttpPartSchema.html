@@ -392,7 +392,7 @@
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cn(a.annotationType()).startsWith(<span class="jxr_string">"jakarta.validation.constraints."</span>))
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 				applyJakartaValidation(a);
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Builder.apply(@{0}) not defined"</span>, cn(a));
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Builder.apply(@{0}) not defined"</span>, cn(a));
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 		}
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 
@@ -3551,7 +3551,7 @@
 <a class="jxr_linenumber" name="L3543" href="#L3543">3543</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3544" href="#L3544">3544</a> 			<strong class="jxr_keyword">return</strong> JsonMap.ofJson(s);
 <a class="jxr_linenumber" name="L3545" href="#L3545">3545</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
-<a class="jxr_linenumber" name="L3546" href="#L3546">3546</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L3546" href="#L3546">3546</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L3547" href="#L3547">3547</a> 		}
 <a class="jxr_linenumber" name="L3548" href="#L3548">3548</a> 	}
 <a class="jxr_linenumber" name="L3549" href="#L3549">3549</a> 
@@ -3562,7 +3562,7 @@
 <a class="jxr_linenumber" name="L3554" href="#L3554">3554</a> 					<strong class="jxr_keyword">return</strong> parseNumber(ss, Number.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L3555" href="#L3555">3555</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L3556" href="#L3556">3556</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
-<a class="jxr_linenumber" name="L3557" href="#L3557">3557</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L3557" href="#L3557">3557</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L3558" href="#L3558">3558</a> 		}
 <a class="jxr_linenumber" name="L3559" href="#L3559">3559</a> 	}
 <a class="jxr_linenumber" name="L3560" href="#L3560">3560</a> 
@@ -3573,7 +3573,7 @@
 <a class="jxr_linenumber" name="L3565" href="#L3565">3565</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3566" href="#L3566">3566</a> 			JsonList.ofJsonOrCdl(s).forEach(x -&gt; set.add(x.toString()));
 <a class="jxr_linenumber" name="L3567" href="#L3567">3567</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
-<a class="jxr_linenumber" name="L3568" href="#L3568">3568</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L3568" href="#L3568">3568</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L3569" href="#L3569">3569</a> 		}
 <a class="jxr_linenumber" name="L3570" href="#L3570">3570</a> 		<strong class="jxr_keyword">return</strong> set;
 <a class="jxr_linenumber" name="L3571" href="#L3571">3571</a> 	}

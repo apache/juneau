@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">public</strong> <a name="SwaggerElement" href="../../../../../org/apache/juneau/bean/swagger/SwaggerElement.html#SwaggerElement">SwaggerElement</a> set(String property, Object value) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">if</strong> (strict)
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Cannot set property ''{0}'' in strict mode."</span>, property);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Cannot set property ''{0}'' in strict mode."</span>, property);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">if</strong> (extra == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			extra = map();
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		extra.put(property, value);

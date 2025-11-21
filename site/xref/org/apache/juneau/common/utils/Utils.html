@@ -770,7 +770,7 @@
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException t) {
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 			<strong class="jxr_keyword">throw</strong> t;
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 			<strong class="jxr_keyword">throw</strong> ThrowableUtils.toRuntimeException(t);
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 			<strong class="jxr_keyword">throw</strong> ThrowableUtils.toRex(t);
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 		}
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 	}
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> 
@@ -789,7 +789,7 @@
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(e);
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			<strong class="jxr_keyword">throw</strong> rex(e);
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 		}
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 	}
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 
@@ -807,7 +807,7 @@
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException t) {
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> 			<strong class="jxr_keyword">throw</strong> t;
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(t);
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 			<strong class="jxr_keyword">throw</strong> toRex(t);
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 		}
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 	}
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 
@@ -899,7 +899,7 @@
 <a class="jxr_linenumber" name="L891" href="#L891">891</a> 			<strong class="jxr_keyword">return</strong> (T)Enum.valueOf((Class&lt;? <strong class="jxr_keyword">extends</strong> Enum&gt;)c, s);
 <a class="jxr_linenumber" name="L892" href="#L892">892</a> 		<strong class="jxr_keyword">var</strong> f = (Function&lt;String,T&gt;)ENV_FUNCTIONS.get(c);
 <a class="jxr_linenumber" name="L893" href="#L893">893</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid env type: {0}"</span>, c);
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid env type: {0}"</span>, c);
 <a class="jxr_linenumber" name="L895" href="#L895">895</a> 		<strong class="jxr_keyword">return</strong> f.apply(s);
 <a class="jxr_linenumber" name="L896" href="#L896">896</a> 	}
 <a class="jxr_linenumber" name="L897" href="#L897">897</a> 

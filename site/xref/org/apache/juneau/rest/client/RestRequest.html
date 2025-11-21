@@ -1652,7 +1652,7 @@
 <a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> 				q = s(value);  <em class="jxr_comment">// Works for NameValuePairs.</em>
 <a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> 			uriBuilder.setCustomQuery(q);
 <a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(e, <span class="jxr_string">"Could not read custom query."</span>);
+<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> 			<strong class="jxr_keyword">throw</strong> rex(e, <span class="jxr_string">"Could not read custom query."</span>);
 <a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> 		}
 <a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 	}
@@ -2517,7 +2517,7 @@
 <a class="jxr_linenumber" name="L2509" href="#L2509">2509</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isBean(value)) {
 <a class="jxr_linenumber" name="L2510" href="#L2510">2510</a> 			toBeanMap(value).forEach((k, v) -&gt; l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
 <a class="jxr_linenumber" name="L2511" href="#L2511">2511</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(value)) {
-<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value type for header arg ''{0}'': {1}"</span>, name, cn(value));
+<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value type for header arg ''{0}'': {1}"</span>, name, cn(value));
 <a class="jxr_linenumber" name="L2513" href="#L2513">2513</a> 		}
 <a class="jxr_linenumber" name="L2514" href="#L2514">2514</a> 
 <a class="jxr_linenumber" name="L2515" href="#L2515">2515</a> 		<strong class="jxr_keyword">if</strong> (skipIfEmpty)
@@ -2552,7 +2552,7 @@
 <a class="jxr_linenumber" name="L2544" href="#L2544">2544</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isBean(value)) {
 <a class="jxr_linenumber" name="L2545" href="#L2545">2545</a> 			toBeanMap(value).forEach((k, v) -&gt; l.add(createPart(k, v, PATH, serializer, schema, false)));
 <a class="jxr_linenumber" name="L2546" href="#L2546">2546</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(value)) {
-<a class="jxr_linenumber" name="L2547" href="#L2547">2547</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value type for path arg ''{0}'': {1}"</span>, name, cn(value));
+<a class="jxr_linenumber" name="L2547" href="#L2547">2547</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value type for path arg ''{0}'': {1}"</span>, name, cn(value));
 <a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 		}
 <a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> 
 <a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 		pathData.append(l);

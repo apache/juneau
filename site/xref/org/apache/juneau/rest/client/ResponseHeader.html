@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">return</strong> opt(parser.parse(HEADER, schema, getValue(), type));
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(e, <span class="jxr_string">"Could not parse response header {0}."</span>, getName());
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">throw</strong> rex(e, <span class="jxr_string">"Could not parse response header {0}."</span>, getName());
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		}
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 
@@ -269,9 +269,9 @@
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">if</strong> (e instanceof <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>)
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 				e = e.getCause();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		}
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Could not determine a method to construct type {0}"</span>, cn(c));
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Could not determine a method to construct type {0}"</span>, cn(c));
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<em class="jxr_javadoccomment">/**</em>

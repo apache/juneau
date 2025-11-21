@@ -547,7 +547,7 @@
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 			<strong class="jxr_keyword">return</strong> JsonParser.DEFAULT.parse(Json5Serializer.DEFAULT.serialize(<strong class="jxr_keyword">this</strong>), cm);
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> | <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 		}
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 	}
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 

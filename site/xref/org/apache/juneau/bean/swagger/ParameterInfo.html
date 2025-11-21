@@ -673,7 +673,7 @@
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 	<strong class="jxr_keyword">public</strong> <a name="ParameterInfo" href="../../../../../org/apache/juneau/bean/swagger/ParameterInfo.html#ParameterInfo">ParameterInfo</a> setCollectionFormat(String value) {
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_COLLECTION_FORMATS))
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_COLLECTION_FORMATS));
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_COLLECTION_FORMATS));
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 		collectionFormat = value;
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 	}
@@ -832,7 +832,7 @@
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> 	<strong class="jxr_keyword">public</strong> <a name="ParameterInfo" href="../../../../../org/apache/juneau/bean/swagger/ParameterInfo.html#ParameterInfo">ParameterInfo</a> setIn(String value) {
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_IN))
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_IN));
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_IN));
 <a class="jxr_linenumber" name="L828" href="#L828">828</a> 		in = value;
 <a class="jxr_linenumber" name="L829" href="#L829">829</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"path"</span>.equals(value))
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 			required = <strong class="jxr_keyword">true</strong>;
@@ -1033,7 +1033,7 @@
 <a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 	<strong class="jxr_keyword">public</strong> <a name="ParameterInfo" href="../../../../../org/apache/juneau/bean/swagger/ParameterInfo.html#ParameterInfo">ParameterInfo</a> setType(String value) {
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_TYPES))
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_TYPES));
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_TYPES));
 <a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 		type = value;
 <a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 	}

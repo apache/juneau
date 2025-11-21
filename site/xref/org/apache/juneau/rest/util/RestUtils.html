@@ -334,7 +334,7 @@
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 				<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 			}
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e); <em class="jxr_comment">// Should never happen.</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">throw</strong> toRex(e); <em class="jxr_comment">// Should never happen.</em>
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 		}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 
@@ -452,7 +452,7 @@
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 				<strong class="jxr_keyword">return</strong> requestURI;
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Exception(<span class="jxr_string">"case=6"</span>);
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(e, <span class="jxr_string">"Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''"</span>, requestURI, servletPath);
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">throw</strong> rex(e, <span class="jxr_string">"Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''"</span>, requestURI, servletPath);
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 		}
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 	}
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 
@@ -463,7 +463,7 @@
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> validateContextPath(String value) {
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">if</strong> (! isValidContextPath(value))
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Value is not a valid context path: [{0}]"</span>, value);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Value is not a valid context path: [{0}]"</span>, value);
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 	}
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -473,7 +473,7 @@
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> validatePathInfo(String value) {
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">if</strong> (! isValidPathInfo(value))
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Value is not a valid path-info path: [{0}]"</span>, value);
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Value is not a valid path-info path: [{0}]"</span>, value);
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 	}
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -483,7 +483,7 @@
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> validateServletPath(String value) {
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">if</strong> (! isValidServletPath(value))
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Value is not a valid servlet path: [{0}]"</span>, value);
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Value is not a valid servlet path: [{0}]"</span>, value);
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 	}
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> add(Map&lt;String,String[]&gt; m, String key, String val) {

@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">if</strong> (meta.ctx.isIgnoreUnknownBeanProperties())
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(meta.c, <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">throw</strong> bex(meta.c, <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		}
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		p.add(<strong class="jxr_keyword">this</strong>, property, value);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
@@ -152,7 +152,7 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 				<strong class="jxr_keyword">return</strong> meta.dynaProperty.getDynaMap(bean).containsKey(key);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">throw</strong> bex(e);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 			}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">return</strong> false;
@@ -175,7 +175,7 @@
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 						x.getDynaMap(bean).entrySet().forEach(y -&gt; s.add(<strong class="jxr_keyword">new</strong> <a name="BeanMapEntry" href="../../../org/apache/juneau/BeanMapEntry.html#BeanMapEntry">BeanMapEntry</a>(<strong class="jxr_keyword">this</strong>, x, y.getKey())));
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 					} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 						<strong class="jxr_keyword">throw</strong> bex(e);
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 					}
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 					s.add(<strong class="jxr_keyword">new</strong> <a name="BeanMapEntry" href="../../../org/apache/juneau/BeanMapEntry.html#BeanMapEntry">BeanMapEntry</a>(<strong class="jxr_keyword">this</strong>, x, x.getName()));
@@ -393,7 +393,7 @@
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 					getPropertyMeta(k).setArray(b, v);
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e1) {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 					<strong class="jxr_keyword">throw</strong> toRuntimeException(e1);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 					<strong class="jxr_keyword">throw</strong> toRex(e1);
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 				}
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 			});
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 			arrayPropertyCache = <strong class="jxr_keyword">null</strong>;
@@ -442,10 +442,10 @@
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 				propertyCache.forEach((k, v) -&gt; put(k, v));
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 				propertyCache = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e, meta.classMeta.innerClass, <span class="jxr_string">"IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''"</span>, c.getSimpleName(),
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 				<strong class="jxr_keyword">throw</strong> bex(e, meta.classMeta.innerClass, <span class="jxr_string">"IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''"</span>, c.getSimpleName(),
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 					Json5Serializer.DEFAULT.toString(getClasses(args)));
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 				<strong class="jxr_keyword">throw</strong> bex(e);
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 			}
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">return</strong> bean;
@@ -648,7 +648,7 @@
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 			p = getPropertyMeta(<span class="jxr_string">"*"</span>);
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 			<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(meta.c, <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 				<strong class="jxr_keyword">throw</strong> bex(meta.c, <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 		}
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<strong class="jxr_keyword">return</strong> p.set(<strong class="jxr_keyword">this</strong>, property, value);
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 	}
