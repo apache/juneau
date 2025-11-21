@@ -98,7 +98,7 @@ public class BuilderSwap<T,B> {
 		ConstructorInfo builderConstructor;
 		var pci = ClassInfo.of(objectClass);
 
-		bc.getAnnotationProvider().find(org.apache.juneau.annotation.Builder.class, pci).map(x -> x.inner()).filter(x -> isNotVoid(x.value())).forEach(x -> builderClass.set(x.value()));
+		bc.getAnnotationProvider().find(org.apache.juneau.annotation.Builder.class, pci).stream().map(x -> x.inner().value()).filter(x -> isNotVoid(x)).forEach(x -> builderClass.set(x));
 
 		builderCreateMethod = getBuilderCreateMethod(pci);
 

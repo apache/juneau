@@ -362,8 +362,7 @@ public class ClassMeta<T> implements Type {
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
 			if (nn(bc)) {
-				// Inline Context.forEachAnnotation() call
-				ap.find(Bean.class, ci).map(x -> x.inner()).forEach(x -> {
+				ap.find(Bean.class, ci).stream().map(AnnotationInfo::inner).forEach(x -> {
 					if (x.dictionary().length != 0)
 						beanRegistry = new BeanRegistry(bc, null, x.dictionary());
 					// This could be a non-bean POJO with a type name.
@@ -373,8 +372,7 @@ public class ClassMeta<T> implements Type {
 			}
 
 			if (example == null && nn(bc)) {
-				// Inline Context.forEachAnnotation() call
-				ap.find(Example.class, ci).map(x -> x.inner().value()).filter(x -> isNotEmpty(x)).forEach(x -> example = x);
+				rstream(ap.find(Example.class, ci)).map(x -> x.inner().value()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -> example = x);
 			}
 
 			if (example == null) {
@@ -498,21 +496,21 @@ public class ClassMeta<T> implements Type {
 
 		private void findSwaps(List<ObjectSwap> l, BeanContext bc) {
 
-		if (nn(bc))
-			// Inline Context.forEachAnnotation() call
-			bc.getAnnotationProvider().find(Swap.class, ci).map(x -> x.inner()).forEach(x -> l.add(createSwap(x)));
+			if (nn(bc))
+				bc.getAnnotationProvider().find(Swap.class, ci).stream().map(AnnotationInfo::inner).forEach(x -> l.add(createSwap(x)));
 
-			ObjectSwap defaultSwap = DefaultSwaps.find(ci);
-			if (defaultSwap == null)
-				defaultSwap = AutoObjectSwap.find(bc, ci);
-			if (defaultSwap == null)
-				defaultSwap = AutoNumberSwap.find(bc, ci);
-			if (defaultSwap == null)
-				defaultSwap = AutoMapSwap.find(bc, ci);
-			if (defaultSwap == null)
-				defaultSwap = AutoListSwap.find(bc, ci);
-			if (nn(defaultSwap))
-				l.add(defaultSwap);
+			var ds = DefaultSwaps.find(ci);
+			if (ds == null)
+				ds = AutoObjectSwap.find(bc, ci);
+			if (ds == null)
+				ds = AutoNumberSwap.find(bc, ci);
+			if (ds == null)
+				ds = AutoMapSwap.find(bc, ci);
+			if (ds == null)
+				ds = AutoListSwap.find(bc, ci);
+
+			if (nn(ds))
+				l.add(ds);
 		}
 	}
 
@@ -865,7 +863,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	public <A extends Annotation> ClassMeta<T> forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		if (beanContext != null) {
-			beanContext.getAnnotationProvider().find(type, info).map(x -> x.inner()).filter(x -> x != null).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+			beanContext.getAnnotationProvider().find(type, info).stream().map(AnnotationInfo::inner).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 		}
 		return this;
 	}
@@ -1113,11 +1111,11 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A getLastAnnotation(Class<A> a) {
-		Optional<A> o = (Optional<A>)annotationLastMap.get(a);
+		var o = (Optional<A>)annotationLastMap.get(a);
 		if (o == null) {
 			if (beanContext == null)
-				return AnnotationProvider.INSTANCE.find(a, info).findFirst().map(x -> x.inner()).orElse(null);
-			o = beanContext.getAnnotationProvider().find(a, info).findFirst().map(x -> x.inner());
+				return AnnotationProvider.INSTANCE.find(a, info).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
+			o = beanContext.getAnnotationProvider().find(a, info).stream().findFirst().map(AnnotationInfo::inner);
 			annotationLastMap.put(a, o);
 		}
 		return o.orElse(null);
@@ -1762,7 +1760,7 @@ public class ClassMeta<T> implements Type {
 		A[] array = annotationArray(type);
 		if (array == null) {
 			if (beanContext == null)
-				return AnnotationProvider.INSTANCE.find(type, info)
+				return AnnotationProvider.INSTANCE.find(type, info).stream()
 					.map(AnnotationInfo::inner)
 					.filter(a -> test(filter, a))
 					.findFirst();  // AnnotationProvider returns child-to-parent, so first is "last"
@@ -1936,13 +1934,13 @@ public class ClassMeta<T> implements Type {
 
 	@SuppressWarnings("unchecked")
 	private <A extends Annotation> A[] annotationArray(Class<A> type) {
-		A[] array = (A[])annotationArrayMap.get(type);
+		var array = (A[])annotationArrayMap.get(type);
 		if (array == null && nn(beanContext)) {
-			List<A> l = list();
-			beanContext.getAnnotationProvider().find(type, info).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
-			array = (A[])Array.newInstance(type, l.size());
-			for (int i = 0; i < l.size(); i++)
-				Array.set(array, i, l.get(i));
+			var ap = beanContext.getAnnotationProvider();
+			array = ap.find(type, info)
+				.stream()
+				.map(AnnotationInfo::inner)
+				.toArray(i -> array(type, i));
 			annotationArrayMap.put(type, array);
 		}
 		return array;

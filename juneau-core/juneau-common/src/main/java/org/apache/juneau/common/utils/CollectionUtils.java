@@ -388,6 +388,12 @@ public class CollectionUtils {
 		return l.get(l.size() - 1);
 	}
 
+	public static <E> E first(List<E> l) {
+		if (l == null || l.isEmpty())
+			return null;
+		return l.get(0);
+	}
+
 	/**
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
@@ -1605,6 +1611,10 @@ public class CollectionUtils {
 			return null;
 		var array = (E[])Array.newInstance(componentType, value.size());
 		return value.toArray(array);
+	}
+
+	public static <E> E[] array(Class<E> componentType, int length) {
+		return (E[])Array.newInstance(componentType, length);
 	}
 
 	/**

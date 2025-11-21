@@ -509,12 +509,6 @@ public class AnnotationProvider {
 		return cache.get(type, c, traversals);
 	}
 
-	public <A extends Annotation> List<AnnotationInfo<A>> find2(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("c", c);
-		return cache.get(type, c, traversals);
-	}
-
 	/**
 	 * Streams all annotations from a class using configurable traversal options, without filtering by annotation type.
 	 *

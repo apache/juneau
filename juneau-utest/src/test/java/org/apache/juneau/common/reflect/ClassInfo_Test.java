@@ -571,10 +571,10 @@ public class ClassInfo_Test extends TestBase {
 	@Test void lastAnnotation() {
 		// Use AnnotationProvider to get last annotation (first in child-to-parent order stream)
 		var ap = org.apache.juneau.common.reflect.AnnotationProvider.INSTANCE;
-		assertEquals(7, ap.find(A.class, g3).map(x -> x.inner()).findFirst().get().value());
-		assertEquals(7, ap.find(A.class, g4).map(x -> x.inner()).findFirst().get().value());
-		assertEquals(3, ap.find(A.class, g5).map(x -> x.inner()).findFirst().get().value());
-		assertEquals(5, ap.find(A.class, g3).map(x -> x.inner()).filter(x -> x.value() == 5).findFirst().get().value());
+		assertEquals(7, ap.find(A.class, g3).stream().map(AnnotationInfo::inner).findFirst().get().value());
+		assertEquals(7, ap.find(A.class, g4).stream().map(AnnotationInfo::inner).findFirst().get().value());
+		assertEquals(3, ap.find(A.class, g5).stream().map(AnnotationInfo::inner).findFirst().get().value());
+		assertEquals(5, ap.find(A.class, g3).stream().map(AnnotationInfo::inner).filter(x -> x.value() == 5).findFirst().get().value());
 	}
 
 	@Test void getPackageAnnotation() {
