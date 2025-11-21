@@ -31,7 +31,7 @@ public class SystemUtils {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				if (Boolean.getBoolean("SystemUtils.verbose"))
+				if (! Boolean.getBoolean("juneau.shutdown.quiet"))
 					SHUTDOWN_MESSAGES.forEach(x -> System.out.println(x.get()));  // NOSONAR - System.out.println is acceptable here for shutdown messages.
 			}
 		});

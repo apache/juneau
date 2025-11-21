@@ -21,13 +21,10 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
-import static org.apache.juneau.common.collections.CacheMode.*;
-import static java.util.stream.Stream.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
@@ -179,6 +176,7 @@ import org.apache.juneau.common.collections.*;
  * 	<li class='jc'>{@link MethodInfo}
  * </ul>
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class AnnotationProvider {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -209,70 +207,12 @@ public class AnnotationProvider {
 	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
 	 * <br>Default: <c>FALSE</c>
 	 */
-	private static final boolean LOG_ON_EXIT = b(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
-
-	/**
-	 * Enable performance instrumentation for tracking method call counts.
-	 *
-	 * <p>
-	 * System property: <c>juneau.annotationProvider.instrumentation</c>
-	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
-	 * <br>Default: <c>FALSE</c>
-	 */
-	private static final boolean ENABLE_INSTRUMENTATION = b(System.getProperty("juneau.annotationProvider.instrumentation"));
-
-	/**
-	 * Enable new optimized code path for annotation lookups.
-	 *
-	 * <p>
-	 * System property: <c>juneau.annotationProvider.useNewCode</c>
-	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
-	 * <br>Default: <c>FALSE</c>
-	 */
-	private static final boolean ENABLE_NEW_CODE = true;
+	private static final boolean LOG_ON_EXIT = true;//b(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
 
 	/**
 	 * Default instance.
 	 */
-	public static final AnnotationProvider INSTANCE = new AnnotationProvider(create());
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Performance instrumentation
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static final Map<String, Long> methodCallCounts = new java.util.concurrent.ConcurrentHashMap<>();
-
-	static {
-		if (ENABLE_INSTRUMENTATION) {
-			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-				try {
-					java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("/tmp/annotation-provider-stats.txt"));
-					pw.println("\n=== AnnotationProvider Method Call Statistics ===");
-					pw.println(String.format("%-65s %12s", "Method", "Calls"));
-					pw.println("=".repeat(80));
-
-					methodCallCounts.entrySet().stream()
-						.sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-						.forEach(e -> pw.println(String.format("%-65s %,12d", e.getKey(), e.getValue())));
-
-					long totalCalls = methodCallCounts.values().stream().mapToLong(Long::longValue).sum();
-					pw.println("=".repeat(80));
-					pw.println(String.format("%-65s %,12d", "TOTAL", totalCalls));
-					pw.println("=== Total methods instrumented: " + methodCallCounts.size() + " ===\n");
-					pw.close();
-					System.err.println("\n=== AnnotationProvider statistics written to /tmp/annotation-provider-stats.txt ===\n");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}));
-		}
-	}
-
-	private static void trackCall(String methodSignature) {
-		if (ENABLE_INSTRUMENTATION) {
-			methodCallCounts.merge(methodSignature, 1L, Long::sum);
-		}
-	}
+	public static final AnnotationProvider INSTANCE = new AnnotationProvider(create().logOnExit());
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
@@ -297,7 +237,7 @@ public class AnnotationProvider {
 	public static class Builder {
 		CacheMode cacheMode;
 		boolean logOnExit;
-		ReflectionMap.Builder<Annotation> runtimeAnnotations = ReflectionMap.create(Annotation.class);
+		ReflectionMap.Builder<Annotation> runtimeAnnotations;
 
 		Builder() {
 			cacheMode = CACHING_MODE;
@@ -310,6 +250,7 @@ public class AnnotationProvider {
 		 * @return A new immutable {@link AnnotationProvider} instance.
 		 */
 		public AnnotationProvider build() {
+			if ((runtimeAnnotations == null || runtimeAnnotations.isEmpty()) && INSTANCE != null) return INSTANCE;
 			return new AnnotationProvider(this);
 		}
 
@@ -353,83 +294,84 @@ public class AnnotationProvider {
 			return this;
 		}
 
-	/**
-	 * Adds runtime annotations to be applied to classes, methods, fields, and constructors.
-	 *
-	 * <p>
-	 * Runtime annotations are concrete Java objects that implement annotation interfaces (e.g., {@code @Bean}).
-	 * They allow you to dynamically apply annotations to code elements at runtime without modifying source code.
-	 *
-	 * <p>
-	 * <b>How It Works:</b>
-	 * <ol>
-	 * 	<li>Create annotation objects using builder classes (e.g., {@code BeanAnnotation.create()})
-	 * 	<li>Specify targets using {@code on()} or {@code onClass()} methods
-	 * 	<li>Set annotation properties (e.g., {@code typeName()}, {@code properties()})
-	 * 	<li>Build the annotation object
-	 * 	<li>Add to the provider via this method
-	 * </ol>
-	 *
-	 * <p>
-	 * <b>Targeting Requirements:</b>
-	 * <ul>
-	 * 	<li>Annotations MUST define an {@code onClass()} method returning {@code Class[]} for type-safe targeting
-	 * 	<li>OR an {@code on()} method returning {@code String[]} for string-based targeting
-	 * 	<li>The {@code on()} method accepts fully-qualified names:
-	 * 		<ul>
-	 * 			<li>{@code "com.example.MyClass"} - targets a class
-	 * 			<li>{@code "com.example.MyClass.myMethod"} - targets a method
-	 * 			<li>{@code "com.example.MyClass.myField"} - targets a field
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <p class='bjava'>
-	 * 	<jc>// Example 1: Target a specific class using type-safe targeting</jc>
-	 * 	Bean <jv>beanAnnotation</jv> = BeanAnnotation
-	 * 		.<jsm>create</jsm>()
-	 * 		.onClass(MyClass.<jk>class</jk>)  <jc>// Targets MyClass</jc>
-	 * 		.typeName(<js>"MyType"</js>)
-	 * 		.properties(<js>"id,name"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Example 2: Target multiple classes</jc>
-	 * 	Bean <jv>multiAnnotation</jv> = BeanAnnotation
-	 * 		.<jsm>create</jsm>()
-	 * 		.onClass(MyClass.<jk>class</jk>, OtherClass.<jk>class</jk>)
-	 * 		.sort(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Example 3: Target using string names (useful for dynamic/reflection scenarios)</jc>
-	 * 	Bean <jv>stringAnnotation</jv> = BeanAnnotation
-	 * 		.<jsm>create</jsm>()
-	 * 		.on(<js>"com.example.MyClass"</js>)
-	 * 		.findFluentSetters(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Example 4: Target a specific method</jc>
-	 * 	Swap <jv>swapAnnotation</jv> = SwapAnnotation
-	 * 		.<jsm>create</jsm>()
-	 * 		.on(<js>"com.example.MyClass.getValue"</js>)
-	 * 		.value(MySwap.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Add all runtime annotations to the provider</jc>
-	 * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
-	 * 		.<jsm>create</jsm>()
-	 * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>multiAnnotation</jv>, <jv>stringAnnotation</jv>, <jv>swapAnnotation</jv>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * <b>Priority:</b> Runtime annotations always take precedence over declared annotations at the same level.
-	 * They are evaluated first when searching for annotations.
-	 *
-	 * @param annotations The list of runtime annotation objects to add.
-	 * @return This object for method chaining.
-	 * @throws BeanRuntimeException If any annotation is invalid (missing {@code on()} or {@code onClass()} methods,
-	 * 	or if the methods return incorrect types).
-	 */
-	public Builder addRuntimeAnnotations(List<Annotation> annotations) {
+		/**
+		 * Adds runtime annotations to be applied to classes, methods, fields, and constructors.
+		 *
+		 * <p>
+		 * Runtime annotations are concrete Java objects that implement annotation interfaces (e.g., {@code @Bean}).
+		 * They allow you to dynamically apply annotations to code elements at runtime without modifying source code.
+		 *
+		 * <p>
+		 * <b>How It Works:</b>
+		 * <ol>
+		 * 	<li>Create annotation objects using builder classes (e.g., {@code BeanAnnotation.create()})
+		 * 	<li>Specify targets using {@code on()} or {@code onClass()} methods
+		 * 	<li>Set annotation properties (e.g., {@code typeName()}, {@code properties()})
+		 * 	<li>Build the annotation object
+		 * 	<li>Add to the provider via this method
+		 * </ol>
+		 *
+		 * <p>
+		 * <b>Targeting Requirements:</b>
+		 * <ul>
+		 * 	<li>Annotations MUST define an {@code onClass()} method returning {@code Class[]} for type-safe targeting
+		 * 	<li>OR an {@code on()} method returning {@code String[]} for string-based targeting
+		 * 	<li>The {@code on()} method accepts fully-qualified names:
+		 * 		<ul>
+		 * 			<li>{@code "com.example.MyClass"} - targets a class
+		 * 			<li>{@code "com.example.MyClass.myMethod"} - targets a method
+		 * 			<li>{@code "com.example.MyClass.myField"} - targets a field
+		 * 		</ul>
+		 * </ul>
+		 *
+		 * <p class='bjava'>
+		 * 	<jc>// Example 1: Target a specific class using type-safe targeting</jc>
+		 * 	Bean <jv>beanAnnotation</jv> = BeanAnnotation
+		 * 		.<jsm>create</jsm>()
+		 * 		.onClass(MyClass.<jk>class</jk>)  <jc>// Targets MyClass</jc>
+		 * 		.typeName(<js>"MyType"</js>)
+		 * 		.properties(<js>"id,name"</js>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Example 2: Target multiple classes</jc>
+		 * 	Bean <jv>multiAnnotation</jv> = BeanAnnotation
+		 * 		.<jsm>create</jsm>()
+		 * 		.onClass(MyClass.<jk>class</jk>, OtherClass.<jk>class</jk>)
+		 * 		.sort(<jk>true</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Example 3: Target using string names (useful for dynamic/reflection scenarios)</jc>
+		 * 	Bean <jv>stringAnnotation</jv> = BeanAnnotation
+		 * 		.<jsm>create</jsm>()
+		 * 		.on(<js>"com.example.MyClass"</js>)
+		 * 		.findFluentSetters(<jk>true</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Example 4: Target a specific method</jc>
+		 * 	Swap <jv>swapAnnotation</jv> = SwapAnnotation
+		 * 		.<jsm>create</jsm>()
+		 * 		.on(<js>"com.example.MyClass.getValue"</js>)
+		 * 		.value(MySwap.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Add all runtime annotations to the provider</jc>
+		 * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
+		 * 		.<jsm>create</jsm>()
+		 * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>multiAnnotation</jv>, <jv>stringAnnotation</jv>, <jv>swapAnnotation</jv>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * <b>Priority:</b> Runtime annotations always take precedence over declared annotations at the same level.
+		 * They are evaluated first when searching for annotations.
+		 *
+		 * @param annotations The list of runtime annotation objects to add.
+		 * @return This object for method chaining.
+		 * @throws BeanRuntimeException If any annotation is invalid (missing {@code on()} or {@code onClass()} methods,
+		 * 	or if the methods return incorrect types).
+		 */
+		public Builder addRuntimeAnnotations(List<Annotation> annotations) {
+			if (runtimeAnnotations == null) runtimeAnnotations = ReflectionMap.create(Annotation.class);
 
 			for (var a : annotations) {
 				try {
@@ -504,10 +446,7 @@ public class AnnotationProvider {
 		return new Builder();
 	}
 
-	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classRuntimeAnnotations;
-	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodRuntimeAnnotations;
-	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldRuntimeAnnotations;
-	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorRuntimeAnnotations;
+	private final Cache<Object,List<AnnotationInfo<Annotation>>> runtimeCache;
 	private final Cache3<Class<?>,ElementInfo,AnnotationTraversal[],List> cache;
 	private final ReflectionMap<Annotation> annotationMap;
 
@@ -517,66 +456,19 @@ public class AnnotationProvider {
 	 * @param builder The builder containing configuration settings.
 	 */
 	protected AnnotationProvider(Builder builder) {
-		var classCache = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findClassRuntimeAnnotations)
-			.cacheMode(builder.cacheMode);
-		if (builder.logOnExit)
-			classCache.logOnExit("AnnotationProvider.classRuntimeAnnotations");
-		this.classRuntimeAnnotations = classCache.build();
+		this.runtimeCache = Cache.<Object,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::load)
+			.cacheMode(builder.cacheMode)
+			.logOnExit(builder.logOnExit, "AnnotationProvider.runtimeAnnotations")
+			.build();
 
-		var methodCache = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findMethodRuntimeAnnotations)
-			.cacheMode(builder.cacheMode);
-		if (builder.logOnExit)
-			methodCache.logOnExit("AnnotationProvider.methodRuntimeAnnotations");
-		this.methodRuntimeAnnotations = methodCache.build();
+		this.cache = Cache3.<Class<?>,ElementInfo,AnnotationTraversal[],List>create()
+			.supplier(this::load)
+			.cacheMode(builder.cacheMode)
+			.logOnExit(builder.logOnExit, "AnnotationProvider.cache")
+			.build();
 
-		var fieldCache = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findFieldRuntimeAnnotations)
-			.cacheMode(builder.cacheMode);
-		if (builder.logOnExit)
-			fieldCache.logOnExit("AnnotationProvider.fieldRuntimeAnnotations");
-		this.fieldRuntimeAnnotations = fieldCache.build();
-
-		var constructorCache = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findConstructorRuntimeAnnotations)
-			.cacheMode(builder.cacheMode);
-		if (builder.logOnExit)
-			constructorCache.logOnExit("AnnotationProvider.constructorRuntimeAnnotations");
-		this.constructorRuntimeAnnotations = constructorCache.build();
-
-		var cache3 = Cache3.<Class<?>,ElementInfo,AnnotationTraversal[],List>create()
-			.supplier(this::findCached)
-			.cacheMode(builder.cacheMode);
-		if (builder.logOnExit)
-			cache3.logOnExit("AnnotationProvider.cache");
-		this.cache = cache3.build();
-
-		this.annotationMap = builder.runtimeAnnotations.build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Private implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private List<AnnotationInfo<Annotation>> findClassRuntimeAnnotations(Class<?> forClass) {
-		var ci = ClassInfo.of(forClass);
-		return annotationMap.find(forClass).map(a -> ai(ci, a)).toList();
-	}
-
-	private List<AnnotationInfo<Annotation>> findMethodRuntimeAnnotations(Method forMethod) {
-		var mi = MethodInfo.of(forMethod);
-		return annotationMap.find(forMethod).map(a -> ai(mi, a)).toList();
-	}
-
-	private List<AnnotationInfo<Annotation>> findFieldRuntimeAnnotations(Field forField) {
-		var fi = FieldInfo.of(forField);
-		return annotationMap.find(forField).map(a -> ai(fi, a)).toList();
-	}
-
-	private List<AnnotationInfo<Annotation>> findConstructorRuntimeAnnotations(Constructor<?> forConstructor) {
-		var ci = ConstructorInfo.of(forConstructor);
-		return annotationMap.find(forConstructor).map(a -> ai(ci, a)).toList();
+		this.annotationMap = opt(builder.runtimeAnnotations).map(x -> x.build()).orElse(null);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -607,86 +499,21 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param clazz The class to search.
+	 * @param c The class to search.
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
-		trackCall("find(Class, ClassInfo, AnnotationTraversal...)");
-		if (ENABLE_NEW_CODE)
-			return findNew(type, clazz, traversals).stream();
-
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
-		assertArgNotNull("clazz", clazz);
-		if (traversals.length == 0)
-			traversals = a(PARENTS, PACKAGE);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return concat(
-						classRuntimeAnnotations.get(clazz.inner()).stream(),
-						clazz.getDeclaredAnnotations().stream()
-					)
-					.filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
-				} else if (traversal == PARENTS) {
-					return clazz.getParentsAndInterfaces().stream().flatMap(x ->
-						concat(
-							classRuntimeAnnotations.get(x.inner()).stream(),
-							x.getDeclaredAnnotations().stream()
-						).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)
-					);
-				} else if (traversal == PACKAGE) {
-					return opt(clazz.getPackage()).map(x -> x.getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)).orElse(Stream.empty());
-				}
-				throw illegalArg("Invalid traversal type for class annotations: {0}", traversal);
-			});
+		assertArgNotNull("c", c);
+		return cache.get(type, c, traversals).stream();
 	}
 
-	/**
-	 * New optimized implementation of find(Class, ClassInfo, AnnotationTraversal...).
-	 * Returns a List for better performance.
-	 * Enable with -Djuneau.annotationProvider.enableNewCode=true
-	 */
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> List<AnnotationInfo<A>> findNew(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
-		return (List<AnnotationInfo<A>>)cache.get(type, clazz, traversals);
+	public <A extends Annotation> List<AnnotationInfo<A>> find2(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("c", c);
+		return cache.get(type, c, traversals);
 	}
-
-	/**
-	 * Computes and caches the complete list of annotations for a given type, class, and traversal combination.
-	 * This is the supplier function for the findCache.
-	 */
-	@SuppressWarnings("unchecked")
-	private List findCached(Class<?> type, ElementInfo element, AnnotationTraversal[] traversals) {
-		var l = new ArrayList();
-		var filter = isType((Class<? extends Annotation>)type);
-
-		if (element instanceof ClassInfo ci) {
-			if (traversals.length == 0)
-				traversals = a(PARENTS, PACKAGE);
-			var t = Arrays.asList(traversals);
-			if (t.contains(SELF)) {
-				classRuntimeAnnotations.get(ci.inner()).stream().filter(filter).forEach(l::add);
-				ci.getDeclaredAnnotations().stream().filter(filter).forEach(l::add);
-			}
-			if (t.contains(PARENTS)) {
-				for (var p : ci.getParentsAndInterfaces()) {
-					classRuntimeAnnotations.get(p.inner()).stream().filter(filter).forEach(l::add);
-					p.getDeclaredAnnotations().stream().filter(filter).forEach(l::add);
-				}
-			}
-			if (t.contains(PACKAGE)) {
-				if (ci.getPackage() != null)
-					ci.getPackage().getAnnotations().stream().filter(filter).forEach(l::add);
-			}
-		}
-
-		return l;
-	}
-
 
 	/**
 	 * Streams all annotations from a class using configurable traversal options, without filtering by annotation type.
@@ -706,40 +533,18 @@ public class AnnotationProvider {
 	 * 		find(<jv>ci</jv>, SELF, PARENTS);
 	 * </p>
 	 *
-	 * @param clazz The class to search.
+	 * @param c The class to search.
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
-	public Stream<AnnotationInfo<? extends Annotation>> find(ClassInfo clazz, AnnotationTraversal... traversals) {
-		trackCall("find(ClassInfo, AnnotationTraversal...)");
-		if (ENABLE_NEW_CODE)
-			return (Stream<AnnotationInfo<? extends Annotation>>)(Stream<?>)findNew(null, clazz, traversals).stream();
+	public Stream<AnnotationInfo<? extends Annotation>> find(ClassInfo c, AnnotationTraversal... traversals) {
+		assertArgNotNull("c", c);
+		return cache.get(null, c, traversals).stream();
+	}
 
-		assertArgNotNull("clazz", clazz);
-		if (traversals.length == 0)
-			traversals = a(PARENTS, PACKAGE);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return concat(
-						classRuntimeAnnotations.get(clazz.inner()).stream(),
-						clazz.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<Annotation>)a)
-					);
-				} else if (traversal == PARENTS) {
-					return clazz.getParentsAndInterfaces().stream().flatMap(x -> {
-						return concat(
-							classRuntimeAnnotations.get(x.inner()).stream(),
-							x.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<Annotation>)a)
-						);
-					});
-				} else if (traversal == PACKAGE) {
-					return opt(clazz.getPackage()).map(x -> x.getAnnotations().stream()).orElse(Stream.empty());
-				}
-				throw illegalArg("Invalid traversal type for class annotations: {0}", traversal);
-			});
+	public List<AnnotationInfo<? extends Annotation>> find2(ClassInfo c, AnnotationTraversal... traversals) {
+		assertArgNotNull("c", c);
+		return cache.get(null, c, traversals);
 	}
 
 	/**
@@ -751,13 +556,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param clazz The class to search.
+	 * @param c The class to search.
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(Class, ClassInfo, AnnotationTraversal...)");
-		return rstream(find(type, clazz, traversals).toList());
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("c", c);
+		return rstream(cache.get(type, c, traversals));
 	}
 
 	/**
@@ -767,13 +573,13 @@ public class AnnotationProvider {
 	 * This is equivalent to calling {@link #find(ClassInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
-	 * @param clazz The class to search.
+	 * @param c The class to search.
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ClassInfo clazz, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(ClassInfo, AnnotationTraversal...)");
-		return rstream(find(clazz, traversals).toList());
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ClassInfo c, AnnotationTraversal... traversals) {
+		assertArgNotNull("c", c);
+		return rstream(cache.get(null, c, traversals));
 	}
 
 	/**
@@ -807,15 +613,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param clazz The class to search.
+	 * @param c The class to search.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, PARENTS, PACKAGE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#PARENTS PARENTS}, {@link AnnotationTraversal#PACKAGE PACKAGE}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
-		trackCall("has(Class, ClassInfo, AnnotationTraversal...)");
-		return find(type, clazz, traversals).findFirst().isPresent();
+	public <A extends Annotation> boolean has(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
+		return find(type, c, traversals).findFirst().isPresent();
 	}
 
 	/**
@@ -837,42 +642,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param method The method to search.
+	 * @param m The method to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
-		trackCall("find(Class, MethodInfo, AnnotationTraversal...)");
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, MethodInfo m, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
-		assertArgNotNull("method", method);
-		if (traversals.length == 0)
-			traversals = a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return concat(
-						methodRuntimeAnnotations.get(method.inner()).stream(),
-						method.getDeclaredAnnotations().stream()
-					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
-				} else if (traversal == MATCHING_METHODS) {
-					return method.getMatchingMethods().stream().skip(1).flatMap(m ->
-						concat(
-							methodRuntimeAnnotations.get(m.inner()).stream(),
-							m.getDeclaredAnnotations().stream()
-						).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)
-					);
-				} else if (traversal == DECLARING_CLASS) {
-					return find(type, method.getDeclaringClass(), PARENTS);
-				} else if (traversal == RETURN_TYPE) {
-					return find(type, method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
-				} else if (traversal == PACKAGE) {
-					return opt(method.getDeclaringClass().getPackage()).map(x -> x.getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)).orElse(Stream.empty());
-				}
-				throw illegalArg("Invalid traversal type for method annotations: {0}", traversal);
-			});
+		assertArgNotNull("m", m);
+		return cache.get(type, m, traversals).stream();
 	}
 
 	/**
@@ -893,40 +670,13 @@ public class AnnotationProvider {
 	 * 		find(<jv>mi</jv>, SELF, MATCHING_METHODS, RETURN_TYPE);
 	 * </p>
 	 *
-	 * @param method The method to search.
+	 * @param m The method to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> find(MethodInfo method, AnnotationTraversal... traversals) {
-		trackCall("find(MethodInfo, AnnotationTraversal...)");
-		assertArgNotNull("method", method);
-		if (traversals.length == 0)
-			traversals = a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return concat(
-						methodRuntimeAnnotations.get(method.inner()).stream(),
-						method.getDeclaredAnnotations().stream()
-					);
-				} else if (traversal == MATCHING_METHODS) {
-					return method.getMatchingMethods().stream().skip(1).flatMap(m -> {
-						return concat(
-							methodRuntimeAnnotations.get(m.inner()).stream(),
-							m.getDeclaredAnnotations().stream()
-						);
-					});
-				} else if (traversal == DECLARING_CLASS) {
-					return find(method.getDeclaringClass(), PARENTS);
-				} else if (traversal == RETURN_TYPE) {
-					return find(method.getReturnType().unwrap(Value.class, Optional.class), PARENTS);
-				} else if (traversal == PACKAGE) {
-					return opt(method.getDeclaringClass().getPackage()).map(x -> x.getAnnotations().stream()).orElse(Stream.empty());
-				}
-				throw illegalArg("Invalid traversal type for method annotations: {0}", traversal);
-			});
+	public Stream<AnnotationInfo<? extends Annotation>> find(MethodInfo m, AnnotationTraversal... traversals) {
+		assertArgNotNull("m", m);
+		return cache.get(null, m, traversals).stream();
 	}
 
 	/**
@@ -938,13 +688,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param method The method to search.
+	 * @param m The method to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(Class, MethodInfo, AnnotationTraversal...)");
-		return rstream(find(type, method, traversals).toList());
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, MethodInfo m, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("m", m);
+		return rstream(cache.get(type, m, traversals));
 	}
 
 	/**
@@ -954,13 +705,13 @@ public class AnnotationProvider {
 	 * This is equivalent to calling {@link #find(MethodInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
-	 * @param method The method to search.
+	 * @param m The method to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(MethodInfo method, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(MethodInfo, AnnotationTraversal...)");
-		return rstream(find(method, traversals).toList());
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(MethodInfo m, AnnotationTraversal... traversals) {
+		assertArgNotNull("m", m);
+		return rstream(cache.get(null, m, traversals));
 	}
 
 	/**
@@ -994,15 +745,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param method The method to search.
+	 * @param m The method to search.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS}, {@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE}, {@link AnnotationTraversal#PACKAGE PACKAGE}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, MethodInfo method, AnnotationTraversal... traversals) {
-		trackCall("has(Class, MethodInfo, AnnotationTraversal...)");
-		return find(type, method, traversals).findFirst().isPresent();
+	public <A extends Annotation> boolean has(Class<A> type, MethodInfo m, AnnotationTraversal... traversals) {
+		return find(type, m, traversals).findFirst().isPresent();
 	}
 
 	/**
@@ -1038,31 +788,16 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param parameter The parameter to search.
+	 * @param p The parameter to search.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
-		trackCall("find(Class, ParameterInfo, AnnotationTraversal...)");
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ParameterInfo p, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
-		assertArgNotNull("parameter", parameter);
-		if (traversals.length == 0)
-			traversals = a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return parameter.getAnnotations(type);
-				} else if (traversal == MATCHING_PARAMETERS) {
-					return parameter.getMatchingParameters().stream().skip(1).flatMap(x -> x.getAnnotations(type));
-				} else if (traversal == PARAMETER_TYPE) {
-					return find(type, parameter.getParameterType().unwrap(Value.class, Optional.class), PARENTS, PACKAGE);
-				}
-				throw illegalArg("Invalid traversal type for parameter annotations: {0}", traversal);
-			});
+		assertArgNotNull("p", p);
+		return cache.get(type, p, traversals).stream();
 	}
 
 	/**
@@ -1094,15 +829,16 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param parameter The parameter to search.
+	 * @param p The parameter to search.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(Class, ParameterInfo, AnnotationTraversal...)");
-		return rstream(find(type, parameter, traversals).toList());
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ParameterInfo p, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("p", p);
+		return rstream(cache.get(type, p, traversals));
 	}
 
 	/**
@@ -1133,30 +869,15 @@ public class AnnotationProvider {
 	 * 		find(<jv>pi</jv>, SELF);
 	 * </p>
 	 *
-	 * @param parameter The parameter to search.
+	 * @param p The parameter to search.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> find(ParameterInfo parameter, AnnotationTraversal... traversals) {
-		trackCall("find(ParameterInfo, AnnotationTraversal...)");
-		assertArgNotNull("parameter", parameter);
-		if (traversals.length == 0)
-			traversals = a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return parameter.getAnnotations().stream();
-				} else if (traversal == MATCHING_PARAMETERS) {
-					return parameter.getMatchingParameters().stream().skip(1).flatMap(x -> x.getAnnotations().stream());
-				} else if (traversal == PARAMETER_TYPE) {
-					return find(parameter.getParameterType().unwrap(Value.class, Optional.class), PARENTS, PACKAGE);
-				}
-				throw illegalArg("Invalid traversal type for parameter annotations: {0}", traversal);
-			});
+	public Stream<AnnotationInfo<? extends Annotation>> find(ParameterInfo p, AnnotationTraversal... traversals) {
+		assertArgNotNull("p", p);
+		return cache.get(null, p, traversals).stream();
 	}
 
 	/**
@@ -1166,15 +887,15 @@ public class AnnotationProvider {
 	 * This is equivalent to calling {@link #find(ParameterInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
-	 * @param parameter The parameter to search.
+	 * @param p The parameter to search.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ParameterInfo parameter, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(ParameterInfo, AnnotationTraversal...)");
-		return rstream(find(parameter, traversals).toList());
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ParameterInfo p, AnnotationTraversal... traversals) {
+		assertArgNotNull("p", p);
+		return rstream(cache.get(null, p, traversals));
 	}
 
 	/**
@@ -1207,15 +928,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param parameter The parameter to search.
+	 * @param p The parameter to search.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, ParameterInfo parameter, AnnotationTraversal... traversals) {
-		trackCall("has(Class, ParameterInfo, AnnotationTraversal...)");
-		return find(type, parameter, traversals).findFirst().isPresent();
+	public <A extends Annotation> boolean has(Class<A> type, ParameterInfo p, AnnotationTraversal... traversals) {
+		return find(type, p, traversals).findFirst().isPresent();
 	}
 
 	/**
@@ -1233,29 +953,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param field The field to search.
+	 * @param f The field to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
-		trackCall("find(Class, FieldInfo, AnnotationTraversal...)");
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, FieldInfo f, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
-		assertArgNotNull("field", field);
-		if (traversals.length == 0)
-			traversals = a(SELF);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return concat(
-						fieldRuntimeAnnotations.get(field.inner()).stream(),
-						field.getAnnotations().stream()
-					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
-				}
-				throw illegalArg("Invalid traversal type for field annotations: {0}", traversal);
-			});
+		assertArgNotNull("f", f);
+		return cache.get(type, f, traversals).stream();
 	}
 
 	/**
@@ -1272,27 +977,13 @@ public class AnnotationProvider {
 	 * 		find(<jv>fi</jv>, SELF);
 	 * </p>
 	 *
-	 * @param field The field to search.
+	 * @param f The field to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> find(FieldInfo field, AnnotationTraversal... traversals) {
-		trackCall("find(FieldInfo, AnnotationTraversal...)");
-		assertArgNotNull("field", field);
-		if (traversals.length == 0)
-			traversals = a(SELF);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return concat(
-						fieldRuntimeAnnotations.get(field.inner()).stream(),
-						field.getAnnotations().stream()
-					);
-				}
-				throw illegalArg("Invalid traversal type for field annotations: {0}", traversal);
-			});
+	public Stream<AnnotationInfo<? extends Annotation>> find(FieldInfo f, AnnotationTraversal... traversals) {
+		assertArgNotNull("f", f);
+		return cache.get(null, f, traversals).stream();
 	}
 
 	/**
@@ -1304,13 +995,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param field The field to search.
+	 * @param f The field to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(Class, FieldInfo, AnnotationTraversal...)");
-		return rstream(find(type, field, traversals).toList());
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, FieldInfo f, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("f", f);
+		return rstream(cache.get(type, f, traversals));
 	}
 
 	/**
@@ -1320,13 +1012,13 @@ public class AnnotationProvider {
 	 * This is equivalent to calling {@link #find(FieldInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
-	 * @param field The field to search.
+	 * @param f The field to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(FieldInfo field, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(FieldInfo, AnnotationTraversal...)");
-		return rstream(find(field, traversals).toList());
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(FieldInfo f, AnnotationTraversal... traversals) {
+		assertArgNotNull("f", f);
+		return rstream(cache.get(null, f, traversals));
 	}
 
 	/**
@@ -1354,15 +1046,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param field The field to search.
+	 * @param f The field to search.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, FieldInfo field, AnnotationTraversal... traversals) {
-		trackCall("has(Class, FieldInfo, AnnotationTraversal...)");
-		return find(type, field, traversals).findFirst().isPresent();
+	public <A extends Annotation> boolean has(Class<A> type, FieldInfo f, AnnotationTraversal... traversals) {
+		return find(type, f, traversals).findFirst().isPresent();
 	}
 
 	/**
@@ -1380,29 +1071,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param constructor The constructor to search.
+	 * @param c The constructor to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
-		trackCall("find(Class, ConstructorInfo, AnnotationTraversal...)");
+	public <A extends Annotation> Stream<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("type", type);
-		assertArgNotNull("constructor", constructor);
-		if (traversals.length == 0)
-			traversals = a(SELF);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return concat(
-						constructorRuntimeAnnotations.get(constructor.inner()).stream(),
-						constructor.getDeclaredAnnotations().stream()
-					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
-				}
-				throw illegalArg("Invalid traversal type for constructor annotations: {0}", traversal);
-			});
+		assertArgNotNull("c", c);
+		return cache.get(type, c, traversals).stream();
 	}
 
 	/**
@@ -1419,27 +1095,13 @@ public class AnnotationProvider {
 	 * 		find(<jv>ci</jv>, SELF);
 	 * </p>
 	 *
-	 * @param constructor The constructor to search.
+	 * @param c The constructor to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> find(ConstructorInfo constructor, AnnotationTraversal... traversals) {
-		trackCall("find(ConstructorInfo, AnnotationTraversal...)");
-		assertArgNotNull("constructor", constructor);
-		if (traversals.length == 0)
-			traversals = a(SELF);
-
-		return Arrays.stream(traversals)
-			.sorted(Comparator.comparingInt(AnnotationTraversal::getOrder))
-			.flatMap(traversal -> {
-				if (traversal == SELF) {
-					return concat(
-						constructorRuntimeAnnotations.get(constructor.inner()).stream(),
-						constructor.getDeclaredAnnotations().stream()
-					);
-				}
-				throw illegalArg("Invalid traversal type for constructor annotations: {0}", traversal);
-			});
+	public Stream<AnnotationInfo<? extends Annotation>> find(ConstructorInfo c, AnnotationTraversal... traversals) {
+		assertArgNotNull("c", c);
+		return cache.get(null, c, traversals).stream();
 	}
 
 	/**
@@ -1451,13 +1113,14 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param constructor The constructor to search.
+	 * @param c The constructor to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(Class, ConstructorInfo, AnnotationTraversal...)");
-		return rstream(find(type, constructor, traversals).toList());
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findTopDown(Class<A> type, ConstructorInfo c, AnnotationTraversal... traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("c", c);
+		return rstream(cache.get(type, c, traversals));
 	}
 
 	/**
@@ -1467,13 +1130,13 @@ public class AnnotationProvider {
 	 * This is equivalent to calling {@link #find(ConstructorInfo, AnnotationTraversal...)}
 	 * and reversing the result.
 	 *
-	 * @param constructor The constructor to search.
+	 * @param c The constructor to search.
 	 * @param traversals The traversal options.
 	 * @return A stream of {@link AnnotationInfo} objects in parent-first order. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ConstructorInfo constructor, AnnotationTraversal... traversals) {
-		trackCall("findTopDown(ConstructorInfo, AnnotationTraversal...)");
-		return rstream(find(constructor, traversals).toList());
+	public Stream<AnnotationInfo<? extends Annotation>> findTopDown(ConstructorInfo c, AnnotationTraversal... traversals) {
+		assertArgNotNull("c", c);
+		return rstream(cache.get(null, c, traversals));
 	}
 
 	/**
@@ -1501,34 +1164,130 @@ public class AnnotationProvider {
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param constructor The constructor to search.
+	 * @param c The constructor to search.
 	 * @param traversals
 	 * 	The traversal options. If not specified, defaults to {@code SELF}.
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo constructor, AnnotationTraversal... traversals) {
-		trackCall("has(Class, ConstructorInfo, AnnotationTraversal...)");
-		return find(type, constructor, traversals).findFirst().isPresent();
+	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo c, AnnotationTraversal... traversals) {
+		return find(type, c, traversals).findFirst().isPresent();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Creates a predicate that filters annotations by type.
-	 * If type is null, all annotations pass; otherwise only annotations of the specified type pass.
-	 *
-	 * @param type The annotation type to filter by, or null to accept all annotations.
-	 * @return A predicate that tests if an annotation matches the type.
-	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	private static Predicate isType(Class<? extends Annotation> type) {
-		return type == null ? x -> true : x -> ((AnnotationInfo)x).isType(type);
+	private List load(Object o) {
+		if (o instanceof Class c) {
+			var ci = ClassInfo.of(c);
+			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
+		}
+		if (o instanceof Method m) {
+			var mi = MethodInfo.of(m);
+			return annotationMap == null ? liste() : annotationMap.find(mi.inner()).map(a -> ai(mi, a)).toList();
+		}
+		if (o instanceof Field f) {
+			var fi = FieldInfo.of(f);
+			return annotationMap == null ? liste() : annotationMap.find(fi.inner()).map(a -> ai(fi, a)).toList();
+		}
+		if (o instanceof Constructor c) {
+			var ci = ConstructorInfo.of(c);
+			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
+		}
+		throw unsupportedOp();
 	}
 
-	private <A extends Annotation> AnnotationInfo<A> ai(Annotatable on, A value) {
+	/**
+	 * Computes and caches the complete list of annotations for a given type, class, and traversal combination.
+	 * This is the supplier function for the findCache.
+	 */
+	private List load(Class<?> type, ElementInfo element, AnnotationTraversal[] traversals) {
+
+		if (type != null) {
+			return cache.get(null, element, traversals).stream().filter(x -> ((AnnotationInfo)x).isType(type)).toList();
+		}
+
+		var l = new ArrayList();
+
+		List<AnnotationTraversal> t;
+		if (traversals.length > 0)
+			t = l(traversals);
+		else if (element instanceof ClassInfo)
+			t = l(a(PARENTS, PACKAGE));
+		else if (element instanceof MethodInfo)
+			t = l(a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE));
+		else if (element instanceof FieldInfo || element instanceof ConstructorInfo)
+			t = l(a(SELF));
+		else if (element instanceof ParameterInfo)
+			t = l(a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE));
+		else
+			t = l();  // Never happens.
+
+		if (element instanceof ClassInfo ci) {
+			if (t.contains(SELF)) {
+				l.addAll(runtimeCache.get(ci.inner()));
+				l.addAll(ci.getDeclaredAnnotations());
+			}
+			if (t.contains(PARENTS)) {
+				for (var p : ci.getParentsAndInterfaces()) {
+					l.addAll(runtimeCache.get(p.inner()));
+					l.addAll(p.getDeclaredAnnotations());
+				}
+			}
+			if (t.contains(PACKAGE)) {
+				if (ci.getPackage() != null)
+					l.addAll(ci.getPackage().getAnnotations());
+			}
+		} else if (element instanceof MethodInfo mi) {
+			if (t.contains(SELF)) {
+				l.addAll(runtimeCache.get(mi.inner()));
+				l.addAll(mi.getDeclaredAnnotations());
+			}
+			if (t.contains(MATCHING_METHODS)) {
+				for (var m : mi.getMatchingMethods().stream().skip(1).toList()) {
+					l.addAll(runtimeCache.get(m.inner()));
+					l.addAll(m.getDeclaredAnnotations());
+				}
+			}
+			if (t.contains(DECLARING_CLASS)) {
+				l.addAll(find2(mi.getDeclaringClass(), a(PARENTS)));
+			}
+			if (t.contains(RETURN_TYPE)) {
+				l.addAll(find2(mi.getReturnType().unwrap(Value.class, Optional.class), a(PARENTS)));
+			}
+			if (t.contains(PACKAGE)) {
+				if (mi.getDeclaringClass().getPackage() != null)
+					l.addAll(mi.getDeclaringClass().getPackage().getAnnotations());
+			}
+		} else if (element instanceof FieldInfo fi) {
+			if (t.contains(SELF)) {
+				l.addAll(runtimeCache.get(fi.inner()));
+				l.addAll(fi.getAnnotations());
+			}
+		} else if (element instanceof ConstructorInfo ci2) {
+			if (t.contains(SELF)) {
+				l.addAll(runtimeCache.get(ci2.inner()));
+				l.addAll(ci2.getDeclaredAnnotations());
+			}
+		} else if (element instanceof ParameterInfo pi) {
+			if (t.contains(SELF)) {
+				l.addAll(pi.getAnnotations());
+			}
+			if (t.contains(MATCHING_PARAMETERS)) {
+				for (var p : pi.getMatchingParameters().stream().skip(1).toList()) {
+					l.addAll(p.getAnnotations());
+				}
+			}
+			if (t.contains(PARAMETER_TYPE)) {
+				l.addAll(find2(pi.getParameterType().unwrap(Value.class, Optional.class), a(PARENTS, PACKAGE)));
+			}
+		}
+
+		return l;
+	}
+
+	private static <A extends Annotation> AnnotationInfo<A> ai(Annotatable on, A value) {
 		return AnnotationInfo.of(on, value);
 	}
 }

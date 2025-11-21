@@ -295,6 +295,10 @@ public class ReflectionMap<V> {
 		public ReflectionMap<V> build() {
 			return new ReflectionMap<>(this);
 		}
+
+		public boolean isEmpty() { // TODO Auto-generated method stub
+			return classEntries.isEmpty() && methodEntries.isEmpty() && fieldEntries.isEmpty() && constructorEntries.isEmpty();
+		}
 	}
 
 	private static class ClassEntry<V> {
