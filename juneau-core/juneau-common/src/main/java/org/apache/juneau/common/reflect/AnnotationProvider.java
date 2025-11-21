@@ -26,6 +26,7 @@ import static java.util.stream.Stream.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
@@ -195,7 +196,8 @@ public class AnnotationProvider {
 
 	private static final Map<String, Long> methodCallCounts = new java.util.concurrent.ConcurrentHashMap<>();
 	private static final boolean ENABLE_INSTRUMENTATION = Boolean.getBoolean("juneau.instrumentAnnotationProvider");
-	private static final boolean ENABLE_NEW_CODE = Boolean.getBoolean("juneau.annotationProvider.enableNewCode");
+//	private static final boolean ENABLE_NEW_CODE = Boolean.getBoolean("juneau.annotationProvider.enableNewCode");
+	private static final boolean ENABLE_NEW_CODE = true;
 
 	static {
 		if (ENABLE_INSTRUMENTATION) {
@@ -205,11 +207,11 @@ public class AnnotationProvider {
 					pw.println("\n=== AnnotationProvider Method Call Statistics ===");
 					pw.println(String.format("%-65s %12s", "Method", "Calls"));
 					pw.println("=".repeat(80));
-					
+
 					methodCallCounts.entrySet().stream()
 						.sorted(Map.Entry.<String, Long>comparingByValue().reversed())
 						.forEach(e -> pw.println(String.format("%-65s %,12d", e.getKey(), e.getValue())));
-					
+
 					long totalCalls = methodCallCounts.values().stream().mapToLong(Long::longValue).sum();
 					pw.println("=".repeat(80));
 					pw.println(String.format("%-65s %,12d", "TOTAL", totalCalls));
@@ -441,10 +443,11 @@ public class AnnotationProvider {
 		return new Builder();
 	}
 
-	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classAnnnotations;
-	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodAnnotations;
-	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldAnnotations;
-	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorAnnotations;
+	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classRuntimeAnnotations;
+	private final Cache<Method,List<AnnotationInfo<Annotation>>> methodRuntimeAnnotations;
+	private final Cache<Field,List<AnnotationInfo<Annotation>>> fieldRuntimeAnnotations;
+	private final Cache<Constructor<?>,List<AnnotationInfo<Annotation>>> constructorRuntimeAnnotations;
+	private final Cache3<Class<?>,ElementInfo,AnnotationTraversal[],List> cache;
 	private final ReflectionMap<Annotation> annotationMap;
 
 	/**
@@ -453,20 +456,24 @@ public class AnnotationProvider {
 	 * @param builder The builder containing configuration settings.
 	 */
 	protected AnnotationProvider(Builder builder) {
-		this.classAnnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findClassAnnotations)
+		this.classRuntimeAnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findClassRuntimeAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
-		this.methodAnnotations = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findMethodAnnotations)
+		this.methodRuntimeAnnotations = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findMethodRuntimeAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
-		this.fieldAnnotations = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findFieldAnnotations)
+		this.fieldRuntimeAnnotations = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findFieldRuntimeAnnotations)
 			.disableCaching(builder.disableCaching)
 			.build();
-		this.constructorAnnotations = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
-			.supplier(this::findConstructorAnnotations)
+		this.constructorRuntimeAnnotations = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
+			.supplier(this::findConstructorRuntimeAnnotations)
+			.disableCaching(builder.disableCaching)
+			.build();
+		this.cache = Cache3.<Class<?>,ElementInfo,AnnotationTraversal[],List>create()
+			.supplier(this::findCached)
 			.disableCaching(builder.disableCaching)
 			.build();
 		this.annotationMap = builder.runtimeAnnotations.build();
@@ -476,22 +483,22 @@ public class AnnotationProvider {
 	// Private implementation
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private List<AnnotationInfo<Annotation>> findClassAnnotations(Class<?> forClass) {
+	private List<AnnotationInfo<Annotation>> findClassRuntimeAnnotations(Class<?> forClass) {
 		var ci = ClassInfo.of(forClass);
 		return annotationMap.find(forClass).map(a -> ai(ci, a)).toList();
 	}
 
-	private List<AnnotationInfo<Annotation>> findMethodAnnotations(Method forMethod) {
+	private List<AnnotationInfo<Annotation>> findMethodRuntimeAnnotations(Method forMethod) {
 		var mi = MethodInfo.of(forMethod);
 		return annotationMap.find(forMethod).map(a -> ai(mi, a)).toList();
 	}
 
-	private List<AnnotationInfo<Annotation>> findFieldAnnotations(Field forField) {
+	private List<AnnotationInfo<Annotation>> findFieldRuntimeAnnotations(Field forField) {
 		var fi = FieldInfo.of(forField);
 		return annotationMap.find(forField).map(a -> ai(fi, a)).toList();
 	}
 
-	private List<AnnotationInfo<Annotation>> findConstructorAnnotations(Constructor<?> forConstructor) {
+	private List<AnnotationInfo<Annotation>> findConstructorRuntimeAnnotations(Constructor<?> forConstructor) {
 		var ci = ConstructorInfo.of(forConstructor);
 		return annotationMap.find(forConstructor).map(a -> ai(ci, a)).toList();
 	}
@@ -533,7 +540,7 @@ public class AnnotationProvider {
 		trackCall("find(Class, ClassInfo, AnnotationTraversal...)");
 		if (ENABLE_NEW_CODE)
 			return findNew(type, clazz, traversals).stream();
-		
+
 		assertArgNotNull("type", type);
 		assertArgNotNull("clazz", clazz);
 		if (traversals.length == 0)
@@ -544,14 +551,14 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						classAnnnotations.get(clazz.inner()).stream(),
+						classRuntimeAnnotations.get(clazz.inner()).stream(),
 						clazz.getDeclaredAnnotations().stream()
 					)
 					.filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				} else if (traversal == PARENTS) {
 					return clazz.getParentsAndInterfaces().stream().flatMap(x ->
 						concat(
-							classAnnnotations.get(x.inner()).stream(),
+							classRuntimeAnnotations.get(x.inner()).stream(),
 							x.getDeclaredAnnotations().stream()
 						).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)
 					);
@@ -569,9 +576,41 @@ public class AnnotationProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	private <A extends Annotation> List<AnnotationInfo<A>> findNew(Class<A> type, ClassInfo clazz, AnnotationTraversal... traversals) {
-		// TODO: Implement optimized version
-		throw new UnsupportedOperationException("New implementation not yet available");
+		return (List<AnnotationInfo<A>>)cache.get(type, clazz, traversals);
 	}
+
+	/**
+	 * Computes and caches the complete list of annotations for a given type, class, and traversal combination.
+	 * This is the supplier function for the findCache.
+	 */
+	@SuppressWarnings("unchecked")
+	private List findCached(Class<?> type, ElementInfo element, AnnotationTraversal[] traversals) {
+		var l = new ArrayList();
+		var filter = isType((Class<? extends Annotation>)type);
+
+		if (element instanceof ClassInfo ci) {
+			if (traversals.length == 0)
+				traversals = a(PARENTS, PACKAGE);
+			var t = Arrays.asList(traversals);
+			if (t.contains(SELF)) {
+				classRuntimeAnnotations.get(ci.inner()).stream().filter(filter).forEach(l::add);
+				ci.getDeclaredAnnotations().stream().filter(filter).forEach(l::add);
+			}
+			if (t.contains(PARENTS)) {
+				for (var p : ci.getParentsAndInterfaces()) {
+					classRuntimeAnnotations.get(p.inner()).stream().filter(filter).forEach(l::add);
+					p.getDeclaredAnnotations().stream().filter(filter).forEach(l::add);
+				}
+			}
+			if (t.contains(PACKAGE)) {
+				if (ci.getPackage() != null)
+					ci.getPackage().getAnnotations().stream().filter(filter).forEach(l::add);
+			}
+		}
+
+		return l;
+	}
+
 
 	/**
 	 * Streams all annotations from a class using configurable traversal options, without filtering by annotation type.
@@ -607,13 +646,13 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						classAnnnotations.get(clazz.inner()).stream(),
+						classRuntimeAnnotations.get(clazz.inner()).stream(),
 						clazz.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<Annotation>)a)
 					);
 				} else if (traversal == PARENTS) {
 					return clazz.getParentsAndInterfaces().stream().flatMap(x -> {
 						return concat(
-							classAnnnotations.get(x.inner()).stream(),
+							classRuntimeAnnotations.get(x.inner()).stream(),
 							x.getDeclaredAnnotations().stream().map(a -> (AnnotationInfo<Annotation>)a)
 						);
 					});
@@ -736,13 +775,13 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						methodAnnotations.get(method.inner()).stream(),
+						methodRuntimeAnnotations.get(method.inner()).stream(),
 						method.getDeclaredAnnotations().stream()
 					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				} else if (traversal == MATCHING_METHODS) {
 					return method.getMatchingMethods().stream().skip(1).flatMap(m ->
 						concat(
-							methodAnnotations.get(m.inner()).stream(),
+							methodRuntimeAnnotations.get(m.inner()).stream(),
 							m.getDeclaredAnnotations().stream()
 						).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a)
 					);
@@ -790,13 +829,13 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						methodAnnotations.get(method.inner()).stream(),
+						methodRuntimeAnnotations.get(method.inner()).stream(),
 						method.getDeclaredAnnotations().stream()
 					);
 				} else if (traversal == MATCHING_METHODS) {
 					return method.getMatchingMethods().stream().skip(1).flatMap(m -> {
 						return concat(
-							methodAnnotations.get(m.inner()).stream(),
+							methodRuntimeAnnotations.get(m.inner()).stream(),
 							m.getDeclaredAnnotations().stream()
 						);
 					});
@@ -1132,7 +1171,7 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						fieldAnnotations.get(field.inner()).stream(),
+						fieldRuntimeAnnotations.get(field.inner()).stream(),
 						field.getAnnotations().stream()
 					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				}
@@ -1169,7 +1208,7 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						fieldAnnotations.get(field.inner()).stream(),
+						fieldRuntimeAnnotations.get(field.inner()).stream(),
 						field.getAnnotations().stream()
 					);
 				}
@@ -1279,7 +1318,7 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						constructorAnnotations.get(constructor.inner()).stream(),
+						constructorRuntimeAnnotations.get(constructor.inner()).stream(),
 						constructor.getDeclaredAnnotations().stream()
 					).filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 				}
@@ -1316,7 +1355,7 @@ public class AnnotationProvider {
 			.flatMap(traversal -> {
 				if (traversal == SELF) {
 					return concat(
-						constructorAnnotations.get(constructor.inner()).stream(),
+						constructorRuntimeAnnotations.get(constructor.inner()).stream(),
 						constructor.getDeclaredAnnotations().stream()
 					);
 				}
@@ -1393,10 +1432,22 @@ public class AnnotationProvider {
 		trackCall("has(Class, ConstructorInfo, AnnotationTraversal...)");
 		return find(type, constructor, traversals).findFirst().isPresent();
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a predicate that filters annotations by type.
+	 * If type is null, all annotations pass; otherwise only annotations of the specified type pass.
+	 *
+	 * @param type The annotation type to filter by, or null to accept all annotations.
+	 * @return A predicate that tests if an annotation matches the type.
+	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static Predicate isType(Class<? extends Annotation> type) {
+		return type == null ? x -> true : x -> ((AnnotationInfo)x).isType(type);
+	}
 
 	private <A extends Annotation> AnnotationInfo<A> ai(Annotatable on, A value) {
 		return AnnotationInfo.of(on, value);
