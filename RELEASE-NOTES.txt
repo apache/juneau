@@ -27,6 +27,7 @@ Release Notes - Juneau - Version 9.2.0
         The current use case is for developers to further annotate their code with documentation.
     * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.0 to 3.14.1 #271.
     * Bump org.jacoco:jacoco-maven-plugin from 0.8.13 to 0.8.14 #273.
+    * Bump js-yaml from 3.14.1 to 3.14.2 in /juneau-docs #282.
 
 ** New Features - Multi-Key Cache and Concurrent Map Classes
 
