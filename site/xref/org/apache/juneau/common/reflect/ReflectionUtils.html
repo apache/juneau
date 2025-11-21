@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">	 * @param o The class. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">	 * @return The {@link ClassInfo} wrapper, or &lt;jk&gt;null&lt;/jk&gt; if the input is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ClassInfo info(Class o) {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ClassInfo info(Class&lt;?&gt; o) {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">return</strong> ClassInfo.of(o);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	}
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * @param o The constructor. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * @return The {@link ConstructorInfo} wrapper, or &lt;jk&gt;null&lt;/jk&gt; if the input is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> info(Constructor o) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> info(Constructor&lt;?&gt; o) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> ConstructorInfo.of(o);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  }

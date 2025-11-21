@@ -155,9 +155,9 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">if</strong> (isVoid(c))
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				c = s.impl();
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">if</strong> (isVoid(c))
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(c);
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">if</strong> (ci.isChildOf(ObjectSwap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> ci = info(c);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">if</strong> (ci.isChildOf(ObjectSwap.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 				ObjectSwap ps = BeanCreator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(c).run();
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<strong class="jxr_keyword">if</strong> (nn(ps.forMediaTypes()))
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 					<strong class="jxr_keyword">throw</strong> unsupportedOp(<span class="jxr_string">"TODO - Media types on swaps not yet supported on bean properties."</span>);
@@ -229,9 +229,9 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 			canRead |= (nn(field) || nn(getter));
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			canWrite |= (nn(field ) || nn(setter));
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">var</strong> ifi = innerField == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : FieldInfo.of(innerField);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">var</strong> gi = getter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : MethodInfo.of(getter);
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">var</strong> si = setter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : MethodInfo.of(setter);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">var</strong> ifi = innerField == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : info(innerField);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">var</strong> gi = getter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : info(getter);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> si = setter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : info(setter);
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">if</strong> (nn(innerField)) {
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 				List&lt;Beanp&gt; lp = list();
@@ -337,9 +337,9 @@
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 				}
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 			}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">if</strong> (nn(field)) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 				<strong class="jxr_keyword">if</strong> (isDyna) {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 					<strong class="jxr_keyword">if</strong> (! ClassInfo.of(field.getType()).isChildOf(Map.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 						<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">if</strong> (isDyna) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 				<strong class="jxr_keyword">if</strong> (! info(field.getType()).isChildOf(Map.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 					<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 					<strong class="jxr_keyword">if</strong> (! ci.isChildOf(field.getType()))
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 						<strong class="jxr_keyword">return</strong> false;
@@ -652,10 +652,10 @@
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; BeanPropertyMeta forEachAnnotation(Class&lt;A&gt; a, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 		BeanContext bc = beanContext;
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">if</strong> (nn(a)) {
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">if</strong> (nn(field)) bc.getAnnotationProvider().find(a, FieldInfo.of(field)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) bc.getAnnotationProvider().find(a, MethodInfo.of(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			<strong class="jxr_keyword">if</strong> (nn(setter)) bc.getAnnotationProvider().find(a, MethodInfo.of(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		}
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		<strong class="jxr_keyword">if</strong> (nn(field)) bc.getAnnotationProvider().find(a, info(field)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">if</strong> (nn(getter)) bc.getAnnotationProvider().find(a, info(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		<strong class="jxr_keyword">if</strong> (nn(setter)) bc.getAnnotationProvider().find(a, info(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).filter(filter).forEach(action);
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	}
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 	}
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 
@@ -694,10 +694,10 @@
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 		List&lt;A&gt; l = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 		BeanContext bc = beanContext;
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">var</strong> ap = bc.getAnnotationProvider();
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">var</strong> fi = field == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : FieldInfo.of(field);
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<strong class="jxr_keyword">var</strong> gi = getter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : MethodInfo.of(getter);
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">var</strong> si = setter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : MethodInfo.of(setter);
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	<strong class="jxr_keyword">var</strong> fi = field == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : info(field);
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<strong class="jxr_keyword">var</strong> gi = getter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : info(getter);
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	<strong class="jxr_keyword">var</strong> si = setter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : info(setter);
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 	<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L693" href="#L693">693</a> 			<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> 		rstream(ap.find(a, getBeanMeta().getClassMeta().getInfo())).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">if</strong> (nn(field)) {
@@ -706,23 +706,23 @@
 <a class="jxr_linenumber" name="L698" href="#L698">698</a> 		}
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 		<strong class="jxr_keyword">if</strong> (nn(gi)) {
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the getter method</em>
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			forEachParentMethod(getter, parentGetter -&gt; {
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 				ap.find(a, MethodInfo.of(parentGetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 			});
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 		forEachParentMethod(getter, parentGetter -&gt; {
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 			ap.find(a, info(parentGetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		});
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 			ap.find(a, gi, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 			rstream(ap.find(a, gi.getReturnType())).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 		}
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 		<strong class="jxr_keyword">if</strong> (nn(setter)) {
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the setter method</em>
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			forEachParentMethod(setter, parentSetter -&gt; {
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 				ap.find(a, MethodInfo.of(parentSetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 			});
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		forEachParentMethod(setter, parentSetter -&gt; {
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			ap.find(a, info(parentSetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		});
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 			ap.find(a, si, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 			rstream(ap.find(a, info(setter.getReturnType()))).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 		}
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">if</strong> (nn(extraKeys)) {
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 			MethodInfo eki = MethodInfo.of(extraKeys);
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 			<em class="jxr_comment">// Walk up the inheritance hierarchy for the extraKeys method</em>
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 	<strong class="jxr_keyword">if</strong> (nn(extraKeys)) {
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		MethodInfo eki = info(extraKeys);
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		<em class="jxr_comment">// Walk up the inheritance hierarchy for the extraKeys method</em>
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 			forEachParentMethod(extraKeys, parentExtraKeys -&gt; {
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> 				ap.find(a, info(parentExtraKeys), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> 			});
