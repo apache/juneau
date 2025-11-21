@@ -158,7 +158,7 @@ public class Args extends JsonMap {
 			if (startsWith(s, '-')) {
 				key = s.substring(1);
 				if (key.matches("\\d*"))
-					throw runtimeException("Invalid optional key name ''{0}''", key);
+					throw rex("Invalid optional key name ''{0}''", key);
 				if (! containsKey(key))
 					put(key, new JsonList());
 			} else {

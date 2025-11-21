@@ -433,7 +433,7 @@ public class Items extends OpenApiElement {
 	 */
 	public Items setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw runtimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values=[{1}]", value, toCdl(VALID_COLLECTION_FORMATS));
+			throw rex("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values=[{1}]", value, toCdl(VALID_COLLECTION_FORMATS));
 		collectionFormat = value;
 		return this;
 	}

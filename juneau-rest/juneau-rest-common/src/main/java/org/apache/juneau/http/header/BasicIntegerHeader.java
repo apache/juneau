@@ -203,7 +203,7 @@ public class BasicIntegerHeader extends BasicHeader {
 		try {
 			return value == null ? null : Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			throw runtimeException(e, "Value ''{0}'' could not be parsed as an integer.", value);
+			throw rex(e, "Value ''{0}'' could not be parsed as an integer.", value);
 		}
 	}
 

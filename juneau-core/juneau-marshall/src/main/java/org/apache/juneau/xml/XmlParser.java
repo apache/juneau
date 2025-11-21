@@ -837,7 +837,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		try {
 			return c.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

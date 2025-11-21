@@ -212,7 +212,7 @@ public class VarResolverSession {
 		try {
 			return resolveTo(s, new StringWriter()).toString();
 		} catch (IOException e) {
-			throw toRuntimeException(e); // Never happens.
+			throw toRex(e); // Never happens.
 		}
 	}
 

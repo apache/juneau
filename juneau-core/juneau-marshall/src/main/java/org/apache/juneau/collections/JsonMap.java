@@ -29,7 +29,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
@@ -1821,10 +1820,10 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			}
 
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e, cm.getInnerClass(), "Error occurred attempting to cast to an object of type ''{0}''", cm.getInnerClass().getName());
+			throw bex(e, cm.getInnerClass(), "Error occurred attempting to cast to an object of type ''{0}''", cm.getInnerClass().getName());
 		}
 
-		throw new BeanRuntimeException(cm.getInnerClass(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cm.getInnerClass().getName());
+		throw bex(cm.getInnerClass(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cm.getInnerClass().getName());
 	}
 
 	private ObjectRest getObjectRest() {

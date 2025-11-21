@@ -356,7 +356,7 @@ public class Parameter extends OpenApiElement {
 	 */
 	public Parameter setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
-			throw runtimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_IN));
+			throw rex("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_IN));
 		this.in = value;
 		return this;
 	}
@@ -402,7 +402,7 @@ public class Parameter extends OpenApiElement {
 	 */
 	public Parameter setStyle(String value) {
 		if (isStrict() && ! contains(value, VALID_STYLES))
-			throw runtimeException("Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_STYLES));
+			throw rex("Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_STYLES));
 		this.style = value;
 		return this;
 	}

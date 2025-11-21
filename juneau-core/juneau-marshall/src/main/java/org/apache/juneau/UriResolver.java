@@ -258,7 +258,7 @@ public class UriResolver {
 
 			return a;
 		} catch (IOException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

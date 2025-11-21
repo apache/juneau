@@ -309,7 +309,7 @@ public class TestUtils extends Utils2 {
 				m.setAccessible(true);
 				return m.invoke(o);
 			}
-			throw runtimeException("Property {0} not found on object of type {1}", name, cn(o));
+			throw rex("Property {0} not found on object of type {1}", name, cn(o));
 		});
 	}
 

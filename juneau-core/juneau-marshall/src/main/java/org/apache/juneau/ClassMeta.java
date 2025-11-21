@@ -17,7 +17,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
-import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -465,11 +464,11 @@ public class ClassMeta<T> implements Type {
 		private BeanFilter findBeanFilter(BeanContext bc) {
 			try {
 				List<Bean> ba = list();
-				bc.getAnnotationProvider().findTopDown(Bean.class, info).map(x -> x.inner()).forEach(x -> ba.add(x));
+				rstream(bc.getAnnotationProvider().find(Bean.class, info)).forEach(x -> ba.add(x.inner()));
 				if (! ba.isEmpty())
 					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
-				throw toRuntimeException(e);
+				throw toRex(e);
 			}
 			return null;
 		}
@@ -485,7 +484,7 @@ public class ClassMeta<T> implements Type {
 				if (! ba.isEmpty())
 					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
-				throw toRuntimeException(e);
+				throw toRex(e);
 			}
 			return null;
 		}
@@ -878,7 +877,7 @@ public class ClassMeta<T> implements Type {
 	public ClassMeta<?> getArg(int index) {
 		if (nn(args) && index >= 0 && index < args.length)
 			return args[index];
-		throw new BeanRuntimeException("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.length);
+		throw bex("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.length);
 	}
 
 	/**

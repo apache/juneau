@@ -24,7 +24,6 @@ import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.common.io.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -95,7 +94,7 @@ public class SerializerPipe implements Closeable {
 			if (autoClose)
 				IOUtils.close(writer, outputStream);
 		} catch (IOException e) {
-			throw new BeanRuntimeException(e);
+			throw bex(e);
 		}
 	}
 
@@ -120,14 +119,14 @@ public class SerializerPipe implements Closeable {
 	 */
 	public OutputStream getOutputStream() throws IOException {
 		if (output == null)
-			throw ioException("Output cannot be null.");
+			throw ioex("Output cannot be null.");
 
 		if (output instanceof OutputStream)
 			outputStream = (OutputStream)output;
 		else if (output instanceof File)
 			outputStream = new BufferedOutputStream(new FileOutputStream((File)output));
 		else
-			throw ioException("Cannot convert object of type {0} to an OutputStream.", cn(output));
+			throw ioex("Cannot convert object of type {0} to an OutputStream.", cn(output));
 
 		return new NoCloseOutputStream(outputStream);
 	}

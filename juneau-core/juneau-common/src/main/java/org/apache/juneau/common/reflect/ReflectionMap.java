@@ -254,7 +254,7 @@ public class ReflectionMap<V> {
 		 */
 		public Builder<V> append(String key, V value) {
 			if (StringUtils.isEmpty(key))
-				throw runtimeException("Invalid reflection signature: [{0}]", key);
+				throw rex("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {
 					if (k.endsWith(")")) {
@@ -278,7 +278,7 @@ public class ReflectionMap<V> {
 					}
 				});
 			} catch (@SuppressWarnings("unused") IndexOutOfBoundsException e) {
-				throw runtimeException("Invalid reflection signature: [{0}]", key);
+				throw rex("Invalid reflection signature: [{0}]", key);
 			}
 
 			return this;
@@ -296,7 +296,12 @@ public class ReflectionMap<V> {
 			return new ReflectionMap<>(this);
 		}
 
-		public boolean isEmpty() { // TODO Auto-generated method stub
+		/**
+		 * Returns <jk>true</jk> if this builder has no entries.
+		 *
+		 * @return <jk>true</jk> if this builder has no entries.
+		 */
+		public boolean isEmpty() {
 			return classEntries.isEmpty() && methodEntries.isEmpty() && fieldEntries.isEmpty() && constructorEntries.isEmpty();
 		}
 	}

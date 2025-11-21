@@ -665,7 +665,7 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw runtimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_COLLECTION_FORMATS));
+			throw rex("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_COLLECTION_FORMATS));
 		collectionFormat = value;
 		return this;
 	}
@@ -824,7 +824,7 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
-			throw runtimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_IN));
+			throw rex("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_IN));
 		in = value;
 		if ("path".equals(value))
 			required = true;
@@ -1025,7 +1025,7 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw runtimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
+			throw rex("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
 		type = value;
 		return this;
 	}

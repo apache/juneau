@@ -230,7 +230,7 @@ public class Assertion {
 					.run();
 			} catch (@SuppressWarnings("unused") ExecutableException e) {
 				// If we couldn't create requested exception, just throw a RuntimeException.
-				throw runtimeException(cause, msg);
+				throw rex(cause, msg);
 			}
 		}
 		return new BasicAssertionError(cause, msg);

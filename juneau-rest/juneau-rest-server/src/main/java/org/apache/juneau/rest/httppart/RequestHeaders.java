@@ -312,7 +312,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(HEADER, cm).orElseThrow(() -> runtimeException("@Header(name) not found on class {0}", cn(type)));
+		String name = HttpParts.getName(HEADER, cm).orElseThrow(() -> rex("@Header(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}
 

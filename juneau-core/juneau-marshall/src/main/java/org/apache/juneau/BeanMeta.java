@@ -252,19 +252,19 @@ public class BeanMeta<T> {
 				// Look for @Beanc constructor on public constructors.
 				ci.getPublicConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
 					if (nn(constructor))
-						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
+						throw bex(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
 					ap.find(Beanc.class, x).map(x2 -> x2.inner().properties()).filter(StringUtils::isNotBlank).forEach(z -> constructorArgs = splita(z));
 					if (! x.hasNumParameters(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
-						throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
+						throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 						constructorArgs = new String[x.getParameterCount()];
 						var i = IntegerValue.create();
 						x.getParameters().forEach(pi -> {
 							String pn = pi.getName();
 							if (pn == null)
-								throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
+								throw bex(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
 							constructorArgs[i.getAndIncrement()] = pn;
 						});
 					}
@@ -275,19 +275,19 @@ public class BeanMeta<T> {
 				if (constructor == null) {
 					ci.getDeclaredConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
 						if (nn(constructor))
-							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
+							throw bex(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
 						ap.find(Beanc.class, x).map(x2 -> x2.inner().properties()).filter(y -> isNotEmpty(y)).forEach(z -> constructorArgs = splita(z));
 						if (! x.hasNumParameters(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
-							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
+							throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 						constructorArgs = new String[x.getParameterCount()];
 						var i = IntegerValue.create();
 						x.getParameters().forEach(y -> {
 							String pn = y.getName();
 							if (pn == null)
-								throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
+								throw bex(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
 								constructorArgs[i.getAndIncrement()] = pn;
 							});
 						}
@@ -435,14 +435,14 @@ public class BeanMeta<T> {
 							i.remove();
 						}
 					} catch (ClassNotFoundException e) {
-						throw new BeanRuntimeException(c, lm(e));
+						throw bex(c, lm(e));
 					}
 				}
 
 				// Check for missing properties.
 				fixedBeanProps.forEach(x -> {
 					if (! normalProps.containsKey(x))
-						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x,
+						throw bex(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x,
 							ci.getNameSimple());
 				});
 
@@ -450,7 +450,7 @@ public class BeanMeta<T> {
 				for (var fp : constructorArgs) {
 					BeanPropertyMeta.Builder m = normalProps.get(fp);
 					if (m == null)
-						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Beanc(properties=X) annotation but was not found on the class definition.", fp);
+						throw bex(c, "The property ''{0}'' was defined on the @Beanc(properties=X) annotation but was not found on the class definition.", fp);
 					m.setAsConstructorArg();
 				}
 
@@ -692,7 +692,7 @@ public class BeanMeta<T> {
 				n = pn.getPropertyName(n);
 
 				if ("*".equals(bpName) && methodType == UNKNOWN)
-					throw new BeanRuntimeException(c, "Found @Beanp(\"*\") but could not determine method type on method ''{0}''.", m.getSimpleName());
+					throw bex(c, "Found @Beanp(\"*\") but could not determine method type on method ''{0}''.", m.getSimpleName());
 
 				if (methodType != UNKNOWN) {
 					if (nn(bpName) && ! bpName.isEmpty())

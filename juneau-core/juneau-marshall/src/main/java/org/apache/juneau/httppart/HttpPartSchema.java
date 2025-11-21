@@ -384,7 +384,7 @@ public class HttpPartSchema {
 			else if (cn(a.annotationType()).startsWith("jakarta.validation.constraints."))
 				applyJakartaValidation(a);
 			else
-				throw runtimeException("Builder.apply(@{0}) not defined", cn(a));
+				throw rex("Builder.apply(@{0}) not defined", cn(a));
 			return this;
 		}
 
@@ -3543,7 +3543,7 @@ public class HttpPartSchema {
 		try {
 			return JsonMap.ofJson(s);
 		} catch (ParseException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 
@@ -3554,7 +3554,7 @@ public class HttpPartSchema {
 					return parseNumber(ss, Number.class);
 			return null;
 		} catch (ParseException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 
@@ -3565,7 +3565,7 @@ public class HttpPartSchema {
 		try {
 			JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
 		} catch (ParseException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 		return set;
 	}

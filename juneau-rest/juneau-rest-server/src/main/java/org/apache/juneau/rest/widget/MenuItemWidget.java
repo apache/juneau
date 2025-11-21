@@ -157,7 +157,7 @@ public abstract class MenuItemWidget extends Widget {
 			try (Reader r = (Reader)o; Writer w = new StringBuilderWriter(sb)) {
 				pipe(r, w);
 			} catch (IOException e) {
-				throw toRuntimeException(e);
+				throw toRex(e);
 			}
 		} else if (o instanceof CharSequence) {
 			sb.append((CharSequence)o);
@@ -176,7 +176,7 @@ public abstract class MenuItemWidget extends Widget {
 			try {
 				session.serialize(o, sb);
 			} catch (Exception e) {
-				throw toRuntimeException(e);
+				throw toRex(e);
 			}
 		}
 		// @formatter:off

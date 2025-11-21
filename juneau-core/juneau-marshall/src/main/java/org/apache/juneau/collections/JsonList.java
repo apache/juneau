@@ -539,7 +539,7 @@ public class JsonList extends LinkedList<Object> {
 		try {
 			return JsonParser.DEFAULT.parse(Json5Serializer.DEFAULT.serialize(this), cm);
 		} catch (ParseException | SerializeException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

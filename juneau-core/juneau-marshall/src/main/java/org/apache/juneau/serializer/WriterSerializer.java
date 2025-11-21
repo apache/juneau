@@ -1049,7 +1049,7 @@ public class WriterSerializer extends Serializer {
 		try {
 			return serialize(o);
 		} catch (Exception e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

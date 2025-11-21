@@ -775,7 +775,7 @@ public class BasicBeanConverter implements BeanConverter {
 			.stream()
 			.filter(x -> x.canExtract(this, o, name))
 			.findFirst()
-			.orElseThrow(() -> runtimeException("Could not find extractor for object of type {0}", cn(o))).extract(this, o, name);
+			.orElseThrow(() -> rex("Could not find extractor for object of type {0}", cn(o))).extract(this, o, name);
 	}
 
 	@Override

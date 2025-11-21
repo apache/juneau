@@ -25,7 +25,6 @@ import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -172,7 +171,7 @@ public class ParserPipe implements Closeable {
 			if (doClose)
 				IOUtils.close(reader, inputStream);
 		} catch (IOException e) {
-			throw new BeanRuntimeException(e);
+			throw bex(e);
 		}
 	}
 
@@ -238,7 +237,7 @@ public class ParserPipe implements Closeable {
 				doClose = true;
 			}
 		} else {
-			throw ioException("Cannot convert object of type {0} to an InputStream.", cn(input));
+			throw ioex("Cannot convert object of type {0} to an InputStream.", cn(input));
 		}
 
 		return inputStream;
@@ -317,7 +316,7 @@ public class ParserPipe implements Closeable {
 			}
 			doClose = true;
 		} else {
-			throw ioException("Cannot convert object of type {0} to an InputStream.", cn(input));
+			throw ioex("Cannot convert object of type {0} to an InputStream.", cn(input));
 		}
 
 		return reader;

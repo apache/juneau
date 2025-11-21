@@ -21,6 +21,8 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.common.reflect.*;
+
 /**
  * Various utility methods for creating and working with throwables.
  */
@@ -44,16 +46,6 @@ public class ThrowableUtils {
 	}
 
 	/**
-	 * Creates a new {@link RuntimeException}.
-	 *
-	 * @param cause The caused-by exception.
-	 * @return A new {@link RuntimeException}, or the same exception if it's already of that type.
-	 */
-	public static RuntimeException toRuntimeException(Throwable cause) {
-		return castException(RuntimeException.class, cause);
-	}
-
-	/**
 	 * Casts or wraps the specified throwable to the specified type.
 	 *
 	 * @param <T> The class to cast to.
@@ -67,6 +59,37 @@ public class ThrowableUtils {
 		} catch (Exception e) {
 			throw illegalArg(e);
 		}
+	}
+
+	/**
+	 * Searches through the cause chain of an exception to find an exception of the specified type.
+	 *
+	 * @param <T> The cause type.
+	 * @param e The exception to search.
+	 * @param cause The cause type to search for.
+	 * @return An {@link Optional} containing the cause if found, or empty if not found.
+	 */
+	public static <T extends Throwable> Optional<T> findCause(Throwable e, Class<T> cause) {
+		while (nn(e)) {
+			if (cause.isInstance(e))
+				return Optional.of(cause.cast(e));
+			e = e.getCause();
+		}
+		return Optional.empty();
+	}
+
+	/**
+	 * Convenience method for getting a stack trace as a string.
+	 *
+	 * @param t The throwable to get the stack trace from.
+	 * @return The same content that would normally be rendered via <c>t.printStackTrace()</c>
+	 */
+	public static String getStackTrace(Throwable t) {
+		var sw = new StringWriter();
+		try (var pw = new PrintWriter(sw)) {
+			t.printStackTrace(pw);
+		}
+		return sw.toString();
 	}
 
 	/**
@@ -84,20 +107,6 @@ public class ThrowableUtils {
 				return c.cast(t);
 		}
 		return null;
-	}
-
-	/**
-	 * Convenience method for getting a stack trace as a string.
-	 *
-	 * @param t The throwable to get the stack trace from.
-	 * @return The same content that would normally be rendered via <c>t.printStackTrace()</c>
-	 */
-	public static String getStackTrace(Throwable t) {
-		var sw = new StringWriter();
-		try (var pw = new PrintWriter(sw)) {
-			t.printStackTrace(pw);
-		}
-		return sw.toString();
 	}
 
 	/**
@@ -133,6 +142,16 @@ public class ThrowableUtils {
 	}
 
 	/**
+	 * Creates an {@link IllegalArgumentException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new IllegalArgumentException wrapping the given cause.
+	 */
+	public static IllegalArgumentException illegalArg(Throwable cause) {
+		return new IllegalArgumentException(cause);
+	}
+
+	/**
 	 * Creates an {@link IllegalArgumentException} with a cause.
 	 *
 	 * @param cause The cause of the exception.
@@ -145,14 +164,67 @@ public class ThrowableUtils {
 	}
 
 	/**
+	 * Creates an {@link java.io.IOException}.
+	 *
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new IOException with the formatted message.
+	 */
+	public static java.io.IOException ioex(String msg, Object...args) {
+		return new java.io.IOException(args.length == 0 ? msg : f(msg, args));
+	}
+
+	/**
+	 * Creates an {@link java.io.IOException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new IOException wrapping the given cause.
+	 */
+	public static java.io.IOException ioex(Throwable cause) {
+		return new java.io.IOException(cause);
+	}
+
+	/**
+	 * Creates an {@link java.io.IOException} with a cause.
+	 *
+	 * @param cause The cause of the exception.
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new IOException with the formatted message and cause.
+	 */
+	public static java.io.IOException ioex(Throwable cause, String msg, Object...args) {
+		return new java.io.IOException(args.length == 0 ? msg : f(msg, args), cause);
+	}
+
+	/**
+	 * Convenience method for calling {@link Throwable#getLocalizedMessage()}.
+	 *
+	 * @param t The throwable.
+	 * @return The localized message of the throwable.
+	 */
+	public static String lm(Throwable t) {
+		return t.getLocalizedMessage();
+	}
+
+	/**
 	 * Creates a {@link RuntimeException}.
 	 *
 	 * @param msg The exception message.
 	 * @param args The arguments to substitute into the message.
 	 * @return A new RuntimeException with the formatted message.
 	 */
-	public static RuntimeException runtimeException(String msg, Object...args) {
+	public static RuntimeException rex(String msg, Object...args) {
 		return new RuntimeException(args.length == 0 ? msg : f(msg, args));
+	}
+
+	/**
+	 * Creates a {@link RuntimeException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new RuntimeException wrapping the given cause.
+	 */
+	public static RuntimeException rex(Throwable cause) {
+		return new RuntimeException(cause);
 	}
 
 	/**
@@ -163,8 +235,85 @@ public class ThrowableUtils {
 	 * @param args The arguments to substitute into the message.
 	 * @return A new RuntimeException with the formatted message and cause.
 	 */
-	public static RuntimeException runtimeException(Throwable cause, String msg, Object...args) {
+	public static RuntimeException rex(Throwable cause, String msg, Object...args) {
 		return new RuntimeException(args.length == 0 ? msg : f(msg, args), cause);
+	}
+
+	/**
+	 * Creates a {@link RuntimeException}.
+	 *
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new RuntimeException with the formatted message.
+	 */
+	public static BeanRuntimeException bex(String msg, Object...args) {
+		return new BeanRuntimeException(args.length == 0 ? msg : f(msg, args));
+	}
+
+	/**
+	 * Shortcut for creating a {@link BeanRuntimeException} with a message and associated class.
+	 *
+	 * @param c The class associated with the exception.
+	 * @param msg The message.
+	 * @param args Optional {@link String#format(String, Object...)} arguments.
+	 * @return A new {@link BeanRuntimeException}.
+	 */
+	public static BeanRuntimeException bex(Class<?> c, String msg, Object...args) {
+		return new BeanRuntimeException(c, msg, args);
+	}
+
+	/**
+	 * Shortcut for creating a {@link BeanRuntimeException} with a cause, message, and associated class.
+	 *
+	 * @param e The cause of the exception.
+	 * @param c The class associated with the exception.
+	 * @param msg The message.
+	 * @param args Optional {@link String#format(String, Object...)} arguments.
+	 * @return A new {@link BeanRuntimeException}.
+	 */
+	public static BeanRuntimeException bex(Throwable e, Class<?> c, String msg, Object...args) {
+		return new BeanRuntimeException(e, c, msg, args);
+	}
+
+	/**
+	 * Creates a {@link RuntimeException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new RuntimeException wrapping the given cause.
+	 */
+	public static BeanRuntimeException bex(Throwable cause) {
+		return new BeanRuntimeException(cause);
+	}
+
+	/**
+	 * Creates a {@link RuntimeException} with a cause.
+	 *
+	 * @param cause The cause of the exception.
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new RuntimeException with the formatted message and cause.
+	 */
+	public static BeanRuntimeException bex(Throwable cause, String msg, Object...args) {
+		return new BeanRuntimeException(args.length == 0 ? msg : f(msg, args), cause);
+	}
+
+	/**
+	 * Creates a new {@link RuntimeException}.
+	 *
+	 * @param cause The caused-by exception.
+	 * @return A new {@link RuntimeException}, or the same exception if it's already of that type.
+	 */
+	public static RuntimeException toRex(Throwable cause) {
+		return castException(RuntimeException.class, cause);
+	}
+
+	/**
+	 * Creates an {@link UnsupportedOperationException} with a default message.
+	 *
+	 * @return A new UnsupportedOperationException with the message "Not supported."
+	 */
+	public static UnsupportedOperationException unsupportedOp() {
+		return new UnsupportedOperationException("Not supported.");
 	}
 
 	/**
@@ -176,6 +325,16 @@ public class ThrowableUtils {
 	 */
 	public static UnsupportedOperationException unsupportedOp(String msg, Object...args) {
 		return new UnsupportedOperationException(args.length == 0 ? msg : f(msg, args));
+	}
+
+	/**
+	 * Creates an {@link UnsupportedOperationException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new UnsupportedOperationException wrapping the given cause.
+	 */
+	public static UnsupportedOperationException unsupportedOp(Throwable cause) {
+		return new UnsupportedOperationException(cause);
 	}
 
 	/**
@@ -191,110 +350,11 @@ public class ThrowableUtils {
 	}
 
 	/**
-	 * Creates an {@link java.io.IOException}.
-	 *
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new IOException with the formatted message.
-	 */
-	public static java.io.IOException ioException(String msg, Object...args) {
-		return new java.io.IOException(args.length == 0 ? msg : f(msg, args));
-	}
-
-	/**
-	 * Creates an {@link java.io.IOException} with a cause.
-	 *
-	 * @param cause The cause of the exception.
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new IOException with the formatted message and cause.
-	 */
-	public static java.io.IOException ioException(Throwable cause, String msg, Object...args) {
-		return new java.io.IOException(args.length == 0 ? msg : f(msg, args), cause);
-	}
-
-	/**
-	 * Creates an {@link java.io.IOException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new IOException wrapping the given cause.
-	 */
-	public static java.io.IOException ioException(Throwable cause) {
-		return new java.io.IOException(cause);
-	}
-
-	/**
-	 * Creates an {@link IllegalArgumentException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new IllegalArgumentException wrapping the given cause.
-	 */
-	public static IllegalArgumentException illegalArg(Throwable cause) {
-		return new IllegalArgumentException(cause);
-	}
-
-	/**
-	 * Creates a {@link RuntimeException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new RuntimeException wrapping the given cause.
-	 */
-	public static RuntimeException runtimeException(Throwable cause) {
-		return new RuntimeException(cause);
-	}
-
-	/**
-	 * Creates an {@link UnsupportedOperationException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new UnsupportedOperationException wrapping the given cause.
-	 */
-	public static UnsupportedOperationException unsupportedOp(Throwable cause) {
-		return new UnsupportedOperationException(cause);
-	}
-
-	/**
-	 * Creates an {@link UnsupportedOperationException} with a default message.
-	 *
-	 * @return A new UnsupportedOperationException with the message "Not supported."
-	 */
-	public static UnsupportedOperationException unsupportedOp() {
-		return new UnsupportedOperationException("Not supported.");
-	}
-
-	/**
 	 * Creates an {@link UnsupportedOperationException} for read-only objects.
 	 *
 	 * @return A new UnsupportedOperationException with the message "Object is read only."
 	 */
 	public static UnsupportedOperationException unsupportedOpReadOnly() {
 		return new UnsupportedOperationException("Object is read only.");
-	}
-
-	/**
-	 * Searches through the cause chain of an exception to find an exception of the specified type.
-	 *
-	 * @param <T> The cause type.
-	 * @param e The exception to search.
-	 * @param cause The cause type to search for.
-	 * @return An {@link Optional} containing the cause if found, or empty if not found.
-	 */
-	public static <T extends Throwable> Optional<T> findCause(Throwable e, Class<T> cause) {
-		while (nn(e)) {
-			if (cause.isInstance(e))
-				return Optional.of(cause.cast(e));
-			e = e.getCause();
-		}
-		return Optional.empty();
-	}
-
-	/**
-	 * Convenience method for calling {@link Throwable#getLocalizedMessage()}.
-	 *
-	 * @param t The throwable.
-	 * @return The localized message of the throwable.
-	 */
-	public static String lm(Throwable t) {
-		return t.getLocalizedMessage();
 	}
 }

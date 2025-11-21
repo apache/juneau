@@ -240,7 +240,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), "root", null);
 			return w.toString();
 		} catch (Exception e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

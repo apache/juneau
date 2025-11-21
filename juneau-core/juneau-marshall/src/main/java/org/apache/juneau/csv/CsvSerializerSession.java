@@ -224,7 +224,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			}
 			return value;
 		} catch (SerializeException e) {
-			throw runtimeException(e);
+			throw rex(e);
 		}
 	}
 

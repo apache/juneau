@@ -165,9 +165,9 @@ public class SerializedPart extends BasicPart {
 				return null;
 			return serializer == null ? s(v) : serializer.serialize(type, schema, v);
 		} catch (SchemaValidationException e) {
-			throw runtimeException(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);
+			throw rex(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);
 		} catch (SerializeException e) {
-			throw runtimeException(e, "Serialization error on request {0} part ''{1}''", type, getName());
+			throw rex(e, "Serialization error on request {0} part ''{1}''", type, getName());
 		}
 	}
 

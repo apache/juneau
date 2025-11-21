@@ -342,7 +342,7 @@ public class FileStore extends ConfigStore {
 			try {
 				watchService.close();
 			} catch (IOException e) {
-				throw toRuntimeException(e);
+				throw toRex(e);
 			} finally {
 				super.interrupt();
 			}
@@ -363,7 +363,7 @@ public class FileStore extends ConfigStore {
 						break;
 				}
 			} catch (Exception e) {
-				throw toRuntimeException(e);
+				throw toRex(e);
 			}
 		}
 
@@ -425,7 +425,7 @@ public class FileStore extends ConfigStore {
 			if (nn(watcher))
 				watcher.start();
 		} catch (Exception e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 
@@ -550,7 +550,7 @@ public class FileStore extends ConfigStore {
 			if (! Files.exists(p)) {
 				Files.createDirectories(p.getParent());
 				if (! Files.exists(p) && ! p.toFile().createNewFile()) {
-					throw ioException("Could not create file: {0}", p);
+					throw ioex("Could not create file: {0}", p);
 				}
 			}
 		} catch (@SuppressWarnings("unused") IOException e) {

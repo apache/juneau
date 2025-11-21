@@ -161,7 +161,7 @@ public class PartBeanMeta<T> {
 		try {
 			return constructor.newInstance(args);
 		} catch (Exception e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

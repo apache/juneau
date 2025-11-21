@@ -21,6 +21,7 @@ import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -155,7 +156,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 			inner.setAccessible(true);
 			return (T)inner.get(o);
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
+			throw bex(e);
 		}
 	}
 
@@ -291,7 +292,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 			inner.setAccessible(true);
 			inner.set(o, value);
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
+			throw bex(e);
 		}
 	}
 

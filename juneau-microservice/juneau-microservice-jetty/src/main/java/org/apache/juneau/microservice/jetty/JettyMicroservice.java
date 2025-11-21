@@ -215,7 +215,7 @@ public class JettyMicroservice extends Microservice {
 			else if (jettyXml instanceof Reader reader)
 				this.jettyXml = read(reader);
 			else
-				throw runtimeException("Invalid object type passed to jettyXml(Object): {0}", cn(jettyXml));
+				throw rex("Invalid object type passed to jettyXml(Object): {0}", cn(jettyXml));
 			this.jettyXmlResolveVars = resolveVars;
 			return this;
 		}
@@ -556,7 +556,7 @@ public class JettyMicroservice extends Microservice {
 		if (jettyXml == null)
 			jettyXml = loadSystemResourceAsString("jetty.xml", ".", "files");
 		if (jettyXml == null)
-			throw runtimeException("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
+			throw rex("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
 
 		if (resolveVars)
 			jettyXml = vr.resolve(jettyXml);
@@ -576,7 +576,7 @@ public class JettyMicroservice extends Microservice {
 					var rs = (RestServlet)c.newInstance();
 					addServlet(rs, rs.getPath());
 				} else {
-					throw runtimeException("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: {0}", s);
+					throw rex("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: {0}", s);
 				}
 			} catch (ClassNotFoundException e1) {
 				throw new ExecutableException(e1);
@@ -590,7 +590,7 @@ public class JettyMicroservice extends Microservice {
 					var rs = (Servlet)c.newInstance();
 					addServlet(rs, k);
 				} else {
-					throw runtimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: {0}", cn(v));
+					throw rex("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: {0}", cn(v));
 				}
 			} catch (ClassNotFoundException e1) {
 				throw new ExecutableException(e1);
@@ -711,7 +711,7 @@ public class JettyMicroservice extends Microservice {
 		try {
 			return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);
 		} catch (URISyntaxException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

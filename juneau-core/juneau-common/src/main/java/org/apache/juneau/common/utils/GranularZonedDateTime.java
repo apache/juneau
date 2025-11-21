@@ -144,6 +144,6 @@ public class GranularZonedDateTime {
 			return new GranularZonedDateTime(zdt, precision);
 		}
 
-		throw runtimeException("Invalid date encountered: ''{0}''", seg);
+		throw rex("Invalid date encountered: ''{0}''", seg);
 	}
 }

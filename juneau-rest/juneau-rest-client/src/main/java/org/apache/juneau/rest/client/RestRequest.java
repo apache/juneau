@@ -1644,7 +1644,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				q = s(value);  // Works for NameValuePairs.
 			uriBuilder.setCustomQuery(q);
 		} catch (IOException e) {
-			throw runtimeException(e, "Could not read custom query.");
+			throw rex(e, "Could not read custom query.");
 		}
 		return this;
 	}
@@ -2509,7 +2509,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
 		} else if (nn(value)) {
-			throw runtimeException("Invalid value type for header arg ''{0}'': {1}", name, cn(value));
+			throw rex("Invalid value type for header arg ''{0}'': {1}", name, cn(value));
 		}
 
 		if (skipIfEmpty)
@@ -2544,7 +2544,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, PATH, serializer, schema, false)));
 		} else if (nn(value)) {
-			throw runtimeException("Invalid value type for path arg ''{0}'': {1}", name, cn(value));
+			throw rex("Invalid value type for path arg ''{0}'': {1}", name, cn(value));
 		}
 
 		pathData.append(l);

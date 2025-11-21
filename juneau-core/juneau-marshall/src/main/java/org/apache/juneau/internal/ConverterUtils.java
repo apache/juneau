@@ -200,7 +200,7 @@ public class ConverterUtils {
 		try {
 			return parseNumber(o.toString(), null);
 		} catch (ParseException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

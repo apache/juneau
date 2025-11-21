@@ -21,6 +21,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.DateUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -972,12 +973,12 @@ public class BeanSession extends ContextSession {
 		try {
 			T o = (T)m.newBean(outer);
 			if (o == null)
-				throw new BeanRuntimeException(c, "Class does not have a no-arg constructor.");
+				throw bex(c, "Class does not have a no-arg constructor.");
 			return o;
 		} catch (BeanRuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
+			throw bex(e);
 		}
 	}
 
@@ -1117,7 +1118,7 @@ public class BeanSession extends ContextSession {
 
 		BeanMeta m = cm.getBeanMeta();
 		if (m == null)
-			throw new BeanRuntimeException(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
+			throw bex(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
 		return new BeanMap<>(this, o, m);
 	}
 

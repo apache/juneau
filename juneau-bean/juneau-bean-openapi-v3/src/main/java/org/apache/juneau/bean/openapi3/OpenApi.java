@@ -25,7 +25,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.objecttools.*;
 
@@ -246,13 +245,14 @@ public class OpenApi extends OpenApiElement {
 		assertArgNotNullOrBlank("ref", ref);
 		assertArgNotNull("c", c);
 		if (! ref.startsWith("#/"))
-			throw runtimeException("Unsupported reference:  ''{0}''", ref);
+			throw rex("Unsupported reference:  ''{0}''", ref);
 		try {
 			return new ObjectRest(this).get(ref.substring(1), c);
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, cn(c));
+			throw bex(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, cn(c));
 		}
 	}
+
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

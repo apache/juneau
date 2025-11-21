@@ -431,7 +431,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 					return Json5.DEFAULT.read(in.substring(1),c);
 				return SimplePartParser.DEFAULT.parse(type,schema,in,c);
 			} catch (Exception e) {
-				throw toRuntimeException(e);
+				throw toRex(e);
 			}
 		}
 	}

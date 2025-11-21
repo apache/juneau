@@ -32,7 +32,6 @@ import org.apache.http.conn.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.resource.*;
@@ -579,7 +578,7 @@ public class ResponseContent implements HttpEntity {
 
 			return is;
 		} catch (UnsupportedOperationException e) {
-			throw ioException(e);
+			throw ioex(e);
 		}
 	}
 

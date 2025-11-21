@@ -115,26 +115,26 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void c01_ioException_noArgs() {
-		IOException ex = ioException("File not found");
+		IOException ex = ioex("File not found");
 		assertEquals("File not found", ex.getMessage());
 		assertInstanceOf(IOException.class, ex);
 	}
 
 	@Test
 	void c02_ioException_withArgs() {
-		IOException ex = ioException("Failed to read file {0} at line {1}", "/tmp/test.txt", 42);
+		IOException ex = ioex("Failed to read file {0} at line {1}", "/tmp/test.txt", 42);
 		assertEquals("Failed to read file /tmp/test.txt at line 42", ex.getMessage());
 	}
 
 	@Test
 	void c03_ioException_emptyArgs() {
-		IOException ex = ioException("No formatting");
+		IOException ex = ioex("No formatting");
 		assertEquals("No formatting", ex.getMessage());
 	}
 
 	@Test
 	void c04_ioException_throwable() {
-		IOException ex = ioException("Cannot write to {0}", "readonly.txt");
+		IOException ex = ioex("Cannot write to {0}", "readonly.txt");
 		assertThrows(IOException.class, () -> {
 			throw ex;
 		});
@@ -142,7 +142,7 @@ class ThrowableUtils_Test extends TestBase {
 
 	@Test
 	void c05_ioException_multipleArgs() {
-		IOException ex = ioException("Error at position {0}:{1} in file {2}", 10, 25, "data.csv");
+		IOException ex = ioex("Error at position {0}:{1} in file {2}", 10, 25, "data.csv");
 		assertEquals("Error at position 10:25 in file data.csv", ex.getMessage());
 	}
 
@@ -162,7 +162,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void d02_runtimeException_withCause() {
 		var cause = new SQLException("Database error");
-		RuntimeException ex = runtimeException(cause, "Failed to process {0} at {1}", "user", "login");
+		RuntimeException ex = rex(cause, "Failed to process {0} at {1}", "user", "login");
 		
 		assertEquals("Failed to process user at login", ex.getMessage());
 		assertSame(cause, ex.getCause());
@@ -182,7 +182,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void d04_ioException_withCause() {
 		var cause = new FileNotFoundException("config.xml");
-		IOException ex = ioException(cause, "Failed to load {0}", "configuration");
+		IOException ex = ioex(cause, "Failed to load {0}", "configuration");
 		
 		assertEquals("Failed to load configuration", ex.getMessage());
 		assertSame(cause, ex.getCause());
@@ -192,7 +192,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void d05_runtimeException_withCause_noArgs() {
 		var cause = new NullPointerException("value was null");
-		RuntimeException ex = runtimeException(cause, "Processing failed");
+		RuntimeException ex = rex(cause, "Processing failed");
 		
 		assertEquals("Processing failed", ex.getMessage());
 		assertSame(cause, ex.getCause());
@@ -201,7 +201,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void d06_ioException_withCause_multipleArgs() {
 		var cause = new SocketException("Connection reset");
-		IOException ex = ioException(cause, "Network error at {0}:{1} for host {2}", "192.168.1.1", "8080", "server");
+		IOException ex = ioex(cause, "Network error at {0}:{1} for host {2}", "192.168.1.1", "8080", "server");
 		
 		assertEquals("Network error at 192.168.1.1:8080 for host server", ex.getMessage());
 		assertSame(cause, ex.getCause());
@@ -210,7 +210,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void d07_exception_withCause_chaining() {
 		var rootCause = new IOException("disk full");
-		RuntimeException wrappedException = runtimeException(rootCause, "Cannot write file {0}", "output.txt");
+		RuntimeException wrappedException = rex(rootCause, "Cannot write file {0}", "output.txt");
 		IllegalArgumentException topException = illegalArg(wrappedException, "Invalid operation");
 		
 		assertEquals("Invalid operation", topException.getMessage());

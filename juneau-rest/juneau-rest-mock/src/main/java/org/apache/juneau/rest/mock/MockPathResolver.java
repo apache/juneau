@@ -221,19 +221,19 @@ class MockPathResolver {
 		} else if (state == S7) {
 			this.remainder = uri.substring(mark);
 		} else {
-			throw runtimeException("Invalid URI pattern encountered:  {0}", uri);
+			throw rex("Invalid URI pattern encountered:  {0}", uri);
 		}
 
 		if (! contextPath.isEmpty()) {
 			var p = UrlPathMatcher.of(contextPath);
 			if (p.match(UrlPath.of(this.contextPath)) == null)
-				throw runtimeException("Context path [{0}] not found in URI:  {1}", contextPath, uri);
+				throw rex("Context path [{0}] not found in URI:  {1}", contextPath, uri);
 		}
 
 		if (! servletPath.isEmpty()) {
 			var p = UrlPathMatcher.of(servletPath);
 			if (p.match(UrlPath.of(this.servletPath)) == null)
-				throw runtimeException("Servlet path [{0}] not found in URI:  {1}", servletPath, uri);
+				throw rex("Servlet path [{0}] not found in URI:  {1}", servletPath, uri);
 		}
 	}
 }

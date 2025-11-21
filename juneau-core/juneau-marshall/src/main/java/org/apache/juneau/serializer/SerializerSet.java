@@ -158,7 +158,7 @@ public class SerializerSet {
 				if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
 				} else {
-					throw runtimeException("Invalid type passed to SerializeGroup.Builder.add(): {0}", cn(e));
+					throw rex("Invalid type passed to SerializeGroup.Builder.add(): {0}", cn(e));
 				}
 			}
 			entries.addAll(0, l);
@@ -345,7 +345,7 @@ public class SerializerSet {
 				} else if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
 				} else {
-					throw runtimeException("Invalid type passed to SerializeGroup.Builder.set(): {0}", cn(e));
+					throw rex("Invalid type passed to SerializeGroup.Builder.set(): {0}", cn(e));
 				}
 			}
 			entries = l;
@@ -371,7 +371,7 @@ public class SerializerSet {
 		if (o instanceof Serializer.Builder x) {
 			Serializer.Builder x2 = x.copy();
 			if (ne(x.getClass(), x2.getClass()))
-				throw runtimeException("Copy method not implemented on class {0}", cn(x));
+				throw rex("Copy method not implemented on class {0}", cn(x));
 			x = x2;
 				if (nn(bcBuilder))
 					x.beanContext(bcBuilder);

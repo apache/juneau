@@ -339,11 +339,11 @@ public class ParserReader extends Reader implements Positionable {
 	public final ParserReader replace(int c, int offset) throws IOException {
 		if (c < 0x10000) {
 			if (offset < 1)
-				throw ioException("Buffer underflow.");
+				throw ioex("Buffer underflow.");
 			buff[iCurrent - offset] = (char)c;
 		} else {
 			if (offset < 2)
-				throw ioException("Buffer underflow.");
+				throw ioex("Buffer underflow.");
 			c -= 0x10000;
 			buff[iCurrent - offset] = (char)(0xd800 + (c >> 10));
 			buff[iCurrent - offset + 1] = (char)(0xdc00 + (c & 0x3ff));
@@ -364,7 +364,7 @@ public class ParserReader extends Reader implements Positionable {
 	 */
 	public ParserReader unread() throws IOException {
 		if (iCurrent <= 0)
-			throw ioException("Buffer underflow.");
+			throw ioex("Buffer underflow.");
 		iCurrent--;
 		if (column == 0)
 			line--;

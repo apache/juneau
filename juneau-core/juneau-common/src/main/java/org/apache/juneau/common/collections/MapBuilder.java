@@ -222,7 +222,7 @@ public class MapBuilder<K,V> {
 					if (nn(m))
 						addAny(m);
 					else
-						throw runtimeException("Object of type {0} could not be converted to type {1}", cn(o), "Map");
+						throw rex("Object of type {0} could not be converted to type {1}", cn(o), "Map");
 				}
 			}
 		}
@@ -261,7 +261,7 @@ public class MapBuilder<K,V> {
 			if (nn(e))
 				return e;
 		}
-		throw runtimeException("Object of type {0} could not be converted to type {1}", cn(o), cn(c));
+		throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(c));
 	}
 
 	/**

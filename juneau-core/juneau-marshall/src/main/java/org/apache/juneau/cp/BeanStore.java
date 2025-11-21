@@ -136,7 +136,7 @@ public class BeanStore {
 			if (result.isPresent())
 				return result.get();
 
-			throw runtimeException("Could not find a way to instantiate class {0}", cn(type));
+			throw rex("Could not find a way to instantiate class {0}", cn(type));
 		}
 
 		/**

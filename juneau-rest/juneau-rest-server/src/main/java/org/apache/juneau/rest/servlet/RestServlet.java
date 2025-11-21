@@ -18,19 +18,16 @@ package org.apache.juneau.rest.servlet;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.logging.Level.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.text.*;
-import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.common.reflect.*;

@@ -88,7 +88,7 @@ public abstract class ElementInfo {
 			case NOT_ABSTRACT -> isNotAbstract();
 			case STRICT -> isStrict();
 			case NOT_STRICT -> isNotStrict();
-			default -> throw runtimeException("Invalid flag for element: {0}", flag);
+			default -> throw rex("Invalid flag for element: {0}", flag);
 		};
 	}
 

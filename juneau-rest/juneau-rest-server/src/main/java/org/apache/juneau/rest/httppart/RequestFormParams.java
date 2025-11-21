@@ -373,7 +373,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(() -> runtimeException("@FormData(name) not found on class {0}", cn(type)));
+		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(() -> rex("@FormData(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}
 

@@ -18,6 +18,7 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.BinaryFormat.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -26,7 +27,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.json.*;
@@ -128,7 +128,7 @@ public class Entry {
 			}
 			return opt(parser.parse(v, type, args));
 		} catch (ParseException e) {
-			throw new BeanRuntimeException(e, null, "Value could not be parsed.");
+			throw bex(e, (Class<?>)null, "Value could not be parsed.");
 		}
 	}
 
@@ -223,7 +223,7 @@ public class Entry {
 				return opt(fromSpacedHex(s));
 			return opt(base64Decode(s));
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e, null, "Value could not be converted to a byte array.");
+			throw bex(e, (Class<?>)null, "Value could not be converted to a byte array.");
 		}
 	}
 
@@ -438,7 +438,7 @@ public class Entry {
 			try {
 				return opt(config.parser.parse(v, String[].class));
 			} catch (ParseException e) {
-				throw new BeanRuntimeException(e);
+				throw bex(e);
 			}
 		}
 		return opt(StringUtils.splita(v));

@@ -651,7 +651,7 @@ public abstract class Context {
 				cci = ClassInfo.of(type).getPublicConstructor(
 					x -> x.hasNumParameters(1)
 					&& x.getParameter(0).canAccept(this)
-				).orElseThrow(() -> runtimeException("Public constructor not found: {0}({1})", cn(type), cn(this)));
+				).orElseThrow(() -> rex("Public constructor not found: {0}({1})", cn(type), cn(this)));
 				// @formatter:on
 				CONTEXT_CONSTRUCTORS.put(type, cci);
 			}
@@ -660,7 +660,7 @@ public abstract class Context {
 
 		private Context innerBuild() {
 			if (type == null)
-				throw runtimeException("Type not specified for context builder {0}", cn(getClass()));
+				throw rex("Type not specified for context builder {0}", cn(getClass()));
 			if (nn(impl) && type.isInstance(impl))
 				return type.cast(impl);
 			if (nn(cache))
@@ -742,14 +742,14 @@ public abstract class Context {
 					}
 				}
 				if (mi == null)
-					throw runtimeException("Could not find builder create method on class {0}", cn(type));
+					throw rex("Could not find builder create method on class {0}", cn(type));
 				BUILDER_CREATE_METHODS.put(type, mi);
 			}
 			var b = (Builder)mi.invoke(null);
 			b.type(type);
 			return b;
 		} catch (ExecutableException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

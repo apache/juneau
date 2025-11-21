@@ -129,7 +129,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		if (p == null) {
 			if (meta.ctx.isIgnoreUnknownBeanProperties())
 				return;
-			throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);
+			throw bex(meta.c, "Bean property ''{0}'' not found.", property);
 		}
 		p.add(this, property, value);
 	}
@@ -144,7 +144,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			try {
 				return meta.dynaProperty.getDynaMap(bean).containsKey(key);
 			} catch (Exception e) {
-				throw new BeanRuntimeException(e);
+				throw bex(e);
 			}
 		}
 		return false;
@@ -167,7 +167,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 					try {
 						x.getDynaMap(bean).entrySet().forEach(y -> s.add(new BeanMapEntry(this, x, y.getKey())));
 					} catch (Exception e) {
-						throw new BeanRuntimeException(e);
+						throw bex(e);
 					}
 				} else {
 					s.add(new BeanMapEntry(this, x, x.getName()));
@@ -385,7 +385,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				try {
 					getPropertyMeta(k).setArray(b, v);
 				} catch (Exception e1) {
-					throw toRuntimeException(e1);
+					throw toRex(e1);
 				}
 			});
 			arrayPropertyCache = null;
@@ -434,10 +434,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				propertyCache.forEach((k, v) -> put(k, v));
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
-				throw new BeanRuntimeException(e, meta.classMeta.innerClass, "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getSimpleName(),
+				throw bex(e, meta.classMeta.innerClass, "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getSimpleName(),
 					Json5Serializer.DEFAULT.toString(getClasses(args)));
 			} catch (Exception e) {
-				throw new BeanRuntimeException(e);
+				throw bex(e);
 			}
 		}
 		return bean;
@@ -640,7 +640,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 			p = getPropertyMeta("*");
 			if (p == null)
-				throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);
+				throw bex(meta.c, "Bean property ''{0}'' not found.", property);
 		}
 		return p.set(this, property, value);
 	}

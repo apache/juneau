@@ -326,7 +326,7 @@ public class RestUtils {
 				return m;
 			}
 		} catch (IOException e) {
-			throw toRuntimeException(e); // Should never happen.
+			throw toRex(e); // Should never happen.
 		}
 	}
 
@@ -444,7 +444,7 @@ public class RestUtils {
 				return requestURI;
 			throw new Exception("case=6");
 		} catch (Exception e) {
-			throw runtimeException(e, "Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''", requestURI, servletPath);
+			throw rex(e, "Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''", requestURI, servletPath);
 		}
 	}
 
@@ -455,7 +455,7 @@ public class RestUtils {
 	 */
 	public static void validateContextPath(String value) {
 		if (! isValidContextPath(value))
-			throw runtimeException("Value is not a valid context path: [{0}]", value);
+			throw rex("Value is not a valid context path: [{0}]", value);
 	}
 
 	/**
@@ -465,7 +465,7 @@ public class RestUtils {
 	 */
 	public static void validatePathInfo(String value) {
 		if (! isValidPathInfo(value))
-			throw runtimeException("Value is not a valid path-info path: [{0}]", value);
+			throw rex("Value is not a valid path-info path: [{0}]", value);
 	}
 
 	/**
@@ -475,7 +475,7 @@ public class RestUtils {
 	 */
 	public static void validateServletPath(String value) {
 		if (! isValidServletPath(value))
-			throw runtimeException("Value is not a valid servlet path: [{0}]", value);
+			throw rex("Value is not a valid servlet path: [{0}]", value);
 	}
 
 	private static void add(Map<String,String[]> m, String key, String val) {

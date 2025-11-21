@@ -4604,7 +4604,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (StringUtils.isEmpty(s))
 				rootUrl = null;
 			else if (s.indexOf("://") == -1)
-				throw runtimeException("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
+				throw rex("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
 			else
 				rootUrl = s;
 			return this;
@@ -6960,7 +6960,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						} catch (Exception e) {
 							throw e;
 						} catch (Throwable e) {
-							throw toRuntimeException(e);
+							throw toRex(e);
 						}
 					});
 				} else if (ror.isCompletableFuture()) {
@@ -7110,7 +7110,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					for (var t2 : method.getExceptionTypes())
 						if (t2.isInstance(e))
 							throw e;
-					throw toRuntimeException(e);
+					throw toRex(e);
 				}
 			}
 		});
@@ -7616,7 +7616,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			try {
 				x = beanStore.createBean(c).run();
 			} catch (ExecutableException e) {
-				throw toRuntimeException(e);
+				throw toRex(e);
 			}
 			partParsers.put(c, x);
 		}
@@ -7642,7 +7642,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			try {
 				x = beanStore.createBean(c).run();
 			} catch (ExecutableException e) {
-				throw toRuntimeException(e);
+				throw toRex(e);
 			}
 			partSerializers.put(c, x);
 		}
@@ -7912,7 +7912,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			for (var t2 : method.getExceptionTypes())
 				if (t2.isInstance(t))
 					throw t;
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

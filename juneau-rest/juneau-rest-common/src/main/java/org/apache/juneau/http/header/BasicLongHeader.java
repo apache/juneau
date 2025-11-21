@@ -204,7 +204,7 @@ public class BasicLongHeader extends BasicHeader {
 		try {
 			return value == null ? null : Long.parseLong(value);
 		} catch (NumberFormatException e) {
-			throw runtimeException(e, "Value ''{0}'' could not be parsed as a long.", value);
+			throw rex(e, "Value ''{0}'' could not be parsed as a long.", value);
 		}
 	}
 

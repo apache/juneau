@@ -26,7 +26,6 @@ import java.util.*;
 import javax.xml.stream.*;
 
 import org.apache.juneau.common.io.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -209,7 +208,7 @@ public class XmlUtils {
 				w.append(s);
 			}
 		} catch (IOException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 
 		return w;
@@ -234,7 +233,7 @@ public class XmlUtils {
 					return encodeElementNameInner(w, s).toString();
 				}
 		} catch (IOException e) {
-			throw toRuntimeException(e); // Never happens
+			throw toRex(e); // Never happens
 		}
 
 		return s;
@@ -256,7 +255,7 @@ public class XmlUtils {
 				return encodeElementNameInner(w, s);
 			w.append(s);
 		} catch (IOException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 		return w;
 	}
@@ -309,7 +308,7 @@ public class XmlUtils {
 				w.append(s);
 			}
 		} catch (IOException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 
 		return w;
@@ -344,7 +343,7 @@ public class XmlUtils {
 			}
 			return sw.toString();
 		} catch (IOException e) {
-			throw toRuntimeException(e); // Never happens
+			throw toRex(e); // Never happens
 		}
 	}
 
@@ -480,7 +479,7 @@ public class XmlUtils {
 					if (xmlNs.prefix().equals(prefix))
 						return Namespace.of(prefix, xmlNs.namespaceURI());
 			}
-			throw new BeanRuntimeException("Found @Xml.prefix annotation with no matching URI.  prefix='" + prefix + "'");
+			throw bex("Found @Xml.prefix annotation with no matching URI.  prefix='" + prefix + "'");
 		}
 
 		// If only namespaceURI specified, need to search for prefix.

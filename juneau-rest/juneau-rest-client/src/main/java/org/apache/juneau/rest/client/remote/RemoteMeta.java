@@ -81,7 +81,7 @@ public class RemoteMeta {
 				try {
 					headers.append(r.headerList().getDeclaredConstructor().newInstance().getAll());
 				} catch (Exception e) {
-					throw runtimeException(e, "Could not instantiate HeaderSupplier class");
+					throw rex(e, "Could not instantiate HeaderSupplier class");
 				}
 			}
 		}

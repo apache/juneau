@@ -136,7 +136,7 @@ public class MsgPackInputStream extends ParserInputStream {
 	DataType readDataType() throws IOException {
 		int i = read();
 		if (i == -1)
-			throw ioException("Unexpected end of file found at position {0}", pos);
+			throw ioex("Unexpected end of file found at position {0}", pos);
 		currentDataType = TYPES[i];
 		switch (currentDataType) {
 			case NULL:
@@ -427,7 +427,7 @@ public class MsgPackInputStream extends ParserInputStream {
 				break;
 			}
 			default:
-				throw ioException("Invalid flag 0xC1 detected in stream.");
+				throw ioex("Invalid flag 0xC1 detected in stream.");
 		}
 		return currentDataType;
 	}

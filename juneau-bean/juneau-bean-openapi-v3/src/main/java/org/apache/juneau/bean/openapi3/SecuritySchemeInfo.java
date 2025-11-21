@@ -342,7 +342,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 */
 	public SecuritySchemeInfo setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
-			throw runtimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values=[{1}]", value, toCdl(VALID_IN));
+			throw rex("Invalid value passed in to setIn(String).  Value=''{0}'', valid values=[{1}]", value, toCdl(VALID_IN));
 		in = value;
 		return this;
 	}
@@ -432,7 +432,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 */
 	public SecuritySchemeInfo setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw runtimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values=[{1}]", value, toCdl(VALID_TYPES));
+			throw rex("Invalid value passed in to setType(String).  Value=''{0}'', valid values=[{1}]", value, toCdl(VALID_TYPES));
 		type = value;
 		return this;
 	}

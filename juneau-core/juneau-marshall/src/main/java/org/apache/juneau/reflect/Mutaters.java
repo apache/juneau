@@ -239,7 +239,7 @@ public class Mutaters {
 						try {
 							return createMethod.invoke(null, in);
 						} catch (Exception e) {
-							throw toRuntimeException(e);
+							throw toRex(e);
 						}
 					}
 				};
@@ -263,7 +263,7 @@ public class Mutaters {
 						try {
 							return cm.invoke(null, in);
 						} catch (Exception e) {
-							throw toRuntimeException(e);
+							throw toRex(e);
 						}
 					}
 				};
@@ -281,7 +281,7 @@ public class Mutaters {
 							return c.newInstance(outer, in);
 						return c.newInstance(in);
 					} catch (Exception e) {
-						throw toRuntimeException(e);
+						throw toRex(e);
 					}
 				}
 			};
@@ -295,7 +295,7 @@ public class Mutaters {
 					try {
 						return toXMethod.invoke(in);
 					} catch (Exception e) {
-						throw toRuntimeException(e);
+						throw toRex(e);
 					}
 				}
 			};

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -23,7 +24,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.cp.*;
 
@@ -52,14 +52,16 @@ public class BeanRegistry {
 
 	private final Map<String,ClassMeta<?>> map;
 	private final Map<Class<?>,String> reverseMap;
-	private final BeanContext beanContext;
+	private final BeanContext bc;
+	private final AnnotationProvider ap;
 	private final boolean isEmpty;
 
-	BeanRegistry(BeanContext beanContext, BeanRegistry parent, Class<?>...classes) {
-		this.beanContext = beanContext;
+	BeanRegistry(BeanContext bc, BeanRegistry parent, Class<?>...classes) {
+		this.bc = bc;
+		this.ap = bc.getAnnotationProvider();
 		this.map = new ConcurrentHashMap<>();
 		this.reverseMap = new ConcurrentHashMap<>();
-		beanContext.getBeanDictionary().forEach(this::addClass);
+		bc.getBeanDictionary().forEach(this::addClass);
 		if (nn(parent))
 			parent.map.forEach(this::addToMap);
 		for (var c : classes)
@@ -78,13 +80,13 @@ public class BeanRegistry {
 	public ClassMeta<?> getClassMeta(String typeName) {
 		if (isEmpty || typeName == null)
 			return null;
-		ClassMeta<?> cm = map.get(typeName);
+		var cm = map.get(typeName);
 		if (nn(cm))
 			return cm;
 		if (typeName.charAt(typeName.length() - 1) == '^') {
 			cm = getClassMeta(typeName.substring(0, typeName.length() - 1));
 			if (nn(cm)) {
-				cm = beanContext.getClassMeta(Array.newInstance(cm.innerClass, 1).getClass());
+				cm = bc.getClassMeta(Array.newInstance(cm.innerClass, 1).getClass());
 				map.put(typeName, cm);
 			}
 			return cm;
@@ -99,9 +101,7 @@ public class BeanRegistry {
 	 * @return The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.
 	 */
 	public String getTypeName(ClassMeta<?> c) {
-		if (isEmpty)
-			return null;
-		return reverseMap.get(c.innerClass);
+		return isEmpty ? null : reverseMap.get(c.innerClass);
 	}
 
 	/**
@@ -133,33 +133,35 @@ public class BeanRegistry {
 						if (x instanceof Class)
 							addClass((Class<?>)x);
 						else
-							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", cn(c));
+							throw bex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", cn(c));
 					});
 				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
 					m.forEach((k, v) -> {
-						String typeName = s(k);
+						var typeName = s(k);
 						ClassMeta<?> val = null;
 						if (v instanceof Type)
-							val = beanContext.getClassMeta((Type)v);
+							val = bc.getClassMeta((Type)v);
 						else if (isArray(v))
 							val = getTypedClassMeta(v);
 						else
-							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", cn(c), cn(v));
+							throw bex("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", cn(c), cn(v));
 						addToMap(typeName, val);
 					});
 				} else {
-					Value<String> typeName = Value.empty();
-					//beanContext.getAnnotationProvider().xforEachClassAnnotation(Bean.class, ci, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
-					beanContext.getAnnotationProvider().findTopDown(Bean.class, ci).map(x -> x.inner().typeName()).filter(x -> isNotEmpty(x)).forEach(x -> typeName.set(x));
-					addToMap(typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", cn(c))),
-						beanContext.getClassMeta(c));
+					var typeName = ap.find(Bean.class, ci)
+						.stream()
+						.map(x -> x.inner().typeName())
+						.filter(x -> isNotEmpty(x))
+						.findFirst()
+						.orElseThrow(() -> bex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", cn(c)));
+					addToMap(typeName, bc.getClassMeta(c));
 				}
 			}
 		} catch (BeanRuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
+			throw bex(e);
 		}
 	}
 
@@ -169,13 +171,13 @@ public class BeanRegistry {
 	}
 
 	private ClassMeta<?> getTypedClassMeta(Object array) {
-		int len = Array.getLength(array);
+		var len = Array.getLength(array);
 		if (len == 0)
-			throw new BeanRuntimeException("Map entry had an empty array value.");
+			throw bex("Map entry had an empty array value.");
 		var type = (Type)Array.get(array, 0);
-		Type[] args = new Type[len - 1];
+		var args = new Type[len - 1];
 		for (int i = 1; i < len; i++)
 			args[i - 1] = (Type)Array.get(array, i);
-		return beanContext.getClassMeta(type, args);
+		return bc.getClassMeta(type, args);
 	}
 }

@@ -17,13 +17,13 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents a map of dictionary type names to bean classes that make up a bean dictionary.
@@ -88,7 +88,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 				return;
 			}
 		}
-		throw new BeanRuntimeException("Invalid object type passed to BeanDictionaryMap: ''{0}''.  Only objects of type Class or Object[] containing Class or Object[] objects can be used.");
+		throw bex("Invalid object type passed to BeanDictionaryMap: ''{0}''.  Only objects of type Class or Object[] containing Class or Object[] objects can be used.", cn(o));
 	}
 
 	/**

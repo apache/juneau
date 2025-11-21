@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.*;
@@ -117,7 +118,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 		String cen = xml.childName();
 		if ((! cen.isEmpty()) && (! isCollection))
-			throw new BeanRuntimeException(cmProperty.getInnerClass(), "Annotation error on property ''{0}''.  @Xml.childName can only be specified on collections and arrays.", name);
+			throw bex(cmProperty.getInnerClass(), "Annotation error on property ''{0}''.  @Xml.childName can only be specified on collections and arrays.", name);
 
 		if (xmlFormat == XmlFormat.COLLAPSED) {
 			if (isCollection) {
@@ -128,7 +129,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 				if (cen == null || cen.isEmpty())
 					cen = name;
 			} else {
-				throw new BeanRuntimeException(cmBean.getInnerClass(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
+				throw bex(cmBean.getInnerClass(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
 			}
 			if (cen.isEmpty() && isCollection)
 				cen = cmProperty.getDictionaryName();

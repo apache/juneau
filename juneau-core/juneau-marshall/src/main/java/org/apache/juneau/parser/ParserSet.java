@@ -162,7 +162,7 @@ public class ParserSet {
 				if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else if (! v.getSimpleName().equals("NoInherit")) {
-					throw runtimeException("Invalid type passed to ParserSet.Builder.add(): {0}", cn(v));
+					throw rex("Invalid type passed to ParserSet.Builder.add(): {0}", cn(v));
 				}
 			}
 			entries.addAll(0, l);
@@ -349,7 +349,7 @@ public class ParserSet {
 				} else if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else {
-					throw runtimeException("Invalid type passed to ParserGrouup.Builder.set(): {0}", cn(v));
+					throw rex("Invalid type passed to ParserGrouup.Builder.set(): {0}", cn(v));
 				}
 			}
 			entries = l;
@@ -375,7 +375,7 @@ public class ParserSet {
 		if (o instanceof Parser.Builder x) {
 			Parser.Builder x2 = x.copy();
 			if (ne(x.getClass(), x2.getClass()))
-				throw runtimeException("Copy method not implemented on class {0}", cn(x));
+				throw rex("Copy method not implemented on class {0}", cn(x));
 			x = x2;
 				if (nn(bcBuilder))
 					x.beanContext(bcBuilder);

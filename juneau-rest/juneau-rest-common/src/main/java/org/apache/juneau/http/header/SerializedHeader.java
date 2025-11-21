@@ -234,9 +234,9 @@ public class SerializedHeader extends BasicHeader {
 				return null;
 			return serializer == null ? s(v) : serializer.serialize(HttpPartType.HEADER, schema, v);
 		} catch (SchemaValidationException e) {
-			throw runtimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
+			throw rex(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {
-			throw runtimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
+			throw rex(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
 	}
 

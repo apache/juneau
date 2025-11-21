@@ -17,13 +17,13 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents a wrapped {@link BeanMap} where property values can be overridden, removed, or reordered without
@@ -87,7 +87,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 			else
 				bme = this.getProperty(k);
 			if (bme == null)
-				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", k);
+				throw bex(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", k);
 			s.add(bme);
 		});
 		return s;

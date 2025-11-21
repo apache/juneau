@@ -66,7 +66,7 @@ public class UriContext {
 		try {
 			return new UriContext(s);
 		} catch (ParseException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

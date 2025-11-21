@@ -56,7 +56,7 @@ public class ContentComboTestBase extends RestTestcase {
 			case "text/uon" -> getClient(mt, UonSerializer.DEFAULT, UonParser.DEFAULT);
 			case "application/x-www-form-urlencoded" -> getClient(mt, UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT);
 			case "text/xml" -> getClient(mt, XmlSerializer.DEFAULT, XmlParser.DEFAULT);
-			default -> throw runtimeException("Client for mediaType ''{0}'' not found", mt);
+			default -> throw rex("Client for mediaType ''{0}'' not found", mt);
 		};
 	}
 

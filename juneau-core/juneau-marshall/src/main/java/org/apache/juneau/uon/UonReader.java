@@ -50,7 +50,7 @@ public class UonReader extends ParserReader {
 			return 10 + c - 'a';
 		if (c >= 'A' && c <= 'F')
 			return 10 + c - 'A';
-		throw ioException("Invalid hex character ''{0}'' found in escape pattern.", c);
+		throw ioex("Invalid hex character ''{0}'' found in escape pattern.", c);
 	}
 
 	private final boolean decodeChars;
@@ -130,7 +130,7 @@ public class UonReader extends ParserReader {
 
 				} else if (b0 < 192) {
 					// 10xxxxxx
-					throw ioException("Invalid hex value for first escape pattern in UTF-8 sequence: {0}", b0);
+					throw ioex("Invalid hex value for first escape pattern in UTF-8 sequence: {0}", b0);
 
 				} else if (b0 < 224) {
 					// 110xxxxx	10xxxxxx
@@ -160,7 +160,7 @@ public class UonReader extends ParserReader {
 					}
 
 				} else
-					throw ioException("Invalid hex value for first escape pattern in UTF-8 sequence: {0}", b0);
+					throw ioex("Invalid hex value for first escape pattern in UTF-8 sequence: {0}", b0);
 
 				if (cx < 0x10000)
 					cbuf[off + i++] = (char)cx;
@@ -182,7 +182,7 @@ public class UonReader extends ParserReader {
 
 	private int readEncodedByte() throws IOException {
 		if (iEnd <= iCurrent + 1)
-			throw ioException("Incomplete trailing escape pattern");
+			throw ioex("Incomplete trailing escape pattern");
 		int h = buff[iCurrent++];
 		int l = buff[iCurrent++];
 		h = fromHexChar(h);
@@ -193,7 +193,7 @@ public class UonReader extends ParserReader {
 	private int readHex() throws IOException {
 		var c = buff[iCurrent++];
 		if (c != '%')
-			throw ioException("Did not find expected '%' character in UTF-8 sequence.");
+			throw ioex("Did not find expected '%' character in UTF-8 sequence.");
 		return readEncodedByte();
 	}
 

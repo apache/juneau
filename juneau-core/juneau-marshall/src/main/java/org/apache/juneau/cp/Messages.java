@@ -267,7 +267,7 @@ public class Messages extends ResourceBundle {
 						try {
 							ms = Json5.DEFAULT.read(value, MessagesString.class);
 						} catch (ParseException e) {
-							throw toRuntimeException(e);
+							throw toRex(e);
 						}
 						x = Messages.create(c).name(ms.name).baseNames(StringUtils.splita(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
 					} else {

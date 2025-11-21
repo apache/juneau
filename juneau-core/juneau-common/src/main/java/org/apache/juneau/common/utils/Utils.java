@@ -762,7 +762,7 @@ public class Utils {
 		} catch (RuntimeException t) {
 			throw t;
 		} catch (Throwable t) {
-			throw ThrowableUtils.toRuntimeException(t);
+			throw ThrowableUtils.toRex(t);
 		}
 	}
 
@@ -781,7 +781,7 @@ public class Utils {
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw rex(e);
 		}
 	}
 
@@ -799,7 +799,7 @@ public class Utils {
 		} catch (RuntimeException t) {
 			throw t;
 		} catch (Throwable t) {
-			throw toRuntimeException(t);
+			throw toRex(t);
 		}
 	}
 
@@ -891,7 +891,7 @@ public class Utils {
 			return (T)Enum.valueOf((Class<? extends Enum>)c, s);
 		var f = (Function<String,T>)ENV_FUNCTIONS.get(c);
 		if (f == null)
-			throw runtimeException("Invalid env type: {0}", c);
+			throw rex("Invalid env type: {0}", c);
 		return f.apply(s);
 	}
 

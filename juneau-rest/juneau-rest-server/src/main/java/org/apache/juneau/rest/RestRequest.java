@@ -1185,7 +1185,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 				return null;
 			});
 		} catch (Exception e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 
@@ -1303,7 +1303,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			return new URI(uri);
 		} catch (URISyntaxException e) {
 			// Shouldn't happen.
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

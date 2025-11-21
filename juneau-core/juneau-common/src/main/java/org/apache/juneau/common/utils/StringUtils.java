@@ -3466,7 +3466,7 @@ public class StringUtils {
 		try {
 			return new URI(o.toString());
 		} catch (URISyntaxException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 
@@ -3884,7 +3884,7 @@ public class StringUtils {
 			}
 			return -1;
 		} catch (Exception e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

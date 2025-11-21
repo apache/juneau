@@ -156,7 +156,7 @@ public abstract class Widget implements HtmlWidget {
 				s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
 			return s;
 		} catch (IOException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 
@@ -234,7 +234,7 @@ public abstract class Widget implements HtmlWidget {
 				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 			return s;
 		} catch (IOException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

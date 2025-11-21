@@ -16,14 +16,10 @@
  */
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
 
 import java.lang.reflect.*;
-import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.http.annotation.*;

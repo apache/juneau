@@ -127,7 +127,7 @@ public abstract class OpenApiElement {
 	public OpenApiElement set(String property, Object value) {
 		assertArgNotNull("property", property);
 		if (strict)
-			throw runtimeException("Cannot set property ''{0}'' in strict mode.", property);
+			throw rex("Cannot set property ''{0}'' in strict mode.", property);
 		if (extra == null)
 			extra = map();
 		extra.put(property, value);

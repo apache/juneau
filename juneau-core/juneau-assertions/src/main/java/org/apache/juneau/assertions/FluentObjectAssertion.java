@@ -249,7 +249,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		try {
 			return new FluentStringAssertion<>(this, ws.serialize(value), returns());
 		} catch (SerializeException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

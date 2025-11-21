@@ -232,7 +232,7 @@ public class SetBuilder<E> {
 								if (nn(l))
 									addAny(l);
 								else
-									throw runtimeException("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
+									throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
 							}
 						}
 					}

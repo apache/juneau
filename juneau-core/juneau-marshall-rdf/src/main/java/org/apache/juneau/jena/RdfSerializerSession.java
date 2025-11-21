@@ -248,7 +248,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		// Only apply properties with this prefix!
 		String propPrefix = LANG_PROP_MAP.get(ctx.getLanguage());
 		if (propPrefix == null)
-			throw runtimeException("Unknown RDF language encountered: ''{0}''", ctx.getLanguage());
+			throw rex("Unknown RDF language encountered: ''{0}''", ctx.getLanguage());
 
 		// RDF/XML specific properties.
 		if (propPrefix.equals("rdfXml.")) {

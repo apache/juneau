@@ -388,6 +388,13 @@ public class CollectionUtils {
 		return l.get(l.size() - 1);
 	}
 
+	/**
+	 * Returns the first element in a list.
+	 *
+	 * @param <E> The element type.
+	 * @param l The list. Can be <jk>null</jk>.
+	 * @return The first element in the list, or <jk>null</jk> if the list is <jk>null</jk> or empty.
+	 */
 	public static <E> E first(List<E> l) {
 		if (l == null || l.isEmpty())
 			return null;
@@ -1613,6 +1620,14 @@ public class CollectionUtils {
 		return value.toArray(array);
 	}
 
+	/**
+	 * Creates an array of the specified component type and length.
+	 *
+	 * @param <E> The component type of the array.
+	 * @param componentType The component type of the array.
+	 * @param length The length of the array.
+	 * @return A new array of the specified type and length. Never <jk>null</jk>.
+	 */
 	public static <E> E[] array(Class<E> componentType, int length) {
 		return (E[])Array.newInstance(componentType, length);
 	}
@@ -1963,7 +1978,7 @@ public class CollectionUtils {
 			return o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());
 		if (isArray(o))
 			return arrayToList(o);
-		throw runtimeException("Could not convert object of type {0} to a list", cn(o));
+		throw rex("Could not convert object of type {0} to a list", cn(o));
 	}
 
 	/**

@@ -49,7 +49,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 		try {
 			this.dtf = DatatypeFactory.newInstance();
 		} catch (DatatypeConfigurationException e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 

@@ -70,7 +70,7 @@ public class HttpPart implements NameValuePair {
 		try {
 			return serializer.serialize(partType, schema, opart);
 		} catch (Exception e) {
-			throw toRuntimeException(e);
+			throw toRex(e);
 		}
 	}
 }

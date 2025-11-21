@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
 
@@ -80,7 +80,7 @@ public class RdfUtils {
 					if (rdfNs.prefix().equals(prefix))
 						return Namespace.of(prefix, rdfNs.namespaceURI());
 			}
-			throw new BeanRuntimeException("Found @Rdf.prefix annotation with no matching URI.  prefix='" + prefix + "'");
+			throw bex("Found @Rdf.prefix annotation with no matching URI.  prefix='" + prefix + "'");
 		}
 
 		// If only namespaceURI specified, need to search for prefix.

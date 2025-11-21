@@ -379,14 +379,14 @@ public class AnnotationProvider {
 
 					ci.getPublicMethod(x -> x.hasName("onClass")).ifPresent(mi -> {
 						if (! mi.getReturnType().is(Class[].class))
-							throw new BeanRuntimeException("Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array.", scn(a));
+							throw bex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array.", scn(a));
 						for (var c : (Class<?>[])mi.accessible().invoke(a))
 							runtimeAnnotations.append(c.getName(), a);
 					});
 
 					ci.getPublicMethod(x -> x.hasName("on")).ifPresent(mi -> {
 						if (! mi.getReturnType().is(String[].class))
-							throw new BeanRuntimeException("Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array.", scn(a));
+							throw bex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array.", scn(a));
 						for (var s : (String[])mi.accessible().invoke(a))
 							runtimeAnnotations.append(s, a);
 					});
@@ -394,7 +394,7 @@ public class AnnotationProvider {
 				} catch (BeanRuntimeException e) {
 					throw e;
 				} catch (Exception e) {
-					throw new BeanRuntimeException(e, null, "Invalid annotation @{0} used in runtime annotations.", cn(a));
+					throw bex(e, (Class<?>)null, "Invalid annotation @{0} used in runtime annotations.", cn(a));
 				}
 			}
 			return this;
@@ -531,12 +531,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A stream of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public Stream<AnnotationInfo<? extends Annotation>> find(ClassInfo c, AnnotationTraversal... traversals) {
-		assertArgNotNull("c", c);
-		return cache.get(null, c, traversals).stream();
-	}
-
-	public List<AnnotationInfo<? extends Annotation>> find2(ClassInfo c, AnnotationTraversal... traversals) {
+	public List<AnnotationInfo<? extends Annotation>> find(ClassInfo c, AnnotationTraversal... traversals) {
 		assertArgNotNull("c", c);
 		return cache.get(null, c, traversals);
 	}
@@ -1245,10 +1240,10 @@ public class AnnotationProvider {
 				}
 			}
 			if (t.contains(DECLARING_CLASS)) {
-				l.addAll(find2(mi.getDeclaringClass(), a(PARENTS)));
+				l.addAll(find(mi.getDeclaringClass(), a(PARENTS)));
 			}
 			if (t.contains(RETURN_TYPE)) {
-				l.addAll(find2(mi.getReturnType().unwrap(Value.class, Optional.class), a(PARENTS)));
+				l.addAll(find(mi.getReturnType().unwrap(Value.class, Optional.class), a(PARENTS)));
 			}
 			if (t.contains(PACKAGE)) {
 				if (mi.getDeclaringClass().getPackage() != null)
@@ -1274,7 +1269,7 @@ public class AnnotationProvider {
 				}
 			}
 			if (t.contains(PARAMETER_TYPE)) {
-				l.addAll(find2(pi.getParameterType().unwrap(Value.class, Optional.class), a(PARENTS, PACKAGE)));
+				l.addAll(find(pi.getParameterType().unwrap(Value.class, Optional.class), a(PARENTS, PACKAGE)));
 			}
 		}
 

@@ -61,7 +61,7 @@ public class Namespace {
 			return (Namespace)o;
 		if (o instanceof CharSequence)
 			return of(o.toString());
-		throw runtimeException("Invalid object type passed to Namespace.create(Object):  ''{0}''", cn(o));
+		throw rex("Invalid object type passed to Namespace.create(Object):  ''{0}''", cn(o));
 	}
 
 	/**
@@ -108,12 +108,12 @@ public class Namespace {
 				else if (o2 instanceof CharSequence)
 					n[i++] = create(o2.toString());
 				else
-					throw runtimeException("Invalid type passed to NamespaceFactory.createArray: ''{0}''", cn(o));
+					throw rex("Invalid type passed to NamespaceFactory.createArray: ''{0}''", cn(o));
 			}
 			return n;
 		}
 
-		throw runtimeException("Invalid type passed to NamespaceFactory.createArray: ''{0}''", cn(o));
+		throw rex("Invalid type passed to NamespaceFactory.createArray: ''{0}''", cn(o));
 	}
 
 	/**
