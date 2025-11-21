@@ -21,6 +21,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
+import static org.apache.juneau.common.collections.CacheMode.*;
 import static java.util.stream.Stream.*;
 
 import java.lang.annotation.*;
@@ -180,10 +181,55 @@ import org.apache.juneau.common.collections.*;
  */
 public class AnnotationProvider {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// System properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Disable annotation caching.
+	 * Caching mode for annotation lookups.
+	 *
+	 * <p>
+	 * System property: <c>juneau.annotationProvider.caching</c>
+	 * <br>Valid values: <c>NONE</c>, <c>WEAK</c>, <c>FULL</c> (case-insensitive)
+	 * <br>Default: <c>FULL</c>
+	 *
+	 * <ul>
+	 * 	<li><c>NONE</c> - Disables all caching (always recompute)
+	 * 	<li><c>WEAK</c> - Uses WeakHashMap (allows GC of cached entries)
+	 * 	<li><c>FULL</c> - Uses ConcurrentHashMap (best performance)
+	 * </ul>
 	 */
-	private static final boolean DISABLE_ANNOTATION_CACHING = Boolean.getBoolean("juneau.disableAnnotationCaching");
+	private static final CacheMode CACHING_MODE = CacheMode.parse(System.getProperty("juneau.annotationProvider.caching", "FULL"));
+
+	/**
+	 * Enable logging of cache statistics on JVM shutdown.
+	 *
+	 * <p>
+	 * System property: <c>juneau.annotationProvider.caching.logOnExit</c>
+	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
+	 * <br>Default: <c>FALSE</c>
+	 */
+	private static final boolean LOG_ON_EXIT = b(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
+
+	/**
+	 * Enable performance instrumentation for tracking method call counts.
+	 *
+	 * <p>
+	 * System property: <c>juneau.annotationProvider.instrumentation</c>
+	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
+	 * <br>Default: <c>FALSE</c>
+	 */
+	private static final boolean ENABLE_INSTRUMENTATION = b(System.getProperty("juneau.annotationProvider.instrumentation"));
+
+	/**
+	 * Enable new optimized code path for annotation lookups.
+	 *
+	 * <p>
+	 * System property: <c>juneau.annotationProvider.useNewCode</c>
+	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
+	 * <br>Default: <c>FALSE</c>
+	 */
+	private static final boolean ENABLE_NEW_CODE = b(System.getProperty("juneau.annotationProvider.useNewCode"));
 
 	/**
 	 * Default instance.
@@ -195,9 +241,6 @@ public class AnnotationProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Map<String, Long> methodCallCounts = new java.util.concurrent.ConcurrentHashMap<>();
-	private static final boolean ENABLE_INSTRUMENTATION = Boolean.getBoolean("juneau.instrumentAnnotationProvider");
-//	private static final boolean ENABLE_NEW_CODE = Boolean.getBoolean("juneau.annotationProvider.enableNewCode");
-	private static final boolean ENABLE_NEW_CODE = true;
 
 	static {
 		if (ENABLE_INSTRUMENTATION) {
@@ -252,11 +295,13 @@ public class AnnotationProvider {
 	 * </ul>
 	 */
 	public static class Builder {
-		boolean disableCaching;
+		CacheMode cacheMode;
+		boolean logOnExit;
 		ReflectionMap.Builder<Annotation> runtimeAnnotations = ReflectionMap.create(Annotation.class);
 
 		Builder() {
-			disableCaching = DISABLE_ANNOTATION_CACHING;
+			cacheMode = CACHING_MODE;
+			logOnExit = LOG_ON_EXIT;
 		}
 
 		/**
@@ -269,26 +314,42 @@ public class AnnotationProvider {
 		}
 
 		/**
-		 * Disables annotation caching entirely.
+		 * Sets the caching mode for annotation lookups.
 		 *
 		 * <p>
-		 * When disabled, annotation lookups will always perform fresh searches without caching results.
+		 * Available modes:
+		 * <ul>
+		 * 	<li><c>NONE</c> - Disables all caching (always recompute)
+		 * 	<li><c>WEAK</c> - Uses WeakHashMap (allows GC of cached entries)
+		 * 	<li><c>FULL</c> - Uses ConcurrentHashMap (best performance)
+		 * </ul>
 		 *
+		 * @param value The caching mode.
 		 * @return This object for method chaining.
 		 */
-		public Builder disableCaching() {
-			disableCaching = true;
+		public Builder cacheMode(CacheMode value) {
+			cacheMode = value;
 			return this;
 		}
 
 		/**
-		 * Conditionally disables or enables annotation caching.
+		 * Enables logging of cache statistics on JVM shutdown.
 		 *
-		 * @param value Whether to disable caching.
 		 * @return This object for method chaining.
 		 */
-		public Builder disableCaching(boolean value) {
-			disableCaching = value;
+		public Builder logOnExit() {
+			logOnExit = true;
+			return this;
+		}
+
+		/**
+		 * Conditionally enables logging of cache statistics on JVM shutdown.
+		 *
+		 * @param value Whether to log on exit.
+		 * @return This object for method chaining.
+		 */
+		public Builder logOnExit(boolean value) {
+			logOnExit = value;
 			return this;
 		}
 
@@ -352,11 +413,11 @@ public class AnnotationProvider {
 	 * 		.value(MySwap.<jk>class</jk>)
 	 * 		.build();
 	 *
- * 	<jc>// Add all runtime annotations to the provider</jc>
- * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
- * 		.<jsm>create</jsm>()
- * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>multiAnnotation</jv>, <jv>stringAnnotation</jv>, <jv>swapAnnotation</jv>)
- * 		.build();
+	 * 	<jc>// Add all runtime annotations to the provider</jc>
+	 * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
+	 * 		.<jsm>create</jsm>()
+	 * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>multiAnnotation</jv>, <jv>stringAnnotation</jv>, <jv>swapAnnotation</jv>)
+	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
@@ -456,26 +517,41 @@ public class AnnotationProvider {
 	 * @param builder The builder containing configuration settings.
 	 */
 	protected AnnotationProvider(Builder builder) {
-		this.classRuntimeAnnotations = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
+		var classCache = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findClassRuntimeAnnotations)
-			.disableCaching(builder.disableCaching)
-			.build();
-		this.methodRuntimeAnnotations = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
+			.cacheMode(builder.cacheMode);
+		if (builder.logOnExit)
+			classCache.logOnExit("AnnotationProvider.classRuntimeAnnotations");
+		this.classRuntimeAnnotations = classCache.build();
+
+		var methodCache = Cache.<Method,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findMethodRuntimeAnnotations)
-			.disableCaching(builder.disableCaching)
-			.build();
-		this.fieldRuntimeAnnotations = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
+			.cacheMode(builder.cacheMode);
+		if (builder.logOnExit)
+			methodCache.logOnExit("AnnotationProvider.methodRuntimeAnnotations");
+		this.methodRuntimeAnnotations = methodCache.build();
+
+		var fieldCache = Cache.<Field,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findFieldRuntimeAnnotations)
-			.disableCaching(builder.disableCaching)
-			.build();
-		this.constructorRuntimeAnnotations = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
+			.cacheMode(builder.cacheMode);
+		if (builder.logOnExit)
+			fieldCache.logOnExit("AnnotationProvider.fieldRuntimeAnnotations");
+		this.fieldRuntimeAnnotations = fieldCache.build();
+
+		var constructorCache = Cache.<Constructor<?>,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::findConstructorRuntimeAnnotations)
-			.disableCaching(builder.disableCaching)
-			.build();
-		this.cache = Cache3.<Class<?>,ElementInfo,AnnotationTraversal[],List>create()
+			.cacheMode(builder.cacheMode);
+		if (builder.logOnExit)
+			constructorCache.logOnExit("AnnotationProvider.constructorRuntimeAnnotations");
+		this.constructorRuntimeAnnotations = constructorCache.build();
+
+		var cache3 = Cache3.<Class<?>,ElementInfo,AnnotationTraversal[],List>create()
 			.supplier(this::findCached)
-			.disableCaching(builder.disableCaching)
-			.build();
+			.cacheMode(builder.cacheMode);
+		if (builder.logOnExit)
+			cache3.logOnExit("AnnotationProvider.cache");
+		this.cache = cache3.build();
+
 		this.annotationMap = builder.runtimeAnnotations.build();
 	}
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.collections.CacheMode.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -94,7 +95,7 @@ import org.apache.juneau.common.function.*;
  * <p>
  * The following system properties can be used to configure default cache behavior:
  * <ul class='spaced-list'>
- * 	<li><c>juneau.cache.disable</c> - Disables all caching (default: <jk>false</jk>)
+ * 	<li><c>juneau.cache.mode</c> - Cache mode: NONE/WEAK/FULL (default: FULL, case-insensitive)
  * 	<li><c>juneau.cache.maxSize</c> - Maximum cache size before eviction (default: 1000)
  * 	<li><c>juneau.cache.logOnExit</c> - Log cache statistics on shutdown (default: <jk>false</jk>)
  * </ul>
@@ -152,7 +153,7 @@ import org.apache.juneau.common.function.*;
 public class Cache<K,V> {
 
 	// Internal map with Tuple1 keys for content-based equality (especially for arrays)
-	private final ConcurrentHashMap<Tuple1<K>,V> map = new ConcurrentHashMap<>();
+	private final Map<Tuple1<K>,V> map;
 
 	/**
 	 * Cache of Tuple1 wrapper objects to minimize object creation on repeated get/put calls.
@@ -161,7 +162,7 @@ public class Cache<K,V> {
 	 * Uses WeakHashMap so wrappers can be GC'd when keys are no longer referenced.
 	 * This provides a significant performance improvement for caches with repeated key access.
 	 */
-	private final Map<K,Tuple1<K>> wrapperCache = synchronizedMap(new WeakHashMap<>());
+	private final Map<K,Tuple1<K>> wrapperCache;
 
 	/**
 	 * Gets or creates a Tuple1 wrapper for the given key.
@@ -206,14 +207,14 @@ public class Cache<K,V> {
 	 * @param <V> The value type.
 	 */
 	public static class Builder<K,V> {
-		boolean disableCaching;
+		CacheMode cacheMode;
 		int maxSize;
 		String id;
 		boolean logOnExit;
 		Function<K,V> supplier;
 
 		Builder() {
-			disableCaching = env("juneau.cache.disable", false);
+			cacheMode = CacheMode.parse(env("juneau.cache.mode", "FULL"));
 			maxSize = env("juneau.cache.maxSize", 1000);
 			logOnExit = env("juneau.cache.logOnExit", false);
 			id = "Cache";
@@ -229,50 +230,39 @@ public class Cache<K,V> {
 		}
 
 		/**
-		 * Disables caching entirely.
+		 * Sets the caching mode for this cache.
 		 *
 		 * <p>
-		 * When disabled, the {@link Cache#get(Object)} and {@link Cache#get(Object, Supplier)} methods
-		 * will always invoke the supplier and never store or retrieve values from the cache.
-		 *
-		 * <p>
-		 * This is useful for:
+		 * Available modes:
 		 * <ul>
-		 * 	<li>Testing scenarios where you want fresh computation each time
-		 * 	<li>Development environments where caching might hide issues
-		 * 	<li>Temporarily disabling caching without code changes
+		 * 	<li>{@link CacheMode#NONE NONE} - No caching (always invoke supplier)
+		 * 	<li>{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link WeakHashMap})
+		 * 	<li>{@link CacheMode#FULL FULL} - Full caching (uses {@link ConcurrentHashMap}, default)
 		 * </ul>
-		 *
-		 * @return This object for method chaining.
-		 */
-		public Builder<K,V> disableCaching() {
-			disableCaching = true;
-			return this;
-		}
-
-		/**
-		 * Conditionally disables or enables caching.
-		 *
-		 * <p>
-		 * When disabled, the {@link Cache#get(Object)} and {@link Cache#get(Object, Supplier)} methods
-		 * will always invoke the supplier and never store or retrieve values from the cache.
-		 *
-		 * <p>
-		 * This is typically used when the disable flag comes from an external configuration or system property.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	Cache&lt;String,Object&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(String.<jk>class</jk>, Object.<jk>class</jk>)
-		 * 		.disableCaching(Boolean.<jsm>getBoolean</jsm>(<js>"myapp.disableCache"</js>))
+		 * 	<jc>// No caching for testing</jc>
+		 * 	Cache&lt;String,Object&gt; <jv>cache1</jv> = Cache.<jsm>of</jsm>(String.<jk>class</jk>, Object.<jk>class</jk>)
+		 * 		.cacheMode(CacheMode.<jsf>NONE</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Weak caching for Class metadata</jc>
+		 * 	Cache&lt;Class&lt;?&gt;,ClassMeta&gt; <jv>cache2</jv> = Cache.<jsm>of</jsm>(Class.<jk>class</jk>, ClassMeta.<jk>class</jk>)
+		 * 		.cacheMode(CacheMode.<jsf>WEAK</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Full caching (default)</jc>
+		 * 	Cache&lt;String,Pattern&gt; <jv>cache3</jv> = Cache.<jsm>of</jsm>(String.<jk>class</jk>, Pattern.<jk>class</jk>)
+		 * 		.cacheMode(CacheMode.<jsf>FULL</jsf>)
 		 * 		.build();
 		 * </p>
 		 *
-		 * @param value If <jk>true</jk>, caching is disabled. If <jk>false</jk>, caching is enabled (default).
+		 * @param value The caching mode.
 		 * @return This object for method chaining.
-		 * @see #disableCaching()
 		 */
-		public Builder<K,V> disableCaching(boolean value) {
-			disableCaching = value;
+		public Builder<K,V> cacheMode(CacheMode value) {
+			cacheMode = value;
 			return this;
 		}
 
@@ -432,8 +422,15 @@ public class Cache<K,V> {
 	 */
 	protected Cache(Builder<K,V> builder) {
 		this.maxSize = builder.maxSize;
-		this.disableCaching = builder.disableCaching;
+		this.disableCaching = builder.cacheMode == NONE;
 		this.supplier = builder.supplier != null ? builder.supplier : (K)->null;
+		if (builder.cacheMode == WEAK) {
+			this.map = synchronizedMap(new WeakHashMap<>());
+			this.wrapperCache = synchronizedMap(new WeakHashMap<>());
+		} else {
+			this.map = new ConcurrentHashMap<>();
+			this.wrapperCache = synchronizedMap(new WeakHashMap<>());
+		}
 		if (builder.logOnExit) {
 			shutdownMessage(() -> builder.id + ":  hits=" + cacheHits.get() + ", misses: " + size());
 		}

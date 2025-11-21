@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.collections.CacheMode.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.FileUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -75,7 +76,7 @@ public class MimeTypeDetector {
 		private final Map<String,String> fileMap = new ConcurrentHashMap<>();
 		private boolean nioContentBasedDetection = true;
 		private int cacheSize = 1000;
-		private boolean cacheDisabled = false;
+		private CacheMode cacheMode = FULL;
 		private boolean cacheLogOnExit = false;
 		private String defaultType = "application/octet-stream";
 
@@ -132,13 +133,21 @@ public class MimeTypeDetector {
 		}
 
 		/**
-		 * Enables or disables the cache.
+		 * Sets the caching mode for MIME type lookups.
 		 *
-		 * @param value Whether to disable the cache.
+		 * <p>
+		 * Available modes:
+		 * <ul>
+		 * 	<li>{@link CacheMode#NONE NONE} - No caching (always recompute)
+		 * 	<li>{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link java.util.WeakHashMap})
+		 * 	<li>{@link CacheMode#FULL FULL} - Full caching (uses {@link java.util.concurrent.ConcurrentHashMap}, default)
+		 * </ul>
+		 *
+		 * @param value The caching mode.
 		 * @return This builder.
 		 */
-		public Builder setCacheDisabled(boolean value) {
-			cacheDisabled = value;
+		public Builder setCacheMode(CacheMode value) {
+			cacheMode = value;
 			return this;
 		}
 
@@ -257,11 +266,10 @@ public class MimeTypeDetector {
 		this.defaultType = builder.defaultType;
 
 		// Create cache for file-based lookups
-		var cacheBuilder = Cache.of(String.class, String.class).maxSize(builder.cacheSize);
+		var cacheBuilder = Cache.of(String.class, String.class)
+			.maxSize(builder.cacheSize)
+			.cacheMode(builder.cacheMode);
 
-		if (builder.cacheDisabled) {
-			cacheBuilder.disableCaching();
-		}
 		if (builder.cacheLogOnExit) {
 			cacheBuilder.logOnExit("MimeTypeDetector");
 		}

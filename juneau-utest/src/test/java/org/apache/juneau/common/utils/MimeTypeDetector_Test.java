@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.file.*;
 
+import org.apache.juneau.common.collections.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.*;
 
@@ -142,7 +143,7 @@ public class MimeTypeDetector_Test {
 	@Test
 	public void testSetCacheDisabled() {
 		var detector = MimeTypeDetector.builder()
-			.setCacheDisabled(true)
+			.setCacheMode(CacheMode.NONE)
 			.addExtensionType("test", "application/x-test")
 			.build();
 		
@@ -371,7 +372,7 @@ public class MimeTypeDetector_Test {
 	@Test
 	public void testCacheDisabled() {
 		var detector = MimeTypeDetector.builder()
-			.setCacheDisabled(true)
+			.setCacheMode(CacheMode.NONE)
 			.addExtensionType("test", "application/x-test")
 			.build();
 		
@@ -405,7 +406,7 @@ public class MimeTypeDetector_Test {
 			.addExtensionType("custom", "application/x-custom")
 			.addNioContentBasedDetection(false)
 			.setCacheSize(100)
-			.setCacheDisabled(false)
+			.setCacheMode(CacheMode.FULL)
 			.setCacheLogOnExit(true)
 			.setDefaultType("application/unknown")
 			.addTypes("text/html html htm")

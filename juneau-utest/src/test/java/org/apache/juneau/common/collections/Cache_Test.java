@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.collections.CacheMode.*;
+
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -199,7 +201,7 @@ class Cache_Test extends TestBase {
 
 	@Test void a10_disabled_neverCaches() {
 		var cache = Cache.of(String.class, String.class)
-			.disableCaching()
+			.cacheMode(NONE)
 			.build();
 		var callCount = new AtomicInteger();
 
@@ -222,7 +224,7 @@ class Cache_Test extends TestBase {
 
 	@Test void a11_disabled_sizeAlwaysZero() {
 		var cache = Cache.of(String.class, Integer.class)
-			.disableCaching()
+			.cacheMode(NONE)
 			.build();
 
 		cache.get("one", () -> 1);
@@ -234,7 +236,7 @@ class Cache_Test extends TestBase {
 
 	@Test void a12_disabled_clearHasNoEffect() {
 		var cache = Cache.of(String.class, Integer.class)
-			.disableCaching()
+			.cacheMode(NONE)
 			.build();
 
 		cache.clear(); // Should not throw
@@ -256,7 +258,7 @@ class Cache_Test extends TestBase {
 	@Test void a14_builder_chaining() {
 		var cache = Cache.of(String.class, String.class)
 			.maxSize(100)
-			.disableCaching()
+			.cacheMode(NONE)
 			.build();
 
 		// Disabled takes precedence

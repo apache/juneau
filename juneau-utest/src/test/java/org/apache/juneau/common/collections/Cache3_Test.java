@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.collections.CacheMode.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
@@ -75,7 +77,7 @@ class Cache3_Test extends TestBase {
 	void a04_disableCaching() {
 		var callCount = new AtomicInteger();
 		var x = Cache3.of(String.class, String.class, Integer.class, String.class)
-			.disableCaching()
+			.cacheMode(NONE)
 			.supplier((k1, k2, k3) -> {
 				callCount.incrementAndGet();
 				return "value";

@@ -16,10 +16,14 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.collections.CacheMode.*;
+
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.common.function.*;
@@ -63,7 +67,7 @@ import org.apache.juneau.common.function.*;
 public class Cache4<K1,K2,K3,K4,V> {
 
 	// Internal map with Tuple4 keys for content-based equality (especially for arrays)
-	private final java.util.concurrent.ConcurrentHashMap<Tuple4<K1,K2,K3,K4>,V> map = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.Map<Tuple4<K1,K2,K3,K4>,V> map;
 
 	/**
 	 * Builder for creating configured {@link Cache4} instances.
@@ -75,14 +79,14 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 * @param <V> The value type.
 	 */
 	public static class Builder<K1,K2,K3,K4,V> {
-		boolean disableCaching;
+		CacheMode cacheMode;
 		int maxSize;
 		String id;
 		boolean logOnExit;
 		Function4<K1,K2,K3,K4,V> supplier;
 
 		Builder() {
-			disableCaching = env("juneau.cache.disable", false);
+			cacheMode = CacheMode.parse(env("juneau.cache.mode", "FULL"));
 			maxSize = env("juneau.cache.maxSize", 1000);
 			logOnExit = env("juneau.cache.logOnExit", false);
 			id = "Cache4";
@@ -98,23 +102,21 @@ public class Cache4<K1,K2,K3,K4,V> {
 		}
 
 		/**
-		 * Disables caching entirely.
+		 * Sets the caching mode for this cache.
 		 *
+		 * <p>
+		 * Available modes:
+		 * <ul>
+		 * 	<li>{@link CacheMode#NONE NONE} - No caching (always invoke supplier)
+		 * 	<li>{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link WeakHashMap})
+		 * 	<li>{@link CacheMode#FULL FULL} - Full caching (uses {@link ConcurrentHashMap}, default)
+		 * </ul>
+		 *
+		 * @param value The caching mode.
 		 * @return This object for method chaining.
 		 */
-		public Builder<K1,K2,K3,K4,V> disableCaching() {
-			disableCaching = true;
-			return this;
-		}
-
-		/**
-		 * Optionally disables caching based on the provided flag.
-		 *
-		 * @param value If <jk>true</jk>, disables caching.
-		 * @return This object for method chaining.
-		 */
-		public Builder<K1,K2,K3,K4,V> disableCaching(boolean value) {
-			disableCaching = value;
+		public Builder<K1,K2,K3,K4,V> cacheMode(CacheMode value) {
+			cacheMode = value;
 			return this;
 		}
 
@@ -208,7 +210,7 @@ public class Cache4<K1,K2,K3,K4,V> {
 	}
 
 	private final int maxSize;
-	private final boolean disableCaching;
+	private final CacheMode cacheMode;
 	private final Function4<K1,K2,K3,K4,V> supplier;
 	private final AtomicInteger cacheHits = new AtomicInteger();
 
@@ -219,8 +221,13 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 */
 	protected Cache4(Builder<K1,K2,K3,K4,V> builder) {
 		this.maxSize = builder.maxSize;
-		this.disableCaching = builder.disableCaching;
+		this.cacheMode = builder.cacheMode;
 		this.supplier = builder.supplier;
+		if (builder.cacheMode == WEAK) {
+			this.map = Collections.synchronizedMap(new WeakHashMap<>());
+		} else {
+			this.map = new ConcurrentHashMap<>();
+		}
 		if (builder.logOnExit) {
 			shutdownMessage(() -> builder.id + ":  hits=" + cacheHits.get() + ", misses: " + size());
 		}
@@ -255,7 +262,7 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, java.util.function.Supplier<V> supplier) {
 		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4);
-		if (disableCaching)
+		if (cacheMode == NONE)
 			return supplier.get();
 		Tuple4<K1,K2,K3,K4> wrapped = Tuple4.of(key1, key2, key3, key4);
 		V v = map.get(wrapped);
