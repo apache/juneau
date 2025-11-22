@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<em class="jxr_comment">// Get parameter-level @FormData</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> paramFormData = AP.find(FormData.<strong class="jxr_keyword">class</strong>, pi).findFirst().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> paramFormData = AP.find(FormData.<strong class="jxr_keyword">class</strong>, pi).stream().findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">if</strong> (paramFormData == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<em class="jxr_comment">// No parameter-level @FormData, use class-level as-is</em>

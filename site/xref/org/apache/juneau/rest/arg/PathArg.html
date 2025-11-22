@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<em class="jxr_comment">// Get parameter-level @Path</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> paramPath = AP.find(Path.<strong class="jxr_keyword">class</strong>, pi).findFirst().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> paramPath = AP.find(Path.<strong class="jxr_keyword">class</strong>, pi).stream().findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (paramPath == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<em class="jxr_comment">// No parameter-level @Path, use class-level as-is</em>
@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">var</strong> mi = pi.getMethod();
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; i; j++) {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				<strong class="jxr_keyword">var</strong> hasAnnotation = AnnotationProvider.INSTANCE.find(Path.<strong class="jxr_keyword">class</strong>, mi.getParameter(j)).findAny().isPresent();
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				<strong class="jxr_keyword">var</strong> hasAnnotation = AnnotationProvider.INSTANCE.has(Path.<strong class="jxr_keyword">class</strong>, mi.getParameter(j));
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 				<strong class="jxr_keyword">if</strong> (hasAnnotation)
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 					idx++;
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			}

@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		Value&lt;String&gt; path = Value.of(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(c);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		AnnotationProvider.INSTANCE.findTopDown(Remote.<strong class="jxr_keyword">class</strong>, ci).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().path()).filter(x -&gt; isNotEmpty(x)).forEach(x -&gt; path.set(trimSlashes(x)));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		rstream(AnnotationProvider.INSTANCE.find(Remote.<strong class="jxr_keyword">class</strong>, ci)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().path()).filter(x -&gt; isNotEmpty(x)).forEach(x -&gt; path.set(trimSlashes(x)));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		Map&lt;Method,RrpcInterfaceMethodMeta&gt; methods = map();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		ci.getPublicMethods().stream().forEach(x -&gt; methods.put(x.<strong class="jxr_keyword">inner</strong>(), <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMethodMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.html#RrpcInterfaceMethodMeta">RrpcInterfaceMethodMeta</a>(uri, x.<strong class="jxr_keyword">inner</strong>())));

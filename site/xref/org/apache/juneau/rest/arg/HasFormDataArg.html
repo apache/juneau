@@ -87,21 +87,22 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">protected</strong> <a name="HasFormDataArg" href="../../../../../org/apache/juneau/rest/arg/HasFormDataArg.html#HasFormDataArg">HasFormDataArg</a>(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">this</strong>.name = AP.find(HasFormData.<strong class="jxr_keyword">class</strong>, pi)
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.filter(HasFormDataArg::hasName)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.findFirst()
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.map(HasFormDataArg::getName)
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"@HasFormData used without name or value"</span>));
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">this</strong>.type = pi.getParameterType().innerType();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> req = opSession.getRequest();
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> bs = req.getBeanSession();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">return</strong> bs.convertToType(req.getFormParams().contains(name), bs.getClassMeta(type));
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.stream()
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.filter(HasFormDataArg::hasName)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.findFirst()
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.map(HasFormDataArg::getName)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"@HasFormData used without name or value"</span>));
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">this</strong>.type = pi.getParameterType().innerType();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> req = opSession.getRequest();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> bs = req.getBeanSession();
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">return</strong> bs.convertToType(req.getFormParams().contains(name), bs.getClassMeta(type));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

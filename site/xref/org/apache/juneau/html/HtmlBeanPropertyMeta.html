@@ -85,16 +85,16 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * @param bpm The metadata of the bean property of this additional metadata.</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * @param mp HTML metadata provider (for finding information about other artifacts).</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">public</strong> <a name="HtmlBeanPropertyMeta" href="../../../../org/apache/juneau/html/HtmlBeanPropertyMeta.html#HtmlBeanPropertyMeta">HtmlBeanPropertyMeta</a>(BeanPropertyMeta bpm, AnnotationProvider annotationProvider, <a name="HtmlMetaProvider" href="../../../../org/apache/juneau/html/HtmlMetaProvider.html#HtmlMetaProvider">HtmlMetaProvider</a> mp) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">public</strong> <a name="HtmlBeanPropertyMeta" href="../../../../org/apache/juneau/html/HtmlBeanPropertyMeta.html#HtmlBeanPropertyMeta">HtmlBeanPropertyMeta</a>(BeanPropertyMeta bpm, AnnotationProvider ap, <a name="HtmlMetaProvider" href="../../../../org/apache/juneau/html/HtmlMetaProvider.html#HtmlMetaProvider">HtmlMetaProvider</a> mp) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">super</strong>(bpm);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		Builder b = <strong class="jxr_keyword">new</strong> Builder();
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">if</strong> (nn(bpm.getInnerField()))
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		annotationProvider.find(Html.<strong class="jxr_keyword">class</strong>, info(bpm.getInnerField())).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; b.findHtmlInfo(x));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		ap.find(Html.<strong class="jxr_keyword">class</strong>, info(bpm.getInnerField())).forEach(x -&gt; b.findHtmlInfo(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">if</strong> (nn(bpm.getGetter()))
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		annotationProvider.find(Html.<strong class="jxr_keyword">class</strong>, info(bpm.getGetter())).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; b.findHtmlInfo(x));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		ap.find(Html.<strong class="jxr_keyword">class</strong>, info(bpm.getGetter())).forEach(x -&gt; b.findHtmlInfo(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">if</strong> (nn(bpm.getSetter()))
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		annotationProvider.find(Html.<strong class="jxr_keyword">class</strong>, info(bpm.getSetter())).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).forEach(x -&gt; b.findHtmlInfo(x));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		ap.find(Html.<strong class="jxr_keyword">class</strong>, info(bpm.getSetter())).forEach(x -&gt; b.findHtmlInfo(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">this</strong>.format = b.format;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">this</strong>.noTables = b.noTables;

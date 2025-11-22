@@ -274,12 +274,13 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;String&gt; findDef(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">return</strong> AP.find(PathRemainder.<strong class="jxr_keyword">class</strong>, pi)
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			.filter(x -&gt; isNotEmpty(x.def()))
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			.findFirst()
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.map(x -&gt; x.def());
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> }
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			.stream()
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			.filter(x -&gt; isNotEmpty(x.def()))
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.findFirst()
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			.map(x -&gt; x.def());
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	}
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
