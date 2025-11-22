@@ -1035,7 +1035,7 @@
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		<strong class="jxr_keyword">if</strong> (gct instanceof ParameterizedType pt3)
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 			<strong class="jxr_keyword">return</strong> Array.newInstance((Class&lt;?&gt;)pt3.getRawType(), 0).getClass();
 <a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 	} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (actualType instanceof TypeVariable&lt;?&gt; typeVariable) {
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		List&lt;Class&lt;?&gt;&gt; nestedOuterTypes = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		<strong class="jxr_keyword">var</strong> nestedOuterTypes = <strong class="jxr_keyword">new</strong> LinkedList&lt;Class&lt;?&gt;&gt;();
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 			Class&lt;?&gt; outerClass = cc.getClass();
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 			nestedOuterTypes.add(outerClass);
