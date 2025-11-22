@@ -24,12 +24,9 @@ import static org.apache.juneau.common.utils.Utils.isEmpty;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import static org.apache.juneau.rest.httppart.RestPartType.*;
 
-import java.io.*;
 import java.lang.reflect.*;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -143,7 +140,7 @@ public class BasicSwaggerProviderSession {
 	public Swagger getSwagger() throws Exception {
 		// @formatter:off
 
-		InputStream is = ff.getStream(rci.getNameSimple() + ".json", locale).orElse(null);
+		var is = ff.getStream(rci.getNameSimple() + ".json", locale).orElse(null);
 
 		var ap = this.context.getBeanContext().getAnnotationProvider();
 
@@ -152,16 +149,16 @@ public class BasicSwaggerProviderSession {
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 
 		// Load swagger JSON from classpath.
-		JsonMap omSwagger = Json5.DEFAULT.read(is, JsonMap.class);
+		var omSwagger = Json5.DEFAULT.read(is, JsonMap.class);
 		if (omSwagger == null)
 			omSwagger = new JsonMap();
 
 		// Combine it with @Rest(swagger)
-		List<Rest> restAnnotations = list();
-		ap.findTopDown(Rest.class, rci).map(x -> x.inner()).forEach(x -> restAnnotations.add(x));
+		var restAnnotations = rstream(ap.find(Rest.class, rci)).map(AnnotationInfo::inner).toList();
+
 		for (var rr : restAnnotations) {
 
-			JsonMap sInfo = omSwagger.getMap("info", true);
+			var sInfo = omSwagger.getMap("info", true);
 
 			sInfo
 				.appendIf(ne, "title",
@@ -177,12 +174,12 @@ public class BasicSwaggerProviderSession {
 					)
 				);
 
-			org.apache.juneau.rest.annotation.Swagger r = rr.swagger();
+			var r = rr.swagger();
 
 			omSwagger.append(parseMap(r.value(), "@Swagger(value) on class {0}", c));
 
 			if (! SwaggerAnnotation.empty(r)) {
-				JsonMap info = omSwagger.getMap("info", true);
+				var info = omSwagger.getMap("info", true);
 
 				info
 					.appendIf(ne, "title", resolve(r.title()))
@@ -220,7 +217,7 @@ public class BasicSwaggerProviderSession {
 
 		omSwagger.appendIf(nem, "externalDocs", parseMap(mb.findFirstString("externalDocs"), "Messages/externalDocs on class {0}", c));
 
-		JsonMap info = omSwagger.getMap("info", true);
+		var info = omSwagger.getMap("info", true);
 
 		info
 			.appendIf(ne, "title", resolve(mb.findFirstString("title")))
@@ -233,9 +230,9 @@ public class BasicSwaggerProviderSession {
 		if (info.isEmpty())
 			omSwagger.remove("info");
 
-		JsonList
-			produces = omSwagger.getList("produces", true),
-			consumes = omSwagger.getList("consumes", true);
+		var produces = omSwagger.getList("produces", true);
+		var consumes = omSwagger.getList("consumes", true);
+
 		if (consumes.isEmpty())
 			consumes.addAll(context.getConsumes());
 		if (produces.isEmpty())
@@ -251,10 +248,10 @@ public class BasicSwaggerProviderSession {
 			}
 		}
 
-		String s = mb.findFirstString("tags");
+		var s = mb.findFirstString("tags");
 		if (nn(s)) {
 			for (var m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(JsonMap.class)) {
-				String name = m.getString("name");
+				var name = m.getString("name");
 				if (name == null)
 					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class {0}", c);
 				if (tagMap.containsKey(name))
@@ -265,22 +262,22 @@ public class BasicSwaggerProviderSession {
 		}
 
 		// Load our existing bean definitions into our session.
-		JsonMap definitions = omSwagger.getMap("definitions", true);
+		var definitions = omSwagger.getMap("definitions", true);
 		for (var defId : definitions.keySet())
 			js.addBeanDef(defId, new JsonMap(definitions.getMap(defId)));
 
 		// Iterate through all the @RestOp methods.
 		for (var sm : context.getRestOperations().getOpContexts()) {
 
-			BeanSession bs = sm.getBeanContext().getSession();
+			var bs = sm.getBeanContext().getSession();
 
-			Method m = sm.getJavaMethod();
+			var m = sm.getJavaMethod();
 			var mi = MethodInfo.of(m);
-			List<AnnotationInfo<?>> al = ap.findTopDown(mi).filter(REST_OP_GROUP).collect(Collectors.toList());
-			String mn = m.getName();
+			var al = rstream(ap.find(mi)).filter(REST_OP_GROUP).toList();
+			var mn = m.getName();
 
 			// Get the operation from the existing swagger so far.
-			JsonMap op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
+			var op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
 
 			// Add @RestOp(swagger)
 			Value<OpSwagger> _ms = Value.empty();
@@ -380,48 +377,48 @@ public class BasicSwaggerProviderSession {
 			// Finally, look for parameters defined on method.
 			for (var mpi : mi.getParameters()) {
 
-				ClassInfo pt = mpi.getParameterType();
-				Type type = pt.innerType();
+				var pt = mpi.getParameterType();
+				var type = pt.innerType();
 
 				if (ap.has(Content.class, mpi)) {
-					JsonMap param = paramMap.getMap(BODY + ".body", true).append("in", BODY);
-					JsonMap schema = getSchema(param.getMap("schema"), type, bs);
-					ap.findTopDown(Schema.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
-					ap.findTopDown(Content.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(schema, x.schema()));
+					var param = paramMap.getMap(BODY + ".body", true).append("in", BODY);
+					var schema = getSchema(param.getMap("schema"), type, bs);
+					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(schema, x.inner()));
+					rstream(ap.find(Content.class, mpi)).forEach(x -> merge(schema, x.inner().schema()));
 					pushupSchemaFields(BODY, param, schema);
 					param.appendIf(nem, "schema", schema);
 					param.putIfAbsent("required", true);
 					addBodyExamples(sm, param, false, type, locale);
 
 				} else if (ap.has(Query.class, mpi)) {
-					String name = QueryAnnotation.findName(mpi).orElse(null);
-					JsonMap param = paramMap.getMap(QUERY + "." + name, true).append("name", name).append("in", QUERY);
-					ap.findTopDown(Schema.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
-					ap.findTopDown(Query.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
+					var name = QueryAnnotation.findName(mpi).orElse(null);
+					var param = paramMap.getMap(QUERY + "." + name, true).append("name", name).append("in", QUERY);
+					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
+					rstream(ap.find(Query.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
 					pushupSchemaFields(QUERY, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, QUERY, type);
 
 				} else if (ap.has(FormData.class, mpi)) {
-					String name = FormDataAnnotation.findName(mpi).orElse(null);
-					JsonMap param = paramMap.getMap(FORM_DATA + "." + name, true).append("name", name).append("in", FORM_DATA);
-					ap.findTopDown(Schema.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
-					ap.findTopDown(FormData.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
+					var name = FormDataAnnotation.findName(mpi).orElse(null);
+					var param = paramMap.getMap(FORM_DATA + "." + name, true).append("name", name).append("in", FORM_DATA);
+					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
+					rstream(ap.find(FormData.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
 					pushupSchemaFields(FORM_DATA, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, FORM_DATA, type);
 
 				} else if (ap.has(Header.class, mpi)) {
-					String name = HeaderAnnotation.findName(mpi).orElse(null);
-					JsonMap param = paramMap.getMap(HEADER + "." + name, true).append("name", name).append("in", HEADER);
-					ap.findTopDown(Schema.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
-					ap.findTopDown(Header.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
+					var name = HeaderAnnotation.findName(mpi).orElse(null);
+					var param = paramMap.getMap(HEADER + "." + name, true).append("name", name).append("in", HEADER);
+					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
+					rstream(ap.find(Header.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
 					pushupSchemaFields(HEADER, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, HEADER, type);
 
 				} else if (ap.has(Path.class, mpi)) {
-					String name = PathAnnotation.findName(mpi).orElse(null);
-					JsonMap param = paramMap.getMap(PATH + "." + name, true).append("name", name).append("in", PATH);
-					ap.findTopDown(Schema.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(param, x));
-					ap.findTopDown(Path.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(param, x.schema()));
+					var name = PathAnnotation.findName(mpi).orElse(null);
+					var param = paramMap.getMap(PATH + "." + name, true).append("name", name).append("in", PATH);
+					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
+					rstream(ap.find(Path.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
 					pushupSchemaFields(PATH, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, PATH, type);
 					param.putIfAbsent("required", true);
@@ -431,37 +428,35 @@ public class BasicSwaggerProviderSession {
 			if (! paramMap.isEmpty())
 				op.put("parameters", paramMap.values());
 
-			JsonMap responses = op.getMap("responses", true);
+			var responses = op.getMap("responses", true);
 
 			for (var eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
-					List<Response> la = list();
-					ap.findTopDown(Response.class, eci).map(x -> x.inner()).forEach(x -> la.add(x));
-					List<StatusCode> la2 = list();
-					ap.findTopDown(StatusCode.class, eci).map(x -> x.inner()).forEach(x -> la2.add(x));
-					Set<Integer> codes = getCodes(la2, 500);
+					var la = rstream(ap.find(Response.class, eci)).map(AnnotationInfo::inner).toList();
+					var la2 = rstream(ap.find(StatusCode.class, eci)).map(x -> x.inner()).toList();
+					var codes = getCodes(la2, 500);
 					for (var a : la) {
 						for (var code : codes) {
-							JsonMap om = responses.getMap(String.valueOf(code), true);
+							var om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
-							JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-							ap.findTopDown(Schema.class, eci).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
+							var schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
+							rstream(ap.find(Schema.class, eci)).forEach(x -> merge(schema, x.inner()));
 							pushupSchemaFields(RESPONSE, om, schema);
 							om.appendIf(nem, "schema", schema);
 					}
 				}
-				List<MethodInfo> methods = eci.getAllMethods();
+				var methods = eci.getAllMethods();
 				for (int i = methods.size() - 1; i >= 0; i--) {
-					MethodInfo ecmi = methods.get(i);
-						Header a = ecmi.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+					var ecmi = methods.get(i);
+					var a = ecmi.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (a == null)
 							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (nn(a) && ! isMulti(a)) {
-							String ha = a.name();
+							var ha = a.name();
 							for (var code : codes) {
-								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-								ap.findTopDown(Schema.class, ecmi).map(x -> x.inner()).forEach(x -> merge(header, x));
-								ap.findTopDown(Schema.class, ecmi.getReturnType().unwrap(Value.class, Optional.class)).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
+								var header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
+								rstream(ap.find(Schema.class, ecmi)).forEach(x -> merge(header, x.inner()));
+								rstream(ap.find(Schema.class, ecmi.getReturnType().unwrap(Value.class, Optional.class))).forEach(x -> merge(header, x.inner()));
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Value.class, Optional.class).innerType(), bs));
 							}
 						}
@@ -470,19 +465,15 @@ public class BasicSwaggerProviderSession {
 			}
 
 			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class, Optional.class).hasAnnotation(Response.class)) {
-				List<Response> la = list();
-				ap.findTopDown(Response.class, mi).map(x -> x.inner()).forEach(x -> la.add(x));
-				//context.getAnnotationProvider().xforEachMethodAnnotation(Response.class, mi, x -> true, x -> la.add(x));
-				List<StatusCode> la2 = list();
-				//context.getAnnotationProvider().xforEachMethodAnnotation(StatusCode.class, mi, x -> true, x -> la2.add(x));
-				ap.findTopDown(StatusCode.class, mi).map(x -> x.inner()).forEach(x -> la2.add(x));
-				Set<Integer> codes = getCodes(la2, 200);
+				var la = rstream(ap.find(Response.class, mi)).map(x -> x.inner()).toList();
+				var la2 = rstream(ap.find(StatusCode.class, mi)).map(x -> x.inner()).toList();
+				var codes = getCodes(la2, 200);
 				for (var a : la) {
 					for (var code : codes) {
-						JsonMap om = responses.getMap(String.valueOf(code), true);
+						var om = responses.getMap(String.valueOf(code), true);
 						merge(om, a);
-						JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-						ap.findTopDown(Schema.class, mi).map(x -> x.inner()).forEach(x -> merge(schema, x));
+						var schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
+						rstream(ap.find(Schema.class, mi)).forEach(x -> merge(schema, x.inner()));
 						//context.getAnnotationProvider().xforEachMethodAnnotation(Schema.class, mi, x -> true, x -> merge(schema, x));
 						pushupSchemaFields(RESPONSE, om, schema);
 						om.appendIf(nem, "schema", schema);
@@ -490,18 +481,17 @@ public class BasicSwaggerProviderSession {
 					}
 			}
 			if (mi.getReturnType().hasAnnotation(Response.class)) {
-				List<MethodInfo> methods = mi.getReturnType().getAllMethods();
+				var methods = mi.getReturnType().getAllMethods();
 				for (int i = methods.size() - 1; i >= 0; i--) {
-					MethodInfo ecmi = methods.get(i);
+					var ecmi = methods.get(i);
 						if (ecmi.hasAnnotation(Header.class)) {
-							Header a = ecmi.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-							String ha = a.name();
+							var a = ecmi.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+							var ha = a.name();
 							if (! isMulti(a)) {
 								for (var code : codes) {
-									JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-									//context.getAnnotationProvider().xforEachMethodAnnotation(Schema.class, ecmi, x -> true, x -> merge(header, x));
-									ap.findTopDown(Schema.class, ecmi).map(x -> x.inner()).forEach(x -> merge(header, x));
-									ap.findTopDown(Schema.class, ecmi.getReturnType().unwrap(Value.class, Optional.class)).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
+									var header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
+									rstream(ap.find(Schema.class, ecmi)).forEach(x -> merge(header, x.inner()));
+									rstream(ap.find(Schema.class, ecmi.getReturnType().unwrap(Value.class, Optional.class))).forEach(x -> merge(header, x.inner()));
 									merge(header, a.schema());
 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 								}
@@ -510,10 +500,10 @@ public class BasicSwaggerProviderSession {
 					}
 				}
 			} else if (m.getGenericReturnType() != void.class) {
-				JsonMap om = responses.getMap("200", true);
+				var om = responses.getMap("200", true);
 				var pt2 = ClassInfo.of(m.getGenericReturnType());
-				JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-				ap.findTopDown(Schema.class, pt2).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
+				var schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
+				rstream(ap.find(Schema.class, pt2)).forEach(x -> merge(schema, x.inner()));
 				pushupSchemaFields(RESPONSE, om, schema);
 				om.appendIf(nem, "schema", schema);
 				addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
@@ -522,21 +512,19 @@ public class BasicSwaggerProviderSession {
 			// Finally, look for Value @Header parameters defined on method.
 			for (var mpi : mi.getParameters()) {
 
-				ClassInfo pt = mpi.getParameterType();
+				var pt = mpi.getParameterType();
 
 				if (pt.is(Value.class) && (ap.has(Header.class, mpi))) {
-					List<Header> la = list();
-					ap.findTopDown(Header.class, mpi).map(AnnotationInfo::inner).forEach(x -> la.add(x));
-					List<StatusCode> la2 = list();
-					ap.findTopDown(StatusCode.class, mpi).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
-					Set<Integer> codes = getCodes(la2, 200);
-					String name = HeaderAnnotation.findName(mpi).orElse(null);
-					Type type = Value.unwrap(mpi.getParameterType().innerType());
+					var la = rstream(ap.find(Header.class, mpi)).map(AnnotationInfo::inner).toList();
+					var la2 = rstream(ap.find(StatusCode.class, mpi)).map(AnnotationInfo::inner).toList();
+					var codes = getCodes(la2, 200);
+					var name = HeaderAnnotation.findName(mpi).orElse(null);
+					var type = Value.unwrap(mpi.getParameterType().innerType());
 					for (var a : la) {
 						if (! isMulti(a)) {
 							for (var code : codes) {
-								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
-								ap.findTopDown(Schema.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
+								var header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
+								rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(header, x.inner()));
 								merge(header, a.schema());
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, type, bs));
 							}
@@ -544,18 +532,16 @@ public class BasicSwaggerProviderSession {
 					}
 
 				} else if (ap.has(Response.class, mpi)) {
-					List<Response> la = list();
-					ap.findTopDown(Response.class, mpi).map(AnnotationInfo::inner).forEach(x -> la.add(x));
-					List<StatusCode> la2 = list();
-					ap.findTopDown(StatusCode.class, mpi).map(AnnotationInfo::inner).forEach(x -> la2.add(x));
-					Set<Integer> codes = getCodes(la2, 200);
-					Type type = Value.unwrap(mpi.getParameterType().innerType());
+					var la = rstream(ap.find(Response.class, mpi)).map(AnnotationInfo::inner).toList();
+					var la2 = rstream(ap.find(StatusCode.class, mpi)).map(AnnotationInfo::inner).toList();
+					var codes = getCodes(la2, 200);
+					var type = Value.unwrap(mpi.getParameterType().innerType());
 					for (var a : la) {
 						for (var code : codes) {
-							JsonMap om = responses.getMap(String.valueOf(code), true);
+							var om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
-							JsonMap schema = getSchema(om.getMap("schema"), type, bs);
-							ap.findTopDown(Schema.class, mpi).map(AnnotationInfo::inner).forEach(x -> merge(schema, x));
+							var schema = getSchema(om.getMap("schema"), type, bs);
+							rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(schema, x.inner()));
 							la.forEach(x -> merge(schema, x.schema()));
 							pushupSchemaFields(RESPONSE, om, schema);
 							om.appendIf(nem, "schema", schema);
@@ -566,9 +552,9 @@ public class BasicSwaggerProviderSession {
 
 			// Add default response descriptions.
 			for (var e : responses.entrySet()) {
-				String key = e.getKey();
-				JsonMap val = responses.getMap(key);
-				if (StringUtils.isDecimal(key))
+				var key = e.getKey();
+				var val = responses.getMap(key);
+				if (isDecimal(key))
 					val.appendIfAbsentIf(ne, "description", RestUtils.getHttpResponseText(Integer.parseInt(key)));
 			}
 
@@ -578,13 +564,13 @@ public class BasicSwaggerProviderSession {
 				op.put("responses", new TreeMap<>(responses));
 
 			if (! op.containsKey("consumes")) {
-				List<MediaType> mConsumes = sm.getSupportedContentTypes();
+				var mConsumes = sm.getSupportedContentTypes();
 				if (! mConsumes.equals(consumes))
 					op.put("consumes", mConsumes);
 			}
 
 			if (! op.containsKey("produces")) {
-				List<MediaType> mProduces = sm.getSupportedAcceptTypes();
+				var mProduces = sm.getSupportedAcceptTypes();
 				if (! mProduces.equals(produces))
 					op.put("produces", mProduces);
 			}
@@ -593,6 +579,7 @@ public class BasicSwaggerProviderSession {
 		if (nn(js.getBeanDefs()))
 			for (var e : js.getBeanDefs().entrySet())
 				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
+
 		if (definitions.isEmpty())
 			omSwagger.remove("definitions");
 
@@ -605,7 +592,7 @@ public class BasicSwaggerProviderSession {
 			omSwagger.remove("produces");
 
 		try {
-			String swaggerJson = Json5Serializer.DEFAULT_READABLE.toString(omSwagger);
+			var swaggerJson = Json5Serializer.DEFAULT_READABLE.toString(omSwagger);
 			return jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
 			throw new ServletException("Error detected in swagger.", e);
@@ -615,10 +602,10 @@ public class BasicSwaggerProviderSession {
 
 	private void addBodyExamples(RestOpContext sm, JsonMap piri, boolean response, Type type, Locale locale) throws Exception {
 
-		String sex = piri.getString("example");
+		var sex = piri.getString("example");
 
 		if (sex == null) {
-			JsonMap schema = resolveRef(piri.getMap("schema"));
+			var schema = resolveRef(piri.getMap("schema"));
 			if (nn(schema))
 				sex = schema.getString("example", schema.getString("example"));
 		}
@@ -636,21 +623,21 @@ public class BasicSwaggerProviderSession {
 			}
 		}
 
-		String examplesKey = "examples";  // Parameters don't have an examples attribute.
+		var examplesKey = "examples";  // Parameters don't have an examples attribute.
 
-		JsonMap examples = piri.getMap(examplesKey);
+		var examples = piri.getMap(examplesKey);
 		if (examples == null)
 			examples = new JsonMap();
 
-		List<MediaType> mediaTypes = response ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
+		var mediaTypes = response ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
 
 		for (var mt : mediaTypes) {
 			if (mt != MediaType.HTML) {
-				Serializer s2 = sm.getSerializers().getSerializer(mt);
+				var s2 = sm.getSerializers().getSerializer(mt);
 				if (nn(s2)) {
 					try {
 						// @formatter:off
-						String eVal = s2
+						var eVal = s2
 							.createSession()
 							.locale(locale)
 							.mediaType(mt)
@@ -672,16 +659,16 @@ public class BasicSwaggerProviderSession {
 
 	private static void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) throws Exception {
 
-		String s = piri.getString("example");
+		var s = piri.getString("example");
 
 		if (isEmpty(s))
 			return;
 
-		JsonMap examples = piri.getMap("examples");
+		var examples = piri.getMap("examples");
 		if (examples == null)
 			examples = new JsonMap();
 
-		String paramName = piri.getString("name");
+		var paramName = piri.getString("name");
 
 		if (in == QUERY)
 			s = "?" + urlEncodeLax(paramName) + "=" + urlEncodeLax(s);
@@ -741,7 +728,7 @@ public class BasicSwaggerProviderSession {
 
 		schema = newMap(schema);
 
-		ClassMeta<?> cm = bs.getClassMeta(type);
+		var cm = bs.getClassMeta(type);
 
 		if (schema.getBoolean("ignore", false))
 			return null;
@@ -749,7 +736,7 @@ public class BasicSwaggerProviderSession {
 		if (schema.containsKey("type") || schema.containsKey("$ref"))
 			return schema;
 
-		JsonMap om = fixSwaggerExtensions(schema.append(js.getSchema(cm)));
+		var om = fixSwaggerExtensions(schema.append(js.getSchema(cm)));
 
 		return om;
 	}
@@ -761,8 +748,8 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private static JsonList merge(JsonList...lists) {
-		JsonList l = lists[0];
-		for (int i = 1; i < lists.length; i++) {
+		var l = lists[0];
+		for (var i = 1; i < lists.length; i++) {
 			if (nn(lists[i])) {
 				if (l == null)
 					l = new JsonList();
@@ -773,8 +760,8 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private static JsonMap merge(JsonMap...maps) {
-		JsonMap m = maps[0];
-		for (int i = 1; i < maps.length; i++) {
+		var m = maps[0];
+		for (var i = 1; i < maps.length; i++) {
 			if (nn(maps[i])) {
 				if (m == null)
 					m = new JsonMap();
@@ -802,7 +789,7 @@ public class BasicSwaggerProviderSession {
 			return om;
 		om = newMap(om);
 		for (var aa : a) {
-			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
+			var name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
 				throw illegalArg("@Header used without name or value.");
 			merge(om.getMap(name, true), aa.schema());
@@ -947,7 +934,7 @@ public class BasicSwaggerProviderSession {
 		try {
 			if (o == null)
 				return null;
-			String s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
+			var s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
@@ -963,7 +950,7 @@ public class BasicSwaggerProviderSession {
 		try {
 			if (o == null)
 				return null;
-			String s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
+			var s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
@@ -979,7 +966,7 @@ public class BasicSwaggerProviderSession {
 		if (o instanceof String[])
 			o = joinnl((String[])o);
 		if (o instanceof String) {
-			String s = o.toString();
+			var s = o.toString();
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
@@ -1075,7 +1062,7 @@ public class BasicSwaggerProviderSession {
 			om2 = new JsonMap();
 		}
 		for (var e : om.entrySet()) {
-			Object val = e.getValue();
+			var val = e.getValue();
 			if (val instanceof JsonMap) {
 				val = resolve((JsonMap)val);
 			} else if (val instanceof JsonList) {
@@ -1106,7 +1093,7 @@ public class BasicSwaggerProviderSession {
 		if (m == null)
 			return null;
 		if (m.containsKey("$ref") && nn(js.getBeanDefs())) {
-			String ref = m.getString("$ref");
+			var ref = m.getString("$ref");
 			if (ref.startsWith("#/definitions/"))
 				return js.getBeanDefs().get(ref.substring(14));
 		}
@@ -1116,7 +1103,7 @@ public class BasicSwaggerProviderSession {
 	private JsonMap toJsonMap(String[] ss) throws ParseException {
 		if (ss.length == 0)
 			return null;
-		String s = joinnl(ss);
+		var s = joinnl(ss);
 		if (s.isEmpty())
 			return null;
 		if (! isJsonObject(s, true))
@@ -1189,7 +1176,7 @@ public class BasicSwaggerProviderSession {
 			return null;
 		Set<String> set = set();
 		for (var s : ss)
-			StringUtils.split(s, x -> set.add(x));
+			split(s, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}
 }

@@ -80,6 +80,7 @@ public class HasQueryArg implements RestOpArg {
 	 */
 	protected HasQueryArg(ParameterInfo pi) {
 		this.name = AP.find(HasQuery.class, pi)
+			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(HasQueryArg::hasName)
 			.findFirst()

@@ -65,7 +65,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public static class Builder {
 		BeanMeta<?> beanMeta;
-		BeanContext beanContext;
+		BeanContext bc;
 		String name;
 		Field field, innerField;  // TODO - Replace with FieldInfo fields
 		Method getter, setter, extraKeys;  // TODO - Replace with MethodInfo fields
@@ -80,7 +80,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
-			this.beanContext = beanMeta.ctx;
+			this.bc = beanMeta.ctx;
 			this.name = name;
 		}
 
@@ -227,8 +227,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			if (nn(innerField)) {
 				List<Beanp> lp = list();
-				// Inline Context.forEachAnnotation() call
-				ap.find(Beanp.class, ifi).map(x -> x.inner()).forEach(x -> lp.add(x));
+				ap.find(Beanp.class, ifi).forEach(x -> lp.add(x.inner()));
 				if (nn(field) || isNotEmpty(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
@@ -246,14 +245,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (! x.wo().isEmpty())
 						writeOnly = Boolean.valueOf(x.wo());
 				});
-				// Inline Context.forEachAnnotation() call
-				ap.find(Swap.class, ifi).map(x -> x.inner()).forEach(x -> swap = getPropertySwap(x));
+				ap.find(Swap.class, ifi).stream().findFirst().ifPresent(x -> swap = getPropertySwap(x.inner()));
 				isUri |= ap.has(Uri.class, ifi);
 			}
 
 			if (nn(getter)) {
-				List<Beanp> lp = list();
-				ap.find(Beanp.class, gi).map(x -> x.inner()).forEach(x -> lp.add(x));
+				var lp = ap.find(Beanp.class, gi).stream().map(AnnotationInfo::inner).toList();
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, gi));
@@ -268,12 +265,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (! x.wo().isEmpty())
 						writeOnly = Boolean.valueOf(x.wo());
 				});
-				ap.find(Swap.class, gi).map(x -> x.inner()).forEach(x -> swap = getPropertySwap(x));
+				ap.find(Swap.class, gi).stream().map(AnnotationInfo::inner).forEach(x -> swap = getPropertySwap(x));
 			}
 
 			if (nn(setter)) {
-				List<Beanp> lp = list();
-				ap.find(Beanp.class, si).map(x -> x.inner()).forEach(x -> lp.add(x));
+				var lp = ap.find(Beanp.class, si).stream().map(AnnotationInfo::inner).toList();
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, si));
@@ -288,13 +284,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (! x.wo().isEmpty())
 						writeOnly = Boolean.valueOf(x.wo());
 				});
-				ap.find(Swap.class, si).map(x -> x.inner()).forEach(x -> swap = getPropertySwap(x));
+				ap.find(Swap.class, si).stream().map(AnnotationInfo::inner).forEach(x -> swap = getPropertySwap(x));
 			}
 
 			if (rawTypeMeta == null)
 				return false;
 
-			this.beanRegistry = new BeanRegistry(beanContext, parentBeanRegistry, bdClasses.toArray(new Class<?>[0]));
+			this.beanRegistry = new BeanRegistry(bc, parentBeanRegistry, bdClasses.toArray(new Class<?>[0]));
 
 			isDyna = "*".equals(name);
 
@@ -341,13 +337,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (isDyna) {
 				rawTypeMeta = rawTypeMeta.getValueType();
 				if (rawTypeMeta == null)
-					rawTypeMeta = beanContext.object();
+					rawTypeMeta = bc.object();
 			}
 			if (rawTypeMeta == null)
 				return false;
 
 			if (typeMeta == null)
-				typeMeta = (nn(swap) ? beanContext.getClassMeta(swap.getSwapClass().innerType()) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta);
+				typeMeta = (nn(swap) ? bc.getClassMeta(swap.getSwapClass().innerType()) : rawTypeMeta == null ? bc.object() : rawTypeMeta);
 			if (typeMeta == null)
 				typeMeta = rawTypeMeta;
 
@@ -381,7 +377,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	}
 
 	final BeanMeta<?> beanMeta;                               // The bean that this property belongs to.
-	private final BeanContext beanContext;                    // The context that created this meta.
+	private final BeanContext bc;                    // The context that created this meta.
+	private final AnnotationProvider ap;
 	private final String name;                                // The name of the property.
 	private final Field field;                                // The bean property field (if it has one).
 	private final Field innerField;                                // The bean property field (if it has one).
@@ -418,7 +415,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		this.extraKeys = b.extraKeys;
 		this.isUri = b.isUri;
 		this.beanMeta = b.beanMeta;
-		this.beanContext = b.beanContext;
+		this.bc = b.bc;
+		this.ap = bc.getAnnotationProvider();
 		this.name = b.name;
 		this.rawTypeMeta = b.rawTypeMeta;
 		this.typeMeta = b.typeMeta;
@@ -642,11 +640,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
-		BeanContext bc = beanContext;
 		if (nn(a)) {
-		if (nn(field)) bc.getAnnotationProvider().find(a, info(field)).map(x -> x.inner()).filter(filter).forEach(action);
-		if (nn(getter)) bc.getAnnotationProvider().find(a, info(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).filter(filter).forEach(action);
-		if (nn(setter)) bc.getAnnotationProvider().find(a, info(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).map(x -> x.inner()).filter(filter).forEach(action);
+		if (nn(field)) ap.find(a, info(field)).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
+		if (nn(getter)) ap.find(a, info(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
+		if (nn(setter)) ap.find(a, info(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
 	}
 		return this;
 	}
@@ -684,7 +681,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	@SuppressWarnings("null")
 	public <A extends Annotation> List<A> getAllAnnotationsParentFirst(Class<A> a) {
 		List<A> l = new LinkedList<>();
-		BeanContext bc = beanContext;
 		var ap = bc.getAnnotationProvider();
 	var fi = field == null ? null : info(field);
 	var gi = getter == null ? null : info(getter);
@@ -852,7 +848,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return invokeGetter(bean, pName);
 
 		} catch (Throwable e) {
-			if (beanContext.isIgnoreInvocationExceptionsOnGetters()) {
+			if (bc.isIgnoreInvocationExceptionsOnGetters()) {
 				if (rawTypeMeta.isPrimitive())
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
@@ -939,7 +935,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (cm.isObject()) {
 			if (o instanceof Map)
 				return new FilteredMap(cm, (Map)o, properties);
-			BeanMeta bm = beanContext.getBeanMeta(o.getClass());
+			BeanMeta bm = bc.getBeanMeta(o.getClass());
 			if (nn(bm))
 				return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
 		}
@@ -1011,7 +1007,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return toSerializedForm(m.getBeanSession(), getRaw(m, pName));
 
 		} catch (Throwable e) {
-			if (beanContext.isIgnoreInvocationExceptionsOnGetters()) {
+			if (bc.isIgnoreInvocationExceptionsOnGetters()) {
 				if (rawTypeMeta.isPrimitive())
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
@@ -1091,7 +1087,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			boolean isCollection = rawTypeMeta.isCollection();
 
 			if ((! isDyna) && field == null && setter == null && ! (isMap || isCollection)) {
-				if ((value == null && beanContext.isIgnoreUnknownNullBeanProperties()) || beanContext.isIgnoreMissingSetters())
+				if ((value == null && bc.isIgnoreUnknownNullBeanProperties()) || bc.isIgnoreMissingSetters())
 					return null;
 				throw bex(beanMeta.c, "Setter or public field not defined on property ''{0}''", name);
 			}
@@ -1100,7 +1096,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			try {
 
-				Object r = (beanContext.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
+				Object r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
 				Class<?> propertyClass = rawTypeMeta.getInnerClass();
 				ClassInfo pcInfo = rawTypeMeta.getInfo();
 
@@ -1241,7 +1237,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			} catch (BeanRuntimeException e) {
 				throw e;
 			} catch (Exception e) {
-				if (beanContext.isIgnoreInvocationExceptionsOnSetters()) {
+				if (bc.isIgnoreInvocationExceptionsOnSetters()) {
 					if (rawTypeMeta.isPrimitive())
 						return rawTypeMeta.getPrimitiveDefault();
 					return null;

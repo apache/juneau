@@ -21,8 +21,6 @@ import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.common.reflect.*;
-
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *

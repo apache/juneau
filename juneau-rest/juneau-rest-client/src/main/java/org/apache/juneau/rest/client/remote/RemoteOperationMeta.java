@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.Constants.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
@@ -25,14 +26,12 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.common.utils.*;
@@ -58,15 +57,15 @@ public class RemoteOperationMeta {
 		RemoteOperationReturn methodReturn;
 		Map<String,String> pathDefaults = new LinkedHashMap<>(), queryDefaults = new LinkedHashMap<>(), headerDefaults = new LinkedHashMap<>(), formDataDefaults = new LinkedHashMap<>();
 		String contentDefault = null;
+		static AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 		Builder(String parentPath, Method m, String defaultMethod) {
 
 			var mi = MethodInfo.of(m);
-			AnnotationProvider ap = AnnotationProvider.INSTANCE;
 
-			List<AnnotationInfo<?>> al = ap.findTopDown(mi).filter(REMOTE_OP_GROUP).collect(Collectors.toList());
+			var al = rstream(AP.find(mi)).filter(REMOTE_OP_GROUP).toList();
 			if (al.isEmpty())
-				al = ap.findTopDown(mi.getReturnType().unwrap(Value.class, Optional.class)).filter(REMOTE_OP_GROUP).collect(Collectors.toList());
+				al = rstream(AP.find(mi.getReturnType().unwrap(Value.class, Optional.class))).filter(REMOTE_OP_GROUP).toList();
 
 			var _httpMethod = Value.<String>empty();
 			var _path = Value.<String>empty();
@@ -80,7 +79,7 @@ public class RemoteOperationMeta {
 			al.stream().filter(x -> x.isType(RemoteOp.class) && isNotEmpty(((RemoteOp)x.inner()).value().trim())).forEach(x -> value.set(((RemoteOp)x.inner()).value().trim()));
 
 			if (value.isPresent()) {
-				String v = value.get();
+				var v = value.get();
 				int i = v.indexOf(' ');
 				if (i == -1) {
 					httpMethod = v;
@@ -114,7 +113,7 @@ public class RemoteOperationMeta {
 			mi.getParameters().forEach(x -> {
 				var rma = RemoteOperationArg.create(x);
 				if (nn(rma)) {
-					HttpPartType pt = rma.getPartType();
+					var pt = rma.getPartType();
 					if (pt == HEADER)
 						headerArgs.add(rma);
 					else if (pt == QUERY)
@@ -145,7 +144,8 @@ public class RemoteOperationMeta {
 		// These handle both individual annotations and repeated annotation arrays
 
 		private void processContentDefaults(MethodInfo mi) {
-			AnnotationProvider.INSTANCE.find(Content.class, mi)
+			AP.find(Content.class, mi)
+				.stream()
 				.map(x -> x.inner().def())
 				.filter(x -> isNotBlank(x))
 				.findFirst()
@@ -153,28 +153,28 @@ public class RemoteOperationMeta {
 		}
 
 		private static void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
-			AnnotationProvider.INSTANCE.findTopDown(FormData.class, mi)
+			rstream(AP.find(FormData.class, mi))
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 		}
 
 		private static void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
-			AnnotationProvider.INSTANCE.findTopDown(Header.class, mi)
+			rstream(AP.find(Header.class, mi))
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 		}
 
 		private static void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
-			AnnotationProvider.INSTANCE.findTopDown(Path.class, mi)
+			rstream(AP.find(Path.class, mi))
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(NONE, x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 		}
 
 		private static void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
-			AnnotationProvider.INSTANCE.findTopDown(Query.class, mi)
+			rstream(AP.find(Query.class, mi))
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));

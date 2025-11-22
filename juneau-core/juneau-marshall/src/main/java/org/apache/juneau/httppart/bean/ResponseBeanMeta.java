@@ -129,8 +129,8 @@ public class ResponseBeanMeta {
 		var b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
 		AnnotationProvider ap = AnnotationProvider.INSTANCE;
-		ap.findTopDown(Response.class, m).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
-		ap.findTopDown(StatusCode.class, m).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(ap.find(Response.class, m)).forEach(x -> b.apply(x.inner()));
+		rstream(ap.find(StatusCode.class, m)).forEach(x -> b.apply(x.inner()));
 		return b.build();
 	}
 
@@ -146,8 +146,8 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
-		AP.findTopDown(Response.class, mpi).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
-		AP.findTopDown(StatusCode.class, mpi).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(AP.find(Response.class, mpi)).forEach(x -> b.apply(x.inner()));
+		rstream(AP.find(StatusCode.class, mpi)).forEach(x -> b.apply(x.inner()));
 		return b.build();
 	}
 
@@ -165,8 +165,8 @@ public class ResponseBeanMeta {
 		var b = new Builder(annotations);
 		b.apply(ci.innerType());
 		var ai = AnnotationProvider.INSTANCE;
-		ai.findTopDown(Response.class, ci).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
-		ai.findTopDown(StatusCode.class, ci).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		rstream(ai.find(Response.class, ci)).forEach(x -> b.apply(x.inner()));
+		rstream(ai.find(StatusCode.class, ci)).forEach(x -> b.apply(x.inner()));
 		return b.build();
 	}
 

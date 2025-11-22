@@ -278,6 +278,7 @@ public class QueryAnnotation {
 	 */
 	public static Optional<String> findDef(ParameterInfo pi) {
 		return AP.find(Query.class, pi)
+			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isNotEmpty(x.def()))
 			.findFirst()
@@ -292,6 +293,7 @@ public class QueryAnnotation {
 	 */
 	public static Optional<String> findName(ParameterInfo pi) {
 		return AP.find(Query.class, pi)
+			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isAnyNotBlank(x.value(), x.name()))
 			.findFirst()

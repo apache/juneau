@@ -278,6 +278,7 @@ public class HeaderAnnotation {
 	 */
 	public static Optional<String> findDef(ParameterInfo pi) {
 		return AP.find(Header.class, pi)
+			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isNotEmpty(x.def()))
 			.findFirst()
@@ -295,6 +296,7 @@ public class HeaderAnnotation {
 	 */
 	public static Optional<String> findName(ParameterInfo pi) {
 		return AP.find(Header.class, pi)
+			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isAnyNotBlank(x.value(), x.name()))
 			.findFirst()

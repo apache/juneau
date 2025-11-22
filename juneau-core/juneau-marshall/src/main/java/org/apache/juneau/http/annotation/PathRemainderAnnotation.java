@@ -266,6 +266,7 @@ public class PathRemainderAnnotation {
 	 */
 	public static Optional<String> findDef(ParameterInfo pi) {
 		return AP.find(PathRemainder.class, pi)
+			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isNotEmpty(x.def()))
 			.findFirst()

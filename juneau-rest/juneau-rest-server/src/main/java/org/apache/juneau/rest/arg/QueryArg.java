@@ -105,7 +105,7 @@ public class QueryArg implements RestOpArg {
 			return null;
 
 		// Get parameter-level @Query
-		var paramQuery = AP.find(Query.class, pi).findFirst().map(x -> x.inner()).orElse(null);
+		var paramQuery = AP.find(Query.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
 
 		if (paramQuery == null) {
 			// No parameter-level @Query, use class-level as-is

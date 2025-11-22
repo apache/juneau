@@ -47,6 +47,7 @@ public class ClientVersionMatcher extends RestMatcher {
 	public ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
 		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "Client-Version" : clientVersionHeader;
 		var clientVersion = AnnotationProvider.INSTANCE.find(mi)
+			.stream()
 			.filter(REST_OP_GROUP)
 			.flatMap(ai -> ai.getValue(String.class, "clientVersion").stream())
 			.filter(NOT_EMPTY)

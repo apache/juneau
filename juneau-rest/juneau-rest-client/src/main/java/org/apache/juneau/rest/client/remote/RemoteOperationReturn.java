@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.remote;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
 
 import java.lang.reflect.*;
@@ -46,7 +47,7 @@ public class RemoteOperationReturn {
 		ClassInfo rt = m.getReturnType();
 
 		var ap = AnnotationProvider.INSTANCE;
-		var al = ap.findTopDown(m).filter(REMOTE_OP_GROUP).toList();
+		var al = rstream(ap.find(m)).filter(REMOTE_OP_GROUP).toList();
 
 		RemoteReturn rv = null;
 

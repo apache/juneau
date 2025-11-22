@@ -1413,6 +1413,13 @@ public class CollectionUtils {
 	 * @param array The array to reverse.
 	 * @return The same array.
 	 */
+	/**
+	 * Reverses the elements in the specified array in-place.
+	 *
+	 * @param <E> The element type.
+	 * @param array The array to reverse.
+	 * @return The same array, reversed.
+	 */
 	public static <E> E[] reverse(E[] array) {
 		for (int i = 0; i < array.length / 2; i++) {
 			E temp = array[i];
@@ -1420,6 +1427,20 @@ public class CollectionUtils {
 			array[array.length - i - 1] = temp;
 		}
 		return array;
+	}
+
+	/**
+	 * Returns a reversed view of the specified list.
+	 *
+	 * <p>
+	 * The returned list is a live view that reflects changes to the original list.
+	 *
+	 * @param <E> The element type.
+	 * @param list The list to reverse.
+	 * @return A reversed view of the list.
+	 */
+	public static <E> List<E> reverse(List<E> list) {
+		return new ReversedList<>(list);
 	}
 
 	/**
@@ -1628,6 +1649,7 @@ public class CollectionUtils {
 	 * @param length The length of the array.
 	 * @return A new array of the specified type and length. Never <jk>null</jk>.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <E> E[] array(Class<E> componentType, int length) {
 		return (E[])Array.newInstance(componentType, length);
 	}

@@ -18,6 +18,7 @@ package org.apache.juneau.rest.servlet;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.logging.Level.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -111,7 +112,7 @@ public abstract class RestServlet extends HttpServlet {
 		if (nn(context))
 			return context.getFullPath();
 		var ci = ClassInfo.of(getClass());
-		return AnnotationProvider.INSTANCE.findTopDown(Rest.class, ci)
+		return rstream(AnnotationProvider.INSTANCE.find(Rest.class, ci))
 			.map(x -> x.inner().path())
 			.filter(x -> isNotEmpty(x))
 			.map(x -> trimSlashes(x))

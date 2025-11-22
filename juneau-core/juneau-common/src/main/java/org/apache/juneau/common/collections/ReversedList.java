@@ -119,7 +119,7 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 	 */
 	@Override
 	public Iterator<E> iterator() {
-		return new Iterator<E>() {
+		return new Iterator<>() {
 			private final ListIterator<E> it = list.listIterator(list.size());
 
 			@Override
@@ -167,7 +167,7 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 		if (index < 0 || index > size())
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
 
-		return new ListIterator<E>() {
+		return new ListIterator<>() {
 			private final ListIterator<E> it = list.listIterator(list.size() - index);
 
 			@Override

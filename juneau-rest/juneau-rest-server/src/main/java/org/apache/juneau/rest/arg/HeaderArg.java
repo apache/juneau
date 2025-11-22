@@ -146,7 +146,7 @@ public class HeaderArg implements RestOpArg {
 			return null;
 
 		// Get parameter-level @Header
-		var paramHeader = AnnotationProvider.INSTANCE.find(Header.class, pi).findFirst().map(x -> x.inner()).orElse(null);
+		var paramHeader = AnnotationProvider.INSTANCE.find(Header.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
 
 		if (paramHeader == null) {
 			// No parameter-level @Header, use class-level as-is

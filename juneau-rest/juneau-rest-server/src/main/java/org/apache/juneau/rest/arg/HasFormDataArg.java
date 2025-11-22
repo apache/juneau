@@ -79,6 +79,7 @@ public class HasFormDataArg implements RestOpArg {
 	 */
 	protected HasFormDataArg(ParameterInfo pi) {
 		this.name = AP.find(HasFormData.class, pi)
+			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(HasFormDataArg::hasName)
 			.findFirst()

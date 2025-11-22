@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.debug;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
@@ -74,7 +75,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @Rest(debug) settings.
 		// @formatter:off
-		ap.findTopDown(Rest.class, ci).map(AnnotationInfo::inner).forEach(x -> {
+		rstream(ap.find(Rest.class, ci)).map(AnnotationInfo::inner).forEach(x -> {
 			String x2 = varResolver.resolve(x.debug());
 			if (! x2.isEmpty())
 				b.enable(Enablement.fromString(x2), ci.getNameFull());
@@ -85,7 +86,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		// @formatter:off
 		ci.getPublicMethods().stream()
 			.forEach(x ->
-				ap.findTopDown(x)
+				rstream(ap.find(x))
 					.filter(REST_OP_GROUP)
 					.flatMap(ai -> ai.getValue(String.class, "debug").stream())
 					.filter(Utils::isNotEmpty)
@@ -98,7 +99,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @Rest(debugOn) settings.
 		// @formatter:off
-		ap.findTopDown(Rest.class, ci).map(AnnotationInfo::inner).forEach(x -> {
+		rstream(ap.find(Rest.class, ci)).map(AnnotationInfo::inner).forEach(x -> {
 			String x2 = varResolver.resolve(x.debugOn());
 			for (var e : splitMap(x2, true).entrySet()) {
 				var k = e.getKey();

@@ -77,6 +77,7 @@ public class AttributeArg implements RestOpArg {
 
 	private static String getName(ParameterInfo paramInfo) {
 		return AP.find(Attr.class, paramInfo)
+			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isAnyNotBlank(x.value(), x.name()))
 			.findFirst()

@@ -187,9 +187,8 @@ public class BeanMeta<T> {
 		private String findPropertyName(FieldInfo f) {
 			List<Beanp> lp = list();
 			List<Name> ln = list();
-			// Inline Context.forEachAnnotation() calls
-			ap.find(Beanp.class, f).map(x -> x.inner()).forEach(x -> lp.add(x));
-			ap.find(Name.class, f).map(x -> x.inner()).forEach(x -> ln.add(x));
+			ap.find(Beanp.class, f).forEach(x -> lp.add(x.inner()));
+			ap.find(Name.class, f).forEach(x -> ln.add(x.inner()));
 			String name = bpName(lp, ln);
 			if (isNotEmpty(name))
 				return name;
@@ -593,25 +592,24 @@ public class BeanMeta<T> {
 	 * @param pn Use this property namer to determine property names from the method names.
 	 */
 	static final List<BeanMethod> findBeanMethods(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, PropertyNamer pn, boolean fluentSetters) {
-		List<BeanMethod> l = new LinkedList<>();
+		var l = new LinkedList<BeanMethod>();
 		var ap = ctx.getAnnotationProvider();
 
 	forEachClass(info(c), stopClass, c2 -> {
 		for (var m : c2.getDeclaredMethods()) {
 				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.getMatchingMethods().stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF, MATCHING_METHODS)))
 					continue;
-				Transient t = m.getMatchingMethods().stream()
-					.map(m2 -> ap.find(Transient.class, m2).map(x -> x.inner()).findFirst().orElse(null))
+
+				var t = m.getMatchingMethods().stream()
+					.map(m2 -> ap.find(Transient.class, m2).stream().map(AnnotationInfo::inner).findFirst().orElse(null))
 					.filter(Objects::nonNull)
 					.findFirst()
 					.orElse(null);
 				if (nn(t) && t.value())
 					continue;
 
-				List<Beanp> lp = list();
-				List<Name> ln = list();
-				ap.find(Beanp.class, m).map(x -> x.inner()).forEach(x -> lp.add(x));
-				ap.find(Name.class, m).map(x -> x.inner()).forEach(x -> ln.add(x));
+				var lp = ap.find(Beanp.class, m).stream().map(AnnotationInfo::inner).toList();
+				var ln = ap.find(Name.class, m).stream().map(AnnotationInfo::inner).toList();
 
 				// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does
 				// This ensures property names are inherited correctly, preventing duplicate property definitions
@@ -620,12 +618,12 @@ public class BeanMeta<T> {
 				if (! (m.isVisible(v) || isNotEmpty(lp) || isNotEmpty(ln)))
 					continue;
 
-			String n = m.getSimpleName();
+			var n = m.getSimpleName();
 
-			List<ParameterInfo> params = m.getParameters();
-			ClassInfo rt = m.getReturnType();
-			MethodType methodType = UNKNOWN;
-			String bpName = bpName(lp, ln);
+			var params = m.getParameters();
+			var rt = m.getReturnType();
+			var methodType = UNKNOWN;
+			var bpName = bpName(lp, ln);
 
 			if (params.isEmpty()) {
 					if ("*".equals(bpName)) {
@@ -825,8 +823,8 @@ public class BeanMeta<T> {
 
 					if (paramsMatch) {
 						// Found a matching parent method - check for @Beanp and @Name annotations
-						ap.find(Beanp.class, parentMethod).map(x -> x.inner()).forEach(x -> lp.add(x));
-						ap.find(Name.class, parentMethod).map(x -> x.inner()).forEach(x -> ln.add(x));
+						ap.find(Beanp.class, parentMethod).forEach(x -> lp.add(x.inner()));
+						ap.find(Name.class, parentMethod).forEach(x -> ln.add(x.inner()));
 
 						// If we found annotations, we're done
 						if (! lp.isEmpty() || ! ln.isEmpty())

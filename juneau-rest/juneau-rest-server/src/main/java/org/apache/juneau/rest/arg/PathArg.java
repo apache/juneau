@@ -104,7 +104,7 @@ public class PathArg implements RestOpArg {
 			return null;
 
 		// Get parameter-level @Path
-		var paramPath = AP.find(Path.class, pi).findFirst().map(x -> x.inner()).orElse(null);
+		var paramPath = AP.find(Path.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
 
 		if (paramPath == null) {
 			// No parameter-level @Path, use class-level as-is
@@ -200,7 +200,7 @@ public class PathArg implements RestOpArg {
 			var mi = pi.getMethod();
 
 			for (int j = 0; j < i; j++) {
-				var hasAnnotation = AnnotationProvider.INSTANCE.find(Path.class, mi.getParameter(j)).findAny().isPresent();
+				var hasAnnotation = AnnotationProvider.INSTANCE.has(Path.class, mi.getParameter(j));
 				if (hasAnnotation)
 					idx++;
 			}

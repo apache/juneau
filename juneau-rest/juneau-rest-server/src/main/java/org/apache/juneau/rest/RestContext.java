@@ -20,6 +20,7 @@ import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.addAll;
@@ -206,7 +207,7 @@ public class RestContext extends Context {
 			// @formatter:off
 			ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
 				.filter(y -> y.hasAnnotation(annotation))
-				.forEach(y -> ap.findTopDown(annotation, y).map(AnnotationInfo::inner)
+				.forEach(y -> rstream(ap.find(annotation, y)).map(AnnotationInfo::inner)
 					.filter(z -> predicate == null || predicate.test(z))
 					.forEach(z -> x.put(y.getSignature(), y.accessible().inner())));
 			// @formatter:on
@@ -1787,7 +1788,7 @@ public class RestContext extends Context {
 			});
 
 			var vrs = varResolver().build().createSession();
-			var work = AnnotationWorkList.of(vrs, AnnotationProvider.INSTANCE.findTopDown(rci).filter(CONTEXT_APPLY_FILTER));
+			var work = AnnotationWorkList.of(vrs, rstream(AnnotationProvider.INSTANCE.find(rci)).filter(CONTEXT_APPLY_FILTER));
 
 			apply(work);
 			beanContext().apply(work);
@@ -3852,7 +3853,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			// Apply @Rest(beanStore).
-			AnnotationProvider.INSTANCE.findTopDown(Rest.class, ClassInfo.of(resourceClass)).map(x -> x.inner().beanStore()).filter(x -> isNotVoid(x)).forEach(x -> v.get().type(x));
+			rstream(AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass))).map(x -> x.inner().beanStore()).filter(x -> isNotVoid(x)).forEach(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
 			// @formatter:off
@@ -3916,7 +3917,7 @@ public class RestContext extends Context {
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			var vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
 			var cfv = Value.<String>empty();
-			AnnotationProvider.INSTANCE.findTopDown(Rest.class, ClassInfo.of(resourceClass)).map(x -> x.inner().config()).filter(x -> isNotEmpty(x)).forEach(x -> cfv.set(vr.resolve(x)));
+			rstream(AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass))).map(x -> x.inner().config()).filter(x -> isNotEmpty(x)).forEach(x -> cfv.set(vr.resolve(x)));
 			var cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
@@ -4583,7 +4584,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			for (var mi : rci.getPublicMethods()) {
-				List<AnnotationInfo<?>> al = ap.findTopDown(mi).filter(REST_OP_GROUP).collect(Collectors.toList());
+				var al = rstream(ap.find(mi)).filter(REST_OP_GROUP).collect(Collectors.toList());
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {

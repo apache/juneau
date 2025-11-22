@@ -105,7 +105,7 @@ public class FormDataArg implements RestOpArg {
 			return null;
 
 		// Get parameter-level @FormData
-		var paramFormData = AP.find(FormData.class, pi).findFirst().map(x -> x.inner()).orElse(null);
+		var paramFormData = AP.find(FormData.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
 
 		if (paramFormData == null) {
 			// No parameter-level @FormData, use class-level as-is

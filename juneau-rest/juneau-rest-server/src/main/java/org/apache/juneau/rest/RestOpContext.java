@@ -135,7 +135,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				var vr = context.getVarResolver();
 				var vrs = vr.createSession();
 
-				var work = AnnotationWorkList.of(vrs, ap.findTopDown(mi, SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE).filter(CONTEXT_APPLY_FILTER));
+				var work = AnnotationWorkList.of(vrs, rstream(ap.find(mi, SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE)).filter(CONTEXT_APPLY_FILTER));
 
 				apply(work);
 
@@ -1949,6 +1949,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					httpMethod = "delete";
 				else if (mi.hasAnnotation(RestOp.class)) {
 					httpMethod = AnnotationProvider.INSTANCE.find(RestOp.class, mi)
+						.stream()
 						.map(x -> x.inner().method())
 						.filter(x -> isNotEmpty(x))
 						.findFirst()
