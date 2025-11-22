@@ -300,12 +300,12 @@ public class MapBuilder<K,V> {
 			if (map == null)
 				map = new LinkedHashMap<>();
 		}
-		if (nn(map)) {
-			if (nn(comparator)) {
-				Map<K,V> m2 = new TreeMap<>(comparator);
-				m2.putAll(map);
-				map = m2;
-			}
+	if (nn(map)) {
+		if (nn(comparator)) {
+			var m2 = new TreeMap<K,V>(comparator);
+			m2.putAll(map);
+			map = m2;
+		}
 			if (unmodifiable)
 				map = Collections.unmodifiableMap(map);
 		}

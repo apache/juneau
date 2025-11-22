@@ -1027,7 +1027,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (gct instanceof ParameterizedType pt3)
 			return Array.newInstance((Class<?>)pt3.getRawType(), 0).getClass();
 	} else if (actualType instanceof TypeVariable<?> typeVariable) {
-		List<Class<?>> nestedOuterTypes = new LinkedList<>();
+		var nestedOuterTypes = new LinkedList<Class<?>>();
 		for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 			Class<?> outerClass = cc.getClass();
 			nestedOuterTypes.add(outerClass);

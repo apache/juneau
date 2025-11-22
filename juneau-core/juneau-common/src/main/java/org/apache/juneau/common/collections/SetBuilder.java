@@ -301,12 +301,12 @@ public class SetBuilder<E> {
 			if (set == null)
 				set = new LinkedHashSet<>(0);
 		}
-		if (nn(set)) {
-			if (nn(comparator)) {
-				Set<E> s = new TreeSet<>(comparator);
-				s.addAll(set);
-				set = s;
-			}
+	if (nn(set)) {
+		if (nn(comparator)) {
+			var s = new TreeSet<E>(comparator);
+			s.addAll(set);
+			set = s;
+		}
 			if (unmodifiable)
 				set = unmodifiableSet(set);
 		}

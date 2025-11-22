@@ -86,7 +86,7 @@ public class FileWriterBuilder {
 	 * @throws FileNotFoundException If file could not be found.
 	 */
 	public Writer build() throws FileNotFoundException {
-		OutputStream os = new FileOutputStream(file, append);
+		var os = (OutputStream)new FileOutputStream(file, append);
 		if (buffered)
 			os = new BufferedOutputStream(os);
 		return new OutputStreamWriter(os, cs);

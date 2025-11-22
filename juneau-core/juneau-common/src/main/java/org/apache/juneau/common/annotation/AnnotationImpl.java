@@ -100,7 +100,7 @@ public class AnnotationImpl implements Annotation {
 	 * @return This annotation as a map of key/value pairs.
 	 */
 	public Map<String,Object> toMap() {
-		Map<String,Object> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<String,Object>();
 		// @formatter:off
 		stream(annotationType().getDeclaredMethods())
 			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
