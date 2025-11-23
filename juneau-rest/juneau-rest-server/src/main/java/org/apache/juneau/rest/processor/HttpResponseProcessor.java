@@ -35,25 +35,25 @@ public class HttpResponseProcessor implements ResponseProcessor {
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {
 
-		RestResponse res = opSession.getResponse();
-		HttpResponse r = res.getContent(HttpResponse.class);
+		var res = opSession.getResponse();
+		var r = res.getContent(HttpResponse.class);
 
 		if (r == null)
 			return NEXT;
 
 		opSession.status(r.getStatusLine());
 
-		HttpEntity e = r.getEntity();
+		var e = r.getEntity();
 
 		res.setHeader(e.getContentType());
 		res.setHeader(e.getContentEncoding());
-		long contentLength = e.getContentLength();
+		var contentLength = e.getContentLength();
 		if (contentLength >= 0)
 			res.setHeader(contentLength(contentLength));
 
 		r.headerIterator().forEachRemaining(x -> res.addHeader((Header)x)); // No iterator involved.
 
-		try (OutputStream os = res.getNegotiatedOutputStream()) {
+		try (var os = res.getNegotiatedOutputStream()) {
 			e.writeTo(os);
 			os.flush();
 		}

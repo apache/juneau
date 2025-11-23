@@ -65,8 +65,8 @@ public class DebugResource extends BasicRestServlet {
 	 */
 	@RestPost(path = "/jetty/dump", description = "Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
 	public Ok createJettyDump(RestRequest req, RestResponse res) throws Exception {
-		String dump = JettyMicroservice.getInstance().getServer().dump();
-		try (FileWriter fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {
+		var dump = JettyMicroservice.getInstance().getServer().dump();
+		try (var fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {
 			fw.write(dump);
 		}
 		return Ok.OK;

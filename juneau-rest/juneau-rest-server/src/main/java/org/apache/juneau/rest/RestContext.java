@@ -4471,7 +4471,7 @@ public class RestContext extends Context {
 
 				if (o instanceof RestChild o2) {
 					path = o2.path;
-					Object o3 = o2.resource;
+					var o3 = o2.resource;
 					so = () -> o3;
 				}
 
@@ -4498,7 +4498,7 @@ public class RestContext extends Context {
 
 				var cc = cb.init(so).build();
 
-				MethodInfo mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
+				var mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 				if (nn(mi))
 					mi.accessible().invoke(so.get(), cc);
 
@@ -4577,7 +4577,7 @@ public class RestContext extends Context {
 			ClassInfo.ofProxy(resource.get()).getAllMethodsTopDown().stream()
 				.filter(y -> y.hasAnnotation(RestInit.class) && y.hasParameter(RestOpContext.Builder.class))
 				.forEach(y -> {
-					String sig = y.getSignature();
+					var sig = y.getSignature();
 					if (! initMap.containsKey(sig))
 						initMap.put(sig, y.accessible());
 				});
@@ -5139,10 +5139,10 @@ public class RestContext extends Context {
 			// the remainder after the new servletPath.
 			// Only do this for the top-level resource because the logic for child resources are processed next.
 			if (pathMatcher.hasVars() && parentContext == null) {
-				String sp = sb.req().getServletPath();
-				String pi = sb.getPathInfoUndecoded();
+				var sp = sb.req().getServletPath();
+				var pi = sb.getPathInfoUndecoded();
 				var upi2 = UrlPath.of(pi == null ? sp : sp + pi);
-				UrlPathMatch uppm = pathMatcher.match(upi2);
+				var uppm = pathMatcher.match(upi2);
 				if (nn(uppm) && ! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
 					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
@@ -5156,11 +5156,11 @@ public class RestContext extends Context {
 			// If this resource has child resources, try to recursively call them.
 			var childMatch = restChildren.findMatch(sb);
 			if (childMatch.isPresent()) {
-				UrlPathMatch uppm = childMatch.get().getPathMatch();
+				var uppm = childMatch.get().getPathMatch();
 				var rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix())))
+					var childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix())))
 						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
 					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {
@@ -6008,7 +6008,7 @@ public class RestContext extends Context {
 			}
 
 			try (PrintWriter w2 = w) {
-				String httpMessage = RestUtils.getHttpResponseText(statusCode);
+				var httpMessage = RestUtils.getHttpResponseText(statusCode);
 				if (nn(httpMessage))
 					w2.append("HTTP ").append(String.valueOf(statusCode)).append(": ").append(httpMessage).append("\n\n");
 				if (isRenderResponseStackTraces())
@@ -6147,7 +6147,7 @@ public class RestContext extends Context {
 			} catch (IllegalAccessException | IllegalArgumentException e) {
 				throw new InternalServerError(e, "Error occurred invoking start-call method ''{0}''.", x.getFullName());
 			} catch (InvocationTargetException e) {
-				Throwable t = e.getTargetException();
+				var t = e.getTargetException();
 				if (t instanceof BasicHttpException t2)
 					throw t2;
 				throw new InternalServerError(t);

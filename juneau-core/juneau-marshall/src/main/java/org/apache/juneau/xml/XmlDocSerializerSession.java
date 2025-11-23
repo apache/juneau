@@ -197,7 +197,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws java.io.IOException, SerializeException {
-		try (XmlWriter w = getXmlWriter(out)) {
+		try (var w = getXmlWriter(out)) {
 			w.append("<?xml").attr("version", "1.0").attr("encoding", "UTF-8").appendln("?>");
 			w.flush();
 			super.doSerialize(out, o);

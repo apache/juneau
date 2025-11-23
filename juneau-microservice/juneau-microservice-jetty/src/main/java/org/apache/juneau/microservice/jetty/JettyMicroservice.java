@@ -439,7 +439,7 @@ public class JettyMicroservice extends Microservice {
 			// If port is 0, try a random port between ports[0] and 32767.
 			if (port == 0)
 				port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
-			try (ServerSocket ss = new ServerSocket(port)) {
+			try (var ss = new ServerSocket(port)) {
 				return port;
 			} catch (@SuppressWarnings("unused") IOException e) {}
 		}

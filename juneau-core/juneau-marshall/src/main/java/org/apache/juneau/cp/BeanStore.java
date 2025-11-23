@@ -362,7 +362,7 @@ public class BeanStore {
 	public <T> BeanStore addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
 		assertCanWrite();
 		var e = createEntry(beanType, bean, name);
-		try (SimpleLock x = lock.write()) {
+		try (var x = lock.write()) {
 			entries.addFirst(e);
 			if (isEmpty(name))
 				unnamedEntries.put(beanType, e);
@@ -380,7 +380,7 @@ public class BeanStore {
 	 */
 	public BeanStore clear() {
 		assertCanWrite();
-		try (SimpleLock x = lock.write()) {
+		try (var x = lock.write()) {
 			unnamedEntries.clear();
 			entries.clear();
 		}
@@ -465,7 +465,7 @@ public class BeanStore {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType) {
-		try (SimpleLock x = lock.read()) {
+		try (var x = lock.read()) {
 			var e = (BeanStoreEntry<T>)unnamedEntries.get(beanType);
 			if (nn(e))
 				return opt(e.get());
@@ -485,7 +485,7 @@ public class BeanStore {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType, String name) {
-		try (SimpleLock x = lock.read()) {
+		try (var x = lock.read()) {
 			var e = (BeanStoreEntry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
 			if (nn(e))
 				return opt(e.get());
@@ -608,7 +608,7 @@ public class BeanStore {
 	 */
 	public BeanStore removeBean(Class<?> beanType, String name) {
 		assertCanWrite();
-		try (SimpleLock x = lock.write()) {
+		try (var x = lock.write()) {
 			if (name == null)
 				unnamedEntries.remove(beanType);
 			entries.removeIf(y -> y.matches(beanType, name));

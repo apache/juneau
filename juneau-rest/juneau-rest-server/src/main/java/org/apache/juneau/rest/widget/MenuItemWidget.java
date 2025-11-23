@@ -155,7 +155,7 @@ public abstract class MenuItemWidget extends Widget {
 		// @formatter:on
 		var o = getContent(req, res);
 		if (o instanceof Reader o2) {
-			try (Reader r = o2; Writer w = new StringBuilderWriter(sb)) {
+			try (var r = o2; Writer w = new StringBuilderWriter(sb)) {
 				pipe(r, w);
 			} catch (IOException e) {
 				throw toRex(e);

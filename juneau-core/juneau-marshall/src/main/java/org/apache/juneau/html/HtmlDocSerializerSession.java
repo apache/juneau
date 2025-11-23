@@ -227,7 +227,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @throws Exception Error occurred during serialization.
 	 */
 	public void parentSerialize(Object out, Object o) throws Exception {
-		try (SerializerPipe pipe = createPipe(out)) {
+		try (var pipe = createPipe(out)) {
 			super.doSerialize(pipe, o);
 		}
 	}
@@ -240,7 +240,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	@Override /* Overridden from Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 
-		try (HtmlWriter w = getHtmlWriter(out)) {
+		try (var w = getHtmlWriter(out)) {
 			try {
 				getTemplate().writeTo(this, w, o);
 			} catch (Exception e) {

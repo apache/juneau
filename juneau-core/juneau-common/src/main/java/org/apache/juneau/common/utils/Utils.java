@@ -534,16 +534,6 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
-	 */
-	public static boolean isBlank(CharSequence s) {
-		return StringUtils.isBlank(s);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
 	 *
 	 * Works on any of the following data types:  String, CharSequence, Collection, Map, array.
@@ -1170,7 +1160,7 @@ public class Utils {
 		var cache = new AtomicReference<Optional<T>>();
 
 		return () -> {
-			Optional<T> h = cache.get();
+			var h = cache.get();
 			if (h == null) {
 				h = opt(supplier.get());
 				if (! cache.compareAndSet(null, h)) {

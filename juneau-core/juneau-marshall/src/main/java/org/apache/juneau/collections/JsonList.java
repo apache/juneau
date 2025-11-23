@@ -987,8 +987,8 @@ public class JsonList extends LinkedList<Object> {
 	 * @return An unmodifiable copy of this list if it's modifiable, or this list if it is already unmodifiable.
 	 */
 	public JsonList unmodifiable() {
-		if (this instanceof UnmodifiableJsonList)
-			return this;
+		if (this instanceof UnmodifiableJsonList this2)
+			return this2;
 		return new UnmodifiableJsonList(this);
 	}
 

@@ -272,8 +272,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			if (x == 'n' && "null".equals(in))
 				return null;
 		}
-		try (ParserPipe pipe = createPipe(in)) {
-			try (UonReader r = getUonReader(pipe, false)) {
+		try (var pipe = createPipe(in)) {
+			try (var r = getUonReader(pipe, false)) {
 				return parseAnything(toType, r, null, true, null);
 			}
 		} catch (ParseException e) {
@@ -801,7 +801,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		try (UonReader r = getUonReader(pipe, decoding)) {
+		try (var r = getUonReader(pipe, decoding)) {
 			T o = parseAnything(type, r, getOuter(), true, null);
 			validateEnd(r);
 			return o;
@@ -810,7 +810,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@Override /* Overridden from ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		try (UonReader r = getUonReader(pipe, decoding)) {
+		try (var r = getUonReader(pipe, decoding)) {
 			c = parseIntoCollection(r, c, (ClassMeta<E>)getClassMeta(elementType), false, null);
 			validateEnd(r);
 			return c;
@@ -819,7 +819,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		try (UonReader r = getUonReader(pipe, decoding)) {
+		try (var r = getUonReader(pipe, decoding)) {
 			m = parseIntoMap(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
 			validateEnd(r);
 			return m;

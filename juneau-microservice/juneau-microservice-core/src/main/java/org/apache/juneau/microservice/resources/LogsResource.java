@@ -118,7 +118,7 @@ public class LogsResource extends BasicRestServlet {
 		public Set<FileResource> getFiles() {
 			if (f.isFile() || ! includeChildren)
 				return null;
-			Set<FileResource> s = new TreeSet<>(FILE_COMPARATOR);
+			var s = new TreeSet<>(FILE_COMPARATOR);
 			for (var fc : f.listFiles(FILE_FILTER))
 				s.add(new FileResource(fc, (nn(path) ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false));
 			return s;
@@ -189,7 +189,7 @@ public class LogsResource extends BasicRestServlet {
 	)
 	public FileResource getFile(RestRequest req, @Path("/*") String path) throws NotFound, Exception {
 
-		File dir = getFile(path);
+		var dir = getFile(path);
 		req.setAttribute("fullPath", dir.getAbsolutePath());
 
 		return new FileResource(dir, path, allowDeletes, true);
@@ -224,18 +224,18 @@ public class LogsResource extends BasicRestServlet {
 			@Query(name="severity",schema=@Schema( d="Severity filter.\nOnly show log entries with the specified severity.")) String[] severity
 		) throws NotFound, MethodNotAllowed, IOException {
 
-		File f = getFile(path);
+		var f = getFile(path);
 
 		var startDate = parseIsoDate(start);
 		var endDate = parseIsoDate(end);
 
 		if (! highlight) {
-			Object o = getReader(f, startDate, endDate, thread, loggers, severity);
+			var o = getReader(f, startDate, endDate, thread, loggers, severity);
 			res.setContentType("text/plain");
 			if (o instanceof Reader)
 				res.setContent(o);
 			else {
-				try (LogParser p = (LogParser)o; Writer w = res.getNegotiatedWriter()) {
+				try (var p = (LogParser)o; Writer w = res.getNegotiatedWriter()) {
 					p.writeTo(w);
 				}
 			}
@@ -243,9 +243,9 @@ public class LogsResource extends BasicRestServlet {
 		}
 
 		res.setContentType("text/html");
-		try (PrintWriter w = res.getNegotiatedWriter()) {
+		try (var w = res.getNegotiatedWriter()) {
 			w.println("<html><body style='font-family:monospace;font-size:8pt;white-space:pre;'>");
-			try (LogParser lp = getLogParser(f, startDate, endDate, thread, loggers, severity)) {
+			try (var lp = getLogParser(f, startDate, endDate, thread, loggers, severity)) {
 				if (! lp.hasNext())
 					w.append("<span style='color:gray'>[EMPTY]</span>");
 				else
@@ -293,7 +293,7 @@ public class LogsResource extends BasicRestServlet {
 			@Query(name="severity", schema=@Schema(d="Severity filter.\nOnly show log entries with the specified severity.")) String[] severity
 		) throws NotFound, IOException {
 
-		File f = getFile(path);
+		var f = getFile(path);
 		req.setAttribute("fullPath", f.getAbsolutePath());
 
 		var startDate = parseIsoDate(start);
@@ -306,7 +306,7 @@ public class LogsResource extends BasicRestServlet {
 		if (! allowDeletes)
 			throw new MethodNotAllowed("DELETE not enabled");
 		if (f.isDirectory()) {
-			File[] files = f.listFiles();
+			var files = f.listFiles();
 			if (nn(files)) {
 				for (var fc : files)
 					deleteFile(fc);

@@ -113,12 +113,12 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 
 		// If sort or view isn't empty, then we need to make sure that all entries in the
 		// list are maps.
-		Map<String,Boolean> sort = args.getSort();
+		var sort = args.getSort();
 
 		if (sort.isEmpty())
 			return input;
 
-		ClassMeta type = session.getClassMetaForObject(input);
+		var type = session.getClassMetaForObject(input);
 
 		if (! type.isCollectionOrArray())
 			return input;
@@ -138,17 +138,17 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		}
 
 		// We reverse the list and sort last to first.
-		List<String> columns = toList(sort.keySet());
+		var columns = toList(sort.keySet());
 		Collections.reverse(columns);
 
-		List<SortEntry> l3 = l;
+		var l3 = l;
 		columns.forEach(c -> {
 			final boolean isDesc = sort.get(c);
 			l3.forEach(se -> se.setSort(c, isDesc));
 			Collections.sort(l3);
 		});
 
-		List<Object> l2 = listOfSize(l.size());
+		var l2 = listOfSize(l.size());
 		l.forEach(x -> l2.add(x.o));
 
 		return l2;
@@ -163,9 +163,9 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	 * @return A list of maps/beans matching the
 	 */
 	public <R> List<R> run(Object input, String sortArgs) {
-		Object r = run(BeanContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));
-		if (r instanceof List)
-			return (List<R>)r;
+		var r = run(BeanContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));
+		if (r instanceof List r2)
+			return r2;
 		if (r instanceof Collection r2)
 			return toList(r2);
 		if (isArray(r))

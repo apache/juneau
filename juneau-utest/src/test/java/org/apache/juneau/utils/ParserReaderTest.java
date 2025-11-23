@@ -28,7 +28,7 @@ class ParserReaderTest extends TestBase {
 	// test
 	//====================================================================================================
 	@Test void a01_test() throws Exception {
-		try (ParserReader r = new ParserReader(new ParserPipe("abc123"))) {
+		try (var r = new ParserReader(new ParserPipe("abc123"))) {
 			assertEquals('a', r.read());
 			r.unread();
 			assertEquals('a', r.read());

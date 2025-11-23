@@ -67,7 +67,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 		if (input == null)
 			return null;
 
-		ClassMeta type = session.getClassMetaForObject(input);
+		var type = session.getClassMetaForObject(input);
 
 		if (! type.isCollectionOrArray())
 			return input;
@@ -99,8 +99,8 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 			return copyOfRange((short[])input, pos, end);
 		}
 
-		List l = type.isList() ? (List)input : new ArrayList((Collection)input);
-		int end = (limit + pos >= l.size()) ? l.size() : limit + pos;
+		var l = type.isList() ? (List)input : new ArrayList((Collection)input);
+		var end = (limit + pos >= l.size()) ? l.size() : limit + pos;
 		pos = Math.min(pos, l.size());
 		return l.subList(pos, end);
 	}
@@ -116,10 +116,10 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <R> List<R> run(Object input, int pos, int limit) {
-		BeanSession bs = BeanContext.DEFAULT_SESSION;
-		Object r = run(BeanContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));
-		if (r instanceof List)
-			return (List<R>)r;
+		var bs = BeanContext.DEFAULT_SESSION;
+		var r = run(BeanContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));
+		if (r instanceof List r2)
+			return r2;
 		return bs.convertToType(r, List.class);
 	}
 }

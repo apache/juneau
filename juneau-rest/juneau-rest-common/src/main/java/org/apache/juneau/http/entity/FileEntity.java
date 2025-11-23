@@ -184,14 +184,14 @@ public class FileEntity extends BasicHttpEntity {
 		if (isCached()) {
 			out.write(asBytes());
 		} else {
-			try (InputStream is = getContent()) {
+			try (var is = getContent()) {
 				pipe(is, out, getMaxLength());
 			}
 		}
 	}
 
 	private File content() {
-		File f = contentOrElse((File)null);
+		var f = contentOrElse((File)null);
 		Objects.requireNonNull(f, "File");
 		if (! f.exists())
 			throw new IllegalStateException("File " + f.getAbsolutePath() + " does not exist.");

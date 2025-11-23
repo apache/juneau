@@ -2113,9 +2113,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	@Override /* Overridden from HttpClientConnection */
 	public void sendRequestEntity(HttpEntityEnclosingRequest request) throws HttpException, IOException {
 		byte[] body = {};
-		HttpEntity entity = request.getEntity();
+		var entity = request.getEntity();
 		if (nn(entity)) {
-			long length = entity.getContentLength();
+			var length = entity.getContentLength();
 			if (length < 0)
 				length = 1024;
 			var baos = new ByteArrayOutputStream((int)Math.min(length, 1024));
@@ -2129,7 +2129,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	@Override /* Overridden from HttpClientConnection */
 	public void sendRequestHeader(HttpRequest request) throws HttpException, IOException {
 		try {
-			RequestLine rl = request.getRequestLine();
+			var rl = request.getRequestLine();
 			var path = rl.getUri();
 			var target = findTarget(request);
 

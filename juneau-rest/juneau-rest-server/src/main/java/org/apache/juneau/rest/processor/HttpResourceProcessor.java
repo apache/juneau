@@ -35,21 +35,21 @@ public class HttpResourceProcessor implements ResponseProcessor {
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {
 
-		RestResponse res = opSession.getResponse();
-		HttpResource r = res.getContent(HttpResource.class);
+		var res = opSession.getResponse();
+		var r = res.getContent(HttpResource.class);
 
 		if (r == null)
 			return NEXT;
 
 		res.setHeader(r.getContentType());
 		res.setHeader(r.getContentEncoding());
-		long contentLength = r.getContentLength();
+		var contentLength = r.getContentLength();
 		if (contentLength >= 0)
 			res.setHeader(contentLength(contentLength));
 
 		r.getHeaders().forEach(x -> res.addHeader(x));
 
-		try (OutputStream os = res.getNegotiatedOutputStream()) {
+		try (var os = res.getNegotiatedOutputStream()) {
 			r.writeTo(os);
 			os.flush();
 		}

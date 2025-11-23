@@ -3861,7 +3861,7 @@ public class StringUtils {
 	 * @return The multiplier value (1 if no valid suffix found).
 	 */
 	private static int multiplier(String s) {
-		var c = isEmpty(s) ? null : s.charAt(s.length() - 1);  // NOSONAR - NPE not possible.
+		var c = isEmpty(s) ? 'z' : s.charAt(s.length() - 1);
 		if (c == 'G')
 			return 1024 * 1024 * 1024;
 		if (c == 'M')
@@ -3884,7 +3884,7 @@ public class StringUtils {
 	 * @return The multiplier value (1 if no valid suffix found).
 	 */
 	private static long multiplier2(String s) {
-		var c = isEmpty(s) ? null : s.charAt(s.length() - 1);  // NOSONAR - NPE not possible.
+		var c = isEmpty(s) ? 'z' : s.charAt(s.length() - 1);
 		if (c == 'P')
 			return 1024 * 1024 * 1024 * 1024 * 1024l;
 		if (c == 'T')

@@ -37,13 +37,13 @@ public class InputStreamProcessor implements ResponseProcessor {
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {
 
-		RestResponse res = opSession.getResponse();
-		InputStream is = res.getContent(InputStream.class);
+		var res = opSession.getResponse();
+		var is = res.getContent(InputStream.class);
 
 		if (is == null)
 			return NEXT;
 
-		try (InputStream is2 = is; OutputStream os = res.getNegotiatedOutputStream()) {
+		try (var is2 = is; var os = res.getNegotiatedOutputStream()) {
 			pipe(is2, os);
 		}
 

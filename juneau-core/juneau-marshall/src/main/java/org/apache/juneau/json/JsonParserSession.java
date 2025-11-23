@@ -871,7 +871,7 @@ public class JsonParserSession extends ReaderParserSession {
 
 	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		try (ParserReader r = pipe.getParserReader()) {
+		try (var r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
 			T o = parseAnything(type, r, getOuter(), null);
@@ -882,7 +882,7 @@ public class JsonParserSession extends ReaderParserSession {
 
 	@Override /* Overridden from ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws IOException, ParseException, ExecutableException {
-		try (ParserReader r = pipe.getParserReader()) {
+		try (var r = pipe.getParserReader()) {
 			c = parseIntoCollection2(r, c, getClassMeta(elementType), null);
 			validateEnd(r);
 			return c;
@@ -891,7 +891,7 @@ public class JsonParserSession extends ReaderParserSession {
 
 	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws IOException, ParseException, ExecutableException {
-		try (ParserReader r = pipe.getParserReader()) {
+		try (var r = pipe.getParserReader()) {
 			m = parseIntoMap2(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
 			validateEnd(r);
 			return m;

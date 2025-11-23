@@ -91,7 +91,7 @@ public class FileUtils {
 	 */
 	public static File createTempFile(String name, String contents) throws IOException {
 		var f = createTempFile(name);
-		try (Reader r = new StringReader(contents); Writer w = new FileWriter(f)) {
+		try (var r = new StringReader(contents); Writer w = new FileWriter(f)) {
 			pipe(r, w);
 			w.flush();
 		}

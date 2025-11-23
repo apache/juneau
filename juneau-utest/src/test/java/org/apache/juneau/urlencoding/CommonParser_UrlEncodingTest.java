@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({"rawtypes","serial"})
 class CommonParser_UrlEncodingTest extends TestBase {
 
-	ReaderParser p = UrlEncodingParser.create().beanDictionary(A1.class).build();
+	UrlEncodingParser p = UrlEncodingParser.create().beanDictionary(A1.class).build();
 
 	//====================================================================================================
 	// testFromSerializer

@@ -30,8 +30,8 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({"rawtypes","serial"})
 class CommonParser_UonTest extends TestBase {
 
-	ReaderParser p = UonParser.create().beanDictionary(A1.class).build();
-	ReaderParser pe = UonParser.DEFAULT_DECODING;
+	UonParser p = UonParser.create().beanDictionary(A1.class).build();
+	UonParser pe = UonParser.DEFAULT_DECODING;
 
 	//====================================================================================================
 	// testFromSerializer

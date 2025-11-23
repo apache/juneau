@@ -2014,6 +2014,6 @@ public class ClassMeta<T> implements Type {
 	 * Causes thread to wait until constructor has exited.
 	 */
 	void waitForInit() {
-		try (SimpleLock x = lock.read()) {}
+		try (var x = lock.read()) {}
 	}
 }

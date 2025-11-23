@@ -299,9 +299,9 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected final JsonWriter getJsonWriter(SerializerPipe out) throws IOException {
-		Object output = out.getRawOutput();
-		if (output instanceof JsonWriter)
-			return (JsonWriter)output;
+		var output = out.getRawOutput();
+		if (output instanceof JsonWriter output2)
+			return output2;
 		var w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), isSimpleAttrs(), isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;

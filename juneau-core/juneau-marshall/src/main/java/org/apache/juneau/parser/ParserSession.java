@@ -381,7 +381,7 @@ public class ParserSession extends BeanSession {
 	 * @throws IOException Thrown by the underlying stream.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException, IOException {
-		try (ParserPipe pipe = createPipe(input)) {
+		try (var pipe = createPipe(input)) {
 			return parseInner(pipe, getClassMeta(type));
 		}
 	}
@@ -403,7 +403,7 @@ public class ParserSession extends BeanSession {
 	 * @throws IOException Thrown by the underlying stream.
 	 */
 	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException, IOException {
-		try (ParserPipe pipe = createPipe(input)) {
+		try (var pipe = createPipe(input)) {
 			return parseInner(pipe, type);
 		}
 	}
@@ -484,7 +484,7 @@ public class ParserSession extends BeanSession {
 	 */
 	@SuppressWarnings("unchecked")
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
-		try (ParserPipe pipe = createPipe(input)) {
+		try (var pipe = createPipe(input)) {
 			return (T)parseInner(pipe, getClassMeta(type, args));
 		}
 	}
@@ -524,7 +524,7 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(String input, Class<T> type) throws ParseException {
-		try (ParserPipe pipe = createPipe(input)) {
+		try (var pipe = createPipe(input)) {
 			return parseInner(pipe, getClassMeta(type));
 		} catch (IOException e) {
 			throw new ParseException(e); // Shouldn't happen.
@@ -546,7 +546,7 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(String input, ClassMeta<T> type) throws ParseException {
-		try (ParserPipe pipe = createPipe(input)) {
+		try (var pipe = createPipe(input)) {
 			return parseInner(pipe, type);
 		} catch (IOException e) {
 			throw new ParseException(e); // Shouldn't happen.
@@ -591,7 +591,7 @@ public class ParserSession extends BeanSession {
 	 */
 	@SuppressWarnings("unchecked")
 	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
-		try (ParserPipe pipe = createPipe(input)) {
+		try (var pipe = createPipe(input)) {
 			return (T)parseInner(pipe, getClassMeta(type, args));
 		} catch (IOException e) {
 			throw new ParseException(e); // Shouldn't happen.
@@ -619,7 +619,7 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
-		try (ParserPipe pipe = createPipe(input)) {
+		try (var pipe = createPipe(input)) {
 			return doParse(pipe, getArgsClassMeta(argTypes));
 		} catch (ParseException e) {
 			throw e;
@@ -654,7 +654,7 @@ public class ParserSession extends BeanSession {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
-		try (ParserPipe pipe = createPipe(input)) {
+		try (var pipe = createPipe(input)) {
 			return doParseIntoCollection(pipe, c, elementType);
 		} catch (ParseException e) {
 			throw e;
@@ -694,7 +694,7 @@ public class ParserSession extends BeanSession {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
-		try (ParserPipe pipe = createPipe(input)) {
+		try (var pipe = createPipe(input)) {
 			return doParseIntoMap(pipe, m, keyType, valueType);
 		} catch (ParseException e) {
 			throw e;
@@ -746,9 +746,9 @@ public class ParserSession extends BeanSession {
 	 */
 	protected final Object cast(JsonMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 
-		String btpn = getBeanTypePropertyName(eType);
+		var btpn = getBeanTypePropertyName(eType);
 
-		Object o = m.get(btpn);
+		var o = m.get(btpn);
 		if (o == null)
 			return m;
 		var typeName = o.toString();
@@ -756,7 +756,7 @@ public class ParserSession extends BeanSession {
 		var cm = getClassMeta(typeName, pMeta, eType);
 
 		if (nn(cm)) {
-			BeanMap<?> bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
+			var bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
 
 			// Iterate through all the entries in the map and set the individual field values.
 			m.forEach((k, v) -> {
@@ -786,7 +786,7 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes", "cast" })
+	@SuppressWarnings("unchecked")
 	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws ParseException {
 		if (s == null)
 			return null;
@@ -796,7 +796,7 @@ public class ParserSession extends BeanSession {
 		var swap = type.getSwap(this);
 		var sType = swap == null ? type : swap.getSwapClassMeta(this);
 
-		Object o = s;
+		var o = (Object)s;
 		if (sType.isChar())
 			o = parseCharacter(s);
 		else if (sType.isNumber())
@@ -1128,8 +1128,8 @@ public class ParserSession extends BeanSession {
 	 */
 	@SuppressWarnings("unchecked")
 	protected final <K> K trim(K o) {
-		if (isTrimStrings() && o instanceof String)
-			return (K)o.toString().trim();
+		if (isTrimStrings() && o instanceof String o2)
+			return (K)o2.trim();
 		return o;
 
 	}

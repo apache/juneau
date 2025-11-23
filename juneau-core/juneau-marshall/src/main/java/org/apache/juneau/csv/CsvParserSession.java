@@ -188,7 +188,7 @@ public class CsvParserSession extends ReaderParserSession {
 
 	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
-		try (ParserReader r = pipe.getParserReader()) {
+		try (var r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
 			return parseAnything(type, r, getOuter(), null);

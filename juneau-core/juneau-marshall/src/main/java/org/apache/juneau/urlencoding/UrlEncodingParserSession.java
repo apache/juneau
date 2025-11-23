@@ -509,14 +509,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		try (UonReader r = getUonReader(pipe, true)) {
+		try (var r = getUonReader(pipe, true)) {
 			return parseAnything(type, r, getOuter());
 		}
 	}
 
 	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		try (UonReader r = getUonReader(pipe, true)) {
+		try (var r = getUonReader(pipe, true)) {
 			if (r.peekSkipWs() == '?')
 				r.read();  // NOSONAR - skip leading '?'.
 			m = parseIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);

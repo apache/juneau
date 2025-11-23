@@ -232,8 +232,8 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 
-		try (CsvWriter w = getCsvWriter(pipe)) {
-			ClassMeta<?> cm = getClassMetaForObject(o);
+		try (var w = getCsvWriter(pipe)) {
+			var cm = getClassMetaForObject(o);
 			var l = (Collection<?>)null;
 			if (cm.isArray()) {
 				l = l((Object[])o);
@@ -245,9 +245,9 @@ public class CsvSerializerSession extends WriterSerializerSession {
 
 			// TODO - Doesn't support DynaBeans.
 			if (isNotEmpty(l)) {
-				ClassMeta<?> entryType = getClassMetaForObject(l.iterator().next());
+				var entryType = getClassMetaForObject(l.iterator().next());
 				if (entryType.isBean()) {
-					BeanMeta<?> bm = entryType.getBeanMeta();
+					var bm = entryType.getBeanMeta();
 					var addComma = Flag.create();
 					bm.forEachProperty(BeanPropertyMeta::canRead, x -> {
 						addComma.ifSet(() -> w.w(',')).set();
@@ -260,7 +260,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 						bm.forEachProperty(BeanPropertyMeta::canRead, y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
 							// Bean property values are already swapped by BeanPropertyMeta.get() via toSerializedForm()
-							Object value = y.get(bean, y.getName());
+							var value = y.get(bean, y.getName());
 							w.writeEntry(value);
 						});
 						w.w('\n');
@@ -278,7 +278,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 						var map = (Map)x;
 						map.values().forEach(y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
-							Object value = applySwap(y, getClassMetaForObject(y));
+							var value = applySwap(y, getClassMetaForObject(y));
 							w.writeEntry(value);
 						});
 						w.w('\n');
@@ -287,7 +287,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 					w.writeEntry("value");
 					w.append('\n');
 					l.stream().forEach(x -> {
-						Object value = applySwap(x, getClassMetaForObject(x));
+						var value = applySwap(x, getClassMetaForObject(x));
 						w.writeEntry(value);
 						w.w('\n');
 					});
@@ -297,9 +297,9 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	}
 
 	CsvWriter getCsvWriter(SerializerPipe out) {
-		Object output = out.getRawOutput();
-		if (output instanceof CsvWriter)
-			return (CsvWriter)output;
+		var output = out.getRawOutput();
+		if (output instanceof CsvWriter output2)
+			return output2;
 		var w = new CsvWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), getQuoteChar(), isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;

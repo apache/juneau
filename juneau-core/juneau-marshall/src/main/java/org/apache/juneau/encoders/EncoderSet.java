@@ -280,8 +280,8 @@ public class EncoderSet {
 	}
 
 	private static Encoder instantiate(BeanStore bs, Object o) {
-		if (o instanceof Encoder)
-			return (Encoder)o;
+		if (o instanceof Encoder o2)
+			return o2;
 		try {
 			return bs.createBean(Encoder.class).type((Class<?>)o).run();
 		} catch (ExecutableException e) {

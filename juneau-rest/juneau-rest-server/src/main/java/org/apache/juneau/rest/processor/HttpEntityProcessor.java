@@ -35,19 +35,19 @@ public class HttpEntityProcessor implements ResponseProcessor {
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {
 
-		RestResponse res = opSession.getResponse();
-		HttpEntity e = res.getContent(HttpEntity.class);
+		var res = opSession.getResponse();
+		var e = res.getContent(HttpEntity.class);
 
 		if (e == null)
 			return NEXT;
 
 		res.setHeader(e.getContentType());
 		res.setHeader(e.getContentEncoding());
-		long contentLength = e.getContentLength();
+		var contentLength = e.getContentLength();
 		if (contentLength >= 0)
 			res.setHeader(contentLength(contentLength));
 
-		try (OutputStream os = res.getNegotiatedOutputStream()) {
+		try (var os = res.getNegotiatedOutputStream()) {
 			e.writeTo(os);
 			os.flush();
 		}
