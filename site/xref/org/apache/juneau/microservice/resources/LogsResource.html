@@ -126,7 +126,7 @@
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">public</strong> Set&lt;FileResource&gt; getFiles() {
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">if</strong> (f.isFile() || ! includeChildren)
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			Set&lt;FileResource&gt; s = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(FILE_COMPARATOR);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(FILE_COMPARATOR);
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> fc : f.listFiles(FILE_FILTER))
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 				s.add(<strong class="jxr_keyword">new</strong> FileResource(fc, (nn(path) ? (path + '/') : <span class="jxr_string">""</span>) + urlEncode(fc.getName()), allowDeletes, false));
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">return</strong> s;
@@ -197,7 +197,7 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	)
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">public</strong> FileResource getFile(RestRequest req, @Path(<span class="jxr_string">"/*"</span>) String path) <strong class="jxr_keyword">throws</strong> NotFound, Exception {
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		File dir = getFile(path);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> dir = getFile(path);
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		req.setAttribute(<span class="jxr_string">"fullPath"</span>, dir.getAbsolutePath());
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FileResource(dir, path, allowDeletes, <strong class="jxr_keyword">true</strong>);
@@ -232,18 +232,18 @@
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 			@Query(name=<span class="jxr_string">"severity"</span>,schema=@Schema( d=<span class="jxr_string">"Severity filter.\nOnly show log entries with the specified severity."</span>)) String[] severity
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		) <strong class="jxr_keyword">throws</strong> NotFound, MethodNotAllowed, IOException {
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		File f = getFile(path);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">var</strong> f = getFile(path);
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> startDate = parseIsoDate(start);
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> endDate = parseIsoDate(end);
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">if</strong> (! highlight) {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			Object o = getReader(f, startDate, endDate, thread, loggers, severity);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">var</strong> o = getReader(f, startDate, endDate, thread, loggers, severity);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			res.setContentType(<span class="jxr_string">"text/plain"</span>);
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Reader)
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 				res.setContent(o);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 				<strong class="jxr_keyword">try</strong> (<a name="LogParser" href="../../../../../org/apache/juneau/microservice/resources/LogParser.html#LogParser">LogParser</a> p = (<a name="LogParser" href="../../../../../org/apache/juneau/microservice/resources/LogParser.html#LogParser">LogParser</a>)o; Writer w = res.getNegotiatedWriter()) {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 				<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> p = (<a name="LogParser" href="../../../../../org/apache/juneau/microservice/resources/LogParser.html#LogParser">LogParser</a>)o; Writer w = res.getNegotiatedWriter()) {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 					p.writeTo(w);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 				}
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			}
@@ -251,9 +251,9 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		res.setContentType(<span class="jxr_string">"text/html"</span>);
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">try</strong> (PrintWriter w = res.getNegotiatedWriter()) {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> w = res.getNegotiatedWriter()) {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			w.println(<span class="jxr_string">"&lt;html&gt;&lt;body style='font-family:monospace;font-size:8pt;white-space:pre;'&gt;"</span>);
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">try</strong> (<a name="LogParser" href="../../../../../org/apache/juneau/microservice/resources/LogParser.html#LogParser">LogParser</a> lp = getLogParser(f, startDate, endDate, thread, loggers, severity)) {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> lp = getLogParser(f, startDate, endDate, thread, loggers, severity)) {
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 				<strong class="jxr_keyword">if</strong> (! lp.hasNext())
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 					w.append(<span class="jxr_string">"&lt;span style='color:gray'&gt;[EMPTY]&lt;/span&gt;"</span>);
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 				<strong class="jxr_keyword">else</strong>
@@ -301,7 +301,7 @@
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 			@Query(name=<span class="jxr_string">"severity"</span>, schema=@Schema(d=<span class="jxr_string">"Severity filter.\nOnly show log entries with the specified severity."</span>)) String[] severity
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		) <strong class="jxr_keyword">throws</strong> NotFound, IOException {
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		File f = getFile(path);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> f = getFile(path);
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		req.setAttribute(<span class="jxr_string">"fullPath"</span>, f.getAbsolutePath());
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> startDate = parseIsoDate(start);
@@ -314,7 +314,7 @@
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">if</strong> (! allowDeletes)
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MethodNotAllowed" href="../../../../../org/apache/juneau/http/response/MethodNotAllowed.html#MethodNotAllowed">MethodNotAllowed</a>(<span class="jxr_string">"DELETE not enabled"</span>);
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">if</strong> (f.isDirectory()) {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			File[] files = f.listFiles();
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">var</strong> files = f.listFiles();
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">if</strong> (nn(files)) {
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> fc : files)
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 					deleteFile(fc);

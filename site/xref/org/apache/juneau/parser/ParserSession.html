@@ -389,7 +389,7 @@
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by the underlying stream.</em>
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T parse(Object input, Class&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> ParseException, IOException {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe = createPipe(input)) {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pipe = createPipe(input)) {
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">return</strong> parseInner(pipe, getClassMeta(type));
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 		}
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
@@ -411,7 +411,7 @@
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by the underlying stream.</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T parse(Object input, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> ParseException, IOException {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe = createPipe(input)) {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pipe = createPipe(input)) {
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">return</strong> parseInner(pipe, type);
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		}
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
@@ -492,7 +492,7 @@
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T parse(Object input, Type type, Type...args) <strong class="jxr_keyword">throws</strong> ParseException, IOException {
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe = createPipe(input)) {
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pipe = createPipe(input)) {
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">return</strong> (T)parseInner(pipe, getClassMeta(type, args));
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 		}
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 	}
@@ -532,7 +532,7 @@
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T parse(String input, Class&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe = createPipe(input)) {
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pipe = createPipe(input)) {
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 			<strong class="jxr_keyword">return</strong> parseInner(pipe, getClassMeta(type));
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(e); <em class="jxr_comment">// Shouldn't happen.</em>
@@ -554,7 +554,7 @@
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T parse(String input, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe = createPipe(input)) {
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pipe = createPipe(input)) {
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 			<strong class="jxr_keyword">return</strong> parseInner(pipe, type);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(e); <em class="jxr_comment">// Shouldn't happen.</em>
@@ -599,7 +599,7 @@
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T parse(String input, Type type, Type...args) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe = createPipe(input)) {
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pipe = createPipe(input)) {
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 			<strong class="jxr_keyword">return</strong> (T)parseInner(pipe, getClassMeta(type, args));
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(e); <em class="jxr_comment">// Shouldn't happen.</em>
@@ -627,7 +627,7 @@
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Object[] parseArgs(Object input, Type[] argTypes) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe = createPipe(input)) {
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pipe = createPipe(input)) {
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<strong class="jxr_keyword">return</strong> doParse(pipe, getArgsClassMeta(argTypes));
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> 			<strong class="jxr_keyword">throw</strong> e;
@@ -662,7 +662,7 @@
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 * @throws UnsupportedOperationException If not implemented.</em>
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;E&gt; Collection&lt;E&gt; parseIntoCollection(Object input, Collection&lt;E&gt; c, Type elementType) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe = createPipe(input)) {
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pipe = createPipe(input)) {
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 			<strong class="jxr_keyword">return</strong> doParseIntoCollection(pipe, c, elementType);
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 			<strong class="jxr_keyword">throw</strong> e;
@@ -702,7 +702,7 @@
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">	 * @throws UnsupportedOperationException If not implemented.</em>
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;K,V&gt; Map&lt;K,V&gt; parseIntoMap(Object input, Map&lt;K,V&gt; m, Type keyType, Type valueType) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe = createPipe(input)) {
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pipe = createPipe(input)) {
 <a class="jxr_linenumber" name="L698" href="#L698">698</a> 			<strong class="jxr_keyword">return</strong> doParseIntoMap(pipe, m, keyType, valueType);
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 			<strong class="jxr_keyword">throw</strong> e;
@@ -754,9 +754,9 @@
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Object <strong class="jxr_keyword">cast</strong>(<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> m, BeanPropertyMeta pMeta, ClassMeta&lt;?&gt; eType) {
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> 
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		String btpn = getBeanTypePropertyName(eType);
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		<strong class="jxr_keyword">var</strong> btpn = getBeanTypePropertyName(eType);
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		Object o = m.get(btpn);
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		<strong class="jxr_keyword">var</strong> o = m.get(btpn);
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 			<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">var</strong> typeName = o.toString();
@@ -764,7 +764,7 @@
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">var</strong> cm = getClassMeta(typeName, pMeta, eType);
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">if</strong> (nn(cm)) {
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 			BeanMap&lt;?&gt; bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 			<strong class="jxr_keyword">var</strong> bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 			<em class="jxr_comment">// Iterate through all the entries in the map and set the individual field values.</em>
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 			m.forEach((k, v) -&gt; {
@@ -794,7 +794,7 @@
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"cast"</span> })
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T convertAttrToType(Object <strong class="jxr_keyword">outer</strong>, String s, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -804,7 +804,7 @@
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 		<strong class="jxr_keyword">var</strong> swap = type.getSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 		<strong class="jxr_keyword">var</strong> sType = swap == <strong class="jxr_keyword">null</strong> ? type : swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> 
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		Object o = s;
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		<strong class="jxr_keyword">var</strong> o = (Object)s;
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> 		<strong class="jxr_keyword">if</strong> (sType.isChar())
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 			o = parseCharacter(s);
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isNumber())
@@ -1136,8 +1136,8 @@
 <a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> &lt;K&gt; K trim(K o) {
-<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 		<strong class="jxr_keyword">if</strong> (isTrimStrings() &amp;&amp; o instanceof String)
-<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 			<strong class="jxr_keyword">return</strong> (K)o.toString().trim();
+<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 		<strong class="jxr_keyword">if</strong> (isTrimStrings() &amp;&amp; o instanceof String o2)
+<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 			<strong class="jxr_keyword">return</strong> (K)o2.trim();
 <a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 		<strong class="jxr_keyword">return</strong> o;
 <a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 
 <a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 	}

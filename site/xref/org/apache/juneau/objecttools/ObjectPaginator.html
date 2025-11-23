@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">if</strong> (input == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		ClassMeta type = session.getClassMetaForObject(input);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> type = session.getClassMetaForObject(input);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">if</strong> (! type.isCollectionOrArray())
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			<strong class="jxr_keyword">return</strong> input;
@@ -107,8 +107,8 @@
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">return</strong> copyOfRange((<strong class="jxr_keyword">short</strong>[])input, pos, end);
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		}
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		List l = type.isList() ? (List)input : <strong class="jxr_keyword">new</strong> ArrayList((Collection)input);
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">int</strong> end = (limit + pos &gt;= l.size()) ? l.size() : limit + pos;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> l = type.isList() ? (List)input : <strong class="jxr_keyword">new</strong> ArrayList((Collection)input);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> end = (limit + pos &gt;= l.size()) ? l.size() : limit + pos;
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		pos = Math.min(pos, l.size());
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">return</strong> l.subList(pos, end);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
@@ -124,10 +124,10 @@
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">public</strong> &lt;R&gt; List&lt;R&gt; run(Object input, <strong class="jxr_keyword">int</strong> pos, <strong class="jxr_keyword">int</strong> limit) {
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		BeanSession bs = BeanContext.DEFAULT_SESSION;
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		Object r = run(BeanContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">if</strong> (r instanceof List)
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">return</strong> (List&lt;R&gt;)r;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> bs = BeanContext.DEFAULT_SESSION;
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> r = run(BeanContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">if</strong> (r instanceof List r2)
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">return</strong> r2;
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">return</strong> bs.convertToType(r, List.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> }

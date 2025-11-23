@@ -240,8 +240,8 @@
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 	@Override <em class="jxr_comment">/* Overridden from SerializerSession */</em>
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> pipe, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">try</strong> (<a name="CsvWriter" href="../../../../org/apache/juneau/csv/CsvWriter.html#CsvWriter">CsvWriter</a> w = getCsvWriter(pipe)) {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			ClassMeta&lt;?&gt; cm = getClassMetaForObject(o);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> w = getCsvWriter(pipe)) {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">var</strong> cm = getClassMetaForObject(o);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">var</strong> l = (Collection&lt;?&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">if</strong> (cm.isArray()) {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 				l = l((Object[])o);
@@ -253,9 +253,9 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<em class="jxr_comment">// TODO - Doesn't support DynaBeans.</em>
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(l)) {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				ClassMeta&lt;?&gt; entryType = getClassMetaForObject(l.iterator().next());
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				<strong class="jxr_keyword">var</strong> entryType = getClassMetaForObject(l.iterator().next());
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 				<strong class="jxr_keyword">if</strong> (entryType.isBean()) {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 					BeanMeta&lt;?&gt; bm = entryType.getBeanMeta();
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 					<strong class="jxr_keyword">var</strong> bm = entryType.getBeanMeta();
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 					<strong class="jxr_keyword">var</strong> addComma = Flag.create();
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 					bm.forEachProperty(BeanPropertyMeta::canRead, x -&gt; {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 						addComma.ifSet(() -&gt; w.w(',')).set();
@@ -268,7 +268,7 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 						bm.forEachProperty(BeanPropertyMeta::canRead, y -&gt; {
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 							addComma2.ifSet(() -&gt; w.w(',')).set();
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 							<em class="jxr_comment">// Bean property values are already swapped by BeanPropertyMeta.get() via toSerializedForm()</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 							Object value = y.get(bean, y.getName());
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 							<strong class="jxr_keyword">var</strong> value = y.get(bean, y.getName());
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 							w.writeEntry(value);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 						});
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 						w.w('\n');
@@ -286,7 +286,7 @@
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 						<strong class="jxr_keyword">var</strong> map = (Map)x;
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 						map.values().forEach(y -&gt; {
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 							addComma2.ifSet(() -&gt; w.w(',')).set();
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 							Object value = applySwap(y, getClassMetaForObject(y));
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 							<strong class="jxr_keyword">var</strong> value = applySwap(y, getClassMetaForObject(y));
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 							w.writeEntry(value);
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 						});
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 						w.w('\n');
@@ -295,7 +295,7 @@
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 					w.writeEntry(<span class="jxr_string">"value"</span>);
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 					w.append('\n');
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 					l.stream().forEach(x -&gt; {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 						Object value = applySwap(x, getClassMetaForObject(x));
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 						<strong class="jxr_keyword">var</strong> value = applySwap(x, getClassMetaForObject(x));
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 						w.writeEntry(value);
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 						w.w('\n');
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 					});
@@ -305,9 +305,9 @@
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 	CsvWriter getCsvWriter(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out) {
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		Object output = out.getRawOutput();
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">if</strong> (output instanceof <a name="CsvWriter" href="../../../../org/apache/juneau/csv/CsvWriter.html#CsvWriter">CsvWriter</a>)
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">return</strong> (<a name="CsvWriter" href="../../../../org/apache/juneau/csv/CsvWriter.html#CsvWriter">CsvWriter</a>)output;
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> output = out.getRawOutput();
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">if</strong> (output instanceof <a name="CsvWriter" href="../../../../org/apache/juneau/csv/CsvWriter.html#CsvWriter">CsvWriter</a> output2)
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">return</strong> output2;
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">var</strong> w = <strong class="jxr_keyword">new</strong> <a name="CsvWriter" href="../../../../org/apache/juneau/csv/CsvWriter.html#CsvWriter">CsvWriter</a>(out.getWriter(), isUseWhitespace(), getMaxIndent(), getQuoteChar(), isTrimStrings(), getUriResolver());
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		out.setWriter(w);
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">return</strong> w;

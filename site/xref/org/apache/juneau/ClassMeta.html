@@ -2022,7 +2022,7 @@
 <a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> <em class="jxr_javadoccomment">	 * Causes thread to wait until constructor has exited.</em>
 <a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2016" href="#L2016">2016</a> 	<strong class="jxr_keyword">void</strong> waitForInit() {
-<a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.read()) {}
+<a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.read()) {}
 <a class="jxr_linenumber" name="L2018" href="#L2018">2018</a> 	}
 <a class="jxr_linenumber" name="L2019" href="#L2019">2019</a> }
 </pre>

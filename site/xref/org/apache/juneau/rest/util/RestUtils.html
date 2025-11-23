@@ -275,24 +275,24 @@
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (qs == <strong class="jxr_keyword">null</strong> || ((qs instanceof CharSequence) &amp;&amp; isEmpty(s(qs))))
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 				<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> p = <strong class="jxr_keyword">new</strong> <a name="ParserPipe" href="../../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a>(qs)) {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">try</strong> (<a name="ParserPipe" href="../../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> p = <strong class="jxr_keyword">new</strong> <a name="ParserPipe" href="../../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a>(qs)) {
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				<em class="jxr_comment">// S1: Looking for attrName start.</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				<em class="jxr_comment">// S2: Found attrName start, looking for = or &amp; or end.</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				<em class="jxr_comment">// S3: Found =, looking for valStart or &amp;.</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 				<em class="jxr_comment">// S4: Found valStart, looking for &amp; or end.</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<em class="jxr_comment">// S1: Looking for attrName start.</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<em class="jxr_comment">// S2: Found attrName start, looking for = or &amp; or end.</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<em class="jxr_comment">// S3: Found =, looking for valStart or &amp;.</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<em class="jxr_comment">// S4: Found valStart, looking for &amp; or end.</em>
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				<strong class="jxr_keyword">try</strong> (<a name="UonReader" href="../../../../../org/apache/juneau/uon/UonReader.html#UonReader">UonReader</a> r = <strong class="jxr_keyword">new</strong> <a name="UonReader" href="../../../../../org/apache/juneau/uon/UonReader.html#UonReader">UonReader</a>(p, <strong class="jxr_keyword">true</strong>)) {
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 					<strong class="jxr_keyword">int</strong> c = r.peekSkipWs();
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 					<strong class="jxr_keyword">if</strong> (c == '?')
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 						r.read();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> <a name="UonReader" href="../../../../../org/apache/juneau/uon/UonReader.html#UonReader">UonReader</a>(p, <strong class="jxr_keyword">true</strong>)) {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 				<strong class="jxr_keyword">int</strong> c = r.peekSkipWs();
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 				<strong class="jxr_keyword">if</strong> (c == '?')
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 					r.read();
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 					<strong class="jxr_keyword">var</strong> state = S1;
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 					<strong class="jxr_keyword">var</strong> currAttr = (String)<strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 					<strong class="jxr_keyword">while</strong> (c != -1) {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 						c = r.read();
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 						<strong class="jxr_keyword">if</strong> (state == S1) {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 							<strong class="jxr_keyword">if</strong> (c != -1) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 				<strong class="jxr_keyword">var</strong> state = S1;
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<strong class="jxr_keyword">var</strong> currAttr = (String)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				<strong class="jxr_keyword">while</strong> (c != -1) {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 					c = r.read();
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 					<strong class="jxr_keyword">if</strong> (state == S1) {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 						<strong class="jxr_keyword">if</strong> (c != -1) {
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 								r.unread();
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 								r.mark();
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 								state = S2;

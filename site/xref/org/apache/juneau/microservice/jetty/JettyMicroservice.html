@@ -447,7 +447,7 @@
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<em class="jxr_comment">// If port is 0, try a random port between ports[0] and 32767.</em>
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">if</strong> (port == 0)
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 				port = <strong class="jxr_keyword">new</strong> Random().nextInt(32767 - ports[0] + 1) + ports[0];
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">try</strong> (ServerSocket ss = <strong class="jxr_keyword">new</strong> ServerSocket(port)) {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> ss = <strong class="jxr_keyword">new</strong> ServerSocket(port)) {
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 				<strong class="jxr_keyword">return</strong> port;
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException e) {}
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 		}

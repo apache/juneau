@@ -2121,9 +2121,9 @@
 <a class="jxr_linenumber" name="L2113" href="#L2113">2113</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2114" href="#L2114">2114</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sendRequestEntity(HttpEntityEnclosingRequest request) <strong class="jxr_keyword">throws</strong> HttpException, IOException {
 <a class="jxr_linenumber" name="L2115" href="#L2115">2115</a> 		byte[] body = {};
-<a class="jxr_linenumber" name="L2116" href="#L2116">2116</a> 		HttpEntity entity = request.getEntity();
+<a class="jxr_linenumber" name="L2116" href="#L2116">2116</a> 		<strong class="jxr_keyword">var</strong> entity = request.getEntity();
 <a class="jxr_linenumber" name="L2117" href="#L2117">2117</a> 		<strong class="jxr_keyword">if</strong> (nn(entity)) {
-<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 			<strong class="jxr_keyword">long</strong> length = entity.getContentLength();
+<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 			<strong class="jxr_keyword">var</strong> length = entity.getContentLength();
 <a class="jxr_linenumber" name="L2119" href="#L2119">2119</a> 			<strong class="jxr_keyword">if</strong> (length &lt; 0)
 <a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 				length = 1024;
 <a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 			<strong class="jxr_keyword">var</strong> baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream((<strong class="jxr_keyword">int</strong>)Math.min(length, 1024));
@@ -2137,7 +2137,7 @@
 <a class="jxr_linenumber" name="L2129" href="#L2129">2129</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2130" href="#L2130">2130</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sendRequestHeader(HttpRequest request) <strong class="jxr_keyword">throws</strong> HttpException, IOException {
 <a class="jxr_linenumber" name="L2131" href="#L2131">2131</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> 			RequestLine rl = request.getRequestLine();
+<a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> 			<strong class="jxr_keyword">var</strong> rl = request.getRequestLine();
 <a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> 			<strong class="jxr_keyword">var</strong> path = rl.getUri();
 <a class="jxr_linenumber" name="L2134" href="#L2134">2134</a> 			<strong class="jxr_keyword">var</strong> target = findTarget(request);
 <a class="jxr_linenumber" name="L2135" href="#L2135">2135</a> 

@@ -3869,7 +3869,7 @@
 <a class="jxr_linenumber" name="L3861" href="#L3861">3861</a> <em class="jxr_javadoccomment">	 * @return The multiplier value (1 if no valid suffix found).</em>
 <a class="jxr_linenumber" name="L3862" href="#L3862">3862</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L3863" href="#L3863">3863</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> multiplier(String s) {
-<a class="jxr_linenumber" name="L3864" href="#L3864">3864</a> 		<strong class="jxr_keyword">var</strong> c = isEmpty(s) ? <strong class="jxr_keyword">null</strong> : s.charAt(s.length() - 1);  <em class="jxr_comment">// NOSONAR - NPE not possible.</em>
+<a class="jxr_linenumber" name="L3864" href="#L3864">3864</a> 		<strong class="jxr_keyword">var</strong> c = isEmpty(s) ? 'z' : s.charAt(s.length() - 1);
 <a class="jxr_linenumber" name="L3865" href="#L3865">3865</a> 		<strong class="jxr_keyword">if</strong> (c == 'G')
 <a class="jxr_linenumber" name="L3866" href="#L3866">3866</a> 			<strong class="jxr_keyword">return</strong> 1024 * 1024 * 1024;
 <a class="jxr_linenumber" name="L3867" href="#L3867">3867</a> 		<strong class="jxr_keyword">if</strong> (c == 'M')
@@ -3892,7 +3892,7 @@
 <a class="jxr_linenumber" name="L3884" href="#L3884">3884</a> <em class="jxr_javadoccomment">	 * @return The multiplier value (1 if no valid suffix found).</em>
 <a class="jxr_linenumber" name="L3885" href="#L3885">3885</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L3886" href="#L3886">3886</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> multiplier2(String s) {
-<a class="jxr_linenumber" name="L3887" href="#L3887">3887</a> 		<strong class="jxr_keyword">var</strong> c = isEmpty(s) ? <strong class="jxr_keyword">null</strong> : s.charAt(s.length() - 1);  <em class="jxr_comment">// NOSONAR - NPE not possible.</em>
+<a class="jxr_linenumber" name="L3887" href="#L3887">3887</a> 		<strong class="jxr_keyword">var</strong> c = isEmpty(s) ? 'z' : s.charAt(s.length() - 1);
 <a class="jxr_linenumber" name="L3888" href="#L3888">3888</a> 		<strong class="jxr_keyword">if</strong> (c == 'P')
 <a class="jxr_linenumber" name="L3889" href="#L3889">3889</a> 			<strong class="jxr_keyword">return</strong> 1024 * 1024 * 1024 * 1024 * 1024l;
 <a class="jxr_linenumber" name="L3890" href="#L3890">3890</a> 		<strong class="jxr_keyword">if</strong> (c == 'T')

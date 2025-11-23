@@ -73,8 +73,8 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@RestPost(path = <span class="jxr_string">"/jetty/dump"</span>, description = <span class="jxr_string">"Generates and saves the jetty thread dump file to jetty-thread-dump.log."</span>)
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <a name="Ok" href="../../../../../../org/apache/juneau/http/response/Ok.html#Ok">Ok</a> createJettyDump(RestRequest req, <a name="RestResponse" href="../../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		String dump = JettyMicroservice.getInstance().getServer().dump();
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">try</strong> (FileWriter fw = <strong class="jxr_keyword">new</strong> FileWriter(req.getConfig().get(<span class="jxr_string">"Logging/logDir"</span>).orElse(<span class="jxr_string">""</span>) + <span class="jxr_string">"/jetty-thread-dump.log"</span>)) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> dump = JettyMicroservice.getInstance().getServer().dump();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fw = <strong class="jxr_keyword">new</strong> FileWriter(req.getConfig().get(<span class="jxr_string">"Logging/logDir"</span>).orElse(<span class="jxr_string">""</span>) + <span class="jxr_string">"/jetty-thread-dump.log"</span>)) {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			fw.write(dump);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		}
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">return</strong> Ok.OK;

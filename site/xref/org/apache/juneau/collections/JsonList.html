@@ -995,8 +995,8 @@
 <a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable copy of this list if it's modifiable, or this list if it is already unmodifiable.</em>
 <a class="jxr_linenumber" name="L988" href="#L988">988</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonList" href="../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a> unmodifiable() {
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> instanceof UnmodifiableJsonList)
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> instanceof UnmodifiableJsonList <strong class="jxr_keyword">this</strong>2)
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>2;
 <a class="jxr_linenumber" name="L992" href="#L992">992</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UnmodifiableJsonList(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L993" href="#L993">993</a> 	}
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> 

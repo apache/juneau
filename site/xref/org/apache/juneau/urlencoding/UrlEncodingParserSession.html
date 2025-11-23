@@ -517,14 +517,14 @@
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 	@Override <em class="jxr_comment">/* Overridden from ParserSession */</em>
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T doParse(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">try</strong> (<a name="UonReader" href="../../../../org/apache/juneau/uon/UonReader.html#UonReader">UonReader</a> r = getUonReader(pipe, <strong class="jxr_keyword">true</strong>)) {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> r = getUonReader(pipe, <strong class="jxr_keyword">true</strong>)) {
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">return</strong> parseAnything(type, r, getOuter());
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 		}
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 	}
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 	@Override <em class="jxr_comment">/* Overridden from ReaderParserSession */</em>
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 	<strong class="jxr_keyword">protected</strong> &lt;K,V&gt; Map&lt;K,V&gt; doParseIntoMap(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, Map&lt;K,V&gt; m, Type keyType, Type valueType) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<strong class="jxr_keyword">try</strong> (<a name="UonReader" href="../../../../org/apache/juneau/uon/UonReader.html#UonReader">UonReader</a> r = getUonReader(pipe, <strong class="jxr_keyword">true</strong>)) {
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> r = getUonReader(pipe, <strong class="jxr_keyword">true</strong>)) {
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 			<strong class="jxr_keyword">if</strong> (r.peekSkipWs() == '?')
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 				r.read();  <em class="jxr_comment">// NOSONAR - skip leading '?'.</em>
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 			m = parseIntoMap2(r, m, getClassMeta(Map.<strong class="jxr_keyword">class</strong>, keyType, valueType), <strong class="jxr_keyword">null</strong>);

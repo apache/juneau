@@ -4479,7 +4479,7 @@
 <a class="jxr_linenumber" name="L4471" href="#L4471">4471</a> 
 <a class="jxr_linenumber" name="L4472" href="#L4472">4472</a> 				<strong class="jxr_keyword">if</strong> (o instanceof <a name="RestChild" href="../../../../org/apache/juneau/rest/RestChild.html#RestChild">RestChild</a> o2) {
 <a class="jxr_linenumber" name="L4473" href="#L4473">4473</a> 					path = o2.path;
-<a class="jxr_linenumber" name="L4474" href="#L4474">4474</a> 					Object o3 = o2.resource;
+<a class="jxr_linenumber" name="L4474" href="#L4474">4474</a> 					<strong class="jxr_keyword">var</strong> o3 = o2.resource;
 <a class="jxr_linenumber" name="L4475" href="#L4475">4475</a> 					so = () -&gt; o3;
 <a class="jxr_linenumber" name="L4476" href="#L4476">4476</a> 				}
 <a class="jxr_linenumber" name="L4477" href="#L4477">4477</a> 
@@ -4506,7 +4506,7 @@
 <a class="jxr_linenumber" name="L4498" href="#L4498">4498</a> 
 <a class="jxr_linenumber" name="L4499" href="#L4499">4499</a> 				<strong class="jxr_keyword">var</strong> cc = cb.init(so).build();
 <a class="jxr_linenumber" name="L4500" href="#L4500">4500</a> 
-<a class="jxr_linenumber" name="L4501" href="#L4501">4501</a> 				MethodInfo mi = ClassInfo.of(so.get()).getMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParameterTypes(RestContext.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L4501" href="#L4501">4501</a> 				<strong class="jxr_keyword">var</strong> mi = ClassInfo.of(so.get()).getMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParameterTypes(RestContext.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L4502" href="#L4502">4502</a> 				<strong class="jxr_keyword">if</strong> (nn(mi))
 <a class="jxr_linenumber" name="L4503" href="#L4503">4503</a> 					mi.accessible().invoke(so.get(), cc);
 <a class="jxr_linenumber" name="L4504" href="#L4504">4504</a> 
@@ -4585,7 +4585,7 @@
 <a class="jxr_linenumber" name="L4577" href="#L4577">4577</a> 			ClassInfo.ofProxy(resource.get()).getAllMethodsTopDown().stream()
 <a class="jxr_linenumber" name="L4578" href="#L4578">4578</a> 				.filter(y -&gt; y.hasAnnotation(RestInit.<strong class="jxr_keyword">class</strong>) &amp;&amp; y.hasParameter(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L4579" href="#L4579">4579</a> 				.forEach(y -&gt; {
-<a class="jxr_linenumber" name="L4580" href="#L4580">4580</a> 					String sig = y.getSignature();
+<a class="jxr_linenumber" name="L4580" href="#L4580">4580</a> 					<strong class="jxr_keyword">var</strong> sig = y.getSignature();
 <a class="jxr_linenumber" name="L4581" href="#L4581">4581</a> 					<strong class="jxr_keyword">if</strong> (! initMap.containsKey(sig))
 <a class="jxr_linenumber" name="L4582" href="#L4582">4582</a> 						initMap.put(sig, y.accessible());
 <a class="jxr_linenumber" name="L4583" href="#L4583">4583</a> 				});
@@ -5147,10 +5147,10 @@
 <a class="jxr_linenumber" name="L5139" href="#L5139">5139</a> 			<em class="jxr_comment">// the remainder after the new servletPath.</em>
 <a class="jxr_linenumber" name="L5140" href="#L5140">5140</a> 			<em class="jxr_comment">// Only do this for the top-level resource because the logic for child resources are processed next.</em>
 <a class="jxr_linenumber" name="L5141" href="#L5141">5141</a> 			<strong class="jxr_keyword">if</strong> (pathMatcher.hasVars() &amp;&amp; parentContext == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L5142" href="#L5142">5142</a> 				String sp = sb.req().getServletPath();
-<a class="jxr_linenumber" name="L5143" href="#L5143">5143</a> 				String pi = sb.getPathInfoUndecoded();
+<a class="jxr_linenumber" name="L5142" href="#L5142">5142</a> 				<strong class="jxr_keyword">var</strong> sp = sb.req().getServletPath();
+<a class="jxr_linenumber" name="L5143" href="#L5143">5143</a> 				<strong class="jxr_keyword">var</strong> pi = sb.getPathInfoUndecoded();
 <a class="jxr_linenumber" name="L5144" href="#L5144">5144</a> 				<strong class="jxr_keyword">var</strong> upi2 = UrlPath.of(pi == <strong class="jxr_keyword">null</strong> ? sp : sp + pi);
-<a class="jxr_linenumber" name="L5145" href="#L5145">5145</a> 				UrlPathMatch uppm = pathMatcher.match(upi2);
+<a class="jxr_linenumber" name="L5145" href="#L5145">5145</a> 				<strong class="jxr_keyword">var</strong> uppm = pathMatcher.match(upi2);
 <a class="jxr_linenumber" name="L5146" href="#L5146">5146</a> 				<strong class="jxr_keyword">if</strong> (nn(uppm) &amp;&amp; ! uppm.hasEmptyVars()) {
 <a class="jxr_linenumber" name="L5147" href="#L5147">5147</a> 					sb.pathVars(uppm.getVars());
 <a class="jxr_linenumber" name="L5148" href="#L5148">5148</a> 					sb.req(<strong class="jxr_keyword">new</strong> <a name="OverrideableHttpServletRequest" href="../../../../org/apache/juneau/rest/OverrideableHttpServletRequest.html#OverrideableHttpServletRequest">OverrideableHttpServletRequest</a>(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
@@ -5164,11 +5164,11 @@
 <a class="jxr_linenumber" name="L5156" href="#L5156">5156</a> 			<em class="jxr_comment">// If this resource has child resources, try to recursively call them.</em>
 <a class="jxr_linenumber" name="L5157" href="#L5157">5157</a> 			<strong class="jxr_keyword">var</strong> childMatch = restChildren.findMatch(sb);
 <a class="jxr_linenumber" name="L5158" href="#L5158">5158</a> 			<strong class="jxr_keyword">if</strong> (childMatch.isPresent()) {
-<a class="jxr_linenumber" name="L5159" href="#L5159">5159</a> 				UrlPathMatch uppm = childMatch.get().getPathMatch();
+<a class="jxr_linenumber" name="L5159" href="#L5159">5159</a> 				<strong class="jxr_keyword">var</strong> uppm = childMatch.get().getPathMatch();
 <a class="jxr_linenumber" name="L5160" href="#L5160">5160</a> 				<strong class="jxr_keyword">var</strong> rc = childMatch.get().getChildContext();
 <a class="jxr_linenumber" name="L5161" href="#L5161">5161</a> 				<strong class="jxr_keyword">if</strong> (! uppm.hasEmptyVars()) {
 <a class="jxr_linenumber" name="L5162" href="#L5162">5162</a> 					sb.pathVars(uppm.getVars());
-<a class="jxr_linenumber" name="L5163" href="#L5163">5163</a> 					HttpServletRequest childRequest = <strong class="jxr_keyword">new</strong> <a name="OverrideableHttpServletRequest" href="../../../../org/apache/juneau/rest/OverrideableHttpServletRequest.html#OverrideableHttpServletRequest">OverrideableHttpServletRequest</a>(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix())))
+<a class="jxr_linenumber" name="L5163" href="#L5163">5163</a> 					<strong class="jxr_keyword">var</strong> childRequest = <strong class="jxr_keyword">new</strong> <a name="OverrideableHttpServletRequest" href="../../../../org/apache/juneau/rest/OverrideableHttpServletRequest.html#OverrideableHttpServletRequest">OverrideableHttpServletRequest</a>(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix())))
 <a class="jxr_linenumber" name="L5164" href="#L5164">5164</a> 						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
 <a class="jxr_linenumber" name="L5165" href="#L5165">5165</a> 					rc.execute(rc.getResource(), childRequest, sb.res());
 <a class="jxr_linenumber" name="L5166" href="#L5166">5166</a> 				} <strong class="jxr_keyword">else</strong> {
@@ -6016,7 +6016,7 @@
 <a class="jxr_linenumber" name="L6008" href="#L6008">6008</a> 			}
 <a class="jxr_linenumber" name="L6009" href="#L6009">6009</a> 
 <a class="jxr_linenumber" name="L6010" href="#L6010">6010</a> 			<strong class="jxr_keyword">try</strong> (PrintWriter w2 = w) {
-<a class="jxr_linenumber" name="L6011" href="#L6011">6011</a> 				String httpMessage = RestUtils.getHttpResponseText(statusCode);
+<a class="jxr_linenumber" name="L6011" href="#L6011">6011</a> 				<strong class="jxr_keyword">var</strong> httpMessage = RestUtils.getHttpResponseText(statusCode);
 <a class="jxr_linenumber" name="L6012" href="#L6012">6012</a> 				<strong class="jxr_keyword">if</strong> (nn(httpMessage))
 <a class="jxr_linenumber" name="L6013" href="#L6013">6013</a> 					w2.append(<span class="jxr_string">"HTTP "</span>).append(String.valueOf(statusCode)).append(<span class="jxr_string">": "</span>).append(httpMessage).append(<span class="jxr_string">"\n\n"</span>);
 <a class="jxr_linenumber" name="L6014" href="#L6014">6014</a> 				<strong class="jxr_keyword">if</strong> (isRenderResponseStackTraces())
@@ -6155,7 +6155,7 @@
 <a class="jxr_linenumber" name="L6147" href="#L6147">6147</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | IllegalArgumentException e) {
 <a class="jxr_linenumber" name="L6148" href="#L6148">6148</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e, <span class="jxr_string">"Error occurred invoking start-call method ''{0}''."</span>, x.getFullName());
 <a class="jxr_linenumber" name="L6149" href="#L6149">6149</a> 			} <strong class="jxr_keyword">catch</strong> (InvocationTargetException e) {
-<a class="jxr_linenumber" name="L6150" href="#L6150">6150</a> 				Throwable t = e.getTargetException();
+<a class="jxr_linenumber" name="L6150" href="#L6150">6150</a> 				<strong class="jxr_keyword">var</strong> t = e.getTargetException();
 <a class="jxr_linenumber" name="L6151" href="#L6151">6151</a> 				<strong class="jxr_keyword">if</strong> (t instanceof <a name="BasicHttpException" href="../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> t2)
 <a class="jxr_linenumber" name="L6152" href="#L6152">6152</a> 					<strong class="jxr_keyword">throw</strong> t2;
 <a class="jxr_linenumber" name="L6153" href="#L6153">6153</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(t);

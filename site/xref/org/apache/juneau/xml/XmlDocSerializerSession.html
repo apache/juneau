@@ -205,7 +205,7 @@
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	@Override <em class="jxr_comment">/* Overridden from SerializerSession */</em>
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out, Object o) <strong class="jxr_keyword">throws</strong> java.io.IOException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">try</strong> (<a name="XmlWriter" href="../../../../org/apache/juneau/xml/XmlWriter.html#XmlWriter">XmlWriter</a> w = getXmlWriter(out)) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> w = getXmlWriter(out)) {
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			w.append(<span class="jxr_string">"&lt;?xml"</span>).attr(<span class="jxr_string">"version"</span>, <span class="jxr_string">"1.0"</span>).attr(<span class="jxr_string">"encoding"</span>, <span class="jxr_string">"UTF-8"</span>).appendln(<span class="jxr_string">"?&gt;"</span>);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 			w.flush();
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">super</strong>.doSerialize(out, o);

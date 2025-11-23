@@ -38,8 +38,8 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  @SuppressWarnings({<span class="jxr_string">"rawtypes"</span>,<span class="jxr_string">"serial"</span>})
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">class</strong> CommonParser_UonTest <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	ReaderParser p = UonParser.create().beanDictionary(A1.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	ReaderParser pe = UonParser.DEFAULT_DECODING;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	UonParser p = UonParser.create().beanDictionary(A1.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	UonParser pe = UonParser.DEFAULT_DECODING;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<em class="jxr_comment">// testFromSerializer</em>
