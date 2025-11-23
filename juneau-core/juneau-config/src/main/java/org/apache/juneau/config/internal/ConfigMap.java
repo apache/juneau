@@ -418,7 +418,7 @@ public class ConfigMap implements ConfigStoreListener {
 	@SuppressWarnings("null")
 	@Override /* Overridden from ConfigStoreListener */
 	public void onChange(String newContents) {
-		ConfigEvents changes2 = null;
+		var changes2 = (ConfigEvents)null;
 		try (var x = lock.write()) {
 			if (ne(contents, newContents)) {
 				changes2 = findDiffs(newContents);

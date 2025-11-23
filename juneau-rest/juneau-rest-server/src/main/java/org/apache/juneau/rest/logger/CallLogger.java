@@ -562,8 +562,8 @@ public class CallLogger {
 		var method = req.getMethod();
 		int status = res.getStatus();
 		var uri = req.getRequestURI();
-		byte[] reqContent = getRequestContent(req);
-		byte[] resContent = getResponseContent(req, res);
+		var reqContent = getRequestContent(req);
+		var resContent = getResponseContent(req, res);
 
 		var sb = new StringBuilder();
 
@@ -575,7 +575,7 @@ public class CallLogger {
 		sb.append('[').append(status);
 
 		if (nn(sti)) {
-			int count = sti.getCount();
+			var count = sti.getCount();
 			sb.append(',').append(StringUtils.toHex8(sti.getHash())).append('.').append(count);
 			if (count > 1)
 				e = null;

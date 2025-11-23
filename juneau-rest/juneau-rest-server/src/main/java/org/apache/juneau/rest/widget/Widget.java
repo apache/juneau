@@ -151,7 +151,7 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadHtml(RestRequest req, String name) {
 		try {
-			String s = getFileFinder(req).getString(name, null).orElse(null);
+			var s = getFileFinder(req).getString(name, null).orElse(null);
 			if (nn(s))
 				s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
 			return s;
@@ -190,7 +190,7 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadScript(RestRequest req, String name) {
 		try {
-			String s = getFileFinder(req).getString(name, null).orElse(null);
+			var s = getFileFinder(req).getString(name, null).orElse(null);
 			if (nn(s))
 				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 			return s;
@@ -229,7 +229,7 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadStyle(RestRequest req, String name) {
 		try {
-			String s = getFileFinder(req).getString(name, null).orElse(null);
+			var s = getFileFinder(req).getString(name, null).orElse(null);
 			if (nn(s))
 				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 			return s;

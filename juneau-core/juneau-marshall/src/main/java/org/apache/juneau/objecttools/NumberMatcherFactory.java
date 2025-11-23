@@ -82,15 +82,15 @@ public class NumberMatcherFactory extends MatcherFactory {
 			// S11 = Found [123 - 4], looking for WS (WS=S1)
 
 			StateEnum state = S1;
-			int mark = 0;
-			boolean isNot = false;
+			var mark = 0;
+			var isNot = false;
 			var eq = Equality.NONE;
 			var n1 = (Integer)null;
 			var n2 = (Integer)null;
 
 			int i;
 			for (i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
+				var c = s.charAt(i);
 				if (state == S1) {
 					if (c == '!') {
 						isNot = true;
@@ -298,8 +298,8 @@ public class NumberMatcherFactory extends MatcherFactory {
 		}
 
 		public boolean matches(Number n) {
-			long i = n.longValue();
-			boolean b = (i >= start && i <= end);
+			var i = n.longValue();
+			var b = (i >= start && i <= end);
 			if (isNot)
 				b = ! b;
 			return b;

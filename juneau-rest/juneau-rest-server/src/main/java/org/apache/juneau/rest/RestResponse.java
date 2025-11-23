@@ -377,7 +377,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
-			Encoder encoder = null;
+			var encoder = (Encoder)null;
 			var encoders = request.getOpContext().getEncoders();
 
 			var ae = request.getHeaderParam("Accept-Encoding").orElse(null);
@@ -537,7 +537,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 */
 	@Override
 	public void sendRedirect(String uri) throws IOException {
-		char c = (uri.length() > 0 ? uri.charAt(0) : 0);
+		var c = (uri.length() > 0 ? uri.charAt(0) : 0);
 		if (c != '/' && uri.indexOf("://") == -1)
 			uri = request.getContextPath() + '/' + uri;
 		inner.sendRedirect(uri);

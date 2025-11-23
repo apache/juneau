@@ -123,10 +123,10 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		if (! type.isCollectionOrArray())
 			return input;
 
-		ArrayList<SortEntry> l = null;
+		var l = (ArrayList<SortEntry>)null;
 
 		if (type.isArray()) {
-			int size = Array.getLength(input);
+			var size = Array.getLength(input);
 			l = listOfSize(size);
 			for (int i = 0; i < size; i++)
 				l.add(new SortEntry(session, Array.get(input, i)));

@@ -346,7 +346,7 @@ public class BeanCreator<T> {
 		if (silent)
 			return null;
 
-		String msg = null;
+		var msg = (String)null;
 		if (found.isEmpty()) {
 			msg = "No public/protected constructors found";
 		} else if (found.get().equals("STATIC_CREATOR")) {

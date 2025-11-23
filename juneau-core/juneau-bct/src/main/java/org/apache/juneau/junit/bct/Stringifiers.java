@@ -654,7 +654,7 @@ public class Stringifiers {
 				while ((nRead = o2.read(b, 0, b.length)) != -1)
 					buff.write(b, 0, nRead);
 				buff.flush();
-				byte[] bytes = buff.toByteArray();
+				var bytes = buff.toByteArray();
 				var sb = new StringBuilder(bytes.length * 2);
 				for (var element : bytes) {
 					var v = element & 0xFF;

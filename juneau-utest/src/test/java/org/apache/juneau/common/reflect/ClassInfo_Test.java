@@ -80,7 +80,7 @@ public class ClassInfo_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		if (o instanceof List<?> l) {
-			String actual = l.stream().map(TO_STRING).collect(Collectors.joining(","));
+			var actual = l.stream().map(TO_STRING).collect(Collectors.joining(","));
 			assertEquals(expected, actual);
 		} else if (o instanceof Iterable o2) {
 			var actual = StreamSupport.stream(((Iterable<?>)o2).spliterator(), false).map(TO_STRING).collect(Collectors.joining(","));
@@ -1913,7 +1913,7 @@ public class ClassInfo_Test extends TestBase {
 
 		@Test
 		void a01_simple() {
-			ClassInfo ci = ClassInfo.of(String.class);
+			var ci = ClassInfo.of(String.class);
 
 			// SIMPLE format
 			assertEquals("String", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
@@ -1923,7 +1923,7 @@ public class ClassInfo_Test extends TestBase {
 
 		@Test
 		void a02_short() {
-			ClassInfo ci = ClassInfo.of(String.class);
+			var ci = ClassInfo.of(String.class);
 
 			// SHORT format
 			assertEquals("String", ci.getNameFormatted(SHORT, false, '$', BRACKETS));
@@ -1932,7 +1932,7 @@ public class ClassInfo_Test extends TestBase {
 
 		@Test
 		void a03_full() {
-			ClassInfo ci = ClassInfo.of(String.class);
+			var ci = ClassInfo.of(String.class);
 
 			// FULL format
 			assertEquals("java.lang.String", ci.getNameFormatted(FULL, false, '$', BRACKETS));
@@ -1941,7 +1941,7 @@ public class ClassInfo_Test extends TestBase {
 
 		@Test
 		void a04_innerClass() {
-			ClassInfo ci = ClassInfo.of(Map.Entry.class);
+			var ci = ClassInfo.of(Map.Entry.class);
 
 			// SIMPLE - only innermost name
 			assertEquals("Entry", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
@@ -1957,7 +1957,7 @@ public class ClassInfo_Test extends TestBase {
 
 		@Test
 		void a05_arrays() {
-			ClassInfo ci = ClassInfo.of(String[].class);
+			var ci = ClassInfo.of(String[].class);
 
 			// BRACKETS format
 			assertEquals("String[]", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
@@ -1972,7 +1972,7 @@ public class ClassInfo_Test extends TestBase {
 
 		@Test
 		void a06_multiDimensionalArrays() {
-			ClassInfo ci = ClassInfo.of(String[][].class);
+			var ci = ClassInfo.of(String[][].class);
 
 			// BRACKETS format
 			assertEquals("String[][]", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
@@ -1985,7 +1985,7 @@ public class ClassInfo_Test extends TestBase {
 
 		@Test
 		void a07_primitiveArrays() {
-			ClassInfo ci = ClassInfo.of(int[].class);
+			var ci = ClassInfo.of(int[].class);
 
 			// BRACKETS format
 			assertEquals("int[]", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
@@ -1999,9 +1999,9 @@ public class ClassInfo_Test extends TestBase {
 		@Test
 		void a08_generics() throws Exception {
 			// Get a ParameterizedType for HashMap<String, Integer>
-			Field f = GenericsTestClass.class.getDeclaredField("hashMap");
-			Type t = f.getGenericType();
-			ClassInfo ci = ClassInfo.of(t);
+			var f = GenericsTestClass.class.getDeclaredField("hashMap");
+			var t = f.getGenericType();
+			var ci = ClassInfo.of(t);
 
 			// Without type params
 			assertEquals("HashMap", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
@@ -2020,9 +2020,9 @@ public class ClassInfo_Test extends TestBase {
 		@Test
 		void a09_nestedGenerics() throws Exception {
 			// Get a ParameterizedType for Map<String, List<Integer>>
-			Field f = GenericsTestClass.class.getDeclaredField("nestedMap");
-			Type t = f.getGenericType();
-			ClassInfo ci = ClassInfo.of(t);
+			var f = GenericsTestClass.class.getDeclaredField("nestedMap");
+			var t = f.getGenericType();
+			var ci = ClassInfo.of(t);
 
 			// With type params - SIMPLE
 			assertEquals("HashMap<String,ArrayList<Integer>>", ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
@@ -2034,9 +2034,9 @@ public class ClassInfo_Test extends TestBase {
 		@Test
 		void a10_genericArrays() throws Exception {
 			// Get a ParameterizedType for List<String>[]
-			Field f = GenericsTestClass.class.getDeclaredField("listArray");
-			Type t = f.getGenericType();
-			ClassInfo ci = ClassInfo.of(t);
+			var f = GenericsTestClass.class.getDeclaredField("listArray");
+			var t = f.getGenericType();
+			var ci = ClassInfo.of(t);
 
 			// BRACKETS format
 			assertEquals("ArrayList<String>[]", ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
@@ -2048,20 +2048,20 @@ public class ClassInfo_Test extends TestBase {
 
 		@Test
 		void a11_appendVersion() {
-			ClassInfo ci = ClassInfo.of(String.class);
-			StringBuilder sb = new StringBuilder("Type: ");
+			var ci = ClassInfo.of(String.class);
+			var sb = new StringBuilder("Type: ");
 			ci.appendNameFormatted(sb, FULL, false, '$', BRACKETS);
 			assertEquals("Type: java.lang.String", sb.toString());
 
 			// Verify it returns the same StringBuilder for chaining
-			StringBuilder result = ci.appendNameFormatted(sb, SIMPLE, false, '$', BRACKETS);
+			var result = ci.appendNameFormatted(sb, SIMPLE, false, '$', BRACKETS);
 			assertSame(sb, result);
 			assertEquals("Type: java.lang.StringString", sb.toString());
 		}
 
 		@Test
 		void a12_equivalentMethods() {
-			ClassInfo ci = ClassInfo.of(String.class);
+			var ci = ClassInfo.of(String.class);
 
 			// getName() equivalent
 			assertEquals(ci.getName(), ci.getNameFormatted(FULL, false, '$', BRACKETS));
@@ -2072,7 +2072,7 @@ public class ClassInfo_Test extends TestBase {
 
 		@Test
 		void a13_innerClassArrays() {
-			ClassInfo ci = ClassInfo.of(Map.Entry[].class);
+			var ci = ClassInfo.of(Map.Entry[].class);
 
 			// SIMPLE
 			assertEquals("Entry[]", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));

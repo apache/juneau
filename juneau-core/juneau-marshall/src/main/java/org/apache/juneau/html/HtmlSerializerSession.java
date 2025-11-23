@@ -226,7 +226,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The anchor text to use for the specified URL object.
 	 */
 	public String getAnchorText(BeanPropertyMeta pMeta, Object o) {
-		String s = o.toString();
+		var s = o.toString();
 		if (isDetectLabelParameters()) {
 			Matcher m = labelPattern.matcher(s);
 			if (m.find())
@@ -340,7 +340,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		c = sort(c);
 
-		Object o1 = null;
+		var o1 = (Object)null;
 		for (var o : c)
 			if (nn(o)) {
 				o1 = o;
@@ -483,7 +483,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return;
 		}
 
-		String type2 = null;
+		var type2 = (String)null;
 		if (sType != eType)
 			type2 = sType.getDictionaryName();
 		if (type2 == null)
@@ -596,7 +596,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (! type2.equals("array"))
 				out.attr(btpn, type2);
 			out.w('>').nl(i + 1);
-			boolean isFirst = true;
+			var isFirst = true;
 			for (var o : c) {
 				if (isDc && ! isFirst)
 					out.append(isCdc ? ", " : " ");
@@ -655,7 +655,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	@SuppressWarnings("rawtypes")
 	private void serializeMapEntry(XmlWriter out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
 		Object key = generalize(e.getKey(), keyType);
-		Object value = null;
+		var value = (Object)null;
 		try {
 			value = e.getValue();
 		} catch (StackOverflowError t) {
@@ -850,7 +850,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			sType = aType;
 
-			String typeName = null;
+			var typeName = (String)null;
 			if (isAddBeanTypes() && ! eType.equals(aType))
 				typeName = aType.getDictionaryName();
 

@@ -104,7 +104,7 @@ class HtmlElement_Attr_Test extends TestBase {
 			.attr("data-test", "value")
 			.attrUri("data-url", "http://test.com")
 			._class("test");
-		String result = x.toString();
+		var result = x.toString();
 		assertNotNull(result);
 		assertTrue(result.contains("data-test='value'"));
 		assertTrue(result.contains("data-url='http://test.com'"));

@@ -67,16 +67,16 @@ public class SubstringVar extends MultipartVar {
 		assertArg(args.length >= 2 && args.length <= 3, "Invalid number of arguments passed to $ST var.  Must have 2 or 3 arguments.");
 
 		String stringArg = args[0];
-		String result = "";
+		var result = "";
 		if (args.length == 2) {
-			int start = Integer.parseInt(args[1]);
+			var start = Integer.parseInt(args[1]);
 			if (start >= 0 && start <= stringArg.length())
 				result = stringArg.substring(start);
 			if (start < 0 && -start <= stringArg.length())
 				result = stringArg.substring(stringArg.length() + start);
 		} else if (args.length == 3) {
-			int start = Integer.parseInt(args[1]);
-			int end = Integer.parseInt(args[2]);
+			var start = Integer.parseInt(args[1]);
+			var end = Integer.parseInt(args[2]);
 			if (start >= 0 && start < stringArg.length() && end >= 0 && end <= stringArg.length() && start < end)
 				result = stringArg.substring(start, end);
 		}

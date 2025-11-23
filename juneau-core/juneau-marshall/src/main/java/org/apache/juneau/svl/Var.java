@@ -73,7 +73,7 @@ public abstract class Var {
 
 		for (int i = 0; i < name.length(); i++) {
 			// Need to make sure only ASCII characters are used.
-			char c = name.charAt(i);
+			var c = name.charAt(i);
 			if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a'))
 				throw illegalArg("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");
 		}

@@ -98,7 +98,7 @@ public class Mutaters {
 	 * @param t The transform for converting the input to the output.
 	 */
 	public static synchronized void add(Class<?> ic, Class<?> oc, Mutater<?,?> t) {
-		Map<Class<?>,Mutater<?,?>> m = CACHE.get(oc);
+		var m = CACHE.get(oc);
 		if (m == null) {
 			m = new ConcurrentHashMap<>();
 			CACHE.put(oc, m);
@@ -123,7 +123,7 @@ public class Mutaters {
 	 * @return A new object instance, or <jk>null</jk> if a method for converting the string to an object could not be found.
 	 */
 	public static <T> T fromString(Class<T> c, String s) {
-		Mutater<String,T> t = get(String.class, c);
+		var t = get(String.class, c);
 		return t == null ? null : t.mutate(s);
 	}
 
@@ -136,27 +136,27 @@ public class Mutaters {
 	 * @param oc The output type.
 	 * @return The transform for performing the conversion, or <jk>null</jk> if the conversion cannot be made.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I,O> Mutater<I,O> get(Class<I> ic, Class<O> oc) {
 
 		if (ic == null || oc == null)
 			return null;
 
-		Map<Class<?>,Mutater<?,?>> m = CACHE.get(oc);
+		var m = CACHE.get(oc);
 		if (m == null) {
 			m = new ConcurrentHashMap<>();
 			CACHE.putIfAbsent(oc, m);
 			m = CACHE.get(oc);
 		}
 
-		Mutater t = m.get(ic);
+		var t = m.get(ic);
 
 		if (t == null) {
 			t = find(ic, oc, m);
 			m.put(ic, t);
 		}
 
-		return t == NULL ? null : t;
+		return t == NULL ? null : (Mutater<I,O>)t;
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class Mutaters {
 			var oc2i = info(oc2);
 
 			// @formatter:off
-			final MethodInfo createMethod = oc2i.getPublicMethod(
+			final var createMethod = oc2i.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasReturnType(oc2)
@@ -247,7 +247,7 @@ public class Mutaters {
 			}
 		} else {
 			// @formatter:off
-			MethodInfo createMethod = oci.getPublicMethod(
+			var createMethod = oci.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasReturnType(oc)
@@ -257,7 +257,7 @@ public class Mutaters {
 			// @formatter:on
 
 			if (nn(createMethod)) {
-				Method cm = createMethod.inner();
+				var cm = createMethod.inner();
 				return new Mutater() {
 					@Override
 					public Object mutate(Object context, Object in) {
@@ -271,9 +271,9 @@ public class Mutaters {
 			}
 		}
 
-		ConstructorInfo c = oci.getPublicConstructor(x -> x.hasParameterTypes(ic)).orElse(null);
+		var c = oci.getPublicConstructor(x -> x.hasParameterTypes(ic)).orElse(null);
 		if (nn(c) && c.isNotDeprecated()) {
-			boolean isMemberClass = oci.isNonStaticMemberClass();
+			var isMemberClass = oci.isNonStaticMemberClass();
 			return new Mutater() {
 				@Override
 				public Object mutate(Object outer, Object in) {
@@ -288,7 +288,7 @@ public class Mutaters {
 			};
 		}
 
-		MethodInfo toXMethod = findToXMethod(ici, oci);
+		var toXMethod = findToXMethod(ici, oci);
 		if (nn(toXMethod)) {
 			return new Mutater() {
 				@Override
@@ -306,7 +306,7 @@ public class Mutaters {
 	}
 
 	private static MethodInfo findToXMethod(ClassInfo ic, ClassInfo oc) {
-		String tn = oc.getNameReadable();
+		var tn = oc.getNameReadable();
 		// @formatter:off
 		return ic.getPublicMethod(
 			x -> x.isNotStatic()

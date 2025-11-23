@@ -95,7 +95,7 @@ public class BuilderSwap<T,B> {
 	public static BuilderSwap<?,?> findSwapFromObjectClass(BeanContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
 		var builderClass = Value.<Class<?>>empty();
 		MethodInfo objectCreateMethod, builderCreateMethod;
-		ConstructorInfo objectConstructor = null;
+		var objectConstructor = (ConstructorInfo)null;
 		ConstructorInfo builderConstructor;
 		var pci = info(objectClass);
 

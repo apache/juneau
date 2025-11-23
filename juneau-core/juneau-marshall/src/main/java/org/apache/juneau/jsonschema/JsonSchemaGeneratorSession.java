@@ -317,7 +317,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		var aType = (ClassMeta<?>)null;			// The actual type (will be null if recursion occurs)
 		var sType = (ClassMeta<?>)null;			// The serialized type
-		ObjectSwap objectSwap = eType.getSwap(this);
+		var objectSwap = eType.getSwap(this);
 
 		aType = push(attrName, eType, null);
 
@@ -340,14 +340,14 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			return new JsonMap().append("$ref", getBeanDefUri(sType));
 		}
 
-		JsonSchemaClassMeta jscm = null;
+		var jscm = (JsonSchemaClassMeta)null;
 		var objectSwapCM = objectSwap == null ? null : getClassMeta(objectSwap.getClass());
 		if (nn(objectSwapCM) && objectSwapCM.hasAnnotation(Schema.class))
 			jscm = getJsonSchemaClassMeta(objectSwapCM);
 		if (jscm == null)
 			jscm = getJsonSchemaClassMeta(sType);
 
-		TypeCategory tc = null;
+		var tc = (TypeCategory)null;
 
 		if (sType.isNumber()) {
 			tc = NUMBER;

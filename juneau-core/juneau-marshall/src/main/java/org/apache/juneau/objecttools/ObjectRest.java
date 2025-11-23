@@ -977,13 +977,13 @@ public class ObjectRest {
 			o2 = ((Map)o).get(parentKey);
 			ct2 = cm.getValueType();
 		} else if (cm.isCollection() && o instanceof List o3) {
-			int key = parseInt(parentKey);
+			var key = parseInt(parentKey);
 			if (o3.size() <= key)
 				return null;
 			o2 = o3.get(key);
 			ct2 = cm.getElementType();
 		} else if (cm.isArray()) {
-			int key = parseInt(parentKey);
+			var key = parseInt(parentKey);
 			var a = ((Object[])o);
 			if (a.length <= key)
 				return null;

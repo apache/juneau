@@ -1670,7 +1670,7 @@ class RrpcInterface_Test extends TestBase {
 	@MethodSource("input")
 	void m02_setMultiParamsInteger(Input input) {
 		var x1 = Integer.valueOf(1);
-		Integer x1n = null;
+		var x1n = (Integer)null;
 		var x2 = a(a(a(1,null),null),null);
 		Integer[][][] x2n = null;
 		var x3 = l(x2,null);
@@ -1693,7 +1693,7 @@ class RrpcInterface_Test extends TestBase {
 	@MethodSource("input")
 	void m04_setMultiParamsFloatObject(Input input) {
 		var x1 = 1f;
-		Float x1n = null;
+		var x1n = (Float)null;
 		var x2 = a(a(a(1f,null),null),null);
 		Float[][][] x2n = null;
 		var x3 = l(x2,null);
@@ -1721,7 +1721,7 @@ class RrpcInterface_Test extends TestBase {
 		var x3 = l(x2,null);
 		List<ABean[][][]> x3n = null;
 		var x4 = m("foo",ABean.get());
-		Map<String,ABean> x4n = null;
+		var x4n = (Map<String,ABean>)null;
 		var x5 = m("foo",x3);
 		Map<String,List<ABean[][][]>> x5n = null;
 		assertDoesNotThrow(()->input.proxy.setMultiParamsBean(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
@@ -1736,7 +1736,7 @@ class RrpcInterface_Test extends TestBase {
 		var x3 = l(x2,null);
 		List<SwappedObject[][][]> x3n = null;
 		var x4 = m(new SwappedObject(),new SwappedObject());
-		Map<SwappedObject,SwappedObject> x4n = null;
+		var x4n = (Map<SwappedObject,SwappedObject>)null;
 		var x5 = m(new SwappedObject(),x3);
 		Map<SwappedObject,List<SwappedObject[][][]>> x5n = null;
 		assertDoesNotThrow(()->input.proxy.setMultiParamsSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
@@ -1751,7 +1751,7 @@ class RrpcInterface_Test extends TestBase {
 		var x3 = l(x2,null);
 		List<ImplicitSwappedObject[][][]> x3n = null;
 		var x4 = m(new ImplicitSwappedObject(),new ImplicitSwappedObject());
-		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n = null;
+		var x4n = (Map<ImplicitSwappedObject,ImplicitSwappedObject>)null;
 		var x5 = m(new ImplicitSwappedObject(),x3);
 		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5n = null;
 		assertDoesNotThrow(()->input.proxy.setMultiParamsImplicitSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
@@ -1766,7 +1766,7 @@ class RrpcInterface_Test extends TestBase {
 		var x3 = l(x2,null);
 		List<TestEnum[][][]> x3n = null;
 		var x4 = m(TestEnum.ONE,TestEnum.TWO);
-		Map<TestEnum,TestEnum> x4n = null;
+		var x4n = (Map<TestEnum,TestEnum>)null;
 		var x5 = m(TestEnum.ONE,x3);
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
 		assertDoesNotThrow(()->input.proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));

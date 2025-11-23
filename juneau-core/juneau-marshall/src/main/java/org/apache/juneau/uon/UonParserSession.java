@@ -791,7 +791,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		if (! isValidateEnd())
 			return;
 		while (true) {
-			int c = r.read();
+			var c = r.read();
 			if (c == -1)
 				return;
 			if (! Character.isWhitespace(c))
@@ -856,8 +856,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws ParseException Attribute was malformed.
 	 */
 	protected final Object parseAttr(UonReader r, boolean encoded) throws IOException, ParseException {
-		Object attr;
-		attr = parseAttrName(r, encoded);
+		var attr = parseAttrName(r, encoded);
 		return attr;
 	}
 

@@ -218,7 +218,7 @@ public class BasicFileFinder implements FileFinder {
 		var ext = getFileExtension(fileName);
 
 		getCandidateLocales(locale).forEach(x -> {
-			String ls = x.toString();
+			var ls = x.toString();
 			if (ls.isEmpty())
 				list.add(fileName);
 			else {

@@ -64,9 +64,9 @@ public class LocalizationVar extends MultipartVar {
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String[] args) {
 		if (args.length > 0) {
-			String key = args[0];
+			var key = args[0];
 			String[] a = (args.length > 1) ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
-			Messages messages = null;
+			var messages = (Messages)null;
 			if (session.getBean(RestRequest.class).isPresent())
 				messages = session.getBean(RestRequest.class).get().getMessages();
 			if (messages == null)

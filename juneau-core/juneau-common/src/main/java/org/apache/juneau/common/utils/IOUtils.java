@@ -234,7 +234,7 @@ public class IOUtils {
 	 */
 	@SuppressWarnings("null")
 	public static void flush(Object...o) throws IOException {
-		IOException ex = null;
+		var ex = (IOException)null;
 		for (var o2 : o) {
 			try {
 				if (o2 instanceof OutputStream o3)

@@ -99,8 +99,8 @@ public class ObjectMerger {
 		 */
 		@Override /* Overridden from InvocationHandler */
 		public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {
-			Object r = null;
-			boolean isGetter = args == null && method.getReturnType() != Void.class;
+			var r = (Object)null;
+			var isGetter = args == null && method.getReturnType() != Void.class;
 			for (var pojo : pojos) {
 				if (nn(pojo)) {
 					try {

@@ -146,7 +146,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void c03_stringType_byteFormat() throws Exception {
 		var ps = T_BYTE;
-		byte[] foob = "foo".getBytes();
+		var foob = "foo".getBytes();
 		var expected = base64Encode(foob);
 		assertEquals(expected, serialize(ps, foob));
 		assertEquals(expected, serialize(ps, new C1(foob)));

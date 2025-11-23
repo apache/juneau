@@ -4466,7 +4466,7 @@ public class RestContext extends Context {
 
 			// Initialize our child resources.
 			for (var o : children) {
-				String path = null;
+				var path = (String)null;
 				Supplier<?> so;
 
 				if (o instanceof RestChild o2) {
@@ -4475,7 +4475,7 @@ public class RestContext extends Context {
 					so = () -> o3;
 				}
 
-				Builder cb = null;
+				var cb = (Builder)null;
 
 				if (o instanceof Class<?> oc) {
 					// Don't allow specifying yourself as a child.  Causes an infinite loop.
@@ -5006,7 +5006,7 @@ public class RestContext extends Context {
 
 			path = nn(builder.path) ? builder.path : "";
 			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
-			String p = path;
+			var p = path;
 			if (! p.endsWith("/*"))
 				p += "/*";
 			pathMatcher = UrlPathMatcher.of(p);
@@ -5997,10 +5997,10 @@ public class RestContext extends Context {
 		try {
 			res.setContentType("text/plain");
 			res.setHeader("Content-Encoding", "identity");
-			int statusCode = e2.getStatusLine().getStatusCode();
+			var statusCode = e2.getStatusLine().getStatusCode();
 			res.setStatus(statusCode);
 
-			PrintWriter w = null;
+			var w = (PrintWriter)null;
 			try {
 				w = res.getWriter();
 			} catch (@SuppressWarnings("unused") IllegalStateException x) {
@@ -6092,7 +6092,7 @@ public class RestContext extends Context {
 		// Loop until we find the correct processor for the POJO.
 		int loops = 5;
 		for (int i = 0; i < responseProcessors.length; i++) {
-			int j = responseProcessors[i].process(opSession);
+			var j = responseProcessors[i].process(opSession);
 			if (j == FINISHED)
 				return;
 			if (j == RESTART) {

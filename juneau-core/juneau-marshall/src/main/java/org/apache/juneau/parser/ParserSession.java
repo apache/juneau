@@ -751,7 +751,7 @@ public class ParserSession extends BeanSession {
 		Object o = m.get(btpn);
 		if (o == null)
 			return m;
-		String typeName = o.toString();
+		var typeName = o.toString();
 
 		var cm = getClassMeta(typeName, pMeta, eType);
 
@@ -793,7 +793,7 @@ public class ParserSession extends BeanSession {
 
 		if (type == null)
 			type = (ClassMeta<T>)object();
-		ObjectSwap swap = type.getSwap(this);
+		var swap = type.getSwap(this);
 		var sType = swap == null ? type : swap.getSwapClassMeta(this);
 
 		Object o = s;
@@ -919,7 +919,7 @@ public class ParserSession extends BeanSession {
 	 * @return The resolved class, or <jk>null</jk> if the type name could not be resolved.
 	 */
 	protected final ClassMeta<?> getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
-		BeanRegistry br = null;
+		var br = (BeanRegistry)null;
 
 		// Resolve via @Beanp(dictionary={})
 		if (nn(pMeta)) {
@@ -1052,7 +1052,7 @@ public class ParserSession extends BeanSession {
 	protected final void onBeanSetterException(BeanPropertyMeta p, Throwable t) {
 		if (nn(listener))
 			listener.onBeanSetterException(this, t, p);
-		String prefix = "";
+		var prefix = "";
 		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t));
 	}
 

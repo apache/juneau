@@ -44,7 +44,7 @@ class StringBuilderWriterTest extends TestBase {
 		sbw.append((String)null,0,4);
 		assertEquals("abcabcbbnullnullnull", sbw.toString());
 
-		char[] buff = "abc".toCharArray();
+		var buff = "abc".toCharArray();
 		var sbw2 = new StringBuilderWriter();
 		sbw2.write(buff, 0, buff.length);
 		assertEquals("abc", sbw2.toString());

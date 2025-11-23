@@ -1151,7 +1151,7 @@ public class Config extends Context implements ConfigEventListener {
 			return value.toString();
 
 		if (value instanceof byte[] b) {
-			String s = null;
+			var s = (String)null;
 			if (binaryFormat == BinaryFormat.HEX)
 				s = toHex(b);
 			else if (binaryFormat == BinaryFormat.SPACED_HEX)
@@ -1167,7 +1167,7 @@ public class Config extends Context implements ConfigEventListener {
 			return sb.toString();
 		}
 
-		String r = null;
+		var r = (String)null;
 		if (multiLineValuesOnSeparateLines)
 			r = "\n" + (String)serializer.serialize(value);
 		else

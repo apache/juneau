@@ -86,7 +86,7 @@ public class Version implements Comparable<Version> {
 	@Override
 	public int compareTo(Version v) {
 		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++) {
-			int c = parts[i] - v.parts[i];
+			var c = parts[i] - v.parts[i];
 			if (c != 0)
 				return c;
 		}
@@ -183,7 +183,7 @@ public class Version implements Comparable<Version> {
 	 */
 	public boolean isAtLeast(Version v, boolean exclusive) {
 		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++) {
-			int c = v.parts[i] - parts[i];
+			var c = v.parts[i] - parts[i];
 			if (c > 0)
 				return false;
 			else if (c < 0)
@@ -228,7 +228,7 @@ public class Version implements Comparable<Version> {
 	 */
 	public boolean isAtMost(Version v, boolean exclusive) {
 		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++) {
-			int c = parts[i] - v.parts[i];
+			var c = parts[i] - v.parts[i];
 			if (c > 0)
 				return false;
 			else if (c < 0)

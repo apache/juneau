@@ -156,7 +156,7 @@ public class SerializedPart extends BasicPart {
 		try {
 			Object v = unwrap(value);
 			HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
-			String def = schema.getDefault();
+			var def = schema.getDefault();
 			if (v == null) {
 				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
 					return null;

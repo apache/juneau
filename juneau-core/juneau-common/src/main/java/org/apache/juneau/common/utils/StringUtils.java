@@ -175,7 +175,7 @@ public class StringUtils {
 			var b0 = base64m2[i0];
 			var b1 = base64m2[i1];
 			var b2 = base64m2[i2];
-			int b3 = base64m2[i3];
+			var b3 = base64m2[i3];
 			var o0 = (b0 << 2) | (b1 >>> 4);
 			var o1 = ((b1 & 0xf) << 4) | (b2 >>> 2);
 			var o2 = ((b2 & 3) << 6) | b3;
@@ -659,7 +659,7 @@ public class StringUtils {
 		if (in == null)
 			return null;
 
-		StringBuilder sb = null;
+		var sb = (StringBuilder)null;
 
 		var m = 0;
 
@@ -2747,7 +2747,7 @@ public class StringUtils {
 		var sArray = s.toCharArray();
 		var x1 = 0;
 		var escapeCount = 0;
-		String key = null;
+		var key = (String)null;
 		for (var i = 0; i < sArray.length + 1; i++) {
 			var c = i == sArray.length ? ',' : sArray[i];
 			if (c == '\\')
@@ -3861,7 +3861,7 @@ public class StringUtils {
 	 * @return The multiplier value (1 if no valid suffix found).
 	 */
 	private static int multiplier(String s) {
-		char c = isEmpty(s) ? null : s.charAt(s.length() - 1);  // NOSONAR - NPE not possible.
+		var c = isEmpty(s) ? null : s.charAt(s.length() - 1);  // NOSONAR - NPE not possible.
 		if (c == 'G')
 			return 1024 * 1024 * 1024;
 		if (c == 'M')
@@ -3884,7 +3884,7 @@ public class StringUtils {
 	 * @return The multiplier value (1 if no valid suffix found).
 	 */
 	private static long multiplier2(String s) {
-		char c = isEmpty(s) ? null : s.charAt(s.length() - 1);  // NOSONAR - NPE not possible.
+		var c = isEmpty(s) ? null : s.charAt(s.length() - 1);  // NOSONAR - NPE not possible.
 		if (c == 'P')
 			return 1024 * 1024 * 1024 * 1024 * 1024l;
 		if (c == 'T')

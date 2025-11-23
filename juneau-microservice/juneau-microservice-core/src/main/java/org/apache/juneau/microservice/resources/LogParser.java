@@ -190,7 +190,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		Entry prev = next;
 		try {
 			next = null;
-			String line = null;
+			var line = (String)null;
 			while (next == null && nn(line = br.readLine())) {
 				var e = new Entry(line);
 				if (e.isRecord) {

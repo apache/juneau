@@ -51,7 +51,7 @@ public class RestCallException extends HttpException {
 
 		var sb = new StringBuilder(message.length());
 		for (int i = 0; i < message.length(); i++) {
-			char c = message.charAt(i);
+			var c = message.charAt(i);
 			sb.append(c < 32 ? ' ' : c);
 		}
 

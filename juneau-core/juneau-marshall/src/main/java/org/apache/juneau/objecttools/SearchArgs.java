@@ -63,10 +63,10 @@ public class SearchArgs {
 	 */
 	public SearchArgs(List<String> searchArgs) {
 		searchArgs.forEach(s -> {
-			int i = indexOf(s, '=', '>', '<');
+			var i = indexOf(s, '=', '>', '<');
 			if (i == -1)
 				throw new PatternException("Invalid search terms: ''{0}''", searchArgs);
-			char c = s.charAt(i);
+			var c = s.charAt(i);
 			append(s.substring(0, i).trim(), s.substring(c == '=' ? i + 1 : i).trim());
 		});
 	}

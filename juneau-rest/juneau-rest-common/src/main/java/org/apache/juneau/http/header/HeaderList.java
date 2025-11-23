@@ -345,8 +345,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public Optional<Header> get(String name) {
 
-		Header first = null;
-		List<Header> rest = null;
+		var first = (Header)null;
+		var rest = (List<Header>)null;
 		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
@@ -403,8 +403,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public <T> Optional<T> get(String name, Class<T> type) {
 
-		Header first = null;
-		List<Header> rest = null;
+		var first = (Header)null;
+		var rest = (List<Header>)null;
 		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
@@ -729,7 +729,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList set(Header value) {
 		if (nn(value)) {
-			boolean replaced = false;
+			var replaced = false;
 			for (int i = 0, j = size(); i < j; i++) {
 				var x = get(i);
 				if (eq(x.getName(), value.getName())) {

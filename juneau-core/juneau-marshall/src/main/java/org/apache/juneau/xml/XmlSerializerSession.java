@@ -523,7 +523,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		var previousWasTextNode = Value.of(false);
 
 		forEachEntry(c, x -> {
-			boolean currentIsTextNode = isTextNode(x);
+			var currentIsTextNode = isTextNode(x);
 
 			// Insert delimiter between consecutive text nodes
 			if (previousWasTextNode.get() && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
@@ -599,7 +599,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		// Handle recursion
 		if (nn(aType) && ! aType.isPrimitive()) {
 
-			BeanMap<?> bm = null;
+			var bm = (BeanMap<?>)null;
 			if (aType.isBeanMap()) {
 				bm = (BeanMap<?>)o;
 			} else if (aType.isBean()) {

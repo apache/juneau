@@ -91,9 +91,9 @@ public class PathArg implements RestOpArg {
 			return null;
 
 		// Find matching @Path from class-level pathParams array
-		Path classLevelPath = null;
+		var classLevelPath = (Path)null;
 		for (var p : restAnnotation.pathParams()) {
-			String pName = firstNonEmpty(p.name(), p.value());
+			var pName = firstNonEmpty(p.name(), p.value());
 			if (paramName.equals(pName)) {
 				classLevelPath = p;
 				break;
@@ -195,8 +195,8 @@ public class PathArg implements RestOpArg {
 		if (nn(p))
 			return p;
 		if (nn(pathMatcher)) {
-			int idx = 0;
-			int i = pi.getIndex();
+			var idx = 0;
+			var i = pi.getIndex();
 			var mi = pi.getMethod();
 
 			for (int j = 0; j < i; j++) {

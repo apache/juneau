@@ -217,8 +217,8 @@ public class ParserReader extends Reader implements Positionable {
 	 */
 	public final int peekSkipWs() throws IOException {
 		while (true) {
-			int c = read();
-			boolean isWs = Character.isWhitespace(c);
+			var c = read();
+			var isWs = Character.isWhitespace(c);
 			if (c != -1 && ! isWs)
 				unread();
 			if (! isWs)
@@ -291,7 +291,7 @@ public class ParserReader extends Reader implements Positionable {
 
 		// Characters that take up 2 chars.
 		if (c >= 0xd800 && c <= 0xdbff) {
-			int low = read();
+			var low = read();
 			if (low >= 0xdc00 && low <= 0xdfff)
 				c = 0x10000 + ((c - 0xd800) << 10) + (low - 0xdc00);
 		}
@@ -307,7 +307,7 @@ public class ParserReader extends Reader implements Positionable {
 	 */
 	public final int readSkipWs() throws IOException {
 		while (true) {
-			int c = read();
+			var c = read();
 			if (c == -1 || ! Character.isWhitespace(c))
 				return c;
 		}

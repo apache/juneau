@@ -193,7 +193,7 @@ public class XmlParserSession extends ReaderParserSession {
 	private static int getJsonType(String s) {
 		if (s == null)
 			return UNKNOWN;
-		char c = s.charAt(0);
+		var c = s.charAt(0);
 		return switch (c) {
 			case 'o' -> (s.equals("object") ? OBJECT : UNKNOWN);
 			case 'a' -> (s.equals("array") ? ARRAY : UNKNOWN);
@@ -412,7 +412,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 		int depth = 0;
 		do {
-			int event = r.next();
+			var event = r.next();
 			String currAttr;
 			// We only care about text in MIXED mode.
 			// Ignore if in ELEMENTS mode.
@@ -534,7 +534,7 @@ public class XmlParserSession extends ReaderParserSession {
 		int depth = 0;
 		int argIndex = 0;
 		do {
-			int event = r.nextTag();
+			var event = r.nextTag();
 			if (event == START_ELEMENT) {
 				depth++;
 				var elementType = type == null ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
@@ -562,7 +562,7 @@ public class XmlParserSession extends ReaderParserSession {
 			}
 		}
 		do {
-			int event = r.nextTag();
+			var event = r.nextTag();
 			String currAttr;
 			if (event == START_ELEMENT) {
 				depth++;
@@ -906,7 +906,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 		int depth = 0;
 		while (true) {
-			int et = r.getEventType();
+			var et = r.getEventType();
 			if (et == START_ELEMENT) {
 				sb2.append(getElementAsString(r));
 				depth++;

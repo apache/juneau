@@ -1932,7 +1932,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			client.onCallConnect(this, response);
 
 			var method = getMethod();
-			int sc = response.getStatusCode();
+			var sc = response.getStatusCode();
 
 			var thrown = response.getHeader("Thrown").asHeader(Thrown.class);
 			if (thrown.isPresent() && nn(rethrow)) {

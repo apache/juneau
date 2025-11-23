@@ -150,7 +150,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return null;
 			var ci = info(c);
 			if (ci.isChildOf(ObjectSwap.class)) {
-				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
+				var ps = BeanCreator.of(ObjectSwap.class).type(c).run();
 				if (nn(ps.forMediaTypes()))
 					throw unsupportedOp("TODO - Media types on swaps not yet supported on bean properties.");
 				if (nn(ps.withTemplate()))
@@ -209,7 +209,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
-			List<Class<?>> bdClasses = list();
+			var bdClasses = list();
 			var ap = bc.getAnnotationProvider();
 
 			if (field == null && getter == null && setter == null)
@@ -297,7 +297,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			// Do some annotation validation.
 			var ci = rawTypeMeta.getInfo();
 			if (nn(getter)) {
-				Class<?>[] pt = getter.getParameterTypes();
+				var pt = getter.getParameterTypes();
 				if (isDyna) {
 					if (ci.isChildOf(Map.class) && pt.length == 0) {
 						isDynaGetterMap = true;
@@ -312,7 +312,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				}
 			}
 			if (nn(setter)) {
-				Class<?>[] pt = setter.getParameterTypes();
+				var pt = setter.getParameterTypes();
 				if (isDyna) {
 					if (pt.length == 2 && pt[0] == String.class) {
 						// OK.
@@ -458,25 +458,25 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return;
 		}
 
-		BeanSession session = m.getBeanSession();
+		var session = m.getBeanSession();
 
-		boolean isCollection = rawTypeMeta.isCollection();
-		boolean isArray = rawTypeMeta.isArray();
+		var isCollection = rawTypeMeta.isCollection();
+		var isArray = rawTypeMeta.isArray();
 
 		if (! (isCollection || isArray))
 			throw bex(beanMeta.c, "Attempt to add element to property ''{0}'' which is not a collection or array", name);
 
-		Object bean = m.getBean(true);
+		var bean = m.getBean(true);
 
 		var elementType = rawTypeMeta.getElementType();
 
 		try {
-			Object v = session.convertToType(value, elementType);
+			var v = session.convertToType(value, elementType);
 
 			if (isCollection) {
 				var c = (Collection)invokeGetter(bean, pName);
 
-				Collection c2 = null;
+				var c2 = (Collection)null;
 				if (nn(c)) {
 					if (canAddTo(c)) {
 						c.add(v);
@@ -508,7 +508,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					m.arrayPropertyCache.put(name, l);
 
 					// Copy any existing array values into the temporary list.
-					Object oldArray = invokeGetter(bean, pName);
+					var oldArray = invokeGetter(bean, pName);
 					copyArrayToList(oldArray, l);
 				}
 
@@ -544,20 +544,20 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return;
 		}
 
-		BeanSession session = m.getBeanSession();
+		var session = m.getBeanSession();
 
-		boolean isMap = rawTypeMeta.isMap();
-		boolean isBean = rawTypeMeta.isBean();
+		var isMap = rawTypeMeta.isMap();
+		var isBean = rawTypeMeta.isBean();
 
 		if (! (isBean || isMap))
 			throw bex(beanMeta.c, "Attempt to add key/value to property ''{0}'' which is not a map or bean", name);
 
-		Object bean = m.getBean(true);
+		var bean = m.getBean(true);
 
 		var elementType = rawTypeMeta.getElementType();
 
 		try {
-			Object v = session.convertToType(value, elementType);
+			var v = session.convertToType(value, elementType);
 
 			if (isMap) {
 				var map = (Map)invokeGetter(bean, pName);
@@ -578,17 +578,17 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			} else /* isBean() */ {
 
-				Object b = invokeGetter(bean, pName);
+				var b = invokeGetter(bean, pName);
 
 				if (nn(b)) {
-					BeanMap bm = session.toBeanMap(b);
+					var bm = session.toBeanMap(b);
 					bm.put(key, v);
 					return;
 				}
 
 				if (rawTypeMeta.canCreateNewInstance(m.getBean(false))) {
 					b = rawTypeMeta.newInstance();
-					BeanMap bm = session.toBeanMap(b);
+					var bm = session.toBeanMap(b);
 					bm.put(key, v);
 				}
 
@@ -844,7 +844,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public Object getRaw(BeanMap<?> m, String pName) {
 		try {
 			// Read-only beans have their properties stored in a cache until getBean() is called.
-			Object bean = m.bean;
+			var bean = m.bean;
 			if (bean == null)
 				return m.propertyCache.get(name);
 
@@ -938,7 +938,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (cm.isObject()) {
 			if (o instanceof Map o2)
 				return new FilteredMap(cm, o2, properties);
-			BeanMeta bm = bc.getBeanMeta(o.getClass());
+			var bm = bc.getBeanMeta(o.getClass());
 			if (nn(bm))
 				return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
 		}
@@ -959,7 +959,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return;
 
 		var methodName = method.getName();
-		Class<?>[] paramTypes = method.getParameterTypes();
+		var paramTypes = method.getParameterTypes();
 		var declaringClass = method.getDeclaringClass();
 
 		// Collect parent methods in a list (we'll reverse it to get parent-to-child order)
@@ -969,7 +969,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		var currentClass = declaringClass.getSuperclass();
 		while (nn(currentClass) && currentClass != Object.class) {
 			try {
-				Method parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
+				var parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
 				parentMethods.add(parentMethod);
 			} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
 				// No matching method in this parent class, continue up the hierarchy
@@ -980,7 +980,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		// Also check interfaces
 		for (var iface : declaringClass.getInterfaces()) {
 			try {
-				Method ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
+				var ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
 				parentMethods.add(ifaceMethod);
 			} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
 				// No matching method in this interface
@@ -1003,7 +1003,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return overrideValue;
 
 			// Read-only beans have their properties stored in a cache until getBean() is called.
-			Object bean = m.bean;
+			var bean = m.bean;
 			if (bean == null)
 				return m.propertyCache.get(name);
 
@@ -1021,7 +1021,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	private Object invokeGetter(Object bean, String pName) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		if (isDyna) {
-			Map m = null;
+			var m = (Map)null;
 			if (nn(getter)) {
 				if (! isDynaGetterMap)
 					return getter.invoke(bean, pName);
@@ -1043,7 +1043,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (isDyna) {
 			if (nn(setter))
 				return setter.invoke(bean, pName, val);
-			Map m = null;
+			var m = (Map)null;
 			if (nn(field))
 				m = (Map<String,Object>)field.get(bean);
 			else if (nn(getter))
@@ -1070,7 +1070,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (readOnly)
 				return null;
 
-			BeanSession session = m.getBeanSession();
+			var session = m.getBeanSession();
 
 			// Convert to raw form.
 			value = unswap(session, value);
@@ -1084,8 +1084,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				throw bex("Non-existent bean instance on bean.");
 			}
 
-			boolean isMap = rawTypeMeta.isMap();
-			boolean isCollection = rawTypeMeta.isCollection();
+			var isMap = rawTypeMeta.isMap();
+			var isCollection = rawTypeMeta.isCollection();
 
 			if ((! isDyna) && field == null && setter == null && ! (isMap || isCollection)) {
 				if ((value == null && bc.isIgnoreUnknownNullBeanProperties()) || bc.isIgnoreMissingSetters())
@@ -1093,11 +1093,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				throw bex(beanMeta.c, "Setter or public field not defined on property ''{0}''", name);
 			}
 
-			Object bean = m.getBean(true);  // Don't use getBean() because it triggers array creation!
+			var bean = m.getBean(true);  // Don't use getBean() because it triggers array creation!
 
 			try {
 
-				Object r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
+				var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
 				var propertyClass = rawTypeMeta.getInnerClass();
 				var pcInfo = rawTypeMeta.getInfo();
 
@@ -1157,7 +1157,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					}
 
 					// Set the values.
-					Map propMap2 = propMap;
+					var propMap2 = propMap;
 					valueMap.forEach((k, v) -> {
 						if (! valueType.isObject())
 							v = session.convertToType(v, valueType);
@@ -1177,7 +1177,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 					var valueList = (Collection)value;
 					var propList = (Collection)r;
-					ClassMeta elementType = rawTypeMeta.getElementType();
+					var elementType = rawTypeMeta.getElementType();
 
 					// If the property type is abstract, then we either need to reuse the existing
 					// collection (if it's not null), or try to assign the value directly.
@@ -1217,7 +1217,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					}
 
 					// Set the values.
-					Collection propList2 = propList;
+					var propList2 = propList;
 					valueList.forEach(x -> {
 						if (! elementType.isObject())
 							x = session.convertToType(x, elementType);
@@ -1329,15 +1329,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(properties)) {
 				if (rawTypeMeta.isArray()) {
 					var a = (Object[])o;
-					List l = new DelegateList(rawTypeMeta);
-					ClassMeta childType = rawTypeMeta.getElementType();
+					var l = new DelegateList(rawTypeMeta);
+					var childType = rawTypeMeta.getElementType();
 					for (var c : a)
 						l.add(applyChildPropertiesFilter(session, childType, c));
 					return l;
 				} else if (rawTypeMeta.isCollection()) {
 					var c = (Collection)o;
-					List l = listOfSize(c.size());
-					ClassMeta childType = rawTypeMeta.getElementType();
+					var l = listOfSize(c.size());
+					var childType = rawTypeMeta.getElementType();
 					c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
 					return l;
 				} else {

@@ -182,7 +182,7 @@ public class JsonWriter extends SerializerWriter {
 			// All possible numbers should be caught here.
 			if (! doConvert) {
 				for (int i = 0; i < s.length() && ! doConvert; i++) {
-					char c = s.charAt(i);
+					var c = s.charAt(i);
 					doConvert |= ! (i == 0 ? validFirstAttrChars.contains(c) : validAttrChars.contains(c));
 				}
 			}
@@ -292,7 +292,7 @@ public class JsonWriter extends SerializerWriter {
 			return this;
 		boolean doConvert = false;
 		for (int i = 0; i < s.length() && ! doConvert; i++) {
-			char c = s.charAt(i);
+			var c = s.charAt(i);
 			doConvert |= ec.contains(c);
 		}
 		q();
@@ -300,7 +300,7 @@ public class JsonWriter extends SerializerWriter {
 			w(s);
 		} else {
 			for (int i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
+				var c = s.charAt(i);
 				if (ec.contains(c)) {
 					if (c == '\n')
 						w('\\').w('n');

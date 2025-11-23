@@ -115,7 +115,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 				if (nn(mi))
 					return new AutoObjectSwap(bc, ci, m, mi, null);
 
-				ConstructorInfo cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt)).orElse(null);
+				var cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt)).orElse(null);
 				if (nn(cs))
 					return new AutoObjectSwap(bc, ci, m, null, cs);
 

@@ -254,7 +254,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
 	 */
 	public FluentListAssertion<String,R> asLocalizedMessages() {
-		List<String> l = null;
+		var l = (List<String>)null;
 		Throwable t = orElse(null);
 		if (nn(t)) {
 			if (t.getCause() == null)
@@ -303,7 +303,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
 	 */
 	public FluentListAssertion<String,R> asMessages() {
-		List<String> l = null;
+		var l = (List<String>)null;
 		Throwable t = orElse(null);
 		if (nn(t)) {
 			if (t.getCause() == null)

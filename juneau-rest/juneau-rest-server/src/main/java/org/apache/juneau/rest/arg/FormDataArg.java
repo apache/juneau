@@ -92,7 +92,7 @@ public class FormDataArg implements RestOpArg {
 			return null;
 
 		// Find matching @FormData from class-level formDataParams array
-		FormData classLevelFormData = null;
+		var classLevelFormData = (FormData)null;
 		for (var f : restAnnotation.formDataParams()) {
 			var fName = firstNonEmpty(f.name(), f.value());
 			if (eq(paramName, fName)) {

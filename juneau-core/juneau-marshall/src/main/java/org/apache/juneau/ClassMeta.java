@@ -115,7 +115,7 @@ public class ClassMeta<T> implements Type {
 				this.childUnswapMap = new ConcurrentHashMap<>();
 			}
 
-			Class<T> c = innerClass;
+			var c = innerClass;
 			ci = info(c);
 
 			if (c.isPrimitive()) {
@@ -274,8 +274,8 @@ public class ClassMeta<T> implements Type {
 				.forEach(x -> publicMethods.put(x.getSignature(), x.inner()));
 			// @formatter:on
 
-			BeanFilter beanFilter = findBeanFilter(bc);
-			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
+			var beanFilter = findBeanFilter(bc);
+			var marshalledFilter = findMarshalledFilter(bc);
 
 			addAll(this.swaps, swaps);
 
@@ -333,7 +333,7 @@ public class ClassMeta<T> implements Type {
 				// Note that this needs to be done after all other initialization has been done.
 				else if (cc == OTHER) {
 
-					BeanMeta newMeta = null;
+					var newMeta = (BeanMeta)null;
 					try {
 						newMeta = new BeanMeta(ClassMeta.this, bc, beanFilter, null, implClass == null ? null : noArgConstructor);
 						notABeanReason = newMeta.notABeanReason;
@@ -425,7 +425,7 @@ public class ClassMeta<T> implements Type {
 			var ci = info(c);
 
 			if (ci.isChildOf(ObjectSwap.class)) {
-				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
+				var ps = BeanCreator.of(ObjectSwap.class).type(c).run();
 				if (s.mediaTypes().length > 0)
 					ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
 				if (! s.template().isEmpty())
@@ -502,7 +502,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	private static boolean isCacheable(Class<?> c) {
 		var n = c.getName();
-		char x = n.charAt(n.length() - 1);  // All generated classes appear to end with digits.
+		var x = n.charAt(n.length() - 1);  // All generated classes appear to end with digits.
 		if (x >= '0' && x <= '9') {
 			if (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1)
 				return false;
@@ -613,12 +613,12 @@ public class ClassMeta<T> implements Type {
 		this.beanContext = beanContext;
 		var notABeanReason = (String)null;
 
-		try (SimpleLock x = lock.write()) {
+		try (var x = lock.write()) {
 			// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
 			if (nn(beanContext) && nn(beanContext.cmCache) && isCacheable(innerClass))
 				beanContext.cmCache.put(innerClass, this);
 
-			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, swaps, childSwaps);
+			var builder = new ClassMetaBuilder<>(innerClass, beanContext, swaps, childSwaps);
 
 			this.cc = builder.cc;
 			this.isDelegate = builder.isDelegate;
@@ -973,7 +973,7 @@ public class ClassMeta<T> implements Type {
 				var etExample = getElementType().getExample(session, jpSession);
 				if (nn(etExample)) {
 					if (canCreateNewInstance()) {
-						Collection c = (Collection)newInstance();
+						var c = (Collection)newInstance();
 						c.add(etExample);
 						return (T)c;
 					}
@@ -982,7 +982,7 @@ public class ClassMeta<T> implements Type {
 			} else if (isArray()) {
 				var etExample = getElementType().getExample(session, jpSession);
 				if (nn(etExample)) {
-					Object o = Array.newInstance(getElementType().innerClass, 1);
+					var o = Array.newInstance(getElementType().innerClass, 1);
 					Array.set(o, 0, etExample);
 					return (T)o;
 				}
@@ -1235,8 +1235,8 @@ public class ClassMeta<T> implements Type {
 	 */
 	public ObjectSwap<T,?> getSwap(BeanSession session) {
 		if (nn(swaps)) {
-			int matchQuant = 0;
-			int matchIndex = -1;
+			var matchQuant = 0;
+			var matchIndex = -1;
 
 			for (var i = 0; i < swaps.length; i++) {
 				var q = swaps[i].match(session);
@@ -1736,7 +1736,7 @@ public class ClassMeta<T> implements Type {
 	 * @return This object.
 	 */
 	public <A extends Annotation> Optional<A> lastAnnotation(Class<A> type, Predicate<A> filter) {
-		A[] array = annotationArray(type);
+		var array = annotationArray(type);
 		if (array == null) {
 			if (beanContext == null)
 				return AP.find(type, info).stream().map(AnnotationInfo::inner).filter(a -> test(filter, a)).findFirst();  // AnnotationProvider returns child-to-parent, so first is "last"
@@ -1796,10 +1796,10 @@ public class ClassMeta<T> implements Type {
 	public T newInstance() throws ExecutableException {
 		if (isArray())
 			return (T)Array.newInstance(getInnerClass().getComponentType(), 0);
-		ConstructorInfo c = getConstructor();
+		var c = getConstructor();
 		if (nn(c))
 			return c.<T>newInstance();
-		InvocationHandler h = getProxyInvocationHandler();
+		var h = getProxyInvocationHandler();
 		if (nn(h))
 			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(getInnerClass(), java.io.Serializable.class), h);
 		if (isArray())
@@ -1843,13 +1843,13 @@ public class ClassMeta<T> implements Type {
 	public T newInstanceFromString(Object outer, String arg) throws ExecutableException {
 
 		if (isEnum()) {
-			T t = (T)enumValues.getKey(arg);
+			var t = (T)enumValues.getKey(arg);
 			if (t == null && ! beanContext.isIgnoreUnknownEnumValues())
 				throw new ExecutableException("Could not resolve enum value '" + arg + "' on class '" + getInnerClass().getName() + "'");
 			return t;
 		}
 
-		Method m = fromStringMethod;
+		var m = fromStringMethod;
 		if (nn(m)) {
 			try {
 				return (T)m.invoke(null, arg);
@@ -1857,7 +1857,7 @@ public class ClassMeta<T> implements Type {
 				throw new ExecutableException(e);
 			}
 		}
-		ConstructorInfo c = stringConstructor;
+		var c = stringConstructor;
 		if (nn(c)) {
 			if (isMemberClass)
 				return c.<T>newInstance(outer, arg);
@@ -1928,14 +1928,14 @@ public class ClassMeta<T> implements Type {
 	 */
 	protected ObjectSwap<?,?> getChildObjectSwapForSwap(Class<?> normalClass) {
 		if (nn(childSwapMap)) {
-			ObjectSwap<?,?> s = childSwapMap.get(normalClass);
+			var s = childSwapMap.get(normalClass);
 			if (s == null) {
 				for (var f : childSwaps)
 					if (s == null && f.getNormalClass().isParentOf(normalClass))
 						s = f;
 				if (s == null)
 					s = ObjectSwap.NULL;
-				ObjectSwap<?,?> s2 = childSwapMap.putIfAbsent(normalClass, s);
+				var s2 = childSwapMap.putIfAbsent(normalClass, s);
 				if (nn(s2))
 					s = s2;
 			}
@@ -1955,14 +1955,14 @@ public class ClassMeta<T> implements Type {
 	 */
 	protected ObjectSwap<?,?> getChildObjectSwapForUnswap(Class<?> swapClass) {
 		if (nn(childUnswapMap)) {
-			ObjectSwap<?,?> s = childUnswapMap.get(swapClass);
+			var s = childUnswapMap.get(swapClass);
 			if (s == null) {
 				for (var f : childSwaps)
 					if (s == null && f.getSwapClass().isParentOf(swapClass))
 						s = f;
 				if (s == null)
 					s = ObjectSwap.NULL;
-				ObjectSwap<?,?> s2 = childUnswapMap.putIfAbsent(swapClass, s);
+				var s2 = childUnswapMap.putIfAbsent(swapClass, s);
 				if (nn(s2))
 					s = s2;
 			}

@@ -177,7 +177,7 @@ public class RequestAttributes {
 		var m = new JsonMap();
 		Enumeration<String> e = sreq.getAttributeNames();
 		while (e.hasMoreElements()) {
-			String n = e.nextElement();
+			var n = e.nextElement();
 			m.put(n, sreq.getAttribute(n));
 		}
 		return m;
@@ -230,7 +230,7 @@ public class RequestAttributes {
 		List<RequestAttribute> l = list();
 		Enumeration<String> e = sreq.getAttributeNames();
 		while (e.hasMoreElements()) {
-			String n = e.nextElement();
+			var n = e.nextElement();
 			l.add(new RequestAttribute(req, n, sreq.getAttribute(n)));
 		}
 		return l;

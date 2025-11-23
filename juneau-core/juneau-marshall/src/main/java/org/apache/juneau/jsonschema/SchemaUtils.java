@@ -62,7 +62,7 @@ public class SchemaUtils {
 		if (o instanceof String[])
 			o = joinnl((String[])o);
 		if (o instanceof String o2) {
-			String s = o2.toString();
+			var s = o2.toString();
 			if (s.isEmpty())
 				return null;
 			if ("IGNORE".equalsIgnoreCase(s))

@@ -46,7 +46,7 @@ public class ContentComboTestBase extends RestTestcase {
 	private static Map<String,RestClient> clients = map();
 
 	protected RestClient getClient(MediaType mediaType) {
-		String mt = mediaType.toString();
+		var mt = mediaType.toString();
 		return switch (mt) {
 			case "text/csv" -> getClient(mt, CsvSerializer.DEFAULT, CsvParser.DEFAULT);
 			case "text/html" -> getClient(mt, HtmlSerializer.DEFAULT, HtmlParser.DEFAULT);
@@ -62,7 +62,7 @@ public class ContentComboTestBase extends RestTestcase {
 
 	protected RestClient getClient(String label, Serializer serializer, Parser parser, Consumer<RestClient.Builder>...postApply) {
 		if (! clients.containsKey(label)) {
-			RestClient.Builder b = SamplesMicroservice.client(serializer, parser);
+			var b = SamplesMicroservice.client(serializer, parser);
 			for (var c : postApply)
 				c.accept(b);
 			clients.put(label, b.build());
@@ -103,8 +103,8 @@ public class ContentComboTestBase extends RestTestcase {
 
 	@Test
 	public void doTest() throws Exception {
-		RestClient rc = getClient(comboInput.mediaType);
-		String s = rc.get(comboInput.url).run().getContent().asString();
+		var rc = getClient(comboInput.mediaType);
+		var s = rc.get(comboInput.url).run().getContent().asString();
 		assertContains(s, comboInput.expectedResults);
 	}
 }

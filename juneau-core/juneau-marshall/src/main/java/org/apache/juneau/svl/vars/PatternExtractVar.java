@@ -70,7 +70,7 @@ public class PatternExtractVar extends MultipartVar {
 
 		String stringArg = args[0];
 		String pattern = args[1];
-		String result = "";
+		var result = "";
 		int groupId = Integer.parseInt(args[2]);
 
 		var p = Pattern.compile(pattern.replace("*", ".*").replace("?", "."));

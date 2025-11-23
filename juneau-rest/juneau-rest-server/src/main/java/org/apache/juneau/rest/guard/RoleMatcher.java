@@ -192,7 +192,7 @@ public class RoleMatcher {
 	private static Exp parseOperand(String operand) {
 		boolean hasMeta = false;
 		for (int i = 0; i < operand.length() && ! hasMeta; i++) {
-			char c = operand.charAt(i);
+			var c = operand.charAt(i);
 			hasMeta |= META.contains(c);
 		}
 		return hasMeta ? new Match(operand) : new Eq(operand);
@@ -253,7 +253,7 @@ public class RoleMatcher {
 		boolean error = false;
 
 		for (i = 0; i < expression.length(); i++) {
-			char c = expression.charAt(i);
+			var c = expression.charAt(i);
 			if (state == S1) {
 				// S1 = Looking for start
 				if (! WS.contains(c)) {

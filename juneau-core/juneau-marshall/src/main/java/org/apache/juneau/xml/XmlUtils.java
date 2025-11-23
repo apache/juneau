@@ -68,7 +68,7 @@ public class XmlUtils {
 	 */
 	public static LinkedList<Object> collapseTextNodes(LinkedList<Object> value) {
 
-		String prev = null;
+		var prev = (String)null;
 		for (ListIterator<Object> i = value.listIterator(); i.hasNext();) {
 			Object o = i.next();
 			if (o instanceof String o2) {
@@ -103,11 +103,11 @@ public class XmlUtils {
 		if (sb == null)
 			sb = new StringBuilder(value.length());
 
-		for (int i = 0; i < value.length(); i++) {
-			char c = value.charAt(i);
+		for (var i = 0; i < value.length(); i++) {
+			var c = value.charAt(i);
 			if (c == '_' && isEscapeSequence(value, i)) {
 
-				int x = Integer.parseInt(value.substring(i + 2, i + 6), 16);
+				var x = Integer.parseInt(value.substring(i + 2, i + 6), 16);
 
 				// If we find _x0000_, then that means a null.
 				// If we find _xE000_, then that means an empty string.
@@ -138,8 +138,8 @@ public class XmlUtils {
 		var s = value.toString();
 
 		if (needsAttrNameEncoding(s)) {
-			for (int i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
+			for (var i = 0; i < s.length(); i++) {
+				var c = s.charAt(i);
 				if (i == 0) {
 					if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == ':')
 						w.append(c);
@@ -183,16 +183,16 @@ public class XmlUtils {
 		try {
 			if (value == null)
 				return w.append("_x0000_");
-			String s = value.toString();
+			var s = value.toString();
 			if (s.isEmpty())
 				return w;
 			if (trim)
 				s = s.trim();
 
 			if (needsAttrValueEncoding(s)) {
-				final int len = s.length();
-				for (int i = 0; i < len; i++) {
-					char c = s.charAt(i);
+				var len = s.length();
+				for (var i = 0; i < len; i++) {
+					var c = s.charAt(i);
 					if ((i == 0 || i == len - 1) && Character.isWhitespace(c))
 						appendPaddedHexChar(w, c);
 					else if (REPLACE_ATTR_VAL.contains(c))
@@ -229,7 +229,7 @@ public class XmlUtils {
 
 		try {
 			if (needsElementNameEncoding(s))
-				try (Writer w = new StringBuilderWriter(s.length() * 2)) {
+				try (var w = new StringBuilderWriter(s.length() * 2)) {
 					return encodeElementNameInner(w, s).toString();
 				}
 		} catch (IOException e) {
@@ -250,7 +250,7 @@ public class XmlUtils {
 		try {
 			if (value == null)
 				return w.append("_x0000_");
-			String s = value.toString();
+			var s = value.toString();
 			if (needsElementNameEncoding(s))
 				return encodeElementNameInner(w, s);
 			w.append(s);
@@ -283,16 +283,16 @@ public class XmlUtils {
 		try {
 			if (value == null)
 				return w.append("_x0000_");
-			String s = value.toString();
+			var s = value.toString();
 			if (s.isEmpty())
 				return w.append("_xE000_");
 			if (trim)
 				s = s.trim();
 
 			if (needsTextEncoding(s)) {
-				final int len = s.length();
+				var len = s.length();
 				for (int i = 0; i < len; i++) {
-					char c = s.charAt(i);
+					var c = s.charAt(i);
 					if ((i == 0 || i == len - 1) && Character.isWhitespace(c) && ! preserveWhitespace)
 						appendPaddedHexChar(w, c);
 					else if (REPLACE_TEXT.contains(c))
@@ -328,10 +328,10 @@ public class XmlUtils {
 		try {
 			if (! needsTextEncoding(s))
 				return s;
-			final int len = s.length();
+			var len = s.length();
 			var sw = new StringWriter(s.length() * 2);
 			for (int i = 0; i < len; i++) {
-				char c = s.charAt(i);
+				var c = s.charAt(i);
 				if ((i == 0 || i == len - 1) && Character.isWhitespace(c))
 					appendPaddedHexChar(sw, c);
 				else if (c == '_' && isEscapeSequence(s, i))
@@ -360,15 +360,15 @@ public class XmlUtils {
 	public static Namespace findNamespace(List<Xml> xmls, List<XmlSchema> schemas) {
 
 		for (int i = xmls.size() - 1; i >= 0; i--) {
-			Xml xml = xmls.get(i);
-			Namespace ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);
+			var xml = xmls.get(i);
+			var ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);
 			if (nn(ns))
 				return ns;
 		}
 
 		for (int i = schemas.size() - 1; i >= 0; i--) {
-			XmlSchema schema = schemas.get(i);
-			Namespace ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
+			var schema = schemas.get(i);
+			var ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
 			if (nn(ns))
 				return ns;
 		}
@@ -427,7 +427,7 @@ public class XmlUtils {
 
 	private static Writer encodeElementNameInner(Writer w, String s) throws IOException {
 		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+			var c = s.charAt(i);
 			// @formatter:off
 			if ((c >= 'A' && c <= 'Z')
 					|| (c == '_' && ! isEscapeSequence(s,i))
@@ -527,8 +527,8 @@ public class XmlUtils {
 
 	private static boolean needsAttrNameEncoding(String value) {
 		// Note that this doesn't need to be perfect, just fast.
-		for (int i = 0; i < value.length(); i++) {
-			char c = value.charAt(i);
+		for (var i = 0; i < value.length(); i++) {
+			var c = value.charAt(i);
 			if (! (c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') || (i == 0 && ! (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z')))
 				return true;
 		}
@@ -538,9 +538,9 @@ public class XmlUtils {
 	private static boolean needsAttrValueEncoding(String value) {
 		// See if we need to convert the string.
 		// Conversion is somewhat expensive, so make sure we need to do so before hand.
-		final int len = value.length();
-		for (int i = 0; i < len; i++) {
-			char c = value.charAt(i);
+		var len = value.length();
+		for (var i = 0; i < len; i++) {
+			var c = value.charAt(i);
 			if ((i == 0 || i == len - 1) && Character.isWhitespace(c))
 				return true;
 			if (REPLACE_ATTR_VAL.contains(c) || ! isValidXmlCharacter(c) || (c == '_' && isEscapeSequence(value, i)))
@@ -551,8 +551,8 @@ public class XmlUtils {
 
 	private static boolean needsElementNameEncoding(String value) {
 		// Note that this doesn't need to be perfect, just fast.
-		for (int i = 0; i < value.length(); i++) {
-			char c = value.charAt(i);
+		for (var i = 0; i < value.length(); i++) {
+			var c = value.charAt(i);
 			if (! (c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') || (i == 0 && (c >= '0' && c <= '9')))
 				return true;
 		}
@@ -562,9 +562,9 @@ public class XmlUtils {
 	private static boolean needsTextEncoding(String value) {
 		// See if we need to convert the string.
 		// Conversion is somewhat expensive, so make sure we need to do so before hand.
-		final int len = value.length();
-		for (int i = 0; i < len; i++) {
-			char c = value.charAt(i);
+		var len = value.length();
+		for (var i = 0; i < len; i++) {
+			var c = value.charAt(i);
 			if ((i == 0 || i == len - 1) && Character.isWhitespace(c))
 				return true;
 			if (REPLACE_TEXT.contains(c) || ! isValidXmlCharacter(c) || (c == '_' && isEscapeSequence(value, i)))

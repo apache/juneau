@@ -592,7 +592,7 @@ public class BeanSession extends ContextSession {
 	 * @return The type property name.  Never <jk>null</jk>.
 	 */
 	public final String getBeanTypePropertyName(ClassMeta cm) {
-		String s = cm == null ? null : cm.getBeanTypePropertyName();
+		var s = cm == null ? null : cm.getBeanTypePropertyName();
 		return s == null ? getBeanTypePropertyName() : s;
 	}
 
@@ -966,12 +966,12 @@ public class BeanSession extends ContextSession {
 	 * @throws BeanRuntimeException If the specified class is not a valid bean.
 	 */
 	public final <T> T newBean(Object outer, Class<T> c) throws BeanRuntimeException {
-		ClassMeta<T> cm = getClassMeta(c);
-		BeanMeta m = cm.getBeanMeta();
+		var cm = getClassMeta(c);
+		var m = cm.getBeanMeta();
 		if (m == null)
 			return null;
 		try {
-			T o = (T)m.newBean(outer);
+			var o = m.newBean(outer);
 			if (o == null)
 				throw bex(c, "Class does not have a no-arg constructor.");
 			return o;
@@ -1016,7 +1016,7 @@ public class BeanSession extends ContextSession {
 	 * @return A new instance of the class.
 	 */
 	public final <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
-		BeanMeta m = getBeanMeta(c);
+		var m = getBeanMeta(c);
 		if (m == null)
 			return null;
 		T bean = null;
@@ -1114,7 +1114,7 @@ public class BeanSession extends ContextSession {
 		assertArgNotNull("c", c);
 		assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", cn(c), cn(o), 0);
 
-		ClassMeta cm = getClassMeta(c);
+		var cm = getClassMeta(c);
 
 		BeanMeta m = cm.getBeanMeta();
 		if (m == null)
@@ -1176,7 +1176,7 @@ public class BeanSession extends ContextSession {
 			if (to.isOptional() && (! (value instanceof Optional)))
 				return (T)opt(convertToMemberType(outer, value, to.getElementType()));
 
-			Class<T> tc = to.getInnerClass();
+			var tc = to.getInnerClass();
 
 			// If no conversion needed, then just return the value.
 			// Don't include maps or collections, because child elements may need conversion.
@@ -1190,7 +1190,7 @@ public class BeanSession extends ContextSession {
 				var fc = swap.getSwapClass();
 				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
 					return (T)swap.unswap(this, value, to);
-				ClassMeta fcm = getClassMeta(fc.inner());
+				var fcm = getClassMeta(fc.inner());
 				if (fcm.isNumber() && value instanceof Number value2) {
 					value = convertToMemberType(null, value2, fc.inner());
 					return (T)swap.unswap(this, value, to);
@@ -1209,7 +1209,7 @@ public class BeanSession extends ContextSession {
 			if (to.isPrimitive()) {
 				if (to.isNumber()) {
 					if (from.isNumber()) {
-						Number n = (Number)value;
+						var n = (Number)value;
 						if (tc == Integer.TYPE)
 							return (T)Integer.valueOf(n.intValue());
 						if (tc == Short.TYPE)
@@ -1223,7 +1223,7 @@ public class BeanSession extends ContextSession {
 						if (tc == Byte.TYPE)
 							return (T)Byte.valueOf(n.byteValue());
 					} else if (from.isBoolean()) {
-						Boolean b = (Boolean)value;
+						var b = (Boolean)value;
 						if (tc == Integer.TYPE)
 							return (T)(Integer.valueOf(b ? 1 : 0));
 						if (tc == Short.TYPE)
@@ -1239,8 +1239,8 @@ public class BeanSession extends ContextSession {
 					} else if (isNullOrEmpty(value)) {
 						return (T)to.info.getPrimitiveDefault();
 					} else {
-						String s = value.toString();
-						int multiplier = (tc == Integer.TYPE || tc == Short.TYPE || tc == Long.TYPE) ? getMultiplier(s) : 1;
+						var s = value.toString();
+						var multiplier = (tc == Integer.TYPE || tc == Short.TYPE || tc == Long.TYPE) ? getMultiplier(s) : 1;
 						if (multiplier != 1) {
 							s = s.substring(0, s.length() - 1).trim();
 							Long l = Long.valueOf(s) * multiplier;
@@ -1271,7 +1271,7 @@ public class BeanSession extends ContextSession {
 					return (T)parseCharacter(value);
 				} else if (to.isBoolean()) {
 					if (from.isNumber()) {
-						int i = ((Number)value).intValue();
+						var i = ((Number)value).intValue();
 						return (T)(i == 0 ? Boolean.FALSE : Boolean.TRUE);
 					} else if (isNullOrEmpty(value)) {
 						return (T)to.info.getPrimitiveDefault();
@@ -1283,7 +1283,7 @@ public class BeanSession extends ContextSession {
 
 			if (to.isNumber()) {
 				if (from.isNumber()) {
-					Number n = (Number)value;
+					var n = (Number)value;
 					if (tc == Integer.class)
 						return (T)Integer.valueOf(n.intValue());
 					if (tc == Short.class)
@@ -1301,7 +1301,7 @@ public class BeanSession extends ContextSession {
 					if (tc == AtomicLong.class)
 						return (T)new AtomicLong(n.intValue());
 				} else if (from.isBoolean()) {
-					Boolean b = (Boolean)value;
+					var b = (Boolean)value;
 					if (tc == Integer.class)
 						return (T)Integer.valueOf(b ? 1 : 0);
 					if (tc == Short.class)
@@ -1321,9 +1321,9 @@ public class BeanSession extends ContextSession {
 				} else if (isNullOrEmpty(value)) {
 					return null;
 				} else if (! hasMutater(from, to)) {
-					String s = value.toString();
+					var s = value.toString();
 
-					int multiplier = (tc == Integer.class || tc == Short.class || tc == Long.class) ? getMultiplier(s) : 1;
+					var multiplier = (tc == Integer.class || tc == Short.class || tc == Long.class) ? getMultiplier(s) : 1;
 					if (multiplier != 1) {
 						s = s.substring(0, s.length() - 1).trim();
 						Long l = Long.valueOf(s) * multiplier;
@@ -1359,7 +1359,7 @@ public class BeanSession extends ContextSession {
 			if (to.isChar()) {
 				if (isNullOrEmpty(value))
 					return null;
-				String s = value.toString();
+				var s = value.toString();
 				if (s.length() == 1)
 					return (T)Character.valueOf(s.charAt(0));
 			}
@@ -1396,18 +1396,18 @@ public class BeanSession extends ContextSession {
 			if (to.isMap()) {
 				try {
 					if (from.isMap()) {
-						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
+						var m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
 						var keyType = to.getKeyType();
 						var valueType = to.getValueType();
 						((Map<?,?>)value).forEach((k, v) -> {
-							Object k2 = k;
+							var k2 = k;
 							if (keyType.isNotObject()) {
 								if (keyType.isString() && k.getClass() != Class.class)
 									k2 = k.toString();
 								else
 									k2 = convertToMemberType(m, k, keyType);
 							}
-							Object v2 = v;
+							var v2 = v;
 							if (valueType.isNotObject())
 								v2 = convertToMemberType(m, v, valueType);
 							m.put(k2, v2);
@@ -1426,12 +1426,12 @@ public class BeanSession extends ContextSession {
 			// Target type is some sort of Collection
 			if (to.isCollection()) {
 				try {
-					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? set() : new JsonList(this);
-					ClassMeta elementType = to.getElementType();
+					var l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? set() : new JsonList(this);
+					var elementType = to.getElementType();
 
 					if (from.isArray()) {
-						for (int i = 0; i < Array.getLength(value); i++) {
-							Object o = Array.get(value, i);
+						for (var i = 0; i < Array.getLength(value); i++) {
+							var o = Array.get(value, i);
 							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
 						}
 					} else if (from.isCollection())
@@ -1441,7 +1441,7 @@ public class BeanSession extends ContextSession {
 					else if (isNullOrEmpty(value))
 						return null;
 					else if (from.isString()) {
-						String s = value.toString();
+						var s = value.toString();
 						if (isJsonArray(s, false)) {
 							var l2 = JsonList.ofJson(s);
 							l2.setBeanSession(this);
@@ -1467,7 +1467,7 @@ public class BeanSession extends ContextSession {
 				if (from.isByteArray()) {
 					return (T)new String((byte[])value);
 				} else if (from.isMapOrBean() || from.isCollectionOrArrayOrOptional()) {
-					WriterSerializer ws = ctx.getBeanToStringSerializer();
+					var ws = ctx.getBeanToStringSerializer();
 					if (nn(ws))
 						return (T)ws.serialize(value);
 				} else if (from.isClass()) {
@@ -1480,9 +1480,9 @@ public class BeanSession extends ContextSession {
 				var c = value.getClass();
 				if (c.isArray()) {
 					if (c.getComponentType().isPrimitive()) {
-						JsonList l = new JsonList(this);
-						int size = Array.getLength(value);
-						for (int i = 0; i < size; i++)
+						var l = new JsonList(this);
+						var size = Array.getLength(value);
+						for (var i = 0; i < size; i++)
 							l.add(Array.get(value, i));
 						value = l;
 					}
@@ -1514,7 +1514,7 @@ public class BeanSession extends ContextSession {
 					}
 				}
 				if (nn(builder)) {
-					BeanMap m = toBeanMap(builder.create(this, to));
+					var m = toBeanMap(builder.create(this, to));
 					m.load(value2);
 					return builder.build(this, m.getBean(), to);
 				}
@@ -1523,16 +1523,16 @@ public class BeanSession extends ContextSession {
 
 			if (to.isInputStream()) {
 				if (from.isByteArray()) {
-					byte[] b = (byte[])value;
+					var b = (byte[])value;
 					return (T)new ByteArrayInputStream(b, 0, b.length);
 				}
-				byte[] b = value.toString().getBytes();
+				var b = value.toString().getBytes();
 				return (T)new ByteArrayInputStream(b, 0, b.length);
 			}
 
 			if (to.isReader()) {
 				if (from.isByteArray()) {
-					byte[] b = (byte[])value;
+					var b = (byte[])value;
 					return (T)new StringReader(new String(b));
 				}
 				return (T)new StringReader(value.toString());
@@ -1540,7 +1540,7 @@ public class BeanSession extends ContextSession {
 
 			if (to.isCalendar()) {
 				if (from.isCalendar()) {
-					Calendar c = (Calendar)value;
+					var c = (Calendar)value;
 					if (value instanceof GregorianCalendar) {
 						var c2 = new GregorianCalendar(c.getTimeZone());
 						c2.setTime(c.getTime());
@@ -1548,7 +1548,7 @@ public class BeanSession extends ContextSession {
 					}
 				}
 				if (from.isDate()) {
-					Date d = (Date)value;
+					var d = (Date)value;
 					if (value instanceof GregorianCalendar) {
 						var c2 = new GregorianCalendar(TimeZone.getDefault());
 						c2.setTime(d);
@@ -1594,8 +1594,8 @@ public class BeanSession extends ContextSession {
 	 */
 	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
 		assertArgNotNull("classes", classes);
-		ClassMeta[] cm = new ClassMeta<?>[classes.length];
-		for (int i = 0; i < classes.length; i++)
+		var cm = new ClassMeta<?>[classes.length];
+		for (var i = 0; i < classes.length; i++)
 			cm[i] = getClassMeta(classes[i]);
 		return new ClassMeta(cm);
 	}
@@ -1653,10 +1653,10 @@ public class BeanSession extends ContextSession {
 		if (list == null)
 			return null;
 		var componentType = type.isArgs() ? object() : type.getElementType();
-		Object array = Array.newInstance(componentType.getInnerClass(), list.size());
+		var array = Array.newInstance(componentType.getInnerClass(), list.size());
 		var i = IntegerValue.create();
 		list.forEach(x -> {
-			Object x2 = x;
+			var x2 = x;
 			if (! type.getInnerClass().isInstance(x)) {
 				if (componentType.isArray() && x instanceof Collection<?> c)
 					x2 = toArray(componentType, c);

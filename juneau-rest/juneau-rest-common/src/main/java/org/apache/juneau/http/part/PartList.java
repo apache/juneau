@@ -329,8 +329,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public Optional<NameValuePair> get(String name) {
 
-		NameValuePair first = null;
-		List<NameValuePair> rest = null;
+		var first = (NameValuePair)null;
+		var rest = (List<NameValuePair>)null;
 		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
@@ -387,8 +387,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public <T> Optional<T> get(String name, Class<T> type) {
 
-		NameValuePair first = null;
-		List<NameValuePair> rest = null;
+		var first = (NameValuePair)null;
+		var rest = (List<NameValuePair>)null;
 		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
@@ -737,7 +737,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList set(NameValuePair value) {
 		if (nn(value)) {
-			boolean replaced = false;
+			var replaced = false;
 			for (int i = 0, j = size(); i < j; i++) {
 				var x = get(i);
 				if (eq(x.getName(), value.getName())) {

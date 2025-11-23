@@ -613,7 +613,7 @@ public class BasicSwaggerProviderSession {
 		if (isEmpty(sex))
 			return;
 
-		Object example = null;
+		var example = (Object)null;
 		if (isJson(sex)) {
 			example = jp.parse(sex, type);
 		} else {

@@ -76,8 +76,8 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 		int limit = args.getLimit();
 
 		if (type.isArray()) {
-			int size = Array.getLength(input);
-			int end = (limit + pos >= size) ? size : limit + pos;
+			var size = Array.getLength(input);
+			var end = (limit + pos >= size) ? size : limit + pos;
 			pos = Math.min(pos, size);
 			var et = type.getElementType();
 			if (! et.isPrimitive())

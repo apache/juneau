@@ -112,7 +112,7 @@ public class RrpcRestOpSession extends RestOpSession {
 			return;
 
 		} else if ("POST".equals(session.getMethod())) {
-			String pip = session.getUrlPath().getPath();
+			var pip = session.getUrlPath().getPath();
 			if (pip.indexOf('/') != -1)
 				pip = pip.substring(pip.lastIndexOf('/') + 1);
 			pip = urlDecode(pip);

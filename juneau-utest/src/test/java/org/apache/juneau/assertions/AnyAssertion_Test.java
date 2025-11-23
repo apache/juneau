@@ -120,7 +120,7 @@ class AnyAssertion_Test extends TestBase {
 	@Test void bb01_asArray() {
 		var x1 = a(1,2);
 		var nil = na(Integer.class);
-		String x2 = "";
+		var x2 = "";
 		test(x1).asArray(Integer.class).asItem(0).is(1);
 		test(nil).asArray(Integer.class).isNull();
 		assertThrown(()->test(x2).asArray(Integer.class)).asMessage().asOneLine().is("Object was not type 'java.lang.Integer[]'.  Actual='java.lang.String'.");

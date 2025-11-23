@@ -133,9 +133,9 @@ public class HeaderArg implements RestOpArg {
 			return null;
 
 		// Find matching @Header from class-level headerParams array
-		Header classLevelHeader = null;
+		var classLevelHeader = (Header)null;
 		for (var h : restAnnotation.headerParams()) {
-			String hName = firstNonEmpty(h.name(), h.value());
+			var hName = firstNonEmpty(h.name(), h.value());
 			if (paramName.equals(hName)) {
 				classLevelHeader = h;
 				break;

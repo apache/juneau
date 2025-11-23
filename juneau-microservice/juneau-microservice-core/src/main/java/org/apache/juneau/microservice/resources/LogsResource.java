@@ -250,7 +250,7 @@ public class LogsResource extends BasicRestServlet {
 					w.append("<span style='color:gray'>[EMPTY]</span>");
 				else
 					for (var le : lp) {
-						char s = le.severity.charAt(0);
+						var s = le.severity.charAt(0);
 						String color = "black";
 						//SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST
 						if (s == 'I')

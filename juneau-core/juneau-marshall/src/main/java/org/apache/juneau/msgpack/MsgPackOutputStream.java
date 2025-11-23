@@ -209,7 +209,7 @@ public class MsgPackOutputStream extends OutputStream {
 			throw new SerializeException(x);
 		});
 
-		byte[] b = baos.toByteArray();
+		var b = baos.toByteArray();
 
 		// bin 8 stores a byte array whose length is up to (2^8)-1 bytes:
 		// +--------+--------+========+

@@ -1940,8 +1940,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			if (v.get().isEmpty()) {
 				var mi = MethodInfo.of(restMethod);
-				String p = null;
-				String httpMethod = null;
+				var p = (String)null;
+				var httpMethod = (String)null;
 				if (mi.hasAnnotation(RestGet.class))
 					httpMethod = "get";
 				else if (mi.hasAnnotation(RestPut.class))
@@ -1990,7 +1990,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected void processParameterAnnotations() {
 			for (var aa : restMethod.getParameterAnnotations()) {
 
-				String def = null;
+				var def = (String)null;
 				for (var a : aa) {
 					if (a instanceof Schema a2) {
 						def = joinnlFirstNonEmptyArray(a2._default(), a2.df());

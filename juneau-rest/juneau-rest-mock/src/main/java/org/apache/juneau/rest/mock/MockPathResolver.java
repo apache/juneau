@@ -170,7 +170,7 @@ class MockPathResolver {
 
 		int mark = 0;
 		for (int i = uri.indexOf("://") + 3; i < uri.length(); i++) {
-			char c = uri.charAt(i);
+			var c = uri.charAt(i);
 			if (state == S3) {
 				if (c != '/')
 					state = S4;

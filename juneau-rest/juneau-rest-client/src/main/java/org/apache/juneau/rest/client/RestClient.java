@@ -6185,7 +6185,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		var uri = (String)null;
 		var content = (String)null;
 		for (int i = 0; i < callString.length(); i++) {
-			char c = callString.charAt(i);
+			var c = callString.charAt(i);
 			if (state == S1) {
 				if (isWhitespace(c)) {
 					method = callString.substring(mark, i);
@@ -7873,7 +7873,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		try {
 			var ret = (Object)null;
-			RestResponse res = null;
+			var res = (RestResponse)null;
 			rc.rethrow(RuntimeException.class);
 			rom.forEachException(x -> rc.rethrow(x));
 			if (ror.getReturnValue() == RemoteReturn.NONE) {

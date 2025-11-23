@@ -299,7 +299,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			type = object();
 
 		// Swap if necessary
-		ObjectSwap swap = type.getSwap(this);
+		var swap = type.getSwap(this);
 		if (nn(swap) && ! type.isDateOrCalendarOrTemporal()) {
 			value = swap(swap, value);
 			type = swap.getSwapClassMeta(this);
@@ -322,7 +322,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		if (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
 			cf = ctx.getCollectionFormat();
 
-		String out = null;
+		var out = (String)null;
 
 		schema.validateOutput(value, ctx.getBeanContext());
 

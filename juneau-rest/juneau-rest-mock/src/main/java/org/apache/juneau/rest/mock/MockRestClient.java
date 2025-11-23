@@ -2130,8 +2130,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public void sendRequestHeader(HttpRequest request) throws HttpException, IOException {
 		try {
 			RequestLine rl = request.getRequestLine();
-			String path = rl.getUri();
-			String target = findTarget(request);
+			var path = rl.getUri();
+			var target = findTarget(request);
 
 			var req = findRestRequest(request);
 			rreq.set(req);

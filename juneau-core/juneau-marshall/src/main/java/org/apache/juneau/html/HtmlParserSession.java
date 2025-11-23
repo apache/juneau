@@ -583,7 +583,7 @@ public class HtmlParserSession extends XmlParserSession {
 			if (tag == xTABLE)
 				break;
 
-			ClassMeta elementType = null;
+			var elementType = (ClassMeta)null;
 			String beanType = getAttribute(r, getBeanTypePropertyName(type), null);
 			if (nn(beanType))
 				elementType = getClassMeta(beanType, pMeta, null);
@@ -812,7 +812,7 @@ public class HtmlParserSession extends XmlParserSession {
 
 		int depth = 0;
 
-		String characters = null;
+		var characters = (String)null;
 
 		while (true) {
 			if (et == START_ELEMENT) {
@@ -834,7 +834,7 @@ public class HtmlParserSession extends XmlParserSession {
 					if (et == CHARACTERS) {
 						String s = r.getText();
 						if (isNotEmpty(s)) {
-							char c = r.getText().charAt(0);
+							var c = r.getText().charAt(0);
 							if (c == '\u2003')
 								c = '\t';
 							sb.append(c);

@@ -214,7 +214,7 @@ class MsgPackSerializerTest extends TestBase {
 	}
 
 	private static void test(Object input, String expected) throws Exception {
-		byte[] b = MsgPackSerializer.DEFAULT.serialize(input);
+		var b = MsgPackSerializer.DEFAULT.serialize(input);
 		assertEquals(expected, toSpacedHex(b));
 	}
 }

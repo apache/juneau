@@ -191,13 +191,13 @@ public class BeanDiff {
 	public <T> BeanDiff(BeanContext bc, T first, T second, Set<String> include, Set<String> exclude) {
 		if (first == null && second == null)
 			return;
-		BeanMap<?> bm1 = first == null ? null : bc.toBeanMap(first);
-		BeanMap<?> bm2 = second == null ? null : bc.toBeanMap(second);
-		Set<String> keys = nn(bm1) ? bm1.keySet() : bm2.keySet();
+		var bm1 = first == null ? null : bc.toBeanMap(first);
+		var bm2 = second == null ? null : bc.toBeanMap(second);
+		var keys = nn(bm1) ? bm1.keySet() : bm2.keySet();
 		keys.forEach(k -> {
 			if ((include == null || include.contains(k)) && (exclude == null || ! exclude.contains(k))) {
-				Object o1 = bm1 == null ? null : bm1.get(k);
-				Object o2 = bm2 == null ? null : bm2.get(k);
+				var o1 = bm1 == null ? null : bm1.get(k);
+				var o2 = bm2 == null ? null : bm2.get(k);
 				if (ne(o1, o2)) {
 					if (nn(o1))
 						v1.put(k, o1);

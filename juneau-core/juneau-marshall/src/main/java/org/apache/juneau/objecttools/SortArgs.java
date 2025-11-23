@@ -86,7 +86,7 @@ public class SortArgs {
 	public SortArgs(Collection<String> sortArgs) {
 		Map<String,Boolean> sort = map();
 		sortArgs.forEach(s -> {
-			boolean isDesc = false;
+			var isDesc = false;
 			if (endsWith(s, '-', '+')) {
 				isDesc = endsWith(s, '-');
 				s = s.substring(0, s.length() - 1);

@@ -219,7 +219,7 @@ public class JsonParserSession extends ReaderParserSession {
 		setCurrentClass(sType);
 		var wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
 
-		Object o = null;
+		var o = (Object)null;
 
 		skipCommentsAndSpace(r);
 		if (nn(wrapperAttr))
@@ -629,8 +629,8 @@ public class JsonParserSession extends ReaderParserSession {
 
 			// Need to weed out octal and hexadecimal formats:  0123,-0123,0x123,-0x123.
 			// Don't weed out 0 or -0.
-			boolean isNegative = false;
-			char c = s.charAt(0);
+			var isNegative = false;
+			var c = s.charAt(0);
 			if (c == '-') {
 				isNegative = true;
 				c = (s.length() == 1 ? 'x' : s.charAt(1));
@@ -642,7 +642,7 @@ public class JsonParserSession extends ReaderParserSession {
 
 			// '01' is not a valid number, but '0.1', '0e1', '0e+1' are valid.
 			if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
-				char c2 = s.charAt((isNegative ? 2 : 1));
+				var c2 = s.charAt((isNegative ? 2 : 1));
 				if (c2 != '.' && c2 != 'e' && c2 != 'E')
 					throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
 			}
@@ -670,7 +670,7 @@ public class JsonParserSession extends ReaderParserSession {
 			throw new ParseException(this, msg, (char)qc);
 		}
 		final boolean isQuoted = (qc == '\'' || qc == '"');
-		String s = null;
+		var s = (String)null;
 		boolean isInEscape = false;
 		int c = 0;
 		while (c != -1) {
@@ -818,7 +818,7 @@ public class JsonParserSession extends ReaderParserSession {
 		// S4: Found :, looking for valStart: { [ " ' LITERAL.
 
 		var state = S1;
-		String currAttr = null;
+		var currAttr = (String)null;
 		int c = 0;
 		while (c != -1) {
 			c = r.read();

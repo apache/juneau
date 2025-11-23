@@ -540,7 +540,7 @@ public class Utils {
 	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
 	 */
 	public static boolean isBlank(CharSequence s) {
-		return isBlank(s);
+		return StringUtils.isBlank(s);
 	}
 
 	/**

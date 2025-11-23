@@ -496,7 +496,7 @@ public class TestUtils extends Utils2 {
 					// Validate that nextOpen is actually an opening tag
 					if (nextOpen != -1 && (nextOpen < nextClose || nextClose == -1)) {
 						if (nextOpen + elementName.length() + 1 < html.length()) {
-							char nextChar = html.charAt(nextOpen + elementName.length() + 1);
+							var nextChar = html.charAt(nextOpen + elementName.length() + 1);
 							if (nextChar == ' ' || nextChar == '>' || nextChar == '/') {
 								depth++;
 								pos = nextOpen + elementName.length() + 1;

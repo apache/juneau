@@ -107,7 +107,7 @@ public class BeanMeta<T> {
 				return true;
 
 			// Get the bean property type from the getter/field.
-			Class<?> pt = null;
+			var pt = (Class<?>)null;
 			if (nn(b.getter))
 				pt = b.getter.getReturnType();
 			else if (nn(b.field))
@@ -160,7 +160,7 @@ public class BeanMeta<T> {
 		}
 
 		private String findDictionaryName(ClassMeta<?> cm) {
-			BeanRegistry br = cm.getBeanRegistry();
+			var br = cm.getBeanRegistry();
 			if (nn(br)) {
 				String s = br.getTypeName(this.classMeta);
 				if (nn(s))
@@ -344,7 +344,7 @@ public class BeanMeta<T> {
 				fixedBeanProps.forEach(x -> normalProps.put(x, BeanPropertyMeta.builder(beanMeta, x)));
 
 				if (ctx.isUseJavaBeanIntrospector()) {
-					BeanInfo bi = null;
+					var bi = (BeanInfo)null;
 					if (! c2.isInterface())
 						bi = Introspector.getBeanInfo(c2, stopClass);
 					else
@@ -757,7 +757,7 @@ public class BeanMeta<T> {
 			for (var ci : c.getGenericInterfaces())
 				findTypeVarImpls(ci, m);
 		} else if (t instanceof ParameterizedType t2) {
-			Type rt = t2.getRawType();
+			var rt = t2.getRawType();
 			if (rt instanceof Class) {
 				Type[] gImpls = t2.getActualTypeArguments();
 				Class<?>[] gTypes = new Class[gImpls.length];

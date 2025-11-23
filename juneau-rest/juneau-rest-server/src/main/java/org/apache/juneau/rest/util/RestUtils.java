@@ -280,7 +280,7 @@ public class RestUtils {
 						r.read();
 
 					var state = S1;
-					String currAttr = null;
+					var currAttr = (String)null;
 					while (c != -1) {
 						c = r.read();
 						if (state == S1) {

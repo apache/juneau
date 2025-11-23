@@ -120,7 +120,7 @@ public class LogEntryFormatter extends Formatter {
 		var state = S1;
 		int i1 = 0;
 		for (int i = 0; i < format.length(); i++) {
-			char c = format.charAt(i);
+			var c = format.charAt(i);
 			if (state == S1) {
 				if (c == '%')
 					state = S2;
@@ -190,7 +190,7 @@ public class LogEntryFormatter extends Formatter {
 		}
 
 		// The log parser
-		String sre = re.toString();
+		var sre = re.toString();
 		if (sre.endsWith("\\%n"))
 			sre = sre.substring(0, sre.length() - 3);
 
@@ -206,7 +206,7 @@ public class LogEntryFormatter extends Formatter {
 	public String format(LogRecord r) {
 		String msg = formatMessage(r);
 		Throwable t = r.getThrown();
-		String hash = null;
+		var hash = (String)null;
 		int c = 0;
 		if (nn(hashes) && nn(t)) {
 			hash = hashCode(t);

@@ -4269,7 +4269,7 @@ public class HttpPartSchema {
 					if (! isValidMaxProperties(m))
 						throw new SchemaValidationException("Maximum number of properties exceeded.");
 					m.forEach((k, v) -> {
-						String key = k.toString();
+						var key = k.toString();
 						HttpPartSchema s2 = getProperty(key);
 						if (nn(s2))
 							s2.validateOutput(v, bc);
@@ -4281,7 +4281,7 @@ public class HttpPartSchema {
 			}
 			case STRING: {
 				if (cm.isCharSequence()) {
-					String s = o.toString();
+					var s = o.toString();
 					if (! isValidMinLength(s))
 						throw new SchemaValidationException("Minimum length of value not met.");
 					if (! isValidMaxLength(s))
@@ -4577,7 +4577,7 @@ public class HttpPartSchema {
 		if (uniqueItems) {
 			var s = new HashSet<>();
 			for (int i = 0; i < Array.getLength(x); i++) {
-				Object o = Array.get(x, i);
+				var o = Array.get(x, i);
 				if (! s.add(o))
 					return false;
 			}

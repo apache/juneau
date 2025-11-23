@@ -199,7 +199,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 
 		setCurrentClass(sType);
 
-		Object o = null;
+		var o = (Object)null;
 		DataType dt = is.readDataType();
 		int length = (int)is.readLength();
 

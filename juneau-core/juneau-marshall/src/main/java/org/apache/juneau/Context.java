@@ -646,7 +646,7 @@ public abstract class Context {
 		}
 
 		private ConstructorInfo getContextConstructor() {
-			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
+			var cci = CONTEXT_CONSTRUCTORS.get(type);
 			if (cci == null) {
 			// @formatter:off
 			cci = info(type).getPublicConstructor(

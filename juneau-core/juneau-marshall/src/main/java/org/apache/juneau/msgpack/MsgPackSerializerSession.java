@@ -242,7 +242,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		String typeName = getBeanTypeName(this, eType, aType, pMeta);
 
 		// Swap if necessary
-		ObjectSwap swap = aType.getSwap(this);
+		var swap = aType.getSwap(this);
 		if (nn(swap)) {
 			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);

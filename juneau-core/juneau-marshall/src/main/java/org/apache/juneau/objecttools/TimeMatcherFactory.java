@@ -305,7 +305,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 			if (ranges.length == 0)
 				return true;
 
-			ZonedDateTime zdt = null;
+			var zdt = (ZonedDateTime)null;
 			if (cm.isCalendar()) {
 				var c = (Calendar)o;
 				zdt = c.toInstant().atZone(c.getTimeZone().toZoneId());

@@ -74,8 +74,8 @@ public class DateUtils {
 		 * 	different pattern.
 		 */
 		public static SimpleDateFormat formatFor(final String pattern) {
-			final SoftReference<Map<String,SimpleDateFormat>> ref = THREADLOCAL_FORMATS.get();
-			Map<String,SimpleDateFormat> formats = ref.get();
+			var ref = THREADLOCAL_FORMATS.get();
+			var formats = ref.get();
 			if (formats == null) {
 				formats = new HashMap<>();
 				THREADLOCAL_FORMATS.set(new SoftReference<>(formats));
@@ -106,7 +106,7 @@ public class DateUtils {
 	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
 	static {
-		final Calendar calendar = Calendar.getInstance();
+		var calendar = Calendar.getInstance();
 		calendar.setTimeZone(GMT);
 		calendar.set(2000, Calendar.JANUARY, 1, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
@@ -132,8 +132,7 @@ public class DateUtils {
 	 * @see SimpleDateFormat
 	 */
 	public static String formatDate(final Date date, final String pattern) {
-		final SimpleDateFormat formatter = DateFormatHolder.formatFor(pattern);
-		return formatter.format(date);
+		return DateFormatHolder.formatFor(pattern).format(date);
 	}
 
 	/**
@@ -221,7 +220,7 @@ public class DateUtils {
 	 * @see #toIso8601(Calendar)
 	 */
 	public static Calendar fromIso8601Calendar(String s) {
-		if (StringUtils.isBlank(s))
+		if (isBlank(s))
 			return null;
 		return GregorianCalendar.from(fromIso8601(s));
 	}
@@ -391,8 +390,8 @@ public class DateUtils {
 
 		var state = S1;
 		var needsT = false;
-		for (int i = 0; i < in.length(); i++) {
-			char c = in.charAt(i);
+		for (var i = 0; i < in.length(); i++) {
+			var c = in.charAt(i);
 			if (state == S1) {
 				if (c == '-')
 					state = S2;
@@ -421,7 +420,7 @@ public class DateUtils {
 		if (needsT)
 			in = in.replace(' ', 'T');
 
-		String result = switch (state) {
+		var result = switch (state) {
 			case S1 -> in + "-01-01T00:00:00";
 			case S2 -> in + "-01T00:00:00";
 			case S3 -> in + "T00:00:00";
@@ -511,11 +510,11 @@ public class DateUtils {
 		// S13: Found ., looking for millisecond digits (YYYY-MM-DDTHH:MM:SS.SSS)
 		// S14: Found timezone (Z, +HH:mm, -HH:mm)
 
-		StateEnum state = S1;
+		var state = S1;
 		var precision = ChronoField.YEAR; // Track precision as we go
 
 		for (int i = 0; i < seg.length(); i++) {
-			char c = seg.charAt(i);
+			var c = seg.charAt(i);
 
 			if (state == S1) {
 				// S1: Looking for year digits (YYYY)

@@ -384,14 +384,14 @@ public class HtmlWriter extends XmlWriter {
 			append("<null/>");
 			return this;
 		}
-		String s = o.toString();
+		var s = o.toString();
 		if (s.isEmpty()) {
 			append("<sp/>");
 			return this;
 		}
 
 		for (int i = 0; i < s.length(); i++) {
-			char test = s.charAt(i);
+			var test = s.charAt(i);
 			if (test == '&')
 				append("&amp;");
 			else if (test == '<')

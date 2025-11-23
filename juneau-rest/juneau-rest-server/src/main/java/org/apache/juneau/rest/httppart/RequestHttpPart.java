@@ -121,7 +121,7 @@ public class RequestHttpPart {
 	public <T> Optional<T> as(ClassMeta<T> type) throws BasicHttpException {
 		try {
 			if (HttpParts.isHttpPart(partType, type)) {
-				ConstructorInfo cc = HttpParts.getConstructor(type).orElse(null);
+				var cc = HttpParts.getConstructor(type).orElse(null);
 				if (nn(cc)) {
 					if (! isPresent())
 						return opte();

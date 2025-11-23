@@ -230,7 +230,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		content = new RequestContent(this);
 
 		if (context.isAllowContentParam()) {
-			String b = queryParams.get("content").asString().orElse(null);
+			var b = queryParams.get("content").asString().orElse(null);
 			if (nn(b)) {
 				headers.set("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
 				content.mediaType(MediaType.UON).parser(UonParser.DEFAULT).content(b.getBytes(UTF8));
@@ -459,8 +459,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 		if (authorityPath == null)
 			authorityPath = context.getUriAuthority();
 		if (authorityPath == null) {
-			String scheme = inner.getScheme();
-			int port = inner.getServerPort();
+			var scheme = inner.getScheme();
+			var port = inner.getServerPort();
 			var sb = new StringBuilder(inner.getScheme()).append("://").append(inner.getServerName());
 			if (! (port == 80 && "http".equals(scheme) || port == 443 && "https".equals(scheme)))
 				sb.append(':').append(port);

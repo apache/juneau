@@ -212,7 +212,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 
 	@Override /* Overridden from SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
-		byte[] b = serialize(o);
+		var b = serialize(o);
 		return switch (getBinaryFormat()) {
 			case SPACED_HEX -> toSpacedHex(b);
 			case HEX -> toHex(b);

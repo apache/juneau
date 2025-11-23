@@ -78,7 +78,7 @@ public class UriResolver {
 		if (s == null)
 			return false;
 		for (int i = 0; i < s.length() - 1; i++) {
-			char c = s.charAt(i);
+			var c = s.charAt(i);
 			if ((i == 0 && c == '/') || (c == '/' && s.charAt(i + 1) == '.'))
 				return true;
 		}
@@ -88,7 +88,7 @@ public class UriResolver {
 	private static boolean isSpecialUri(String s) {
 		if (s == null || s.isEmpty())
 			return false;
-		char c = s.charAt(0);
+		var c = s.charAt(0);
 		if (c != 's' && c != 'c' && c != 'r')
 			return false;
 		return s.startsWith("servlet:") || s.startsWith("context:") || s.startsWith("request:");

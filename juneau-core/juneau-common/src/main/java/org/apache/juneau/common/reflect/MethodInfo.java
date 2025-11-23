@@ -245,7 +245,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public boolean hasOnlyParameterTypes(Class<?>...args) {
 		for (var param : getParameters()) {
 			var c1 = param.getParameterType().inner();
-			boolean foundMatch = false;
+			var foundMatch = false;
 			for (var c2 : args)
 				if (c1 == c2)
 					foundMatch = true;

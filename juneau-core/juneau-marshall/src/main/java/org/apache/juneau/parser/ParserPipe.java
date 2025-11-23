@@ -211,7 +211,7 @@ public class ParserPipe implements Closeable {
 
 		if (input instanceof InputStream input2) {
 			if (debug) {
-				byte[] b = readBytes(input2);
+				var b = readBytes(input2);
 				inputString = toHex(b);
 				inputStream = new ByteArrayInputStream(b);
 			} else {
@@ -229,7 +229,7 @@ public class ParserPipe implements Closeable {
 			doClose = false;
 		} else if (input instanceof File input2) {
 			if (debug) {
-				byte[] b = readBytes(input2);
+				var b = readBytes(input2);
 				inputString = toHex(b);
 				inputStream = new ByteArrayInputStream(b);
 			} else {

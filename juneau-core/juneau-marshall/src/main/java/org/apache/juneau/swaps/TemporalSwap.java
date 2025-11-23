@@ -337,7 +337,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	private static final Map<Class<? extends Temporal>,Method> FROM_METHODS = new ConcurrentHashMap<>();
 
 	private static Method findParseMethod(Class<? extends Temporal> c) throws ExecutableException {
-		Method m = FROM_METHODS.get(c);
+		var m = FROM_METHODS.get(c);
 		if (m == null) {
 		// @formatter:off
 		m = info(c).getPublicMethod(
@@ -387,14 +387,14 @@ public class TemporalSwap extends StringSwap<Temporal> {
 			hint = session.getClassMeta(Instant.class);
 		var tc = (Class<? extends Temporal>)hint.getInnerClass();
 
-		ZoneId offset = session.getTimeZoneId();
+		var offset = session.getTimeZoneId();
 
 		if (tc == Instant.class)
 			offset = Z;
 
-		Method parseMethod = findParseMethod(tc);
+		var parseMethod = findParseMethod(tc);
 
-		TemporalAccessor ta = defaulting(formatter.parse(f), offset);
+		var ta = defaulting(formatter.parse(f), offset);
 		return (Temporal)parseMethod.invoke(null, ta);
 	}
 
@@ -411,7 +411,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 */
 	protected Temporal convertToSerializable(BeanSession session, Temporal t) {
 
-		ZoneId zoneId = session.getTimeZoneId();
+		var zoneId = session.getTimeZoneId();
 		var tc = t.getClass();
 
 		// Instant is always serialized in GMT.

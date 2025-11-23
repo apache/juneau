@@ -2329,7 +2329,7 @@ public class BeanContext extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-
+		
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -2367,7 +2367,7 @@ public class BeanContext extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-
+		
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -4048,7 +4048,7 @@ public class BeanContext extends Context {
 	private final ObjectSwap[] findChildObjectSwaps(Class<?> c) {
 		if (c == null || swapArray.length == 0)
 			return null;
-		List<ObjectSwap> l = null;
+		var l = (List<ObjectSwap>)null;
 		for (var f : swapArray) {
 			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
@@ -4085,11 +4085,11 @@ public class BeanContext extends Context {
 	private ClassMeta<?> getTypedClassMeta(ClassMeta<?>[] c, int pos) {
 		ClassMeta<?> cm = c[pos++];
 		if (cm.isCollection() || cm.isOptional()) {
-			ClassMeta<?> ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
+			var ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
 			return (ce.isObject() ? cm : new ClassMeta(cm, null, null, ce));
 		} else if (cm.isMap()) {
-			ClassMeta<?> ck = c.length == pos ? object() : c[pos++];
-			ClassMeta<?> cv = c.length == pos ? object() : getTypedClassMeta(c, pos);
+			var ck = c.length == pos ? object() : c[pos++];
+			var cv = c.length == pos ? object() : getTypedClassMeta(c, pos);
 			return (ck.isObject() && cv.isObject() ? cm : new ClassMeta(cm, ck, cv, null));
 		}
 		return cm;
@@ -4390,7 +4390,7 @@ public class BeanContext extends Context {
 
 		if (t instanceof GenericArrayType t4) {
 			// An array parameter (e.g. <byte[]>).
-			Type gatct = t4.getGenericComponentType();
+			var gatct = t4.getGenericComponentType();
 
 			if (gatct instanceof Class<?> gatct2)
 				return Array.newInstance(gatct2, 0).getClass();

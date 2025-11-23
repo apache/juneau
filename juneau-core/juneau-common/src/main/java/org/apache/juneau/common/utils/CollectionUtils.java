@@ -1521,7 +1521,7 @@ public class CollectionUtils {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List copyArrayToList(Object array, List list) {
 		if (nn(array)) {
-			int length = Array.getLength(array);
+			var length = Array.getLength(array);
 			for (int i = 0; i < length; i++)
 				list.add(Array.get(array, i));
 		}

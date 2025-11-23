@@ -302,7 +302,7 @@ public class SerializerSession extends BeanTraverseSession {
 	protected static final List<Object> toList(Class<?> type, Object array) {
 		var componentType = type.getComponentType();
 		if (componentType.isPrimitive()) {
-			int l = Array.getLength(array);
+			var l = Array.getLength(array);
 			var list = new ArrayList<>(l);
 			for (int i = 0; i < l; i++)
 				list.add(Array.get(array, i));
@@ -659,7 +659,7 @@ public class SerializerSession extends BeanTraverseSession {
 			return ((ClassInfo)o).getNameFull();
 		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);
-		String s = o.toString();
+		var s = o.toString();
 		if (isTrimStrings())
 			s = s.trim();
 		return s;
@@ -674,7 +674,7 @@ public class SerializerSession extends BeanTraverseSession {
 	public final String trim(Object o) {
 		if (o == null)
 			return null;
-		String s = o.toString();
+		var s = o.toString();
 		if (isTrimStrings())
 			s = s.trim();
 		return s;
