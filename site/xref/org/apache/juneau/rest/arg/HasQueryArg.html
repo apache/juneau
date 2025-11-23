@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="HasQueryArg" href="../../../../../org/apache/juneau/rest/arg/HasQueryArg.html#HasQueryArg">HasQueryArg</a> <strong class="jxr_keyword">implements</strong> <a name="RestOpArg" href="../../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a> {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> AnnotationProvider AP = AnnotationProvider.INSTANCE;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> AnnotationProvider AP = AnnotationProvider.INSTANCE;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * Static creator.</em>
@@ -87,23 +87,25 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * @param pi The Java method parameter being resolved.</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">protected</strong> <a name="HasQueryArg" href="../../../../../org/apache/juneau/rest/arg/HasQueryArg.html#HasQueryArg">HasQueryArg</a>(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">this</strong>.name = AP.find(HasQuery.<strong class="jxr_keyword">class</strong>, pi)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.stream()
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.filter(HasQueryArg::hasName)
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.findFirst()
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.map(HasQueryArg::getName)
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"@HasQuery used without name or value"</span>));
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">this</strong>.type = pi.getParameterType().innerType();
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> req = opSession.getRequest();
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> bs = req.getBeanSession();
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">return</strong> bs.convertToType(req.getQueryParams().contains(name), bs.getClassMeta(type));
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">this</strong>.name = AP.find(HasQuery.<strong class="jxr_keyword">class</strong>, pi)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.stream()
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.filter(HasQueryArg::hasName)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.findFirst()
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			.map(HasQueryArg::getName)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"@HasQuery used without name or value"</span>));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">this</strong>.type = pi.getParameterType().innerType();
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> req = opSession.getRequest();
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> bs = req.getBeanSession();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">return</strong> bs.convertToType(req.getQueryParams().contains(name), bs.getClassMeta(type));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

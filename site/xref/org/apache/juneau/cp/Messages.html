@@ -265,11 +265,11 @@
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">if</strong> (! locations.isEmpty()) {
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 				Tuple2&lt;Class&lt;?&gt;,String&gt;[] mbl = locations.toArray(<strong class="jxr_keyword">new</strong> <a name="Tuple2" href="../../../../org/apache/juneau/common/function/Tuple2.html#Tuple2">Tuple2</a>[0]);
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				Builder x = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				<strong class="jxr_keyword">var</strong> x = (Builder)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = mbl.length - 1; i &gt;= 0; i--) {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 					Class&lt;?&gt; c = firstNonNull(mbl[i].getA(), forClass);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 					String value = mbl[i].getB();
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 					<strong class="jxr_keyword">var</strong> c = firstNonNull(mbl[i].getA(), forClass);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 					<strong class="jxr_keyword">var</strong> value = mbl[i].getB();
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 					<strong class="jxr_keyword">if</strong> (isJsonObject(value, <strong class="jxr_keyword">true</strong>)) {
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 						MessagesString ms;
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 						<strong class="jxr_keyword">try</strong> {
@@ -290,11 +290,11 @@
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		}
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		ResourceBundle getBundle() {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			ClassLoader cl = forClass.getClassLoader();
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			<strong class="jxr_keyword">var</strong> cl = forClass.getClassLoader();
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">var</strong> m = JsonMap.of(<span class="jxr_string">"name"</span>, name, <span class="jxr_string">"package"</span>, forClass.getPackage().getName());
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bn : baseNames) {
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 				bn = StringUtils.replaceVars(bn, m);
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 				ResourceBundle rb = findBundle(bn, locale, cl);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 				<strong class="jxr_keyword">var</strong> rb = findBundle(bn, locale, cl);
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 				<strong class="jxr_keyword">if</strong> (nn(rb))
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 					<strong class="jxr_keyword">return</strong> rb;
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			}
@@ -371,12 +371,12 @@
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> keyMap = <strong class="jxr_keyword">new</strong> TreeMap&lt;String,String&gt;();
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		String cn = scn(c) + '.';
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> cn = scn(c) + '.';
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">if</strong> (nn(rb)) {
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 			rb.keySet().forEach(x -&gt; {
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 				keyMap.put(x, x);
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 				<strong class="jxr_keyword">if</strong> (x.startsWith(cn)) {
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 					String shortKey = x.substring(cn.length());
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 					<strong class="jxr_keyword">var</strong> shortKey = x.substring(cn.length());
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 					keyMap.put(shortKey, x);
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 				}
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 			});
@@ -385,7 +385,7 @@
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 			parent.keySet().forEach(x -&gt; {
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 				keyMap.put(x, x);
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 				<strong class="jxr_keyword">if</strong> (x.startsWith(cn)) {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 					String shortKey = x.substring(cn.length());
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 					<strong class="jxr_keyword">var</strong> shortKey = x.substring(cn.length());
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 					keyMap.put(shortKey, x);
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 				}
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			});
@@ -425,10 +425,10 @@
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 			locale = Locale.getDefault();
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.locale.equals(locale))
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		Messages mb = localizedMessages.get(locale);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> mb = localizedMessages.get(locale);
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">if</strong> (mb == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			Messages parent = <strong class="jxr_keyword">this</strong>.parent == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">this</strong>.parent.forLocale(locale);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			ResourceBundle rb = <strong class="jxr_keyword">this</strong>.rb == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : findBundle(<strong class="jxr_keyword">this</strong>.rb.getBaseBundleName(), locale, c.getClassLoader());
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">var</strong> parent = <strong class="jxr_keyword">this</strong>.parent == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">this</strong>.parent.forLocale(locale);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">var</strong> rb = <strong class="jxr_keyword">this</strong>.rb == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : findBundle(<strong class="jxr_keyword">this</strong>.rb.getBaseBundleName(), locale, c.getClassLoader());
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			mb = <strong class="jxr_keyword">new</strong> <a name="Messages" href="../../../../org/apache/juneau/cp/Messages.html#Messages">Messages</a>(c, rb, locale, parent);
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			localizedMessages.put(locale, mb);
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		}
@@ -448,7 +448,7 @@
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * 	&lt;js&gt;"{!key}"&lt;/js&gt; if the key is missing.</em>
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 	<strong class="jxr_keyword">public</strong> String getString(String key, Object...args) {
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		String s = getString(key);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">var</strong> s = getString(key);
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">if</strong> (s.startsWith(<span class="jxr_string">"{!"</span>))
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> format(s, args);
@@ -487,7 +487,7 @@
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 	@Override <em class="jxr_comment">/* Overridden from ResourceBundle */</em>
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">protected</strong> Object handleGetObject(String key) {
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		String k = keyMap.get(key);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">var</strong> k = keyMap.get(key);
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">if</strong> (k == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{!"</span> + key + <span class="jxr_string">"}"</span>;
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">try</strong> {

@@ -376,12 +376,12 @@
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">return</strong> entries.stream().filter(x -&gt; type.isInstance(x)).map(x -&gt; type.<strong class="jxr_keyword">cast</strong>(x));
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		}
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">private</strong> Object copyBuilder(Object o) {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Serializer.Builder x) {
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			Serializer.Builder x2 = x.copy();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			<strong class="jxr_keyword">if</strong> (ne(x.getClass(), x2.getClass()))
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Copy method not implemented on class {0}"</span>, cn(x));
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			x = x2;
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">private</strong> Object copyBuilder(Object o) {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Serializer.Builder x) {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				Serializer.Builder x2 = x.copy();
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 				<strong class="jxr_keyword">if</strong> (ne(x.getClass(), x2.getClass()))
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Copy method not implemented on class {0}"</span>, cn(x));
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 				x = x2;
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 				<strong class="jxr_keyword">if</strong> (nn(bcBuilder))
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 					x.beanContext(bcBuilder);
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 				<strong class="jxr_keyword">return</strong> x;
@@ -390,11 +390,11 @@
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 		}
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">private</strong> Object createBuilder(Object o) {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Class) {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Class o2) {
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<em class="jxr_comment">// Check for no-arg constructor.</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			ConstructorInfo ci = info((Class&lt;?&gt;)o).getPublicConstructor(c -&gt; c.getParameterCount() == 0).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<strong class="jxr_keyword">if</strong> (nn(ci))
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				<em class="jxr_comment">// Check for no-arg constructor.</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 				ConstructorInfo ci = info(o2).getPublicConstructor(c -&gt; c.getParameterCount() == 0).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 				<strong class="jxr_keyword">if</strong> (nn(ci))
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 					<strong class="jxr_keyword">return</strong> ci.newInstance();
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 				<em class="jxr_comment">// Check for builder create method.</em>
@@ -651,8 +651,8 @@
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isEmpty() { <strong class="jxr_keyword">return</strong> entries.length == 0; }
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 	<strong class="jxr_keyword">private</strong> <a name="Serializer" href="../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a> build(Object o) {
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="Serializer" href="../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a>)
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">return</strong> (<a name="Serializer" href="../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a>)o;
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="Serializer" href="../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a> o2)
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">return</strong> o2;
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">return</strong> ((Serializer.Builder)o).build();
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 	}
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> }

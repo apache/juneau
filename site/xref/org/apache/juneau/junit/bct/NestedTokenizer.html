@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">		 * @return true if nested tokens exist</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasNested() {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">return</strong> nn(nested) &amp;&amp; !nested.isEmpty();
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">return</strong> nn(nested) &amp;&amp; ! nested.isEmpty();
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		@Override
@@ -189,7 +189,7 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == ',') {
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 					<strong class="jxr_keyword">var</strong> value = currentValue.toString().trim();
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 					<em class="jxr_comment">// Add token unless it's empty and we just completed a nested token</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 					<strong class="jxr_keyword">if</strong> (!value.isEmpty() || tokens.isEmpty() || !justCompletedNested) {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 					<strong class="jxr_keyword">if</strong> (! value.isEmpty() || tokens.isEmpty() || ! justCompletedNested) {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 						tokens.add(<strong class="jxr_keyword">new</strong> Token(value));
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 					}
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 					currentValue.setLength(0);
@@ -217,7 +217,7 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 						<strong class="jxr_keyword">var</strong> value = currentValue.toString().trim();
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 						<strong class="jxr_keyword">var</strong> nestedContent = in.substring(nestedStart, pos);
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 						<strong class="jxr_keyword">var</strong> token = <strong class="jxr_keyword">new</strong> Token(value);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 						<strong class="jxr_keyword">if</strong> (!nestedContent.trim().isEmpty()) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 						<strong class="jxr_keyword">if</strong> (! nestedContent.trim().isEmpty()) {
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 							token.setNested(tokenize(nestedContent));
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 						}
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 						tokens.add(token);
@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<em class="jxr_comment">// Add final token if we have content, or if input ended with comma, or if no tokens yet</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> finalValue = currentValue.toString().trim();
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">if</strong> (!finalValue.isEmpty() || lastWasComma || tokens.isEmpty()) {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">if</strong> (! finalValue.isEmpty() || lastWasComma || tokens.isEmpty()) {
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			tokens.add(<strong class="jxr_keyword">new</strong> Token(finalValue));
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		}
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 

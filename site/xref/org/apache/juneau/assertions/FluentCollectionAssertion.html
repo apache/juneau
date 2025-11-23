@@ -197,7 +197,7 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">if</strong> (test == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		value().forEach(x -&gt; {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">if</strong> (!test.test(x))
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">if</strong> (! test.test(x))
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 				<strong class="jxr_keyword">throw</strong> error(MSG_collectionDidNotContainTestedValue, value());
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		});
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">return</strong> returns();
@@ -240,7 +240,7 @@
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">public</strong> R isEmpty() <strong class="jxr_keyword">throws</strong> AssertionError {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">if</strong> (!value().isEmpty())
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">if</strong> (! value().isEmpty())
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_collectionWasNotEmpty);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}

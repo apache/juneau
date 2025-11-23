@@ -358,7 +358,7 @@
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 		assertArgNotNull(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> s = orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> substring : values)
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">if</strong> (nn(substring) &amp;&amp; !StringUtils.contains(s, substring))
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">if</strong> (nn(substring) &amp;&amp; ! contains(s, substring))
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 				<strong class="jxr_keyword">throw</strong> error(MSG_stringDidNotContainExpectedSubstring, fix(substring), fix(s));
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
@@ -371,7 +371,7 @@
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">public</strong> R isEmpty() <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> s = orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">if</strong> (nn(s) &amp;&amp; !s.isEmpty())
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">if</strong> (nn(s) &amp;&amp; ! s.isEmpty())
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringWasNotEmpty, fix(s));
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 	}
@@ -386,7 +386,7 @@
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 	<strong class="jxr_keyword">public</strong> R isEndsWith(String string) {
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertArgNotNull(<span class="jxr_string">"string"</span>, string);
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">var</strong> s = value();
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">if</strong> (!s.endsWith(string))
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">if</strong> (! s.endsWith(string))
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringDidNotEndWithExpected, fix(string), fix(s));
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
@@ -429,7 +429,7 @@
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<strong class="jxr_keyword">public</strong> R isLines(String...lines) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertArgNotNull(<span class="jxr_string">"lines"</span>, lines);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> v = StringUtils.join(lines, '\n');
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> v = join(lines, '\n');
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">var</strong> s = value();
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">if</strong> (ne(v, s))
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
@@ -448,7 +448,7 @@
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 	<strong class="jxr_keyword">public</strong> R isMatches(String searchPattern) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		assertArgNotNull(<span class="jxr_string">"searchPattern"</span>, searchPattern);
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">return</strong> isPattern(StringUtils.getMatchPattern(searchPattern));
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">return</strong> isPattern(getMatchPattern(searchPattern));
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 	}
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -477,7 +477,7 @@
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 		assertArgNotNull(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">var</strong> s = orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> substring : values)
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			<strong class="jxr_keyword">if</strong> (nn(substring) &amp;&amp; StringUtils.contains(s, substring))
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			<strong class="jxr_keyword">if</strong> (nn(substring) &amp;&amp; contains(s, substring))
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 				<strong class="jxr_keyword">throw</strong> error(MSG_stringContainedUnexpectedSubstring, fix(substring), fix(s));
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
@@ -521,7 +521,7 @@
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 	<strong class="jxr_keyword">public</strong> R isPattern(Pattern pattern) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 		assertArgNotNull(<span class="jxr_string">"pattern"</span>, pattern);
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<strong class="jxr_keyword">var</strong> s = value();
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		<strong class="jxr_keyword">if</strong> (!pattern.matcher(s).matches())
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		<strong class="jxr_keyword">if</strong> (! pattern.matcher(s).matches())
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringDidNotMatchExpectedPattern, fix(pattern.pattern()), fix(s));
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 	}
@@ -549,7 +549,7 @@
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		assertArgNotNull(<span class="jxr_string">"regex"</span>, regex);
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">var</strong> p = Pattern.compile(regex, flags);
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">var</strong> s = value();
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		<strong class="jxr_keyword">if</strong> (!p.matcher(s).matches())
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		<strong class="jxr_keyword">if</strong> (! p.matcher(s).matches())
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringDidNotMatchExpectedPattern, fix(regex), fix(s));
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 	}
@@ -580,7 +580,7 @@
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		assertArgNotNull(<span class="jxr_string">"lines"</span>, lines);
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<em class="jxr_comment">// Must work for windows too.</em>
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">var</strong> e = StringUtils.join(lines, '\n').trim().split(<span class="jxr_string">"[\r\n]+"</span>);
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">var</strong> e = join(lines, '\n').trim().split(<span class="jxr_string">"[\r\n]+"</span>);
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">var</strong> a = value().trim().split(<span class="jxr_string">"[\r\n]+"</span>);
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 		<strong class="jxr_keyword">if</strong> (e.length != a.length)
@@ -590,7 +590,7 @@
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 		Arrays.sort(a);
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; e.length; i++)
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 			<strong class="jxr_keyword">if</strong> (!e[i].equals(a[i]))
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 			<strong class="jxr_keyword">if</strong> (! e[i].equals(a[i]))
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 				<strong class="jxr_keyword">throw</strong> error(MSG_expectedStringHadDifferentValuesAtLine, i + 1, e[i], a[i]);
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">return</strong> returns();
@@ -606,7 +606,7 @@
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 	<strong class="jxr_keyword">public</strong> R isStartsWith(String string) {
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 		assertArgNotNull(<span class="jxr_string">"string"</span>, string);
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<strong class="jxr_keyword">var</strong> s = value();
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">if</strong> (!s.startsWith(string))
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">if</strong> (! s.startsWith(string))
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringDidNotStartWithExpected, fix(string), fix(s));
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 	}

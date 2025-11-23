@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAccessible() {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">boolean</strong>) AccessibleObject.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"isAccessible"</span>).invoke(<strong class="jxr_keyword">inner</strong>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">boolean</strong>)AccessibleObject.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"isAccessible"</span>).invoke(<strong class="jxr_keyword">inner</strong>);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception ex) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		}

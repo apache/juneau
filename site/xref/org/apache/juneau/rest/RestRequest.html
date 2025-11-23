@@ -494,9 +494,9 @@
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<em class="jxr_comment">// Determine charset</em>
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 			<em class="jxr_comment">// NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.</em>
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<em class="jxr_comment">// Jetty returns the default charset instead of null if the character is not specified on the request.</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			String h = getHeaderParam(<span class="jxr_string">"Content-Type"</span>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">var</strong> h = getHeaderParam(<span class="jxr_string">"Content-Type"</span>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 			<strong class="jxr_keyword">if</strong> (nn(h)) {
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 				<strong class="jxr_keyword">int</strong> i = h.indexOf(<span class="jxr_string">";charset="</span>);
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 				<strong class="jxr_keyword">var</strong> i = h.indexOf(<span class="jxr_string">";charset="</span>);
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 				<strong class="jxr_keyword">if</strong> (i &gt; 0)
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 					charset = Charset.forName(h.substring(i + 9).trim());
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 			}
@@ -938,9 +938,9 @@
 <a class="jxr_linenumber" name="L930" href="#L930">930</a> 
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">var</strong> swagger = getSwagger();
 <a class="jxr_linenumber" name="L932" href="#L932">932</a> 		<strong class="jxr_keyword">if</strong> (! swagger.isPresent())
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 			<strong class="jxr_keyword">return</strong> Optional.empty();
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 			<strong class="jxr_keyword">return</strong> opte();
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> 
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		<strong class="jxr_keyword">return</strong> ofNullable(swagger.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		<strong class="jxr_keyword">return</strong> opt(swagger.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
 <a class="jxr_linenumber" name="L936" href="#L936">936</a> 	}
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1177,7 +1177,7 @@
 <a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 					HttpPartParserSession pp = pm.getParser(getPartParserSession());
 <a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 					HttpPartSchema schema = pm.getSchema();
 <a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 					String name = pm.getPartName();
-<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 					ClassMeta&lt;?&gt; type = bs.getClassMeta(method.getGenericReturnType());
+<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 					<strong class="jxr_keyword">var</strong> type = bs.getClassMeta(method.getGenericReturnType());
 <a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 					HttpPartType pt = pm.getPartType();
 <a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 					<strong class="jxr_keyword">if</strong> (pt == HttpPartType.BODY)
 <a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 						<strong class="jxr_keyword">return</strong> getContent().setSchema(schema).as(type);
@@ -1280,7 +1280,7 @@
 <a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 		<strong class="jxr_keyword">var</strong> tz = headers.get(<span class="jxr_string">"Time-Zone"</span>).asString().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 		<strong class="jxr_keyword">if</strong> (nn(tz))
 <a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 			<strong class="jxr_keyword">return</strong> opt(TimeZone.getTimeZone(tz));
-<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 		<strong class="jxr_keyword">return</strong> Optional.empty();
+<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 		<strong class="jxr_keyword">return</strong> opte();
 <a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 	}
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1502,7 +1502,7 @@
 <a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"\n"</span>).append(getRequestLine()).append(<span class="jxr_string">"\n"</span>);
 <a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 		sb.append(<span class="jxr_string">"---Headers---\n"</span>);
 <a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 		getHeaders().forEach(x -&gt; sb.append(<span class="jxr_string">"\t"</span>).append(x).append(<span class="jxr_string">"\n"</span>));
-<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 		String m = getMethod();
+<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 		<strong class="jxr_keyword">var</strong> m = getMethod();
 <a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 		<strong class="jxr_keyword">if</strong> (m.equals(<span class="jxr_string">"PUT"</span>) || m.equals(<span class="jxr_string">"POST"</span>)) {
 <a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 				sb.append(<span class="jxr_string">"---Content UTF-8---\n"</span>);

@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">if</strong> (pairs == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			pairs = <strong class="jxr_keyword">new</strong> String[0];
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertArg(pairs.length % 2 == 0, <span class="jxr_string">"Odd number of parameters passed into PartList.ofPairs()"</span>);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pairs.length; i += 2)
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; pairs.length; i += 2)
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			x.add(BasicPart.of(pairs[i], pairs[i + 1]));
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
@@ -319,7 +319,7 @@
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		String name = PartBeanMeta.of(type).getSchema().getName();
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> name = PartBeanMeta.of(type).getSchema().getName();
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertArg(isNotNull(name), <span class="jxr_string">"Part name could not be found on bean type ''{0}''"</span>, cn(type));
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">return</strong> get(name, type);
@@ -882,7 +882,7 @@
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> 		forEach(p -&gt; {
 <a class="jxr_linenumber" name="L876" href="#L876">876</a> 			<strong class="jxr_keyword">if</strong> (nn(p)) {
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 				String v = p.getValue();
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 				<strong class="jxr_keyword">var</strong> v = p.getValue();
 <a class="jxr_linenumber" name="L878" href="#L878">878</a> 				<strong class="jxr_keyword">if</strong> (nn(v)) {
 <a class="jxr_linenumber" name="L879" href="#L879">879</a> 					<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0)
 <a class="jxr_linenumber" name="L880" href="#L880">880</a> 						sb.append(<span class="jxr_string">"&amp;"</span>);
@@ -903,7 +903,7 @@
 <a class="jxr_linenumber" name="L895" href="#L895">895</a> 	}
 <a class="jxr_linenumber" name="L896" href="#L896">896</a> 
 <a class="jxr_linenumber" name="L897" href="#L897">897</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> eq(String s1, String s2) {
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		<strong class="jxr_keyword">return</strong> Utils.eq(caseInsensitive, s1, s2);
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		<strong class="jxr_keyword">return</strong> Utils.eq(caseInsensitive, s1, s2);  <em class="jxr_comment">// NOAI</em>
 <a class="jxr_linenumber" name="L899" href="#L899">899</a> 	}
 <a class="jxr_linenumber" name="L900" href="#L900">900</a> 
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> 	<strong class="jxr_keyword">private</strong> Supplier&lt;Object&gt; resolver(Object input) {
@@ -911,8 +911,8 @@
 <a class="jxr_linenumber" name="L903" href="#L903">903</a> 	}
 <a class="jxr_linenumber" name="L904" href="#L904">904</a> 
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object unwrap(Object o) {
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">while</strong> (o instanceof Supplier)
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 			o = ((Supplier&lt;?&gt;)o).get();
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">while</strong> (o instanceof Supplier&lt;?&gt; s)
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 			o = s.get();
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">return</strong> o;
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 	}
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> }

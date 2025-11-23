@@ -149,12 +149,12 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">if</strong> (index.length == 1)
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">return</strong> getChild(index[0]);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		Object c = <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> element : index) {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">if</strong> (c instanceof <a name="HtmlElementMixed" href="../../../../../org/apache/juneau/bean/html5/HtmlElementMixed.html#HtmlElementMixed">HtmlElementMixed</a> x)
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				c = x.getChild(element);
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c instanceof <a name="HtmlElementContainer" href="../../../../../org/apache/juneau/bean/html5/HtmlElementContainer.html#HtmlElementContainer">HtmlElementContainer</a> x)
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 				c = x.getChild(element);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	Object c = <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> element : index) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">if</strong> (c instanceof <a name="HtmlElementMixed" href="../../../../../org/apache/juneau/bean/html5/HtmlElementMixed.html#HtmlElementMixed">HtmlElementMixed</a> c2)
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			c = c2.getChild(element);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c instanceof <a name="HtmlElementContainer" href="../../../../../org/apache/juneau/bean/html5/HtmlElementContainer.html#HtmlElementContainer">HtmlElementContainer</a> c2)
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			c = c2.getChild(element);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		}

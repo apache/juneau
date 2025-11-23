@@ -72,9 +72,9 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getUtf8ByteLength(CharSequence cs) {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">int</strong> count = 0;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> count = 0;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, len = cs.length(); i &lt; len; i++) {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">char</strong> ch = cs.charAt(i);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">var</strong> ch = cs.charAt(i);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">if</strong> (ch &lt;= 0x7F) {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  				count++;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ch &lt;= 0x7FF) {
@@ -90,9 +90,9 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> writeUtf8To(CharSequence in, OutputStream out) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">int</strong> count = 0;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> count = 0;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, len = in.length(); i &lt; len; i++) {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">int</strong> c = (in.charAt(i) &amp; 0xFFFF);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">var</strong> c = (in.charAt(i) &amp; 0xFFFF);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">if</strong> (c &lt;= 0x7F) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  				write((byte)(c &amp; 0xFF));
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  				count++;
@@ -323,7 +323,7 @@
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * Appends a generic Number to the stream.</em>
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 	MsgPackOutputStream appendNumber(Number n) {
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		Class&lt;?&gt; c = n.getClass();
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> c = n.getClass();
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">if</strong> (c == Integer.<strong class="jxr_keyword">class</strong> || c == Short.<strong class="jxr_keyword">class</strong> || c == Byte.<strong class="jxr_keyword">class</strong> || c == AtomicInteger.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">return</strong> appendInt(n.intValue());
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">if</strong> (c == Long.<strong class="jxr_keyword">class</strong> || c == AtomicLong.<strong class="jxr_keyword">class</strong>)

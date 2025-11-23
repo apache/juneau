@@ -211,16 +211,16 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			};
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		}
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<strong class="jxr_keyword">var</strong> ici = info(ic);
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<strong class="jxr_keyword">var</strong> oci = info(oc);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">var</strong> ici = info(ic);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">var</strong> oci = info(oc);
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		ClassInfo pic = ici.getAllParents().stream().filter(x -&gt; nn(m.get(x.<strong class="jxr_keyword">inner</strong>()))).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">var</strong> pic = ici.getAllParents().stream().filter(x -&gt; nn(m.get(x.<strong class="jxr_keyword">inner</strong>()))).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">if</strong> (nn(pic))
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">return</strong> m.get(pic.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">if</strong> (ic == String.<strong class="jxr_keyword">class</strong>) {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		Class&lt;?&gt; oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> oc2i = info(oc2);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">var</strong> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">var</strong> oc2i = info(oc2);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">final</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> createMethod = oc2i.getPublicMethod(

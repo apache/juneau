@@ -110,8 +110,8 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="ResponseProcessor" href="../../../../../org/apache/juneau/rest/processor/ResponseProcessor.html#ResponseProcessor">ResponseProcessor</a> instantiate(Object o, <a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> bs) {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="ResponseProcessor" href="../../../../../org/apache/juneau/rest/processor/ResponseProcessor.html#ResponseProcessor">ResponseProcessor</a>)
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<strong class="jxr_keyword">return</strong> (<a name="ResponseProcessor" href="../../../../../org/apache/juneau/rest/processor/ResponseProcessor.html#ResponseProcessor">ResponseProcessor</a>)o;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="ResponseProcessor" href="../../../../../org/apache/juneau/rest/processor/ResponseProcessor.html#ResponseProcessor">ResponseProcessor</a> o2)
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<strong class="jxr_keyword">return</strong> o2;
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">return</strong> bs.createBean(ResponseProcessor.<strong class="jxr_keyword">class</strong>).type((Class&lt;?&gt;)o).run();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {

@@ -246,7 +246,7 @@
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> R isEmpty() <strong class="jxr_keyword">throws</strong> AssertionError {
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">if</strong> (!value().isEmpty())
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">if</strong> (! value().isEmpty())
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_mapWasNotEmpty);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 	}
@@ -259,7 +259,7 @@
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<strong class="jxr_keyword">public</strong> R isNotContainsKey(String name) <strong class="jxr_keyword">throws</strong> AssertionError {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">if</strong> (!value().containsKey(name))
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">if</strong> (! value().containsKey(name))
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">throw</strong> error(MSG_mapContainedUnexpectedKey, name, value());
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 	}

@@ -229,12 +229,12 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@Override <em class="jxr_comment">/* Overridden from HttpPartParser */</em>
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T parse(<a name="HttpPartType" href="../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType, <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, String in, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> ParseException, <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">if</strong> (partType == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			partType = HttpPartType.OTHER;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">if</strong> (partType == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		partType = HttpPartType.OTHER;
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">boolean</strong> isOptional = type.isOptional();
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">var</strong> isOptional = type.isOptional();
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">while</strong> (nn(type) &amp;&amp; type.isOptional())
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<strong class="jxr_keyword">while</strong> (nn(type) &amp;&amp; type.isOptional())
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 			type = (ClassMeta&lt;T&gt;)type.getElementType();
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">null</strong>)
@@ -262,25 +262,25 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			in = schema.getDefault();
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;)type.getSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;)type.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			ClassMeta&lt;?&gt; sType = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">if</strong> (nn(builder))
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;)type.getSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;)type.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">var</strong> sType = (ClassMeta&lt;?&gt;)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">if</strong> (nn(builder))
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 				sType = builder.getBuilderClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(swap))
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 				sType = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 				sType = type;
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (sType.isOptional())
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				<strong class="jxr_keyword">return</strong> (T)opt(parseInner(partType, schema, in, sType.getElementType()));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">if</strong> (sType.isOptional())
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">return</strong> (T)opt(parseInner(partType, schema, in, sType.getElementType()));
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			HttpPartDataType t = schema.getType(sType);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">if</strong> (partType == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				partType = HttpPartType.OTHER;
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">var</strong> t = schema.getType(sType);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">if</strong> (partType == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			partType = HttpPartType.OTHER;
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			HttpPartFormat f = schema.getFormat(sType);
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">if</strong> (f == HttpPartFormat.NO_FORMAT)
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">var</strong> f = schema.getFormat(sType);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">if</strong> (f == HttpPartFormat.NO_FORMAT)
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 				f = ctx.getFormat();
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">if</strong> (t == STRING) {
@@ -362,25 +362,25 @@
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parse(partType, schema, in, type);
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 				<strong class="jxr_keyword">return</strong> toType(<strong class="jxr_keyword">super</strong>.parse(partType, schema, in, CM_Double), type);
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t == ARRAY) {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t == ARRAY) {
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 				HttpPartCollectionFormat cf = schema.getCollectionFormat();
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 				<strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 					cf = ctx.getCollectionFormat();
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">var</strong> cf = schema.getCollectionFormat();
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 				cf = ctx.getCollectionFormat();
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 				<strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.UONC)
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parse(partType, schema, in, type);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.UONC)
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parse(partType, schema, in, type);
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 				<strong class="jxr_keyword">if</strong> (type.isObject())
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 					type = (ClassMeta&lt;T&gt;)CM_JsonList;
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">if</strong> (type.isObject())
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				type = (ClassMeta&lt;T&gt;)CM_JsonList;
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 				ClassMeta&lt;?&gt; eType = type.isObject() ? string() : type.getElementType();
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 				<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 					eType = schema.getParsedType().getElementType();
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 				<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 					eType = string();
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<strong class="jxr_keyword">var</strong> eType = type.isObject() ? string() : type.getElementType();
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 				eType = schema.getParsedType().getElementType();
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				eType = string();
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 				String[] ss = {};
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">var</strong> ss = <strong class="jxr_keyword">new</strong> String[]{};
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 				<strong class="jxr_keyword">if</strong> (cf == MULTI)
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 					ss = a(in);
@@ -400,32 +400,32 @@
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 					ss = StringUtils.splita(in, ',');
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 				}
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 				HttpPartSchema items = schema.getItems();
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 				<strong class="jxr_keyword">if</strong> (items == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 					items = HttpPartSchema.DEFAULT;
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 				Object o = Array.newInstance(eType.getInnerClass(), ss.length);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ss.length; i++)
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">var</strong> items = schema.getItems();
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">if</strong> (items == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 				items = HttpPartSchema.DEFAULT;
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">var</strong> o = Array.newInstance(eType.getInnerClass(), ss.length);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ss.length; i++)
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 					Array.set(o, i, parse(partType, items, ss[i], eType));
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 				<strong class="jxr_keyword">if</strong> (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 					<strong class="jxr_keyword">return</strong> toType(toType(o, schema.getParsedType()), type);
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 				<strong class="jxr_keyword">return</strong> toType(o, type);
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t == OBJECT) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t == OBJECT) {
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 				HttpPartCollectionFormat cf = schema.getCollectionFormat();
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 				<strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 					cf = ctx.getCollectionFormat();
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">var</strong> cf = schema.getCollectionFormat();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 				cf = ctx.getCollectionFormat();
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 				<strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.UONC)
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parse(partType, schema, in, type);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.UONC)
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parse(partType, schema, in, type);
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 				<strong class="jxr_keyword">if</strong> (type.isObject())
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					type = (ClassMeta&lt;T&gt;)CM_JsonMap;
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			<strong class="jxr_keyword">if</strong> (type.isObject())
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 				type = (ClassMeta&lt;T&gt;)CM_JsonMap;
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 				<strong class="jxr_keyword">if</strong> (! type.isMapOrBean())
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid type {0} for part type OBJECT."</span>, type);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">if</strong> (! type.isMapOrBean())
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid type {0} for part type OBJECT."</span>, type);
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 				String[] ss = {};
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">var</strong> ss = <strong class="jxr_keyword">new</strong> String[]{};
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 				<strong class="jxr_keyword">if</strong> (cf == MULTI)
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 					ss = a(in);
@@ -445,15 +445,15 @@
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 					ss = StringUtils.splita(in, ',');
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 				}
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 				<strong class="jxr_keyword">if</strong> (type.isBean()) {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 					BeanMap&lt;T&gt; m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : ss) {
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 					String[] kv = StringUtils.splita(s, '=', 2);
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					<strong class="jxr_keyword">if</strong> (kv.length != 2)
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid input {0} for part type OBJECT."</span>, in);
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 					<strong class="jxr_keyword">var</strong> key = kv[0];
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 					<strong class="jxr_keyword">var</strong> value = kv[1];
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 					BeanPropertyMeta bpm = m.getPropertyMeta(key);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">if</strong> (type.isBean()) {
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 				<strong class="jxr_keyword">var</strong> m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : ss) {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 						<strong class="jxr_keyword">var</strong> kv = StringUtils.splita(s, '=', 2);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 						<strong class="jxr_keyword">if</strong> (kv.length != 2)
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid input {0} for part type OBJECT."</span>, in);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 						<strong class="jxr_keyword">var</strong> key = kv[0];
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 						<strong class="jxr_keyword">var</strong> value = kv[1];
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 						<strong class="jxr_keyword">var</strong> bpm = m.getPropertyMeta(key);
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 						<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong> &amp;&amp; ! isIgnoreUnknownBeanProperties())
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid input {0} for part type OBJECT.  Cannot find property {1}"</span>, in, key);
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 						m.put(key, parse(partType, schema.getProperty(key), value, ((ClassMeta&lt;T&gt;)(bpm == <strong class="jxr_keyword">null</strong> ? object() : bpm.getClassMeta()))));
@@ -461,24 +461,24 @@
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 					<strong class="jxr_keyword">return</strong> m.getBean();
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 				}
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				ClassMeta&lt;?&gt; eType = type.isObject() ? string() : type.getValueType();
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 				<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 					eType = schema.getParsedType().getValueType();
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 				<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 					eType = string();
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">var</strong> eType = type.isObject() ? string() : type.getValueType();
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 				eType = schema.getParsedType().getValueType();
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 				eType = string();
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 					<strong class="jxr_keyword">var</strong> m = (Map&lt;String,Object&gt;)type.newInstance();
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 					<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 						m = JsonMap.create();
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : ss) {
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 					String[] kv = StringUtils.splita(s, '=', 2);
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 					<strong class="jxr_keyword">if</strong> (kv.length != 2)
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid input {0} for part type OBJECT."</span>, in);
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 					<strong class="jxr_keyword">var</strong> key = kv[0];
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 					<strong class="jxr_keyword">var</strong> value = kv[1];
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 					m.put(key, parse(partType, schema.getProperty(key), value, eType));
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : ss) {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 						<strong class="jxr_keyword">var</strong> kv = StringUtils.splita(s, '=', 2);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 						<strong class="jxr_keyword">if</strong> (kv.length != 2)
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid input {0} for part type OBJECT."</span>, in);
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 						<strong class="jxr_keyword">var</strong> key = kv[0];
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 						<strong class="jxr_keyword">var</strong> value = kv[1];
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 						m.put(key, parse(partType, schema.getProperty(key), value, eType));
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 					}
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 					<strong class="jxr_keyword">return</strong> (T)m;
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 				} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {

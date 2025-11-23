@@ -141,10 +141,10 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">public</strong> Appendable append(Appendable a, Object o) {
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			String uri = s(o);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			uri = nullIfEmpty(uri);
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">boolean</strong> needsNormalize = hasDotSegments(uri) &amp;&amp; nn(resolution);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> uri = s(o);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		uri = nullIfEmpty(uri);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> needsNormalize = hasDotSegments(uri) &amp;&amp; nn(resolution);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<em class="jxr_comment">// Absolute paths are not changed.</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">if</strong> (isAbsoluteUri(uri))
@@ -154,7 +154,7 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">if</strong> (resolution == ROOT_RELATIVE &amp;&amp; startsWith(uri, '/'))
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">return</strong> a.append(needsNormalize ? normalize(uri) : uri);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			Appendable a2 = needsNormalize ? <strong class="jxr_keyword">new</strong> StringBuilder() : a;
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">var</strong> a2 = needsNormalize ? <strong class="jxr_keyword">new</strong> StringBuilder() : a;
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<em class="jxr_comment">// Root-relative path</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">if</strong> (startsWith(uri, '/')) {
@@ -170,11 +170,11 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(uri) &amp;&amp; uri.startsWith(<span class="jxr_string">"context:"</span>)) {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 				<strong class="jxr_keyword">if</strong> (resolution == ABSOLUTE &amp;&amp; nn(authority))
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 					a2.append(authority);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 				<strong class="jxr_keyword">boolean</strong> hasContext = nn(contextRoot) &amp;&amp; ! contextRoot.isEmpty();
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 				<strong class="jxr_keyword">var</strong> hasContext = nn(contextRoot) &amp;&amp; ! contextRoot.isEmpty();
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">if</strong> (hasContext)
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 					a2.append('/').append(contextRoot);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">if</strong> (uri.length() &gt; 8) {
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 					String remainder = uri.substring(8);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 					<strong class="jxr_keyword">var</strong> remainder = uri.substring(8);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 					<em class="jxr_comment">// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else</em>
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 					<strong class="jxr_keyword">if</strong> (remainder.equals(<span class="jxr_string">"/"</span>) &amp;&amp; (hasContext || (resolution == ABSOLUTE &amp;&amp; nn(authority)))) {
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 						<em class="jxr_comment">// Do nothing</em>
@@ -191,14 +191,14 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(uri) &amp;&amp; uri.startsWith(<span class="jxr_string">"servlet:"</span>)) {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				<strong class="jxr_keyword">if</strong> (resolution == ABSOLUTE &amp;&amp; nn(authority))
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 					a2.append(authority);
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 				<strong class="jxr_keyword">boolean</strong> hasContext = nn(contextRoot) &amp;&amp; ! contextRoot.isEmpty();
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				<strong class="jxr_keyword">boolean</strong> hasServlet = nn(servletPath) &amp;&amp; ! servletPath.isEmpty();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 				<strong class="jxr_keyword">var</strong> hasContext = nn(contextRoot) &amp;&amp; ! contextRoot.isEmpty();
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				<strong class="jxr_keyword">var</strong> hasServlet = nn(servletPath) &amp;&amp; ! servletPath.isEmpty();
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<strong class="jxr_keyword">if</strong> (hasContext)
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 					a2.append('/').append(contextRoot);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 				<strong class="jxr_keyword">if</strong> (hasServlet)
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 					a2.append('/').append(servletPath);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 				<strong class="jxr_keyword">if</strong> (uri.length() &gt; 8) {
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 					String remainder = uri.substring(8);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 					<strong class="jxr_keyword">var</strong> remainder = uri.substring(8);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 					<em class="jxr_comment">// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 					<strong class="jxr_keyword">if</strong> (remainder.equals(<span class="jxr_string">"/"</span>) &amp;&amp; (hasContext || hasServlet || (resolution == ABSOLUTE &amp;&amp; nn(authority)))) {
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 						<em class="jxr_comment">// Do nothing</em>
@@ -215,9 +215,9 @@
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(uri) &amp;&amp; uri.startsWith(<span class="jxr_string">"request:"</span>)) {
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 				<strong class="jxr_keyword">if</strong> (resolution == ABSOLUTE &amp;&amp; nn(authority))
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 					a2.append(authority);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">boolean</strong> hasContext = nn(contextRoot) &amp;&amp; ! contextRoot.isEmpty();
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 				<strong class="jxr_keyword">boolean</strong> hasServlet = nn(servletPath) &amp;&amp; ! servletPath.isEmpty();
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 				<strong class="jxr_keyword">boolean</strong> hasPath = nn(pathInfo) &amp;&amp; ! pathInfo.isEmpty();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">var</strong> hasContext = nn(contextRoot) &amp;&amp; ! contextRoot.isEmpty();
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 				<strong class="jxr_keyword">var</strong> hasServlet = nn(servletPath) &amp;&amp; ! servletPath.isEmpty();
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 				<strong class="jxr_keyword">var</strong> hasPath = nn(pathInfo) &amp;&amp; ! pathInfo.isEmpty();
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 				<strong class="jxr_keyword">if</strong> (hasContext)
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 					a2.append('/').append(contextRoot);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 				<strong class="jxr_keyword">if</strong> (hasServlet)
@@ -225,7 +225,7 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 				<strong class="jxr_keyword">if</strong> (hasPath)
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 					a2.append('/').append(pathInfo);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 				<strong class="jxr_keyword">if</strong> (uri.length() &gt; 8) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 					String remainder = uri.substring(8);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 					<strong class="jxr_keyword">var</strong> remainder = uri.substring(8);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 					<em class="jxr_comment">// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 					<strong class="jxr_keyword">if</strong> (remainder.equals(<span class="jxr_string">"/"</span>) &amp;&amp; (hasContext || hasServlet || hasPath || (resolution == ABSOLUTE &amp;&amp; nn(authority)))) {
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 						<em class="jxr_comment">// Do nothing</em>
@@ -289,8 +289,8 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * @return The relativized URI.</em>
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">public</strong> String relativize(Object relativeTo, Object uri) {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		String r = resolve(relativeTo, ABSOLUTE);
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		String s = resolve(uri, ABSOLUTE);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">var</strong> r = resolve(relativeTo, ABSOLUTE);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">var</strong> s = resolve(uri, ABSOLUTE);
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">return</strong> URI.create(r).relativize(URI.create(s)).toString();
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 	}
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 
@@ -329,7 +329,7 @@
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 	}
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<strong class="jxr_keyword">private</strong> String resolve(Object uri, <a name="UriResolution" href="../../../org/apache/juneau/UriResolution.html#UriResolution">UriResolution</a> res) {
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		String s = s(uri);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> s = s(uri);
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">if</strong> (isAbsoluteUri(s))
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">return</strong> hasDotSegments(s) &amp;&amp; res != NONE ? normalize(s) : s;
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">if</strong> (res == ROOT_RELATIVE &amp;&amp; startsWith(s, '/'))

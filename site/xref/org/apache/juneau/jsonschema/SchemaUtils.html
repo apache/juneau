@@ -69,8 +69,8 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (o instanceof String[])
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			o = joinnl((String[])o);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (o instanceof String) {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			String s = o.toString();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (o instanceof String o2) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			String s = o2.toString();
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">if</strong> (s.isEmpty())
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"IGNORE"</span>.equalsIgnoreCase(s))
@@ -79,8 +79,8 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  				s = <span class="jxr_string">"{"</span> + s + <span class="jxr_string">"}"</span>;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">return</strong> JsonMap.ofJson(s);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		}
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">return</strong> (<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)o;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> o2)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">return</strong> o2;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Unexpected data type ''{0}''.  Expected JsonMap or String."</span>, cn(o));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  

@@ -82,10 +82,10 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">		 * Constructor.</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">		 * @param value The header part value.</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">		*/</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">public</strong> Part(String value) {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">this</strong>.value = value;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">int</strong> i = value.indexOf(';');
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">var</strong> i = value.indexOf(';');
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">this</strong>.className = urlDecode(i == -1 ? value.trim() : value.substring(0, i).trim());
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">this</strong>.message = urlDecode(i == -1 ? <strong class="jxr_keyword">null</strong> : value.substring(i + 1).trim());
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		}

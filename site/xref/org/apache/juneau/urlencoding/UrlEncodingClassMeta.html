@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">public</strong> <a name="UrlEncodingClassMeta" href="../../../../org/apache/juneau/urlencoding/UrlEncodingClassMeta.html#UrlEncodingClassMeta">UrlEncodingClassMeta</a>(ClassMeta&lt;?&gt; cm, <a name="UrlEncodingMetaProvider" href="../../../../org/apache/juneau/urlencoding/UrlEncodingMetaProvider.html#UrlEncodingMetaProvider">UrlEncodingMetaProvider</a> mp) {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">super</strong>(cm);
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		Value&lt;Boolean&gt; expandedParams = Value.empty();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">var</strong> expandedParams = Value.&lt;Boolean&gt;empty();
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		cm.forEachAnnotation(UrlEncoding.<strong class="jxr_keyword">class</strong>, UrlEncoding::expandedParams, x -&gt; expandedParams.set(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">this</strong>.expandedParams = expandedParams.orElse(false);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}

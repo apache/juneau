@@ -761,7 +761,7 @@
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 			<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 		String typeName = o.toString();
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		ClassMeta&lt;?&gt; cm = getClassMeta(typeName, pMeta, eType);
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">var</strong> cm = getClassMeta(typeName, pMeta, eType);
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">if</strong> (nn(cm)) {
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 			BeanMap&lt;?&gt; bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
@@ -770,8 +770,8 @@
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 			m.forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 				<strong class="jxr_keyword">if</strong> (! k.equals(btpn)) {
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> 					<em class="jxr_comment">// Attempt to recursively cast child maps.</em>
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 					<strong class="jxr_keyword">if</strong> (v instanceof <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 						v = <strong class="jxr_keyword">cast</strong>((<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)v, pMeta, eType);
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 					<strong class="jxr_keyword">if</strong> (v instanceof <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> v2)
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 						v = <strong class="jxr_keyword">cast</strong>(v2, pMeta, eType);
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 					bm.put(k, v);
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> 				}
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> 			});
@@ -794,7 +794,7 @@
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"cast"</span> })
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T convertAttrToType(Object <strong class="jxr_keyword">outer</strong>, String s, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -802,7 +802,7 @@
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 		<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 			type = (ClassMeta&lt;T&gt;)object();
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 		ObjectSwap swap = type.getSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		ClassMeta&lt;?&gt; sType = swap == <strong class="jxr_keyword">null</strong> ? type : swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		<strong class="jxr_keyword">var</strong> sType = swap == <strong class="jxr_keyword">null</strong> ? type : swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> 
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> 		Object o = s;
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> 		<strong class="jxr_keyword">if</strong> (sType.isChar())

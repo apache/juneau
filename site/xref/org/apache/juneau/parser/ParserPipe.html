@@ -117,8 +117,8 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">this</strong>.autoCloseStreams = autoCloseStreams;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">this</strong>.unbuffered = unbuffered;
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">this</strong>.charset = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">if</strong> (input instanceof CharSequence)
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">this</strong>.inputString = input.toString();
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">if</strong> (input instanceof CharSequence input2)
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">this</strong>.inputString = input2.toString();
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">this</strong>.binaryFormat = binaryFormat;
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 
@@ -156,8 +156,8 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">if</strong> (cs == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			cs = (isFile ? Charset.defaultCharset() : UTF8);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">this</strong>.charset = cs;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">if</strong> (input instanceof CharSequence)
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">this</strong>.inputString = input.toString();
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">if</strong> (input instanceof CharSequence cs2)
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">this</strong>.inputString = cs2.toString();
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">this</strong>.binaryFormat = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
@@ -217,13 +217,13 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">if</strong> (input == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">if</strong> (input instanceof InputStream) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">if</strong> (input instanceof InputStream input2) {
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">if</strong> (debug) {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				byte[] b = readBytes((InputStream)input);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				byte[] b = readBytes(input2);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 				inputString = toHex(b);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 				inputStream = <strong class="jxr_keyword">new</strong> ByteArrayInputStream(b);
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				inputStream = (InputStream)input;
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				inputStream = input2;
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 				doClose = autoCloseStreams;
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			}
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof byte[]) {
@@ -231,17 +231,17 @@
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 				inputString = toHex((byte[])input);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 			inputStream = <strong class="jxr_keyword">new</strong> ByteArrayInputStream((byte[])input);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 			doClose = false;
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof String) {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			inputString = (String)input;
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			inputStream = <strong class="jxr_keyword">new</strong> ByteArrayInputStream(convertFromString((String)input));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof String input2) {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			inputString = input2;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			inputStream = <strong class="jxr_keyword">new</strong> ByteArrayInputStream(convertFromString(input2));
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 			doClose = false;
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof File) {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof File input2) {
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">if</strong> (debug) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				byte[] b = readBytes((File)input);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				byte[] b = readBytes(input2);
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 				inputString = toHex(b);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 				inputStream = <strong class="jxr_keyword">new</strong> ByteArrayInputStream(b);
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				inputStream = <strong class="jxr_keyword">new</strong> FileInputStream((File)input);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				inputStream = <strong class="jxr_keyword">new</strong> FileInputStream(input2);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 				doClose = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			}
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		} <strong class="jxr_keyword">else</strong> {
@@ -260,8 +260,8 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">public</strong> <a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a> getParserReader() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">if</strong> (input == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (input instanceof <a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a>)
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			parserReader = (<a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a>)input;
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (input instanceof <a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a> input2)
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			parserReader = input2;
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 			parserReader = <strong class="jxr_keyword">new</strong> <a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">return</strong> parserReader;
@@ -280,21 +280,21 @@
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">if</strong> (input == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">if</strong> (input instanceof Reader) {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">if</strong> (input instanceof Reader input2) {
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">if</strong> (debug) {
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				inputString = read((Reader)input);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				inputString = read(input2);
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 				reader = <strong class="jxr_keyword">new</strong> StringReader(inputString);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 				reader = (Reader)input;
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 				reader = input2;
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 				doClose = autoCloseStreams;
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			}
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof CharSequence) {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			inputString = input.toString();
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof CharSequence input2) {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			inputString = input2.toString();
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			reader = <strong class="jxr_keyword">new</strong> <a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			doClose = false;
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof InputStream || input instanceof byte[]) {
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 			doClose = input instanceof InputStream &amp;&amp; autoCloseStreams;
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			InputStream is = (input instanceof InputStream ? (InputStream)input : <strong class="jxr_keyword">new</strong> ByteArrayInputStream((byte[])input));
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			InputStream is = (input instanceof InputStream input2 ? input2 : <strong class="jxr_keyword">new</strong> ByteArrayInputStream((byte[])input));
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 			CharsetDecoder cd = charset.newDecoder();
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">if</strong> (strict) {
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 				cd.onMalformedInput(CodingErrorAction.REPORT);
@@ -308,7 +308,7 @@
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 				inputString = read(reader);
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 				reader = <strong class="jxr_keyword">new</strong> StringReader(inputString);
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 			}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof File) {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof File input2) {
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 			CharsetDecoder cd = charset.newDecoder();
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">if</strong> (strict) {
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 				cd.onMalformedInput(CodingErrorAction.REPORT);
@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 				cd.onMalformedInput(CodingErrorAction.REPLACE);
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 				cd.onUnmappableCharacter(CodingErrorAction.REPLACE);
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 			}
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			reader = <strong class="jxr_keyword">new</strong> InputStreamReader(<strong class="jxr_keyword">new</strong> FileInputStream((File)input), cd);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			reader = <strong class="jxr_keyword">new</strong> InputStreamReader(<strong class="jxr_keyword">new</strong> FileInputStream(input2), cd);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<strong class="jxr_keyword">if</strong> (debug) {
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 				inputString = read(reader);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 				reader = <strong class="jxr_keyword">new</strong> StringReader(inputString);

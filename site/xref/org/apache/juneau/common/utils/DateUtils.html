@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  				formats = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  				THREADLOCAL_FORMATS.set(<strong class="jxr_keyword">new</strong> SoftReference&lt;&gt;(formats));
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			}
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			SimpleDateFormat format = formats.get(pattern);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">var</strong> format = formats.get(pattern);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">if</strong> (format == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  				format = <strong class="jxr_keyword">new</strong> SimpleDateFormat(pattern, Locale.US);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  				format.setTimeZone(TimeZone.getTimeZone(<span class="jxr_string">"GMT"</span>));
@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * @return The formatter.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> DateTimeFormatter getDateTimeFormatter(String pattern) {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(pattern))
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(pattern))
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">return</strong> DateTimeFormatter.ISO_INSTANT;
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : DateTimeFormatter.<strong class="jxr_keyword">class</strong>.getFields()) {
@@ -398,7 +398,7 @@
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<em class="jxr_comment">// S7: Found time zone</em>
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> state = S1;
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">boolean</strong> needsT = false;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">var</strong> needsT = false;
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; in.length(); i++) {
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">char</strong> c = in.charAt(i);
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">if</strong> (state == S1) {
@@ -500,7 +500,7 @@
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * @see ChronoField</em>
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ChronoField getPrecisionFromString(String seg) {
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(seg))
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(seg))
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<strong class="jxr_keyword">return</strong> ChronoField.MILLI_OF_SECOND;
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<em class="jxr_comment">// States:</em>
@@ -763,35 +763,32 @@
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">	 * @return A cloned calendar with the updated date, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Calendar addSubtractDays(Calendar c, <strong class="jxr_keyword">int</strong> days) {
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">return</strong> opt(c)
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 			.map(x -&gt; (Calendar)x.clone())
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 			.map(x -&gt; add(x, Calendar.DATE, days))
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	}
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> <em class="jxr_javadoccomment">	 * Adds to a field of a calendar.</em>
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * @param c The calendar to modify.</em>
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 * @param field The calendar field to modify (e.g., {@link Calendar#DATE}, {@link Calendar#MONTH}).</em>
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">	 * @param amount The amount to add.</em>
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">	 * @return The same calendar with the field modified.</em>
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Calendar add(Calendar c, <strong class="jxr_keyword">int</strong> field, <strong class="jxr_keyword">int</strong> amount) {
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 		c.add(field, amount);
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> 	}
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 * Converts a calendar to a {@link ZonedDateTime}.</em>
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> <em class="jxr_javadoccomment">	 * @param c The calendar to convert.</em>
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> <em class="jxr_javadoccomment">	 * @return An {@link Optional} containing the {@link ZonedDateTime}, or empty if the input was &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;ZonedDateTime&gt; toZonedDateTime(Calendar c) {
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<strong class="jxr_keyword">return</strong> opt(c).map(GregorianCalendar.<strong class="jxr_keyword">class</strong>::<strong class="jxr_keyword">cast</strong>).map(GregorianCalendar::toZonedDateTime);
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	}
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> }
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">return</strong> opt(c).map(x -&gt; (Calendar)x.clone()).map(x -&gt; add(x, Calendar.DATE, days)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 	}
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> <em class="jxr_javadoccomment">	 * Adds to a field of a calendar.</em>
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> <em class="jxr_javadoccomment">	 * @param c The calendar to modify.</em>
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> <em class="jxr_javadoccomment">	 * @param field The calendar field to modify (e.g., {@link Calendar#DATE}, {@link Calendar#MONTH}).</em>
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> <em class="jxr_javadoccomment">	 * @param amount The amount to add.</em>
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * @return The same calendar with the field modified.</em>
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Calendar add(Calendar c, <strong class="jxr_keyword">int</strong> field, <strong class="jxr_keyword">int</strong> amount) {
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		c.add(field, amount);
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 	}
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">	 * Converts a calendar to a {@link ZonedDateTime}.</em>
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> <em class="jxr_javadoccomment">	 * @param c The calendar to convert.</em>
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 * @return An {@link Optional} containing the {@link ZonedDateTime}, or empty if the input was &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;ZonedDateTime&gt; toZonedDateTime(Calendar c) {
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<strong class="jxr_keyword">return</strong> opt(c).map(GregorianCalendar.<strong class="jxr_keyword">class</strong>::<strong class="jxr_keyword">cast</strong>).map(GregorianCalendar::toZonedDateTime);
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 	}
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

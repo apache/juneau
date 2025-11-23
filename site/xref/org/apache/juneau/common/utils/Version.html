@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * 	Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">public</strong> <a name="Version" href="../../../../../org/apache/juneau/common/utils/Version.html#Version">Version</a>(String value) {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(value))
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (isEmpty(value))
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			value = <span class="jxr_string">"0"</span>;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		String[] sParts = splita(value, '.');
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		parts = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[sParts.length];

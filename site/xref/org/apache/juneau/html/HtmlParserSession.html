@@ -288,7 +288,7 @@
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			eType = (ClassMeta&lt;T&gt;)object();
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		ClassMeta&lt;?&gt; sType = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">var</strong> sType = (ClassMeta&lt;?&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">if</strong> (nn(builder))
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			sType = builder.getBuilderClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(swap))
@@ -307,7 +307,7 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">if</strong> (! isRoot)
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 			event = r.next();
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">boolean</strong> isEmpty = (event == END_ELEMENT);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">var</strong> isEmpty = (event == END_ELEMENT);
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<em class="jxr_comment">// Skip until we find a start element, end document, or non-empty text.</em>
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">if</strong> (! isEmpty)
@@ -317,14 +317,14 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Unexpected end of stream in parseAnything for type ''{0}''"</span>, eType);
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<em class="jxr_comment">// Handle @Html(asXml=true) beans.</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		HtmlClassMeta hcm = getHtmlClassMeta(sType);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> hcm = getHtmlClassMeta(sType);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">if</strong> (hcm.getFormat() == HtmlFormat.XML)
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parseAnything(eType, <strong class="jxr_keyword">null</strong>, r, <strong class="jxr_keyword">outer</strong>, false, pMeta);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		Object o = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> o = (Object)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">boolean</strong> isValid = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		HtmlTag tag = (event == CHARACTERS ? <strong class="jxr_keyword">null</strong> : HtmlTag.forString(r.getName().getLocalPart(), false));
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> isValid = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> tag = (event == CHARACTERS ? <strong class="jxr_keyword">null</strong> : HtmlTag.forString(r.getName().getLocalPart(), false));
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<em class="jxr_comment">// If it's not a known tag, then parse it as XML.</em>
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<em class="jxr_comment">// Allows us to parse stuff like "&lt;div/&gt;" into HTML5 beans.</em>
@@ -493,11 +493,11 @@
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 				String key = getElementText(r);
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 				nextTag(r, TD);
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 				BeanPropertyMeta pMeta = m.getPropertyMeta(key);
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 				<strong class="jxr_keyword">var</strong> pMeta = m.getPropertyMeta(key);
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 				<strong class="jxr_keyword">if</strong> (pMeta == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 					onUnknownProperty(key, m, parseAnything(object(), r, <strong class="jxr_keyword">null</strong>, false, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 					ClassMeta&lt;?&gt; cm = pMeta.getClassMeta();
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 					<strong class="jxr_keyword">var</strong> cm = pMeta.getClassMeta();
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 					Object value = parseAnything(cm, r, m.getBean(false), false, pMeta);
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 					setName(cm, value, key);
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 					<strong class="jxr_keyword">try</strong> {
@@ -528,7 +528,7 @@
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 				tag = nextTag(r, LI, xUL, xLI);
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 			<strong class="jxr_keyword">if</strong> (tag == xUL)
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 				<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 			ClassMeta&lt;?&gt; elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 			<strong class="jxr_keyword">var</strong> elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 			l.add((E)parseAnything(elementType, r, l, false, pMeta));
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 		}
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">return</strong> l;
@@ -624,7 +624,7 @@
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 						parseAnything(object(), r, l, false, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 					} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 						BeanPropertyMeta bpm = e.getMeta();
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 						ClassMeta&lt;?&gt; cm = bpm.getClassMeta();
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 						<strong class="jxr_keyword">var</strong> cm = bpm.getClassMeta();
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> 						Object value = parseAnything(cm, r, m.getBean(false), false, bpm);
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 						setName(cm, value, key);
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 						bpm.set(m, key, value);
@@ -658,12 +658,12 @@
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> 					}
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 				}
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 				<strong class="jxr_keyword">if</strong> (nn(m) &amp;&amp; nn(c)) {
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 					JsonMap m2 = (m instanceof <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> ? (<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)m : <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(m).session(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 					<strong class="jxr_keyword">var</strong> m2 = (m instanceof <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> ? (<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)m : <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(m).session(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 					m2.put(getBeanTypePropertyName(type.getElementType()), c);
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 					l.add((E)<strong class="jxr_keyword">cast</strong>(m2, pMeta, elementType));
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 					<strong class="jxr_keyword">if</strong> (m instanceof <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 						l.add((E)convertToType(m, elementType));
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 					<strong class="jxr_keyword">if</strong> (m instanceof <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> m2)
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 						l.add((E)convertToType(m2, elementType));
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 					<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 						l.add((E)m);
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 				}
@@ -720,11 +720,11 @@
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<strong class="jxr_keyword">private</strong> <a name="HtmlTag" href="../../../../org/apache/juneau/html/HtmlTag.html#HtmlTag">HtmlTag</a> skipToData(<a name="XmlReader" href="../../../../org/apache/juneau/xml/XmlReader.html#XmlReader">XmlReader</a> r) <strong class="jxr_keyword">throws</strong> ParseException, XMLStreamException {
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			<strong class="jxr_keyword">int</strong> event = r.next();
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			<strong class="jxr_keyword">var</strong> event = r.next();
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 			<strong class="jxr_keyword">if</strong> (event == START_ELEMENT &amp;&amp; <span class="jxr_string">"div"</span>.equals(r.getLocalName()) &amp;&amp; <span class="jxr_string">"data"</span>.equals(r.getAttributeValue(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"id"</span>))) {
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 				r.nextTag();
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 				event = r.getEventType();
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 				<strong class="jxr_keyword">boolean</strong> isEmpty = (event == END_ELEMENT);
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 				<strong class="jxr_keyword">var</strong> isEmpty = (event == END_ELEMENT);
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> 				<em class="jxr_comment">// Skip until we find a start element, end document, or non-empty text.</em>
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> 				<strong class="jxr_keyword">if</strong> (! isEmpty)
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> 					event = skipWs(r);

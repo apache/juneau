@@ -71,12 +71,12 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Override <em class="jxr_comment">/* Overridden from Var */</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> resolveTo(<a name="VarResolverSession" href="../../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> session, Writer w, String key) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">int</strong> i = key.indexOf(',');
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> i = key.indexOf(',');
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">if</strong> (i == -1)
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid format for $SA var. Must be of the format $SA{contentType,key[,defaultValue]}"</span>);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		String[] s2 = splita(key);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		RestRequest req = session.getBean(RestRequest.<strong class="jxr_keyword">class</strong>).orElseThrow(InternalServerError::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		Object o = req.getAttribute(key).orElse(key);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> s2 = splita(key);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> req = session.getBean(RestRequest.<strong class="jxr_keyword">class</strong>).orElseThrow(InternalServerError::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> o = req.getAttribute(key).orElse(key);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		Serializer s = req.getOpContext().getSerializers().getSerializer(s2[0]);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			s.serialize(w, o);

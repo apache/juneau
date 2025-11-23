@@ -282,7 +282,7 @@
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 	}
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<strong class="jxr_keyword">private</strong> Object getDescription(ClassMeta&lt;?&gt; sType, <a name="TypeCategory" href="../../../../org/apache/juneau/jsonschema/TypeCategory.html#TypeCategory">TypeCategory</a> t, <strong class="jxr_keyword">boolean</strong> descriptionAdded) {
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">boolean</strong> canAdd = isAllowNestedDescriptions() || ! descriptionAdded;
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">var</strong> canAdd = isAllowNestedDescriptions() || ! descriptionAdded;
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">if</strong> (canAdd &amp;&amp; (getAddDescriptionsTo().contains(t) || getAddDescriptionsTo().contains(ANY)))
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">return</strong> sType.toString();
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -297,9 +297,9 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 	<strong class="jxr_keyword">private</strong> Object getExample(ClassMeta&lt;?&gt; sType, <a name="TypeCategory" href="../../../../org/apache/juneau/jsonschema/TypeCategory.html#TypeCategory">TypeCategory</a> t, <strong class="jxr_keyword">boolean</strong> exampleAdded) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">boolean</strong> canAdd = isAllowNestedExamples() || ! exampleAdded;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">var</strong> canAdd = isAllowNestedExamples() || ! exampleAdded;
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">if</strong> (canAdd &amp;&amp; (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			Object example = sType.getExample(<strong class="jxr_keyword">this</strong>, jpSession());
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">var</strong> example = sType.getExample(<strong class="jxr_keyword">this</strong>, jpSession());
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">if</strong> (nn(example)) {
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 					<strong class="jxr_keyword">return</strong> JsonParser.DEFAULT.parse(toJson(example), Object.<strong class="jxr_keyword">class</strong>);
@@ -323,8 +323,8 @@
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			eType = object();
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		ClassMeta&lt;?&gt; aType;			<em class="jxr_comment">// The actual type (will be null if recursion occurs)</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		ClassMeta&lt;?&gt; sType;			<em class="jxr_comment">// The serialized type</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> aType = (ClassMeta&lt;?&gt;)<strong class="jxr_keyword">null</strong>;			<em class="jxr_comment">// The actual type (will be null if recursion occurs)</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> sType = (ClassMeta&lt;?&gt;)<strong class="jxr_keyword">null</strong>;			<em class="jxr_comment">// The serialized type</em>
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		ObjectSwap objectSwap = eType.getSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 		aType = push(attrName, eType, <strong class="jxr_keyword">null</strong>);
@@ -349,7 +349,7 @@
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 		}
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 		JsonSchemaClassMeta jscm = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		ClassMeta objectSwapCM = objectSwap == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : getClassMeta(objectSwap.getClass());
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> objectSwapCM = objectSwap == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : getClassMeta(objectSwap.getClass());
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">if</strong> (nn(objectSwapCM) &amp;&amp; objectSwapCM.hasAnnotation(Schema.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 			jscm = getJsonSchemaClassMeta(objectSwapCM);
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">if</strong> (jscm == <strong class="jxr_keyword">null</strong>)
@@ -452,7 +452,7 @@
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 				out.put(<span class="jxr_string">"enum"</span>, getEnums(sType));
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (tc == MAP) {
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				JsonMap om = getSchema(sType.getValueType(), <span class="jxr_string">"additionalProperties"</span>, <strong class="jxr_keyword">null</strong>, exampleAdded, descriptionAdded, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">var</strong> om = getSchema(sType.getValueType(), <span class="jxr_string">"additionalProperties"</span>, <strong class="jxr_keyword">null</strong>, exampleAdded, descriptionAdded, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 				<strong class="jxr_keyword">if</strong> (! om.isEmpty())
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 					out.put(<span class="jxr_string">"additionalProperties"</span>, om);
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 
@@ -482,8 +482,8 @@
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 	}
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 	<strong class="jxr_keyword">private</strong> ClassMeta&lt;?&gt; toClassMeta(Object o) {
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Type)
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">return</strong> getClassMeta((Type)o);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Type o2)
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">return</strong> getClassMeta(o2);
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">return</strong> getClassMetaForObject(o);
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 	}
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 

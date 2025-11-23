@@ -819,7 +819,7 @@
 <a class="jxr_linenumber" name="L811" href="#L811">811</a> 
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 	@Test
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 	<strong class="jxr_keyword">void</strong> test_toZonedDateTime() {
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		Calendar cal = <strong class="jxr_keyword">new</strong> GregorianCalendar(2024, Calendar.JANUARY, 15, 12, 30, 45);
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">var</strong> cal = <strong class="jxr_keyword">new</strong> GregorianCalendar(2024, Calendar.JANUARY, 15, 12, 30, 45);
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> 
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> 		Optional&lt;ZonedDateTime&gt; result = toZonedDateTime(cal);
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 		assertTrue(result.isPresent());

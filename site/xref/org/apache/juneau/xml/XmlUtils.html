@@ -79,11 +79,11 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		String prev = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">for</strong> (ListIterator&lt;Object&gt; i = value.listIterator(); i.hasNext();) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			Object o = i.next();
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">if</strong> (o instanceof String) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">if</strong> (o instanceof String o2) {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  				<strong class="jxr_keyword">if</strong> (prev == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					prev = o.toString();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					prev = o2.toString();
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  				<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  					prev += o;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  					prev += o2;
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  					i.remove();
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  					i.previous();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  					i.remove();
@@ -428,7 +428,7 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 	<em class="jxr_comment">// Converts an integer to a hexadecimal string padded to 4 places.</em>
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Writer appendPaddedHexChar(Writer out, <strong class="jxr_keyword">int</strong> num) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		out.append(<span class="jxr_string">"_x"</span>);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">char</strong> c : toHex4(num))
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : toHex4(num))
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			out.append(c);
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">return</strong> out.append('_');
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 	}

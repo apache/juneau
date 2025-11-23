@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified type is this class.</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isType(Type t) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">return</strong> (t instanceof ParameterizedType &amp;&amp; ((ParameterizedType)t).getRawType() == Value.<strong class="jxr_keyword">class</strong>) || (t instanceof Class &amp;&amp; Value.<strong class="jxr_keyword">class</strong>.isAssignableFrom((Class&lt;?&gt;)t));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">return</strong> (t instanceof ParameterizedType t2 &amp;&amp; t2.getRawType() == Value.<strong class="jxr_keyword">class</strong>) || (t instanceof Class t3 &amp;&amp; Value.<strong class="jxr_keyword">class</strong>.isAssignableFrom(t3));
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -535,12 +535,12 @@
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * @return The result of applying the {@link Value}-bearing mapping function to the value if present,</em>
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 *         otherwise an empty {@link Value}.</em>
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	<strong class="jxr_keyword">public</strong> &lt;T2&gt; Value&lt;T2&gt; flatMap(Function&lt;? <strong class="jxr_keyword">super</strong> T, ? <strong class="jxr_keyword">extends</strong> Value&lt;? <strong class="jxr_keyword">extends</strong> T2&gt;&gt; mapper) {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	<strong class="jxr_keyword">public</strong> &lt;T2&gt; Value&lt;T2&gt; flatMap(Function&lt;? <strong class="jxr_keyword">super</strong> T,? <strong class="jxr_keyword">extends</strong> Value&lt;? <strong class="jxr_keyword">extends</strong> T2&gt;&gt; mapper) {
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 			<strong class="jxr_keyword">return</strong> Value.empty();
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">var</strong> result = mapper.apply(t);
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">cast</strong> = (Value&lt;T2&gt;) result;
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">cast</strong> = (Value&lt;T2&gt;)result;
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">cast</strong>;
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 	}
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 
@@ -548,9 +548,9 @@
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object obj) {
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == obj)
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">if</strong> (!(obj instanceof <a name="Value" href="../../../../../org/apache/juneau/common/collections/Value.html#Value">Value</a>))
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">if</strong> (! (obj instanceof <a name="Value" href="../../../../../org/apache/juneau/common/collections/Value.html#Value">Value</a>))
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">var</strong> other = (Value&lt;?&gt;) obj;
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">var</strong> other = (Value&lt;?&gt;)obj;
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">return</strong> t == <strong class="jxr_keyword">null</strong> ? other.t == <strong class="jxr_keyword">null</strong> : t.equals(other.t);
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 	}
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 

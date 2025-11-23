@@ -52,24 +52,23 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> toPropertyMap(Object o) {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		Map&lt;String,MethodInfo&gt; methods = PROPERTIES_METHODS.get(o.getClass());
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">if</strong> (methods == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> ci = info(o);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> methods2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,MethodInfo&gt;();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> methods = PROPERTIES_METHODS.get(o.getClass());
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">if</strong> (methods == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			<strong class="jxr_keyword">var</strong> ci = info(o);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">var</strong> methods2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,MethodInfo&gt;();
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">do</strong> {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  				String cname = ci.getNameShort();
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  				ci.getDeclaredMethod(x -&gt; x.hasName(<span class="jxr_string">"properties"</span>))
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  					.ifPresent(mi -&gt; methods2.put(cname, mi.accessible()));
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  				ci = ci.getSuperclass();
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			} <strong class="jxr_keyword">while</strong> (nn(ci));
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			methods = methods2;
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			PROPERTIES_METHODS.put(o.getClass(), methods);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		}
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> m = JsonMap.create().append(<span class="jxr_string">"id"</span>, identity(o));
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		methods.forEach((k, v) -&gt; m.put(k, v.invoke(o)));
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  				ci.getDeclaredMethod(x -&gt; x.hasName(<span class="jxr_string">"properties"</span>)).ifPresent(mi -&gt; methods2.put(cname, mi.accessible()));
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  				ci = ci.getSuperclass();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			} <strong class="jxr_keyword">while</strong> (nn(ci));
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			methods = methods2;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			PROPERTIES_METHODS.put(o.getClass(), methods);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		}
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> m = JsonMap.create().append(<span class="jxr_string">"id"</span>, identity(o));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		methods.forEach((k, v) -&gt; m.put(k, v.invoke(o)));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

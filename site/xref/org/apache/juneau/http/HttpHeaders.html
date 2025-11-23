@@ -522,16 +522,16 @@
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * @param o</em>
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * 	The object to cast or convert to a {@link Header}.</em>
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * @return Either the same object cast as a {@link Header} or converted to a {@link Header}.</em>
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	*/</em>
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Header <strong class="jxr_keyword">cast</strong>(Object o) {
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Header h)
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 			<strong class="jxr_keyword">return</strong> h;
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="Headerable" href="../../../../org/apache/juneau/http/header/Headerable.html#Headerable">Headerable</a> hable)
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 			<strong class="jxr_keyword">return</strong> hable.asHeader();
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">if</strong> (o instanceof NameValuePair nvp)
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 			<strong class="jxr_keyword">return</strong> BasicHeader.of(nvp);
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="NameValuePairable" href="../../../../org/apache/juneau/http/part/NameValuePairable.html#NameValuePairable">NameValuePairable</a> nvpable)
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			<strong class="jxr_keyword">return</strong> BasicHeader.of(nvpable.asNameValuePair());
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Header o2)
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 			<strong class="jxr_keyword">return</strong> o2;
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	<strong class="jxr_keyword">if</strong> (o instanceof <a name="Headerable" href="../../../../org/apache/juneau/http/header/Headerable.html#Headerable">Headerable</a> o3)
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">return</strong> o3.asHeader();
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	<strong class="jxr_keyword">if</strong> (o instanceof NameValuePair o4)
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<strong class="jxr_keyword">return</strong> BasicHeader.of(o4);
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	<strong class="jxr_keyword">if</strong> (o instanceof <a name="NameValuePairable" href="../../../../org/apache/juneau/http/part/NameValuePairable.html#NameValuePairable">NameValuePairable</a> o5)
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">return</strong> BasicHeader.of(o5.asNameValuePair());
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Map.Entry e) {
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 			<strong class="jxr_keyword">return</strong> BasicHeader.of(s(e.getKey()), s(e.getValue()));
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 		}

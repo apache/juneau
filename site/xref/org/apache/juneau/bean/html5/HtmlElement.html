@@ -1168,10 +1168,10 @@
 <a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> <em class="jxr_javadoccomment">	 * @param value The attribute value.</em>
 <a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> <em class="jxr_javadoccomment">	 * @param attr The attribute name.</em>
 <a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> <em class="jxr_javadoccomment">	 * @return The deminimized value, or the same value if the value wasn't a boolean.</em>
-<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> <em class="jxr_javadoccomment">	*/</em>
 <a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 	<strong class="jxr_keyword">protected</strong> Object deminimize(Object value, String attr) {
-<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Boolean b) {
-<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 			<strong class="jxr_keyword">if</strong> (Boolean.TRUE.equals(b))
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Boolean value2) {
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 			<strong class="jxr_keyword">if</strong> (Boolean.TRUE.equals(value2))
 <a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 				<strong class="jxr_keyword">return</strong> attr;
 <a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 		}

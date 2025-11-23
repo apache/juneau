@@ -548,7 +548,7 @@
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 		<strong class="jxr_keyword">var</strong> errors = <strong class="jxr_keyword">new</strong> ArrayList&lt;AssertionFailedError&gt;();
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : expected) {
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">if</strong> (!a.contains(e)) {
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">if</strong> (! a.contains(e)) {
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 				errors.add(assertEqualsFailed(<strong class="jxr_keyword">true</strong>, false, args.getMessage(<span class="jxr_string">"String did not contain expected substring.  ==&gt; expected: &lt;{0}&gt; but was: &lt;{1}&gt;"</span>, e, a)));
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 			}
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 		}
@@ -561,7 +561,7 @@
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">var</strong> missingSubstrings = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : expected) {
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">if</strong> (!a.contains(e)) {
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">if</strong> (! a.contains(e)) {
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 				missingSubstrings.add(e);
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 			}
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		}
@@ -692,7 +692,7 @@
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> 						errors.add(assertEqualsFailed(e2, converter.stringify(x), args.getMessage(<span class="jxr_string">"Element at index {0} did not match."</span>, i)));
 <a class="jxr_linenumber" name="L685" href="#L685">685</a> 					}
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Predicate e2) { <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 					<strong class="jxr_keyword">if</strong> (!e2.test(x)) {
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 					<strong class="jxr_keyword">if</strong> (! e2.test(x)) {
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 						errors.add(<strong class="jxr_keyword">new</strong> AssertionFailedError(args.getMessage(<span class="jxr_string">"Element at index {0} did not pass predicate.  ==&gt; actual: &lt;{1}&gt;"</span>, i, converter.stringify(x)).get()));
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 					}
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 				} <strong class="jxr_keyword">else</strong> {

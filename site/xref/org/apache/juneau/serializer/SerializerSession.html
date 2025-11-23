@@ -308,7 +308,7 @@
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 * @return The array as a list.</em>
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;Object&gt; toList(Class&lt;?&gt; type, Object array) {
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		Class&lt;?&gt; componentType = type.getComponentType();
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">var</strong> componentType = type.getComponentType();
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">if</strong> (componentType.isPrimitive()) {
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">int</strong> l = Array.getLength(array);
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(l);
@@ -385,16 +385,16 @@
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">if</strong> (cm.isArray() || (cm.isObject() &amp;&amp; isArray(value))) {
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 				<strong class="jxr_keyword">if</strong> (((Object[])value).length == 0)
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		}
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">if</strong> (cm.isCollection() || (cm.isObject() &amp;&amp; info(value).isChildOf(Collection.<strong class="jxr_keyword">class</strong>))) {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">if</strong> (((Collection&lt;?&gt;)value).isEmpty())
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">if</strong> (cm.isCollection() || (cm.isObject() &amp;&amp; info(value).isChildOf(Collection.<strong class="jxr_keyword">class</strong>))) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 				<strong class="jxr_keyword">if</strong> (((Collection&lt;?&gt;)value).isEmpty())
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 			}
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		}
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<strong class="jxr_keyword">if</strong> (isTrimEmptyMaps()) {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">if</strong> (cm.isMap() || (cm.isObject() &amp;&amp; info(value).isChildOf(Map.<strong class="jxr_keyword">class</strong>))) {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<strong class="jxr_keyword">if</strong> (((Map&lt;?,?&gt;)value).isEmpty())
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">if</strong> (isTrimEmptyMaps()) {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">if</strong> (cm.isMap() || (cm.isObject() &amp;&amp; info(value).isChildOf(Map.<strong class="jxr_keyword">class</strong>))) {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 				<strong class="jxr_keyword">if</strong> (((Map&lt;?,?&gt;)value).isEmpty())
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 			}
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 		}
@@ -661,9 +661,9 @@
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String toString(Object o) {
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	<strong class="jxr_keyword">if</strong> (o.getClass() == Class.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">return</strong> info((Class&lt;?&gt;)o).getNameFull();
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">if</strong> (o.getClass() == ClassInfo.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">if</strong> (o.getClass() == Class.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			<strong class="jxr_keyword">return</strong> info((Class&lt;?&gt;)o).getNameFull();
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		<strong class="jxr_keyword">if</strong> (o.getClass() == ClassInfo.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 			<strong class="jxr_keyword">return</strong> ((ClassInfo)o).getNameFull();
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">if</strong> (o.getClass().isEnum())
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 			<strong class="jxr_keyword">return</strong> getClassMetaForObject(o).toString(o);
@@ -837,7 +837,7 @@
 <a class="jxr_linenumber" name="L829" href="#L829">829</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; getExpectedRootType(Object o) {
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 		<strong class="jxr_keyword">if</strong> (isAddRootType())
 <a class="jxr_linenumber" name="L831" href="#L831">831</a> 			<strong class="jxr_keyword">return</strong> object();
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		ClassMeta&lt;?&gt; cm = getClassMetaForObject(o);
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		<strong class="jxr_keyword">var</strong> cm = getClassMetaForObject(o);
 <a class="jxr_linenumber" name="L833" href="#L833">833</a> 		<strong class="jxr_keyword">if</strong> (nn(cm) &amp;&amp; cm.isOptional())
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 			<strong class="jxr_keyword">return</strong> cm.getElementType();
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 		<strong class="jxr_keyword">return</strong> cm;
@@ -974,104 +974,105 @@
 <a class="jxr_linenumber" name="L966" href="#L966">966</a> 		String prefix = (isDebug() ? getStack(false) + <span class="jxr_string">": "</span> : <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L967" href="#L967">967</a> 		addWarning(<span class="jxr_string">"{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}"</span>, prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t));
 <a class="jxr_linenumber" name="L968" href="#L968">968</a> 		<strong class="jxr_keyword">if</strong> (! isIgnoreInvocationExceptionsOnGetters())
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}"</span>, prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t)).initCause(t);
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 	}
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 * Logs a warning message.</em>
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 * @param t The throwable that was thrown (if there was one).</em>
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 * @param msg The warning message.</em>
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 	@Override
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> onError(Throwable t, String msg, Object...args) {
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 		<strong class="jxr_keyword">if</strong> (nn(listener))
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 			listener.onError(<strong class="jxr_keyword">this</strong>, t, format(msg, args));
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 		<strong class="jxr_keyword">super</strong>.onError(t, msg, args);
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	}
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 	@Override <em class="jxr_comment">/* Overridden from ContextSession */</em>
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"uriResolver"</span>, uriResolver);
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 	}
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> <em class="jxr_javadoccomment">	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link BeanRecursionException} inside {@link SerializeException}.</em>
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 * @param attrName The attribute name.</em>
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * @param o The current object being traversed.</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * @param eType The expected class type.</em>
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 * 	The {@link ClassMeta} of the object so that &lt;c&gt;instanceof&lt;/c&gt; operations only need to be performed</em>
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">	 * 	once (since they can be expensive).</em>
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> <em class="jxr_javadoccomment">	 * @throws SerializeException If recursion occurred.</em>
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; push2(String attrName, Object o, ClassMeta&lt;?&gt; eType) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.push(attrName, o, eType);
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="BeanRecursionException" href="../../../../org/apache/juneau/BeanRecursionException.html#BeanRecursionException">BeanRecursionException</a> e) {
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		}
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 	}
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> <em class="jxr_javadoccomment">	 * Opposite of {@link #resolveUri(Object)}.</em>
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> <em class="jxr_javadoccomment">	 * Converts the URI to a value relative to the specified &lt;c&gt;relativeTo&lt;/c&gt; parameter.</em>
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> <em class="jxr_javadoccomment">	 * Both parameters can be any of the following:</em>
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link java.net.URI}</em>
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link java.net.URL}</em>
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link CharSequence}</em>
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">	 * Both URIs can be any of the following forms:</em>
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"foo://foo"&lt;/js&gt; - Absolute URI.</em>
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"/foo"&lt;/js&gt; - Root-relative URI.</em>
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"/"&lt;/js&gt; - Root URI.</em>
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"context:/foo"&lt;/js&gt; - Context-root-relative URI.</em>
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"context:/"&lt;/js&gt; - Context-root URI.</em>
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"servlet:/foo"&lt;/js&gt; - Servlet-path-relative URI.</em>
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"servlet:/"&lt;/js&gt; - Servlet-path URI.</em>
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"request:/foo"&lt;/js&gt; - Request-path-relative URI.</em>
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"request:/"&lt;/js&gt; - Request-path URI.</em>
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"foo"&lt;/js&gt; - Path-info-relative URI.</em>
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;""&lt;/js&gt; - Path-info URI.</em>
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> <em class="jxr_javadoccomment">	 * @param relativeTo The URI to relativize against.</em>
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> <em class="jxr_javadoccomment">	 * @param uri The URI to relativize.</em>
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> <em class="jxr_javadoccomment">	 * @return The relativized URI.</em>
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String relativizeUri(Object relativeTo, Object uri) {
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		<strong class="jxr_keyword">return</strong> uriResolver.relativize(relativeTo, uri);
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	}
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> <em class="jxr_javadoccomment">	 * Invokes the specified swap on the specified object if the swap is not null.</em>
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> <em class="jxr_javadoccomment">	 * @param swap The swap to invoke.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> <em class="jxr_javadoccomment">	 * @param o The input object.</em>
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> <em class="jxr_javadoccomment">	 * @return The swapped object.</em>
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> <em class="jxr_javadoccomment">	 * @throws SerializeException If swap method threw an exception.</em>
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 	<strong class="jxr_keyword">protected</strong> Object swap(ObjectSwap swap, Object o) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			<strong class="jxr_keyword">if</strong> (swap == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 				<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 			<strong class="jxr_keyword">return</strong> swap.swap(<strong class="jxr_keyword">this</strong>, o);
-<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
-<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 		}
-<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 	}
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> }
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}"</span>, prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t))
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 				.initCause(t);
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 	}
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 * Logs a warning message.</em>
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 * @param t The throwable that was thrown (if there was one).</em>
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 * @param msg The warning message.</em>
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 	@Override
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> onError(Throwable t, String msg, Object...args) {
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 		<strong class="jxr_keyword">if</strong> (nn(listener))
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 			listener.onError(<strong class="jxr_keyword">this</strong>, t, format(msg, args));
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 		<strong class="jxr_keyword">super</strong>.onError(t, msg, args);
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	}
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 	@Override <em class="jxr_comment">/* Overridden from ContextSession */</em>
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"uriResolver"</span>, uriResolver);
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	}
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link BeanRecursionException} inside {@link SerializeException}.</em>
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * @param attrName The attribute name.</em>
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * @param o The current object being traversed.</em>
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * @param eType The expected class type.</em>
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">	 * 	The {@link ClassMeta} of the object so that &lt;c&gt;instanceof&lt;/c&gt; operations only need to be performed</em>
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> <em class="jxr_javadoccomment">	 * 	once (since they can be expensive).</em>
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> <em class="jxr_javadoccomment">	 * @throws SerializeException If recursion occurred.</em>
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; push2(String attrName, Object o, ClassMeta&lt;?&gt; eType) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.push(attrName, o, eType);
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="BeanRecursionException" href="../../../../org/apache/juneau/BeanRecursionException.html#BeanRecursionException">BeanRecursionException</a> e) {
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		}
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	}
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> <em class="jxr_javadoccomment">	 * Opposite of {@link #resolveUri(Object)}.</em>
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> <em class="jxr_javadoccomment">	 * Converts the URI to a value relative to the specified &lt;c&gt;relativeTo&lt;/c&gt; parameter.</em>
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> <em class="jxr_javadoccomment">	 * Both parameters can be any of the following:</em>
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link java.net.URI}</em>
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link java.net.URL}</em>
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link CharSequence}</em>
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> <em class="jxr_javadoccomment">	 * Both URIs can be any of the following forms:</em>
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"foo://foo"&lt;/js&gt; - Absolute URI.</em>
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"/foo"&lt;/js&gt; - Root-relative URI.</em>
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"/"&lt;/js&gt; - Root URI.</em>
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"context:/foo"&lt;/js&gt; - Context-root-relative URI.</em>
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"context:/"&lt;/js&gt; - Context-root URI.</em>
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"servlet:/foo"&lt;/js&gt; - Servlet-path-relative URI.</em>
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"servlet:/"&lt;/js&gt; - Servlet-path URI.</em>
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"request:/foo"&lt;/js&gt; - Request-path-relative URI.</em>
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"request:/"&lt;/js&gt; - Request-path URI.</em>
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"foo"&lt;/js&gt; - Path-info-relative URI.</em>
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;""&lt;/js&gt; - Path-info URI.</em>
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> <em class="jxr_javadoccomment">	 * @param relativeTo The URI to relativize against.</em>
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> <em class="jxr_javadoccomment">	 * @param uri The URI to relativize.</em>
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> <em class="jxr_javadoccomment">	 * @return The relativized URI.</em>
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String relativizeUri(Object relativeTo, Object uri) {
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 		<strong class="jxr_keyword">return</strong> uriResolver.relativize(relativeTo, uri);
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 	}
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> <em class="jxr_javadoccomment">	 * Invokes the specified swap on the specified object if the swap is not null.</em>
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> <em class="jxr_javadoccomment">	 * @param swap The swap to invoke.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> <em class="jxr_javadoccomment">	 * @param o The input object.</em>
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> <em class="jxr_javadoccomment">	 * @return The swapped object.</em>
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> <em class="jxr_javadoccomment">	 * @throws SerializeException If swap method threw an exception.</em>
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 	<strong class="jxr_keyword">protected</strong> Object swap(ObjectSwap swap, Object o) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 			<strong class="jxr_keyword">if</strong> (swap == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 				<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 			<strong class="jxr_keyword">return</strong> swap.swap(<strong class="jxr_keyword">this</strong>, o);
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 		}
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 	}
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

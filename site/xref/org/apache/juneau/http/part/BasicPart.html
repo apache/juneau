@@ -79,15 +79,15 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> NameValuePair <strong class="jxr_keyword">cast</strong>(Object o) {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">if</strong> (o instanceof NameValuePair nvp)
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">return</strong> nvp;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="NameValuePairable" href="../../../../../org/apache/juneau/http/part/NameValuePairable.html#NameValuePairable">NameValuePairable</a> nvpable)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">return</strong> nvpable.asNameValuePair();
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">if</strong> (o instanceof NameValuePair p) {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">return</strong> BasicPart.of(p.getName(), p.getValue());
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">if</strong> (o instanceof NameValuePair o2)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">return</strong> o2;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="NameValuePairable" href="../../../../../org/apache/juneau/http/part/NameValuePairable.html#NameValuePairable">NameValuePairable</a> o3)
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">return</strong> o3.asNameValuePair();
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">if</strong> (o instanceof NameValuePair o2) {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">return</strong> BasicPart.of(o2.getName(), o2.getValue());
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		}
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="Headerable" href="../../../../../org/apache/juneau/http/header/Headerable.html#Headerable">Headerable</a> h) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			Header x = h.asHeader();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="Headerable" href="../../../../../org/apache/juneau/http/header/Headerable.html#Headerable">Headerable</a> o2) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">var</strong> x = o2.asHeader();
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">return</strong> BasicPart.of(x.getName(), x.getValue());
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		}
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">if</strong> (o instanceof Map.Entry e) {
@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a> ofPair(String pair) {
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (pair == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">int</strong> i = pair.indexOf(':');
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> i = pair.indexOf(':');
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">if</strong> (i == -1)
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 			i = pair.indexOf('=');
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">if</strong> (i == -1)

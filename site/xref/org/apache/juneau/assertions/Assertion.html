@@ -228,22 +228,24 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			out.println(msg);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">if</strong> (nn(throwable)) {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				<strong class="jxr_keyword">throw</strong> <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 					.create()
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					.build()
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 					.addBean(Throwable.<strong class="jxr_keyword">class</strong>, cause)
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 					.addBean(String.<strong class="jxr_keyword">class</strong>, msg)
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 					.addBean(Object[].<strong class="jxr_keyword">class</strong>,<strong class="jxr_keyword">new</strong> Object[0])
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 					.createBean(throwable)
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					.run();
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<em class="jxr_comment">// If we couldn't create requested exception, just throw a RuntimeException.</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">throw</strong> rex(cause, msg);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			}
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		}
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BasicAssertionError" href="../../../../org/apache/juneau/BasicAssertionError.html#BasicAssertionError">BasicAssertionError</a>(cause, msg);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> }
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				<strong class="jxr_keyword">throw</strong> <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					.create()
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 					.build()
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 					.addBean(Throwable.<strong class="jxr_keyword">class</strong>, cause)
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 					.addBean(String.<strong class="jxr_keyword">class</strong>, msg)
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 					.addBean(Object[].<strong class="jxr_keyword">class</strong>,<strong class="jxr_keyword">new</strong> Object[0])
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					.createBean(throwable)
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 					.run();
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<em class="jxr_comment">// If we couldn't create requested exception, just throw a RuntimeException.</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">throw</strong> rex(cause, msg);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			}
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		}
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BasicAssertionError" href="../../../../org/apache/juneau/BasicAssertionError.html#BasicAssertionError">BasicAssertionError</a>(cause, msg);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

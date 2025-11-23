@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ResponseBeanArg" href="../../../../../org/apache/juneau/rest/arg/ResponseBeanArg.html#ResponseBeanArg">ResponseBeanArg</a> <strong class="jxr_keyword">implements</strong> <a name="RestOpArg" href="../../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a> {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> AnnotationProvider AP = AnnotationProvider.INSTANCE;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> AnnotationProvider AP = AnnotationProvider.INSTANCE;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 * Static creator.</em>
@@ -84,22 +84,21 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(paramInfo, <span class="jxr_string">"Type must be Value&lt;?&gt; on parameter annotated with @Response annotation"</span>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<strong class="jxr_keyword">final</strong> <a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		Value&lt;Object&gt; v = <strong class="jxr_keyword">new</strong> <a name="Value" href="../../../../../org/apache/juneau/common/collections/Value.html#Value">Value</a>();
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		v.listener(o -&gt; {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			RestRequest req = opSession.getRequest();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			RestResponse res = opSession.getResponse();
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			ResponseBeanMeta meta = req.getOpContext().getResponseBeanMeta(o);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">if</strong> (meta == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  				meta = ResponseBeanArg.<strong class="jxr_keyword">this</strong>.meta;
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			res.setResponseBeanMeta(meta);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			res.setContent(o);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		});
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">return</strong> v;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  }
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<strong class="jxr_keyword">final</strong> <a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> v = <strong class="jxr_keyword">new</strong> Value&lt;&gt;();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		v.listener(o -&gt; {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			RestRequest req = opSession.getRequest();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			RestResponse res = opSession.getResponse();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			ResponseBeanMeta meta = req.getOpContext().getResponseBeanMeta(o);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">if</strong> (meta == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  				meta = ResponseBeanArg.<strong class="jxr_keyword">this</strong>.meta;
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			res.setResponseBeanMeta(meta);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			res.setContent(o);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		});
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">return</strong> v;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

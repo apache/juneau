@@ -65,9 +65,9 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * Implemented to handle the method called.</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	@Override <em class="jxr_comment">/* Overridden from InvocationHandler */</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">public</strong> Object invoke(Object proxy, Method method, Object[] args) {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">var</strong> mi = info(method);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">if</strong> (mi.hasName(<span class="jxr_string">"equals"</span>) &amp;&amp; mi.hasParameterTypes(java.lang.Object.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">public</strong> Object invoke(Object proxy, Method method, Object[] args) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> mi = info(method);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (mi.hasName(<span class="jxr_string">"equals"</span>) &amp;&amp; mi.hasParameterTypes(java.lang.Object.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			Object arg = args[0];
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  			<strong class="jxr_keyword">if</strong> (arg == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  				<strong class="jxr_keyword">return</strong> false;
@@ -75,8 +75,8 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">if</strong> (proxy.getClass() == arg.getClass()) {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  				InvocationHandler ih = Proxy.getInvocationHandler(arg);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				<strong class="jxr_keyword">if</strong> (ih instanceof <a name="BeanProxyInvocationHandler" href="../../../org/apache/juneau/BeanProxyInvocationHandler.html#BeanProxyInvocationHandler">BeanProxyInvocationHandler</a>) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.beanProps.equals(((BeanProxyInvocationHandler&lt;?&gt;)ih).beanProps);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				<strong class="jxr_keyword">if</strong> (ih instanceof <a name="BeanProxyInvocationHandler" href="../../../org/apache/juneau/BeanProxyInvocationHandler.html#BeanProxyInvocationHandler">BeanProxyInvocationHandler</a> ih2) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.beanProps.equals(ih2.beanProps);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  				}
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			BeanMap&lt;Object&gt; bean = <strong class="jxr_keyword">this</strong>.meta.ctx.toBeanMap(arg);

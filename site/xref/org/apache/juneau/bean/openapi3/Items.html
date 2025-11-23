@@ -334,438 +334,440 @@
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			.addIf(nn(ref), <span class="jxr_string">"$ref"</span>)
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			.addIf(nn(collectionFormat), <span class="jxr_string">"collectionFormat"</span>)
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			.addIf(nn(_<strong class="jxr_keyword">default</strong>), <span class="jxr_string">"default"</span>)
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			.addIf(nn(_enum), <span class="jxr_string">"enum"</span>)
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			.addIf(nn(exclusiveMaximum), <span class="jxr_string">"exclusiveMaximum"</span>)
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			.addIf(nn(exclusiveMinimum), <span class="jxr_string">"exclusiveMinimum"</span>)
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			.addIf(nn(format), <span class="jxr_string">"format"</span>)
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			.addIf(nn(items), <span class="jxr_string">"items"</span>)
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			.addIf(nn(maxItems), <span class="jxr_string">"maxItems"</span>)
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			.addIf(nn(maxLength), <span class="jxr_string">"maxLength"</span>)
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			.addIf(nn(maximum), <span class="jxr_string">"maximum"</span>)
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			.addIf(nn(minItems), <span class="jxr_string">"minItems"</span>)
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			.addIf(nn(minLength), <span class="jxr_string">"minLength"</span>)
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			.addIf(nn(minimum), <span class="jxr_string">"minimum"</span>)
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			.addIf(nn(multipleOf), <span class="jxr_string">"multipleOf"</span>)
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			.addIf(nn(pattern), <span class="jxr_string">"pattern"</span>)
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			.addIf(nn(type), <span class="jxr_string">"type"</span>)
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			.addIf(nn(uniqueItems), <span class="jxr_string">"uniqueItems"</span>)
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			.build();
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * Resolves any &lt;js&gt;"$ref"&lt;/js&gt; attributes in this element.</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * @param openApi The swagger document containing the definitions.</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * @param maxDepth</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * 	The maximum depth to resolve references.</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;After that level is reached, &lt;code&gt;$ref&lt;/code&gt; references will be left alone.</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Useful if you have very complex models and you don't want your swagger page to be overly-complex.</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * 	This object with references resolved.</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;May or may not be the same object.</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> resolveRefs(<a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> openApi, Deque&lt;String&gt; refStack, <strong class="jxr_keyword">int</strong> maxDepth) {
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">if</strong> (nn(ref)) {
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">if</strong> (refStack.contains(ref) || refStack.size() &gt;= maxDepth)
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			refStack.addLast(ref);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<strong class="jxr_keyword">var</strong> r = openApi.findRef(ref, Items.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			r = r.resolveRefs(openApi, refStack, maxDepth);
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			refStack.removeLast();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			<strong class="jxr_keyword">return</strong> r;
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		}
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		set(<span class="jxr_string">"properties"</span>, resolveRefs(get(<span class="jxr_string">"properties"</span>), openApi, refStack, maxDepth));
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			.addIf(nn(ref), <span class="jxr_string">"$ref"</span>)
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			.addIf(nn(collectionFormat), <span class="jxr_string">"collectionFormat"</span>)
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			.addIf(nn(_<strong class="jxr_keyword">default</strong>), <span class="jxr_string">"default"</span>)
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			.addIf(nn(_enum), <span class="jxr_string">"enum"</span>)
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			.addIf(nn(exclusiveMaximum), <span class="jxr_string">"exclusiveMaximum"</span>)
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			.addIf(nn(exclusiveMinimum), <span class="jxr_string">"exclusiveMinimum"</span>)
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			.addIf(nn(format), <span class="jxr_string">"format"</span>)
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			.addIf(nn(items), <span class="jxr_string">"items"</span>)
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			.addIf(nn(maxItems), <span class="jxr_string">"maxItems"</span>)
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			.addIf(nn(maxLength), <span class="jxr_string">"maxLength"</span>)
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			.addIf(nn(maximum), <span class="jxr_string">"maximum"</span>)
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			.addIf(nn(minItems), <span class="jxr_string">"minItems"</span>)
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			.addIf(nn(minLength), <span class="jxr_string">"minLength"</span>)
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			.addIf(nn(minimum), <span class="jxr_string">"minimum"</span>)
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			.addIf(nn(multipleOf), <span class="jxr_string">"multipleOf"</span>)
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			.addIf(nn(pattern), <span class="jxr_string">"pattern"</span>)
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			.addIf(nn(type), <span class="jxr_string">"type"</span>)
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			.addIf(nn(uniqueItems), <span class="jxr_string">"uniqueItems"</span>)
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			.build();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	}
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * Resolves any &lt;js&gt;"$ref"&lt;/js&gt; attributes in this element.</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * @param openApi The swagger document containing the definitions.</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 * @param maxDepth</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * 	The maximum depth to resolve references.</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;After that level is reached, &lt;code&gt;$ref&lt;/code&gt; references will be left alone.</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Useful if you have very complex models and you don't want your swagger page to be overly-complex.</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * 	This object with references resolved.</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;May or may not be the same object.</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> resolveRefs(<a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> openApi, Deque&lt;String&gt; refStack, <strong class="jxr_keyword">int</strong> maxDepth) {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">if</strong> (nn(ref)) {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">if</strong> (refStack.contains(ref) || refStack.size() &gt;= maxDepth)
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			refStack.addLast(ref);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">var</strong> r = openApi.findRef(ref, Items.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			r = r.resolveRefs(openApi, refStack, maxDepth);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			refStack.removeLast();
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">return</strong> r;
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		}
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">if</strong> (nn(items))
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			items = items.resolveRefs(openApi, refStack, maxDepth);
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		set(<span class="jxr_string">"example"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		set(<span class="jxr_string">"properties"</span>, resolveRefs(get(<span class="jxr_string">"properties"</span>), openApi, refStack, maxDepth));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">if</strong> (nn(items))
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			items = items.resolveRefs(openApi, refStack, maxDepth);
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> set(String property, Object value) {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"$ref"</span> -&gt; setRef(value);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"collectionFormat"</span> -&gt; setCollectionFormat(s(value));
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"default"</span> -&gt; setDefault(value);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"enum"</span> -&gt; setEnum(value);
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"exclusiveMaximum"</span> -&gt; setExclusiveMaximum(toBoolean(value));
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"exclusiveMinimum"</span> -&gt; setExclusiveMinimum(toBoolean(value));
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"format"</span> -&gt; setFormat(s(value));
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"items"</span> -&gt; setItems(toType(value, Items.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"maxItems"</span> -&gt; setMaxItems(toInteger(value));
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"maxLength"</span> -&gt; setMaxLength(toInteger(value));
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"maximum"</span> -&gt; setMaximum(toNumber(value));
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"minItems"</span> -&gt; setMinItems(toInteger(value));
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"minLength"</span> -&gt; setMinLength(toInteger(value));
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"minimum"</span> -&gt; setMinimum(toNumber(value));
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"multipleOf"</span> -&gt; setMultipleOf(toNumber(value));
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"pattern"</span> -&gt; setPattern(s(value));
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"type"</span> -&gt; setType(s(value));
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"uniqueItems"</span> -&gt; setUniqueItems(toBoolean(value));
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">default</strong> -&gt; {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 				<strong class="jxr_keyword">super</strong>.set(property, value);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 				yield <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			}
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		};
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;collectionFormat&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * Determines the format of the array if type array is used.</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values:</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"csv"&lt;/js&gt; (default) - comma separated values &lt;code&gt;foo,bar&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"ssv"&lt;/js&gt; - space separated values &lt;code&gt;foo bar&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"tsv"&lt;/js&gt; - tab separated values &lt;code&gt;foo\tbar&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"pipes"&lt;/js&gt; - pipe separated values &lt;code&gt;foo|bar&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setCollectionFormat(String value) {
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_COLLECTION_FORMATS))
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values=[{1}]"</span>, value, toCdl(VALID_COLLECTION_FORMATS));
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		collectionFormat = value;
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	}
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;default&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * Declares the value of the item that the server will use if none is provided.</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * &lt;ul class='spaced-list'&gt;</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * 		&lt;js&gt;"default"&lt;/js&gt; has no meaning for required items.</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		set(<span class="jxr_string">"example"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> set(String property, Object value) {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"$ref"</span> -&gt; setRef(value);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"collectionFormat"</span> -&gt; setCollectionFormat(s(value));
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"default"</span> -&gt; setDefault(value);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"enum"</span> -&gt; setEnum(value);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"exclusiveMaximum"</span> -&gt; setExclusiveMaximum(toBoolean(value));
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"exclusiveMinimum"</span> -&gt; setExclusiveMinimum(toBoolean(value));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"format"</span> -&gt; setFormat(s(value));
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"items"</span> -&gt; setItems(toType(value, Items.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"maxItems"</span> -&gt; setMaxItems(toInteger(value));
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"maxLength"</span> -&gt; setMaxLength(toInteger(value));
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"maximum"</span> -&gt; setMaximum(toNumber(value));
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"minItems"</span> -&gt; setMinItems(toInteger(value));
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"minLength"</span> -&gt; setMinLength(toInteger(value));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"minimum"</span> -&gt; setMinimum(toNumber(value));
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"multipleOf"</span> -&gt; setMultipleOf(toNumber(value));
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"pattern"</span> -&gt; setPattern(s(value));
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"type"</span> -&gt; setType(s(value));
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"uniqueItems"</span> -&gt; setUniqueItems(toBoolean(value));
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">default</strong> -&gt; {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				<strong class="jxr_keyword">super</strong>.set(property, value);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 				yield <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			}
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		};
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	}
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;collectionFormat&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * Determines the format of the array if type array is used.</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values:</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"csv"&lt;/js&gt; (default) - comma separated values &lt;code&gt;foo,bar&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"ssv"&lt;/js&gt; - space separated values &lt;code&gt;foo bar&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"tsv"&lt;/js&gt; - tab separated values &lt;code&gt;foo\tbar&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"pipes"&lt;/js&gt; - pipe separated values &lt;code&gt;foo|bar&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setCollectionFormat(String value) {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_COLLECTION_FORMATS))
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values=[{1}]"</span>, value, toCdl(VALID_COLLECTION_FORMATS));
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		collectionFormat = value;
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;default&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * Declares the value of the item that the server will use if none is provided.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * 		Unlike JSON Schema this value MUST conform to the defined &lt;code&gt;type&lt;/code&gt; for the data type.</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setDefault(Object value) {
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		_<strong class="jxr_keyword">default</strong> = value;
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	}
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;enum&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setEnum(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		_enum = toList(value);
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	}
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * Adds one or more values to the &lt;property&gt;enum&lt;/property&gt; property.</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * @param values</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * 	The values to add to this property.</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid types:</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;code&gt;Object&lt;/code&gt;</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;code&gt;Collection&amp;lt;Object&amp;gt;&lt;/code&gt;</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;code&gt;String&lt;/code&gt; - JSON array representation of &lt;code&gt;Collection&amp;lt;Object&amp;gt;&lt;/code&gt;</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * 			&lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * 			&lt;p class='bcode'&gt;</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * 	_enum(&lt;js&gt;"['foo','bar']"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * 			&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;code&gt;String&lt;/code&gt; - Individual values</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * 			&lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * 			&lt;p class='bcode'&gt;</em>
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * 	_enum(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * 			&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setEnum(Object...values) {  <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		_enum = listb(Object.<strong class="jxr_keyword">class</strong>).sparse().addAny(_enum, values).build();
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	}
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;exclusiveMaximum&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setExclusiveMaximum(Boolean value) {
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		exclusiveMaximum = value;
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	}
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;exclusiveMinimum&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setExclusiveMinimum(Boolean value) {
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		exclusiveMinimum = value;
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	}
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;format&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * The extending format for the previously mentioned &lt;code&gt;type&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setFormat(String value) {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		format = value;
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	}
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;items&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 * Describes the type of items in the array.</em>
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Property value is required if &lt;code&gt;type&lt;/code&gt; is &lt;js&gt;"array"&lt;/js&gt;.</em>
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setItems(<a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> value) {
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		items = value;
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	}
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;maximum&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMaximum(Number value) {
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		maximum = value;
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	}
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;maxItems&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMaxItems(Integer value) {
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		maxItems = value;
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	}
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;maxLength&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMaxLength(Integer value) {
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		maxLength = value;
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	}
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;minimum&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMinimum(Number value) {
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		minimum = value;
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	}
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;minItems&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMinItems(Integer value) {
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		minItems = value;
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	}
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;minLength&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMinLength(Integer value) {
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		minLength = value;
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	}
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;multipleOf&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMultipleOf(Number value) {
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		multipleOf = value;
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 	}
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;pattern&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">	 * This string SHOULD be a valid regular expression.</em>
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setPattern(String value) {
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		pattern = value;
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	}
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;$ref&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	@Beanp(<span class="jxr_string">"$ref"</span>)
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setRef(Object value) {
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		ref = s(value);
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	}
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;type&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> <em class="jxr_javadoccomment">	 * The internal type of the array.</em>
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values:</em>
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"string"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"number"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"integer"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"boolean"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"array"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Property value is required.</em>
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setType(String value) {
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_TYPES))
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}"</span>, value, Json5Serializer.DEFAULT.toString(VALID_TYPES));
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		type = value;
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 	}
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;uniqueItems&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * @return This object</em>
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setUniqueItems(Boolean value) {
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		uniqueItems = value;
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 	}
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> 
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> 	@Override <em class="jxr_comment">/* Overridden from OpenApiElement */</em>
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> strict(Object value) {
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">super</strong>.strict(value);
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 	}
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 	<em class="jxr_comment">/* Resolve references in extra attributes */</em>
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 	<strong class="jxr_keyword">private</strong> Object resolveRefs(Object o, <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> openApi, Deque&lt;String&gt; refStack, <strong class="jxr_keyword">int</strong> maxDepth) {
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> om) {
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 			<strong class="jxr_keyword">var</strong> ref2 = om.get(<span class="jxr_string">"$ref"</span>);
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> 			<strong class="jxr_keyword">if</strong> (ref2 instanceof CharSequence) {
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 				<strong class="jxr_keyword">var</strong> sref = ref2.toString();
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 				<strong class="jxr_keyword">if</strong> (refStack.contains(sref) || refStack.size() &gt;= maxDepth)
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> 					<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 				refStack.addLast(sref);
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 				<strong class="jxr_keyword">var</strong> o2 = openApi.findRef(sref, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 				o2 = resolveRefs(o2, openApi, refStack, maxDepth);
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> 				refStack.removeLast();
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> 				<strong class="jxr_keyword">return</strong> o2;
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 			}
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : om.entrySet())
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 				e.setValue(resolveRefs(e.getValue(), openApi, refStack, maxDepth));
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		}
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a> x)
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> li = x.listIterator(); li.hasNext();)
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 				li.set(resolveRefs(li.next(), openApi, refStack, maxDepth));
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> 	}
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> 
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 	<strong class="jxr_keyword">protected</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> strict() {
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">super</strong>.strict();
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 	}
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> }
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * 		&lt;js&gt;"default"&lt;/js&gt; has no meaning for required items.</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * 		Unlike JSON Schema this value MUST conform to the defined &lt;code&gt;type&lt;/code&gt; for the data type.</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setDefault(Object value) {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		_<strong class="jxr_keyword">default</strong> = value;
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	}
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;enum&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setEnum(Collection&lt;Object&gt; value) {
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		_enum = toList(value);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	}
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * Adds one or more values to the &lt;property&gt;enum&lt;/property&gt; property.</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * @param values</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * 	The values to add to this property.</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid types:</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;code&gt;Object&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;code&gt;Collection&amp;lt;Object&amp;gt;&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;code&gt;String&lt;/code&gt; - JSON array representation of &lt;code&gt;Collection&amp;lt;Object&amp;gt;&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * 			&lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * 			&lt;p class='bcode'&gt;</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * 	_enum(&lt;js&gt;"['foo','bar']"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * 			&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;code&gt;String&lt;/code&gt; - Individual values</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * 			&lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * 			&lt;p class='bcode'&gt;</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * 	_enum(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * 			&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setEnum(Object...values) {  <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		_enum = listb(Object.<strong class="jxr_keyword">class</strong>).sparse().addAny(_enum, values).build();
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	}
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;exclusiveMaximum&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setExclusiveMaximum(Boolean value) {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		exclusiveMaximum = value;
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	}
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;exclusiveMinimum&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setExclusiveMinimum(Boolean value) {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		exclusiveMinimum = value;
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	}
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;format&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * The extending format for the previously mentioned &lt;code&gt;type&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setFormat(String value) {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		format = value;
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	}
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;items&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * Describes the type of items in the array.</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Property value is required if &lt;code&gt;type&lt;/code&gt; is &lt;js&gt;"array"&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setItems(<a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> value) {
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		items = value;
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	}
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;maximum&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMaximum(Number value) {
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		maximum = value;
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	}
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;maxItems&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMaxItems(Integer value) {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		maxItems = value;
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	}
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;maxLength&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMaxLength(Integer value) {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		maxLength = value;
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 	}
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;minimum&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMinimum(Number value) {
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		minimum = value;
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	}
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;minItems&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMinItems(Integer value) {
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		minItems = value;
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	}
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;minLength&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMinLength(Integer value) {
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		minLength = value;
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	}
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;multipleOf&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setMultipleOf(Number value) {
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		multipleOf = value;
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	}
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;pattern&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">	 * This string SHOULD be a valid regular expression.</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setPattern(String value) {
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		pattern = value;
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	}
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;$ref&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	@Beanp(<span class="jxr_string">"$ref"</span>)
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setRef(Object value) {
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		ref = s(value);
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	}
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;type&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> <em class="jxr_javadoccomment">	 * The internal type of the array.</em>
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Valid values:</em>
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"string"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"number"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"integer"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"boolean"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;js&gt;"array"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Property value is required.</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setType(String value) {
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_TYPES))
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}"</span>, value, Json5Serializer.DEFAULT.toString(VALID_TYPES));
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		type = value;
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 	}
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;uniqueItems&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * 	The new value for this property.</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</em>
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">	 * @return This object</em>
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setUniqueItems(Boolean value) {
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		uniqueItems = value;
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 	}
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 	@Override <em class="jxr_comment">/* Overridden from OpenApiElement */</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> strict(Object value) {
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		<strong class="jxr_keyword">super</strong>.strict(value);
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 	}
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 	<em class="jxr_comment">/* Resolve references in extra attributes */</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 	<strong class="jxr_keyword">private</strong> Object resolveRefs(Object o, <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> openApi, Deque&lt;String&gt; refStack, <strong class="jxr_keyword">int</strong> maxDepth) {
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> om) {
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 			<strong class="jxr_keyword">var</strong> ref2 = om.get(<span class="jxr_string">"$ref"</span>);
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 			<strong class="jxr_keyword">if</strong> (ref2 instanceof CharSequence) {
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 				<strong class="jxr_keyword">var</strong> sref = ref2.toString();
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 				<strong class="jxr_keyword">if</strong> (refStack.contains(sref) || refStack.size() &gt;= maxDepth)
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 					<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 				refStack.addLast(sref);
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 				<strong class="jxr_keyword">var</strong> o2 = openApi.findRef(sref, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 				o2 = resolveRefs(o2, openApi, refStack, maxDepth);
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 				refStack.removeLast();
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 				<strong class="jxr_keyword">return</strong> o2;
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 			}
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : om.entrySet())
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 				e.setValue(resolveRefs(e.getValue(), openApi, refStack, maxDepth));
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 		}
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a> o2)
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> li = o2.listIterator(); li.hasNext();)
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 				li.set(resolveRefs(li.next(), openApi, refStack, maxDepth));
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 	}
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 	<strong class="jxr_keyword">protected</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> strict() {
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">super</strong>.strict();
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	}
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

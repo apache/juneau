@@ -107,8 +107,8 @@
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * @throws Exception Any exception can be thrown.</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> aside(<a name="HtmlDocSerializerSession" href="../../../../org/apache/juneau/html/HtmlDocSerializerSession.html#HtmlDocSerializerSession">HtmlDocSerializerSession</a> session, <a name="HtmlWriter" href="../../../../org/apache/juneau/html/HtmlWriter.html#HtmlWriter">HtmlWriter</a> w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		String[] aside = session.getAside();
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; aside.length; i++)
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> aside = session.getAside();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; aside.length; i++)
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			w.sIf(i &gt; 0).appendln(4, session.resolve(aside[i]));
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
@@ -189,8 +189,8 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception can be thrown.</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> footer(<a name="HtmlDocSerializerSession" href="../../../../org/apache/juneau/html/HtmlDocSerializerSession.html#HtmlDocSerializerSession">HtmlDocSerializerSession</a> session, <a name="HtmlWriter" href="../../../../org/apache/juneau/html/HtmlWriter.html#HtmlWriter">HtmlWriter</a> w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		String[] footer = session.getFooter();
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; footer.length; i++)
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> footer = session.getFooter();
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; footer.length; i++)
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			w.sIf(i &gt; 0).appendln(3, session.resolve(footer[i]));
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 	}
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 
@@ -268,8 +268,8 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> head(<a name="HtmlDocSerializerSession" href="../../../../org/apache/juneau/html/HtmlDocSerializerSession.html#HtmlDocSerializerSession">HtmlDocSerializerSession</a> session, <a name="HtmlWriter" href="../../../../org/apache/juneau/html/HtmlWriter.html#HtmlWriter">HtmlWriter</a> w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		String[] head = session.getHead();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; head.length; i++)
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> head = session.getHead();
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; head.length; i++)
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 			w.sIf(i &gt; 0).appendln(2, session.resolve(head[i]));
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">if</strong> (hasStyle(session)) {
@@ -294,8 +294,8 @@
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> header(<a name="HtmlDocSerializerSession" href="../../../../org/apache/juneau/html/HtmlDocSerializerSession.html#HtmlDocSerializerSession">HtmlDocSerializerSession</a> session, <a name="HtmlWriter" href="../../../../org/apache/juneau/html/HtmlWriter.html#HtmlWriter">HtmlWriter</a> w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<em class="jxr_comment">// Write the title of the page.</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		String[] header = session.getHeader();
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; header.length; i++)
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">var</strong> header = session.getHeader();
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; header.length; i++)
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			w.sIf(i &gt; 0).appendln(3, session.resolve(header[i]));
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 
@@ -315,9 +315,9 @@
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 				w.sTag(4, <span class="jxr_string">"li"</span>);
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 				l = session.resolve(l);
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 				<strong class="jxr_keyword">if</strong> (l.matches(<span class="jxr_string">"(?s)&#92;&#92;S+&#92;&#92;:.*"</span>)) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 					<strong class="jxr_keyword">int</strong> i = l.indexOf(':');
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 					String key = l.substring(0, i);
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 					String val = l.substring(i + 1).trim();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 					<strong class="jxr_keyword">var</strong> i = l.indexOf(':');
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 					<strong class="jxr_keyword">var</strong> key = l.substring(0, i);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 					<strong class="jxr_keyword">var</strong> val = l.substring(i + 1).trim();
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 					<strong class="jxr_keyword">if</strong> (val.startsWith(<span class="jxr_string">"&lt;"</span>))
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 						w.nl(4).appendln(5, val);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 					<strong class="jxr_keyword">else</strong>
@@ -330,9 +330,9 @@
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 			}
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			w.eTag(3, <span class="jxr_string">"ol"</span>).nl(3);
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		}
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		String[] nav = session.getNav();
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> nav = session.getNav();
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">if</strong> (nav.length &gt; 0) {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; nav.length; i++)
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; nav.length; i++)
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 				w.sIf(i &gt; 0).appendln(3, session.resolve(nav[i]));
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		}
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}

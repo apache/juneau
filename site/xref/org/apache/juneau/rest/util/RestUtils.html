@@ -218,12 +218,12 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 * @return The parsed string.</em>
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String[] parseHeader(String s) {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">int</strong> i = s.indexOf(':');
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">var</strong> i = s.indexOf(':');
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">if</strong> (i == -1)
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 			i = s.indexOf('=');
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">if</strong> (i == -1)
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		String name = s.substring(0, i).trim().toLowerCase(Locale.ENGLISH);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> name = s.substring(0, i).trim().toLowerCase(Locale.ENGLISH);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		String val = s.substring(i + 1).trim();
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">return</strong> a(name, val);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
@@ -235,9 +235,9 @@
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 * @return The parsed string.</em>
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String[] parseKeyValuePair(String s) {
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">int</strong> i = -1;
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; s.length() &amp;&amp; i &lt; 0; j++) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">char</strong> c = s.charAt(j);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> i = -1;
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> j = 0; j &lt; s.length() &amp;&amp; i &lt; 0; j++) {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(j);
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">if</strong> (c == '=' || c == ':')
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 				i = j;
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		}
@@ -408,9 +408,9 @@
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<em class="jxr_comment">// Given URL:  http://hostname:port/servletPath/extra</em>
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<em class="jxr_comment">// We want:    http://hostname:port/servletPath</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">int</strong> sc = 0;
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; requestURI.length(); i++) {
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 				<strong class="jxr_keyword">char</strong> c = requestURI.charAt(i);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">var</strong> sc = 0;
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; requestURI.length(); i++) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 				<strong class="jxr_keyword">var</strong> c = requestURI.charAt(i);
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 				<strong class="jxr_keyword">if</strong> (c == '/') {
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 					sc++;
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 					<strong class="jxr_keyword">if</strong> (sc == 3) {
@@ -420,12 +420,12 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 						}
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 						<em class="jxr_comment">// Make sure context path follows the authority.</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; contextPath.length(); i++, j++)
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> j = 0; j &lt; contextPath.length(); i++, j++)
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 							<strong class="jxr_keyword">if</strong> (requestURI.charAt(i) != contextPath.charAt(j))
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Exception(<span class="jxr_string">"case=1"</span>);
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 						<em class="jxr_comment">// Make sure servlet path follows the authority.</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; servletPath.length(); i++, j++)
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> j = 0; j &lt; servletPath.length(); i++, j++)
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 							<strong class="jxr_keyword">if</strong> (requestURI.charAt(i) != servletPath.charAt(j))
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Exception(<span class="jxr_string">"case=2"</span>);
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 

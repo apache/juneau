@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		}
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">boolean</strong> matches(Object o) {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			ClassMeta&lt;?&gt; cm = bs.getClassMetaForObject(o);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">var</strong> cm = bs.getClassMetaForObject(o);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">if</strong> (cm == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">if</strong> (cm.isCollection()) {
@@ -171,14 +171,14 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">boolean</strong> matches(Object o) {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			ClassMeta&lt;?&gt; cm = bs.getClassMetaForObject(o);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">var</strong> cm = bs.getClassMetaForObject(o);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">if</strong> (cm.isMapOrBean()) {
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				Map m = cm.isMap() ? (Map)o : bs.toBeanMap(o);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : entryMatchers.entrySet()) {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 					String key = e.getKey();
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 					Object val = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 					<strong class="jxr_keyword">if</strong> (m instanceof <a name="BeanMap" href="../../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>) {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 						val = ((<a name="BeanMap" href="../../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>)m).getRaw(key);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 					<strong class="jxr_keyword">if</strong> (m instanceof <a name="BeanMap" href="../../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a> m2) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 						val = m2.getRaw(key);
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 					} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 						val = m.get(key);
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 					}
@@ -246,7 +246,7 @@
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Override <em class="jxr_comment">/* Overridden from ObjectTool */</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">public</strong> Object run(BeanSession session, Object input, <a name="SearchArgs" href="../../../../org/apache/juneau/objecttools/SearchArgs.html#SearchArgs">SearchArgs</a> args) {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		ClassMeta&lt;?&gt; type = session.getClassMetaForObject(input);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> type = session.getClassMetaForObject(input);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		Map&lt;String,String&gt; search = args.getSearch();
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">if</strong> (search.isEmpty() || type == <strong class="jxr_keyword">null</strong> || ! type.isCollectionOrArray())
@@ -288,10 +288,10 @@
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">public</strong> &lt;R&gt; List&lt;R&gt; run(Object input, String searchArgs) {
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		Object r = run(BeanContext.DEFAULT_SESSION, input, SearchArgs.create(searchArgs));
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">if</strong> (r instanceof List)
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">return</strong> (List&lt;R&gt;)r;
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">if</strong> (r instanceof Collection)
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ArrayList&lt;R&gt;((Collection)r);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">if</strong> (r instanceof List r2)
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">return</strong> r2;
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">if</strong> (r instanceof Collection r3)
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">return</strong> toList(r3);
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">if</strong> (isArray(r))
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">return</strong> l((R[])r);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

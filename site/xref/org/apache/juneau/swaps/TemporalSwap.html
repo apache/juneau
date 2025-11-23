@@ -420,7 +420,7 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">protected</strong> Temporal convertToSerializable(BeanSession session, Temporal t) {
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		ZoneId zoneId = session.getTimeZoneId();
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		Class&lt;? <strong class="jxr_keyword">extends</strong> Temporal&gt; tc = t.getClass();
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> tc = t.getClass();
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<em class="jxr_comment">// Instant is always serialized in GMT.</em>
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">if</strong> (tc == Instant.<strong class="jxr_keyword">class</strong>)

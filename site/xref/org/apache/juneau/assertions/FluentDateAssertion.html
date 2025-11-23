@@ -223,7 +223,7 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<strong class="jxr_keyword">public</strong> R isAfter(Date value) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertArgNotNull(<span class="jxr_string">"value"</span>, value);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">if</strong> (!(value().after(value)))
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">if</strong> (! (value().after(value)))
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_valueWasNotAfterExpected, value, value());
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
@@ -245,7 +245,7 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<strong class="jxr_keyword">public</strong> R isBefore(Date value) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertArgNotNull(<span class="jxr_string">"value"</span>, value);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">if</strong> (!(value().before(value)))
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">if</strong> (! (value().before(value)))
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_valueWasNotBeforeExpected, value, value());
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}

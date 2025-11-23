@@ -844,8 +844,8 @@
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="StringAssertion" href="../../../../org/apache/juneau/assertions/StringAssertion.html#StringAssertion">StringAssertion</a> assertString(Object value) {
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Optional)
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> 			value = ((Optional&lt;?&gt;)value).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Optional&lt;?&gt; value2)
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 			value = value2.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L841" href="#L841">841</a> 		<strong class="jxr_keyword">return</strong> StringAssertion.create(value);
 <a class="jxr_linenumber" name="L842" href="#L842">842</a> 	}
 <a class="jxr_linenumber" name="L843" href="#L843">843</a> 

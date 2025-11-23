@@ -45,8 +45,8 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying content stream.</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="CachingHttpServletResponse" href="../../../../../org/apache/juneau/rest/util/CachingHttpServletResponse.html#CachingHttpServletResponse">CachingHttpServletResponse</a> wrap(HttpServletResponse res) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">if</strong> (res instanceof <a name="CachingHttpServletResponse" href="../../../../../org/apache/juneau/rest/util/CachingHttpServletResponse.html#CachingHttpServletResponse">CachingHttpServletResponse</a>)
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			<strong class="jxr_keyword">return</strong> (<a name="CachingHttpServletResponse" href="../../../../../org/apache/juneau/rest/util/CachingHttpServletResponse.html#CachingHttpServletResponse">CachingHttpServletResponse</a>)res;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">if</strong> (res instanceof <a name="CachingHttpServletResponse" href="../../../../../org/apache/juneau/rest/util/CachingHttpServletResponse.html#CachingHttpServletResponse">CachingHttpServletResponse</a> res2)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			<strong class="jxr_keyword">return</strong> res2;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="CachingHttpServletResponse" href="../../../../../org/apache/juneau/rest/util/CachingHttpServletResponse.html#CachingHttpServletResponse">CachingHttpServletResponse</a>(res);
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  

@@ -409,7 +409,7 @@
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 				<strong class="jxr_keyword">if</strong> (client.logRequests == DetailLevel.SIMPLE) {
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 					client.log(client.logRequestsLevel, <span class="jxr_string">"HTTP {0} {1}, {2}"</span>, request.getMethod(), request.getURI(), <strong class="jxr_keyword">this</strong>.getStatusLine());
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (request.isDebug() || client.logRequests == DetailLevel.FULL) {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 					String output = getContent().asString();
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 					<strong class="jxr_keyword">var</strong> output = getContent().asString();
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 					<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 					sb.append(<span class="jxr_string">"\n=== HTTP Call (outgoing) ======================================================"</span>);
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 					sb.append(<span class="jxr_string">"\n=== REQUEST ===\n"</span>);
@@ -418,7 +418,7 @@
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 					request.getHeaders().forEach(x -&gt; sb.append(<span class="jxr_string">"\n\t"</span>).append(x));
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 					<strong class="jxr_keyword">if</strong> (request.hasHttpEntity()) {
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 						sb.append(<span class="jxr_string">"\n---request entity---"</span>);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 						HttpEntity e = request.getHttpEntity();
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 						<strong class="jxr_keyword">var</strong> e = request.getHttpEntity();
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 						<strong class="jxr_keyword">if</strong> (nn(e.getContentType()))
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 							sb.append(<span class="jxr_string">"\n\t"</span>).append(e.getContentType());
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 						<strong class="jxr_keyword">if</strong> (e.isRepeatable()) {
@@ -509,8 +509,8 @@
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * @throws RestCallException If REST call failed.</em>
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 	<strong class="jxr_keyword">public</strong> String getCharacterEncoding() <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		Optional&lt;ContentType&gt; ct = getContentType();
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		String s = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">var</strong> ct = getContentType();
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">var</strong> s = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">if</strong> (ct.isPresent())
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 			s = getContentType().get().getParameter(<span class="jxr_string">"charset"</span>);
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">return</strong> isEmpty(s) ? <span class="jxr_string">"utf-8"</span> : s;
@@ -905,7 +905,7 @@
 <a class="jxr_linenumber" name="L897" href="#L897">897</a> <em class="jxr_javadoccomment">	 * @return A session of the specified parser.</em>
 <a class="jxr_linenumber" name="L898" href="#L898">898</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L899" href="#L899">899</a> 	<strong class="jxr_keyword">protected</strong> <a name="HttpPartParserSession" href="../../../../../org/apache/juneau/httppart/HttpPartParserSession.html#HttpPartParserSession">HttpPartParserSession</a> getPartParserSession(<a name="HttpPartParser" href="../../../../../org/apache/juneau/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> parser) {
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		HttpPartParserSession s = partParserSessions.get(parser);
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		<strong class="jxr_keyword">var</strong> s = partParserSessions.get(parser);
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L902" href="#L902">902</a> 			s = parser.getPartSession();
 <a class="jxr_linenumber" name="L903" href="#L903">903</a> 			partParserSessions.put(parser, s);
@@ -918,12 +918,12 @@
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">var</strong> c = (Class&lt;T&gt;)rbm.getClassMeta().getInnerClass();
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">final</strong> <a name="RestClient" href="../../../../../org/apache/juneau/rest/client/RestClient.html#RestClient">RestClient</a> rc = <strong class="jxr_keyword">this</strong>.client;
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -&gt; {
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 			ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 			HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 			HttpPartSchema schema = pm.getSchema();
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 			HttpPartType pt = pm.getPartType();
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			String name = pm.getPartName().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			ClassMeta&lt;?&gt; type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 			<strong class="jxr_keyword">var</strong> pm = rbm.getProperty(method.getName());
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 			<strong class="jxr_keyword">var</strong> pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 			<strong class="jxr_keyword">var</strong> schema = pm.getSchema();
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 			<strong class="jxr_keyword">var</strong> pt = pm.getPartType();
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			<strong class="jxr_keyword">var</strong> name = pm.getPartName().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			<strong class="jxr_keyword">var</strong> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
 <a class="jxr_linenumber" name="L919" href="#L919">919</a> 			<strong class="jxr_keyword">if</strong> (pt == RESPONSE_HEADER)
 <a class="jxr_linenumber" name="L920" href="#L920">920</a> 				<strong class="jxr_keyword">return</strong> getHeader(name).parser(pp).schema(schema).as(type).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L921" href="#L921">921</a> 			<strong class="jxr_keyword">if</strong> (pt == RESPONSE_STATUS)

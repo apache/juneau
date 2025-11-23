@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  				<strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">inner</strong>[i];
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  				<strong class="jxr_keyword">if</strong> (nn(p)) {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  					<strong class="jxr_keyword">var</strong> b = p.test(t);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  					<strong class="jxr_keyword">if</strong> (!b) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  					<strong class="jxr_keyword">if</strong> (! b) {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  						<strong class="jxr_keyword">var</strong> m = format(MSG_predicateTestFailed, i + 1);
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 						<strong class="jxr_keyword">if</strong> (p instanceof <a name="AssertionPredicate" href="../../../../org/apache/juneau/assertions/AssertionPredicate.html#AssertionPredicate">AssertionPredicate</a> p2) <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 							m += <span class="jxr_string">"\n\t"</span> + p2.getFailureMessage();
@@ -248,13 +248,13 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> test(T t) {
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		failedMessage.remove();
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">inner</strong>.test(t);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">if</strong> (!b) {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">if</strong> (! b) {
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">var</strong> m = message;
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">var</strong> oargs = <strong class="jxr_keyword">new</strong> Object[<strong class="jxr_keyword">this</strong>.args.length];
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; oargs.length; i++) {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 				<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">this</strong>.args[i];
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				<strong class="jxr_keyword">if</strong> (a instanceof Function af) <em class="jxr_comment">// NOSONAR - Intentional.</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 					oargs[i] = af.apply(t);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">if</strong> (a instanceof Function a2) <em class="jxr_comment">// NOSONAR - Intentional.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 				oargs[i] = a2.apply(t);
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 					oargs[i] = a;
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 			}

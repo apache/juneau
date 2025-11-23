@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">if</strong> (! c.isInterface())
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Class ''{0}'' passed to toInterface() is not an interface."</span>, cn(c));
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">return</strong> opt((T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler) (proxy, method, args) -&gt; {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">return</strong> opt((T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -&gt; {
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">var</strong> bi = Introspector.getBeanInfo(c, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pd : bi.getPropertyDescriptors()) {
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 				<strong class="jxr_keyword">var</strong> rm = pd.getReadMethod();

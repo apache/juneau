@@ -194,7 +194,7 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			eType = object();
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		ClassMeta&lt;?&gt; sType = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> sType = (ClassMeta&lt;?&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">if</strong> (nn(builder))
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 			sType = builder.getBuilderClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(swap))
@@ -247,7 +247,7 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 					Map m = (sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Map)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : newGenericMap(sType));
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; length; i++) {
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 						Object key = parseAnything(sType.getKeyType(), is, <strong class="jxr_keyword">outer</strong>, pMeta);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 						ClassMeta&lt;?&gt; vt = sType.getValueType();
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 						<strong class="jxr_keyword">var</strong> vt = sType.getValueType();
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 						Object value = parseAnything(vt, is, m, pMeta);
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 						setName(vt, value, key);
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 						m.put(key, value);
@@ -261,14 +261,14 @@
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 					BeanMap m = builder == <strong class="jxr_keyword">null</strong> ? newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass()) : toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType));
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; length; i++) {
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 						String pName = parseAnything(string(), is, m.getBean(false), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 						BeanPropertyMeta bpm = m.getPropertyMeta(pName);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 						<strong class="jxr_keyword">var</strong> bpm = m.getPropertyMeta(pName);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 						<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 							<strong class="jxr_keyword">if</strong> (pName.equals(getBeanTypePropertyName(eType)))
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 								parseAnything(string(), is, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 							<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 								onUnknownProperty(pName, m, parseAnything(string(), is, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 						} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 							ClassMeta&lt;?&gt; cm = bpm.getClassMeta();
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 							<strong class="jxr_keyword">var</strong> cm = bpm.getClassMeta();
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 							Object value = parseAnything(cm, is, m.getBean(false), bpm);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 							setName(cm, value, pName);
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 							<strong class="jxr_keyword">try</strong> {

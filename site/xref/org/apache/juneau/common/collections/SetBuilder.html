@@ -223,8 +223,8 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">if</strong> (nn(values)) {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : values) {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 				<strong class="jxr_keyword">if</strong> (nn(o)) {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					<strong class="jxr_keyword">if</strong> (o instanceof Collection) {
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 						((Collection&lt;?&gt;)o).forEach(x -&gt; addAny(x));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					<strong class="jxr_keyword">if</strong> (o instanceof Collection&lt;?&gt; o2) {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 						o2.forEach(x -&gt; addAny(x));
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isArray(o)) {
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(o); i++)
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 							addAny(Array.get(o, i));
@@ -309,12 +309,12 @@
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">if</strong> (set == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 				set = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(0);
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		}
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<strong class="jxr_keyword">if</strong> (nn(set)) {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">if</strong> (nn(comparator)) {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;(comparator);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			s.addAll(set);
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			set = s;
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">if</strong> (nn(set)) {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">if</strong> (nn(comparator)) {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(comparator);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 				s.addAll(set);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 				set = s;
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			}
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">if</strong> (unmodifiable)
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 				set = unmodifiableSet(set);
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		}

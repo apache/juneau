@@ -73,9 +73,9 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">public</strong> StringMatcher(String searchPattern) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">this</strong>.pattern = searchPattern.trim();
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			List&lt;Pattern&gt; ors = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			List&lt;Pattern&gt; ands = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			List&lt;Pattern&gt; nots = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">var</strong> ors = <strong class="jxr_keyword">new</strong> LinkedList&lt;Pattern&gt;();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">var</strong> ands = <strong class="jxr_keyword">new</strong> LinkedList&lt;Pattern&gt;();
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">var</strong> nots = <strong class="jxr_keyword">new</strong> LinkedList&lt;Pattern&gt;();
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : StringUtils.splitQuoted(pattern, <strong class="jxr_keyword">true</strong>)) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  				<strong class="jxr_keyword">char</strong> c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);

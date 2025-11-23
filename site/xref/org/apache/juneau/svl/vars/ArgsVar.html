@@ -91,9 +91,9 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">if</strong> (nn(ARGS))
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">this</strong>.args = ARGS;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			String s = System.getProperty(<span class="jxr_string">"sun.java.command"</span>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">var</strong> s = System.getProperty(<span class="jxr_string">"sun.java.command"</span>);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">if</strong> (isNotEmpty(s)) {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  				<strong class="jxr_keyword">int</strong> i = s.indexOf(' ');
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  				<strong class="jxr_keyword">var</strong> i = s.indexOf(' ');
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  				args = <strong class="jxr_keyword">new</strong> <a name="Args" href="../../../../../org/apache/juneau/collections/Args.html#Args">Args</a>(i == -1 ? <span class="jxr_string">""</span> : s.substring(i + 1));
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  				args = <strong class="jxr_keyword">new</strong> <a name="Args" href="../../../../../org/apache/juneau/collections/Args.html#Args">Args</a>(System.getProperty(<span class="jxr_string">"juneau.args"</span>, <span class="jxr_string">""</span>));

@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> of(String value, NameValuePair...parameters) {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">if</strong> (parameters.length == 0)
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">return</strong> of(value);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">return</strong> StringUtils.isEmpty(value) ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>(value, parameters);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">return</strong> isEmpty(value) ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>(value, parameters);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -129,8 +129,8 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Always the same length as the input string array.</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>[] ofAll(String...values) {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		MediaType[] mt = <strong class="jxr_keyword">new</strong> <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>[values.length];
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; values.length; i++)
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> mt = <strong class="jxr_keyword">new</strong> <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>[values.length];
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; values.length; i++)
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			mt[i] = of(values[i]);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">return</strong> mt;
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
@@ -171,26 +171,26 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">if</strong> (parameters == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			parameters = e.getParameters();
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parameters.length; i++) {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parameters.length; i++) {
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 				<strong class="jxr_keyword">if</strong> (parameters[i].getName().equals(<span class="jxr_string">"q"</span>)) {
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 					parameters = Arrays.copyOfRange(parameters, 0, i);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 					<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 				}
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 			}
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		}
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parameters.length; i++)
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parameters.length; i++)
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 			parameters[i] = <strong class="jxr_keyword">new</strong> BasicNameValuePair(parameters[i].getName(), parameters[i].getValue());
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">this</strong>.parameters = parameters;
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		String x = mediaType.replace(' ', '+');
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">int</strong> i = x.indexOf('/');
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> x = mediaType.replace(' ', '+');
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> i = x.indexOf('/');
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		type = (i == -1 ? x : x.substring(0, i));
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		subType = (i == -1 ? <span class="jxr_string">"*"</span> : x.substring(i + 1));
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	subTypes = splita(subType, '+');
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	Arrays.sort(<strong class="jxr_keyword">this</strong>.subTypesSorted);
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	hasSubtypeMeta = CollectionUtils.contains(<span class="jxr_string">"*"</span>, <strong class="jxr_keyword">this</strong>.subTypes);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		subTypes = splita(subType, '+');
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		Arrays.sort(<strong class="jxr_keyword">this</strong>.subTypesSorted);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		hasSubtypeMeta = CollectionUtils.contains(<span class="jxr_string">"*"</span>, <strong class="jxr_keyword">this</strong>.subTypes);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		sb.append(mediaType);
@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> hasSubType(String st) {
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">if</strong> (nn(st))
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : subTypes)
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">if</strong> (st.equalsIgnoreCase(s))
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">if</strong> (eqic(st, s))
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 	}
@@ -345,114 +345,115 @@
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * @return The index into the array of the best match, or &lt;c&gt;-1&lt;/c&gt; if no suitable matches could be found.</em>
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> match(List&lt;MediaType&gt; mediaTypes) {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">int</strong> matchQuant = 0, matchIndex = -1;
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; mediaTypes.size(); i++) {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			MediaType mt = mediaTypes.get(i);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">int</strong> matchQuant2 = mt.match(<strong class="jxr_keyword">this</strong>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">if</strong> (matchQuant2 &gt; matchQuant) {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 				matchQuant = matchQuant2;
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				matchIndex = i;
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			}
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">return</strong> matchIndex;
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * Returns a match metric against the specified media type where a larger number represents a better match.</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * This media type can contain &lt;js&gt;'*'&lt;/js&gt; metacharacters.</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;The comparison media type must not.</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Exact matches (e.g. &lt;js&gt;"text/json"&lt;/js&gt;/&lt;/js&gt;"text/json"&lt;/js&gt;) should match</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * 		better than meta-character matches (e.g. &lt;js&gt;"text/*"&lt;/js&gt;/&lt;/js&gt;"text/json"&lt;/js&gt;)</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;The comparison media type can have additional subtype tokens (e.g. &lt;js&gt;"text/json+foo"&lt;/js&gt;)</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * 		that will not prevent a match if the &lt;c&gt;allowExtraSubTypes&lt;/c&gt; flag is set.</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * 		The reverse is not true, e.g. the comparison media type must contain all subtype tokens found in the</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * 		comparing media type.</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * 		&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;We want the {@link JsonSerializer} (&lt;js&gt;"text/json"&lt;/js&gt;) class to be able to handle requests for &lt;js&gt;"text/json+foo"&lt;/js&gt;.</em>
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;We want to make sure {@link org.apache.juneau.json.Json5Serializer} (&lt;js&gt;"text/json5"&lt;/js&gt;) does not handle</em>
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * 				requests for &lt;js&gt;"text/json"&lt;/js&gt;.</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * 		&lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * 		More token matches should result in a higher match number.</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * The formula is as follows for &lt;c&gt;type/subTypes&lt;/c&gt;:</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;An exact match is &lt;c&gt;100,000&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Add the following for type (assuming subtype match is &amp;lt;0):</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;10,000&lt;/c&gt; for an exact match (e.g. &lt;js&gt;"text"&lt;/js&gt;==&lt;js&gt;"text"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;5,000&lt;/c&gt; for a meta match (e.g. &lt;js&gt;"*"&lt;/js&gt;==&lt;js&gt;"text"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Add the following for subtype (assuming type match is &amp;lt;0):</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;7,500&lt;/c&gt; for an exact match (e.g. &lt;js&gt;"json+foo"&lt;/js&gt;==&lt;js&gt;"json+foo"&lt;/js&gt; or &lt;js&gt;"json+foo"&lt;/js&gt;==&lt;js&gt;"foo+json"&lt;/js&gt;)</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;100&lt;/c&gt; for every subtype entry match (e.g. &lt;js&gt;"json"&lt;/js&gt;/&lt;js&gt;"json+foo"&lt;/js&gt;)</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * @param o The media type to compare with.</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 * @param allowExtraSubTypes If &lt;jk&gt;true&lt;/jk&gt;,</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the media types match.</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> match(<a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> o, <strong class="jxr_keyword">boolean</strong> allowExtraSubTypes) {
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">return</strong> -1;
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<em class="jxr_comment">// Perfect match</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == o || (type.equals(o.type) &amp;&amp; subType.equals(o.subType)))
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">return</strong> 100000;
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">int</strong> c = 0;
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">if</strong> (type.equals(o.type))
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			c += 10000;
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(type) || <span class="jxr_string">"*"</span>.equals(o.type))
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			c += 5000;
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">if</strong> (c == 0)
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">return</strong> 0;
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<em class="jxr_comment">// Subtypes match but are ordered different</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">if</strong> (eq(subTypesSorted, o.subTypesSorted))
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">return</strong> c + 7500;
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st1 : subTypes) {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(st1))
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 				c += 0;
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (CollectionUtils.contains(st1, o.subTypes))
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 				c += 100;
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o.hasSubtypeMeta)
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 				c += 0;
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 				<strong class="jxr_keyword">return</strong> 0;
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		}
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st2 : o.subTypes) {
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(st2))
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 				c += 0;
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (CollectionUtils.contains(st2, subTypes))
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 				c += 100;
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (hasSubtypeMeta)
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 				c += 0;
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! allowExtraSubTypes)
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 				<strong class="jxr_keyword">return</strong> 0;
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 				c += 10;
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		}
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">return</strong> string;
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	}
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> }
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">int</strong> matchQuant = 0;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">int</strong> matchIndex = -1;
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; mediaTypes.size(); i++) {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">var</strong> mt = mediaTypes.get(i);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">var</strong> matchQuant2 = mt.match(<strong class="jxr_keyword">this</strong>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">if</strong> (matchQuant2 &gt; matchQuant) {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				matchQuant = matchQuant2;
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				matchIndex = i;
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			}
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">return</strong> matchIndex;
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	}
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * Returns a match metric against the specified media type where a larger number represents a better match.</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * This media type can contain &lt;js&gt;'*'&lt;/js&gt; metacharacters.</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;The comparison media type must not.</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Exact matches (e.g. &lt;js&gt;"text/json"&lt;/js&gt;/&lt;/js&gt;"text/json"&lt;/js&gt;) should match</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * 		better than meta-character matches (e.g. &lt;js&gt;"text/*"&lt;/js&gt;/&lt;/js&gt;"text/json"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;The comparison media type can have additional subtype tokens (e.g. &lt;js&gt;"text/json+foo"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * 		that will not prevent a match if the &lt;c&gt;allowExtraSubTypes&lt;/c&gt; flag is set.</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * 		The reverse is not true, e.g. the comparison media type must contain all subtype tokens found in the</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * 		comparing media type.</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 * 		&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;We want the {@link JsonSerializer} (&lt;js&gt;"text/json"&lt;/js&gt;) class to be able to handle requests for &lt;js&gt;"text/json+foo"&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;We want to make sure {@link org.apache.juneau.json.Json5Serializer} (&lt;js&gt;"text/json5"&lt;/js&gt;) does not handle</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * 				requests for &lt;js&gt;"text/json"&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * 		&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * 		More token matches should result in a higher match number.</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * The formula is as follows for &lt;c&gt;type/subTypes&lt;/c&gt;:</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;An exact match is &lt;c&gt;100,000&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Add the following for type (assuming subtype match is &amp;lt;0):</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;10,000&lt;/c&gt; for an exact match (e.g. &lt;js&gt;"text"&lt;/js&gt;==&lt;js&gt;"text"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;5,000&lt;/c&gt; for a meta match (e.g. &lt;js&gt;"*"&lt;/js&gt;==&lt;js&gt;"text"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Add the following for subtype (assuming type match is &amp;lt;0):</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;7,500&lt;/c&gt; for an exact match (e.g. &lt;js&gt;"json+foo"&lt;/js&gt;==&lt;js&gt;"json+foo"&lt;/js&gt; or &lt;js&gt;"json+foo"&lt;/js&gt;==&lt;js&gt;"foo+json"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;100&lt;/c&gt; for every subtype entry match (e.g. &lt;js&gt;"json"&lt;/js&gt;/&lt;js&gt;"json+foo"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 * @param o The media type to compare with.</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 * @param allowExtraSubTypes If &lt;jk&gt;true&lt;/jk&gt;,</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the media types match.</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> match(<a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> o, <strong class="jxr_keyword">boolean</strong> allowExtraSubTypes) {
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">return</strong> -1;
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<em class="jxr_comment">// Perfect match</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == o || (type.equals(o.type) &amp;&amp; subType.equals(o.subType)))
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">return</strong> 100000;
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> c = 0;
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">if</strong> (type.equals(o.type))
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			c += 10000;
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(type) || <span class="jxr_string">"*"</span>.equals(o.type))
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			c += 5000;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">if</strong> (c == 0)
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			<strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<em class="jxr_comment">// Subtypes match but are ordered different</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">if</strong> (eq(subTypesSorted, o.subTypesSorted))
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">return</strong> c + 7500;
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st1 : subTypes) {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(st1))
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 				c += 0;
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (CollectionUtils.contains(st1, o.subTypes))
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 				c += 100;
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o.hasSubtypeMeta)
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 				c += 0;
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 				<strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		}
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st2 : o.subTypes) {
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(st2))
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 				c += 0;
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (CollectionUtils.contains(st2, subTypes))
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 				c += 100;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (hasSubtypeMeta)
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 				c += 0;
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! allowExtraSubTypes)
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				<strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 				c += 10;
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		}
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	}
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> string;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

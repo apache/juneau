@@ -65,10 +65,10 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> create(Object o) {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>)
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">return</strong> (<a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>)o;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (o instanceof CharSequence)
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">return</strong> of(o.toString());
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> o2)
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">return</strong> o2;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (o instanceof CharSequence o3)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">return</strong> of(o3.toString());
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid object type passed to Namespace.create(Object):  ''{0}''"</span>, cn(o));
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
@@ -93,28 +93,28 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">if</strong> (o instanceof String[]) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">var</strong> ss = (String[])o;
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			Namespace[] n = <strong class="jxr_keyword">new</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>[ss.length];
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ss.length; i++)
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">var</strong> n = <strong class="jxr_keyword">new</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>[ss.length];
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; ss.length; i++)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  				n[i] = create(ss[i]);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">return</strong> n;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		}
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">if</strong> (o instanceof CharSequence) {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			String[] ss = splita(o.toString());
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			Namespace[] n = <strong class="jxr_keyword">new</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>[ss.length];
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ss.length; i++)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">if</strong> (o instanceof CharSequence o2) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">var</strong> ss = splita(o2.toString());
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">var</strong> n = <strong class="jxr_keyword">new</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>[ss.length];
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; ss.length; i++)
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  				n[i] = create(ss[i]);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">return</strong> n;
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		}
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">if</strong> (o instanceof Collection c) {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		Namespace[] n = <strong class="jxr_keyword">new</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>[c.size()];
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o2 : c) {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<strong class="jxr_keyword">if</strong> (o2 instanceof <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>)
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 					n[i++] = (<a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>)o2;
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o2 instanceof CharSequence)
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 					n[i++] = create(o2.toString());
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Collection o2) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">var</strong> n = <strong class="jxr_keyword">new</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>[o2.size()];
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			<strong class="jxr_keyword">var</strong> i = 0;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o3 : o2) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				<strong class="jxr_keyword">if</strong> (o3 instanceof <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> o4)
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 					n[i++] = o4;
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o3 instanceof CharSequence o4)
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 					n[i++] = create(o4.toString());
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid type passed to NamespaceFactory.createArray: ''{0}''"</span>, cn(o));
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			}
@@ -131,10 +131,10 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * @return The namespace object.</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> of(String key) {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		Namespace n = CACHE.get(key);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> n = CACHE.get(key);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">if</strong> (nn(n))
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">return</strong> n;
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">int</strong> i = key.indexOf(':');
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> i = key.indexOf(':');
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">if</strong> (i == -1)
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">return</strong> of(key, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">if</strong> (key.startsWith(<span class="jxr_string">"http://"</span>) || key.startsWith(<span class="jxr_string">"https://"</span>))

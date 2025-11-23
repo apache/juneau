@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(HttpResponse response) {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">super</strong>((Throwable)<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		Header h = response.getLastHeader(<span class="jxr_string">"Thrown"</span>);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> h = response.getLastHeader(<span class="jxr_string">"Thrown"</span>);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">if</strong> (nn(h))
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			setMessage(thrown(h.getValue()).asParts().get().get(0).getMessage());
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		setHeaders(response.getAllHeaders());
@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * @return All error messages from all errors in this stack.</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">public</strong> String getFullStackMessage(<strong class="jxr_keyword">boolean</strong> scrubForXssVulnerabilities) {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		String msg = getMessage();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> msg = getMessage();
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">if</strong> (nn(msg)) {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">if</strong> (scrubForXssVulnerabilities)

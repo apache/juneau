@@ -405,7 +405,7 @@
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 	@Override
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<strong class="jxr_keyword">public</strong> R isType(Class&lt;?&gt; parent) {
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertArgNotNull(<span class="jxr_string">"parent"</span>, parent);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">if</strong> (!parent.isInstance(value()))
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">if</strong> (! parent.isInstance(value()))
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_exceptionWasNotExpectedType, cn(parent), cn(value()));
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}

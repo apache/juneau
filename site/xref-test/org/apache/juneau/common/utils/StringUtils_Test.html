@@ -1045,11 +1045,11 @@
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 	}
 <a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 
 <a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	@Test <strong class="jxr_keyword">void</strong> a43_isEmpty() {
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		assertTrue(StringUtils.isEmpty(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		assertTrue(StringUtils.isEmpty(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		assertFalse(StringUtils.isEmpty(<span class="jxr_string">"   "</span>));
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		assertFalse(StringUtils.isEmpty(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 		assertFalse(StringUtils.isEmpty(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		assertTrue(Utils.isEmpty((String)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		assertTrue(Utils.isEmpty(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		assertFalse(Utils.isEmpty(<span class="jxr_string">"   "</span>));
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		assertFalse(Utils.isEmpty(<span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 		assertFalse(Utils.isEmpty(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 	}
 <a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 
 <a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 	@Test <strong class="jxr_keyword">void</strong> a44_hasText() {
@@ -1508,8 +1508,8 @@
 <a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 		assertEquals(<span class="jxr_string">"[a,b,c]"</span>, readable(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)));
 <a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 		assertEquals(<span class="jxr_string">"{foo=bar}"</span>, readable(m(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>)));
 <a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> 		assertEquals(<span class="jxr_string">"[1,2,3]"</span>, readable(ints(1, 2, 3)));
-<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 		assertEquals(<span class="jxr_string">"test"</span>, readable(Optional.of(<span class="jxr_string">"test"</span>)));
-<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 		assertNull(readable(Optional.empty()));
+<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 	assertEquals(<span class="jxr_string">"test"</span>, readable(opt(<span class="jxr_string">"test"</span>)));
+<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 	assertNull(readable(opte()));
 <a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 	}
 <a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> }
 </pre>

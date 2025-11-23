@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">public</strong> R isAfter(ZonedDateTime value) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertArgNotNull(<span class="jxr_string">"value"</span>, value);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">if</strong> (!(value().isAfter(value)))
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">if</strong> (! (value().isAfter(value)))
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_valueWasNotAfterExpected, value, value());
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
@@ -221,7 +221,7 @@
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">public</strong> R isBefore(ZonedDateTime value) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertArgNotNull(<span class="jxr_string">"value"</span>, value);
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">if</strong> (!(value().isBefore(value)))
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">if</strong> (! (value().isBefore(value)))
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_valueWasNotBeforeExpected, value, value());
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}

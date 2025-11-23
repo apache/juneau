@@ -1828,17 +1828,17 @@
 <a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 
 <a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Builder preInit(Builder builder) {
 <a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 			Object restBean = builder.restBean;
-<a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 			String contextPath = builder.contextPath;
-<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 			String servletPath = builder.servletPath;
-<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 			String rootUrl = builder.getRootUri();
+<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 			<strong class="jxr_keyword">var</strong> restBean = builder.restBean;
+<a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 			<strong class="jxr_keyword">var</strong> contextPath = builder.contextPath;
+<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 			<strong class="jxr_keyword">var</strong> servletPath = builder.servletPath;
+<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 			<strong class="jxr_keyword">var</strong> rootUrl = builder.getRootUri();
 <a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> 			<strong class="jxr_keyword">if</strong> (rootUrl == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> 				rootUrl = <span class="jxr_string">"http://localhost"</span>;
 <a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> 
-<a class="jxr_linenumber" name="L1830" href="#L1830">1830</a> 			Class&lt;?&gt; c = restBean instanceof Class ? (Class&lt;?&gt;)restBean : restBean.getClass();
+<a class="jxr_linenumber" name="L1830" href="#L1830">1830</a> 			<strong class="jxr_keyword">var</strong> c = restBean instanceof Class restBean2 ? (Class&lt;?&gt;)restBean2 : restBean.getClass();
 <a class="jxr_linenumber" name="L1831" href="#L1831">1831</a> 			<strong class="jxr_keyword">if</strong> (! REST_CONTEXTS.containsKey(c)) {
-<a class="jxr_linenumber" name="L1832" href="#L1832">1832</a> 				<strong class="jxr_keyword">boolean</strong> isClass = restBean instanceof Class;
-<a class="jxr_linenumber" name="L1833" href="#L1833">1833</a> 				Object o = isClass ? ((Class&lt;?&gt;)restBean).getDeclaredConstructor().newInstance() : restBean;
+<a class="jxr_linenumber" name="L1832" href="#L1832">1832</a> 				<strong class="jxr_keyword">var</strong> isClass = restBean instanceof Class;
+<a class="jxr_linenumber" name="L1833" href="#L1833">1833</a> 				<strong class="jxr_keyword">var</strong> o = isClass ? ((Class&lt;?&gt;)restBean).getDeclaredConstructor().newInstance() : restBean;
 <a class="jxr_linenumber" name="L1834" href="#L1834">1834</a> 				<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L1835" href="#L1835">1835</a> 				RestContext rc = <a name="RestContext" href="../../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a>
 <a class="jxr_linenumber" name="L1836" href="#L1836">1836</a> 					.create(o.getClass(), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>)
@@ -1851,7 +1851,7 @@
 <a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 				<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 				REST_CONTEXTS.put(c, rc);
 <a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 			}
-<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 			RestContext restBeanCtx = REST_CONTEXTS.get(c);
+<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 			<strong class="jxr_keyword">var</strong> restBeanCtx = REST_CONTEXTS.get(c);
 <a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 			builder.restContext(restBeanCtx);
 <a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 
 <a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 			<strong class="jxr_keyword">if</strong> (servletPath == <strong class="jxr_keyword">null</strong>)
@@ -1893,8 +1893,8 @@
 <a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> 		restObject = restContext.getResource();
 <a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 
 <a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
-<a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 		<strong class="jxr_keyword">if</strong> (ccm instanceof <a name="MockHttpClientConnectionManager" href="../../../../../org/apache/juneau/rest/mock/MockHttpClientConnectionManager.html#MockHttpClientConnectionManager">MockHttpClientConnectionManager</a>)
-<a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> 			((<a name="MockHttpClientConnectionManager" href="../../../../../org/apache/juneau/rest/mock/MockHttpClientConnectionManager.html#MockHttpClientConnectionManager">MockHttpClientConnectionManager</a>)ccm).init(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 		<strong class="jxr_keyword">if</strong> (ccm instanceof <a name="MockHttpClientConnectionManager" href="../../../../../org/apache/juneau/rest/mock/MockHttpClientConnectionManager.html#MockHttpClientConnectionManager">MockHttpClientConnectionManager</a> ccm2)
+<a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> 			ccm2.init(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1890" href="#L1890">1890</a> 	}
 <a class="jxr_linenumber" name="L1891" href="#L1891">1891</a> 
 <a class="jxr_linenumber" name="L1892" href="#L1892">1892</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
@@ -2063,7 +2063,7 @@
 <a class="jxr_linenumber" name="L2055" href="#L2055">2055</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2056" href="#L2056">2056</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> receiveResponseEntity(HttpResponse response) <strong class="jxr_keyword">throws</strong> HttpException, IOException {
 <a class="jxr_linenumber" name="L2057" href="#L2057">2057</a> 		InputStream is = <strong class="jxr_keyword">new</strong> ByteArrayInputStream(sres.get().getContent());
-<a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 		Header contentEncoding = response.getLastHeader(<span class="jxr_string">"Content-Encoding"</span>);
+<a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 		<strong class="jxr_keyword">var</strong> contentEncoding = response.getLastHeader(<span class="jxr_string">"Content-Encoding"</span>);
 <a class="jxr_linenumber" name="L2059" href="#L2059">2059</a> 		<strong class="jxr_keyword">if</strong> (nn(contentEncoding) &amp;&amp; contentEncoding.getValue().equalsIgnoreCase(<span class="jxr_string">"gzip"</span>))
 <a class="jxr_linenumber" name="L2060" href="#L2060">2060</a> 			is = <strong class="jxr_keyword">new</strong> GZIPInputStream(is);
 <a class="jxr_linenumber" name="L2061" href="#L2061">2061</a> 		response.setEntity(<strong class="jxr_keyword">new</strong> InputStreamEntity(is));
@@ -2086,7 +2086,7 @@
 <a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 
 <a class="jxr_linenumber" name="L2079" href="#L2079">2079</a> 			sres.set(res);
 <a class="jxr_linenumber" name="L2080" href="#L2080">2080</a> 
-<a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> 			HttpResponse response = <strong class="jxr_keyword">new</strong> BasicHttpResponse(<strong class="jxr_keyword">new</strong> BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
+<a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> 			<strong class="jxr_keyword">var</strong> response = <strong class="jxr_keyword">new</strong> BasicHttpResponse(<strong class="jxr_keyword">new</strong> BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
 <a class="jxr_linenumber" name="L2082" href="#L2082">2082</a> 			res.getHeaders().forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L2083" href="#L2083">2083</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> hv : v)
 <a class="jxr_linenumber" name="L2084" href="#L2084">2084</a> 					response.addHeader(k, hv);
@@ -2141,7 +2141,7 @@
 <a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> 			String path = rl.getUri();
 <a class="jxr_linenumber" name="L2134" href="#L2134">2134</a> 			String target = findTarget(request);
 <a class="jxr_linenumber" name="L2135" href="#L2135">2135</a> 
-<a class="jxr_linenumber" name="L2136" href="#L2136">2136</a> 			HttpRequest req = findRestRequest(request);
+<a class="jxr_linenumber" name="L2136" href="#L2136">2136</a> 			<strong class="jxr_keyword">var</strong> req = findRestRequest(request);
 <a class="jxr_linenumber" name="L2137" href="#L2137">2137</a> 			rreq.set(req);
 <a class="jxr_linenumber" name="L2138" href="#L2138">2138</a> 			rres.remove();
 <a class="jxr_linenumber" name="L2139" href="#L2139">2139</a> 			sreq.remove();
@@ -2153,61 +2153,60 @@
 <a class="jxr_linenumber" name="L2145" href="#L2145">2145</a> 			<strong class="jxr_keyword">if</strong> (nn(pr.getError()))
 <a class="jxr_linenumber" name="L2146" href="#L2146">2146</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(pr.getError());
 <a class="jxr_linenumber" name="L2147" href="#L2147">2147</a> 
-<a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> 			<strong class="jxr_keyword">var</strong> r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
-<a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 				.debug(isDebug());
-<a class="jxr_linenumber" name="L2150" href="#L2150">2150</a> 
-<a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : request.getAllHeaders())
-<a class="jxr_linenumber" name="L2152" href="#L2152">2152</a> 				r.header(h.getName(), h.getValue());
-<a class="jxr_linenumber" name="L2153" href="#L2153">2153</a> 
-<a class="jxr_linenumber" name="L2154" href="#L2154">2154</a> 			sreq.set(r);
-<a class="jxr_linenumber" name="L2155" href="#L2155">2155</a> 			sreq.get().applyOverrides(req);
-<a class="jxr_linenumber" name="L2156" href="#L2156">2156</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> HttpException(e.getMessage(), e);
-<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> 		}
-<a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> 	}
-<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> 
-<a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
-<a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSocketTimeout(<strong class="jxr_keyword">int</strong> timeout) {}
-<a class="jxr_linenumber" name="L2163" href="#L2163">2163</a> 
-<a class="jxr_linenumber" name="L2164" href="#L2164">2164</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
-<a class="jxr_linenumber" name="L2165" href="#L2165">2165</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> shutdown() <strong class="jxr_keyword">throws</strong> IOException {}
-<a class="jxr_linenumber" name="L2166" href="#L2166">2166</a> 
-<a class="jxr_linenumber" name="L2167" href="#L2167">2167</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2168" href="#L2168">2168</a> <em class="jxr_javadoccomment">	 * Attempts to unwrap the request to find the underlying RestRequest object.</em>
-<a class="jxr_linenumber" name="L2169" href="#L2169">2169</a> <em class="jxr_javadoccomment">	 * Returns the same object if one of the low-level client methods are used (e.g. execute(HttpUriRequest)).</em>
-<a class="jxr_linenumber" name="L2170" href="#L2170">2170</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2171" href="#L2171">2171</a> 	<strong class="jxr_keyword">private</strong> HttpRequest findRestRequest(HttpRequest req) {
-<a class="jxr_linenumber" name="L2172" href="#L2172">2172</a> 		<strong class="jxr_keyword">if</strong> (req instanceof <a name="RestRequestCreated" href="../../../../../org/apache/juneau/rest/client/RestRequestCreated.html#RestRequestCreated">RestRequestCreated</a>)
-<a class="jxr_linenumber" name="L2173" href="#L2173">2173</a> 			<strong class="jxr_keyword">return</strong> ((<a name="RestRequestCreated" href="../../../../../org/apache/juneau/rest/client/RestRequestCreated.html#RestRequestCreated">RestRequestCreated</a>)req).getRestRequest();
-<a class="jxr_linenumber" name="L2174" href="#L2174">2174</a> 		<strong class="jxr_keyword">if</strong> (req instanceof HttpRequestWrapper)
-<a class="jxr_linenumber" name="L2175" href="#L2175">2175</a> 			<strong class="jxr_keyword">return</strong> findRestRequest(((HttpRequestWrapper)req).getOriginal());
-<a class="jxr_linenumber" name="L2176" href="#L2176">2176</a> 		<strong class="jxr_keyword">return</strong> req;
-<a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> 	}
-<a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> 
-<a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findTarget(HttpRequest req) {
-<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 		<strong class="jxr_keyword">if</strong> (req instanceof HttpRequestWrapper hrw) {
-<a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 			HttpHost httpHost = hrw.getTarget();
-<a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> 			<strong class="jxr_keyword">if</strong> (nn(httpHost))
-<a class="jxr_linenumber" name="L2183" href="#L2183">2183</a> 				<strong class="jxr_keyword">return</strong> httpHost.toURI();
-<a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> 		}
-<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"http://localhost"</span>;
-<a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> 	}
-<a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 
-<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
-<a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> 	<strong class="jxr_keyword">protected</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> createRequest(URI uri, String method, <strong class="jxr_keyword">boolean</strong> hasBody) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>(<strong class="jxr_keyword">this</strong>, uri, method, hasBody);
-<a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 	}
-<a class="jxr_linenumber" name="L2192" href="#L2192">2192</a> 
-<a class="jxr_linenumber" name="L2193" href="#L2193">2193</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
-<a class="jxr_linenumber" name="L2194" href="#L2194">2194</a> 	<strong class="jxr_keyword">protected</strong> <a name="MockRestResponse" href="../../../../../org/apache/juneau/rest/mock/MockRestResponse.html#MockRestResponse">MockRestResponse</a> createResponse(<a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> req, HttpResponse httpResponse, <a name="Parser" href="../../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> parser) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L2195" href="#L2195">2195</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MockRestResponse" href="../../../../../org/apache/juneau/rest/mock/MockRestResponse.html#MockRestResponse">MockRestResponse</a>(<strong class="jxr_keyword">this</strong>, req, httpResponse, parser);
-<a class="jxr_linenumber" name="L2196" href="#L2196">2196</a> 	}
-<a class="jxr_linenumber" name="L2197" href="#L2197">2197</a> 
-<a class="jxr_linenumber" name="L2198" href="#L2198">2198</a> 	MockRestClient currentResponse(<a name="MockRestResponse" href="../../../../../org/apache/juneau/rest/mock/MockRestResponse.html#MockRestResponse">MockRestResponse</a> value) {
-<a class="jxr_linenumber" name="L2199" href="#L2199">2199</a> 		rres.set(value);
-<a class="jxr_linenumber" name="L2200" href="#L2200">2200</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L2201" href="#L2201">2201</a> 	}
-<a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> }
+<a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> 			<strong class="jxr_keyword">var</strong> r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars).debug(isDebug());
+<a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 
+<a class="jxr_linenumber" name="L2150" href="#L2150">2150</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : request.getAllHeaders())
+<a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> 				r.header(h.getName(), h.getValue());
+<a class="jxr_linenumber" name="L2152" href="#L2152">2152</a> 
+<a class="jxr_linenumber" name="L2153" href="#L2153">2153</a> 			sreq.set(r);
+<a class="jxr_linenumber" name="L2154" href="#L2154">2154</a> 			sreq.get().applyOverrides(req);
+<a class="jxr_linenumber" name="L2155" href="#L2155">2155</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L2156" href="#L2156">2156</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> HttpException(e.getMessage(), e);
+<a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> 		}
+<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> 	}
+<a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> 
+<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSocketTimeout(<strong class="jxr_keyword">int</strong> timeout) {}
+<a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> 
+<a class="jxr_linenumber" name="L2163" href="#L2163">2163</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2164" href="#L2164">2164</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> shutdown() <strong class="jxr_keyword">throws</strong> IOException {}
+<a class="jxr_linenumber" name="L2165" href="#L2165">2165</a> 
+<a class="jxr_linenumber" name="L2166" href="#L2166">2166</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2167" href="#L2167">2167</a> <em class="jxr_javadoccomment">	 * Attempts to unwrap the request to find the underlying RestRequest object.</em>
+<a class="jxr_linenumber" name="L2168" href="#L2168">2168</a> <em class="jxr_javadoccomment">	 * Returns the same object if one of the low-level client methods are used (e.g. execute(HttpUriRequest)).</em>
+<a class="jxr_linenumber" name="L2169" href="#L2169">2169</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2170" href="#L2170">2170</a> 	<strong class="jxr_keyword">private</strong> HttpRequest findRestRequest(HttpRequest req) {
+<a class="jxr_linenumber" name="L2171" href="#L2171">2171</a> 		<strong class="jxr_keyword">if</strong> (req instanceof <a name="RestRequestCreated" href="../../../../../org/apache/juneau/rest/client/RestRequestCreated.html#RestRequestCreated">RestRequestCreated</a> req2)
+<a class="jxr_linenumber" name="L2172" href="#L2172">2172</a> 			<strong class="jxr_keyword">return</strong> req2.getRestRequest();
+<a class="jxr_linenumber" name="L2173" href="#L2173">2173</a> 		<strong class="jxr_keyword">if</strong> (req instanceof HttpRequestWrapper req3)
+<a class="jxr_linenumber" name="L2174" href="#L2174">2174</a> 			<strong class="jxr_keyword">return</strong> findRestRequest(req3.getOriginal());
+<a class="jxr_linenumber" name="L2175" href="#L2175">2175</a> 		<strong class="jxr_keyword">return</strong> req;
+<a class="jxr_linenumber" name="L2176" href="#L2176">2176</a> 	}
+<a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> 
+<a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findTarget(HttpRequest req) {
+<a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> 		<strong class="jxr_keyword">if</strong> (req instanceof HttpRequestWrapper req2) {
+<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 			<strong class="jxr_keyword">var</strong> httpHost = req2.getTarget();
+<a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 			<strong class="jxr_keyword">if</strong> (nn(httpHost))
+<a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> 				<strong class="jxr_keyword">return</strong> httpHost.toURI();
+<a class="jxr_linenumber" name="L2183" href="#L2183">2183</a> 		}
+<a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"http://localhost"</span>;
+<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 	}
+<a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> 
+<a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
+<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 	<strong class="jxr_keyword">protected</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> createRequest(URI uri, String method, <strong class="jxr_keyword">boolean</strong> hasBody) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
+<a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>(<strong class="jxr_keyword">this</strong>, uri, method, hasBody);
+<a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> 	}
+<a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 
+<a class="jxr_linenumber" name="L2192" href="#L2192">2192</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
+<a class="jxr_linenumber" name="L2193" href="#L2193">2193</a> 	<strong class="jxr_keyword">protected</strong> <a name="MockRestResponse" href="../../../../../org/apache/juneau/rest/mock/MockRestResponse.html#MockRestResponse">MockRestResponse</a> createResponse(<a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> req, HttpResponse httpResponse, <a name="Parser" href="../../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> parser) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
+<a class="jxr_linenumber" name="L2194" href="#L2194">2194</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MockRestResponse" href="../../../../../org/apache/juneau/rest/mock/MockRestResponse.html#MockRestResponse">MockRestResponse</a>(<strong class="jxr_keyword">this</strong>, req, httpResponse, parser);
+<a class="jxr_linenumber" name="L2195" href="#L2195">2195</a> 	}
+<a class="jxr_linenumber" name="L2196" href="#L2196">2196</a> 
+<a class="jxr_linenumber" name="L2197" href="#L2197">2197</a> 	MockRestClient currentResponse(<a name="MockRestResponse" href="../../../../../org/apache/juneau/rest/mock/MockRestResponse.html#MockRestResponse">MockRestResponse</a> value) {
+<a class="jxr_linenumber" name="L2198" href="#L2198">2198</a> 		rres.set(value);
+<a class="jxr_linenumber" name="L2199" href="#L2199">2199</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L2200" href="#L2200">2200</a> 	}
+<a class="jxr_linenumber" name="L2201" href="#L2201">2201</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

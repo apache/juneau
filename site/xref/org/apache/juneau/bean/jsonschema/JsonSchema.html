@@ -481,10 +481,10 @@
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">this</strong>.typeJsonType = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">this</strong>.typeJsonTypeArray = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">if</strong> (nn(type)) {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">if</strong> (type instanceof <a name="JsonType" href="../../../../../org/apache/juneau/bean/jsonschema/JsonType.html#JsonType">JsonType</a> x)
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 				<strong class="jxr_keyword">this</strong>.typeJsonType = x;
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type instanceof <a name="JsonTypeArray" href="../../../../../org/apache/juneau/bean/jsonschema/JsonTypeArray.html#JsonTypeArray">JsonTypeArray</a> x)
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">this</strong>.typeJsonTypeArray = x;
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">if</strong> (type instanceof <a name="JsonType" href="../../../../../org/apache/juneau/bean/jsonschema/JsonType.html#JsonType">JsonType</a> type2)
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 				<strong class="jxr_keyword">this</strong>.typeJsonType = type2;
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type instanceof <a name="JsonTypeArray" href="../../../../../org/apache/juneau/bean/jsonschema/JsonTypeArray.html#JsonTypeArray">JsonTypeArray</a> type2)
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">this</strong>.typeJsonTypeArray = type2;
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 				<strong class="jxr_keyword">throw</strong> bex(JsonSchemaProperty.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray"</span>, cn(type));
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		}
@@ -819,11 +819,11 @@
 <a class="jxr_linenumber" name="L811" href="#L811">811</a> 		<strong class="jxr_keyword">this</strong>.itemsSchema = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 		<strong class="jxr_keyword">this</strong>.itemsSchemaArray = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 		<strong class="jxr_keyword">if</strong> (nn(items)) {
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 			<strong class="jxr_keyword">if</strong> (items instanceof <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> x) {
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 				<strong class="jxr_keyword">this</strong>.itemsSchema = x;
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 			<strong class="jxr_keyword">if</strong> (items instanceof <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> items2) {
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 				<strong class="jxr_keyword">this</strong>.itemsSchema = items2;
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> 				setMasterOn(<strong class="jxr_keyword">this</strong>.itemsSchema);
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (items instanceof <a name="JsonSchemaArray" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchemaArray.html#JsonSchemaArray">JsonSchemaArray</a> x) {
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> 				<strong class="jxr_keyword">this</strong>.itemsSchemaArray = x;
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (items instanceof <a name="JsonSchemaArray" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchemaArray.html#JsonSchemaArray">JsonSchemaArray</a> items2) {
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 				<strong class="jxr_keyword">this</strong>.itemsSchemaArray = items2;
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 				setMasterOn(<strong class="jxr_keyword">this</strong>.itemsSchemaArray);
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> 				<strong class="jxr_keyword">throw</strong> bex(JsonSchemaProperty.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray"</span>, cn(items));
@@ -1062,10 +1062,10 @@
 <a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		<strong class="jxr_keyword">this</strong>.additionalItemsBoolean = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<strong class="jxr_keyword">this</strong>.additionalItemsSchemaArray = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 		<strong class="jxr_keyword">if</strong> (nn(additionalItems)) {
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 			<strong class="jxr_keyword">if</strong> (additionalItems instanceof Boolean x)
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 				<strong class="jxr_keyword">this</strong>.additionalItemsBoolean = x;
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (additionalItems instanceof <a name="JsonSchemaArray" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchemaArray.html#JsonSchemaArray">JsonSchemaArray</a> x) {
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 				<strong class="jxr_keyword">this</strong>.additionalItemsSchemaArray = x;
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 			<strong class="jxr_keyword">if</strong> (additionalItems instanceof Boolean additionalItems2)
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 				<strong class="jxr_keyword">this</strong>.additionalItemsBoolean = additionalItems2;
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (additionalItems instanceof <a name="JsonSchemaArray" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchemaArray.html#JsonSchemaArray">JsonSchemaArray</a> additionalItems2) {
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 				<strong class="jxr_keyword">this</strong>.additionalItemsSchemaArray = additionalItems2;
 <a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 				setMasterOn(<strong class="jxr_keyword">this</strong>.additionalItemsSchemaArray);
 <a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 				<strong class="jxr_keyword">throw</strong> bex(JsonSchemaProperty.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray"</span>, cn(additionalItems));
@@ -1321,10 +1321,10 @@
 <a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 		<strong class="jxr_keyword">this</strong>.additionalPropertiesBoolean = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 		<strong class="jxr_keyword">this</strong>.additionalPropertiesSchema = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 		<strong class="jxr_keyword">if</strong> (nn(additionalProperties)) {
-<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 			<strong class="jxr_keyword">if</strong> (additionalProperties instanceof Boolean x)
-<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 				<strong class="jxr_keyword">this</strong>.additionalPropertiesBoolean = x;
-<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (additionalProperties instanceof <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> x) {
-<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 				<strong class="jxr_keyword">this</strong>.additionalPropertiesSchema = x;
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 			<strong class="jxr_keyword">if</strong> (additionalProperties instanceof Boolean additionalProperties2)
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 				<strong class="jxr_keyword">this</strong>.additionalPropertiesBoolean = additionalProperties2;
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (additionalProperties instanceof <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> additionalProperties2) {
+<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 				<strong class="jxr_keyword">this</strong>.additionalPropertiesSchema = additionalProperties2;
 <a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 				setMasterOn(<strong class="jxr_keyword">this</strong>.additionalPropertiesSchema);
 <a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 			} <strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 				<strong class="jxr_keyword">throw</strong> bex(JsonSchemaProperty.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema"</span>, cn(additionalProperties));

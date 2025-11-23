@@ -79,8 +79,8 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">this</strong>.buff = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[in.length() &lt; 1024 ? in.length() : 1024];
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			Reader _r = pipe.getReader();
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">if</strong> (_r instanceof <a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a>)
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  				<strong class="jxr_keyword">this</strong>.r = ((<a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a>)_r).r;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">if</strong> (_r instanceof <a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a> _r2)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  				<strong class="jxr_keyword">this</strong>.r = _r2.r;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  				<strong class="jxr_keyword">this</strong>.r = _r;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">this</strong>.buff = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[1024];
@@ -278,9 +278,9 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * @throws IOException If a problem occurred trying to read from the reader.</em>
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String read(<strong class="jxr_keyword">int</strong> num) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">char</strong>[] c = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[num];
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; num; i++) {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">int</strong> c2 = read();
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">var</strong> c = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[num];
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; num; i++) {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">var</strong> c2 = read();
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">if</strong> (c2 == -1)
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(c, 0, i);
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 			c[i] = (<strong class="jxr_keyword">char</strong>)c2;
@@ -404,7 +404,7 @@
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 					<em class="jxr_comment">// If we're marking from the beginning of the array, we double the size of the</em>
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 					<em class="jxr_comment">// buffer.  This isn't likely to occur often.</em>
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 					<strong class="jxr_keyword">if</strong> (iMark == 0) {
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 						<strong class="jxr_keyword">char</strong>[] buff2 = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[buff.length &lt;&lt; 1];
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 						<strong class="jxr_keyword">var</strong> buff2 = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[buff.length &lt;&lt; 1];
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 						System.arraycopy(buff, 0, buff2, 0, buff.length);
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 						buff = buff2;
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 

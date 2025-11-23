@@ -269,7 +269,7 @@
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<strong class="jxr_keyword">public</strong> V get(K1 key1, K2 key2, K3 key3, K4 key4, java.util.function.Supplier&lt;V&gt; supplier) {
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">if</strong> (cacheMode == NONE)
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">return</strong> supplier.get();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		Tuple4&lt;K1,K2,K3,K4&gt; wrapped = Tuple4.of(key1, key2, key3, key4);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">var</strong> wrapped = Tuple4.of(key1, key2, key3, key4);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		V v = map.get(wrapped);
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (size() &gt; maxSize)
@@ -348,25 +348,22 @@
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the cache is empty.</em>
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isEmpty() {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">return</strong> map.isEmpty();
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	}
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * Removes all entries from the cache.</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> clear() {
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		map.clear();
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	}
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * Returns the total number of cache hits since this cache was created.</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * @return The total number of cache hits since creation.</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getCacheHits() { <strong class="jxr_keyword">return</strong> cacheHits.get(); }
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> }
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isEmpty() { <strong class="jxr_keyword">return</strong> map.isEmpty(); }
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * Removes all entries from the cache.</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> clear() {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		map.clear();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * Returns the total number of cache hits since this cache was created.</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * @return The total number of cache hits since creation.</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getCacheHits() { <strong class="jxr_keyword">return</strong> cacheHits.get(); }
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

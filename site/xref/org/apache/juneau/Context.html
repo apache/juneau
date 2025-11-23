@@ -89,8 +89,8 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,ConstructorInfo&gt; CONTEXT_CONSTRUCTORS = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> AnnotationProvider AP = AnnotationProvider.INSTANCE;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> AnnotationProvider AP = AnnotationProvider.INSTANCE;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,ConstructorInfo&gt; CONTEXT_CONSTRUCTORS = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">boolean</strong> debug;
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> Context&gt; type;
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			registerBuilders(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<em class="jxr_comment">// By default, the type being created should be the class declaring the builder.</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			Class&lt;?&gt; dc = getClass().getDeclaringClass();
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">var</strong> dc = getClass().getDeclaringClass();
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">if</strong> (Context.<strong class="jxr_keyword">class</strong>.isAssignableFrom(dc))
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 				type((Class&lt;? <strong class="jxr_keyword">extends</strong> Context&gt;)dc);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		}
@@ -678,15 +678,15 @@
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 		}
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="AnnotationWorkList" href="../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> traverse(<a name="AnnotationWorkList" href="../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> work, Object x) {
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 			AnnotationProvider ap = AnnotationProvider.INSTANCE;
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 			<strong class="jxr_keyword">var</strong> ap = AP;
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 			CollectionUtils.traverse(x, y -&gt; {
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			<strong class="jxr_keyword">if</strong> (x instanceof Class&lt;?&gt; x2)
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 				work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x instanceof ClassInfo x2)
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 				<strong class="jxr_keyword">if</strong> (x instanceof Class&lt;?&gt; x2)
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 					work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x instanceof ClassInfo x2)
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x instanceof Method x2)
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 				work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x instanceof <a name="MethodInfo" href="../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> x2)
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x instanceof Method x2)
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 					work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x instanceof <a name="MethodInfo" href="../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> x2)
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 				<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> 					illegalArg(<span class="jxr_string">"Invalid type passed to applyAnnotations:  {0}"</span>, cn(x));
@@ -734,9 +734,9 @@
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder createBuilder(Class&lt;? <strong class="jxr_keyword">extends</strong> Context&gt; type) {
 <a class="jxr_linenumber" name="L727" href="#L727">727</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L728" href="#L728">728</a> 			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		<strong class="jxr_keyword">if</strong> (mi == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 			<strong class="jxr_keyword">var</strong> c = info(type);
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ci : c.getPublicConstructors()) {
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 			<strong class="jxr_keyword">if</strong> (mi == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 				<strong class="jxr_keyword">var</strong> c = info(type);
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ci : c.getPublicConstructors()) {
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> 					<strong class="jxr_keyword">if</strong> (ci.hasNumParameters(1) &amp;&amp; ! ci.getParameter(0).getParameterType().is(type)) {
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 						<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 						mi = c.getPublicMethod(
@@ -790,78 +790,81 @@
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 		annotationProvider = copyFrom.annotationProvider;
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 	}
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	<strong class="jxr_keyword">public</strong> AnnotationProvider getAnnotationProvider() {
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">return</strong> annotationProvider;
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 	}
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> <em class="jxr_javadoccomment">	 * Creates a builder from this context object.</em>
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> <em class="jxr_javadoccomment">	 * Builders are used to define new contexts (e.g. serializers, parsers) based on existing configurations.</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">	 * Returns the annotation provider for this context.</em>
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">	 * @return The annotation provider for this context.</em>
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<strong class="jxr_keyword">public</strong> AnnotationProvider getAnnotationProvider() { <strong class="jxr_keyword">return</strong> annotationProvider; }
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> <em class="jxr_javadoccomment">	 * Creates a builder from this context object.</em>
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> <em class="jxr_javadoccomment">	 * @return A new Builder object.</em>
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 	}
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> <em class="jxr_javadoccomment">	 * Create a session builder based on the properties defined on this context.</em>
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> <em class="jxr_javadoccomment">	 * Use this method for creating sessions where you want to override basic settings.</em>
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> <em class="jxr_javadoccomment">	 * Otherwise, use {@link #getSession()} directly.</em>
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> <em class="jxr_javadoccomment">	 * @return A new session builder.</em>
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 	<strong class="jxr_keyword">public</strong> ContextSession.Builder createSession() {
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 	}
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> <em class="jxr_javadoccomment">	 * Returns a session to use for this context.</em>
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 * Note that subclasses may opt to return a reusable non-modifiable session.</em>
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> <em class="jxr_javadoccomment">	 * Builders are used to define new contexts (e.g. serializers, parsers) based on existing configurations.</em>
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> <em class="jxr_javadoccomment">	 * @return A new Builder object.</em>
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	}
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> <em class="jxr_javadoccomment">	 * Create a session builder based on the properties defined on this context.</em>
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> <em class="jxr_javadoccomment">	 * Use this method for creating sessions where you want to override basic settings.</em>
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> <em class="jxr_javadoccomment">	 * Otherwise, use {@link #getSession()} directly.</em>
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> <em class="jxr_javadoccomment">	 * @return A new session builder.</em>
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	<strong class="jxr_keyword">public</strong> ContextSession.Builder createSession() {
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	}
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 * Returns a session to use for this context.</em>
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">	 * @return A new session object.</em>
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 	<strong class="jxr_keyword">public</strong> <a name="ContextSession" href="../../../org/apache/juneau/ContextSession.html#ContextSession">ContextSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> <em class="jxr_javadoccomment">	 * Debug mode.</em>
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> <em class="jxr_javadoccomment">	 * @see Context.Builder#debug()</em>
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if debug mode is enabled.</em>
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDebug() { <strong class="jxr_keyword">return</strong> debug; }
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> 
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> 		<strong class="jxr_keyword">return</strong> Utils2.toPropertyMap(<strong class="jxr_keyword">this</strong>).asReadableString();
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> 	}
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> 
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> <em class="jxr_javadoccomment">	 * Perform optional initialization on builder before it is used.</em>
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	 * Default behavior is a no-op.</em>
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 * Note that subclasses may opt to return a reusable non-modifiable session.</em>
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> <em class="jxr_javadoccomment">	 * @return A new session object.</em>
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 	<strong class="jxr_keyword">public</strong> <a name="ContextSession" href="../../../org/apache/juneau/ContextSession.html#ContextSession">ContextSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> <em class="jxr_javadoccomment">	 * Debug mode.</em>
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> <em class="jxr_javadoccomment">	 * @see Context.Builder#debug()</em>
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if debug mode is enabled.</em>
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDebug() { <strong class="jxr_keyword">return</strong> debug; }
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 		<strong class="jxr_keyword">return</strong> Utils2.toPropertyMap(<strong class="jxr_keyword">this</strong>).asReadableString();
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> 	}
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	 * Perform optional initialization on builder before it is used.</em>
 <a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 * @param builder The builder to initialize.</em>
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> init(Builder builder) {}
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> 
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * Returns the properties on this bean as a map for debugging.</em>
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * @return The properties on this bean as a map for debugging.</em>
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"annotations"</span>, annotations, <span class="jxr_string">"debug"</span>, debug);
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 	}
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> }
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 * Default behavior is a no-op.</em>
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 * @param builder The builder to initialize.</em>
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> init(Builder builder) {}
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 * Returns the properties on this bean as a map for debugging.</em>
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> <em class="jxr_javadoccomment">	 * @return The properties on this bean as a map for debugging.</em>
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"annotations"</span>, annotations, <span class="jxr_string">"debug"</span>, debug);
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 	}
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

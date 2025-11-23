@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		@Override
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">public</strong> Address unswap(BeanSession session, String str, ClassMeta&lt;?&gt; hint) {
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">if</strong> (str == <strong class="jxr_keyword">null</strong>) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			String[] parts = str.split(<span class="jxr_string">"&#92;&#92;|"</span>);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">var</strong> parts = str.split(<span class="jxr_string">"&#92;&#92;|"</span>);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Address(parts[0], parts[1], parts[2]);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		}
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
