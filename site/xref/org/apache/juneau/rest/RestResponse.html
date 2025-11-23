@@ -385,7 +385,7 @@
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 	<strong class="jxr_keyword">public</strong> <a name="FinishableServletOutputStream" href="../../../../org/apache/juneau/rest/util/FinishableServletOutputStream.html#FinishableServletOutputStream">FinishableServletOutputStream</a> getNegotiatedOutputStream() <strong class="jxr_keyword">throws</strong> NotAcceptable, IOException {
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">if</strong> (os == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			Encoder encoder = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">var</strong> encoder = (<a name="Encoder" href="../../../../org/apache/juneau/encoders/Encoder.html#Encoder">Encoder</a>)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">var</strong> encoders = request.getOpContext().getEncoders();
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">var</strong> ae = request.getHeaderParam(<span class="jxr_string">"Accept-Encoding"</span>).orElse(<strong class="jxr_keyword">null</strong>);
@@ -545,7 +545,7 @@
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 	@Override
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sendRedirect(String uri) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		<strong class="jxr_keyword">char</strong> c = (uri.length() &gt; 0 ? uri.charAt(0) : 0);
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		<strong class="jxr_keyword">var</strong> c = (uri.length() &gt; 0 ? uri.charAt(0) : 0);
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">if</strong> (c != '/' &amp;&amp; uri.indexOf(<span class="jxr_string">"://"</span>) == -1)
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 			uri = request.getContextPath() + '/' + uri;
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">inner</strong>.sendRedirect(uri);

@@ -310,7 +310,7 @@
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;Object&gt; toList(Class&lt;?&gt; type, Object array) {
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">var</strong> componentType = type.getComponentType();
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">if</strong> (componentType.isPrimitive()) {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">int</strong> l = Array.getLength(array);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">var</strong> l = Array.getLength(array);
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(l);
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; l; i++)
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 				list.add(Array.get(array, i));
@@ -667,7 +667,7 @@
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 			<strong class="jxr_keyword">return</strong> ((ClassInfo)o).getNameFull();
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">if</strong> (o.getClass().isEnum())
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 			<strong class="jxr_keyword">return</strong> getClassMetaForObject(o).toString(o);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		String s = o.toString();
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">var</strong> s = o.toString();
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 		<strong class="jxr_keyword">if</strong> (isTrimStrings())
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 			s = s.trim();
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<strong class="jxr_keyword">return</strong> s;
@@ -682,7 +682,7 @@
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String trim(Object o) {
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		String s = o.toString();
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<strong class="jxr_keyword">var</strong> s = o.toString();
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<strong class="jxr_keyword">if</strong> (isTrimStrings())
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 			s = s.trim();
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">return</strong> s;

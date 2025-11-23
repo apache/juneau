@@ -190,7 +190,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<em class="jxr_comment">// All possible numbers should be caught here.</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">if</strong> (! doConvert) {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length() &amp;&amp; ! doConvert; i++) {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 					<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 					<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 					doConvert |= ! (i == 0 ? validFirstAttrChars.contains(c) : validAttrChars.contains(c));
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 				}
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 			}
@@ -300,7 +300,7 @@
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">boolean</strong> doConvert = false;
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length() &amp;&amp; ! doConvert; i++) {
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			doConvert |= ec.contains(c);
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		}
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		q();
@@ -308,7 +308,7 @@
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			w(s);
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 				<strong class="jxr_keyword">if</strong> (ec.contains(c)) {
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 					<strong class="jxr_keyword">if</strong> (c == '\n')
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 						w('&#92;&#92;').w('n');

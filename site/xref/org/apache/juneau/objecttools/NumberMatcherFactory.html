@@ -90,15 +90,15 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<em class="jxr_comment">// S11 = Found [123 - 4], looking for WS (WS=S1)</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			StateEnum state = S1;
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			<strong class="jxr_keyword">int</strong> mark = 0;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">boolean</strong> isNot = false;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			<strong class="jxr_keyword">var</strong> mark = 0;
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">var</strong> isNot = false;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">var</strong> eq = Equality.NONE;
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">var</strong> n1 = (Integer)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">var</strong> n2 = (Integer)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">int</strong> i;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			<strong class="jxr_keyword">for</strong> (i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  				<strong class="jxr_keyword">if</strong> (state == S1) {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  					<strong class="jxr_keyword">if</strong> (c == '!') {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  						isNot = <strong class="jxr_keyword">true</strong>;
@@ -306,8 +306,8 @@
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		}
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(Number n) {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">long</strong> i = n.longValue();
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">boolean</strong> b = (i &gt;= start &amp;&amp; i &lt;= end);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">var</strong> i = n.longValue();
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">var</strong> b = (i &gt;= start &amp;&amp; i &lt;= end);
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">if</strong> (isNot)
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 				b = ! b;
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">return</strong> b;

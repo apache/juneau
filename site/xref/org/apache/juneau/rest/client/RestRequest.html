@@ -1940,7 +1940,7 @@
 <a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 			client.onCallConnect(<strong class="jxr_keyword">this</strong>, response);
 <a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 
 <a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> 			<strong class="jxr_keyword">var</strong> method = getMethod();
-<a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 			<strong class="jxr_keyword">int</strong> sc = response.getStatusCode();
+<a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 			<strong class="jxr_keyword">var</strong> sc = response.getStatusCode();
 <a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 
 <a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 			<strong class="jxr_keyword">var</strong> thrown = response.getHeader(<span class="jxr_string">"Thrown"</span>).asHeader(Thrown.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 			<strong class="jxr_keyword">if</strong> (thrown.isPresent() &amp;&amp; nn(rethrow)) {

@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,RestClient&gt; clients = map();
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">protected</strong> RestClient getClient(MediaType mediaType) {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		String mt = mediaType.toString();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> mt = mediaType.toString();
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (mt) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"text/csv"</span> -&gt; getClient(mt, CsvSerializer.DEFAULT, CsvParser.DEFAULT);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"text/html"</span> -&gt; getClient(mt, HtmlSerializer.DEFAULT, HtmlParser.DEFAULT);
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">protected</strong> RestClient getClient(String label, Serializer serializer, Parser parser, Consumer&lt;RestClient.Builder&gt;...postApply) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (! clients.containsKey(label)) {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			RestClient.Builder b = SamplesMicroservice.client(serializer, parser);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">var</strong> b = SamplesMicroservice.client(serializer, parser);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : postApply)
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  				c.accept(b);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			clients.put(label, b.build());
@@ -111,8 +111,8 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> doTest() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		RestClient rc = getClient(comboInput.mediaType);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		String s = rc.get(comboInput.url).run().getContent().asString();
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> rc = getClient(comboInput.mediaType);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> s = rc.get(comboInput.url).run().getContent().asString();
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertContains(s, comboInput.expectedResults);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> }

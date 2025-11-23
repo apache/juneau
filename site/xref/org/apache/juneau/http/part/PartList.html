@@ -337,8 +337,8 @@
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;NameValuePair&gt; get(String name) {
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		NameValuePair first = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		List&lt;NameValuePair&gt; <strong class="jxr_keyword">rest</strong> = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> first = (NameValuePair)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">rest</strong> = (List&lt;NameValuePair&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : <strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name)) {
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 				<strong class="jxr_keyword">if</strong> (first == <strong class="jxr_keyword">null</strong>)
@@ -395,8 +395,8 @@
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; get(String name, Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		NameValuePair first = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		List&lt;NameValuePair&gt; <strong class="jxr_keyword">rest</strong> = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">var</strong> first = (NameValuePair)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">rest</strong> = (List&lt;NameValuePair&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : <strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name)) {
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 				<strong class="jxr_keyword">if</strong> (first == <strong class="jxr_keyword">null</strong>)
@@ -745,7 +745,7 @@
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 	<strong class="jxr_keyword">public</strong> <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> set(NameValuePair value) {
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">if</strong> (nn(value)) {
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 			<strong class="jxr_keyword">boolean</strong> replaced = false;
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 			<strong class="jxr_keyword">var</strong> replaced = false;
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = size(); i &lt; j; i++) {
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> 				<strong class="jxr_keyword">var</strong> x = get(i);
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 				<strong class="jxr_keyword">if</strong> (eq(x.getName(), value.getName())) {

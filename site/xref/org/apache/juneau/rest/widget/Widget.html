@@ -159,7 +159,7 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<strong class="jxr_keyword">protected</strong> String loadHtml(RestRequest req, String name) {
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			String s = getFileFinder(req).getString(name, <strong class="jxr_keyword">null</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">var</strong> s = getFileFinder(req).getString(name, <strong class="jxr_keyword">null</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 				s = s.replaceAll(<span class="jxr_string">"(?s)&lt;!--(.*?)--&gt;&#92;&#92;s*"</span>, <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">return</strong> s;
@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">protected</strong> String loadScript(RestRequest req, String name) {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			String s = getFileFinder(req).getString(name, <strong class="jxr_keyword">null</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">var</strong> s = getFileFinder(req).getString(name, <strong class="jxr_keyword">null</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 				s = s.replaceAll(<span class="jxr_string">"(?s)&#92;&#92;/&#92;&#92;*(.*?)&#92;&#92;*&#92;&#92;/&#92;&#92;s*"</span>, <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">return</strong> s;
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<strong class="jxr_keyword">protected</strong> String loadStyle(RestRequest req, String name) {
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			String s = getFileFinder(req).getString(name, <strong class="jxr_keyword">null</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">var</strong> s = getFileFinder(req).getString(name, <strong class="jxr_keyword">null</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 				s = s.replaceAll(<span class="jxr_string">"(?s)&#92;&#92;/&#92;&#92;*(.*?)&#92;&#92;*&#92;&#92;/&#92;&#92;s*"</span>, <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">return</strong> s;

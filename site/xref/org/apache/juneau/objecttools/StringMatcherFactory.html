@@ -77,8 +77,8 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">var</strong> ands = <strong class="jxr_keyword">new</strong> LinkedList&lt;Pattern&gt;();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">var</strong> nots = <strong class="jxr_keyword">new</strong> LinkedList&lt;Pattern&gt;();
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : StringUtils.splitQuoted(pattern, <strong class="jxr_keyword">true</strong>)) {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  				<strong class="jxr_keyword">char</strong> c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : StringUtils.splitQuoted(pattern, <strong class="jxr_keyword">true</strong>)) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			<strong class="jxr_keyword">char</strong> c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  				<strong class="jxr_keyword">if</strong> (c0 == '/' &amp;&amp; c9 == '/' &amp;&amp; s.length() &gt; 1) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  					ands.add(Pattern.compile(strip(s)));
@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  						<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  						<strong class="jxr_keyword">boolean</strong> isInEscape = false;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  							<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  							<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  							<strong class="jxr_keyword">if</strong> (isInEscape) {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  								<strong class="jxr_keyword">if</strong> (c == '?' || c == '*' || c == '&#92;&#92;')
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 									sb.append('&#92;&#92;').append(c);

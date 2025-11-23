@@ -185,7 +185,7 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		Enumeration&lt;String&gt; e = sreq.getAttributeNames();
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">while</strong> (e.hasMoreElements()) {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			String n = e.nextElement();
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">var</strong> n = e.nextElement();
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			m.put(n, sreq.getAttribute(n));
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		}
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">return</strong> m;
@@ -238,7 +238,7 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		List&lt;RequestAttribute&gt; l = list();
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		Enumeration&lt;String&gt; e = sreq.getAttributeNames();
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">while</strong> (e.hasMoreElements()) {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			String n = e.nextElement();
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">var</strong> n = e.nextElement();
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			l.add(<strong class="jxr_keyword">new</strong> <a name="RequestAttribute" href="../../../../../org/apache/juneau/rest/httppart/RequestAttribute.html#RequestAttribute">RequestAttribute</a>(req, n, sreq.getAttribute(n)));
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		}
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">return</strong> l;

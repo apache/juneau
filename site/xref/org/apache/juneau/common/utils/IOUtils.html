@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@SuppressWarnings(<span class="jxr_string">"null"</span>)
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> flush(Object...o) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		IOException ex = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> ex = (IOException)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o2 : o) {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 				<strong class="jxr_keyword">if</strong> (o2 instanceof OutputStream o3)

@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">if</strong> (input instanceof InputStream input2) {
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">if</strong> (debug) {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				byte[] b = readBytes(input2);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				<strong class="jxr_keyword">var</strong> b = readBytes(input2);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 				inputString = toHex(b);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 				inputStream = <strong class="jxr_keyword">new</strong> ByteArrayInputStream(b);
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			} <strong class="jxr_keyword">else</strong> {
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 			doClose = false;
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (input instanceof File input2) {
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">if</strong> (debug) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				byte[] b = readBytes(input2);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<strong class="jxr_keyword">var</strong> b = readBytes(input2);
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 				inputString = toHex(b);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 				inputStream = <strong class="jxr_keyword">new</strong> ByteArrayInputStream(b);
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			} <strong class="jxr_keyword">else</strong> {

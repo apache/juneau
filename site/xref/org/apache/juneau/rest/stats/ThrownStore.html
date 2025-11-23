@@ -169,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">this</strong>.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		Set&lt;String&gt; s = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> s = (Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">if</strong> (nn(builder.ignoreClasses))
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			s = builder.ignoreClasses.stream().map(Class::getName).collect(toSet());
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> &amp;&amp; parent.isPresent())

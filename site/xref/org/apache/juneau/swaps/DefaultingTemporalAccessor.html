@@ -115,15 +115,15 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">if</strong> (isSupported(INSTANT_SECONDS))
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">return</strong> (R)zdt().toLocalTime();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">int</strong> hour = 0;
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">var</strong> hour = 0;
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">if</strong> (isSupported(HOUR_OF_DAY))
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 				hour = iget(HOUR_OF_DAY);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isSupported(HOUR_OF_AMPM))
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 				hour = iget(HOUR_OF_AMPM) + 12 * iget(AMPM_OF_DAY);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">int</strong> minute = isSupported(MINUTE_OF_HOUR) ? iget(MINUTE_OF_HOUR) : 0;
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">int</strong> second = isSupported(SECOND_OF_MINUTE) ? iget(SECOND_OF_MINUTE) : 0;
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">int</strong> nano = isSupported(NANO_OF_SECOND) ? iget(NANO_OF_SECOND) : 0;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">var</strong> minute = isSupported(MINUTE_OF_HOUR) ? iget(MINUTE_OF_HOUR) : 0;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">var</strong> second = isSupported(SECOND_OF_MINUTE) ? iget(SECOND_OF_MINUTE) : 0;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">var</strong> nano = isSupported(NANO_OF_SECOND) ? iget(NANO_OF_SECOND) : 0;
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 			<strong class="jxr_keyword">return</strong> (R)LocalTime.of(hour, minute, second, nano);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		}
@@ -133,9 +133,9 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">if</strong> (isSupported(INSTANT_SECONDS))
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 				<strong class="jxr_keyword">return</strong> (R)zdt().toLocalDate();
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">int</strong> year = isSupported(YEAR) ? iget(ChronoField.YEAR) : 1970;
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">int</strong> month = isSupported(MONTH_OF_YEAR) ? iget(MONTH_OF_YEAR) : 1;
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">int</strong> dayOfMonth = isSupported(DAY_OF_MONTH) ? iget(DAY_OF_MONTH) : 1;
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">var</strong> year = isSupported(YEAR) ? iget(ChronoField.YEAR) : 1970;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">var</strong> month = isSupported(MONTH_OF_YEAR) ? iget(MONTH_OF_YEAR) : 1;
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">var</strong> dayOfMonth = isSupported(DAY_OF_MONTH) ? iget(DAY_OF_MONTH) : 1;
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">return</strong> (R)LocalDate.of(year, Month.of(month), dayOfMonth);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		}

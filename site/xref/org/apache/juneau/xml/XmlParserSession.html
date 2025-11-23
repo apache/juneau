@@ -201,7 +201,7 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getJsonType(String s) {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">return</strong> UNKNOWN;
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">char</strong> c = s.charAt(0);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> c = s.charAt(0);
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (c) {
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">case</strong> 'o' -&gt; (s.equals(<span class="jxr_string">"object"</span>) ? OBJECT : UNKNOWN);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">case</strong> 'a' -&gt; (s.equals(<span class="jxr_string">"array"</span>) ? ARRAY : UNKNOWN);
@@ -420,7 +420,7 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">int</strong> depth = 0;
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">do</strong> {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">int</strong> event = r.next();
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">var</strong> event = r.next();
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 			String currAttr;
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<em class="jxr_comment">// We only care about text in MIXED mode.</em>
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<em class="jxr_comment">// Ignore if in ELEMENTS mode.</em>
@@ -542,7 +542,7 @@
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">int</strong> depth = 0;
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">int</strong> argIndex = 0;
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">do</strong> {
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 			<strong class="jxr_keyword">int</strong> event = r.nextTag();
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 			<strong class="jxr_keyword">var</strong> event = r.nextTag();
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 			<strong class="jxr_keyword">if</strong> (event == START_ELEMENT) {
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 				depth++;
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 				<strong class="jxr_keyword">var</strong> elementType = type == <strong class="jxr_keyword">null</strong> ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
@@ -570,7 +570,7 @@
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 			}
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 		}
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">do</strong> {
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">int</strong> event = r.nextTag();
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">var</strong> event = r.nextTag();
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 			String currAttr;
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<strong class="jxr_keyword">if</strong> (event == START_ELEMENT) {
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 				depth++;
@@ -914,7 +914,7 @@
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">int</strong> depth = 0;
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 			<strong class="jxr_keyword">int</strong> et = r.getEventType();
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 			<strong class="jxr_keyword">var</strong> et = r.getEventType();
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 			<strong class="jxr_keyword">if</strong> (et == START_ELEMENT) {
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> 				sb2.append(getElementAsString(r));
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 				depth++;

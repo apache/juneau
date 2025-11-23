@@ -262,7 +262,7 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * @return An assertion against the throwable message.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<strong class="jxr_keyword">public</strong> FluentListAssertion&lt;String,R&gt; asLocalizedMessages() {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		List&lt;String&gt; l = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">var</strong> l = (List&lt;String&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		Throwable t = orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">if</strong> (nn(t)) {
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">if</strong> (t.getCause() == <strong class="jxr_keyword">null</strong>)
@@ -311,7 +311,7 @@
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 * @return An assertion against the throwable message.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">public</strong> FluentListAssertion&lt;String,R&gt; asMessages() {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		List&lt;String&gt; l = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> l = (List&lt;String&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		Throwable t = orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">if</strong> (nn(t)) {
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">if</strong> (t.getCause() == <strong class="jxr_keyword">null</strong>)

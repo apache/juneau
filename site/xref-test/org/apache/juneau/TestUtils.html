@@ -504,7 +504,7 @@
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 					<em class="jxr_comment">// Validate that nextOpen is actually an opening tag</em>
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 					<strong class="jxr_keyword">if</strong> (nextOpen != -1 &amp;&amp; (nextOpen &lt; nextClose || nextClose == -1)) {
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 						<strong class="jxr_keyword">if</strong> (nextOpen + elementName.length() + 1 &lt; html.length()) {
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 							<strong class="jxr_keyword">char</strong> nextChar = html.charAt(nextOpen + elementName.length() + 1);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 							<strong class="jxr_keyword">var</strong> nextChar = html.charAt(nextOpen + elementName.length() + 1);
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 							<strong class="jxr_keyword">if</strong> (nextChar == ' ' || nextChar == '&gt;' || nextChar == '/') {
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 								depth++;
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 								pos = nextOpen + elementName.length() + 1;

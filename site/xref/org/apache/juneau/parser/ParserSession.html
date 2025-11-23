@@ -759,7 +759,7 @@
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> 		Object o = m.get(btpn);
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 			<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		String typeName = o.toString();
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">var</strong> typeName = o.toString();
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">var</strong> cm = getClassMeta(typeName, pMeta, eType);
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 
@@ -801,7 +801,7 @@
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 		<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 			type = (ClassMeta&lt;T&gt;)object();
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		ObjectSwap swap = type.getSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		<strong class="jxr_keyword">var</strong> swap = type.getSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 		<strong class="jxr_keyword">var</strong> sType = swap == <strong class="jxr_keyword">null</strong> ? type : swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> 
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> 		Object o = s;
@@ -927,7 +927,7 @@
 <a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">	 * @return The resolved class, or &lt;jk&gt;null&lt;/jk&gt; if the type name could not be resolved.</em>
 <a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L921" href="#L921">921</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta&lt;?&gt; eType) {
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		BeanRegistry br = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		<strong class="jxr_keyword">var</strong> br = (<a name="BeanRegistry" href="../../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a>)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> 
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<em class="jxr_comment">// Resolve via @Beanp(dictionary={})</em>
 <a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<strong class="jxr_keyword">if</strong> (nn(pMeta)) {
@@ -1060,7 +1060,7 @@
 <a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> onBeanSetterException(BeanPropertyMeta p, Throwable t) {
 <a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 		<strong class="jxr_keyword">if</strong> (nn(listener))
 <a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 			listener.onBeanSetterException(<strong class="jxr_keyword">this</strong>, t, p);
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		String prefix = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<strong class="jxr_keyword">var</strong> prefix = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 		addWarning(<span class="jxr_string">"{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}"</span>, prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t));
 <a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 	}
 <a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 

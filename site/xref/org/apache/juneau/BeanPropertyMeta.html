@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">var</strong> ci = info(c);
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">if</strong> (ci.isChildOf(ObjectSwap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				ObjectSwap ps = BeanCreator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(c).run();
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<strong class="jxr_keyword">var</strong> ps = BeanCreator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(c).run();
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<strong class="jxr_keyword">if</strong> (nn(ps.forMediaTypes()))
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 					<strong class="jxr_keyword">throw</strong> unsupportedOp(<span class="jxr_string">"TODO - Media types on swaps not yet supported on bean properties."</span>);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<strong class="jxr_keyword">if</strong> (nn(ps.withTemplate()))
@@ -217,7 +217,7 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">boolean</strong> validate(BeanContext bc, <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a> parentBeanRegistry, Map&lt;Class&lt;?&gt;,Class&lt;?&gt;[]&gt; typeVarImpls, Set&lt;String&gt; bpro, Set&lt;String&gt; bpwo) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			List&lt;Class&lt;?&gt;&gt; bdClasses = list();
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">var</strong> bdClasses = list();
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">var</strong> ap = bc.getAnnotationProvider();
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">if</strong> (field == <strong class="jxr_keyword">null</strong> &amp;&amp; getter == <strong class="jxr_keyword">null</strong> &amp;&amp; setter == <strong class="jxr_keyword">null</strong>)
@@ -305,7 +305,7 @@
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<em class="jxr_comment">// Do some annotation validation.</em>
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<strong class="jxr_keyword">var</strong> ci = rawTypeMeta.getInfo();
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) {
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				Class&lt;?&gt;[] pt = getter.getParameterTypes();
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				<strong class="jxr_keyword">var</strong> pt = getter.getParameterTypes();
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 				<strong class="jxr_keyword">if</strong> (isDyna) {
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 					<strong class="jxr_keyword">if</strong> (ci.isChildOf(Map.<strong class="jxr_keyword">class</strong>) &amp;&amp; pt.length == 0) {
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 						isDynaGetterMap = <strong class="jxr_keyword">true</strong>;
@@ -320,7 +320,7 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				}
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">if</strong> (nn(setter)) {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 				Class&lt;?&gt;[] pt = setter.getParameterTypes();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 				<strong class="jxr_keyword">var</strong> pt = setter.getParameterTypes();
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 				<strong class="jxr_keyword">if</strong> (isDyna) {
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 					<strong class="jxr_keyword">if</strong> (pt.length == 2 &amp;&amp; pt[0] == String.<strong class="jxr_keyword">class</strong>) {
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 						<em class="jxr_comment">// OK.</em>
@@ -466,25 +466,25 @@
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 		}
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		BeanSession session = m.getBeanSession();
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">var</strong> session = m.getBeanSession();
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">boolean</strong> isCollection = rawTypeMeta.isCollection();
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">boolean</strong> isArray = rawTypeMeta.isArray();
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">var</strong> isCollection = rawTypeMeta.isCollection();
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">var</strong> isArray = rawTypeMeta.isArray();
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">if</strong> (! (isCollection || isArray))
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Attempt to add element to property ''{0}'' which is not a collection or array"</span>, name);
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		Object bean = m.getBean(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">var</strong> bean = m.getBean(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">var</strong> elementType = rawTypeMeta.getElementType();
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			Object v = session.convertToType(value, elementType);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			<strong class="jxr_keyword">var</strong> v = session.convertToType(value, elementType);
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">if</strong> (isCollection) {
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 				<strong class="jxr_keyword">var</strong> c = (Collection)invokeGetter(bean, pName);
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				Collection c2 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">var</strong> c2 = (Collection)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 				<strong class="jxr_keyword">if</strong> (nn(c)) {
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 					<strong class="jxr_keyword">if</strong> (canAddTo(c)) {
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 						c.add(v);
@@ -516,7 +516,7 @@
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 					m.arrayPropertyCache.put(name, l);
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 					<em class="jxr_comment">// Copy any existing array values into the temporary list.</em>
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 					Object oldArray = invokeGetter(bean, pName);
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 					<strong class="jxr_keyword">var</strong> oldArray = invokeGetter(bean, pName);
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 					copyArrayToList(oldArray, l);
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 				}
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 
@@ -552,20 +552,20 @@
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 		}
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		BeanSession session = m.getBeanSession();
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		<strong class="jxr_keyword">var</strong> session = m.getBeanSession();
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">boolean</strong> isMap = rawTypeMeta.isMap();
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">boolean</strong> isBean = rawTypeMeta.isBean();
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">var</strong> isMap = rawTypeMeta.isMap();
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">var</strong> isBean = rawTypeMeta.isBean();
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">if</strong> (! (isBean || isMap))
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 			<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Attempt to add key/value to property ''{0}'' which is not a map or bean"</span>, name);
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		Object bean = m.getBean(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">var</strong> bean = m.getBean(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">var</strong> elementType = rawTypeMeta.getElementType();
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			Object v = session.convertToType(value, elementType);
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			<strong class="jxr_keyword">var</strong> v = session.convertToType(value, elementType);
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">if</strong> (isMap) {
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 				<strong class="jxr_keyword">var</strong> map = (Map)invokeGetter(bean, pName);
@@ -586,17 +586,17 @@
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 			} <strong class="jxr_keyword">else</strong> <em class="jxr_comment">/* isBean() */</em> {
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 				Object b = invokeGetter(bean, pName);
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 				<strong class="jxr_keyword">var</strong> b = invokeGetter(bean, pName);
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 				<strong class="jxr_keyword">if</strong> (nn(b)) {
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 					BeanMap bm = session.toBeanMap(b);
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 					<strong class="jxr_keyword">var</strong> bm = session.toBeanMap(b);
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 					bm.put(key, v);
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 					<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 				}
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> 				<strong class="jxr_keyword">if</strong> (rawTypeMeta.canCreateNewInstance(m.getBean(false))) {
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 					b = rawTypeMeta.newInstance();
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 					BeanMap bm = session.toBeanMap(b);
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 					<strong class="jxr_keyword">var</strong> bm = session.toBeanMap(b);
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 					bm.put(key, v);
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 				}
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 
@@ -852,7 +852,7 @@
 <a class="jxr_linenumber" name="L844" href="#L844">844</a> 	<strong class="jxr_keyword">public</strong> Object getRaw(BeanMap&lt;?&gt; m, String pName) {
 <a class="jxr_linenumber" name="L845" href="#L845">845</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L846" href="#L846">846</a> 			<em class="jxr_comment">// Read-only beans have their properties stored in a cache until getBean() is called.</em>
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> 			Object bean = m.bean;
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 			<strong class="jxr_keyword">var</strong> bean = m.bean;
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> 			<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L849" href="#L849">849</a> 				<strong class="jxr_keyword">return</strong> m.propertyCache.get(name);
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> 
@@ -946,7 +946,7 @@
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 		<strong class="jxr_keyword">if</strong> (cm.isObject()) {
 <a class="jxr_linenumber" name="L939" href="#L939">939</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Map o2)
 <a class="jxr_linenumber" name="L940" href="#L940">940</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FilteredMap" href="../../../org/apache/juneau/internal/FilteredMap.html#FilteredMap">FilteredMap</a>(cm, o2, properties);
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 			BeanMeta bm = bc.getBeanMeta(o.getClass());
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 			<strong class="jxr_keyword">var</strong> bm = bc.getBeanMeta(o.getClass());
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 			<strong class="jxr_keyword">if</strong> (nn(bm))
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanMap" href="../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>(session, o, <strong class="jxr_keyword">new</strong> <a name="BeanMetaFiltered" href="../../../org/apache/juneau/BeanMetaFiltered.html#BeanMetaFiltered">BeanMetaFiltered</a>(cm.getBeanMeta(), properties));
 <a class="jxr_linenumber" name="L944" href="#L944">944</a> 		}
@@ -967,7 +967,7 @@
 <a class="jxr_linenumber" name="L959" href="#L959">959</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L960" href="#L960">960</a> 
 <a class="jxr_linenumber" name="L961" href="#L961">961</a> 		<strong class="jxr_keyword">var</strong> methodName = method.getName();
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		Class&lt;?&gt;[] paramTypes = method.getParameterTypes();
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		<strong class="jxr_keyword">var</strong> paramTypes = method.getParameterTypes();
 <a class="jxr_linenumber" name="L963" href="#L963">963</a> 		<strong class="jxr_keyword">var</strong> declaringClass = method.getDeclaringClass();
 <a class="jxr_linenumber" name="L964" href="#L964">964</a> 
 <a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<em class="jxr_comment">// Collect parent methods in a list (we'll reverse it to get parent-to-child order)</em>
@@ -977,7 +977,7 @@
 <a class="jxr_linenumber" name="L969" href="#L969">969</a> 		<strong class="jxr_keyword">var</strong> currentClass = declaringClass.getSuperclass();
 <a class="jxr_linenumber" name="L970" href="#L970">970</a> 		<strong class="jxr_keyword">while</strong> (nn(currentClass) &amp;&amp; currentClass != Object.<strong class="jxr_keyword">class</strong>) {
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 				Method parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 				<strong class="jxr_keyword">var</strong> parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
 <a class="jxr_linenumber" name="L973" href="#L973">973</a> 				parentMethods.add(parentMethod);
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NoSuchMethodException e) {
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 				<em class="jxr_comment">// No matching method in this parent class, continue up the hierarchy</em>
@@ -988,7 +988,7 @@
 <a class="jxr_linenumber" name="L980" href="#L980">980</a> 		<em class="jxr_comment">// Also check interfaces</em>
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> iface : declaringClass.getInterfaces()) {
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 				Method ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 				<strong class="jxr_keyword">var</strong> ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 				parentMethods.add(ifaceMethod);
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NoSuchMethodException e) {
 <a class="jxr_linenumber" name="L986" href="#L986">986</a> 				<em class="jxr_comment">// No matching method in this interface</em>
@@ -1011,7 +1011,7 @@
 <a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 				<strong class="jxr_keyword">return</strong> overrideValue;
 <a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 
 <a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 			<em class="jxr_comment">// Read-only beans have their properties stored in a cache until getBean() is called.</em>
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 			Object bean = m.bean;
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 			<strong class="jxr_keyword">var</strong> bean = m.bean;
 <a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 			<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 				<strong class="jxr_keyword">return</strong> m.propertyCache.get(name);
 <a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 
@@ -1029,7 +1029,7 @@
 <a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 
 <a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 	<strong class="jxr_keyword">private</strong> Object invokeGetter(Object bean, String pName) <strong class="jxr_keyword">throws</strong> IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 		<strong class="jxr_keyword">if</strong> (isDyna) {
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 			Map m = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 			<strong class="jxr_keyword">var</strong> m = (Map)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) {
 <a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 				<strong class="jxr_keyword">if</strong> (! isDynaGetterMap)
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 					<strong class="jxr_keyword">return</strong> getter.invoke(bean, pName);
@@ -1051,7 +1051,7 @@
 <a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		<strong class="jxr_keyword">if</strong> (isDyna) {
 <a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 			<strong class="jxr_keyword">if</strong> (nn(setter))
 <a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 				<strong class="jxr_keyword">return</strong> setter.invoke(bean, pName, val);
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 			Map m = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 			<strong class="jxr_keyword">var</strong> m = (Map)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 			<strong class="jxr_keyword">if</strong> (nn(field))
 <a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 				m = (Map&lt;String,Object&gt;)field.get(bean);
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(getter))
@@ -1078,7 +1078,7 @@
 <a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 			<strong class="jxr_keyword">if</strong> (readOnly)
 <a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 
-<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 			BeanSession session = m.getBeanSession();
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 			<strong class="jxr_keyword">var</strong> session = m.getBeanSession();
 <a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 
 <a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 			<em class="jxr_comment">// Convert to raw form.</em>
 <a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 			value = unswap(session, value);
@@ -1092,8 +1092,8 @@
 <a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 				<strong class="jxr_keyword">throw</strong> bex(<span class="jxr_string">"Non-existent bean instance on bean."</span>);
 <a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 			}
 <a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 
-<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 			<strong class="jxr_keyword">boolean</strong> isMap = rawTypeMeta.isMap();
-<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 			<strong class="jxr_keyword">boolean</strong> isCollection = rawTypeMeta.isCollection();
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 			<strong class="jxr_keyword">var</strong> isMap = rawTypeMeta.isMap();
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 			<strong class="jxr_keyword">var</strong> isCollection = rawTypeMeta.isCollection();
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 
 <a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 			<strong class="jxr_keyword">if</strong> ((! isDyna) &amp;&amp; field == <strong class="jxr_keyword">null</strong> &amp;&amp; setter == <strong class="jxr_keyword">null</strong> &amp;&amp; ! (isMap || isCollection)) {
 <a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 				<strong class="jxr_keyword">if</strong> ((value == <strong class="jxr_keyword">null</strong> &amp;&amp; bc.isIgnoreUnknownNullBeanProperties()) || bc.isIgnoreMissingSetters())
@@ -1101,11 +1101,11 @@
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Setter or public field not defined on property ''{0}''"</span>, name);
 <a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 			}
 <a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 
-<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 			Object bean = m.getBean(<strong class="jxr_keyword">true</strong>);  <em class="jxr_comment">// Don't use getBean() because it triggers array creation!</em>
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 			<strong class="jxr_keyword">var</strong> bean = m.getBean(<strong class="jxr_keyword">true</strong>);  <em class="jxr_comment">// Don't use getBean() because it triggers array creation!</em>
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 
 <a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 
-<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 				Object r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) &amp;&amp; (nn(getter) || nn(field)) ? get(m, pName) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 				<strong class="jxr_keyword">var</strong> r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) &amp;&amp; (nn(getter) || nn(field)) ? get(m, pName) : <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 				<strong class="jxr_keyword">var</strong> propertyClass = rawTypeMeta.getInnerClass();
 <a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 				<strong class="jxr_keyword">var</strong> pcInfo = rawTypeMeta.getInfo();
 <a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 
@@ -1165,7 +1165,7 @@
 <a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 					}
 <a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 
 <a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 					<em class="jxr_comment">// Set the values.</em>
-<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 					Map propMap2 = propMap;
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 					<strong class="jxr_keyword">var</strong> propMap2 = propMap;
 <a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 					valueMap.forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 						<strong class="jxr_keyword">if</strong> (! valueType.isObject())
 <a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 							v = session.convertToType(v, valueType);
@@ -1185,7 +1185,7 @@
 <a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 
 <a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 					<strong class="jxr_keyword">var</strong> valueList = (Collection)value;
 <a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 					<strong class="jxr_keyword">var</strong> propList = (Collection)r;
-<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 					ClassMeta elementType = rawTypeMeta.getElementType();
+<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 					<strong class="jxr_keyword">var</strong> elementType = rawTypeMeta.getElementType();
 <a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 
 <a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 					<em class="jxr_comment">// If the property type is abstract, then we either need to reuse the existing</em>
 <a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 					<em class="jxr_comment">// collection (if it's not null), or try to assign the value directly.</em>
@@ -1225,7 +1225,7 @@
 <a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 					}
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 
 <a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 					<em class="jxr_comment">// Set the values.</em>
-<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 					Collection propList2 = propList;
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 					<strong class="jxr_keyword">var</strong> propList2 = propList;
 <a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 					valueList.forEach(x -&gt; {
 <a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 						<strong class="jxr_keyword">if</strong> (! elementType.isObject())
 <a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 							x = session.convertToType(x, elementType);
@@ -1337,15 +1337,15 @@
 <a class="jxr_linenumber" name="L1329" href="#L1329">1329</a> 			<strong class="jxr_keyword">if</strong> (nn(properties)) {
 <a class="jxr_linenumber" name="L1330" href="#L1330">1330</a> 				<strong class="jxr_keyword">if</strong> (rawTypeMeta.isArray()) {
 <a class="jxr_linenumber" name="L1331" href="#L1331">1331</a> 					<strong class="jxr_keyword">var</strong> a = (Object[])o;
-<a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> 					List l = <strong class="jxr_keyword">new</strong> <a name="DelegateList" href="../../../org/apache/juneau/internal/DelegateList.html#DelegateList">DelegateList</a>(rawTypeMeta);
-<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 					ClassMeta childType = rawTypeMeta.getElementType();
+<a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> 					<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> <a name="DelegateList" href="../../../org/apache/juneau/internal/DelegateList.html#DelegateList">DelegateList</a>(rawTypeMeta);
+<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 					<strong class="jxr_keyword">var</strong> childType = rawTypeMeta.getElementType();
 <a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : a)
 <a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> 						l.add(applyChildPropertiesFilter(session, childType, c));
 <a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> 					<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rawTypeMeta.isCollection()) {
 <a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> 					<strong class="jxr_keyword">var</strong> c = (Collection)o;
-<a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> 					List l = listOfSize(c.size());
-<a class="jxr_linenumber" name="L1340" href="#L1340">1340</a> 					ClassMeta childType = rawTypeMeta.getElementType();
+<a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> 					<strong class="jxr_keyword">var</strong> l = listOfSize(c.size());
+<a class="jxr_linenumber" name="L1340" href="#L1340">1340</a> 					<strong class="jxr_keyword">var</strong> childType = rawTypeMeta.getElementType();
 <a class="jxr_linenumber" name="L1341" href="#L1341">1341</a> 					c.forEach(x -&gt; l.add(applyChildPropertiesFilter(session, childType, x)));
 <a class="jxr_linenumber" name="L1342" href="#L1342">1342</a> 					<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L1343" href="#L1343">1343</a> 				} <strong class="jxr_keyword">else</strong> {

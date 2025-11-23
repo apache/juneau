@@ -985,13 +985,13 @@
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> 			o2 = ((Map)o).get(parentKey);
 <a class="jxr_linenumber" name="L978" href="#L978">978</a> 			ct2 = cm.getValueType();
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isCollection() &amp;&amp; o instanceof List o3) {
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 			<strong class="jxr_keyword">int</strong> key = parseInt(parentKey);
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 			<strong class="jxr_keyword">var</strong> key = parseInt(parentKey);
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> 			<strong class="jxr_keyword">if</strong> (o3.size() &lt;= key)
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> 			o2 = o3.get(key);
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 			ct2 = cm.getElementType();
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isArray()) {
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 			<strong class="jxr_keyword">int</strong> key = parseInt(parentKey);
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 			<strong class="jxr_keyword">var</strong> key = parseInt(parentKey);
 <a class="jxr_linenumber" name="L987" href="#L987">987</a> 			<strong class="jxr_keyword">var</strong> a = ((Object[])o);
 <a class="jxr_linenumber" name="L988" href="#L988">988</a> 			<strong class="jxr_keyword">if</strong> (a.length &lt;= key)
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

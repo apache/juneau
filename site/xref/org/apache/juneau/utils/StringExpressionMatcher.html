@@ -192,7 +192,7 @@
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Exp parseOperand(String operand) {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">boolean</strong> hasMeta = false;
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; operand.length() &amp;&amp; ! hasMeta; i++) {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">char</strong> c = operand.charAt(i);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">var</strong> c = operand.charAt(i);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 			hasMeta |= META.contains(c);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		}
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">return</strong> hasMeta ? <strong class="jxr_keyword">new</strong> Match(operand) : <strong class="jxr_keyword">new</strong> Eq(operand);
@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">boolean</strong> error = false;
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">for</strong> (i = 0; i &lt; expression.length(); i++) {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">char</strong> c = expression.charAt(i);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">var</strong> c = expression.charAt(i);
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">if</strong> (state == S1) {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				<em class="jxr_comment">// S1 = Looking for start</em>
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 				<strong class="jxr_keyword">if</strong> (! WS.contains(c)) {

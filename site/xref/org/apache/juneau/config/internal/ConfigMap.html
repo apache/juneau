@@ -426,7 +426,7 @@
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 	@SuppressWarnings(<span class="jxr_string">"null"</span>)
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStoreListener */</em>
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onChange(String newContents) {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		ConfigEvents changes2 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">var</strong> changes2 = (<a name="ConfigEvents" href="../../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a>)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">if</strong> (ne(contents, newContents)) {
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 				changes2 = findDiffs(newContents);

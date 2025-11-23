@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<em class="jxr_comment">// Get the bean property type from the getter/field.</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			Class&lt;?&gt; pt = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">var</strong> pt = (Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">if</strong> (nn(b.getter))
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 				pt = b.getter.getReturnType();
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(b.field))
@@ -168,7 +168,7 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		}
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">private</strong> String findDictionaryName(ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			BeanRegistry br = cm.getBeanRegistry();
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">var</strong> br = cm.getBeanRegistry();
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">if</strong> (nn(br)) {
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 				String s = br.getTypeName(<strong class="jxr_keyword">this</strong>.classMeta);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">if</strong> (nn(s))
@@ -352,7 +352,7 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 				fixedBeanProps.forEach(x -&gt; normalProps.put(x, BeanPropertyMeta.builder(beanMeta, x)));
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 				<strong class="jxr_keyword">if</strong> (ctx.isUseJavaBeanIntrospector()) {
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 					BeanInfo bi = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 					<strong class="jxr_keyword">var</strong> bi = (BeanInfo)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 					<strong class="jxr_keyword">if</strong> (! c2.isInterface())
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 						bi = Introspector.getBeanInfo(c2, stopClass);
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 					<strong class="jxr_keyword">else</strong>
@@ -765,7 +765,7 @@
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ci : c.getGenericInterfaces())
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 				findTypeVarImpls(ci, m);
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t instanceof ParameterizedType t2) {
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 			Type rt = t2.getRawType();
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 			<strong class="jxr_keyword">var</strong> rt = t2.getRawType();
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 			<strong class="jxr_keyword">if</strong> (rt instanceof Class) {
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 				Type[] gImpls = t2.getActualTypeArguments();
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 				Class&lt;?&gt;[] gTypes = <strong class="jxr_keyword">new</strong> Class[gImpls.length];

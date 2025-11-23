@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		sbw.append((String)<strong class="jxr_keyword">null</strong>,0,4);
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertEquals(<span class="jxr_string">"abcabcbbnullnullnull"</span>, sbw.toString());
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">char</strong>[] buff = <span class="jxr_string">"abc"</span>.toCharArray();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> buff = <span class="jxr_string">"abc"</span>.toCharArray();
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> sbw2 = <strong class="jxr_keyword">new</strong> StringBuilderWriter();
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		sbw2.write(buff, 0, buff.length);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertEquals(<span class="jxr_string">"abc"</span>, sbw2.toString());

@@ -4474,7 +4474,7 @@
 <a class="jxr_linenumber" name="L4466" href="#L4466">4466</a> 
 <a class="jxr_linenumber" name="L4467" href="#L4467">4467</a> 			<em class="jxr_comment">// Initialize our child resources.</em>
 <a class="jxr_linenumber" name="L4468" href="#L4468">4468</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : children) {
-<a class="jxr_linenumber" name="L4469" href="#L4469">4469</a> 				String path = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4469" href="#L4469">4469</a> 				<strong class="jxr_keyword">var</strong> path = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L4470" href="#L4470">4470</a> 				Supplier&lt;?&gt; so;
 <a class="jxr_linenumber" name="L4471" href="#L4471">4471</a> 
 <a class="jxr_linenumber" name="L4472" href="#L4472">4472</a> 				<strong class="jxr_keyword">if</strong> (o instanceof <a name="RestChild" href="../../../../org/apache/juneau/rest/RestChild.html#RestChild">RestChild</a> o2) {
@@ -4483,7 +4483,7 @@
 <a class="jxr_linenumber" name="L4475" href="#L4475">4475</a> 					so = () -&gt; o3;
 <a class="jxr_linenumber" name="L4476" href="#L4476">4476</a> 				}
 <a class="jxr_linenumber" name="L4477" href="#L4477">4477</a> 
-<a class="jxr_linenumber" name="L4478" href="#L4478">4478</a> 				Builder cb = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4478" href="#L4478">4478</a> 				<strong class="jxr_keyword">var</strong> cb = (Builder)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L4479" href="#L4479">4479</a> 
 <a class="jxr_linenumber" name="L4480" href="#L4480">4480</a> 				<strong class="jxr_keyword">if</strong> (o instanceof Class&lt;?&gt; oc) {
 <a class="jxr_linenumber" name="L4481" href="#L4481">4481</a> 					<em class="jxr_comment">// Don't allow specifying yourself as a child.  Causes an infinite loop.</em>
@@ -5014,7 +5014,7 @@
 <a class="jxr_linenumber" name="L5006" href="#L5006">5006</a> 
 <a class="jxr_linenumber" name="L5007" href="#L5007">5007</a> 			path = nn(builder.path) ? builder.path : <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L5008" href="#L5008">5008</a> 			fullPath = (parentContext == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : (parentContext.fullPath + '/')) + path;
-<a class="jxr_linenumber" name="L5009" href="#L5009">5009</a> 			String p = path;
+<a class="jxr_linenumber" name="L5009" href="#L5009">5009</a> 			<strong class="jxr_keyword">var</strong> p = path;
 <a class="jxr_linenumber" name="L5010" href="#L5010">5010</a> 			<strong class="jxr_keyword">if</strong> (! p.endsWith(<span class="jxr_string">"/*"</span>))
 <a class="jxr_linenumber" name="L5011" href="#L5011">5011</a> 				p += <span class="jxr_string">"/*"</span>;
 <a class="jxr_linenumber" name="L5012" href="#L5012">5012</a> 			pathMatcher = UrlPathMatcher.of(p);
@@ -6005,10 +6005,10 @@
 <a class="jxr_linenumber" name="L5997" href="#L5997">5997</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5998" href="#L5998">5998</a> 			res.setContentType(<span class="jxr_string">"text/plain"</span>);
 <a class="jxr_linenumber" name="L5999" href="#L5999">5999</a> 			res.setHeader(<span class="jxr_string">"Content-Encoding"</span>, <span class="jxr_string">"identity"</span>);
-<a class="jxr_linenumber" name="L6000" href="#L6000">6000</a> 			<strong class="jxr_keyword">int</strong> statusCode = e2.getStatusLine().getStatusCode();
+<a class="jxr_linenumber" name="L6000" href="#L6000">6000</a> 			<strong class="jxr_keyword">var</strong> statusCode = e2.getStatusLine().getStatusCode();
 <a class="jxr_linenumber" name="L6001" href="#L6001">6001</a> 			res.setStatus(statusCode);
 <a class="jxr_linenumber" name="L6002" href="#L6002">6002</a> 
-<a class="jxr_linenumber" name="L6003" href="#L6003">6003</a> 			PrintWriter w = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L6003" href="#L6003">6003</a> 			<strong class="jxr_keyword">var</strong> w = (PrintWriter)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L6004" href="#L6004">6004</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L6005" href="#L6005">6005</a> 				w = res.getWriter();
 <a class="jxr_linenumber" name="L6006" href="#L6006">6006</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IllegalStateException x) {
@@ -6100,7 +6100,7 @@
 <a class="jxr_linenumber" name="L6092" href="#L6092">6092</a> 		<em class="jxr_comment">// Loop until we find the correct processor for the POJO.</em>
 <a class="jxr_linenumber" name="L6093" href="#L6093">6093</a> 		<strong class="jxr_keyword">int</strong> loops = 5;
 <a class="jxr_linenumber" name="L6094" href="#L6094">6094</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; responseProcessors.length; i++) {
-<a class="jxr_linenumber" name="L6095" href="#L6095">6095</a> 			<strong class="jxr_keyword">int</strong> j = responseProcessors[i].process(opSession);
+<a class="jxr_linenumber" name="L6095" href="#L6095">6095</a> 			<strong class="jxr_keyword">var</strong> j = responseProcessors[i].process(opSession);
 <a class="jxr_linenumber" name="L6096" href="#L6096">6096</a> 			<strong class="jxr_keyword">if</strong> (j == FINISHED)
 <a class="jxr_linenumber" name="L6097" href="#L6097">6097</a> 				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L6098" href="#L6098">6098</a> 			<strong class="jxr_keyword">if</strong> (j == RESTART) {

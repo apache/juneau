@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> LinkedList&lt;Object&gt; collapseTextNodes(LinkedList&lt;Object&gt; value) {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		String prev = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> prev = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">for</strong> (ListIterator&lt;Object&gt; i = value.listIterator(); i.hasNext();) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			Object o = i.next();
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">if</strong> (o instanceof String o2) {
@@ -111,11 +111,11 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">if</strong> (sb == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			sb = <strong class="jxr_keyword">new</strong> StringBuilder(value.length());
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; value.length(); i++) {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">char</strong> c = value.charAt(i);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; value.length(); i++) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">var</strong> c = value.charAt(i);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">if</strong> (c == '_' &amp;&amp; isEscapeSequence(value, i)) {
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">int</strong> x = Integer.parseInt(value.substring(i + 2, i + 6), 16);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">var</strong> x = Integer.parseInt(value.substring(i + 2, i + 6), 16);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<em class="jxr_comment">// If we find _x0000_, then that means a null.</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 				<em class="jxr_comment">// If we find _xE000_, then that means an empty string.</em>
@@ -146,8 +146,8 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> s = value.toString();
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (needsAttrNameEncoding(s)) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 				<strong class="jxr_keyword">if</strong> (i == 0) {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 					<strong class="jxr_keyword">if</strong> (c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z' || c == ':')
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 						w.append(c);
@@ -191,16 +191,16 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 				<strong class="jxr_keyword">return</strong> w.append(<span class="jxr_string">"_x0000_"</span>);
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			String s = value.toString();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">var</strong> s = value.toString();
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">if</strong> (s.isEmpty())
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<strong class="jxr_keyword">return</strong> w;
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">if</strong> (trim)
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 				s = s.trim();
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">if</strong> (needsAttrValueEncoding(s)) {
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> len = s.length();
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; len; i++) {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 					<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				<strong class="jxr_keyword">var</strong> len = s.length();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; len; i++) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 					<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 					<strong class="jxr_keyword">if</strong> ((i == 0 || i == len - 1) &amp;&amp; Character.isWhitespace(c))
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 						appendPaddedHexChar(w, c);
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (REPLACE_ATTR_VAL.contains(c))
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">if</strong> (needsElementNameEncoding(s))
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<strong class="jxr_keyword">try</strong> (Writer w = <strong class="jxr_keyword">new</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>(s.length() * 2)) {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> w = <strong class="jxr_keyword">new</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>(s.length() * 2)) {
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 					<strong class="jxr_keyword">return</strong> encodeElementNameInner(w, s).toString();
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 				}
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
@@ -258,7 +258,7 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 				<strong class="jxr_keyword">return</strong> w.append(<span class="jxr_string">"_x0000_"</span>);
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			String s = value.toString();
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">var</strong> s = value.toString();
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">if</strong> (needsElementNameEncoding(s))
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 				<strong class="jxr_keyword">return</strong> encodeElementNameInner(w, s);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			w.append(s);
@@ -291,16 +291,16 @@
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 				<strong class="jxr_keyword">return</strong> w.append(<span class="jxr_string">"_x0000_"</span>);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			String s = value.toString();
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">var</strong> s = value.toString();
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">if</strong> (s.isEmpty())
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 				<strong class="jxr_keyword">return</strong> w.append(<span class="jxr_string">"_xE000_"</span>);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">if</strong> (trim)
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 				s = s.trim();
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">if</strong> (needsTextEncoding(s)) {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 				<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> len = s.length();
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 				<strong class="jxr_keyword">var</strong> len = s.length();
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; len; i++) {
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 					<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 					<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 					<strong class="jxr_keyword">if</strong> ((i == 0 || i == len - 1) &amp;&amp; Character.isWhitespace(c) &amp;&amp; ! preserveWhitespace)
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 						appendPaddedHexChar(w, c);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (REPLACE_TEXT.contains(c))
@@ -336,10 +336,10 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">if</strong> (! needsTextEncoding(s))
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 				<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> len = s.length();
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">var</strong> len = s.length();
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">var</strong> sw = <strong class="jxr_keyword">new</strong> StringWriter(s.length() * 2);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; len; i++) {
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 				<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 				<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 				<strong class="jxr_keyword">if</strong> ((i == 0 || i == len - 1) &amp;&amp; Character.isWhitespace(c))
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 					appendPaddedHexChar(sw, c);
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '_' &amp;&amp; isEscapeSequence(s, i))
@@ -368,15 +368,15 @@
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> findNamespace(List&lt;Xml&gt; xmls, List&lt;XmlSchema&gt; schemas) {
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = xmls.size() - 1; i &gt;= 0; i--) {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			Xml xml = xmls.get(i);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			Namespace ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">var</strong> xml = xmls.get(i);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<strong class="jxr_keyword">var</strong> ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">if</strong> (nn(ns))
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 				<strong class="jxr_keyword">return</strong> ns;
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 		}
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = schemas.size() - 1; i &gt;= 0; i--) {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			XmlSchema schema = schemas.get(i);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			Namespace ns = findNamespace(schema.prefix(), schema.namespace(), <strong class="jxr_keyword">null</strong>, schemas);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">var</strong> schema = schemas.get(i);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<strong class="jxr_keyword">var</strong> ns = findNamespace(schema.prefix(), schema.namespace(), <strong class="jxr_keyword">null</strong>, schemas);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">if</strong> (nn(ns))
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 				<strong class="jxr_keyword">return</strong> ns;
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 		}
@@ -435,7 +435,7 @@
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Writer encodeElementNameInner(Writer w, String s) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">if</strong> ((c &gt;= 'A' &amp;&amp; c &lt;= 'Z')
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 					|| (c == '_' &amp;&amp; ! isEscapeSequence(s,i))
@@ -535,8 +535,8 @@
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> needsAttrNameEncoding(String value) {
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<em class="jxr_comment">// Note that this doesn't need to be perfect, just fast.</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; value.length(); i++) {
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			<strong class="jxr_keyword">char</strong> c = value.charAt(i);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; value.length(); i++) {
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			<strong class="jxr_keyword">var</strong> c = value.charAt(i);
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 			<strong class="jxr_keyword">if</strong> (! (c &gt;= '0' &amp;&amp; c &lt;= '9' || c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z') || (i == 0 &amp;&amp; ! (c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z')))
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 		}
@@ -546,9 +546,9 @@
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> needsAttrValueEncoding(String value) {
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<em class="jxr_comment">// See if we need to convert the string.</em>
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 		<em class="jxr_comment">// Conversion is somewhat expensive, so make sure we need to do so before hand.</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> len = value.length();
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; len; i++) {
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">char</strong> c = value.charAt(i);
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">var</strong> len = value.length();
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; len; i++) {
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">var</strong> c = value.charAt(i);
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 			<strong class="jxr_keyword">if</strong> ((i == 0 || i == len - 1) &amp;&amp; Character.isWhitespace(c))
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">if</strong> (REPLACE_ATTR_VAL.contains(c) || ! isValidXmlCharacter(c) || (c == '_' &amp;&amp; isEscapeSequence(value, i)))
@@ -559,8 +559,8 @@
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> needsElementNameEncoding(String value) {
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<em class="jxr_comment">// Note that this doesn't need to be perfect, just fast.</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; value.length(); i++) {
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">char</strong> c = value.charAt(i);
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; value.length(); i++) {
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">var</strong> c = value.charAt(i);
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">if</strong> (! (c &gt;= '0' &amp;&amp; c &lt;= '9' || c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z') || (i == 0 &amp;&amp; (c &gt;= '0' &amp;&amp; c &lt;= '9')))
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 		}
@@ -570,9 +570,9 @@
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> needsTextEncoding(String value) {
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<em class="jxr_comment">// See if we need to convert the string.</em>
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<em class="jxr_comment">// Conversion is somewhat expensive, so make sure we need to do so before hand.</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> len = value.length();
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; len; i++) {
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<strong class="jxr_keyword">char</strong> c = value.charAt(i);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">var</strong> len = value.length();
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; len; i++) {
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<strong class="jxr_keyword">var</strong> c = value.charAt(i);
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 			<strong class="jxr_keyword">if</strong> ((i == 0 || i == len - 1) &amp;&amp; Character.isWhitespace(c))
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<strong class="jxr_keyword">if</strong> (REPLACE_TEXT.contains(c) || ! isValidXmlCharacter(c) || (c == '_' &amp;&amp; isEscapeSequence(value, i)))

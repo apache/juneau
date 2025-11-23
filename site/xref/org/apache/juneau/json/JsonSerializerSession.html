@@ -391,7 +391,7 @@
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		String typeName = getBeanTypeName(<strong class="jxr_keyword">this</strong>, eType, aType, pMeta);
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<em class="jxr_comment">// Swap if necessary</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		ObjectSwap swap = aType.getSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">var</strong> swap = aType.getSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">if</strong> (nn(swap)) {
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 			o = swap(swap, o);
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 			sType = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);

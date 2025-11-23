@@ -654,7 +654,7 @@
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 		}
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">private</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getContextConstructor() {
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			<strong class="jxr_keyword">var</strong> cci = CONTEXT_CONSTRUCTORS.get(type);
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> 			<strong class="jxr_keyword">if</strong> (cci == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 			cci = info(type).getPublicConstructor(

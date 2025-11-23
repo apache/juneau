@@ -71,10 +71,10 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">public</strong> <a name="SearchArgs" href="../../../../org/apache/juneau/objecttools/SearchArgs.html#SearchArgs">SearchArgs</a>(List&lt;String&gt; searchArgs) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		searchArgs.forEach(s -&gt; {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">int</strong> i = indexOf(s, '=', '&gt;', '&lt;');
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">var</strong> i = indexOf(s, '=', '&gt;', '&lt;');
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">if</strong> (i == -1)
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="PatternException" href="../../../../org/apache/juneau/objecttools/PatternException.html#PatternException">PatternException</a>(<span class="jxr_string">"Invalid search terms: ''{0}''"</span>, searchArgs);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">char</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			append(s.substring(0, i).trim(), s.substring(c == '=' ? i + 1 : i).trim());
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		});
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}

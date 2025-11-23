@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"POST"</span>.equals(session.getMethod())) {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			String pip = session.getUrlPath().getPath();
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">var</strong> pip = session.getUrlPath().getPath();
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">if</strong> (pip.indexOf('/') != -1)
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 				pip = pip.substring(pip.lastIndexOf('/') + 1);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			pip = urlDecode(pip);

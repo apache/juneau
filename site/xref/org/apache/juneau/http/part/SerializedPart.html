@@ -164,7 +164,7 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			Object v = unwrap(value);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			HttpPartSchema schema = <strong class="jxr_keyword">this</strong>.schema == <strong class="jxr_keyword">null</strong> ? HttpPartSchema.DEFAULT : <strong class="jxr_keyword">this</strong>.schema;
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			String def = schema.getDefault();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">var</strong> def = schema.getDefault();
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 				<strong class="jxr_keyword">if</strong> ((def == <strong class="jxr_keyword">null</strong> &amp;&amp; ! schema.isRequired()) || (def == <strong class="jxr_keyword">null</strong> &amp;&amp; schema.isAllowEmptyValue()))
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

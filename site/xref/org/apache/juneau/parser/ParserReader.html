@@ -225,8 +225,8 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> peekSkipWs() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">int</strong> c = read();
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">boolean</strong> isWs = Character.isWhitespace(c);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">var</strong> c = read();
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">var</strong> isWs = Character.isWhitespace(c);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">if</strong> (c != -1 &amp;&amp; ! isWs)
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 				unread();
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">if</strong> (! isWs)
@@ -299,7 +299,7 @@
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<em class="jxr_comment">// Characters that take up 2 chars.</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">if</strong> (c &gt;= 0xd800 &amp;&amp; c &lt;= 0xdbff) {
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">int</strong> low = read();
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">var</strong> low = read();
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">if</strong> (low &gt;= 0xdc00 &amp;&amp; low &lt;= 0xdfff)
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 				c = 0x10000 + ((c - 0xd800) &lt;&lt; 10) + (low - 0xdc00);
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		}
@@ -315,7 +315,7 @@
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> readSkipWs() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">int</strong> c = read();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">var</strong> c = read();
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">if</strong> (c == -1 || ! Character.isWhitespace(c))
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		}

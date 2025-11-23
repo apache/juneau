@@ -123,7 +123,7 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 				<strong class="jxr_keyword">this</strong>.childUnswapMap = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 			}
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			Class&lt;T&gt; c = innerClass;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">var</strong> c = innerClass;
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			ci = info(c);
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 			<strong class="jxr_keyword">if</strong> (c.isPrimitive()) {
@@ -282,8 +282,8 @@
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 				.forEach(x -&gt; publicMethods.put(x.getSignature(), x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			BeanFilter beanFilter = findBeanFilter(bc);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">var</strong> beanFilter = findBeanFilter(bc);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">var</strong> marshalledFilter = findMarshalledFilter(bc);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			addAll(<strong class="jxr_keyword">this</strong>.swaps, swaps);
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
@@ -341,7 +341,7 @@
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 				<em class="jxr_comment">// Note that this needs to be done after all other initialization has been done.</em>
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cc == OTHER) {
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 					BeanMeta newMeta = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 					<strong class="jxr_keyword">var</strong> newMeta = (<a name="BeanMeta" href="../../../org/apache/juneau/BeanMeta.html#BeanMeta">BeanMeta</a>)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 						newMeta = <strong class="jxr_keyword">new</strong> <a name="BeanMeta" href="../../../org/apache/juneau/BeanMeta.html#BeanMeta">BeanMeta</a>(ClassMeta.<strong class="jxr_keyword">this</strong>, bc, beanFilter, <strong class="jxr_keyword">null</strong>, implClass == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : noArgConstructor);
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 						notABeanReason = newMeta.notABeanReason;
@@ -433,7 +433,7 @@
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">var</strong> ci = info(c);
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">if</strong> (ci.isChildOf(ObjectSwap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				ObjectSwap ps = BeanCreator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(c).run();
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				<strong class="jxr_keyword">var</strong> ps = BeanCreator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(c).run();
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 				<strong class="jxr_keyword">if</strong> (s.mediaTypes().length &gt; 0)
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 					ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 				<strong class="jxr_keyword">if</strong> (! s.template().isEmpty())
@@ -510,7 +510,7 @@
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isCacheable(Class&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">var</strong> n = c.getName();
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">char</strong> x = n.charAt(n.length() - 1);  <em class="jxr_comment">// All generated classes appear to end with digits.</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">var</strong> x = n.charAt(n.length() - 1);  <em class="jxr_comment">// All generated classes appear to end with digits.</em>
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">if</strong> (x &gt;= '0' &amp;&amp; x &lt;= '9') {
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 			<strong class="jxr_keyword">if</strong> (n.indexOf(<span class="jxr_string">"$$"</span>) != -1 || n.startsWith(<span class="jxr_string">"sun"</span>) || n.startsWith(<span class="jxr_string">"com.sun"</span>) || n.indexOf(<span class="jxr_string">"$Proxy"</span>) != -1)
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 				<strong class="jxr_keyword">return</strong> false;
@@ -621,12 +621,12 @@
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">this</strong>.beanContext = beanContext;
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">var</strong> notABeanReason = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.write()) {
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 			<em class="jxr_comment">// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.</em>
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 			<strong class="jxr_keyword">if</strong> (nn(beanContext) &amp;&amp; nn(beanContext.cmCache) &amp;&amp; isCacheable(innerClass))
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 				beanContext.cmCache.put(innerClass, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> 
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			ClassMetaBuilder&lt;T&gt; builder = <strong class="jxr_keyword">new</strong> ClassMetaBuilder(innerClass, beanContext, swaps, childSwaps);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			<strong class="jxr_keyword">var</strong> builder = <strong class="jxr_keyword">new</strong> ClassMetaBuilder&lt;&gt;(innerClass, beanContext, swaps, childSwaps);
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<strong class="jxr_keyword">this</strong>.cc = builder.cc;
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 			<strong class="jxr_keyword">this</strong>.isDelegate = builder.isDelegate;
@@ -981,7 +981,7 @@
 <a class="jxr_linenumber" name="L973" href="#L973">973</a> 				<strong class="jxr_keyword">var</strong> etExample = getElementType().getExample(session, jpSession);
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 				<strong class="jxr_keyword">if</strong> (nn(etExample)) {
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 					<strong class="jxr_keyword">if</strong> (canCreateNewInstance()) {
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 						Collection c = (Collection)newInstance();
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 						<strong class="jxr_keyword">var</strong> c = (Collection)newInstance();
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> 						c.add(etExample);
 <a class="jxr_linenumber" name="L978" href="#L978">978</a> 						<strong class="jxr_keyword">return</strong> (T)c;
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 					}
@@ -990,7 +990,7 @@
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isArray()) {
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> 				<strong class="jxr_keyword">var</strong> etExample = getElementType().getExample(session, jpSession);
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 				<strong class="jxr_keyword">if</strong> (nn(etExample)) {
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 					Object o = Array.newInstance(getElementType().innerClass, 1);
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 					<strong class="jxr_keyword">var</strong> o = Array.newInstance(getElementType().innerClass, 1);
 <a class="jxr_linenumber" name="L986" href="#L986">986</a> 					Array.set(o, 0, etExample);
 <a class="jxr_linenumber" name="L987" href="#L987">987</a> 					<strong class="jxr_keyword">return</strong> (T)o;
 <a class="jxr_linenumber" name="L988" href="#L988">988</a> 				}
@@ -1243,8 +1243,8 @@
 <a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 	<strong class="jxr_keyword">public</strong> ObjectSwap&lt;T,?&gt; getSwap(BeanSession session) {
 <a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> 		<strong class="jxr_keyword">if</strong> (nn(swaps)) {
-<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 			<strong class="jxr_keyword">int</strong> matchQuant = 0;
-<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 			<strong class="jxr_keyword">int</strong> matchIndex = -1;
+<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 			<strong class="jxr_keyword">var</strong> matchQuant = 0;
+<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 			<strong class="jxr_keyword">var</strong> matchIndex = -1;
 <a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> 
 <a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; swaps.length; i++) {
 <a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 				<strong class="jxr_keyword">var</strong> q = swaps[i].match(session);
@@ -1744,7 +1744,7 @@
 <a class="jxr_linenumber" name="L1736" href="#L1736">1736</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1737" href="#L1737">1737</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1738" href="#L1738">1738</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; Optional&lt;A&gt; lastAnnotation(Class&lt;A&gt; type, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> 		A[] array = annotationArray(type);
+<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> 		<strong class="jxr_keyword">var</strong> array = annotationArray(type);
 <a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> 		<strong class="jxr_keyword">if</strong> (array == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> 			<strong class="jxr_keyword">if</strong> (beanContext == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> 				<strong class="jxr_keyword">return</strong> AP.find(type, info).stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).filter(a -&gt; test(filter, a)).findFirst();  <em class="jxr_comment">// AnnotationProvider returns child-to-parent, so first is "last"</em>
@@ -1804,10 +1804,10 @@
 <a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 	<strong class="jxr_keyword">public</strong> T newInstance() <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> 		<strong class="jxr_keyword">if</strong> (isArray())
 <a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(getInnerClass().getComponentType(), 0);
-<a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> 		ConstructorInfo c = getConstructor();
+<a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> 		<strong class="jxr_keyword">var</strong> c = getConstructor();
 <a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> 		<strong class="jxr_keyword">if</strong> (nn(c))
 <a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance();
-<a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> 		InvocationHandler h = getProxyInvocationHandler();
+<a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> 		<strong class="jxr_keyword">var</strong> h = getProxyInvocationHandler();
 <a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> 		<strong class="jxr_keyword">if</strong> (nn(h))
 <a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader(), a(getInnerClass(), java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
 <a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 		<strong class="jxr_keyword">if</strong> (isArray())
@@ -1851,13 +1851,13 @@
 <a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 	<strong class="jxr_keyword">public</strong> T newInstanceFromString(Object <strong class="jxr_keyword">outer</strong>, String arg) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 
 <a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 		<strong class="jxr_keyword">if</strong> (isEnum()) {
-<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 			T t = (T)enumValues.getKey(arg);
+<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 			<strong class="jxr_keyword">var</strong> t = (T)enumValues.getKey(arg);
 <a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 			<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> &amp;&amp; ! beanContext.isIgnoreUnknownEnumValues())
 <a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve enum value '"</span> + arg + <span class="jxr_string">"' on class '"</span> + getInnerClass().getName() + <span class="jxr_string">"'"</span>);
 <a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 			<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 		}
 <a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 
-<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 		Method m = fromStringMethod;
+<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 		<strong class="jxr_keyword">var</strong> m = fromStringMethod;
 <a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> 		<strong class="jxr_keyword">if</strong> (nn(m)) {
 <a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> 				<strong class="jxr_keyword">return</strong> (T)m.invoke(<strong class="jxr_keyword">null</strong>, arg);
@@ -1865,7 +1865,7 @@
 <a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
 <a class="jxr_linenumber" name="L1858" href="#L1858">1858</a> 			}
 <a class="jxr_linenumber" name="L1859" href="#L1859">1859</a> 		}
-<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> 		ConstructorInfo c = stringConstructor;
+<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> 		<strong class="jxr_keyword">var</strong> c = stringConstructor;
 <a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> 		<strong class="jxr_keyword">if</strong> (nn(c)) {
 <a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> 			<strong class="jxr_keyword">if</strong> (isMemberClass)
 <a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> 				<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>, arg);
@@ -1936,14 +1936,14 @@
 <a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForSwap(Class&lt;?&gt; normalClass) {
 <a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 		<strong class="jxr_keyword">if</strong> (nn(childSwapMap)) {
-<a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 			ObjectSwap&lt;?,?&gt; s = childSwapMap.get(normalClass);
+<a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 			<strong class="jxr_keyword">var</strong> s = childSwapMap.get(normalClass);
 <a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : childSwaps)
 <a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> 					<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> &amp;&amp; f.getNormalClass().isParentOf(normalClass))
 <a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 						s = f;
 <a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 					s = ObjectSwap.NULL;
-<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 				ObjectSwap&lt;?,?&gt; s2 = childSwapMap.putIfAbsent(normalClass, s);
+<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 				<strong class="jxr_keyword">var</strong> s2 = childSwapMap.putIfAbsent(normalClass, s);
 <a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> 				<strong class="jxr_keyword">if</strong> (nn(s2))
 <a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 					s = s2;
 <a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 			}
@@ -1963,14 +1963,14 @@
 <a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForUnswap(Class&lt;?&gt; swapClass) {
 <a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 		<strong class="jxr_keyword">if</strong> (nn(childUnswapMap)) {
-<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 			ObjectSwap&lt;?,?&gt; s = childUnswapMap.get(swapClass);
+<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 			<strong class="jxr_keyword">var</strong> s = childUnswapMap.get(swapClass);
 <a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : childSwaps)
 <a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> 					<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> &amp;&amp; f.getSwapClass().isParentOf(swapClass))
 <a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> 						s = f;
 <a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> 					s = ObjectSwap.NULL;
-<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> 				ObjectSwap&lt;?,?&gt; s2 = childUnswapMap.putIfAbsent(swapClass, s);
+<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> 				<strong class="jxr_keyword">var</strong> s2 = childUnswapMap.putIfAbsent(swapClass, s);
 <a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> 				<strong class="jxr_keyword">if</strong> (nn(s2))
 <a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> 					s = s2;
 <a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 			}

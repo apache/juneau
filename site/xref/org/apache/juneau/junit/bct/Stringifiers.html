@@ -662,7 +662,7 @@
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 				<strong class="jxr_keyword">while</strong> ((nRead = o2.read(b, 0, b.length)) != -1)
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 					buff.write(b, 0, nRead);
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 				buff.flush();
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 				byte[] bytes = buff.toByteArray();
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 				<strong class="jxr_keyword">var</strong> bytes = buff.toByteArray();
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 				<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(bytes.length * 2);
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> element : bytes) {
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 					<strong class="jxr_keyword">var</strong> v = element &amp; 0xFF;

@@ -141,9 +141,9 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<em class="jxr_comment">// Find matching @Header from class-level headerParams array</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		Header classLevelHeader = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> classLevelHeader = (Header)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : restAnnotation.headerParams()) {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			String hName = firstNonEmpty(h.name(), h.value());
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<strong class="jxr_keyword">var</strong> hName = firstNonEmpty(h.name(), h.value());
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">if</strong> (paramName.equals(hName)) {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 				classLevelHeader = h;
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 				<strong class="jxr_keyword">break</strong>;

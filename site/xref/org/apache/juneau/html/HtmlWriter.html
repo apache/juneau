@@ -392,14 +392,14 @@
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 			append(<span class="jxr_string">"&lt;null/&gt;"</span>);
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 		}
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		String s = o.toString();
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> s = o.toString();
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty()) {
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 			append(<span class="jxr_string">"&lt;sp/&gt;"</span>);
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 		}
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">char</strong> test = s.charAt(i);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">var</strong> test = s.charAt(i);
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">if</strong> (test == '&amp;')
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 				append(<span class="jxr_string">"&amp;amp;"</span>);
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (test == '&lt;')

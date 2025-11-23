@@ -6193,7 +6193,7 @@
 <a class="jxr_linenumber" name="L6185" href="#L6185">6185</a> 		<strong class="jxr_keyword">var</strong> uri = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L6186" href="#L6186">6186</a> 		<strong class="jxr_keyword">var</strong> content = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L6187" href="#L6187">6187</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; callString.length(); i++) {
-<a class="jxr_linenumber" name="L6188" href="#L6188">6188</a> 			<strong class="jxr_keyword">char</strong> c = callString.charAt(i);
+<a class="jxr_linenumber" name="L6188" href="#L6188">6188</a> 			<strong class="jxr_keyword">var</strong> c = callString.charAt(i);
 <a class="jxr_linenumber" name="L6189" href="#L6189">6189</a> 			<strong class="jxr_keyword">if</strong> (state == S1) {
 <a class="jxr_linenumber" name="L6190" href="#L6190">6190</a> 				<strong class="jxr_keyword">if</strong> (isWhitespace(c)) {
 <a class="jxr_linenumber" name="L6191" href="#L6191">6191</a> 					method = callString.substring(mark, i);
@@ -7881,7 +7881,7 @@
 <a class="jxr_linenumber" name="L7873" href="#L7873">7873</a> 
 <a class="jxr_linenumber" name="L7874" href="#L7874">7874</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L7875" href="#L7875">7875</a> 			<strong class="jxr_keyword">var</strong> ret = (Object)<strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L7876" href="#L7876">7876</a> 			RestResponse res = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L7876" href="#L7876">7876</a> 			<strong class="jxr_keyword">var</strong> res = (<a name="RestResponse" href="../../../../../org/apache/juneau/rest/client/RestResponse.html#RestResponse">RestResponse</a>)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L7877" href="#L7877">7877</a> 			rc.rethrow(RuntimeException.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L7878" href="#L7878">7878</a> 			rom.forEachException(x -&gt; rc.rethrow(x));
 <a class="jxr_linenumber" name="L7879" href="#L7879">7879</a> 			<strong class="jxr_keyword">if</strong> (ror.getReturnValue() == RemoteReturn.NONE) {

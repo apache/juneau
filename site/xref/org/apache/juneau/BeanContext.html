@@ -2337,7 +2337,7 @@
 <a class="jxr_linenumber" name="L2329" href="#L2329">2329</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBeanImpl &lt;jk&gt;implements&lt;/jk&gt; MyBean {</em>
 <a class="jxr_linenumber" name="L2330" href="#L2330">2330</a> <em class="jxr_javadoccomment">		 * 		...</em>
 <a class="jxr_linenumber" name="L2331" href="#L2331">2331</a> <em class="jxr_javadoccomment">		 * 	}</em>
-<a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> 
+<a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> <em class="jxr_javadoccomment">		</em>
 <a class="jxr_linenumber" name="L2333" href="#L2333">2333</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a parser that instantiates MyBeanImpls when parsing MyBeans.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2334" href="#L2334">2334</a> <em class="jxr_javadoccomment">		 * 	ReaderParser &lt;jv&gt;parser&lt;/jv&gt; = JsonParser</em>
 <a class="jxr_linenumber" name="L2335" href="#L2335">2335</a> <em class="jxr_javadoccomment">		 * 		.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
@@ -2375,7 +2375,7 @@
 <a class="jxr_linenumber" name="L2367" href="#L2367">2367</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBeanImpl &lt;jk&gt;implements&lt;/jk&gt; MyBean {</em>
 <a class="jxr_linenumber" name="L2368" href="#L2368">2368</a> <em class="jxr_javadoccomment">		 * 		...</em>
 <a class="jxr_linenumber" name="L2369" href="#L2369">2369</a> <em class="jxr_javadoccomment">		 * 	}</em>
-<a class="jxr_linenumber" name="L2370" href="#L2370">2370</a> 
+<a class="jxr_linenumber" name="L2370" href="#L2370">2370</a> <em class="jxr_javadoccomment">		</em>
 <a class="jxr_linenumber" name="L2371" href="#L2371">2371</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a parser that instantiates MyBeanImpls when parsing MyBeans.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2372" href="#L2372">2372</a> <em class="jxr_javadoccomment">		 * 	ReaderParser &lt;jv&gt;parser&lt;/jv&gt; = JsonParser</em>
 <a class="jxr_linenumber" name="L2373" href="#L2373">2373</a> <em class="jxr_javadoccomment">		 * 		.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
@@ -4056,7 +4056,7 @@
 <a class="jxr_linenumber" name="L4048" href="#L4048">4048</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ObjectSwap[] findChildObjectSwaps(Class&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L4049" href="#L4049">4049</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong> || swapArray.length == 0)
 <a class="jxr_linenumber" name="L4050" href="#L4050">4050</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L4051" href="#L4051">4051</a> 		List&lt;ObjectSwap&gt; l = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4051" href="#L4051">4051</a> 		<strong class="jxr_keyword">var</strong> l = (List&lt;ObjectSwap&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L4052" href="#L4052">4052</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : swapArray) {
 <a class="jxr_linenumber" name="L4053" href="#L4053">4053</a> 			<strong class="jxr_keyword">if</strong> (f.getNormalClass().isChildOf(c)) {
 <a class="jxr_linenumber" name="L4054" href="#L4054">4054</a> 				<strong class="jxr_keyword">if</strong> (l == <strong class="jxr_keyword">null</strong>)
@@ -4093,11 +4093,11 @@
 <a class="jxr_linenumber" name="L4085" href="#L4085">4085</a> 	<strong class="jxr_keyword">private</strong> ClassMeta&lt;?&gt; getTypedClassMeta(ClassMeta&lt;?&gt;[] c, <strong class="jxr_keyword">int</strong> pos) {
 <a class="jxr_linenumber" name="L4086" href="#L4086">4086</a> 		ClassMeta&lt;?&gt; cm = c[pos++];
 <a class="jxr_linenumber" name="L4087" href="#L4087">4087</a> 		<strong class="jxr_keyword">if</strong> (cm.isCollection() || cm.isOptional()) {
-<a class="jxr_linenumber" name="L4088" href="#L4088">4088</a> 			ClassMeta&lt;?&gt; ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
+<a class="jxr_linenumber" name="L4088" href="#L4088">4088</a> 			<strong class="jxr_keyword">var</strong> ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
 <a class="jxr_linenumber" name="L4089" href="#L4089">4089</a> 			<strong class="jxr_keyword">return</strong> (ce.isObject() ? cm : <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(cm, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, ce));
 <a class="jxr_linenumber" name="L4090" href="#L4090">4090</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isMap()) {
-<a class="jxr_linenumber" name="L4091" href="#L4091">4091</a> 			ClassMeta&lt;?&gt; ck = c.length == pos ? object() : c[pos++];
-<a class="jxr_linenumber" name="L4092" href="#L4092">4092</a> 			ClassMeta&lt;?&gt; cv = c.length == pos ? object() : getTypedClassMeta(c, pos);
+<a class="jxr_linenumber" name="L4091" href="#L4091">4091</a> 			<strong class="jxr_keyword">var</strong> ck = c.length == pos ? object() : c[pos++];
+<a class="jxr_linenumber" name="L4092" href="#L4092">4092</a> 			<strong class="jxr_keyword">var</strong> cv = c.length == pos ? object() : getTypedClassMeta(c, pos);
 <a class="jxr_linenumber" name="L4093" href="#L4093">4093</a> 			<strong class="jxr_keyword">return</strong> (ck.isObject() &amp;&amp; cv.isObject() ? cm : <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(cm, ck, cv, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L4094" href="#L4094">4094</a> 		}
 <a class="jxr_linenumber" name="L4095" href="#L4095">4095</a> 		<strong class="jxr_keyword">return</strong> cm;
@@ -4398,7 +4398,7 @@
 <a class="jxr_linenumber" name="L4390" href="#L4390">4390</a> 
 <a class="jxr_linenumber" name="L4391" href="#L4391">4391</a> 		<strong class="jxr_keyword">if</strong> (t instanceof GenericArrayType t4) {
 <a class="jxr_linenumber" name="L4392" href="#L4392">4392</a> 			<em class="jxr_comment">// An array parameter (e.g. &lt;byte[]&gt;).</em>
-<a class="jxr_linenumber" name="L4393" href="#L4393">4393</a> 			Type gatct = t4.getGenericComponentType();
+<a class="jxr_linenumber" name="L4393" href="#L4393">4393</a> 			<strong class="jxr_keyword">var</strong> gatct = t4.getGenericComponentType();
 <a class="jxr_linenumber" name="L4394" href="#L4394">4394</a> 
 <a class="jxr_linenumber" name="L4395" href="#L4395">4395</a> 			<strong class="jxr_keyword">if</strong> (gatct instanceof Class&lt;?&gt; gatct2)
 <a class="jxr_linenumber" name="L4396" href="#L4396">4396</a> 				<strong class="jxr_keyword">return</strong> Array.newInstance(gatct2, 0).getClass();

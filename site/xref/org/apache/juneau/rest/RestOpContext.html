@@ -1948,8 +1948,8 @@
 <a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 
 <a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 			<strong class="jxr_keyword">if</strong> (v.get().isEmpty()) {
 <a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 				<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(restMethod);
-<a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 				String p = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 				String httpMethod = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 				<strong class="jxr_keyword">var</strong> p = (String)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 				<strong class="jxr_keyword">var</strong> httpMethod = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 				<strong class="jxr_keyword">if</strong> (mi.hasAnnotation(RestGet.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 					httpMethod = <span class="jxr_string">"get"</span>;
 <a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mi.hasAnnotation(RestPut.<strong class="jxr_keyword">class</strong>))
@@ -1998,7 +1998,7 @@
 <a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 		<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> processParameterAnnotations() {
 <a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> aa : restMethod.getParameterAnnotations()) {
 <a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 
-<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 				String def = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 				<strong class="jxr_keyword">var</strong> def = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : aa) {
 <a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> 					<strong class="jxr_keyword">if</strong> (a instanceof Schema a2) {
 <a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> 						def = joinnlFirstNonEmptyArray(a2._<strong class="jxr_keyword">default</strong>(), a2.df());

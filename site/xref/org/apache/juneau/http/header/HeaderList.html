@@ -353,8 +353,8 @@
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;Header&gt; get(String name) {
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		Header first = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		List&lt;Header&gt; <strong class="jxr_keyword">rest</strong> = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">var</strong> first = (Header)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">rest</strong> = (List&lt;Header&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : <strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name)) {
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 				<strong class="jxr_keyword">if</strong> (first == <strong class="jxr_keyword">null</strong>)
@@ -411,8 +411,8 @@
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; get(String name, Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		Header first = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		List&lt;Header&gt; <strong class="jxr_keyword">rest</strong> = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> first = (Header)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">rest</strong> = (List&lt;Header&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : <strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name)) {
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 				<strong class="jxr_keyword">if</strong> (first == <strong class="jxr_keyword">null</strong>)
@@ -737,7 +737,7 @@
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> set(Header value) {
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 		<strong class="jxr_keyword">if</strong> (nn(value)) {
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 			<strong class="jxr_keyword">boolean</strong> replaced = false;
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 			<strong class="jxr_keyword">var</strong> replaced = false;
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = size(); i &lt; j; i++) {
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 				<strong class="jxr_keyword">var</strong> x = get(i);
 <a class="jxr_linenumber" name="L735" href="#L735">735</a> 				<strong class="jxr_keyword">if</strong> (eq(x.getName(), value.getName())) {

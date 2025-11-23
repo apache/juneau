@@ -99,9 +99,9 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<em class="jxr_comment">// Find matching @Path from class-level pathParams array</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		Path classLevelPath = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> classLevelPath = (Path)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : restAnnotation.pathParams()) {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			String pName = firstNonEmpty(p.name(), p.value());
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">var</strong> pName = firstNonEmpty(p.name(), p.value());
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">if</strong> (paramName.equals(pName)) {
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  				classLevelPath = p;
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  				<strong class="jxr_keyword">break</strong>;
@@ -203,8 +203,8 @@
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (nn(p))
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">return</strong> p;
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">if</strong> (nn(pathMatcher)) {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">int</strong> idx = 0;
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">int</strong> i = pi.getIndex();
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">var</strong> idx = 0;
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">var</strong> i = pi.getIndex();
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">var</strong> mi = pi.getMethod();
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; i; j++) {

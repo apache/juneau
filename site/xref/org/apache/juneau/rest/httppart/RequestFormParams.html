@@ -145,7 +145,7 @@
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">this</strong>.vs = req.getVarResolverSession();
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		Map&lt;String,String[]&gt; m = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		Collection&lt;Part&gt; c = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> c = (Collection&lt;Part&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		RequestContent content = req.getContent();
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">if</strong> (content.isLoaded() || ! req.getHeader(ContentType.<strong class="jxr_keyword">class</strong>).orElse(ContentType.NULL).equalsIgnoreCase(<span class="jxr_string">"multipart/form-data"</span>))

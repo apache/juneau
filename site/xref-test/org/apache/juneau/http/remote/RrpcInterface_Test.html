@@ -1678,7 +1678,7 @@
 <a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 	<strong class="jxr_keyword">void</strong> m02_setMultiParamsInteger(Input input) {
 <a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 		<strong class="jxr_keyword">var</strong> x1 = Integer.valueOf(1);
-<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 		Integer x1n = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 		<strong class="jxr_keyword">var</strong> x1n = (Integer)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 		<strong class="jxr_keyword">var</strong> x2 = a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 		Integer[][][] x2n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 		<strong class="jxr_keyword">var</strong> x3 = l(x2,<strong class="jxr_keyword">null</strong>);
@@ -1701,7 +1701,7 @@
 <a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> 	<strong class="jxr_keyword">void</strong> m04_setMultiParamsFloatObject(Input input) {
 <a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> 		<strong class="jxr_keyword">var</strong> x1 = 1f;
-<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> 		Float x1n = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> 		<strong class="jxr_keyword">var</strong> x1n = (Float)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> 		<strong class="jxr_keyword">var</strong> x2 = a(a(a(1f,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1698" href="#L1698">1698</a> 		Float[][][] x2n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1699" href="#L1699">1699</a> 		<strong class="jxr_keyword">var</strong> x3 = l(x2,<strong class="jxr_keyword">null</strong>);
@@ -1729,7 +1729,7 @@
 <a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> 		<strong class="jxr_keyword">var</strong> x3 = l(x2,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> 		List&lt;ABean[][][]&gt; x3n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> 		<strong class="jxr_keyword">var</strong> x4 = m(<span class="jxr_string">"foo"</span>,ABean.get());
-<a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> 		Map&lt;String,ABean&gt; x4n = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> 		<strong class="jxr_keyword">var</strong> x4n = (Map&lt;String,ABean&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> 		<strong class="jxr_keyword">var</strong> x5 = m(<span class="jxr_string">"foo"</span>,x3);
 <a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> 		Map&lt;String,List&lt;ABean[][][]&gt;&gt; x5n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> 		assertDoesNotThrow(()-&gt;input.proxy.setMultiParamsBean(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
@@ -1744,7 +1744,7 @@
 <a class="jxr_linenumber" name="L1736" href="#L1736">1736</a> 		<strong class="jxr_keyword">var</strong> x3 = l(x2,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1737" href="#L1737">1737</a> 		List&lt;SwappedObject[][][]&gt; x3n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1738" href="#L1738">1738</a> 		<strong class="jxr_keyword">var</strong> x4 = m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>());
-<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> 		Map&lt;SwappedObject,SwappedObject&gt; x4n = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> 		<strong class="jxr_keyword">var</strong> x4n = (Map&lt;SwappedObject,SwappedObject&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> 		<strong class="jxr_keyword">var</strong> x5 = m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),x3);
 <a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> 		Map&lt;SwappedObject,List&lt;SwappedObject[][][]&gt;&gt; x5n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> 		assertDoesNotThrow(()-&gt;input.proxy.setMultiParamsSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
@@ -1759,7 +1759,7 @@
 <a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> 		<strong class="jxr_keyword">var</strong> x3 = l(x2,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> 		List&lt;ImplicitSwappedObject[][][]&gt; x3n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 		<strong class="jxr_keyword">var</strong> x4 = m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>());
-<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 		Map&lt;ImplicitSwappedObject,ImplicitSwappedObject&gt; x4n = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 		<strong class="jxr_keyword">var</strong> x4n = (Map&lt;ImplicitSwappedObject,ImplicitSwappedObject&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 		<strong class="jxr_keyword">var</strong> x5 = m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),x3);
 <a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 		Map&lt;ImplicitSwappedObject,List&lt;ImplicitSwappedObject[][][]&gt;&gt; x5n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 		assertDoesNotThrow(()-&gt;input.proxy.setMultiParamsImplicitSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
@@ -1774,7 +1774,7 @@
 <a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> 		<strong class="jxr_keyword">var</strong> x3 = l(x2,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 		List&lt;TestEnum[][][]&gt; x3n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 		<strong class="jxr_keyword">var</strong> x4 = m(TestEnum.ONE,TestEnum.TWO);
-<a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 		Map&lt;TestEnum,TestEnum&gt; x4n = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 		<strong class="jxr_keyword">var</strong> x4n = (Map&lt;TestEnum,TestEnum&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 		<strong class="jxr_keyword">var</strong> x5 = m(TestEnum.ONE,x3);
 <a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 		Map&lt;TestEnum,List&lt;TestEnum[][][]&gt;&gt; x5n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 		assertDoesNotThrow(()-&gt;input.proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));

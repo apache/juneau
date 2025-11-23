@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasOnlyParameterTypes(Class&lt;?&gt;...args) {
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> param : getParameters()) {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">var</strong> c1 = param.getParameterType().<strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">boolean</strong> foundMatch = false;
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">var</strong> foundMatch = false;
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c2 : args)
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				<strong class="jxr_keyword">if</strong> (c1 == c2)
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 					foundMatch = <strong class="jxr_keyword">true</strong>;

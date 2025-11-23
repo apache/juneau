@@ -199,13 +199,13 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; <a name="BeanDiff" href="../../../../org/apache/juneau/utils/BeanDiff.html#BeanDiff">BeanDiff</a>(BeanContext bc, T first, T second, Set&lt;String&gt; include, Set&lt;String&gt; exclude) {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">if</strong> (first == <strong class="jxr_keyword">null</strong> &amp;&amp; second == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		BeanMap&lt;?&gt; bm1 = first == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bc.toBeanMap(first);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		BeanMap&lt;?&gt; bm2 = second == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bc.toBeanMap(second);
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		Set&lt;String&gt; keys = nn(bm1) ? bm1.keySet() : bm2.keySet();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> bm1 = first == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bc.toBeanMap(first);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> bm2 = second == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bc.toBeanMap(second);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> keys = nn(bm1) ? bm1.keySet() : bm2.keySet();
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		keys.forEach(k -&gt; {
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">if</strong> ((include == <strong class="jxr_keyword">null</strong> || include.contains(k)) &amp;&amp; (exclude == <strong class="jxr_keyword">null</strong> || ! exclude.contains(k))) {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				Object o1 = bm1 == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bm1.get(k);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 				Object o2 = bm2 == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bm2.get(k);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				<strong class="jxr_keyword">var</strong> o1 = bm1 == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bm1.get(k);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 				<strong class="jxr_keyword">var</strong> o2 = bm2 == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bm2.get(k);
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 				<strong class="jxr_keyword">if</strong> (ne(o1, o2)) {
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 					<strong class="jxr_keyword">if</strong> (nn(o1))
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 						v1.put(k, o1);

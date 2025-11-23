@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">super</strong>(patternString);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">this</strong>.pattern = isEmpty(patternString) ? <span class="jxr_string">"/"</span> : patternString.charAt(0) != '/' ? '/' + patternString : patternString;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			String c = patternString.replaceAll(<span class="jxr_string">"&#92;&#92;{[^&#92;&#92;}]+&#92;&#92;}"</span>, <span class="jxr_string">"."</span>).replaceAll(<span class="jxr_string">"&#92;&#92;w+"</span>, <span class="jxr_string">"X"</span>).replaceAll(<span class="jxr_string">"&#92;&#92;."</span>, <span class="jxr_string">"W"</span>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">var</strong> c = patternString.replaceAll(<span class="jxr_string">"&#92;&#92;{[^&#92;&#92;}]+&#92;&#92;}"</span>, <span class="jxr_string">"."</span>).replaceAll(<span class="jxr_string">"&#92;&#92;w+"</span>, <span class="jxr_string">"X"</span>).replaceAll(<span class="jxr_string">"&#92;&#92;."</span>, <span class="jxr_string">"W"</span>);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">if</strong> (c.isEmpty())
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  				c = <span class="jxr_string">"+"</span>;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">if</strong> (! c.endsWith(<span class="jxr_string">"/*"</span>))
@@ -161,7 +161,7 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			String[] vals = varKeys == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> String[varKeys.length];
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">int</strong> j = 0;
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">var</strong> j = 0;
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">if</strong> (nn(vals))
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parts.length; i++)
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 					<strong class="jxr_keyword">if</strong> (nn(vars[i]))

@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">public</strong> &lt;T <strong class="jxr_keyword">extends</strong> BasicHeader&gt; T asHeader(Class&lt;T&gt; c) {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(c);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			ConstructorInfo cc = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">var</strong> cc = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">if</strong> (nn(cc))
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 				<strong class="jxr_keyword">return</strong> cc.newInstance(getValue());
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 			cc = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);

@@ -227,7 +227,7 @@
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		setCurrentClass(sType);
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">var</strong> wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		Object o = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> o = (Object)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 		skipCommentsAndSpace(r);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">if</strong> (nn(wrapperAttr))
@@ -637,8 +637,8 @@
 <a class="jxr_linenumber" name="L629" href="#L629">629</a> 
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> 			<em class="jxr_comment">// Need to weed out octal and hexadecimal formats:  0123,-0123,0x123,-0x123.</em>
 <a class="jxr_linenumber" name="L631" href="#L631">631</a> 			<em class="jxr_comment">// Don't weed out 0 or -0.</em>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			<strong class="jxr_keyword">boolean</strong> isNegative = false;
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			<strong class="jxr_keyword">char</strong> c = s.charAt(0);
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			<strong class="jxr_keyword">var</strong> isNegative = false;
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(0);
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 			<strong class="jxr_keyword">if</strong> (c == '-') {
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 				isNegative = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 				c = (s.length() == 1 ? 'x' : s.charAt(1));
@@ -650,7 +650,7 @@
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 			<em class="jxr_comment">// '01' is not a valid number, but '0.1', '0e1', '0e+1' are valid.</em>
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 			<strong class="jxr_keyword">if</strong> (c == '0' &amp;&amp; s.length() &gt; (isNegative ? 2 : 1)) {
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 				<strong class="jxr_keyword">char</strong> c2 = s.charAt((isNegative ? 2 : 1));
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 				<strong class="jxr_keyword">var</strong> c2 = s.charAt((isNegative ? 2 : 1));
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 				<strong class="jxr_keyword">if</strong> (c2 != '.' &amp;&amp; c2 != 'e' &amp;&amp; c2 != 'E')
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Invalid JSON number: ''{0}''"</span>, s);
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 			}
@@ -678,7 +678,7 @@
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, msg, (<strong class="jxr_keyword">char</strong>)qc);
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 		}
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isQuoted = (qc == '\'' || qc == '&quot;');
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		String s = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<strong class="jxr_keyword">var</strong> s = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">boolean</strong> isInEscape = false;
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 		<strong class="jxr_keyword">int</strong> c = 0;
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">while</strong> (c != -1) {
@@ -826,7 +826,7 @@
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<em class="jxr_comment">// S4: Found :, looking for valStart: { [ " ' LITERAL.</em>
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 		<strong class="jxr_keyword">var</strong> state = S1;
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> 		String currAttr = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 		<strong class="jxr_keyword">var</strong> currAttr = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> 		<strong class="jxr_keyword">int</strong> c = 0;
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 		<strong class="jxr_keyword">while</strong> (c != -1) {
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 			c = r.read();

@@ -531,7 +531,7 @@
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">var</strong> previousWasTextNode = Value.of(false);
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 		forEachEntry(c, x -&gt; {
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			<strong class="jxr_keyword">boolean</strong> currentIsTextNode = isTextNode(x);
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			<strong class="jxr_keyword">var</strong> currentIsTextNode = isTextNode(x);
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 			<em class="jxr_comment">// Insert delimiter between consecutive text nodes</em>
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 			<strong class="jxr_keyword">if</strong> (previousWasTextNode.get() &amp;&amp; currentIsTextNode &amp;&amp; nn(textNodeDelimiter) &amp;&amp; ! textNodeDelimiter.isEmpty()) {
@@ -607,7 +607,7 @@
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<em class="jxr_comment">// Handle recursion</em>
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<strong class="jxr_keyword">if</strong> (nn(aType) &amp;&amp; ! aType.isPrimitive()) {
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			BeanMap&lt;?&gt; bm = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			<strong class="jxr_keyword">var</strong> bm = (BeanMap&lt;?&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 			<strong class="jxr_keyword">if</strong> (aType.isBeanMap()) {
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 				bm = (BeanMap&lt;?&gt;)o;
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (aType.isBean()) {

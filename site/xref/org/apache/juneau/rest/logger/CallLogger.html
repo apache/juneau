@@ -570,8 +570,8 @@
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">var</strong> method = req.getMethod();
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">int</strong> status = res.getStatus();
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> uri = req.getRequestURI();
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		byte[] reqContent = getRequestContent(req);
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		byte[] resContent = getResponseContent(req, res);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">var</strong> reqContent = getRequestContent(req);
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">var</strong> resContent = getResponseContent(req, res);
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 
@@ -583,7 +583,7 @@
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 		sb.append('[').append(status);
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">if</strong> (nn(sti)) {
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 			<strong class="jxr_keyword">int</strong> count = sti.getCount();
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 			<strong class="jxr_keyword">var</strong> count = sti.getCount();
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 			sb.append(',').append(StringUtils.toHex8(sti.getHash())).append('.').append(count);
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 			<strong class="jxr_keyword">if</strong> (count &gt; 1)
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 				e = <strong class="jxr_keyword">null</strong>;

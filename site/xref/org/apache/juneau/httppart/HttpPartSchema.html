@@ -4277,7 +4277,7 @@
 <a class="jxr_linenumber" name="L4269" href="#L4269">4269</a> 					<strong class="jxr_keyword">if</strong> (! isValidMaxProperties(m))
 <a class="jxr_linenumber" name="L4270" href="#L4270">4270</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Maximum number of properties exceeded."</span>);
 <a class="jxr_linenumber" name="L4271" href="#L4271">4271</a> 					m.forEach((k, v) -&gt; {
-<a class="jxr_linenumber" name="L4272" href="#L4272">4272</a> 						String key = k.toString();
+<a class="jxr_linenumber" name="L4272" href="#L4272">4272</a> 						<strong class="jxr_keyword">var</strong> key = k.toString();
 <a class="jxr_linenumber" name="L4273" href="#L4273">4273</a> 						HttpPartSchema s2 = getProperty(key);
 <a class="jxr_linenumber" name="L4274" href="#L4274">4274</a> 						<strong class="jxr_keyword">if</strong> (nn(s2))
 <a class="jxr_linenumber" name="L4275" href="#L4275">4275</a> 							s2.validateOutput(v, bc);
@@ -4289,7 +4289,7 @@
 <a class="jxr_linenumber" name="L4281" href="#L4281">4281</a> 			}
 <a class="jxr_linenumber" name="L4282" href="#L4282">4282</a> 			<strong class="jxr_keyword">case</strong> STRING: {
 <a class="jxr_linenumber" name="L4283" href="#L4283">4283</a> 				<strong class="jxr_keyword">if</strong> (cm.isCharSequence()) {
-<a class="jxr_linenumber" name="L4284" href="#L4284">4284</a> 					String s = o.toString();
+<a class="jxr_linenumber" name="L4284" href="#L4284">4284</a> 					<strong class="jxr_keyword">var</strong> s = o.toString();
 <a class="jxr_linenumber" name="L4285" href="#L4285">4285</a> 					<strong class="jxr_keyword">if</strong> (! isValidMinLength(s))
 <a class="jxr_linenumber" name="L4286" href="#L4286">4286</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Minimum length of value not met."</span>);
 <a class="jxr_linenumber" name="L4287" href="#L4287">4287</a> 					<strong class="jxr_keyword">if</strong> (! isValidMaxLength(s))
@@ -4585,7 +4585,7 @@
 <a class="jxr_linenumber" name="L4577" href="#L4577">4577</a> 		<strong class="jxr_keyword">if</strong> (uniqueItems) {
 <a class="jxr_linenumber" name="L4578" href="#L4578">4578</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
 <a class="jxr_linenumber" name="L4579" href="#L4579">4579</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(x); i++) {
-<a class="jxr_linenumber" name="L4580" href="#L4580">4580</a> 				Object o = Array.get(x, i);
+<a class="jxr_linenumber" name="L4580" href="#L4580">4580</a> 				<strong class="jxr_keyword">var</strong> o = Array.get(x, i);
 <a class="jxr_linenumber" name="L4581" href="#L4581">4581</a> 				<strong class="jxr_keyword">if</strong> (! s.add(o))
 <a class="jxr_linenumber" name="L4582" href="#L4582">4582</a> 					<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L4583" href="#L4583">4583</a> 			}

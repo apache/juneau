@@ -1529,7 +1529,7 @@
 <a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
 <a class="jxr_linenumber" name="L1522" href="#L1522">1522</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List copyArrayToList(Object array, List list) {
 <a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> 		<strong class="jxr_keyword">if</strong> (nn(array)) {
-<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> 			<strong class="jxr_keyword">int</strong> length = Array.getLength(array);
+<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> 			<strong class="jxr_keyword">var</strong> length = Array.getLength(array);
 <a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; length; i++)
 <a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> 				list.add(Array.get(array, i));
 <a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> 		}

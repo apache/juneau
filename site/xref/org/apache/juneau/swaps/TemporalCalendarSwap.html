@@ -301,7 +301,7 @@
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">public</strong> String swap(BeanSession session, Calendar o) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		ZonedDateTime t = o instanceof GregorianCalendar ? ((GregorianCalendar)o).toZonedDateTime() : o.toInstant().atZone(session.getTimeZoneId());
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> t = o instanceof GregorianCalendar ? ((GregorianCalendar)o).toZonedDateTime() : o.toInstant().atZone(session.getTimeZoneId());
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">return</strong> formatter.format(t);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 
@@ -310,7 +310,7 @@
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		ZoneId offset = session.getTimeZoneId();
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> offset = session.getTimeZoneId();
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> ta = <strong class="jxr_keyword">new</strong> <a name="DefaultingTemporalAccessor" href="../../../../org/apache/juneau/swaps/DefaultingTemporalAccessor.html#DefaultingTemporalAccessor">DefaultingTemporalAccessor</a>(formatter.parse(f), offset);
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">return</strong> GregorianCalendar.from(ZonedDateTime.from(ta));
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
