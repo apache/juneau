@@ -300,4 +300,3 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 		throw unsupportedOp("Map is unmodifiable");
 	}
 }
-

@@ -57,10 +57,10 @@ public class Namespace {
 	public static Namespace create(Object o) {
 		if (o == null)
 			return null;
-		if (o instanceof Namespace)
-			return (Namespace)o;
-		if (o instanceof CharSequence)
-			return of(o.toString());
+		if (o instanceof Namespace o2)
+			return o2;
+		if (o instanceof CharSequence o3)
+			return of(o3.toString());
 		throw rex("Invalid object type passed to Namespace.create(Object):  ''{0}''", cn(o));
 	}
 
@@ -85,28 +85,28 @@ public class Namespace {
 
 		if (o instanceof String[]) {
 			var ss = (String[])o;
-			Namespace[] n = new Namespace[ss.length];
-			for (int i = 0; i < ss.length; i++)
+			var n = new Namespace[ss.length];
+			for (var i = 0; i < ss.length; i++)
 				n[i] = create(ss[i]);
 			return n;
 		}
 
-		if (o instanceof CharSequence) {
-			String[] ss = splita(o.toString());
-			Namespace[] n = new Namespace[ss.length];
-			for (int i = 0; i < ss.length; i++)
+		if (o instanceof CharSequence o2) {
+			var ss = splita(o2.toString());
+			var n = new Namespace[ss.length];
+			for (var i = 0; i < ss.length; i++)
 				n[i] = create(ss[i]);
 			return n;
 		}
 
-	if (o instanceof Collection c) {
-		Namespace[] n = new Namespace[c.size()];
-		int i = 0;
-		for (var o2 : c) {
-			if (o2 instanceof Namespace)
-					n[i++] = (Namespace)o2;
-				else if (o2 instanceof CharSequence)
-					n[i++] = create(o2.toString());
+		if (o instanceof Collection o2) {
+			var n = new Namespace[o2.size()];
+			var i = 0;
+			for (var o3 : o2) {
+				if (o3 instanceof Namespace o4)
+					n[i++] = o4;
+				else if (o3 instanceof CharSequence o4)
+					n[i++] = create(o4.toString());
 				else
 					throw rex("Invalid type passed to NamespaceFactory.createArray: ''{0}''", cn(o));
 			}
@@ -123,10 +123,10 @@ public class Namespace {
 	 * @return The namespace object.
 	 */
 	public static Namespace of(String key) {
-		Namespace n = CACHE.get(key);
+		var n = CACHE.get(key);
 		if (nn(n))
 			return n;
-		int i = key.indexOf(':');
+		var i = key.indexOf(':');
 		if (i == -1)
 			return of(key, null);
 		if (key.startsWith("http://") || key.startsWith("https://"))

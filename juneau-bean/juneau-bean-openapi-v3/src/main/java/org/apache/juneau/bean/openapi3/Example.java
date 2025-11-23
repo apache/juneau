@@ -164,12 +164,14 @@ public class Example extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(description), "description")
 			.addIf(nn(externalValue), "externalValue")
 			.addIf(nn(summary), "summary")
 			.addIf(nn(value), "value")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

@@ -317,7 +317,7 @@ public class RestSession extends ContextSession {
 			}
 
 			if (method == null && ! s2.isEmpty()) {
-				String x = req.getHeader("X-Method");
+				var x = req.getHeader("X-Method");
 				if (nn(x) && (s2.contains("*") || s2.contains(x)))
 					method = x;
 			}

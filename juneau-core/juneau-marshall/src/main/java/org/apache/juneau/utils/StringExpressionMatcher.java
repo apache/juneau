@@ -208,7 +208,7 @@ public class StringExpressionMatcher {
 	 * @return All the tokens used in this expression.
 	 */
 	public Set<String> getTokens() {
-		Set<String> set = new TreeSet<>();
+		var set = new TreeSet<String>();
 		exp.appendTokens(set);
 		return set;
 	}

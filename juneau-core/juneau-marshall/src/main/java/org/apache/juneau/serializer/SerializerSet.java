@@ -368,12 +368,12 @@ public class SerializerSet {
 			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
 		}
 
-	private Object copyBuilder(Object o) {
-		if (o instanceof Serializer.Builder x) {
-			Serializer.Builder x2 = x.copy();
-			if (ne(x.getClass(), x2.getClass()))
-				throw rex("Copy method not implemented on class {0}", cn(x));
-			x = x2;
+		private Object copyBuilder(Object o) {
+			if (o instanceof Serializer.Builder x) {
+				Serializer.Builder x2 = x.copy();
+				if (ne(x.getClass(), x2.getClass()))
+					throw rex("Copy method not implemented on class {0}", cn(x));
+				x = x2;
 				if (nn(bcBuilder))
 					x.beanContext(bcBuilder);
 				return x;
@@ -382,11 +382,11 @@ public class SerializerSet {
 		}
 
 		private Object createBuilder(Object o) {
-			if (o instanceof Class) {
+			if (o instanceof Class o2) {
 
-			// Check for no-arg constructor.
-			ConstructorInfo ci = info((Class<?>)o).getPublicConstructor(c -> c.getParameterCount() == 0).orElse(null);
-			if (nn(ci))
+				// Check for no-arg constructor.
+				ConstructorInfo ci = info(o2).getPublicConstructor(c -> c.getParameterCount() == 0).orElse(null);
+				if (nn(ci))
 					return ci.newInstance();
 
 				// Check for builder create method.
@@ -643,8 +643,8 @@ public class SerializerSet {
 	public boolean isEmpty() { return entries.length == 0; }
 
 	private Serializer build(Object o) {
-		if (o instanceof Serializer)
-			return (Serializer)o;
+		if (o instanceof Serializer o2)
+			return o2;
 		return ((Serializer.Builder)o).build();
 	}
 }

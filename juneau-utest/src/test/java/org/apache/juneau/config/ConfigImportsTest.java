@@ -38,7 +38,7 @@ class ConfigImportsTest extends TestBase {
 		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1");
 		ms.write("B", "", "<A>");
-		Config c = Config
+		var c = Config
 			.create("B")
 			.store(ms)
 			.build();

@@ -367,9 +367,9 @@ public class RequestContent {
 		if (nn(content))
 			return new BoundedServletInputStream(content);
 
-		Encoder enc = getEncoder();
+		var enc = getEncoder();
 
-		InputStream is = req.getHttpServletRequest().getInputStream();
+		var is = req.getHttpServletRequest().getInputStream();
 
 		if (enc == null)
 			return new BoundedServletInputStream(is, maxInput);
@@ -388,7 +388,7 @@ public class RequestContent {
 	public Optional<ParserMatch> getParserMatch() {
 		if (nn(mediaType) && nn(parser))
 			return opt(new ParserMatch(mediaType, parser));
-		MediaType mt = getMediaType();
+		var mt = getMediaType();
 		return opt(mt).map(x -> parsers.getParserMatch(x));
 	}
 
@@ -406,9 +406,9 @@ public class RequestContent {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public BufferedReader getReader() throws IOException {
-		Reader r = getUnbufferedReader();
-		if (r instanceof BufferedReader)
-			return (BufferedReader)r;
+		var r = getUnbufferedReader();
+		if (r instanceof BufferedReader r2)
+			return r2;
 		int len = req.getHttpServletRequest().getContentLength();
 		int buffSize = len <= 0 ? 8192 : Math.max(len, 8192);
 		return new BufferedReader(r, buffSize);
@@ -479,7 +479,7 @@ public class RequestContent {
 
 	private Encoder getEncoder() throws UnsupportedMediaType {
 		if (encoder == null) {
-			String ce = req.getHeaderParam("content-encoding").orElse(null);
+			var ce = req.getHeaderParam("content-encoding").orElse(null);
 			if (isNotEmpty(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
@@ -517,7 +517,7 @@ public class RequestContent {
 	private MediaType getMediaType() {
 		if (nn(mediaType))
 			return mediaType;
-		Optional<ContentType> ct = req.getHeader(ContentType.class);
+		var ct = req.getHeader(ContentType.class);
 		if (! ct.isPresent() && nn(content))
 			return MediaType.UON;
 		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
@@ -532,18 +532,18 @@ public class RequestContent {
 		if (cm.isInputStream())
 			return (T)getInputStream();
 
-		Optional<TimeZone> timeZone = req.getTimeZone();
-		Locale locale = req.getLocale();
-		ParserMatch pm = getParserMatch().orElse(null);
+		var timeZone = req.getTimeZone();
+		var locale = req.getLocale();
+		var pm = getParserMatch().orElse(null);
 
 		if (schema == null)
 			schema = HttpPartSchema.DEFAULT;
 
 		if (nn(pm)) {
-			Parser p = pm.getParser();
-			MediaType mediaType = pm.getMediaType();
+			var p = pm.getParser();
+			var mediaType = pm.getMediaType();
 			// @formatter:off
-			ParserSession session = p
+			var session = p
 				.createSession()
 				.properties(req.getAttributes().asMap())
 				.javaMethod(req.getOpContext().getJavaMethod())
@@ -558,7 +558,7 @@ public class RequestContent {
 			// @formatter:on
 
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
-				T o = session.parse(in, cm);
+				var o = session.parse(in, cm);
 				if (nn(schema))
 					schema.validateOutput(o, cm.getBeanContext());
 				return o;
@@ -571,12 +571,12 @@ public class RequestContent {
 		if (cm.hasInputStreamMutater())
 			return cm.getInputStreamMutater().mutate(getInputStream());
 
-		MediaType mt = getMediaType();
+		var mt = getMediaType();
 
 		if ((isEmpty(s(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
 			return cm.getStringMutater().mutate(asString());
 
-		Optional<ContentType> ct = req.getHeader(ContentType.class);
+		var ct = req.getHeader(ContentType.class);
 		throw new UnsupportedMediaType("Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
 			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
 	}

@@ -57,9 +57,9 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 	 * Implemented to handle the method called.
 	 */
 	@Override /* Overridden from InvocationHandler */
-public Object invoke(Object proxy, Method method, Object[] args) {
-	var mi = info(method);
-	if (mi.hasName("equals") && mi.hasParameterTypes(java.lang.Object.class)) {
+	public Object invoke(Object proxy, Method method, Object[] args) {
+		var mi = info(method);
+		if (mi.hasName("equals") && mi.hasParameterTypes(java.lang.Object.class)) {
 			Object arg = args[0];
 			if (arg == null)
 				return false;
@@ -67,8 +67,8 @@ public Object invoke(Object proxy, Method method, Object[] args) {
 				return true;
 			if (proxy.getClass() == arg.getClass()) {
 				InvocationHandler ih = Proxy.getInvocationHandler(arg);
-				if (ih instanceof BeanProxyInvocationHandler) {
-					return this.beanProps.equals(((BeanProxyInvocationHandler<?>)ih).beanProps);
+				if (ih instanceof BeanProxyInvocationHandler ih2) {
+					return this.beanProps.equals(ih2.beanProps);
 				}
 			}
 			BeanMap<Object> bean = this.meta.ctx.toBeanMap(arg);

@@ -153,7 +153,7 @@ class Assertions_Test extends TestBase {
 	}
 
 	@Test void a24_assertOptional() {
-		assertOptional(Optional.of(1)).isNotNull();
+		assertOptional(opt(1)).isNotNull();
 	}
 
 	@Test void a25_assertStringList() {

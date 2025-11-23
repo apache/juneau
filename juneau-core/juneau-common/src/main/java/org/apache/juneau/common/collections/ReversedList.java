@@ -280,4 +280,3 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 		throw new UnsupportedOperationException("ReversedList is read-only");
 	}
 }
-

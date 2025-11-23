@@ -99,7 +99,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class HeaderArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.
@@ -146,7 +146,7 @@ public class HeaderArg implements RestOpArg {
 			return null;
 
 		// Get parameter-level @Header
-		var paramHeader = AnnotationProvider.INSTANCE.find(Header.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
+		var paramHeader = AP.find(Header.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
 
 		if (paramHeader == null) {
 			// No parameter-level @Header, use class-level as-is

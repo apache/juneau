@@ -32,7 +32,6 @@ import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 
-
 /**
  * API for retrieving localized static files from either the classpath or file system.
  *

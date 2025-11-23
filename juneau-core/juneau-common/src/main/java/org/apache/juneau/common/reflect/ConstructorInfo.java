@@ -85,7 +85,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		return i;
 	}
 
-
 	/**
 	 * Returns the wrapped method.
 	 *
@@ -138,12 +137,8 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.CONSTRUCTOR_TYPE;
-	}
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.CONSTRUCTOR_TYPE; }
 
 	@Override /* Annotatable */
-	public String getLabel() {
-		return getDeclaringClass().getNameSimple() + "." + getShortName();
-	}
+	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getShortName(); }
 }

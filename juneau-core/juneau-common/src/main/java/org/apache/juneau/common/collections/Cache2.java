@@ -444,7 +444,7 @@ public class Cache2<K1,K2,V> {
 	public V get(K1 key1, K2 key2, java.util.function.Supplier<V> supplier) {
 		if (cacheMode == NONE)
 			return supplier.get();
-		Tuple2<K1,K2> wrapped = Tuple2.of(key1, key2);
+		var wrapped = Tuple2.of(key1, key2);
 		V v = map.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
@@ -515,9 +515,7 @@ public class Cache2<K1,K2,V> {
 	 *
 	 * @return <jk>true</jk> if the cache is empty.
 	 */
-	public boolean isEmpty() {
-		return map.isEmpty();
-	}
+	public boolean isEmpty() { return map.isEmpty(); }
 
 	/**
 	 * Removes all entries from the cache.
@@ -555,4 +553,3 @@ public class Cache2<K1,K2,V> {
 	 */
 	public int getCacheHits() { return cacheHits.get(); }
 }
-

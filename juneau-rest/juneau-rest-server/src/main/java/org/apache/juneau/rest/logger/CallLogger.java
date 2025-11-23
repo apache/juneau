@@ -671,14 +671,14 @@ public class CallLogger {
 	}
 
 	private static byte[] getRequestContent(HttpServletRequest req) {
-		if (req instanceof CachingHttpServletRequest)
-			return ((CachingHttpServletRequest)req).getContent();
+		if (req instanceof CachingHttpServletRequest req2)
+			return req2.getContent();
 		return castOrNull(req.getAttribute("RequestContent"), byte[].class);
 	}
 
 	private static byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
-		if (res instanceof CachingHttpServletResponse)
-			return ((CachingHttpServletResponse)res).getContent();
+		if (res instanceof CachingHttpServletResponse res2)
+			return res2.getContent();
 		return castOrNull(req.getAttribute("ResponseContent"), byte[].class);
 	}
 

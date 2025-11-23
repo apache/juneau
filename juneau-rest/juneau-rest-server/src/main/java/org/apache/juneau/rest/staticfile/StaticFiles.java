@@ -63,9 +63,7 @@ public interface StaticFiles extends FileFinder {
 		 * @return This object.
 		 */
 		public Builder addMimeTypes(String mimeTypes) {
-			this.mimeTypes = MimeTypeDetector.builder()
-				.addTypes(mimeTypes)
-				.build();
+			this.mimeTypes = MimeTypeDetector.builder().addTypes(mimeTypes).build();
 			return this;
 		}
 

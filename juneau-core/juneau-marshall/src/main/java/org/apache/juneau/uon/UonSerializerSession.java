@@ -32,7 +32,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.swap.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UonSerializer}.
@@ -226,12 +225,12 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 		try {
 			// Shortcut for simple types.
-			ClassMeta<?> cm = getClassMetaForObject(value);
+			var cm = getClassMetaForObject(value);
 			if (nn(cm) && (schema == null || schema.getType() == HttpPartDataType.NO_TYPE)) {
 				if (cm.isNumber() || cm.isBoolean())
 					return Mutaters.toString(value);
 				if (cm.isString()) {
-					String s = Mutaters.toString(value);
+					var s = Mutaters.toString(value);
 					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
 						return s;
 				}
@@ -256,14 +255,14 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		var addComma = Flag.create();
 
 		if (nn(typeName)) {
-			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			var pm = m.getMeta().getTypeProperty();
 			out.cr(indent).appendObject(pm.getName(), false).append('=').appendObject(typeName, false);
 			addComma.set();
 		}
 
-		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
+		var checkNull = (Predicate<Object>)(x -> isKeepNullProperties() || nn(x));
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			ClassMeta<?> cMeta = pMeta.getClassMeta();
+			var cMeta = pMeta.getClassMeta();
 
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
@@ -289,7 +288,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
-		ClassMeta<?> elementType = type.getElementType();
+		var elementType = type.getElementType();
 
 		if (! plainTextParams)
 			out.append('@').append('(');
@@ -311,7 +310,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+		var keyType = type.getKeyType();
+		var valueType = type.getValueType();
 
 		if (! plainTextParams)
 			out.append('(');
@@ -319,8 +319,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		var addComma = Flag.create();
 		forEachEntry(m, x -> {
 			addComma.ifSet(() -> out.append(',')).set();
-			Object value = x.getValue();
-			Object key = generalize(x.getKey(), keyType);
+			var value = x.getValue();
+			var key = generalize(x.getKey(), keyType);
 			out.cr(indent).appendObject(key, false).append('=');
 			serializeAnything(out, value, valueType, toString(key), null);
 		});
@@ -365,9 +365,9 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected final UonWriter getUonWriter(SerializerPipe out) throws IOException {
-		Object output = out.getRawOutput();
-		if (output instanceof UonWriter)
-			return (UonWriter)output;
+		var output = out.getRawOutput();
+		if (output instanceof UonWriter output2)
+			return output2;
 		var w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
 		out.setWriter(w);
 		return w;
@@ -420,8 +420,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		if (eType == null)
 			eType = object();
 
-		ClassMeta<?> aType;			// The actual type
-		ClassMeta<?> sType;			// The serialized type
+		var aType = (ClassMeta<?>)null;			// The actual type
+		var sType = (ClassMeta<?>)null;			// The serialized type
 
 		aType = push2(attrName, o, eType);
 		boolean isRecursion = aType == null;
@@ -440,10 +440,10 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		}
 
 		sType = aType;
-		String typeName = getBeanTypeName(this, eType, aType, pMeta);
+		var typeName = getBeanTypeName(this, eType, aType, pMeta);
 
 		// Swap if necessary
-		ObjectSwap swap = aType.getSwap(this);
+		var swap = aType.getSwap(this);
 		if (nn(swap)) {
 			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);

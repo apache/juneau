@@ -203,9 +203,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	@SuppressWarnings("unchecked")
 	public final <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotations(Class<A> type) {
 		assertArgNotNull("type", type);
+		// @formatter:off
 		return declaredAnnotations.get().stream()
 			.filter(x -> type.isInstance(x.inner()))
 			.map(x -> (AnnotationInfo<A>)x);
+		// @formatter:on
 	}
 
 	/**
@@ -230,9 +232,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The underlying executable name.
 	 */
-	public final String getFullName() {
-		return fullName.get();
-	}
+	public final String getFullName() { return fullName.get(); }
 
 	/**
 	 * Returns parameter information at the specified index.
@@ -276,9 +276,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The underlying executable name.
 	 */
-	public final String getShortName() {
-		return shortName.get();
-	}
+	public final String getShortName() { return shortName.get(); }
 
 	/**
 	 * Returns the simple name of the underlying method.
@@ -366,8 +364,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean hasParameterTypeParents(Class<?>...args) {
 		var params = getParameters();
-		return params.size() == args.length
-			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfLenient(a)));
+		return params.size() == args.length && params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfLenient(a)));
 	}
 
 	/**
@@ -378,8 +375,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean hasParameterTypeParents(ClassInfo...args) {
 		var params = getParameters();
-		return params.size() == args.length
-			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfLenient(a)));
+		return params.size() == args.length && params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfLenient(a)));
 	}
 
 	/**
@@ -445,8 +441,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean hasParameterTypes(Class<?>...args) {
 		var params = getParameters();
-		return params.size() == args.length
-			&& IntStream.range(0, args.length).allMatch(i -> params.get(i).getParameterType().is(args[i]));
+		return params.size() == args.length && IntStream.range(0, args.length).allMatch(i -> params.get(i).getParameterType().is(args[i]));
 	}
 
 	/**
@@ -457,8 +452,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean hasParameterTypes(ClassInfo...args) {
 		var params = getParameters();
-		return params.size() == args.length
-			&& IntStream.range(0, args.length).allMatch(i -> params.get(i).getParameterType().is(args[i]));
+		return params.size() == args.length && IntStream.range(0, args.length).allMatch(i -> params.get(i).getParameterType().is(args[i]));
 	}
 
 	/**
@@ -469,9 +463,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean hasMatchingParameters(List<ParameterInfo> params) {
 		var myParams = getParameters();
-		return myParams.size() == params.size()
-			&& IntStream.range(0, params.size()).allMatch(i ->
-				myParams.get(i).getParameterType().is(params.get(i).getParameterType()));
+		return myParams.size() == params.size() && IntStream.range(0, params.size()).allMatch(i -> myParams.get(i).getParameterType().is(params.get(i).getParameterType()));
 	}
 
 	/**
@@ -484,15 +476,15 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public boolean is(ElementFlag flag) {
 		return switch (flag) {
 			case CONSTRUCTOR -> isConstructor();
-			case NOT_CONSTRUCTOR -> !isConstructor();
+			case NOT_CONSTRUCTOR -> ! isConstructor();
 			case DEPRECATED -> isDeprecated();
 			case NOT_DEPRECATED -> isNotDeprecated();
 			case HAS_PARAMS -> hasParameters();
 			case HAS_NO_PARAMS -> getParameterCount() == 0;
 			case SYNTHETIC -> isSynthetic();
-			case NOT_SYNTHETIC -> !isSynthetic();
+			case NOT_SYNTHETIC -> ! isSynthetic();
 			case VARARGS -> isVarArgs();
-			case NOT_VARARGS -> !isVarArgs();
+			case NOT_VARARGS -> ! isVarArgs();
 			default -> super.is(flag);
 		};
 	}
@@ -562,9 +554,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this executable is a synthetic construct.
 	 * @see Executable#isSynthetic()
 	 */
-	public final boolean isSynthetic() {
-		return inner.isSynthetic();
-	}
+	public final boolean isSynthetic() { return inner.isSynthetic(); }
 
 	/**
 	 * Returns <jk>true</jk> if this executable was declared to take a variable number of arguments.
@@ -582,9 +572,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this executable was declared to take a variable number of arguments.
 	 * @see Executable#isVarArgs()
 	 */
-	public final boolean isVarArgs() {
-		return inner.isVarArgs();
-	}
+	public final boolean isVarArgs() { return inner.isVarArgs(); }
 
 	/**
 	 * Returns an array of {@link TypeVariable} objects that represent the type variables declared by the generic declaration.
@@ -606,9 +594,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return An array of {@link TypeVariable} objects, or an empty array if none.
 	 * @see Executable#getTypeParameters()
 	 */
-	public final TypeVariable<?>[] getTypeParameters() {
-		return inner.getTypeParameters();
-	}
+	public final TypeVariable<?>[] getTypeParameters() { return inner.getTypeParameters(); }
 
 	/**
 	 * Returns a string describing this executable, including type parameters.
@@ -653,9 +639,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return An {@link AnnotatedType} object representing the receiver type, or <jk>null</jk> if not applicable.
 	 * @see Executable#getAnnotatedReceiverType()
 	 */
-	public final AnnotatedType getAnnotatedReceiverType() {
-		return inner.getAnnotatedReceiverType();
-	}
+	public final AnnotatedType getAnnotatedReceiverType() { return inner.getAnnotatedReceiverType(); }
 
 	/**
 	 * Returns an array of {@link AnnotatedType} objects that represent the use of types to specify formal parameter types.
@@ -676,9 +660,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return An array of {@link AnnotatedType} objects, or an empty array if the executable has no parameters.
 	 * @see Executable#getAnnotatedParameterTypes()
 	 */
-	public final AnnotatedType[] getAnnotatedParameterTypes() {
-		return inner.getAnnotatedParameterTypes();
-	}
+	public final AnnotatedType[] getAnnotatedParameterTypes() { return inner.getAnnotatedParameterTypes(); }
 
 	/**
 	 * Returns an array of {@link AnnotatedType} objects that represent the use of types to specify the declared exceptions.
@@ -699,9 +681,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return An array of {@link AnnotatedType} objects, or an empty array if the executable declares no exceptions.
 	 * @see Executable#getAnnotatedExceptionTypes()
 	 */
-	public final AnnotatedType[] getAnnotatedExceptionTypes() {
-		return inner.getAnnotatedExceptionTypes();
-	}
+	public final AnnotatedType[] getAnnotatedExceptionTypes() { return inner.getAnnotatedExceptionTypes(); }
 
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
@@ -754,9 +734,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		} else {
 			genericTypes = ptt;
 		}
-	return IntStream.range(0, rp.length)
-		.mapToObj(i -> new ParameterInfo(this, rp[i], i, ClassInfo.of(ptc[i], genericTypes[i])))
-		.toList();
+		return IntStream.range(0, rp.length).mapToObj(i -> new ParameterInfo(this, rp[i], i, ClassInfo.of(ptc[i], genericTypes[i]))).toList();
 	}
 
 	private String findFullName() {
@@ -769,10 +747,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		if (! isConstructor)
 			sb.append('.').append(getSimpleName());
 		sb.append('(');
-		sb.append(getParameters().stream()
-			.map(p -> p.getParameterType().getNameFormatted(FULL, true, '$', BRACKETS))
-			.collect(joining(","))
-		);
+		sb.append(getParameters().stream().map(p -> p.getParameterType().getNameFormatted(FULL, true, '$', BRACKETS)).collect(joining(",")));
 		sb.append(')');
 		return sb.toString();
 	}

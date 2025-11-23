@@ -149,10 +149,12 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(mapping), "mapping")
 			.addIf(nn(propertyName), "propertyName")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

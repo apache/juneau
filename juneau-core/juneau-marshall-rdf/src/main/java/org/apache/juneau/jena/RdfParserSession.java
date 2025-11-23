@@ -321,7 +321,7 @@ public class RdfParserSession extends ReaderParserSession {
 			eType = object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		ClassMeta<?> sType = null;
+		var sType = (ClassMeta<?>)null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -346,14 +346,14 @@ public class RdfParserSession extends ReaderParserSession {
 			}
 		}
 
-		Object o = null;
+		var o = (Object)null;
 		if (n.isResource() && nn(n.asResource().getURI()) && n.asResource().getURI().equals(RDF_NIL)) {
 			// Do nothing.  Leave o == null.
 		} else if (sType.isObject()) {
 			if (n.isLiteral()) {
 				o = n.asLiteral().getValue();
-				if (o instanceof String) {
-					o = decodeString(o);
+				if (o instanceof String o2) {
+					o = decodeString(o2);
 				}
 			} else if (n.isResource()) {
 				var r = n.asResource();
@@ -554,7 +554,7 @@ public class RdfParserSession extends ReaderParserSession {
 
 		// Special case where we're parsing a loose collection of resources.
 		if (isLooseCollections() && type.isCollectionOrArray()) {
-			Collection c = null;
+			var c = (Collection)null;
 			if (type.isArray() || type.isArgs())
 				c = list();
 			else

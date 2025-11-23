@@ -811,7 +811,7 @@ class DateUtils_Test extends TestBase {
 
 	@Test
 	void test_toZonedDateTime() {
-		Calendar cal = new GregorianCalendar(2024, Calendar.JANUARY, 15, 12, 30, 45);
+		var cal = new GregorianCalendar(2024, Calendar.JANUARY, 15, 12, 30, 45);
 
 		Optional<ZonedDateTime> result = toZonedDateTime(cal);
 		assertTrue(result.isPresent());

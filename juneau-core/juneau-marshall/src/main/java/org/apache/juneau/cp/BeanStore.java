@@ -21,7 +21,6 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.isEmpty;
@@ -114,10 +113,10 @@ public class BeanStore {
 			if (type == null || type == BeanStore.class)
 				return new BeanStore(this);
 
-		var c = info(type);
+			var c = info(type);
 
 			// @formatter:off
-			Optional<BeanStore> result = c.getDeclaredMethod(
+			var result = c.getDeclaredMethod(
 				x -> x.isPublic()
 				&& x.getParameterCount() == 0
 				&& x.isStatic()
@@ -127,13 +126,11 @@ public class BeanStore {
 			if (result.isPresent())
 				return result.get();
 
-			result = c.getPublicConstructor(x -> x.canAccept(this))
-				.map(ci -> ci.<BeanStore>newInstance(this));
+			result = c.getPublicConstructor(x -> x.canAccept(this)).map(ci -> ci.<BeanStore>newInstance(this));
 			if (result.isPresent())
 				return result.get();
 
-			result = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this))
-				.map(ci -> ci.accessible().<BeanStore>newInstance(this));
+			result = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this)).map(ci -> ci.accessible().<BeanStore>newInstance(this));
 			if (result.isPresent())
 				return result.get();
 
@@ -364,7 +361,7 @@ public class BeanStore {
 	 */
 	public <T> BeanStore addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
 		assertCanWrite();
-		BeanStoreEntry<T> e = createEntry(beanType, bean, name);
+		var e = createEntry(beanType, bean, name);
 		try (SimpleLock x = lock.write()) {
 			entries.addFirst(e);
 			if (isEmpty(name))
@@ -505,17 +502,17 @@ public class BeanStore {
 	 * @return A comma-delimited list of types that are missing from this factory, or <jk>null</jk> if none are missing.
 	 */
 	public String getMissingParams(ExecutableInfo executable) {
-		List<ParameterInfo> params = executable.getParameters();
+		var params = executable.getParameters();
 		List<String> l = list();
 		loop: for (int i = 0; i < params.size(); i++) {
-			ParameterInfo pi = params.get(i);
-			ClassInfo pt = pi.getParameterType();
+			var pi = params.get(i);
+			var pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
 				continue loop;
 			if (pt.is(Optional.class) || pt.is(BeanStore.class))
 				continue loop;
-			String beanName = pi.getResolvedQualifier();  // Use @Named for bean injection
-			Class<?> ptc = pt.inner();
+			var beanName = pi.getResolvedQualifier();  // Use @Named for bean injection
+			var ptc = pt.inner();
 			if (beanName == null && ! hasBean(ptc))
 				l.add(pt.getNameSimple());
 			if (nn(beanName) && ! hasBean(ptc, beanName))
@@ -531,18 +528,18 @@ public class BeanStore {
 	 * @return The corresponding beans in this factory for the specified param types.
 	 */
 	public Object[] getParams(ExecutableInfo executable) {
-		Object[] o = new Object[executable.getParameterCount()];
-		for (int i = 0; i < executable.getParameterCount(); i++) {
-			ParameterInfo pi = executable.getParameter(i);
-			ClassInfo pt = pi.getParameterType();
+		var o = new Object[executable.getParameterCount()];
+		for (var i = 0; i < executable.getParameterCount(); i++) {
+			var pi = executable.getParameter(i);
+			var pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get())) {
 				o[i] = outer.get();
 			} else if (pt.is(BeanStore.class)) {
 				o[i] = this;
 			} else {
-				String beanQualifier = pi.getResolvedQualifier();
-				Class<?> ptc = pt.unwrap(Optional.class).inner();
-				Optional<?> o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);
+				var beanQualifier = pi.getResolvedQualifier();
+				var ptc = pt.unwrap(Optional.class).inner();
+				var o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);
 				o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
 			}
 		}
@@ -557,14 +554,14 @@ public class BeanStore {
 	 */
 	public boolean hasAllParams(ExecutableInfo executable) {
 		loop: for (int i = 0; i < executable.getParameterCount(); i++) {
-			ParameterInfo pi = executable.getParameter(i);
-			ClassInfo pt = pi.getParameterType();
+			var pi = executable.getParameter(i);
+			var pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
 				continue loop;
 			if (pt.is(Optional.class) || pt.is(BeanStore.class))
 				continue loop;
-			String beanQualifier = pi.getResolvedQualifier();
-			Class<?> ptc = pt.inner();
+			var beanQualifier = pi.getResolvedQualifier();
+			var ptc = pt.inner();
 			if ((beanQualifier == null && ! hasBean(ptc)) || (nn(beanQualifier) && ! hasBean(ptc, beanQualifier)))
 				return false;
 		}
@@ -634,7 +631,7 @@ public class BeanStore {
 	 */
 	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> beanType) {
 		@SuppressWarnings("unchecked")
-		Stream<BeanStoreEntry<T>> s = entries.stream().filter(x -> x.matches(beanType)).map(x -> (BeanStoreEntry<T>)x);
+		var s = entries.stream().filter(x -> x.matches(beanType)).map(x -> (BeanStoreEntry<T>)x);
 		if (parent.isPresent())
 			s = Stream.concat(s, parent.get().stream(beanType));
 		return s;
@@ -651,7 +648,7 @@ public class BeanStore {
 	}
 
 	private JsonMap properties() {
-		Predicate<Boolean> nf = Utils::isTrue;
+		var nf = (Predicate<Boolean>)Utils::isTrue;
 		// @formatter:off
 		return filteredMap()
 			.append("identity", identity(this))

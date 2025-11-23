@@ -86,4 +86,3 @@ public enum ClassNameFormat {
 	 */
 	SIMPLE
 }
-

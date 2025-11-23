@@ -429,8 +429,8 @@ class AssertionArgs_Test extends TestBase {
 
 			@Override
 			public int size(Object o) {
-				if (o instanceof List) return ((List<?>) o).size();
-				if (o instanceof String) return ((String) o).length();
+				if (o instanceof List o2) return o2.size();
+				if (o instanceof String o3) return o3.length();
 				return 1;
 			}
 
@@ -447,11 +447,11 @@ class AssertionArgs_Test extends TestBase {
 			@Override
 			public Object getProperty(Object object, String name) {
 				// Simple mock implementation
-				if ("name".equals(name) && object instanceof TestBean) {
-					return ((TestBean) object).getName();
+				if ("name".equals(name) && object instanceof TestBean object2) {
+					return object2.getName();
 				}
-				if ("custom".equals(name) && object instanceof TestBeanWithCustomObject) {
-					return ((TestBeanWithCustomObject) object).getCustom();
+				if ("custom".equals(name) && object instanceof TestBeanWithCustomObject object3) {
+					return object3.getCustom();
 				}
 				return null;
 			}
@@ -474,8 +474,8 @@ class AssertionArgs_Test extends TestBase {
 		return new BeanConverter() {
 			@Override
 			public String stringify(Object o) {
-				if (o instanceof CustomObject) {
-					return "CUSTOM:" + ((CustomObject) o).getValue();
+				if (o instanceof CustomObject o2) {
+					return "CUSTOM:" + o2.getValue();
 				}
 				return String.valueOf(o);
 			}
@@ -488,8 +488,8 @@ class AssertionArgs_Test extends TestBase {
 
 			@Override
 			public int size(Object o) {
-				if (o instanceof List) return ((List<?>) o).size();
-				if (o instanceof String) return ((String) o).length();
+				if (o instanceof List o2) return o2.size();
+				if (o instanceof String o3) return o3.length();
 				return 1;
 			}
 
@@ -505,8 +505,8 @@ class AssertionArgs_Test extends TestBase {
 
 			@Override
 			public Object getProperty(Object object, String name) {
-				if ("custom".equals(name) && object instanceof TestBeanWithCustomObject) {
-					return ((TestBeanWithCustomObject) object).getCustom();
+				if ("custom".equals(name) && object instanceof TestBeanWithCustomObject object2) {
+					return object2.getCustom();
 				}
 				return null;
 			}

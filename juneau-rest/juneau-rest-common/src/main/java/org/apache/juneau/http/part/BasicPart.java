@@ -71,15 +71,15 @@ public class BasicPart implements NameValuePair, Headerable {
 	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
 	 */
 	public static NameValuePair cast(Object o) {
-		if (o instanceof NameValuePair nvp)
-			return nvp;
-		if (o instanceof NameValuePairable nvpable)
-			return nvpable.asNameValuePair();
-		if (o instanceof NameValuePair p) {
-			return BasicPart.of(p.getName(), p.getValue());
+		if (o instanceof NameValuePair o2)
+			return o2;
+		if (o instanceof NameValuePairable o3)
+			return o3.asNameValuePair();
+		if (o instanceof NameValuePair o2) {
+			return BasicPart.of(o2.getName(), o2.getValue());
 		}
-		if (o instanceof Headerable h) {
-			Header x = h.asHeader();
+		if (o instanceof Headerable o2) {
+			var x = o2.asHeader();
 			return BasicPart.of(x.getName(), x.getValue());
 		}
 		if (o instanceof Map.Entry e) {
@@ -108,7 +108,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	public static BasicPart ofPair(String pair) {
 		if (pair == null)
 			return null;
-		int i = pair.indexOf(':');
+		var i = pair.indexOf(':');
 		if (i == -1)
 			i = pair.indexOf('=');
 		if (i == -1)

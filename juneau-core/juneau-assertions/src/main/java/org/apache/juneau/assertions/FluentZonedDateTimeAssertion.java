@@ -191,7 +191,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public R isAfter(ZonedDateTime value) throws AssertionError {
 		assertArgNotNull("value", value);
-		if (!(value().isAfter(value)))
+		if (! (value().isAfter(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
 	}
@@ -213,7 +213,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public R isBefore(ZonedDateTime value) throws AssertionError {
 		assertArgNotNull("value", value);
-		if (!(value().isBefore(value)))
+		if (! (value().isBefore(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
 	}

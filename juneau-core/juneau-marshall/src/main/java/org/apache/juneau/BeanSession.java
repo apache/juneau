@@ -1078,8 +1078,8 @@ public class BeanSession extends ContextSession {
 	 * @return The wrapped object.
 	 */
 	public final <T> BeanMap<T> toBeanMap(T o) {
-		if (o instanceof BeanMap)
-			return (BeanMap<T>)o;
+		if (o instanceof BeanMap o2)
+			return o2;
 		return this.toBeanMap(o, (Class<T>)o.getClass());
 	}
 
@@ -1184,27 +1184,27 @@ public class BeanSession extends ContextSession {
 				if (! ((to.isMap() && to.getValueType().isNotObject()) || ((to.isCollection() || to.isOptional()) && to.getElementType().isNotObject())))
 					return (T)value;
 
-		ObjectSwap swap = to.getSwap(this);
-		if (nn(swap)) {
-			var nc = swap.getNormalClass();
-			var fc = swap.getSwapClass();
-			if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
-				return (T)swap.unswap(this, value, to);
-			ClassMeta fcm = getClassMeta(fc.inner());
-				if (fcm.isNumber() && value instanceof Number) {
-					value = convertToMemberType(null, value, fc.inner());
+			ObjectSwap swap = to.getSwap(this);
+			if (nn(swap)) {
+				var nc = swap.getNormalClass();
+				var fc = swap.getSwapClass();
+				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
+					return (T)swap.unswap(this, value, to);
+				ClassMeta fcm = getClassMeta(fc.inner());
+				if (fcm.isNumber() && value instanceof Number value2) {
+					value = convertToMemberType(null, value2, fc.inner());
 					return (T)swap.unswap(this, value, to);
 				}
 			}
 
-		ClassMeta<?> from = getClassMetaForObject(value);
-		swap = from.getSwap(this);
-		if (nn(swap)) {
-			var nc = swap.getNormalClass();
-			var fc = swap.getSwapClass();
-			if (nc.isParentOf(from.getInnerClass()) && fc.isParentOf(tc))
-				return (T)swap.swap(this, value);
-		}
+			var from = getClassMetaForObject(value);
+			swap = from.getSwap(this);
+			if (nn(swap)) {
+				var nc = swap.getNormalClass();
+				var fc = swap.getSwapClass();
+				if (nc.isParentOf(from.getInnerClass()) && fc.isParentOf(tc))
+					return (T)swap.swap(this, value);
+			}
 
 			if (to.isPrimitive()) {
 				if (to.isNumber()) {
@@ -1395,13 +1395,13 @@ public class BeanSession extends ContextSession {
 			// Target type is some sort of Map that needs to be converted.
 			if (to.isMap()) {
 				try {
-			if (from.isMap()) {
-				Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
-				var keyType = to.getKeyType();
-				var valueType = to.getValueType();
-				((Map<?,?>)value).forEach((k, v) -> {
-					Object k2 = k;
-					if (keyType.isNotObject()) {
+					if (from.isMap()) {
+						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
+						var keyType = to.getKeyType();
+						var valueType = to.getValueType();
+						((Map<?,?>)value).forEach((k, v) -> {
+							Object k2 = k;
+							if (keyType.isNotObject()) {
 								if (keyType.isString() && k.getClass() != Class.class)
 									k2 = k.toString();
 								else
@@ -1414,7 +1414,7 @@ public class BeanSession extends ContextSession {
 						});
 						return (T)m;
 					} else if (! to.canCreateNewInstanceFromString(outer)) {
-						JsonMap m = JsonMap.ofJson(value.toString());
+						var m = JsonMap.ofJson(value.toString());
 						m.setBeanSession(this);
 						return convertToMemberType(outer, m, to);
 					}
@@ -1443,7 +1443,7 @@ public class BeanSession extends ContextSession {
 					else if (from.isString()) {
 						String s = value.toString();
 						if (isJsonArray(s, false)) {
-							JsonList l2 = JsonList.ofJson(s);
+							var l2 = JsonList.ofJson(s);
 							l2.setBeanSession(this);
 							l2.forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
 						} else {
@@ -1477,7 +1477,7 @@ public class BeanSession extends ContextSession {
 			}
 
 			if (to.isCharSequence()) {
-				Class<?> c = value.getClass();
+				var c = value.getClass();
 				if (c.isArray()) {
 					if (c.getComponentType().isPrimitive()) {
 						JsonList l = new JsonList(this);
@@ -1502,24 +1502,23 @@ public class BeanSession extends ContextSession {
 			}
 
 			// It's a bean being initialized with a Map
-			if (to.isBean() && value instanceof Map) {
-				BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)to.getBuilderSwap(this);
+			if (to.isBean() && value instanceof Map value2) {
+				var builder = (BuilderSwap<T,Object>)to.getBuilderSwap(this);
 
-				if (value instanceof JsonMap && builder == null) {
-					JsonMap m2 = (JsonMap)value;
-					String typeName = m2.getString(getBeanTypePropertyName(to));
+				if (value2 instanceof JsonMap m2 && builder == null) {
+					var typeName = m2.getString(getBeanTypePropertyName(to));
 					if (nn(typeName)) {
-						ClassMeta cm = to.getBeanRegistry().getClassMeta(typeName);
+						var cm = to.getBeanRegistry().getClassMeta(typeName);
 						if (nn(cm) && to.info.isParentOf(cm.innerClass))
 							return (T)m2.cast(cm);
 					}
 				}
 				if (nn(builder)) {
 					BeanMap m = toBeanMap(builder.create(this, to));
-					m.load((Map<?,?>)value);
+					m.load(value2);
 					return builder.build(this, m.getBean(), to);
 				}
-				return newBeanMap(tc).load((Map<?,?>)value).getBean();
+				return newBeanMap(tc).load(value2).getBean();
 			}
 
 			if (to.isInputStream()) {
@@ -1543,7 +1542,7 @@ public class BeanSession extends ContextSession {
 				if (from.isCalendar()) {
 					Calendar c = (Calendar)value;
 					if (value instanceof GregorianCalendar) {
-						GregorianCalendar c2 = new GregorianCalendar(c.getTimeZone());
+						var c2 = new GregorianCalendar(c.getTimeZone());
 						c2.setTime(c.getTime());
 						return (T)c2;
 					}
@@ -1551,7 +1550,7 @@ public class BeanSession extends ContextSession {
 				if (from.isDate()) {
 					Date d = (Date)value;
 					if (value instanceof GregorianCalendar) {
-						GregorianCalendar c2 = new GregorianCalendar(TimeZone.getDefault());
+						var c2 = new GregorianCalendar(TimeZone.getDefault());
 						c2.setTime(d);
 						return (T)c2;
 					}
@@ -1631,7 +1630,7 @@ public class BeanSession extends ContextSession {
 	 * @return A new map.
 	 */
 	protected Map newGenericMap(ClassMeta mapMeta) {
-		ClassMeta<?> k = mapMeta.getKeyType();
+		var k = mapMeta.getKeyType();
 		return (k == null || k.isString()) ? new JsonMap(this) : map();
 	}
 
@@ -1653,14 +1652,14 @@ public class BeanSession extends ContextSession {
 	protected final Object toArray(ClassMeta<?> type, Collection<?> list) {
 		if (list == null)
 			return null;
-		ClassMeta<?> componentType = type.isArgs() ? object() : type.getElementType();
+		var componentType = type.isArgs() ? object() : type.getElementType();
 		Object array = Array.newInstance(componentType.getInnerClass(), list.size());
-		IntegerValue i = IntegerValue.create();
+		var i = IntegerValue.create();
 		list.forEach(x -> {
 			Object x2 = x;
 			if (! type.getInnerClass().isInstance(x)) {
-				if (componentType.isArray() && x instanceof Collection)
-					x2 = toArray(componentType, (Collection<?>)x);
+				if (componentType.isArray() && x instanceof Collection<?> c)
+					x2 = toArray(componentType, c);
 				else if (x == null && componentType.isPrimitive())
 					x2 = componentType.getPrimitiveDefault();
 				else

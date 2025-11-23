@@ -117,12 +117,11 @@ public enum CacheMode {
 	public static CacheMode parse(String value) {
 		if (value == null)
 			return FULL;
-		switch (value.toUpperCase()) {
-			case "NONE": return NONE;
-			case "WEAK": return WEAK;
-			case "FULL": return FULL;
-			default: return FULL;
-		}
+		return switch (value.toUpperCase()) {
+			case "NONE" -> NONE;
+			case "WEAK" -> WEAK;
+			case "FULL" -> FULL;
+			default -> FULL;
+		};
 	}
 }
-

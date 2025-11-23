@@ -158,7 +158,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		super(creator, value, returns);
 		if (nn(value)) {
 			var c = value.getClass();
-			if (!(c.isArray() && c.getComponentType().isPrimitive()))
+			if (! (c.isArray() && c.getComponentType().isPrimitive()))
 				throw new BasicAssertionError(MSG_objectWasNotAnArray, value.getClass());
 		}
 	}
@@ -227,7 +227,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		isSize(tests.length);
 		for (int i = 0, j = length2(); i < j; i++) {
 			var t = tests[i];
-			if (nn(t) && !t.test(at(i)))
+			if (nn(t) && ! t.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
@@ -243,7 +243,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public R isAll(Predicate<E> test) throws AssertionError {
 		assertArgNotNull("test", test);
 		for (int i = 0, j = length2(); i < j; i++)
-			if (!test.test(at(i)))
+			if (! test.test(at(i)))
 				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));
 		return returns();
 	}

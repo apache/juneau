@@ -27,7 +27,6 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A parsed <c>Accept</c> or similar header value.
@@ -77,7 +76,7 @@ public class MediaRanges {
 	 */
 	private static final Comparator<MediaRange> RANGE_COMPARATOR = (o1, o2) -> {
 		// Compare q-values.
-		int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
+		var qCompare = Float.compare(o2.getQValue(), o1.getQValue());
 		if (qCompare != 0)
 			return qCompare;
 
@@ -93,7 +92,7 @@ public class MediaRanges {
 	 * @return A parsed <c>Accept</c> header value.
 	 */
 	public static MediaRanges of(String value) {
-		return StringUtils.isEmpty(value) ? EMPTY : CACHE.get(value, () -> new MediaRanges(value));
+		return isEmpty(value) ? EMPTY : CACHE.get(value, () -> new MediaRanges(value));
 	}
 
 	private static HeaderElement[] parse(String value) {
@@ -112,7 +111,7 @@ public class MediaRanges {
 	public MediaRanges(HeaderElement[] e) {
 
 		ranges = new MediaRange[e.length];
-		for (int i = 0; i < e.length; i++)
+		for (var i = 0; i < e.length; i++)
 			ranges[i] = new MediaRange(e[i]);
 		Arrays.sort(ranges, RANGE_COMPARATOR);
 
@@ -194,20 +193,21 @@ public class MediaRanges {
 		if (string.isEmpty() || mediaTypes == null)
 			return -1;
 
-		int matchQuant = 0, matchIndex = -1;
-		float q = 0f;
+		int matchQuant = 0;
+		int matchIndex = -1;
+		var q = 0f;
 
 		// Media ranges are ordered by 'q'.
 		// So we only need to search until we've found a match.
 		for (var mr : ranges) {
-			float q2 = mr.getQValue();
+			var q2 = mr.getQValue();
 
 			if (q2 < q || q2 == 0)
 				break;
 
-			for (int i = 0; i < mediaTypes.size(); i++) {
-				MediaType mt = mediaTypes.get(i);
-				int matchQuant2 = mr.match(mt, false);
+			for (var i = 0; i < mediaTypes.size(); i++) {
+				var mt = mediaTypes.get(i);
+				var matchQuant2 = mr.match(mt, false);
 
 				if (matchQuant2 > matchQuant) {
 					matchIndex = i;

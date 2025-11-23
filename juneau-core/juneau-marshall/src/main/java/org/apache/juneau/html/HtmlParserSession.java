@@ -280,7 +280,7 @@ public class HtmlParserSession extends XmlParserSession {
 			eType = (ClassMeta<T>)object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		ClassMeta<?> sType = null;
+		var sType = (ClassMeta<?>)null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -299,7 +299,7 @@ public class HtmlParserSession extends XmlParserSession {
 
 		if (! isRoot)
 			event = r.next();
-		boolean isEmpty = (event == END_ELEMENT);
+		var isEmpty = (event == END_ELEMENT);
 
 		// Skip until we find a start element, end document, or non-empty text.
 		if (! isEmpty)
@@ -309,14 +309,14 @@ public class HtmlParserSession extends XmlParserSession {
 			throw new ParseException(this, "Unexpected end of stream in parseAnything for type ''{0}''", eType);
 
 		// Handle @Html(asXml=true) beans.
-		HtmlClassMeta hcm = getHtmlClassMeta(sType);
+		var hcm = getHtmlClassMeta(sType);
 		if (hcm.getFormat() == HtmlFormat.XML)
 			return super.parseAnything(eType, null, r, outer, false, pMeta);
 
-		Object o = null;
+		var o = (Object)null;
 
-		boolean isValid = true;
-		HtmlTag tag = (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
+		var isValid = true;
+		var tag = (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
 
 		// If it's not a known tag, then parse it as XML.
 		// Allows us to parse stuff like "<div/>" into HTML5 beans.
@@ -485,11 +485,11 @@ public class HtmlParserSession extends XmlParserSession {
 			} else {
 				String key = getElementText(r);
 				nextTag(r, TD);
-				BeanPropertyMeta pMeta = m.getPropertyMeta(key);
+				var pMeta = m.getPropertyMeta(key);
 				if (pMeta == null) {
 					onUnknownProperty(key, m, parseAnything(object(), r, null, false, null));
 				} else {
-					ClassMeta<?> cm = pMeta.getClassMeta();
+					var cm = pMeta.getClassMeta();
 					Object value = parseAnything(cm, r, m.getBean(false), false, pMeta);
 					setName(cm, value, key);
 					try {
@@ -520,7 +520,7 @@ public class HtmlParserSession extends XmlParserSession {
 				tag = nextTag(r, LI, xUL, xLI);
 			if (tag == xUL)
 				break;
-			ClassMeta<?> elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+			var elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
 			l.add((E)parseAnything(elementType, r, l, false, pMeta));
 		}
 		return l;
@@ -616,7 +616,7 @@ public class HtmlParserSession extends XmlParserSession {
 						parseAnything(object(), r, l, false, null);
 					} else {
 						BeanPropertyMeta bpm = e.getMeta();
-						ClassMeta<?> cm = bpm.getClassMeta();
+						var cm = bpm.getClassMeta();
 						Object value = parseAnything(cm, r, m.getBean(false), false, bpm);
 						setName(cm, value, key);
 						bpm.set(m, key, value);
@@ -650,12 +650,12 @@ public class HtmlParserSession extends XmlParserSession {
 					}
 				}
 				if (nn(m) && nn(c)) {
-					JsonMap m2 = (m instanceof JsonMap ? (JsonMap)m : new JsonMap(m).session(this));
+					var m2 = (m instanceof JsonMap ? (JsonMap)m : new JsonMap(m).session(this));
 					m2.put(getBeanTypePropertyName(type.getElementType()), c);
 					l.add((E)cast(m2, pMeta, elementType));
 				} else {
-					if (m instanceof JsonMap)
-						l.add((E)convertToType(m, elementType));
+					if (m instanceof JsonMap m2)
+						l.add((E)convertToType(m2, elementType));
 					else
 						l.add((E)m);
 				}
@@ -712,11 +712,11 @@ public class HtmlParserSession extends XmlParserSession {
 	 */
 	private HtmlTag skipToData(XmlReader r) throws ParseException, XMLStreamException {
 		while (true) {
-			int event = r.next();
+			var event = r.next();
 			if (event == START_ELEMENT && "div".equals(r.getLocalName()) && "data".equals(r.getAttributeValue(null, "id"))) {
 				r.nextTag();
 				event = r.getEventType();
-				boolean isEmpty = (event == END_ELEMENT);
+				var isEmpty = (event == END_ELEMENT);
 				// Skip until we find a start element, end document, or non-empty text.
 				if (! isEmpty)
 					event = skipWs(r);

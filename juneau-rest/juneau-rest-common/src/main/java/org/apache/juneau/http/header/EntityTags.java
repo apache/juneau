@@ -18,12 +18,12 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A list of {@link EntityTag} beans.
@@ -52,7 +52,7 @@ public class EntityTags {
 	 * @return A parsed header value.
 	 */
 	public static EntityTags of(String value) {
-		return StringUtils.isEmpty(value) ? EMPTY : CACHE.get(value, () -> new EntityTags(value));
+		return isEmpty(value) ? EMPTY : CACHE.get(value, () -> new EntityTags(value));
 	}
 
 	private final EntityTag[] value;
@@ -110,9 +110,9 @@ public class EntityTags {
 	private static EntityTag[] parse(String value) {
 		if (value == null)
 			return null;
-		String[] s = splita(value);
-		EntityTag[] v = new EntityTag[s.length];
-		for (int i = 0; i < s.length; i++)
+		var s = splita(value);
+		var v = new EntityTag[s.length];
+		for (var i = 0; i < s.length; i++)
 			v[i] = EntityTag.of(s[i]);
 		return v;
 	}

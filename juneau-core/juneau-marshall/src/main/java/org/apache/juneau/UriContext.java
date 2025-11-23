@@ -88,7 +88,7 @@ public class UriContext {
 	}
 
 	private static String getParent(String uri) {
-		int i = uri.lastIndexOf('/');
+		var i = uri.lastIndexOf('/');
 		if (i <= 1)
 			return "/";
 		return uri.substring(0, i);

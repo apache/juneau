@@ -17,6 +17,7 @@
 package org.apache.juneau.microservice.jetty;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -204,16 +205,16 @@ public class JettyMicroservice extends Microservice {
 		 * @throws IOException Thrown by underlying stream.
 		 */
 		public Builder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
-			if (jettyXml instanceof String)
-				this.jettyXml = read(resolveFile(jettyXml.toString()));
-			else if (jettyXml instanceof File file)
-				this.jettyXml = read(file);
-			else if (jettyXml instanceof Path path)
-				this.jettyXml = read(path);
-			else if (jettyXml instanceof InputStream inputStream)
-				this.jettyXml = read(inputStream);
-			else if (jettyXml instanceof Reader reader)
-				this.jettyXml = read(reader);
+			if (jettyXml instanceof String jettyXml2)
+				this.jettyXml = read(resolveFile(jettyXml2.toString()));
+			else if (jettyXml instanceof File jettyXml3)
+				this.jettyXml = read(jettyXml3);
+			else if (jettyXml instanceof Path jettyXml4)
+				this.jettyXml = read(jettyXml4);
+			else if (jettyXml instanceof InputStream jettyXml5)
+				this.jettyXml = read(jettyXml5);
+			else if (jettyXml instanceof Reader jettyXml6)
+				this.jettyXml = read(jettyXml6);
 			else
 				throw rex("Invalid object type passed to jettyXml(Object): {0}", cn(jettyXml));
 			this.jettyXmlResolveVars = resolveVars;
@@ -434,7 +435,7 @@ public class JettyMicroservice extends Microservice {
 	}
 
 	private static int findOpenPort(int[] ports) {
-		for (int port : ports) {
+		for (var port : ports) {
 			// If port is 0, try a random port between ports[0] and 32767.
 			if (port == 0)
 				port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
@@ -539,19 +540,19 @@ public class JettyMicroservice extends Microservice {
 	public Server createServer() throws ParseException, IOException, ExecutableException {
 		listener.onCreateServer(this);
 
-		Config cf = getConfig();
-		JsonMap mf = getManifest();
-		VarResolver vr = getVarResolver();
+		var cf = getConfig();
+		var mf = getManifest();
+		var vr = getVarResolver();
 
-		int[] ports = firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.getWithDefault("Jetty-Port", ints(8000), int[].class)));
-		int availablePort = findOpenPort(ports);
+		var ports = firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.getWithDefault("Jetty-Port", ints(8000), int[].class)));
+		var availablePort = findOpenPort(ports);
 
 		if (System.getProperty("availablePort") == null)
 			System.setProperty("availablePort", String.valueOf(availablePort));
 
-		String jettyXml = builder.jettyXml;
-		String jettyConfig = cf.get("Jetty/config").orElse(mf.getString("Jetty-Config", "jetty.xml"));
-		boolean resolveVars = firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
+		var jettyXml = builder.jettyXml;
+		var jettyConfig = cf.get("Jetty/config").orElse(mf.getString("Jetty-Config", "jetty.xml"));
+		var resolveVars = firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
 
 		if (jettyXml == null)
 			jettyXml = loadSystemResourceAsString("jetty.xml", ".", "files");
@@ -571,7 +572,7 @@ public class JettyMicroservice extends Microservice {
 
 		for (var s : cf.get("Jetty/servlets").asStringArray().orElse(new String[0])) {
 			try {
-				var c = ClassInfo.of(Class.forName(s));
+				var c = info(Class.forName(s));
 				if (c.isChildOf(RestServlet.class)) {
 					var rs = (RestServlet)c.newInstance();
 					addServlet(rs, rs.getPath());
@@ -585,7 +586,7 @@ public class JettyMicroservice extends Microservice {
 
 		cf.get("Jetty/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -> {
 			try {
-				var c = ClassInfo.of(Class.forName(v.toString()));
+				var c = info(Class.forName(v.toString()));
 				if (c.isChildOf(Servlet.class)) {
 					var rs = (Servlet)c.newInstance();
 					addServlet(rs, k);
@@ -628,9 +629,7 @@ public class JettyMicroservice extends Microservice {
 	 *
 	 * @return The context path that this microservice is using.
 	 */
-	public String getContextPath() {
-		return getServletContextHandler().getContextPath();
-	}
+	public String getContextPath() { return getServletContextHandler().getContextPath(); }
 
 	/**
 	 * Returns the hostname of this microservice.
@@ -657,8 +656,8 @@ public class JettyMicroservice extends Microservice {
 	 */
 	public int getPort() {
 		for (var c : getServer().getConnectors())
-			if (c instanceof ServerConnector)
-				return ((ServerConnector)c).getPort();
+			if (c instanceof ServerConnector c2)
+				return c2.getPort();
 		throw new IllegalStateException("Could not locate ServerConnector in Jetty server.");
 	}
 
@@ -673,8 +672,8 @@ public class JettyMicroservice extends Microservice {
 	 */
 	public String getProtocol() {
 		for (var c : getServer().getConnectors())
-			if (c instanceof ServerConnector)
-				for (var cf : ((ServerConnector)c).getConnectionFactories())
+			if (c instanceof ServerConnector c2)
+				for (var cf : c2.getConnectionFactories())
 					if (cf instanceof SslConnectionFactory)
 						return "https";
 		return "http";
@@ -694,10 +693,9 @@ public class JettyMicroservice extends Microservice {
 	 * @throws RuntimeException if context handler is not defined.
 	 */
 	public ServletContextHandler getServletContextHandler() {
-		Object obj = getServer().getAttribute(KEY_SERVLET_CONTEXT_HANDLER);
-		if (obj instanceof ServletContextHandler) {
-			return (ServletContextHandler)obj;
-		}
+		var obj = getServer().getAttribute(KEY_SERVLET_CONTEXT_HANDLER);
+		if (obj instanceof ServletContextHandler obj2)
+			return obj2;
 		throw new IllegalStateException("Servlet context handler not found in jetty server or at attribute '" + KEY_SERVLET_CONTEXT_HANDLER + "'");
 	}
 
@@ -707,7 +705,7 @@ public class JettyMicroservice extends Microservice {
 	 * @return The URI where this microservice is listening on.
 	 */
 	public URI getURI() {
-		String cp = getContextPath();
+		var cp = getContextPath();
 		try {
 			return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);
 		} catch (URISyntaxException e) {

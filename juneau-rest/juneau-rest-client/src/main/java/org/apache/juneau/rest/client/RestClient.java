@@ -71,7 +71,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.entity.*;
@@ -80,7 +79,6 @@ import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.msgpack.*;
@@ -1345,9 +1343,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder basicAuth(String host, int port, String user, String pw) {
-			AuthScope scope = new AuthScope(host, port);
-			Credentials up = new UsernamePasswordCredentials(user, pw);
-			CredentialsProvider p = new BasicCredentialsProvider();
+			var scope = new AuthScope(host, port);
+			var up = new UsernamePasswordCredentials(user, pw);
+			var p = new BasicCredentialsProvider();
 			p.setCredentials(scope, up);
 			defaultCredentialsProvider(p);
 			return this;
@@ -2892,7 +2890,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			for (var c : values) {
 				if (c == null)
 					continue;
-				ClassInfo ci = ClassInfo.of(c);
+				var ci = ClassInfo.of(c);
 				if (nn(ci)) {
 					if (ci.isChildOfAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
 						interceptors(ci.newInstance());
@@ -2961,12 +2959,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				if (nn(ci)) {
 					if (! ci.isChildOfAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))
 						throw new ConfigException("Invalid object of type ''{0}'' passed to interceptors().", ci.getName());
-					if (o instanceof HttpRequestInterceptor)
-						addInterceptorLast((HttpRequestInterceptor)o);
-					if (o instanceof HttpResponseInterceptor)
-						addInterceptorLast((HttpResponseInterceptor)o);
-					if (o instanceof RestCallInterceptor)
-						l.add((RestCallInterceptor)o);
+					if (o instanceof HttpRequestInterceptor o2)
+						addInterceptorLast(o2);
+					if (o instanceof HttpResponseInterceptor o3)
+						addInterceptorLast(o3);
+					if (o instanceof RestCallInterceptor o4)
+						l.add(o4);
 				}
 			}
 			if (interceptors == null)
@@ -4601,7 +4599,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			var s = s(value);
 			if (isNotEmpty(s))
 				s = s.replaceAll("\\/$", "");
-			if (StringUtils.isEmpty(s))
+			if (isEmpty(s))
 				rootUrl = null;
 			else if (s.indexOf("://") == -1)
 				throw rex("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
@@ -6179,7 +6177,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		// S4 - Found end of headers, looking for beginning of URI.
 		// S5 - Found beginning of URI, looking for end of URI.
 
-		StateEnum state = S1;
+		var state = S1;
 
 		var mark = 0;
 		var method = (String)null;
@@ -6224,7 +6222,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			throw new RestCallException(null, null, "Invalid format for call string.  State={0}", state);
 
 		try {
-			RestRequest req = request(method, uri, isNotEmpty(content));
+			var req = request(method, uri, isNotEmpty(content));
 			if (nn(headers))
 				JsonMap.ofJson(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
 			if (isNotEmpty(content))
@@ -6604,23 +6602,23 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest formPost(Object uri, Object body) throws RestCallException {
-		RestRequest req = request(op("POST", uri, NO_BODY));
+		var req = request(op("POST", uri, NO_BODY));
 		try {
-		if (body instanceof Supplier)
-			body = ((Supplier<?>)body).get();
-		if (body instanceof NameValuePair nvp)
-			return req.content(new UrlEncodedFormEntity(l(nvp)));
-		if (body instanceof NameValuePair[])
-			return req.content(new UrlEncodedFormEntity(l((NameValuePair[])body)));
-		if (body instanceof PartList pl)
-			return req.content(new UrlEncodedFormEntity(pl));
-		if (body instanceof HttpResource)
-			((HttpResource)body).getHeaders().forEach(x -> req.header(x));
-		if (body instanceof HttpEntity e) {
-			if (e.getContentType() == null)
-				req.header(ContentType.APPLICATION_FORM_URLENCODED);
-			return req.content(e);
-		}
+			if (body instanceof Supplier body2)
+				body = body2.get();
+			if (body instanceof NameValuePair body2)
+				return req.content(new UrlEncodedFormEntity(l(body2)));
+			if (body instanceof NameValuePair[])
+				return req.content(new UrlEncodedFormEntity(l((NameValuePair[])body)));
+			if (body instanceof PartList body2)
+				return req.content(new UrlEncodedFormEntity(body2));
+			if (body instanceof HttpResource body2)
+				body2.getHeaders().forEach(x -> req.header(x));
+			if (body instanceof HttpEntity body3) {
+				if (body3.getContentType() == null)
+					req.header(ContentType.APPLICATION_FORM_URLENCODED);
+				return req.content(body3);
+			}
 			if (body instanceof Reader || body instanceof InputStream)
 				return req.header(ContentType.APPLICATION_FORM_URLENCODED).content(body);
 			return req.content(serializedEntity(body, urlEncodingSerializer, null));
@@ -6837,7 +6835,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 			@Override /* Overridden from InvocationHandler */
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				RemoteOperationMeta rom = rm.getOperationMeta(method);
+				var rom = rm.getOperationMeta(method);
 
 				var uri = rom.getFullPath();
 				if (uri.indexOf("://") == -1)
@@ -6846,7 +6844,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
 
 				var httpMethod = rom.getHttpMethod();
-				RestRequest rc = request(httpMethod, uri, hasContent(httpMethod));
+				var rc = request(httpMethod, uri, hasContent(httpMethod));
 
 				rc.serializer(serializer);
 				rc.parser(parser);
@@ -6928,14 +6926,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				}
 
 				rom.forEachRequestArg(rmba -> {
-					RequestBeanMeta rbm = rmba.getMeta();
+					var rbm = rmba.getMeta();
 					var bean = args[rmba.getIndex()];
 					if (nn(bean)) {
 						for (var p : rbm.getProperties()) {
 							var val = safeSupplier(() -> p.getGetter().invoke(bean));
 							var pt = p.getPartType();
 							var pn = p.getPartName();
-							HttpPartSchema schema = p.getSchema();
+							var schema = p.getSchema();
 							if (pt == PATH)
 								rc.pathArg(pn, val, schema, p.getSerializer().orElse(partSerializer));
 							else if (nn(val)) {
@@ -6952,7 +6950,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					}
 				});
 
-				RemoteOperationReturn ror = rom.getReturns();
+				var ror = rom.getReturns();
 				if (ror.isFuture()) {
 					return getExecutorService().submit(() -> {
 						try {
@@ -6964,7 +6962,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						}
 					});
 				} else if (ror.isCompletableFuture()) {
-					CompletableFuture<Object> cf = new CompletableFuture<>();
+					var cf = new CompletableFuture<>();
 					getExecutorService().submit(() -> {
 						try {
 							cf.complete(executeRemote(interfaceClass, rc, method, rom));
@@ -7060,10 +7058,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public <T> T getRrpcInterface(final Class<T> interfaceClass, Object uri, final Serializer serializer, final Parser parser) {
 
 		if (uri == null) {
-			RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, "");
-			String path = rm.getPath();
+			var rm = new RrpcInterfaceMeta(interfaceClass, "");
+			var path = rm.getPath();
 			if (path.indexOf("://") == -1) {
-				if (StringUtils.isEmpty(rootUrl))
+				if (isEmpty(rootUrl))
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote interface.");
 				path = trimSlashes(rootUrl) + '/' + path;
 			}
@@ -7078,10 +7076,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 			@Override /* Overridden from InvocationHandler */
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				RrpcInterfaceMethodMeta rim = rm.getMethodMeta(method);
+				var rim = rm.getMethodMeta(method);
 
-				String uri = rim.getUri();
-				RestResponse res = null;
+				var uri = rim.getUri();
+				var res = (RestResponse)null;
 
 				try {
 					// @formatter:off
@@ -7094,19 +7092,19 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 					res = rc.run();
 
-					Object v = res.getContent().as(method.getGenericReturnType());
+					var v = res.getContent().as(method.getGenericReturnType());
 					if (v == null && method.getReturnType().isPrimitive())
 						v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
 					return v;
 
 				} catch (Throwable e) {
-					if (e instanceof RestCallException) {
-						Throwable t = e.getCause();
+					if (e instanceof RestCallException e2) {
+						var t = e2.getCause();
 						if (nn(t))
 							e = t;
 					}
-					if (e instanceof RuntimeException)
-						throw e;
+					if (e instanceof RuntimeException e2)
+						throw e2;
 					for (var t2 : method.getExceptionTypes())
 						if (t2.isInstance(e))
 							throw e;
@@ -7587,7 +7585,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	@Override
 	protected void finalize() throws Throwable {
 		if (detectLeaks && ! isClosed && ! keepHttpClientOpen) {
-			StringBuilder sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
+			var sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
 			if (nn(creationStack)) {
 				sb.append("\nCreation Stack:");  // NOT DEBUG
 				for (var e : creationStack)
@@ -7611,7 +7609,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @return The part parser.
 	 */
 	protected HttpPartParser getPartParser(Class<? extends HttpPartParser> c) {
-		HttpPartParser x = partParsers.get(c);
+		var x = partParsers.get(c);
 		if (x == null) {
 			try {
 				x = beanStore.createBean(c).run();
@@ -7637,7 +7635,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @return The part serializer.
 	 */
 	protected HttpPartSerializer getPartSerializer(Class<? extends HttpPartSerializer> c) {
-		HttpPartSerializer x = partSerializers.get(c);
+		var x = partSerializers.get(c);
 		if (x == null) {
 			try {
 				x = beanStore.createBean(c).run();
@@ -7821,7 +7819,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	protected RestRequest request(RestOperation op) throws RestCallException {
 		if (isClosed) {
-			Exception e2 = null;
+			var e2 = (Exception)null;
 			if (nn(closedStack)) {
 				e2 = new Exception("Creation stack:");
 				e2.setStackTrace(closedStack);
@@ -7831,7 +7829,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				"RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		RestRequest req = createRequest(toURI(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
+		var req = createRequest(toURI(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
 
 		onCallInit(req);
 
@@ -7874,7 +7872,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		RemoteOperationReturn ror = rom.getReturns();
 
 		try {
-			Object ret = null;
+			var ret = (Object)null;
 			RestResponse res = null;
 			rc.rethrow(RuntimeException.class);
 			rom.forEachException(x -> rc.rethrow(x));
@@ -7883,7 +7881,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			} else if (ror.getReturnValue() == RemoteReturn.STATUS) {
 				res = rc.complete();
 				int returnCode = res.getStatusCode();
-				Class<?> rt = method.getReturnType();
+				var rt = method.getReturnType();
 				if (rt == Integer.class || rt == int.class)
 					ret = returnCode;
 				else if (rt == Boolean.class || rt == boolean.class)
@@ -7895,7 +7893,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				res = rc.run();
 				ret = res.as(ror.getResponseBeanMeta());
 			} else {
-				Class<?> rt = method.getReturnType();
+				var rt = method.getReturnType();
 				if (Throwable.class.isAssignableFrom(rt))
 					rc.ignoreErrors();
 				res = rc.run();
@@ -7907,10 +7905,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return ret;
 		} catch (RestCallException e) {
 			Throwable t = e.getCause();
-			if (t instanceof RuntimeException)
-				throw t;
-			for (var t2 : method.getExceptionTypes())
-				if (t2.isInstance(t))
+			if (t instanceof RuntimeException t2)
+				throw t2;
+			for (var t3 : method.getExceptionTypes())
+				if (t3.isInstance(t))
 					throw t;
 			throw toRex(e);
 		}
@@ -7927,7 +7925,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	@SuppressWarnings("unchecked")
 	<T extends Context> T getInstance(Class<T> c) {
-		Context o = requestContexts.get(c);
+		var o = requestContexts.get(c);
 		if (o == null) {
 			if (Serializer.class.isAssignableFrom(c)) {
 				o = Serializer.createSerializerBuilder((Class<? extends Serializer>)c).beanContext(getBeanContext()).build();
@@ -7948,11 +7946,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		if (parsers.isEmpty())
 			return null;
 		if (nn(mediaType)) {
-			Parser p = parsers.getParser(mediaType);
+			var p = parsers.getParser(mediaType);
 			if (nn(p))
 				return p;
 		}
-		List<Parser> l = parsers.getParsers();
+		var l = parsers.getParsers();
 		return (l.size() == 1 ? l.get(0) : null);
 	}
 
@@ -7965,11 +7963,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		if (serializers.isEmpty())
 			return null;
 		if (nn(mediaType)) {
-			Serializer s = serializers.getSerializer(mediaType);
+			var s = serializers.getSerializer(mediaType);
 			if (nn(s))
 				return s;
 		}
-		List<Serializer> l = serializers.getSerializers();
+		var l = serializers.getSerializers();
 		return (l.size() == 1 ? l.get(0) : null);
 	}
 
@@ -7983,18 +7981,18 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	URI toURI(Object x, String rootUrl) throws RestCallException {
 		try {
-			if (x instanceof URI uri)
-				return uri;
-			if (x instanceof URL)
-				((URL)x).toURI();
-			if (x instanceof URIBuilder urib)
-				return urib.build();
-			String s = x == null ? "" : x.toString();
+			if (x instanceof URI x2)
+				return x2;
+			if (x instanceof URL x3)
+				x3.toURI();
+			if (x instanceof URIBuilder x4)
+				return x4.build();
+			var s = x == null ? "" : x.toString();
 			if (nn(rootUrl) && ! absUrlPattern.matcher(s).matches()) {
 				if (s.isEmpty())
 					s = rootUrl;
 				else {
-					StringBuilder sb = new StringBuilder(rootUrl);
+					var sb = new StringBuilder(rootUrl);
 					if (! s.startsWith("/"))
 						sb.append('/');
 					sb.append(s);

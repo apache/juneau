@@ -819,7 +819,7 @@ public class ConfigMap implements ConfigStoreListener {
 						if (! isValidConfigName(l2))
 							throw new ConfigException("Invalid import config name found in configuration:  {0}", line);
 						var l3 = l.substring(i + 1);
-						if (! (StringUtils.isEmpty(l3) || firstChar(l3) == '#'))
+						if (! (isEmpty(l3) || firstChar(l3) == '#'))
 							throw new ConfigException("Invalid import config name found in configuration:  {0}", line);
 						var importName = l2.trim();
 						try {

@@ -42,7 +42,7 @@ import org.apache.juneau.svl.*;
  */
 public class PathRemainderAnnotation {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Applies targeted {@link PathRemainder} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
@@ -265,11 +265,13 @@ public class PathRemainderAnnotation {
 	 * @return The last matching default value, or empty if not found.
 	 */
 	public static Optional<String> findDef(ParameterInfo pi) {
+		// @formatter:off
 		return AP.find(PathRemainder.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isNotEmpty(x.def()))
 			.findFirst()
 			.map(x -> x.def());
+		// @formatter:on
 	}
 }

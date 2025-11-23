@@ -27,10 +27,12 @@ import org.junit.runners.Suite.*;
  * Stops the REST service after running the tests.
  */
 @RunWith(Suite.class)
+// @formatter:off
 @SuiteClasses({
 	RootResourcesTest.class,
 	RootContentTest.class
 })
+// @formatter:on
 public class _TestSuite {
 
 	@BeforeClass

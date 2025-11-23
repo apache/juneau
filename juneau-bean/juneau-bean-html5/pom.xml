@@ -49,6 +49,7 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
+					<supportIncrementalBuild>true</supportIncrementalBuild>
 					<instructions>
 						<Automatic-Module-Name>org.apache.juneau.bean.html5</Automatic-Module-Name>
 					</instructions>

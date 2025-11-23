@@ -203,16 +203,16 @@ public class Mutaters {
 			};
 		}
 
-	var ici = info(ic);
-	var oci = info(oc);
+		var ici = info(ic);
+		var oci = info(oc);
 
-		ClassInfo pic = ici.getAllParents().stream().filter(x -> nn(m.get(x.inner()))).findFirst().orElse(null);
+		var pic = ici.getAllParents().stream().filter(x -> nn(m.get(x.inner()))).findFirst().orElse(null);
 		if (nn(pic))
 			return m.get(pic.inner());
 
 		if (ic == String.class) {
-		Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
-		var oc2i = info(oc2);
+			var oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
+			var oc2i = info(oc2);
 
 			// @formatter:off
 			final MethodInfo createMethod = oc2i.getPublicMethod(

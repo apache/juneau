@@ -58,7 +58,7 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class QueryArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.

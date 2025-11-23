@@ -83,9 +83,9 @@ public class ArgsVar extends DefaultingVar {
 		if (nn(ARGS))
 			this.args = ARGS;
 		else {
-			String s = System.getProperty("sun.java.command");
+			var s = System.getProperty("sun.java.command");
 			if (isNotEmpty(s)) {
-				int i = s.indexOf(' ');
+				var i = s.indexOf(' ');
 				args = new Args(i == -1 ? "" : s.substring(i + 1));
 			} else {
 				args = new Args(System.getProperty("juneau.args", ""));

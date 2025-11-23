@@ -447,14 +447,14 @@ public class TestUtils extends Utils2 {
 	 * @return List of HTML content strings (inner content of matching elements)
 	 */
 	public static List<String> extractXml(String html, String elementName, Map<String,String> withAttributes) {
-		List<String> results = list();
+		List<String> results = list();  // NOAI
 
 		if (html == null || elementName == null) {
 			return results;
 		}
 
 		// Find all opening tags of the specified element
-		String openTag = "<" + elementName;
+		var openTag = "<" + elementName;
 		int searchPos = 0;
 
 		while ((searchPos = html.indexOf(openTag, searchPos)) != -1) {
@@ -462,18 +462,18 @@ public class TestUtils extends Utils2 {
 			int tagEnd = html.indexOf('>', searchPos);
 			if (tagEnd == -1) break;
 
-			String fullOpenTag = html.substring(searchPos, tagEnd + 1);
+			var fullOpenTag = html.substring(searchPos, tagEnd + 1);
 
 			// Check if attributes match
-			boolean matches = true;
+			var matches = true;
 			if (withAttributes != null && !withAttributes.isEmpty()) {
 				for (var entry : withAttributes.entrySet()) {
-					String attrName = entry.getKey();
-					String attrValue = entry.getValue();
+					var attrName = entry.getKey();
+					var attrValue = entry.getValue();
 
 					// Look for attribute in the tag (handle both single and double quotes)
-					String pattern1 = attrName + "=\"" + attrValue + "\"";
-					String pattern2 = attrName + "='" + attrValue + "'";
+					var pattern1 = attrName + "=\"" + attrValue + "\"";
+					var pattern2 = attrName + "='" + attrValue + "'";
 
 					if (!fullOpenTag.contains(pattern1) && !fullOpenTag.contains(pattern2)) {
 						matches = false;

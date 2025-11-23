@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.springboot;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -24,9 +23,10 @@ import org.junit.jupiter.api.*;
  */
 class SpringBeanStore_Test extends TestBase {
 
-	@Test void a01_fluentChaining_clear() {
+	@Test
+	void a01_fluentChaining_clear() {
 		// Test that clear() returns SpringBeanStore (not BeanStore)
-		var store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
+		var store = new SpringBeanStore(opte(), opte(), null);
 
 		SpringBeanStore result = store.clear();
 
@@ -34,9 +34,10 @@ class SpringBeanStore_Test extends TestBase {
 		assertInstanceOf(SpringBeanStore.class, result);
 	}
 
-	@Test void a02_fluentChaining_removeBean_byClass() {
+	@Test
+	void a02_fluentChaining_removeBean_byClass() {
 		// Test that removeBean(Class) returns SpringBeanStore (not BeanStore)
-		var store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
+		var store = new SpringBeanStore(opte(), opte(), null);
 
 		SpringBeanStore result = store.removeBean(String.class);
 
@@ -44,9 +45,10 @@ class SpringBeanStore_Test extends TestBase {
 		assertInstanceOf(SpringBeanStore.class, result);
 	}
 
-	@Test void a03_fluentChaining_removeBean_byClassAndName() {
+	@Test
+	void a03_fluentChaining_removeBean_byClassAndName() {
 		// Test that removeBean(Class, String) returns SpringBeanStore (not BeanStore)
-		var store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
+		var store = new SpringBeanStore(opte(), opte(), null);
 
 		SpringBeanStore result = store.removeBean(String.class, "testBean");
 
@@ -54,14 +56,12 @@ class SpringBeanStore_Test extends TestBase {
 		assertInstanceOf(SpringBeanStore.class, result);
 	}
 
-	@Test void a04_fluentChaining_complex() {
+	@Test
+	void a04_fluentChaining_complex() {
 		// Test chaining multiple fluent calls
-		var store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
+		var store = new SpringBeanStore(opte(), opte(), null);
 
-		SpringBeanStore result = store
-			.removeBean(String.class)
-			.removeBean(Integer.class, "myInt")
-			.clear();
+		SpringBeanStore result = store.removeBean(String.class).removeBean(Integer.class, "myInt").clear();
 
 		assertSame(store, result);
 		assertInstanceOf(SpringBeanStore.class, result);

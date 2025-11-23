@@ -60,7 +60,7 @@ import org.apache.juneau.rest.util.*;
  */
 public class PathRemainderArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.

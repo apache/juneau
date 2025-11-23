@@ -264,8 +264,5 @@ public enum AnnotationTraversal {
 	 *
 	 * @return The order value.
 	 */
-	public int getOrder() {
-		return order;
-	}
+	public int getOrder() { return order; }
 }
-

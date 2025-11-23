@@ -84,7 +84,7 @@ public class BasicPartIterator implements PartIterator {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(caseInsensitive, s1, s2);
+		return Utils.eq(caseInsensitive, s1, s2);  // NOAI
 	}
 
 	private boolean filter(int index) {

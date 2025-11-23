@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a URL path pattern match.
@@ -63,8 +62,8 @@ public class UrlPathMatch {
 	 * <br>Otherwise, always starts with <js>'/'</js>.
 	 */
 	public String getPrefix() {
-		int c = 0;
-		for (int j = 0; j < matchedParts; j++) {
+		var c = 0;
+		for (var j = 0; j < matchedParts; j++) {
 			c = path.indexOf('/', c + 1);
 			if (c == -1)
 				c = path.length();
@@ -81,7 +80,7 @@ public class UrlPathMatch {
 	 * @return The remainder of the path after the pattern match has been made.
 	 */
 	public String getRemainder() {
-		String suffix = getSuffix();
+		var suffix = getSuffix();
 		if (isNotEmpty(suffix) && suffix.charAt(0) == '/')
 			suffix = suffix.substring(1);
 		return suffix;
@@ -96,9 +95,9 @@ public class UrlPathMatch {
 	 * <br>Otherwise, always starts with <js>'/'</js>.
 	 */
 	public String getSuffix() {
-		String s = path;
-		for (int j = 0; j < matchedParts; j++) {
-			int k = s.indexOf('/', 1);
+		var s = path;
+		for (var j = 0; j < matchedParts; j++) {
+			var k = s.indexOf('/', 1);
 			if (k == -1)
 				return null;
 			s = s.substring(k);
@@ -122,7 +121,7 @@ public class UrlPathMatch {
 	 */
 	public boolean hasEmptyVars() {
 		for (var v : vars.values())
-			if (StringUtils.isEmpty(v))
+			if (isEmpty(v))
 				return true;
 		return false;
 	}

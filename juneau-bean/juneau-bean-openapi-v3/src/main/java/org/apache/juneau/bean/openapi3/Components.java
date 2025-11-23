@@ -208,6 +208,7 @@ public class Components extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(callbacks), "callbacks")
 			.addIf(nn(examples), "examples")
@@ -219,6 +220,7 @@ public class Components extends OpenApiElement {
 			.addIf(nn(schemas), "schemas")
 			.addIf(nn(securitySchemes), "securitySchemes")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

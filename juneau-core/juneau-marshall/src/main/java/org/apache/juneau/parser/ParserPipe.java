@@ -109,8 +109,8 @@ public class ParserPipe implements Closeable {
 		this.autoCloseStreams = autoCloseStreams;
 		this.unbuffered = unbuffered;
 		this.charset = null;
-		if (input instanceof CharSequence)
-			this.inputString = input.toString();
+		if (input instanceof CharSequence input2)
+			this.inputString = input2.toString();
 		this.binaryFormat = binaryFormat;
 	}
 
@@ -148,8 +148,8 @@ public class ParserPipe implements Closeable {
 		if (cs == null)
 			cs = (isFile ? Charset.defaultCharset() : UTF8);
 		this.charset = cs;
-		if (input instanceof CharSequence)
-			this.inputString = input.toString();
+		if (input instanceof CharSequence cs2)
+			this.inputString = cs2.toString();
 		this.binaryFormat = null;
 	}
 
@@ -209,13 +209,13 @@ public class ParserPipe implements Closeable {
 		if (input == null)
 			return null;
 
-		if (input instanceof InputStream) {
+		if (input instanceof InputStream input2) {
 			if (debug) {
-				byte[] b = readBytes((InputStream)input);
+				byte[] b = readBytes(input2);
 				inputString = toHex(b);
 				inputStream = new ByteArrayInputStream(b);
 			} else {
-				inputStream = (InputStream)input;
+				inputStream = input2;
 				doClose = autoCloseStreams;
 			}
 		} else if (input instanceof byte[]) {
@@ -223,17 +223,17 @@ public class ParserPipe implements Closeable {
 				inputString = toHex((byte[])input);
 			inputStream = new ByteArrayInputStream((byte[])input);
 			doClose = false;
-		} else if (input instanceof String) {
-			inputString = (String)input;
-			inputStream = new ByteArrayInputStream(convertFromString((String)input));
+		} else if (input instanceof String input2) {
+			inputString = input2;
+			inputStream = new ByteArrayInputStream(convertFromString(input2));
 			doClose = false;
-		} else if (input instanceof File) {
+		} else if (input instanceof File input2) {
 			if (debug) {
-				byte[] b = readBytes((File)input);
+				byte[] b = readBytes(input2);
 				inputString = toHex(b);
 				inputStream = new ByteArrayInputStream(b);
 			} else {
-				inputStream = new FileInputStream((File)input);
+				inputStream = new FileInputStream(input2);
 				doClose = true;
 			}
 		} else {
@@ -252,8 +252,8 @@ public class ParserPipe implements Closeable {
 	public ParserReader getParserReader() throws IOException {
 		if (input == null)
 			return null;
-		if (input instanceof ParserReader)
-			parserReader = (ParserReader)input;
+		if (input instanceof ParserReader input2)
+			parserReader = input2;
 		else
 			parserReader = new ParserReader(this);
 		return parserReader;
@@ -272,21 +272,21 @@ public class ParserPipe implements Closeable {
 		if (input == null)
 			return null;
 
-		if (input instanceof Reader) {
+		if (input instanceof Reader input2) {
 			if (debug) {
-				inputString = read((Reader)input);
+				inputString = read(input2);
 				reader = new StringReader(inputString);
 			} else {
-				reader = (Reader)input;
+				reader = input2;
 				doClose = autoCloseStreams;
 			}
-		} else if (input instanceof CharSequence) {
-			inputString = input.toString();
+		} else if (input instanceof CharSequence input2) {
+			inputString = input2.toString();
 			reader = new ParserReader(this);
 			doClose = false;
 		} else if (input instanceof InputStream || input instanceof byte[]) {
 			doClose = input instanceof InputStream && autoCloseStreams;
-			InputStream is = (input instanceof InputStream ? (InputStream)input : new ByteArrayInputStream((byte[])input));
+			InputStream is = (input instanceof InputStream input2 ? input2 : new ByteArrayInputStream((byte[])input));
 			CharsetDecoder cd = charset.newDecoder();
 			if (strict) {
 				cd.onMalformedInput(CodingErrorAction.REPORT);
@@ -300,7 +300,7 @@ public class ParserPipe implements Closeable {
 				inputString = read(reader);
 				reader = new StringReader(inputString);
 			}
-		} else if (input instanceof File) {
+		} else if (input instanceof File input2) {
 			CharsetDecoder cd = charset.newDecoder();
 			if (strict) {
 				cd.onMalformedInput(CodingErrorAction.REPORT);
@@ -309,7 +309,7 @@ public class ParserPipe implements Closeable {
 				cd.onMalformedInput(CodingErrorAction.REPLACE);
 				cd.onUnmappableCharacter(CodingErrorAction.REPLACE);
 			}
-			reader = new InputStreamReader(new FileInputStream((File)input), cd);
+			reader = new InputStreamReader(new FileInputStream(input2), cd);
 			if (debug) {
 				inputString = read(reader);
 				reader = new StringReader(inputString);

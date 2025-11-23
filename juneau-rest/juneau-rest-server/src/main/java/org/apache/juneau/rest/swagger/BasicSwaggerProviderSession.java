@@ -66,7 +66,7 @@ public class BasicSwaggerProviderSession {
 	private static Set<Integer> getCodes(List<StatusCode> la, Integer def) {
 		var codes = new TreeSet<Integer>();
 		for (var a : la) {
-			for (int i : a.value())
+			for (var i : a.value())
 				codes.add(i);
 		}
 		if (codes.isEmpty() && nn(def))
@@ -280,9 +280,9 @@ public class BasicSwaggerProviderSession {
 			var op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
 
 			// Add @RestOp(swagger)
-			Value<OpSwagger> _ms = Value.empty();
+			var _ms = Value.<OpSwagger>empty();
 			al.forEach(ai -> ai.getValue(OpSwagger.class, "swagger").filter(OpSwaggerAnnotation::notEmpty).ifPresent(x -> _ms.set(x)));
-			OpSwagger ms = _ms.orElseGet(() -> OpSwaggerAnnotation.create().build());
+			var ms = _ms.orElseGet(() -> OpSwaggerAnnotation.create().build());
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
 			op.appendIf(ne, "operationId",
@@ -293,7 +293,7 @@ public class BasicSwaggerProviderSession {
 				)
 			);
 
-			Value<String> _summary = Value.empty();
+			var _summary = Value.<String>empty();
 			al.forEach(ai -> ai.getValue(String.class, "summary").filter(NOT_EMPTY).ifPresent(x -> _summary.set(x)));
 			op.appendIf(ne, "summary",
 				firstNonEmpty(
@@ -304,7 +304,7 @@ public class BasicSwaggerProviderSession {
 				)
 			);
 
-			Value<String[]> _description = Value.empty();
+			var _description = Value.<String[]>empty();
 			al.forEach(ai -> ai.getValue(String[].class, "description").filter(x -> x.length > 0).ifPresent(x -> _description.set(x)));
 			op.appendIf(ne, "description",
 				firstNonEmpty(
@@ -617,7 +617,7 @@ public class BasicSwaggerProviderSession {
 		if (isJson(sex)) {
 			example = jp.parse(sex, type);
 		} else {
-			ClassMeta<?> cm = js.getClassMeta(type);
+			var cm = js.getClassMeta(type);
 			if (cm.hasStringMutater()) {
 				example = cm.getStringMutater().mutate(sex);
 			}
@@ -965,20 +965,19 @@ public class BasicSwaggerProviderSession {
 			return null;
 		if (o instanceof String[])
 			o = joinnl((String[])o);
-		if (o instanceof String) {
-			var s = o.toString();
-			if (s.isEmpty())
+		if (o instanceof String o2) {
+			if (o2.isEmpty())
 				return null;
-			s = resolve(s);
-			if ("IGNORE".equalsIgnoreCase(s))
+			o2 = resolve(o2);
+			if ("IGNORE".equalsIgnoreCase(o2))
 				return JsonMap.of("ignore", true);
-		if (! isJsonObject(s, true))
-			s = "{" + s + "}";
-		return JsonMap.ofJson(s);
-	}
-	if (o instanceof JsonMap jm)
-		return jm;
-	throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", cn(o));
+			if (! isJsonObject(o2, true))
+				o2 = "{" + o2 + "}";
+			return JsonMap.ofJson(o2);
+		}
+		if (o instanceof JsonMap o2)
+			return o2;
+		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", cn(o));
 	}
 
 	private JsonMap parseMap(String o, String location, Object...args) throws ParseException {
@@ -1041,12 +1040,12 @@ public class BasicSwaggerProviderSession {
 	private JsonList resolve(JsonList om) throws ParseException {
 		var ol2 = new JsonList();
 		for (var val : om) {
-			if (val instanceof JsonMap) {
-				val = resolve((JsonMap)val);
-			} else if (val instanceof JsonList) {
-				val = resolve((JsonList)val);
-			} else if (val instanceof String) {
-				val = resolve(val.toString());
+			if (val instanceof JsonMap val2) {
+				val = resolve(val2);
+			} else if (val instanceof JsonList val3) {
+				val = resolve(val3);
+			} else if (val instanceof String val4) {
+				val = resolve(val4);
 			}
 			ol2.add(val);
 		}
@@ -1054,7 +1053,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private JsonMap resolve(JsonMap om) throws ParseException {
-		JsonMap om2 = null;
+		var om2 = (JsonMap)null;
 		if (om.containsKey("_value")) {
 			om = om.modifiable();
 			om2 = parseMap(om.remove("_value"));
@@ -1063,12 +1062,12 @@ public class BasicSwaggerProviderSession {
 		}
 		for (var e : om.entrySet()) {
 			var val = e.getValue();
-			if (val instanceof JsonMap) {
-				val = resolve((JsonMap)val);
-			} else if (val instanceof JsonList) {
-				val = resolve((JsonList)val);
-			} else if (val instanceof String) {
-				val = resolve(val.toString());
+			if (val instanceof JsonMap val2) {
+				val = resolve(val2);
+			} else if (val instanceof JsonList val3) {
+				val = resolve(val3);
+			} else if (val instanceof String val4) {
+				val = resolve(val4);
 			}
 			om2.put(e.getKey(), val);
 		}

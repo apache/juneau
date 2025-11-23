@@ -87,12 +87,11 @@ public class AnnotationInfo<T extends Annotation> {
 		return new AnnotationInfo<>(on, value);
 	}
 
-
 	private final Annotatable annotatable;
 	final int rank;
 	private T a;  // Effectively final
 
-private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
+	private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
 
 	/**
 	 * Constructor.
@@ -130,9 +129,7 @@ private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annota
 	 *
 	 * @return The rank of this annotation, or {@code 0} if no rank method exists.
 	 */
-	public int getRank() {
-		return rank;
-	}
+	public int getRank() { return rank; }
 
 	/**
 	 * Returns the simple class name of this annotation.
@@ -173,10 +170,12 @@ private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annota
 	 */
 	@SuppressWarnings("unchecked")
 	public <V> Optional<V> getValue(Class<V> type, String name) {
+		// @formatter:off
 		return methods.get().stream()
 			.filter(m -> eq(m.getName(), name) && eq(m.getReturnType().inner(), type))
 			.map(m -> safe(() -> (V)m.invoke(a)))
 			.findFirst();
+		// @formatter:on
 	}
 
 	/**
@@ -318,10 +317,10 @@ private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annota
 	 *
 	 * @return A new map showing the attributes of this annotation info.
 	 */
-	public LinkedHashMap<String, Object> toMap() {
-		var jm = new LinkedHashMap<String, Object>();
+	public LinkedHashMap<String,Object> toMap() {
+		var jm = new LinkedHashMap<String,Object>();
 		jm.put(s(annotatable.getAnnotatableType()), annotatable.getLabel());
-		var ja = new LinkedHashMap<String, Object>();
+		var ja = new LinkedHashMap<String,Object>();
 		var ca = info(a.annotationType());
 		ca.getDeclaredMethods().stream().forEach(x -> {
 			try {
@@ -436,17 +435,18 @@ private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annota
 		return toMap().toString();
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Private helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static int findRank(Object a) {
+		// @formatter:off
 		return ClassInfo.of(a).getAllMethods().stream()
 			.filter(m -> m.hasName("rank") && m.getParameterCount() == 0 && m.hasReturnType(int.class))
 			.findFirst()
 			.map(m -> safe(() -> (int)m.invoke(a)))
 			.orElse(0);
+		// @formatter:on
 	}
 
 	/**
@@ -511,9 +511,7 @@ private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annota
 	 *
 	 * @return An {@link Optional} containing the value of the {@code value()} method, or empty if not found or not a string.
 	 */
-	public Optional<String> getValue() {
-		return getString("value");
-	}
+	public Optional<String> getValue() { return getString("value"); }
 
 	/**
 	 * Returns the value of the specified method on this annotation as a string.
@@ -656,11 +654,13 @@ private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annota
 	 */
 	@SuppressWarnings({ "unchecked", "hiding" })
 	public <T> Optional<Class<? extends T>> getClassValue(String methodName, Class<T> type) {
+		// @formatter:off
 		return getMethod(methodName)
 			.filter(x -> x.hasReturnType(Class.class))
 			.map(x -> (Class<?>)x.invoke(a))
 			.filter(type::isAssignableFrom)
 			.map(x -> (Class<? extends T>)x);
+		// @formatter:on
 	}
 
 	/**
@@ -719,6 +719,7 @@ private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annota
 	 */
 	@SuppressWarnings({ "unchecked", "hiding" })
 	public <T> Optional<Class<? extends T>[]> getClassArray(String methodName, Class<T> type) {
+		// @formatter:off
 		return getMethod(methodName)
 			.filter(x -> x.hasReturnType(Class[].class))
 			.map(x -> (Class<?>[])x.invoke(a))
@@ -730,6 +731,7 @@ private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annota
 				return true;
 			})
 			.map(x -> (Class<? extends T>[])x);
+		// @formatter:on
 	}
 
 	/**

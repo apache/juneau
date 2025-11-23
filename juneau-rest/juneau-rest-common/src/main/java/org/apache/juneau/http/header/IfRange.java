@@ -204,7 +204,7 @@ public class IfRange extends BasicDateHeader {
 	public Optional<EntityTag> asEntityTag() {
 		if (nn(supplier)) {
 			Object o = supplier.get();
-			return opt(o instanceof EntityTag ? (EntityTag)o : null);
+			return opt(o instanceof EntityTag o2 ? o2 : null);
 		}
 		return opt(value);
 	}
@@ -215,10 +215,10 @@ public class IfRange extends BasicDateHeader {
 			Object o = supplier.get();
 			if (o == null)
 				return null;
-			if (o instanceof EntityTag) {
-				return o.toString();
-			} else if (o instanceof ZonedDateTime) {
-				return RFC_1123_DATE_TIME.format((ZonedDateTime)o);
+			if (o instanceof EntityTag o2) {
+				return o2.toString();
+			} else if (o instanceof ZonedDateTime o2) {
+				return RFC_1123_DATE_TIME.format(o2);
 			}
 			throw rex("Invalid object type returned by supplier: {0}", cn(o));
 		}

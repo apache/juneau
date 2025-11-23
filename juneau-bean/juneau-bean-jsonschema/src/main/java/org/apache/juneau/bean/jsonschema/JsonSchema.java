@@ -473,10 +473,10 @@ public class JsonSchema {
 		this.typeJsonType = null;
 		this.typeJsonTypeArray = null;
 		if (nn(type)) {
-			if (type instanceof JsonType x)
-				this.typeJsonType = x;
-			else if (type instanceof JsonTypeArray x)
-				this.typeJsonTypeArray = x;
+			if (type instanceof JsonType type2)
+				this.typeJsonType = type2;
+			else if (type instanceof JsonTypeArray type2)
+				this.typeJsonTypeArray = type2;
 			else
 				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", cn(type));
 		}
@@ -811,11 +811,11 @@ public class JsonSchema {
 		this.itemsSchema = null;
 		this.itemsSchemaArray = null;
 		if (nn(items)) {
-			if (items instanceof JsonSchema x) {
-				this.itemsSchema = x;
+			if (items instanceof JsonSchema items2) {
+				this.itemsSchema = items2;
 				setMasterOn(this.itemsSchema);
-			} else if (items instanceof JsonSchemaArray x) {
-				this.itemsSchemaArray = x;
+			} else if (items instanceof JsonSchemaArray items2) {
+				this.itemsSchemaArray = items2;
 				setMasterOn(this.itemsSchemaArray);
 			} else {
 				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", cn(items));
@@ -1054,10 +1054,10 @@ public class JsonSchema {
 		this.additionalItemsBoolean = null;
 		this.additionalItemsSchemaArray = null;
 		if (nn(additionalItems)) {
-			if (additionalItems instanceof Boolean x)
-				this.additionalItemsBoolean = x;
-			else if (additionalItems instanceof JsonSchemaArray x) {
-				this.additionalItemsSchemaArray = x;
+			if (additionalItems instanceof Boolean additionalItems2)
+				this.additionalItemsBoolean = additionalItems2;
+			else if (additionalItems instanceof JsonSchemaArray additionalItems2) {
+				this.additionalItemsSchemaArray = additionalItems2;
 				setMasterOn(this.additionalItemsSchemaArray);
 			} else {
 				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray", cn(additionalItems));
@@ -1313,10 +1313,10 @@ public class JsonSchema {
 		this.additionalPropertiesBoolean = null;
 		this.additionalPropertiesSchema = null;
 		if (nn(additionalProperties)) {
-			if (additionalProperties instanceof Boolean x)
-				this.additionalPropertiesBoolean = x;
-			else if (additionalProperties instanceof JsonSchema x) {
-				this.additionalPropertiesSchema = x;
+			if (additionalProperties instanceof Boolean additionalProperties2)
+				this.additionalPropertiesBoolean = additionalProperties2;
+			else if (additionalProperties instanceof JsonSchema additionalProperties2) {
+				this.additionalPropertiesSchema = additionalProperties2;
 				setMasterOn(this.additionalPropertiesSchema);
 			} else
 				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema", cn(additionalProperties));

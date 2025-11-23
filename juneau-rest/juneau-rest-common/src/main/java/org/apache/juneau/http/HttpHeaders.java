@@ -514,16 +514,16 @@ public class HttpHeaders {
 	 * @param o
 	 * 	The object to cast or convert to a {@link Header}.
 	 * @return Either the same object cast as a {@link Header} or converted to a {@link Header}.
-	 */
+	*/
 	public static Header cast(Object o) {
-		if (o instanceof Header h)
-			return h;
-		if (o instanceof Headerable hable)
-			return hable.asHeader();
-		if (o instanceof NameValuePair nvp)
-			return BasicHeader.of(nvp);
-		if (o instanceof NameValuePairable nvpable)
-			return BasicHeader.of(nvpable.asNameValuePair());
+		if (o instanceof Header o2)
+			return o2;
+	if (o instanceof Headerable o3)
+		return o3.asHeader();
+	if (o instanceof NameValuePair o4)
+		return BasicHeader.of(o4);
+	if (o instanceof NameValuePairable o5)
+		return BasicHeader.of(o5.asNameValuePair());
 		if (o instanceof Map.Entry e) {
 			return BasicHeader.of(s(e.getKey()), s(e.getValue()));
 		}

@@ -24,6 +24,7 @@
  * using Juneau's marshalling framework.
  * </p>
  */
+// @formatter:off
 @XmlSchema(
 	prefix="atom",
 	xmlNs={
@@ -31,6 +32,7 @@
 		@XmlNs(prefix="xml", namespaceURI="http://www.w3.org/XML/1998/namespace")
 	}
 )
+// @formatter:on
 package org.apache.juneau.bean.atom;
 
 import org.apache.juneau.xml.annotation.*;

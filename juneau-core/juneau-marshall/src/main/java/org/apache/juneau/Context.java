@@ -81,8 +81,8 @@ public abstract class Context {
 	 */
 	public abstract static class Builder {
 
-		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
 		private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
 
 		boolean debug;
 		Class<? extends Context> type;
@@ -104,7 +104,7 @@ public abstract class Context {
 			registerBuilders(this);
 
 			// By default, the type being created should be the class declaring the builder.
-			Class<?> dc = getClass().getDeclaringClass();
+			var dc = getClass().getDeclaringClass();
 			if (Context.class.isAssignableFrom(dc))
 				type((Class<? extends Context>)dc);
 		}
@@ -670,15 +670,15 @@ public abstract class Context {
 		}
 
 		private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
-			AnnotationProvider ap = AnnotationProvider.INSTANCE;
+			var ap = AP;
 			CollectionUtils.traverse(x, y -> {
-			if (x instanceof Class<?> x2)
-				work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
-			else if (x instanceof ClassInfo x2)
+				if (x instanceof Class<?> x2)
+					work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
+				else if (x instanceof ClassInfo x2)
 					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
-			else if (x instanceof Method x2)
-				work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
-			else if (x instanceof MethodInfo x2)
+				else if (x instanceof Method x2)
+					work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
+				else if (x instanceof MethodInfo x2)
 					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
 				else
 					illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
@@ -726,9 +726,9 @@ public abstract class Context {
 	public static Builder createBuilder(Class<? extends Context> type) {
 		try {
 			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
-		if (mi == null) {
-			var c = info(type);
-			for (var ci : c.getPublicConstructors()) {
+			if (mi == null) {
+				var c = info(type);
+				for (var ci : c.getPublicConstructors()) {
 					if (ci.hasNumParameters(1) && ! ci.getParameter(0).getParameterType().is(type)) {
 						// @formatter:off
 						mi = c.getPublicMethod(
@@ -782,9 +782,12 @@ public abstract class Context {
 		annotationProvider = copyFrom.annotationProvider;
 	}
 
-	public AnnotationProvider getAnnotationProvider() {
-		return annotationProvider;
-	}
+	/**
+	 * Returns the annotation provider for this context.
+	 *
+	 * @return The annotation provider for this context.
+	 */
+	public AnnotationProvider getAnnotationProvider() { return annotationProvider; }
 
 	/**
 	 * Creates a builder from this context object.

@@ -260,7 +260,7 @@ public class LongValue extends Value<Long> {
 	 * @param values The values to compare to.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
-	public boolean isAny(Long... values) {
+	public boolean isAny(Long...values) {
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

@@ -124,7 +124,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		if (pairs == null)
 			pairs = new String[0];
 		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into HeaderList.ofPairs()");
-		for (int i = 0; i < pairs.length; i += 2)
+		for (var i = 0; i < pairs.length; i += 2)
 			x.add(BasicHeader.of(pairs[i], pairs[i + 1]));
 		return x;
 	}
@@ -914,7 +914,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 
 	private Supplier<Object> resolver(Object input) {
@@ -922,8 +922,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	private static Object unwrap(Object o) {
-		while (o instanceof Supplier)
-			o = ((Supplier<?>)o).get();
+		while (o instanceof Supplier<?> s)
+			o = s.get();
 		return o;
 	}
 }

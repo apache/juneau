@@ -186,9 +186,9 @@ public class ClassUtils {
 	 */
 	public static void extractTypes(Map<Type,Type> typeMap, Class<?> c) {
 		var gs = c.getGenericSuperclass();
-		if (gs instanceof ParameterizedType pt) {
-			var typeParameters = ((Class<?>)pt.getRawType()).getTypeParameters();
-			var actualTypeArguments = pt.getActualTypeArguments();
+		if (gs instanceof ParameterizedType gs2) {
+			var typeParameters = ((Class<?>)gs2.getRawType()).getTypeParameters();
+			var actualTypeArguments = gs2.getActualTypeArguments();
 			for (var i = 0; i < typeParameters.length; i++) {
 				if (typeMap.containsKey(actualTypeArguments[i]))
 					actualTypeArguments[i] = typeMap.get(actualTypeArguments[i]);
@@ -290,9 +290,9 @@ public class ClassUtils {
 		if (! needsShuffle)
 			return args;
 		var params = new Object[paramTypes.length];
-	for (var i = 0; i < paramTypes.length; i++) {
-		var pt = info(paramTypes[i]).getWrapperIfPrimitive();
-		for (var arg : args) {
+		for (var i = 0; i < paramTypes.length; i++) {
+			var pt = info(paramTypes[i]).getWrapperIfPrimitive();
+			for (var arg : args) {
 				if (nn(arg) && pt.isParentOf(arg.getClass())) {
 					params[i] = arg;
 					break;
@@ -316,7 +316,7 @@ public class ClassUtils {
 
 		// We need to make up a mapping of type names.
 		var typeMap = new HashMap<Type,Type>();
-		Class<?> cc = c;
+		var cc = c;
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
@@ -335,15 +335,15 @@ public class ClassUtils {
 		if (typeMap.containsKey(actualType))
 			actualType = typeMap.get(actualType);
 
-		if (actualType instanceof Class) {
-			return (Class<?>)actualType;
+		if (actualType instanceof Class actualType2) {
+			return actualType2;
 
 		}
-		if (actualType instanceof GenericArrayType gat) {
-			var gct = gat.getGenericComponentType();
-			if (gct instanceof ParameterizedType pt3)
-				return Array.newInstance((Class<?>)pt3.getRawType(), 0).getClass();
-		} else if (actualType instanceof TypeVariable<?> typeVariable) {
+		if (actualType instanceof GenericArrayType actualType2) {
+			var gct = actualType2.getGenericComponentType();
+			if (gct instanceof ParameterizedType gct2)
+				return Array.newInstance((Class<?>)gct2.getRawType(), 0).getClass();
+		} else if (actualType instanceof TypeVariable<?> actualType3) {
 			var nestedOuterTypes = new LinkedList<Class<?>>();
 			for (var ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 				var outerClass = cc.getClass();
@@ -353,16 +353,15 @@ public class ClassUtils {
 				for (var entry : outerTypeMap.entrySet()) {
 					var key = entry.getKey();
 					var value = entry.getValue();
-					if ((key instanceof TypeVariable<?> keyType)
-						&& (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration()))) {
-						if (value instanceof Class<?> c2)
-							return c2;
-						typeVariable = (TypeVariable<?>)entry.getValue();
+					if ((key instanceof TypeVariable<?> key2) && (key2.getName().equals(actualType3.getName()) && isInnerClass(key2.getGenericDeclaration(), actualType3.getGenericDeclaration()))) {
+						if (value instanceof Class<?> value2)
+							return value2;
+						actualType3 = (TypeVariable<?>)entry.getValue();
 					}
 				}
 			}
-		} else if (actualType instanceof ParameterizedType pt2) {
-			return (Class<?>)pt2.getRawType();
+		} else if (actualType instanceof ParameterizedType actualType2) {
+			return (Class<?>)actualType2.getRawType();
 		}
 		throw illegalArg("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
 	}
@@ -429,9 +428,9 @@ public class ClassUtils {
 		// Pattern: com.example.MyClass$$EnhancerBySpringCGLIB$$abc123
 		if (s.contains("$$EnhancerBySpringCGLIB$$")) {
 			// Try to invoke getTargetClass() if available (Spring specific)
-		Value<Class<?>> v = Value.empty();
-		info(c).getPublicMethods().stream().filter(m -> m.hasName("getTargetClass") && m.getParameterCount() == 0 && m.hasReturnType(Class.class)).forEach(m -> safe(() -> v.set(m.invoke(o))));
-		return v.isPresent() ? v.get() : c.getSuperclass();
+			var v = Value.<Class<?>>empty();
+			info(c).getPublicMethods().stream().filter(m -> m.hasName("getTargetClass") && m.getParameterCount() == 0 && m.hasReturnType(Class.class)).forEach(m -> safe(() -> v.set(m.invoke(o))));
+			return v.isPresent() ? v.get() : c.getSuperclass();
 		}
 
 		// Javassist Proxy: Created by Javassist ProxyFactory
@@ -508,9 +507,9 @@ public class ClassUtils {
 	 * 	Never <jk>null</jk>.
 	 */
 	public static Stream<Annotation> streamRepeated(Annotation a) {
-	try {
-		var ci = info(a.annotationType());
-		var mi = ci.getRepeatedAnnotationMethod();
+		try {
+			var ci = info(a.annotationType());
+			var mi = ci.getRepeatedAnnotationMethod();
 			if (nn(mi)) {
 				Annotation[] annotations = mi.invoke(a);
 				return Arrays.stream(annotations);
@@ -528,14 +527,14 @@ public class ClassUtils {
 	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
 	 */
 	public static Type getValueParameterType(Type t) {
-		if (t instanceof ParameterizedType pt) {
-			if (pt.getRawType() == Value.class) {
-				var ta = pt.getActualTypeArguments();
+		if (t instanceof ParameterizedType t2) {
+			if (t2.getRawType() == Value.class) {
+				var ta = t2.getActualTypeArguments();
 				if (ta.length > 0)
 					return ta[0];
 			}
-		} else if ((t instanceof Class<?> c) && Value.class.isAssignableFrom(c)) {
-			return getParameterType(c, 0, Value.class);
+		} else if ((t instanceof Class<?> t3) && Value.class.isAssignableFrom(t3)) {
+			return getParameterType(t3, 0, Value.class);
 		}
 
 		return null;
@@ -644,9 +643,9 @@ public class ClassUtils {
 	 * @return The simple name of the class or <jk>null</jk> if the value was null.
 	 */
 	public static String simpleClassName(Object value) {
-		if (value instanceof ClassInfo)
-			return ((ClassInfo)value).getNameSimple();
-		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getSimpleName() : value.getClass().getSimpleName();
+		if (value instanceof ClassInfo value2)
+			return value2.getNameSimple();
+		return value == null ? null : value instanceof Class<?> c ? c.getSimpleName() : value.getClass().getSimpleName();
 	}
 
 	/**
@@ -717,9 +716,9 @@ public class ClassUtils {
 	public static Class<?> toClass(Type t) {
 		if (t instanceof Class<?> c)
 			return c;
-		if (t instanceof ParameterizedType pt) {
+		if (t instanceof ParameterizedType t2) {
 			// The raw type should always be a class (right?)
-			return (Class<?>)pt.getRawType();
+			return (Class<?>)t2.getRawType();
 		}
 		return null;
 	}

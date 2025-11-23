@@ -40,7 +40,7 @@ public class UrlEncodingClassMeta extends ExtendedClassMeta {
 	public UrlEncodingClassMeta(ClassMeta<?> cm, UrlEncodingMetaProvider mp) {
 		super(cm);
 
-		Value<Boolean> expandedParams = Value.empty();
+		var expandedParams = Value.<Boolean>empty();
 		cm.forEachAnnotation(UrlEncoding.class, UrlEncoding::expandedParams, x -> expandedParams.set(true));
 		this.expandedParams = expandedParams.orElse(false);
 	}

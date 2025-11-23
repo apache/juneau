@@ -43,7 +43,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class ResponseBeanArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.
@@ -76,10 +76,9 @@ public class ResponseBeanArg implements RestOpArg {
 			throw new ArgException(paramInfo, "Type must be Value<?> on parameter annotated with @Response annotation");
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(final RestOpSession opSession) throws Exception {
-		Value<Object> v = new Value();
+		var v = new Value<>();
 		v.listener(o -> {
 			RestRequest req = opSession.getRequest();
 			RestResponse res = opSession.getResponse();

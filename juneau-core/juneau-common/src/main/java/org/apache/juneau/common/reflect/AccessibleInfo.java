@@ -81,7 +81,7 @@ public abstract class AccessibleInfo extends ElementInfo {
 	 */
 	public boolean isAccessible() {
 		try {
-			return (boolean) AccessibleObject.class.getMethod("isAccessible").invoke(inner);
+			return (boolean)AccessibleObject.class.getMethod("isAccessible").invoke(inner);
 		} catch (@SuppressWarnings("unused") Exception ex) {
 			return false;
 		}

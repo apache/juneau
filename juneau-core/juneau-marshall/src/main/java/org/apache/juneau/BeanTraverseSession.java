@@ -264,8 +264,8 @@ public class BeanTraverseSession extends BeanSession {
 	protected final Object getOptionalValue(Object o) {
 		if (o == null)
 			return null;
-		if (o instanceof Optional)
-			return getOptionalValue(((Optional<?>)o).orElse(null));
+		if (o instanceof Optional<?> o2)
+			return getOptionalValue(o2.orElse(null));
 		return o;
 	}
 
@@ -361,8 +361,8 @@ public class BeanTraverseSession extends BeanSession {
 		isBottom = true;
 		if (o == null)
 			return null;
-		Class<?> c = o.getClass();
-		ClassMeta<?> cm = (nn(eType) && c == eType.getInnerClass()) ? eType : ((o instanceof ClassMeta) ? (ClassMeta<?>)o : getClassMeta(c));
+		var c = o.getClass();
+		var cm = (nn(eType) && c == eType.getInnerClass()) ? eType : ((o instanceof ClassMeta) ? (ClassMeta<?>)o : getClassMeta(c));
 		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
 			return cm;
 		if (depth > getMaxDepth())

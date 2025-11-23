@@ -282,7 +282,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Predicate<T> test) throws AssertionError {
-		if (nn(test) && !test.test(value))
+		if (nn(test) && ! test.test(value))
 			throw error(getFailureMessage(test, value));
 		return returns();
 	}
@@ -297,7 +297,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R is(T value) throws AssertionError {
 		if (this.value == value)
 			return returns();
-		if (!equals(orElse(null), value))
+		if (! equals(orElse(null), value))
 			throw error(MSG_unexpectedValue, value, this.value);
 		return returns();
 	}
@@ -579,8 +579,8 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The result, never <jk>null</jk>.
 	 */
 	protected String getFailureMessage(Predicate<?> p, Object value) {
-		if (p instanceof AssertionPredicate)
-			return ((AssertionPredicate<?>)p).getFailureMessage();
+		if (p instanceof AssertionPredicate p2)
+			return p2.getFailureMessage();
 		return format(MSG_unexpectedValue2, value);
 	}
 
@@ -601,7 +601,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The value wrapped in an {@link Optional}.
 	 */
 	protected Optional<T> opt() {
-		return Utils.opt(value);
+		return Utils.opt(value);  // NOAI
 	}
 
 	/**

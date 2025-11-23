@@ -125,10 +125,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		SimplePart(NameValuePair x, boolean skipIfEmpty) {
 			name = x.getName();
-			if (x instanceof SerializedHeader) {
-				value = ((SerializedHeader)x).copyWith(getPartSerializerSession(), null).getValue();
-			} else if (x instanceof SerializedPart) {
-				value = ((SerializedPart)x).copyWith(getPartSerializerSession(), null).getValue();
+			if (x instanceof SerializedHeader x2) {
+				value = x2.copyWith(getPartSerializerSession(), null).getValue();
+			} else if (x instanceof SerializedPart x3) {
+				value = x3.copyWith(getPartSerializerSession(), null).getValue();
 			} else {
 				var v = x.getValue();
 				value = (isEmpty(v) && skipIfEmpty) ? null : v;
@@ -657,7 +657,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest formDataBean(Object value) {
 		assertArg(isBean(value), "Object passed into formDataBean(Object) is not a bean.");
-		PartList b = formData;
+		var b = formData;
 		toBeanMap(value).forEach((k, v) -> b.append(createPart(FORMDATA, k, v)));
 		return this;
 	}
@@ -735,8 +735,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest formDataPairs(String...pairs) throws RestCallException {
 		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into formDataPairs(String...)");
-		PartList b = formData;
-		for (int i = 0; i < pairs.length; i += 2)
+		var b = formData;
+		for (var i = 0; i < pairs.length; i += 2)
 			b.append(pairs[i], pairs[i + 1]);
 		return this;
 	}
@@ -1017,8 +1017,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest headerPairs(String...pairs) {
 		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into headerPairs(String...)");
-		HeaderList b = headerData;
-		for (int i = 0; i < pairs.length; i += 2)
+		var b = headerData;
+		for (var i = 0; i < pairs.length; i += 2)
 			b.append(pairs[i], pairs[i + 1]);
 		return this;
 	}
@@ -1074,7 +1074,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest headersBean(Object value) {
 		assertArg(isBean(value), "Object passed into headersBean(Object) is not a bean.");
-		HeaderList b = headerData;
+		var b = headerData;
 		toBeanMap(value, PropertyNamerDUCS.INSTANCE).forEach((k, v) -> b.append(createHeader(k, v)));
 		return this;
 	}
@@ -1527,7 +1527,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest pathDataBean(Object value) {
 		assertArg(isBean(value), "Object passed into pathDataBean(Object) is not a bean.");
-		PartList b = pathData;
+		var b = pathData;
 		toBeanMap(value).forEach((k, v) -> b.set(createPart(PATH, k, v)));
 		return this;
 	}
@@ -1556,8 +1556,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest pathDataPairs(String...pairs) {
 		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into pathDataPairs(String...)");
-		PartList b = pathData;
-		for (int i = 0; i < pairs.length; i += 2)
+		var b = pathData;
+		for (var i = 0; i < pairs.length; i += 2)
 			b.set(pairs[i], pairs[i + 1]);
 		return this;
 	}
@@ -1636,10 +1636,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest queryCustom(Object value) {
 		try {
 			var q = (String)null;
-			if (value instanceof Reader)
-				q = read((Reader)value);
-			else if (value instanceof InputStream)
-				q = read((InputStream)value);
+			if (value instanceof Reader value2)
+				q = read(value2);
+			else if (value instanceof InputStream value2)
+				q = read(value2);
 			else
 				q = s(value);  // Works for NameValuePairs.
 			uriBuilder.setCustomQuery(q);
@@ -1724,7 +1724,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest queryDataBean(Object value) {
 		assertArg(isBean(value), "Object passed into queryDataBean(Object) is not a bean.");
-		PartList b = queryData;
+		var b = queryData;
 		toBeanMap(value).forEach((k, v) -> b.append(createPart(QUERY, k, v)));
 		return this;
 	}
@@ -1751,8 +1751,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest queryDataPairs(String...pairs) throws RestCallException {
 		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into queryDataPairs(String...)");
-		PartList b = queryData;
-		for (int i = 0; i < pairs.length; i += 2)
+		var b = queryData;
+		for (var i = 0; i < pairs.length; i += 2)
 			b.append(pairs[i], pairs[i + 1]);
 		return this;
 	}
@@ -1834,12 +1834,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			queryData.stream().map(SimpleQuery::new).filter(SimplePart::isValid).forEach(x -> uriBuilder.addParameter(x.name, x.value));
 
-		pathData.stream().map(SimplePath::new).forEach(x -> {
-			String path = uriBuilder.getPath();
-			var name = x.name;
-			var value = x.value;
-			String var = "{" + name + "}";
-			if (path.indexOf(var) == -1 && ! name.equals("/*"))
+			pathData.stream().map(SimplePath::new).forEach(x -> {
+				var path = uriBuilder.getPath();
+				var name = x.name;
+				var value = x.value;
+				var var = "{" + name + "}";
+				if (path.indexOf(var) == -1 && ! name.equals("/*"))
 					throw new IllegalStateException("Path variable {" + name + "} was not found in path.");
 				if (name.equals("/*"))
 					path = path.replaceAll("\\/\\*$", "/" + value);
@@ -1848,14 +1848,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				uriBuilder.setPath(path);
 			});
 
-			HttpEntityEnclosingRequestBase request2 = request instanceof HttpEntityEnclosingRequestBase ? (HttpEntityEnclosingRequestBase)request : null;
+			HttpEntityEnclosingRequestBase request2 = request instanceof HttpEntityEnclosingRequestBase request3 ? request3 : null;
 			request.setURI(uriBuilder.build());
 
 			// Pick the serializer if it hasn't been overridden.
-			HeaderList hl = headerData;
-			Optional<Header> h = hl.getLast("Content-Type");
-			String contentType = h.isPresent() ? h.get().getValue() : null;
-			Serializer serializer = this.serializer;
+			var hl = headerData;
+			var h = hl.getLast("Content-Type");
+			var contentType = h.isPresent() ? h.get().getValue() : null;
+			var serializer = this.serializer;
 			if (serializer == null)
 				serializer = client.getMatchingSerializer(contentType);
 			if (contentType == null && nn(serializer))
@@ -1863,8 +1863,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			// Pick the parser if it hasn't been overridden.
 			h = hl.getLast("Accept");
-			String accept = h.isPresent() ? h.get().getValue() : null;
-			Parser parser = this.parser;
+			var accept = h.isPresent() ? h.get().getValue() : null;
+			var parser = this.parser;
 			if (parser == null)
 				parser = client.getMatchingParser(accept);
 			if (accept == null && nn(parser))
@@ -1877,32 +1877,32 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			if (nn(request2)) {
 
-				Object input2 = null;
+				var input2 = (Object)null;
 				if (content != NO_BODY) {
 					input2 = content;
 				} else {
 					input2 = new UrlEncodedFormEntity(formData.stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
 				}
 
-				if (input2 instanceof Supplier)
-					input2 = ((Supplier<?>)input2).get();
+				if (input2 instanceof Supplier<?> s)
+					input2 = s.get();
 
-				HttpEntity entity = null;
-			if (input2 instanceof PartList)
-				entity = new UrlEncodedFormEntity(((PartList)input2).stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
-			else if (input2 instanceof HttpResource r) {
-				r.getHeaders().forEach(x -> request.addHeader(x));
-				entity = (HttpEntity)input2;
-			} else if (input2 instanceof HttpEntity) {
-					if (input2 instanceof SerializedEntity) {
-						entity = ((SerializedEntity)input2).copyWith(serializer, contentSchema);
+				var entity = (HttpEntity)null;
+				if (input2 instanceof PartList input22)
+					entity = new UrlEncodedFormEntity(input22.stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
+				else if (input2 instanceof HttpResource input23) {
+					input23.getHeaders().forEach(x -> request.addHeader(x));
+					entity = (HttpEntity)input2;
+				} else if (input2 instanceof HttpEntity input3) {
+					if (input3 instanceof SerializedEntity input32) {
+						entity = input32.copyWith(serializer, contentSchema);
 					} else {
-						entity = (HttpEntity)input2;
+						entity = input3;
 					}
-				} else if (input2 instanceof Reader)
-					entity = readerEntity((Reader)input2, getRequestContentType(TEXT_PLAIN));
-				else if (input2 instanceof InputStream)
-					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
+				} else if (input2 instanceof Reader input24)
+					entity = readerEntity(input24, getRequestContentType(TEXT_PLAIN));
+				else if (input2 instanceof InputStream input25)
+					entity = streamEntity(input25, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				else if (nn(serializer))
 					entity = serializedEntity(input2, serializer, contentSchema).setContentType(contentType);
 				else {
@@ -1931,17 +1931,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				rci.onConnect(this, response);
 			client.onCallConnect(this, response);
 
-			String method = getMethod();
+			var method = getMethod();
 			int sc = response.getStatusCode();
 
-			Thrown thrown = response.getHeader("Thrown").asHeader(Thrown.class);
+			var thrown = response.getHeader("Thrown").asHeader(Thrown.class);
 			if (thrown.isPresent() && nn(rethrow)) {
-				Thrown.Part thrownPart = thrown.asParts().get().get(0);
-				String className = thrownPart.getClassName();
-				String message = thrownPart.getMessage();
+				var thrownPart = thrown.asParts().get().get(0);
+				var className = thrownPart.getClassName();
+				var message = thrownPart.getMessage();
 				for (var t : rethrow) {
 					if (t.getName().equals(className)) {
-						ConstructorInfo c = null;
+						var c = (ConstructorInfo)null;
 						var ci = ClassInfo.of(t);
 						c = ci.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class)).orElse(null);
 						if (nn(c))
@@ -2185,7 +2185,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid URI syntax detected.
 	 */
 	public RestRequest uri(Object uri) throws RestCallException {
-		URI x = client.toURI(uri, null);
+		var x = client.toURI(uri, null);
 		if (nn(x.getScheme()))
 			uriBuilder.setScheme(x.getScheme());
 		if (nn(x.getHost()))
@@ -2346,7 +2346,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private HttpPartSerializerSession getPartSerializerSession(HttpPartSerializer serializer) {
 		if (serializer == null)
 			serializer = client.getPartSerializer();
-		HttpPartSerializerSession s = partSerializerSessions.get(serializer);
+		var s = partSerializerSessions.get(serializer);
 		if (s == null) {
 			s = serializer.getPartSession();
 			partSerializerSessions.put(serializer, s);
@@ -2355,9 +2355,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	private ContentType getRequestContentType(ContentType def) {
-		Header h = request.getFirstHeader("Content-Type");
+		var h = request.getFirstHeader("Content-Type");
 		if (nn(h)) {
-			String s = h.getValue();
+			var s = h.getValue();
 			if (isNotEmpty(s))
 				return ContentType.of(s);
 		}
@@ -2396,7 +2396,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return A new {@link HttpRequestBase} object.
 	 */
 	protected HttpRequestBase createInnerRequest(String method, URI uri, boolean hasBody) {
-		HttpRequestBase req = hasBody ? new BasicHttpEntityRequestBase(this, method) : new BasicHttpRequestBase(this, method);
+		var req = hasBody ? new BasicHttpEntityRequestBase(this, method) : new BasicHttpRequestBase(this, method);
 		req.setURI(uri);
 		return req;
 	}
@@ -2442,7 +2442,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
 			if (! (skipIfEmpty && isEmpty(s(value))))
@@ -2454,15 +2454,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
-		} else if (value instanceof PartList) {
-			((PartList)value).forEach(x -> l.add(x));
-		} else if (value instanceof Collection) {
-			((Collection<?>)value).forEach(x -> l.add(HttpParts.cast(x)));
+		} else if (value instanceof PartList value2) {
+			value2.forEach(x -> l.add(x));
+		} else if (value instanceof Collection<?> value3) {
+			value3.forEach(x -> l.add(HttpParts.cast(x)));
 		} else if (isArray(value)) {
-			for (int i = 0; i < Array.getLength(value); i++)
+			for (var i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
-		} else if (value instanceof Map) {
-			toMap(value).forEach((k, v) -> l.add(createPart(s(k), v, FORMDATA, serializer, schema, skipIfEmpty)));
+		} else if (value instanceof Map value4) {
+			toMap(value4).forEach((k, v) -> l.add(createPart(s(k), v, FORMDATA, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, FORMDATA, serializer, schema, skipIfEmpty)));
 		} else if (nn(value)) {
@@ -2485,7 +2485,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest headerArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
+		var isMulti = isEmpty(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
 
 		if (! isMulti) {
 			if (! (skipIfEmpty && isEmpty(s(value))))
@@ -2497,15 +2497,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		if (HttpHeaders.canCast(value)) {
 			l.add(HttpHeaders.cast(value));
-		} else if (value instanceof HeaderList) {
-			((HeaderList)value).forEach(x -> l.add(x));
-		} else if (value instanceof Collection) {
-			((Collection<?>)value).forEach(x -> l.add(HttpHeaders.cast(x)));
+		} else if (value instanceof HeaderList value2) {
+			value2.forEach(x -> l.add(x));
+		} else if (value instanceof Collection<?> value3) {
+			value3.forEach(x -> l.add(HttpHeaders.cast(x)));
 		} else if (isArray(value)) {
-			for (int i = 0; i < Array.getLength(value); i++)
+			for (var i = 0; i < Array.getLength(value); i++)
 				l.add(HttpHeaders.cast(Array.get(value, i)));
-		} else if (value instanceof Map) {
-			toMap(value).forEach((k, v) -> l.add(createHeader(s(k), v, serializer, schema, skipIfEmpty)));
+		} else if (value instanceof Map value2) {
+			toMap(value2).forEach((k, v) -> l.add(createHeader(s(k), v, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
 		} else if (nn(value)) {
@@ -2523,7 +2523,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	boolean isLoggingSuppressed() { return suppressLogging; }
 
 	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti)
 			return pathData(createPart(name, value, PATH, serializer, schema, false));
@@ -2532,15 +2532,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
-		} else if (value instanceof PartList) {
-			((PartList)value).forEach(x -> l.add(x));
-		} else if (value instanceof Collection) {
-			((Collection<?>)value).forEach(x -> l.add(HttpParts.cast(x)));
+		} else if (value instanceof PartList value2) {
+			value2.forEach(x -> l.add(x));
+		} else if (value instanceof Collection<?> value3) {
+			value3.forEach(x -> l.add(HttpParts.cast(x)));
 		} else if (isArray(value)) {
-			for (int i = 0; i < Array.getLength(value); i++)
+			for (var i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
-		} else if (value instanceof Map) {
-			toMap(value).forEach((k, v) -> l.add(createPart(s(k), v, PATH, serializer, schema, false)));
+		} else if (value instanceof Map value4) {
+			toMap(value4).forEach((k, v) -> l.add(createPart(s(k), v, PATH, serializer, schema, false)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, PATH, serializer, schema, false)));
 		} else if (nn(value)) {
@@ -2553,7 +2553,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest queryArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
 			if (! (skipIfEmpty && isEmpty(s(value))))
@@ -2565,15 +2565,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
-		} else if (value instanceof PartList) {
-			((PartList)value).forEach(x -> l.add(x));
-		} else if (value instanceof Collection) {
-			((Collection<?>)value).forEach(x -> l.add(HttpParts.cast(x)));
+		} else if (value instanceof PartList value2) {
+			value2.forEach(x -> l.add(x));
+		} else if (value instanceof Collection<?> value3) {
+			value3.forEach(x -> l.add(HttpParts.cast(x)));
 		} else if (isArray(value)) {
-			for (int i = 0; i < Array.getLength(value); i++)
+			for (var i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
-		} else if (value instanceof Map) {
-			toMap(value).forEach((k, v) -> l.add(createPart(s(k), v, QUERY, serializer, schema, skipIfEmpty)));
+		} else if (value instanceof Map value4) {
+			toMap(value4).forEach((k, v) -> l.add(createPart(s(k), v, QUERY, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, QUERY, serializer, schema, skipIfEmpty)));
 		} else if (nn(value)) {

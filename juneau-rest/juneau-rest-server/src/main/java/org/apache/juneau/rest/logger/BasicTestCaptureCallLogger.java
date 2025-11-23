@@ -149,7 +149,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	 * @return The last logged message.
 	 */
 	public String getMessageAndReset() {
-		String msg = getMessage();
+		var msg = getMessage();
 		reset();
 		return msg;
 	}

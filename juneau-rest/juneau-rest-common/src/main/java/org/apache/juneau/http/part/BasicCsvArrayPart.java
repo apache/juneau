@@ -26,7 +26,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.
@@ -46,7 +45,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, String...value) {
-		if (StringUtils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
@@ -62,7 +61,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, Supplier<String[]> value) {
-		if (StringUtils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}

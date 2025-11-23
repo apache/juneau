@@ -71,8 +71,8 @@ public class ParserReader extends Reader implements Positionable {
 			this.buff = new char[in.length() < 1024 ? in.length() : 1024];
 		} else {
 			Reader _r = pipe.getReader();
-			if (_r instanceof ParserReader)
-				this.r = ((ParserReader)_r).r;
+			if (_r instanceof ParserReader _r2)
+				this.r = _r2.r;
 			else
 				this.r = _r;
 			this.buff = new char[1024];
@@ -270,9 +270,9 @@ public class ParserReader extends Reader implements Positionable {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public final String read(int num) throws IOException {
-		char[] c = new char[num];
-		for (int i = 0; i < num; i++) {
-			int c2 = read();
+		var c = new char[num];
+		for (var i = 0; i < num; i++) {
+			var c2 = read();
 			if (c2 == -1)
 				return new String(c, 0, i);
 			c[i] = (char)c2;
@@ -396,7 +396,7 @@ public class ParserReader extends Reader implements Positionable {
 					// If we're marking from the beginning of the array, we double the size of the
 					// buffer.  This isn't likely to occur often.
 					if (iMark == 0) {
-						char[] buff2 = new char[buff.length << 1];
+						var buff2 = new char[buff.length << 1];
 						System.arraycopy(buff, 0, buff2, 0, buff.length);
 						buff = buff2;
 

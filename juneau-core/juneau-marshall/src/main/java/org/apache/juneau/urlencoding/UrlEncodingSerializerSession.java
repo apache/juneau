@@ -235,10 +235,10 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	private SerializerWriter serializeAnything(UonWriter out, Object o) throws IOException, SerializeException {
 
-		ClassMeta<?> aType;			// The actual type
-		ClassMeta<?> sType;			// The serialized type
+		var aType = (ClassMeta<?>)null;			// The actual type
+		var sType = (ClassMeta<?>)null;			// The serialized type
 
-		ClassMeta<?> eType = getExpectedRootType(o);
+		var eType = getExpectedRootType(o);
 		aType = push2("root", o, eType);
 		indent--;
 		if (aType == null)
@@ -260,8 +260,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		}
 
 		if (sType.isMap()) {
-			if (o instanceof BeanMap)
-				serializeBeanMap(out, (BeanMap)o, typeName);
+			if (o instanceof BeanMap o2)
+				serializeBeanMap(out, o2, typeName);
 			else
 				serializeMap(out, (Map)o, sType);
 		} else if (sType.isBean()) {
@@ -297,8 +297,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			ClassMeta<?> cMeta = pMeta.getClassMeta();
-			ClassMeta<?> sMeta = cMeta.getSerializedClassMeta(this);
+			var cMeta = pMeta.getClassMeta();
+			var sMeta = cMeta.getSerializedClassMeta(this);
 
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
@@ -334,7 +334,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	private SerializerWriter serializeCollectionMap(UonWriter out, Map<?,?> m, ClassMeta<?> type) throws SerializeException {
 
-		ClassMeta<?> valueType = type.getValueType();
+		var valueType = type.getValueType();
 
 		var addAmp = Flag.create();
 
@@ -349,7 +349,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+		var keyType = type.getKeyType();
+		var valueType = type.getValueType();
 
 		var addAmp = Flag.create();
 
@@ -358,8 +359,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			var value = e.getValue();
 
 			if (shouldUseExpandedParams(value)) {
-				if (value instanceof Collection) {
-					((Collection<?>)value).forEach(x -> {
+				if (value instanceof Collection value2) {
+					value2.forEach(x -> {
 						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
 						super.serializeAnything(out, x, null, s(key), null);
@@ -385,7 +386,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
 	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
-		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
+		var cm = pMeta.getClassMeta().getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
 			if (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams())
 				return true;
@@ -399,7 +400,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	private boolean shouldUseExpandedParams(Object value) {
 		if (value == null || ! isExpandedParams())
 			return false;
-		ClassMeta<?> cm = getClassMetaForObject(value).getSerializedClassMeta(this);
+		var cm = getClassMetaForObject(value).getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
 			if (isExpandedParams())
 				return true;

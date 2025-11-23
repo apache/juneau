@@ -140,10 +140,10 @@ public abstract class ObjectSwap<T,S> {
 	 */
 	protected ObjectSwap(Class<T> normalClass, Class<?> swapClass) {
 		this.normalClass = normalClass;
-	this.swapClass = swapClass;
-	normalClassInfo = opt(normalClass).map(x -> info(x)).orElse(null);
-	swapClassInfo = opt(swapClass).map(x -> info(x)).orElse(null);
-	this.forMediaTypes = forMediaTypes();
+		this.swapClass = swapClass;
+		normalClassInfo = opt(normalClass).map(x -> info(x)).orElse(null);
+		swapClassInfo = opt(swapClass).map(x -> info(x)).orElse(null);
+		this.forMediaTypes = forMediaTypes();
 		this.template = withTemplate();
 	}
 

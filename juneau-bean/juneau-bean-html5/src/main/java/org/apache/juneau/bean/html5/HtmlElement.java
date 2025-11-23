@@ -1160,10 +1160,10 @@ public abstract class HtmlElement {
 	 * @param value The attribute value.
 	 * @param attr The attribute name.
 	 * @return The deminimized value, or the same value if the value wasn't a boolean.
-	 */
+	*/
 	protected Object deminimize(Object value, String attr) {
-		if (value instanceof Boolean b) {
-			if (Boolean.TRUE.equals(b))
+		if (value instanceof Boolean value2) {
+			if (Boolean.TRUE.equals(value2))
 				return attr;
 			return null;
 		}

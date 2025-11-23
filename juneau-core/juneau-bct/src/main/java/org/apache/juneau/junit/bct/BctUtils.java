@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.junit.bct;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -61,7 +60,7 @@ public class BctUtils {
 	 * @return A new {@link AssertionFailedError} with formatted message and values.
 	 */
 	public static AssertionFailedError assertEqualsFailed(Object expected, Object actual, Supplier<String> messageSupplier) {
-		return new AssertionFailedError(ofNullable(messageSupplier).map(x -> x.get()).orElse("Equals assertion failed.") + f(" ==> expected: <{0}> but was: <{1}>", expected, actual), expected, actual);
+		return new AssertionFailedError(opt(messageSupplier).map(x -> x.get()).orElse("Equals assertion failed.") + f(" ==> expected: <{0}> but was: <{1}>", expected, actual), expected, actual);
 	}
 
 	/**
@@ -87,4 +86,3 @@ public class BctUtils {
 
 	private BctUtils() {}
 }
-

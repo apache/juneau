@@ -204,11 +204,11 @@ public class RestResponse extends HttpServletResponseWrapper {
 	public RestResponse addHeader(Header header) {
 		if (header == null) {
 			// Do nothing.
-		} else if (header instanceof BasicUriHeader x) {
+		} else if (header instanceof BasicUriHeader header2) {
+			addHeader(header2.getName(), resolveUris(header2.getValue()));
+		} else if (header instanceof SerializedHeader header3) {
+			var x = header3.copyWith(request.getPartSerializerSession(), null);
 			addHeader(x.getName(), resolveUris(x.getValue()));
-		} else if (header instanceof SerializedHeader sh) {
-			var x = sh.copyWith(request.getPartSerializerSession(), null);
-				addHeader(x.getName(), resolveUris(x.getValue()));
 		} else {
 			addHeader(header.getName(), header.getValue());
 		}
@@ -234,7 +234,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	@Override
 	public void addHeader(String name, String value) {
 		if (nn(name) && nn(value)) {
-			if (name.equalsIgnoreCase("Content-Type"))
+			if (eqic(name, "Content-Type"))
 				setHeader(name, value);
 			else {
 				if (safeHeaders)
@@ -317,7 +317,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 			contentSchema = opt(responseBeanMeta.getSchema());
 		else {
 			var rbm = opContext.getResponseBeanMeta(getContent(Object.class));
-				if (nn(rbm))
+			if (nn(rbm))
 				contentSchema = opt(rbm.getSchema());
 			else
 				contentSchema = opte();
@@ -395,8 +395,8 @@ public class RestResponse extends HttpServletResponseWrapper {
 					// Some clients don't recognize identity as an encoding, so don't set it.
 					if (! encoding.equals("identity"))
 						setHeader("content-encoding", encoding);
-					}
 				}
+			}
 			var sos = getOutputStream();
 			os = new FinishableServletOutputStream(encoder == null ? sos : encoder.getOutputStream(sos));
 		}
@@ -663,11 +663,11 @@ public class RestResponse extends HttpServletResponseWrapper {
 	public RestResponse setHeader(Header header) {
 		if (header == null) {
 			// Do nothing.
-		} else if (header instanceof BasicUriHeader x) {
-			setHeader(x.getName(), resolveUris(x.getValue()));
-		} else if (header instanceof SerializedHeader sh) {
-			var x = sh.copyWith(request.getPartSerializerSession(), null);
-			String v = x.getValue();
+		} else if (header instanceof BasicUriHeader header2) {
+			setHeader(header2.getName(), resolveUris(header2.getValue()));
+		} else if (header instanceof SerializedHeader header2) {
+			var x = header2.copyWith(request.getPartSerializerSession(), null);
+			var v = x.getValue();
 			if (nn(v) && v.indexOf("://") != -1)
 				v = resolveUris(v);
 			setHeader(x.getName(), v);
@@ -732,7 +732,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 
 		// Jetty doesn't set the content type correctly if set through this method.
 		// Tomcat/WAS does.
-		if (name.equalsIgnoreCase("Content-Type")) {
+		if (eqic(name, "Content-Type")) {
 			inner.setContentType(value);
 			ContentType ct = contentType(value);
 			if (nn(ct) && nn(ct.getParameter("charset")))
@@ -822,14 +822,14 @@ public class RestResponse extends HttpServletResponseWrapper {
 			w = new FinishablePrintWriter(out, getCharacterEncoding(), autoflush);
 			return w;
 		} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {
-			String ce = getCharacterEncoding();
+			var ce = getCharacterEncoding();
 			setCharacterEncoding("UTF-8");
 			throw new NotAcceptable("Unsupported charset in request header ''Accept-Charset'': ''{0}''", ce);
 		}
 	}
 
 	private String resolveUris(Object value) {
-		String s = s(value);
+		var s = s(value);
 		return request.getUriResolver().resolve(s);
 	}
 }

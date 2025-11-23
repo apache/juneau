@@ -38,7 +38,6 @@ import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlParser}.
@@ -288,7 +287,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
 	 */
 	private String getText(XmlReader r, boolean trim) {
-		String s = r.getText();
+		var s = r.getText();
 		if (trim)
 			s = s.trim();
 		if (s.isEmpty())
@@ -301,20 +300,20 @@ public class XmlParserSession extends ReaderParserSession {
 		if (r.getEventType() != START_ELEMENT) {
 			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
 		}
-		JsonMap m = null;
+		var m = (JsonMap)null;
 
 		// If this element has attributes, then it's always a JsonMap.
 		if (r.getAttributeCount() > 0) {
 			m = new JsonMap(this);
-			for (int i = 0; i < r.getAttributeCount(); i++) {
-				String key = getAttributeName(r, i);
-				String val = r.getAttributeValue(i);
+			for (var i = 0; i < r.getAttributeCount(); i++) {
+				var key = getAttributeName(r, i);
+				var val = r.getAttributeValue(i);
 				if (! isSpecialAttr(key))
 					m.put(key, val);
 			}
 		}
 		int eventType = r.next();
-		StringBuilder sb = getStringBuilder();
+		var sb = getStringBuilder();
 		while (eventType != END_ELEMENT) {
 			if (eventType == CHARACTERS || eventType == CDATA || eventType == SPACE || eventType == ENTITY_REFERENCE) {
 				sb.append(r.getText());
@@ -337,11 +336,11 @@ public class XmlParserSession extends ReaderParserSession {
 						if (currAttr == null)
 							currAttr = getElementName(r);
 						String key = convertAttrToType(null, currAttr, string());
-						Object value = parseAnything(object(), currAttr, r, null, false, null);
+						var value = parseAnything(object(), currAttr, r, null, false, null);
 						if (m.containsKey(key)) {
-							Object o = m.get(key);
-							if (o instanceof JsonList)
-								((JsonList)o).add(value);
+							var o = m.get(key);
+							if (o instanceof JsonList o2)
+								o2.add(value);
 							else
 								m.put(key, new JsonList(o, value).setBeanSession(this));
 						} else {
@@ -360,7 +359,7 @@ public class XmlParserSession extends ReaderParserSession {
 			}
 			eventType = r.next();
 		}
-		String s = sb.toString().trim();
+		var s = sb.toString().trim();
 		returnStringBuilder(sb);
 		s = decodeString(s);
 		if (nn(m)) {
@@ -377,15 +376,15 @@ public class XmlParserSession extends ReaderParserSession {
 
 	@SuppressWarnings("null")
 	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
-		BeanMeta<?> bMeta = m.getMeta();
-		XmlBeanMeta xmlMeta = getXmlBeanMeta(bMeta);
+		var bMeta = m.getMeta();
+		var xmlMeta = getXmlBeanMeta(bMeta);
 
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String key = getAttributeName(r, i);
 			if (! ("nil".equals(key) || isSpecialAttr(key))) {
-				String val = r.getAttributeValue(i);
-				String ns = r.getAttributeNamespace(i);
-				BeanPropertyMeta bpm = xmlMeta.getPropertyMeta(key);
+				var val = r.getAttributeValue(i);
+				var ns = r.getAttributeNamespace(i);
+				var bpm = xmlMeta.getPropertyMeta(key);
 				if (bpm == null) {
 					if (nn(xmlMeta.getAttrsProperty())) {
 						xmlMeta.getAttrsProperty().add(m, key, key, val);
@@ -403,13 +402,13 @@ public class XmlParserSession extends ReaderParserSession {
 			}
 		}
 
-		BeanPropertyMeta cp = xmlMeta.getContentProperty();
-		XmlFormat cpf = xmlMeta.getContentFormat();
-		boolean trim = cp == null || ! cpf.isOneOf(MIXED_PWS, TEXT_PWS);
-		ClassMeta<?> cpcm = (cp == null ? object() : cp.getClassMeta());
-		StringBuilder sb = null;
-		BeanRegistry breg = cp == null ? null : cp.getBeanRegistry();
-		LinkedList<Object> l = null;
+		var cp = xmlMeta.getContentProperty();
+		var cpf = xmlMeta.getContentFormat();
+		var trim = cp == null || ! cpf.isOneOf(MIXED_PWS, TEXT_PWS);
+		var cpcm = (cp == null ? object() : cp.getClassMeta());
+		var sb = (StringBuilder)null;
+		var breg = cp == null ? null : cp.getBeanRegistry();
+		var l = (LinkedList<Object>)null;
 
 		int depth = 0;
 		do {
@@ -427,7 +426,7 @@ public class XmlParserSession extends ReaderParserSession {
 						cp.set(m, null, getText(r, trim));
 					}
 				} else if (cpf != ELEMENTS) {
-					String s = getText(r, trim);
+					var s = getText(r, trim);
 					if (nn(s)) {
 						if (sb == null)
 							sb = getStringBuilder();
@@ -438,7 +437,7 @@ public class XmlParserSession extends ReaderParserSession {
 				}
 			} else if (event == START_ELEMENT) {
 				if (nn(cp) && cpf.isOneOf(TEXT, TEXT_PWS)) {
-					String s = parseText(r);
+					var s = parseText(r);
 					if (nn(s)) {
 						if (sb == null)
 							sb = getStringBuilder();
@@ -474,24 +473,24 @@ public class XmlParserSession extends ReaderParserSession {
 					currAttr = getNameProperty(r);
 					if (currAttr == null)
 						currAttr = getElementName(r);
-					BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
+					var pMeta = xmlMeta.getPropertyMeta(currAttr);
 					if (pMeta == null) {
-						Object value = parseAnything(object(), currAttr, r, m.getBean(false), false, null);
+						var value = parseAnything(object(), currAttr, r, m.getBean(false), false, null);
 						onUnknownProperty(currAttr, m, value);
 					} else {
 						setCurrentProperty(pMeta);
-						XmlFormat xf = getXmlBeanPropertyMeta(pMeta).getXmlFormat();
+						var xf = getXmlBeanPropertyMeta(pMeta).getXmlFormat();
 						if (xf == COLLAPSED) {
-							ClassMeta<?> et = pMeta.getClassMeta().getElementType();
-							Object value = parseAnything(et, currAttr, r, m.getBean(false), false, pMeta);
+							var et = pMeta.getClassMeta().getElementType();
+							var value = parseAnything(et, currAttr, r, m.getBean(false), false, pMeta);
 							setName(et, value, currAttr);
 							pMeta.add(m, currAttr, value);
 						} else if (xf == ATTR) {
 							pMeta.set(m, currAttr, getAttributeValue(r, 0));
 							r.nextTag();
 						} else {
-							ClassMeta<?> cm = pMeta.getClassMeta();
-							Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, pMeta);
+							var cm = pMeta.getClassMeta();
+							var value = parseAnything(cm, currAttr, r, m.getBean(false), false, pMeta);
 							setName(cm, value, currAttr);
 							pMeta.set(m, currAttr, value);
 						}
@@ -521,7 +520,7 @@ public class XmlParserSession extends ReaderParserSession {
 			else if (nn(l))
 				cp.set(m, null, XmlUtils.collapseTextNodes(l));
 			else if (cpcm.isCollectionOrArray()) {
-				Object o = cp.get(m, null);
+				var o = cp.get(m, null);
 				if (o == null)
 					cp.set(m, cp.getName(), list());
 			}
@@ -538,7 +537,7 @@ public class XmlParserSession extends ReaderParserSession {
 			int event = r.nextTag();
 			if (event == START_ELEMENT) {
 				depth++;
-				ClassMeta<?> elementType = type == null ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+				var elementType = type == null ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
 				E value = (E)parseAnything(elementType, null, r, l, false, pMeta);
 				l.add(value);
 			} else if (event == END_ELEMENT) {
@@ -553,7 +552,7 @@ public class XmlParserSession extends ReaderParserSession {
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
 		for (int i = 0; i < r.getAttributeCount(); i++) {
-			String a = r.getAttributeLocalName(i);
+			var a = r.getAttributeLocalName(i);
 			// TODO - Need better handling of namespaces here.
 			if (! isSpecialAttr(a)) {
 				K key = trim(convertAttrToType(m, a, keyType));
@@ -574,9 +573,9 @@ public class XmlParserSession extends ReaderParserSession {
 				V value = parseAnything(valueType, currAttr, r, m, false, pMeta);
 				setName(valueType, value, currAttr);
 				if (valueType.isObject() && m.containsKey(key)) {
-					Object o = m.get(key);
-					if (o instanceof List)
-						((List)o).add(value);
+					var o = m.get(key);
+					if (o instanceof List o2)
+						o2.add(value);
 					else
 						m.put(key, (V)new JsonList(o, value).setBeanSession(this));
 				} else {
@@ -620,13 +619,13 @@ public class XmlParserSession extends ReaderParserSession {
 
 	@Override /* Overridden from ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		ClassMeta cm = getClassMeta(c.getClass(), elementType);
+		var cm = getClassMeta(c.getClass(), elementType);
 		return parseIntoCollection(pipe, c, cm.getElementType());
 	}
 
 	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		ClassMeta cm = getClassMeta(m.getClass(), keyType, valueType);
+		var cm = getClassMeta(m.getClass(), keyType, valueType);
 		return parseIntoMap(pipe, m, cm.getKeyType(), cm.getValueType());
 	}
 
@@ -775,7 +774,7 @@ public class XmlParserSession extends ReaderParserSession {
 			eType = (ClassMeta<T>)object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		ClassMeta<?> sType = null;
+		var sType = (ClassMeta<?>)null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -788,11 +787,11 @@ public class XmlParserSession extends ReaderParserSession {
 
 		setCurrentClass(sType);
 
-		String wrapperAttr = (isRoot && isPreserveRootElement()) ? r.getName().getLocalPart() : null;
-		String typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));
-		boolean isNil = "true".equals(r.getAttributeValue(null, "nil"));
-		int jsonType = getJsonType(typeAttr);
-		String elementName = getElementName(r);
+		var wrapperAttr = (isRoot && isPreserveRootElement()) ? r.getName().getLocalPart() : null;
+		var typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));
+		var isNil = "true".equals(r.getAttributeValue(null, "nil"));
+		var jsonType = getJsonType(typeAttr);
+		var elementName = getElementName(r);
 		if (jsonType == 0) {
 			if (elementName == null || elementName.equals(currAttr))
 				jsonType = UNKNOWN;
@@ -806,11 +805,11 @@ public class XmlParserSession extends ReaderParserSession {
 		if (tcm == null && nn(elementName) && ! elementName.equals(currAttr))
 			tcm = getClassMeta(elementName, pMeta, eType);
 		if (nn(tcm))
-			sType = eType = tcm;
+		sType = eType = tcm;
 
-		Object o = null;
+	var o = (Object)null;
 
-		if (jsonType == NULL) {
+	if (jsonType == NULL) {
 			r.nextTag();	// Discard end tag
 			return null;
 		}
@@ -841,27 +840,27 @@ public class XmlParserSession extends ReaderParserSession {
 		} else if (sType.isChar()) {
 			o = parseCharacter(getElementText(r));
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
+			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (nn(wrapperAttr))
 				o = new JsonMap(this).append(wrapperAttr, m);
 		} else if (sType.isCollection()) {
-			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
+			var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
 			o = parseIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.getInnerClass());
 		} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 			if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
-				String fieldName = r.getLocalName();
-				BeanMap<?> m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
-				BeanPropertyMeta bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
-				ClassMeta<?> cm = m.getMeta().getClassMeta();
+				var fieldName = r.getLocalName();
+				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
+				var bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
+				var cm = m.getMeta().getClassMeta();
 				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, null);
 				setName(cm, value, currAttr);
 				bpm.set(m, currAttr, value);
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			} else {
-				BeanMap m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
+				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
 				m = parseIntoBean(r, m, isNil);
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
@@ -903,7 +902,7 @@ public class XmlParserSession extends ReaderParserSession {
 		// Note that this is different than {@link #getText(XmlReader)} since it assumes that we're pointing to a
 		// whitespace element.
 
-		StringBuilder sb2 = getStringBuilder();
+		var sb2 = getStringBuilder();
 
 		int depth = 0;
 		while (true) {
@@ -921,7 +920,7 @@ public class XmlParserSession extends ReaderParserSession {
 			}
 			et = r.next();
 		}
-		String s = sb2.toString();
+		var s = sb2.toString();
 		returnStringBuilder(sb2);
 		return s;
 	}

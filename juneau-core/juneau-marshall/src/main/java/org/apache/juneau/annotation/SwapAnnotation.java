@@ -82,7 +82,8 @@ public class SwapAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
-		Class<?> impl = void.class, value = void.class;
+		Class<?> impl = void.class;
+		Class<?> value = void.class;
 		String template = "";
 		String[] mediaTypes = {};
 

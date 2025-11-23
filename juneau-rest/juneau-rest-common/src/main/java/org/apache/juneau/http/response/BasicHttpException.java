@@ -80,7 +80,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	public BasicHttpException(HttpResponse response) {
 		super((Throwable)null);
-		Header h = response.getLastHeader("Thrown");
+		var h = response.getLastHeader("Thrown");
 		if (nn(h))
 			setMessage(thrown(h.getValue()).asParts().get().get(0).getMessage());
 		setHeaders(response.getAllHeaders());
@@ -188,7 +188,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return All error messages from all errors in this stack.
 	 */
 	public String getFullStackMessage(boolean scrubForXssVulnerabilities) {
-		String msg = getMessage();
+		var msg = getMessage();
 		StringBuilder sb = new StringBuilder();
 		if (nn(msg)) {
 			if (scrubForXssVulnerabilities)

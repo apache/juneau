@@ -99,8 +99,8 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	protected void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		String[] aside = session.getAside();
-		for (int i = 0; i < aside.length; i++)
+		var aside = session.getAside();
+		for (var i = 0; i < aside.length; i++)
 			w.sIf(i > 0).appendln(4, session.resolve(aside[i]));
 	}
 
@@ -181,8 +181,8 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	protected void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		String[] footer = session.getFooter();
-		for (int i = 0; i < footer.length; i++)
+		var footer = session.getFooter();
+		for (var i = 0; i < footer.length; i++)
 			w.sIf(i > 0).appendln(3, session.resolve(footer[i]));
 	}
 
@@ -260,8 +260,8 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 */
 	protected void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
-		String[] head = session.getHead();
-		for (int i = 0; i < head.length; i++)
+		var head = session.getHead();
+		for (var i = 0; i < head.length; i++)
 			w.sIf(i > 0).appendln(2, session.resolve(head[i]));
 
 		if (hasStyle(session)) {
@@ -286,8 +286,8 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 */
 	protected void header(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		// Write the title of the page.
-		String[] header = session.getHeader();
-		for (int i = 0; i < header.length; i++)
+		var header = session.getHeader();
+		for (var i = 0; i < header.length; i++)
 			w.sIf(i > 0).appendln(3, session.resolve(header[i]));
 	}
 
@@ -307,9 +307,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 				w.sTag(4, "li");
 				l = session.resolve(l);
 				if (l.matches("(?s)\\S+\\:.*")) {
-					int i = l.indexOf(':');
-					String key = l.substring(0, i);
-					String val = l.substring(i + 1).trim();
+					var i = l.indexOf(':');
+					var key = l.substring(0, i);
+					var val = l.substring(i + 1).trim();
 					if (val.startsWith("<"))
 						w.nl(4).appendln(5, val);
 					else
@@ -322,9 +322,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 			}
 			w.eTag(3, "ol").nl(3);
 		}
-		String[] nav = session.getNav();
+		var nav = session.getNav();
 		if (nav.length > 0) {
-			for (int i = 0; i < nav.length; i++)
+			for (var i = 0; i < nav.length; i++)
 				w.sIf(i > 0).appendln(3, session.resolve(nav[i]));
 		}
 	}

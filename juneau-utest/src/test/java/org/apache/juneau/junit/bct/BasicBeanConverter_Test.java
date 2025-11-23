@@ -17,6 +17,7 @@
 package org.apache.juneau.junit.bct;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BasicBeanConverter.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
@@ -78,10 +79,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("a04_addStringifier() adds custom stringifier")
 		void a04_addStringifier_addsCustomStringifier() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addStringifier(LocalDate.class, (conv, date) -> date.format(DateTimeFormatter.ISO_LOCAL_DATE))
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addStringifier(LocalDate.class, (conv, date) -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).build();
 
 			var date = LocalDate.of(2023, 12, 25);
 			assertEquals("2023-12-25", converter.stringify(date));
@@ -90,10 +88,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("a05_addListifier() adds custom listifier")
 		void a05_addListifier_addsCustomListifier() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addListifier(String.class, (conv, str) -> l((Object[])str.split(",")))
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addListifier(String.class, (conv, str) -> l((Object[])str.split(","))).build();
 
 			var result = converter.listify("a,b,c");
 			assertEquals(l("a", "b", "c"), result);
@@ -102,13 +97,10 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("a06_addSwapper() adds custom swapper")
 		void a06_addSwapper_addsCustomSwapper() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addSwapper(Optional.class, (conv, opt) -> ((Optional<?>)opt).orElse(null))
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addSwapper(Optional.class, (conv, opt) -> ((Optional<?>)opt).orElse(null)).build();
 
-			assertEquals("test", converter.stringify(Optional.of("test")));
-			assertEquals("<null>", converter.stringify(Optional.empty()));
+			assertEquals("test", converter.stringify(opt("test")));
+			assertEquals("<null>", converter.stringify(opte()));
 		}
 
 		@Test
@@ -126,10 +118,7 @@ class BasicBeanConverter_Test extends TestBase {
 				}
 			};
 
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addPropertyExtractor(extractor)
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addPropertyExtractor(extractor).build();
 
 			var bean = new TestBean("John", 30);
 			assertEquals("custom value", converter.getProperty(bean, "custom"));
@@ -138,10 +127,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("a08_addSetting() adds custom setting")
 		void a08_addSetting_addsCustomSetting() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addSetting(SETTING_nullValue, "<null>")
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addSetting(SETTING_nullValue, "<null>").build();
 
 			assertEquals("<null>", converter.stringify(null));
 		}
@@ -230,7 +216,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 		@Test
 		@DisplayName("b09_listify() handles collections")
-			void b09_listify_handlesCollections() {
+		void b09_listify_handlesCollections() {
 			var set = Set.of("z", "a", "m");
 			var result = converter.listify(set);
 			// TreeSet conversion ensures natural ordering
@@ -299,8 +285,7 @@ class BasicBeanConverter_Test extends TestBase {
 		void c03_getProperty_throwsForUnknownProperties() {
 			var bean = new TestBean("John", 30);
 
-			assertThrows(RuntimeException.class, () ->
-			converter.getProperty(bean, "unknown"));
+			assertThrows(RuntimeException.class, () -> converter.getProperty(bean, "unknown"));
 		}
 	}
 
@@ -315,10 +300,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("d01_nullValue setting changes null representation")
 		void d01_nullValue_changesNullRepresentation() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addSetting(SETTING_nullValue, "<null>")
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addSetting(SETTING_nullValue, "<null>").build();
 
 			assertEquals("<null>", converter.stringify(null));
 		}
@@ -326,10 +308,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("d02_fieldSeparator setting changes delimiter")
 		void d02_fieldSeparator_changesDelimiter() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addSetting(SETTING_fieldSeparator, " | ")
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addSetting(SETTING_fieldSeparator, " | ").build();
 
 			assertEquals("[1 | 2 | 3]", converter.stringify(l(1, 2, 3)));
 		}
@@ -337,11 +316,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("d03_collection prefix/suffix settings change brackets")
 		void d03_collectionBrackets_changeBrackets() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addSetting(SETTING_collectionPrefix, "(")
-				.addSetting(SETTING_collectionSuffix, ")")
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addSetting(SETTING_collectionPrefix, "(").addSetting(SETTING_collectionSuffix, ")").build();
 
 			assertEquals("(1,2,3)", converter.stringify(l(1, 2, 3)));
 		}
@@ -349,11 +324,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("d04_map prefix/suffix settings change brackets")
 		void d04_mapBrackets_changeBrackets() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addSetting(SETTING_mapPrefix, "<")
-				.addSetting(SETTING_mapSuffix, ">")
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addSetting(SETTING_mapPrefix, "<").addSetting(SETTING_mapSuffix, ">").build();
 
 			var map = m("a", 1);
 			var result = converter.stringify(map);
@@ -364,10 +335,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("d05_mapEntrySeparator setting changes key-value separator")
 		void d05_mapEntrySeparator_changesKeyValueSeparator() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addSetting(SETTING_mapEntrySeparator, ":")
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addSetting(SETTING_mapEntrySeparator, ":").build();
 
 			var map = m("name", "John");
 			var result = converter.stringify(map);
@@ -377,10 +345,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("d06_classNameFormat setting changes class name format")
 		void d06_classNameFormat_changesFormat() {
-			var converter = BasicBeanConverter.builder()
-				.defaultSettings()
-				.addSetting(SETTING_classNameFormat, "full")
-				.build();
+			var converter = BasicBeanConverter.builder().defaultSettings().addSetting(SETTING_classNameFormat, "full").build();
 
 			var bean = new TestBean("John", 30);
 			var result = converter.stringify(bean);
@@ -408,8 +373,7 @@ class BasicBeanConverter_Test extends TestBase {
 		void e01_getProperty_invalidProperty_throwsException() {
 			var bean = new TestBean("John", 30);
 
-			var ex = assertThrows(RuntimeException.class, () ->
-			converter.getProperty(bean, "invalidProperty"));
+			var ex = assertThrows(RuntimeException.class, () -> converter.getProperty(bean, "invalidProperty"));
 			assertContains("Property 'invalidProperty' not found", ex.getMessage());
 		}
 	}
@@ -428,8 +392,11 @@ class BasicBeanConverter_Test extends TestBase {
 		}
 
 		public String getName() { return name; }
+
 		public int getAge() { return age; }
+
 		void setName(String name) { this.name = name; }
+
 		void setAge(int age) { this.age = age; }
 	}
 
@@ -443,8 +410,11 @@ class BasicBeanConverter_Test extends TestBase {
 		}
 
 		public String getName() { return name; }
+
 		public int getAge() { return age; }
+
 		void setName(String name) { this.name = name; }
+
 		void setAge(int age) { this.age = age; }
 	}
 
@@ -479,10 +449,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 		@Test
 		void h02_swapWithSingleRegistration() {
-			var converter = builder()
-				.defaultSettings()
-				.addSwapper(TestPerson.class, (conv, person) -> "Person:" + person.getName())
-				.build();
+			var converter = builder().defaultSettings().addSwapper(TestPerson.class, (conv, person) -> "Person:" + person.getName()).build();
 
 			var person = new TestPerson("john", 30);
 
@@ -532,8 +499,7 @@ class BasicBeanConverter_Test extends TestBase {
 			var obj = new TestPerson("John", 30);
 
 			// Should throw RuntimeException when no extractor can handle the property
-			var ex = assertThrows(RuntimeException.class, () ->
-				converter.getProperty(obj, "name"));
+			var ex = assertThrows(RuntimeException.class, () -> converter.getProperty(obj, "name"));
 			assertContains("Could not find extractor for object of type", ex.getMessage());
 		}
 
@@ -543,24 +509,18 @@ class BasicBeanConverter_Test extends TestBase {
 			var converter = builder().defaultSettings().build();
 
 			// Test with list of objects
-			var people = l(
-				m("name", "John", "age", 30),
-				m("name", "Jane", "age", 25)
-			);
+			var people = l(m("name", "John", "age", 30), m("name", "Jane", "age", 25));
 
-			assertEquals("[{John},{Jane}]",
-				converter.getNested(people, tokenize("#{name}").get(0)));
-			assertEquals("[{30},{25}]",
-				converter.getNested(people, tokenize("#{age}").get(0)));
-			assertEquals("[{John,30},{Jane,25}]",
-				converter.getNested(people, tokenize("#{name,age}").get(0)));
+			assertEquals("[{John},{Jane}]", converter.getNested(people, tokenize("#{name}").get(0)));
+			assertEquals("[{30},{25}]", converter.getNested(people, tokenize("#{age}").get(0)));
+			assertEquals("[{John,30},{Jane,25}]", converter.getNested(people, tokenize("#{name,age}").get(0)));
 		}
 
 		@Test
 		void h07_getNested_earlyReturnConditions() {
 			// Test line 331: early return when e == null || !token.hasNested()
 			var converter = builder().defaultSettings().build();
-			var obj = new HashMap<String, Object>();
+			var obj = new HashMap<String,Object>();
 			obj.put("key", "value");
 			obj.put("nullKey", null);
 
@@ -588,10 +548,7 @@ class BasicBeanConverter_Test extends TestBase {
 				public String getCustomString() { return "custom"; }
 			}
 
-			var converter = builder()
-				.defaultSettings()
-				.addStringifier(CustomStringifiable.class, (conv, obj) -> "CUSTOM:" + obj.getCustomString())
-				.build();
+			var converter = builder().defaultSettings().addStringifier(CustomStringifiable.class, (conv, obj) -> "CUSTOM:" + obj.getCustomString()).build();
 
 			// CustomObject implements CustomStringifiable, so should find the interface-based stringifier
 			assertEquals("CUSTOM:custom", converter.stringify(new CustomObject()));
@@ -614,16 +571,14 @@ class BasicBeanConverter_Test extends TestBase {
 			class MultiInterfaceClass implements BaseInterface, MiddleInterface {
 				@Override
 				public String getBase() { return "base"; }
+
 				@Override
 				public String getMiddle() { return "middle"; }
 			}
 
-			var converter = builder()
-				.defaultSettings()
+			var converter = builder().defaultSettings()
 				// Register listifier only for MiddleInterface, not BaseInterface or the class
-				.addListifier(MiddleInterface.class, (conv, obj) ->
-					l("FROM_MIDDLE_INTERFACE", obj.getMiddle()))
-				.build();
+				.addListifier(MiddleInterface.class, (conv, obj) -> l("FROM_MIDDLE_INTERFACE", obj.getMiddle())).build();
 
 			// MultiInterfaceClass won't directly match, BaseInterface won't match,
 			// but MiddleInterface will match during interface iteration
@@ -649,15 +604,14 @@ class BasicBeanConverter_Test extends TestBase {
 			class MultiInterfaceWrapper implements FirstInterface, SecondInterface {
 				@Override
 				public String getFirst() { return "first"; }
+
 				@Override
 				public String getSecond() { return "second"; }
 			}
 
-			var converter = builder()
-				.defaultSettings()
+			var converter = builder().defaultSettings()
 				// Register swapper only for SecondInterface, not FirstInterface or the class
-				.addSwapper(SecondInterface.class, (conv, obj) -> "SWAPPED:" + obj.getSecond())
-				.build();
+				.addSwapper(SecondInterface.class, (conv, obj) -> "SWAPPED:" + obj.getSecond()).build();
 
 			// MultiInterfaceWrapper won't directly match, FirstInterface won't match,
 			// but SecondInterface will match during interface iteration

@@ -56,7 +56,7 @@ import org.apache.juneau.rest.util.*;
  */
 public class PathArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.
@@ -200,7 +200,7 @@ public class PathArg implements RestOpArg {
 			var mi = pi.getMethod();
 
 			for (int j = 0; j < i; j++) {
-				var hasAnnotation = AnnotationProvider.INSTANCE.has(Path.class, mi.getParameter(j));
+				var hasAnnotation = AP.has(Path.class, mi.getParameter(j));
 				if (hasAnnotation)
 					idx++;
 			}

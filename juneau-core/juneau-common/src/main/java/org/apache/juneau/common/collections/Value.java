@@ -128,7 +128,7 @@ public class Value<T> {
 	 * @return <jk>true</jk> if the specified type is this class.
 	 */
 	public static boolean isType(Type t) {
-		return (t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class) || (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
+		return (t instanceof ParameterizedType t2 && t2.getRawType() == Value.class) || (t instanceof Class t3 && Value.class.isAssignableFrom(t3));
 	}
 
 	/**
@@ -527,12 +527,12 @@ public class Value<T> {
 	 * @return The result of applying the {@link Value}-bearing mapping function to the value if present,
 	 *         otherwise an empty {@link Value}.
 	 */
-	public <T2> Value<T2> flatMap(Function<? super T, ? extends Value<? extends T2>> mapper) {
+	public <T2> Value<T2> flatMap(Function<? super T,? extends Value<? extends T2>> mapper) {
 		if (t == null)
 			return Value.empty();
 		var result = mapper.apply(t);
 		@SuppressWarnings("unchecked")
-		var cast = (Value<T2>) result;
+		var cast = (Value<T2>)result;
 		return cast;
 	}
 
@@ -540,9 +540,9 @@ public class Value<T> {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!(obj instanceof Value))
+		if (! (obj instanceof Value))
 			return false;
-		var other = (Value<?>) obj;
+		var other = (Value<?>)obj;
 		return t == null ? other.t == null : t.equals(other.t);
 	}
 

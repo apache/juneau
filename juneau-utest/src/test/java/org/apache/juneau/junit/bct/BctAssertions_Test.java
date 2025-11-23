@@ -17,6 +17,7 @@
 package org.apache.juneau.junit.bct;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -161,7 +162,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void d01_basicMapping() {
 			var person = new TestPerson("Grace", 27);
-			BiFunction<TestPerson, String, Object> mapper = (p, prop) -> p.getName().toUpperCase();
+			BiFunction<TestPerson,String,Object> mapper = (p, prop) -> p.getName().toUpperCase();
 
 			assertDoesNotThrow(() -> assertMapped(person, mapper, "upperName", "GRACE"));
 		}
@@ -170,7 +171,7 @@ class BctAssertions_Test extends TestBase {
 		void d02_withCustomArgs() {
 			var person = new TestPerson("Henry", 45);
 			var args = args().setMessage("Custom mapped message");
-			BiFunction<TestPerson, String, Object> mapper = (p, prop) -> p.getName();
+			BiFunction<TestPerson,String,Object> mapper = (p, prop) -> p.getName();
 
 			assertDoesNotThrow(() -> assertMapped(args, person, mapper, "name", "Henry"));
 		}
@@ -178,7 +179,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void d03_mappingMismatch() {
 			var person = new TestPerson("Jack", 50);
-			BiFunction<TestPerson, String, Object> mapper = (p, prop) -> p.getName();
+			BiFunction<TestPerson,String,Object> mapper = (p, prop) -> p.getName();
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertMapped(person, mapper, "name", "Wrong"));
 			assertContains("expected: <Wrong>", e.getMessage());
@@ -281,7 +282,7 @@ class BctAssertions_Test extends TestBase {
 
 			// Should report single error normally (not as "1 substring assertions failed")
 			var message = e.getMessage();
-			assertDoesNotThrow(() -> assertTrue(!message.contains("1 substring assertions failed")));
+			assertDoesNotThrow(() -> assertTrue(! message.contains("1 substring assertions failed")));
 			assertContains("String did not contain expected substring", message);
 			assertContains("Missing", message);
 		}
@@ -364,18 +365,16 @@ class BctAssertions_Test extends TestBase {
 			var numbers = l(1, 2, 3, 4, 5);
 
 			// Test successful predicate validation
-			assertDoesNotThrow(() -> assertList(args, numbers,
-				(Predicate<Integer>) x -> x == 1,   // First element should equal 1
-				(Predicate<Integer>) x -> x > 1,    // Second element should be > 1
+			assertDoesNotThrow(() -> assertList(args, numbers, (Predicate<Integer>)x -> x == 1,   // First element should equal 1
+				(Predicate<Integer>)x -> x > 1,    // Second element should be > 1
 				"3",                                // Third element as string
-				(Predicate<Integer>) x -> x % 2 == 0, // Fourth element should be even
-				(Predicate<Integer>) x -> x == 5     // Fifth element should equal 5
+				(Predicate<Integer>)x -> x % 2 == 0, // Fourth element should be even
+				(Predicate<Integer>)x -> x == 5     // Fifth element should equal 5
 			));
 
 			// Test failed predicate validation - use single element list to avoid length mismatch
 			var singleNumber = l(1);
-			var e = assertThrows(AssertionFailedError.class, () ->
-				assertList(args, singleNumber, (Predicate<Integer>) x -> x == 99)); // Should fail
+			var e = assertThrows(AssertionFailedError.class, () -> assertList(args, singleNumber, (Predicate<Integer>)x -> x == 99)); // Should fail
 			assertContains("Element at index 0 did not pass predicate", e.getMessage());
 			assertContains("actual: <1>", e.getMessage());
 		}
@@ -411,7 +410,7 @@ class BctAssertions_Test extends TestBase {
 
 			// Should report single error normally (not as "1 list assertions failed")
 			var message = e.getMessage();
-			assertDoesNotThrow(() -> assertTrue(!message.contains("1 list assertions failed")));
+			assertDoesNotThrow(() -> assertTrue(! message.contains("1 list assertions failed")));
 			assertContains("Element at index 1 did not match", message);
 		}
 	}
@@ -459,15 +458,12 @@ class BctAssertions_Test extends TestBase {
 			var map = m("count", 42, "enabled", true);
 
 			// Test successful predicate validation
-			assertDoesNotThrow(() -> assertMap(args, map,
-				(Predicate<Map.Entry<String, Object>>) entry -> entry.getKey().equals("count") && entry.getValue().equals(42),
-				(Predicate<Map.Entry<String, Object>>) entry -> entry.getKey().equals("enabled") && entry.getValue().equals(true)
-			));
+			assertDoesNotThrow(() -> assertMap(args, map, (Predicate<Map.Entry<String,Object>>)entry -> entry.getKey().equals("count") && entry.getValue().equals(42),
+				(Predicate<Map.Entry<String,Object>>)entry -> entry.getKey().equals("enabled") && entry.getValue().equals(true)));
 
 			// Test failed predicate validation
 			var singleEntryMap = m("count", 1);
-			var e = assertThrows(AssertionFailedError.class, () ->
-				assertMap(args, singleEntryMap, (Predicate<Map.Entry<String, Object>>) entry -> entry.getValue().equals(99))); // Should fail
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(args, singleEntryMap, (Predicate<Map.Entry<String,Object>>)entry -> entry.getValue().equals(99))); // Should fail
 			assertContains("Element at index 0 did not pass predicate", e.getMessage());
 			assertContains("actual: <count=1>", e.getMessage());
 		}
@@ -523,7 +519,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h11_mapOrdering() {
 			// Test that map ordering is deterministic (HashMap gets converted to TreeMap)
-			var unorderedMap = new HashMap<String, String>();
+			var unorderedMap = new HashMap<String,String>();
 			unorderedMap.put("z", "last");
 			unorderedMap.put("a", "first");
 			unorderedMap.put("m", "middle");
@@ -546,7 +542,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h13_treeMapOrdering() {
 			// Test that TreeMap preserves natural ordering
-			var treeMap = new TreeMap<String, String>();
+			var treeMap = new TreeMap<String,String>();
 			treeMap.put("zebra", "last");
 			treeMap.put("apple", "first");
 			treeMap.put("monkey", "middle");
@@ -716,8 +712,11 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		String getName() { return name; }
+
 		int getAge() { return age; }
+
 		TestAddress getAddress() { return address; }
+
 		void setAddress(TestAddress address) { this.address = address; }
 
 		@Override
@@ -736,6 +735,7 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		String getStreet() { return street; }
+
 		String getCity() { return city; }
 
 		@Override
@@ -765,10 +765,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h02_assertMatchesGlobWithComplexPatterns() {
 			// Test glob matching with various patterns
-			var testStrings = l(
-				"hello.txt", "test_file.log", "document.pdf",
-				"IMG_001.jpg", "data.xml", "script.js"
-			);
+			var testStrings = l("hello.txt", "test_file.log", "document.pdf", "IMG_001.jpg", "data.xml", "script.js");
 
 			assertMatchesGlob("*.txt", testStrings.get(0));
 			assertMatchesGlob("test_*", testStrings.get(1));
@@ -784,7 +781,7 @@ class BctAssertions_Test extends TestBase {
 			assertEmpty(l());
 			assertEmpty(new HashMap<>());
 			assertEmpty(new HashSet<>());
-			assertEmpty(Optional.empty());
+			assertEmpty(opte());
 		}
 
 		@Test
@@ -793,7 +790,7 @@ class BctAssertions_Test extends TestBase {
 			assertNotEmpty(l("item"));
 			assertNotEmpty(m("key", "value"));
 			assertNotEmpty(Set.of("element"));
-			assertNotEmpty(Optional.of("value"));
+			assertNotEmpty(opt("value"));
 		}
 
 		@Test
@@ -805,9 +802,7 @@ class BctAssertions_Test extends TestBase {
 			assertContainsAll(text, "The", "dog");
 
 			// Test with object that stringifies to contain multiple values
-			var complexObj = m(
-				"description", "This is a test with multiple keywords: alpha, beta, gamma"
-			);
+			var complexObj = m("description", "This is a test with multiple keywords: alpha, beta, gamma");
 			assertContainsAll(complexObj, "alpha", "beta", "gamma", "keywords");
 		}
 

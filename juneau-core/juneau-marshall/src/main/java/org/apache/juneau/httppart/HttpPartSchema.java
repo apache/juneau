@@ -361,30 +361,30 @@ public class HttpPartSchema {
 		 *
 		 * @param a The annotation to apply.
 		 * @return This object.
-		 */
+		*/
 		public Builder apply(Annotation a) {
-			if (a instanceof Content)
-				apply((Content)a);
-			else if (a instanceof Header)
-				apply((Header)a);
-			else if (a instanceof FormData)
-				apply((FormData)a);
-			else if (a instanceof Query)
-				apply((Query)a);
-			else if (a instanceof Path)
-				apply((Path)a);
-			else if (a instanceof PathRemainder)
-				apply((PathRemainder)a);
-			else if (a instanceof Response)
-				apply((Response)a);
-			else if (a instanceof StatusCode)
-				apply((StatusCode)a);
-			else if (a instanceof HasQuery)
-				apply((HasQuery)a);
-			else if (a instanceof HasFormData)
-				apply((HasFormData)a);
-			else if (a instanceof Schema)
-				apply((Schema)a);
+			if (a instanceof Content a2)
+				apply(a2);
+			else if (a instanceof Header a2)
+				apply(a2);
+			else if (a instanceof FormData a2)
+				apply(a2);
+			else if (a instanceof Query a3)
+				apply(a3);
+			else if (a instanceof Path a4)
+				apply(a4);
+			else if (a instanceof PathRemainder a5)
+				apply(a5);
+			else if (a instanceof Response a6)
+				apply(a6);
+			else if (a instanceof StatusCode a7)
+				apply(a7);
+			else if (a instanceof HasQuery a8)
+				apply(a8);
+			else if (a instanceof HasFormData a9)
+				apply(a9);
+			else if (a instanceof Schema a10)
+				apply(a10);
 			else if (cn(a.annotationType()).startsWith("jakarta.validation.constraints."))
 				applyJakartaValidation(a);
 			else
@@ -530,7 +530,7 @@ public class HttpPartSchema {
 		 */
 		public Builder codes(int[] value) {
 			if (nn(value) && value.length != 0)
-				for (int v : value)
+				for (var v : value)
 					code(v);
 			return this;
 		}
@@ -3529,8 +3529,8 @@ public class HttpPartSchema {
 	private static HttpPartSchema build(Object in, boolean noValidate) {
 		if (in == null)
 			return null;
-		if (in instanceof HttpPartSchema hps)
-			return hps;
+		if (in instanceof HttpPartSchema in2)
+			return in2;
 		return ((Builder)in).noValidate(noValidate).build();
 	}
 
@@ -3575,7 +3575,7 @@ public class HttpPartSchema {
 	}
 
 	final static Set<String> toSet(String[]...s) {
-		boolean isNotEmpty = false;
+		var isNotEmpty = false;
 		for (var ss : s)
 			isNotEmpty |= ss.length > 0;
 		if (! isNotEmpty)
@@ -3682,9 +3682,10 @@ public class HttpPartSchema {
 			return;
 
 		// Validation.
-		List<String> errors = list();
-		ListBuilder<String> notAllowed = listb(String.class);
-		boolean invalidFormat = false;
+		var errors = list();
+		var notAllowed = listb(String.class);
+		var invalidFormat = false;
+
 		// @formatter:off
 		switch (type) {
 			case STRING: {
@@ -4129,7 +4130,7 @@ public class HttpPartSchema {
 			Predicate<Number> nm1 = Utils::isNotMinusOne;
 			Predicate<Object> nn = Utils::nn;
 			// @formatter:off
-			JsonMap m = new JsonMap()
+			var m = new JsonMap()
 				.appendIf(ne, "name", name)
 				.appendIf(ne, "type", type)
 				.appendIf(ne, "format", format)
@@ -4208,7 +4209,7 @@ public class HttpPartSchema {
 				throw new SchemaValidationException("Required value not provided.");
 			return o;
 		}
-		ClassMeta<?> cm = bc.getClassMetaForObject(o);
+		var cm = bc.getClassMetaForObject(o);
 		switch (getType(cm)) {
 			case ARRAY: {
 				if (cm.isArray()) {
@@ -4348,63 +4349,33 @@ public class HttpPartSchema {
 			return true;
 
 		try {
-			switch (format) {
-				case EMAIL:
-					return isValidEmail(x);
-				case IDN_EMAIL:
-					return isValidIdnEmail(x);
-				case HOSTNAME:
-					return isValidHostname(x);
-				case IDN_HOSTNAME:
-					return isValidIdnHostname(x);
-				case IPV4:
-					return isValidIpv4(x);
-				case IPV6:
-					return isValidIpv6(x);
-				case URI:
-					return isValidUri(x);
-				case URI_REFERENCE:
-					return isValidUriReference(x);
-				case IRI:
-					return isValidIri(x);
-				case IRI_REFERENCE:
-					return isValidIriReference(x);
-				case UUID:
-					return isValidUuid(x);
-				case URI_TEMPLATE:
-					return isValidUriTemplate(x);
-				case JSON_POINTER:
-					return isValidJsonPointer(x);
-				case RELATIVE_JSON_POINTER:
-					return isValidRelativeJsonPointer(x);
-				case REGEX:
-					return isValidRegex(x);
-				case DATE:
-					return isValidDate(x);
-				case DATE_TIME:
-					return isValidDateTime(x);
-				case DATE_TIME_ZONE:
-					return isValidDateTimeZone(x);
-				case TIME:
-					return isValidTime(x);
-				case DURATION:
-					return isValidDuration(x);
-				case BYTE:
-				case BINARY:
-				case BINARY_SPACED:
-					return true; // These are transformation formats, not validation formats
-				case PASSWORD:
-					return true; // Password format is just a UI hint
-				case INT32:
-				case INT64:
-				case FLOAT:
-				case DOUBLE:
-					return true; // Numeric formats are validated during parsing
-				case UON:
-					return true; // UON format is validated during parsing
-				default:
-					return true;
-			}
+			return switch (format) {
+				case EMAIL -> isValidEmail(x);
+				case IDN_EMAIL -> isValidIdnEmail(x);
+				case HOSTNAME -> isValidHostname(x);
+				case IDN_HOSTNAME -> isValidIdnHostname(x);
+				case IPV4 -> isValidIpv4(x);
+				case IPV6 -> isValidIpv6(x);
+				case URI -> isValidUri(x);
+				case URI_REFERENCE -> isValidUriReference(x);
+				case IRI -> isValidIri(x);
+				case IRI_REFERENCE -> isValidIriReference(x);
+				case UUID -> isValidUuid(x);
+				case URI_TEMPLATE -> isValidUriTemplate(x);
+				case JSON_POINTER -> isValidJsonPointer(x);
+				case RELATIVE_JSON_POINTER -> isValidRelativeJsonPointer(x);
+				case REGEX -> isValidRegex(x);
+				case DATE -> isValidDate(x);
+				case DATE_TIME -> isValidDateTime(x);
+				case DATE_TIME_ZONE -> isValidDateTimeZone(x);
+				case TIME -> isValidTime(x);
+				case DURATION -> isValidDuration(x);
+				case BYTE, BINARY, BINARY_SPACED -> true; // These are transformation formats, not validation formats
+				case PASSWORD -> true; // Password format is just a UI hint
+				case INT32, INT64, FLOAT, DOUBLE -> true; // Numeric formats are validated during parsing
+				case UON -> true; // UON format is validated during parsing
+				default -> true;
+			};
 		} catch (@SuppressWarnings("unused") Exception e) {
 			return false;
 		}
@@ -4427,7 +4398,7 @@ public class HttpPartSchema {
 
 	private static boolean isValidIpv4(String x) {
 		// RFC 2673 IPv4 validation
-		String[] parts = x.split("\\.");
+		var parts = x.split("\\.");
 		if (parts.length != 4)
 			return false;
 		for (var part : parts) {

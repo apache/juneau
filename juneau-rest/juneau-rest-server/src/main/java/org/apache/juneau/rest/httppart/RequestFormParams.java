@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
@@ -151,9 +150,9 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 
 		if (nn(m)) {
 			for (var e : m.entrySet()) {
-				String name = e.getKey();
+				var name = e.getKey();
 
-				String[] values = e.getValue();
+				var values = e.getValue();
 				if (values == null)
 					values = new String[0];
 
@@ -261,9 +260,9 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public RequestFormParams addDefault(List<? extends NameValuePair> pairs) {
 		for (var p : pairs) {
-			String name = p.getName();
-			Stream<RequestFormParam> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
+			var name = p.getName();
+			var l = stream(name);
+			var hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));  // NOAI
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestFormParam(req, name, vs.resolve(p.getValue())));
@@ -372,8 +371,8 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return The bean, never <jk>null</jk>.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(() -> rex("@FormData(name) not found on class {0}", cn(type)));
+		var cm = req.getBeanSession().getClassMeta(type);
+		var name = HttpParts.getName(FORMDATA, cm).orElseThrow(() -> rex("@FormData(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}
 
@@ -393,7 +392,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		if (l.size() == 1)
 			return l.get(0);
 		var sb = new StringBuilder(128);
-		for (int i = 0, j = l.size(); i < j; i++) {
+		for (var i = 0; i < l.size(); i++) {
 			if (i > 0)
 				sb.append(", ");
 			sb.append(l.get(i).getValue());
@@ -438,7 +437,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public RequestFormParam getLast(String name) {
 		assertArgNotNull("name", name);
-		Value<RequestFormParam> v = Value.empty();
+		var v = Value.<RequestFormParam>empty();
 		stream(name).forEach(x -> v.set(x));
 		return v.orElseGet(() -> new RequestFormParam(req, name, null).parser(parser));
 	}
@@ -555,6 +554,6 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 }

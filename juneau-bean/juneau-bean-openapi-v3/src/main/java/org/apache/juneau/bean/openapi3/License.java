@@ -131,10 +131,12 @@ public class License extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(name), "name")
 			.addIf(nn(url), "url")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

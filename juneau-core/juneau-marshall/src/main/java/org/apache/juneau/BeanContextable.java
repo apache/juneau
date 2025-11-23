@@ -1971,7 +1971,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-
+		
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -2010,7 +2010,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-
+		
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()

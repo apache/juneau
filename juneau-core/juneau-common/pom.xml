@@ -36,15 +36,16 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.common</Automatic-Module-Name>
-					</instructions>
-				</configuration>
+		<plugin>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>maven-bundle-plugin</artifactId>
+			<extensions>true</extensions>
+			<configuration>
+				<supportIncrementalBuild>true</supportIncrementalBuild>
+				<instructions>
+					<Automatic-Module-Name>org.apache.juneau.common</Automatic-Module-Name>
+				</instructions>
+			</configuration>
 				<executions>
 				<execution>
 					<id>bundle-manifest</id>

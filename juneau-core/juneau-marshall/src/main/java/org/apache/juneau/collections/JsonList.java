@@ -271,7 +271,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static JsonList ofJsonOrCdl(String s) throws ParseException {
-		if (StringUtils.isEmpty(s))
+		if (Utils.isEmpty(s))  // NOAI
 			return null;
 		if (! isJsonArray(s, true))
 			return new JsonList((Object[])splita(s.trim(), ','));

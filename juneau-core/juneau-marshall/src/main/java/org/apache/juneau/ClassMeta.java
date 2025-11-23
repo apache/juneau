@@ -69,6 +69,8 @@ import org.apache.juneau.swap.*;
 @Bean(properties = "innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 public class ClassMeta<T> implements Type {
 
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
 	private class ClassMetaBuilder<T> {
 		Class<T> innerClass;
@@ -113,8 +115,8 @@ public class ClassMeta<T> implements Type {
 				this.childUnswapMap = new ConcurrentHashMap<>();
 			}
 
-		Class<T> c = innerClass;
-		ci = info(c);
+			Class<T> c = innerClass;
+			ci = info(c);
 
 			if (c.isPrimitive()) {
 				if (c == Boolean.TYPE)
@@ -183,7 +185,7 @@ public class ClassMeta<T> implements Type {
 			// valueOf() is used by enums.
 			// parse() is used by the java logging Level class.
 			// forName() is used by Class and Charset
-			String[] fromStringMethodNames = {"fromString","fromValue","valueOf","parse","parseString","forName","forString"};
+			String[] fromStringMethodNames = { "fromString", "fromValue", "valueOf", "parse", "parseString", "forName", "forString" };
 			// @formatter:off
 			fromStringMethod = ci.getPublicMethod(
 					x -> x.isStatic()
@@ -224,10 +226,10 @@ public class ClassMeta<T> implements Type {
 				exampleField = x.accessible().inner();
 			});
 
-		// Find @NameProperty and @ParentProperty methods if present.
-		List<MethodInfo> methods = ci.getAllMethods();
-		for (int i = methods.size() - 1; i >= 0; i--) {
-			MethodInfo m = methods.get(i);
+			// Find @NameProperty and @ParentProperty methods if present.
+			var methods = ci.getAllMethods();
+			for (var i = methods.size() - 1; i >= 0; i--) {
+				var m = methods.get(i);
 				if (m.getMatchingMethods().stream().anyMatch(m2 -> ap.has(ParentProperty.class, m2))) {
 					if (m.isStatic() || ! m.hasNumParameters(1))
 						throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
@@ -294,9 +296,9 @@ public class ClassMeta<T> implements Type {
 					implClass = (Class<? extends T>)marshalledFilter.getImplClass();
 			}
 
-		if (innerClass != Object.class) {
-			ClassInfo x = implClass == null ? ci : info(implClass);
-			noArgConstructor = x.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null);
+			if (innerClass != Object.class) {
+				var x = implClass == null ? ci : info(implClass);
+				noArgConstructor = x.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null);
 			}
 
 			try {
@@ -376,62 +378,40 @@ public class ClassMeta<T> implements Type {
 			}
 
 			if (example == null) {
-				switch (cc) {
-					case BOOLEAN:
-						example = "true";
-						break;
-					case CHAR:
-						example = "a";
-						break;
-					case CHARSEQ:
-					case STR:
-						example = "foo";
-						break;
-					case DECIMAL:
+				example = switch (cc) {
+					case BOOLEAN -> "true";
+					case CHAR -> "a";
+					case CHARSEQ, STR -> "foo";
+					case DECIMAL -> {
 						if (isFloat())
-							example = "1.0";
+							yield "1.0";
 						else if (isDouble())
-							example = "1.0";
-						break;
-					case ENUM:
+							yield "1.0";
+						yield null;
+					}
+					case ENUM -> {
 						Iterator<? extends Enum> i = EnumSet.allOf((Class<? extends Enum>)c).iterator();
-						if (i.hasNext())
-							example = beanContext.isUseEnumNames() ? i.next().name() : i.next().toString();
-						break;
-					case NUMBER:
+						yield i.hasNext() ? (beanContext.isUseEnumNames() ? i.next().name() : i.next().toString()) : null;
+					}
+					case NUMBER -> {
 						if (isShort())
-							example = "1";
+							yield "1";
 						else if (isInteger())
-							example = "1";
+							yield "1";
 						else if (isLong())
-							example = "1";
-						break;
-					case URI:
-					case ARGS:
-					case ARRAY:
-					case BEANMAP:
-					case CLASS:
-					case COLLECTION:
-					case DATE:
-					case INPUTSTREAM:
-					case MAP:
-					case METHOD:
-					case OBJ:
-					case OTHER:
-					case READER:
-					case OPTIONAL:
-					case VOID:
-						break;
-					default:
-						break;
-				}
+							yield "1";
+						yield null;
+					}
+					case URI, ARGS, ARRAY, BEANMAP, CLASS, COLLECTION, DATE, INPUTSTREAM, MAP, METHOD, OBJ, OTHER, READER, OPTIONAL, VOID -> null;
+					default -> null;
+				};
 			}
 
 			this.stringMutater = Mutaters.get(String.class, c);
 
 			if (cc == ENUM) {
 				Class<? extends Enum> ec = (Class<? extends Enum<?>>)c;
-				boolean useEnumNames = nn(bc) && bc.isUseEnumNames();
+				var useEnumNames = nn(bc) && bc.isUseEnumNames();
 				enumValues = BidiMap.create();
 				enumValues.unmodifiable();
 				stream(ec.getEnumConstants()).forEach(x -> enumValues.add(x, useEnumNames ? x.name() : x.toString()));
@@ -439,10 +419,10 @@ public class ClassMeta<T> implements Type {
 		}
 
 		private ObjectSwap<T,?> createSwap(Swap s) {
-			Class<?> c = s.value();
+			var c = s.value();
 			if (ClassUtils.isVoid(c))
-			c = s.impl();
-		ClassInfo ci = info(c);
+				c = s.impl();
+			var ci = info(c);
 
 			if (ci.isChildOf(ObjectSwap.class)) {
 				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
@@ -462,35 +442,31 @@ public class ClassMeta<T> implements Type {
 			throw new ClassMetaRuntimeException(c, "Invalid swap class ''{0}'' specified.  Must extend from ObjectSwap or Surrogate.", c);
 		}
 
-	private BeanFilter findBeanFilter(BeanContext bc) {
-		try {
-			var ba = rstream(bc.getAnnotationProvider().find(Bean.class, info))
-				.map(AnnotationInfo::inner)
-				.toList();
-			if (! ba.isEmpty())
-				return BeanFilter.create(innerClass).applyAnnotations(ba).build();
-		} catch (Exception e) {
-			throw toRex(e);
+		private BeanFilter findBeanFilter(BeanContext bc) {
+			try {
+				var ba = rstream(bc.getAnnotationProvider().find(Bean.class, info)).map(AnnotationInfo::inner).toList();
+				if (! ba.isEmpty())
+					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
+			} catch (Exception e) {
+				throw toRex(e);
+			}
+			return null;
 		}
-		return null;
-	}
 
 		private ClassMeta<?> findClassMeta(Class<?> c) {
 			return beanContext.getClassMeta(c, false);
 		}
 
-	private MarshalledFilter findMarshalledFilter(BeanContext bc) {
-		try {
-			var ba = rstream(bc.getAnnotationProvider().find(Marshalled.class, info))
-				.map(AnnotationInfo::inner)
-				.toList();
-			if (! ba.isEmpty())
-				return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
-		} catch (Exception e) {
-			throw toRex(e);
+		private MarshalledFilter findMarshalledFilter(BeanContext bc) {
+			try {
+				var ba = rstream(bc.getAnnotationProvider().find(Marshalled.class, info)).map(AnnotationInfo::inner).toList();
+				if (! ba.isEmpty())
+					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
+			} catch (Exception e) {
+				throw toRex(e);
+			}
+			return null;
 		}
-		return null;
-	}
 
 		private ClassMeta<?>[] findParameters() {
 			return beanContext.findParameters(innerClass, innerClass);
@@ -525,7 +501,7 @@ public class ClassMeta<T> implements Type {
 	 * Generated classes shouldn't be cacheable to prevent needlessly filling up the cache.
 	 */
 	private static boolean isCacheable(Class<?> c) {
-		String n = c.getName();
+		var n = c.getName();
 		char x = n.charAt(n.length() - 1);  // All generated classes appear to end with digits.
 		if (x >= '0' && x <= '9') {
 			if (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1)
@@ -549,10 +525,10 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings({ "unchecked" })
 	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<?> c, Visibility v) {
-		ClassInfo ci = info(c);
+		var ci = info(c);
 		if (ci.isAbstract())
 			return null;
-		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
+		var isMemberClass = ci.isMemberClass() && ci.isNotStatic();
 		// @formatter:off
 		return ci.getPublicConstructor(
 			x -> x.isVisible(v)
@@ -632,10 +608,10 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
-	this.innerClass = innerClass;
-	this.info = info(innerClass);
-	this.beanContext = beanContext;
-		String notABeanReason = null;
+		this.innerClass = innerClass;
+		this.info = info(innerClass);
+		this.beanContext = beanContext;
+		var notABeanReason = (String)null;
 
 		try (SimpleLock x = lock.write()) {
 			// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
@@ -690,9 +666,9 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
-	this.innerClass = (Class<T>)Object[].class;
-	this.info = info(innerClass);
-	this.args = args;
+		this.innerClass = (Class<T>)Object[].class;
+		this.info = info(innerClass);
+		this.args = args;
 		this.implClass = null;
 		this.childSwaps = null;
 		this.childSwapMap = null;
@@ -988,13 +964,13 @@ public class ClassMeta<T> implements Type {
 		try {
 			if (nn(example))
 				return jpSession.parse(example, this);
-		if (nn(exampleMethod))
-			return (T)info(exampleMethod).invokeLenient(null, session);
-		if (nn(exampleField))
+			if (nn(exampleMethod))
+				return (T)info(exampleMethod).invokeLenient(null, session);
+			if (nn(exampleField))
 				return (T)exampleField.get(null);
 
 			if (isCollection()) {
-				Object etExample = getElementType().getExample(session, jpSession);
+				var etExample = getElementType().getExample(session, jpSession);
 				if (nn(etExample)) {
 					if (canCreateNewInstance()) {
 						Collection c = (Collection)newInstance();
@@ -1004,18 +980,18 @@ public class ClassMeta<T> implements Type {
 					return (T)Collections.singleton(etExample);
 				}
 			} else if (isArray()) {
-				Object etExample = getElementType().getExample(session, jpSession);
+				var etExample = getElementType().getExample(session, jpSession);
 				if (nn(etExample)) {
 					Object o = Array.newInstance(getElementType().innerClass, 1);
 					Array.set(o, 0, etExample);
 					return (T)o;
 				}
 			} else if (isMap()) {
-				Object vtExample = getValueType().getExample(session, jpSession);
-				Object ktExample = getKeyType().getExample(session, jpSession);
+				var vtExample = getValueType().getExample(session, jpSession);
+				var ktExample = getKeyType().getExample(session, jpSession);
 				if (nn(ktExample) && nn(vtExample)) {
 					if (canCreateNewInstance()) {
-						Map m = (Map)newInstance();
+						var m = (Map)newInstance();
 						m.put(ktExample, vtExample);
 						return (T)m;
 					}
@@ -1064,9 +1040,9 @@ public class ClassMeta<T> implements Type {
 	 * @return The no-arg constructor for this class, or <jk>null</jk> if it does not exist.
 	 */
 	public ConstructorInfo getImplClassConstructor(Visibility conVis) {
-	if (nn(implClass))
-		return info(implClass).getNoArgConstructor(conVis).orElse(null);
-	return null;
+		if (nn(implClass))
+			return info(implClass).getNoArgConstructor(conVis).orElse(null);
+		return null;
 	}
 
 	/**
@@ -1116,7 +1092,7 @@ public class ClassMeta<T> implements Type {
 		var o = (Optional<A>)annotationLastMap.get(a);
 		if (o == null) {
 			if (beanContext == null)
-				return AnnotationProvider.INSTANCE.find(a, info).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
+				return AP.find(a, info).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
 			o = beanContext.getAnnotationProvider().find(a, info).stream().findFirst().map(AnnotationInfo::inner);
 			annotationLastMap.put(a, o);
 		}
@@ -1187,7 +1163,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
-		Optional<T2> t = (Optional<T2>)properties.get(name);
+		var t = (Optional<T2>)properties.get(name);
 		if (t == null) {
 			t = opt(function.apply(this));
 			properties.put(name, t);
@@ -1228,7 +1204,7 @@ public class ClassMeta<T> implements Type {
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
 	public ClassMeta<?> getSerializedClassMeta(BeanSession session) {
-		ObjectSwap<T,?> ps = getSwap(session);
+		var ps = getSwap(session);
 		return (ps == null ? this : ps.getSwapClassMeta(session));
 	}
 
@@ -1259,10 +1235,11 @@ public class ClassMeta<T> implements Type {
 	 */
 	public ObjectSwap<T,?> getSwap(BeanSession session) {
 		if (nn(swaps)) {
-			int matchQuant = 0, matchIndex = -1;
+			int matchQuant = 0;
+			int matchIndex = -1;
 
-			for (int i = 0; i < swaps.length; i++) {
-				int q = swaps[i].match(session);
+			for (var i = 0; i < swaps.length; i++) {
+				var q = swaps[i].match(session);
 				if (q > matchQuant) {
 					matchQuant = q;
 					matchIndex = i;
@@ -1762,16 +1739,13 @@ public class ClassMeta<T> implements Type {
 		A[] array = annotationArray(type);
 		if (array == null) {
 			if (beanContext == null)
-				return AnnotationProvider.INSTANCE.find(type, info).stream()
-					.map(AnnotationInfo::inner)
-					.filter(a -> test(filter, a))
-					.findFirst();  // AnnotationProvider returns child-to-parent, so first is "last"
-			return Optional.empty();
+				return AP.find(type, info).stream().map(AnnotationInfo::inner).filter(a -> test(filter, a)).findFirst();  // AnnotationProvider returns child-to-parent, so first is "last"
+			return opte();
 		}
-		for (int i = array.length - 1; i >= 0; i--)
+		for (var i = array.length - 1; i >= 0; i--)
 			if (test(filter, array[i]))
-				return Optional.of(array[i]);
-		return Optional.empty();
+				return opt(array[i]);
+		return opte();
 	}
 
 	/**
@@ -1939,10 +1913,7 @@ public class ClassMeta<T> implements Type {
 		var array = (A[])annotationArrayMap.get(type);
 		if (array == null && nn(beanContext)) {
 			var ap = beanContext.getAnnotationProvider();
-			array = ap.find(type, info)
-				.stream()
-				.map(AnnotationInfo::inner)
-				.toArray(i -> array(type, i));
+			array = ap.find(type, info).stream().map(AnnotationInfo::inner).toArray(i -> array(type, i));
 			annotationArrayMap.put(type, array);
 		}
 		return array;
@@ -2023,9 +1994,9 @@ public class ClassMeta<T> implements Type {
 	 * @return The passed-in string builder.
 	 */
 	protected StringBuilder toString(StringBuilder sb, boolean simple) {
-		String n = innerClass.getName();
+		var n = innerClass.getName();
 		if (simple) {
-			int i = n.lastIndexOf('.');
+			var i = n.lastIndexOf('.');
 			n = n.substring(i == -1 ? 0 : i + 1).replace('$', '.');
 		}
 		if (cc == ARRAY)

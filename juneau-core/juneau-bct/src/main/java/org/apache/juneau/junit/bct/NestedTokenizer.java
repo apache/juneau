@@ -128,7 +128,7 @@ class NestedTokenizer {
 		 * @return true if nested tokens exist
 		 */
 		public boolean hasNested() {
-			return nn(nested) && !nested.isEmpty();
+			return nn(nested) && ! nested.isEmpty();
 		}
 
 		@Override
@@ -181,7 +181,7 @@ class NestedTokenizer {
 				} else if (c == ',') {
 					var value = currentValue.toString().trim();
 					// Add token unless it's empty and we just completed a nested token
-					if (!value.isEmpty() || tokens.isEmpty() || !justCompletedNested) {
+					if (! value.isEmpty() || tokens.isEmpty() || ! justCompletedNested) {
 						tokens.add(new Token(value));
 					}
 					currentValue.setLength(0);
@@ -209,7 +209,7 @@ class NestedTokenizer {
 						var value = currentValue.toString().trim();
 						var nestedContent = in.substring(nestedStart, pos);
 						var token = new Token(value);
-						if (!nestedContent.trim().isEmpty()) {
+						if (! nestedContent.trim().isEmpty()) {
 							token.setNested(tokenize(nestedContent));
 						}
 						tokens.add(token);
@@ -234,7 +234,7 @@ class NestedTokenizer {
 
 		// Add final token if we have content, or if input ended with comma, or if no tokens yet
 		var finalValue = currentValue.toString().trim();
-		if (!finalValue.isEmpty() || lastWasComma || tokens.isEmpty()) {
+		if (! finalValue.isEmpty() || lastWasComma || tokens.isEmpty()) {
 			tokens.add(new Token(finalValue));
 		}
 

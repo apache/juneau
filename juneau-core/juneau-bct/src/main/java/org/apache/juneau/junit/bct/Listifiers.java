@@ -110,15 +110,18 @@ public class Listifiers {
 	private static Comparator<Object> flexibleComparator(BeanConverter converter) {
 		return (o1, o2) -> {
 			// Handle nulls
-			if (o1 == null && o2 == null) return 0;
-			if (o1 == null) return -1;
-			if (o2 == null) return 1;
+			if (o1 == null && o2 == null)
+				return 0;
+			if (o1 == null)
+				return -1;
+			if (o2 == null)
+				return 1;
 
 			// Try natural ordering if both are Comparable
 			if (o1 instanceof Comparable o1c && o2 instanceof Comparable o2c) {
 				try {
 					return o1c.compareTo(o2c);
-				} catch (ClassCastException e) {
+				} catch (@SuppressWarnings("unused") ClassCastException e) {
 					// Comparing different types.  Fall back to string comparison below.
 				}
 			}
@@ -126,9 +129,12 @@ public class Listifiers {
 			// Fall back to string comparison
 			var s1 = converter.stringify(o1);
 			var s2 = converter.stringify(o2);
-			if (s1 == null && s2 == null) return 0;
-			if (s1 == null) return -1;
-			if (s2 == null) return 1;
+			if (s1 == null && s2 == null)
+				return 0;
+			if (s1 == null)
+				return -1;
+			if (s2 == null)
+				return 1;
 			return s1.compareTo(s2);
 		};
 	}
@@ -187,7 +193,7 @@ public class Listifiers {
 	@SuppressWarnings("unchecked")
 	public static Listifier<Collection> collectionListifier() {
 		return (bc, collection) -> {
-			if (collection instanceof Set && !(collection instanceof SortedSet) && !(collection instanceof LinkedHashSet)) {
+			if (collection instanceof Set && ! (collection instanceof SortedSet) && ! (collection instanceof LinkedHashSet)) {
 				var collection2 = new TreeSet<>(flexibleComparator(bc));
 				collection2.addAll(collection);
 				collection = collection2;
@@ -366,7 +372,7 @@ public class Listifiers {
 	@SuppressWarnings("unchecked")
 	public static Listifier<Map> mapListifier() {
 		return (bc, map) -> {
-			if (!(map instanceof SortedMap) && !(map instanceof LinkedHashMap)) {
+			if (! (map instanceof SortedMap) && ! (map instanceof LinkedHashMap)) {
 				var map2 = new TreeMap<>(flexibleComparator(bc));
 				map2.putAll(map);
 				map = map2;

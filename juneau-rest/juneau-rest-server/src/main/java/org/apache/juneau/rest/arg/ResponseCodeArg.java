@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class ResponseCodeArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.
@@ -58,15 +58,14 @@ public class ResponseCodeArg implements RestOpArg {
 	 */
 	protected ResponseCodeArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();
-		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
+		var c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class || getValueParameterType(type) != Integer.class)
 			throw new ArgException(paramInfo, "Type must be Value<Integer> on parameter annotated with @StatusCode annotation");
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(final RestOpSession opSession) throws Exception {
-		Value<Object> v = new Value();
+		var v = new Value<>();
 		v.listener(o -> opSession.getResponse().setStatus(Integer.parseInt(o.toString())));
 		return v;
 	}

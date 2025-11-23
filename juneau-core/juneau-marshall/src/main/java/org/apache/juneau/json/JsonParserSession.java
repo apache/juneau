@@ -205,7 +205,7 @@ public class JsonParserSession extends ReaderParserSession {
 			eType = object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		ClassMeta<?> sType = null;
+		var sType = (ClassMeta<?>)null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -402,14 +402,14 @@ public class JsonParserSession extends ReaderParserSession {
 						skipCommentsAndSpace(r.unread());
 					} else {
 						if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+							var pMeta = m.getPropertyMeta(currAttr);
 							setCurrentProperty(pMeta);
 							if (pMeta == null) {
 								onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), null));
 								unmark();
 							} else {
 								unmark();
-								ClassMeta<?> cm = pMeta.getClassMeta();
+								var cm = pMeta.getClassMeta();
 								Object value = parseAnything(cm, r.unread(), m.getBean(false), pMeta);
 								setName(cm, value, currAttr);
 								try {
@@ -648,7 +648,7 @@ public class JsonParserSession extends ReaderParserSession {
 			}
 
 			// JSON doesn't allow '1.' or '0.e1'.
-			int i = s.indexOf('.');
+			var i = s.indexOf('.');
 			if (i != -1 && (s.length() == (i + 1) || ! decChars.contains(s.charAt(i + 1))))
 				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
 

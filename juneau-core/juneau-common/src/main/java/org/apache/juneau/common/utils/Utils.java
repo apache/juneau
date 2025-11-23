@@ -92,7 +92,6 @@ public class Utils {
 		return null;
 	}
 
-
 	/**
 	 * Compares two objects for equality.
 	 *
@@ -105,7 +104,7 @@ public class Utils {
 	 * 	<c>-1</c>, <c>0</c>, or <c>1</c> if <c>o1</c> is less-than, equal, or greater-than <c>o2</c>.
 	 *	<br><c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked")
 	public static int compare(Object o1, Object o2) {
 		if (o1 == null) {
 			if (o2 == null)
@@ -115,8 +114,8 @@ public class Utils {
 			return 1;
 		}
 
-		if (o1.getClass() == o2.getClass() && o1 instanceof Comparable)
-			return ((Comparable)o1).compareTo(o2);
+		if (o1.getClass() == o2.getClass() && o1 instanceof Comparable o1_2)
+			return o1_2.compareTo(o2);
 
 		return 0;
 	}
@@ -271,7 +270,7 @@ public class Utils {
 	 * @see AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
 	 */
 	public static boolean ne(java.lang.annotation.Annotation a1, java.lang.annotation.Annotation a2) {
-		return !eq(a1, a2);
+		return ! eq(a1, a2);
 	}
 
 	/**
@@ -517,13 +516,21 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if string is <jk>null</jk> or empty.
+	 * Checks if a string is empty (null or zero length).
 	 *
-	 * @param o The string to check.
-	 * @return <jk>true</jk> if string is <jk>null</jk> or empty.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isEmpty(<jk>null</jk>);       <jc>// true</jc>
+	 * 	isEmpty(<js>""</js>);         <jc>// true</jc>
+	 * 	isEmpty(<js>"   "</js>);      <jc>// false</jc>
+	 * 	isEmpty(<js>"hello"</js>);    <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is null or has zero length.
 	 */
-	public static boolean isEmpty(CharSequence o) {
-		return StringUtils.isEmpty(o);
+	public static boolean isEmpty(CharSequence str) {
+		return str == null || str.isEmpty();
 	}
 
 	/**
@@ -548,12 +555,12 @@ public class Utils {
 	public static boolean isNotEmpty(Object value) {
 		if (value == null)
 			return false;
-		if (value instanceof CharSequence x)
-			return ! x.isEmpty();
-		if (value instanceof Collection<?> x)
-			return ! x.isEmpty();
-		if (value instanceof Map<?,?> x)
-			return ! x.isEmpty();
+		if (value instanceof CharSequence value2)
+			return ! value2.isEmpty();
+		if (value instanceof Collection<?> value2)
+			return ! value2.isEmpty();
+		if (value instanceof Map<?,?> value2)
+			return ! value2.isEmpty();
 		if (isArray(value))
 			return Array.getLength(value) > 0;
 		return isNotEmpty(s(value));
@@ -905,12 +912,12 @@ public class Utils {
 	 * @return The unwrapped object.
 	 */
 	public static Object unwrap(Object o) {
-		if (o instanceof Supplier)
-			o = unwrap(((Supplier<?>)o).get());
-		if (o instanceof Value)
-			o = unwrap(((Value<?>)o).get());
-		if (o instanceof Optional)
-			o = unwrap(((Optional<?>)o).orElse(null));
+		if (o instanceof Supplier<?> o2)
+			o = unwrap(o2.get());
+		if (o instanceof Value<?> o2)
+			o = unwrap(o2.get());
+		if (o instanceof Optional<?> o2)
+			o = unwrap(o2.orElse(null));
 		return o;
 	}
 
@@ -1165,8 +1172,8 @@ public class Utils {
 		return () -> {
 			Optional<T> h = cache.get();
 			if (h == null) {
-				h = Optional.ofNullable(supplier.get());
-				if (!cache.compareAndSet(null, h)) {
+				h = opt(supplier.get());
+				if (! cache.compareAndSet(null, h)) {
 					// Another thread beat us, use their value
 					h = cache.get();
 				}
@@ -1224,8 +1231,8 @@ public class Utils {
 	 * @return An identity string.
 	 */
 	public static String identity(Object o) {
-		if (o instanceof Optional)
-			o = ((Optional<?>)o).orElse(null);
+		if (o instanceof Optional<?> opt)
+			o = opt.orElse(null);
 		if (o == null)
 			return null;
 		return sqcn(o) + "@" + System.identityHashCode(o);

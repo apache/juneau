@@ -102,8 +102,8 @@ public abstract class RestObject {
 	 * @param msg The message to log.
 	 */
 	protected void doLog(Level level, Throwable cause, Supplier<String> msg) {
-		RestContext c = context.get();
-		Logger logger = c == null ? null : c.getLogger();
+		var c = context.get();
+		var logger = c == null ? null : c.getLogger();
 		if (logger == null)
 			logger = Logger.getLogger(cn(this));
 		logger.log(level, cause, msg);

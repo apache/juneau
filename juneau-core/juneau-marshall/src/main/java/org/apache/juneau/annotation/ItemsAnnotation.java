@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.annotation;
 
-
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;

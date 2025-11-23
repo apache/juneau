@@ -61,8 +61,8 @@ public class SchemaUtils {
 			return null;
 		if (o instanceof String[])
 			o = joinnl((String[])o);
-		if (o instanceof String) {
-			String s = o.toString();
+		if (o instanceof String o2) {
+			String s = o2.toString();
 			if (s.isEmpty())
 				return null;
 			if ("IGNORE".equalsIgnoreCase(s))
@@ -71,8 +71,8 @@ public class SchemaUtils {
 				s = "{" + s + "}";
 			return JsonMap.ofJson(s);
 		}
-		if (o instanceof JsonMap)
-			return (JsonMap)o;
+		if (o instanceof JsonMap o2)
+			return o2;
 		throw new ParseException("Unexpected data type ''{0}''.  Expected JsonMap or String.", cn(o));
 	}
 

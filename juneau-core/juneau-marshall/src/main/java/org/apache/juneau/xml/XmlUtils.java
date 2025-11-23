@@ -71,11 +71,11 @@ public class XmlUtils {
 		String prev = null;
 		for (ListIterator<Object> i = value.listIterator(); i.hasNext();) {
 			Object o = i.next();
-			if (o instanceof String) {
+			if (o instanceof String o2) {
 				if (prev == null)
-					prev = o.toString();
+					prev = o2.toString();
 				else {
-					prev += o;
+					prev += o2;
 					i.remove();
 					i.previous();
 					i.remove();
@@ -420,7 +420,7 @@ public class XmlUtils {
 	// Converts an integer to a hexadecimal string padded to 4 places.
 	private static Writer appendPaddedHexChar(Writer out, int num) throws IOException {
 		out.append("_x");
-		for (char c : toHex4(num))
+		for (var c : toHex4(num))
 			out.append(c);
 		return out.append('_');
 	}

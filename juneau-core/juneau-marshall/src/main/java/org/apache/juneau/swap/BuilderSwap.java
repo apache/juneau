@@ -17,7 +17,6 @@
 package org.apache.juneau.swap;
 
 import static org.apache.juneau.common.reflect.ReflectionUtils.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -25,6 +24,7 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Specialized transform for builder classes.
@@ -55,7 +55,7 @@ public class BuilderSwap<T,B> {
 		if (bci.isNotPublic())
 			return null;
 
-	Class<?> objectClass = info(builderClass).getParameterType(0, Builder.class);
+		var objectClass = info(builderClass).getParameterType(0, Builder.class);
 
 		MethodInfo createObjectMethod, createBuilderMethod;
 		ConstructorInfo objectConstructor;
@@ -65,13 +65,13 @@ public class BuilderSwap<T,B> {
 		if (nn(createObjectMethod))
 			objectClass = createObjectMethod.getReturnType().inner();
 
-	if (objectClass == null)
-		return null;
+		if (objectClass == null)
+			return null;
 
-	var pci = info(objectClass);
+		var pci = info(objectClass);
 
-	objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass)).orElse(null);
-	if (objectConstructor == null)
+		objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass)).orElse(null);
+		if (objectConstructor == null)
 			return null;
 
 		builderConstructor = bci.getNoArgConstructor(cVis).orElse(null);
@@ -96,10 +96,10 @@ public class BuilderSwap<T,B> {
 		var builderClass = Value.<Class<?>>empty();
 		MethodInfo objectCreateMethod, builderCreateMethod;
 		ConstructorInfo objectConstructor = null;
-	ConstructorInfo builderConstructor;
-	var pci = info(objectClass);
+		ConstructorInfo builderConstructor;
+		var pci = info(objectClass);
 
-		bc.getAnnotationProvider().find(org.apache.juneau.annotation.Builder.class, pci).stream().map(x -> x.inner().value()).filter(x -> isNotVoid(x)).forEach(x -> builderClass.set(x));
+		bc.getAnnotationProvider().find(org.apache.juneau.annotation.Builder.class, pci).stream().map(x -> x.inner().value()).filter(ClassUtils::isNotVoid).forEach(x -> builderClass.set(x));
 
 		builderCreateMethod = getBuilderCreateMethod(pci);
 
@@ -123,8 +123,8 @@ public class BuilderSwap<T,B> {
 		if (builderClass.isEmpty())
 			return null;
 
-	var bci = info(builderClass.get());
-	builderConstructor = bci.getNoArgConstructor(cVis).orElse(null);
+		var bci = info(builderClass.get());
+		builderConstructor = bci.getNoArgConstructor(cVis).orElse(null);
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 

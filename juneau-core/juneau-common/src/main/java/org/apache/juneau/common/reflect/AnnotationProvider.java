@@ -176,7 +176,7 @@ import org.apache.juneau.common.collections.*;
  * 	<li class='jc'>{@link MethodInfo}
  * </ul>
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class AnnotationProvider {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -250,7 +250,8 @@ public class AnnotationProvider {
 		 * @return A new immutable {@link AnnotationProvider} instance.
 		 */
 		public AnnotationProvider build() {
-			if ((runtimeAnnotations == null || runtimeAnnotations.isEmpty()) && INSTANCE != null) return INSTANCE;
+			if ((runtimeAnnotations == null || runtimeAnnotations.isEmpty()) && INSTANCE != null)
+				return INSTANCE;
 			return new AnnotationProvider(this);
 		}
 
@@ -371,7 +372,8 @@ public class AnnotationProvider {
 		 * 	or if the methods return incorrect types).
 		 */
 		public Builder addRuntimeAnnotations(List<Annotation> annotations) {
-			if (runtimeAnnotations == null) runtimeAnnotations = ReflectionMap.create(Annotation.class);
+			if (runtimeAnnotations == null)
+				runtimeAnnotations = ReflectionMap.create(Annotation.class);
 
 			for (var a : annotations) {
 				try {
@@ -456,6 +458,7 @@ public class AnnotationProvider {
 	 * @param builder The builder containing configuration settings.
 	 */
 	protected AnnotationProvider(Builder builder) {
+		// @formatter:off
 		this.runtimeCache = Cache.<Object,List<AnnotationInfo<Annotation>>>create()
 			.supplier(this::load)
 			.cacheMode(builder.cacheMode)
@@ -469,6 +472,7 @@ public class AnnotationProvider {
 			.build();
 
 		this.annotationMap = opt(builder.runtimeAnnotations).map(x -> x.build()).orElse(null);
+		// @formatter:on
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -503,7 +507,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
+	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ClassInfo c, AnnotationTraversal...traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("c", c);
 		return cache.get(type, c, traversals);
@@ -531,7 +535,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options (what to search and order).
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<? extends Annotation>> find(ClassInfo c, AnnotationTraversal... traversals) {
+	public List<AnnotationInfo<? extends Annotation>> find(ClassInfo c, AnnotationTraversal...traversals) {
 		assertArgNotNull("c", c);
 		return cache.get(null, c, traversals);
 	}
@@ -573,7 +577,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#PARENTS PARENTS}, {@link AnnotationTraversal#PACKAGE PACKAGE}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, ClassInfo c, AnnotationTraversal... traversals) {
+	public <A extends Annotation> boolean has(Class<A> type, ClassInfo c, AnnotationTraversal...traversals) {
 		return ! find(type, c, traversals).isEmpty();
 	}
 
@@ -600,7 +604,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, MethodInfo m, AnnotationTraversal... traversals) {
+	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, MethodInfo m, AnnotationTraversal...traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("m", m);
 		return cache.get(type, m, traversals);
@@ -628,7 +632,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<? extends Annotation>> find(MethodInfo m, AnnotationTraversal... traversals) {
+	public List<AnnotationInfo<? extends Annotation>> find(MethodInfo m, AnnotationTraversal...traversals) {
 		assertArgNotNull("m", m);
 		return cache.get(null, m, traversals);
 	}
@@ -670,7 +674,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS}, {@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE}, {@link AnnotationTraversal#PACKAGE PACKAGE}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, MethodInfo m, AnnotationTraversal... traversals) {
+	public <A extends Annotation> boolean has(Class<A> type, MethodInfo m, AnnotationTraversal...traversals) {
 		return ! find(type, m, traversals).isEmpty();
 	}
 
@@ -713,7 +717,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A list of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ParameterInfo p, AnnotationTraversal... traversals) {
+	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ParameterInfo p, AnnotationTraversal...traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("p", p);
 		return cache.get(type, p, traversals);
@@ -753,7 +757,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return A list of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<? extends Annotation>> find(ParameterInfo p, AnnotationTraversal... traversals) {
+	public List<AnnotationInfo<? extends Annotation>> find(ParameterInfo p, AnnotationTraversal...traversals) {
 		assertArgNotNull("p", p);
 		return cache.get(null, p, traversals);
 	}
@@ -794,7 +798,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, ParameterInfo p, AnnotationTraversal... traversals) {
+	public <A extends Annotation> boolean has(Class<A> type, ParameterInfo p, AnnotationTraversal...traversals) {
 		return ! find(type, p, traversals).isEmpty();
 	}
 
@@ -817,7 +821,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, FieldInfo f, AnnotationTraversal... traversals) {
+	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, FieldInfo f, AnnotationTraversal...traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("f", f);
 		return cache.get(type, f, traversals);
@@ -841,7 +845,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<? extends Annotation>> find(FieldInfo f, AnnotationTraversal... traversals) {
+	public List<AnnotationInfo<? extends Annotation>> find(FieldInfo f, AnnotationTraversal...traversals) {
 		assertArgNotNull("f", f);
 		return cache.get(null, f, traversals);
 	}
@@ -877,7 +881,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, FieldInfo f, AnnotationTraversal... traversals) {
+	public <A extends Annotation> boolean has(Class<A> type, FieldInfo f, AnnotationTraversal...traversals) {
 		return ! find(type, f, traversals).isEmpty();
 	}
 
@@ -900,7 +904,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo c, AnnotationTraversal... traversals) {
+	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo c, AnnotationTraversal...traversals) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("c", c);
 		return cache.get(type, c, traversals);
@@ -924,7 +928,7 @@ public class AnnotationProvider {
 	 * @param traversals The traversal options.
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public List<AnnotationInfo<? extends Annotation>> find(ConstructorInfo c, AnnotationTraversal... traversals) {
+	public List<AnnotationInfo<? extends Annotation>> find(ConstructorInfo c, AnnotationTraversal...traversals) {
 		assertArgNotNull("c", c);
 		return cache.get(null, c, traversals);
 	}
@@ -960,7 +964,7 @@ public class AnnotationProvider {
 	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo c, AnnotationTraversal... traversals) {
+	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo c, AnnotationTraversal...traversals) {
 		return ! find(type, c, traversals).isEmpty();
 	}
 
@@ -969,22 +973,22 @@ public class AnnotationProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private List load(Object o) {
-		if (o instanceof Class c) {
-			var ci = ClassInfo.of(c);
+		if (o instanceof Class o2) {
+			var ci = ClassInfo.of(o2);
 			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
 		}
-	if (o instanceof Method m) {
-		var mi = info(m);
-		return annotationMap == null ? liste() : annotationMap.find(mi.inner()).map(a -> ai(mi, a)).toList();
-	}
-	if (o instanceof Field f) {
-		var fi = info(f);
-		return annotationMap == null ? liste() : annotationMap.find(fi.inner()).map(a -> ai(fi, a)).toList();
-	}
-	if (o instanceof Constructor c) {
-		var ci = info(c);
-		return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
-	}
+		if (o instanceof Method o2) {
+			var mi = info(o2);
+			return annotationMap == null ? liste() : annotationMap.find(mi.inner()).map(a -> ai(mi, a)).toList();
+		}
+		if (o instanceof Field o2) {
+			var fi = info(o2);
+			return annotationMap == null ? liste() : annotationMap.find(fi.inner()).map(a -> ai(fi, a)).toList();
+		}
+		if (o instanceof Constructor o2) {
+			var ci = info(o2);
+			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
+		}
 		throw unsupportedOp();
 	}
 
@@ -1014,63 +1018,63 @@ public class AnnotationProvider {
 		else
 			t = l();  // Never happens.
 
-		if (element instanceof ClassInfo ci) {
+		if (element instanceof ClassInfo element2) {
 			if (t.contains(SELF)) {
-				l.addAll(runtimeCache.get(ci.inner()));
-				l.addAll(ci.getDeclaredAnnotations());
+				l.addAll(runtimeCache.get(element2.inner()));
+				l.addAll(element2.getDeclaredAnnotations());
 			}
 			if (t.contains(PARENTS)) {
-				for (var p : ci.getParentsAndInterfaces()) {
+				for (var p : element2.getParentsAndInterfaces()) {
 					l.addAll(runtimeCache.get(p.inner()));
 					l.addAll(p.getDeclaredAnnotations());
 				}
 			}
 			if (t.contains(PACKAGE)) {
-				if (ci.getPackage() != null)
-					l.addAll(ci.getPackage().getAnnotations());
+				if (element2.getPackage() != null)
+					l.addAll(element2.getPackage().getAnnotations());
 			}
-		} else if (element instanceof MethodInfo mi) {
+		} else if (element instanceof MethodInfo element3) {
 			if (t.contains(SELF)) {
-				l.addAll(runtimeCache.get(mi.inner()));
-				l.addAll(mi.getDeclaredAnnotations());
+				l.addAll(runtimeCache.get(element3.inner()));
+				l.addAll(element3.getDeclaredAnnotations());
 			}
 			if (t.contains(MATCHING_METHODS)) {
-				for (var m : mi.getMatchingMethods().stream().skip(1).toList()) {
+				for (var m : element3.getMatchingMethods().stream().skip(1).toList()) {
 					l.addAll(runtimeCache.get(m.inner()));
 					l.addAll(m.getDeclaredAnnotations());
 				}
 			}
 			if (t.contains(DECLARING_CLASS)) {
-				l.addAll(find(mi.getDeclaringClass(), a(PARENTS)));
+				l.addAll(find(element3.getDeclaringClass(), a(PARENTS)));
 			}
 			if (t.contains(RETURN_TYPE)) {
-				l.addAll(find(mi.getReturnType().unwrap(Value.class, Optional.class), a(PARENTS)));
+				l.addAll(find(element3.getReturnType().unwrap(Value.class, Optional.class), a(PARENTS)));
 			}
 			if (t.contains(PACKAGE)) {
-				if (mi.getDeclaringClass().getPackage() != null)
-					l.addAll(mi.getDeclaringClass().getPackage().getAnnotations());
+				if (element3.getDeclaringClass().getPackage() != null)
+					l.addAll(element3.getDeclaringClass().getPackage().getAnnotations());
 			}
-		} else if (element instanceof FieldInfo fi) {
+		} else if (element instanceof FieldInfo element4) {
 			if (t.contains(SELF)) {
-				l.addAll(runtimeCache.get(fi.inner()));
-				l.addAll(fi.getAnnotations());
+				l.addAll(runtimeCache.get(element4.inner()));
+				l.addAll(element4.getAnnotations());
 			}
-		} else if (element instanceof ConstructorInfo ci2) {
+		} else if (element instanceof ConstructorInfo element5) {
 			if (t.contains(SELF)) {
-				l.addAll(runtimeCache.get(ci2.inner()));
-				l.addAll(ci2.getDeclaredAnnotations());
+				l.addAll(runtimeCache.get(element5.inner()));
+				l.addAll(element5.getDeclaredAnnotations());
 			}
-		} else if (element instanceof ParameterInfo pi) {
+		} else if (element instanceof ParameterInfo element6) {
 			if (t.contains(SELF)) {
-				l.addAll(pi.getAnnotations());
+				l.addAll(element6.getAnnotations());
 			}
 			if (t.contains(MATCHING_PARAMETERS)) {
-				for (var p : pi.getMatchingParameters().stream().skip(1).toList()) {
+				for (var p : element6.getMatchingParameters().stream().skip(1).toList()) {
 					l.addAll(p.getAnnotations());
 				}
 			}
 			if (t.contains(PARAMETER_TYPE)) {
-				l.addAll(find(pi.getParameterType().unwrap(Value.class, Optional.class), a(PARENTS, PACKAGE)));
+				l.addAll(find(element6.getParameterType().unwrap(Value.class, Optional.class), a(PARENTS, PACKAGE)));
 			}
 		}
 

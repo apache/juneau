@@ -397,7 +397,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	@Override
 	public R isType(Class<?> parent) {
 		assertArgNotNull("parent", parent);
-		if (!parent.isInstance(value()))
+		if (! parent.isInstance(value()))
 			throw error(MSG_exceptionWasNotExpectedType, cn(parent), cn(value()));
 		return returns();
 	}

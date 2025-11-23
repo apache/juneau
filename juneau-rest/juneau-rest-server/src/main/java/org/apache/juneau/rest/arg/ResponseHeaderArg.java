@@ -49,7 +49,7 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class ResponseHeaderArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.
@@ -88,10 +88,9 @@ public class ResponseHeaderArg implements RestOpArg {
 			throw new ArgException(pi, "Type must be Value<?> on parameter annotated with @Header annotation");
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(final RestOpSession opSession) throws Exception {
-		Value<Object> v = new Value();
+		var v = new Value<>();
 		v.listener(o -> {
 			var req = opSession.getRequest();
 			var res = opSession.getResponse();

@@ -200,7 +200,7 @@ class Csv_Test extends TestBase {
 		@Override
 		public Address unswap(BeanSession session, String str, ClassMeta<?> hint) {
 			if (str == null) return null;
-			String[] parts = str.split("\\|");
+			var parts = str.split("\\|");
 			return new Address(parts[0], parts[1], parts[2]);
 		}
 	}

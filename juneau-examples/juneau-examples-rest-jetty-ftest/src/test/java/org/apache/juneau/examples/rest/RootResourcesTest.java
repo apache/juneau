@@ -39,15 +39,16 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testJson() throws Exception {
-		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
+		var client = SamplesMicroservice.DEFAULT_CLIENT;
 
-		ResourceDescription[] x = client.get("").run().getContent().as(ResourceDescription[].class);
+		var x = client.get("").run().getContent().as(ResourceDescription[].class);
 		assertEquals("helloWorld", x[0].getName());
 		assertEquals("Hello World", x[0].getDescription());
 
-		JsonMap x2 = jsonClient.get("api").run().getContent().as(JsonMap.class);
-		String s = x2.getMap("info").getString("description");
-		if (debug) System.err.println(s);
+		var x2 = jsonClient.get("api").run().getContent().as(JsonMap.class);
+		var s = x2.getMap("info").getString("description");
+		if (debug)
+			System.err.println(s);
 		assertTrue(s, s.startsWith("Example of a router resource page"));
 	}
 
@@ -56,15 +57,16 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testXml() throws Exception {
-		try (RestClient client = SamplesMicroservice.client().xml().build()) {
+		try (var client = SamplesMicroservice.client().xml().build()) {
 
-			ResourceDescription[] x = client.get("").run().getContent().as(ResourceDescription[].class);
+			var x = client.get("").run().getContent().as(ResourceDescription[].class);
 			assertEquals("helloWorld", x[0].getName());
 			assertEquals("Hello World", x[0].getDescription());
 
-			JsonMap x2 = jsonClient.get("api").run().getContent().as(JsonMap.class);
-			String s = x2.getMap("info").getString("description");
-			if (debug) System.err.println(s);
+			var x2 = jsonClient.get("api").run().getContent().as(JsonMap.class);
+			var s = x2.getMap("info").getString("description");
+			if (debug)
+				System.err.println(s);
 			assertTrue(s, s.startsWith("Example of a router resource page"));
 		}
 	}
@@ -76,13 +78,14 @@ public class RootResourcesTest extends RestTestcase {
 	public void testHtmlStripped() throws Exception {
 		try (RestClient client = SamplesMicroservice.client().parsers(HtmlParser.DEFAULT).accept("text/html+stripped").build()) {
 
-			ResourceDescription[] x = client.get("").run().getContent().as(ResourceDescription[].class);
+			var x = client.get("").run().getContent().as(ResourceDescription[].class);
 			assertEquals("helloWorld", x[0].getName());
 			assertEquals("Hello World", x[0].getDescription());
 
-			JsonMap x2 = jsonClient.get("api").run().getContent().as(JsonMap.class);
-			String s = x2.getMap("info").getString("description");
-			if (debug) System.err.println(s);
+			var x2 = jsonClient.get("api").run().getContent().as(JsonMap.class);
+			var s = x2.getMap("info").getString("description");
+			if (debug)
+				System.err.println(s);
 			assertTrue(s, s.startsWith("Example of a router resource page"));
 		}
 	}
@@ -93,8 +96,9 @@ public class RootResourcesTest extends RestTestcase {
 	@Test
 	public void testJsonSchema() throws Exception {
 		try (RestClient client = SamplesMicroservice.client().parsers(JsonParser.DEFAULT).accept("text/json+schema").build()) {
-			JsonMap m = client.get("").run().getContent().as(JsonMap.class);
-			if (debug) System.err.println(m);
+			var m = client.get("").run().getContent().as(JsonMap.class);
+			if (debug)
+				System.err.println(m);
 			client.closeQuietly();
 		}
 	}
@@ -105,7 +109,8 @@ public class RootResourcesTest extends RestTestcase {
 	@Test
 	public void testOptionsPage() throws Exception {
 		Swagger o = jsonClient.get("api").run().getContent().as(Swagger.class);
-		if (debug) System.err.println(o);
+		if (debug)
+			System.err.println(o);
 		assertEquals("Example of a router resource page.", o.getInfo().getDescription());
 	}
 }

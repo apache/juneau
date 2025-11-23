@@ -178,12 +178,14 @@ public class MediaType extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(schema), "schema")
 			.addIf(nn(example), "x-example")
 			.addIf(nn(encoding), "encoding")
 			.addIf(nn(examples), "examples")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

@@ -1037,11 +1037,11 @@ class StringUtils_Test extends TestBase {
 	}
 
 	@Test void a43_isEmpty() {
-		assertTrue(StringUtils.isEmpty(null));
-		assertTrue(StringUtils.isEmpty(""));
-		assertFalse(StringUtils.isEmpty("   "));
-		assertFalse(StringUtils.isEmpty("hello"));
-		assertFalse(StringUtils.isEmpty("a"));
+		assertTrue(Utils.isEmpty((String)null));
+		assertTrue(Utils.isEmpty(""));
+		assertFalse(Utils.isEmpty("   "));
+		assertFalse(Utils.isEmpty("hello"));
+		assertFalse(Utils.isEmpty("a"));
 	}
 
 	@Test void a44_hasText() {
@@ -1500,7 +1500,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("[a,b,c]", readable(l("a", "b", "c")));
 		assertEquals("{foo=bar}", readable(m("foo", "bar")));
 		assertEquals("[1,2,3]", readable(ints(1, 2, 3)));
-		assertEquals("test", readable(Optional.of("test")));
-		assertNull(readable(Optional.empty()));
+	assertEquals("test", readable(opt("test")));
+	assertNull(readable(opte()));
 	}
 }

@@ -375,7 +375,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public JsonMap(Object...keyValuePairs) {
 		assertArg(keyValuePairs.length % 2 == 0, "Odd number of parameters passed into JsonMap(Object...)");
-		for (int i = 0; i < keyValuePairs.length; i += 2)
+		for (var i = 0; i < keyValuePairs.length; i += 2)
 			put(s(keyValuePairs[i]), keyValuePairs[i + 1]);
 	}
 
@@ -579,8 +579,8 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	@SuppressWarnings({ "unchecked" })
 	public <T> T cast(ClassMeta<T> cm) {
 		BeanSession bs = bs();
-		ClassMeta<?> c1 = bs.getBeanRegistry().getClassMeta((String)get(bs.getBeanTypePropertyName(cm)));
-		ClassMeta<?> c = narrowClassMeta(c1, cm);
+		var c1 = bs.getBeanRegistry().getClassMeta((String)get(bs.getBeanTypePropertyName(cm)));
+		var c = narrowClassMeta(c1, cm);
 		return (T)cast2(c);
 	}
 
@@ -710,7 +710,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public JsonMap exclude(String...keys) {
 		var m2 = new JsonMap();
 		this.forEach((k, v) -> {
-			boolean exclude = false;
+			var exclude = false;
 			for (var kk : keys)
 				if (kk.equals(k))
 					exclude = true;
@@ -737,11 +737,11 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		// @formatter:off
 		return filtered(x -> ! (
 			x == null
-			|| (x instanceof Boolean && x.equals(false))
-			|| (x instanceof Number && ((Number)x).intValue() == -1)
-			|| (isArray(x) && Array.getLength(x) == 0)
-			|| (x instanceof Map && ((Map<?,?>)x).isEmpty())
-			|| (x instanceof Collection && ((Collection<?>)x).isEmpty())
+			|| (x instanceof Boolean x2 && x2.equals(false))
+			|| (x instanceof Number x3 && x3.intValue() == -1)
+		|| (isArray(x) && Array.getLength(x) == 0)
+		|| (x instanceof Map x2 && x2.isEmpty())
+		|| (x instanceof Collection x3 && x3.isEmpty())
 		));
 		// @formatter:on
 	}
@@ -836,7 +836,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public String findKeyIgnoreCase(String key) {
 		for (var k : keySet())
-			if (key.equalsIgnoreCase(k))
+			if (eqic(key, k))
 				return k;
 		return null;
 	}
@@ -1250,7 +1250,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public JsonMap getMap(String key, boolean createIfNotExists) {
-		JsonMap m = getWithDefault(key, null, JsonMap.class);
+		var m = getWithDefault(key, null, JsonMap.class);
 		if (m == null && createIfNotExists) {
 			m = new JsonMap();
 			put(key, m);
@@ -1344,12 +1344,12 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		if (s == null)
 			return def;
 		String[] r = null;
-		if (s instanceof Collection)
-			r = toStringArray((Collection<?>)s);
-		else if (s instanceof String[])
-			r = (String[])s;
-		else if (s instanceof Object[])
-			r = toStringArray(l((Object[])s));
+		if (s instanceof Collection<?> s2)
+			r = toStringArray(s2);
+		else if (s instanceof String[] s2)
+			r = s2;
+		else if (s instanceof Object[] s3)
+			r = toStringArray(l(s3));
 		else
 			r = StringUtils.splita(s(s));
 		return (r.length == 0 ? def : r);
@@ -1484,9 +1484,9 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return This map.
 	 */
 	public JsonMap keepAll(String...keys) {
-		for (Iterator<String> i = keySet().iterator(); i.hasNext();) {
-			boolean remove = true;
-			String key = i.next();
+		for (var i = keySet().iterator(); i.hasNext();) {
+			var remove = true;
+			var key = i.next();
 			for (var k : keys) {
 				if (k.equals(key)) {
 					remove = false;
@@ -1741,8 +1741,8 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return An unmodifiable copy of this map if it's modifiable, or this map if it is already unmodifiable.
 	 */
 	public JsonMap unmodifiable() {
-		if (this instanceof UnmodifiableJsonMap)
-			return this;
+		if (this instanceof UnmodifiableJsonMap this2)
+			return this2;
 		return new UnmodifiableJsonMap(this);
 	}
 
@@ -1783,8 +1783,8 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 					if (! k.equals(bs.getBeanTypePropertyName(cm))) {
 
 						// Attempt to recursively cast child maps.
-						if (v instanceof JsonMap)
-							v = ((JsonMap)v).cast(vType);
+						if (v instanceof JsonMap v2)
+							v = v2.cast(vType);
 
 						Object k2 = (kType.isString() ? k : bs.convertToType(k, kType));
 						v = (vType.isObject() ? v : bs.convertToType(v, vType));
@@ -1802,8 +1802,8 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 					if (! k.equals(bs.getBeanTypePropertyName(cm))) {
 
 						// Attempt to recursively cast child maps.
-						if (v instanceof JsonMap)
-							v = ((JsonMap)v).cast(bm.getProperty(k).getMeta().getClassMeta());
+						if (v instanceof JsonMap v2)
+							v = v2.cast(bm.getProperty(k).getMeta().getClassMeta());
 
 						bm.put(k, v);
 					}

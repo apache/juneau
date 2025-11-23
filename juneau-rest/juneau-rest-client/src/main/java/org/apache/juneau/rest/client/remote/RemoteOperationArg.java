@@ -35,7 +35,7 @@ import org.apache.juneau.common.reflect.*;
  */
 public class RemoteOperationArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	static RemoteOperationArg create(ParameterInfo mpi) {
 		int i = mpi.getIndex();

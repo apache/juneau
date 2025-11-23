@@ -63,7 +63,7 @@ public class ByteValue extends Value<Byte> {
 	 * @return A new byte value.
 	 */
 	public static ByteValue create() {
-		return of((byte) 0);
+		return of((byte)0);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class ByteValue extends Value<Byte> {
 	 * Constructor.
 	 */
 	public ByteValue() {
-		super((byte) 0);
+		super((byte)0);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class ByteValue extends Value<Byte> {
 	 * @return This object.
 	 */
 	public ByteValue increment() {
-		set((byte) (get() + 1));
+		set((byte)(get() + 1));
 		return this;
 	}
 
@@ -128,7 +128,7 @@ public class ByteValue extends Value<Byte> {
 	 * @return This object.
 	 */
 	public ByteValue decrement() {
-		set((byte) (get() - 1));
+		set((byte)(get() - 1));
 		return this;
 	}
 
@@ -145,7 +145,7 @@ public class ByteValue extends Value<Byte> {
 	 * @return The incremented value.
 	 */
 	public Byte incrementAndGet() {
-		set((byte) (get() + 1));
+		set((byte)(get() + 1));
 		return get();
 	}
 
@@ -162,7 +162,7 @@ public class ByteValue extends Value<Byte> {
 	 * @return The decremented value.
 	 */
 	public Byte decrementAndGet() {
-		set((byte) (get() - 1));
+		set((byte)(get() - 1));
 		return get();
 	}
 
@@ -180,7 +180,7 @@ public class ByteValue extends Value<Byte> {
 	 * @return This object.
 	 */
 	public ByteValue add(Byte x) {
-		set((byte) (get() + (x == null ? 0 : x)));
+		set((byte)(get() + (x == null ? 0 : x)));
 		return this;
 	}
 
@@ -198,7 +198,7 @@ public class ByteValue extends Value<Byte> {
 	 * @return The new value after addition.
 	 */
 	public Byte addAndGet(Byte x) {
-		set((byte) (get() + (x == null ? 0 : x)));
+		set((byte)(get() + (x == null ? 0 : x)));
 		return get();
 	}
 
@@ -238,7 +238,7 @@ public class ByteValue extends Value<Byte> {
 	 * @param values The values to compare to.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
-	public boolean isAny(Byte... values) {
+	public boolean isAny(Byte...values) {
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))
@@ -246,4 +246,3 @@ public class ByteValue extends Value<Byte> {
 		return false;
 	}
 }
-

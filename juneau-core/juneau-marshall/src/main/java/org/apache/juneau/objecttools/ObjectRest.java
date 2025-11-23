@@ -407,7 +407,7 @@ public class ObjectRest {
 	 * @return The class type.
 	 */
 	public ClassMeta getClassMeta(String url) {
-		JsonNode n = getNode(normalizeUrl(url), root);
+		var n = getNode(normalizeUrl(url), root);
 		if (n == null)
 			return null;
 		return n.cm;
@@ -595,7 +595,7 @@ public class ObjectRest {
 	 * @return The list of methods.
 	 */
 	public Collection<String> getPublicMethods(String url) {
-		Object o = get(url);
+		var o = get(url);
 		if (o == null)
 			return null;
 		return session.getClassMeta(o.getClass()).getPublicMethods().keySet();
@@ -645,7 +645,7 @@ public class ObjectRest {
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
 	public Object getWithDefault(String url, Object defVal) {
-		Object o = service(GET, url, null);
+		var o = service(GET, url, null);
 		return o == null ? defVal : o;
 	}
 
@@ -662,7 +662,7 @@ public class ObjectRest {
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
 	public <T> T getWithDefault(String url, T def, Class<T> type) {
-		Object o = service(GET, url, null);
+		var o = service(GET, url, null);
 		if (o == null)
 			return def;
 		return session.convertToType(o, type);
@@ -682,7 +682,7 @@ public class ObjectRest {
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
 	public <T> T getWithDefault(String url, T def, Type type, Type...args) {
-		Object o = service(GET, url, null);
+		var o = service(GET, url, null);
 		if (o == null)
 			return def;
 		return session.convertToType(o, type, args);
@@ -798,8 +798,8 @@ public class ObjectRest {
 	private Object convert(Object in, ClassMeta cm) {
 		if (cm == null)
 			return in;
-		if (cm.isBean() && in instanceof Map)
-			return session.convertToType(in, cm);
+		if (cm.isBean() && in instanceof Map in2)
+			return session.convertToType(in2, cm);
 		return in;
 	}
 
@@ -811,42 +811,42 @@ public class ObjectRest {
 		url = normalizeUrl(url);
 
 		if (method == GET) {
-			JsonNode p = getNode(url, root);
+			var p = getNode(url, root);
 			return p == null ? null : p.o;
 		}
 
 		// Get the url of the parent and the property name of the addressed object.
-		int i = url.lastIndexOf('/');
-		String parentUrl = (i == -1 ? null : url.substring(0, i));
-		String childKey = (i == -1 ? url : url.substring(i + 1));
+		var i = url.lastIndexOf('/');
+		var parentUrl = (i == -1 ? null : url.substring(0, i));
+		var childKey = (i == -1 ? url : url.substring(i + 1));
 
 		if (method == PUT) {
 			if (url.isEmpty()) {
 				if (rootLocked)
 					throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
-				Object o = root.o;
+				var o = root.o;
 				root = new JsonNode(null, null, val, session.object());
 				return o;
 			}
-			JsonNode n = (parentUrl == null ? root : getNode(parentUrl, root));
+			var n = (parentUrl == null ? root : getNode(parentUrl, root));
 			if (n == null)
 				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
-			ClassMeta cm = n.cm;
-			Object o = n.o;
+			var cm = n.cm;
+			var o = n.o;
 			if (cm.isMap())
 				return ((Map)o).put(childKey, convert(val, cm.getValueType()));
-			if (cm.isCollection() && o instanceof List)
-				return ((List)o).set(parseInt(childKey), convert(val, cm.getElementType()));
+			if (cm.isCollection() && o instanceof List o2)
+				return o2.set(parseInt(childKey), convert(val, cm.getElementType()));
 			if (cm.isArray()) {
 				o = setArrayEntry(n.o, parseInt(childKey), val, cm.getElementType());
-				ClassMeta pct = n.parent.cm;
-				Object po = n.parent.o;
+				var pct = n.parent.cm;
+				var po = n.parent.o;
 				if (pct.isMap()) {
 					((Map)po).put(n.keyName, o);
 					return url;
 				}
 				if (pct.isBean()) {
-					BeanMap m = session.toBeanMap(po);
+					var m = session.toBeanMap(po);
 					m.put(n.keyName, o);
 					return url;
 				}
@@ -860,35 +860,35 @@ public class ObjectRest {
 		if (method == POST) {
 			// Handle POST to root special
 			if (url.isEmpty()) {
-				ClassMeta cm = root.cm;
-				Object o = root.o;
+				var cm = root.cm;
+				var o = root.o;
 				if (cm.isCollection()) {
 					var c = (Collection)o;
 					c.add(convert(val, cm.getElementType()));
-					return (c instanceof List ? url + "/" + (c.size() - 1) : null);
+					return (c instanceof List c2 ? url + "/" + (c2.size() - 1) : null);
 				}
 				if (cm.isArray()) {
-					Object[] o2 = addArrayEntry(o, val, cm.getElementType());
+					var o2 = addArrayEntry(o, val, cm.getElementType());
 					root = new JsonNode(null, null, o2, null);
 					return url + "/" + (o2.length - 1);
 				}
 				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
 			}
-			JsonNode n = getNode(url, root);
+			var n = getNode(url, root);
 			if (n == null)
 				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
-			ClassMeta cm = n.cm;
-			Object o = n.o;
+			var cm = n.cm;
+			var o = n.o;
 			if (cm.isArray()) {
-				Object[] o2 = addArrayEntry(o, val, cm.getElementType());
-				ClassMeta pct = n.parent.cm;
-				Object po = n.parent.o;
+				var o2 = addArrayEntry(o, val, cm.getElementType());
+				var pct = n.parent.cm;
+				var po = n.parent.o;
 				if (pct.isMap()) {
 					((Map)po).put(childKey, o2);
 					return url + "/" + (o2.length - 1);
 				}
 				if (pct.isBean()) {
-					BeanMap m = session.toBeanMap(po);
+					var m = session.toBeanMap(po);
 					m.put(childKey, o2);
 					return url + "/" + (o2.length - 1);
 				}
@@ -897,7 +897,7 @@ public class ObjectRest {
 			if (cm.isCollection()) {
 				var c = (Collection)o;
 				c.add(convert(val, cm.getElementType()));
-				return (c instanceof List ? url + "/" + (c.size() - 1) : null);
+				return (c instanceof List c2 ? url + "/" + (c2.size() - 1) : null);
 			}
 			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
 		}
@@ -906,29 +906,29 @@ public class ObjectRest {
 			if (url.isEmpty()) {
 				if (rootLocked)
 					throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
-				Object o = root.o;
+				var o = root.o;
 				root = new JsonNode(null, null, null, session.object());
 				return o;
 			}
-			JsonNode n = (parentUrl == null ? root : getNode(parentUrl, root));
-			ClassMeta cm = n.cm;
-			Object o = n.o;
+			var n = (parentUrl == null ? root : getNode(parentUrl, root));
+			var cm = n.cm;
+			var o = n.o;
 			if (cm.isMap())
 				return ((Map)o).remove(childKey);
-			if (cm.isCollection() && o instanceof List)
-				return ((List)o).remove(parseInt(childKey));
+			if (cm.isCollection() && o instanceof List o2)
+				return o2.remove(parseInt(childKey));
 			if (cm.isArray()) {
 				int index = parseInt(childKey);
-				Object old = ((Object[])o)[index];
-				Object[] o2 = removeArrayEntry(o, index);
-				ClassMeta pct = n.parent.cm;
-				Object po = n.parent.o;
+				var old = ((Object[])o)[index];
+				var o2 = removeArrayEntry(o, index);
+				var pct = n.parent.cm;
+				var po = n.parent.o;
 				if (pct.isMap()) {
 					((Map)po).put(n.keyName, o2);
 					return old;
 				}
 				if (pct.isBean()) {
-					BeanMap m = session.toBeanMap(po);
+					var m = session.toBeanMap(po);
 					m.put(n.keyName, o2);
 					return old;
 				}
@@ -958,7 +958,8 @@ public class ObjectRest {
 		if (url == null || url.isEmpty())
 			return n;
 		int i = url.indexOf('/');
-		String parentKey, childUrl = null;
+		String parentKey;
+		var childUrl = (String)null;
 		if (i == -1) {
 			parentKey = url;
 		} else {
@@ -966,33 +967,32 @@ public class ObjectRest {
 			childUrl = url.substring(i + 1);
 		}
 
-		Object o = n.o;
-		Object o2 = null;
-		ClassMeta cm = n.cm;
-		ClassMeta ct2 = null;
+		var o = n.o;
+		var o2 = (Object)null;
+		var cm = n.cm;
+		var ct2 = (ClassMeta)null;
 		if (o == null)
 			return null;
 		if (cm.isMap()) {
 			o2 = ((Map)o).get(parentKey);
 			ct2 = cm.getValueType();
-		} else if (cm.isCollection() && o instanceof List) {
+		} else if (cm.isCollection() && o instanceof List o3) {
 			int key = parseInt(parentKey);
-			List l = ((List)o);
-			if (l.size() <= key)
+			if (o3.size() <= key)
 				return null;
-			o2 = l.get(key);
+			o2 = o3.get(key);
 			ct2 = cm.getElementType();
 		} else if (cm.isArray()) {
 			int key = parseInt(parentKey);
-			Object[] a = ((Object[])o);
+			var a = ((Object[])o);
 			if (a.length <= key)
 				return null;
 			o2 = a[key];
 			ct2 = cm.getElementType();
 		} else if (cm.isBean()) {
-			BeanMap m = session.toBeanMap(o);
+			var m = session.toBeanMap(o);
 			o2 = m.get(parentKey);
-			BeanPropertyMeta pMeta = m.getPropertyMeta(parentKey);
+			var pMeta = m.getPropertyMeta(parentKey);
 			if (pMeta == null)
 				throw new ObjectRestException(HTTP_BAD_REQUEST, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", parentKey, m.getClassMeta());
 			ct2 = pMeta.getClassMeta();

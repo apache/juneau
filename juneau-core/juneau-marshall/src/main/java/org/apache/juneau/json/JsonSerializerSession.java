@@ -218,7 +218,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		}
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			ClassMeta<?> cMeta = pMeta.getClassMeta();
+			var cMeta = pMeta.getClassMeta();
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
@@ -239,7 +239,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
-		ClassMeta<?> elementType = type.getElementType();
+		var elementType = type.getElementType();
 
 		out.w('[');
 		var addComma = Flag.create();
@@ -256,7 +256,8 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+		var keyType = type.getKeyType();
+		var valueType = type.getValueType();
 
 		int i = indent;
 		out.w('{');
@@ -359,8 +360,8 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		if (eType == null)
 			eType = object();
 
-		ClassMeta<?> aType;			// The actual type
-		ClassMeta<?> sType;			// The serialized type
+		var aType = (ClassMeta<?>)null;			// The actual type
+		var sType = (ClassMeta<?>)null;			// The serialized type
 
 		aType = push2(attrName, o, eType);
 		boolean isRecursion = aType == null;

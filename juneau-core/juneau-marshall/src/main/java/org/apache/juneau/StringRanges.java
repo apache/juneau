@@ -27,7 +27,6 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A parsed <c>Accept-Encoding</c> or similar header value.
@@ -79,7 +78,7 @@ public class StringRanges {
 	 */
 	private static final Comparator<StringRange> RANGE_COMPARATOR = (o1, o2) -> {
 		// Compare q-values.
-		int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
+		var qCompare = Float.compare(o2.getQValue(), o1.getQValue());
 		if (qCompare != 0)
 			return qCompare;
 
@@ -95,7 +94,7 @@ public class StringRanges {
 	 * @return A parsed header value.
 	 */
 	public static StringRanges of(String value) {
-		return StringUtils.isEmpty(value) ? EMPTY : CACHE.get(value, () -> new StringRanges(value));
+		return isEmpty(value) ? EMPTY : CACHE.get(value, () -> new StringRanges(value));
 	}
 
 	/**
@@ -124,7 +123,7 @@ public class StringRanges {
 	public StringRanges(HeaderElement...e) {
 
 		value = new StringRange[e.length];
-		for (int i = 0; i < e.length; i++)
+		for (var i = 0; i < e.length; i++)
 			value[i] = new StringRange(e[i]);
 		Arrays.sort(value, RANGE_COMPARATOR);
 
@@ -196,20 +195,21 @@ public class StringRanges {
 		if (string.isEmpty())
 			return -1;
 
-		int matchQuant = 0, matchIndex = -1;
-		float q = 0f;
+		int matchQuant = 0;
+		int matchIndex = -1;
+		var q = 0f;
 
 		// Media ranges are ordered by 'q'.
 		// So we only need to search until we've found a match.
 		for (var mr : value) {
-			float q2 = mr.getQValue();
+			var q2 = mr.getQValue();
 
 			if (q2 < q || q2 == 0)
 				break;
 
-			for (int i = 0; i < names.size(); i++) {
-				String mt = names.get(i);
-				int matchQuant2 = mr.match(mt);
+			for (var i = 0; i < names.size(); i++) {
+				var mt = names.get(i);
+				var matchQuant2 = mr.match(mt);
 
 				if (matchQuant2 > matchQuant) {
 					matchIndex = i;

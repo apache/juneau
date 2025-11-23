@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.httppart;
 
-import static java.util.Optional.*;
 import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
@@ -29,7 +28,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
@@ -144,9 +142,9 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		this.vs = req.getVarResolverSession();
 
 		for (var e : query.entrySet()) {
-			String name = e.getKey();
+			var name = e.getKey();
 
-			String[] values = e.getValue();
+			var values = e.getValue();
 			if (values == null)
 				values = new String[0];
 
@@ -235,9 +233,9 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public RequestQueryParams addDefault(List<? extends NameValuePair> pairs) {
 		for (var p : pairs) {
-			String name = p.getName();
-			Stream<RequestQueryParam> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
+			var name = p.getName();
+			var l = stream(name);
+			var hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));
@@ -346,8 +344,8 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return The bean, never <jk>null</jk>.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(QUERY, cm).orElseThrow(() -> rex("@Query(name) not found on class {0}", cn(type)));
+		var cm = req.getBeanSession().getClassMeta(type);
+		var name = HttpParts.getName(QUERY, cm).orElseThrow(() -> rex("@Query(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}
 
@@ -367,7 +365,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		if (l.size() == 1)
 			return l.get(0);
 		var sb = new StringBuilder(128);
-		for (int i = 0, j = l.size(); i < j; i++) {
+		for (int i = 0; i < l.size(); i++) {
 			if (i > 0)
 				sb.append(", ");
 			sb.append(l.get(i).getValue());
@@ -412,7 +410,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public RequestQueryParam getLast(String name) {
 		assertArgNotNull("name", name);
-		Value<RequestQueryParam> v = Value.empty();
+		var v = Value.<RequestQueryParam>empty();
 		stream(name).forEach(x -> v.set(x));
 		return v.orElseGet(() -> new RequestQueryParam(req, name, null).parser(parser));
 	}
@@ -429,7 +427,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<PageArgs> getPageArgs() { return ofNullable(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null))); }
+	public Optional<PageArgs> getPageArgs() { return opt(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null))); }
 
 	/**
 	 * Locates the search query argument ({@code &amp;s=}) in the query string and returns them as a {@link SearchArgs} object.
@@ -437,7 +435,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link SearchArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<SearchArgs> getSearchArgs() { return ofNullable(SearchArgs.create(get("s").asString().orElse(null))); }
+	public Optional<SearchArgs> getSearchArgs() { return opt(SearchArgs.create(get("s").asString().orElse(null))); }
 
 	/**
 	 * Locates the sort query argument ({@code &amp;o=}) in the query string and returns them as a {@link SortArgs} object.
@@ -445,7 +443,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link SortArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<SortArgs> getSortArgs() { return ofNullable(SortArgs.create(get("o").asString().orElse(null))); }
+	public Optional<SortArgs> getSortArgs() { return opt(SortArgs.create(get("o").asString().orElse(null))); }
 
 	/**
 	 * Returns all headers in sorted order.
@@ -467,7 +465,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<ViewArgs> getViewArgs() { return ofNullable(ViewArgs.create(get("v").asString().orElse(null))); }
+	public Optional<ViewArgs> getViewArgs() { return opt(ViewArgs.create(get("v").asString().orElse(null))); }
 
 	/**
 	 * Sets the parser to use for part values.
@@ -561,6 +559,6 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 }

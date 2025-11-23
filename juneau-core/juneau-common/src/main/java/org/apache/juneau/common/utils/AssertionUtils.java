@@ -188,7 +188,8 @@ public class AssertionUtils {
 	 * @param o5 The fifth object to check.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
-	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4, String name5, Object o5) throws IllegalArgumentException {
+	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4, String name5, Object o5)
+		throws IllegalArgumentException {
 		assertArg(o1 != null, "Argument ''{0}'' cannot be null.", name1);
 		assertArg(o2 != null, "Argument ''{0}'' cannot be null.", name2);
 		assertArg(o3 != null, "Argument ''{0}'' cannot be null.", name3);

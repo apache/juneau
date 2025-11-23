@@ -236,7 +236,7 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	private void updateContentTypeHeader() {
-		String contentType = getContentType();
+		var contentType = getContentType();
 		String charset = characterEncoding;
 		if (nn(contentType) && nn(charset)) {
 			if (contentType.indexOf("charset=") != -1)

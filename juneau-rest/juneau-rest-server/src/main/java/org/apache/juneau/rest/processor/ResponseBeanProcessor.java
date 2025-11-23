@@ -20,7 +20,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -28,8 +27,6 @@ import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -45,20 +42,20 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {
 
-		RestRequest req = opSession.getRequest();
-		RestResponse res = opSession.getResponse();
-		HttpPartSerializer defaultPartSerializer = req.getOpContext().getPartSerializer();
+		var req = opSession.getRequest();
+		var res = opSession.getResponse();
+		var defaultPartSerializer = req.getOpContext().getPartSerializer();
 
-		Object output = res.getContent(Object.class);
+		var output = res.getContent(Object.class);
 
 		if (output == null || ! (nn(output.getClass().getAnnotation(Response.class)) || nn(res.getResponseBeanMeta())))
 			return NEXT;
 
-		ResponseBeanMeta rm = res.getResponseBeanMeta();
+		var rm = res.getResponseBeanMeta();
 		if (rm == null)
 			rm = req.getOpContext().getResponseBeanMeta(output);
 
-		ResponseBeanPropertyMeta stm = rm.getStatusMethod();
+		var stm = rm.getStatusMethod();
 		if (nn(stm)) {
 			try {
 				res.setStatus((int)stm.getGetter().invoke(output));
@@ -70,33 +67,32 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 		}
 
 		for (var hm : rm.getHeaderMethods()) {
-			String n = hm.getPartName().orElse(null);
+			var n = hm.getPartName().orElse(null);
 			try {
-				Object o = hm.getGetter().invoke(output);
-				HttpPartSchema ps = hm.getSchema();
+				var o = hm.getGetter().invoke(output);
+				var ps = hm.getSchema();
 				if ("*".equals(n)) {
 					for (var o2 : iterate(o)) {
-						Header h = null;
-						if (o2 instanceof Map.Entry) {
-							@SuppressWarnings("rawtypes")
-							Map.Entry x = (Map.Entry)o2;
-							String k = s(x.getKey());
+						var h = (Header)null;
+						if (o2 instanceof Map.Entry o22) {
+							var x = o22;
+							var k = s(x.getKey());
 							h = new SerializedHeader(k, x.getValue(), hm.getSerializer().orElse(defaultPartSerializer).getPartSession(), ps.getProperty(k), true);
-						} else if (o2 instanceof Header) {
-							h = (Header)o2;
-						} else if (o2 instanceof NameValuePair) {
-							h = BasicHeader.of((NameValuePair)o2);
+						} else if (o2 instanceof Header o22) {
+							h = o22;
+						} else if (o2 instanceof NameValuePair o23) {
+							h = BasicHeader.of(o23);
 						} else {
 							throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", cn(o2), n);
 						}
 						res.addHeader(h);
 					}
 				} else {
-					Header h = null;
-					if (o instanceof Header)
-						h = (Header)o;
-					else if (o instanceof NameValuePair)
-						h = BasicHeader.of((NameValuePair)o);
+					var h = (Header)null;
+					if (o instanceof Header o2)
+						h = o2;
+					else if (o instanceof NameValuePair o3)
+						h = BasicHeader.of(o3);
 					else
 						h = new SerializedHeader(n, o, hm.getSerializer().orElse(defaultPartSerializer).getPartSession(), ps, true);
 					res.addHeader(h);
@@ -106,14 +102,14 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 			}
 		}
 
-		ResponseBeanPropertyMeta bm = rm.getContentMethod();
+		var bm = rm.getContentMethod();
 
 		if (nn(bm)) {
-			Method m = bm.getGetter();
+			var m = bm.getGetter();
 			try {
-				Class<?>[] pt = m.getParameterTypes();
+				var pt = m.getParameterTypes();
 				if (pt.length == 1) {
-					Class<?> ptt = pt[0];
+					var ptt = pt[0];
 					if (ptt == OutputStream.class)
 						m.invoke(output, res.getOutputStream());
 					else if (ptt == Writer.class)
@@ -132,12 +128,12 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 	private static Iterable<?> iterate(Object o) {
 		if (o == null)
 			return Collections.emptyList();
-		if (o instanceof Map)
-			return ((Map<?,?>)o).entrySet();
+		if (o instanceof Map<?,?> m)
+			return m.entrySet();
 		if (isArray(o))
 			return l((Object[])o);
-		if (o instanceof Collection)
-			return (Collection<?>)o;
+		if (o instanceof Collection<?> c)
+			return c;
 		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", cn(o));
 	}
 }

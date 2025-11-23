@@ -220,6 +220,7 @@ public class Assertion {
 			out.println(msg);
 		if (nn(throwable)) {
 			try {
+				// @formatter:off
 				throw BeanStore
 					.create()
 					.build()
@@ -228,6 +229,7 @@ public class Assertion {
 					.addBean(Object[].class,new Object[0])
 					.createBean(throwable)
 					.run();
+				// @formatter:on
 			} catch (@SuppressWarnings("unused") ExecutableException e) {
 				// If we couldn't create requested exception, just throw a RuntimeException.
 				throw rex(cause, msg);

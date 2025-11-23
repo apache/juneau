@@ -40,7 +40,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class MethodArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.

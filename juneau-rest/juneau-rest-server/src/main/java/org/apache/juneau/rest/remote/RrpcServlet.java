@@ -59,17 +59,22 @@ import org.apache.juneau.rest.servlet.*;
 public abstract class RrpcServlet extends BasicRestServlet {
 
 	private final Map<String,RrpcInterfaceMeta> serviceMap = new ConcurrentHashMap<>();
+
+	// @formatter:off
 	@RestGet(
 		path="/",
 		summary="List of available remote interfaces",
 		description="Shows a list of the interfaces registered with this remote interface servlet."
 	)
+	// @formatter:on
 	public List<LinkString> getInterfaces() throws Exception {
-		List<LinkString> l = new LinkedList<>();
+		var l = new LinkedList<LinkString>();
 		for (var c : getServiceMap().keySet())
 			l.add(new LinkString(c.getName(), "servlet:/{0}", urlEncode(c.getName())));
 		return l;
 	}
+
+	// @formatter:off
 	@RestPost(
 		path="/{javaInterface}/{javaMethod}",
 		summary="Invoke an interface method",
@@ -105,6 +110,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface,
 			@Path("javaMethod") @Schema(description="Java method name") String javaMethod
 		) throws UnsupportedMediaType, NotFound, Exception {
+		// @formatter:on
 
 		// Find the parser.
 		if (p == null)
@@ -127,6 +133,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		return m.invoke(service, params);
 	}
 
+	// @formatter:off
 	@RestGet(
 		path="/{javaInterface}",
 		summary="List of available methods on interface",
@@ -135,9 +142,8 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	@HtmlDocConfig(
 		nav="<h5>Interface:  $RP{javaInterface}</h5>"
 	)
-	public Collection<LinkString> listMethods(
-			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface
-		) throws Exception {
+	// @formatter:on
+	public Collection<LinkString> listMethods(@Path("javaInterface") @Schema(description = "Java interface name") String javaInterface) throws Exception {
 
 		List<LinkString> l = list();
 		for (var s : getMethods(javaInterface).keySet())
@@ -145,6 +151,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		return l;
 	}
 
+	// @formatter:off
 	@RestGet(
 		path="/{javaInterface}/{javaMethod}",
 		summary="Form entry for interface method call",
@@ -160,6 +167,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface,
 			@Path("javaMethod") @Schema(description="Java method name") String javaMethod
 		) throws NotFound, Exception {
+		// @formatter:on
 
 		// Find the method.
 		RrpcInterfaceMethodMeta rmm = getMethods(javaInterface).get(javaMethod);

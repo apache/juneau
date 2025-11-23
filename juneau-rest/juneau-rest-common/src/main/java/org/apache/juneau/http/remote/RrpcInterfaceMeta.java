@@ -18,13 +18,12 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Contains the meta-data about a remote proxy REST interface.
@@ -37,6 +36,8 @@ import org.apache.juneau.common.reflect.*;
  * </ul>
  */
 public class RrpcInterfaceMeta {
+
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	private final Map<Method,RrpcInterfaceMethodMeta> methods;
 	private final Map<String,RrpcInterfaceMethodMeta> methodsByPath;
@@ -58,7 +59,7 @@ public class RrpcInterfaceMeta {
 		Value<String> path = Value.of("");
 		var ci = ClassInfo.of(c);
 
-		rstream(AnnotationProvider.INSTANCE.find(Remote.class, ci)).map(x -> x.inner().path()).filter(x -> isNotEmpty(x)).forEach(x -> path.set(trimSlashes(x)));
+		rstream(AP.find(Remote.class, ci)).map(x -> x.inner().path()).filter(Utils::isNotEmpty).forEach(x -> path.set(trimSlashes(x)));
 
 		Map<Method,RrpcInterfaceMethodMeta> methods = map();
 		ci.getPublicMethods().stream().forEach(x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));

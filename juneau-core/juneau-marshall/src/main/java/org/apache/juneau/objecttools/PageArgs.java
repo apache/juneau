@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.objecttools;
 
-import static java.util.Optional.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 /**
  * Arguments passed to {@link ObjectPaginator}.
@@ -37,7 +37,7 @@ public class PageArgs {
 	public static PageArgs create(Integer position, Integer limit) {
 		if (position == null && limit == null)
 			return null;
-		return new PageArgs(ofNullable(position).orElse(0), ofNullable(limit).orElse(-1));
+		return new PageArgs(opt(position).orElse(0), opt(limit).orElse(-1));
 	}
 
 	final int position, limit;

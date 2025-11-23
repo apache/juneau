@@ -252,9 +252,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final static UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws IOException {
-		Reader r = pipe.getReader();
-		if (r instanceof UonReader)
-			return (UonReader)r;
+		var r = pipe.getReader();
+		if (r instanceof UonReader r2)
+			return r2;
 		return new UonReader(pipe, decodeChars);
 	}
 
@@ -305,7 +305,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			eType = object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		ClassMeta<?> sType = null;
+		var sType = (ClassMeta<?>)null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -318,7 +318,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 		setCurrentClass(sType);
 
-		Object o = null;
+		var o = (Object)null;
 
 		int c = r.peekSkipWs();
 
@@ -332,7 +332,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				o = sType.getPrimitiveDefault();
 			// Otherwise, leave null.
 		} else if (sType.isVoid()) {
-			String s = parseString(r, isUrlParamValue);
+			var s = parseString(r, isUrlParamValue);
 			if (nn(s))
 				throw new ParseException(this, "Expected ''null'' for void value, but was ''{0}''.", s);
 		} else if (sType.isObject()) {
@@ -344,7 +344,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				Collection l = new JsonList(this);
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			} else {
-				String s = parseString(r, isUrlParamValue);
+				var s = parseString(r, isUrlParamValue);
 				if (c != '\'') {
 					if ("true".equals(s) || "false".equals(s))
 						o = Boolean.valueOf(s);
@@ -367,7 +367,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
+			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '(') {
@@ -378,24 +378,24 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					o = cast(m, pMeta, eType);
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
-					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
+					var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
 					l.add(m.cast(sType.getElementType()));
 					o = l;
 				}
 			} else {
-				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
+				var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			}
 		} else if (nn(builder)) {
-			BeanMap m = toBeanMap(builder.create(this, eType));
+			var m = toBeanMap(builder.create(this, eType));
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : builder.build(this, m.getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
-			BeanMap m = newBeanMap(outer, sType.getInnerClass());
+			var m = newBeanMap(outer, sType.getInnerClass());
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : m.getBean();
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
-			String s = parseString(r, isUrlParamValue);
+			var s = parseString(r, isUrlParamValue);
 			if (nn(s))
 				o = sType.newInstanceFromString(outer, s);
 		} else if (sType.isArray() || sType.isArgs()) {
@@ -407,7 +407,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					o = cast(m, pMeta, eType);
 				// Handle case where it's an array, but only a single value was specified.
 				else {
-					ArrayList l = listOfSize(1);
+					var l = listOfSize(1);
 					l.add(m.cast(sType.getElementType()));
 					o = toArray(sType, l);
 				}
@@ -444,12 +444,12 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	private Boolean parseBoolean(UonReader r) throws IOException, ParseException {
-		String s = parseString(r, false);
+		var s = parseString(r, false);
 		if (s == null || s.equals("null"))
 			return null;
-		if (s.equalsIgnoreCase("true"))
+		if (eqic(s, "true"))
 			return true;
-		if (s.equalsIgnoreCase("false"))
+		if (eqic(s, "false"))
 			return false;
 		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
 	}
@@ -471,7 +471,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		boolean isInEscape = false;
 
 		var state = S1;
-		String currAttr = "";
+		var currAttr = "";
 		mark();
 		try {
 			while (c != -1 && c != AMP) {
@@ -505,13 +505,13 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					} else if (state == S3) {
 						if (c == -1 || c == ',' || c == ')' || c == AMP) {
 							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+								var pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
 									onUnknownProperty(currAttr, m, null);
 									unmark();
 								} else {
 									unmark();
-									Object value = convertToType("", pMeta.getClassMeta());
+									var value = convertToType("", pMeta.getClassMeta());
 									try {
 										pMeta.set(m, currAttr, value);
 									} catch (BeanRuntimeException e) {
@@ -525,15 +525,15 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 							state = S1;
 						} else {
 							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+								var pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
 									onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), false, null));
 									unmark();
 								} else {
 									unmark();
 									setCurrentProperty(pMeta);
-									ClassMeta<?> cm = pMeta.getClassMeta();
-									Object value = parseAnything(cm, r.unread(), m.getBean(false), false, pMeta);
+									var cm = pMeta.getClassMeta();
+									var value = parseAnything(cm, r.unread(), m.getBean(false), false, pMeta);
 									setName(cm, value, currAttr);
 									try {
 										pMeta.set(m, currAttr, value);
@@ -679,7 +679,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		boolean isInEscape = false;
 
 		var state = S1;
-		K currAttr = null;
+		var currAttr = (K)null;
 		while (c != -1 && c != AMP) {
 			c = r.read();
 			if (! isInEscape) {
@@ -690,7 +690,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 						skipSpace(r);
 					else {
 						r.unread();
-						Object attr = parseAttr(r, decoding);
+						var attr = parseAttr(r, decoding);
 						currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
 						state = S2;
 						c = 0; // Avoid isInEscape if c was '\'
@@ -746,14 +746,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	private Object parseNull(UonReader r) throws IOException, ParseException {
-		String s = parseString(r, false);
+		var s = parseString(r, false);
 		if ("ull".equals(s))
 			return null;
 		throw new ParseException(this, "Unexpected character sequence: ''{0}''", s);
 	}
 
 	private Number parseNumber(UonReader r, Class<? extends Number> c) throws IOException, ParseException {
-		String s = parseString(r, false);
+		var s = parseString(r, false);
 		if (s == null)
 			return null;
 		return StringUtils.parseNumber(s, c);
@@ -888,7 +888,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					if (c == AMP || c == EQ || c == -1 || Character.isWhitespace(c)) {
 						if (c != -1)
 							r.unread();
-						String s = r.getMarked();
+						var s = r.getMarked();
 						return ("null".equals(s) ? null : s);
 					}
 				} else if (c == AMP)
@@ -904,7 +904,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					if (c == '=' || c == -1 || Character.isWhitespace(c)) {
 						if (c != -1)
 							r.unread();
-						String s = r.getMarked();
+						var s = r.getMarked();
 						return ("null".equals(s) ? null : trim(s));
 					}
 				}
@@ -936,8 +936,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 		r.mark();
 		boolean isInEscape = false;
-		String s = null;
-		AsciiSet endChars = (isUrlParamValue ? endCharsParam : endCharsNormal);
+		var s = (String)null;
+		var endChars = (isUrlParamValue ? endCharsParam : endCharsNormal);
 		while (c != -1) {
 			c = r.read();
 			if (! isInEscape) {

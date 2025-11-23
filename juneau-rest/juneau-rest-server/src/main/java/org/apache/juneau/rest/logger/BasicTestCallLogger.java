@@ -55,12 +55,12 @@ import jakarta.servlet.http.*;
 public class BasicTestCallLogger extends CallLogger {
 
 	private static boolean isNoTrace(HttpServletRequest req) {
-		Object o = req.getAttribute("NoTrace");
+		var o = req.getAttribute("NoTrace");
 		if (nn(o))
-			return "true".equalsIgnoreCase(o.toString());
-		String s = req.getHeader("No-Trace");
+			return eqic("true", o.toString());
+		var s = req.getHeader("No-Trace");
 		if (nn(s))
-			return "true".equalsIgnoreCase(s);
+			return eqic("true", s);
 		return emptyIfNull(req.getQueryString()).contains("noTrace=true");
 	}
 

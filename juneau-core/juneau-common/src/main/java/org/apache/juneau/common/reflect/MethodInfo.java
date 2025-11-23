@@ -126,9 +126,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return A list of matching methods including this one, in child-to-parent order.
 	 */
-	public List<MethodInfo> getMatchingMethods() {
-		return matchingMethods.get();
-	}
+	public List<MethodInfo> getMatchingMethods() { return matchingMethods.get(); }
 
 	/**
 	 * Returns all annotations on this method and parent overridden methods in child-to-parent order.
@@ -154,9 +152,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * 	A list of all annotations on this method and overridden methods.
 	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
-	public List<AnnotationInfo<Annotation>> getAnnotations() {
-		return annotations.get();
-	}
+	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotations.get(); }
 
 	/**
 	 * Returns all annotations of the specified type on this method and parent overridden methods in child-to-parent order.
@@ -191,9 +187,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		assertArgNotNull("type", type);
-		return getAnnotations().stream()
-			.filter(a -> a.isType(type))
-			.map(a -> (AnnotationInfo<A>)a);
+		return getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 	}
 
 	private List<MethodInfo> findMatchingMethods() {
@@ -204,17 +198,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 		while (nn(cc)) {
 			// 2. Add matching methods from declared interfaces of current class
-			cc.getDeclaredInterfaces().stream()
-				.forEach(di -> addMatchingMethodsFromInterface(result, di));
+			cc.getDeclaredInterfaces().stream().forEach(di -> addMatchingMethodsFromInterface(result, di));
 
 			// 3. Move to parent class
 			cc = cc.getSuperclass();
 			if (nn(cc)) {
 				// Add matching method from parent class
-				cc.getDeclaredMethods().stream()
-					.filter(this::matches)
-					.findFirst()
-					.ifPresent(result::add);
+				cc.getDeclaredMethods().stream().filter(this::matches).findFirst().ifPresent(result::add);
 			}
 		}
 
@@ -223,13 +213,10 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	private void addMatchingMethodsFromInterface(List<MethodInfo> result, ClassInfo iface) {
 		// Add matching methods from this interface
-		iface.getDeclaredMethods().stream()
-			.filter(this::matches)
-			.forEach(result::add);
+		iface.getDeclaredMethods().stream().filter(this::matches).forEach(result::add);
 
 		// Recursively search parent interfaces
-		iface.getDeclaredInterfaces().stream()
-			.forEach(pi -> addMatchingMethodsFromInterface(result, pi));
+		iface.getDeclaredInterfaces().stream().forEach(pi -> addMatchingMethodsFromInterface(result, pi));
 	}
 
 	@Override /* Overridden from ExecutableInfo */
@@ -310,9 +297,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return The generic return type of this method.
 	 */
-	public ClassInfo getReturnType() {
-		return returnType.get();
-	}
+	public ClassInfo getReturnType() { return returnType.get(); }
 
 	/**
 	 * Returns the signature of this method.
@@ -350,9 +335,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if this method has at least the specified parameters.
 	 */
 	public boolean hasAllParameters(Class<?>...requiredParams) {
-		var paramTypes = getParameters().stream()
-			.map(p -> p.getParameterType().inner())
-			.toList();
+		var paramTypes = getParameters().stream().map(p -> p.getParameterType().inner()).toList();
 
 		for (var c : requiredParams)
 			if (! paramTypes.contains(c))
@@ -492,9 +475,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public boolean is(ElementFlag flag) {
 		return switch (flag) {
 			case BRIDGE -> isBridge();
-			case NOT_BRIDGE -> !isBridge();
+			case NOT_BRIDGE -> ! isBridge();
 			case DEFAULT -> isDefault();
-			case NOT_DEFAULT -> !isDefault();
+			case NOT_DEFAULT -> ! isDefault();
 			default -> super.is(flag);
 		};
 	}
@@ -553,9 +536,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return A {@link Type} object representing the formal return type.
 	 * @see Method#getGenericReturnType()
 	 */
-	public Type getGenericReturnType() {
-		return inner.getGenericReturnType();
-	}
+	public Type getGenericReturnType() { return inner.getGenericReturnType(); }
 
 	/**
 	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the return type of the method.
@@ -574,9 +555,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return An {@link AnnotatedType} object representing the return type.
 	 * @see Method#getAnnotatedReturnType()
 	 */
-	public AnnotatedType getAnnotatedReturnType() {
-		return inner.getAnnotatedReturnType();
-	}
+	public AnnotatedType getAnnotatedReturnType() { return inner.getAnnotatedReturnType(); }
 
 	/**
 	 * Returns the default value for the annotation member represented by this method.
@@ -598,9 +577,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return The default value, or <jk>null</jk> if none.
 	 * @see Method#getDefaultValue()
 	 */
-	public Object getDefaultValue() {
-		return inner.getDefaultValue();
-	}
+	public Object getDefaultValue() { return inner.getDefaultValue(); }
 
 	/**
 	 * Returns <jk>true</jk> if this method is a default method (Java 8+ interface default method).
@@ -623,14 +600,12 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if this method is a default method.
 	 * @see Method#isDefault()
 	 */
-	public boolean isDefault() {
-		return inner.isDefault();
-	}
+	public boolean isDefault() { return inner.isDefault(); }
 
 	MethodInfo findMatchingOnClass(ClassInfo c) {
 		for (var m2 : c.getDeclaredMethods())
-		if (hasName(m2.getName()) && hasParameterTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
-			return m2;
+			if (hasName(m2.getName()) && hasParameterTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
+				return m2;
 		return null;
 	}
 
@@ -639,12 +614,8 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.METHOD_TYPE;
-	}
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.METHOD_TYPE; }
 
 	@Override /* Annotatable */
-	public String getLabel() {
-		return getDeclaringClass().getNameSimple() + "." + getShortName();
-	}
+	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getShortName(); }
 }

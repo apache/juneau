@@ -49,9 +49,7 @@ public abstract class ElementInfo {
 	 *
 	 * @return The Java language modifiers for this element.
 	 */
-	public int getModifiers() {
-		return modifiers;
-	}
+	public int getModifiers() { return modifiers; }
 
 	/**
 	 * Returns <jk>true</jk> if the specified flag is applicable to this element.
@@ -125,216 +123,168 @@ public abstract class ElementInfo {
 	 *
 	 * @return <jk>true</jk> if this element is public.
 	 */
-	public boolean isPublic() {
-		return Modifier.isPublic(modifiers);
-	}
+	public boolean isPublic() { return Modifier.isPublic(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not public.
 	 *
 	 * @return <jk>true</jk> if this element is not public.
 	 */
-	public boolean isNotPublic() {
-		return !Modifier.isPublic(modifiers);
-	}
+	public boolean isNotPublic() { return ! Modifier.isPublic(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is private.
 	 *
 	 * @return <jk>true</jk> if this element is private.
 	 */
-	public boolean isPrivate() {
-		return Modifier.isPrivate(modifiers);
-	}
+	public boolean isPrivate() { return Modifier.isPrivate(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not private.
 	 *
 	 * @return <jk>true</jk> if this element is not private.
 	 */
-	public boolean isNotPrivate() {
-		return !Modifier.isPrivate(modifiers);
-	}
+	public boolean isNotPrivate() { return ! Modifier.isPrivate(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is protected.
 	 *
 	 * @return <jk>true</jk> if this element is protected.
 	 */
-	public boolean isProtected() {
-		return Modifier.isProtected(modifiers);
-	}
+	public boolean isProtected() { return Modifier.isProtected(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not protected.
 	 *
 	 * @return <jk>true</jk> if this element is not protected.
 	 */
-	public boolean isNotProtected() {
-		return !Modifier.isProtected(modifiers);
-	}
+	public boolean isNotProtected() { return ! Modifier.isProtected(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is static.
 	 *
 	 * @return <jk>true</jk> if this element is static.
 	 */
-	public boolean isStatic() {
-		return Modifier.isStatic(modifiers);
-	}
+	public boolean isStatic() { return Modifier.isStatic(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not static.
 	 *
 	 * @return <jk>true</jk> if this element is not static.
 	 */
-	public boolean isNotStatic() {
-		return !Modifier.isStatic(modifiers);
-	}
+	public boolean isNotStatic() { return ! Modifier.isStatic(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is final.
 	 *
 	 * @return <jk>true</jk> if this element is final.
 	 */
-	public boolean isFinal() {
-		return Modifier.isFinal(modifiers);
-	}
+	public boolean isFinal() { return Modifier.isFinal(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not final.
 	 *
 	 * @return <jk>true</jk> if this element is not final.
 	 */
-	public boolean isNotFinal() {
-		return !Modifier.isFinal(modifiers);
-	}
+	public boolean isNotFinal() { return ! Modifier.isFinal(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is synchronized.
 	 *
 	 * @return <jk>true</jk> if this element is synchronized.
 	 */
-	public boolean isSynchronized() {
-		return Modifier.isSynchronized(modifiers);
-	}
+	public boolean isSynchronized() { return Modifier.isSynchronized(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not synchronized.
 	 *
 	 * @return <jk>true</jk> if this element is not synchronized.
 	 */
-	public boolean isNotSynchronized() {
-		return !Modifier.isSynchronized(modifiers);
-	}
+	public boolean isNotSynchronized() { return ! Modifier.isSynchronized(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is volatile.
 	 *
 	 * @return <jk>true</jk> if this element is volatile.
 	 */
-	public boolean isVolatile() {
-		return Modifier.isVolatile(modifiers);
-	}
+	public boolean isVolatile() { return Modifier.isVolatile(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not volatile.
 	 *
 	 * @return <jk>true</jk> if this element is not volatile.
 	 */
-	public boolean isNotVolatile() {
-		return !Modifier.isVolatile(modifiers);
-	}
+	public boolean isNotVolatile() { return ! Modifier.isVolatile(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is transient.
 	 *
 	 * @return <jk>true</jk> if this element is transient.
 	 */
-	public boolean isTransient() {
-		return Modifier.isTransient(modifiers);
-	}
+	public boolean isTransient() { return Modifier.isTransient(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not transient.
 	 *
 	 * @return <jk>true</jk> if this element is not transient.
 	 */
-	public boolean isNotTransient() {
-		return !Modifier.isTransient(modifiers);
-	}
+	public boolean isNotTransient() { return ! Modifier.isTransient(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is native.
 	 *
 	 * @return <jk>true</jk> if this element is native.
 	 */
-	public boolean isNative() {
-		return Modifier.isNative(modifiers);
-	}
+	public boolean isNative() { return Modifier.isNative(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not native.
 	 *
 	 * @return <jk>true</jk> if this element is not native.
 	 */
-	public boolean isNotNative() {
-		return !Modifier.isNative(modifiers);
-	}
+	public boolean isNotNative() { return ! Modifier.isNative(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is an interface.
 	 *
 	 * @return <jk>true</jk> if this element is an interface.
 	 */
-	public boolean isInterface() {
-		return Modifier.isInterface(modifiers);
-	}
+	public boolean isInterface() { return Modifier.isInterface(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not an interface.
 	 *
 	 * @return <jk>true</jk> if this element is not an interface.
 	 */
-	public boolean isNotInterface() {
-		return !Modifier.isInterface(modifiers);
-	}
+	public boolean isNotInterface() { return ! Modifier.isInterface(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is abstract.
 	 *
 	 * @return <jk>true</jk> if this element is abstract.
 	 */
-	public boolean isAbstract() {
-		return Modifier.isAbstract(modifiers);
-	}
+	public boolean isAbstract() { return Modifier.isAbstract(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not abstract.
 	 *
 	 * @return <jk>true</jk> if this element is not abstract.
 	 */
-	public boolean isNotAbstract() {
-		return !Modifier.isAbstract(modifiers);
-	}
+	public boolean isNotAbstract() { return ! Modifier.isAbstract(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is strict.
 	 *
 	 * @return <jk>true</jk> if this element is strict.
 	 */
-	public boolean isStrict() {
-		return Modifier.isStrict(modifiers);
-	}
+	public boolean isStrict() { return Modifier.isStrict(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is not strict.
 	 *
 	 * @return <jk>true</jk> if this element is not strict.
 	 */
-	public boolean isNotStrict() {
-		return !Modifier.isStrict(modifiers);
-	}
+	public boolean isNotStrict() { return ! Modifier.isStrict(modifiers); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods

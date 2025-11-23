@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
@@ -137,7 +136,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		if (nn(pm)) {
 			for (var e : pm.getVars().entrySet())
 				add(e.getKey(), e.getValue());
-			String r = pm.getRemainder();
+			var r = pm.getRemainder();
 			if (nn(r)) {
 				add("/**", r);
 				add("/*", urlDecode(r));
@@ -216,9 +215,9 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public RequestPathParams addDefault(List<NameValuePair> pairs) {
 		for (var p : pairs) {
-			String name = p.getName();
-			Stream<RequestPathParam> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
+			var name = p.getName();
+			var l = stream(name);
+			var hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestPathParam(req, name, vs.resolve(p.getValue())));
@@ -310,8 +309,8 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @return The bean, never <jk>null</jk>.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(PATH, cm).orElseThrow(() -> rex("@Path(name) not found on class {0}", cn(type)));
+		var cm = req.getBeanSession().getClassMeta(type);
+		var name = HttpParts.getName(PATH, cm).orElseThrow(() -> rex("@Path(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}
 
@@ -331,7 +330,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		if (l.size() == 1)
 			return l.get(0);
 		var sb = new StringBuilder(128);
-		for (int i = 0, j = l.size(); i < j; i++) {
+		for (int i = 0; i < l.size(); i++) {
 			if (i > 0)
 				sb.append(", ");
 			sb.append(l.get(i).getValue());
@@ -377,7 +376,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public RequestPathParam getLast(String name) {
 		assertArgNotNull("name", name);
-		Value<RequestPathParam> v = Value.empty();
+		var v = Value.<RequestPathParam>empty();
 		stream(name).forEach(x -> v.set(x));
 		return v.orElseGet(() -> new RequestPathParam(req, name, null).parser(parser));
 	}
@@ -563,6 +562,6 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 }

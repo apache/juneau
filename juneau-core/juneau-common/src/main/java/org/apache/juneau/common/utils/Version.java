@@ -70,7 +70,7 @@ public class Version implements Comparable<Version> {
 	 * 	Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
 	 */
 	public Version(String value) {
-		if (StringUtils.isEmpty(value))
+		if (isEmpty(value))
 			value = "0";
 		String[] sParts = splita(value, '.');
 		parts = new int[sParts.length];

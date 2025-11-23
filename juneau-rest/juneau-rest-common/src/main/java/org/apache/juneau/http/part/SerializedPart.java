@@ -237,8 +237,8 @@ public class SerializedPart extends BasicPart {
 	}
 
 	private static Object unwrap(Object o) {
-		if (o instanceof Supplier)
-			return ((Supplier<?>)o).get();
+		if (o instanceof Supplier o2)
+			return o2.get();
 		return o;
 	}
 }

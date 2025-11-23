@@ -115,7 +115,7 @@ public class MsgPackInputStream extends ParserInputStream {
 	 * Read a binary field from the stream.
 	 */
 	byte[] readBinary() throws IOException {
-		byte[] b = new byte[(int)length];
+		var b = new byte[(int)length];
 		read(b);
 		return b;
 	}

@@ -29,7 +29,6 @@ import java.security.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -332,7 +331,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* Overridden from HttpServletRequest */
 	public long getDateHeader(String name) {
-		String s = getHeader(name);
+		var s = getHeader(name);
 		return s == null ? 0 : date(s).asZonedDateTime().get().toInstant().toEpochMilli();
 	}
 
@@ -341,7 +340,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* Overridden from HttpServletRequest */
 	public String getHeader(String name) {
-		String[] s = headerMap.get(name);
+		var s = headerMap.get(name);
 		return s == null || s.length == 0 ? null : s[0];
 	}
 
@@ -350,7 +349,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* Overridden from HttpServletRequest */
 	public Enumeration<String> getHeaders(String name) {
-		String[] s = headerMap.get(name);
+		var s = headerMap.get(name);
 		return Collections.enumeration(l(s == null ? new String[0] : s));
 	}
 
@@ -363,7 +362,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* Overridden from HttpServletRequest */
 	public int getIntHeader(String name) {
-		String s = getHeader(name);
+		var s = getHeader(name);
 		return s == null || s.isEmpty() ? 0 : Integer.parseInt(s);
 	}
 
@@ -387,7 +386,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* Overridden from HttpServletRequest */
 	public String getParameter(String name) {
-		String[] s = getParameterMap().get(name);
+		var s = getParameterMap().get(name);
 		return s == null || s.length == 0 ? null : s[0];
 	}
 
@@ -459,7 +458,7 @@ public class MockServletRequest implements HttpServletRequest {
 				queryString = sb.toString();
 			}
 		}
-		return StringUtils.isEmpty(queryString) ? null : queryString;
+		return isEmpty(queryString) ? null : queryString;
 	}
 
 	@Override /* Overridden from HttpServletRequest */
@@ -540,9 +539,9 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest header(String name, Object value) {
 		if (nn(value)) {
-			String[] v1 = (value instanceof String[]) ? (String[])value : a(value.toString());
-			String[] v2 = headerMap.get(name);
-			String[] v3 = combine(v2, v1);
+			var v1 = (value instanceof String[]) ? (String[])value : a(value.toString());
+			var v2 = headerMap.get(name);
+			var v3 = combine(v2, v1);
 			headerMap.put(name, v3);
 		}
 		return this;
@@ -925,7 +924,7 @@ public class MockServletRequest implements HttpServletRequest {
 		this.uri = uri;
 
 		if (uri.indexOf('?') != -1) {
-			String qs = uri.substring(uri.indexOf('?') + 1);
+			var qs = uri.substring(uri.indexOf('?') + 1);
 			if (qs.indexOf('#') != -1)
 				qs = qs.substring(0, qs.indexOf('#'));
 			queryString = qs;

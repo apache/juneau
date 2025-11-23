@@ -261,7 +261,7 @@ public class Cache4<K1,K2,K3,K4,V> {
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, java.util.function.Supplier<V> supplier) {
 		if (cacheMode == NONE)
 			return supplier.get();
-		Tuple4<K1,K2,K3,K4> wrapped = Tuple4.of(key1, key2, key3, key4);
+		var wrapped = Tuple4.of(key1, key2, key3, key4);
 		V v = map.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
@@ -340,9 +340,7 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 *
 	 * @return <jk>true</jk> if the cache is empty.
 	 */
-	public boolean isEmpty() {
-		return map.isEmpty();
-	}
+	public boolean isEmpty() { return map.isEmpty(); }
 
 	/**
 	 * Removes all entries from the cache.
@@ -358,4 +356,3 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 */
 	public int getCacheHits() { return cacheHits.get(); }
 }
-

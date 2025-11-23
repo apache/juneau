@@ -87,10 +87,10 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	@Override /* Overridden from SwaggerProvider */
 	public Swagger getSwagger(RestContext context, Locale locale) throws Exception {
 
-		Class<?> c = context.getResourceClass();
-		FileFinder ff = nn(fileFinder) ? fileFinder : FileFinder.create(beanStore).cp(c, null, false).build();
-		Messages mb = nn(messages) ? messages.forLocale(locale) : Messages.create(c).build().forLocale(locale);
-		VarResolverSession vrs = vr.createSession().bean(Messages.class, mb);
+		var c = context.getResourceClass();
+		var ff = nn(fileFinder) ? fileFinder : FileFinder.create(beanStore).cp(c, null, false).build();
+		var mb = nn(messages) ? messages.forLocale(locale) : Messages.create(c).build().forLocale(locale);
+		var vrs = vr.createSession().bean(Messages.class, mb);
 		var session = new BasicSwaggerProviderSession(context, locale, ff, messages, vrs, js.getSession());
 
 		return session.getSwagger();

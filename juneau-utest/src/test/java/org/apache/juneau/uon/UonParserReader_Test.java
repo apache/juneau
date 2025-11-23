@@ -113,7 +113,7 @@ class UonParserReader_Test extends TestBase {
 		int i;
 		in = escape(s);
 		r = r(in, true);
-		char[] buff = new char[2];
+		var buff = new char[2];
 		i = r.read(buff, 0, buff.length);
 		var s2 = new String(buff, 0, i);
 		assertEquals("¢", s2);
@@ -185,8 +185,8 @@ class UonParserReader_Test extends TestBase {
 
 	private static String escape(String s) throws UnsupportedEncodingException {
 		var sb = new StringBuilder();
-		byte[] b = s.getBytes("UTF-8");
-		for (byte element : b)
+		var b = s.getBytes("UTF-8");
+		for (var element : b)
 			sb.append('%').append(toHex(element));
 		return sb.toString();
 	}

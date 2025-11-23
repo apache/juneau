@@ -55,4 +55,3 @@ public interface Sizer<T> {
 	 */
 	int size(T o, BeanConverter bc);
 }
-

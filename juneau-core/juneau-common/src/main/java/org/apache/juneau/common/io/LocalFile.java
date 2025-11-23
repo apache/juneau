@@ -50,7 +50,7 @@ public class LocalFile {
 		this.clazz = assertArgNotNull("clazz", clazz);
 		this.clazzPath = assertArgNotNull("clazzPath", clazzPath);
 		this.path = null;
-		int i = clazzPath.lastIndexOf('/');
+		var i = clazzPath.lastIndexOf('/');
 		this.name = i == -1 ? clazzPath : clazzPath.substring(i + 1);
 	}
 

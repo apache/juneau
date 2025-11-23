@@ -1820,17 +1820,17 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	private static Builder preInit(Builder builder) {
 		try {
-			Object restBean = builder.restBean;
-			String contextPath = builder.contextPath;
-			String servletPath = builder.servletPath;
-			String rootUrl = builder.getRootUri();
+			var restBean = builder.restBean;
+			var contextPath = builder.contextPath;
+			var servletPath = builder.servletPath;
+			var rootUrl = builder.getRootUri();
 			if (rootUrl == null)
 				rootUrl = "http://localhost";
 
-			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
+			var c = restBean instanceof Class restBean2 ? (Class<?>)restBean2 : restBean.getClass();
 			if (! REST_CONTEXTS.containsKey(c)) {
-				boolean isClass = restBean instanceof Class;
-				Object o = isClass ? ((Class<?>)restBean).getDeclaredConstructor().newInstance() : restBean;
+				var isClass = restBean instanceof Class;
+				var o = isClass ? ((Class<?>)restBean).getDeclaredConstructor().newInstance() : restBean;
 				// @formatter:off
 				RestContext rc = RestContext
 					.create(o.getClass(), null, null)
@@ -1843,7 +1843,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				// @formatter:on
 				REST_CONTEXTS.put(c, rc);
 			}
-			RestContext restBeanCtx = REST_CONTEXTS.get(c);
+			var restBeanCtx = REST_CONTEXTS.get(c);
 			builder.restContext(restBeanCtx);
 
 			if (servletPath == null)
@@ -1885,8 +1885,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		restObject = restContext.getResource();
 
 		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
-		if (ccm instanceof MockHttpClientConnectionManager)
-			((MockHttpClientConnectionManager)ccm).init(this);
+		if (ccm instanceof MockHttpClientConnectionManager ccm2)
+			ccm2.init(this);
 	}
 
 	@Override /* Overridden from RestClient */
@@ -2055,7 +2055,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	@Override /* Overridden from HttpClientConnection */
 	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
 		InputStream is = new ByteArrayInputStream(sres.get().getContent());
-		Header contentEncoding = response.getLastHeader("Content-Encoding");
+		var contentEncoding = response.getLastHeader("Content-Encoding");
 		if (nn(contentEncoding) && contentEncoding.getValue().equalsIgnoreCase("gzip"))
 			is = new GZIPInputStream(is);
 		response.setEntity(new InputStreamEntity(is));
@@ -2078,7 +2078,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 			sres.set(res);
 
-			HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
+			var response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
 			res.getHeaders().forEach((k, v) -> {
 				for (var hv : v)
 					response.addHeader(k, hv);
@@ -2133,7 +2133,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			String path = rl.getUri();
 			String target = findTarget(request);
 
-			HttpRequest req = findRestRequest(request);
+			var req = findRestRequest(request);
 			rreq.set(req);
 			rres.remove();
 			sreq.remove();
@@ -2145,8 +2145,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			if (nn(pr.getError()))
 				throw new IllegalStateException(pr.getError());
 
-			var r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
-				.debug(isDebug());
+			var r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars).debug(isDebug());
 
 			for (var h : request.getAllHeaders())
 				r.header(h.getName(), h.getValue());
@@ -2169,16 +2168,16 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * Returns the same object if one of the low-level client methods are used (e.g. execute(HttpUriRequest)).
 	 */
 	private HttpRequest findRestRequest(HttpRequest req) {
-		if (req instanceof RestRequestCreated)
-			return ((RestRequestCreated)req).getRestRequest();
-		if (req instanceof HttpRequestWrapper)
-			return findRestRequest(((HttpRequestWrapper)req).getOriginal());
+		if (req instanceof RestRequestCreated req2)
+			return req2.getRestRequest();
+		if (req instanceof HttpRequestWrapper req3)
+			return findRestRequest(req3.getOriginal());
 		return req;
 	}
 
 	private static String findTarget(HttpRequest req) {
-		if (req instanceof HttpRequestWrapper hrw) {
-			HttpHost httpHost = hrw.getTarget();
+		if (req instanceof HttpRequestWrapper req2) {
+			var httpHost = req2.getTarget();
 			if (nn(httpHost))
 				return httpHost.toURI();
 		}

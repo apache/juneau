@@ -64,9 +64,9 @@ public class MsgPackOutputStream extends OutputStream {
 	}
 
 	private static int getUtf8ByteLength(CharSequence cs) {
-		int count = 0;
+		var count = 0;
 		for (int i = 0, len = cs.length(); i < len; i++) {
-			char ch = cs.charAt(i);
+			var ch = cs.charAt(i);
 			if (ch <= 0x7F) {
 				count++;
 			} else if (ch <= 0x7FF) {
@@ -82,9 +82,9 @@ public class MsgPackOutputStream extends OutputStream {
 	}
 
 	private int writeUtf8To(CharSequence in, OutputStream out) {
-		int count = 0;
+		var count = 0;
 		for (int i = 0, len = in.length(); i < len; i++) {
-			int c = (in.charAt(i) & 0xFFFF);
+			var c = (in.charAt(i) & 0xFFFF);
 			if (c <= 0x7F) {
 				write((byte)(c & 0xFF));
 				count++;
@@ -315,7 +315,7 @@ public class MsgPackOutputStream extends OutputStream {
 	 * Appends a generic Number to the stream.
 	 */
 	MsgPackOutputStream appendNumber(Number n) {
-		Class<?> c = n.getClass();
+		var c = n.getClass();
 		if (c == Integer.class || c == Short.class || c == Byte.class || c == AtomicInteger.class)
 			return appendInt(n.intValue());
 		if (c == Long.class || c == AtomicLong.class)

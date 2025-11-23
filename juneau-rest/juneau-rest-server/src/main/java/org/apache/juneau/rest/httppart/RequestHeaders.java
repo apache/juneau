@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
@@ -132,18 +131,18 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		this.caseSensitive = caseSensitive;
 		this.vs = req.getVarResolverSession();
 
-		for (Enumeration<String> e = req.getHttpServletRequest().getHeaderNames(); e.hasMoreElements();) {
-			String name = e.nextElement();
-			for (Enumeration<String> ve = req.getHttpServletRequest().getHeaders(name); ve.hasMoreElements();) {
+		for (var e = req.getHttpServletRequest().getHeaderNames(); e.hasMoreElements();) {
+			var name = e.nextElement();
+			for (var ve = req.getHttpServletRequest().getHeaders(name); ve.hasMoreElements();) {
 				add(new RequestHeader(req, name, ve.nextElement()));
 			}
 		}
 
 		// Parameters defined on the request URL overwrite existing headers.
-		Set<String> allowedHeaderParams = req.getContext().getAllowedHeaderParams();
+		var allowedHeaderParams = req.getContext().getAllowedHeaderParams();
 		query.forEach(p -> {
-			String name = p.getName();
-			String key = key(name);
+			var name = p.getName();
+			var key = key(name);
 			if (allowedHeaderParams.contains(key) || allowedHeaderParams.contains("*")) {
 				set(name, p.getValue());
 			}
@@ -233,9 +232,9 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	public RequestHeaders addDefault(List<Header> pairs) {
 		assertArgNotNull("pairs", pairs);
 		for (var p : pairs) {
-			String name = p.getName();
-			Stream<RequestHeader> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
+			var name = p.getName();
+			var l = stream(name);
+			var hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestHeader(req, name, vs.resolve(p.getValue())));
@@ -311,8 +310,8 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return The bean, never <jk>null</jk>.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(HEADER, cm).orElseThrow(() -> rex("@Header(name) not found on class {0}", cn(type)));
+		var cm = req.getBeanSession().getClassMeta(type);
+		var name = HttpParts.getName(HEADER, cm).orElseThrow(() -> rex("@Header(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}
 
@@ -332,7 +331,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		if (l.size() == 1)
 			return l.get(0);
 		var sb = new StringBuilder(128);
-		for (int i = 0, j = l.size(); i < j; i++) {
+		for (int i = 0; i < l.size(); i++) {
 			if (i > 0)
 				sb.append(", ");
 			sb.append(l.get(i).getValue());
@@ -377,7 +376,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeader getLast(String name) {
 		assertArgNotNull("name", name);
-		Value<RequestHeader> v = Value.empty();
+		var v = Value.<RequestHeader>empty();
 		stream(name).forEach(x -> v.set(x));
 		return v.orElseGet(() -> new RequestHeader(req, name, null).parser(parser));
 	}
@@ -494,7 +493,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 
 	private String key(String name) {

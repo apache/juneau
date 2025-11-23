@@ -173,7 +173,7 @@ public abstract class ContextSession {
 	protected ContextSession(Builder builder) {
 		ctx = builder.ctx;
 		unmodifiable = builder.unmodifiable;
-		JsonMap sp = builder.properties == null ? JsonMap.EMPTY_MAP : builder.properties;
+		var sp = builder.properties == null ? JsonMap.EMPTY_MAP : builder.properties;
 		if (unmodifiable)
 			sp = sp.unmodifiable();
 		properties = sp;

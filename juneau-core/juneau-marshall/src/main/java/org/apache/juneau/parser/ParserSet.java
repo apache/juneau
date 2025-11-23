@@ -372,12 +372,12 @@ public class ParserSet {
 			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
 		}
 
-	private Object copyBuilder(Object o) {
-		if (o instanceof Parser.Builder x) {
-			Parser.Builder x2 = x.copy();
-			if (ne(x.getClass(), x2.getClass()))
-				throw rex("Copy method not implemented on class {0}", cn(x));
-			x = x2;
+		private Object copyBuilder(Object o) {
+			if (o instanceof Parser.Builder x) {
+				Parser.Builder x2 = x.copy();
+				if (ne(x.getClass(), x2.getClass()))
+					throw rex("Copy method not implemented on class {0}", cn(x));
+				x = x2;
 				if (nn(bcBuilder))
 					x.beanContext(bcBuilder);
 				return x;
@@ -386,11 +386,11 @@ public class ParserSet {
 		}
 
 		private Object createBuilder(Object o) {
-			if (o instanceof Class) {
+			if (o instanceof Class o2) {
 
-			// Check for no-arg constructor.
-			ConstructorInfo ci = info((Class<?>)o).getPublicConstructor(c -> c.getParameterCount() == 0).orElse(null);
-			if (nn(ci))
+				// Check for no-arg constructor.
+				ConstructorInfo ci = info(o2).getPublicConstructor(c -> c.getParameterCount() == 0).orElse(null);
+				if (nn(ci))
 					return ci.newInstance();
 
 				// Check for builder.
@@ -579,8 +579,8 @@ public class ParserSet {
 	public boolean isEmpty() { return entries.length == 0; }
 
 	private Parser build(Object o) {
-		if (o instanceof Parser)
-			return (Parser)o;
+		if (o instanceof Parser o2)
+			return o2;
 		return ((Parser.Builder)o).build();
 	}
 }

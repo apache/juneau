@@ -189,8 +189,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	 */
 	private static MsgPackOutputStream getMsgPackOutputStream(SerializerPipe out) throws IOException {
 		Object output = out.getRawOutput();
-		if (output instanceof MsgPackOutputStream)
-			return (MsgPackOutputStream)output;
+		if (output instanceof MsgPackOutputStream output2)
+			return output2;
 		var os = new MsgPackOutputStream(out.getOutputStream());
 		out.setOutputStream(os);
 		return os;
@@ -221,8 +221,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		if (eType == null)
 			eType = object();
 
-		ClassMeta<?> aType;			// The actual type
-		ClassMeta<?> sType;			// The serialized type
+		var aType = (ClassMeta<?>)null;			// The actual type
+		var sType = (ClassMeta<?>)null;			// The serialized type
 
 		aType = push2(attrName, o, eType);
 		boolean isRecursion = aType == null;
@@ -317,7 +317,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		values.forEach(x -> {
 			BeanPropertyMeta pMeta = x.getMeta();
 			if (pMeta.canRead()) {
-				ClassMeta<?> cMeta = x.getClassMeta();
+				var cMeta = x.getClassMeta();
 				String key = x.getName();
 				Object value = x.getValue();
 				serializeAnything(out, key, null, null, null);
@@ -328,7 +328,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
-		ClassMeta<?> elementType = type.getElementType();
+		var elementType = type.getElementType();
 		List<Object> l = listOfSize(c.size());
 		c = sort(c);
 		l.addAll(c);
@@ -339,7 +339,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+		var keyType = type.getKeyType();
+		var valueType = type.getValueType();
 
 		m = sort(m);
 
@@ -359,7 +360,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
-		ClassMeta<?> aType = push2(v.getName(), v.getValue(), v.getClassMeta());
+		var aType = push2(v.getName(), v.getValue(), v.getClassMeta());
 		if (nn(aType))
 			pop();
 		return aType == null;

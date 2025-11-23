@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.function;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
@@ -86,8 +88,8 @@ public class ResettableSupplier<T> implements Supplier<T> {
 	public T get() {
 		Optional<T> h = cache.get();
 		if (h == null) {
-			h = Optional.ofNullable(supplier.get());
-			if (!cache.compareAndSet(null, h)) {
+			h = opt(supplier.get());
+			if (! cache.compareAndSet(null, h)) {
 				// Another thread beat us, use their value
 				h = cache.get();
 			}
@@ -106,4 +108,3 @@ public class ResettableSupplier<T> implements Supplier<T> {
 		cache.set(null);
 	}
 }
-

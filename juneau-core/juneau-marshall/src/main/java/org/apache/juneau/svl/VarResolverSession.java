@@ -76,8 +76,8 @@ public class VarResolverSession {
 	}
 
 	private static boolean containsVars(Object array) {
-		for (int i = 0; i < Array.getLength(array); i++) {
-			Object o = Array.get(array, i);
+		for (var i = 0; i < Array.getLength(array); i++) {
+			var o = Array.get(array, i);
 			if (o instanceof CharSequence && o.toString().contains("$"))
 				return true;
 		}
@@ -223,8 +223,8 @@ public class VarResolverSession {
 	 * @return An array with resolved strings.
 	 */
 	public String[] resolve(String[] in) {
-		String[] out = new String[in.length];
-		for (int i = 0; i < in.length; i++)
+		var out = new String[in.length];
+		for (var i = 0; i < in.length; i++)
 			out[i] = resolve(in[i]);
 		return out;
 	}
@@ -252,58 +252,52 @@ public class VarResolverSession {
 	public <T> T resolve(T o) {
 		if (o == null)
 			return null;
-		if (o instanceof CharSequence)
-			return (T)resolve(o.toString());
+		if (o instanceof CharSequence o2)
+			return (T)resolve(o2.toString());
 		if (isArray(o)) {
 			if (! containsVars(o))
 				return o;
-			Object o2 = Array.newInstance(o.getClass().getComponentType(), Array.getLength(o));
-			for (int i = 0; i < Array.getLength(o); i++)
+			var o2 = Array.newInstance(o.getClass().getComponentType(), Array.getLength(o));
+			for (var i = 0; i < Array.getLength(o); i++)
 				Array.set(o2, i, resolve(Array.get(o, i)));
 			return (T)o2;
 		}
-		if (o instanceof Set c) {
+		if (o instanceof Set o2) {
 			try {
-				if (! containsVars(c))
-				return o;
-			Set c2 = info(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
-				.map(ci -> safe(() -> (Set)ci.inner().newInstance()))
-					.orElseGet(LinkedHashSet::new);
-				Set c3 = c2;
-				c.forEach(x -> c3.add(resolve(x)));
-				return (T)c2;
+				if (! containsVars(o2))
+					return o;
+				Set o3 = info(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0).map(ci -> safe(() -> (Set)ci.inner().newInstance())).orElseGet(LinkedHashSet::new);
+				Set o4 = o3;
+				o2.forEach(x -> o4.add(resolve(x)));
+				return (T)o3;
 			} catch (VarResolverException e) {
 				throw e;
 			} catch (Exception e) {
 				throw new VarResolverException(e, "Problem occurred resolving set.");
 			}
 		}
-		if (o instanceof List c) {
+		if (o instanceof List o2) {
 			try {
-				if (! containsVars(c))
-				return o;
-			List c2 = info(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
-				.map(ci -> safe(() -> (List)ci.inner().newInstance()))
-					.orElseGet(() -> list());
-				List c3 = c2;
-				c.forEach(x -> c3.add(resolve(x)));
-				return (T)c2;
+				if (! containsVars(o2))
+					return o;
+				List o3 = info(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0).map(ci -> safe(() -> (List)ci.inner().newInstance())).orElseGet(() -> list());
+				List o4 = o3;
+				o2.forEach(x -> o4.add(resolve(x)));
+				return (T)o3;
 			} catch (VarResolverException e) {
 				throw e;
 			} catch (Exception e) {
 				throw new VarResolverException(e, "Problem occurred resolving collection.");
 			}
 		}
-		if (o instanceof Map m) {
+		if (o instanceof Map o2) {
 			try {
-				if (! containsVars(m))
-				return o;
-			Map m2 = info(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0)
-				.map(ci -> safe(() -> (Map)ci.inner().newInstance()))
-					.orElseGet(LinkedHashMap::new);
-				Map m3 = m2;
-				m.forEach((k, v) -> m3.put(k, resolve(v)));
-				return (T)m2;
+				if (! containsVars(o2))
+					return o;
+				Map o3 = info(o).getDeclaredConstructor(x -> x.isPublic() && x.getParameterCount() == 0).map(ci -> safe(() -> (Map)ci.inner().newInstance())).orElseGet(LinkedHashMap::new);
+				Map o4 = o3;
+				o2.forEach((k, v) -> o4.put(k, resolve(v)));
+				return (T)o3;
 			} catch (VarResolverException e) {
 				throw e;
 			} catch (Exception e) {
@@ -332,16 +326,17 @@ public class VarResolverSession {
 		// S3: Found {, Looking for }
 
 		var state = S1;
-		boolean isInEscape = false;
-		boolean hasInternalVar = false;
-		boolean hasInnerEscapes = false;
-		String varType = null;
-		String varVal = null;
-		int x = 0, x2 = 0;
-		int depth = 0;
-		int length = s.length();
-		for (int i = 0; i < length; i++) {
-			char c = s.charAt(i);
+		var isInEscape = false;
+		var hasInternalVar = false;
+		var hasInnerEscapes = false;
+		var varType = (String)null;
+		var varVal = (String)null;
+		var x = 0;
+		var x2 = 0;
+		var depth = 0;
+		var length = s.length();
+		for (var i = 0; i < length; i++) {
+			var c = s.charAt(i);
 			if (state == S1) {
 				if (isInEscape) {
 					if (c == '\\' || c == '$') {

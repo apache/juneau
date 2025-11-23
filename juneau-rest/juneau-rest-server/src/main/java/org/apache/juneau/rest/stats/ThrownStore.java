@@ -273,8 +273,8 @@ public class ThrownStore {
 	protected long hash(Throwable t) {
 		long h = 1125899906842597L; // prime
 		for (var s : createStackTrace(t)) {
-			int len = s.length();
-			for (int i = 0; i < len; i++)
+			var len = s.length();
+			for (var i = 0; i < len; i++)
 				h = 31 * h + s.charAt(i);
 		}
 		return h;
@@ -303,14 +303,15 @@ public class ThrownStore {
 	protected String normalize(StackTraceElement e) {
 		if (ignoreClasses.contains(e.getClassName()))
 			return "<ignored>";
-		String s = e.toString();
-		int i = s.indexOf('$');
+		var s = e.toString();
+		var i = s.indexOf('$');
 		if (i == -1)
 			return s;
-		int j = s.indexOf('(', i);
+		var j = s.indexOf('(', i);
 		if (j == -1)
 			return s;  // Probably can't happen.
-		String s2 = s.substring(0, i), s3 = s.substring(j);
+		var s2 = s.substring(0, i);
+		var s3 = s.substring(j);
 		if (ignoreClasses.contains(s2))
 			return "<ignored>";
 		return s2 + "..." + s3;

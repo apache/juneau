@@ -120,7 +120,7 @@ public class Swappers {
 	 */
 	public static Swapper<Future> futureSwapper() {
 		return (bc, future) -> {
-			if (future.isDone() && !future.isCancelled()) {
+			if (future.isDone() && ! future.isCancelled()) {
 				try {
 					return future.get();
 				} catch (Exception e) { // NOSONAR

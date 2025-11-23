@@ -77,7 +77,7 @@ class PropertyExtractor_Test extends TestBase {
 			};
 
 			BeanConverter converter = BasicBeanConverter.DEFAULT;
-			var result = (String) impl.extract(converter, "test", "length");
+			var result = (String)impl.extract(converter, "test", "length");
 
 			assertEquals("String.length", result);
 		}
@@ -88,7 +88,7 @@ class PropertyExtractor_Test extends TestBase {
 			var concrete = new PrefixPropertyExtractor();
 
 			var converter = BasicBeanConverter.DEFAULT;
-			var result = (String) concrete.extract(converter, "test", "prop");
+			var result = (String)concrete.extract(converter, "test", "prop");
 
 			assertEquals("PREFIX:prop", result);
 		}
@@ -158,8 +158,10 @@ class PropertyExtractor_Test extends TestBase {
 
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
-					if (o == null) return "NULL_OBJECT";
-					if (key == null) return "NULL_PROPERTY";
+					if (o == null)
+						return "NULL_OBJECT";
+					if (key == null)
+						return "NULL_PROPERTY";
 					return o.toString() + ":" + key;
 				}
 			};
@@ -181,9 +183,9 @@ class PropertyExtractor_Test extends TestBase {
 
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
-					if (o instanceof Number) {
+					if (o instanceof Number o2) {
 						return switch (key) {
-							case "doubled" -> ((Number) o).doubleValue() * 2;
+							case "doubled" -> o2.doubleValue() * 2;
 							case "string" -> o.toString();
 							case "type" -> o.getClass().getSimpleName();
 							default -> "UNKNOWN_PROP:" + key;
@@ -244,14 +246,14 @@ class PropertyExtractor_Test extends TestBase {
 					return o instanceof String && "recursive".equals(key);
 				}
 
-			@Override
-			public Object extract(BeanConverter converter, Object o, String key) {
-				if ("recursive".equals(key) && o instanceof String str) {
-					// Use the converter recursively
-					return "RECURSIVE[" + converter.stringify(str.length()) + "]";
+				@Override
+				public Object extract(BeanConverter converter, Object o, String key) {
+					if ("recursive".equals(key) && o instanceof String str) {
+						// Use the converter recursively
+						return "RECURSIVE[" + converter.stringify(str.length()) + "]";
+					}
+					return "NON_RECURSIVE:" + key;
 				}
-				return "NON_RECURSIVE:" + key;
-			}
 			};
 
 			var converter = BasicBeanConverter.DEFAULT;
@@ -270,13 +272,12 @@ class PropertyExtractor_Test extends TestBase {
 
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
-					if (o instanceof Map) {
-						var map = (Map<?, ?>) o;
+					if (o instanceof Map o2) {
 						return switch (key) {
-							case "keys" -> new ArrayList<>(map.keySet());
-							case "values" -> new ArrayList<>(map.values());
-							case "entries" -> map.entrySet().size();
-							default -> map.get(key);
+							case "keys" -> toList(o2.keySet());
+							case "values" -> toList(o2.values());
+							case "entries" -> o2.entrySet().size();
+							default -> o2.get(key);
 						};
 					}
 					return "NOT_A_MAP";
@@ -286,7 +287,7 @@ class PropertyExtractor_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 			var testMap = m("a", "valueA", "b", "valueB");
 
-			var keys = (List<String>) complex.extract(converter, testMap, "keys");
+			var keys = (List<String>)complex.extract(converter, testMap, "keys");
 			assertSize(2, keys);
 			assertTrue(keys.contains("a"));
 			assertTrue(keys.contains("b"));
@@ -319,10 +320,12 @@ class PropertyExtractor_Test extends TestBase {
 				}
 			};
 
+			// @formatter:off
 			var customConverter = BasicBeanConverter.builder()
 				.defaultSettings()
 				.addPropertyExtractor(customExtractor)
 				.build();
+			// @formatter:on
 
 			// Test that the custom extractor works
 			var bean = new TestBean("test", 42);
@@ -358,11 +361,13 @@ class PropertyExtractor_Test extends TestBase {
 				}
 			};
 
+			// @formatter:off
 			var converter = BasicBeanConverter.builder()
 				.defaultSettings()
 				.addPropertyExtractor(first)
 				.addPropertyExtractor(second)
 				.build();
+			// @formatter:on
 
 			// Test that each extractor handles its specific properties
 			var bean = new TestBean("test", 42);
@@ -385,10 +390,12 @@ class PropertyExtractor_Test extends TestBase {
 				}
 			};
 
+			// @formatter:off
 			var converter = BasicBeanConverter.builder()
 				.defaultSettings()
 				.addPropertyExtractor(custom)
 				.build();
+			// @formatter:on
 
 			var bean = new TestBean("test", 42);
 
@@ -427,6 +434,7 @@ class PropertyExtractor_Test extends TestBase {
 		}
 
 		public String getName() { return name; }
+
 		public int getValue() { return value; }
 	}
 }

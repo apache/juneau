@@ -422,7 +422,7 @@ public class Cache<K,V> {
 	protected Cache(Builder<K,V> builder) {
 		this.maxSize = builder.maxSize;
 		this.disableCaching = builder.cacheMode == NONE;
-		this.supplier = builder.supplier != null ? builder.supplier : (K)->null;
+		this.supplier = builder.supplier != null ? builder.supplier : (K) -> null;
 		if (builder.cacheMode == WEAK) {
 			this.map = synchronizedMap(new WeakHashMap<>());
 			this.wrapperCache = synchronizedMap(new WeakHashMap<>());
@@ -556,14 +556,6 @@ public class Cache<K,V> {
 	 *
 	 * @return The total number of cache hits since creation.
 	 */
-	/**
-	 * Returns the number of cache hits since creation.
-	 *
-	 * <p>
-	 * A cache hit occurs when a value is retrieved from the cache without needing to call the supplier.
-	 *
-	 * @return The number of cache hits.
-	 */
 	public int getCacheHits() { return cacheHits.get(); }
 
 	/**
@@ -580,9 +572,7 @@ public class Cache<K,V> {
 	 *
 	 * @return <jk>true</jk> if the cache is empty.
 	 */
-	public boolean isEmpty() {
-		return map.isEmpty();
-	}
+	public boolean isEmpty() { return map.isEmpty(); }
 
 	/**
 	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key.
@@ -625,4 +615,3 @@ public class Cache<K,V> {
 		wrapperCache.clear(); // Clean up wrapper cache
 	}
 }
-

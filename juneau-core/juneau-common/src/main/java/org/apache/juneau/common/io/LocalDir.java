@@ -121,7 +121,7 @@ public class LocalDir {
 		try {
 			if (url == null)
 				return false;
-			URI uri = url.toURI();
+			var uri = url.toURI();
 			if (uri.toString().startsWith("file:"))
 				if (Files.isDirectory(Paths.get(uri)))
 					return false;

@@ -133,10 +133,10 @@ public class UriResolver {
 	 */
 	public Appendable append(Appendable a, Object o) {
 
-		try {
-			String uri = s(o);
-			uri = nullIfEmpty(uri);
-			boolean needsNormalize = hasDotSegments(uri) && nn(resolution);
+	try {
+		var uri = s(o);
+		uri = nullIfEmpty(uri);
+		var needsNormalize = hasDotSegments(uri) && nn(resolution);
 
 			// Absolute paths are not changed.
 			if (isAbsoluteUri(uri))
@@ -146,7 +146,7 @@ public class UriResolver {
 			if (resolution == ROOT_RELATIVE && startsWith(uri, '/'))
 				return a.append(needsNormalize ? normalize(uri) : uri);
 
-			Appendable a2 = needsNormalize ? new StringBuilder() : a;
+			var a2 = needsNormalize ? new StringBuilder() : a;
 
 			// Root-relative path
 			if (startsWith(uri, '/')) {
@@ -162,11 +162,11 @@ public class UriResolver {
 			else if (nn(uri) && uri.startsWith("context:")) {
 				if (resolution == ABSOLUTE && nn(authority))
 					a2.append(authority);
-				boolean hasContext = nn(contextRoot) && ! contextRoot.isEmpty();
+				var hasContext = nn(contextRoot) && ! contextRoot.isEmpty();
 				if (hasContext)
 					a2.append('/').append(contextRoot);
 				if (uri.length() > 8) {
-					String remainder = uri.substring(8);
+					var remainder = uri.substring(8);
 					// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
 					if (remainder.equals("/") && (hasContext || (resolution == ABSOLUTE && nn(authority)))) {
 						// Do nothing
@@ -183,14 +183,14 @@ public class UriResolver {
 			else if (nn(uri) && uri.startsWith("servlet:")) {
 				if (resolution == ABSOLUTE && nn(authority))
 					a2.append(authority);
-				boolean hasContext = nn(contextRoot) && ! contextRoot.isEmpty();
-				boolean hasServlet = nn(servletPath) && ! servletPath.isEmpty();
+				var hasContext = nn(contextRoot) && ! contextRoot.isEmpty();
+				var hasServlet = nn(servletPath) && ! servletPath.isEmpty();
 				if (hasContext)
 					a2.append('/').append(contextRoot);
 				if (hasServlet)
 					a2.append('/').append(servletPath);
 				if (uri.length() > 8) {
-					String remainder = uri.substring(8);
+					var remainder = uri.substring(8);
 					// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
 					if (remainder.equals("/") && (hasContext || hasServlet || (resolution == ABSOLUTE && nn(authority)))) {
 						// Do nothing
@@ -207,9 +207,9 @@ public class UriResolver {
 			else if (nn(uri) && uri.startsWith("request:")) {
 				if (resolution == ABSOLUTE && nn(authority))
 					a2.append(authority);
-				boolean hasContext = nn(contextRoot) && ! contextRoot.isEmpty();
-				boolean hasServlet = nn(servletPath) && ! servletPath.isEmpty();
-				boolean hasPath = nn(pathInfo) && ! pathInfo.isEmpty();
+				var hasContext = nn(contextRoot) && ! contextRoot.isEmpty();
+				var hasServlet = nn(servletPath) && ! servletPath.isEmpty();
+				var hasPath = nn(pathInfo) && ! pathInfo.isEmpty();
 				if (hasContext)
 					a2.append('/').append(contextRoot);
 				if (hasServlet)
@@ -217,7 +217,7 @@ public class UriResolver {
 				if (hasPath)
 					a2.append('/').append(pathInfo);
 				if (uri.length() > 8) {
-					String remainder = uri.substring(8);
+					var remainder = uri.substring(8);
 					// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
 					if (remainder.equals("/") && (hasContext || hasServlet || hasPath || (resolution == ABSOLUTE && nn(authority)))) {
 						// Do nothing
@@ -281,8 +281,8 @@ public class UriResolver {
 	 * @return The relativized URI.
 	 */
 	public String relativize(Object relativeTo, Object uri) {
-		String r = resolve(relativeTo, ABSOLUTE);
-		String s = resolve(uri, ABSOLUTE);
+		var r = resolve(relativeTo, ABSOLUTE);
+		var s = resolve(uri, ABSOLUTE);
 		return URI.create(r).relativize(URI.create(s)).toString();
 	}
 
@@ -321,7 +321,7 @@ public class UriResolver {
 	}
 
 	private String resolve(Object uri, UriResolution res) {
-		String s = s(uri);
+		var s = s(uri);
 		if (isAbsoluteUri(s))
 			return hasDotSegments(s) && res != NONE ? normalize(s) : s;
 		if (res == ROOT_RELATIVE && startsWith(s, '/'))

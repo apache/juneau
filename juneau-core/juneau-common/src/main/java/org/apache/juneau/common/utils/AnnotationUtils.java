@@ -131,8 +131,8 @@ public class AnnotationUtils {
 			return part1;
 		if (isArray(value))
 			return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);
-		if (value instanceof Annotation)
-			return part1 ^ hash((Annotation)value);
+		if (value instanceof Annotation value2)
+			return part1 ^ hash(value2);
 		return part1 ^ value.hashCode();
 	}
 

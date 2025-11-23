@@ -170,7 +170,7 @@ public class BooleanValue extends Value<Boolean> {
 	 * @param values The values to compare to.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
-	public boolean isAny(Boolean... values) {
+	public boolean isAny(Boolean...values) {
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

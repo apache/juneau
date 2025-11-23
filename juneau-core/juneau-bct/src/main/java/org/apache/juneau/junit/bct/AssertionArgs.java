@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.junit.bct;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
@@ -235,7 +234,7 @@ public class AssertionArgs {
 	 *
 	 * @return An Optional containing the custom converter, or empty if using default behavior.
 	 */
-	protected Optional<BeanConverter> getBeanConverter() { return ofNullable(beanConverter); }
+	protected Optional<BeanConverter> getBeanConverter() { return opt(beanConverter); }
 
 	/**
 	 * Gets the base message supplier for composition with assertion-specific messages.

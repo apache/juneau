@@ -103,7 +103,6 @@ public class PackageInfo implements Annotatable {
 		return inner;
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Package methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -123,9 +122,7 @@ public class PackageInfo implements Annotatable {
 	 * @return The fully-qualified name of this package.
 	 * @see Package#getName()
 	 */
-	public String getName() {
-		return inner.getName();
-	}
+	public String getName() { return inner.getName(); }
 
 	/**
 	 * Returns the title of the specification that this package implements.
@@ -136,9 +133,7 @@ public class PackageInfo implements Annotatable {
 	 * @return The specification title, or <jk>null</jk> if it is not known.
 	 * @see Package#getSpecificationTitle()
 	 */
-	public String getSpecificationTitle() {
-		return inner.getSpecificationTitle();
-	}
+	public String getSpecificationTitle() { return inner.getSpecificationTitle(); }
 
 	/**
 	 * Returns the version number of the specification that this package implements.
@@ -153,9 +148,7 @@ public class PackageInfo implements Annotatable {
 	 * @return The specification version, or <jk>null</jk> if it is not known.
 	 * @see Package#getSpecificationVersion()
 	 */
-	public String getSpecificationVersion() {
-		return inner.getSpecificationVersion();
-	}
+	public String getSpecificationVersion() { return inner.getSpecificationVersion(); }
 
 	/**
 	 * Returns the name of the organization that maintains the specification implemented by this package.
@@ -166,9 +159,7 @@ public class PackageInfo implements Annotatable {
 	 * @return The specification vendor, or <jk>null</jk> if it is not known.
 	 * @see Package#getSpecificationVendor()
 	 */
-	public String getSpecificationVendor() {
-		return inner.getSpecificationVendor();
-	}
+	public String getSpecificationVendor() { return inner.getSpecificationVendor(); }
 
 	/**
 	 * Returns the title of this package's implementation.
@@ -179,9 +170,7 @@ public class PackageInfo implements Annotatable {
 	 * @return The implementation title, or <jk>null</jk> if it is not known.
 	 * @see Package#getImplementationTitle()
 	 */
-	public String getImplementationTitle() {
-		return inner.getImplementationTitle();
-	}
+	public String getImplementationTitle() { return inner.getImplementationTitle(); }
 
 	/**
 	 * Returns the version of this package's implementation.
@@ -192,9 +181,7 @@ public class PackageInfo implements Annotatable {
 	 * @return The implementation version, or <jk>null</jk> if it is not known.
 	 * @see Package#getImplementationVersion()
 	 */
-	public String getImplementationVersion() {
-		return inner.getImplementationVersion();
-	}
+	public String getImplementationVersion() { return inner.getImplementationVersion(); }
 
 	/**
 	 * Returns the name of the organization that provided this package's implementation.
@@ -205,9 +192,7 @@ public class PackageInfo implements Annotatable {
 	 * @return The implementation vendor, or <jk>null</jk> if it is not known.
 	 * @see Package#getImplementationVendor()
 	 */
-	public String getImplementationVendor() {
-		return inner.getImplementationVendor();
-	}
+	public String getImplementationVendor() { return inner.getImplementationVendor(); }
 
 	/**
 	 * Returns <jk>true</jk> if this package is sealed.
@@ -218,9 +203,7 @@ public class PackageInfo implements Annotatable {
 	 * @return <jk>true</jk> if this package is sealed.
 	 * @see Package#isSealed()
 	 */
-	public boolean isSealed() {
-		return inner.isSealed();
-	}
+	public boolean isSealed() { return inner.isSealed(); }
 
 	/**
 	 * Returns <jk>true</jk> if this package is sealed with respect to the specified code source URL.
@@ -263,9 +246,7 @@ public class PackageInfo implements Annotatable {
 	 *
 	 * @return All annotations present on this package, or an empty list if there are none.
 	 */
-	public List<AnnotationInfo<Annotation>> getAnnotations() {
-		return annotations.get();
-	}
+	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotations.get(); }
 
 	/**
 	 * Returns this package's annotations of the specified type (including repeated annotations), wrapped in {@link AnnotationInfo}.
@@ -279,11 +260,8 @@ public class PackageInfo implements Annotatable {
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
-		return getAnnotations().stream()
-			.filter(ai -> type.isInstance(ai.inner()))
-			.map(ai -> (AnnotationInfo<A>)ai);
+		return getAnnotations().stream().filter(ai -> type.isInstance(ai.inner())).map(ai -> (AnnotationInfo<A>)ai);
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Object methods
@@ -313,8 +291,8 @@ public class PackageInfo implements Annotatable {
 	 */
 	@Override /* Object */
 	public boolean equals(Object obj) {
-		if (obj instanceof PackageInfo)
-			return inner.equals(((PackageInfo)obj).inner);
+		if (obj instanceof PackageInfo obj2)
+			return inner.equals(obj2.inner);
 		return inner.equals(obj);
 	}
 
@@ -343,13 +321,8 @@ public class PackageInfo implements Annotatable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.PACKAGE_TYPE;
-	}
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.PACKAGE_TYPE; }
 
 	@Override /* Annotatable */
-	public String getLabel() {
-		return getName();
-	}
+	public String getLabel() { return getName(); }
 }
-

@@ -210,12 +210,12 @@ public class RestUtils {
 	 * @return The parsed string.
 	 */
 	public static String[] parseHeader(String s) {
-		int i = s.indexOf(':');
+		var i = s.indexOf(':');
 		if (i == -1)
 			i = s.indexOf('=');
 		if (i == -1)
 			return null;
-		String name = s.substring(0, i).trim().toLowerCase(Locale.ENGLISH);
+		var name = s.substring(0, i).trim().toLowerCase(Locale.ENGLISH);
 		String val = s.substring(i + 1).trim();
 		return a(name, val);
 	}
@@ -227,9 +227,9 @@ public class RestUtils {
 	 * @return The parsed string.
 	 */
 	public static String[] parseKeyValuePair(String s) {
-		int i = -1;
-		for (int j = 0; j < s.length() && i < 0; j++) {
-			char c = s.charAt(j);
+		var i = -1;
+		for (var j = 0; j < s.length() && i < 0; j++) {
+			var c = s.charAt(j);
 			if (c == '=' || c == ':')
 				i = j;
 		}
@@ -400,9 +400,9 @@ public class RestUtils {
 		try {
 			// Given URL:  http://hostname:port/servletPath/extra
 			// We want:    http://hostname:port/servletPath
-			int sc = 0;
-			for (int i = 0; i < requestURI.length(); i++) {
-				char c = requestURI.charAt(i);
+			var sc = 0;
+			for (var i = 0; i < requestURI.length(); i++) {
+				var c = requestURI.charAt(i);
 				if (c == '/') {
 					sc++;
 					if (sc == 3) {
@@ -412,12 +412,12 @@ public class RestUtils {
 						}
 
 						// Make sure context path follows the authority.
-						for (int j = 0; j < contextPath.length(); i++, j++)
+						for (var j = 0; j < contextPath.length(); i++, j++)
 							if (requestURI.charAt(i) != contextPath.charAt(j))
 								throw new Exception("case=1");
 
 						// Make sure servlet path follows the authority.
-						for (int j = 0; j < servletPath.length(); i++, j++)
+						for (var j = 0; j < servletPath.length(); i++, j++)
 							if (requestURI.charAt(i) != servletPath.charAt(j))
 								throw new Exception("case=2");
 

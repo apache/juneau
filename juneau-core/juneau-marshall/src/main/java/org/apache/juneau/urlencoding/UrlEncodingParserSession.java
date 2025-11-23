@@ -207,7 +207,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 * @return <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
 	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
-		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
+		var cm = pMeta.getClassMeta().getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
 			if (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams())
 				return true;
@@ -221,7 +221,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			eType = (ClassMeta<T>)object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		ClassMeta<?> sType = null;
+		var sType = (ClassMeta<?>)null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -246,20 +246,20 @@ public class UrlEncodingParserSession extends UonParserSession {
 			else
 				o = cast(m, null, eType);
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : newGenericMap(sType));
+			var m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : newGenericMap(sType));
 			o = parseIntoMap2(r, m, sType, m);
 		} else if (nn(builder)) {
-			BeanMap m = toBeanMap(builder.create(this, eType));
+			var m = toBeanMap(builder.create(this, eType));
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : builder.build(this, m.getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
-			BeanMap m = newBeanMap(outer, sType.getInnerClass());
+			var m = newBeanMap(outer, sType.getInnerClass());
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : m.getBean();
 		} else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
 			// ?1=foo&2=bar...
-			Collection c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? new JsonList(this) : (Collection)sType.newInstance();
-			Map<Integer,Object> m = new TreeMap<>();
+			var c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? new JsonList(this) : (Collection)sType.newInstance();
+			var m = new TreeMap<Integer,Object>();
 			parseIntoMap2(r, m, sType, c2);
 			c2.addAll(m.values());
 			if (sType.isArray())
@@ -308,7 +308,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		boolean isInEscape = false;
 
 		var state = S1;
-		String currAttr = "";
+		var currAttr = "";
 		mark();
 		try {
 			while (c != -1) {
@@ -336,7 +336,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 					} else if (state == S3) {
 						if (c == -1 || c == '\u0001') {
 							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+								var pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
 									onUnknownProperty(currAttr, m, null);
 									unmark();
@@ -345,7 +345,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 									setCurrentProperty(pMeta);
 									// In cases of "&foo=", create an empty instance of the value if createable.
 									// Otherwise, leave it null.
-									ClassMeta<?> cm = pMeta.getClassMeta();
+									var cm = pMeta.getClassMeta();
 									if (cm.canCreateNewInstance()) {
 										try {
 											pMeta.set(m, currAttr, cm.newInstance());
@@ -362,7 +362,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 							state = S1;
 						} else {
 							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
+								var pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
 									onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), true, null));
 									unmark();
@@ -370,8 +370,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 									unmark();
 									setCurrentProperty(pMeta);
 									if (shouldUseExpandedParams(pMeta)) {
-										ClassMeta et = pMeta.getClassMeta().getElementType();
-										Object value = parseAnything(et, r.unread(), m.getBean(false), true, pMeta);
+										var et = pMeta.getClassMeta().getElementType();
+										var value = parseAnything(et, r.unread(), m.getBean(false), true, pMeta);
 										setName(et, value, currAttr);
 										try {
 											pMeta.add(m, currAttr, value);
@@ -380,8 +380,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 											throw e;
 										}
 									} else {
-										ClassMeta<?> cm = pMeta.getClassMeta();
-										Object value = parseAnything(cm, r.unread(), m.getBean(false), true, pMeta);
+										var cm = pMeta.getClassMeta();
+										var value = parseAnything(cm, r.unread(), m.getBean(false), true, pMeta);
 										setName(cm, value, currAttr);
 										try {
 											pMeta.set(m, currAttr, value);
@@ -437,7 +437,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		var state = S1;
 		int argIndex = 0;
-		K currAttr = null;
+		var currAttr = (K)null;
 		while (c != -1) {
 			c = r.read();
 			if (! isInEscape) {
@@ -445,7 +445,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 					if (c == -1)
 						return m;
 					r.unread();
-					Object attr = parseAttr(r, true);
+					var attr = parseAttr(r, true);
 					currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
 					state = S2;
 					c = 0; // Avoid isInEscape if c was '\'

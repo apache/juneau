@@ -210,6 +210,7 @@ public class Info extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(contact), "contact")
 			.addIf(nn(description), "description")
@@ -218,6 +219,7 @@ public class Info extends OpenApiElement {
 			.addIf(nn(title), "title")
 			.addIf(nn(version), "version")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

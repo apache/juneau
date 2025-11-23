@@ -186,7 +186,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			eType = object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		ClassMeta<?> sType = null;
+		var sType = (ClassMeta<?>)null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -239,7 +239,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 					for (int i = 0; i < length; i++) {
 						Object key = parseAnything(sType.getKeyType(), is, outer, pMeta);
-						ClassMeta<?> vt = sType.getValueType();
+						var vt = sType.getValueType();
 						Object value = parseAnything(vt, is, m, pMeta);
 						setName(vt, value, key);
 						m.put(key, value);
@@ -253,14 +253,14 @@ public class MsgPackParserSession extends InputStreamParserSession {
 					BeanMap m = builder == null ? newBeanMap(outer, sType.getInnerClass()) : toBeanMap(builder.create(this, eType));
 					for (int i = 0; i < length; i++) {
 						String pName = parseAnything(string(), is, m.getBean(false), null);
-						BeanPropertyMeta bpm = m.getPropertyMeta(pName);
+						var bpm = m.getPropertyMeta(pName);
 						if (bpm == null) {
 							if (pName.equals(getBeanTypePropertyName(eType)))
 								parseAnything(string(), is, null, null);
 							else
 								onUnknownProperty(pName, m, parseAnything(string(), is, null, null));
 						} else {
-							ClassMeta<?> cm = bpm.getClassMeta();
+							var cm = bpm.getClassMeta();
 							Object value = parseAnything(cm, is, m.getBean(false), bpm);
 							setName(cm, value, pName);
 							try {

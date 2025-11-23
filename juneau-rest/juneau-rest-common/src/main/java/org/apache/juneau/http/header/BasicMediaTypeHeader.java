@@ -223,11 +223,12 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<MediaType> mediaTypes) {
-		int matchQuant = 0, matchIndex = -1;
+		int matchQuant = 0;
+		int matchIndex = -1;
 
-		for (int i = 0; i < mediaTypes.size(); i++) {
-			MediaType mt = mediaTypes.get(i);
-			int matchQuant2 = mt.match(orElse(MediaType.EMPTY), true);
+		for (var i = 0; i < mediaTypes.size(); i++) {
+			var mt = mediaTypes.get(i);
+			var matchQuant2 = mt.match(orElse(MediaType.EMPTY), true);
 			if (matchQuant2 > matchQuant) {
 				matchQuant = matchQuant2;
 				matchIndex = i;
@@ -291,7 +292,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The value, if present, otherwise <c>other</c>.
 	 */
 	public MediaType orElse(MediaType other) {
-		MediaType x = value();
+		var x = value();
 		return nn(x) ? x : other;
 	}
 
@@ -307,7 +308,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	private static MediaType parse(String value) {
 		// If this happens to be a multi-value, use the last value.
 		if (nn(value)) {
-			int i = value.indexOf(',');
+			var i = value.indexOf(',');
 			if (i != -1)
 				value = value.substring(i + 1);
 		}

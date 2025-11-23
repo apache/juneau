@@ -192,6 +192,7 @@ public class Link extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(description), "description")
 			.addIf(nn(operationId), "operationId")
@@ -200,6 +201,7 @@ public class Link extends OpenApiElement {
 			.addIf(nn(requestBody), "requestBody")
 			.addIf(nn(server), "server")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

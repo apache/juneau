@@ -104,7 +104,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public BasicHeader(String name, Object value) {
-		assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");
+		assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");  // NOAI
 		this.name = name;
 		this.value = value instanceof Supplier ? null : value;
 		this.stringValue = s(value);
@@ -124,7 +124,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicHeader(String name, Supplier<Object> value) {
-		assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");
+		assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");  // NOAI
 		this.name = name;
 		this.value = null;
 		this.stringValue = null;
@@ -204,7 +204,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	@Override
 	public HeaderElement[] getElements() throws ParseException {
 		if (elements == null) {
-			String s = getValue();
+			var s = getValue();
 			HeaderElement[] x = s == null ? EMPTY_HEADER_ELEMENTS : BasicHeaderValueParser.parseElements(s, null);
 			if (supplier == null)
 				elements = x;

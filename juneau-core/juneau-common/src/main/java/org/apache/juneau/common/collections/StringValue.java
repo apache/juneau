@@ -142,7 +142,7 @@ public class StringValue extends Value<String> {
 	 * @param values The values to compare to.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
-	public boolean isAny(String... values) {
+	public boolean isAny(String...values) {
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))
@@ -150,4 +150,3 @@ public class StringValue extends Value<String> {
 		return false;
 	}
 }
-

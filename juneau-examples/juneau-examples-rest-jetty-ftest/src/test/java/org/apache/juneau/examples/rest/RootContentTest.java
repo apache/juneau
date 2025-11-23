@@ -29,6 +29,7 @@ public class RootContentTest extends ContentComboTestBase {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
+		// @formatter:off
 		return l(new Object[][] {
 			{ 	/* 0 */
 				new ComboInput("HTML-stylesheet", "/", MediaType.HTML,
@@ -114,6 +115,7 @@ public class RootContentTest extends ContentComboTestBase {
 				)
 			}
 		});
+		// @formatter:on
 	}
 
 	public RootContentTest(ComboInput comboInput) {

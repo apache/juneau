@@ -54,6 +54,7 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
+					<supportIncrementalBuild>true</supportIncrementalBuild>
 					<instructions>
 						<Automatic-Module-Name>org.apache.juneau.marshall</Automatic-Module-Name>
 						<_nouses>true</_nouses>

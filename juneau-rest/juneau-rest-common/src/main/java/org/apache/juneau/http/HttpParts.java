@@ -42,28 +42,28 @@ import org.apache.juneau.common.reflect.*;
 public class HttpParts {
 
 	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
-		Value<String> n = Value.empty();
+		var n = Value.<String>empty();
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
-		Value<String> n = Value.empty();
+		var n = Value.<String>empty();
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
-		Value<String> n = Value.empty();
+		var n = Value.<String>empty();
 		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
 		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
-		Value<String> n = Value.empty();
+		var n = Value.<String>empty();
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
@@ -71,8 +71,7 @@ public class HttpParts {
 
 	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {
 		var ci = x.getInfo();
-		return ci.getPublicConstructor(y -> y.hasParameterTypes(String.class))
-			.orElseGet(() -> ci.getPublicConstructor(y -> y.hasParameterTypes(String.class, String.class)).orElse(null));
+		return ci.getPublicConstructor(y -> y.hasParameterTypes(String.class)).orElseGet(() -> ci.getPublicConstructor(y -> y.hasParameterTypes(String.class, String.class)).orElse(null));
 	};
 
 	/**
@@ -170,14 +169,14 @@ public class HttpParts {
 	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
 	 */
 	public static NameValuePair cast(Object o) {
-		if (o instanceof NameValuePair nvp)
-			return nvp;
-		if (o instanceof Headerable h) {
-			Header x = h.asHeader();
+		if (o instanceof NameValuePair o2)
+			return o2;
+		if (o instanceof Headerable o3) {
+			Header x = o3.asHeader();
 			return BasicPart.of(x.getName(), x.getValue());
 		}
-		if (o instanceof Map.Entry e) {
-			return BasicPart.of(s(e.getKey()), e.getValue());
+		if (o instanceof Map.Entry o4) {
+			return BasicPart.of(s(o4.getKey()), o4.getValue());
 		}
 		throw rex("Object of type {0} could not be converted to a Part.", cn(o));
 	}
@@ -362,10 +361,8 @@ public class HttpParts {
 	 */
 	public static boolean isHttpPart(HttpPartType partType, ClassMeta<?> type) {
 		return switch (partType) {
-			case PATH, QUERY, FORMDATA ->
-				type.getProperty("HttpPart.isNameValuePair", x -> x.isChildOf(NameValuePair.class)).orElse(false);
-			case HEADER ->
-				type.getProperty("HttpPart.isHeader", x -> x.isChildOf(org.apache.http.Header.class)).orElse(false);
+			case PATH, QUERY, FORMDATA -> type.getProperty("HttpPart.isNameValuePair", x -> x.isChildOf(NameValuePair.class)).orElse(false);
+			case HEADER -> type.getProperty("HttpPart.isHeader", x -> x.isChildOf(org.apache.http.Header.class)).orElse(false);
 			default -> false;
 		};
 	}

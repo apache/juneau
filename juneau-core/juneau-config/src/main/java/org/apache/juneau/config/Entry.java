@@ -434,9 +434,9 @@ public class Entry {
 		var v = toString();
 		var s1 = firstNonWhitespaceChar(v);
 		var s2 = lastNonWhitespaceChar(v);
-		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser) {
+		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser parser2) {
 			try {
-				return opt(config.parser.parse(v, String[].class));
+				return opt(parser2.parse(v, String[].class));
 			} catch (ParseException e) {
 				throw bex(e);
 			}
@@ -550,7 +550,7 @@ public class Entry {
 		return (c.isArray());
 	}
 
-	private boolean isEmpty() { return StringUtils.isEmpty(value); }
+	private boolean isEmpty() { return Utils.isEmpty(value); }  // NOAI
 
 	private boolean isNull() { return value == null; }
 

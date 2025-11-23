@@ -57,7 +57,7 @@ public class RemoteOperationMeta {
 		RemoteOperationReturn methodReturn;
 		Map<String,String> pathDefaults = new LinkedHashMap<>(), queryDefaults = new LinkedHashMap<>(), headerDefaults = new LinkedHashMap<>(), formDataDefaults = new LinkedHashMap<>();
 		String contentDefault = null;
-		static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+		static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 		Builder(String parentPath, Method m, String defaultMethod) {
 
@@ -80,7 +80,7 @@ public class RemoteOperationMeta {
 
 			if (value.isPresent()) {
 				var v = value.get();
-				int i = v.indexOf(' ');
+				var i = v.indexOf(' ');
 				if (i == -1) {
 					httpMethod = v;
 				} else {
@@ -144,40 +144,50 @@ public class RemoteOperationMeta {
 		// These handle both individual annotations and repeated annotation arrays
 
 		private void processContentDefaults(MethodInfo mi) {
+			// @formatter:off
 			AP.find(Content.class, mi)
 				.stream()
 				.map(x -> x.inner().def())
-				.filter(x -> isNotBlank(x))
+				.filter(StringUtils::isNotBlank)
 				.findFirst()
 				.ifPresent(x -> contentDefault = x);
+			// @formatter:on
 		}
 
 		private static void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// @formatter:off
 			rstream(AP.find(FormData.class, mi))
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
+			// @formatter:on
 		}
 
 		private static void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// @formatter:off
 			rstream(AP.find(Header.class, mi))
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
+			// @formatter:on
 		}
 
 		private static void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// @formatter:off
 			rstream(AP.find(Path.class, mi))
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(NONE, x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
+			// @formatter:on
 		}
 
 		private static void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// @formatter:off
 			rstream(AP.find(Query.class, mi))
 				.map(AnnotationInfo::inner)
 				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
+			// @formatter:on
 		}
 	}
 

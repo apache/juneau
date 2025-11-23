@@ -227,8 +227,8 @@ public class VarResolver {
 	}
 
 	private static Var toVar(BeanStore bs, Object o) {
-		if (o instanceof Class)
-			return bs.createBean(Var.class).type((Class<?>)o).run();
+		if (o instanceof Class o2)
+			return bs.createBean(Var.class).type(o2).run();
 		return (Var)o;
 	}
 
@@ -245,7 +245,7 @@ public class VarResolver {
 	protected VarResolver(Builder builder) {
 		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore(), x)).toArray(Var[]::new);
 
-		Map<String,Var> m = new ConcurrentSkipListMap<>();
+		var m = new ConcurrentSkipListMap<String,Var>();
 		for (var v : vars)
 			m.put(v.getName(), v);
 

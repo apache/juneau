@@ -110,7 +110,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		if (pairs == null)
 			pairs = new String[0];
 		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into PartList.ofPairs()");
-		for (int i = 0; i < pairs.length; i += 2)
+		for (var i = 0; i < pairs.length; i += 2)
 			x.add(BasicPart.of(pairs[i], pairs[i + 1]));
 		return x;
 	}
@@ -311,7 +311,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	public <T> Optional<T> get(Class<T> type) {
 		assertArgNotNull("type", type);
 
-		String name = PartBeanMeta.of(type).getSchema().getName();
+		var name = PartBeanMeta.of(type).getSchema().getName();
 		assertArg(isNotNull(name), "Part name could not be found on bean type ''{0}''", cn(type));
 
 		return get(name, type);
@@ -874,7 +874,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		var sb = new StringBuilder();
 		forEach(p -> {
 			if (nn(p)) {
-				String v = p.getValue();
+				var v = p.getValue();
 				if (nn(v)) {
 					if (sb.length() > 0)
 						sb.append("&");
@@ -895,7 +895,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(caseInsensitive, s1, s2);
+		return Utils.eq(caseInsensitive, s1, s2);  // NOAI
 	}
 
 	private Supplier<Object> resolver(Object input) {
@@ -903,8 +903,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	private static Object unwrap(Object o) {
-		while (o instanceof Supplier)
-			o = ((Supplier<?>)o).get();
+		while (o instanceof Supplier<?> s)
+			o = s.get();
 		return o;
 	}
 }

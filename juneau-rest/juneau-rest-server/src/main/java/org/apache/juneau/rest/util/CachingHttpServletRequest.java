@@ -40,8 +40,8 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	 * @throws IOException Thrown by underlying content stream.
 	 */
 	public static CachingHttpServletRequest wrap(HttpServletRequest req) throws IOException {
-		if (req instanceof CachingHttpServletRequest)
-			return (CachingHttpServletRequest)req;
+		if (req instanceof CachingHttpServletRequest req2)
+			return req2;
 		return new CachingHttpServletRequest(req);
 	}
 

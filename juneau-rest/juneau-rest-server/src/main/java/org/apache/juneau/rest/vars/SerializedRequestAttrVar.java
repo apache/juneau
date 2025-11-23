@@ -63,12 +63,12 @@ public class SerializedRequestAttrVar extends StreamedVar {
 
 	@Override /* Overridden from Var */
 	public void resolveTo(VarResolverSession session, Writer w, String key) throws Exception {
-		int i = key.indexOf(',');
+		var i = key.indexOf(',');
 		if (i == -1)
 			throw illegalArg("Invalid format for $SA var. Must be of the format $SA{contentType,key[,defaultValue]}");
-		String[] s2 = splita(key);
-		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
-		Object o = req.getAttribute(key).orElse(key);
+		var s2 = splita(key);
+		var req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
+		var o = req.getAttribute(key).orElse(key);
 		Serializer s = req.getOpContext().getSerializers().getSerializer(s2[0]);
 		if (nn(s))
 			s.serialize(w, o);

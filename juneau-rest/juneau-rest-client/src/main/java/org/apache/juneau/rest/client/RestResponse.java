@@ -401,7 +401,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 				if (client.logRequests == DetailLevel.SIMPLE) {
 					client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
 				} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
-					String output = getContent().asString();
+					var output = getContent().asString();
 					var sb = new StringBuilder();
 					sb.append("\n=== HTTP Call (outgoing) ======================================================");
 					sb.append("\n=== REQUEST ===\n");
@@ -410,7 +410,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 					request.getHeaders().forEach(x -> sb.append("\n\t").append(x));
 					if (request.hasHttpEntity()) {
 						sb.append("\n---request entity---");
-						HttpEntity e = request.getHttpEntity();
+						var e = request.getHttpEntity();
 						if (nn(e.getContentType()))
 							sb.append("\n\t").append(e.getContentType());
 						if (e.isRepeatable()) {
@@ -501,8 +501,8 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public String getCharacterEncoding() throws RestCallException {
-		Optional<ContentType> ct = getContentType();
-		String s = null;
+		var ct = getContentType();
+		var s = (String)null;
 		if (ct.isPresent())
 			s = getContentType().get().getParameter("charset");
 		return isEmpty(s) ? "utf-8" : s;
@@ -897,7 +897,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @return A session of the specified parser.
 	 */
 	protected HttpPartParserSession getPartParserSession(HttpPartParser parser) {
-		HttpPartParserSession s = partParserSessions.get(parser);
+		var s = partParserSessions.get(parser);
 		if (s == null) {
 			s = parser.getPartSession();
 			partParserSessions.put(parser, s);
@@ -910,12 +910,12 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		var c = (Class<T>)rbm.getClassMeta().getInnerClass();
 		final RestClient rc = this.client;
 		return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
-			ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
-			HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
-			HttpPartSchema schema = pm.getSchema();
-			HttpPartType pt = pm.getPartType();
-			String name = pm.getPartName().orElse(null);
-			ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
+			var pm = rbm.getProperty(method.getName());
+			var pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
+			var schema = pm.getSchema();
+			var pt = pm.getPartType();
+			var name = pm.getPartName().orElse(null);
+			var type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
 			if (pt == RESPONSE_HEADER)
 				return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
 			if (pt == RESPONSE_STATUS)

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.rrpc;
 
-import org.apache.juneau.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
@@ -47,7 +46,7 @@ public class RrpcRestOpContext extends RestOpContext {
 	protected RrpcRestOpContext(RestOpContext.Builder builder) throws ServletException {
 		super(builder);
 
-		ClassMeta<?> interfaceClass = getBeanContext().getClassMeta(getJavaMethod().getGenericReturnType());
+		var interfaceClass = getBeanContext().getClassMeta(getJavaMethod().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.getInnerClass(), null);
 		if (meta.getMethodsByPath().isEmpty())
 			throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", getJavaMethod().getName(), interfaceClass.getFullName());

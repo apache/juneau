@@ -125,7 +125,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param value The value to add to the collection or array.
 	 */
 	public void add(String property, Object value) {
-		BeanPropertyMeta p = getPropertyMeta(property);
+		var p = getPropertyMeta(property);
 		if (p == null) {
 			if (meta.ctx.isIgnoreUnknownBeanProperties())
 				return;
@@ -137,7 +137,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	@Override /* Overridden from Map */
 	public boolean containsKey(Object property) {
 		// JUNEAU-248: Match the behavior of keySet() - only check properties map, not hiddenProperties
-		String key = emptyIfNull(property);
+		var key = emptyIfNull(property);
 		if (meta.properties.containsKey(key) && ! "*".equals(key))
 			return true;
 		if (nn(meta.dynaProperty)) {
@@ -177,7 +177,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		}
 
 		// Construct our own anonymous set to implement this function.
-		Set<Entry<String,Object>> s = new AbstractSet<>() {
+		var s = new AbstractSet<Entry<String,Object>>() {
 
 			// Get the list of properties from the meta object.
 			// Note that the HashMap.values() method caches results, so this collection
@@ -248,7 +248,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		if (meta.dynaProperty == null) {
 			forEachProperty(BeanPropertyMeta::canRead, bpm -> {
 				try {
-					Object val = bpm.get(this, null);
+					var val = bpm.get(this, null);
 					if (valueFilter.test(val))
 						action.apply(bpm, bpm.getName(), val, null);
 				} catch (Error e) {
@@ -280,7 +280,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 					Map<String,Object> dynaMap = bpm.getDynaMap(bean);
 					if (nn(dynaMap)) {
 						dynaMap.forEach((k, v) -> {
-							Object val = bpm.get(this, k);
+							var val = bpm.get(this, k);
 							actions.put(k, new BeanPropertyValue(bpm, k, val, null));
 						});
 					}
@@ -336,8 +336,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Overridden from Map */
 	public Object get(Object property) {
-		String pName = s(property);
-		BeanPropertyMeta p = getPropertyMeta(pName);
+		var pName = s(property);
+		var p = getPropertyMeta(pName);
 		if (p == null)
 			return meta.onReadProperty(this.bean, pName, null);
 		return p.get(this, pName);
@@ -360,8 +360,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@SuppressWarnings("unchecked")
 	public <T2> T2 get(String property, Class<T2> c) {
-		String pName = s(property);
-		BeanPropertyMeta p = getPropertyMeta(pName);
+		var pName = s(property);
+		var p = getPropertyMeta(pName);
 		if (p == null)
 			return (T2)meta.onReadProperty(this.bean, pName, null);
 		return (T2)p.get(this, pName);
@@ -393,13 +393,13 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 		// Initialize any null Optional<X> fields.
 		for (var pMeta : this.meta.propertyArray) {
-			ClassMeta<?> cm = pMeta.getClassMeta();
+			var cm = pMeta.getClassMeta();
 			if (cm.isOptional() && pMeta.get(this, pMeta.getName()) == null)
 				pMeta.set(this, pMeta.getName(), cm.getOptionalDefault());
 		}
 		// Do the same for hidden fields.
 		this.meta.hiddenProperties.forEach((k, v) -> {
-			ClassMeta<?> cm = v.getClassMeta();
+			var cm = v.getClassMeta();
 			if (cm.isOptional() && v.get(this, v.getName()) == null)
 				v.set(this, v.getName(), cm.getOptionalDefault());
 		});
@@ -424,10 +424,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public T getBean(boolean create) {
 		/** If this is a read-only bean, then we need to create it. */
 		if (bean == null && create && meta.constructorArgs.length > 0) {
-			String[] props = meta.constructorArgs;
-			ConstructorInfo c = meta.constructor;
-			Object[] args = new Object[props.length];
-			for (int i = 0; i < props.length; i++)
+			var props = meta.constructorArgs;
+			var c = meta.constructor;
+			var args = new Object[props.length];
+			for (var i = 0; i < props.length; i++)
 				args[i] = propertyCache.remove(props[i]);
 			try {
 				bean = c.<T>newInstance(args);
@@ -491,7 +491,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return The bean property, or null if the bean has no such property.
 	 */
 	public BeanMapEntry getProperty(String propertyName) {
-		BeanPropertyMeta p = getPropertyMeta(propertyName);
+		var p = getPropertyMeta(propertyName);
 		if (p == null)
 			return null;
 		return new BeanMapEntry(this, p, propertyName);
@@ -515,8 +515,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return The raw property value.
 	 */
 	public Object getRaw(Object property) {
-		String pName = s(property);
-		BeanPropertyMeta p = getPropertyMeta(pName);
+		var pName = s(property);
+		var p = getPropertyMeta(pName);
 		if (p == null)
 			return null;
 		return p.getRaw(this, pName);
@@ -633,7 +633,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Overridden from Map */
 	public Object put(String property, Object value) {
-		BeanPropertyMeta p = getPropertyMeta(property);
+		var p = getPropertyMeta(property);
 		if (p == null) {
 			if (meta.ctx.isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
 				return meta.onWriteProperty(bean, property, null);

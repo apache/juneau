@@ -109,9 +109,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * 	An unmodifiable list of all annotations declared on this field.
 	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
-	public List<AnnotationInfo<Annotation>> getAnnotations() {
-		return annotations.get();
-	}
+	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotations.get(); }
 
 	/**
 	 * Returns all annotations of the specified type declared on this field.
@@ -122,9 +120,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
-		return annotations.get().stream()
-			.filter(x -> type.isInstance(x.inner()))
-			.map(x -> (AnnotationInfo<A>)x);
+		return annotations.get().stream().filter(x -> type.isInstance(x.inner())).map(x -> (AnnotationInfo<A>)x);
 	}
 
 	/**
@@ -177,9 +173,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * @return The underlying executable name.
 	 */
-	public String getFullName() {
-		return fullName.get();
-	}
+	public String getFullName() { return fullName.get(); }
 
 	/**
 	 * Returns the name of this field.
@@ -193,9 +187,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * @return The type of this field.
 	 */
-	public ClassInfo getFieldType() {
-		return type.get();
-	}
+	public ClassInfo getFieldType() { return type.get(); }
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present.
@@ -239,9 +231,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 			case DEPRECATED -> isDeprecated();
 			case NOT_DEPRECATED -> isNotDeprecated();
 			case ENUM_CONSTANT -> isEnumConstant();
-			case NOT_ENUM_CONSTANT -> !isEnumConstant();
+			case NOT_ENUM_CONSTANT -> ! isEnumConstant();
 			case SYNTHETIC -> isSynthetic();
-			case NOT_SYNTHETIC -> !isSynthetic();
+			case NOT_SYNTHETIC -> ! isSynthetic();
 			default -> super.is(flag);
 		};
 	}
@@ -327,9 +319,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return <jk>true</jk> if this field is a synthetic field.
 	 * @see Field#isSynthetic()
 	 */
-	public boolean isSynthetic() {
-		return inner.isSynthetic();
-	}
+	public boolean isSynthetic() { return inner.isSynthetic(); }
 
 	/**
 	 * Returns <jk>true</jk> if this field represents an element of an enumerated type.
@@ -349,9 +339,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return <jk>true</jk> if this field represents an enum constant.
 	 * @see Field#isEnumConstant()
 	 */
-	public boolean isEnumConstant() {
-		return inner.isEnumConstant();
-	}
+	public boolean isEnumConstant() { return inner.isEnumConstant(); }
 
 	/**
 	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the declared type of the field.
@@ -370,9 +358,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return An {@link AnnotatedType} object representing the declared type.
 	 * @see Field#getAnnotatedType()
 	 */
-	public AnnotatedType getAnnotatedType() {
-		return inner.getAnnotatedType();
-	}
+	public AnnotatedType getAnnotatedType() { return inner.getAnnotatedType(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Field-Specific Methods
@@ -409,12 +395,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.FIELD_TYPE;
-	}
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.FIELD_TYPE; }
 
 	@Override /* Annotatable */
-	public String getLabel() {
-		return getDeclaringClass().getNameSimple() + "." + getName();
-	}
+	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getName(); }
 }

@@ -486,9 +486,9 @@ public class RestRequest extends HttpServletRequestWrapper {
 			// Determine charset
 			// NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.
 			// Jetty returns the default charset instead of null if the character is not specified on the request.
-			String h = getHeaderParam("Content-Type").orElse(null);
+			var h = getHeaderParam("Content-Type").orElse(null);
 			if (nn(h)) {
-				int i = h.indexOf(";charset=");
+				var i = h.indexOf(";charset=");
 				if (i > 0)
 					charset = Charset.forName(h.substring(i + 9).trim());
 			}
@@ -930,9 +930,9 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		var swagger = getSwagger();
 		if (! swagger.isPresent())
-			return Optional.empty();
+			return opte();
 
-		return ofNullable(swagger.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
+		return opt(swagger.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
 	}
 
 	/**
@@ -1169,7 +1169,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 					HttpPartParserSession pp = pm.getParser(getPartParserSession());
 					HttpPartSchema schema = pm.getSchema();
 					String name = pm.getPartName();
-					ClassMeta<?> type = bs.getClassMeta(method.getGenericReturnType());
+					var type = bs.getClassMeta(method.getGenericReturnType());
 					HttpPartType pt = pm.getPartType();
 					if (pt == HttpPartType.BODY)
 						return getContent().setSchema(schema).as(type);
@@ -1272,7 +1272,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var tz = headers.get("Time-Zone").asString().orElse(null);
 		if (nn(tz))
 			return opt(TimeZone.getTimeZone(tz));
-		return Optional.empty();
+		return opte();
 	}
 
 	/**
@@ -1494,7 +1494,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var sb = new StringBuilder("\n").append(getRequestLine()).append("\n");
 		sb.append("---Headers---\n");
 		getHeaders().forEach(x -> sb.append("\t").append(x).append("\n"));
-		String m = getMethod();
+		var m = getMethod();
 		if (m.equals("PUT") || m.equals("POST")) {
 			try {
 				sb.append("---Content UTF-8---\n");

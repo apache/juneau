@@ -64,8 +64,7 @@ public class StringUtils {
 	 *   <li>Object allocation for frequently used patterns</li>
 	 * </ul>
 	 */
-	private static final ThreadLocal<Cache<String,MessageFormat>> MESSAGE_FORMAT_CACHE =
-		ThreadLocal.withInitial(() -> Cache.of(String.class, MessageFormat.class).maxSize(100).build());
+	private static final ThreadLocal<Cache<String,MessageFormat>> MESSAGE_FORMAT_CACHE = ThreadLocal.withInitial(() -> Cache.of(String.class, MessageFormat.class).maxSize(100).build());
 
 	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
 
@@ -589,35 +588,20 @@ public class StringUtils {
 			return null;
 		var sb = new StringBuilder();
 		for (var c : s.toCharArray()) {
-			switch (c) {
-			case '\"':
-				sb.append("\\\"");
-				break;
-			case '\\':
-				sb.append("\\\\");
-				break;
-			case '\n':
-				sb.append("\\n");
-				break;
-			case '\r':
-				sb.append("\\r");
-				break;
-			case '\t':
-				sb.append("\\t");
-				break;
-			case '\f':
-				sb.append("\\f");
-				break;
-			case '\b':
-				sb.append("\\b");
-				break;
-			default:
-				if (c < 0x20 || c > 0x7E) {
-					sb.append(String.format("\\u%04x", (int)c));
-				} else {
-					sb.append(c);
+			sb.append(switch (c) {
+				case '\"' -> "\\\"";
+				case '\\' -> "\\\\";
+				case '\n' -> "\\n";
+				case '\r' -> "\\r";
+				case '\t' -> "\\t";
+				case '\f' -> "\\f";
+				case '\b' -> "\\b";
+				default -> {
+					if (c < 0x20 || c > 0x7E)
+						yield String.format("\\u%04x", (int)c);
+					yield String.valueOf(c);
 				}
-			}
+			});
 		}
 		return sb.toString();
 	}
@@ -1089,7 +1073,7 @@ public class StringUtils {
 	public static boolean isAlpha(String str) {
 		if (isEmpty(str))
 			return false;
-		for (int i = 0; i < str.length(); i++) {
+		for (var i = 0; i < str.length(); i++) {
 			if (! Character.isLetter(str.charAt(i)))
 				return false;
 		}
@@ -1115,7 +1099,7 @@ public class StringUtils {
 	public static boolean isAlphaNumeric(String str) {
 		if (isEmpty(str))
 			return false;
-		for (int i = 0; i < str.length(); i++) {
+		for (var i = 0; i < str.length(); i++) {
 			if (! Character.isLetterOrDigit(str.charAt(i)))
 				return false;
 		}
@@ -1163,24 +1147,24 @@ public class StringUtils {
 		if (c == '0' && length > (isPrefixed ? 2 : 1)) {
 			c = s.charAt(i++);
 			if (c == 'x' || c == 'X') {
-				for (int j = i; j < length; j++) {
+				for (var j = i; j < length; j++) {
 					if (! hexChars.contains(s.charAt(j)))
 						return false;
 				}
 			} else if (octChars.contains(c)) {
-				for (int j = i; j < length; j++)
+				for (var j = i; j < length; j++)
 					if (! octChars.contains(s.charAt(j)))
 						return false;
 			} else {
 				return false;
 			}
 		} else if (c == '#') {
-			for (int j = i; j < length; j++) {
+			for (var j = i; j < length; j++) {
 				if (! hexChars.contains(s.charAt(j)))
 					return false;
 			}
 		} else if (decChars.contains(c)) {
-			for (int j = i; j < length; j++)
+			for (var j = i; j < length; j++)
 				if (! decChars.contains(s.charAt(j)))
 					return false;
 		} else {
@@ -1207,29 +1191,11 @@ public class StringUtils {
 	public static boolean isDigit(String str) {
 		if (isEmpty(str))
 			return false;
-		for (int i = 0; i < str.length(); i++) {
+		for (var i = 0; i < str.length(); i++) {
 			if (! Character.isDigit(str.charAt(i)))
 				return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Checks if a string is empty (null or zero length).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	isEmpty(<jk>null</jk>);       <jc>// true</jc>
-	 * 	isEmpty(<js>""</js>);         <jc>// true</jc>
-	 * 	isEmpty(<js>"   "</js>);      <jc>// false</jc>
-	 * 	isEmpty(<js>"hello"</js>);    <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is null or has zero length.
-	 */
-	public static boolean isEmpty(CharSequence str) {
-		return str == null || str.isEmpty();
 	}
 
 	/**
@@ -1295,8 +1261,8 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string appears to be a JSON array.
 	 */
 	public static boolean isJsonArray(Object o, boolean ignoreWhitespaceAndComments) {
-		if (o instanceof CharSequence) {
-			var s = o.toString();
+		if (o instanceof CharSequence o2) {
+			var s = o2.toString();
 			if (! ignoreWhitespaceAndComments)
 				return (s.startsWith("[") && s.endsWith("]"));
 			if (firstRealCharacter(s) != '[')
@@ -1318,8 +1284,8 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string appears to be a JSON object.
 	 */
 	public static boolean isJsonObject(Object o, boolean ignoreWhitespaceAndComments) {
-		if (o instanceof CharSequence) {
-			var s = o.toString();
+		if (o instanceof CharSequence o2) {
+			var s = o2.toString();
 			if (! ignoreWhitespaceAndComments)
 				return (s.startsWith("{") && s.endsWith("}"));
 			if (firstRealCharacter(s) != '{')
@@ -1373,7 +1339,7 @@ public class StringUtils {
 		if (values == null)
 			return false;
 		for (CharSequence value : values)
-			if (value != null && !value.isEmpty())
+			if (value != null && ! value.isEmpty())
 				return true;
 		return false;
 	}
@@ -1591,7 +1557,7 @@ public class StringUtils {
 			return false;
 		if (str.isEmpty())
 			return true;
-		for (int i = 0; i < str.length(); i++) {
+		for (var i = 0; i < str.length(); i++) {
 			if (! isWhitespace(str.charAt(i)))
 				return false;
 		}
@@ -2309,8 +2275,8 @@ public class StringUtils {
 		if (str == null)
 			return null;
 		var sb = new StringBuilder();
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
 			if (Character.isISOControl(c) && ! Character.isWhitespace(c))
 				sb.append(' ');
 			else
@@ -3175,7 +3141,7 @@ public class StringUtils {
 			return str;
 		if (separator == null)
 			return "";
-		int pos = str.indexOf(separator);
+		var pos = str.indexOf(separator);
 		if (pos == -1)
 			return "";
 		return str.substring(pos + separator.length());
@@ -3203,7 +3169,7 @@ public class StringUtils {
 	public static String substringBefore(String str, String separator) {
 		if (isEmpty(str) || separator == null)
 			return str;
-		int pos = str.indexOf(separator);
+		var pos = str.indexOf(separator);
 		if (pos == -1)
 			return str;
 		return str.substring(0, pos);
@@ -3231,10 +3197,10 @@ public class StringUtils {
 	public static String substringBetween(String str, String open, String close) {
 		if (str == null || open == null || close == null)
 			return null;
-		int start = str.indexOf(open);
+		var start = str.indexOf(open);
 		if (start == -1)
 			return null;
-		int end = str.indexOf(close, start + open.length());
+		var end = str.indexOf(close, start + open.length());
 		if (end == -1)
 			return null;
 		return str.substring(start + open.length(), end);
@@ -3256,8 +3222,8 @@ public class StringUtils {
 		if (str == null)
 			return null;
 		var sb = new StringBuilder(str.length());
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
 			if (Character.isUpperCase(c))
 				sb.append(Character.toLowerCase(c));
 			else if (Character.isLowerCase(c))
@@ -3286,8 +3252,8 @@ public class StringUtils {
 			}
 			return sb.toString();
 		}
-		if (o instanceof Collection)
-			return join((Collection<?>)o, ", ");
+		if (o instanceof Collection<?> c)
+			return join(c, ", ");
 		return o.toString();
 	}
 
@@ -3855,10 +3821,10 @@ public class StringUtils {
 	private static String convertToReadable(Object o) {
 		if (o == null)
 			return null;
-		if (o instanceof Class)
-			return ((Class<?>)o).getName();
-		if (o instanceof Method)
-			return Method.class.cast(o).getName();
+		if (o instanceof Class<?> o2)
+			return o2.getName();
+		if (o instanceof Method o2)
+			return o2.getName();
 		if (isArray(o))
 			return arrayAsList(o).stream().map(StringUtils::convertToReadable).collect(Collectors.joining(", ", "[", "]"));
 		return o.toString();
@@ -4071,7 +4037,7 @@ public class StringUtils {
 	 * @return A comma-delimited string.
 	 */
 	public static String join(Collection<?> values) {
-		return joine(new ArrayList<>(values), ',');
+		return joine(toList(values), ',');
 	}
 
 	/**
@@ -4205,8 +4171,8 @@ public class StringUtils {
 		if (o instanceof Executable o2) {
 			var sb = new StringBuilder(64);
 			sb.append(o2 instanceof Constructor ? scn(o2.getDeclaringClass()) : o2.getName()).append('(');
-			Class<?>[] pt = o2.getParameterTypes();
-			for (int i = 0; i < pt.length; i++) {
+			var pt = o2.getParameterTypes();
+			for (var i = 0; i < pt.length; i++) {
 				if (i > 0)
 					sb.append(',');
 				sb.append(scn(pt[i]));

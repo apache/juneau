@@ -51,7 +51,7 @@ public class ContentComboTestBase extends RestTestcase {
 			case "text/csv" -> getClient(mt, CsvSerializer.DEFAULT, CsvParser.DEFAULT);
 			case "text/html" -> getClient(mt, HtmlSerializer.DEFAULT, HtmlParser.DEFAULT);
 			case "application/json" -> getClient(mt, JsonSerializer.DEFAULT, JsonParser.DEFAULT);
-			case "octal/msgpack" -> getClient(mt, MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT, x -> x.queryData("plainText","true"));
+			case "octal/msgpack" -> getClient(mt, MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT, x -> x.queryData("plainText", "true"));
 			case "text/plain" -> getClient(mt, PlainTextSerializer.DEFAULT, PlainTextParser.DEFAULT);
 			case "text/uon" -> getClient(mt, UonSerializer.DEFAULT, UonParser.DEFAULT);
 			case "application/x-www-form-urlencoded" -> getClient(mt, UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT);

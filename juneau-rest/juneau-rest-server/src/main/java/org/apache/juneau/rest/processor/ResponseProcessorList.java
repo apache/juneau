@@ -102,8 +102,8 @@ public class ResponseProcessorList {
 	}
 
 	private static ResponseProcessor instantiate(Object o, BeanStore bs) {
-		if (o instanceof ResponseProcessor)
-			return (ResponseProcessor)o;
+		if (o instanceof ResponseProcessor o2)
+			return o2;
 		try {
 			return bs.createBean(ResponseProcessor.class).type((Class<?>)o).run();
 		} catch (ExecutableException e) {

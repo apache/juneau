@@ -47,7 +47,7 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class HasFormDataArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.
@@ -78,6 +78,7 @@ public class HasFormDataArg implements RestOpArg {
 	 * @param pi The Java method parameter being resolved.
 	 */
 	protected HasFormDataArg(ParameterInfo pi) {
+		// @formatter:off
 		this.name = AP.find(HasFormData.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
@@ -85,6 +86,7 @@ public class HasFormDataArg implements RestOpArg {
 			.findFirst()
 			.map(HasFormDataArg::getName)
 			.orElseThrow(() -> new ArgException(pi, "@HasFormData used without name or value"));
+		// @formatter:on
 		this.type = pi.getParameterType().innerType();
 	}
 

@@ -373,8 +373,6 @@ public class Operation extends SwaggerElement {
 		return this;
 	}
 
-
-
 	/**
 	 * Same as {@link #addSecurity(String, String...)}.
 	 *

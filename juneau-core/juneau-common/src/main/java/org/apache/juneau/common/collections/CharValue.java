@@ -240,7 +240,7 @@ public class CharValue extends Value<Character> {
 	 * @param values The characters to compare to.
 	 * @return <jk>true</jk> if the current value matches any of the specified characters.
 	 */
-	public boolean isAny(Character... values) {
+	public boolean isAny(Character...values) {
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

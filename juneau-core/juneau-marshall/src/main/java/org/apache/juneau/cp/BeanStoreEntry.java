@@ -112,7 +112,7 @@ public class BeanStoreEntry<T> {
 	 */
 	public boolean matches(Class<?> type, String name) {
 		name = nullIfEmpty(name);
-		return matches(type) && Utils.eq(this.name, name);
+		return matches(type) && eq(this.name, name);
 	}
 
 	/**

@@ -80,7 +80,7 @@ public class DateUtils {
 				formats = new HashMap<>();
 				THREADLOCAL_FORMATS.set(new SoftReference<>(formats));
 			}
-			SimpleDateFormat format = formats.get(pattern);
+			var format = formats.get(pattern);
 			if (format == null) {
 				format = new SimpleDateFormat(pattern, Locale.US);
 				format.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -143,7 +143,7 @@ public class DateUtils {
 	 * @return The formatter.
 	 */
 	public static DateTimeFormatter getDateTimeFormatter(String pattern) {
-		if (StringUtils.isEmpty(pattern))
+		if (isEmpty(pattern))
 			return DateTimeFormatter.ISO_INSTANT;
 		try {
 			for (var f : DateTimeFormatter.class.getFields()) {
@@ -390,7 +390,7 @@ public class DateUtils {
 		// S7: Found time zone
 
 		var state = S1;
-		boolean needsT = false;
+		var needsT = false;
 		for (int i = 0; i < in.length(); i++) {
 			char c = in.charAt(i);
 			if (state == S1) {
@@ -492,7 +492,7 @@ public class DateUtils {
 	 * @see ChronoField
 	 */
 	public static ChronoField getPrecisionFromString(String seg) {
-		if (StringUtils.isEmpty(seg))
+		if (isEmpty(seg))
 			return ChronoField.MILLI_OF_SECOND;
 
 		// States:
@@ -755,10 +755,7 @@ public class DateUtils {
 	 * @return A cloned calendar with the updated date, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public static Calendar addSubtractDays(Calendar c, int days) {
-		return opt(c)
-			.map(x -> (Calendar)x.clone())
-			.map(x -> add(x, Calendar.DATE, days))
-			.orElse(null);
+		return opt(c).map(x -> (Calendar)x.clone()).map(x -> add(x, Calendar.DATE, days)).orElse(null);
 	}
 
 	/**

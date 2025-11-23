@@ -63,7 +63,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 			s = s.trim();
 			pattern = s;
 
-			List<NumberRange> l = new LinkedList<>();
+			var l = new LinkedList<NumberRange>();
 
 			// Possible patterns:
 			// 123, >123, <123, >=123, <=123, >-123, >=-123, 123-456, -123--456, !123, !123-456, 123 - 456 (one token), 123 -456 (two separate tokens)
@@ -83,12 +83,12 @@ public class NumberMatcherFactory extends MatcherFactory {
 
 			StateEnum state = S1;
 			int mark = 0;
-		boolean isNot = false;
-		var eq = Equality.NONE;
-		var n1 = (Integer)null;
-		var n2 = (Integer)null;
+			boolean isNot = false;
+			var eq = Equality.NONE;
+			var n1 = (Integer)null;
+			var n2 = (Integer)null;
 
-		int i;
+			int i;
 			for (i = 0; i < s.length(); i++) {
 				char c = s.charAt(i);
 				if (state == S1) {

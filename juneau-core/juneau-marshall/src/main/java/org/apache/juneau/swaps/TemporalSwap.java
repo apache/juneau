@@ -412,7 +412,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	protected Temporal convertToSerializable(BeanSession session, Temporal t) {
 
 		ZoneId zoneId = session.getTimeZoneId();
-		Class<? extends Temporal> tc = t.getClass();
+		var tc = t.getClass();
 
 		// Instant is always serialized in GMT.
 		if (tc == Instant.class)

@@ -121,10 +121,10 @@ public class SerializerPipe implements Closeable {
 		if (output == null)
 			throw ioex("Output cannot be null.");
 
-		if (output instanceof OutputStream)
-			outputStream = (OutputStream)output;
-		else if (output instanceof File)
-			outputStream = new BufferedOutputStream(new FileOutputStream((File)output));
+		if (output instanceof OutputStream output2)
+			outputStream = output2;
+		else if (output instanceof File output2)
+			outputStream = new BufferedOutputStream(new FileOutputStream(output2));
 		else
 			throw ioex("Cannot convert object of type {0} to an OutputStream.", cn(output));
 
@@ -163,14 +163,14 @@ public class SerializerPipe implements Closeable {
 			throw new SerializeException("Output cannot be null.");
 
 		try {
-			if (output instanceof Writer)
-				writer = (Writer)output;
-			else if (output instanceof OutputStream)
-				writer = new OutputStreamWriter((OutputStream)output, charset);
-			else if (output instanceof File)
-				writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream((File)output)));
-			else if (output instanceof StringBuilder)
-				writer = new StringBuilderWriter((StringBuilder)output);
+			if (output instanceof Writer output2)
+				writer = output2;
+			else if (output instanceof OutputStream output2)
+				writer = new OutputStreamWriter(output2, charset);
+			else if (output instanceof File output2)
+				writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(output2)));
+			else if (output instanceof StringBuilder output2)
+				writer = new StringBuilderWriter(output2);
 			else
 				throw new SerializeException("Cannot convert object of type " + cn(output) + " to a Writer.");
 		} catch (FileNotFoundException e) {

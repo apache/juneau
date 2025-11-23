@@ -540,7 +540,7 @@ public class BctAssertions {
 		var errors = new ArrayList<AssertionFailedError>();
 
 		for (var e : expected) {
-			if (!a.contains(e)) {
+			if (! a.contains(e)) {
 				errors.add(assertEqualsFailed(true, false, args.getMessage("String did not contain expected substring.  ==> expected: <{0}> but was: <{1}>", e, a)));
 			}
 		}
@@ -553,7 +553,7 @@ public class BctAssertions {
 
 		var missingSubstrings = new ArrayList<String>();
 		for (var e : expected) {
-			if (!a.contains(e)) {
+			if (! a.contains(e)) {
 				missingSubstrings.add(e);
 			}
 		}
@@ -684,7 +684,7 @@ public class BctAssertions {
 						errors.add(assertEqualsFailed(e2, converter.stringify(x), args.getMessage("Element at index {0} did not match.", i)));
 					}
 				} else if (e instanceof Predicate e2) { // NOSONAR
-					if (!e2.test(x)) {
+					if (! e2.test(x)) {
 						errors.add(new AssertionFailedError(args.getMessage("Element at index {0} did not pass predicate.  ==> actual: <{1}>", i, converter.stringify(x)).get()));
 					}
 				} else {

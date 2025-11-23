@@ -54,7 +54,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	)
 	public static class AnnotatedClass {}
 
-	private AnnotationInfo<TestAnnotation> getTestAnnotationInfo() {
+	private static AnnotationInfo<TestAnnotation> getTestAnnotationInfo() {
 		var ci = ClassInfo.of(AnnotatedClass.class);
 		return ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 	}
@@ -62,7 +62,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testHasName() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.hasName("org.apache.juneau.common.reflect.AnnotationInfo_ValueMethods_Test$TestAnnotation"));
 		assertFalse(ai.hasName("TestAnnotation"));
 	}
@@ -70,7 +70,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testHasSimpleName() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.hasSimpleName("TestAnnotation"));
 		assertFalse(ai.hasSimpleName("org.apache.juneau.common.reflect.AnnotationInfo_ValueMethods_Test$TestAnnotation"));
 	}
@@ -78,7 +78,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetString() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.getString("stringValue").isPresent());
 		assertEquals("test", ai.getString("stringValue").get());
 		assertTrue(ai.getString("nonexistent").isEmpty());
@@ -87,7 +87,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetInt() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.getInt("intValue").isPresent());
 		assertEquals(123, ai.getInt("intValue").get());
 		assertTrue(ai.getInt("nonexistent").isEmpty());
@@ -96,7 +96,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetBoolean() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.getBoolean("boolValue").isPresent());
 		assertEquals(false, ai.getBoolean("boolValue").get());
 		assertTrue(ai.getBoolean("nonexistent").isEmpty());
@@ -105,7 +105,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetLong() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.getLong("longValue").isPresent());
 		assertEquals(999L, ai.getLong("longValue").get());
 		assertTrue(ai.getLong("nonexistent").isEmpty());
@@ -114,7 +114,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetDouble() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.getDouble("doubleValue").isPresent());
 		assertEquals(1.23, ai.getDouble("doubleValue").get(), 0.001);
 		assertTrue(ai.getDouble("nonexistent").isEmpty());
@@ -123,7 +123,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetFloat() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.getFloat("floatValue").isPresent());
 		assertEquals(4.56f, ai.getFloat("floatValue").get(), 0.001);
 		assertTrue(ai.getFloat("nonexistent").isEmpty());
@@ -132,7 +132,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetClassValue() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.getClassValue("classValue").isPresent());
 		assertEquals(Integer.class, ai.getClassValue("classValue").get());
 		assertTrue(ai.getClassValue("nonexistent").isEmpty());
@@ -141,7 +141,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetStringArray() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.getStringArray("stringArray").isPresent());
 		String[] array = ai.getStringArray("stringArray").get();
 		assertNotNull(array);
@@ -155,7 +155,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetClassArray() {
 		var ai = getTestAnnotationInfo();
-		
+
 		assertTrue(ai.getClassArray("classArray").isPresent());
 		Class<?>[] array = ai.getClassArray("classArray").get();
 		assertNotNull(array);
@@ -168,7 +168,7 @@ public class AnnotationInfo_ValueMethods_Test {
 	@Test
 	public void testGetReturnType() {
 		var ai = getTestAnnotationInfo();
-		
+
 		// Test various return types
 		assertTrue(ai.getReturnType("stringValue").isPresent());
 		assertEquals(String.class, ai.getReturnType("stringValue").get().inner());
@@ -180,7 +180,7 @@ public class AnnotationInfo_ValueMethods_Test {
 		assertEquals(Class.class, ai.getReturnType("classValue").get().inner());
 		assertEquals(String[].class, ai.getReturnType("stringArray").get().inner());
 		assertEquals(Class[].class, ai.getReturnType("classArray").get().inner());
-		
+
 		// Nonexistent method
 		assertTrue(ai.getReturnType("nonexistent").isEmpty());
 	}

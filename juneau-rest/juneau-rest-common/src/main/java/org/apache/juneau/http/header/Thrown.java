@@ -74,10 +74,10 @@ public class Thrown extends BasicCsvHeader {
 		 * Constructor.
 		 *
 		 * @param value The header part value.
-		 */
+		*/
 		public Part(String value) {
 			this.value = value;
-			int i = value.indexOf(';');
+			var i = value.indexOf(';');
 			this.className = urlDecode(i == -1 ? value.trim() : value.substring(0, i).trim());
 			this.message = urlDecode(i == -1 ? null : value.substring(i + 1).trim());
 		}

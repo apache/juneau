@@ -274,7 +274,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
-		boolean canAdd = isAllowNestedDescriptions() || ! descriptionAdded;
+		var canAdd = isAllowNestedDescriptions() || ! descriptionAdded;
 		if (canAdd && (getAddDescriptionsTo().contains(t) || getAddDescriptionsTo().contains(ANY)))
 			return sType.toString();
 		return null;
@@ -289,9 +289,9 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws SerializeException {
-		boolean canAdd = isAllowNestedExamples() || ! exampleAdded;
+		var canAdd = isAllowNestedExamples() || ! exampleAdded;
 		if (canAdd && (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
-			Object example = sType.getExample(this, jpSession());
+			var example = sType.getExample(this, jpSession());
 			if (nn(example)) {
 				try {
 					return JsonParser.DEFAULT.parse(toJson(example), Object.class);
@@ -315,8 +315,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		if (eType == null)
 			eType = object();
 
-		ClassMeta<?> aType;			// The actual type (will be null if recursion occurs)
-		ClassMeta<?> sType;			// The serialized type
+		var aType = (ClassMeta<?>)null;			// The actual type (will be null if recursion occurs)
+		var sType = (ClassMeta<?>)null;			// The serialized type
 		ObjectSwap objectSwap = eType.getSwap(this);
 
 		aType = push(attrName, eType, null);
@@ -341,7 +341,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		}
 
 		JsonSchemaClassMeta jscm = null;
-		ClassMeta objectSwapCM = objectSwap == null ? null : getClassMeta(objectSwap.getClass());
+		var objectSwapCM = objectSwap == null ? null : getClassMeta(objectSwap.getClass());
 		if (nn(objectSwapCM) && objectSwapCM.hasAnnotation(Schema.class))
 			jscm = getJsonSchemaClassMeta(objectSwapCM);
 		if (jscm == null)
@@ -444,7 +444,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 				out.put("enum", getEnums(sType));
 
 			} else if (tc == MAP) {
-				JsonMap om = getSchema(sType.getValueType(), "additionalProperties", null, exampleAdded, descriptionAdded, null);
+				var om = getSchema(sType.getValueType(), "additionalProperties", null, exampleAdded, descriptionAdded, null);
 				if (! om.isEmpty())
 					out.put("additionalProperties", om);
 
@@ -474,8 +474,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	private ClassMeta<?> toClassMeta(Object o) {
-		if (o instanceof Type)
-			return getClassMeta((Type)o);
+		if (o instanceof Type o2)
+			return getClassMeta(o2);
 		return getClassMetaForObject(o);
 	}
 

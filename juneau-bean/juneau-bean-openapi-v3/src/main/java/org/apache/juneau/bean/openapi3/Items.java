@@ -326,6 +326,7 @@ public class Items extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(ref), "$ref")
 			.addIf(nn(collectionFormat), "collectionFormat")
@@ -346,6 +347,7 @@ public class Items extends OpenApiElement {
 			.addIf(nn(type), "type")
 			.addIf(nn(uniqueItems), "uniqueItems")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -746,8 +748,8 @@ public class Items extends OpenApiElement {
 			for (var e : om.entrySet())
 				e.setValue(resolveRefs(e.getValue(), openApi, refStack, maxDepth));
 		}
-		if (o instanceof JsonList x)
-			for (var li = x.listIterator(); li.hasNext();)
+		if (o instanceof JsonList o2)
+			for (var li = o2.listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), openApi, refStack, maxDepth));
 		return o;
 	}

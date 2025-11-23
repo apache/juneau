@@ -38,6 +38,8 @@ import org.apache.juneau.common.reflect.*;
  */
 public class RequestBeanPropertyMeta {
 
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	static class Builder {
 		HttpPartType partType;
 		HttpPartSchema schema;
@@ -65,7 +67,7 @@ public class RequestBeanPropertyMeta {
 
 	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, MethodInfo m) {
 		var sb = HttpPartSchema.create().name(m.getPropertyName());
-		var ap = AnnotationProvider.INSTANCE;
+		var ap = AP;
 		rstream(ap.find(Schema.class, m)).forEach(x -> sb.apply(x.inner()));
 		rstream(ap.find(c, m)).forEach(x -> sb.apply(x.inner()));
 		return new Builder().partType(partType).schema(sb.build()).getter(m.inner());

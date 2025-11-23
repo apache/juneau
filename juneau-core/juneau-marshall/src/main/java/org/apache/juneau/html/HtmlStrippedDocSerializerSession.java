@@ -201,7 +201,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (HtmlWriter w = getHtmlWriter(out)) {
-			if (o == null || (o instanceof Collection && ((Collection<?>)o).isEmpty()) || (isArray(o) && Array.getLength(o) == 0))
+			if (o == null || (o instanceof Collection o2 && o2.isEmpty()) || (isArray(o) && Array.getLength(o) == 0))
 				w.sTag(1, "p").append("No Results").eTag("p").nl(1);
 			else
 				super.doSerialize(out, o);

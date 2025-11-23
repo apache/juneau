@@ -266,9 +266,7 @@ public class MimeTypeDetector {
 		this.defaultType = builder.defaultType;
 
 		// Create cache for file-based lookups
-		var cacheBuilder = Cache.of(String.class, String.class)
-			.maxSize(builder.cacheSize)
-			.cacheMode(builder.cacheMode);
+		var cacheBuilder = Cache.of(String.class, String.class).maxSize(builder.cacheSize).cacheMode(builder.cacheMode);
 
 		if (builder.cacheLogOnExit) {
 			cacheBuilder.logOnExit("MimeTypeDetector");
@@ -327,7 +325,7 @@ public class MimeTypeDetector {
 						return contentType;
 					}
 				}
-			} catch (Exception e) {
+			} catch (@SuppressWarnings("unused") Exception e) {
 				// Fall back to extension-based detection
 			}
 		}

@@ -65,9 +65,9 @@ public class StringMatcherFactory extends MatcherFactory {
 		public StringMatcher(String searchPattern) {
 
 			this.pattern = searchPattern.trim();
-			List<Pattern> ors = new LinkedList<>();
-			List<Pattern> ands = new LinkedList<>();
-			List<Pattern> nots = new LinkedList<>();
+			var ors = new LinkedList<Pattern>();
+			var ands = new LinkedList<Pattern>();
+			var nots = new LinkedList<Pattern>();
 
 			for (var s : StringUtils.splitQuoted(pattern, true)) {
 				char c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);

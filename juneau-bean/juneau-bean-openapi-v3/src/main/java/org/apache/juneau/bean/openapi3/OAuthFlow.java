@@ -178,12 +178,14 @@ public class OAuthFlow extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(authorizationUrl), "authorizationUrl")
 			.addIf(nn(refreshUrl), "refreshUrl")
 			.addIf(nn(scopes), "scopes")
 			.addIf(nn(tokenUrl), "tokenUrl")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

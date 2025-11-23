@@ -112,14 +112,14 @@ public class BasicResource implements HttpResource {
 	public BasicResource addHeaders(Header...values) {
 		for (var h : values) {
 			if (nn(h)) {
-				String n = h.getName();
-				String v = h.getValue();
+				var n = h.getName();
+				var v = h.getValue();
 				if (isNotEmpty(n)) {
-					if (n.equalsIgnoreCase("content-type"))
+					if (eqic(n, "content-type"))
 						setContentType(v);
-					else if (n.equalsIgnoreCase("content-encoding"))
+					else if (eqic(n, "content-encoding"))
 						setContentEncoding(v);
-					else if (n.equalsIgnoreCase("content-length"))
+					else if (eqic(n, "content-length"))
 						setContentLength(Long.parseLong(v));
 					else
 						headers.append(h);
@@ -396,14 +396,14 @@ public class BasicResource implements HttpResource {
 	public BasicResource setHeaders(Header...values) {
 		for (var h : values) {
 			if (nn(h)) {
-				String n = h.getName();
-				String v = h.getValue();
+				var n = h.getName();
+				var v = h.getValue();
 				if (isNotEmpty(n)) {
-					if (n.equalsIgnoreCase("content-type"))
+					if (eqic(n, "content-type"))
 						setContentType(v);
-					else if (n.equalsIgnoreCase("content-encoding"))
+					else if (eqic(n, "content-encoding"))
 						setContentEncoding(v);
-					else if (n.equalsIgnoreCase("content-length"))
+					else if (eqic(n, "content-length"))
 						setContentLength(Long.parseLong(v));
 					else
 						headers.set(h);

@@ -48,6 +48,8 @@ import org.apache.juneau.svl.*;
  */
 public class BasicDebugEnablement extends DebugEnablement {
 
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Constructor.
 	 *
@@ -59,16 +61,16 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 	@Override
 	protected Builder init(BeanStore beanStore) {
-		Builder b = super.init(beanStore);
+		var b = super.init(beanStore);
 
-		DefaultSettingsMap defaultSettings = beanStore.getBean(DefaultSettingsMap.class).get();
-		RestContext.Builder builder = beanStore.getBean(RestContext.Builder.class).get();
-		ResourceSupplier resource = beanStore.getBean(ResourceSupplier.class).get();
-		VarResolver varResolver = beanStore.getBean(VarResolver.class).get();
-		var ap = AnnotationProvider.INSTANCE;
+		var defaultSettings = beanStore.getBean(DefaultSettingsMap.class).get();
+		var builder = beanStore.getBean(RestContext.Builder.class).get();
+		var resource = beanStore.getBean(ResourceSupplier.class).get();
+		var varResolver = beanStore.getBean(VarResolver.class).get();
+		var ap = AP;
 
 		// Default debug enablement if not overridden at class/method level.
-		Enablement debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(builder.isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
+		var debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(builder.isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
 		b.defaultEnable(debugDefault);
 
 		var ci = ClassInfo.ofProxy(resource.get());
@@ -76,7 +78,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		// Gather @Rest(debug) settings.
 		// @formatter:off
 		rstream(ap.find(Rest.class, ci)).map(AnnotationInfo::inner).forEach(x -> {
-			String x2 = varResolver.resolve(x.debug());
+			var x2 = varResolver.resolve(x.debug());
 			if (! x2.isEmpty())
 				b.enable(Enablement.fromString(x2), ci.getNameFull());
 		});
@@ -100,7 +102,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		// Gather @Rest(debugOn) settings.
 		// @formatter:off
 		rstream(ap.find(Rest.class, ci)).map(AnnotationInfo::inner).forEach(x -> {
-			String x2 = varResolver.resolve(x.debugOn());
+			var x2 = varResolver.resolve(x.debugOn());
 			for (var e : splitMap(x2, true).entrySet()) {
 				var k = e.getKey();
 				var v = e.getValue();

@@ -120,7 +120,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		}
 
 		boolean matches(Object o) {
-			ClassMeta<?> cm = bs.getClassMetaForObject(o);
+			var cm = bs.getClassMetaForObject(o);
 			if (cm == null)
 				return false;
 			if (cm.isCollection()) {
@@ -163,14 +163,14 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		boolean matches(Object o) {
 			if (o == null)
 				return false;
-			ClassMeta<?> cm = bs.getClassMetaForObject(o);
+			var cm = bs.getClassMetaForObject(o);
 			if (cm.isMapOrBean()) {
 				Map m = cm.isMap() ? (Map)o : bs.toBeanMap(o);
 				for (var e : entryMatchers.entrySet()) {
 					String key = e.getKey();
 					Object val = null;
-					if (m instanceof BeanMap) {
-						val = ((BeanMap)m).getRaw(key);
+					if (m instanceof BeanMap m2) {
+						val = m2.getRaw(key);
 					} else {
 						val = m.get(key);
 					}
@@ -238,7 +238,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	@Override /* Overridden from ObjectTool */
 	public Object run(BeanSession session, Object input, SearchArgs args) {
 
-		ClassMeta<?> type = session.getClassMetaForObject(input);
+		var type = session.getClassMetaForObject(input);
 		Map<String,String> search = args.getSearch();
 
 		if (search.isEmpty() || type == null || ! type.isCollectionOrArray())
@@ -280,10 +280,10 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	@SuppressWarnings("unchecked")
 	public <R> List<R> run(Object input, String searchArgs) {
 		Object r = run(BeanContext.DEFAULT_SESSION, input, SearchArgs.create(searchArgs));
-		if (r instanceof List)
-			return (List<R>)r;
-		if (r instanceof Collection)
-			return new ArrayList<R>((Collection)r);
+		if (r instanceof List r2)
+			return r2;
+		if (r instanceof Collection r3)
+			return toList(r3);
 		if (isArray(r))
 			return l((R[])r);
 		return null;

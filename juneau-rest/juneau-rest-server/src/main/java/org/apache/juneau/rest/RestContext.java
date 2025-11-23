@@ -18,7 +18,6 @@ package org.apache.juneau.rest;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.Collections.*;
-import static java.util.Optional.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
@@ -131,6 +130,8 @@ public class RestContext extends Context {
 	 */
 	public static class Builder extends Context.Builder implements ServletConfig {
 
+		private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 		// @formatter:off
 		private static final Set<Class<?>> DELAYED_INJECTION = set(
 			BeanContext.Builder.class,
@@ -200,16 +201,16 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		private static <T extends Annotation> MethodList getAnnotatedMethods(Supplier<?> resource, Class<T> annotation, Predicate<T> predicate) {
-			Map<String,Method> x = map();
+			Map<String,Method> x = map();  // NOAI
 			var r = resource.get();
-			AnnotationProvider ap = AnnotationProvider.INSTANCE;
+			var ap = AP;
 
 			// @formatter:off
 			ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
 				.filter(y -> y.hasAnnotation(annotation))
 				.forEach(y -> rstream(ap.find(annotation, y)).map(AnnotationInfo::inner)
-					.filter(z -> predicate == null || predicate.test(z))
-					.forEach(z -> x.put(y.getSignature(), y.accessible().inner())));
+				.filter(z -> predicate == null || predicate.test(z))
+				.forEach(z -> x.put(y.getSignature(), y.accessible().inner())));
 			// @formatter:on
 
 			var x2 = MethodList.of(x.values());
@@ -330,7 +331,7 @@ public class RestContext extends Context {
 		 * 	<li class='note'>
 		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 		 * </ul>
-
+		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
 		 * </ul>
@@ -1788,7 +1789,7 @@ public class RestContext extends Context {
 			});
 
 			var vrs = varResolver().build().createSession();
-			var work = AnnotationWorkList.of(vrs, rstream(AnnotationProvider.INSTANCE.find(rci)).filter(CONTEXT_APPLY_FILTER));
+			var work = AnnotationWorkList.of(vrs, rstream(AP.find(rci)).filter(CONTEXT_APPLY_FILTER));
 
 			apply(work);
 			beanContext().apply(work);
@@ -1798,18 +1799,18 @@ public class RestContext extends Context {
 
 			runInitHooks(bs, resource());
 
-		// Set @RestInject fields not initialized with values.
-		// @formatter:off
-		rci.getAllFields().stream()
-			.filter(x -> x.hasAnnotation(RestInject.class))
-			.forEach(x -> x.setIfNull(
-				resource.get(),
-				beanStore.getBean(
-					x.getFieldType().inner(),
-					RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
+			// Set @RestInject fields not initialized with values.
+			// @formatter:off
+			rci.getAllFields().stream()
+				.filter(x -> x.hasAnnotation(RestInject.class))
+				.forEach(x -> x.setIfNull(
+					resource.get(),
+					beanStore.getBean(
+						x.getFieldType().inner(),
+						RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
 					).orElse(null)
 				));
-		// @formatter:on
+			// @formatter:on
 
 			return this;
 		}
@@ -3795,8 +3796,7 @@ public class RestContext extends Context {
 
 			for (var m : map.values()) {
 				if (! beanStore.hasAllParams(m))
-					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(),
-						beanStore.getMissingParams(m));
+					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(), beanStore.getMissingParams(m));
 				try {
 					m.invoke(r, beanStore.getParams(m));
 				} catch (Exception e) {
@@ -3844,16 +3844,16 @@ public class RestContext extends Context {
 
 			// Default value.
 			// @formatter:off
-			Value<BeanStore.Builder> v = Value.of(
+			var v = Value.of(
 				BeanStore
 					.create()
 					.parent(rootBeanStore())
 					.outer(resource.get())
-			);
+				);
 			// @formatter:on
 
 			// Apply @Rest(beanStore).
-			rstream(AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass))).map(x -> x.inner().beanStore()).filter(x -> isNotVoid(x)).forEach(x -> v.get().type(x));
+			rstream(AP.find(Rest.class, info(resourceClass))).map(x -> x.inner().beanStore()).filter(ClassUtils::isNotVoid).forEach(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
 			// @formatter:off
@@ -3917,7 +3917,7 @@ public class RestContext extends Context {
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			var vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
 			var cfv = Value.<String>empty();
-			rstream(AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass))).map(x -> x.inner().config()).filter(x -> isNotEmpty(x)).forEach(x -> cfv.set(vr.resolve(x)));
+			rstream(AP.find(Rest.class, info(resourceClass))).map(x -> x.inner().config()).filter(Utils::isNotEmpty).forEach(x -> cfv.set(vr.resolve(x)));
 			var cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
@@ -4121,7 +4121,7 @@ public class RestContext extends Context {
 		protected JsonSchemaGenerator.Builder createJsonSchemaGenerator(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<JsonSchemaGenerator.Builder> v = Value.of(JsonSchemaGenerator.create());
+			var v = Value.of(JsonSchemaGenerator.create());
 
 			// Replace with builder from bean store.
 			beanStore.getBean(JsonSchemaGenerator.Builder.class).map(JsonSchemaGenerator.Builder::copy).ifPresent(x -> v.set(x));
@@ -4467,19 +4467,19 @@ public class RestContext extends Context {
 			// Initialize our child resources.
 			for (var o : children) {
 				String path = null;
-			Supplier<?> so;
+				Supplier<?> so;
 
-			if (o instanceof RestChild rc) {
-				path = rc.path;
-				Object o2 = rc.resource;
-				so = () -> o2;
-			}
+				if (o instanceof RestChild o2) {
+					path = o2.path;
+					Object o3 = o2.resource;
+					so = () -> o3;
+				}
 
-			Builder cb = null;
+				Builder cb = null;
 
-			if (o instanceof Class<?> oc) {
-				// Don't allow specifying yourself as a child.  Causes an infinite loop.
-				if (oc == resourceClass)
+				if (o instanceof Class<?> oc) {
+					// Don't allow specifying yourself as a child.  Causes an infinite loop.
+					if (oc == resourceClass)
 						continue;
 					cb = RestContext.create(oc, restContext, inner);
 					if (beanStore.getBean(oc).isPresent()) {
@@ -4496,7 +4496,7 @@ public class RestContext extends Context {
 				if (nn(path))
 					cb.path(path);
 
-				RestContext cc = cb.init(so).build();
+				var cc = cb.init(so).build();
 
 				MethodInfo mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 				if (nn(mi))
@@ -4588,7 +4588,8 @@ public class RestContext extends Context {
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {
-					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && nn(x.getDeclaringClass().getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface()
+						&& nn(x.getDeclaringClass().getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null));
 					mi.getMatchingMethods().stream().filter(isRestAnnotatedInterface).forEach(x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 				}
 
@@ -4600,19 +4601,19 @@ public class RestContext extends Context {
 						RestOpContext.Builder rocb = RestOpContext.create(mi.inner(), restContext).beanStore(beanStore).type(opContextClass);
 
 						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
-					for (var m : initMap.values()) {
-						if (! beanStore.hasAllParams(m)) {
-							throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(),
-								beanStore.getMissingParams(m));
+						for (var m : initMap.values()) {
+							if (! beanStore.hasAllParams(m)) {
+								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(),
+									beanStore.getMissingParams(m));
+							}
+							try {
+								m.invoke(resource.get(), beanStore.getParams(m));
+							} catch (Exception e) {
+								throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", scn(m.getDeclaringClass()), m.getSignature());
+							}
 						}
-						try {
-							m.invoke(resource.get(), beanStore.getParams(m));
-						} catch (Exception e) {
-							throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", scn(m.getDeclaringClass()), m.getSignature());
-						}
-					}
 
-						RestOpContext roc = rocb.build();
+						var roc = rocb.build();
 
 						String httpMethod = roc.getHttpMethod();
 
@@ -5011,9 +5012,9 @@ public class RestContext extends Context {
 			pathMatcher = UrlPathMatcher.of(p);
 
 			allowContentParam = ! builder.disableContentParam;
-			allowedHeaderParams = newCaseInsensitiveSet(ofNullable(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodParams = newCaseInsensitiveSet(ofNullable(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodHeaders = newCaseInsensitiveSet(ofNullable(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedHeaderParams = newCaseInsensitiveSet(opt(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodParams = newCaseInsensitiveSet(opt(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodHeaders = newCaseInsensitiveSet(opt(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			clientVersionHeader = builder.clientVersionHeader;
 			defaultCharset = builder.defaultCharset;
 			maxInput = builder.maxInput;
@@ -5146,7 +5147,7 @@ public class RestContext extends Context {
 					sb.pathVars(uppm.getVars());
 					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
 				} else {
-					RestSession call = sb.build();
+					var call = sb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 					return;
 				}
@@ -5156,14 +5157,14 @@ public class RestContext extends Context {
 			var childMatch = restChildren.findMatch(sb);
 			if (childMatch.isPresent()) {
 				UrlPathMatch uppm = childMatch.get().getPathMatch();
-				RestContext rc = childMatch.get().getChildContext();
+				var rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
 					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix())))
 						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
 					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {
-					RestSession call = sb.build();
+					var call = sb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 				}
 				return;
@@ -5173,7 +5174,7 @@ public class RestContext extends Context {
 			handleError(sb.build(), convertThrowable(e));
 		}
 
-		RestSession s = sb.build();
+		var s = sb.build();
 
 		try {
 			localSession.set(s);
@@ -5813,7 +5814,7 @@ public class RestContext extends Context {
 	}
 
 	private static Set<String> newCaseInsensitiveSet(String value) {
-		Set<String> s = new TreeSet<>(String.CASE_INSENSITIVE_ORDER) {
+		var s = new TreeSet<>(String.CASE_INSENSITIVE_ORDER) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -5830,9 +5831,8 @@ public class RestContext extends Context {
 	}
 
 	private static Throwable unwrap(Throwable t) {
-		if (t instanceof InvocationTargetException) {
-			return ((InvocationTargetException)t).getTargetException();
-		}
+		if (t instanceof InvocationTargetException t2)
+			return t2.getTargetException();
 		return t;
 	}
 
@@ -5852,14 +5852,14 @@ public class RestContext extends Context {
 	 */
 	protected Throwable convertThrowable(Throwable t) {
 
-		if (t instanceof InvocationTargetException)
-			t = ((InvocationTargetException)t).getTargetException();
+		if (t instanceof InvocationTargetException t2)
+			t = t2.getTargetException();
 
-		if (t instanceof ExecutableException)
-			t = ((ExecutableException)t).getTargetException();
+		if (t instanceof ExecutableException t3)
+			t = t3.getTargetException();
 
-		if (t instanceof BasicHttpException)
-			return t;
+		if (t instanceof BasicHttpException t2)
+			return t2;
 
 		var ci = ClassInfo.of(t);
 
@@ -5983,7 +5983,7 @@ public class RestContext extends Context {
 			if (r.value().length > 0)
 				code = r.value()[0];
 
-		var e2 = (e instanceof BasicHttpException ? (BasicHttpException)e : new BasicHttpException(code, e));
+		var e2 = (e instanceof BasicHttpException e3 ? e3 : new BasicHttpException(code, e));
 
 		var req = session.getRequest();
 		var res = session.getResponse();
@@ -6148,8 +6148,8 @@ public class RestContext extends Context {
 				throw new InternalServerError(e, "Error occurred invoking start-call method ''{0}''.", x.getFullName());
 			} catch (InvocationTargetException e) {
 				Throwable t = e.getTargetException();
-				if (t instanceof BasicHttpException)
-					throw (BasicHttpException)t;
+				if (t instanceof BasicHttpException t2)
+					throw t2;
 				throw new InternalServerError(t);
 			}
 		}

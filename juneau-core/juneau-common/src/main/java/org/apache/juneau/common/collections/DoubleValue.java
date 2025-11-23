@@ -149,7 +149,7 @@ public class DoubleValue extends Value<Double> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values within the precision.
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
-	public boolean isAny(double precision, double... values) {
+	public boolean isAny(double precision, double...values) {
 		assertArg(precision >= 0, "Precision must be non-negative");
 		var v = get();
 		if (v == null)

@@ -37,8 +37,8 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	 * @throws IOException Thrown by underlying content stream.
 	 */
 	public static CachingHttpServletResponse wrap(HttpServletResponse res) throws IOException {
-		if (res instanceof CachingHttpServletResponse)
-			return (CachingHttpServletResponse)res;
+		if (res instanceof CachingHttpServletResponse res2)
+			return res2;
 		return new CachingHttpServletResponse(res);
 	}
 

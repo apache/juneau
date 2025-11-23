@@ -17,6 +17,7 @@
 package org.apache.juneau.junit.bct;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,32 +36,32 @@ class Swappers_Test extends TestBase {
 	@Nested
 	class A_optionalSwapper extends TestBase {
 
-		@Test
-		void a01_swapPresentOptional() {
-			var swapper = Swappers.optionalSwapper();
-			var result = swapper.apply(null, Optional.of("Hello"));
-			assertEquals("Hello", result);
-		}
+	@Test
+	void a01_swapPresentOptional() {
+		var swapper = Swappers.optionalSwapper();
+		var result = swapper.apply(null, opt("Hello"));
+		assertEquals("Hello", result);
+	}
 
 		@Test
 		void a02_swapEmptyOptional() {
 			var swapper = Swappers.optionalSwapper();
-			var result = swapper.apply(null, Optional.empty());
+			var result = swapper.apply(null, opte());
 			assertNull(result);
 		}
 
-		@Test
-		void a03_swapOptionalWithNull() {
-			var swapper = Swappers.optionalSwapper();
-			var result = swapper.apply(null, Optional.ofNullable(null));
-			assertNull(result);
-		}
+	@Test
+	void a03_swapOptionalWithNull() {
+		var swapper = Swappers.optionalSwapper();
+		var result = swapper.apply(null, opt(null));
+		assertNull(result);
+	}
 
 	@Test
 	void a04_swapOptionalWithComplexObject() {
 		var swapper = Swappers.optionalSwapper();
 		var list = l("a", "b", "c");
-		var result = swapper.apply(null, Optional.of(list));
+		var result = swapper.apply(null, opt(list));
 		assertSame(list, result);
 		}
 
@@ -68,7 +69,7 @@ class Swappers_Test extends TestBase {
 		void a05_swapOptionalWithConverter() {
 			var converter = BasicBeanConverter.builder().defaultSettings().build();
 			var swapper = Swappers.optionalSwapper();
-			var result = swapper.apply(converter, Optional.of(42));
+			var result = swapper.apply(converter, opt(42));
 			assertEquals(42, result);
 		}
 	}
@@ -201,8 +202,8 @@ class Swappers_Test extends TestBase {
 		@Test
 		void d01_useInBasicBeanConverter() {
 			// Test Optional swapping
-			assertBean(Optional.of("test"), "<self>", "test");
-			assertBean(Optional.empty(), "<self>", "<null>");
+			assertBean(opt("test"), "<self>", "test");
+			assertBean(opte(), "<self>", "<null>");
 
 			// Test Supplier swapping
 			Supplier<String> supplier = () -> "supplied";
@@ -216,18 +217,18 @@ class Swappers_Test extends TestBase {
 		@Test
 		void d02_customSwapperRegistration() {
 			// Test that custom registration works
-			assertBean(Optional.of("custom"), "<self>", "custom");
+			assertBean(opt("custom"), "<self>", "custom");
 		}
 
 		@Test
 		void d03_nestedSwapping() {
 			// Test nested Optional in Supplier
-			Supplier<Optional<String>> nestedSupplier = () -> Optional.of("nested");
+			Supplier<Optional<String>> nestedSupplier = () -> opt("nested");
 			assertBean(nestedSupplier, "<self>", "nested");
 
 			// Test Optional containing Supplier
 			Supplier<String> supplier = () -> "inner";
-			assertBean(Optional.of(supplier), "<self>", "inner");
+			assertBean(opt(supplier), "<self>", "inner");
 		}
 	}
 }

@@ -52,10 +52,10 @@ public class SerializeException extends BasicRuntimeException {
 	 * @return A new {@link SerializeException}.
 	 */
 	public static SerializeException create(Throwable e) {
-		if (e instanceof InvocationTargetException)
-			e = ((InvocationTargetException)e).getCause();
-		if (e instanceof SerializeException)
-			return (SerializeException)e;
+		if (e instanceof InvocationTargetException e2)
+			e = e2.getCause();
+		if (e instanceof SerializeException e2)
+			return e2;
 		return new SerializeException(e);
 	}
 

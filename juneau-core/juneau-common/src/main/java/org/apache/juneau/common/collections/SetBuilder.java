@@ -215,8 +215,8 @@ public class SetBuilder<E> {
 		if (nn(values)) {
 			for (var o : values) {
 				if (nn(o)) {
-					if (o instanceof Collection) {
-						((Collection<?>)o).forEach(x -> addAny(x));
+					if (o instanceof Collection<?> o2) {
+						o2.forEach(x -> addAny(x));
 					} else if (isArray(o)) {
 						for (int i = 0; i < Array.getLength(o); i++)
 							addAny(Array.get(o, i));
@@ -301,12 +301,12 @@ public class SetBuilder<E> {
 			if (set == null)
 				set = new LinkedHashSet<>(0);
 		}
-	if (nn(set)) {
-		if (nn(comparator)) {
-			var s = new TreeSet<E>(comparator);
-			s.addAll(set);
-			set = s;
-		}
+		if (nn(set)) {
+			if (nn(comparator)) {
+				var s = new TreeSet<>(comparator);
+				s.addAll(set);
+				set = s;
+			}
 			if (unmodifiable)
 				set = unmodifiableSet(set);
 		}

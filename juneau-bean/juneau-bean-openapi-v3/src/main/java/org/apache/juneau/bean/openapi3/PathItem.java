@@ -228,6 +228,7 @@ public class PathItem extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(delete), "delete")
 			.addIf(nn(description), "description")
@@ -242,6 +243,7 @@ public class PathItem extends OpenApiElement {
 			.addIf(nn(summary), "summary")
 			.addIf(nn(trace), "trace")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

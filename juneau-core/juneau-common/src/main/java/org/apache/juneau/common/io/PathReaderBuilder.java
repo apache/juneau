@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.common.io;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -78,7 +77,7 @@ public class PathReaderBuilder {
 		if (! allowNoFile && ! Files.exists(path)) {
 			throw new NoSuchFileException(path.toString());
 		}
-		return allowNoFile ? new StringReader("") : Files.newBufferedReader(path, ofNullable(charset).orElse(Charset.defaultCharset()));
+		return allowNoFile ? new StringReader("") : Files.newBufferedReader(path, opt(charset).orElse(Charset.defaultCharset()));
 	}
 
 	/**

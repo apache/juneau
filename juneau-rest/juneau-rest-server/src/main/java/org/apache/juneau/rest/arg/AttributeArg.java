@@ -42,7 +42,7 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class AttributeArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.
@@ -76,6 +76,7 @@ public class AttributeArg implements RestOpArg {
 	}
 
 	private static String getName(ParameterInfo paramInfo) {
+		// @formatter:off
 		return AP.find(Attr.class, paramInfo)
 			.stream()
 			.map(AnnotationInfo::inner)
@@ -83,5 +84,6 @@ public class AttributeArg implements RestOpArg {
 			.findFirst()
 			.map(x -> firstNonBlank(x.name(), x.value()))
 			.orElseThrow(() -> new ArgException(paramInfo, "@Attr used without name or value"));
+		// @formatter:on
 	}
 }

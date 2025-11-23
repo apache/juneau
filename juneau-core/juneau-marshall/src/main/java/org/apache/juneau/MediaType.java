@@ -107,7 +107,7 @@ public class MediaType implements Comparable<MediaType> {
 	public static MediaType of(String value, NameValuePair...parameters) {
 		if (parameters.length == 0)
 			return of(value);
-		return StringUtils.isEmpty(value) ? null : new MediaType(value, parameters);
+		return isEmpty(value) ? null : new MediaType(value, parameters);
 	}
 
 	/**
@@ -121,8 +121,8 @@ public class MediaType implements Comparable<MediaType> {
 	 * 	<br>Always the same length as the input string array.
 	 */
 	public static MediaType[] ofAll(String...values) {
-		MediaType[] mt = new MediaType[values.length];
-		for (int i = 0; i < values.length; i++)
+		var mt = new MediaType[values.length];
+		for (var i = 0; i < values.length; i++)
 			mt[i] = of(values[i]);
 		return mt;
 	}
@@ -163,26 +163,26 @@ public class MediaType implements Comparable<MediaType> {
 
 		if (parameters == null) {
 			parameters = e.getParameters();
-			for (int i = 0; i < parameters.length; i++) {
+			for (var i = 0; i < parameters.length; i++) {
 				if (parameters[i].getName().equals("q")) {
 					parameters = Arrays.copyOfRange(parameters, 0, i);
 					break;
 				}
 			}
 		}
-		for (int i = 0; i < parameters.length; i++)
+		for (var i = 0; i < parameters.length; i++)
 			parameters[i] = new BasicNameValuePair(parameters[i].getName(), parameters[i].getValue());
 		this.parameters = parameters;
 
-		String x = mediaType.replace(' ', '+');
-		int i = x.indexOf('/');
+		var x = mediaType.replace(' ', '+');
+		var i = x.indexOf('/');
 		type = (i == -1 ? x : x.substring(0, i));
 		subType = (i == -1 ? "*" : x.substring(i + 1));
 
-	subTypes = splita(subType, '+');
-	subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
-	Arrays.sort(this.subTypesSorted);
-	hasSubtypeMeta = CollectionUtils.contains("*", this.subTypes);
+		subTypes = splita(subType, '+');
+		subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
+		Arrays.sort(this.subTypesSorted);
+		hasSubtypeMeta = CollectionUtils.contains("*", this.subTypes);
 
 		var sb = new StringBuilder();
 		sb.append(mediaType);
@@ -309,7 +309,7 @@ public class MediaType implements Comparable<MediaType> {
 	public final boolean hasSubType(String st) {
 		if (nn(st))
 			for (var s : subTypes)
-				if (st.equalsIgnoreCase(s))
+				if (eqic(st, s))
 					return true;
 		return false;
 	}
@@ -337,11 +337,12 @@ public class MediaType implements Comparable<MediaType> {
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<MediaType> mediaTypes) {
-		int matchQuant = 0, matchIndex = -1;
+		int matchQuant = 0;
+		int matchIndex = -1;
 
-		for (int i = 0; i < mediaTypes.size(); i++) {
-			MediaType mt = mediaTypes.get(i);
-			int matchQuant2 = mt.match(this, true);
+		for (var i = 0; i < mediaTypes.size(); i++) {
+			var mt = mediaTypes.get(i);
+			var matchQuant2 = mt.match(this, true);
 			if (matchQuant2 > matchQuant) {
 				matchQuant = matchQuant2;
 				matchIndex = i;
@@ -400,7 +401,7 @@ public class MediaType implements Comparable<MediaType> {
 		if (this == o || (type.equals(o.type) && subType.equals(o.subType)))
 			return 100000;
 
-		int c = 0;
+		var c = 0;
 
 		if (type.equals(o.type))
 			c += 10000;

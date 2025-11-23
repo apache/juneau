@@ -72,11 +72,11 @@ public class ThrowableUtils {
 	public static <T extends Throwable> Optional<T> findCause(Throwable e, Class<T> cause) {
 		while (nn(e)) {
 			if (cause.isInstance(e))
-				return Optional.of(cause.cast(e));
+				return opt(cause.cast(e));
 			e = e.getCause();
-		}
-		return Optional.empty();
 	}
+	return opte();
+}
 
 	/**
 	 * Convenience method for getting a stack trace as a string.

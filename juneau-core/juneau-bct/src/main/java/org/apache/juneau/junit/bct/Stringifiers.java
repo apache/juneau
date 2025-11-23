@@ -258,17 +258,18 @@ public class Stringifiers {
 	 * @see Constructor
 	 */
 	public static Stringifier<Constructor> constructorStringifier() {
+		// @formatter:off
 		return (bc, constructor) -> new StringBuilder()
 			.append(stringifyClass(bc, ((Constructor<?>) constructor).getDeclaringClass()))
 			.append('(')
 			.append(
-				Arrays.stream((constructor)
-					.getParameterTypes())
+				Arrays.stream((constructor).getParameterTypes())
 					.map(x -> stringifyClass(bc, x))
 					.collect(joining(","))
 			)
 			.append(')')
 			.toString();
+		// @formatter:on
 	}
 
 	/**
@@ -450,6 +451,7 @@ public class Stringifiers {
 	 * @see List
 	 */
 	public static Stringifier<List> listStringifier() {
+		// @formatter:off
 		return (bc, list) -> ((List<?>)list).stream()
 			.map(bc::stringify)
 			.collect(joining(
@@ -457,6 +459,7 @@ public class Stringifiers {
 				bc.getSetting("collectionPrefix", "["),
 				bc.getSetting("collectionSuffix", "]")
 			));
+		// @formatter:on
 	}
 
 	/**
@@ -530,6 +533,7 @@ public class Stringifiers {
 	 * @see java.util.Map.Entry
 	 */
 	public static Stringifier<Map> mapStringifier() {
+		// @formatter:off
 		return (bc, map) -> ((Map<?,?>)map).entrySet().stream()
 			.map(bc::stringify)
 			.collect(joining(
@@ -537,6 +541,7 @@ public class Stringifiers {
 				bc.getSetting("mapPrefix", "{"),
 				bc.getSetting("mapSuffix", "}")
 			));
+		// @formatter:on
 	}
 
 	/**
@@ -567,6 +572,7 @@ public class Stringifiers {
 	 * @see Method
 	 */
 	public static Stringifier<Method> methodStringifier() {
+		// @formatter:off
 		return (bc, method) -> new StringBuilder()
 			.append(method.getName())
 			.append('(')
@@ -577,6 +583,7 @@ public class Stringifiers {
 			)
 			.append(')')
 			.toString();
+		// @formatter:on
 	}
 
 	/**

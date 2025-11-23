@@ -36,6 +36,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * @serial exclude
  */
+// @formatter:off
 @Rest(
 	path="/debug",
 	title="Debug",
@@ -50,6 +51,7 @@ import org.apache.juneau.rest.servlet.*;
 		"stats: servlet:/stats"
 	}
 )
+// @formatter:on
 public class DebugResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -77,10 +79,11 @@ public class DebugResource extends BasicRestServlet {
 	 */
 	@RestGet(path="/", description="Show contents of config file.")
 	public ResourceDescriptions getChildren() {
+		// @formatter:off
 		return ResourceDescriptions
 			.create()
-			.append("jetty/dump", "Jetty thread dump")
-		;
+			.append("jetty/dump", "Jetty thread dump");
+		// @formatter:on
 	}
 
 	/**

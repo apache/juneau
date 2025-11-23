@@ -38,15 +38,17 @@ import org.apache.juneau.common.reflect.*;
  */
 public class RemoteOperationReturn {
 
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	private final Type returnType;
 	private final RemoteReturn returnValue;
 	private final ResponseBeanMeta meta;
 	private boolean isFuture, isCompletableFuture;
 
 	RemoteOperationReturn(MethodInfo m) {
-		ClassInfo rt = m.getReturnType();
+		var rt = m.getReturnType();
 
-		var ap = AnnotationProvider.INSTANCE;
+		var ap = AP;
 		var al = rstream(ap.find(m)).filter(REMOTE_OP_GROUP).toList();
 
 		RemoteReturn rv = null;

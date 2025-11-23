@@ -17,6 +17,7 @@
 package org.apache.juneau.junit.bct;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,11 +35,11 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class A_collectionListifier extends TestBase {
 
-	@Test
-	void a01_listifyList() {
-		var listifier = Listifiers.collectionListifier();
-		var input = l("a", "b", "c");
-		var result = listifier.apply(null, input);
+		@Test
+		void a01_listifyList() {
+			var listifier = Listifiers.collectionListifier();
+			var input = l("a", "b", "c");
+			var result = listifier.apply(null, input);
 
 			assertNotSame(input, result); // Should create new list
 			assertList(result, "a", "b", "c");
@@ -74,30 +75,30 @@ class Listifiers_Test extends TestBase {
 			assertList(treeResult, "a", "m", "z"); // Natural order
 		}
 
-	@Test
-	void a03_listifyQueue() {
-		var listifier = Listifiers.collectionListifier();
-		var input = new LinkedList<>(l("first", "second"));
-		var result = listifier.apply(null, input);
+		@Test
+		void a03_listifyQueue() {
+			var listifier = Listifiers.collectionListifier();
+			var input = new LinkedList<>(l("first", "second"));
+			var result = listifier.apply(null, input);
 
 			assertList(result, "first", "second");
 		}
 
-	@Test
-	void a04_listifyEmptyCollection() {
-		var listifier = Listifiers.collectionListifier();
-		var input = l();
-		var result = listifier.apply(null, input);
+		@Test
+		void a04_listifyEmptyCollection() {
+			var listifier = Listifiers.collectionListifier();
+			var input = l();
+			var result = listifier.apply(null, input);
 
 			assertEmpty(result);
 		}
 
 		@Test
 		void a05_listifyWithConverter() {
-		var converter = BasicBeanConverter.builder().defaultSettings().build();
-		var listifier = Listifiers.collectionListifier();
-		var input = l(1, 2, 3);
-		var result = listifier.apply(converter, input);
+			var converter = BasicBeanConverter.builder().defaultSettings().build();
+			var listifier = Listifiers.collectionListifier();
+			var input = l(1, 2, 3);
+			var result = listifier.apply(converter, input);
 
 			assertList(result, 1, 2, 3);
 		}
@@ -106,11 +107,11 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class B_iterableListifier extends TestBase {
 
-	@Test
-	void b01_listifyIterable() {
-		var listifier = Listifiers.iterableListifier();
-		Iterable<String> input = l("a", "b", "c");
-		var result = listifier.apply(null, input);
+		@Test
+		void b01_listifyIterable() {
+			var listifier = Listifiers.iterableListifier();
+			Iterable<String> input = l("a", "b", "c");
+			var result = listifier.apply(null, input);
 
 			assertList(result, "a", "b", "c");
 		}
@@ -125,11 +126,11 @@ class Listifiers_Test extends TestBase {
 			assertList(result, 1, 2, 3);
 		}
 
-	@Test
-	void b03_listifyEmptyIterable() {
-		var listifier = Listifiers.iterableListifier();
-		Iterable<String> input = l();
-		var result = listifier.apply(null, input);
+		@Test
+		void b03_listifyEmptyIterable() {
+			var listifier = Listifiers.iterableListifier();
+			Iterable<String> input = l();
+			var result = listifier.apply(null, input);
 
 			assertEmpty(result);
 		}
@@ -150,22 +151,22 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class C_iteratorListifier extends TestBase {
 
-	@Test
-	void c01_listifyIterator() {
-		var listifier = Listifiers.iteratorListifier();
-		var input = l("a", "b", "c").iterator();
-		var result = listifier.apply(null, input);
+		@Test
+		void c01_listifyIterator() {
+			var listifier = Listifiers.iteratorListifier();
+			var input = l("a", "b", "c").iterator();
+			var result = listifier.apply(null, input);
 
 			assertList(result, "a", "b", "c");
 			// Iterator should be exhausted
 			assertFalse(input.hasNext());
 		}
 
-	@Test
-	void c02_listifyEmptyIterator() {
-		var listifier = Listifiers.iteratorListifier();
-		var input = l().iterator();
-		var result = listifier.apply(null, input);
+		@Test
+		void c02_listifyEmptyIterator() {
+			var listifier = Listifiers.iteratorListifier();
+			var input = l().iterator();
+			var result = listifier.apply(null, input);
 
 			assertEmpty(result);
 		}
@@ -183,10 +184,10 @@ class Listifiers_Test extends TestBase {
 
 		@Test
 		void c04_listifyWithConverter() {
-		var converter = BasicBeanConverter.builder().defaultSettings().build();
-		var listifier = Listifiers.iteratorListifier();
-		var input = l("x", "y", "z").iterator();
-		var result = listifier.apply(converter, input);
+			var converter = BasicBeanConverter.builder().defaultSettings().build();
+			var listifier = Listifiers.iteratorListifier();
+			var input = l("x", "y", "z").iterator();
+			var result = listifier.apply(converter, input);
 
 			assertList(result, "x", "y", "z");
 		}
@@ -195,12 +196,12 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class D_enumerationListifier extends TestBase {
 
-	@Test
-	void d01_listifyEnumeration() {
-		var listifier = Listifiers.enumerationListifier();
-		var vector = new Vector<>(l("a", "b", "c"));
-		var input = vector.elements();
-		var result = listifier.apply(null, input);
+		@Test
+		void d01_listifyEnumeration() {
+			var listifier = Listifiers.enumerationListifier();
+			var vector = new Vector<>(l("a", "b", "c"));
+			var input = vector.elements();
+			var result = listifier.apply(null, input);
 
 			assertList(result, "a", "b", "c");
 			// Enumeration should be exhausted
@@ -220,7 +221,7 @@ class Listifiers_Test extends TestBase {
 		@Test
 		void d03_listifyHashtableKeys() {
 			var listifier = Listifiers.enumerationListifier();
-			var hashtable = new Hashtable<String, String>();
+			var hashtable = new Hashtable<String,String>();
 			hashtable.put("key1", "value1");
 			hashtable.put("key2", "value2");
 			var input = hashtable.keys();
@@ -233,11 +234,11 @@ class Listifiers_Test extends TestBase {
 
 		@Test
 		void d04_listifyWithConverter() {
-		var converter = BasicBeanConverter.builder().defaultSettings().build();
-		var listifier = Listifiers.enumerationListifier();
-		var vector = new Vector<>(l(1, 2, 3));
-		var input = vector.elements();
-		var result = listifier.apply(converter, input);
+			var converter = BasicBeanConverter.builder().defaultSettings().build();
+			var listifier = Listifiers.enumerationListifier();
+			var vector = new Vector<>(l(1, 2, 3));
+			var input = vector.elements();
+			var result = listifier.apply(converter, input);
 
 			assertList(result, 1, 2, 3);
 		}
@@ -267,9 +268,7 @@ class Listifiers_Test extends TestBase {
 		@Test
 		void e03_listifyFilteredStream() {
 			var listifier = Listifiers.streamListifier();
-			var input = IntStream.range(1, 10)
-				.filter(n -> n % 2 == 0)
-				.boxed();
+			var input = IntStream.range(1, 10).filter(n -> n % 2 == 0).boxed();
 			var result = listifier.apply(null, input);
 
 			assertList(result, 2, 4, 6, 8);
@@ -278,8 +277,7 @@ class Listifiers_Test extends TestBase {
 		@Test
 		void e04_listifyMappedStream() {
 			var listifier = Listifiers.streamListifier();
-			var input = Stream.of("hello", "world")
-				.map(String::toUpperCase);
+			var input = Stream.of("hello", "world").map(String::toUpperCase);
 			var result = listifier.apply(null, input);
 
 			assertList(result, "HELLO", "WORLD");
@@ -310,9 +308,7 @@ class Listifiers_Test extends TestBase {
 			assertTrue(result.stream().allMatch(obj -> obj instanceof Map.Entry));
 
 			// TreeMap conversion ensures natural key ordering
-			var entries = result.stream()
-				.map(obj -> (Map.Entry<?, ?>) obj)
-				.toList();
+			var entries = result.stream().map(obj -> (Map.Entry<?,?>)obj).toList();
 			assertEquals("a", entries.get(0).getKey());
 			assertEquals("z", entries.get(1).getKey());
 		}
@@ -322,14 +318,12 @@ class Listifiers_Test extends TestBase {
 			var listifier = Listifiers.mapListifier();
 
 			// HashMap (unordered) -> converted to TreeMap for natural key ordering
-			var hashMap = new HashMap<String, String>();
+			var hashMap = new HashMap<String,String>();
 			hashMap.put("z", "value1");
 			hashMap.put("a", "value2");
 			hashMap.put("m", "value3");
 			var hashResult = listifier.apply(null, hashMap);
-			var hashEntries = hashResult.stream()
-				.map(obj -> (Map.Entry<?, ?>) obj)
-				.toList();
+			var hashEntries = hashResult.stream().map(obj -> (Map.Entry<?,?>)obj).toList();
 			assertEquals("a", hashEntries.get(0).getKey());
 			assertEquals("m", hashEntries.get(1).getKey());
 			assertEquals("z", hashEntries.get(2).getKey());
@@ -340,22 +334,18 @@ class Listifiers_Test extends TestBase {
 			linkedMap.put("a", "value2");
 			linkedMap.put("m", "value3");
 			var linkedResult = listifier.apply(null, linkedMap);
-			var linkedEntries = linkedResult.stream()
-				.map(obj -> (Map.Entry<?, ?>) obj)
-				.toList();
+			var linkedEntries = linkedResult.stream().map(obj -> (Map.Entry<?,?>)obj).toList();
 			assertEquals("z", linkedEntries.get(0).getKey()); // Insertion order
 			assertEquals("a", linkedEntries.get(1).getKey());
 			assertEquals("m", linkedEntries.get(2).getKey());
 
 			// TreeMap already sorted, preserves its order
-			var treeMap = new TreeMap<String, String>();
+			var treeMap = new TreeMap<String,String>();
 			treeMap.put("z", "value1");
 			treeMap.put("a", "value2");
 			treeMap.put("m", "value3");
 			var treeResult = listifier.apply(null, treeMap);
-			var treeEntries = treeResult.stream()
-				.map(obj -> (Map.Entry<?, ?>) obj)
-				.toList();
+			var treeEntries = treeResult.stream().map(obj -> (Map.Entry<?,?>)obj).toList();
 			assertEquals("a", treeEntries.get(0).getKey()); // Natural order
 			assertEquals("m", treeEntries.get(1).getKey());
 			assertEquals("z", treeEntries.get(2).getKey());
@@ -373,23 +363,18 @@ class Listifiers_Test extends TestBase {
 		@Test
 		void f03_listifyMapWithNullValues() {
 			var listifier = Listifiers.mapListifier();
-			var input = new HashMap<String, String>();
+			var input = new HashMap<String,String>();
 			input.put("key1", "value1");
 			input.put("key2", null);
 			var result = listifier.apply(null, input);
 
 			assertSize(2, result);
 			// Check that we have the expected entries
-			var hasKey1Entry = result.stream()
-				.filter(obj -> obj instanceof Map.Entry)
-				.map(obj -> (Map.Entry<?, ?>) obj)
+			var hasKey1Entry = result.stream().filter(obj -> obj instanceof Map.Entry).map(obj -> (Map.Entry<?,?>)obj)
 				.anyMatch(entry -> "key1".equals(entry.getKey()) && "value1".equals(entry.getValue()));
 			assertTrue(hasKey1Entry);
 
-			var hasKey2Entry = result.stream()
-				.filter(obj -> obj instanceof Map.Entry)
-				.map(obj -> (Map.Entry<?, ?>) obj)
-				.anyMatch(entry -> "key2".equals(entry.getKey()) && entry.getValue() == null);
+			var hasKey2Entry = result.stream().filter(obj -> obj instanceof Map.Entry).map(obj -> (Map.Entry<?,?>)obj).anyMatch(entry -> "key2".equals(entry.getKey()) && entry.getValue() == null);
 			assertTrue(hasKey2Entry);
 		}
 
@@ -408,26 +393,26 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class G_integration extends TestBase {
 
-	@Test
-	void g01_useInBasicBeanConverter() {
-		// Test various listifiable objects
-		assertList(l("a", "b"), "a", "b");
-		assertList(new LinkedHashSet<>(l("x", "y")), "x", "y");
-		assertSize(3, Stream.of(1, 2, 3));
-			assertEmpty(Optional.empty());
+		@Test
+		void g01_useInBasicBeanConverter() {
+			// Test various listifiable objects
+			assertList(l("a", "b"), "a", "b");
+			assertList(new LinkedHashSet<>(l("x", "y")), "x", "y");
+			assertSize(3, Stream.of(1, 2, 3));
+			assertEmpty(opte());
 		}
 
-	@Test
-	void g02_customListifierRegistration() {
-		// Test that custom registration works
-		assertList(l("custom"), "custom");
-	}
+		@Test
+		void g02_customListifierRegistration() {
+			// Test that custom registration works
+			assertList(l("custom"), "custom");
+		}
 
 		@Test
 		void g03_listifierChaining() {
 			// Test that listified objects can be processed by other listifiers
 			// Stream of optionals
-			var streamOfOptionals = Stream.of(Optional.of("a"), Optional.empty(), Optional.of("b"));
+			var streamOfOptionals = Stream.of(opt("a"), opte(), opt("b"));
 			assertSize(3, streamOfOptionals);
 		}
 	}

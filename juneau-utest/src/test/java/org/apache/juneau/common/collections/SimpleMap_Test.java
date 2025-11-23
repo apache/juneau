@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,11 +30,11 @@ class SimpleMap_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a01_nullKey_singleEntry() {
-		String[] keys = {null};
-		String[] values = {"value1"};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
+		var keys = a((String)null);
+		var values = a("value1");
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
 		assertSize(1, map);
 		assertEquals("value1", map.get(null));
 		assertTrue(map.containsKey(null));
@@ -41,11 +42,11 @@ class SimpleMap_Test extends TestBase {
 
 	@Test
 	void a02_nullKey_withOtherKeys() {
-		String[] keys = {"key1", null, "key3"};
-		String[] values = {"value1", "value2", "value3"};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
+		var keys = a("key1", null, "key3");
+		var values = a("value1", "value2", "value3");
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
 		assertSize(3, map);
 		assertEquals("value1", map.get("key1"));
 		assertEquals("value2", map.get(null));
@@ -55,13 +56,13 @@ class SimpleMap_Test extends TestBase {
 
 	@Test
 	void a03_nullKey_updateValue() {
-		String[] keys = {"key1", null};
-		String[] values = {"value1", "value2"};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
+		var keys = a("key1", null);
+		var values = a("value1", "value2");
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
 		String oldValue = map.put(null, "newValue");
-		
+
 		assertEquals("value2", oldValue);
 		assertEquals("newValue", map.get(null));
 		assertSize(2, map);
@@ -69,11 +70,11 @@ class SimpleMap_Test extends TestBase {
 
 	@Test
 	void a04_nullKey_withNullValue() {
-		String[] keys = {null};
-		String[] values = {null};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
+		var keys = a((String)null);
+		var values = a((String)null);
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
 		assertSize(1, map);
 		assertNull(map.get(null));
 		assertTrue(map.containsKey(null));
@@ -81,12 +82,12 @@ class SimpleMap_Test extends TestBase {
 
 	@Test
 	void a05_nullKey_entrySet() {
-		String[] keys = {"key1", null, "key3"};
-		String[] values = {"value1", "value2", "value3"};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
-		boolean foundNullKey = false;
+		var keys = a("key1", null, "key3");
+		var values = a("value1", "value2", "value3");
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
+		var foundNullKey = false;
 		for (var entry : map.entrySet()) {
 			if (entry.getKey() == null) {
 				foundNullKey = true;
@@ -98,11 +99,11 @@ class SimpleMap_Test extends TestBase {
 
 	@Test
 	void a06_nullKey_keySet() {
-		String[] keys = {"key1", null, "key3"};
-		String[] values = {"value1", "value2", "value3"};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
+		String[] keys = { "key1", null, "key3" };
+		String[] values = { "value1", "value2", "value3" };
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
 		assertTrue(map.keySet().contains(null), "Null key not found in keySet");
 		assertSize(3, map.keySet());
 	}
@@ -112,47 +113,47 @@ class SimpleMap_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void b01_duplicateKey_nonNullKeys() {
-		String[] keys = {"key1", "key2", "key1"};
-		String[] values = {"value1", "value2", "value3"};
-		
+		String[] keys = { "key1", "key2", "key1" };
+		String[] values = { "value1", "value2", "value3" };
+
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
 			new SimpleMap<>(keys, values);
 		});
-		
+
 		assertTrue(ex.getMessage().contains("Duplicate key found: key1"));
 	}
 
 	@Test
 	void b02_duplicateKey_nullKeys() {
-		String[] keys = {null, "key2", null};
-		String[] values = {"value1", "value2", "value3"};
-		
+		String[] keys = { null, "key2", null };
+		String[] values = { "value1", "value2", "value3" };
+
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
 			new SimpleMap<>(keys, values);
 		});
-		
+
 		assertTrue(ex.getMessage().contains("Duplicate key found: null"));
 	}
 
 	@Test
 	void b03_duplicateKey_mixedNullAndNonNull() {
-		String[] keys = {"key1", null, "key2", "key1"};
-		String[] values = {"value1", "value2", "value3", "value4"};
-		
+		String[] keys = { "key1", null, "key2", "key1" };
+		String[] values = { "value1", "value2", "value3", "value4" };
+
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
 			new SimpleMap<>(keys, values);
 		});
-		
+
 		assertTrue(ex.getMessage().contains("Duplicate key found: key1"));
 	}
 
 	@Test
 	void b04_noDuplicateKeys_success() {
-		String[] keys = {"key1", null, "key2", "key3"};
-		String[] values = {"value1", "value2", "value3", "value4"};
-		
-		SimpleMap<String, String> map = assertDoesNotThrow(() -> new SimpleMap<>(keys, values));
-		
+		String[] keys = { "key1", null, "key2", "key3" };
+		String[] values = { "value1", "value2", "value3", "value4" };
+
+		SimpleMap<String,String> map = assertDoesNotThrow(() -> new SimpleMap<>(keys, values));
+
 		assertSize(4, map);
 		assertEquals("value1", map.get("key1"));
 		assertEquals("value2", map.get(null));
@@ -167,9 +168,9 @@ class SimpleMap_Test extends TestBase {
 	void c01_emptyMap_noNullKeys() {
 		String[] keys = {};
 		String[] values = {};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
 		assertEmpty(map);
 		assertNull(map.get(null));
 		assertFalse(map.containsKey(null));
@@ -177,36 +178,36 @@ class SimpleMap_Test extends TestBase {
 
 	@Test
 	void c02_getLookup_nullKeyNotInMap() {
-		String[] keys = {"key1", "key2"};
-		String[] values = {"value1", "value2"};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
+		String[] keys = { "key1", "key2" };
+		String[] values = { "value1", "value2" };
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
 		assertNull(map.get(null));
 		assertFalse(map.containsKey(null));
 	}
 
 	@Test
 	void c03_putOperation_cannotAddNewNullKey() {
-		String[] keys = {"key1"};
-		String[] values = {"value1"};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
+		String[] keys = { "key1" };
+		String[] values = { "value1" };
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
 			map.put(null, "newValue");
 		});
-		
+
 		assertTrue(ex.getMessage().contains("No key 'null' defined in map"));
 	}
 
 	@Test
 	void c04_complexTypes_nullKey() {
-		Integer[] keys = {1, null, 3};
-		String[] values = {"one", "null-key", "three"};
-		
-		SimpleMap<Integer, String> map = new SimpleMap<>(keys, values);
-		
+		var keys = a(1, null, 3);
+		var values = a("one", "null-key", "three");
+
+		SimpleMap<Integer,String> map = new SimpleMap<>(keys, values);
+
 		assertEquals("one", map.get(1));
 		assertEquals("null-key", map.get(null));
 		assertEquals("three", map.get(3));

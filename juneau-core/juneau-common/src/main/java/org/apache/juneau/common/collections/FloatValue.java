@@ -150,7 +150,7 @@ public class FloatValue extends Value<Float> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values within the precision.
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
-	public boolean isAny(float precision, float... values) {
+	public boolean isAny(float precision, float...values) {
 		assertArg(precision >= 0, "Precision must be non-negative");
 		var v = get();
 		if (v == null)

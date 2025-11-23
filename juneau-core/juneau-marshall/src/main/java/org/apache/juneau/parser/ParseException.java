@@ -23,7 +23,6 @@ import java.lang.reflect.*;
 import java.text.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -52,10 +51,10 @@ public class ParseException extends BasicRuntimeException {
 	 * @return A new {@link SerializeException}.
 	 */
 	public static ParseException create(Throwable e) {
-		if (e instanceof InvocationTargetException)
-			e = ((InvocationTargetException)e).getCause();
-		if (e instanceof ParseException)
-			return (ParseException)e;
+		if (e instanceof InvocationTargetException e2)
+			e = e2.getCause();
+		if (e instanceof ParseException e3)
+			return e3;
 		return new ParseException(e);
 	}
 
@@ -69,7 +68,7 @@ public class ParseException extends BasicRuntimeException {
 
 			sb.append("\n\tAt: ").append(p);
 
-			JsonMap lastLocation = session.getLastLocation();
+			var lastLocation = session.getLastLocation();
 			if (nn(lastLocation)) {
 				sb.append("\n\tWhile parsing into: ");
 				lastLocation.forEach((k, v) -> sb.append("\n\t\t").append(k).append(": ").append(v));

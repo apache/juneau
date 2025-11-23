@@ -47,12 +47,12 @@ public abstract class DefaultingVar extends SimpleVar {
 
 	@Override /* Overridden from Var */
 	public String doResolve(VarResolverSession session, String s) throws Exception {
-		int i = s.indexOf(',');
+		var i = s.indexOf(',');
 		if (i == -1)
 			return resolve(session, s.trim());
-		String s1 = s.substring(0, i);
-		String s2 = s.length() == i ? null : s.substring(i + 1);
-		String v = resolve(session, s1);
+		var s1 = s.substring(0, i);
+		var s2 = s.length() == i ? null : s.substring(i + 1);
+		var v = resolve(session, s1);
 		if (v == null)
 			v = s2;
 		return v;

@@ -350,7 +350,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("values", values);
 		var s = orElse(null);
 		for (var substring : values)
-			if (nn(substring) && !StringUtils.contains(s, substring))
+			if (nn(substring) && ! contains(s, substring))
 				throw error(MSG_stringDidNotContainExpectedSubstring, fix(substring), fix(s));
 		return returns();
 	}
@@ -363,7 +363,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isEmpty() throws AssertionError {
 		var s = orElse(null);
-		if (nn(s) && !s.isEmpty())
+		if (nn(s) && ! s.isEmpty())
 			throw error(MSG_stringWasNotEmpty, fix(s));
 		return returns();
 	}
@@ -378,7 +378,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	public R isEndsWith(String string) {
 		assertArgNotNull("string", string);
 		var s = value();
-		if (!s.endsWith(string))
+		if (! s.endsWith(string))
 			throw error(MSG_stringDidNotEndWithExpected, fix(string), fix(s));
 		return returns();
 	}
@@ -421,7 +421,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isLines(String...lines) throws AssertionError {
 		assertArgNotNull("lines", lines);
-		var v = StringUtils.join(lines, '\n');
+		var v = join(lines, '\n');
 		var s = value();
 		if (ne(v, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
@@ -440,7 +440,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isMatches(String searchPattern) throws AssertionError {
 		assertArgNotNull("searchPattern", searchPattern);
-		return isPattern(StringUtils.getMatchPattern(searchPattern));
+		return isPattern(getMatchPattern(searchPattern));
 	}
 
 	/**
@@ -469,7 +469,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("values", values);
 		var s = orElse(null);
 		for (var substring : values)
-			if (nn(substring) && StringUtils.contains(s, substring))
+			if (nn(substring) && contains(s, substring))
 				throw error(MSG_stringContainedUnexpectedSubstring, fix(substring), fix(s));
 		return returns();
 	}
@@ -513,7 +513,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	public R isPattern(Pattern pattern) throws AssertionError {
 		assertArgNotNull("pattern", pattern);
 		var s = value();
-		if (!pattern.matcher(s).matches())
+		if (! pattern.matcher(s).matches())
 			throw error(MSG_stringDidNotMatchExpectedPattern, fix(pattern.pattern()), fix(s));
 		return returns();
 	}
@@ -541,7 +541,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("regex", regex);
 		var p = Pattern.compile(regex, flags);
 		var s = value();
-		if (!p.matcher(s).matches())
+		if (! p.matcher(s).matches())
 			throw error(MSG_stringDidNotMatchExpectedPattern, fix(regex), fix(s));
 		return returns();
 	}
@@ -572,7 +572,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("lines", lines);
 
 		// Must work for windows too.
-		var e = StringUtils.join(lines, '\n').trim().split("[\r\n]+");
+		var e = join(lines, '\n').trim().split("[\r\n]+");
 		var a = value().trim().split("[\r\n]+");
 
 		if (e.length != a.length)
@@ -582,7 +582,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		Arrays.sort(a);
 
 		for (var i = 0; i < e.length; i++)
-			if (!e[i].equals(a[i]))
+			if (! e[i].equals(a[i]))
 				throw error(MSG_expectedStringHadDifferentValuesAtLine, i + 1, e[i], a[i]);
 
 		return returns();
@@ -598,7 +598,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	public R isStartsWith(String string) {
 		assertArgNotNull("string", string);
 		var s = value();
-		if (!s.startsWith(string))
+		if (! s.startsWith(string))
 			throw error(MSG_stringDidNotStartWithExpected, fix(string), fix(s));
 		return returns();
 	}

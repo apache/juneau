@@ -20,7 +20,6 @@ import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
-import java.lang.reflect.Method;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -58,7 +57,7 @@ public abstract class DebugEnablement {
 		protected Builder(BeanStore beanStore) {
 			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
-			conditional = x -> "true".equalsIgnoreCase(x.getHeader("Debug"));
+			conditional = x -> eqic("true", x.getHeader("Debug"));
 			creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class).builder(Builder.class, this);
 		}
 
@@ -222,10 +221,10 @@ public abstract class DebugEnablement {
 	 * @param beanStore The bean store containing injectable beans for this enablement.
 	 */
 	public DebugEnablement(BeanStore beanStore) {
-		Builder builder = init(beanStore);
+		var builder = init(beanStore);
 		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
+		this.conditionalPredicate = firstNonNull(builder.conditional, x -> eqic("true", x.getHeader("Debug")));
 	}
 
 	/**
@@ -236,7 +235,7 @@ public abstract class DebugEnablement {
 	public DebugEnablement(Builder builder) {
 		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
+		this.conditionalPredicate = firstNonNull(builder.conditional, x -> eqic("true", x.getHeader("Debug")));
 
 	}
 
@@ -252,8 +251,8 @@ public abstract class DebugEnablement {
 	 * @return <jk>true</jk> if debug is enabled on the specified method and request.
 	 */
 	public boolean isDebug(RestContext context, HttpServletRequest req) {
-		Class<?> c = context.getResourceClass();
-		Enablement e = enablementMap.find(c).findFirst().orElse(defaultEnablement);
+		var c = context.getResourceClass();
+		var e = enablementMap.find(c).findFirst().orElse(defaultEnablement);
 		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));
 	}
 
@@ -269,9 +268,8 @@ public abstract class DebugEnablement {
 	 * @return <jk>true</jk> if debug is enabled on the specified method and request.
 	 */
 	public boolean isDebug(RestOpContext context, HttpServletRequest req) {
-		Method m = context.getJavaMethod();
-		Enablement e = enablementMap.find(m).findFirst()
-			.orElseGet(() -> enablementMap.find(m.getDeclaringClass()).findFirst().orElse(defaultEnablement));
+		var m = context.getJavaMethod();
+		var e = enablementMap.find(m).findFirst().orElseGet(() -> enablementMap.find(m.getDeclaringClass()).findFirst().orElse(defaultEnablement));
 		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));
 	}
 

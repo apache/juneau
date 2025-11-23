@@ -26,6 +26,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -126,13 +127,13 @@ public class BeanRegistry {
 
 	private void addClass(Class<?> c) {
 		try {
-		if (nn(c)) {
-			var ci = info(c);
-			if (ci.isChildOf(Collection.class)) {
+			if (nn(c)) {
+				var ci = info(c);
+				if (ci.isChildOf(Collection.class)) {
 					Collection<?> cc = BeanCreator.of(Collection.class).type(c).run();
 					cc.forEach(x -> {
-						if (x instanceof Class)
-							addClass((Class<?>)x);
+						if (x instanceof Class x2)
+							addClass(x2);
 						else
 							throw bex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", cn(c));
 					});
@@ -140,9 +141,9 @@ public class BeanRegistry {
 					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
 					m.forEach((k, v) -> {
 						var typeName = s(k);
-						ClassMeta<?> val = null;
-						if (v instanceof Type)
-							val = bc.getClassMeta((Type)v);
+						var val = (ClassMeta<?>)null;
+						if (v instanceof Type v2)
+							val = bc.getClassMeta(v2);
 						else if (isArray(v))
 							val = getTypedClassMeta(v);
 						else
@@ -150,12 +151,14 @@ public class BeanRegistry {
 						addToMap(typeName, val);
 					});
 				} else {
+					// @formatter:off
 					var typeName = ap.find(Bean.class, ci)
 						.stream()
 						.map(x -> x.inner().typeName())
-						.filter(x -> isNotEmpty(x))
+						.filter(Utils::isNotEmpty)
 						.findFirst()
 						.orElseThrow(() -> bex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", cn(c)));
+					// @formatter:on
 					addToMap(typeName, bc.getClassMeta(c));
 				}
 			}

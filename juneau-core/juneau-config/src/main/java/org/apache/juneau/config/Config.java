@@ -1134,7 +1134,7 @@ public class Config extends Context implements ConfigEventListener {
 
 	private static String section(String section) {
 		assertArgNotNull("section", section);
-		if (StringUtils.isEmpty(section))
+		if (isEmpty(section))
 			return "";
 		return section;
 	}

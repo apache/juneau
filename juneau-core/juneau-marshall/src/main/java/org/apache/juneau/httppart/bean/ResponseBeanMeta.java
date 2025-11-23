@@ -43,7 +43,7 @@ import org.apache.juneau.common.reflect.*;
  */
 public class ResponseBeanMeta {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	static class Builder {
 		ClassMeta<?> cm;
@@ -128,7 +128,7 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
-		AnnotationProvider ap = AnnotationProvider.INSTANCE;
+			var ap = AP;
 		rstream(ap.find(Response.class, m)).forEach(x -> b.apply(x.inner()));
 		rstream(ap.find(StatusCode.class, m)).forEach(x -> b.apply(x.inner()));
 		return b.build();
@@ -164,7 +164,7 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(ci.innerType());
-		var ai = AnnotationProvider.INSTANCE;
+			var ai = AP;
 		rstream(ai.find(Response.class, ci)).forEach(x -> b.apply(x.inner()));
 		rstream(ai.find(StatusCode.class, ci)).forEach(x -> b.apply(x.inner()));
 		return b.build();

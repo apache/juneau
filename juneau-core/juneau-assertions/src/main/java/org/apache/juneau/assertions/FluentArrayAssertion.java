@@ -278,7 +278,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		isSize(tests.length);
 		for (int i = 0, j = length(); i < j; i++) {
 			var t = tests[i];
-			if (nn(t) && !t.test(at(i)))
+			if (nn(t) && ! t.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
@@ -294,7 +294,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	public R isAll(Predicate<E> test) throws AssertionError {
 		assertArgNotNull("test", test);
 		for (int i = 0, j = length(); i < j; i++)
-			if (!test.test(at(i)))
+			if (! test.test(at(i)))
 				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));
 		return returns();
 	}

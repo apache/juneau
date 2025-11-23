@@ -232,35 +232,31 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (m.find())
 				return urlDecode(m.group(1));
 		}
-		switch (getUriAnchorText()) {
-			case LAST_TOKEN:
-				s = resolveUri(s);
-				if (s.indexOf('/') != -1)
-					s = s.substring(s.lastIndexOf('/') + 1);
-				if (s.indexOf('?') != -1)
-					s = s.substring(0, s.indexOf('?'));
-				if (s.indexOf('#') != -1)
-					s = s.substring(0, s.indexOf('#'));
-				if (s.isEmpty())
-					s = "/";
-				return urlDecode(s);
-			case URI_ANCHOR:
-				if (s.indexOf('#') != -1)
-					s = s.substring(s.lastIndexOf('#') + 1);
-				return urlDecode(s);
-			case PROPERTY_NAME:
-				return pMeta == null ? s : pMeta.getName();
-			case URI:
-				return resolveUri(s);
-			case CONTEXT_RELATIVE:
-				return relativizeUri("context:/", s);
-			case SERVLET_RELATIVE:
-				return relativizeUri("servlet:/", s);
-			case PATH_RELATIVE:
-				return relativizeUri("request:/", s);
-			default /* TO_STRING */:
-				return s;
+	return switch (getUriAnchorText()) {
+		case LAST_TOKEN -> {
+			s = resolveUri(s);
+			if (s.indexOf('/') != -1)
+				s = s.substring(s.lastIndexOf('/') + 1);
+			if (s.indexOf('?') != -1)
+				s = s.substring(0, s.indexOf('?'));
+			if (s.indexOf('#') != -1)
+				s = s.substring(0, s.indexOf('#'));
+			if (s.isEmpty())
+				s = "/";
+			yield urlDecode(s);
 		}
+		case URI_ANCHOR -> {
+			if (s.indexOf('#') != -1)
+				s = s.substring(s.lastIndexOf('#') + 1);
+			yield urlDecode(s);
+		}
+		case PROPERTY_NAME -> pMeta == null ? s : pMeta.getName();
+		case URI -> resolveUri(s);
+		case CONTEXT_RELATIVE -> relativizeUri("context:/", s);
+		case SERVLET_RELATIVE -> relativizeUri("servlet:/", s);
+		case PATH_RELATIVE -> relativizeUri("request:/", s);
+		default /* TO_STRING */ -> s;
+	};
 	}
 
 	@Override /* Overridden from XmlSerializer */
@@ -312,7 +308,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		HtmlRender<?> render = getHtmlBeanPropertyMeta(pMeta).getRender();
 		if (nn(render))
 			return render;
-		ClassMeta<?> cMeta = session.getClassMetaForObject(value);
+		var cMeta = session.getClassMetaForObject(value);
 		render = cMeta == null ? null : getHtmlClassMeta(cMeta).getRender();
 		return render;
 	}
@@ -353,7 +349,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (o1 == null)
 			return null;
 
-		ClassMeta<?> cm1 = getClassMetaForObject(o1);
+		var cm1 = getClassMetaForObject(o1);
 
 		ObjectSwap swap = cm1.getSwap(this);
 		o1 = swap(swap, o1);
@@ -423,20 +419,20 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			ClassMeta<?> cMeta = pMeta.getClassMeta();
+			var cMeta = pMeta.getClassMeta();
 
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
-		if (canIgnoreValue(cMeta, key, value))
-			return;
+			if (canIgnoreValue(cMeta, key, value))
+				return;
 
-		var link = (String)null;
-		var anchorText = (String)null;
-		if (! cMeta.isCollectionOrArray()) {
-			link = m.resolveVars(getLink(pMeta));
-			anchorText = m.resolveVars(getAnchorText(pMeta));
-		}
+			var link = (String)null;
+			var anchorText = (String)null;
+			if (! cMeta.isCollectionOrArray()) {
+				link = m.resolveVars(getLink(pMeta));
+				anchorText = m.resolveVars(getAnchorText(pMeta));
+			}
 
 			if (nn(anchorText))
 				value = anchorText;
@@ -519,7 +515,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			}
 
 			for (var o : c) {
-				ClassMeta<?> cm = getClassMetaForObject(o);
+				var cm = getClassMetaForObject(o);
 
 				if (nn(cm) && nn(cm.getSwap(this))) {
 					ObjectSwap swap = cm.getSwap(this);
@@ -562,15 +558,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					for (var k : th) {
 						BeanMapEntry p = m2.getProperty(toString(k));
 						BeanPropertyMeta pMeta = p.getMeta();
-					if (pMeta.canRead()) {
-						Object value = p.getValue();
+						if (pMeta.canRead()) {
+							Object value = p.getValue();
 
-						var link = (String)null;
-						var anchorText = (String)null;
-						if (! pMeta.getClassMeta().isCollectionOrArray()) {
-							link = m2.resolveVars(getLink(pMeta));
-							anchorText = m2.resolveVars(getAnchorText(pMeta));
-						}
+							var link = (String)null;
+							var anchorText = (String)null;
+							if (! pMeta.getClassMeta().isCollectionOrArray()) {
+								link = m2.resolveVars(getLink(pMeta));
+								anchorText = m2.resolveVars(getAnchorText(pMeta));
+							}
 
 							if (nn(anchorText))
 								value = anchorText;
@@ -630,9 +626,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
 
-		ClassMeta<?> keyType = eKeyType == null ? string() : eKeyType;
-		ClassMeta<?> valueType = eValueType == null ? object() : eValueType;
-		ClassMeta<?> aType = getClassMetaForObject(m);       // The actual type
+		var keyType = eKeyType == null ? string() : eKeyType;
+		var valueType = eValueType == null ? object() : eValueType;
+		var aType = getClassMetaForObject(m);       // The actual type
 		HtmlClassMeta cHtml = getHtmlClassMeta(aType);
 		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
 
@@ -727,8 +723,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	protected final HtmlWriter getHtmlWriter(SerializerPipe out) throws IOException {
 		Object output = out.getRawOutput();
-		if (output instanceof HtmlWriter)
-			return (HtmlWriter)output;
+		if (output instanceof HtmlWriter output2)
+			return output2;
 		var w = new HtmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver());
 		out.setWriter(w);
 		return w;
@@ -935,15 +931,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				else
 					serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), typeName, pMeta);
 
-		} else if (sType.isBean()) {
-			BeanMap m = toBeanMap(o);
-			if (aType.hasAnnotation(HtmlLink.class)) {
-				var uriProperty = Value.<String>empty();
-				var nameProperty = Value.<String>empty();
-				aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
-				aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
-				Object urlProp = m.get(uriProperty.orElse(""));
-				Object nameProp = m.get(nameProperty.orElse(""));
+			} else if (sType.isBean()) {
+				BeanMap m = toBeanMap(o);
+				if (aType.hasAnnotation(HtmlLink.class)) {
+					var uriProperty = Value.<String>empty();
+					var nameProperty = Value.<String>empty();
+					aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+					aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
+					Object urlProp = m.get(uriProperty.orElse(""));
+					Object nameProp = m.get(nameProperty.orElse(""));
 
 					out.oTag("a").attrUri("href", urlProp).w('>').text(nameProp).eTag("a");
 					cr = CR_MIXED;
@@ -982,7 +978,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		boolean isMixed, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 
 		// If this is a bean, then we want to serialize it as HTML unless it's @Html(format=XML).
-		ClassMeta<?> type = push2(elementName, o, eType);
+		var type = push2(elementName, o, eType);
 		pop();
 
 		if (type == null)

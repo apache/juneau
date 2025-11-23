@@ -1034,11 +1034,11 @@ class StringUtils_Test extends TestBase {
 	}
 
 	@Test void a43_isEmpty() {
-		assertTrue(StringUtils.isEmpty(null));
-		assertTrue(StringUtils.isEmpty(""));
-		assertFalse(StringUtils.isEmpty("   "));
-		assertFalse(StringUtils.isEmpty("hello"));
-		assertFalse(StringUtils.isEmpty("a"));
+		assertTrue(Utils.isEmpty((String)null));
+		assertTrue(Utils.isEmpty(""));
+		assertFalse(Utils.isEmpty("   "));
+		assertFalse(Utils.isEmpty("hello"));
+		assertFalse(Utils.isEmpty("a"));
 	}
 
 	@Test void a44_hasText() {

@@ -56,7 +56,7 @@ import org.apache.juneau.cp.*;
  */
 public class AssertionPredicates {
 
-	private static final Function<Object,String> TYPENAME = x -> cn(x);
+	private static final Function<Object,String> TYPENAME = Utils::cn;
 
 	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(AssertionPredicates.class, "Messages");
@@ -110,7 +110,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> contains(String value) {
-		return test(x -> StringUtils.contains(s(x), value), MSG_valueDidNotContainExpected, value, VALUE);
+		return test(x -> StringUtils.contains(s(x), value), MSG_valueDidNotContainExpected, value, VALUE);  // NOAI
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> eqic(String value) {
-		return test(x -> Utils.eqic(s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
+		return test(x -> Utils.eqic(s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);  // NOAI
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> ne(Object value) {
-		return test(x -> !Objects.equals(x, value), MSG_valueUnexpectedlyMatched, VALUE);
+		return test(x -> ! Objects.equals(x, value), MSG_valueUnexpectedlyMatched, VALUE);
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> ne(String value) {
-		return test(x -> !Objects.equals(s(x), value), MSG_valueUnexpectedlyMatched, VALUE);
+		return test(x -> ! Objects.equals(s(x), value), MSG_valueUnexpectedlyMatched, VALUE);
 	}
 
 	/**

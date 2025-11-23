@@ -20,6 +20,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.common.utils.*;
@@ -168,7 +169,7 @@ public class MapBuilder<K,V> {
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> add(K key, V value) {
-		if (filter != null && !filter.test(value))
+		if (filter != null && ! filter.test(value))
 			return this;
 		if (map == null)
 			map = new LinkedHashMap<>();
@@ -215,10 +216,10 @@ public class MapBuilder<K,V> {
 			throw new IllegalStateException("Unknown key and value types. Cannot use this method.");
 		for (var o : values) {
 			if (nn(o)) {
-				if (o instanceof Map) {
-					((Map<Object,Object>)o).forEach((k, v) -> add(toType(keyType, k), toType(valueType, v)));
+				if (o instanceof Map o2) {
+					o2.forEach((k, v) -> add(toType(keyType, k), toType(valueType, v)));
 				} else {
-					var m = converters.stream().map(x -> x.convertTo(Map.class, o)).filter(x -> nn(x)).findFirst().orElse(null);
+					var m = converters.stream().map(x -> x.convertTo(Map.class, o)).filter(Utils::nn).findFirst().orElse(null);
 					if (nn(m))
 						addAny(m);
 					else
@@ -239,7 +240,7 @@ public class MapBuilder<K,V> {
 	public MapBuilder<K,V> addPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
 			throw illegalArg("Odd number of parameters passed into AMap.ofPairs()");
-		for (int i = 0; i < pairs.length; i += 2)
+		for (var i = 0; i < pairs.length; i += 2)
 			add((K)pairs[i], (V)pairs[i + 1]);
 		return this;
 	}
@@ -257,7 +258,7 @@ public class MapBuilder<K,V> {
 		if (c.isInstance(o))
 			return c.cast(o);
 		if (nn(converters)) {
-			var e = converters.stream().map(x -> x.convertTo(c, o)).filter(x -> nn(x)).findFirst().orElse(null);
+			var e = converters.stream().map(x -> x.convertTo(c, o)).filter(Utils::nn).findFirst().orElse(null);
 			if (nn(e))
 				return e;
 		}
@@ -300,12 +301,12 @@ public class MapBuilder<K,V> {
 			if (map == null)
 				map = new LinkedHashMap<>();
 		}
-	if (nn(map)) {
-		if (nn(comparator)) {
-			var m2 = new TreeMap<K,V>(comparator);
-			m2.putAll(map);
-			map = m2;
-		}
+		if (nn(map)) {
+			if (nn(comparator)) {
+				var m2 = new TreeMap<K,V>(comparator);
+				m2.putAll(map);
+				map = m2;
+			}
 			if (unmodifiable)
 				map = Collections.unmodifiableMap(map);
 		}
@@ -380,14 +381,16 @@ public class MapBuilder<K,V> {
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> filtered() {
+		// @formatter:off
 		return filtered(x -> ! (
 			x == null
-			|| (x instanceof Boolean && x.equals(false))
-			|| (x instanceof Number && ((Number)x).intValue() == -1)
-			|| (isArray(x) && java.lang.reflect.Array.getLength(x) == 0)
-			|| (x instanceof Map && ((Map<?,?>)x).isEmpty())
-			|| (x instanceof Collection && ((Collection<?>)x).isEmpty())
+			|| (x instanceof Boolean x2 && x2.equals(false))
+			|| (x instanceof Number x3 && x3.intValue() == -1)
+			|| (isArray(x) && Array.getLength(x) == 0)
+			|| (x instanceof Map x2 && x2.isEmpty())
+			|| (x instanceof Collection x3 && x3.isEmpty())
 		));
+		// @formatter:on
 	}
 
 	/**

@@ -30,4 +30,3 @@ public class Constants {
 	 */
 	public static final String NONE = "_NONE_";
 }
-

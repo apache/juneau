@@ -52,7 +52,7 @@ public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> 
 		if (in == null)
 			return null;
 
-		int i = in.indexOf('(');
+		var i = in.indexOf('(');
 		if (i != -1) {
 			var s = in.substring(i + 1, in.lastIndexOf(')'));
 			in = in.substring(0, i);

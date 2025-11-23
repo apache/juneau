@@ -195,8 +195,8 @@ public class ConverterUtils {
 	public static Number toNumber(Object o) {
 		if (o == null)
 			return null;
-		if (o instanceof Number)
-			return (Number)o;
+		if (o instanceof Number o2)
+			return o2;
 		try {
 			return parseNumber(o.toString(), null);
 		} catch (ParseException e) {

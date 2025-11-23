@@ -84,6 +84,9 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public class RestOpContext extends Context implements Comparable<RestOpContext> {
+
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Builder class.
 	 */
@@ -1307,23 +1310,23 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return null;
 		}
 
-	private boolean matches(MethodInfo annotated) {
-		var a = annotated.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-		if (nn(a)) {
-			for (var n : a.methodScope()) {
-				if ("*".equals(n) || restMethod.getName().equals(n))
-					return true;
+		private boolean matches(MethodInfo annotated) {
+			var a = annotated.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+			if (nn(a)) {
+				for (var n : a.methodScope()) {
+					if ("*".equals(n) || restMethod.getName().equals(n))
+						return true;
+				}
 			}
+			return false;
 		}
-		return false;
-	}
 
-	private boolean matches(MethodInfo annotated, String beanName) {
-		var a = annotated.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-		if (nn(a)) {
-			if (! a.name().equals(beanName))
-				return false;
-			for (var n : a.methodScope()) {
+		private boolean matches(MethodInfo annotated, String beanName) {
+			var a = annotated.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+			if (nn(a)) {
+				if (! a.name().equals(beanName))
+					return false;
+				for (var n : a.methodScope()) {
 					if ("*".equals(n) || restMethod.getName().equals(n))
 						return true;
 				}
@@ -1476,9 +1479,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request attributes sub-builder.
 		 */
-	protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-		var v = Value.of(parent.defaultRequestAttributes().copy());
+			var v = Value.of(parent.defaultRequestAttributes().copy());
 
 			// Replace with bean from:  @RestInject(name="defaultRequestAttributes",methodScope="foo") public [static] NamedAttributeMap xxx(<args>)
 			// @formatter:off
@@ -1504,9 +1507,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request form data sub-builder.
 		 */
-	protected PartList createDefaultRequestFormData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected PartList createDefaultRequestFormData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-		var v = Value.of(PartList.create());
+			var v = Value.of(PartList.create());
 
 			// Replace with bean from:  @RestInject(name="defaultRequestFormData",methodScope="foo") public [static] PartList xxx(<args>)
 			// @formatter:off
@@ -1532,9 +1535,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request headers sub-builder.
 		 */
-	protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-		var v = Value.of(parent.defaultRequestHeaders().copy());
+			var v = Value.of(parent.defaultRequestHeaders().copy());
 
 			// Replace with bean from:  @RestInject(name="defaultRequestHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
 			// @formatter:off
@@ -1560,9 +1563,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request query data sub-builder.
 		 */
-	protected PartList createDefaultRequestQueryData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected PartList createDefaultRequestQueryData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-		var v = Value.of(PartList.create());
+			var v = Value.of(PartList.create());
 
 			// Replace with bean from:  @RestInject(name="defaultRequestQueryData",methodScope="foo") public [static] PartList xxx(<args>)
 			// @formatter:off
@@ -1588,9 +1591,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default response headers sub-builder.
 		 */
-	protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-		var v = Value.of(parent.defaultResponseHeaders().copy());
+			var v = Value.of(parent.defaultResponseHeaders().copy());
 
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
 			// @formatter:off
@@ -1929,11 +1932,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			if (nn(path)) {
 				for (var p : path) {
-						if (dotAll && ! p.endsWith("/*"))
-							p += "/*";
-						v.get().add(UrlPathMatcher.of(p));
-					}
+					if (dotAll && ! p.endsWith("/*"))
+						p += "/*";
+					v.get().add(UrlPathMatcher.of(p));
 				}
+			}
 
 			if (v.get().isEmpty()) {
 				var mi = MethodInfo.of(restMethod);
@@ -1948,12 +1951,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				else if (mi.hasAnnotation(RestDelete.class))
 					httpMethod = "delete";
 				else if (mi.hasAnnotation(RestOp.class)) {
-					httpMethod = AnnotationProvider.INSTANCE.find(RestOp.class, mi)
+					// @formatter:off
+					httpMethod = AP.find(RestOp.class, mi)
 						.stream()
 						.map(x -> x.inner().method())
-						.filter(x -> isNotEmpty(x))
+						.filter(Utils::isNotEmpty)
 						.findFirst()
 						.orElse(null);
+					// @formatter:on
 				}
 
 				p = HttpUtils.detectHttpPath(restMethod, httpMethod);
@@ -1982,40 +1987,40 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p>
 		 * This includes: {@link Header}, {@link Query}, {@link FormData}.
 		 */
-	protected void processParameterAnnotations() {
-		for (var aa : restMethod.getParameterAnnotations()) {
+		protected void processParameterAnnotations() {
+			for (var aa : restMethod.getParameterAnnotations()) {
 
-		String def = null;
-		for (var a : aa) {
-			if (a instanceof Schema s) {
-				def = joinnlFirstNonEmptyArray(s._default(), s.df());
-			}
-		}
+				String def = null;
+				for (var a : aa) {
+					if (a instanceof Schema a2) {
+						def = joinnlFirstNonEmptyArray(a2._default(), a2.df());
+					}
+				}
 
-		for (var a : aa) {
-			if (a instanceof Header h) {
-					if (nn(def)) {
-						try {
-							defaultRequestHeaders().set(basicHeader(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
-						} catch (ParseException e) {
-							throw new ConfigException(e, "Malformed @Header annotation");
+				for (var a : aa) {
+					if (a instanceof Header a2) {
+						if (nn(def)) {
+							try {
+								defaultRequestHeaders().set(basicHeader(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));
+							} catch (ParseException e) {
+								throw new ConfigException(e, "Malformed @Header annotation");
+							}
 						}
-			}
-		}
-		if (a instanceof Query h) {
-			if (nn(def)) {
-						try {
-							defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
-						} catch (ParseException e) {
-							throw new ConfigException(e, "Malformed @Query annotation");
+					}
+					if (a instanceof Query a2) {
+						if (nn(def)) {
+							try {
+								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));
+							} catch (ParseException e) {
+								throw new ConfigException(e, "Malformed @Query annotation");
+							}
 						}
-			}
-		}
-		if (a instanceof FormData h) {
-			if (nn(def)) {
-						try {
-							defaultRequestFormData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
-						} catch (ParseException e) {
+					}
+					if (a instanceof FormData a2) {
+						if (nn(def)) {
+							try {
+								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));
+							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @FormData annotation");
 							}
 						}
@@ -2028,11 +2033,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		Optional<EncoderSet> getEncoders() { return opt(encoders).map(EncoderSet.Builder::build); }
 
-	RestGuardList getGuards() {
-		var b = guards();
-		var roleGuard = opt(this.roleGuard).orElseGet(CollectionUtils::set);
+		RestGuardList getGuards() {
+			var b = guards();
+			var roleGuard = opt(this.roleGuard).orElseGet(CollectionUtils::set);
 
-		for (var rg : roleGuard) {
+			for (var rg : roleGuard) {
 				try {
 					b.append(new RoleBasedRestGuard(rolesDeclared, rg));
 				} catch (java.text.ParseException e1) {
@@ -2128,8 +2133,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			else
 				debug = DebugEnablement.create(context.getBeanStore()).enable(builder.debug, "*").build();
 
-		mi = MethodInfo.of(method).accessible();
-		var r = context.getResource();
+			mi = MethodInfo.of(method).accessible();
+			var r = context.getResource();
 
 		// @formatter:off
 		var bs = BeanStore.of(context.getRootBeanStore(), r)
@@ -2146,12 +2151,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			partSerializer = bs.add(HttpPartSerializer.class, builder.getPartSerializer().orElse(context.getPartSerializer()));
 			partParser = bs.add(HttpPartParser.class, builder.getPartParser().orElse(context.getPartParser()));
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
-		converters = bs.add(RestConverter[].class, builder.converters().build().asArray());
-		guards = bs.add(RestGuard[].class, builder.getGuards().asArray());
+			converters = bs.add(RestConverter[].class, builder.converters().build().asArray());
+			guards = bs.add(RestGuard[].class, builder.getGuards().asArray());
 
-		var matchers = builder.getMatchers(context);
-		optionalMatchers = matchers.getOptionalEntries();
-		requiredMatchers = matchers.getRequiredEntries();
+			var matchers = builder.getMatchers(context);
+			optionalMatchers = matchers.getOptionalEntries();
+			requiredMatchers = matchers.getRequiredEntries();
 
 			pathMatchers = bs.add(UrlPathMatcher[].class, builder.getPathMatchers().asArray());
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
@@ -2166,14 +2171,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			defaultRequestAttributes = builder.defaultRequestAttributes();
 
 			int _hierarchyDepth = 0;
-			Class<?> sc = method.getDeclaringClass().getSuperclass();
+			var sc = method.getDeclaringClass().getSuperclass();
 			while (nn(sc)) {
 				_hierarchyDepth++;
 				sc = sc.getSuperclass();
 			}
 			hierarchyDepth = _hierarchyDepth;
 
-			String _httpMethod = builder.httpMethod;
+			var _httpMethod = builder.httpMethod;
 			if (_httpMethod == null)
 				_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
 			if ("METHOD".equals(_httpMethod))
@@ -2525,16 +2530,16 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return 2;
 		}
 
-	try {
-		var req = session.getRequest();
+		try {
+			var req = session.getRequest();
 
-		// If the method implements matchers, test them.
-		for (var m : requiredMatchers)
-			if (! m.matches(req))
-				return 1;
-		if (optionalMatchers.length > 0) {
-			boolean matches = false;
-			for (var m : optionalMatchers)
+			// If the method implements matchers, test them.
+			for (var m : requiredMatchers)
+				if (! m.matches(req))
+					return 1;
+			if (optionalMatchers.length > 0) {
+				var matches = false;
+				for (var m : optionalMatchers)
 					matches |= m.matches(req);
 				if (! matches)
 					return 1;

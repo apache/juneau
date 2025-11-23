@@ -46,9 +46,10 @@ public class VersionRange {
 		range = range.trim();
 		if (! range.isEmpty()) {
 			char c1 = range.charAt(0), c2 = range.charAt(range.length() - 1);
-			int c = range.indexOf(',');
+			var c = range.indexOf(',');
 			if (c > -1 && (c1 == '[' || c1 == '(') && (c2 == ']' || c2 == ')')) {
-				String v1 = range.substring(1, c), v2 = range.substring(c + 1, range.length() - 1);
+				var v1 = range.substring(1, c);
+				var v2 = range.substring(c + 1, range.length() - 1);
 				minVersion = new Version(v1);
 				maxVersion = new Version(v2);
 				minExclusive = c1 == '(';

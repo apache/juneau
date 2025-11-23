@@ -50,11 +50,11 @@ public abstract class MultipartResolvingVar extends SimpleVar {
 
 	@Override /* Overridden from Var */
 	public String doResolve(VarResolverSession session, String s) throws Exception {
-		int i = s.indexOf(',');
+		var i = s.indexOf(',');
 		if (i == -1)
 			return resolve(session, s.trim());
 		for (var s2 : splita(s)) {
-			String v = resolve(session, s2);
+			var v = resolve(session, s2);
 			if (nn(v))
 				return v;
 		}

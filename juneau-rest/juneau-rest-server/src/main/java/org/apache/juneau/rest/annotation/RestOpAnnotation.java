@@ -419,9 +419,9 @@ public class RestOpAnnotation {
 			string(a.method()).ifPresent(x -> b.httpMethod(x));
 			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 
-			String v = trim(string(a.value()).orElse(null));
+			var v = trim(string(a.value()).orElse(null));
 			if (nn(v)) {
-				int i = v.indexOf(' ');
+				var i = v.indexOf(' ');
 				if (i == -1) {
 					b.httpMethod(v);
 				} else {

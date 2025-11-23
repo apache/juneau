@@ -253,7 +253,6 @@ public class OpenApi extends OpenApiElement {
 		}
 	}
 
-
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
@@ -328,6 +327,7 @@ public class OpenApi extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(components), "components")
 			.addIf(nn(externalDocs), "externalDocs")
@@ -338,6 +338,7 @@ public class OpenApi extends OpenApiElement {
 			.addIf(nn(servers), "servers")
 			.addIf(nn(tags), "tags")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

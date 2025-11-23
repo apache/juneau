@@ -1503,7 +1503,7 @@ public class CollectionUtils {
 	@SuppressWarnings("unchecked")
 	public static <E> List<E> toList(Object array, Class<E> elementType) {
 		var l = new ArrayList<E>(Array.getLength(array));
-		for (int i = 0; i < Array.getLength(array); i++)
+		for (var i = 0; i < Array.getLength(array); i++)
 			l.add((E)Array.get(array, i));
 		return l;
 	}
@@ -1536,8 +1536,8 @@ public class CollectionUtils {
 	 */
 	public static List<Object> toObjectList(Object array) {
 		var l = new ArrayList<>(Array.getLength(array));
-		for (int i = 0; i < Array.getLength(array); i++) {
-			Object o = Array.get(array, i);
+		for (var i = 0; i < Array.getLength(array); i++) {
+			var o = Array.get(array, i);
 			if (isArray(o))
 				o = toObjectList(o);
 			l.add(o);
@@ -1556,8 +1556,8 @@ public class CollectionUtils {
 	 * @return The collection as a string array.
 	 */
 	public static String[] toStringArray(Collection<?> c) {
-		String[] r = new String[c.size()];
-		int i = 0;
+		var r = new String[c.size()];
+		var i = 0;
 		for (var o : c)
 			r[i++] = s(o);
 		return r;
@@ -1788,42 +1788,42 @@ public class CollectionUtils {
 		if (componentType.isPrimitive()) {
 			if (componentType == int.class) {
 				var arr = (int[])array;
-				for (int value : arr) {
+				for (var value : arr) {
 					result.add(value);
 				}
 			} else if (componentType == long.class) {
 				var arr = (long[])array;
-				for (long value : arr) {
+				for (var value : arr) {
 					result.add(value);
 				}
 			} else if (componentType == double.class) {
 				var arr = (double[])array;
-				for (double value : arr) {
+				for (var value : arr) {
 					result.add(value);
 				}
 			} else if (componentType == float.class) {
 				var arr = (float[])array;
-				for (float value : arr) {
+				for (var value : arr) {
 					result.add(value);
 				}
 			} else if (componentType == boolean.class) {
 				var arr = (boolean[])array;
-				for (boolean value : arr) {
+				for (var value : arr) {
 					result.add(value);
 				}
 			} else if (componentType == byte.class) {
 				var arr = (byte[])array;
-				for (byte value : arr) {
+				for (var value : arr) {
 					result.add(value);
 				}
 			} else if (componentType == char.class) {
 				var arr = (char[])array;
-				for (char value : arr) {
+				for (var value : arr) {
 					result.add(value);
 				}
 			} else if (componentType == short.class) {
 				var arr = (short[])array;
-				for (short value : arr) {
+				for (var value : arr) {
 					result.add(value);
 				}
 			}
@@ -2104,7 +2104,7 @@ public class CollectionUtils {
 	 * @param value The values to initialize the array with.
 	 * @return A new int array.
 	 */
-	public static int[] ints(int... value) {
+	public static int[] ints(int...value) {
 		return value;
 	}
 
@@ -2119,7 +2119,7 @@ public class CollectionUtils {
 	 * @param value The values to initialize the array with.
 	 * @return A new long array.
 	 */
-	public static long[] longs(long... value) {
+	public static long[] longs(long...value) {
 		return value;
 	}
 
@@ -2134,7 +2134,7 @@ public class CollectionUtils {
 	 * @param value The values to initialize the array with.
 	 * @return A new float array.
 	 */
-	public static float[] floats(float... value) {
+	public static float[] floats(float...value) {
 		return value;
 	}
 
@@ -2149,7 +2149,7 @@ public class CollectionUtils {
 	 * @param value The values to initialize the array with.
 	 * @return A new double array.
 	 */
-	public static double[] doubles(double... value) {
+	public static double[] doubles(double...value) {
 		return value;
 	}
 
@@ -2166,9 +2166,9 @@ public class CollectionUtils {
 	 * @param value The int values to convert to shorts. Values outside the short range (-32768 to 32767) will be truncated.
 	 * @return A new short array.
 	 */
-	public static short[] shorts(int... value) {
-		short[] result = new short[value.length];
-		for (int i = 0; i < value.length; i++) {
+	public static short[] shorts(int...value) {
+		var result = new short[value.length];
+		for (var i = 0; i < value.length; i++) {
 			result[i] = (short)value[i];
 		}
 		return result;
@@ -2187,9 +2187,9 @@ public class CollectionUtils {
 	 * @param value The int values to convert to bytes. Values outside the byte range (-128 to 127) will be truncated.
 	 * @return A new byte array.
 	 */
-	public static byte[] bytes(int... value) {
-		byte[] result = new byte[value.length];
-		for (int i = 0; i < value.length; i++) {
+	public static byte[] bytes(int...value) {
+		var result = new byte[value.length];
+		for (var i = 0; i < value.length; i++) {
 			result[i] = (byte)value[i];
 		}
 		return result;
@@ -2206,7 +2206,7 @@ public class CollectionUtils {
 	 * @param value The values to initialize the array with.
 	 * @return A new boolean array.
 	 */
-	public static boolean[] booleans(boolean... value) {
+	public static boolean[] booleans(boolean...value) {
 		return value;
 	}
 
@@ -2221,7 +2221,7 @@ public class CollectionUtils {
 	 * @param value The values to initialize the array with.
 	 * @return A new char array.
 	 */
-	public static char[] chars(char... value) {
+	public static char[] chars(char...value) {
 		return value;
 	}
 

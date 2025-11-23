@@ -58,7 +58,7 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class FormDataArg implements RestOpArg {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Static creator.
@@ -188,7 +188,7 @@ public class FormDataArg implements RestOpArg {
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		RequestFormParams rh = req.getFormParams();
 		BeanSession bs = req.getBeanSession();
-		ClassMeta<?> cm = bs.getClassMeta(type.innerType());
+		var cm = bs.getClassMeta(type.innerType());
 
 		if (multi) {
 			Collection c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());

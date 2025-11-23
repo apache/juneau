@@ -20,7 +20,6 @@ import static org.apache.juneau.common.utils.DateUtils.*;
 
 import java.time.*;
 import java.time.format.*;
-import java.time.temporal.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -302,7 +301,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		if (f == null)
 			return null;
 		ZoneId offset = session.getTimeZoneId();
-		TemporalAccessor ta = new DefaultingTemporalAccessor(formatter.parse(f), offset);
+		var ta = new DefaultingTemporalAccessor(formatter.parse(f), offset);
 		return Date.from(ZonedDateTime.from(ta).toInstant());
 	}
 }

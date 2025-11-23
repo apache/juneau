@@ -83,7 +83,7 @@ public class BasicStringHeader extends BasicHeader {
 	public static BasicStringHeader ofPair(String pair) {
 		if (pair == null)
 			return null;
-		int i = pair.indexOf(':');
+		var i = pair.indexOf(':');
 		if (i == -1)
 			i = pair.indexOf('=');
 		if (i == -1)

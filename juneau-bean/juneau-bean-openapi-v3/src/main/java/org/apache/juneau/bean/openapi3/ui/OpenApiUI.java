@@ -54,12 +54,14 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		}
 	}
 
+	// @formatter:off
 	static final FileFinder RESOURCES = FileFinder
 		.create(BeanStore.INSTANCE)
 		.cp(OpenApiUI.class, null, true)
 		.dir(",")
 		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)
 		.build();
+	// @formatter:on
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options", "head", "patch", "trace");
 
@@ -98,30 +100,20 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		if (css == null)
 			css = RESOURCES.getString("OpenApiUI.css", null).orElse(null);
 
-		var outer = div(
-			style(css),
-			script("text/javascript", RESOURCES.getString("OpenApiUI.js", null).orElse(null)),
-			header(s)
-		)._class("openapi-ui");
+		var outer = div(style(css), script("text/javascript", RESOURCES.getString("OpenApiUI.js", null).orElse(null)), header(s))._class("openapi-ui");
 
 		// Operations without tags are rendered first.
 		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
 
 		if (nn(s.openApi.getTags())) {
 			s.openApi.getTags().forEach(x -> {
-				var tagBlock = div()._class("tag-block tag-block-open").children(
-					tagBlockSummary(x),
-					tagBlockContents(s, x)
-				);
+				var tagBlock = div()._class("tag-block tag-block-open").children(tagBlockSummary(x), tagBlockContents(s, x));
 				outer.child(tagBlock);
 			});
 		}
 
 		if (nn(s.openApi.getComponents()) && nn(s.openApi.getComponents().getSchemas())) {
-			var modelBlock = div()._class("tag-block").children(
-				modelsBlockSummary(),
-				modelsBlockContents(s)
-			);
+			var modelBlock = div()._class("tag-block").children(modelsBlockSummary(), modelsBlockContents(s));
 			outer.child(modelBlock);
 		}
 
@@ -262,36 +254,22 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 		var sectionTable = table(tr(th("Name"), th("Description"), th("Schema")))._class("section-table");
 
-		var headers = div(
-			div("Headers:")._class("section-name"),
-			sectionTable
-		)._class("headers");
+		var headers = div(div("Headers:")._class("section-name"), sectionTable)._class("headers");
 
-		ri.getHeaders().forEach((k,v) ->
-			sectionTable.child(
-				tr(
-					td(k)._class("name"),
-					td(toBRL(v.getDescription()))._class("description"),
-					td(v.asMap().keepAll("type","format","items","collectionFormat","default","maximum","exclusiveMaximum","minimum","exclusiveMinimum","maxLength","minLength","pattern","maxItems","minItems","uniqueItems","enum","multipleOf"))
-				)
-			)
-		);
+		ri.getHeaders()
+			.forEach((k, v) -> sectionTable.child(tr(td(k)._class("name"), td(toBRL(v.getDescription()))._class("description"), td(v.asMap().keepAll("type", "format", "items", "collectionFormat",
+				"default", "maximum", "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern", "maxItems", "minItems", "uniqueItems", "enum", "multipleOf")))));
 
 		return headers;
 	}
 
 	private static Div modelBlock(String modelName, SchemaInfo model) {
-		return div()._class("op-block op-block-closed model").children(
-			modelBlockSummary(modelName, model),
-			div(model)._class("op-block-contents")
-		);
+		return div()._class("op-block op-block-closed model").children(modelBlockSummary(modelName, model), div(model)._class("op-block-contents"));
 	}
 
 	private static HtmlElement modelBlockSummary(String modelName, SchemaInfo model) {
-		return div()._class("op-block-summary").onclick("toggleOpBlock(this)").children(
-			span(modelName)._class("method-button"),
-			nn(model.getDescription()) ? span(toBRL(model.getDescription()))._class("summary") : null
-		);
+		return div()._class("op-block-summary").onclick("toggleOpBlock(this)").children(span(modelName)._class("method-button"),
+			nn(model.getDescription()) ? span(toBRL(model.getDescription()))._class("summary") : null);
 	}
 
 	// Creates the contents under the "Model" header.
@@ -314,18 +292,12 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		if (! (nn(op.getDeprecated()) && op.getDeprecated()) && ! STANDARD_METHODS.contains(opClass))
 			opClass = "other";
 
-		return div()._class("op-block op-block-closed " + opClass).children(
-			opBlockSummary(path, opName, op),
-			div(tableContainer(s, op))._class("op-block-contents")
-		);
+		return div()._class("op-block op-block-closed " + opClass).children(opBlockSummary(path, opName, op), div(tableContainer(s, op))._class("op-block-contents"));
 	}
 
 	private static HtmlElement opBlockSummary(String path, String opName, Operation op) {
-		return div()._class("op-block-summary").onclick("toggleOpBlock(this)").children(
-			span(opName.toUpperCase())._class("method-button"),
-			span(path)._class("path"),
-			nn(op.getSummary()) ? span(op.getSummary())._class("summary") : null
-		);
+		return div()._class("op-block-summary").onclick("toggleOpBlock(this)").children(span(opName.toUpperCase())._class("method-button"), span(path)._class("path"),
+			nn(op.getSummary()) ? span(op.getSummary())._class("summary") : null);
 	}
 
 	private static Div tableContainer(Session s, Operation op) {
@@ -343,17 +315,10 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 				var piName = x.getName();
 				var required = nn(x.getRequired()) && x.getRequired();
 
-				var parameterKey = td(
-					div(piName)._class("name" + (required ? " required" : "")),
-					required ? div("required")._class("requiredlabel") : null,
-					nn(x.getSchema()) ? div(x.getSchema().getType())._class("type") : null,
-					div('(' + x.getIn() + ')')._class("in")
-				)._class("parameter-key");
+				var parameterKey = td(div(piName)._class("name" + (required ? " required" : "")), required ? div("required")._class("requiredlabel") : null,
+					nn(x.getSchema()) ? div(x.getSchema().getType())._class("type") : null, div('(' + x.getIn() + ')')._class("in"))._class("parameter-key");
 
-				var parameterValue = td(
-					div(toBRL(x.getDescription()))._class("description"),
-					examples(s, x)
-				)._class("parameter-value");
+				var parameterValue = td(div(toBRL(x.getDescription()))._class("description"), examples(s, x))._class("parameter-value");
 
 				parameters.child(tr(parameterKey, parameterValue));
 			});
@@ -370,11 +335,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 			op.getResponses().forEach((k, v) -> {
 				var code = td(k)._class("response-key");
 
-				var codeValue = td(
-					div(toBRL(v.getDescription()))._class("description"),
-					examples(s, v),
-					headers(v)
-				)._class("response-value");
+				var codeValue = td(div(toBRL(v.getDescription()))._class("description"), examples(s, v), headers(v))._class("response-value");
 
 				responses.child(tr(code, codeValue));
 			});
@@ -417,10 +378,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		var ed = t.getExternalDocs();
 
 		var content = nn(ed) && nn(ed.getDescription()) ? ed.getDescription() : (nn(ed) ? ed.getUrl() : null);
-		return div()._class("tag-block-summary").onclick("toggleTagBlock(this)").children(
-			span(t.getName())._class("name"),
-			span(toBRL(t.getDescription()))._class("description"),
-			nn(ed) && nn(ed.getUrl()) ? span(a(ed.getUrl(), content))._class("extdocs") : null
-		);
+		return div()._class("tag-block-summary").onclick("toggleTagBlock(this)").children(span(t.getName())._class("name"), span(toBRL(t.getDescription()))._class("description"),
+			nn(ed) && nn(ed.getUrl()) ? span(a(ed.getUrl(), content))._class("extdocs") : null);
 	}
 }

@@ -34,6 +34,8 @@ import org.junit.jupiter.api.*;
 
 class MethodInfo_Test extends TestBase {
 
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	@Documented
 	@Target({METHOD,TYPE})
 	@Retention(RUNTIME)
@@ -350,7 +352,7 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	private static List<A> annotations(MethodInfo mi, Class<? extends Annotation> a) {
-		return rstream(AnnotationProvider.INSTANCE.find(a, mi)).map(AnnotationInfo::inner).map(x -> (A)x).toList();
+		return rstream(AP.find(a, mi)).map(AnnotationInfo::inner).map(x -> (A)x).toList();
 	}
 
 	@Test void getAnnotationAny() {

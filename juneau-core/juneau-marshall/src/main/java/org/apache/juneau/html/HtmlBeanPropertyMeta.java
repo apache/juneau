@@ -75,18 +75,19 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
+	 * @param ap The annotation provider.
 	 * @param mp HTML metadata provider (for finding information about other artifacts).
 	 */
 	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm, AnnotationProvider ap, HtmlMetaProvider mp) {
 		super(bpm);
 
-		Builder b = new Builder();
-	if (nn(bpm.getInnerField()))
-		ap.find(Html.class, info(bpm.getInnerField())).forEach(x -> b.findHtmlInfo(x.inner()));
-	if (nn(bpm.getGetter()))
-		ap.find(Html.class, info(bpm.getGetter())).forEach(x -> b.findHtmlInfo(x.inner()));
-	if (nn(bpm.getSetter()))
-		ap.find(Html.class, info(bpm.getSetter())).forEach(x -> b.findHtmlInfo(x.inner()));
+		var b = new Builder();
+		if (nn(bpm.getInnerField()))
+			ap.find(Html.class, info(bpm.getInnerField())).forEach(x -> b.findHtmlInfo(x.inner()));
+		if (nn(bpm.getGetter()))
+			ap.find(Html.class, info(bpm.getGetter())).forEach(x -> b.findHtmlInfo(x.inner()));
+		if (nn(bpm.getSetter()))
+			ap.find(Html.class, info(bpm.getSetter())).forEach(x -> b.findHtmlInfo(x.inner()));
 
 		this.format = b.format;
 		this.noTables = b.noTables;

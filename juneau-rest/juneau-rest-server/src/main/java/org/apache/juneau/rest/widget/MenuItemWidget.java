@@ -124,9 +124,10 @@ public abstract class MenuItemWidget extends Widget {
 		var sb = new StringBuilder();
 
 		// Need a unique number to define unique function names.
-		Integer id = null;
+		var id = (Integer)null;
 
-		String pre = nullIfEmpty(getBeforeShowScript(req, res)), post = nullIfEmpty(getAfterShowScript(req, res));
+		var pre = nullIfEmpty(getBeforeShowScript(req, res));
+		var post = nullIfEmpty(getAfterShowScript(req, res));
 
 		sb.append("\n<div class='menu-item'>");
 		if (nn(pre) || nn(post)) {
@@ -146,24 +147,24 @@ public abstract class MenuItemWidget extends Widget {
 			sb.append("\n\t</script>");
 		}
 		// @formatter:off
-		String onclick = (pre == null ? "" : "onPreShow"+id+"();") + "menuClick(this);" + (post == null ? "" : "onPostShow"+id+"();");
+		var onclick = (pre == null ? "" : "onPreShow"+id+"();") + "menuClick(this);" + (post == null ? "" : "onPostShow"+id+"();");
 		sb.append(""
 			+ "\n\t<a onclick='"+onclick+"'>"+getLabel(req, res)+"</a>"
 			+ "\n<div class='popup-content'>"
 		);
 		// @formatter:on
-		Object o = getContent(req, res);
-		if (o instanceof Reader) {
-			try (Reader r = (Reader)o; Writer w = new StringBuilderWriter(sb)) {
+		var o = getContent(req, res);
+		if (o instanceof Reader o2) {
+			try (Reader r = o2; Writer w = new StringBuilderWriter(sb)) {
 				pipe(r, w);
 			} catch (IOException e) {
 				throw toRex(e);
 			}
-		} else if (o instanceof CharSequence) {
-			sb.append((CharSequence)o);
+		} else if (o instanceof CharSequence o2) {
+			sb.append(o2);
 		} else {
 			// @formatter:off
-			WriterSerializerSession session = HtmlSerializer.DEFAULT
+			var session = HtmlSerializer.DEFAULT
 				.createSession()
 				.properties(req.getAttributes().asMap())
 				.debug(req.isDebug() ? true : null)
@@ -215,7 +216,7 @@ public abstract class MenuItemWidget extends Widget {
 	}
 
 	private static Integer getId(RestRequest req) {
-		Integer id = req.getAttribute("LastMenuItemId").as(Integer.class).orElse(0) + 1;
+		var id = req.getAttribute("LastMenuItemId").as(Integer.class).orElse(0) + 1;
 		req.setAttribute("LastMenuItemId", id);
 		return id;
 	}

@@ -143,13 +143,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		private static ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
-			Class<?> c = s.value();
+			var c = s.value();
 			if (isVoid(c))
 				c = s.impl();
 			if (isVoid(c))
-			return null;
-		var ci = info(c);
-		if (ci.isChildOf(ObjectSwap.class)) {
+				return null;
+			var ci = info(c);
+			if (ci.isChildOf(ObjectSwap.class)) {
 				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
 				if (nn(ps.forMediaTypes()))
 					throw unsupportedOp("TODO - Media types on swaps not yet supported on bean properties.");
@@ -219,11 +219,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return false;
 
 			canRead |= (nn(field) || nn(getter));
-			canWrite |= (nn(field ) || nn(setter));
+			canWrite |= (nn(field) || nn(setter));
 
-		var ifi = innerField == null ? null : info(innerField);
-		var gi = getter == null ? null : info(getter);
-		var si = setter == null ? null : info(setter);
+			var ifi = innerField == null ? null : info(innerField);
+			var gi = getter == null ? null : info(getter);
+			var si = setter == null ? null : info(setter);
 
 			if (nn(innerField)) {
 				List<Beanp> lp = list();
@@ -295,7 +295,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			isDyna = "*".equals(name);
 
 			// Do some annotation validation.
-			ClassInfo ci = rawTypeMeta.getInfo();
+			var ci = rawTypeMeta.getInfo();
 			if (nn(getter)) {
 				Class<?>[] pt = getter.getParameterTypes();
 				if (isDyna) {
@@ -325,9 +325,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				}
 			}
 			if (nn(field)) {
-			if (isDyna) {
-				if (! info(field.getType()).isChildOf(Map.class))
-					return false;
+				if (isDyna) {
+					if (! info(field.getType()).isChildOf(Map.class))
+						return false;
 				} else {
 					if (! ci.isChildOf(field.getType()))
 						return false;
@@ -371,8 +371,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private static String findClassName(Object o) {
 		if (o == null)
 			return null;
-		if (o instanceof Class)
-			return ((Class<?>)o).getName();
+		if (o instanceof Class o2)
+			return o2.getName();
 		return cn(o);
 	}
 
@@ -468,7 +468,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		Object bean = m.getBean(true);
 
-		ClassMeta<?> elementType = rawTypeMeta.getElementType();
+		var elementType = rawTypeMeta.getElementType();
 
 		try {
 			Object v = session.convertToType(value, elementType);
@@ -554,7 +554,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		Object bean = m.getBean(true);
 
-		ClassMeta<?> elementType = rawTypeMeta.getElementType();
+		var elementType = rawTypeMeta.getElementType();
 
 		try {
 			Object v = session.convertToType(value, elementType);
@@ -641,10 +641,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (nn(a)) {
-		if (nn(field)) ap.find(a, info(field)).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
-		if (nn(getter)) ap.find(a, info(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
-		if (nn(setter)) ap.find(a, info(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
-	}
+			if (nn(field))
+				ap.find(a, info(field)).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
+			if (nn(getter))
+				ap.find(a, info(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
+			if (nn(setter))
+				ap.find(a, info(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
+		}
 		return this;
 	}
 
@@ -680,12 +683,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	@SuppressWarnings("null")
 	public <A extends Annotation> List<A> getAllAnnotationsParentFirst(Class<A> a) {
-		List<A> l = new LinkedList<>();
+		var l = new LinkedList<A>();
 		var ap = bc.getAnnotationProvider();
-	var fi = field == null ? null : info(field);
-	var gi = getter == null ? null : info(getter);
-	var si = setter == null ? null : info(setter);
-	if (a == null)
+		var fi = field == null ? null : info(field);
+		var gi = getter == null ? null : info(getter);
+		var si = setter == null ? null : info(setter);
+		if (a == null)
 			return l;
 		rstream(ap.find(a, getBeanMeta().getClassMeta().getInfo())).forEach(x -> l.add(x.inner()));
 		if (nn(field)) {
@@ -694,23 +697,23 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 		if (nn(gi)) {
 			// Walk up the inheritance hierarchy for the getter method
-		forEachParentMethod(getter, parentGetter -> {
-			ap.find(a, info(parentGetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-		});
+			forEachParentMethod(getter, parentGetter -> {
+				ap.find(a, info(parentGetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
+			});
 			ap.find(a, gi, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, gi.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(setter)) {
 			// Walk up the inheritance hierarchy for the setter method
-		forEachParentMethod(setter, parentSetter -> {
-			ap.find(a, info(parentSetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-		});
+			forEachParentMethod(setter, parentSetter -> {
+				ap.find(a, info(parentSetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
+			});
 			ap.find(a, si, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, info(setter.getReturnType()))).forEach(x -> l.add(x.inner()));
 		}
-	if (nn(extraKeys)) {
-		MethodInfo eki = info(extraKeys);
-		// Walk up the inheritance hierarchy for the extraKeys method
+		if (nn(extraKeys)) {
+			var eki = info(extraKeys);
+			// Walk up the inheritance hierarchy for the extraKeys method
 			forEachParentMethod(extraKeys, parentExtraKeys -> {
 				ap.find(a, info(parentExtraKeys), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			});
@@ -933,8 +936,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (cm.isMap())
 			return new FilteredMap(cm, (Map)o, properties);
 		if (cm.isObject()) {
-			if (o instanceof Map)
-				return new FilteredMap(cm, (Map)o, properties);
+			if (o instanceof Map o2)
+				return new FilteredMap(cm, o2, properties);
 			BeanMeta bm = bc.getBeanMeta(o.getClass());
 			if (nn(bm))
 				return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
@@ -955,15 +958,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (method == null)
 			return;
 
-		String methodName = method.getName();
+		var methodName = method.getName();
 		Class<?>[] paramTypes = method.getParameterTypes();
-		Class<?> declaringClass = method.getDeclaringClass();
+		var declaringClass = method.getDeclaringClass();
 
 		// Collect parent methods in a list (we'll reverse it to get parent-to-child order)
-		List<Method> parentMethods = new LinkedList<>();
+		var parentMethods = new LinkedList<Method>();
 
 		// Walk up the class hierarchy
-		Class<?> currentClass = declaringClass.getSuperclass();
+		var currentClass = declaringClass.getSuperclass();
 		while (nn(currentClass) && currentClass != Object.class) {
 			try {
 				Method parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
@@ -1046,9 +1049,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			else if (nn(getter))
 				m = (Map<String,Object>)getter.invoke(bean);
 			else
-				throw bex(beanMeta.c,
-					"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
-					this.getClassMeta().getInnerClass().getName(), findClassName(val));
+				throw bex(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null",
+					name, this.getClassMeta().getInnerClass().getName(), findClassName(val));
 			return (m == null ? null : m.put(pName, val));
 		}
 		if (nn(setter))
@@ -1057,8 +1059,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			field.set(bean, val);
 			return null;
 		}
-		throw bex(beanMeta.c,
-			"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
+		throw bex(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
 			this.getClassMeta().getInnerClass().getName(), findClassName(val));
 	}
 
@@ -1097,28 +1098,28 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			try {
 
 				Object r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
-				Class<?> propertyClass = rawTypeMeta.getInnerClass();
-				ClassInfo pcInfo = rawTypeMeta.getInfo();
+				var propertyClass = rawTypeMeta.getInnerClass();
+				var pcInfo = rawTypeMeta.getInfo();
 
 				if (value == null && (isMap || isCollection)) {
 					invokeSetter(bean, pName, null);
 					return r;
 				}
 
-				Class<?> vc = value == null ? null : value.getClass();
+				var vc = value == null ? null : value.getClass();
 
 				if (isMap && (setter == null || ! pcInfo.isParentOf(vc))) {
 
 					if (! (value instanceof Map)) {
-						if (value instanceof CharSequence)
-							value = JsonMap.ofJson((CharSequence)value).session(session);
+						if (value instanceof CharSequence value2)
+							value = JsonMap.ofJson(value2).session(session);
 						else
 							throw bex(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
 
 					var valueMap = (Map)value;
 					var propMap = (Map)r;
-					ClassMeta<?> valueType = rawTypeMeta.getValueType();
+					var valueType = rawTypeMeta.getValueType();
 
 					// If the property type is abstract, then we either need to reuse the existing
 					// map (if it's not null), or try to assign the value directly.
@@ -1168,8 +1169,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				} else if (isCollection && (setter == null || ! pcInfo.isParentOf(vc))) {
 
 					if (! (value instanceof Collection)) {
-						if (value instanceof CharSequence)
-							value = new JsonList((CharSequence)value).setBeanSession(session);
+						if (value instanceof CharSequence value2)
+							value = new JsonList(value2).setBeanSession(session);
 						else
 							throw bex(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}

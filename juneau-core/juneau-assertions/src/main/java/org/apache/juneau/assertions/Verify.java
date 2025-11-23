@@ -82,7 +82,7 @@ public class Verify {
 	public String is(Object expected) {
 		if (expected == o)
 			return null;
-		if (expected == null || o == null || !expected.equals(o))
+		if (expected == null || o == null || ! expected.equals(o))
 			return nn(msg) ? msg.get() : format(MSG_unexpectedValue, expected, o);
 		return null;
 	}

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.common.reflect;
 
-
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -106,9 +105,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * 	An unmodifiable list of annotations on this parameter, never <jk>null</jk>.
 	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
-	public List<AnnotationInfo<Annotation>> getAnnotations() {
-		return annotations.get();
-	}
+	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotations.get(); }
 
 	/**
 	 * Returns <jk>true</jk> if this parameter can accept the specified value.
@@ -160,23 +157,20 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return A list of matching parameters including this one, in child-to-parent order.
 	 */
-	public List<ParameterInfo> getMatchingParameters() {
-		return matchingParameters.get();
-	}
+	public List<ParameterInfo> getMatchingParameters() { return matchingParameters.get(); }
 
 	private List<ParameterInfo> findMatchingParameters() {
-		if (executable.isConstructor()) {
+		if (executable instanceof ConstructorInfo executable2) {
 			// For constructors: search parent class constructors for parameters with matching index and type
 			// Note: We match by index and type only, not by name, to avoid circular dependency
 			// (getName() needs getMatchingParameters() which needs getName())
-			var ci = (ConstructorInfo)executable;
 			var list = new ArrayList<ParameterInfo>();
 
 			// Add this parameter first
 			list.add(this);
 
 			// Search parent classes for matching parameters
-			var cc = ci.getDeclaringClass().getSuperclass();
+			var cc = executable2.getDeclaringClass().getSuperclass();
 			while (nn(cc)) {
 				// Check all constructors in parent class
 				for (var pc : cc.getDeclaredConstructors()) {
@@ -238,9 +232,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see #getResolvedQualifier()
 	 * @see #getName()
 	 */
-	public String getResolvedName() {
-		return resolvedName.get();
-	}
+	public String getResolvedName() { return resolvedName.get(); }
 
 	static void reset() {
 		DISABLE_PARAM_NAME_DETECTION.reset();
@@ -253,7 +245,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		for (var mp : getMatchingParameters()) {
 			for (var ai : mp.getAnnotations()) {
 				if (ai.hasSimpleName("Name")) {
-					String value = ai.getValue().orElse(null);
+					var value = ai.getValue().orElse(null);
 					if (value != null)
 						return value;
 				}
@@ -261,7 +253,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		}
 
 		// Fall back to bytecode parameter name if available and not disabled
-		if (!DISABLE_PARAM_NAME_DETECTION.get() && inner.isNamePresent()) {
+		if (! DISABLE_PARAM_NAME_DETECTION.get() && inner.isNamePresent()) {
 			return inner.getName();
 		}
 
@@ -285,12 +277,11 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return The bean qualifier name if {@code @Named} annotation is found, or <jk>null</jk> if not annotated.
 	 * @see #getResolvedName()
 	 */
-	public String getResolvedQualifier() {
-		return resolvedQualifier.get();
-	}
+	public String getResolvedQualifier() { return resolvedQualifier.get(); }
 
 	private String findQualifierInternal() {
 		// Search through matching parameters in hierarchy for @Named or javax.inject.Qualifier annotations
+		// @formatter:off
 		return getMatchingParameters().stream()
 			.flatMap(mp -> mp.getAnnotations().stream())
 			.filter(ai -> ai.hasSimpleName("Named") || ai.hasSimpleName("Qualifier"))
@@ -298,6 +289,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			.filter(Objects::nonNull)
 			.findFirst()
 			.orElse(null);
+		// @formatter:on
 	}
 
 	/**
@@ -319,7 +311,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#getName()
 	 */
 	public String getName() {
-		String name = getResolvedName();
+		var name = getResolvedName();
 		return name != null ? name : inner.getName();
 	}
 
@@ -375,9 +367,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return The {@link ExecutableInfo} declaring this parameter.
 	 * @see Parameter#getDeclaringExecutable()
 	 */
-	public ExecutableInfo getDeclaringExecutable() {
-		return executable;
-	}
+	public ExecutableInfo getDeclaringExecutable() { return executable; }
 
 	/**
 	 * Returns the Java language modifiers for the parameter represented by this object, as an integer.
@@ -401,9 +391,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see java.lang.reflect.Modifier
 	 */
 	@Override
-	public int getModifiers() {
-		return inner.getModifiers();
-	}
+	public int getModifiers() { return inner.getModifiers(); }
 
 	/**
 	 * Returns <jk>true</jk> if the parameter has a name according to the <c>.class</c> file.
@@ -428,9 +416,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#isNamePresent()
 	 * @see #hasName()
 	 */
-	public boolean isNamePresent() {
-		return inner.isNamePresent();
-	}
+	public boolean isNamePresent() { return inner.isNamePresent(); }
 
 	/**
 	 * Returns <jk>true</jk> if this parameter is implicitly declared in source code.
@@ -453,9 +439,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this parameter is implicitly declared.
 	 * @see Parameter#isImplicit()
 	 */
-	public boolean isImplicit() {
-		return inner.isImplicit();
-	}
+	public boolean isImplicit() { return inner.isImplicit(); }
 
 	/**
 	 * Returns <jk>true</jk> if this parameter is a synthetic construct as defined by the Java Language Specification.
@@ -475,17 +459,15 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this parameter is a synthetic construct.
 	 * @see Parameter#isSynthetic()
 	 */
-	public boolean isSynthetic() {
-		return inner.isSynthetic();
-	}
+	public boolean isSynthetic() { return inner.isSynthetic(); }
 
 	@Override
 	public boolean is(ElementFlag flag) {
 		return switch (flag) {
 			case SYNTHETIC -> isSynthetic();
-			case NOT_SYNTHETIC -> !isSynthetic();
+			case NOT_SYNTHETIC -> ! isSynthetic();
 			case VARARGS -> isVarArgs();
-			case NOT_VARARGS -> !isVarArgs();
+			case NOT_VARARGS -> ! isVarArgs();
 			default -> super.is(flag);
 		};
 	}
@@ -521,9 +503,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this parameter represents a variable argument list.
 	 * @see Parameter#isVarArgs()
 	 */
-	public boolean isVarArgs() {
-		return inner.isVarArgs();
-	}
+	public boolean isVarArgs() { return inner.isVarArgs(); }
 
 	/**
 	 * Returns a {@link Type} object that identifies the parameterized type for this parameter.
@@ -545,9 +525,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return A {@link Type} object identifying the parameterized type.
 	 * @see Parameter#getParameterizedType()
 	 */
-	public Type getParameterizedType() {
-		return inner.getParameterizedType();
-	}
+	public Type getParameterizedType() { return inner.getParameterizedType(); }
 
 	/**
 	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the type of this parameter.
@@ -566,9 +544,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return An {@link AnnotatedType} object representing the type of this parameter.
 	 * @see Parameter#getAnnotatedType()
 	 */
-	public AnnotatedType getAnnotatedType() {
-		return inner.getAnnotatedType();
-	}
+	public AnnotatedType getAnnotatedType() { return inner.getAnnotatedType(); }
 
 	@Override
 	public String toString() {
@@ -580,9 +556,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.PARAMETER_TYPE;
-	}
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.PARAMETER_TYPE; }
 
 	@Override /* Annotatable */
 	public String getLabel() {

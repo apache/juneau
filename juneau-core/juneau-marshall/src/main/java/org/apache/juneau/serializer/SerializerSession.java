@@ -300,7 +300,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return The array as a list.
 	 */
 	protected static final List<Object> toList(Class<?> type, Object array) {
-		Class<?> componentType = type.getComponentType();
+		var componentType = type.getComponentType();
 		if (componentType.isPrimitive()) {
 			int l = Array.getLength(array);
 			var list = new ArrayList<>(l);
@@ -377,16 +377,16 @@ public class SerializerSession extends BeanTraverseSession {
 			if (cm.isArray() || (cm.isObject() && isArray(value))) {
 				if (((Object[])value).length == 0)
 					return true;
-		}
-		if (cm.isCollection() || (cm.isObject() && info(value).isChildOf(Collection.class))) {
-			if (((Collection<?>)value).isEmpty())
+			}
+			if (cm.isCollection() || (cm.isObject() && info(value).isChildOf(Collection.class))) {
+				if (((Collection<?>)value).isEmpty())
 					return true;
 			}
 		}
 
-	if (isTrimEmptyMaps()) {
-		if (cm.isMap() || (cm.isObject() && info(value).isChildOf(Map.class))) {
-			if (((Map<?,?>)value).isEmpty())
+		if (isTrimEmptyMaps()) {
+			if (cm.isMap() || (cm.isObject() && info(value).isChildOf(Map.class))) {
+				if (((Map<?,?>)value).isEmpty())
 					return true;
 			}
 		}
@@ -653,9 +653,9 @@ public class SerializerSession extends BeanTraverseSession {
 	public final String toString(Object o) {
 		if (o == null)
 			return null;
-	if (o.getClass() == Class.class)
-		return info((Class<?>)o).getNameFull();
-	if (o.getClass() == ClassInfo.class)
+		if (o.getClass() == Class.class)
+			return info((Class<?>)o).getNameFull();
+		if (o.getClass() == ClassInfo.class)
 			return ((ClassInfo)o).getNameFull();
 		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);
@@ -829,7 +829,7 @@ public class SerializerSession extends BeanTraverseSession {
 	protected final ClassMeta<?> getExpectedRootType(Object o) {
 		if (isAddRootType())
 			return object();
-		ClassMeta<?> cm = getClassMetaForObject(o);
+		var cm = getClassMetaForObject(o);
 		if (nn(cm) && cm.isOptional())
 			return cm.getElementType();
 		return cm;
@@ -966,7 +966,8 @@ public class SerializerSession extends BeanTraverseSession {
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
 		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t));
 		if (! isIgnoreInvocationExceptionsOnGetters())
-			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t)).initCause(t);
+			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t))
+				.initCause(t);
 	}
 
 	/**

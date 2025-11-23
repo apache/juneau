@@ -753,7 +753,7 @@ public class ParserSession extends BeanSession {
 			return m;
 		String typeName = o.toString();
 
-		ClassMeta<?> cm = getClassMeta(typeName, pMeta, eType);
+		var cm = getClassMeta(typeName, pMeta, eType);
 
 		if (nn(cm)) {
 			BeanMap<?> bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
@@ -762,8 +762,8 @@ public class ParserSession extends BeanSession {
 			m.forEach((k, v) -> {
 				if (! k.equals(btpn)) {
 					// Attempt to recursively cast child maps.
-					if (v instanceof JsonMap)
-						v = cast((JsonMap)v, pMeta, eType);
+					if (v instanceof JsonMap v2)
+						v = cast(v2, pMeta, eType);
 					bm.put(k, v);
 				}
 			});
@@ -786,7 +786,7 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "cast" })
 	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws ParseException {
 		if (s == null)
 			return null;
@@ -794,7 +794,7 @@ public class ParserSession extends BeanSession {
 		if (type == null)
 			type = (ClassMeta<T>)object();
 		ObjectSwap swap = type.getSwap(this);
-		ClassMeta<?> sType = swap == null ? type : swap.getSwapClassMeta(this);
+		var sType = swap == null ? type : swap.getSwapClassMeta(this);
 
 		Object o = s;
 		if (sType.isChar())

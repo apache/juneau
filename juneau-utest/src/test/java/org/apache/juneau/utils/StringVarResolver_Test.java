@@ -18,10 +18,10 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
@@ -170,7 +170,7 @@ class StringVarResolver_Test extends TestBase {
 	@Test void a07_test$E() {
 		var t = "$E{PATH}";
 
-		assertFalse(StringUtils.isEmpty(VarResolver.DEFAULT.resolve(t)));
+		assertFalse(org.apache.juneau.common.utils.Utils.isEmpty(VarResolver.DEFAULT.resolve(t)));  // NOAI
 	}
 
 	//====================================================================================================

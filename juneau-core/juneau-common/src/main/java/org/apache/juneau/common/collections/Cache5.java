@@ -269,7 +269,7 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5, java.util.function.Supplier<V> supplier) {
 		if (cacheMode == NONE)
 			return supplier.get();
-		Tuple5<K1,K2,K3,K4,K5> wrapped = Tuple5.of(key1, key2, key3, key4, key5);
+		var wrapped = Tuple5.of(key1, key2, key3, key4, key5);
 		V v = map.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
@@ -351,9 +351,7 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	 *
 	 * @return <jk>true</jk> if the cache is empty.
 	 */
-	public boolean isEmpty() {
-		return map.isEmpty();
-	}
+	public boolean isEmpty() { return map.isEmpty(); }
 
 	/**
 	 * Removes all entries from the cache.
@@ -369,4 +367,3 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	 */
 	public int getCacheHits() { return cacheHits.get(); }
 }
-

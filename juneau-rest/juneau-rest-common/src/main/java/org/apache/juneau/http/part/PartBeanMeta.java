@@ -96,12 +96,14 @@ public class PartBeanMeta<T> {
 
 		var ci = ClassInfo.of(type);
 
+		// @formatter:off
 		constructor = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class))
 			.or(() -> ci.getPublicConstructor(x -> x.hasParameterTypes(Object.class)))
 			.or(() -> ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class)))
 			.or(() -> ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, Object.class)))
 			.map(x -> x.<T>inner())
 			.orElse(null);
+		// @formatter:on
 
 		if (ci.hasAnnotation(Query.class))
 			this.schema = HttpPartSchema.create(Query.class, type);
@@ -147,8 +149,8 @@ public class PartBeanMeta<T> {
 		if (name == null)
 			name = schema.getName();
 
-		Class<?>[] pt = constructor.getParameterTypes();
-		Object[] args = new Object[pt.length];
+		var pt = constructor.getParameterTypes();
+		var args = new Object[pt.length];
 		if (pt.length == 1) {
 			args[0] = pt[0] == String.class ? s(value) : value;
 		} else {

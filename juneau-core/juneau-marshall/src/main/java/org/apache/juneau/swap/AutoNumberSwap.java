@@ -126,10 +126,10 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		if (shouldIgnore(bc, ci))
 			return null;
 
-	// Find swap() method if present.
-	for (var m : ci.getAllMethods()) {
+		// Find swap() method if present.
+		for (var m : ci.getAllMethods()) {
 
-		if (isSwapMethod(bc, m)) {
+			if (isSwapMethod(bc, m)) {
 
 				var rt = m.getReturnType();
 
@@ -149,7 +149,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	}
 
 	private static boolean isSwapMethod(BeanContext bc, MethodInfo mi) {
-		ClassInfo rt = mi.getReturnType();
+		var rt = mi.getReturnType();
 		// @formatter:off
 		return
 			mi.isNotDeprecated()
@@ -208,7 +208,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		this.unswapMethod = unswapMethod == null ? null : bc.getBeanMethodVisibility().transform(unswapMethod.inner());
 		this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());
 
-		Class<?> unswapType = null;
+		var unswapType = (Class<?>)null;
 		if (nn(unswapMethod)) {
 			for (var pi : unswapMethod.getParameters())
 				if (! pi.getParameterType().is(BeanSession.class))

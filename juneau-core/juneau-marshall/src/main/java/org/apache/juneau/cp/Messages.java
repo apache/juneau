@@ -257,11 +257,11 @@ public class Messages extends ResourceBundle {
 			if (! locations.isEmpty()) {
 				Tuple2<Class<?>,String>[] mbl = locations.toArray(new Tuple2[0]);
 
-				Builder x = null;
+				var x = (Builder)null;
 
 				for (int i = mbl.length - 1; i >= 0; i--) {
-					Class<?> c = firstNonNull(mbl[i].getA(), forClass);
-					String value = mbl[i].getB();
+					var c = firstNonNull(mbl[i].getA(), forClass);
+					var value = mbl[i].getB();
 					if (isJsonObject(value, true)) {
 						MessagesString ms;
 						try {
@@ -282,11 +282,11 @@ public class Messages extends ResourceBundle {
 		}
 
 		ResourceBundle getBundle() {
-			ClassLoader cl = forClass.getClassLoader();
+			var cl = forClass.getClassLoader();
 			var m = JsonMap.of("name", name, "package", forClass.getPackage().getName());
 			for (var bn : baseNames) {
 				bn = StringUtils.replaceVars(bn, m);
-				ResourceBundle rb = findBundle(bn, locale, cl);
+				var rb = findBundle(bn, locale, cl);
 				if (nn(rb))
 					return rb;
 			}
@@ -363,12 +363,12 @@ public class Messages extends ResourceBundle {
 
 		var keyMap = new TreeMap<String,String>();
 
-		String cn = scn(c) + '.';
+		var cn = scn(c) + '.';
 		if (nn(rb)) {
 			rb.keySet().forEach(x -> {
 				keyMap.put(x, x);
 				if (x.startsWith(cn)) {
-					String shortKey = x.substring(cn.length());
+					var shortKey = x.substring(cn.length());
 					keyMap.put(shortKey, x);
 				}
 			});
@@ -377,7 +377,7 @@ public class Messages extends ResourceBundle {
 			parent.keySet().forEach(x -> {
 				keyMap.put(x, x);
 				if (x.startsWith(cn)) {
-					String shortKey = x.substring(cn.length());
+					var shortKey = x.substring(cn.length());
 					keyMap.put(shortKey, x);
 				}
 			});
@@ -417,10 +417,10 @@ public class Messages extends ResourceBundle {
 			locale = Locale.getDefault();
 		if (this.locale.equals(locale))
 			return this;
-		Messages mb = localizedMessages.get(locale);
+		var mb = localizedMessages.get(locale);
 		if (mb == null) {
-			Messages parent = this.parent == null ? null : this.parent.forLocale(locale);
-			ResourceBundle rb = this.rb == null ? null : findBundle(this.rb.getBaseBundleName(), locale, c.getClassLoader());
+			var parent = this.parent == null ? null : this.parent.forLocale(locale);
+			var rb = this.rb == null ? null : findBundle(this.rb.getBaseBundleName(), locale, c.getClassLoader());
 			mb = new Messages(c, rb, locale, parent);
 			localizedMessages.put(locale, mb);
 		}
@@ -440,7 +440,7 @@ public class Messages extends ResourceBundle {
 	 * 	<js>"{!key}"</js> if the key is missing.
 	 */
 	public String getString(String key, Object...args) {
-		String s = getString(key);
+		var s = getString(key);
 		if (s.startsWith("{!"))
 			return s;
 		return format(s, args);
@@ -479,7 +479,7 @@ public class Messages extends ResourceBundle {
 
 	@Override /* Overridden from ResourceBundle */
 	protected Object handleGetObject(String key) {
-		String k = keyMap.get(key);
+		var k = keyMap.get(key);
 		if (k == null)
 			return "{!" + key + "}";
 		try {

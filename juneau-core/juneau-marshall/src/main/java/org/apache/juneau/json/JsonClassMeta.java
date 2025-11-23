@@ -44,7 +44,7 @@ public class JsonClassMeta extends ExtendedClassMeta {
 	public JsonClassMeta(ClassMeta<?> cm, JsonMetaProvider mp) {
 		super(cm);
 
-		Value<String> wrapperAttr = Value.empty();
+		var wrapperAttr = Value.<String>empty();
 		cm.forEachAnnotation(Json.class, x -> isNotEmpty(x.wrapperAttr()), x -> wrapperAttr.set(x.wrapperAttr()));
 		this.wrapperAttr = wrapperAttr.orElse(null);
 	}

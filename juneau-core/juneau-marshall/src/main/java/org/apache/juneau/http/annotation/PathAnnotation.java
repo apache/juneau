@@ -40,7 +40,7 @@ import org.apache.juneau.svl.*;
  */
 public class PathAnnotation {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Applies targeted {@link Path} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
@@ -278,12 +278,14 @@ public class PathAnnotation {
 	 * @return The last matching default value, or empty if not found.
 	 */
 	public static Optional<String> findDef(ParameterInfo pi) {
+		// @formatter:off
 		return AP.find(Header.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isNotEmpty(x.def()) && ne(NONE, x.def()))
 			.findFirst()
 			.map(x -> x.def());
+		// @formatter:on
 	}
 
 	/**
@@ -296,11 +298,6 @@ public class PathAnnotation {
 	 * @return The last matching name, or empty if not found.
 	 */
 	public static Optional<String> findName(ParameterInfo pi) {
-		return AP.find(Path.class, pi)
-			.stream()
-			.map(AnnotationInfo::inner)
-			.filter(x -> isAnyNotBlank(x.value(), x.name()))
-			.findFirst()
-			.map(x -> firstNonBlank(x.name(), x.value()));
+		return AP.find(Path.class, pi).stream().map(AnnotationInfo::inner).filter(x -> isAnyNotBlank(x.value(), x.name())).findFirst().map(x -> firstNonBlank(x.name(), x.value()));
 	}
 }

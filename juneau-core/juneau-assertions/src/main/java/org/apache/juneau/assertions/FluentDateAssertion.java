@@ -215,7 +215,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 */
 	public R isAfter(Date value) throws AssertionError {
 		assertArgNotNull("value", value);
-		if (!(value().after(value)))
+		if (! (value().after(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
 	}
@@ -237,7 +237,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 */
 	public R isBefore(Date value) throws AssertionError {
 		assertArgNotNull("value", value);
-		if (!(value().before(value)))
+		if (! (value().before(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
 	}

@@ -44,14 +44,13 @@ public class Utils2 extends Utils {
 	public static JsonMap toPropertyMap(Object o) {
 		if (o == null)
 			return null;
-		Map<String,MethodInfo> methods = PROPERTIES_METHODS.get(o.getClass());
-	if (methods == null) {
-		var ci = info(o);
-		var methods2 = new LinkedHashMap<String,MethodInfo>();
+		var methods = PROPERTIES_METHODS.get(o.getClass());
+		if (methods == null) {
+			var ci = info(o);
+			var methods2 = new LinkedHashMap<String,MethodInfo>();
 			do {
 				String cname = ci.getNameShort();
-				ci.getDeclaredMethod(x -> x.hasName("properties"))
-					.ifPresent(mi -> methods2.put(cname, mi.accessible()));
+				ci.getDeclaredMethod(x -> x.hasName("properties")).ifPresent(mi -> methods2.put(cname, mi.accessible()));
 				ci = ci.getSuperclass();
 			} while (nn(ci));
 			methods = methods2;

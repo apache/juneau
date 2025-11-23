@@ -17,7 +17,7 @@
 package org.apache.juneau;
 
 import static java.lang.Character.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 /**
  * Converts property names to dashed-lower-case format.
@@ -43,10 +43,10 @@ public class PropertyNamerDLC implements PropertyNamer {
 		if (isEmpty(name))
 			return name;
 
-		int numUCs = 0;
-		boolean isPrevUC = isUpperCase(name.charAt(0));
-		for (int i = 1; i < name.length(); i++) {
-			char c = name.charAt(i);
+		var numUCs = 0;
+		var isPrevUC = isUpperCase(name.charAt(0));
+		for (var i = 1; i < name.length(); i++) {
+			var c = name.charAt(i);
 			if (isUpperCase(c)) {
 				if (! isPrevUC)
 					numUCs++;
@@ -56,11 +56,11 @@ public class PropertyNamerDLC implements PropertyNamer {
 			}
 		}
 
-		char[] name2 = new char[name.length() + numUCs];
+		var name2 = new char[name.length() + numUCs];
 		isPrevUC = isUpperCase(name.charAt(0));
-		int ni = 0;
-		for (int i = 0; i < name.length(); i++) {
-			char c = name.charAt(i);
+		var ni = 0;
+		for (var i = 0; i < name.length(); i++) {
+			var c = name.charAt(i);
 			if (isUpperCase(c)) {
 				if (! isPrevUC)
 					name2[ni++] = '-';

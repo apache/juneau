@@ -159,12 +159,14 @@ public class OAuthFlows extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(authorizationCode), "authorizationCode")
 			.addIf(nn(clientCredentials), "clientCredentials")
 			.addIf(nn(implicit), "implicit")
 			.addIf(nn(password), "password")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

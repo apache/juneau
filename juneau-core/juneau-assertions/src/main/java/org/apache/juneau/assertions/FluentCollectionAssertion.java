@@ -189,7 +189,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		if (test == null)
 			return returns();
 		value().forEach(x -> {
-			if (!test.test(x))
+			if (! test.test(x))
 				throw error(MSG_collectionDidNotContainTestedValue, value());
 		});
 		return returns();
@@ -232,7 +232,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isEmpty() throws AssertionError {
-		if (!value().isEmpty())
+		if (! value().isEmpty())
 			throw error(MSG_collectionWasNotEmpty);
 		return returns();
 	}

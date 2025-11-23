@@ -155,11 +155,13 @@ public class RequestBodyInfo extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(content), "content")
 			.addIf(nn(description), "description")
 			.addIf(nn(required), "required")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

@@ -836,8 +836,8 @@ public class Assertions {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final StringAssertion assertString(Object value) {
-		if (value instanceof Optional)
-			value = ((Optional<?>)value).orElse(null);
+		if (value instanceof Optional<?> value2)
+			value = value2.orElse(null);
 		return StringAssertion.create(value);
 	}
 

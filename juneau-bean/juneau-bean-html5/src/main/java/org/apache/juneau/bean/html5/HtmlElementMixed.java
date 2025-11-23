@@ -149,10 +149,10 @@ public class HtmlElementMixed extends HtmlElement {
 			return getChild(index[0]);
 		Object c = this;
 		for (var element : index) {
-			if (c instanceof HtmlElementMixed x)
-				c = x.getChild(element);
-			else if (c instanceof HtmlElementContainer x)
-				c = x.getChild(element);
+			if (c instanceof HtmlElementMixed c2)
+				c = c2.getChild(element);
+			else if (c instanceof HtmlElementContainer c2)
+				c = c2.getChild(element);
 			else
 				return null;
 		}

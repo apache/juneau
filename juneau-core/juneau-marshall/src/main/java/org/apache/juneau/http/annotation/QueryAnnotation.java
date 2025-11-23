@@ -39,7 +39,7 @@ import org.apache.juneau.svl.*;
  */
 public class QueryAnnotation {
 
-	private static AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Applies targeted {@link Query} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
@@ -277,12 +277,14 @@ public class QueryAnnotation {
 	 * @return The last matching default value, or empty if not found.
 	 */
 	public static Optional<String> findDef(ParameterInfo pi) {
+		// @formatter:off
 		return AP.find(Query.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isNotEmpty(x.def()))
 			.findFirst()
 			.map(x -> x.def());
+		// @formatter:on
 	}
 
 	/**
@@ -292,11 +294,13 @@ public class QueryAnnotation {
 	 * @return The last matching name, or empty if not found.
 	 */
 	public static Optional<String> findName(ParameterInfo pi) {
+		// @formatter:off
 		return AP.find(Query.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isAnyNotBlank(x.value(), x.name()))
 			.findFirst()
 			.map(x -> firstNonBlank(x.name(), x.value()));
+		// @formatter:on
 	}
 }

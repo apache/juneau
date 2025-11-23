@@ -253,7 +253,7 @@ public class ReflectionMap<V> {
 		 * @throws RuntimeException If the key pattern is invalid or empty.
 		 */
 		public Builder<V> append(String key, V value) {
-			if (StringUtils.isEmpty(key))
+			if (Utils.isEmpty(key))  // NOAI
 				throw rex("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {
@@ -265,7 +265,7 @@ public class ReflectionMap<V> {
 							methodEntries.add(new MethodEntry<>(k, value));
 						}
 					} else {
-						int i = k.lastIndexOf('.');
+						var i = k.lastIndexOf('.');
 						if (i == -1) {
 							classEntries.add(new ClassEntry<>(k, value));
 						} else if (isUpperCase(k.charAt(i + 1))) {
@@ -301,9 +301,7 @@ public class ReflectionMap<V> {
 		 *
 		 * @return <jk>true</jk> if this builder has no entries.
 		 */
-		public boolean isEmpty() {
-			return classEntries.isEmpty() && methodEntries.isEmpty() && fieldEntries.isEmpty() && constructorEntries.isEmpty();
-		}
+		public boolean isEmpty() { return classEntries.isEmpty() && methodEntries.isEmpty() && fieldEntries.isEmpty() && constructorEntries.isEmpty(); }
 	}
 
 	private static class ClassEntry<V> {
@@ -340,9 +338,9 @@ public class ReflectionMap<V> {
 		V value;
 
 		ConstructorEntry(String name, V value) {
-			int i = name.indexOf('(');
+			var i = name.indexOf('(');
 			this.args = splitMethodArgs(name.substring(i + 1, name.length() - 1));
-			for (int j = 0; j < args.length; j++) {
+			for (var j = 0; j < args.length; j++) {
 				// Strip off generic parameters (e.g., "List<String>[]" -> "List[]")
 				args[j] = stripGenerics(args[j]);
 			}
@@ -378,7 +376,7 @@ public class ReflectionMap<V> {
 		V value;
 
 		FieldEntry(String name, V value) {
-			int i = name.lastIndexOf('.');
+			var i = name.lastIndexOf('.');
 			var s1 = name.substring(0, i);
 			var s2 = name.substring(i + 1);
 			this.simpleClassName = simpleClassName(s1);
@@ -413,10 +411,10 @@ public class ReflectionMap<V> {
 		V value;
 
 		MethodEntry(String name, V value) {
-			int i = name.indexOf('(');
+			var i = name.indexOf('(');
 			this.args = i == -1 ? null : splitMethodArgs(name.substring(i + 1, name.length() - 1));
 			if (nn(args)) {
-				for (int j = 0; j < args.length; j++) {
+				for (var j = 0; j < args.length; j++) {
 					// Strip off generic parameters (e.g., "List<String>[]" -> "List[]")
 					args[j] = stripGenerics(args[j]);
 				}
@@ -483,8 +481,8 @@ public class ReflectionMap<V> {
 			return true;
 		if (names.length != args.length)
 			return false;
-		for (int i = 0; i < args.length; i++) {
-			if (!argMatches(names[i], args[i]))
+		for (var i = 0; i < args.length; i++) {
+			if (! argMatches(names[i], args[i]))
 				return false;
 		}
 		return true;
@@ -523,9 +521,9 @@ public class ReflectionMap<V> {
 		if (type.indexOf('<') == -1)
 			return type;
 		var sb = new StringBuilder(type.length());
-		int depth = 0;
-		for (int i = 0; i < type.length(); i++) {
-			char c = type.charAt(i);
+		var depth = 0;
+		for (var i = 0; i < type.length(); i++) {
+			var c = type.charAt(i);
 			if (c == '<') {
 				depth++;
 			} else if (c == '>') {
@@ -552,7 +550,7 @@ public class ReflectionMap<V> {
 				cFull = cFull.substring(p.getName().length() + 1);
 			if (eq(simpleName, cFull))
 				return true;
-			int i = cFull.indexOf('$');
+			var i = cFull.indexOf('$');
 			while (i != -1) {
 				cFull = cFull.substring(i + 1);
 				if (eq(simpleName, cFull))
@@ -564,7 +562,7 @@ public class ReflectionMap<V> {
 	}
 
 	private static String simpleClassName(String name) {
-		int i = name.indexOf('.');
+		var i = name.indexOf('.');
 		if (i == -1)
 			return name;
 		// Return null for fully qualified names to ensure they only match by fullName, not by simpleName.
@@ -577,10 +575,10 @@ public class ReflectionMap<V> {
 		if (key.indexOf(',') == -1) {
 			consumer.accept(key);
 		} else {
-			int m = 0;
-			boolean escaped = false;
-			for (int i = 0; i < key.length(); i++) {
-				char c = key.charAt(i);
+			var m = 0;
+			var escaped = false;
+			for (var i = 0; i < key.length(); i++) {
+				var c = key.charAt(i);
 				if (c == '(')
 					escaped = true;
 				else if (c == ')')
@@ -607,7 +605,7 @@ public class ReflectionMap<V> {
 	protected ReflectionMap(Builder<V> b) {
 		this.classEntries = u(copyOf(b.classEntries));
 		this.methodEntries = u(copyOf(b.methodEntries));
-		this.fieldEntries =  u(copyOf(b.fieldEntries));
+		this.fieldEntries = u(copyOf(b.fieldEntries));
 		this.constructorEntries = u(copyOf(b.constructorEntries));
 	}
 

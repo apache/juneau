@@ -111,7 +111,7 @@ public class SerializerWriter extends Writer {
 	 * @return This object.
 	 */
 	public SerializerWriter append(char[] value) {
-		for (char c : value)
+		for (var c : value)
 			w(c);
 		return this;
 	}

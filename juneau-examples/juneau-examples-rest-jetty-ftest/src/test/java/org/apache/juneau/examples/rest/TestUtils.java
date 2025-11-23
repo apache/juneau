@@ -30,6 +30,7 @@ import org.junit.*;
 
 public class TestUtils {
 
+	// @formatter:off
 	private static JsonSerializer js = JsonSerializer.create()
 		.json5()
 		.keepNullProperties()
@@ -52,6 +53,7 @@ public class TestUtils {
 		.swaps(IteratorSwap.class, EnumerationSwap.class)
 		.sortProperties()
 		.build();
+	// @formatter:on
 
 	/**
 	 * Verifies that two objects are equivalent.
@@ -67,9 +69,9 @@ public class TestUtils {
 	 * @param sort If <jk>true</jk> sort maps and collections before comparison.
 	 */
 	public static void assertEqualObjects(Object o1, Object o2, boolean sort) throws SerializeException {
-		JsonSerializer s = (sort ? jsSorted : js);
-		String s1 = s.serialize(o1);
-		String s2 = s.serialize(o2);
+		var s = (sort ? jsSorted : js);
+		var s1 = s.serialize(o1);
+		var s2 = s.serialize(o2);
 		if (s1.equals(s2))
 			return;
 		throw new ComparisonFailure(null, s1, s2);
@@ -91,21 +93,21 @@ public class TestUtils {
 		var combinedTag = Pattern.compile("^(\\s*)<[^>/]+(\\s+\\S+=['\"]\\S*['\"])*\\s*/>$");
 		var contentOnly = Pattern.compile("^(\\s*)[^\\s\\<]+$");
 		var tagWithContent = Pattern.compile("^(\\s*)<[^>]+>.*</[^>]+>$");
-		String[] lines = out.split("\n");
+		var lines = out.split("\n");
 		try {
 			for (int i = 0; i < lines.length; i++) {
-				String line = lines[i];
-				Matcher m = startTag.matcher(line);
+				var line = lines[i];
+				var m = startTag.matcher(line);
 				if (m.matches()) {
 					indent++;
 					if (m.group(1).length() != indent)
-						throw new SerializeException("Wrong indentation detected on start tag line ''{0}''", i+1);
+						throw new SerializeException("Wrong indentation detected on start tag line ''{0}''", i + 1);
 					continue;
 				}
 				m = endTag.matcher(line);
 				if (m.matches()) {
 					if (m.group(1).length() != indent)
-						throw new SerializeException("Wrong indentation detected on end tag line ''{0}''", i+1);
+						throw new SerializeException("Wrong indentation detected on end tag line ''{0}''", i + 1);
 					indent--;
 					continue;
 				}
@@ -113,7 +115,7 @@ public class TestUtils {
 				if (m.matches()) {
 					indent++;
 					if (m.group(1).length() != indent)
-						throw new SerializeException("Wrong indentation detected on combined tag line ''{0}''", i+1);
+						throw new SerializeException("Wrong indentation detected on combined tag line ''{0}''", i + 1);
 					indent--;
 					continue;
 				}
@@ -121,7 +123,7 @@ public class TestUtils {
 				if (m.matches()) {
 					indent++;
 					if (m.group(1).length() != indent)
-						throw new SerializeException("Wrong indentation detected on content-only line ''{0}''", i+1);
+						throw new SerializeException("Wrong indentation detected on content-only line ''{0}''", i + 1);
 					indent--;
 					continue;
 				}
@@ -129,11 +131,11 @@ public class TestUtils {
 				if (m.matches()) {
 					indent++;
 					if (m.group(1).length() != indent)
-						throw new SerializeException("Wrong indentation detected on tag-with-content line ''{0}''", i+1);
+						throw new SerializeException("Wrong indentation detected on tag-with-content line ''{0}''", i + 1);
 					indent--;
 					continue;
 				}
-				throw new SerializeException("Unmatched whitespace line at line number ''{0}''", i+1);
+				throw new SerializeException("Unmatched whitespace line at line number ''{0}''", i + 1);
 			}
 			if (indent != -1)
 				throw new SerializeException("Possible unmatched tag.  indent=''{0}''", indent);
@@ -145,7 +147,7 @@ public class TestUtils {
 
 	private static void printLines(String[] lines) {
 		for (int i = 0; i < lines.length; i++)
-			System.err.println(String.format("%4s:" + lines[i], i+1));  // NOT DEBUG
+			System.err.println(String.format("%4s:" + lines[i], i + 1));  // NOT DEBUG
 	}
 
 	public static void validateXml(Object o) throws Exception {
@@ -157,7 +159,7 @@ public class TestUtils {
 	 */
 	public static void validateXml(Object o, XmlSerializer s) throws Exception {
 		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
-		String xml = s.serialize(o);
+		var xml = s.serialize(o);
 
 		try {
 			TestUtils.checkXmlWhitespace(xml);
@@ -169,21 +171,22 @@ public class TestUtils {
 	}
 
 	public static String readFile(String p) throws Exception {
-		InputStream is = TestUtils.class.getResourceAsStream(p);
+		var is = TestUtils.class.getResourceAsStream(p);
 		if (is == null) {
 			is = new FileInputStream(p);
 		}
 		try (InputStream is2 = is) {
-			String e = read(is2);
+			var e = read(is2);
 			e = e.replaceAll("\r", "");
 			return e;
 		}
 	}
 
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
 	public static String toHex(byte b) {
-		char[] c = new char[2];
-		int v = b & 0xFF;
+		var c = new char[2];
+		var v = b & 0xFF;
 		c[0] = hexArray[v >>> 4];
 		c[1] = hexArray[v & 0x0F];
 		return new String(c);
@@ -223,7 +226,7 @@ public class TestUtils {
 	 * Replaces all newlines with pipes, then compares the strings.
 	 */
 	public static void assertTextEquals(String s, Object o) {
-		String s2 = o.toString().replaceAll("\\r?\\n", "|");
+		var s2 = o.toString().replaceAll("\\r?\\n", "|");
 		Assert.assertEquals(s, s2);
 	}
 

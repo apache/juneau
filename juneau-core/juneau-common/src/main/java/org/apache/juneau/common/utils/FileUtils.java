@@ -68,7 +68,7 @@ public class FileUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static File createTempFile(String name) throws IOException {
-		String[] parts = name.split("\\.");
+		var parts = name.split("\\.");
 		var f = File.createTempFile(parts[0], "." + parts[1]);
 		f.deleteOnExit();
 		return f;
@@ -90,7 +90,7 @@ public class FileUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static File createTempFile(String name, String contents) throws IOException {
-		File f = createTempFile(name);
+		var f = createTempFile(name);
 		try (Reader r = new StringReader(contents); Writer w = new FileWriter(f)) {
 			pipe(r, w);
 			w.flush();
@@ -108,7 +108,7 @@ public class FileUtils {
 		if (f == null)
 			return true;
 		if (f.isDirectory()) {
-			File[] cf = f.listFiles();
+			var cf = f.listFiles();
 			if (nn(cf))
 				for (var c : cf)
 					deleteFile(c);
@@ -138,7 +138,7 @@ public class FileUtils {
 	public static String getBaseName(String name) {
 		if (name == null)
 			return null;
-		int i = name.lastIndexOf('.');
+		var i = name.lastIndexOf('.');
 		if (i == -1)
 			return name;
 		return name.substring(0, i);
@@ -153,7 +153,7 @@ public class FileUtils {
 	public static String getFileExtension(String name) {
 		if (name == null)
 			return null;
-		int i = name.lastIndexOf('.');
+		var i = name.lastIndexOf('.');
 		if (i == -1)
 			return "";
 		return name.substring(i + 1);
@@ -166,10 +166,10 @@ public class FileUtils {
 	 * @return The file name.
 	 */
 	public static String getFileName(String path) {
-		if (StringUtils.isEmpty(path))
+		if (isEmpty(path))
 			return null;
 		path = trimTrailingSlashes(path);
-		int i = path.lastIndexOf('/');
+		var i = path.lastIndexOf('/');
 		return i == -1 ? path : path.substring(i + 1);
 	}
 
@@ -230,8 +230,8 @@ public class FileUtils {
 	 * @param f The file to modify the modified timestamp on.
 	 */
 	public static void modifyTimestamp(File f) {
-		long lm = f.lastModified();
-		long l = System.currentTimeMillis();
+		var lm = f.lastModified();
+		var l = System.currentTimeMillis();
 		if (lm == l)
 			l++;
 		if (! f.setLastModified(l))

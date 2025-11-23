@@ -166,8 +166,8 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		Object r = run(BeanContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));
 		if (r instanceof List)
 			return (List<R>)r;
-		if (r instanceof Collection)
-			return new ArrayList<R>((Collection)r);
+		if (r instanceof Collection r2)
+			return toList(r2);
 		if (isArray(r))
 			return l((R[])r);
 		return null;

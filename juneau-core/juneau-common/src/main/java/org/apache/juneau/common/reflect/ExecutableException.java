@@ -71,7 +71,7 @@ public class ExecutableException extends RuntimeException {
 	 */
 	public Throwable getTargetException() {
 		Throwable c = this.getCause();
-		return c instanceof InvocationTargetException ? ((InvocationTargetException)c).getTargetException() : c;
+		return c instanceof InvocationTargetException c2 ? c2.getTargetException() : c;
 	}
 
 	/**

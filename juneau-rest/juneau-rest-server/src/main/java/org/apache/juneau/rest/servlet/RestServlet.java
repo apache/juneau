@@ -19,7 +19,6 @@ package org.apache.juneau.rest.servlet;
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -67,6 +66,7 @@ import jakarta.servlet.http.*;
 public abstract class RestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	private AtomicReference<RestContext> context = new AtomicReference<>();
 	private AtomicReference<Exception> initException = new AtomicReference<>();
@@ -95,7 +95,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The context information on this servlet.
 	 */
 	public synchronized RestContext getContext() {
-		RestContext rc = context.get();
+		var rc = context.get();
 		if (rc == null)
 			throw new InternalServerError("RestContext object not set on resource.");
 		return rc;
@@ -108,16 +108,18 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The path defined on this servlet, or an empty string if not specified.
 	 */
 	public synchronized String getPath() {
-		RestContext context = this.context.get();
+		var context = this.context.get();
 		if (nn(context))
 			return context.getFullPath();
 		var ci = ClassInfo.of(getClass());
-		return rstream(AnnotationProvider.INSTANCE.find(Rest.class, ci))
+		// @formatter:off
+		return rstream(AP.find(Rest.class, ci))
 			.map(x -> x.inner().path())
-			.filter(x -> isNotEmpty(x))
-			.map(x -> trimSlashes(x))
+			.filter(Utils::isNotEmpty)
+			.map(StringUtils::trimSlashes)
 			.findFirst()
 			.orElse("");
+		// @formatter:on
 	}
 
 	/**
@@ -220,8 +222,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param msg The message to log.
 	 */
 	protected void doLog(Level level, Throwable cause, Supplier<String> msg) {
-		RestContext c = context.get();
-		Logger logger = c == null ? null : c.getLogger();
+		var c = context.get();
+		var logger = c == null ? null : c.getLogger();
 		if (logger == null)
 			logger = Logger.getLogger(cn(this));
 		logger.log(level, cause, msg);
