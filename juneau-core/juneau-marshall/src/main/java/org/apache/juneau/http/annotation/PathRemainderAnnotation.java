@@ -94,11 +94,11 @@ public class PathRemainderAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
-		String[] description = {};
-		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
-		Schema schema = SchemaAnnotation.DEFAULT;
-		String def = "";
+		private Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
+		private String[] description = {};
+		private Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
+		private Schema schema = SchemaAnnotation.DEFAULT;
+		private String def = "";
 
 		/**
 		 * Constructor.

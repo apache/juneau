@@ -264,24 +264,24 @@ public class RestUtils {
 			if (qs == null || ((qs instanceof CharSequence) && isEmpty(s(qs))))
 				return m;
 
-		try (ParserPipe p = new ParserPipe(qs)) {
+			try (ParserPipe p = new ParserPipe(qs)) {
 
-			// S1: Looking for attrName start.
-			// S2: Found attrName start, looking for = or & or end.
-			// S3: Found =, looking for valStart or &.
-			// S4: Found valStart, looking for & or end.
+				// S1: Looking for attrName start.
+				// S2: Found attrName start, looking for = or & or end.
+				// S3: Found =, looking for valStart or &.
+				// S4: Found valStart, looking for & or end.
 
-			try (var r = new UonReader(p, true)) {
-				int c = r.peekSkipWs();
-				if (c == '?')
-					r.read();
+				try (var r = new UonReader(p, true)) {
+					int c = r.peekSkipWs();
+					if (c == '?')
+						r.read();
 
-				var state = S1;
-				var currAttr = (String)null;
-				while (c != -1) {
-					c = r.read();
-					if (state == S1) {
-						if (c != -1) {
+					var state = S1;
+					var currAttr = (String)null;
+					while (c != -1) {
+						c = r.read();
+						if (state == S1) {
+							if (c != -1) {
 								r.unread();
 								r.mark();
 								state = S2;

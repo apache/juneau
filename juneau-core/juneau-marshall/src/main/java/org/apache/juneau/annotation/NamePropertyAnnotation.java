@@ -81,7 +81,7 @@ public class NamePropertyAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderMF<Builder> {
 
-		String[] description = {};
+		private String[] description = {};
 
 		/**
 		 * Constructor.

@@ -81,11 +81,11 @@ public class SwapAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		String[] description = {};
-		Class<?> impl = void.class;
-		Class<?> value = void.class;
-		String template = "";
-		String[] mediaTypes = {};
+		private String[] description = {};
+		private Class<?> impl = void.class;
+		private Class<?> value = void.class;
+		private String template = "";
+		private String[] mediaTypes = {};
 
 		/**
 		 * Constructor.

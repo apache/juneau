@@ -36,8 +36,8 @@ public class HasQueryAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
-		String[] description = {};
-		String name = "", value = "";
+		private String[] description = {};
+		private String name = "", value = "";
 
 		/**
 		 * Constructor.

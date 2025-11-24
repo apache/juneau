@@ -59,7 +59,7 @@ public class RestInitAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
-		String[] description = {};
+		private String[] description = {};
 
 		/**
 		 * Constructor.

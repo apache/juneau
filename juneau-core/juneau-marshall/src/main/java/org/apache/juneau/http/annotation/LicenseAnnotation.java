@@ -36,8 +36,8 @@ public class LicenseAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
-		String[] description = {};
-		String name = "", url = "";
+		private String[] description = {};
+		private String name = "", url = "";
 
 		/**
 		 * Constructor.

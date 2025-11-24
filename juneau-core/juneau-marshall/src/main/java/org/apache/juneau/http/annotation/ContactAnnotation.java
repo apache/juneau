@@ -36,8 +36,8 @@ public class ContactAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
-		String[] description = {};
-		String email = "", name = "", url = "";
+		private String[] description = {};
+		private String email = "", name = "", url = "";
 
 		/**
 		 * Constructor.

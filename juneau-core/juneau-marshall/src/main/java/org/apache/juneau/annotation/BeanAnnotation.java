@@ -82,15 +82,15 @@ public class BeanAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
-		String[] description = {};
-		Class<?>[] dictionary = new Class[0];
-		Class<?> implClass = void.class;
-		Class<?> interfaceClass = void.class;
-		Class<?> stopClass = void.class;
-		Class<? extends BeanInterceptor<?>> interceptor = BeanInterceptor.Void.class;
-		Class<? extends PropertyNamer> propertyNamer = BasicPropertyNamer.class;
-		String example = "", excludeProperties = "", p = "", properties = "", readOnlyProperties = "", ro = "", typeName = "", typePropertyName = "", wo = "", writeOnlyProperties = "", xp = "";
-		boolean findFluentSetters, sort;
+		private String[] description = {};
+		private Class<?>[] dictionary = new Class[0];
+		private Class<?> implClass = void.class;
+		private Class<?> interfaceClass = void.class;
+		private Class<?> stopClass = void.class;
+		private Class<? extends BeanInterceptor<?>> interceptor = BeanInterceptor.Void.class;
+		private Class<? extends PropertyNamer> propertyNamer = BasicPropertyNamer.class;
+		private String example = "", excludeProperties = "", p = "", properties = "", readOnlyProperties = "", ro = "", typeName = "", typePropertyName = "", wo = "", writeOnlyProperties = "", xp = "";
+		private boolean findFluentSetters, sort;
 
 		/**
 		 * Constructor.

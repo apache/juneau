@@ -81,7 +81,7 @@ public class BeanIgnoreAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMFC<Builder> {
 
-		String[] description = {};
+		private String[] description = {};
 
 		/**
 		 * Constructor.

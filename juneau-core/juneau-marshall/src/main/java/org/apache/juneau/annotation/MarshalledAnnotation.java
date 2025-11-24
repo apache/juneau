@@ -81,9 +81,9 @@ public class MarshalledAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
-		String[] description = {};
-		Class<?> implClass = void.class;
-		String example = "";
+		private String[] description = {};
+		private Class<?> implClass = void.class;
+		private String example = "";
 
 		/**
 		 * Constructor.

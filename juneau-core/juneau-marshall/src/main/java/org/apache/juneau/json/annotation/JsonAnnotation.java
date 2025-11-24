@@ -84,8 +84,8 @@ public class JsonAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		String[] description = {};
-		String wrapperAttr = "";
+		private String[] description = {};
+		private String wrapperAttr = "";
 
 		/**
 		 * Constructor.

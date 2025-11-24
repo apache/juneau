@@ -84,8 +84,8 @@ public class UrlEncodingAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		String[] description = {};
-		boolean expandedParams;
+		private String[] description = {};
+		private boolean expandedParams;
 
 		/**
 		 * Constructor.

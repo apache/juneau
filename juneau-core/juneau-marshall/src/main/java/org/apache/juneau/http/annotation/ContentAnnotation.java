@@ -82,9 +82,9 @@ public class ContentAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTM<Builder> {
 
-		String def = "";
-		String[] description = {};
-		Schema schema = SchemaAnnotation.DEFAULT;
+		private String def = "";
+		private String[] description = {};
+		private Schema schema = SchemaAnnotation.DEFAULT;
 
 		/**
 		 * Constructor.

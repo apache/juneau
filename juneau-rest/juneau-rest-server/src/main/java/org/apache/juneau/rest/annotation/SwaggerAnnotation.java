@@ -41,13 +41,13 @@ public class SwaggerAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
-		String[] description = {};
-		Contact contact = ContactAnnotation.DEFAULT;
-		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
-		License license = LicenseAnnotation.DEFAULT;
-		String version = "";
-		String[] termsOfService = {}, title = {}, value = {};
-		Tag[] tags = {};
+		private String[] description = {};
+		private Contact contact = ContactAnnotation.DEFAULT;
+		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
+		private License license = LicenseAnnotation.DEFAULT;
+		private String version = "";
+		private String[] termsOfService = {}, title = {}, value = {};
+		private Tag[] tags = {};
 
 		/**
 		 * Constructor.

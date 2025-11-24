@@ -40,12 +40,10 @@ public class OpSwaggerAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
-		String[] description = {};
-
-		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
-
-		String deprecated = "", operationId = "";
-		String[] consumes = {}, parameters = {}, produces = {}, responses = {}, schemes = {}, summary = {}, tags = {}, value = {};
+		private String[] description = {};
+		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
+		private String deprecated = "", operationId = "";
+		private String[] consumes = {}, parameters = {}, produces = {}, responses = {}, schemes = {}, summary = {}, tags = {}, value = {};
 
 		/**
 		 * Constructor.

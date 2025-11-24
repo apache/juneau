@@ -87,18 +87,17 @@ public class SchemaAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, ignore, r, readOnly, required, ro, sie, skipIfEmpty, ui, uniqueItems;
-		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
-		Items items = ItemsAnnotation.DEFAULT;
-		long maxi = -1, maxItems = -1, maxl = -1, maxLength = -1, maxp = -1, maxProperties = -1, mini = -1, minItems = -1, minl = -1, minLength = -1, minp = -1, minProperties = -1;
-		String $ref = "", cf = "", collectionFormat = "", discriminator = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "",
+		private boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, ignore, r, readOnly, required, ro, sie, skipIfEmpty, ui, uniqueItems;
+		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
+		private Items items = ItemsAnnotation.DEFAULT;
+		private long maxi = -1, maxItems = -1, maxl = -1, maxLength = -1, maxp = -1, maxProperties = -1, mini = -1, minItems = -1, minl = -1, minLength = -1, minp = -1, minProperties = -1;
+		private String $ref = "", cf = "", collectionFormat = "", discriminator = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "",
 			t = "", title = "", type = "";
-		String[] _default = {}, _enum = {}, additionalProperties = {}, allOf = {}, d = {}, description = {}, df = {}, e = {}, properties = {}, value = {}, xml = {};
-		// JSON Schema Draft 2020-12 properties
-		boolean deprecatedProperty;
-		String $id = "", contentMediaType = "", contentEncoding = "", exclusiveMaximumValue = "", exclusiveMinimumValue = "";
-		String[] _const = {}, examples = {}, $comment = {}, prefixItems = {}, unevaluatedItems = {}, unevaluatedProperties = {}, dependentSchemas = {}, dependentRequired = {}, _if = {}, _then = {},
-			_else = {}, $defs = {};
+		private String[] _default = {}, _enum = {}, additionalProperties = {}, allOf = {}, d = {}, description = {}, df = {}, e = {}, properties = {}, value = {}, xml = {};
+		private boolean deprecatedProperty;
+		private String $id = "", contentMediaType = "", contentEncoding = "", exclusiveMaximumValue = "", exclusiveMinimumValue = "";
+		private String[] _const = {}, examples = {}, $comment = {}, prefixItems = {}, unevaluatedItems = {}, unevaluatedProperties = {}, dependentSchemas = {}, dependentRequired = {}, _if = {},
+			_then = {}, _else = {}, $defs = {};
 
 		/**
 		 * Constructor.

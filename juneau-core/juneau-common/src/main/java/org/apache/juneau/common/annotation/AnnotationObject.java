@@ -52,7 +52,7 @@ public class AnnotationObject implements Annotation {
 	 */
 	public static class Builder<B> {
 
-		Class<? extends Annotation> annotationType;
+		private Class<? extends Annotation> annotationType;
 
 		/**
 		 * Constructor.

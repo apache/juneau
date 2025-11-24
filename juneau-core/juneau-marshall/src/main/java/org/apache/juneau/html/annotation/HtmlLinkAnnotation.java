@@ -84,8 +84,8 @@ public class HtmlLinkAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
-		String[] description = {};
-		String nameProperty = "", uriProperty = "";
+		private String[] description = {};
+		private String nameProperty = "", uriProperty = "";
 
 		/**
 		 * Constructor.

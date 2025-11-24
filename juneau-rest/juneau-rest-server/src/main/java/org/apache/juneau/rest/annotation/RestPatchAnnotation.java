@@ -52,16 +52,16 @@ public class RestPatchAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
-		Class<? extends RestConverter>[] converters = new Class[0];
-		Class<? extends RestGuard>[] guards = new Class[0];
-		Class<? extends RestMatcher>[] matchers = new Class[0];
-		Class<? extends Encoder>[] encoders = new Class[0];
-		Class<? extends Serializer>[] serializers = new Class[0];
-		Class<?>[] parsers = {};
-		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
-		String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", defaultContentType = "", maxInput = "", rolesDeclared = "", roleGuard = "", summary = "", value = "";
-		String[] consumes = {}, defaultRequestFormData = {}, defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, description = {},
-			path = {}, produces = {};
+		private Class<? extends RestConverter>[] converters = new Class[0];
+		private Class<? extends RestGuard>[] guards = new Class[0];
+		private Class<? extends RestMatcher>[] matchers = new Class[0];
+		private Class<? extends Encoder>[] encoders = new Class[0];
+		private Class<? extends Serializer>[] serializers = new Class[0];
+		private Class<?>[] parsers = {};
+		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
+		private String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", defaultContentType = "", maxInput = "", rolesDeclared = "", roleGuard = "", summary = "", value = "";
+		private String[] consumes = {}, defaultRequestFormData = {}, defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {},
+			description = {}, path = {}, produces = {};
 
 		/**
 		 * Constructor.

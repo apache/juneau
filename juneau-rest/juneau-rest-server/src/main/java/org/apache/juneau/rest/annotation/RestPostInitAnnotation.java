@@ -59,8 +59,8 @@ public class RestPostInitAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
-		String[] description = {};
-		boolean childFirst;
+		private String[] description = {};
+		private boolean childFirst;
 
 		/**
 		 * Constructor.

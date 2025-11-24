@@ -60,32 +60,32 @@ public class RestAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
-		String[] description = {};
-		Class<? extends Encoder>[] encoders = new Class[0];
-		Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
-		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Void.class;
-		Class<? extends StaticFiles> staticFiles = StaticFiles.Void.class;
-		Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
-		Class<? extends CallLogger> callLogger = CallLogger.Void.class;
-		Class<? extends RestConverter>[] converters = new Class[0];
-		Class<? extends RestGuard>[] guards = new Class[0];
-		Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
-		Class<? extends RestOpArg>[] restOpArgs = new Class[0];
-		Class<? extends BeanStore> beanStore = BeanStore.Void.class;
-		Class<? extends RestChildren> restChildrenClass = RestChildren.Void.class;
-		Class<? extends RestOperations> restOperationsClass = RestOperations.Void.class;
-		Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
-		Class<? extends Serializer>[] serializers = new Class[0];
-		Class<?>[] children = {}, parsers = {};
-		Swagger swagger = SwaggerAnnotation.DEFAULT;
-		String disableContentParam = "", allowedHeaderParams = "", allowedMethodHeaders = "", allowedMethodParams = "", clientVersionHeader = "", config = "", debug = "", debugOn = "",
+		private String[] description = {};
+		private Class<? extends Encoder>[] encoders = new Class[0];
+		private Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
+		private Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Void.class;
+		private Class<? extends StaticFiles> staticFiles = StaticFiles.Void.class;
+		private Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
+		private Class<? extends CallLogger> callLogger = CallLogger.Void.class;
+		private Class<? extends RestConverter>[] converters = new Class[0];
+		private Class<? extends RestGuard>[] guards = new Class[0];
+		private Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
+		private Class<? extends RestOpArg>[] restOpArgs = new Class[0];
+		private Class<? extends BeanStore> beanStore = BeanStore.Void.class;
+		private Class<? extends RestChildren> restChildrenClass = RestChildren.Void.class;
+		private Class<? extends RestOperations> restOperationsClass = RestOperations.Void.class;
+		private Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
+		private Class<? extends Serializer>[] serializers = new Class[0];
+		private Class<?>[] children = {}, parsers = {};
+		private Swagger swagger = SwaggerAnnotation.DEFAULT;
+		private String disableContentParam = "", allowedHeaderParams = "", allowedMethodHeaders = "", allowedMethodParams = "", clientVersionHeader = "", config = "", debug = "", debugOn = "",
 			defaultAccept = "", defaultCharset = "", defaultContentType = "", maxInput = "", messages = "", path = "", renderResponseStackTraces = "", roleGuard = "", rolesDeclared = "",
 			siteName = "", uriAuthority = "", uriContext = "", uriRelativity = "", uriResolution = "";
-		String[] consumes = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, produces = {}, title = {};
-		Query[] queryParams = new Query[0];
-		Header[] headerParams = new Header[0];
-		Path[] pathParams = new Path[0];
-		FormData[] formDataParams = new FormData[0];
+		private String[] consumes = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, produces = {}, title = {};
+		private Query[] queryParams = new Query[0];
+		private Header[] headerParams = new Header[0];
+		private Path[] pathParams = new Path[0];
+		private FormData[] formDataParams = new FormData[0];
 
 		/**
 		 * Constructor.

@@ -37,9 +37,9 @@ public class TagAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
-		String[] description = {};
-		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
-		String name = "";
+		private String[] description = {};
+		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
+		private String name = "";
 
 		/**
 		 * Constructor.

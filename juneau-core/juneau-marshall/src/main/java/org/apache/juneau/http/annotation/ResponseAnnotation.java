@@ -83,12 +83,12 @@ public class ResponseAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTM<Builder> {
 
-		String[] description = {};
-		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
-		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
-		Header[] headers = {};
-		Schema schema = SchemaAnnotation.DEFAULT;
-		String[] examples = {};
+		private String[] description = {};
+		private Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
+		private Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
+		private Header[] headers = {};
+		private Schema schema = SchemaAnnotation.DEFAULT;
+		private String[] examples = {};
 
 		/**
 		 * Constructor.

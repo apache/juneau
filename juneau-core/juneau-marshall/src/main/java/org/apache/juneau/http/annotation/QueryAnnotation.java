@@ -89,11 +89,11 @@ public class QueryAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		String[] description = {};
-		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
-		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
-		Schema schema = SchemaAnnotation.DEFAULT;
-		String name = "", value = "", def = "";
+		private String[] description = {};
+		private Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
+		private Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
+		private Schema schema = SchemaAnnotation.DEFAULT;
+		private String name = "", value = "", def = "";
 
 		/**
 		 * Constructor.

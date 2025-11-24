@@ -63,10 +63,9 @@ public class RdfAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		String[] description = {};
-		String namespace = "", prefix = "";
-		boolean beanUri;
-		RdfCollectionFormat collectionFormat = RdfCollectionFormat.DEFAULT;
+		private String namespace = "", prefix = "";
+		private boolean beanUri;
+		private RdfCollectionFormat collectionFormat = RdfCollectionFormat.DEFAULT;
 
 		/**
 		 * Constructor.
@@ -93,17 +92,6 @@ public class RdfAnnotation {
 		 */
 		public Rdf build() {
 			return new Object(this);
-		}
-
-		/**
-		 * Sets the description property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
-			return this;
 		}
 
 		/**

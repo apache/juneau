@@ -36,12 +36,12 @@ public class ItemsAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
-		String[] description = {};
-		boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
-		long maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
-		String $ref = "", cf = "", collectionFormat = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "", t = "", type = "";
-		String[] _default = {}, _enum = {}, df = {}, e = {};
-		SubItems items = SubItemsAnnotation.DEFAULT;
+		private String[] description = {};
+		private boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
+		private long maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
+		private String $ref = "", cf = "", collectionFormat = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "", t = "", type = "";
+		private String[] _default = {}, _enum = {}, df = {}, e = {};
+		private SubItems items = SubItemsAnnotation.DEFAULT;
 
 		/**
 		 * Constructor.

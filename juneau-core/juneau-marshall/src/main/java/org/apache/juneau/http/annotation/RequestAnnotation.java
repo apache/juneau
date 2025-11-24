@@ -82,9 +82,9 @@ public class RequestAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
-		String[] description = {};
-		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
-		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
+		private String[] description = {};
+		private Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
+		private Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 
 		/**
 		 * Constructor.

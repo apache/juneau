@@ -84,7 +84,7 @@ public class UonAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		String[] description = {};
+		private String[] description = {};
 
 		/**
 		 * Constructor.

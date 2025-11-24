@@ -86,11 +86,11 @@ public class HtmlAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		String[] description = {};
-		String anchorText = "", link = "", style = "";
-		HtmlFormat format = HtmlFormat.HTML;
-		boolean noTableHeaders, noTables;
-		Class<? extends HtmlRender> render = HtmlRender.class;
+		private String[] description = {};
+		private String anchorText = "", link = "", style = "";
+		private HtmlFormat format = HtmlFormat.HTML;
+		private boolean noTableHeaders, noTables;
+		private Class<? extends HtmlRender> render = HtmlRender.class;
 
 		/**
 		 * Constructor.

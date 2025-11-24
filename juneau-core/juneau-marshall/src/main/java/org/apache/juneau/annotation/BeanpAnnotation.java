@@ -81,10 +81,10 @@ public class BeanpAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderMF<Builder> {
 
-		String[] description = {};
-		Class<?> type = void.class;
-		Class<?>[] dictionary = new Class[0], params = new Class[0];
-		String format = "", name = "", properties = "", ro = "", value = "", wo = "";
+		private String[] description = {};
+		private Class<?> type = void.class;
+		private Class<?>[] dictionary = new Class[0], params = new Class[0];
+		private String format = "", name = "", properties = "", ro = "", value = "", wo = "";
 
 		/**
 		 * Constructor.

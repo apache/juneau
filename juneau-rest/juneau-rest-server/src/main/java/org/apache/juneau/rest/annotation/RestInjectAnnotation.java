@@ -56,10 +56,9 @@ public class RestInjectAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
-		String[] description = {};
-
-				String name, value;
-		String[] methodScope;
+		private String[] description = {};
+		private String name, value;
+		private String[] methodScope;
 
 		/**
 		 * Constructor.

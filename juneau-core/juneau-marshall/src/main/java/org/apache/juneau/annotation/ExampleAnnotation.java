@@ -81,8 +81,8 @@ public class ExampleAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
-		String[] description = {};
-		String value = "";
+		private String[] description = {};
+		private String value = "";
 
 		/**
 		 * Constructor.

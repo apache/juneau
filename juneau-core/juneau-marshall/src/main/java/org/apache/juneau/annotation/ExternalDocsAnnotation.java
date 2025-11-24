@@ -42,8 +42,8 @@ public class ExternalDocsAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
-		String[] description = {};
-		String url = "";
+		private String[] description = {};
+		private String url = "";
 
 		/**
 		 * Constructor.

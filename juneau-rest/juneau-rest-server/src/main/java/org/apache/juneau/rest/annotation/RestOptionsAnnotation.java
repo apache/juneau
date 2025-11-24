@@ -52,15 +52,15 @@ public class RestOptionsAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
-		String[] description = {};
-		Class<? extends RestConverter>[] converters = new Class[0];
-		Class<? extends RestGuard>[] guards = new Class[0];
-		Class<? extends RestMatcher>[] matchers = new Class[0];
-		Class<? extends Encoder>[] encoders = new Class[0];
-		Class<? extends Serializer>[] serializers = new Class[0];
-		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
-		String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", rolesDeclared = "", roleGuard = "", summary = "", value = "";
-		String[] defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {}, produces = {};
+		private String[] description = {};
+		private Class<? extends RestConverter>[] converters = new Class[0];
+		private Class<? extends RestGuard>[] guards = new Class[0];
+		private Class<? extends RestMatcher>[] matchers = new Class[0];
+		private Class<? extends Encoder>[] encoders = new Class[0];
+		private Class<? extends Serializer>[] serializers = new Class[0];
+		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
+		private String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", rolesDeclared = "", roleGuard = "", summary = "", value = "";
+		private String[] defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {}, produces = {};
 
 		/**
 		 * Constructor.

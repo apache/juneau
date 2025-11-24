@@ -81,8 +81,8 @@ public class BeancAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderC<Builder> {
 
-		String[] description = {};
-		String properties = "";
+		private String[] description = {};
+		private String properties = "";
 
 		/**
 		 * Constructor.
