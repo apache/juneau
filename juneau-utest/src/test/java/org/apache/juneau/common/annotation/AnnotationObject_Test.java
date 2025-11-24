@@ -401,5 +401,16 @@ class AnnotationObject_Test extends TestBase {
 		var a = TestAnnotationObject.create().build();
 		assertNotEquals(a, null);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Null validation tests
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void h01_nullBuilder_throwsException() {
+		assertThrows(IllegalArgumentException.class, () ->
+			new TestAnnotationObject(null)
+		);
+	}
 }
 

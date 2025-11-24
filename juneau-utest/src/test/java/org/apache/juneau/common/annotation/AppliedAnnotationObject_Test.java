@@ -690,5 +690,81 @@ class AppliedAnnotationObject_Test extends TestBase {
 		assertNotSame(a1, a2);
 		assertEquals(a1, a2);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Null validation tests
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void j01_nullClass_throwsException() {
+		assertThrows(IllegalArgumentException.class, () ->
+			TestAppliedAnnotationObjectT.create()
+				.on((Class<?>)null)
+				.build()
+		);
+	}
+
+	@Test
+	void j02_nullClassInfo_throwsException() {
+		assertThrows(IllegalArgumentException.class, () ->
+			TestAppliedAnnotationObjectT.create()
+				.on((ClassInfo)null)
+				.build()
+		);
+	}
+
+	@Test
+	void j03_nullMethod_throwsException() {
+		assertThrows(IllegalArgumentException.class, () ->
+			TestAppliedAnnotationObjectM.create()
+				.on((java.lang.reflect.Method)null)
+				.build()
+		);
+	}
+
+	@Test
+	void j04_nullMethodInfo_throwsException() {
+		assertThrows(IllegalArgumentException.class, () ->
+			TestAppliedAnnotationObjectM.create()
+				.on((MethodInfo)null)
+				.build()
+		);
+	}
+
+	@Test
+	void j05_nullField_throwsException() {
+		assertThrows(IllegalArgumentException.class, () ->
+			TestAppliedAnnotationObjectMF.create()
+				.on((java.lang.reflect.Field)null)
+				.build()
+		);
+	}
+
+	@Test
+	void j06_nullFieldInfo_throwsException() {
+		assertThrows(IllegalArgumentException.class, () ->
+			TestAppliedAnnotationObjectMF.create()
+				.on((FieldInfo)null)
+				.build()
+		);
+	}
+
+	@Test
+	void j07_nullConstructor_throwsException() {
+		assertThrows(IllegalArgumentException.class, () ->
+			TestAppliedAnnotationObjectC.create()
+				.on((java.lang.reflect.Constructor<?>)null)
+				.build()
+		);
+	}
+
+	@Test
+	void j08_nullConstructorInfo_throwsException() {
+		assertThrows(IllegalArgumentException.class, () ->
+			TestAppliedAnnotationObjectC.create()
+				.on((ConstructorInfo)null)
+				.build()
+		);
+	}
 }
 
