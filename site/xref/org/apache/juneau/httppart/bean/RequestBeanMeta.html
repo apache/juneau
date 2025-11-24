@@ -144,12 +144,12 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartParser" href="../../../../../org/apache/juneau/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> parser;
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	RequestBeanMeta(Builder b) {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">this</strong>.cm = b.cm;
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">this</strong>.serializer = b.serializer.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">this</strong>.parser = b.parser.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		Map&lt;String,RequestBeanPropertyMeta&gt; properties = map();
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		b.properties.forEach((k, v) -&gt; properties.put(k, v.build(serializer, parser)));
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">this</strong>.properties = u(properties);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		cm = b.cm;
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		serializer = b.serializer.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		parser = b.parser.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		Map&lt;String,RequestBeanPropertyMeta&gt; pm = map();
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		b.properties.forEach((k, v) -&gt; pm.put(k, v.build(serializer, parser)));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		properties = u(pm);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<em class="jxr_javadoccomment">/**</em>

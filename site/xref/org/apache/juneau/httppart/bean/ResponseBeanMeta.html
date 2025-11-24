@@ -189,11 +189,11 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema;
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	ResponseBeanMeta(Builder b) {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">this</strong>.cm = b.cm;
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">this</strong>.code = b.code;
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">this</strong>.partSerializer = opt(b.partSerializer).map(x -&gt; HttpPartSerializer.creator().type(x).apply(b.annotations).create());
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">this</strong>.partParser = opt(b.partParser).map(x -&gt; HttpPartParser.creator().type(x).apply(b.annotations).create());
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">this</strong>.schema = b.schema.build();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		cm = b.cm;
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		code = b.code;
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		partSerializer = opt(b.partSerializer).map(x -&gt; HttpPartSerializer.creator().type(x).apply(b.annotations).create());
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		partParser = opt(b.partParser).map(x -&gt; HttpPartParser.creator().type(x).apply(b.annotations).create());
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		schema = b.schema.build();
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		Map&lt;String,ResponseBeanPropertyMeta&gt; properties = map();
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
@@ -205,8 +205,8 @@
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		});
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">this</strong>.headerMethods = u(hm);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">this</strong>.contentMethod = b.contentMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.contentMethod.schema(schema).build(partSerializer, partParser);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">this</strong>.statusMethod = b.statusMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.statusMethod.build(opte(), opte());
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		contentMethod = b.contentMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.contentMethod.schema(schema).build(partSerializer, partParser);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		statusMethod = b.statusMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.statusMethod.build(opte(), opte());
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">if</strong> (nn(contentMethod))
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			properties.put(contentMethod.getGetter().getName(), contentMethod);

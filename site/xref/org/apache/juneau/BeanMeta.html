@@ -900,24 +900,24 @@
 <a class="jxr_linenumber" name="L892" href="#L892">892</a> 		<strong class="jxr_keyword">this</strong>.c = classMeta.getInnerClass();
 <a class="jxr_linenumber" name="L893" href="#L893">893</a> 
 <a class="jxr_linenumber" name="L894" href="#L894">894</a> 		Builder&lt;T&gt; b = <strong class="jxr_keyword">new</strong> Builder&lt;&gt;(classMeta, ctx, beanFilter, pNames, implClassConstructor);
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 		<strong class="jxr_keyword">this</strong>.notABeanReason = b.init(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 		notABeanReason = b.init(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L896" href="#L896">896</a> 
 <a class="jxr_linenumber" name="L897" href="#L897">897</a> 		<strong class="jxr_keyword">this</strong>.beanFilter = beanFilter;
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		<strong class="jxr_keyword">this</strong>.dictionaryName = b.dictionaryName;
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> 		<strong class="jxr_keyword">this</strong>.properties = u(b.properties);
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		<strong class="jxr_keyword">this</strong>.propertyArray = properties == <strong class="jxr_keyword">null</strong> ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		<strong class="jxr_keyword">this</strong>.hiddenProperties = u(b.hiddenProperties);
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		<strong class="jxr_keyword">this</strong>.getterProps = u(b.getterProps);
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		<strong class="jxr_keyword">this</strong>.setterProps = u(b.setterProps);
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		<strong class="jxr_keyword">this</strong>.dynaProperty = b.dynaProperty;
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		<strong class="jxr_keyword">this</strong>.typeVarImpls = u(b.typeVarImpls);
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">this</strong>.constructor = b.constructor;
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">this</strong>.constructorArgs = b.constructorArgs;
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">this</strong>.beanRegistry = b.beanRegistry;
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">this</strong>.typePropertyName = b.typePropertyName;
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">this</strong>.typeProperty = BeanPropertyMeta.builder(<strong class="jxr_keyword">this</strong>, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">this</strong>.sortProperties = b.sortProperties;
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		<strong class="jxr_keyword">this</strong>.fluentSetters = b.fluentSetters;
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		dictionaryName = b.dictionaryName;
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 		properties = u(b.properties);
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		propertyArray = properties == <strong class="jxr_keyword">null</strong> ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		hiddenProperties = u(b.hiddenProperties);
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		getterProps = u(b.getterProps);
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		setterProps = u(b.setterProps);
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		dynaProperty = b.dynaProperty;
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		typeVarImpls = u(b.typeVarImpls);
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		constructor = b.constructor;
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		constructorArgs = b.constructorArgs;
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		beanRegistry = b.beanRegistry;
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		typePropertyName = b.typePropertyName;
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		typeProperty = BeanPropertyMeta.builder(<strong class="jxr_keyword">this</strong>, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		sortProperties = b.sortProperties;
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		fluentSetters = b.fluentSetters;
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 
 <a class="jxr_linenumber" name="L914" href="#L914">914</a> 		<strong class="jxr_keyword">if</strong> (sortProperties)
 <a class="jxr_linenumber" name="L915" href="#L915">915</a> 			Arrays.sort(propertyArray);

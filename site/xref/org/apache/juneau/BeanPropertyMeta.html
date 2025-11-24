@@ -413,30 +413,30 @@
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * @param b The builder to copy fields from.</em>
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<strong class="jxr_keyword">protected</strong> BeanPropertyMeta(BeanPropertyMeta.Builder b) {
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">this</strong>.field = b.field;
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">this</strong>.innerField = b.innerField;
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">this</strong>.getter = b.getter;
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">this</strong>.setter = b.setter;
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">this</strong>.extraKeys = b.extraKeys;
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">this</strong>.isUri = b.isUri;
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">this</strong>.beanMeta = b.beanMeta;
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">this</strong>.bc = b.bc;
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">this</strong>.ap = bc.getAnnotationProvider();
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">this</strong>.name = b.name;
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">this</strong>.rawTypeMeta = b.rawTypeMeta;
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">this</strong>.typeMeta = b.typeMeta;
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">this</strong>.properties = b.properties;
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">this</strong>.swap = b.swap;
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">this</strong>.beanRegistry = b.beanRegistry;
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">this</strong>.overrideValue = b.overrideValue;
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">this</strong>.delegateFor = b.delegateFor;
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">this</strong>.isDyna = b.isDyna;
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">this</strong>.isDynaGetterMap = b.isDynaGetterMap;
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">this</strong>.canRead = b.canRead;
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">this</strong>.canWrite = b.canWrite;
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">this</strong>.readOnly = b.readOnly;
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">this</strong>.writeOnly = b.writeOnly;
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">this</strong>.hashCode = HashCode.of(beanMeta, name);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		field = b.field;
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		innerField = b.innerField;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		getter = b.getter;
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		setter = b.setter;
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		extraKeys = b.extraKeys;
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		isUri = b.isUri;
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		beanMeta = b.beanMeta;
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		bc = b.bc;
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		ap = bc.getAnnotationProvider();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		name = b.name;
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		rawTypeMeta = b.rawTypeMeta;
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		typeMeta = b.typeMeta;
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		properties = b.properties;
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		swap = b.swap;
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		beanRegistry = b.beanRegistry;
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		overrideValue = b.overrideValue;
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		delegateFor = b.delegateFor;
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		isDyna = b.isDyna;
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		isDynaGetterMap = b.isDynaGetterMap;
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		canRead = b.canRead;
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		canWrite = b.canWrite;
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		readOnly = b.readOnly;
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		writeOnly = b.writeOnly;
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		hashCode = HashCode.of(beanMeta, name);
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 	}
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<em class="jxr_javadoccomment">/**</em>
