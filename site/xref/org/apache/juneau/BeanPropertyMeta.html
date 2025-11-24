@@ -244,7 +244,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 						swap = getPropertySwap(x);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 					<strong class="jxr_keyword">if</strong> (! x.properties().isEmpty())
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 						properties = splita(x.properties());
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 					addAll(bdClasses, x.dictionary());
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 					addAll(bdClasses, (Object[])x.dictionary());
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 					<strong class="jxr_keyword">if</strong> (! x.ro().isEmpty())
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 						readOnly = Boolean.valueOf(x.ro());
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 					<strong class="jxr_keyword">if</strong> (! x.wo().isEmpty())
@@ -264,7 +264,7 @@
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 						swap = getPropertySwap(x);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 					<strong class="jxr_keyword">if</strong> (nn(properties) &amp;&amp; ! x.properties().isEmpty())
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 						properties = splita(x.properties());
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 					addAll(bdClasses, x.dictionary());
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 					addAll(bdClasses, (Object[])x.dictionary());
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 					<strong class="jxr_keyword">if</strong> (! x.ro().isEmpty())
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 						readOnly = Boolean.valueOf(x.ro());
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 					<strong class="jxr_keyword">if</strong> (! x.wo().isEmpty())
@@ -283,7 +283,7 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 						swap = getPropertySwap(x);
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 					<strong class="jxr_keyword">if</strong> (nn(properties) &amp;&amp; ! x.properties().isEmpty())
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 						properties = splita(x.properties());
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 					addAll(bdClasses, x.dictionary());
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 					addAll(bdClasses, (Object[])x.dictionary());
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 					<strong class="jxr_keyword">if</strong> (! x.ro().isEmpty())
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 						readOnly = Boolean.valueOf(x.ro());
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 					<strong class="jxr_keyword">if</strong> (! x.wo().isEmpty())
