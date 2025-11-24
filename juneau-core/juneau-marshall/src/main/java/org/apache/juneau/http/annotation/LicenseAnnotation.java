@@ -52,7 +52,7 @@ public class LicenseAnnotation {
 		 * @return A new {@link License @License} object.
 		 */
 		public License build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -90,12 +90,12 @@ public class LicenseAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements License {
+	private static class Object extends AnnotationObject implements License {
 
 		private final String[] description;
 		private final String name, url;
 
-		Impl(LicenseAnnotation.Builder b) {
+		Object(LicenseAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.name = b.name;

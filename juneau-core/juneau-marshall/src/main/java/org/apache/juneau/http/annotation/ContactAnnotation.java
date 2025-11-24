@@ -52,7 +52,7 @@ public class ContactAnnotation {
 		 * @return A new {@link Contact @Contact} object.
 		 */
 		public Contact build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -101,12 +101,12 @@ public class ContactAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements Contact {
+	private static class Object extends AnnotationObject implements Contact {
 
 		private final String[] description;
 		private final String email, name, url;
 
-		Impl(ContactAnnotation.Builder b) {
+		Object(ContactAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.email = b.email;

@@ -58,7 +58,7 @@ public class ExternalDocsAnnotation {
 		 * @return A new {@link ExternalDocs @ExternalDocs} object.
 		 */
 		public ExternalDocs build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -85,12 +85,12 @@ public class ExternalDocsAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements ExternalDocs {
+	private static class Object extends AnnotationObject implements ExternalDocs {
 
 		private final String[] description;
 		private final String url;
 
-		Impl(ExternalDocsAnnotation.Builder b) {
+		Object(ExternalDocsAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.url = b.url;

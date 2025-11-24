@@ -144,7 +144,7 @@ public class RestAnnotation {
 		 * @return A new {@link Rest @Rest} object.
 		 */
 		public Rest build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -658,7 +658,7 @@ public class RestAnnotation {
 			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders(x));
 			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -> b.defaultRequestHeaders(x));
 			b.responseProcessors().add(a.responseProcessors());
-			b.children((Object[])a.children());
+			b.children((java.lang.Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
 			classes(a.encoders()).ifPresent(x -> b.encoders().add(x));
 			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
@@ -711,7 +711,7 @@ public class RestAnnotation {
 		}
 	}
 
-	private static class Impl extends AppliedOnClassAnnotationObject implements Rest {
+	private static class Object extends AppliedOnClassAnnotationObject implements Rest {
 
 		private final String[] description;
 		private final Class<? extends Encoder>[] encoders;
@@ -739,7 +739,7 @@ public class RestAnnotation {
 		private final Path[] pathParams;
 		private final FormData[] formDataParams;
 
-		Impl(RestAnnotation.Builder b) {
+		Object(RestAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.disableContentParam = b.disableContentParam;

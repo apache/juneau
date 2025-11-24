@@ -52,7 +52,7 @@ public class HasFormDataAnnotation {
 		 * @return A new {@link HasFormData @HasFormData} object.
 		 */
 		public HasFormData build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -90,12 +90,12 @@ public class HasFormDataAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements HasFormData {
+	private static class Object extends AnnotationObject implements HasFormData {
 
 		private final String[] description;
 		private final String name, value;
 
-		Impl(HasFormDataAnnotation.Builder b) {
+		Object(HasFormDataAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.name = b.name;

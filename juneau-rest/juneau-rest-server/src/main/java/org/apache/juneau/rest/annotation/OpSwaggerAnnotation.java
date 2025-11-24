@@ -60,7 +60,7 @@ public class OpSwaggerAnnotation {
 		 * @return A new {@link OpSwagger @OpSwagger} object.
 		 */
 		public OpSwagger build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -197,14 +197,14 @@ public class OpSwaggerAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements OpSwagger {
+	private static class Object extends AnnotationObject implements OpSwagger {
 
 		private final String[] description;
 		private final ExternalDocs externalDocs;
 		private final String deprecated, operationId;
 		private final String[] consumes, parameters, produces, responses, schemes, summary, tags, value;
 
-		Impl(OpSwaggerAnnotation.Builder b) {
+		Object(OpSwaggerAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.consumes = copyOf(b.consumes);

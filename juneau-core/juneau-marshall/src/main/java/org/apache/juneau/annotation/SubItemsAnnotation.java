@@ -94,7 +94,7 @@ public class SubItemsAnnotation {
 		 * @return A new {@link SubItems @SubItems} object.
 		 */
 		public SubItems build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -451,7 +451,7 @@ public class SubItemsAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements SubItems {
+	private static class Object extends AnnotationObject implements SubItems {
 
 		private final String[] description;
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
@@ -459,7 +459,7 @@ public class SubItemsAnnotation {
 		private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
 		private final String[] _default, _enum, df, e, items;
 
-		Impl(SubItemsAnnotation.Builder b) {
+		Object(SubItemsAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.$ref = b.$ref;

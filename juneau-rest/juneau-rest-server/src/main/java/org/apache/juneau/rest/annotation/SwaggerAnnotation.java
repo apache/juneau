@@ -62,7 +62,7 @@ public class SwaggerAnnotation {
 		 * @return A new {@link Swagger @Swagger} object.
 		 */
 		public Swagger build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -166,7 +166,7 @@ public class SwaggerAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements Swagger {
+	private static class Object extends AnnotationObject implements Swagger {
 
 		private final String[] description;
 		private final Contact contact;
@@ -176,7 +176,7 @@ public class SwaggerAnnotation {
 		private final String[] termsOfService, title, value;
 		private final Tag[] tags;
 
-		Impl(SwaggerAnnotation.Builder b) {
+		Object(SwaggerAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.contact = b.contact;

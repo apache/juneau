@@ -89,7 +89,7 @@ public class ItemsAnnotation {
 		 * @return A new {@link Items @Items} object.
 		 */
 		public Items build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -446,7 +446,7 @@ public class ItemsAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements Items {
+	private static class Object extends AnnotationObject implements Items {
 
 		private final String[] description;
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
@@ -455,7 +455,7 @@ public class ItemsAnnotation {
 		private final String[] _default, _enum, df, e;
 		private final SubItems items;
 
-		Impl(ItemsAnnotation.Builder b) {
+		Object(ItemsAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.$ref = b.$ref;

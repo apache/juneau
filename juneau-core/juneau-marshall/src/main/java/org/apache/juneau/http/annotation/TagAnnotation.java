@@ -54,7 +54,7 @@ public class TagAnnotation {
 		 * @return A new {@link Tag @Tag} object.
 		 */
 		public Tag build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -92,13 +92,13 @@ public class TagAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements Tag {
+	private static class Object extends AnnotationObject implements Tag {
 
 		private final String[] description;
 		private final ExternalDocs externalDocs;
 		private final String name;
 
-		Impl(TagAnnotation.Builder b) {
+		Object(TagAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.externalDocs = b.externalDocs;

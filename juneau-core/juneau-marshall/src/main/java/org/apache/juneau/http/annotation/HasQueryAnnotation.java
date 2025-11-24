@@ -52,7 +52,7 @@ public class HasQueryAnnotation {
 		 * @return A new {@link HasQuery @HasQuery} object.
 		 */
 		public HasQuery build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -90,12 +90,12 @@ public class HasQueryAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationObject implements HasQuery {
+	private static class Object extends AnnotationObject implements HasQuery {
 
 		private final String[] description;
 		private final String name, value;
 
-		Impl(HasQueryAnnotation.Builder b) {
+		Object(HasQueryAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.name = b.name;
