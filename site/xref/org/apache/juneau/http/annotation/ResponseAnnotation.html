@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> TargetedAnnotationTMBuilder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AppliedAnnotationObject.BuilderTM&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartParser&gt; parser = HttpPartParser.Void.<strong class="jxr_keyword">class</strong>;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; serializer = HttpPartSerializer.Void.<strong class="jxr_keyword">class</strong>;
@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="TargetedAnnotationTImpl" href="../../../../../org/apache/juneau/common/annotation/TargetedAnnotationTImpl.html#TargetedAnnotationTImpl">TargetedAnnotationTImpl</a> <strong class="jxr_keyword">implements</strong> Response {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Response {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartParser&gt; parser;
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; serializer;

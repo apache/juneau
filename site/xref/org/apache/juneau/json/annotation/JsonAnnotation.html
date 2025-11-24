@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> TargetedAnnotationTMFBuilder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AppliedAnnotationObject.BuilderTMF&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		String wrapperAttr = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
@@ -124,7 +124,7 @@
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="TargetedAnnotationTImpl" href="../../../../../org/apache/juneau/common/annotation/TargetedAnnotationTImpl.html#TargetedAnnotationTImpl">TargetedAnnotationTImpl</a> <strong class="jxr_keyword">implements</strong> Json {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Json {
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String wrapperAttr;
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 

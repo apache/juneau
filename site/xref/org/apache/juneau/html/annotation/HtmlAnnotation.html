@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> TargetedAnnotationTMFBuilder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AppliedAnnotationObject.BuilderTMF&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		String anchorText = <span class="jxr_string">""</span>, link = <span class="jxr_string">""</span>, style = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		HtmlFormat format = HtmlFormat.HTML;
@@ -195,7 +195,7 @@
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="TargetedAnnotationTImpl" href="../../../../../org/apache/juneau/common/annotation/TargetedAnnotationTImpl.html#TargetedAnnotationTImpl">TargetedAnnotationTImpl</a> <strong class="jxr_keyword">implements</strong> Html {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Html {
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> noTableHeaders, noTables;
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">private</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> HtmlRender&gt; render;

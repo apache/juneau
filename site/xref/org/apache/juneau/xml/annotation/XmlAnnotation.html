@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> TargetedAnnotationTMFBuilder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AppliedAnnotationObject.BuilderTMF&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		String childName = <span class="jxr_string">""</span>, namespace = <span class="jxr_string">""</span>, prefix = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		XmlFormat format = XmlFormat.DEFAULT;
@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="TargetedAnnotationTImpl" href="../../../../../org/apache/juneau/common/annotation/TargetedAnnotationTImpl.html#TargetedAnnotationTImpl">TargetedAnnotationTImpl</a> <strong class="jxr_keyword">implements</strong> Xml {
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Xml {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String childName, namespace, prefix;
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="XmlFormat" href="../../../../../org/apache/juneau/xml/annotation/XmlFormat.html#XmlFormat">XmlFormat</a> format;

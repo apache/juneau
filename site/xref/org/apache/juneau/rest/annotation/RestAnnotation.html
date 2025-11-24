@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> TargetedAnnotationTBuilder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AppliedAnnotationObject.BuilderT&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> Encoder&gt;[] encoders = <strong class="jxr_keyword">new</strong> Class[0];
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartParser&gt; partParser = HttpPartParser.Void.<strong class="jxr_keyword">class</strong>;
@@ -708,7 +708,7 @@
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 		}
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 	}
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="TargetedAnnotationTImpl" href="../../../../../org/apache/juneau/common/annotation/TargetedAnnotationTImpl.html#TargetedAnnotationTImpl">TargetedAnnotationTImpl</a> <strong class="jxr_keyword">implements</strong> Rest {
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Rest {
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> Encoder&gt;[] encoders;
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartParser&gt; partParser;

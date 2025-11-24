@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> TargetedAnnotationTMFBuilder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AppliedAnnotationObject.BuilderTMF&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">boolean</strong> aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, ignore, r, readOnly, required, ro, sie, skipIfEmpty, ui, uniqueItems;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
@@ -933,7 +933,7 @@
 <a class="jxr_linenumber" name="L925" href="#L925">925</a> 
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 	}
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="TargetedAnnotationTImpl" href="../../../../org/apache/juneau/common/annotation/TargetedAnnotationTImpl.html#TargetedAnnotationTImpl">TargetedAnnotationTImpl</a> <strong class="jxr_keyword">implements</strong> Schema {
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Schema {
 <a class="jxr_linenumber" name="L929" href="#L929">929</a> 
 <a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> aev, allowEmptyValue, exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, sie, skipIfEmpty, ignore;
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ExternalDocs" href="../../../../org/apache/juneau/annotation/ExternalDocs.html#ExternalDocs">ExternalDocs</a> externalDocs;
