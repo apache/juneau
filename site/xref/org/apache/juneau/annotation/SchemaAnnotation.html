@@ -275,7 +275,7 @@
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">		 * @return A new {@link Schema @Schema} object.</em>
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">public</strong> Schema build() {
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Impl(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Object(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		}
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -933,7 +933,7 @@
 <a class="jxr_linenumber" name="L925" href="#L925">925</a> 
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 	}
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Schema {
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Object <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Schema {
 <a class="jxr_linenumber" name="L929" href="#L929">929</a> 
 <a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> aev, allowEmptyValue, exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, sie, skipIfEmpty, ignore;
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ExternalDocs" href="../../../../org/apache/juneau/annotation/ExternalDocs.html#ExternalDocs">ExternalDocs</a> externalDocs;
@@ -946,7 +946,7 @@
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String $id, contentMediaType, contentEncoding, exclusiveMaximumValue, exclusiveMinimumValue;
 <a class="jxr_linenumber" name="L939" href="#L939">939</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] _<strong class="jxr_keyword">const</strong>, examples, $comment, prefixItems, unevaluatedItems, unevaluatedProperties, dependentSchemas, dependentRequired, _<strong class="jxr_keyword">if</strong>, _then, _<strong class="jxr_keyword">else</strong>, $defs;
 <a class="jxr_linenumber" name="L940" href="#L940">940</a> 
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		Impl(SchemaAnnotation.Builder b) {
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		Object(SchemaAnnotation.Builder b) {
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 			<strong class="jxr_keyword">this</strong>.$ref = b.$ref;
 <a class="jxr_linenumber" name="L944" href="#L944">944</a> 			<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">default</strong> = copyOf(b._<strong class="jxr_keyword">default</strong>);

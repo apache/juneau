@@ -107,7 +107,7 @@
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">		 * @return A new {@link Swap @Swap} object.</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">public</strong> Swap build() {
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Impl(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Object(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		}
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -156,13 +156,13 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Swap {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Object <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Swap {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; impl, value;
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String template;
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] mediaTypes;
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		Impl(SwapAnnotation.Builder b) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		Object(SwapAnnotation.Builder b) {
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">this</strong>.impl = b.impl;
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">this</strong>.mediaTypes = copyOf(b.mediaTypes);

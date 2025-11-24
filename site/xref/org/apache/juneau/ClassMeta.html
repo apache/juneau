@@ -611,7 +611,7 @@
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> <em class="jxr_javadoccomment">	 * 	Don't call init() in constructor.</em>
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">	 * 	Used for delayed initialization when the possibility of class reference loops exist.</em>
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L607" href="#L607">607</a> 	ClassMeta(Class&lt;T&gt; innerClass, BeanContext beanContext, ObjectSwap&lt;T,?&gt;[] swaps, ObjectSwap&lt;?,?&gt;[] childSwaps) {
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<strong class="jxr_keyword">this</strong>.innerClass = innerClass;
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 		<strong class="jxr_keyword">this</strong>.info = info(innerClass);

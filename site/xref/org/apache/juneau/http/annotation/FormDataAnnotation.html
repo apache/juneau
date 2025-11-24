@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">		 * @return A new {@link FormData @FormData} object.</em>
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">public</strong> FormData build() {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Impl(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Object(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		}
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -186,14 +186,14 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> FormData {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Object <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> FormData {
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartParser&gt; parser;
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; serializer;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String name, value, def;
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Schema schema;
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		Impl(FormDataAnnotation.Builder b) {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		Object(FormDataAnnotation.Builder b) {
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">this</strong>.def = b.def;
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">this</strong>.name = b.name;

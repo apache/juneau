@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">		 * @return A new {@link Bean @Bean} object.</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">public</strong> Bean build() {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Impl(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Object(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		}
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -326,7 +326,7 @@
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Bean {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Object <strong class="jxr_keyword">extends</strong> <a name="AppliedOnTypeAnnotationObject" href="../../../../org/apache/juneau/common/annotation/AppliedOnTypeAnnotationObject.html#AppliedOnTypeAnnotationObject">AppliedOnTypeAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Bean {
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> findFluentSetters, sort;
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> BeanInterceptor&lt;?&gt;&gt; interceptor;
@@ -335,7 +335,7 @@
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt;[] dictionary;
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String example, excludeProperties, p, properties, readOnlyProperties, ro, typeName, typePropertyName, wo, writeOnlyProperties, xp;
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		Impl(BeanAnnotation.Builder b) {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		Object(BeanAnnotation.Builder b) {
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">this</strong>.dictionary = copyOf(b.dictionary);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">this</strong>.example = b.example;
