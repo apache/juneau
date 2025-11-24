@@ -23,6 +23,7 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.common.utils.*;
 
@@ -167,7 +168,7 @@ public class AnnotationObject implements Annotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Class<? extends Annotation> annotationType;
-	private int hashCode = -1;
+	private Supplier<Integer> hashCode = memoize(() -> AnnotationUtils.hash(this));
 
 	/**
 	 * Constructor.
@@ -190,16 +191,12 @@ public class AnnotationObject implements Annotation {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		if (! annotationType.isInstance(o))
-			return false;
-		return eq(this, (Annotation)o);
+		return o instanceof Annotation o2 && annotationType.isInstance(o) && eq(this, o2);
 	}
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		if (hashCode == -1)
-			hashCode = AnnotationUtils.hash(this);
-		return hashCode;
+		return hashCode.get();
 	}
 
 	/**
