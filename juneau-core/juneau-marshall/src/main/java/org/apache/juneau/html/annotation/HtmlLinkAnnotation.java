@@ -175,9 +175,9 @@ public class HtmlLinkAnnotation {
 
 		Object(HtmlLinkAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.nameProperty = b.nameProperty;
-			this.uriProperty = b.uriProperty;
+			description = copyOf(b.description);
+			nameProperty = b.nameProperty;
+			uriProperty = b.uriProperty;
 		}
 
 		@Override /* Overridden from HtmlLink */

@@ -81,9 +81,9 @@ public class RequestBeanPropertyMeta {
 	private final HttpPartSchema schema;
 
 	RequestBeanPropertyMeta(Builder b, HttpPartSerializer serializer, HttpPartParser parser) {
-		this.partType = b.partType;
-		this.schema = b.schema;
-		this.getter = b.getter;
+		partType = b.partType;
+		schema = b.schema;
+		getter = b.getter;
 		this.serializer = opt(schema.getSerializer() == null ? serializer : BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).run());
 		this.parser = schema.getParser() == null ? parser : BeanCreator.of(HttpPartParser.class).type(schema.getParser()).run();
 	}

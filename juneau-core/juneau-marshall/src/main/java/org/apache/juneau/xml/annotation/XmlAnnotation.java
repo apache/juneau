@@ -224,11 +224,11 @@ public class XmlAnnotation {
 
 		Object(XmlAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.childName = b.childName;
-			this.format = b.format;
-			this.namespace = b.namespace;
-			this.prefix = b.prefix;
+			description = copyOf(b.description);
+			childName = b.childName;
+			format = b.format;
+			namespace = b.namespace;
+			prefix = b.prefix;
 		}
 
 		@Override /* Overridden from Xml */

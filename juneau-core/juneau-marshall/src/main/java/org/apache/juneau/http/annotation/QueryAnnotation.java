@@ -255,13 +255,13 @@ public class QueryAnnotation {
 
 		Object(QueryAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.name = b.name;
-			this.parser = b.parser;
-			this.schema = b.schema;
-			this.serializer = b.serializer;
-			this.value = b.value;
-			this.def = b.def;
+			description = copyOf(b.description);
+			name = b.name;
+			parser = b.parser;
+			schema = b.schema;
+			serializer = b.serializer;
+			value = b.value;
+			def = b.def;
 		}
 
 		@Override /* Overridden from Query */

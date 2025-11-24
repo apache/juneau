@@ -137,7 +137,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 		private final int f1;
 
 		public A(Builder b) {
-			this.f1 = b.f1;
+			f1 = b.f1;
 		}
 
 		public static Builder builder() {
@@ -175,7 +175,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 		private final int f1;
 
 		public Ac(Builder b) {
-			this.f1 = b.f1;
+			f1 = b.f1;
 		}
 
 		public static Builder builder() {
@@ -211,7 +211,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 		private final A f1;
 
 		public A2(Builder b) {
-			this.f1 = b.f1;
+			f1 = b.f1;
 		}
 
 		public static Builder builder() {
@@ -273,15 +273,15 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 		private final Map<String,List<A[]>> f9;
 
 		public A3(Builder b) {
-			this.f1 = b.f1;
-			this.f2 = b.f2;
-			this.f3 = b.f3;
-			this.f4 = b.f4;
-			this.f5 = b.f5;
-			this.f6 = b.f6;
-			this.f7 = b.f7;
-			this.f8 = b.f8;
-			this.f9 = b.f9;
+			f1 = b.f1;
+			f2 = b.f2;
+			f3 = b.f3;
+			f4 = b.f4;
+			f5 = b.f5;
+			f6 = b.f6;
+			f7 = b.f7;
+			f8 = b.f8;
+			f9 = b.f9;
 		}
 
 		public static Builder builder() {

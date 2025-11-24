@@ -92,8 +92,8 @@ public class ExternalDocsAnnotation {
 
 		Object(ExternalDocsAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.url = b.url;
+			description = copyOf(b.description);
+			url = b.url;
 		}
 
 		@Override

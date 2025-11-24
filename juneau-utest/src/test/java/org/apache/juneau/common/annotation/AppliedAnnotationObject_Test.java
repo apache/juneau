@@ -84,8 +84,8 @@ class AppliedAnnotationObject_Test extends TestBase {
 
 		public TestAppliedAnnotationObject(Builder b) {
 			super(b);
-			this.value = b.value;
-			this.number = b.number;
+			value = b.value;
+			number = b.number;
 		}
 
 		@Override
@@ -117,654 +117,667 @@ class AppliedAnnotationObject_Test extends TestBase {
 	public static class TargetClass2 {}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Basic tests - on() with strings
+	// Nested test classes
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void a01_basic_noTargets() {
-		var a = TestAppliedAnnotationObject.create().build();
-		assertArrayEquals(new String[0], a.on());
+	@Nested
+	@DisplayName("Basic on() tests with strings")
+	class BasicOnTests {
+
+		@Test
+		void noTargets() {
+			var a = TestAppliedAnnotationObject.create().build();
+			assertArrayEquals(new String[0], a.on());
+		}
+
+		@Test
+		void singleTarget() {
+			var a = TestAppliedAnnotationObject.create()
+				.on("com.example.MyClass")
+				.build();
+
+			assertArrayEquals(new String[]{"com.example.MyClass"}, a.on());
+		}
+
+		@Test
+		void multipleTargets() {
+			var a = TestAppliedAnnotationObject.create()
+				.on("com.example.Class1")
+				.on("com.example.Class2")
+				.build();
+
+			assertArrayEquals(new String[]{"com.example.Class1", "com.example.Class2"}, a.on());
+		}
+
+		@Test
+		void varargsTargets() {
+			var a = TestAppliedAnnotationObject.create()
+				.on("target1", "target2", "target3")
+				.build();
+
+			assertArrayEquals(new String[]{"target1", "target2", "target3"}, a.on());
+		}
+
+		@Test
+		void withOtherProperties() {
+			var a = TestAppliedAnnotationObject.create()
+				.on("com.example.MyClass")
+				.value("test")
+				.number(42)
+				.build();
+
+			assertArrayEquals(new String[]{"com.example.MyClass"}, a.on());
+			assertEquals("test", a.value());
+			assertEquals(42, a.number());
+		}
 	}
 
-	@Test
-	void a02_basic_singleTarget() {
-		var a = TestAppliedAnnotationObject.create()
-			.on("com.example.MyClass")
-			.build();
+	@Nested
+	@DisplayName("Equality and hashcode tests")
+	class EqualityAndHashCodeTests {
 
-		assertArrayEquals(new String[]{"com.example.MyClass"}, a.on());
+		@Test
+		void sameTargets() {
+			var a1 = TestAppliedAnnotationObject.create()
+				.on("target1", "target2")
+				.value("test")
+				.build();
+
+			var a2 = TestAppliedAnnotationObject.create()
+				.on("target1", "target2")
+				.value("test")
+				.build();
+
+			assertEquals(a1, a2);
+			assertEquals(a1.hashCode(), a2.hashCode());
+		}
+
+		@Test
+		void differentTargets() {
+			var a1 = TestAppliedAnnotationObject.create()
+				.on("target1")
+				.build();
+
+			var a2 = TestAppliedAnnotationObject.create()
+				.on("target2")
+				.build();
+
+			assertNotEquals(a1, a2);
+		}
+
+		@Test
+		void differentTargetOrder() {
+			// Arrays with different order should not be equal
+			var a1 = TestAppliedAnnotationObject.create()
+				.on("target1", "target2")
+				.build();
+
+			var a2 = TestAppliedAnnotationObject.create()
+				.on("target2", "target1")
+				.build();
+
+			assertNotEquals(a1, a2);
+		}
+
+		@Test
+		void noTargetsVsWithTargets() {
+			var a1 = TestAppliedAnnotationObject.create().build();
+			var a2 = TestAppliedAnnotationObject.create()
+				.on("target1")
+				.build();
+
+			assertNotEquals(a1, a2);
+		}
 	}
 
-	@Test
-	void a03_basic_multipleTargets() {
-		var a = TestAppliedAnnotationObject.create()
-			.on("com.example.Class1")
-			.on("com.example.Class2")
-			.build();
+	@Nested
+	@DisplayName("BuilderT - Class targeting tests")
+	class BuilderTTests {
 
-		assertArrayEquals(new String[]{"com.example.Class1", "com.example.Class2"}, a.on());
-	}
+		/**
+		 * Implementation with BuilderT for class targeting
+		 */
+		public static class TestAppliedAnnotationObjectT extends AppliedAnnotationObject implements TestAppliedAnnotation {
 
-	@Test
-	void a04_basic_varargsTargets() {
-		var a = TestAppliedAnnotationObject.create()
-			.on("target1", "target2", "target3")
-			.build();
+			private final String value;
 
-		assertArrayEquals(new String[]{"target1", "target2", "target3"}, a.on());
-	}
+			public static class Builder extends AppliedAnnotationObject.BuilderT {
+				String value = "";
 
-	@Test
-	void a05_basic_withOtherProperties() {
-		var a = TestAppliedAnnotationObject.create()
-			.on("com.example.MyClass")
-			.value("test")
-			.number(42)
-			.build();
+				public Builder() {
+					super(TestAppliedAnnotation.class);
+				}
 
-		assertArrayEquals(new String[]{"com.example.MyClass"}, a.on());
-		assertEquals("test", a.value());
-		assertEquals(42, a.number());
-	}
+				public Builder value(String value) {
+					this.value = value;
+					return this;
+				}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Equality and hashcode tests with on property
-	//------------------------------------------------------------------------------------------------------------------
+				@Override
+				public Builder on(String...value) {
+					super.on(value);
+					return this;
+				}
 
-	@Test
-	void b01_equality_sameTargets() {
-		var a1 = TestAppliedAnnotationObject.create()
-			.on("target1", "target2")
-			.value("test")
-			.build();
+				@Override
+				public Builder on(Class<?>...value) {
+					super.on(value);
+					return this;
+				}
 
-		var a2 = TestAppliedAnnotationObject.create()
-			.on("target1", "target2")
-			.value("test")
-			.build();
+				@Override
+				public Builder on(ClassInfo...value) {
+					super.on(value);
+					return this;
+				}
 
-		assertEquals(a1, a2);
-		assertEquals(a1.hashCode(), a2.hashCode());
-	}
-
-	@Test
-	void b02_equality_differentTargets() {
-		var a1 = TestAppliedAnnotationObject.create()
-			.on("target1")
-			.build();
-
-		var a2 = TestAppliedAnnotationObject.create()
-			.on("target2")
-			.build();
-
-		assertNotEquals(a1, a2);
-	}
-
-	@Test
-	void b03_equality_differentTargetOrder() {
-		// Arrays with different order should not be equal
-		var a1 = TestAppliedAnnotationObject.create()
-			.on("target1", "target2")
-			.build();
-
-		var a2 = TestAppliedAnnotationObject.create()
-			.on("target2", "target1")
-			.build();
-
-		assertNotEquals(a1, a2);
-	}
-
-	@Test
-	void b04_equality_noTargetsVsWithTargets() {
-		var a1 = TestAppliedAnnotationObject.create().build();
-		var a2 = TestAppliedAnnotationObject.create()
-			.on("target1")
-			.build();
-
-		assertNotEquals(a1, a2);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// BuilderT tests - Class targeting
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Implementation with BuilderT for class targeting
-	 */
-	public static class TestAppliedAnnotationObjectT extends AppliedAnnotationObject implements TestAppliedAnnotation {
-
-		private final String value;
-
-		public static class Builder extends AppliedAnnotationObject.BuilderT {
-			String value = "";
-
-			public Builder() {
-				super(TestAppliedAnnotation.class);
+				public TestAppliedAnnotation build() {
+					return new TestAppliedAnnotationObjectT(this);
+				}
 			}
 
-			public Builder value(String value) {
-				this.value = value;
-				return this;
+			public static Builder create() {
+				return new Builder();
+			}
+
+			public TestAppliedAnnotationObjectT(Builder b) {
+				super(b);
+				value = b.value;
 			}
 
 			@Override
-			public Builder on(String...value) {
-				super.on(value);
-				return this;
+			public String value() {
+				return value;
 			}
 
 			@Override
-			public Builder on(Class<?>...value) {
-				super.on(value);
-				return this;
+			public int number() {
+				return 0;
+			}
+		}
+
+		@Test
+		void onClassArray() {
+			var a = TestAppliedAnnotationObjectT.create()
+				.on(TargetClass1.class, TargetClass2.class)
+				.build();
+
+			String[] expected = {
+				CNAME + "$TargetClass1",
+				CNAME + "$TargetClass2"
+			};
+			assertArrayEquals(expected, a.on());
+		}
+
+		@Test
+		void onClassInfo() {
+			var ci1 = ClassInfo.of(TargetClass1.class);
+			var ci2 = ClassInfo.of(TargetClass2.class);
+
+			var a = TestAppliedAnnotationObjectT.create()
+				.on(ci1, ci2)
+				.build();
+
+			String[] expected = {
+				CNAME + "$TargetClass1",
+				CNAME + "$TargetClass2"
+			};
+			assertArrayEquals(expected, a.on());
+		}
+
+		@Test
+		void mixedTargeting() {
+			var a = TestAppliedAnnotationObjectT.create()
+				.on("com.example.StringTarget")
+				.on(TargetClass1.class)
+				.build();
+
+			String[] expected = {
+				"com.example.StringTarget",
+				CNAME + "$TargetClass1"
+			};
+			assertArrayEquals(expected, a.on());
+		}
+	}
+
+	@Nested
+	@DisplayName("BuilderM - Method targeting tests")
+	class BuilderMTests {
+
+		/**
+		 * Implementation with BuilderM for method targeting
+		 */
+		public static class TestAppliedAnnotationObjectM extends AppliedAnnotationObject implements TestAppliedAnnotation {
+
+			public static class Builder extends AppliedAnnotationObject.BuilderM {
+
+				public Builder() {
+					super(TestAppliedAnnotation.class);
+				}
+
+				@Override
+				public Builder on(String...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Method...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(MethodInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				public TestAppliedAnnotation build() {
+					return new TestAppliedAnnotationObjectM(this);
+				}
+			}
+
+			public static Builder create() {
+				return new Builder();
+			}
+
+			public TestAppliedAnnotationObjectM(Builder b) {
+				super(b);
 			}
 
 			@Override
-			public Builder on(ClassInfo...value) {
-				super.on(value);
-				return this;
-			}
-
-			public TestAppliedAnnotation build() {
-				return new TestAppliedAnnotationObjectT(this);
-			}
-		}
-
-		public static Builder create() {
-			return new Builder();
-		}
-
-		public TestAppliedAnnotationObjectT(Builder b) {
-			super(b);
-			this.value = b.value;
-		}
-
-		@Override
-		public String value() {
-			return value;
-		}
-
-		@Override
-		public int number() {
-			return 0;
-		}
-	}
-
-	@Test
-	void c01_builderT_onClassArray() {
-		var a = TestAppliedAnnotationObjectT.create()
-			.on(TargetClass1.class, TargetClass2.class)
-			.build();
-
-		String[] expected = {
-			CNAME + "$TargetClass1",
-			CNAME + "$TargetClass2"
-		};
-		assertArrayEquals(expected, a.on());
-	}
-
-	@Test
-	void c02_builderT_onClassInfo() {
-		var ci1 = ClassInfo.of(TargetClass1.class);
-		var ci2 = ClassInfo.of(TargetClass2.class);
-
-		var a = TestAppliedAnnotationObjectT.create()
-			.on(ci1, ci2)
-			.build();
-
-		String[] expected = {
-			CNAME + "$TargetClass1",
-			CNAME + "$TargetClass2"
-		};
-		assertArrayEquals(expected, a.on());
-	}
-
-	@Test
-	void c03_builderT_mixedTargeting() {
-		var a = TestAppliedAnnotationObjectT.create()
-			.on("com.example.StringTarget")
-			.on(TargetClass1.class)
-			.build();
-
-		String[] expected = {
-			"com.example.StringTarget",
-			CNAME + "$TargetClass1"
-		};
-		assertArrayEquals(expected, a.on());
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// BuilderM tests - Method targeting
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Implementation with BuilderM for method targeting
-	 */
-	public static class TestAppliedAnnotationObjectM extends AppliedAnnotationObject implements TestAppliedAnnotation {
-
-		public static class Builder extends AppliedAnnotationObject.BuilderM {
-
-			public Builder() {
-				super(TestAppliedAnnotation.class);
+			public String value() {
+				return "";
 			}
 
 			@Override
-			public Builder on(String...value) {
-				super.on(value);
-				return this;
+			public int number() {
+				return 0;
+			}
+		}
+
+		@Test
+		void onMethod() throws Exception {
+			Method m1 = TargetClass1.class.getMethod("method1");
+			Method m2 = TargetClass1.class.getMethod("method2", int.class);
+
+			var a = TestAppliedAnnotationObjectM.create()
+				.on(m1, m2)
+				.build();
+
+			String[] expected = {
+				CNAME + "$TargetClass1.method1()",
+				CNAME + "$TargetClass1.method2(int)"
+			};
+			assertArrayEquals(expected, a.on());
+		}
+
+		@Test
+		void onMethodInfo() throws Exception {
+			var mi1 = MethodInfo.of(TargetClass1.class.getMethod("method1"));
+			var mi2 = MethodInfo.of(TargetClass1.class.getMethod("method2", int.class));
+
+			var a = TestAppliedAnnotationObjectM.create()
+				.on(mi1, mi2)
+				.build();
+
+			String[] expected = {
+				CNAME + "$TargetClass1.method1()",
+				CNAME + "$TargetClass1.method2(int)"
+			};
+			assertArrayEquals(expected, a.on());
+		}
+	}
+
+	@Nested
+	@DisplayName("BuilderC - Constructor targeting tests")
+	class BuilderCTests {
+
+		/**
+		 * Implementation with BuilderC for constructor targeting
+		 */
+		public static class TestAppliedAnnotationObjectC extends AppliedAnnotationObject implements TestAppliedAnnotation {
+
+			public static class Builder extends AppliedAnnotationObject.BuilderC {
+
+				public Builder() {
+					super(TestAppliedAnnotation.class);
+				}
+
+				@Override
+				public Builder on(String...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Constructor<?>...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(ConstructorInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				public TestAppliedAnnotation build() {
+					return new TestAppliedAnnotationObjectC(this);
+				}
+			}
+
+			public static Builder create() {
+				return new Builder();
+			}
+
+			public TestAppliedAnnotationObjectC(Builder b) {
+				super(b);
 			}
 
 			@Override
-			public Builder on(Method...value) {
-				super.on(value);
-				return this;
+			public String value() {
+				return "";
 			}
 
 			@Override
-			public Builder on(MethodInfo...value) {
-				super.on(value);
-				return this;
-			}
-
-			public TestAppliedAnnotation build() {
-				return new TestAppliedAnnotationObjectM(this);
+			public int number() {
+				return 0;
 			}
 		}
 
-		public static Builder create() {
-			return new Builder();
+		@Test
+		void onConstructor() throws Exception {
+			Constructor<?> c1 = TargetClass1.class.getConstructor();
+			Constructor<?> c2 = TargetClass1.class.getConstructor(String.class);
+
+			var a = TestAppliedAnnotationObjectC.create()
+				.on(c1, c2)
+				.build();
+
+			String[] expected = {
+				CNAME + "$TargetClass1()",
+				CNAME + "$TargetClass1(java.lang.String)"
+			};
+			assertArrayEquals(expected, a.on());
 		}
 
-		public TestAppliedAnnotationObjectM(Builder b) {
-			super(b);
-		}
+		@Test
+		void onConstructorInfo() throws Exception {
+			var ci1 = ConstructorInfo.of(TargetClass1.class.getConstructor());
+			var ci2 = ConstructorInfo.of(TargetClass1.class.getConstructor(String.class));
 
-		@Override
-		public String value() {
-			return "";
-		}
+			var a = TestAppliedAnnotationObjectC.create()
+				.on(ci1, ci2)
+				.build();
 
-		@Override
-		public int number() {
-			return 0;
+			String[] expected = {
+				CNAME + "$TargetClass1()",
+				CNAME + "$TargetClass1(java.lang.String)"
+			};
+			assertArrayEquals(expected, a.on());
 		}
 	}
 
-	@Test
-	void d01_builderM_onMethod() throws Exception {
-		Method m1 = TargetClass1.class.getMethod("method1");
-		Method m2 = TargetClass1.class.getMethod("method2", int.class);
+	@Nested
+	@DisplayName("BuilderMF - Method and Field targeting tests")
+	class BuilderMFTests {
 
-		var a = TestAppliedAnnotationObjectM.create()
-			.on(m1, m2)
-			.build();
+		/**
+		 * Implementation with BuilderMF for method and field targeting
+		 */
+		public static class TestAppliedAnnotationObjectMF extends AppliedAnnotationObject implements TestAppliedAnnotation {
 
-		String[] expected = {
-			CNAME + "$TargetClass1.method1()",
-			CNAME + "$TargetClass1.method2(int)"
-		};
-		assertArrayEquals(expected, a.on());
-	}
+			public static class Builder extends AppliedAnnotationObject.BuilderMF {
 
-	@Test
-	void d02_builderM_onMethodInfo() throws Exception {
-		var mi1 = MethodInfo.of(TargetClass1.class.getMethod("method1"));
-		var mi2 = MethodInfo.of(TargetClass1.class.getMethod("method2", int.class));
+				public Builder() {
+					super(TestAppliedAnnotation.class);
+				}
 
-		var a = TestAppliedAnnotationObjectM.create()
-			.on(mi1, mi2)
-			.build();
+				@Override
+				public Builder on(String...value) {
+					super.on(value);
+					return this;
+				}
 
-		String[] expected = {
-			CNAME + "$TargetClass1.method1()",
-			CNAME + "$TargetClass1.method2(int)"
-		};
-		assertArrayEquals(expected, a.on());
-	}
+				@Override
+				public Builder on(Method...value) {
+					super.on(value);
+					return this;
+				}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// BuilderC tests - Constructor targeting
-	//------------------------------------------------------------------------------------------------------------------
+				@Override
+				public Builder on(MethodInfo...value) {
+					super.on(value);
+					return this;
+				}
 
-	/**
-	 * Implementation with BuilderC for constructor targeting
-	 */
-	public static class TestAppliedAnnotationObjectC extends AppliedAnnotationObject implements TestAppliedAnnotation {
+				@Override
+				public Builder on(Field...value) {
+					super.on(value);
+					return this;
+				}
 
-		public static class Builder extends AppliedAnnotationObject.BuilderC {
+				@Override
+				public Builder on(FieldInfo...value) {
+					super.on(value);
+					return this;
+				}
 
-			public Builder() {
-				super(TestAppliedAnnotation.class);
+				public TestAppliedAnnotation build() {
+					return new TestAppliedAnnotationObjectMF(this);
+				}
 			}
 
-			@Override
-			public Builder on(String...value) {
-				super.on(value);
-				return this;
+			public static Builder create() {
+				return new Builder();
 			}
 
-			@Override
-			public Builder on(Constructor<?>...value) {
-				super.on(value);
-				return this;
-			}
-
-			@Override
-			public Builder on(ConstructorInfo...value) {
-				super.on(value);
-				return this;
-			}
-
-			public TestAppliedAnnotation build() {
-				return new TestAppliedAnnotationObjectC(this);
-			}
-		}
-
-		public static Builder create() {
-			return new Builder();
-		}
-
-		public TestAppliedAnnotationObjectC(Builder b) {
-			super(b);
-		}
-
-		@Override
-		public String value() {
-			return "";
-		}
-
-		@Override
-		public int number() {
-			return 0;
-		}
-	}
-
-	@Test
-	void e01_builderC_onConstructor() throws Exception {
-		Constructor<?> c1 = TargetClass1.class.getConstructor();
-		Constructor<?> c2 = TargetClass1.class.getConstructor(String.class);
-
-		var a = TestAppliedAnnotationObjectC.create()
-			.on(c1, c2)
-			.build();
-
-		String[] expected = {
-			CNAME + "$TargetClass1()",
-			CNAME + "$TargetClass1(java.lang.String)"
-		};
-		assertArrayEquals(expected, a.on());
-	}
-
-	@Test
-	void e02_builderC_onConstructorInfo() throws Exception {
-		var ci1 = ConstructorInfo.of(TargetClass1.class.getConstructor());
-		var ci2 = ConstructorInfo.of(TargetClass1.class.getConstructor(String.class));
-
-		var a = TestAppliedAnnotationObjectC.create()
-			.on(ci1, ci2)
-			.build();
-
-		String[] expected = {
-			CNAME + "$TargetClass1()",
-			CNAME + "$TargetClass1(java.lang.String)"
-		};
-		assertArrayEquals(expected, a.on());
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// BuilderMF tests - Method and Field targeting
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Implementation with BuilderMF for method and field targeting
-	 */
-	public static class TestAppliedAnnotationObjectMF extends AppliedAnnotationObject implements TestAppliedAnnotation {
-
-		public static class Builder extends AppliedAnnotationObject.BuilderMF {
-
-			public Builder() {
-				super(TestAppliedAnnotation.class);
+			public TestAppliedAnnotationObjectMF(Builder b) {
+				super(b);
 			}
 
 			@Override
-			public Builder on(String...value) {
-				super.on(value);
-				return this;
+			public String value() {
+				return "";
 			}
 
 			@Override
-			public Builder on(Method...value) {
-				super.on(value);
-				return this;
-			}
-
-			@Override
-			public Builder on(MethodInfo...value) {
-				super.on(value);
-				return this;
-			}
-
-			@Override
-			public Builder on(Field...value) {
-				super.on(value);
-				return this;
-			}
-
-			@Override
-			public Builder on(FieldInfo...value) {
-				super.on(value);
-				return this;
-			}
-
-			public TestAppliedAnnotation build() {
-				return new TestAppliedAnnotationObjectMF(this);
+			public int number() {
+				return 0;
 			}
 		}
 
-		public static Builder create() {
-			return new Builder();
+		@Test
+		void onField() throws Exception {
+			Field f1 = TargetClass1.class.getField("field1");
+			Field f2 = TargetClass1.class.getField("field2");
+
+			var a = TestAppliedAnnotationObjectMF.create()
+				.on(f1, f2)
+				.build();
+
+			String[] expected = {
+				CNAME + "$TargetClass1.field1",
+				CNAME + "$TargetClass1.field2"
+			};
+			assertArrayEquals(expected, a.on());
 		}
 
-		public TestAppliedAnnotationObjectMF(Builder b) {
-			super(b);
+		@Test
+		void onFieldInfo() throws Exception {
+			var fi1 = FieldInfo.of(ClassInfo.of(TargetClass1.class), TargetClass1.class.getField("field1"));
+			var fi2 = FieldInfo.of(ClassInfo.of(TargetClass1.class), TargetClass1.class.getField("field2"));
+
+			var a = TestAppliedAnnotationObjectMF.create()
+				.on(fi1, fi2)
+				.build();
+
+			String[] expected = {
+				CNAME + "$TargetClass1.field1",
+				CNAME + "$TargetClass1.field2"
+			};
+			assertArrayEquals(expected, a.on());
 		}
 
-		@Override
-		public String value() {
-			return "";
+		@Test
+		void mixedMethodsAndFields() throws Exception {
+			Method m = TargetClass1.class.getMethod("method1");
+			Field f = TargetClass1.class.getField("field1");
+
+			var a = TestAppliedAnnotationObjectMF.create()
+				.on(m)
+				.on(f)
+				.build();
+
+			String[] expected = {
+				CNAME + "$TargetClass1.method1()",
+				CNAME + "$TargetClass1.field1"
+			};
+			assertArrayEquals(expected, a.on());
+		}
+	}
+
+	@Nested
+	@DisplayName("Fluent API tests")
+	class FluentApiTests {
+
+		@Test
+		void chaining() {
+			var a = TestAppliedAnnotationObject.create()
+				.on("target1")
+				.value("test")
+				.on("target2")
+				.number(42)
+				.on("target3")
+				.build();
+
+			assertArrayEquals(new String[]{"target1", "target2", "target3"}, a.on());
+			assertEquals("test", a.value());
+			assertEquals(42, a.number());
+		}
+	}
+
+	@Nested
+	@DisplayName("toMap() tests")
+	class ToMapTests {
+
+		@Test
+		void withTargets() {
+			var a = TestAppliedAnnotationObject.create()
+				.on("target1", "target2")
+				.value("test")
+				.build();
+
+			var map = ((TestAppliedAnnotationObject)a).toMap();
+			assertArrayEquals(new String[]{"target1", "target2"}, (String[])map.get("on"));
+			assertEquals("test", map.get("value"));
+		}
+	}
+
+	@Nested
+	@DisplayName("Edge case tests")
+	class EdgeCaseTests {
+
+		@Test
+		void emptyTargets() {
+			var a = TestAppliedAnnotationObject.create()
+				.on()
+				.build();
+
+			assertArrayEquals(new String[0], a.on());
 		}
 
-		@Override
-		public int number() {
-			return 0;
+		@Test
+		void builderReuse() {
+			var builder = TestAppliedAnnotationObject.create()
+				.on("target1")
+				.value("test");
+
+			var a1 = builder.build();
+			var a2 = builder.build();
+
+			// Different instances but equal
+			assertNotSame(a1, a2);
+			assertEquals(a1, a2);
 		}
 	}
 
-	@Test
-	void f01_builderMF_onField() throws Exception {
-		Field f1 = TargetClass1.class.getField("field1");
-		Field f2 = TargetClass1.class.getField("field2");
+	@Nested
+	@DisplayName("Null validation tests")
+	class NullValidationTests {
 
-		var a = TestAppliedAnnotationObjectMF.create()
-			.on(f1, f2)
-			.build();
+		@Test
+		void nullClass_throwsException() {
+			assertThrows(IllegalArgumentException.class, () ->
+				BuilderTTests.TestAppliedAnnotationObjectT.create()
+					.on((Class<?>)null)
+					.build()
+			);
+		}
 
-		String[] expected = {
-			CNAME + "$TargetClass1.field1",
-			CNAME + "$TargetClass1.field2"
-		};
-		assertArrayEquals(expected, a.on());
-	}
+		@Test
+		void nullClassInfo_throwsException() {
+			assertThrows(IllegalArgumentException.class, () ->
+				BuilderTTests.TestAppliedAnnotationObjectT.create()
+					.on((ClassInfo)null)
+					.build()
+			);
+		}
 
-	@Test
-	void f02_builderMF_onFieldInfo() throws Exception {
-		var fi1 = FieldInfo.of(ClassInfo.of(TargetClass1.class), TargetClass1.class.getField("field1"));
-		var fi2 = FieldInfo.of(ClassInfo.of(TargetClass1.class), TargetClass1.class.getField("field2"));
+		@Test
+		void nullMethod_throwsException() {
+			assertThrows(IllegalArgumentException.class, () ->
+				BuilderMTests.TestAppliedAnnotationObjectM.create()
+					.on((java.lang.reflect.Method)null)
+					.build()
+			);
+		}
 
-		var a = TestAppliedAnnotationObjectMF.create()
-			.on(fi1, fi2)
-			.build();
+		@Test
+		void nullMethodInfo_throwsException() {
+			assertThrows(IllegalArgumentException.class, () ->
+				BuilderMTests.TestAppliedAnnotationObjectM.create()
+					.on((MethodInfo)null)
+					.build()
+			);
+		}
 
-		String[] expected = {
-			CNAME + "$TargetClass1.field1",
-			CNAME + "$TargetClass1.field2"
-		};
-		assertArrayEquals(expected, a.on());
-	}
+		@Test
+		void nullField_throwsException() {
+			assertThrows(IllegalArgumentException.class, () ->
+				BuilderMFTests.TestAppliedAnnotationObjectMF.create()
+					.on((java.lang.reflect.Field)null)
+					.build()
+			);
+		}
 
-	@Test
-	void f03_builderMF_mixedMethodsAndFields() throws Exception {
-		Method m = TargetClass1.class.getMethod("method1");
-		Field f = TargetClass1.class.getField("field1");
+		@Test
+		void nullFieldInfo_throwsException() {
+			assertThrows(IllegalArgumentException.class, () ->
+				BuilderMFTests.TestAppliedAnnotationObjectMF.create()
+					.on((FieldInfo)null)
+					.build()
+			);
+		}
 
-		var a = TestAppliedAnnotationObjectMF.create()
-			.on(m)
-			.on(f)
-			.build();
+		@Test
+		void nullConstructor_throwsException() {
+			assertThrows(IllegalArgumentException.class, () ->
+				BuilderCTests.TestAppliedAnnotationObjectC.create()
+					.on((java.lang.reflect.Constructor<?>)null)
+					.build()
+			);
+		}
 
-		String[] expected = {
-			CNAME + "$TargetClass1.method1()",
-			CNAME + "$TargetClass1.field1"
-		};
-		assertArrayEquals(expected, a.on());
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent API tests
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void g01_fluentApi_chaining() {
-		var a = TestAppliedAnnotationObject.create()
-			.on("target1")
-			.value("test")
-			.on("target2")
-			.number(42)
-			.on("target3")
-			.build();
-
-		assertArrayEquals(new String[]{"target1", "target2", "target3"}, a.on());
-		assertEquals("test", a.value());
-		assertEquals(42, a.number());
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// toMap() tests with on property
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void h01_toMap_withTargets() {
-		var a = TestAppliedAnnotationObject.create()
-			.on("target1", "target2")
-			.value("test")
-			.build();
-
-		var map = ((TestAppliedAnnotationObject)a).toMap();
-		assertArrayEquals(new String[]{"target1", "target2"}, (String[])map.get("on"));
-		assertEquals("test", map.get("value"));
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Edge cases
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void i01_edgeCase_emptyTargets() {
-		var a = TestAppliedAnnotationObject.create()
-			.on()
-			.build();
-
-		assertArrayEquals(new String[0], a.on());
-	}
-
-	@Test
-	void i02_edgeCase_builderReuse() {
-		var builder = TestAppliedAnnotationObject.create()
-			.on("target1")
-			.value("test");
-
-		var a1 = builder.build();
-		var a2 = builder.build();
-
-		// Different instances but equal
-		assertNotSame(a1, a2);
-		assertEquals(a1, a2);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Null validation tests
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void j01_nullClass_throwsException() {
-		assertThrows(IllegalArgumentException.class, () ->
-			TestAppliedAnnotationObjectT.create()
-				.on((Class<?>)null)
-				.build()
-		);
-	}
-
-	@Test
-	void j02_nullClassInfo_throwsException() {
-		assertThrows(IllegalArgumentException.class, () ->
-			TestAppliedAnnotationObjectT.create()
-				.on((ClassInfo)null)
-				.build()
-		);
-	}
-
-	@Test
-	void j03_nullMethod_throwsException() {
-		assertThrows(IllegalArgumentException.class, () ->
-			TestAppliedAnnotationObjectM.create()
-				.on((java.lang.reflect.Method)null)
-				.build()
-		);
-	}
-
-	@Test
-	void j04_nullMethodInfo_throwsException() {
-		assertThrows(IllegalArgumentException.class, () ->
-			TestAppliedAnnotationObjectM.create()
-				.on((MethodInfo)null)
-				.build()
-		);
-	}
-
-	@Test
-	void j05_nullField_throwsException() {
-		assertThrows(IllegalArgumentException.class, () ->
-			TestAppliedAnnotationObjectMF.create()
-				.on((java.lang.reflect.Field)null)
-				.build()
-		);
-	}
-
-	@Test
-	void j06_nullFieldInfo_throwsException() {
-		assertThrows(IllegalArgumentException.class, () ->
-			TestAppliedAnnotationObjectMF.create()
-				.on((FieldInfo)null)
-				.build()
-		);
-	}
-
-	@Test
-	void j07_nullConstructor_throwsException() {
-		assertThrows(IllegalArgumentException.class, () ->
-			TestAppliedAnnotationObjectC.create()
-				.on((java.lang.reflect.Constructor<?>)null)
-				.build()
-		);
-	}
-
-	@Test
-	void j08_nullConstructorInfo_throwsException() {
-		assertThrows(IllegalArgumentException.class, () ->
-			TestAppliedAnnotationObjectC.create()
-				.on((ConstructorInfo)null)
-				.build()
-		);
+		@Test
+		void nullConstructorInfo_throwsException() {
+			assertThrows(IllegalArgumentException.class, () ->
+				BuilderCTests.TestAppliedAnnotationObjectC.create()
+					.on((ConstructorInfo)null)
+					.build()
+			);
+		}
 	}
 }
-

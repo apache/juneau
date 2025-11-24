@@ -321,15 +321,15 @@ public class CallLoggerRule {
 	 * @param b Builder
 	 */
 	CallLoggerRule(Builder b) {
-		this.statusFilter = b.statusFilter;
-		this.exceptionFilter = b.exceptionFilter;
-		this.requestFilter = b.requestFilter;
-		this.responseFilter = b.responseFilter;
-		this.level = b.level;
-		this.enabled = b.enabled;
-		this.enabledTest = b.enabledTest;
-		this.requestDetail = b.requestDetail;
-		this.responseDetail = b.responseDetail;
+		statusFilter = b.statusFilter;
+		exceptionFilter = b.exceptionFilter;
+		requestFilter = b.requestFilter;
+		responseFilter = b.responseFilter;
+		level = b.level;
+		enabled = b.enabled;
+		enabledTest = b.enabledTest;
+		requestDetail = b.requestDetail;
+		responseDetail = b.responseDetail;
 	}
 
 	/**

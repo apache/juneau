@@ -254,16 +254,16 @@ public class BeanpAnnotation {
 
 		Object(BeanpAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.dictionary = copyOf(b.dictionary);
-			this.format = b.format;
-			this.name = b.name;
-			this.params = copyOf(b.params);
-			this.properties = b.properties;
-			this.ro = b.ro;
-			this.type = b.type;
-			this.value = b.value;
-			this.wo = b.wo;
+			description = copyOf(b.description);
+			dictionary = copyOf(b.dictionary);
+			format = b.format;
+			name = b.name;
+			params = copyOf(b.params);
+			properties = b.properties;
+			ro = b.ro;
+			type = b.type;
+			value = b.value;
+			wo = b.wo;
 		}
 
 		@Override /* Overridden from Beanp */

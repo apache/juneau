@@ -228,12 +228,12 @@ public class ResponseAnnotation {
 
 		Object(ResponseAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.examples = copyOf(b.examples);
-			this.headers = copyOf(b.headers);
-			this.parser = b.parser;
-			this.schema = b.schema;
-			this.serializer = b.serializer;
+			description = copyOf(b.description);
+			examples = copyOf(b.examples);
+			headers = copyOf(b.headers);
+			parser = b.parser;
+			schema = b.schema;
+			serializer = b.serializer;
 		}
 
 		@Override /* Overridden from Response */

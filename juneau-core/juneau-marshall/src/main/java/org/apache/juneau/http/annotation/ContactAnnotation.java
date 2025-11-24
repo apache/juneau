@@ -108,10 +108,10 @@ public class ContactAnnotation {
 
 		Object(ContactAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.email = b.email;
-			this.name = b.name;
-			this.url = b.url;
+			description = copyOf(b.description);
+			email = b.email;
+			name = b.name;
+			url = b.url;
 		}
 
 		@Override /* Overridden from Contact */

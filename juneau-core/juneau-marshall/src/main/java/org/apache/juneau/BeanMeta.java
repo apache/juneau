@@ -892,24 +892,24 @@ public class BeanMeta<T> {
 		this.c = classMeta.getInnerClass();
 
 		Builder<T> b = new Builder<>(classMeta, ctx, beanFilter, pNames, implClassConstructor);
-		this.notABeanReason = b.init(this);
+		notABeanReason = b.init(this);
 
 		this.beanFilter = beanFilter;
-		this.dictionaryName = b.dictionaryName;
-		this.properties = u(b.properties);
-		this.propertyArray = properties == null ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.class);
-		this.hiddenProperties = u(b.hiddenProperties);
-		this.getterProps = u(b.getterProps);
-		this.setterProps = u(b.setterProps);
-		this.dynaProperty = b.dynaProperty;
-		this.typeVarImpls = u(b.typeVarImpls);
-		this.constructor = b.constructor;
-		this.constructorArgs = b.constructorArgs;
-		this.beanRegistry = b.beanRegistry;
-		this.typePropertyName = b.typePropertyName;
-		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
-		this.sortProperties = b.sortProperties;
-		this.fluentSetters = b.fluentSetters;
+		dictionaryName = b.dictionaryName;
+		properties = u(b.properties);
+		propertyArray = properties == null ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.class);
+		hiddenProperties = u(b.hiddenProperties);
+		getterProps = u(b.getterProps);
+		setterProps = u(b.setterProps);
+		dynaProperty = b.dynaProperty;
+		typeVarImpls = u(b.typeVarImpls);
+		constructor = b.constructor;
+		constructorArgs = b.constructorArgs;
+		beanRegistry = b.beanRegistry;
+		typePropertyName = b.typePropertyName;
+		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
+		sortProperties = b.sortProperties;
+		fluentSetters = b.fluentSetters;
 
 		if (sortProperties)
 			Arrays.sort(propertyArray);

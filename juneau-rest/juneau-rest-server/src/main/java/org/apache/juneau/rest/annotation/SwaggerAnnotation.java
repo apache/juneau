@@ -178,15 +178,15 @@ public class SwaggerAnnotation {
 
 		Object(SwaggerAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.contact = b.contact;
-			this.externalDocs = b.externalDocs;
-			this.license = b.license;
-			this.tags = copyOf(b.tags);
-			this.termsOfService = copyOf(b.termsOfService);
-			this.title = copyOf(b.title);
-			this.value = copyOf(b.value);
-			this.version = b.version;
+			description = copyOf(b.description);
+			contact = b.contact;
+			externalDocs = b.externalDocs;
+			license = b.license;
+			tags = copyOf(b.tags);
+			termsOfService = copyOf(b.termsOfService);
+			title = copyOf(b.title);
+			value = copyOf(b.value);
+			version = b.version;
 		}
 
 		@Override /* Overridden from Swagger */

@@ -100,9 +100,9 @@ public class TagAnnotation {
 
 		Object(TagAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.externalDocs = b.externalDocs;
-			this.name = b.name;
+			description = copyOf(b.description);
+			externalDocs = b.externalDocs;
+			name = b.name;
 		}
 
 		@Override /* Overridden from Tag */

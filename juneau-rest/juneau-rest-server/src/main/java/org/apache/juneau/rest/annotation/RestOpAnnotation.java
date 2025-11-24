@@ -478,33 +478,33 @@ public class RestOpAnnotation {
 
 		Object(RestOpAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.clientVersion = b.clientVersion;
-			this.consumes = copyOf(b.consumes);
-			this.converters = copyOf(b.converters);
-			this.debug = b.debug;
-			this.defaultAccept = b.defaultAccept;
-			this.defaultCharset = b.defaultCharset;
-			this.defaultContentType = b.defaultContentType;
-			this.defaultRequestFormData = copyOf(b.defaultRequestFormData);
-			this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
-			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
-			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
-			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
-			this.encoders = copyOf(b.encoders);
-			this.guards = copyOf(b.guards);
-			this.matchers = copyOf(b.matchers);
-			this.maxInput = b.maxInput;
-			this.method = b.method;
-			this.parsers = copyOf(b.parsers);
-			this.path = copyOf(b.path);
-			this.produces = copyOf(b.produces);
-			this.roleGuard = b.roleGuard;
-			this.rolesDeclared = b.rolesDeclared;
-			this.serializers = copyOf(b.serializers);
-			this.summary = b.summary;
-			this.swagger = b.swagger;
-			this.value = b.value;
+			description = copyOf(b.description);
+			clientVersion = b.clientVersion;
+			consumes = copyOf(b.consumes);
+			converters = copyOf(b.converters);
+			debug = b.debug;
+			defaultAccept = b.defaultAccept;
+			defaultCharset = b.defaultCharset;
+			defaultContentType = b.defaultContentType;
+			defaultRequestFormData = copyOf(b.defaultRequestFormData);
+			defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
+			defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
+			defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
+			defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
+			encoders = copyOf(b.encoders);
+			guards = copyOf(b.guards);
+			matchers = copyOf(b.matchers);
+			maxInput = b.maxInput;
+			method = b.method;
+			parsers = copyOf(b.parsers);
+			path = copyOf(b.path);
+			produces = copyOf(b.produces);
+			roleGuard = b.roleGuard;
+			rolesDeclared = b.rolesDeclared;
+			serializers = copyOf(b.serializers);
+			summary = b.summary;
+			swagger = b.swagger;
+			value = b.value;
 		}
 
 		@Override /* Overridden from RestOp */

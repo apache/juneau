@@ -238,11 +238,11 @@ public class PathRemainderAnnotation {
 
 		Object(PathRemainderAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.def = b.def;
-			this.parser = b.parser;
-			this.schema = b.schema;
-			this.serializer = b.serializer;
+			description = copyOf(b.description);
+			def = b.def;
+			parser = b.parser;
+			schema = b.schema;
+			serializer = b.serializer;
 		}
 
 		@Override /* Overridden from PathRemainder */

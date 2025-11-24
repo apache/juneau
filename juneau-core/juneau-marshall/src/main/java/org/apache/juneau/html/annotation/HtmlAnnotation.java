@@ -263,14 +263,14 @@ public class HtmlAnnotation {
 
 		Object(HtmlAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.anchorText = b.anchorText;
-			this.format = b.format;
-			this.link = b.link;
-			this.noTableHeaders = b.noTableHeaders;
-			this.noTables = b.noTables;
-			this.render = b.render;
-			this.style = b.style;
+			description = copyOf(b.description);
+			anchorText = b.anchorText;
+			format = b.format;
+			link = b.link;
+			noTableHeaders = b.noTableHeaders;
+			noTables = b.noTables;
+			render = b.render;
+			style = b.style;
 		}
 
 		@Override /* Overridden from Html */

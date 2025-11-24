@@ -174,9 +174,9 @@ public class MarshalledAnnotation {
 
 		Object(MarshalledAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.example = b.example;
-			this.implClass = b.implClass;
+			description = copyOf(b.description);
+			example = b.example;
+			implClass = b.implClass;
 		}
 
 		@Override /* Overridden from Marshalled */

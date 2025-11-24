@@ -89,13 +89,13 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		if (nn(bpm.getSetter()))
 			ap.find(Html.class, info(bpm.getSetter())).forEach(x -> b.findHtmlInfo(x.inner()));
 
-		this.format = b.format;
-		this.noTables = b.noTables;
-		this.noTableHeaders = b.noTableHeaders;
-		this.render = b.render.orElse(null);
-		this.link = b.link;
-		this.anchorText = b.anchorText;
-		this.style = b.style;
+		format = b.format;
+		noTables = b.noTables;
+		noTableHeaders = b.noTableHeaders;
+		render = b.render.orElse(null);
+		link = b.link;
+		anchorText = b.anchorText;
+		style = b.style;
 	}
 
 	private HtmlBeanPropertyMeta() {

@@ -177,7 +177,7 @@ public class AnnotationObject implements Annotation {
 	 */
 	public AnnotationObject(Builder b) {
 		assertArgNotNull("b", b);
-		this.annotationType = b.getAnnotationType();
+		annotationType = b.getAnnotationType();
 	}
 
 	/**

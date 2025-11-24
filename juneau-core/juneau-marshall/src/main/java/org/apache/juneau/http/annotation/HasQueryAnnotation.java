@@ -97,9 +97,9 @@ public class HasQueryAnnotation {
 
 		Object(HasQueryAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.name = b.name;
-			this.value = b.value;
+			description = copyOf(b.description);
+			name = b.name;
+			value = b.value;
 		}
 
 		@Override

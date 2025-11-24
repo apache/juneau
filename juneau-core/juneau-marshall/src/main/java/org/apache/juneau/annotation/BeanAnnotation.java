@@ -373,26 +373,26 @@ public class BeanAnnotation {
 
 		Object(BeanAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.dictionary = copyOf(b.dictionary);
-			this.example = b.example;
-			this.excludeProperties = b.excludeProperties;
-			this.findFluentSetters = b.findFluentSetters;
-			this.implClass = b.implClass;
-			this.interceptor = b.interceptor;
-			this.interfaceClass = b.interfaceClass;
-			this.p = b.p;
-			this.properties = b.properties;
-			this.propertyNamer = b.propertyNamer;
-			this.readOnlyProperties = b.readOnlyProperties;
-			this.ro = b.ro;
-			this.sort = b.sort;
-			this.stopClass = b.stopClass;
-			this.typeName = b.typeName;
-			this.typePropertyName = b.typePropertyName;
-			this.wo = b.wo;
-			this.writeOnlyProperties = b.writeOnlyProperties;
-			this.xp = b.xp;
+			description = copyOf(b.description);
+			dictionary = copyOf(b.dictionary);
+			example = b.example;
+			excludeProperties = b.excludeProperties;
+			findFluentSetters = b.findFluentSetters;
+			implClass = b.implClass;
+			interceptor = b.interceptor;
+			interfaceClass = b.interfaceClass;
+			p = b.p;
+			properties = b.properties;
+			propertyNamer = b.propertyNamer;
+			readOnlyProperties = b.readOnlyProperties;
+			ro = b.ro;
+			sort = b.sort;
+			stopClass = b.stopClass;
+			typeName = b.typeName;
+			typePropertyName = b.typePropertyName;
+			wo = b.wo;
+			writeOnlyProperties = b.writeOnlyProperties;
+			xp = b.xp;
 		}
 
 		@Override /* Overridden from Bean */

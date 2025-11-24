@@ -189,8 +189,8 @@ public class UrlEncodingAnnotation {
 
 		Object(UrlEncodingAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.expandedParams = b.expandedParams;
+			description = copyOf(b.description);
+			expandedParams = b.expandedParams;
 		}
 
 		@Override /* Overridden from UrlEncoding */

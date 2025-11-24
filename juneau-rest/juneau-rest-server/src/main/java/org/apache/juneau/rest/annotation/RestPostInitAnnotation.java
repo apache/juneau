@@ -126,8 +126,8 @@ public class RestPostInitAnnotation {
 
 		Object(RestPostInitAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.childFirst = b.childFirst;
+			description = copyOf(b.description);
+			childFirst = b.childFirst;
 		}
 
 		@Override /* Overridden from RestHook */

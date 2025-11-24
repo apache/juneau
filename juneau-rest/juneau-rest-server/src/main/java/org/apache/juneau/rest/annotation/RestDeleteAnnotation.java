@@ -346,24 +346,24 @@ public class RestDeleteAnnotation {
 
 		Object(RestDeleteAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.clientVersion = b.clientVersion;
-			this.debug = b.debug;
-			this.defaultAccept = b.defaultAccept;
-			this.defaultCharset = b.defaultCharset;
-			this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
-			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
-			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
-			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
-			this.encoders = copyOf(b.encoders);
-			this.guards = copyOf(b.guards);
-			this.matchers = copyOf(b.matchers);
-			this.path = copyOf(b.path);
-			this.roleGuard = b.roleGuard;
-			this.rolesDeclared = b.rolesDeclared;
-			this.summary = b.summary;
-			this.swagger = b.swagger;
-			this.value = b.value;
+			description = copyOf(b.description);
+			clientVersion = b.clientVersion;
+			debug = b.debug;
+			defaultAccept = b.defaultAccept;
+			defaultCharset = b.defaultCharset;
+			defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
+			defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
+			defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
+			defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
+			encoders = copyOf(b.encoders);
+			guards = copyOf(b.guards);
+			matchers = copyOf(b.matchers);
+			path = copyOf(b.path);
+			roleGuard = b.roleGuard;
+			rolesDeclared = b.rolesDeclared;
+			summary = b.summary;
+			swagger = b.swagger;
+			value = b.value;
 		}
 
 		@Override /* Overridden from RestDelete */

@@ -90,9 +90,9 @@ class AnnotationObject_Test extends TestBase {
 
 		public TestAnnotationObject(Builder b) {
 			super(b);
-			this.value = b.value;
-			this.number = b.number;
-			this.flag = b.flag;
+			value = b.value;
+			number = b.number;
+			flag = b.flag;
 			this.array = Arrays.copyOf(b.array, b.array.length);
 		}
 

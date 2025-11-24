@@ -188,9 +188,9 @@ public class ContentAnnotation {
 
 		Object(ContentAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.def = b.def;
-			this.schema = b.schema;
+			description = copyOf(b.description);
+			def = b.def;
+			schema = b.schema;
 		}
 
 		@Override /* Overridden from Content */

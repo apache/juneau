@@ -213,21 +213,21 @@ public class RemoteOperationMeta {
 	 */
 	public RemoteOperationMeta(String parentPath, Method m, String defaultMethod) {
 		var b = new Builder(parentPath, m, defaultMethod);
-		this.httpMethod = b.httpMethod;
-		this.fullPath = b.fullPath;
-		this.pathArgs = b.pathArgs.toArray(new RemoteOperationArg[b.pathArgs.size()]);
-		this.queryArgs = b.queryArgs.toArray(new RemoteOperationArg[b.queryArgs.size()]);
-		this.formDataArgs = b.formDataArgs.toArray(new RemoteOperationArg[b.formDataArgs.size()]);
-		this.headerArgs = b.headerArgs.toArray(new RemoteOperationArg[b.headerArgs.size()]);
-		this.requestArgs = b.requestArgs.toArray(new RemoteOperationBeanArg[b.requestArgs.size()]);
-		this.contentArg = b.bodyArg;
-		this.methodReturn = b.methodReturn;
-		this.exceptions = m.getExceptionTypes();
-		this.pathDefaults = Collections.unmodifiableMap(b.pathDefaults);
-		this.queryDefaults = Collections.unmodifiableMap(b.queryDefaults);
-		this.headerDefaults = Collections.unmodifiableMap(b.headerDefaults);
-		this.formDataDefaults = Collections.unmodifiableMap(b.formDataDefaults);
-		this.contentDefault = b.contentDefault;
+		httpMethod = b.httpMethod;
+		fullPath = b.fullPath;
+		pathArgs = b.pathArgs.toArray(new RemoteOperationArg[b.pathArgs.size()]);
+		queryArgs = b.queryArgs.toArray(new RemoteOperationArg[b.queryArgs.size()]);
+		formDataArgs = b.formDataArgs.toArray(new RemoteOperationArg[b.formDataArgs.size()]);
+		headerArgs = b.headerArgs.toArray(new RemoteOperationArg[b.headerArgs.size()]);
+		requestArgs = b.requestArgs.toArray(new RemoteOperationBeanArg[b.requestArgs.size()]);
+		contentArg = b.bodyArg;
+		methodReturn = b.methodReturn;
+		exceptions = m.getExceptionTypes();
+		pathDefaults = Collections.unmodifiableMap(b.pathDefaults);
+		queryDefaults = Collections.unmodifiableMap(b.queryDefaults);
+		headerDefaults = Collections.unmodifiableMap(b.headerDefaults);
+		formDataDefaults = Collections.unmodifiableMap(b.formDataDefaults);
+		contentDefault = b.contentDefault;
 	}
 
 	/**

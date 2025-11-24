@@ -224,11 +224,11 @@ public class SwapAnnotation {
 
 		Object(SwapAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.impl = b.impl;
-			this.mediaTypes = copyOf(b.mediaTypes);
-			this.template = b.template;
-			this.value = b.value;
+			description = copyOf(b.description);
+			impl = b.impl;
+			mediaTypes = copyOf(b.mediaTypes);
+			template = b.template;
+			value = b.value;
 		}
 
 		@Override /* Overridden from Swap */

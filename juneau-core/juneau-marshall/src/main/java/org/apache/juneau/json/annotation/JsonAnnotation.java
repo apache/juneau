@@ -189,8 +189,8 @@ public class JsonAnnotation {
 
 		Object(JsonAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.wrapperAttr = b.wrapperAttr;
+			description = copyOf(b.description);
+			wrapperAttr = b.wrapperAttr;
 		}
 
 		@Override /* Overridden from Json */

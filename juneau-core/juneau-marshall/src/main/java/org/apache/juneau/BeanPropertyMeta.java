@@ -405,30 +405,30 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param b The builder to copy fields from.
 	 */
 	protected BeanPropertyMeta(BeanPropertyMeta.Builder b) {
-		this.field = b.field;
-		this.innerField = b.innerField;
-		this.getter = b.getter;
-		this.setter = b.setter;
-		this.extraKeys = b.extraKeys;
-		this.isUri = b.isUri;
-		this.beanMeta = b.beanMeta;
-		this.bc = b.bc;
-		this.ap = bc.getAnnotationProvider();
-		this.name = b.name;
-		this.rawTypeMeta = b.rawTypeMeta;
-		this.typeMeta = b.typeMeta;
-		this.properties = b.properties;
-		this.swap = b.swap;
-		this.beanRegistry = b.beanRegistry;
-		this.overrideValue = b.overrideValue;
-		this.delegateFor = b.delegateFor;
-		this.isDyna = b.isDyna;
-		this.isDynaGetterMap = b.isDynaGetterMap;
-		this.canRead = b.canRead;
-		this.canWrite = b.canWrite;
-		this.readOnly = b.readOnly;
-		this.writeOnly = b.writeOnly;
-		this.hashCode = HashCode.of(beanMeta, name);
+		field = b.field;
+		innerField = b.innerField;
+		getter = b.getter;
+		setter = b.setter;
+		extraKeys = b.extraKeys;
+		isUri = b.isUri;
+		beanMeta = b.beanMeta;
+		bc = b.bc;
+		ap = bc.getAnnotationProvider();
+		name = b.name;
+		rawTypeMeta = b.rawTypeMeta;
+		typeMeta = b.typeMeta;
+		properties = b.properties;
+		swap = b.swap;
+		beanRegistry = b.beanRegistry;
+		overrideValue = b.overrideValue;
+		delegateFor = b.delegateFor;
+		isDyna = b.isDyna;
+		isDynaGetterMap = b.isDynaGetterMap;
+		canRead = b.canRead;
+		canWrite = b.canWrite;
+		readOnly = b.readOnly;
+		writeOnly = b.writeOnly;
+		hashCode = HashCode.of(beanMeta, name);
 	}
 
 	/**

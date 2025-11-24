@@ -150,8 +150,8 @@ public class BeancAnnotation {
 
 		Object(BeancAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.properties = b.properties;
+			description = copyOf(b.description);
+			properties = b.properties;
 		}
 
 		@Override /* Overridden from Beanc */

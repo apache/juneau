@@ -256,13 +256,13 @@ public class PathAnnotation {
 
 		Object(PathAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.def = b.def;
-			this.name = b.name;
-			this.parser = b.parser;
-			this.schema = b.schema;
-			this.serializer = b.serializer;
-			this.value = b.value;
+			description = copyOf(b.description);
+			def = b.def;
+			name = b.name;
+			parser = b.parser;
+			schema = b.schema;
+			serializer = b.serializer;
+			value = b.value;
 		}
 
 		@Override /* Overridden from Path */

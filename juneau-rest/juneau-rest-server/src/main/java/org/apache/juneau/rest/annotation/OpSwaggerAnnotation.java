@@ -204,18 +204,18 @@ public class OpSwaggerAnnotation {
 
 		Object(OpSwaggerAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.consumes = copyOf(b.consumes);
-			this.deprecated = b.deprecated;
-			this.externalDocs = b.externalDocs;
-			this.operationId = b.operationId;
-			this.parameters = copyOf(b.parameters);
-			this.produces = copyOf(b.produces);
-			this.responses = copyOf(b.responses);
-			this.schemes = copyOf(b.schemes);
-			this.summary = copyOf(b.summary);
-			this.tags = copyOf(b.tags);
-			this.value = copyOf(b.value);
+			description = copyOf(b.description);
+			consumes = copyOf(b.consumes);
+			deprecated = b.deprecated;
+			externalDocs = b.externalDocs;
+			operationId = b.operationId;
+			parameters = copyOf(b.parameters);
+			produces = copyOf(b.produces);
+			responses = copyOf(b.responses);
+			schemes = copyOf(b.schemes);
+			summary = copyOf(b.summary);
+			tags = copyOf(b.tags);
+			value = copyOf(b.value);
 		}
 
 		@Override /* Overridden from OpSwagger */

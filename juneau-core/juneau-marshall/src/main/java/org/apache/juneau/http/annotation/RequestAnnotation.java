@@ -175,9 +175,9 @@ public class RequestAnnotation {
 
 		Object(RequestAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.parser = b.parser;
-			this.serializer = b.serializer;
+			description = copyOf(b.description);
+			parser = b.parser;
+			serializer = b.serializer;
 		}
 
 		@Override /* Overridden from Request */

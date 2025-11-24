@@ -237,10 +237,10 @@ public class RdfAnnotation {
 
 		Object(RdfAnnotation.Builder b) {
 			super(b);
-			this.beanUri = b.beanUri;
-			this.collectionFormat = b.collectionFormat;
-			this.namespace = b.namespace;
-			this.prefix = b.prefix;
+			beanUri = b.beanUri;
+			collectionFormat = b.collectionFormat;
+			namespace = b.namespace;
+			prefix = b.prefix;
 		}
 
 		@Override /* Overridden from Rdf */

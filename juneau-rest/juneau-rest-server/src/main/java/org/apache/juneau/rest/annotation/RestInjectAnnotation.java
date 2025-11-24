@@ -148,10 +148,10 @@ public class RestInjectAnnotation {
 
 		Object(RestInjectAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.name = b.name;
-			this.value = b.value;
-			this.methodScope = b.methodScope;
+			description = copyOf(b.description);
+			name = b.name;
+			value = b.value;
+			methodScope = b.methodScope;
 		}
 
 		@Override /* Overridden from RestInject */

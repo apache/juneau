@@ -181,11 +181,11 @@ public class ResponseBeanMeta {
 	private final HttpPartSchema schema;
 
 	ResponseBeanMeta(Builder b) {
-		this.cm = b.cm;
-		this.code = b.code;
-		this.partSerializer = opt(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
-		this.partParser = opt(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
-		this.schema = b.schema.build();
+		cm = b.cm;
+		code = b.code;
+		partSerializer = opt(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
+		partParser = opt(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
+		schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties = map();
 
@@ -197,8 +197,8 @@ public class ResponseBeanMeta {
 		});
 		this.headerMethods = u(hm);
 
-		this.contentMethod = b.contentMethod == null ? null : b.contentMethod.schema(schema).build(partSerializer, partParser);
-		this.statusMethod = b.statusMethod == null ? null : b.statusMethod.build(opte(), opte());
+		contentMethod = b.contentMethod == null ? null : b.contentMethod.schema(schema).build(partSerializer, partParser);
+		statusMethod = b.statusMethod == null ? null : b.statusMethod.build(opte(), opte());
 
 		if (nn(contentMethod))
 			properties.put(contentMethod.getGetter().getName(), contentMethod);

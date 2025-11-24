@@ -136,12 +136,12 @@ public class RequestBeanMeta {
 	private final HttpPartParser parser;
 
 	RequestBeanMeta(Builder b) {
-		this.cm = b.cm;
-		this.serializer = b.serializer.orElse(null);
-		this.parser = b.parser.orElse(null);
-		Map<String,RequestBeanPropertyMeta> properties = map();
-		b.properties.forEach((k, v) -> properties.put(k, v.build(serializer, parser)));
-		this.properties = u(properties);
+		cm = b.cm;
+		serializer = b.serializer.orElse(null);
+		parser = b.parser.orElse(null);
+		Map<String,RequestBeanPropertyMeta> pm = map();
+		b.properties.forEach((k, v) -> pm.put(k, v.build(serializer, parser)));
+		properties = u(pm);
 	}
 
 	/**

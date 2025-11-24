@@ -97,9 +97,9 @@ public class LicenseAnnotation {
 
 		Object(LicenseAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.name = b.name;
-			this.url = b.url;
+			description = copyOf(b.description);
+			name = b.name;
+			url = b.url;
 		}
 
 		@Override /* Overridden from License */

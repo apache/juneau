@@ -186,8 +186,8 @@ public class ExampleAnnotation {
 
 		Object(ExampleAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
-			this.value = b.value;
+			description = copyOf(b.description);
+			value = b.value;
 		}
 
 		@Override /* Overridden from Example */
