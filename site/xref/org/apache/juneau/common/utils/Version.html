@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			value = <span class="jxr_string">"0"</span>;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		String[] sParts = splita(value, '.');
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		parts = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[sParts.length];
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sParts.length; i++) {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; sParts.length; i++) {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  				parts[i] = sParts[i].isEmpty() ? 0 : Integer.parseInt(sParts[i]);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
@@ -197,7 +197,7 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c &lt; 0)
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		}
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parts.length; i &lt; v.parts.length; i++)
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = parts.length; i &lt; v.parts.length; i++)
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">if</strong> (v.parts[i] != 0)
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">return</strong> ! exclusive;
@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c &lt; 0)
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		}
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parts.length; i &lt; v.parts.length; i++)
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = parts.length; i &lt; v.parts.length; i++)
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">if</strong> (v.parts[i] &gt; 0)
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">return</strong> ! exclusive;

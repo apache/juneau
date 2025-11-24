@@ -221,7 +221,7 @@
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;Integer,Object&gt; getCollectionMap(Object array) {
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> TreeMap&lt;Integer,Object&gt;();
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(array); i++)
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(array); i++)
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			m.put(i, Array.get(array, i));
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
@@ -324,7 +324,7 @@
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 						<strong class="jxr_keyword">super</strong>.serializeAnything(out, x, cMeta.getElementType(), key, pMeta);
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 					});
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 				} <strong class="jxr_keyword">else</strong> <em class="jxr_comment">/* array */</em> {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(value); i++) {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(value); i++) {
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 						addAmp.ifSet(() -&gt; out.cr(indent).append('&amp;')).set();
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 						out.appendObject(key, <strong class="jxr_keyword">true</strong>).append('=');
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 						<strong class="jxr_keyword">super</strong>.serializeAnything(out, Array.get(value, i), cMeta.getElementType(), key, pMeta);
@@ -374,7 +374,7 @@
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 						<strong class="jxr_keyword">super</strong>.serializeAnything(out, x, <strong class="jxr_keyword">null</strong>, s(key), <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 					});
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 				} <strong class="jxr_keyword">else</strong> <em class="jxr_comment">/* array */</em> {
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(value); i++) {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(value); i++) {
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 						addAmp.ifSet(() -&gt; out.cr(indent).append('&amp;')).set();
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 						out.appendObject(key, <strong class="jxr_keyword">true</strong>).append('=');
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 						<strong class="jxr_keyword">super</strong>.serializeAnything(out, Array.get(value, i), <strong class="jxr_keyword">null</strong>, s(key), <strong class="jxr_keyword">null</strong>);

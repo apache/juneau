@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		rsb.setLength(0);
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		rsb.append(<span class="jxr_string">"&lt;"</span>).append(t == 1 ? <span class="jxr_string">""</span> : <span class="jxr_string">"/"</span>).append(r.getLocalName());
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">if</strong> (t == 1)
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; r.getAttributeCount(); i++)
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; r.getAttributeCount(); i++)
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 				rsb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		rsb.append('&gt;');
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">return</strong> rsb.toString();
@@ -387,7 +387,7 @@
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">var</strong> bMeta = m.getMeta();
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">var</strong> xmlMeta = getXmlBeanMeta(bMeta);
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; r.getAttributeCount(); i++) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; r.getAttributeCount(); i++) {
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			String key = getAttributeName(r, i);
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">if</strong> (! (<span class="jxr_string">"nil"</span>.equals(key) || isSpecialAttr(key))) {
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 				<strong class="jxr_keyword">var</strong> val = r.getAttributeValue(i);
@@ -559,7 +559,7 @@
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 	<strong class="jxr_keyword">private</strong> &lt;K,V&gt; Map&lt;K,V&gt; parseIntoMap(<a name="XmlReader" href="../../../../org/apache/juneau/xml/XmlReader.html#XmlReader">XmlReader</a> r, Map&lt;K,V&gt; m, ClassMeta&lt;K&gt; keyType, ClassMeta&lt;V&gt; valueType, BeanPropertyMeta pMeta)
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">throws</strong> IOException, ParseException, ExecutableException, XMLStreamException {
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">int</strong> depth = 0;
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; r.getAttributeCount(); i++) {
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; r.getAttributeCount(); i++) {
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">var</strong> a = r.getAttributeLocalName(i);
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<em class="jxr_comment">// TODO - Need better handling of namespaces here.</em>
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 			<strong class="jxr_keyword">if</strong> (! isSpecialAttr(a)) {

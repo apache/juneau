@@ -996,7 +996,7 @@
 <a class="jxr_linenumber" name="L988" href="#L988">988</a> 		}
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> 
 <a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<em class="jxr_comment">// Process in reverse order (parent-to-child) to match the "ParentFirst" semantics</em>
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parentMethods.size() - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = parentMethods.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L992" href="#L992">992</a> 			consumer.accept(parentMethods.get(i));
 <a class="jxr_linenumber" name="L993" href="#L993">993</a> 		}
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> 	}

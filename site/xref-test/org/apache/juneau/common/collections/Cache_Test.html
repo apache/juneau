@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 			.maxSize(5)
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			.build();
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt;= 5; i++) {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 1; i &lt;= 5; i++) {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index = i;
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			cache.get(<span class="jxr_string">"key"</span> + index, () -&gt; <span class="jxr_string">"value"</span> + index);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		}
@@ -331,7 +331,7 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<em class="jxr_comment">// Submit 100 tasks that all try to cache the same key</em>
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> futures = <strong class="jxr_keyword">new</strong> CompletableFuture[100];
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 100; i++) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 100; i++) {
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 			futures[i] = CompletableFuture.runAsync(() -&gt; {
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 				cache.get(1, () -&gt; {
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 					callCount.incrementAndGet();
@@ -357,7 +357,7 @@
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<em class="jxr_comment">// Submit tasks for different keys</em>
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> futures = <strong class="jxr_keyword">new</strong> CompletableFuture[10];
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 10; i++) {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 10; i++) {
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> key = i;
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 			futures[i] = CompletableFuture.runAsync(() -&gt; {
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 				cache.get(key, () -&gt; <span class="jxr_string">"value"</span> + key);

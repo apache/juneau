@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	UrlPath(String path) {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">this</strong>.path = path;
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		parts = path == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">new</strong> String[0] : StringUtils.splita(path.substring(1), '/');
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parts.length; i++)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parts.length; i++)
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			parts[i] = urlDecode(parts[i]);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  

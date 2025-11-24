@@ -406,7 +406,7 @@
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<em class="jxr_comment">// Test that simple swappers execute quickly</em>
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">var</strong> start = System.nanoTime();
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 1000; i++) {
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 1000; i++) {
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 				simpleSwapper.apply(converter, <span class="jxr_string">"test"</span> + i);
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 			}
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">var</strong> end = System.nanoTime();
@@ -428,7 +428,7 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">var</strong> testList = l(<span class="jxr_string">"z"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"m"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"x"</span>);
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">var</strong> start = System.nanoTime();
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 100; i++) {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 100; i++) {
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 				complexSwapper.apply(converter, testList);
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			}
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">var</strong> end = System.nanoTime();

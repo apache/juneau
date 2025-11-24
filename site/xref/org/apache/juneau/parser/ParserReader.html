@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="ParserReader" href="../../../../org/apache/juneau/parser/ParserReader.html#ParserReader">ParserReader</a> delete(<strong class="jxr_keyword">int</strong> count) {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; count; i++)
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; count; i++)
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 			buff[iCurrent - i - 1] = 127;
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		holesExist = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -152,7 +152,7 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<em class="jxr_comment">// Holes are \u00FF 'delete' characters that we need to get rid of now.</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">if</strong> (holesExist) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = iMark; i &lt; iCurrent; i++) {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = iMark; i &lt; iCurrent; i++) {
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">char</strong> c = buff[i];
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 				<strong class="jxr_keyword">if</strong> (c == 127)
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 					offset++;
@@ -358,7 +358,7 @@
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 			offset--;
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		}
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<em class="jxr_comment">// Fill in the gap with DEL characters.</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt; offset; i++)
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 1; i &lt; offset; i++)
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 			buff[iCurrent - i] = 127;
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 		holesExist |= (offset &gt; 1);
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;

@@ -376,7 +376,7 @@
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<em class="jxr_comment">// Simulate multiple threads modifying the same instance</em>
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> threads = <strong class="jxr_keyword">new</strong> Thread[5];
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; threads.length; i++) {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; threads.length; i++) {
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> threadId = i;
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 			threads[i] = <strong class="jxr_keyword">new</strong> Thread(() -&gt; {
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 				sharedArgs.setMessage(<span class="jxr_string">"Thread "</span> + threadId + <span class="jxr_string">" message"</span>);

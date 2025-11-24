@@ -471,7 +471,7 @@
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * @return The first matching part, or {@link Optional#empty()} if not found.</em>
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;NameValuePair&gt; getFirst(String name) {
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; size(); i++) {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; size(); i++) {
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">var</strong> x = get(i);
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name))
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 				<strong class="jxr_keyword">return</strong> opt(x);
@@ -489,7 +489,7 @@
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * @return The last matching part, or {@link Optional#empty()} if not found.</em>
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;NameValuePair&gt; getLast(String name) {
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = size() - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 			<strong class="jxr_keyword">var</strong> x = get(i);
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name))
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 				<strong class="jxr_keyword">return</strong> opt(x);

@@ -1300,10 +1300,10 @@
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 			componentType.appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
 <a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 
 <a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 			<strong class="jxr_keyword">if</strong> (arrayFormat == ClassArrayFormat.WORD) {
-<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; dim; i++)
+<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; dim; i++)
 <a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 					sb.append(<span class="jxr_string">"Array"</span>);
 <a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (arrayFormat == ClassArrayFormat.BRACKETS) {
-<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; dim; i++)
+<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; dim; i++)
 <a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 					sb.append(<span class="jxr_string">"[]"</span>);
 <a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 			}
 <a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 			<em class="jxr_comment">// JVM format is already in getName() - would need special handling</em>
@@ -1326,7 +1326,7 @@
 <a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 					sb.append(ct.getName());
 <a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 					<em class="jxr_comment">// Apply separator if not '$'</em>
 <a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 					<strong class="jxr_keyword">if</strong> (separator != '$' &amp;&amp; sb.indexOf(<span class="jxr_string">"$"</span>) != -1) {
-<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sb.length(); i++) {
+<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; sb.length(); i++) {
 <a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 							<strong class="jxr_keyword">if</strong> (sb.charAt(i) == '$')
 <a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> 								sb.setCharAt(i, separator);
 <a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> 						}
@@ -2388,13 +2388,13 @@
 <a class="jxr_linenumber" name="L2380" href="#L2380">2380</a> 
 <a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> 		<em class="jxr_comment">// Process all parent classes (includes this class)</em>
 <a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> 		<strong class="jxr_keyword">var</strong> parents = getParents();
-<a class="jxr_linenumber" name="L2383" href="#L2383">2383</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parents.size(); i++) {
+<a class="jxr_linenumber" name="L2383" href="#L2383">2383</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parents.size(); i++) {
 <a class="jxr_linenumber" name="L2384" href="#L2384">2384</a> 			<strong class="jxr_keyword">var</strong> parent = parents.get(i);
 <a class="jxr_linenumber" name="L2385" href="#L2385">2385</a> 			set.add(parent);
 <a class="jxr_linenumber" name="L2386" href="#L2386">2386</a> 
 <a class="jxr_linenumber" name="L2387" href="#L2387">2387</a> 			<em class="jxr_comment">// Process interfaces declared on this parent (and their parent interfaces)</em>
 <a class="jxr_linenumber" name="L2388" href="#L2388">2388</a> 			<strong class="jxr_keyword">var</strong> declaredInterfaces = parent.getDeclaredInterfaces();
-<a class="jxr_linenumber" name="L2389" href="#L2389">2389</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; declaredInterfaces.size(); j++)
+<a class="jxr_linenumber" name="L2389" href="#L2389">2389</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> j = 0; j &lt; declaredInterfaces.size(); j++)
 <a class="jxr_linenumber" name="L2390" href="#L2390">2390</a> 				addInterfaceHierarchy(set, declaredInterfaces.get(j));
 <a class="jxr_linenumber" name="L2391" href="#L2391">2391</a> 		}
 <a class="jxr_linenumber" name="L2392" href="#L2392">2392</a> 
@@ -2413,7 +2413,7 @@
 <a class="jxr_linenumber" name="L2405" href="#L2405">2405</a> 
 <a class="jxr_linenumber" name="L2406" href="#L2406">2406</a> 		<em class="jxr_comment">// Process parent interfaces recursively</em>
 <a class="jxr_linenumber" name="L2407" href="#L2407">2407</a> 		<strong class="jxr_keyword">var</strong> parentInterfaces = iface.getDeclaredInterfaces();
-<a class="jxr_linenumber" name="L2408" href="#L2408">2408</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parentInterfaces.size(); i++)
+<a class="jxr_linenumber" name="L2408" href="#L2408">2408</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parentInterfaces.size(); i++)
 <a class="jxr_linenumber" name="L2409" href="#L2409">2409</a> 			addInterfaceHierarchy(set, parentInterfaces.get(i));
 <a class="jxr_linenumber" name="L2410" href="#L2410">2410</a> 	}
 <a class="jxr_linenumber" name="L2411" href="#L2411">2411</a> 
@@ -2439,7 +2439,7 @@
 <a class="jxr_linenumber" name="L2431" href="#L2431">2431</a> 
 <a class="jxr_linenumber" name="L2432" href="#L2432">2432</a> 		<em class="jxr_comment">// On all parent classes and interfaces (properly traversed to avoid duplicates)</em>
 <a class="jxr_linenumber" name="L2433" href="#L2433">2433</a> 		<strong class="jxr_keyword">var</strong> parentsAndInterfaces = getParentsAndInterfaces();
-<a class="jxr_linenumber" name="L2434" href="#L2434">2434</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parentsAndInterfaces.size(); i++) {
+<a class="jxr_linenumber" name="L2434" href="#L2434">2434</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parentsAndInterfaces.size(); i++) {
 <a class="jxr_linenumber" name="L2435" href="#L2435">2435</a> 			<strong class="jxr_keyword">var</strong> ci = parentsAndInterfaces.get(i);
 <a class="jxr_linenumber" name="L2436" href="#L2436">2436</a> 			<em class="jxr_comment">// Add declared annotations from this class/interface</em>
 <a class="jxr_linenumber" name="L2437" href="#L2437">2437</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : ci.<strong class="jxr_keyword">inner</strong>().getDeclaredAnnotations())

@@ -330,7 +330,7 @@
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 		Class&lt;?&gt;[] pt = <strong class="jxr_keyword">inner</strong>.getParameterTypes();
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">if</strong> (pt.length != args.length)
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pt.length; i++)
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; pt.length; i++)
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">if</strong> (! pt[i].isInstance(args[i]))
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
@@ -733,7 +733,7 @@
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 			<strong class="jxr_keyword">if</strong> (ptt.length + 1 == ptc.length) {
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> 				<strong class="jxr_keyword">var</strong> ptt2 = <strong class="jxr_keyword">new</strong> Type[ptc.length];
 <a class="jxr_linenumber" name="L727" href="#L727">727</a> 				ptt2[0] = ptc[0];
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ptt.length; i++)
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; ptt.length; i++)
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> 					ptt2[i + 1] = ptt[i];
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 				genericTypes = ptt2;
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 			} <strong class="jxr_keyword">else</strong> {

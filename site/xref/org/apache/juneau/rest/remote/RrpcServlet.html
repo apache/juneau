@@ -189,7 +189,7 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			t.child(tr(td(<span class="jxr_string">"No arguments"</span>).colspan(3).style(<span class="jxr_string">"text-align:center"</span>)));
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			t.child(tr(th(<span class="jxr_string">"Index"</span>), th(<span class="jxr_string">"Type"</span>), th(<span class="jxr_string">"Value"</span>)));
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; types.length; i++) {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; types.length; i++) {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 				String type = Mutaters.toString(types[i]);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 				t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type(<span class="jxr_string">"text"</span>))));
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			}

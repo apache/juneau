@@ -299,7 +299,7 @@
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">if</strong> (needsTextEncoding(s)) {
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 				<strong class="jxr_keyword">var</strong> len = s.length();
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; len; i++) {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; len; i++) {
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 					<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 					<strong class="jxr_keyword">if</strong> ((i == 0 || i == len - 1) &amp;&amp; Character.isWhitespace(c) &amp;&amp; ! preserveWhitespace)
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 						appendPaddedHexChar(w, c);
@@ -338,7 +338,7 @@
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 				<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">var</strong> len = s.length();
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">var</strong> sw = <strong class="jxr_keyword">new</strong> StringWriter(s.length() * 2);
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; len; i++) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; len; i++) {
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 				<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 				<strong class="jxr_keyword">if</strong> ((i == 0 || i == len - 1) &amp;&amp; Character.isWhitespace(c))
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 					appendPaddedHexChar(sw, c);
@@ -367,14 +367,14 @@
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> findNamespace(List&lt;Xml&gt; xmls, List&lt;XmlSchema&gt; schemas) {
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = xmls.size() - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = xmls.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">var</strong> xml = xmls.get(i);
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<strong class="jxr_keyword">var</strong> ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">if</strong> (nn(ns))
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 				<strong class="jxr_keyword">return</strong> ns;
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 		}
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = schemas.size() - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = schemas.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">var</strong> schema = schemas.get(i);
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<strong class="jxr_keyword">var</strong> ns = findNamespace(schema.prefix(), schema.namespace(), <strong class="jxr_keyword">null</strong>, schemas);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">if</strong> (nn(ns))
@@ -434,7 +434,7 @@
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 	}
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Writer encodeElementNameInner(Writer w, String s) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length(); i++) {
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">if</strong> ((c &gt;= 'A' &amp;&amp; c &lt;= 'Z')

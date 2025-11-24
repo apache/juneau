@@ -4229,7 +4229,7 @@
 <a class="jxr_linenumber" name="L4221" href="#L4221">4221</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Duplicate items not allowed."</span>);
 <a class="jxr_linenumber" name="L4222" href="#L4222">4222</a> 					HttpPartSchema items = getItems();
 <a class="jxr_linenumber" name="L4223" href="#L4223">4223</a> 					<strong class="jxr_keyword">if</strong> (nn(items))
-<a class="jxr_linenumber" name="L4224" href="#L4224">4224</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(o); i++)
+<a class="jxr_linenumber" name="L4224" href="#L4224">4224</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(o); i++)
 <a class="jxr_linenumber" name="L4225" href="#L4225">4225</a> 							items.validateOutput(Array.get(o, i), bc);
 <a class="jxr_linenumber" name="L4226" href="#L4226">4226</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isCollection()) {
 <a class="jxr_linenumber" name="L4227" href="#L4227">4227</a> 					Collection&lt;?&gt; c = (Collection&lt;?&gt;)o;
@@ -4584,7 +4584,7 @@
 <a class="jxr_linenumber" name="L4576" href="#L4576">4576</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidUniqueItems(Object x) {
 <a class="jxr_linenumber" name="L4577" href="#L4577">4577</a> 		<strong class="jxr_keyword">if</strong> (uniqueItems) {
 <a class="jxr_linenumber" name="L4578" href="#L4578">4578</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L4579" href="#L4579">4579</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(x); i++) {
+<a class="jxr_linenumber" name="L4579" href="#L4579">4579</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(x); i++) {
 <a class="jxr_linenumber" name="L4580" href="#L4580">4580</a> 				<strong class="jxr_keyword">var</strong> o = Array.get(x, i);
 <a class="jxr_linenumber" name="L4581" href="#L4581">4581</a> 				<strong class="jxr_keyword">if</strong> (! s.add(o))
 <a class="jxr_linenumber" name="L4582" href="#L4582">4582</a> 					<strong class="jxr_keyword">return</strong> false;

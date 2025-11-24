@@ -3118,7 +3118,7 @@
 <a class="jxr_linenumber" name="L3110" href="#L3110">3110</a> 	}
 <a class="jxr_linenumber" name="L3111" href="#L3111">3111</a> 
 <a class="jxr_linenumber" name="L3112" href="#L3112">3112</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertInstancesOf(Class&lt;?&gt; c, Object...values) {
-<a class="jxr_linenumber" name="L3113" href="#L3113">3113</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; values.length; i++) {
+<a class="jxr_linenumber" name="L3113" href="#L3113">3113</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; values.length; i++) {
 <a class="jxr_linenumber" name="L3114" href="#L3114">3114</a> 			assertInstanceOf(c, values[i], fs(<span class="jxr_string">"Object {0} not expected type.  Expected={1}, Actual={2}"</span>, i, c, scn(values[i])));
 <a class="jxr_linenumber" name="L3115" href="#L3115">3115</a> 		}
 <a class="jxr_linenumber" name="L3116" href="#L3116">3116</a> 	}

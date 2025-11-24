@@ -250,7 +250,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	@SuppressWarnings(<span class="jxr_string">"null"</span>)
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T[] assertVarargsNotNull(String name, T[] o) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertArg(o != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Argument ''{0}'' cannot be null."</span>, name);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; o.length; i++)
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; o.length; i++)
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			assertArg(nn(o[i]), <span class="jxr_string">"Argument ''{0}'' parameter {1} cannot be null."</span>, name, i);
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">return</strong> o;
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}

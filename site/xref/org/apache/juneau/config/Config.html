@@ -1224,7 +1224,7 @@
 <a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 
 <a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 	String removeMods(String mods, String x) {
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 		<strong class="jxr_keyword">if</strong> (nn(mods) &amp;&amp; nn(x))
-<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = mods.length() - 1; i &gt; -1; i--)
+<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = mods.length() - 1; i &gt; -1; i--)
 <a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 				x = getMod(mods.charAt(i)).doRemove(x);
 <a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 		<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 	}

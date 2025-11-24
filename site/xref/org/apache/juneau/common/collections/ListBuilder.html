@@ -252,7 +252,7 @@
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 					<strong class="jxr_keyword">if</strong> (o instanceof Collection&lt;?&gt; o2) {
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 						o2.forEach(x -&gt; addAny(x));
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isArray(o)) {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(o); i++)
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(o); i++)
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 							addAny(Array.get(o, i));
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (elementType.isInstance(o)) {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 						add(elementType.<strong class="jxr_keyword">cast</strong>(o));

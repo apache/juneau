@@ -1213,7 +1213,7 @@
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 	@Test
 <a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 	<strong class="jxr_keyword">void</strong> getPrimitiveWrapper() {
-<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; primitives.size(); i++)
+<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; primitives.size(); i++)
 <a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 			assertEquals(of(primitives.get(i)).getPrimitiveWrapper(), primitiveWrappers.get(i));
 <a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 		assertNull(of(String.<strong class="jxr_keyword">class</strong>).getPrimitiveWrapper());
 <a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 	}
@@ -1225,7 +1225,7 @@
 <a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 	@Test
 <a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 	<strong class="jxr_keyword">void</strong> getPrimitiveForWrapper() {
-<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; primitives.size(); i++)
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; primitives.size(); i++)
 <a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 			assertEquals(of(primitiveWrappers.get(i)).getPrimitiveForWrapper(), primitives.get(i));
 <a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 		assertNull(of(String.<strong class="jxr_keyword">class</strong>).getPrimitiveForWrapper());
 <a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 	}
@@ -1237,7 +1237,7 @@
 <a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 	@Test
 <a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 	<strong class="jxr_keyword">void</strong> getWrapperIfPrimitive() {
-<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; primitives.size(); i++)
+<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; primitives.size(); i++)
 <a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>(), primitiveWrappers.get(i));
 <a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 		assertEquals(of(String.<strong class="jxr_keyword">class</strong>).getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>(), String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 	}
@@ -1253,7 +1253,7 @@
 <a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 
 <a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 	@Test
 <a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 	<strong class="jxr_keyword">void</strong> getWrapperIfPrimitive_asClassInfo() {
-<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; primitives.size(); i++)
+<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; primitives.size(); i++)
 <a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>(), primitiveWrappers.get(i));
 <a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 		assertEquals(of(String.<strong class="jxr_keyword">class</strong>).getWrapperIfPrimitive().<strong class="jxr_keyword">inner</strong>(), String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> 	}
@@ -1266,7 +1266,7 @@
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 
 <a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 	@Test
 <a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 	<strong class="jxr_keyword">void</strong> getPrimitiveDefault() {
-<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; primitives.size(); i++)
+<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; primitives.size(); i++)
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 			assertEquals(of(primitives.get(i)).getPrimitiveDefault(), primitiveDefaults.get(i));
 <a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 		assertNull(of(String.<strong class="jxr_keyword">class</strong>).getPrimitiveDefault());
 <a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 	}

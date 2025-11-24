@@ -454,7 +454,7 @@
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 					}
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 				}
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 				<strong class="jxr_keyword">var</strong> methods = eci.getAllMethods();
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = methods.size() - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = methods.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 					<strong class="jxr_keyword">var</strong> ecmi = methods.get(i);
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 					<strong class="jxr_keyword">var</strong> a = ecmi.getAnnotations(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 						<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
@@ -490,7 +490,7 @@
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 			}
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<strong class="jxr_keyword">if</strong> (mi.getReturnType().hasAnnotation(Response.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 				<strong class="jxr_keyword">var</strong> methods = mi.getReturnType().getAllMethods();
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = methods.size() - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = methods.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 					<strong class="jxr_keyword">var</strong> ecmi = methods.get(i);
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 						<strong class="jxr_keyword">if</strong> (ecmi.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 							<strong class="jxr_keyword">var</strong> a = ecmi.getAnnotations(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);

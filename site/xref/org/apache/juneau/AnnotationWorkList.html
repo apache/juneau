@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 				applyConstructors = a(AnnotationApplier.NoOp.<strong class="jxr_keyword">class</strong>.getConstructor(VarResolverSession.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 				applyConstructors = <strong class="jxr_keyword">new</strong> Constructor[cpa.value().length];
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; cpa.value().length; i++)
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; cpa.value().length; i++)
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 					applyConstructors[i] = (Constructor&lt;? <strong class="jxr_keyword">extends</strong> AnnotationApplier&lt;?,?&gt;&gt;)cpa.value()[i].getConstructor(VarResolverSession.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 

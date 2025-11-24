@@ -1019,7 +1019,7 @@
 <a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 
 <a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		String[] _consumes = splita(nn(consumes) ? consumes : <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		<strong class="jxr_keyword">this</strong>.consumesArray = <strong class="jxr_keyword">new</strong> <a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>[_consumes.length];
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; _consumes.length; i++) {
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; _consumes.length; i++) {
 <a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 			<strong class="jxr_keyword">this</strong>.consumesArray[i] = MediaType.of(_consumes[i]);
 <a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		}
 <a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 	}

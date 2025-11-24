@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">throw</strong> bex(<span class="jxr_string">"Map entry had an empty array value."</span>);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> type = (Type)Array.get(array, 0);
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> Type[len - 1];
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt; len; i++)
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 1; i &lt; len; i++)
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			args[i - 1] = (Type)Array.get(array, i);
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">return</strong> bc.getClassMeta(type, args);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}

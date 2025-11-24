@@ -415,7 +415,7 @@
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 					<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> OapiStringBuilder(cf);
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 					<strong class="jxr_keyword">if</strong> (type.isArray()) {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(value); i++)
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(value); i++)
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 							sb.append(serialize(partType, items, Array.get(value, i)));
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type.isCollection()) {
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 						((Collection&lt;?&gt;)value).forEach(x -&gt; sb.append(serialize(partType, items, x)));
@@ -482,7 +482,7 @@
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> <a name="JsonList" href="../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>();
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 		HttpPartSchema items = s.getItems();
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">if</strong> (type.isArray()) {
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(o); i++)
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(o); i++)
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 				l.add(toObject(partType, Array.get(o, i), items));
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type.isCollection()) {
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 			((Collection&lt;?&gt;)o).forEach(x -&gt; l.add(toObject(partType, x, items)));

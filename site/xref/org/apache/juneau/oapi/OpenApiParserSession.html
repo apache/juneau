@@ -404,7 +404,7 @@
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">if</strong> (items == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 				items = HttpPartSchema.DEFAULT;
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">var</strong> o = Array.newInstance(eType.getInnerClass(), ss.length);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ss.length; i++)
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; ss.length; i++)
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 					Array.set(o, i, parse(partType, items, ss[i], eType));
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 				<strong class="jxr_keyword">if</strong> (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 					<strong class="jxr_keyword">return</strong> toType(toType(o, schema.getParsedType()), type);

@@ -333,7 +333,7 @@
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<em class="jxr_comment">// Test concurrent execution</em>
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">var</strong> futures = <strong class="jxr_keyword">new</strong> ArrayList&lt;java.util.concurrent.CompletableFuture&lt;String&gt;&gt;();
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 10; i++) {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 10; i++) {
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -&gt; safe(supplier)));
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 			}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
@@ -351,7 +351,7 @@
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<em class="jxr_comment">// Test concurrent exception handling</em>
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">var</strong> futures = <strong class="jxr_keyword">new</strong> ArrayList&lt;java.util.concurrent.CompletableFuture&lt;RuntimeException&gt;&gt;();
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 5; i++) {
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 5; i++) {
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -&gt; {
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 						safe(throwingSupplier);

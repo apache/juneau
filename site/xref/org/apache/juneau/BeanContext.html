@@ -3748,7 +3748,7 @@
 <a class="jxr_linenumber" name="L3740" href="#L3740">3740</a> 			<strong class="jxr_keyword">return</strong> cm;
 <a class="jxr_linenumber" name="L3741" href="#L3741">3741</a> 		ClassMeta&lt;?&gt;[] cma = <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>[args.length + 1];
 <a class="jxr_linenumber" name="L3742" href="#L3742">3742</a> 		cma[0] = cm;
-<a class="jxr_linenumber" name="L3743" href="#L3743">3743</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(args); i++) {
+<a class="jxr_linenumber" name="L3743" href="#L3743">3743</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(args); i++) {
 <a class="jxr_linenumber" name="L3744" href="#L3744">3744</a> 			<strong class="jxr_keyword">var</strong> arg = (Type)Array.get(args, i);
 <a class="jxr_linenumber" name="L3745" href="#L3745">3745</a> 			cma[i + 1] = arg instanceof Class arg2 ? getClassMeta(arg2) : resolveClassMeta(arg, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L3746" href="#L3746">3746</a> 		}
@@ -4417,7 +4417,7 @@
 <a class="jxr_linenumber" name="L4409" href="#L4409">4409</a> 				<strong class="jxr_keyword">int</strong> varIndex = -1;
 <a class="jxr_linenumber" name="L4410" href="#L4410">4410</a> 				<strong class="jxr_keyword">var</strong> gc = (Class)t4.getGenericDeclaration();
 <a class="jxr_linenumber" name="L4411" href="#L4411">4411</a> 				TypeVariable[] tvv = gc.getTypeParameters();
-<a class="jxr_linenumber" name="L4412" href="#L4412">4412</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tvv.length; i++) {
+<a class="jxr_linenumber" name="L4412" href="#L4412">4412</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; tvv.length; i++) {
 <a class="jxr_linenumber" name="L4413" href="#L4413">4413</a> 					<strong class="jxr_keyword">if</strong> (tvv[i].getName().equals(varName)) {
 <a class="jxr_linenumber" name="L4414" href="#L4414">4414</a> 						varIndex = i;
 <a class="jxr_linenumber" name="L4415" href="#L4415">4415</a> 					}

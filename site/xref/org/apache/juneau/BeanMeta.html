@@ -769,7 +769,7 @@
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 			<strong class="jxr_keyword">if</strong> (rt instanceof Class) {
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 				Type[] gImpls = t2.getActualTypeArguments();
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 				Class&lt;?&gt;[] gTypes = <strong class="jxr_keyword">new</strong> Class[gImpls.length];
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; gImpls.length; i++) {
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; gImpls.length; i++) {
 <a class="jxr_linenumber" name="L765" href="#L765">765</a> 					Type gt = gImpls[i];
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 					<strong class="jxr_keyword">if</strong> (gt instanceof Class&lt;?&gt; c)
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 						gTypes[i] = c;
@@ -818,7 +818,7 @@
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 					<em class="jxr_comment">// Check if parameter types match</em>
 <a class="jxr_linenumber" name="L811" href="#L811">811</a> 					<strong class="jxr_keyword">var</strong> paramsMatch = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 					List&lt;ParameterInfo&gt; parentParams = parentMethod.getParameters();
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; params.size(); i++) {
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; params.size(); i++) {
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 						<strong class="jxr_keyword">if</strong> (! params.get(i).getParameterType().is(parentParams.get(i).getParameterType().<strong class="jxr_keyword">inner</strong>())) {
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> 							paramsMatch = false;
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> 							<strong class="jxr_keyword">break</strong>;

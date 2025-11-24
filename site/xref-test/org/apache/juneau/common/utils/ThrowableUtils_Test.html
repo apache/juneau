@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Test
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">void</strong> a03_findCause_longChain() {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		Throwable cause = <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"root"</span>);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 10; i++) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 10; i++) {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			cause = <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"level"</span> + i, cause);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		}
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  

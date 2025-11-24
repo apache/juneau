@@ -307,7 +307,7 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 			Stringifier&lt;List&lt;?&gt;&gt; listStringifier = (converter, list) -&gt; {
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 				<em class="jxr_comment">// Use the converter parameter to stringify elements</em>
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 				<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"["</span>);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; list.size(); i++) {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; list.size(); i++) {
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 					<strong class="jxr_keyword">if</strong> (i &gt; 0) sb.append(<span class="jxr_string">","</span>);
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 					sb.append(converter.stringify(list.get(i)));
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 				}
@@ -350,7 +350,7 @@
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">void</strong> f01_performanceWithLargeStrings() {
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 			Stringifier&lt;String&gt; largeStringHandler = (converter, str) -&gt; {
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 				<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 1000; i++) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 1000; i++) {
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 					sb.append(str).append(<span class="jxr_string">"_"</span>).append(i);
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 					<strong class="jxr_keyword">if</strong> (i &lt; 999) sb.append(<span class="jxr_string">","</span>);
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 				}
@@ -372,7 +372,7 @@
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 			Stringifier&lt;Integer&gt; memoryTest = (converter, num) -&gt; {
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 				<em class="jxr_comment">// Create a reasonably large string</em>
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 				<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; num; i++) {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; num; i++) {
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 					sb.append(<span class="jxr_string">"item_"</span>).append(i);
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 					<strong class="jxr_keyword">if</strong> (i &lt; num - 1) sb.append(<span class="jxr_string">","</span>);
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 				}

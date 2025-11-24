@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 							<strong class="jxr_keyword">var</strong> parts = line.trim().split(<span class="jxr_string">"&#92;&#92;s+"</span>);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 							<strong class="jxr_keyword">if</strong> (parts.length &gt;= 2) {
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 								<strong class="jxr_keyword">var</strong> mimeType = parts[0];
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 								<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt; parts.length; i++) {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 								<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 1; i &lt; parts.length; i++) {
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 									addExtensionType(parts[i], mimeType);
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 								}
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 							}

@@ -5923,7 +5923,7 @@
 <a class="jxr_linenumber" name="L5915" href="#L5915">5915</a> 
 <a class="jxr_linenumber" name="L5916" href="#L5916">5916</a> 		beanStore = BeanStore.of(beanStore, getResource());
 <a class="jxr_linenumber" name="L5917" href="#L5917">5917</a> 
-<a class="jxr_linenumber" name="L5918" href="#L5918">5918</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; params.size(); i++) {
+<a class="jxr_linenumber" name="L5918" href="#L5918">5918</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; params.size(); i++) {
 <a class="jxr_linenumber" name="L5919" href="#L5919">5919</a> 			<strong class="jxr_keyword">var</strong> pi = params.get(i);
 <a class="jxr_linenumber" name="L5920" href="#L5920">5920</a> 			beanStore.addBean(ParameterInfo.<strong class="jxr_keyword">class</strong>, pi);
 <a class="jxr_linenumber" name="L5921" href="#L5921">5921</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : restOpArgs) {
@@ -6099,7 +6099,7 @@
 <a class="jxr_linenumber" name="L6091" href="#L6091">6091</a> 
 <a class="jxr_linenumber" name="L6092" href="#L6092">6092</a> 		<em class="jxr_comment">// Loop until we find the correct processor for the POJO.</em>
 <a class="jxr_linenumber" name="L6093" href="#L6093">6093</a> 		<strong class="jxr_keyword">int</strong> loops = 5;
-<a class="jxr_linenumber" name="L6094" href="#L6094">6094</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; responseProcessors.length; i++) {
+<a class="jxr_linenumber" name="L6094" href="#L6094">6094</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; responseProcessors.length; i++) {
 <a class="jxr_linenumber" name="L6095" href="#L6095">6095</a> 			<strong class="jxr_keyword">var</strong> j = responseProcessors[i].process(opSession);
 <a class="jxr_linenumber" name="L6096" href="#L6096">6096</a> 			<strong class="jxr_keyword">if</strong> (j == FINISHED)
 <a class="jxr_linenumber" name="L6097" href="#L6097">6097</a> 				<strong class="jxr_keyword">return</strong>;
