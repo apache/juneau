@@ -14,42 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.common.annotation;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 
-import java.lang.annotation.*;
-
-import org.apache.juneau.common.annotation.*;
-
 /**
- * Builder for {@link TargetedAnnotationImpl} objects.
+ * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
- *
- * @param <B> The actual builder class.
  */
-public class TargetedAnnotationBuilder<B> extends AnnotationObject.Builder<B> {
+public class TargetedAnnotationTImpl extends TargetedAnnotationImpl {
 
-	String[] on = {};
+	private final Class<?>[] onClass;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param annotationType The annotation type of the annotation implementation class.
+	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public TargetedAnnotationBuilder(Class<? extends Annotation> annotationType) {
-		super(annotationType);
+	public TargetedAnnotationTImpl(TargetedAnnotationTBuilder<?> b) {
+		super(b);
+		this.onClass = copyOf(b.onClass);
 	}
 
 	/**
 	 * The targets this annotation applies to.
 	 *
-	 * @param values The targets this annotation applies to.
-	 * @return This object.
+	 * @return The targets this annotation applies to.
 	 */
-	public B on(String...values) {
-		for (var v : values)
-			on = addAll(on, v);
-		return asThis();
+	public Class<?>[] onClass() {
+		return onClass;
 	}
 }

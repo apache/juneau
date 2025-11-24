@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.common.annotation;
 
 import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 
@@ -27,36 +27,24 @@ import java.lang.reflect.*;
  *
  * @param <B> The actual builder class.
  */
-public class TargetedAnnotationTMFBuilder<B> extends TargetedAnnotationTBuilder<B> {
+public class TargetedAnnotationCBuilder<B> extends TargetedAnnotationBuilder<B> {
 
 	/**
 	 * Constructor.
 	 *
 	 * @param annotationType The annotation type of the annotation implementation class.
 	 */
-	public TargetedAnnotationTMFBuilder(Class<? extends Annotation> annotationType) {
+	public TargetedAnnotationCBuilder(Class<? extends Annotation> annotationType) {
 		super(annotationType);
 	}
 
 	/**
-	 * Appends the fields that this annotation applies to.
+	 * Appends the constructors that this annotation applies to.
 	 *
 	 * @param value The values to append.
 	 * @return This object.
 	 */
-	public B on(Field...value) {
-		for (var v : value)
-			on(info(v).getFullName());
-		return asThis();
-	}
-
-	/**
-	 * Appends the methods that this annotation applies to.
-	 *
-	 * @param value The values to append.
-	 * @return This object.
-	 */
-	public B on(Method...value) {
+	public B on(Constructor<?>...value) {
 		for (var v : value)
 			on(info(v).getFullName());
 		return asThis();

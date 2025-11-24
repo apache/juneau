@@ -14,39 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.common.annotation;
 
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 
 /**
- * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
+ * Builder for {@link TargetedAnnotationImpl} objects.
  *
  *
  * @param <B> The actual builder class.
  */
-public class TargetedAnnotationMBuilder<B> extends TargetedAnnotationBuilder<B> {
+public class TargetedAnnotationBuilder<B> extends AnnotationObject.Builder<B> {
+
+	String[] on = {};
 
 	/**
 	 * Constructor.
 	 *
 	 * @param annotationType The annotation type of the annotation implementation class.
 	 */
-	public TargetedAnnotationMBuilder(Class<? extends Annotation> annotationType) {
+	public TargetedAnnotationBuilder(Class<? extends Annotation> annotationType) {
 		super(annotationType);
 	}
 
 	/**
-	 * Appends the methods that this annotation applies to.
+	 * The targets this annotation applies to.
 	 *
-	 * @param value The values to append.
+	 * @param values The targets this annotation applies to.
 	 * @return This object.
 	 */
-	public B on(Method...value) {
-		for (var v : value)
-			on(info(v).getFullName());
+	public B on(String...values) {
+		for (var v : values)
+			on = addAll(on, v);
 		return asThis();
 	}
 }

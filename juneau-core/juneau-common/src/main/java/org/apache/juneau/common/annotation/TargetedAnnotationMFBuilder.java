@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.common.annotation;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
@@ -26,41 +27,38 @@ import java.lang.annotation.*;
  *
  * @param <B> The actual builder class.
  */
-public class TargetedAnnotationTBuilder<B> extends TargetedAnnotationBuilder<B> {
-
-	Class<?>[] onClass = {};
+public class TargetedAnnotationMFBuilder<B> extends TargetedAnnotationBuilder<B> {
 
 	/**
 	 * Constructor.
 	 *
 	 * @param annotationType The annotation type of the annotation implementation class.
 	 */
-	public TargetedAnnotationTBuilder(Class<? extends Annotation> annotationType) {
+	public TargetedAnnotationMFBuilder(Class<? extends Annotation> annotationType) {
 		super(annotationType);
 	}
 
 	/**
-	 * Appends the classes that this annotation applies to.
+	 * Appends the fields that this annotation applies to.
 	 *
 	 * @param value The values to append.
 	 * @return This object.
 	 */
-	public B on(Class<?>...value) {
+	public B on(Field...value) {
 		for (var v : value)
-			on = addAll(on, v.getName());
+			on(info(v).getFullName());
 		return asThis();
 	}
 
 	/**
-	 * Appends the classes that this annotation applies to.
+	 * Appends the methods that this annotation applies to.
 	 *
 	 * @param value The values to append.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
-	public B onClass(Class<?>...value) {
+	public B on(Method...value) {
 		for (var v : value)
-			onClass = addAll(onClass, v);
+			on(info(v).getFullName());
 		return asThis();
 	}
 }

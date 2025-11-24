@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.common.annotation;
 
 import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 
@@ -24,15 +24,17 @@ import java.lang.reflect.*;
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
+ *
+ * @param <B> The actual builder class.
  */
-public class TargetedAnnotationMFCBuilder extends TargetedAnnotationMFBuilder<TargetedAnnotationMFCBuilder> {
+public class TargetedAnnotationTMFCBuilder<B> extends TargetedAnnotationTMFBuilder<B> {
 
 	/**
 	 * Constructor.
 	 *
 	 * @param annotationType The annotation type of the annotation implementation class.
 	 */
-	public TargetedAnnotationMFCBuilder(Class<? extends Annotation> annotationType) {
+	public TargetedAnnotationTMFCBuilder(Class<? extends Annotation> annotationType) {
 		super(annotationType);
 	}
 
@@ -42,9 +44,9 @@ public class TargetedAnnotationMFCBuilder extends TargetedAnnotationMFBuilder<Ta
 	 * @param value The values to append.
 	 * @return This object.
 	 */
-	public TargetedAnnotationMFCBuilder on(Constructor<?>...value) {
+	public B on(Constructor<?>...value) {
 		for (var v : value)
 			on(info(v).getFullName());
-		return this;
+		return asThis();
 	}
 }
