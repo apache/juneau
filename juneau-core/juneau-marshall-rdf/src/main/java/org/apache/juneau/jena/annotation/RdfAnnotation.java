@@ -61,7 +61,7 @@ public class RdfAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
 		private String namespace = "", prefix = "";
 		private boolean beanUri;
@@ -134,18 +134,6 @@ public class RdfAnnotation {
 			return this;
 		}
 
-		@Override /* Overridden from AppliedAnnotationObject.Builder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder onClass(Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
-
 		/**
 		 * Sets the {@link Rdf#prefix} property on this annotation.
 		 *
@@ -154,6 +142,18 @@ public class RdfAnnotation {
 		 */
 		public Builder prefix(String value) {
 			this.prefix = value;
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
+		public Builder onClass(Class<?>...value) {
+			super.onClass(value);
 			return this;
 		}
 	}

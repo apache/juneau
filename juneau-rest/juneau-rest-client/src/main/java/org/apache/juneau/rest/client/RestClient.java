@@ -6822,7 +6822,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRemote(final Class<T> interfaceClass, Object rootUrl, final Serializer serializer, final Parser parser) {
+	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl, Serializer serializer, Parser parser) {
 
 		if (rootUrl == null)
 			rootUrl = this.rootUrl;
@@ -7020,7 +7020,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @return The new proxy interface.
 	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
 	 */
-	public <T> T getRrpcInterface(final Class<T> interfaceClass) {
+	public <T> T getRrpcInterface(Class<T> interfaceClass) {
 		return getRrpcInterface(interfaceClass, null);
 	}
 
@@ -7036,7 +7036,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param uri The URI of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRrpcInterface(final Class<T> interfaceClass, final Object uri) {
+	public <T> T getRrpcInterface(Class<T> interfaceClass, Object uri) {
 		return getRrpcInterface(interfaceClass, uri, null, null);
 	}
 
@@ -7055,7 +7055,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRrpcInterface(final Class<T> interfaceClass, Object uri, final Serializer serializer, final Parser parser) {
+	public <T> T getRrpcInterface(Class<T> interfaceClass, Object uri, Serializer serializer, Parser parser) {
 
 		if (uri == null) {
 			var rm = new RrpcInterfaceMeta(interfaceClass, "");

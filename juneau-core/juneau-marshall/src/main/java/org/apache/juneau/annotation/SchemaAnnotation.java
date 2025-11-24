@@ -22,6 +22,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -85,15 +86,15 @@ public class SchemaAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
 		private boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, ignore, r, readOnly, required, ro, sie, skipIfEmpty, ui, uniqueItems;
 		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		private Items items = ItemsAnnotation.DEFAULT;
 		private long maxi = -1, maxItems = -1, maxl = -1, maxLength = -1, maxp = -1, maxProperties = -1, mini = -1, minItems = -1, minl = -1, minLength = -1, minp = -1, minProperties = -1;
-		private String $ref = "", cf = "", collectionFormat = "", discriminator = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "",
-			t = "", title = "", type = "";
-		private String[] _default = {}, _enum = {}, additionalProperties = {}, allOf = {}, d = {}, description = {}, df = {}, e = {}, properties = {}, value = {}, xml = {};
+		private String $ref = "", cf = "", collectionFormat = "", discriminator = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "",
+			pattern = "", t = "", title = "", type = "";
+		private String[] _default = {}, _enum = {}, additionalProperties = {}, allOf = {}, d = {}, description = {}, df = {}, e = {}, properties = {}, xml = {};
 		private boolean deprecatedProperty;
 		private String $id = "", contentMediaType = "", contentEncoding = "", exclusiveMaximumValue = "", exclusiveMinimumValue = "";
 		private String[] _const = {}, examples = {}, $comment = {}, prefixItems = {}, unevaluatedItems = {}, unevaluatedProperties = {}, dependentSchemas = {}, dependentRequired = {}, _if = {},
@@ -930,6 +931,36 @@ public class SchemaAnnotation {
 		 */
 		public Builder xml(String...value) {
 			this.xml = value;
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
+		public Builder on(Class<?>...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
+		public Builder onClass(Class<?>...value) {
+			super.onClass(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
+		public Builder on(Method...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderMF */
+		public Builder on(Field...value) {
+			super.on(value);
 			return this;
 		}
 

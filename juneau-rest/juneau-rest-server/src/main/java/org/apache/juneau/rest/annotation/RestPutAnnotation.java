@@ -50,7 +50,7 @@ public class RestPutAnnotation {
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderM {
 
 		private String[] description = {};
 		private Class<? extends RestConverter>[] converters = new Class[0];
@@ -371,6 +371,17 @@ public class RestPutAnnotation {
 			return this;
 		}
 
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
+		public Builder on(java.lang.reflect.Method...value) {
+			super.on(value);
+			return this;
+		}
 	}
 
 	/**
@@ -417,6 +428,7 @@ public class RestPutAnnotation {
 			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
 			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 		}
+
 	}
 
 	private static class Object extends AppliedAnnotationObject implements RestPut {

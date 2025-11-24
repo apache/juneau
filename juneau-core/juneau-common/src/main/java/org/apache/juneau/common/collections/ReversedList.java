@@ -163,7 +163,7 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 	 * @throws IndexOutOfBoundsException if the index is out of range.
 	 */
 	@Override
-	public ListIterator<E> listIterator(final int index) {
+	public ListIterator<E> listIterator(int index) {
 		if (index < 0 || index > size())
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
 

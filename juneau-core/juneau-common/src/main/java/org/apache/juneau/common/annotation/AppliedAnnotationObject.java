@@ -34,10 +34,8 @@ public class AppliedAnnotationObject extends AnnotationObject {
 
 	/**
 	 * Builder for {@link AppliedAnnotationObject} objects.
-	 *
-	 * @param <B> The actual builder class.
 	 */
-	public static class Builder<B> extends AnnotationObject.Builder<B> {
+	public static class Builder extends AnnotationObject.Builder {
 
 		String[] on = {};
 
@@ -56,20 +54,17 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param values The targets this annotation applies to.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(String...values) {
+		public Builder on(String...values) {
 			for (var v : values)
 				on = addAll(on, v);
-			return (B)this;
+			return this;
 		}
 	}
 
 	/**
 	 * Builder for applied annotations targeting classes.
-	 *
-	 * @param <B> The actual builder class.
 	 */
-	public static class BuilderT<B> extends Builder<B> {
+	public static class BuilderT extends Builder {
 
 		Class<?>[] onClass = {};
 
@@ -88,11 +83,10 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(Class<?>...value) {
+		public BuilderT on(Class<?>...value) {
 			for (var v : value)
 				on = addAll(on, v.getName());
-			return (B)this;
+			return this;
 		}
 
 		/**
@@ -102,19 +96,17 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
-		public B onClass(Class<?>...value) {
+		public BuilderT onClass(Class<?>...value) {
 			for (var v : value)
 				onClass = addAll(onClass, v);
-			return (B)this;
+			return this;
 		}
 	}
 
 	/**
 	 * Builder for applied annotations targeting methods.
-	 *
-	 * @param <B> The actual builder class.
 	 */
-	public static class BuilderM<B> extends Builder<B> {
+	public static class BuilderM extends Builder {
 
 		/**
 		 * Constructor.
@@ -131,20 +123,17 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(Method...value) {
+		public BuilderM on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return (B)this;
+			return this;
 		}
 	}
 
 	/**
 	 * Builder for applied annotations targeting constructors.
-	 *
-	 * @param <B> The actual builder class.
 	 */
-	public static class BuilderC<B> extends Builder<B> {
+	public static class BuilderC extends Builder {
 
 		/**
 		 * Constructor.
@@ -161,20 +150,17 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(Constructor<?>...value) {
+		public BuilderC on(Constructor<?>...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return (B)this;
+			return this;
 		}
 	}
 
 	/**
 	 * Builder for applied annotations targeting methods and fields.
-	 *
-	 * @param <B> The actual builder class.
 	 */
-	public static class BuilderMF<B> extends Builder<B> {
+	public static class BuilderMF extends Builder {
 
 		/**
 		 * Constructor.
@@ -191,11 +177,10 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(Field...value) {
+		public BuilderMF on(Field...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return (B)this;
+			return this;
 		}
 
 		/**
@@ -204,20 +189,17 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(Method...value) {
+		public BuilderMF on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return (B)this;
+			return this;
 		}
 	}
 
 	/**
 	 * Builder for applied annotations targeting classes and methods.
-	 *
-	 * @param <B> The actual builder class.
 	 */
-	public static class BuilderTM<B> extends BuilderT<B> {
+	public static class BuilderTM extends BuilderT {
 
 		/**
 		 * Constructor.
@@ -234,20 +216,29 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(Method...value) {
+		public BuilderTM on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return (B)this;
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public BuilderTM on(String...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
+		public BuilderTM onClass(Class<?>...value) {
+			super.onClass(value);
+			return this;
 		}
 	}
 
 	/**
 	 * Builder for applied annotations targeting classes, methods, and fields.
-	 *
-	 * @param <B> The actual builder class.
 	 */
-	public static class BuilderTMF<B> extends BuilderT<B> {
+	public static class BuilderTMF extends BuilderT {
 
 		/**
 		 * Constructor.
@@ -264,11 +255,10 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(Field...value) {
+		public BuilderTMF on(Field...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return (B)this;
+			return this;
 		}
 
 		/**
@@ -277,35 +267,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(Method...value) {
-			for (var v : value)
-				on(info(v).getFullName());
-			return (B)this;
-		}
-	}
-
-	/**
-	 * Builder for applied annotations targeting methods, fields, and constructors.
-	 */
-	public static class BuilderMFC extends BuilderMF<BuilderMFC> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
-		 */
-		public BuilderMFC(Class<? extends Annotation> annotationType) {
-			super(annotationType);
-		}
-
-		/**
-		 * Appends the constructors that this annotation applies to.
-		 *
-		 * @param value The values to append.
-		 * @return This object.
-		 */
-		public BuilderMFC on(Constructor<?>...value) {
+		public BuilderTMF on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
 			return this;
@@ -314,10 +276,8 @@ public class AppliedAnnotationObject extends AnnotationObject {
 
 	/**
 	 * Builder for applied annotations targeting classes, methods, fields, and constructors.
-	 *
-	 * @param <B> The actual builder class.
 	 */
-	public static class BuilderTMFC<B> extends BuilderTMF<B> {
+	public static class BuilderTMFC extends BuilderTMF {
 
 		/**
 		 * Constructor.
@@ -334,11 +294,10 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
-		public B on(Constructor<?>...value) {
+		public BuilderTMFC on(Constructor<?>...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return (B)this;
+			return this;
 		}
 	}
 
@@ -353,7 +312,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 *
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public AppliedAnnotationObject(Builder<?> b) {
+	public AppliedAnnotationObject(Builder b) {
 		super(b);
 		this.on = copyOf(b.on);
 	}

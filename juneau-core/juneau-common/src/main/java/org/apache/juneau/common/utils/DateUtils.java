@@ -72,7 +72,7 @@ public class DateUtils {
 		 * 	This simple date-format should not be used to {@link SimpleDateFormat#applyPattern(String) apply} to a
 		 * 	different pattern.
 		 */
-		public static SimpleDateFormat formatFor(final String pattern) {
+		public static SimpleDateFormat formatFor(String pattern) {
 			var ref = THREADLOCAL_FORMATS.get();
 			var formats = ref.get();
 			if (formats == null) {
@@ -130,7 +130,7 @@ public class DateUtils {
 	 * @throws IllegalArgumentException If the given date pattern is invalid.
 	 * @see SimpleDateFormat
 	 */
-	public static String formatDate(final Date date, final String pattern) {
+	public static String formatDate(Date date, String pattern) {
 		return DateFormatHolder.formatFor(pattern).format(date);
 	}
 

@@ -79,7 +79,7 @@ public class MarshalledAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderT {
 
 		private String[] description = {};
 		private Class<?> implClass = void.class;
@@ -134,6 +134,23 @@ public class MarshalledAnnotation {
 			return this;
 		}
 
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
+		public Builder on(Class<?>...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
+		public Builder onClass(Class<?>...value) {
+			super.onClass(value);
+			return this;
+		}
 	}
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Marshalled {

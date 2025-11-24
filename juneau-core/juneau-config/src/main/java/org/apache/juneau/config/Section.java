@@ -185,7 +185,7 @@ public class Section {
 	 * @return The proxy interface.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> Optional<T> asInterface(final Class<T> c) {
+	public <T> Optional<T> asInterface(Class<T> c) {
 		assertArgNotNull("c", c);
 
 		if (! c.isInterface())

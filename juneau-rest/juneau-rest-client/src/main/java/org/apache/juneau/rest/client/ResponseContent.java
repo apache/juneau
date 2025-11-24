@@ -440,7 +440,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
-	public <T> Future<T> asFuture(final Class<T> type) throws RestCallException {
+	public <T> Future<T> asFuture(Class<T> type) throws RestCallException {
 		return client.getExecutorService().submit(() -> as(type));
 	}
 
@@ -466,7 +466,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
-	public <T> Future<T> asFuture(final ClassMeta<T> type) throws RestCallException {
+	public <T> Future<T> asFuture(ClassMeta<T> type) throws RestCallException {
 		return client.getExecutorService().submit(() -> as(type));
 	}
 
@@ -498,7 +498,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
-	public <T> Future<T> asFuture(final Type type, final Type...args) throws RestCallException {
+	public <T> Future<T> asFuture(Type type, Type...args) throws RestCallException {
 		return client.getExecutorService().submit(() -> as(type, args));
 	}
 

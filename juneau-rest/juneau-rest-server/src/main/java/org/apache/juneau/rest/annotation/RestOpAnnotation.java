@@ -53,7 +53,7 @@ public class RestOpAnnotation {
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderM {
 
 		private String[] description = {};
 		private Class<? extends RestConverter>[] converters = new Class[0];
@@ -386,6 +386,17 @@ public class RestOpAnnotation {
 			return this;
 		}
 
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
+		public Builder on(java.lang.reflect.Method...value) {
+			super.on(value);
+			return this;
+		}
 	}
 
 	/**
@@ -442,6 +453,7 @@ public class RestOpAnnotation {
 				}
 			}
 		}
+
 	}
 
 	private static class Object extends AppliedAnnotationObject implements RestOp {
@@ -629,7 +641,7 @@ public class RestOpAnnotation {
 	public static final RestOp DEFAULT = create().build();
 	/**
 	 * Predicate that can be used to filter annotation streams.
-	 * 
+	 *
 	 * <p>
 	 * Example: <c>classInfo.getAnnotations().stream().filter(REST_OP_GROUP)</c>
 	 */

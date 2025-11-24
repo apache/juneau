@@ -27,6 +27,7 @@ import org.apache.juneau.common.annotation.*;
  *
  */
 public class ContactAnnotation {
+
 	/**
 	 * Builder class.
 	 *
@@ -34,7 +35,7 @@ public class ContactAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationObject.Builder<Builder> {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 		private String email = "", name = "", url = "";
@@ -98,7 +99,6 @@ public class ContactAnnotation {
 			this.url = value;
 			return this;
 		}
-
 	}
 
 	private static class Object extends AnnotationObject implements Contact {

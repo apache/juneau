@@ -130,7 +130,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	}
 
 	@Override
-	public ListIterator<E> listIterator(final int index) {
+	public ListIterator<E> listIterator(int index) {
 		if (! unmodifiable)
 			return overrideListIterator(index);
 
@@ -252,7 +252,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	 * @param index Index of the first element to be returned from the list iterator.
 	 * @return A list iterator over the elements in this list (in proper sequence), starting at the specified position in the list.
 	 */
-	public ListIterator<E> overrideListIterator(final int index) {
+	public ListIterator<E> overrideListIterator(int index) {
 		return super.listIterator(index);
 	}
 

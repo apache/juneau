@@ -21,6 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.annotation.*;
@@ -79,7 +80,7 @@ public class BeancAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderC<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderC {
 
 		private String[] description = {};
 		private String properties = "";
@@ -122,6 +123,17 @@ public class BeancAnnotation {
 			return this;
 		}
 
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderC */
+		public Builder on(Constructor<?>...value) {
+			super.on(value);
+			return this;
+		}
 	}
 
 	private static class Object extends AppliedAnnotationObject implements Beanc {

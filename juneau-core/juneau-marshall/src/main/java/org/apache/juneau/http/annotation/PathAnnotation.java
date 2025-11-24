@@ -24,6 +24,7 @@ import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -88,7 +89,7 @@ public class PathAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
 		private String[] description = {};
 		private Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
@@ -186,6 +187,36 @@ public class PathAnnotation {
 		 */
 		public Builder value(String value) {
 			this.value = value;
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
+		public Builder on(Class<?>...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
+		public Builder onClass(Class<?>...value) {
+			super.onClass(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
+		public Builder on(Method...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderMF */
+		public Builder on(Field...value) {
+			super.on(value);
 			return this;
 		}
 

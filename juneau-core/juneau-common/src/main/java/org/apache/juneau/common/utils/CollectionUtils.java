@@ -1287,7 +1287,7 @@ public class CollectionUtils {
 	 * @param array The array being wrapped in a <c>Set</c> interface.
 	 * @return The new set.
 	 */
-	public static <T> Set<T> toSet(final T[] array) {
+	public static <T> Set<T> toSet(T[] array) {
 		assertArgNotNull("array", array);
 		return new AbstractSet<>() {
 

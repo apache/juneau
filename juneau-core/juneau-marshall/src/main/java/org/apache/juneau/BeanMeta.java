@@ -886,7 +886,7 @@ public class BeanMeta<T> {
 	 * @param pNames Explicit list of property names and order of properties.  If <jk>null</jk>, determine automatically.
 	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be <jk>null</jk>.
 	 */
-	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
+	protected BeanMeta(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
 		this.c = classMeta.getInnerClass();

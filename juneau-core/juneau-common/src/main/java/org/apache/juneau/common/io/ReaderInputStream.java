@@ -98,7 +98,7 @@ public class ReaderInputStream extends InputStream {
 	 * @param reader the target {@link Reader}
 	 * @param charset the charset encoding
 	 */
-	public ReaderInputStream(final Reader reader, final Charset charset) {
+	public ReaderInputStream(Reader reader, Charset charset) {
 		this(reader, charset, DEFAULT_BUFFER_SIZE);
 	}
 
@@ -109,7 +109,7 @@ public class ReaderInputStream extends InputStream {
 	 * @param charset the charset encoding
 	 * @param bufferSize the size of the input buffer in number of characters
 	 */
-	public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
+	public ReaderInputStream(Reader reader, Charset charset, int bufferSize) {
 		// @formatter:off
 		this(reader,
 			 charset.newEncoder()
@@ -127,7 +127,7 @@ public class ReaderInputStream extends InputStream {
 	 * @param encoder the charset encoder
 	 * @since 2.1
 	 */
-	public ReaderInputStream(final Reader reader, final CharsetEncoder encoder) {
+	public ReaderInputStream(Reader reader, CharsetEncoder encoder) {
 		this(reader, encoder, DEFAULT_BUFFER_SIZE);
 	}
 
@@ -138,7 +138,7 @@ public class ReaderInputStream extends InputStream {
 	 * @param encoder the charset encoder
 	 * @param bufferSize the size of the input buffer in number of characters
 	 */
-	public ReaderInputStream(final Reader reader, final CharsetEncoder encoder, final int bufferSize) {
+	public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize) {
 		this.reader = reader;
 		this.encoder = encoder;
 		this.encoderIn = CharBuffer.allocate(bufferSize);
@@ -154,7 +154,7 @@ public class ReaderInputStream extends InputStream {
 	 * @param reader the target {@link Reader}
 	 * @param charsetName the name of the charset encoding
 	 */
-	public ReaderInputStream(final Reader reader, final String charsetName) {
+	public ReaderInputStream(Reader reader, String charsetName) {
 		this(reader, charsetName, DEFAULT_BUFFER_SIZE);
 	}
 
@@ -165,7 +165,7 @@ public class ReaderInputStream extends InputStream {
 	 * @param charsetName the name of the charset encoding
 	 * @param bufferSize the size of the input buffer in number of characters
 	 */
-	public ReaderInputStream(final Reader reader, final String charsetName, final int bufferSize) {
+	public ReaderInputStream(Reader reader, String charsetName, int bufferSize) {
 		this(reader, Charset.forName(charsetName), bufferSize);
 	}
 
@@ -208,7 +208,7 @@ public class ReaderInputStream extends InputStream {
 	 * @throws IOException if an I/O error occurs
 	 */
 	@Override
-	public int read(final byte[] b) throws IOException {
+	public int read(byte[] b) throws IOException {
 		return read(b, 0, b.length);
 	}
 
@@ -223,7 +223,7 @@ public class ReaderInputStream extends InputStream {
 	 * @throws IOException if an I/O error occurs
 	 */
 	@Override
-	public int read(final byte[] array, int off, int len) throws IOException {
+	public int read(byte[] array, int off, int len) throws IOException {
 		Objects.requireNonNull(array, "array");
 		if (len < 0 || off < 0 || (off + len) > array.length) {
 			throw new IndexOutOfBoundsException("Array Size=" + array.length + ", offset=" + off + ", length=" + len);

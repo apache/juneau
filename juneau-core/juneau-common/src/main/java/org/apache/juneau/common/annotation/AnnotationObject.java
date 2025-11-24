@@ -17,7 +17,6 @@
 package org.apache.juneau.common.annotation;
 
 import static java.util.Arrays.*;
-import static org.apache.juneau.common.utils.CollectionUtils.copyOf;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -47,10 +46,8 @@ public class AnnotationObject implements Annotation {
 
 	/**
 	 * Builder for {@link AnnotationObject} objects.
-	 *
-	 * @param <B> The actual builder class.
 	 */
-	public static class Builder<B> {
+	public static class Builder {
 
 		private Class<? extends Annotation> annotationType;
 
@@ -83,7 +80,7 @@ public class AnnotationObject implements Annotation {
 	 *
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public AnnotationObject(Builder<?> b) {
+	public AnnotationObject(Builder b) {
 		this.annotationType = b.getAnnotationType();
 	}
 

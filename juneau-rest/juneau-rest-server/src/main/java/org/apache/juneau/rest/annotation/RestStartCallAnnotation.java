@@ -57,7 +57,7 @@ public class RestStartCallAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderM {
 
 		private String[] description = {};
 
@@ -85,6 +85,17 @@ public class RestStartCallAnnotation {
 		 */
 		public Builder description(String...value) {
 			this.description = value;
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
+		public Builder on(java.lang.reflect.Method...value) {
+			super.on(value);
 			return this;
 		}
 

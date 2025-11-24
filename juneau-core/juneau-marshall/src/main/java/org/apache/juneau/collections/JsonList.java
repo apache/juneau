@@ -154,7 +154,7 @@ public class JsonList extends LinkedList<Object> {
 		}
 
 		@Override /* Overridden from List */
-		public ListIterator<Object> listIterator(final int location) {
+		public ListIterator<Object> listIterator(int location) {
 			return Collections.emptyList().listIterator(location);
 		}
 
@@ -607,7 +607,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @param childType The child object type.
 	 * @return A new <c>Iterable</c> object over this list.
 	 */
-	public <E> Iterable<E> elements(final Class<E> childType) {
+	public <E> Iterable<E> elements(Class<E> childType) {
 		final Iterator<?> iterator = iterator();
 		return () -> new Iterator<>() {
 

@@ -86,7 +86,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 	@Override /* Overridden from Delegate */
 	public ClassMeta<Map<K,V>> getClassMeta() { return classMeta; }
 
-	private Map.Entry<K,V> createEntry(final K key) {
+	private Map.Entry<K,V> createEntry(K key) {
 		return new Map.Entry<>() {
 
 			@Override /* Overridden from Map.Entry */

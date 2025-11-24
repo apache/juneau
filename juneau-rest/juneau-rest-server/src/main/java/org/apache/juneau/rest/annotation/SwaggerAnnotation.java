@@ -39,7 +39,7 @@ public class SwaggerAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationObject.Builder<Builder> {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 		private Contact contact = ContactAnnotation.DEFAULT;

@@ -58,7 +58,7 @@ public class RestAnnotation {
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderT {
 
 		private String[] description = {};
 		private Class<? extends Encoder>[] encoders = new Class[0];
@@ -626,6 +626,22 @@ public class RestAnnotation {
 			return this;
 		}
 
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
+		public Builder on(Class<?>...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
+		public Builder onClass(Class<?>...value) {
+			super.onClass(value);
+			return this;
+		}
 	}
 
 	/**

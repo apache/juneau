@@ -21,6 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -81,7 +82,7 @@ public class ResponseAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderTM<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTM {
 
 		private String[] description = {};
 		private Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
@@ -169,6 +170,30 @@ public class ResponseAnnotation {
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
 			this.serializer = value;
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
+		public Builder on(Class<?>...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
+		public Builder onClass(Class<?>...value) {
+			super.onClass(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
+		public Builder on(Method...value) {
+			super.on(value);
 			return this;
 		}
 

@@ -206,7 +206,7 @@ public class BasicFileFinder implements FileFinder {
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return An iterator of file names to look at.
 	 */
-	protected List<String> getCandidateFileNames(final String fileName, final Locale locale) {
+	protected List<String> getCandidateFileNames(String fileName, Locale locale) {
 
 		if (locale == null)
 			return Collections.singletonList(fileName);

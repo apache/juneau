@@ -161,7 +161,7 @@ public class ConfigMap implements ConfigStoreListener {
 			return this;
 		}
 
-		synchronized Import register(final ConfigEventListener listener) {
+		synchronized Import register(ConfigEventListener listener) {
 			var l2 = (ConfigEventListener)events -> {
 				var events2 = events.stream().filter(x -> ! hasEntry(x.getSection(), x.getKey())).collect(Collectors.toCollection(ConfigEvents::new));
 				if (! events2.isEmpty())
@@ -172,7 +172,7 @@ public class ConfigMap implements ConfigStoreListener {
 			return this;
 		}
 
-		synchronized Import unregister(final ConfigEventListener listener) {
+		synchronized Import unregister(ConfigEventListener listener) {
 			configMap.unregister(listenerMap.remove(listener));
 			return this;
 		}

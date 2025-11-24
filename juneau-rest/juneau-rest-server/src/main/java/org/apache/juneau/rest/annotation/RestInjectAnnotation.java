@@ -54,7 +54,7 @@ public class RestInjectAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderM {
 
 		private String[] description = {};
 		private String name, value;
@@ -117,6 +117,17 @@ public class RestInjectAnnotation {
 		 */
 		public Builder value(String value) {
 			this.value = value;
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
+		public Builder on(String...value) {
+			super.on(value);
+			return this;
+		}
+		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
+		public Builder on(java.lang.reflect.Method...value) {
+			super.on(value);
 			return this;
 		}
 

@@ -44,7 +44,7 @@ public class PathReaderBuilder {
 	 * @param path The path being written to.
 	 * @return A new builder.
 	 */
-	public static PathReaderBuilder create(final Path path) {
+	public static PathReaderBuilder create(Path path) {
 		return new PathReaderBuilder().path(path);
 	}
 
@@ -86,7 +86,7 @@ public class PathReaderBuilder {
 	 * @param charset The character encoding. The default is {@link Charset#defaultCharset()}. Null resets to the default.
 	 * @return This object.
 	 */
-	public PathReaderBuilder charset(final Charset charset) {
+	public PathReaderBuilder charset(Charset charset) {
 		this.charset = charset;
 		return this;
 	}
@@ -97,7 +97,7 @@ public class PathReaderBuilder {
 	 * @param charset The character encoding. The default is {@link Charset#defaultCharset()}. Null resets to the default.
 	 * @return This object.
 	 */
-	public PathReaderBuilder charset(final String charset) {
+	public PathReaderBuilder charset(String charset) {
 		this.charset = nn(charset) ? Charset.forName(charset) : null;
 		return this;
 	}
@@ -108,7 +108,7 @@ public class PathReaderBuilder {
 	 * @param path The path being written from.
 	 * @return This object.
 	 */
-	public PathReaderBuilder path(final Path path) {
+	public PathReaderBuilder path(Path path) {
 		this.path = path;
 		return this;
 	}
@@ -119,7 +119,7 @@ public class PathReaderBuilder {
 	 * @param path The path of the path being written from.
 	 * @return This object.
 	 */
-	public PathReaderBuilder path(final String path) {
+	public PathReaderBuilder path(String path) {
 		this.path = Paths.get(path);
 		return this;
 	}

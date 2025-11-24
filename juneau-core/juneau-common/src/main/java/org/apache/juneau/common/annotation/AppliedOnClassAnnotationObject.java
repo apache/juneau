@@ -31,7 +31,7 @@ public class AppliedOnClassAnnotationObject extends AppliedAnnotationObject {
 	 *
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public AppliedOnClassAnnotationObject(BuilderT<?> b) {
+	public AppliedOnClassAnnotationObject(BuilderT b) {
 		super(b);
 		this.onClass = copyOf(b.onClass);
 	}

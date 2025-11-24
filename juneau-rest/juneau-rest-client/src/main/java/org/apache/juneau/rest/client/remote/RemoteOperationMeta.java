@@ -211,7 +211,7 @@ public class RemoteOperationMeta {
 	 * @param m The Java method.
 	 * @param defaultMethod The default HTTP method if not specified through annotation.
 	 */
-	public RemoteOperationMeta(final String parentPath, Method m, String defaultMethod) {
+	public RemoteOperationMeta(String parentPath, Method m, String defaultMethod) {
 		var b = new Builder(parentPath, m, defaultMethod);
 		this.httpMethod = b.httpMethod;
 		this.fullPath = b.fullPath;
