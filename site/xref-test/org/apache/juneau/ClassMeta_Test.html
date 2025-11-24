@@ -300,22 +300,21 @@
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">var</strong> l1 = list();
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		c3.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; l1.add(x.value()));
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		System.err.println(l1);
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		assertList(l1, <span class="jxr_string">"7"</span>, <span class="jxr_string">"6"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"5"</span>, <span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> l2 = list();
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		c4.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; l2.add(x.value()));
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertList(l2, <span class="jxr_string">"7"</span>, <span class="jxr_string">"6"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"5"</span>, <span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">var</strong> l3 = list();
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		c5.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; l3.add(x.value()));
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertList(l3, <span class="jxr_string">"3"</span>);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> l4 = list();
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		c3.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, x -&gt; x.value() == 5, x -&gt; l4.add(x.value()));
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		assertList(l4, <span class="jxr_string">"5"</span>);
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> }
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		assertList(l1, <span class="jxr_string">"7"</span>, <span class="jxr_string">"6"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"5"</span>, <span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> l2 = list();
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		c4.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; l2.add(x.value()));
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertList(l2, <span class="jxr_string">"7"</span>, <span class="jxr_string">"6"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"5"</span>, <span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">var</strong> l3 = list();
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		c5.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; l3.add(x.value()));
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertList(l3, <span class="jxr_string">"3"</span>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> l4 = list();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		c3.forEachAnnotation(A.<strong class="jxr_keyword">class</strong>, x -&gt; x.value() == 5, x -&gt; l4.add(x.value()));
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		assertList(l4, <span class="jxr_string">"5"</span>);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AnnotationBuilder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AnnotationImpl.Builder&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">boolean</strong> emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">long</strong> maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
@@ -450,7 +450,7 @@
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] _<strong class="jxr_keyword">default</strong>, _enum, df, e;
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="SubItems" href="../../../../org/apache/juneau/annotation/SubItems.html#SubItems">SubItems</a> items;
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		Impl(Builder b) {
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		Impl(ItemsAnnotation.Builder b) {
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">this</strong>.$ref = b.$ref;
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">default</strong> = copyOf(b._<strong class="jxr_keyword">default</strong>);

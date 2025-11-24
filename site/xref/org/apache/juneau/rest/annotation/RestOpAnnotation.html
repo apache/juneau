@@ -452,7 +452,7 @@
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, rolesDeclared, roleGuard, summary, value;
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] consumes, defaultRequestFormData, defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path, produces;
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		Impl(Builder b) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		Impl(RestOpAnnotation.Builder b) {
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">this</strong>.clientVersion = b.clientVersion;
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">this</strong>.consumes = copyOf(b.consumes);
