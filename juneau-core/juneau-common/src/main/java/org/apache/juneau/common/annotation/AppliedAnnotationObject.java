@@ -22,6 +22,8 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
+import org.apache.juneau.common.reflect.*;
+
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
@@ -95,10 +97,35 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		public BuilderT on(ClassInfo...value) {
+			for (var v : value)
+				on = addAll(on, v.inner().getName());
+			return this;
+		}
+
+		/**
+		 * Appends the classes that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
 		@SuppressWarnings("unchecked")
 		public BuilderT onClass(Class<?>...value) {
 			for (var v : value)
 				onClass = addAll(onClass, v);
+			return this;
+		}
+
+		/**
+		 * Appends the classes that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked")
+		public BuilderT onClass(ClassInfo...value) {
+			for (var v : value)
+				onClass = addAll(onClass, v.inner());
 			return this;
 		}
 	}
@@ -128,6 +155,18 @@ public class AppliedAnnotationObject extends AnnotationObject {
 				on(info(v).getFullName());
 			return this;
 		}
+
+		/**
+		 * Appends the methods that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderM on(MethodInfo...value) {
+			for (var v : value)
+				on(v.getFullName());
+			return this;
+		}
 	}
 
 	/**
@@ -153,6 +192,18 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		public BuilderC on(Constructor<?>...value) {
 			for (var v : value)
 				on(info(v).getFullName());
+			return this;
+		}
+
+		/**
+		 * Appends the constructors that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderC on(ConstructorInfo...value) {
+			for (var v : value)
+				on(v.getFullName());
 			return this;
 		}
 	}
@@ -184,6 +235,18 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		}
 
 		/**
+		 * Appends the fields that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderMF on(FieldInfo...value) {
+			for (var v : value)
+				on(v.getFullName());
+			return this;
+		}
+
+		/**
 		 * Appends the methods that this annotation applies to.
 		 *
 		 * @param value The values to append.
@@ -192,6 +255,18 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		public BuilderMF on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
+			return this;
+		}
+
+		/**
+		 * Appends the methods that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderMF on(MethodInfo...value) {
+			for (var v : value)
+				on(v.getFullName());
 			return this;
 		}
 	}
@@ -219,6 +294,18 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		public BuilderTM on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
+			return this;
+		}
+
+		/**
+		 * Appends the methods that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderTM on(MethodInfo...value) {
+			for (var v : value)
+				on(v.getFullName());
 			return this;
 		}
 
@@ -262,6 +349,18 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		}
 
 		/**
+		 * Appends the fields that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderTMF on(FieldInfo...value) {
+			for (var v : value)
+				on(v.getFullName());
+			return this;
+		}
+
+		/**
 		 * Appends the methods that this annotation applies to.
 		 *
 		 * @param value The values to append.
@@ -270,6 +369,18 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		public BuilderTMF on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
+			return this;
+		}
+
+		/**
+		 * Appends the methods that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderTMF on(MethodInfo...value) {
+			for (var v : value)
+				on(v.getFullName());
 			return this;
 		}
 	}
@@ -297,6 +408,18 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		public BuilderTMFC on(Constructor<?>...value) {
 			for (var v : value)
 				on(info(v).getFullName());
+			return this;
+		}
+
+		/**
+		 * Appends the constructors that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderTMFC on(ConstructorInfo...value) {
+			for (var v : value)
+				on(v.getFullName());
 			return this;
 		}
 	}
