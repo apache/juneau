@@ -64,35 +64,25 @@ public class AnnotationObject implements Annotation {
 			this.annotationType = annotationType;
 		}
 
-		/**
-		 * Sets the {@link AnnotationObject#description()} property on the target annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 * @since 9.2.0
-		 */
-		public B description(final String...value) {
-			description = value;
-			return asThis();
-		}
+	/**
+	 * Sets the {@link AnnotationObject#description()} property on the target annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 * @since 9.2.0
+	 */
+	@SuppressWarnings("unchecked")
+	public B description(final String...value) {
+		description = value;
+		return (B)this;
+	}
 
-		/**
-		 * Returns this instance typed as {@code B}.
-		 *
-		 * @return this instance typed as {@code B}.
-		 * @since 9.2.0
-		 */
-		@SuppressWarnings("unchecked")
-		protected B asThis() {
-			return (B)this;
-		}
-
-		/**
-		 * Returns the annotation type being built.
-		 *
-		 * @return The annotation type being built.
-		 */
-		public Class<? extends Annotation> getAnnotationType() { return annotationType; }
+	/**
+	 * Returns the annotation type being built.
+	 *
+	 * @return The annotation type being built.
+	 */
+	public Class<? extends Annotation> getAnnotationType() { return annotationType; }
 
 		/**
 		 * Returns the description of this annotation builder.

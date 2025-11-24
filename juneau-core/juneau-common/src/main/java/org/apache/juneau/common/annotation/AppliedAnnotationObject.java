@@ -56,10 +56,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param values The targets this annotation applies to.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(String...values) {
 			for (var v : values)
 				on = addAll(on, v);
-			return asThis();
+			return (B)this;
 		}
 	}
 
@@ -87,10 +88,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(Class<?>...value) {
 			for (var v : value)
 				on = addAll(on, v.getName());
-			return asThis();
+			return (B)this;
 		}
 
 		/**
@@ -103,7 +105,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		public B onClass(Class<?>...value) {
 			for (var v : value)
 				onClass = addAll(onClass, v);
-			return asThis();
+			return (B)this;
 		}
 	}
 
@@ -129,10 +131,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return asThis();
+			return (B)this;
 		}
 	}
 
@@ -158,10 +161,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(Constructor<?>...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return asThis();
+			return (B)this;
 		}
 	}
 
@@ -187,10 +191,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(Field...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return asThis();
+			return (B)this;
 		}
 
 		/**
@@ -199,10 +204,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return asThis();
+			return (B)this;
 		}
 	}
 
@@ -228,10 +234,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return asThis();
+			return (B)this;
 		}
 	}
 
@@ -257,10 +264,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(Field...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return asThis();
+			return (B)this;
 		}
 
 		/**
@@ -269,10 +277,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(Method...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return asThis();
+			return (B)this;
 		}
 	}
 
@@ -325,10 +334,11 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public B on(Constructor<?>...value) {
 			for (var v : value)
 				on(info(v).getFullName());
-			return asThis();
+			return (B)this;
 		}
 	}
 
