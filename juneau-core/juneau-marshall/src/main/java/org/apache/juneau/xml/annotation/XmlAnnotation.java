@@ -229,7 +229,6 @@ public class XmlAnnotation {
 			this.format = b.format;
 			this.namespace = b.namespace;
 			this.prefix = b.prefix;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Xml */

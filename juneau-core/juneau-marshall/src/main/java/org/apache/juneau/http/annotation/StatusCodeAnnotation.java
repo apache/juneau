@@ -177,7 +177,6 @@ public class StatusCodeAnnotation {
 			super(b);
 			this.description = copyOf(b.description);
 			this.value = Arrays.copyOf(b.value, b.value.length);
-			postConstruct();
 		}
 
 		@Override /* Overridden from Response */

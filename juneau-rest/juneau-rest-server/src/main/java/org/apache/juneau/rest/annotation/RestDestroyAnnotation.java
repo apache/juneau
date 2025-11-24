@@ -115,7 +115,6 @@ public class RestDestroyAnnotation {
 		Object(RestDestroyAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from RestDestroy */

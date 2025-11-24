@@ -411,7 +411,6 @@ public class RestGetAnnotation {
 			this.summary = b.summary;
 			this.swagger = b.swagger;
 			this.value = b.value;
-			postConstruct();
 		}
 
 		@Override /* Overridden from RestGet */

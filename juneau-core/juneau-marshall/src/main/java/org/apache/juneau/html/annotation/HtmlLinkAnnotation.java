@@ -178,7 +178,6 @@ public class HtmlLinkAnnotation {
 			this.description = copyOf(b.description);
 			this.nameProperty = b.nameProperty;
 			this.uriProperty = b.uriProperty;
-			postConstruct();
 		}
 
 		@Override /* Overridden from HtmlLink */

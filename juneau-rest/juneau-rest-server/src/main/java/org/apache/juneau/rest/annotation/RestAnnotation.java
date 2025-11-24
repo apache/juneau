@@ -821,7 +821,6 @@ public class RestAnnotation {
 			this.headerParams = copyOf(b.headerParams);
 			this.pathParams = copyOf(b.pathParams);
 			this.formDataParams = copyOf(b.formDataParams);
-			postConstruct();
 		}
 
 		@Override /* Overridden from Rest */

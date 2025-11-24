@@ -150,7 +150,6 @@ public class ParentPropertyAnnotation {
 		Object(ParentPropertyAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from annotation */

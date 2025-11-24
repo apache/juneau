@@ -229,7 +229,6 @@ public class SwapAnnotation {
 			this.mediaTypes = copyOf(b.mediaTypes);
 			this.template = b.template;
 			this.value = b.value;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Swap */

@@ -264,7 +264,6 @@ public class BeanpAnnotation {
 			this.type = b.type;
 			this.value = b.value;
 			this.wo = b.wo;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Beanp */

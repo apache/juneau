@@ -191,7 +191,6 @@ public class JsonAnnotation {
 			super(b);
 			this.description = copyOf(b.description);
 			this.wrapperAttr = b.wrapperAttr;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Json */

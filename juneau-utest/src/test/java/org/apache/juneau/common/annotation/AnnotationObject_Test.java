@@ -94,7 +94,6 @@ class AnnotationObject_Test extends TestBase {
 			this.number = b.number;
 			this.flag = b.flag;
 			this.array = Arrays.copyOf(b.array, b.array.length);
-			postConstruct();
 		}
 
 		@Override
@@ -294,31 +293,16 @@ class AnnotationObject_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// postConstruct() requirement tests
+	// Constructor validation tests
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void e01_postConstruct_required() {
-		// Test that hashCode() throws exception if postConstruct() was not called
-		var obj = new AnnotationObject(new AnnotationObject.Builder(TestAnnotation.class)) {
-			// Intentionally not calling postConstruct()
-		};
-
+	void e01_constructor_nullAnnotationType() {
 		var e = assertThrows(IllegalArgumentException.class, () -> {
-			obj.hashCode();
+			new AnnotationObject.Builder(null);
 		});
 
-		assertTrue(e.getMessage().contains("postConstruct"));
-	}
-
-	@Test
-	void e02_postConstruct_called() {
-		// Test that hashCode() works correctly when postConstruct() is called
-		var a = TestAnnotationObject.create().build();
-
-		// Should not throw exception and should have valid hashcode
-		assertNotEquals(-1, a.hashCode());
-		assertNotEquals(0, a.hashCode());
+		assertTrue(e.getMessage().contains("annotationType"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

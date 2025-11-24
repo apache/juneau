@@ -100,7 +100,6 @@ public class LicenseAnnotation {
 			this.description = copyOf(b.description);
 			this.name = b.name;
 			this.url = b.url;
-			postConstruct();
 		}
 
 		@Override /* Overridden from License */

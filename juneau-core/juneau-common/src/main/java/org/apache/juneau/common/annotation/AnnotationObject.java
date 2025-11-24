@@ -17,7 +17,7 @@
 package org.apache.juneau.common.annotation;
 
 import static java.util.Arrays.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -71,15 +71,13 @@ import org.apache.juneau.common.utils.*;
  *
  * <h5 class='section'>Hashcode Caching:</h5>
  * <p>
- * For performance reasons, the hashcode is calculated once and cached at the end of object construction.
- * Subclass constructors <b>must</b> call {@link #postConstruct()} after all fields have been set to trigger
- * this calculation.
+ * For performance reasons, the hashcode is calculated once and cached on first access.
+ * The hash is computed lazily when {@link #hashCode()} is first called and then stored for subsequent calls.
  *
  * <p class='bjava'>
  * 	<jk>public</jk> MyAnnotation(Builder <jv>builder</jv>) {
  * 		<jk>super</jk>(<jv>builder</jv>);
  * 		<jk>this</jk>.<jf>myField</jf> = <jv>builder</jv>.<jf>myField</jf>;
- * 		postConstruct();  <jc>// Must be called!</jc>
  * 	}
  * </p>
  *
@@ -119,7 +117,6 @@ import org.apache.juneau.common.utils.*;
  * 		<jk>public</jk> MyAnnotationObject(Builder <jv>builder</jv>) {
  * 			<jk>super</jk>(<jv>builder</jv>);
  * 			<jk>this</jk>.<jf>value</jf> = <jv>builder</jv>.<jf>value</jf>;
- * 			postConstruct();
  * 		}
  *
  * 		<ja>@Override</ja>
@@ -153,6 +150,7 @@ public class AnnotationObject implements Annotation {
 		 * @param annotationType The annotation type of the annotation implementation class.
 		 */
 		public Builder(Class<? extends Annotation> annotationType) {
+			assertArgNotNull("annotationType", annotationType);
 			this.annotationType = annotationType;
 		}
 
@@ -200,7 +198,7 @@ public class AnnotationObject implements Annotation {
 	@Override /* Overridden from Object */
 	public int hashCode() {
 		if (hashCode == -1)
-			throw illegalArg("Programming error. postConstruct() was never called on annotation.");
+			hashCode = AnnotationUtils.hash(this);
 		return hashCode;
 	}
 
@@ -216,6 +214,8 @@ public class AnnotationObject implements Annotation {
 		var m = new LinkedHashMap<String,Object>();
 		// @formatter:off
 		stream(annotationType().getDeclaredMethods())
+			// Note: isAnnotation() check is defensive code. For properly-formed AnnotationObject instances,
+			// annotationType() always returns an annotation interface, so this condition is always true.
 			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
 			.sorted(Comparator.comparing(Method::getName))
 			.forEach(x -> m.put(x.getName(), safeSupplier(()->x.invoke(this))));
@@ -226,12 +226,5 @@ public class AnnotationObject implements Annotation {
 	@Override /* Overridden from Object */
 	public String toString() {
 		return toMap().toString();
-	}
-
-	/**
-	 * This method must be called at the end of initialization to calculate the hashCode one time.
-	 */
-	protected void postConstruct() {
-		hashCode = AnnotationUtils.hash(this);
 	}
 }

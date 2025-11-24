@@ -178,7 +178,6 @@ public class RequestAnnotation {
 			this.description = copyOf(b.description);
 			this.parser = b.parser;
 			this.serializer = b.serializer;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Request */

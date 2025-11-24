@@ -115,7 +115,6 @@ public class RestInitAnnotation {
 		Object(RestInitAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from RestInit */

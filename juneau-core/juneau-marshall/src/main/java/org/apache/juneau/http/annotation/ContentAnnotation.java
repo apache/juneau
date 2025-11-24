@@ -191,7 +191,6 @@ public class ContentAnnotation {
 			this.description = copyOf(b.description);
 			this.def = b.def;
 			this.schema = b.schema;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Content */

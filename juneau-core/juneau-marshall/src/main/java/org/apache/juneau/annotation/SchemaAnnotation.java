@@ -1081,7 +1081,6 @@ public class SchemaAnnotation {
 			this._then = copyOf(b._then);
 			this._else = copyOf(b._else);
 			this.$defs = copyOf(b.$defs);
-			postConstruct();
 		}
 
 		@Override /* Overridden from Schema */

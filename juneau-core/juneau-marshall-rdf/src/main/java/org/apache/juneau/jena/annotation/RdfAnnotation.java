@@ -241,7 +241,6 @@ public class RdfAnnotation {
 			this.collectionFormat = b.collectionFormat;
 			this.namespace = b.namespace;
 			this.prefix = b.prefix;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Rdf */

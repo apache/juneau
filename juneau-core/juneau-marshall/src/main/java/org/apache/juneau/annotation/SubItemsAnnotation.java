@@ -497,7 +497,6 @@ public class SubItemsAnnotation {
 			this.type = b.type;
 			this.ui = b.ui;
 			this.uniqueItems = b.uniqueItems;
-			postConstruct();
 		}
 
 		@Override /* Overridden from SubItems */

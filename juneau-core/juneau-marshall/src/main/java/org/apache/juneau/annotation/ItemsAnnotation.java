@@ -493,7 +493,6 @@ public class ItemsAnnotation {
 			this.type = b.type;
 			this.ui = b.ui;
 			this.uniqueItems = b.uniqueItems;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Items */

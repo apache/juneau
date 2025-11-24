@@ -103,7 +103,6 @@ public class TagAnnotation {
 			this.description = copyOf(b.description);
 			this.externalDocs = b.externalDocs;
 			this.name = b.name;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Tag */

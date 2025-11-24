@@ -174,7 +174,6 @@ public class SoapXmlAnnotation {
 		Object(SoapXmlAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from annotation */

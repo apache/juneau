@@ -150,7 +150,6 @@ public class NamePropertyAnnotation {
 		Object(NamePropertyAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from NameProperty */

@@ -262,7 +262,6 @@ public class FormDataAnnotation {
 			this.schema = b.schema;
 			this.serializer = b.serializer;
 			this.value = b.value;
-			postConstruct();
 		}
 
 		@Override /* Overridden from FormData */

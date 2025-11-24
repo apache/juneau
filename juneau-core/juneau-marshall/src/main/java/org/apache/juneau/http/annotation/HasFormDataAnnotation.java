@@ -100,7 +100,6 @@ public class HasFormDataAnnotation {
 			this.description = copyOf(b.description);
 			this.name = b.name;
 			this.value = b.value;
-			postConstruct();
 		}
 
 		@Override

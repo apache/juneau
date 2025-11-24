@@ -191,7 +191,6 @@ public class UrlEncodingAnnotation {
 			super(b);
 			this.description = copyOf(b.description);
 			this.expandedParams = b.expandedParams;
-			postConstruct();
 		}
 
 		@Override /* Overridden from UrlEncoding */

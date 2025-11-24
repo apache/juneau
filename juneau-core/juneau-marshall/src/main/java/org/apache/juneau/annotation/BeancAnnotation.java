@@ -152,7 +152,6 @@ public class BeancAnnotation {
 			super(b);
 			this.description = copyOf(b.description);
 			this.properties = b.properties;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Beanc */

@@ -188,7 +188,6 @@ public class ExampleAnnotation {
 			super(b);
 			this.description = copyOf(b.description);
 			this.value = b.value;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Example */

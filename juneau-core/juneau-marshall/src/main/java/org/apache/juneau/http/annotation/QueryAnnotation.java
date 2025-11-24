@@ -262,7 +262,6 @@ public class QueryAnnotation {
 			this.serializer = b.serializer;
 			this.value = b.value;
 			this.def = b.def;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Query */

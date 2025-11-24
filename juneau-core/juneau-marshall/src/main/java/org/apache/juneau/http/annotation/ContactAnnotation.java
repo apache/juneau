@@ -112,7 +112,6 @@ public class ContactAnnotation {
 			this.email = b.email;
 			this.name = b.name;
 			this.url = b.url;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Contact */

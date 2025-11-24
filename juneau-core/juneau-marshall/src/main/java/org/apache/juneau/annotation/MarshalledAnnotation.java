@@ -177,7 +177,6 @@ public class MarshalledAnnotation {
 			this.description = copyOf(b.description);
 			this.example = b.example;
 			this.implClass = b.implClass;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Marshalled */

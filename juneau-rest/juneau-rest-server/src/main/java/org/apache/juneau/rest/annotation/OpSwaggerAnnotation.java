@@ -216,7 +216,6 @@ public class OpSwaggerAnnotation {
 			this.summary = copyOf(b.summary);
 			this.tags = copyOf(b.tags);
 			this.value = copyOf(b.value);
-			postConstruct();
 		}
 
 		@Override /* Overridden from OpSwagger */

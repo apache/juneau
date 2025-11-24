@@ -234,7 +234,6 @@ public class ResponseAnnotation {
 			this.parser = b.parser;
 			this.schema = b.schema;
 			this.serializer = b.serializer;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Response */

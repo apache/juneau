@@ -152,7 +152,6 @@ public class RestInjectAnnotation {
 			this.name = b.name;
 			this.value = b.value;
 			this.methodScope = b.methodScope;
-			postConstruct();
 		}
 
 		@Override /* Overridden from RestInject */

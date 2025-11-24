@@ -177,7 +177,6 @@ public class MsgPackAnnotation {
 		Object(MsgPackAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from annotation */

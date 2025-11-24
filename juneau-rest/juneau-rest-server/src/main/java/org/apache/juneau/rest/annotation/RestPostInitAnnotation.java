@@ -128,7 +128,6 @@ public class RestPostInitAnnotation {
 			super(b);
 			this.description = copyOf(b.description);
 			this.childFirst = b.childFirst;
-			postConstruct();
 		}
 
 		@Override /* Overridden from RestHook */

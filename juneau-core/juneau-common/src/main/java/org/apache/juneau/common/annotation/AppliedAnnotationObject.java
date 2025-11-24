@@ -110,7 +110,7 @@ import org.apache.juneau.common.reflect.*;
  * 	<li>The {@link #on()} method returns the string-based targets
  * 	<li>Subclasses may provide additional {@code onClass()}, {@code onMethod()}, etc. methods for type-safe access
  * 	<li>All builder methods return the builder for method chaining
- * 	<li>Use {@link #postConstruct()} after setting all properties to finalize hashcode calculation
+ * 	<li>Hashcode is calculated lazily on first access and then cached for performance
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>

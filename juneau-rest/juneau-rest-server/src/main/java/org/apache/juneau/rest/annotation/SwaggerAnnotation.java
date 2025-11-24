@@ -187,7 +187,6 @@ public class SwaggerAnnotation {
 			this.title = copyOf(b.title);
 			this.value = copyOf(b.value);
 			this.version = b.version;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Swagger */

@@ -115,7 +115,6 @@ public class RestPostCallAnnotation {
 		Object(RestPostCallAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from RestPostCall */

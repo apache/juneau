@@ -174,7 +174,6 @@ public class PlainTextAnnotation {
 		Object(PlainTextAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from annotation */

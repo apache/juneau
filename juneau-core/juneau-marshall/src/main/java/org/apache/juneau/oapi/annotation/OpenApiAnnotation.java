@@ -177,7 +177,6 @@ public class OpenApiAnnotation {
 		Object(OpenApiAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from annotation */

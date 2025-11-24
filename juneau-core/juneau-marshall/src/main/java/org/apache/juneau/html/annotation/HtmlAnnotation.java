@@ -271,7 +271,6 @@ public class HtmlAnnotation {
 			this.noTables = b.noTables;
 			this.render = b.render;
 			this.style = b.style;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Html */

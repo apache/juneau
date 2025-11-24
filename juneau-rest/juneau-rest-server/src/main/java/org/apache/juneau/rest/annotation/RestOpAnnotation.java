@@ -505,7 +505,6 @@ public class RestOpAnnotation {
 			this.summary = b.summary;
 			this.swagger = b.swagger;
 			this.value = b.value;
-			postConstruct();
 		}
 
 		@Override /* Overridden from RestOp */

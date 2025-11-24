@@ -393,7 +393,6 @@ public class BeanAnnotation {
 			this.wo = b.wo;
 			this.writeOnlyProperties = b.writeOnlyProperties;
 			this.xp = b.xp;
-			postConstruct();
 		}
 
 		@Override /* Overridden from Bean */

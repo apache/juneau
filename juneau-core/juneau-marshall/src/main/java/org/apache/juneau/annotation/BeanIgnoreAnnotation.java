@@ -186,7 +186,6 @@ public class BeanIgnoreAnnotation {
 		Object(BeanIgnoreAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
-			postConstruct();
 		}
 
 		@Override /* Overridden from BeanIgnore */

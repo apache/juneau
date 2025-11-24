@@ -94,7 +94,6 @@ public class ExternalDocsAnnotation {
 			super(b);
 			this.description = copyOf(b.description);
 			this.url = b.url;
-			postConstruct();
 		}
 
 		@Override
