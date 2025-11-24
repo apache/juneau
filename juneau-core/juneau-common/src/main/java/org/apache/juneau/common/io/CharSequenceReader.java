@@ -70,7 +70,7 @@ public class CharSequenceReader extends BufferedReader {
 	}
 
 	@Override /* Overridden from Reader */
-	public int read(char[] cbuf, final int off, final int len) {
+	public int read(char[] cbuf, int off, int len) {
 		if (next >= length)
 			return -1;
 		int n = Math.min(length - next, len);

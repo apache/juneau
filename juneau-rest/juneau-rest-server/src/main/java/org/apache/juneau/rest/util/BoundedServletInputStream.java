@@ -106,7 +106,7 @@ public class BoundedServletInputStream extends ServletInputStream {
 	}
 
 	@Override /* Overridden from InputStream */
-	public int read(final byte[] b, final int off, final int len) throws IOException {
+	public int read(byte[] b, int off, int len) throws IOException {
 		long numBytes = Math.min(len, remain);
 		int r = is.read(b, off, (int)numBytes);
 		if (r == -1)
@@ -127,7 +127,7 @@ public class BoundedServletInputStream extends ServletInputStream {
 	}
 
 	@Override /* Overridden from InputStream */
-	public long skip(final long n) throws IOException {
+	public long skip(long n) throws IOException {
 		long toSkip = Math.min(n, remain);
 		long r = is.skip(toSkip);
 		decrement(r);

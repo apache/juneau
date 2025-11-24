@@ -67,7 +67,7 @@ public class RrpcInterfaceMethodMeta {
 	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.
 	 * @param m The Java method.
 	 */
-	public RrpcInterfaceMethodMeta(final String restUrl, Method m) {
+	public RrpcInterfaceMethodMeta(String restUrl, Method m) {
 		this.method = m;
 		this.path = m.getName() + '/' + getMethodArgsSignature(m);
 		this.url = trimSlashes(restUrl) + '/' + urlEncode(path);

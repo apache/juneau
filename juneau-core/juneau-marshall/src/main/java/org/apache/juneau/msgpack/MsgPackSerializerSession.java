@@ -286,7 +286,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		return out;
 	}
 
-	private void serializeBeanMap(MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws SerializeException {
+	private void serializeBeanMap(MsgPackOutputStream out, BeanMap<?> m, String typeName) throws SerializeException {
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 

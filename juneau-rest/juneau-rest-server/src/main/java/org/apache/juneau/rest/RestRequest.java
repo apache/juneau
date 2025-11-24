@@ -1155,7 +1155,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @param rbm The metadata about the request bean interface to create.
 	 * @return A new request bean proxy for this REST request.
 	 */
-	public <T> T getRequest(final RequestBeanMeta rbm) {
+	public <T> T getRequest(RequestBeanMeta rbm) {
 		try {
 			var c = (Class<T>)rbm.getClassMeta().getInnerClass();
 			final BeanSession bs = getBeanSession();

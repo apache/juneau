@@ -325,11 +325,11 @@ public class LogsResource extends BasicRestServlet {
 		throw new NotFound("File not found.");
 	}
 
-	private LogParser getLogParser(File f, final Date start, final Date end, final String thread, final String[] loggers, final String[] severity) throws IOException {
+	private LogParser getLogParser(File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {
 		return new LogParser(leFormatter, f, start, end, thread, loggers, severity);
 	}
 
-	private Object getReader(File f, final Date start, final Date end, final String thread, final String[] loggers, final String[] severity) throws IOException {
+	private Object getReader(File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {
 		if (start == null && end == null && thread == null && loggers == null)
 			return getReader(f);
 		return getLogParser(f, start, end, thread, loggers, severity);

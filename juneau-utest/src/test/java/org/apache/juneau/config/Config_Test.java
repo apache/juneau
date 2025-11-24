@@ -854,7 +854,7 @@ class Config_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	//	public <T> T getSectionAsInterface(final String sectionName, final Class<T> c)
+	//	public <T> T getSectionAsInterface(String sectionName, Class<T> c)
 	//====================================================================================================
 	@Test void getSectionAsInterface() {
 		var c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");

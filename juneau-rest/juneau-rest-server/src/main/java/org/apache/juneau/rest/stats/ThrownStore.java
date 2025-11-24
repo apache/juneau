@@ -219,7 +219,7 @@ public class ThrownStore {
 		db.clear();
 	}
 
-	private ThrownStats find(final Throwable t) {
+	private ThrownStats find(Throwable t) {
 
 		if (t == null)
 			return null;

@@ -197,7 +197,7 @@ public class UonReader extends ParserReader {
 		return readEncodedByte();
 	}
 
-	private int readUTF8(int n, final int numBytes) throws IOException {
+	private int readUTF8(int n, int numBytes) throws IOException {
 		if (iCurrent + numBytes * 3 > iEnd)
 			return -1;
 		for (var i = 0; i < numBytes; i++) {

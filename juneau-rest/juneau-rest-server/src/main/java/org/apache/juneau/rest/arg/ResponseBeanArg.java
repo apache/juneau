@@ -77,7 +77,7 @@ public class ResponseBeanArg implements RestOpArg {
 	}
 
 	@Override /* Overridden from RestOpArg */
-	public Object resolve(final RestOpSession opSession) throws Exception {
+	public Object resolve(RestOpSession opSession) throws Exception {
 		var v = new Value<>();
 		v.listener(o -> {
 			RestRequest req = opSession.getRequest();
