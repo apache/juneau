@@ -538,12 +538,7 @@ public class Value<T> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (! (obj instanceof Value))
-			return false;
-		var other = (Value<?>)obj;
-		return t == null ? other.t == null : t.equals(other.t);
+		return obj instanceof Value<?> obj2 && eq(this, obj2, (x, y) -> eq(x.t, y.t));
 	}
 
 	@Override /* Overridden from Object */

@@ -93,7 +93,7 @@ public class Version implements Comparable<Version> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Version && equals((Version)o);
+		return o instanceof Version o2 && eq(this, o2, (x, y) -> x.equals(y));
 	}
 
 	/**

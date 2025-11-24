@@ -174,9 +174,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	public boolean equals(Object o) {
 		// Functionality provided for HttpRequest.removeHeader().
 		// Not a perfect equality operator if using SVL vars.
-		if (! (o instanceof Header))
-			return false;
-		return eq(this, (Header)o, (x, y) -> eq(x.name, y.getName()) && eq(x.getValue(), y.getValue()));
+		return o instanceof Header o2 && eq(this, o2, (x, y) -> eq(x.name, y.getName()) && eq(x.getValue(), y.getValue()));
 	}
 
 	/**
