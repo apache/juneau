@@ -112,7 +112,7 @@ public class BeancAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements Beanc {
+	private static class Impl extends AppliedAnnotationObject implements Beanc {
 
 		private String properties = "";
 

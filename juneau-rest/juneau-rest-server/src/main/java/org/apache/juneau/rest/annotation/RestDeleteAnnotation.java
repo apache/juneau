@@ -304,7 +304,7 @@ public class RestDeleteAnnotation {
 		}
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestDelete {
+	private static class Impl extends AppliedAnnotationObject implements RestDelete {
 
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;

@@ -99,7 +99,7 @@ public class NamePropertyAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements NameProperty {
+	private static class Impl extends AppliedAnnotationObject implements NameProperty {
 
 		Impl(NamePropertyAnnotation.Builder b) {
 			super(b);

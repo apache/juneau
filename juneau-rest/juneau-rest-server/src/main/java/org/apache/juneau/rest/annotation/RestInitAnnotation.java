@@ -76,7 +76,7 @@ public class RestInitAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestInit {
+	private static class Impl extends AppliedAnnotationObject implements RestInit {
 
 		Impl(RestInitAnnotation.Builder b) {
 			super(b);

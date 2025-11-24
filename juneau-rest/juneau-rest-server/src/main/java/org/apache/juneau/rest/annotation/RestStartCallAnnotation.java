@@ -76,7 +76,7 @@ public class RestStartCallAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestStartCall {
+	private static class Impl extends AppliedAnnotationObject implements RestStartCall {
 
 		Impl(RestStartCallAnnotation.Builder b) {
 			super(b);

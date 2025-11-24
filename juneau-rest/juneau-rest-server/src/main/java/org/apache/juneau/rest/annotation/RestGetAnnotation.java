@@ -346,7 +346,7 @@ public class RestGetAnnotation {
 		}
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestGet {
+	private static class Impl extends AppliedAnnotationObject implements RestGet {
 
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;

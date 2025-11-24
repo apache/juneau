@@ -76,7 +76,7 @@ public class RestDestroyAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestDestroy {
+	private static class Impl extends AppliedAnnotationObject implements RestDestroy {
 
 		Impl(RestDestroyAnnotation.Builder b) {
 			super(b);

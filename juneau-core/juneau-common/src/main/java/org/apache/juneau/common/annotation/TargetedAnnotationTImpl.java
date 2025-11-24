@@ -22,7 +22,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
  */
-public class TargetedAnnotationTImpl extends TargetedAnnotationImpl {
+public class TargetedAnnotationTImpl extends AppliedAnnotationObject {
 
 	private final Class<?>[] onClass;
 

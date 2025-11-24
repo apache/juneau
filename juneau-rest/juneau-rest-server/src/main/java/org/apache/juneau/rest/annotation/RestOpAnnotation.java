@@ -433,7 +433,7 @@ public class RestOpAnnotation {
 		}
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestOp {
+	private static class Impl extends AppliedAnnotationObject implements RestOp {
 
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;

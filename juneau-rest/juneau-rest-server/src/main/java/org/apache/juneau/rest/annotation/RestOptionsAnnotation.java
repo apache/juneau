@@ -346,7 +346,7 @@ public class RestOptionsAnnotation {
 		}
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestOptions {
+	private static class Impl extends AppliedAnnotationObject implements RestOptions {
 
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;

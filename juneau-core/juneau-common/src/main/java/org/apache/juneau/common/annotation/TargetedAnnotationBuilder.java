@@ -21,7 +21,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 /**
- * Builder for {@link TargetedAnnotationImpl} objects.
+ * Builder for {@link AppliedAnnotationObject} objects.
  *
  *
  * @param <B> The actual builder class.

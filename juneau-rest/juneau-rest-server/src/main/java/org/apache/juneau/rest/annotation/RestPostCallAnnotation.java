@@ -76,7 +76,7 @@ public class RestPostCallAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestPostCall {
+	private static class Impl extends AppliedAnnotationObject implements RestPostCall {
 
 		Impl(RestPostCallAnnotation.Builder b) {
 			super(b);

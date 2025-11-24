@@ -99,7 +99,7 @@ public class ParentPropertyAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements ParentProperty {
+	private static class Impl extends AppliedAnnotationObject implements ParentProperty {
 
 		Impl(ParentPropertyAnnotation.Builder b) {
 			super(b);

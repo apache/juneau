@@ -109,7 +109,7 @@ public class RestInjectAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestInject {
+	private static class Impl extends AppliedAnnotationObject implements RestInject {
 
 		private final String name, value;
 		private final String[] methodScope;

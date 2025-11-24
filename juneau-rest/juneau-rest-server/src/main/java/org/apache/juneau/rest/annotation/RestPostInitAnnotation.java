@@ -88,7 +88,7 @@ public class RestPostInitAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestPostInit {
+	private static class Impl extends AppliedAnnotationObject implements RestPostInit {
 
 		private final boolean childFirst;
 

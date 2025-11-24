@@ -202,7 +202,7 @@ public class BeanpAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements Beanp {
+	private static class Impl extends AppliedAnnotationObject implements Beanp {
 
 		private final Class<?> type;
 		private final Class<?>[] params, dictionary;

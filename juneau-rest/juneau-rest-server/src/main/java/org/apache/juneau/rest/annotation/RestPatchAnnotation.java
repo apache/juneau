@@ -408,7 +408,7 @@ public class RestPatchAnnotation {
 		}
 	}
 
-	private static class Impl extends TargetedAnnotationImpl implements RestPatch {
+	private static class Impl extends AppliedAnnotationObject implements RestPatch {
 
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
