@@ -32,7 +32,6 @@ import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.swap.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSchemaSerializer}.

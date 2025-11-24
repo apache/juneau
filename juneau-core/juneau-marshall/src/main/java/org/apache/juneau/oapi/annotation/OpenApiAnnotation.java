@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -98,14 +97,14 @@ public class OpenApiAnnotation {
 		 * @return A new {@link OpenApi @OpenApi} object.
 		 */
 		public OpenApi build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements OpenApi {
+	private static class Object extends AppliedOnTypeAnnotationObject implements OpenApi {
 
-		Impl(OpenApiAnnotation.Builder b) {
+		Object(OpenApiAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

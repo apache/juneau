@@ -26,7 +26,6 @@ import java.io.*;
 import org.apache.juneau.common.io.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * A subclass of widgets for rendering menu items with drop-down windows.

@@ -29,7 +29,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.

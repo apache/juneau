@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -98,14 +97,14 @@ public class UonAnnotation {
 		 * @return A new {@link Uon @Uon} object.
 		 */
 		public Uon build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Uon {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Uon {
 
-		Impl(UonAnnotation.Builder b) {
+		Object(UonAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

@@ -22,7 +22,6 @@ import java.lang.annotation.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;

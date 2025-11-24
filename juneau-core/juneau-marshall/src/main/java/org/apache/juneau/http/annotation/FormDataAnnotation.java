@@ -107,7 +107,7 @@ public class FormDataAnnotation {
 		 * @return A new {@link FormData @FormData} object.
 		 */
 		public FormData build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -178,14 +178,14 @@ public class FormDataAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements FormData {
+	private static class Object extends AppliedOnTypeAnnotationObject implements FormData {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String name, value, def;
 		private final Schema schema;
 
-		Impl(FormDataAnnotation.Builder b) {
+		Object(FormDataAnnotation.Builder b) {
 			super(b);
 			this.def = b.def;
 			this.name = b.name;

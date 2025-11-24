@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -100,7 +99,7 @@ public class HtmlLinkAnnotation {
 		 * @return A new {@link HtmlLink @HtmlLink} object.
 		 */
 		public HtmlLink build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -127,11 +126,11 @@ public class HtmlLinkAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements HtmlLink {
+	private static class Object extends AppliedOnTypeAnnotationObject implements HtmlLink {
 
 		private final String nameProperty, uriProperty;
 
-		Impl(HtmlLinkAnnotation.Builder b) {
+		Object(HtmlLinkAnnotation.Builder b) {
 			super(b);
 			this.nameProperty = b.nameProperty;
 			this.uriProperty = b.uriProperty;

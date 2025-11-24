@@ -24,7 +24,6 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.swap.*;
 
 /**
  * Converter for enablement of {@link ObjectIntrospector} support on response objects returned by a
@@ -65,7 +64,6 @@ public class Introspectable implements RestConverter {
 		""";
 
 	@Override /* Overridden from RestConverter */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object convert(RestRequest req, Object o) throws InternalServerError {
 		String method = req.getQueryParam("invokeMethod").orElse(null);
 		String args = req.getQueryParam("invokeArgs").orElse(null);

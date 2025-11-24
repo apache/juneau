@@ -23,7 +23,6 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.swap.*;
 
 /**
  * Converter for enabling of {@link ObjectRest} support on response objects returned by a <c>@RestOp</c>-annotated method.
@@ -49,7 +48,6 @@ import org.apache.juneau.swap.*;
 public class Traversable implements RestConverter {
 
 	@Override /* Overridden from RestConverter */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object convert(RestRequest req, Object o) throws BasicHttpException, InternalServerError {
 		if (o == null)
 			return null;

@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -101,7 +100,7 @@ public class XmlAnnotation {
 		 * @return A new {@link Xml @Xml} object.
 		 */
 		public Xml build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -150,12 +149,12 @@ public class XmlAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Xml {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Xml {
 
 		private final String childName, namespace, prefix;
 		private final XmlFormat format;
 
-		Impl(XmlAnnotation.Builder b) {
+		Object(XmlAnnotation.Builder b) {
 			super(b);
 			this.childName = b.childName;
 			this.format = b.format;

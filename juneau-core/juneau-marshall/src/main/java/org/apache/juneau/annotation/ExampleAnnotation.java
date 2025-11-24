@@ -96,7 +96,7 @@ public class ExampleAnnotation {
 		 * @return A new {@link Example @Example} object.
 		 */
 		public Example build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -112,11 +112,11 @@ public class ExampleAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Example {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Example {
 
 		private final String value;
 
-		Impl(ExampleAnnotation.Builder b) {
+		Object(ExampleAnnotation.Builder b) {
 			super(b);
 			this.value = b.value;
 			postConstruct();

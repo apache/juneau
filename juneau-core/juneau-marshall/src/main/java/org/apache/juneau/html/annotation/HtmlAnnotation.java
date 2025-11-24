@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
@@ -116,7 +115,7 @@ public class HtmlAnnotation {
 		 * @return A new {@link Html @Html} object.
 		 */
 		public Html build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -187,14 +186,14 @@ public class HtmlAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Html {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Html {
 
 		private boolean noTableHeaders, noTables;
 		private Class<? extends HtmlRender> render;
 		private final String anchorText, link, style;
 		private HtmlFormat format;
 
-		Impl(HtmlAnnotation.Builder b) {
+		Object(HtmlAnnotation.Builder b) {
 			super(b);
 			this.anchorText = b.anchorText;
 			this.format = b.format;

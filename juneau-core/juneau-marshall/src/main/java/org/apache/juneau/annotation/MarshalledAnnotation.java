@@ -97,7 +97,7 @@ public class MarshalledAnnotation {
 		 * @return A new {@link Marshalled @Marshalled} object.
 		 */
 		public Marshalled build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -124,12 +124,12 @@ public class MarshalledAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Marshalled {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Marshalled {
 
 		private final Class<?> implClass;
 		private final String example;
 
-		Impl(MarshalledAnnotation.Builder b) {
+		Object(MarshalledAnnotation.Builder b) {
 			super(b);
 			this.example = b.example;
 			this.implClass = b.implClass;

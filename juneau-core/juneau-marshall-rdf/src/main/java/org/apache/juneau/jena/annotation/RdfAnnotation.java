@@ -24,7 +24,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
@@ -92,7 +91,7 @@ public class RdfAnnotation {
 		 * @return A new {@link Rdf @Rdf} object.
 		 */
 		public Rdf build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -205,13 +204,13 @@ public class RdfAnnotation {
 		}
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Rdf {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Rdf {
 
 		private final boolean beanUri;
 		private final RdfCollectionFormat collectionFormat;
 		private final String namespace, prefix;
 
-		Impl(RdfAnnotation.Builder b) {
+		Object(RdfAnnotation.Builder b) {
 			super(b);
 			this.beanUri = b.beanUri;
 			this.collectionFormat = b.collectionFormat;

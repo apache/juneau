@@ -30,7 +30,6 @@ import org.apache.juneau.common.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.swap.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSerializer}.

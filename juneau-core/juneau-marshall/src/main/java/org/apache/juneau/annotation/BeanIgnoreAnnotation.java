@@ -94,14 +94,14 @@ public class BeanIgnoreAnnotation {
 		 * @return A new {@link BeanIgnore @BeanIgnore} object.
 		 */
 		public BeanIgnore build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements BeanIgnore {
+	private static class Object extends AppliedOnTypeAnnotationObject implements BeanIgnore {
 
-		Impl(BeanIgnoreAnnotation.Builder b) {
+		Object(BeanIgnoreAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

@@ -21,7 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 
 /**
@@ -71,7 +70,7 @@ public class RestInjectAnnotation {
 		 * @return A new {@link RestInject @RestInject} object.
 		 */
 		public RestInject build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -109,12 +108,12 @@ public class RestInjectAnnotation {
 
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements RestInject {
+	private static class Object extends AppliedAnnotationObject implements RestInject {
 
 		private final String name, value;
 		private final String[] methodScope;
 
-		Impl(RestInjectAnnotation.Builder b) {
+		Object(RestInjectAnnotation.Builder b) {
 			super(b);
 			this.name = b.name;
 			this.value = b.value;

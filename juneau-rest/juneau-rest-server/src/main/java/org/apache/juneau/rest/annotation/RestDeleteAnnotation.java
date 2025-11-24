@@ -22,7 +22,6 @@ import java.lang.annotation.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.common.annotation.*;
@@ -71,7 +70,7 @@ public class RestDeleteAnnotation {
 		 * @return A new {@link RestDelete @RestDelete} object.
 		 */
 		public RestDelete build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -304,7 +303,7 @@ public class RestDeleteAnnotation {
 		}
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements RestDelete {
+	private static class Object extends AppliedAnnotationObject implements RestDelete {
 
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
@@ -313,7 +312,7 @@ public class RestDeleteAnnotation {
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
 		private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path;
 
-		Impl(RestDeleteAnnotation.Builder b) {
+		Object(RestDeleteAnnotation.Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
 			this.debug = b.debug;

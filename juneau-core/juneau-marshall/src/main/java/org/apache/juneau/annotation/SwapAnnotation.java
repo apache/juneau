@@ -99,7 +99,7 @@ public class SwapAnnotation {
 		 * @return A new {@link Swap @Swap} object.
 		 */
 		public Swap build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -148,13 +148,13 @@ public class SwapAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Swap {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Swap {
 
 		private final Class<?> impl, value;
 		private final String template;
 		private final String[] mediaTypes;
 
-		Impl(SwapAnnotation.Builder b) {
+		Object(SwapAnnotation.Builder b) {
 			super(b);
 			this.impl = b.impl;
 			this.mediaTypes = copyOf(b.mediaTypes);

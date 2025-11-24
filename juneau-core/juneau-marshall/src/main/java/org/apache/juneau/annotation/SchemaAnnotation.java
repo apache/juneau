@@ -267,7 +267,7 @@ public class SchemaAnnotation {
 		 * @return A new {@link Schema @Schema} object.
 		 */
 		public Schema build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -925,7 +925,7 @@ public class SchemaAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Schema {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Schema {
 
 		private final boolean aev, allowEmptyValue, exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, sie, skipIfEmpty, ignore;
 		private final ExternalDocs externalDocs;
@@ -938,7 +938,7 @@ public class SchemaAnnotation {
 		private final String $id, contentMediaType, contentEncoding, exclusiveMaximumValue, exclusiveMinimumValue;
 		private final String[] _const, examples, $comment, prefixItems, unevaluatedItems, unevaluatedProperties, dependentSchemas, dependentRequired, _if, _then, _else, $defs;
 
-		Impl(SchemaAnnotation.Builder b) {
+		Object(SchemaAnnotation.Builder b) {
 			super(b);
 			this.$ref = b.$ref;
 			this._default = copyOf(b._default);

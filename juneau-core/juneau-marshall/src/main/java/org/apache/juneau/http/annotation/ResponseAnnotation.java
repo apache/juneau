@@ -102,7 +102,7 @@ public class ResponseAnnotation {
 		 * @return A new {@link Response @Response} object.
 		 */
 		public Response build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -162,7 +162,7 @@ public class ResponseAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Response {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Response {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
@@ -170,7 +170,7 @@ public class ResponseAnnotation {
 		private final Schema schema;
 		private final String[] examples;
 
-		Impl(ResponseAnnotation.Builder b) {
+		Object(ResponseAnnotation.Builder b) {
 			super(b);
 			this.examples = copyOf(b.examples);
 			this.headers = copyOf(b.headers);

@@ -107,7 +107,7 @@ public class HeaderAnnotation {
 		 * @return A new {@link Header @Header} object.
 		 */
 		public Header build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -178,14 +178,14 @@ public class HeaderAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Header {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Header {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String name, value, def;
 		private final Schema schema;
 
-		Impl(HeaderAnnotation.Builder b) {
+		Object(HeaderAnnotation.Builder b) {
 			super(b);
 			this.def = b.def;
 			this.name = b.name;

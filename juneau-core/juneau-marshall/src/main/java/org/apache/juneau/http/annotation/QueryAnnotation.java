@@ -107,7 +107,7 @@ public class QueryAnnotation {
 		 * @return A new {@link Query @Query} object.
 		 */
 		public Query build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -178,14 +178,14 @@ public class QueryAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Query {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Query {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String name, value, def;
 		private final Schema schema;
 
-		Impl(QueryAnnotation.Builder b) {
+		Object(QueryAnnotation.Builder b) {
 			super(b);
 			this.name = b.name;
 			this.parser = b.parser;

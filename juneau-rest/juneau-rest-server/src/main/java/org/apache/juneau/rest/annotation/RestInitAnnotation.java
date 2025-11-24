@@ -21,7 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 
 /**
@@ -71,14 +70,14 @@ public class RestInitAnnotation {
 		 * @return A new {@link RestInit @RestInit} object.
 		 */
 		public RestInit build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements RestInit {
+	private static class Object extends AppliedAnnotationObject implements RestInit {
 
-		Impl(RestInitAnnotation.Builder b) {
+		Object(RestInitAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

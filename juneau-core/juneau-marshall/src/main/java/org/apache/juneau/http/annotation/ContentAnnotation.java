@@ -99,7 +99,7 @@ public class ContentAnnotation {
 		 * @return A new {@link Content @Content} object.
 		 */
 		public Content build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -138,13 +138,13 @@ public class ContentAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Content {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Content {
 
 		private final String def;
 		private final String[] description;
 		private final Schema schema;
 
-		Impl(ContentAnnotation.Builder b) {
+		Object(ContentAnnotation.Builder b) {
 			super(b);
 			this.def = b.def;
 			this.description = b.description;

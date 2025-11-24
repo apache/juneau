@@ -98,7 +98,7 @@ public class BeanpAnnotation {
 		 * @return A new {@link Beanp @Beanp} object.
 		 */
 		public Beanp build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -202,13 +202,13 @@ public class BeanpAnnotation {
 
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements Beanp {
+	private static class Object extends AppliedAnnotationObject implements Beanp {
 
 		private final Class<?> type;
 		private final Class<?>[] params, dictionary;
 		private final String name, value, properties, format, ro, wo;
 
-		Impl(BeanpAnnotation.Builder b) {
+		Object(BeanpAnnotation.Builder b) {
 			super(b);
 			this.dictionary = copyOf(b.dictionary);
 			this.format = b.format;

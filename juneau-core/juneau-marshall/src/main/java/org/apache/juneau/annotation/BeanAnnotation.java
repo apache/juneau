@@ -104,7 +104,7 @@ public class BeanAnnotation {
 		 * @return A new {@link Bean @Bean} object.
 		 */
 		public Bean build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -318,7 +318,7 @@ public class BeanAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Bean {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Bean {
 
 		private final boolean findFluentSetters, sort;
 		private final Class<? extends BeanInterceptor<?>> interceptor;
@@ -327,7 +327,7 @@ public class BeanAnnotation {
 		private final Class<?>[] dictionary;
 		private final String example, excludeProperties, p, properties, readOnlyProperties, ro, typeName, typePropertyName, wo, writeOnlyProperties, xp;
 
-		Impl(BeanAnnotation.Builder b) {
+		Object(BeanAnnotation.Builder b) {
 			super(b);
 			this.dictionary = copyOf(b.dictionary);
 			this.example = b.example;

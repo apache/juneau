@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
@@ -99,7 +98,7 @@ public class RequestAnnotation {
 		 * @return A new {@link Request @Request} object.
 		 */
 		public Request build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -126,12 +125,12 @@ public class RequestAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Request {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Request {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 
-		Impl(RequestAnnotation.Builder b) {
+		Object(RequestAnnotation.Builder b) {
 			super(b);
 			this.parser = b.parser;
 			this.serializer = b.serializer;

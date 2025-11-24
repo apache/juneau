@@ -35,7 +35,6 @@ import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
 
@@ -290,7 +289,6 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		ctx = builder.ctx;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override /* Overridden from PartSerializer */
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 

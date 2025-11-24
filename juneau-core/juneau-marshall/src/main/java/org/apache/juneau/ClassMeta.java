@@ -603,7 +603,7 @@ public class ClassMeta<T> implements Type {
 	 * 	Don't call init() in constructor.
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked")
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
 		this.innerClass = innerClass;
 		this.info = info(innerClass);

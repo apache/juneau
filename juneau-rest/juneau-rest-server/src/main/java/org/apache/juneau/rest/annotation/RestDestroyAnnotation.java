@@ -21,7 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 
 /**
@@ -71,14 +70,14 @@ public class RestDestroyAnnotation {
 		 * @return A new {@link RestDestroy @RestDestroy} object.
 		 */
 		public RestDestroy build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements RestDestroy {
+	private static class Object extends AppliedAnnotationObject implements RestDestroy {
 
-		Impl(RestDestroyAnnotation.Builder b) {
+		Object(RestDestroyAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

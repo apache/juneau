@@ -94,14 +94,14 @@ public class UriAnnotation {
 		 * @return A new {@link Uri @Uri} object.
 		 */
 		public Uri build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Uri {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Uri {
 
-		Impl(UriAnnotation.Builder b) {
+		Object(UriAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

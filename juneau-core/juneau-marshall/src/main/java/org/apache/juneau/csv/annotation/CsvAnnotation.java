@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -95,14 +94,14 @@ public class CsvAnnotation {
 		 * @return A new {@link Csv @Csv} object.
 		 */
 		public Csv build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Csv {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Csv {
 
-		Impl(CsvAnnotation.Builder b) {
+		Object(CsvAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

@@ -108,7 +108,7 @@ public class PathAnnotation {
 		 * @return A new {@link Path @Path} object.
 		 */
 		public Path build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -179,14 +179,14 @@ public class PathAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Path {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Path {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String name, value, def;
 		private final Schema schema;
 
-		Impl(PathAnnotation.Builder b) {
+		Object(PathAnnotation.Builder b) {
 			super(b);
 			this.def = b.def;
 			this.name = b.name;

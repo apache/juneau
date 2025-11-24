@@ -94,14 +94,14 @@ public class ParentPropertyAnnotation {
 		 * @return A new {@link ParentProperty @ParentProperty} object.
 		 */
 		public ParentProperty build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements ParentProperty {
+	private static class Object extends AppliedAnnotationObject implements ParentProperty {
 
-		Impl(ParentPropertyAnnotation.Builder b) {
+		Object(ParentPropertyAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

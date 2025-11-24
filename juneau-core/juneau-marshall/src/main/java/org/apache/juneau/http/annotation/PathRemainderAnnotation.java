@@ -113,7 +113,7 @@ public class PathRemainderAnnotation {
 		 * @return A new {@link PathRemainder @PathRemainder} object.
 		 */
 		public PathRemainder build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -173,7 +173,7 @@ public class PathRemainderAnnotation {
 		}
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements PathRemainder {
+	private static class Object extends AppliedOnTypeAnnotationObject implements PathRemainder {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
@@ -181,7 +181,7 @@ public class PathRemainderAnnotation {
 		private final String[] description;
 		private final Schema schema;
 
-		Impl(PathRemainderAnnotation.Builder b) {
+		Object(PathRemainderAnnotation.Builder b) {
 			super(b);
 			this.def = b.def;
 			this.description = copyOf(b.description);

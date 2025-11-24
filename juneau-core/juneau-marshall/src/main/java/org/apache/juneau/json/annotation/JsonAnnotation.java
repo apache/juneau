@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -100,7 +99,7 @@ public class JsonAnnotation {
 		 * @return A new {@link Json @Json} object.
 		 */
 		public Json build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -116,11 +115,11 @@ public class JsonAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Json {
+	private static class Object extends AppliedOnTypeAnnotationObject implements Json {
 
 		private final String wrapperAttr;
 
-		Impl(JsonAnnotation.Builder b) {
+		Object(JsonAnnotation.Builder b) {
 			super(b);
 			this.wrapperAttr = b.wrapperAttr;
 			postConstruct();

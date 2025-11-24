@@ -96,7 +96,7 @@ public class BeancAnnotation {
 		 * @return A new {@link Beanc @Beanc} object.
 		 */
 		public Beanc build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -112,11 +112,11 @@ public class BeancAnnotation {
 
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements Beanc {
+	private static class Object extends AppliedAnnotationObject implements Beanc {
 
 		private String properties = "";
 
-		Impl(BeancAnnotation.Builder b) {
+		Object(BeancAnnotation.Builder b) {
 			super(b);
 			this.properties = b.properties;
 			postConstruct();

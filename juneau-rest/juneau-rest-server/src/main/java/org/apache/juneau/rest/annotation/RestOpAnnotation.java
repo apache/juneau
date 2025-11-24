@@ -25,7 +25,6 @@ import java.nio.charset.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.common.annotation.*;
@@ -81,7 +80,7 @@ public class RestOpAnnotation {
 		 * @return A new {@link RestOp @RestOp} object.
 		 */
 		public RestOp build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -433,7 +432,7 @@ public class RestOpAnnotation {
 		}
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements RestOp {
+	private static class Object extends AppliedAnnotationObject implements RestOp {
 
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
@@ -445,7 +444,7 @@ public class RestOpAnnotation {
 		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, rolesDeclared, roleGuard, summary, value;
 		private final String[] consumes, defaultRequestFormData, defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path, produces;
 
-		Impl(RestOpAnnotation.Builder b) {
+		Object(RestOpAnnotation.Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
 			this.consumes = copyOf(b.consumes);

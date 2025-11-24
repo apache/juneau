@@ -24,7 +24,6 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -98,7 +97,7 @@ public class StatusCodeAnnotation {
 		 * @return A new {@link StatusCode @StatusCode} object.
 		 */
 		public StatusCode build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -114,11 +113,11 @@ public class StatusCodeAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements StatusCode {
+	private static class Object extends AppliedOnTypeAnnotationObject implements StatusCode {
 
 		private final int[] value;
 
-		Impl(StatusCodeAnnotation.Builder b) {
+		Object(StatusCodeAnnotation.Builder b) {
 			super(b);
 			this.value = Arrays.copyOf(b.value, b.value.length);
 			postConstruct();

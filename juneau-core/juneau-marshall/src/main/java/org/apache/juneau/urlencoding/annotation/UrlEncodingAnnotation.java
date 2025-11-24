@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -100,7 +99,7 @@ public class UrlEncodingAnnotation {
 		 * @return A new {@link UrlEncoding @UrlEncoding} object.
 		 */
 		public UrlEncoding build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -116,11 +115,11 @@ public class UrlEncodingAnnotation {
 
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements UrlEncoding {
+	private static class Object extends AppliedOnTypeAnnotationObject implements UrlEncoding {
 
 		private final boolean expandedParams;
 
-		Impl(UrlEncodingAnnotation.Builder b) {
+		Object(UrlEncodingAnnotation.Builder b) {
 			super(b);
 			this.expandedParams = b.expandedParams;
 			postConstruct();

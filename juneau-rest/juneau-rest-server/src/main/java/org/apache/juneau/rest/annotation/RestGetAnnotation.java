@@ -22,7 +22,6 @@ import java.lang.annotation.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.common.annotation.*;
@@ -75,7 +74,7 @@ public class RestGetAnnotation {
 		 * @return A new {@link RestGet @RestGet} object.
 		 */
 		public RestGet build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 		/**
@@ -346,7 +345,7 @@ public class RestGetAnnotation {
 		}
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements RestGet {
+	private static class Object extends AppliedAnnotationObject implements RestGet {
 
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
@@ -357,7 +356,7 @@ public class RestGetAnnotation {
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
 		private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path, produces;
 
-		Impl(RestGetAnnotation.Builder b) {
+		Object(RestGetAnnotation.Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
 			this.converters = copyOf(b.converters);

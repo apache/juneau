@@ -94,14 +94,14 @@ public class NamePropertyAnnotation {
 		 * @return A new {@link NameProperty @NameProperty} object.
 		 */
 		public NameProperty build() {
-			return new Impl(this);
+			return new Object(this);
 		}
 
 	}
 
-	private static class Impl extends AppliedAnnotationObject implements NameProperty {
+	private static class Object extends AppliedAnnotationObject implements NameProperty {
 
-		Impl(NamePropertyAnnotation.Builder b) {
+		Object(NamePropertyAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}
