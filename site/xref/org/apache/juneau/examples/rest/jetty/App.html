@@ -38,28 +38,26 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * The {@link JettyMicroservice} class will locate the &lt;c&gt;examples.cfg&lt;/c&gt; file in the home directory and initialize</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * the resources and commands defined in that file.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="App" href="../../../../../../org/apache/juneau/examples/rest/jetty/App.html#App">App</a> {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">	 * Entry point method.</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 * @param args Command line arguments.</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">	 * @throws Exception General exception occurred.</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String[] args) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		JettyMicroservice
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			.create()
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			.args(args)
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			.servlet(RootResources.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.build()
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.start()
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			.startConsole()
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			.join();
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  }
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="App" href="../../../../../../org/apache/juneau/examples/rest/jetty/App.html#App">App</a> {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 * Entry point method.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">	 * @param args Command line arguments.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 * @throws Exception General exception occurred.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String[] args) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		JettyMicroservice
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			.create()
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			.args(args)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			.servlet(RootResources.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			.build()
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			.start()
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.startConsole()
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.join();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
