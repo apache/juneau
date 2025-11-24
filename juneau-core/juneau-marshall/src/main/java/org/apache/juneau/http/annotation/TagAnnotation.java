@@ -33,7 +33,7 @@ public class TagAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationImpl.Builder<Builder> {
+	public static class Builder extends AnnotationObject.Builder<Builder> {
 
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		String name = "";
@@ -78,7 +78,7 @@ public class TagAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationImpl implements Tag {
+	private static class Impl extends AnnotationObject implements Tag {
 
 		private final ExternalDocs externalDocs;
 		private final String name;

@@ -24,7 +24,7 @@ import org.apache.juneau.common.annotation.*;
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
  */
-public class TargetedAnnotationImpl extends AnnotationImpl {
+public class TargetedAnnotationImpl extends AnnotationObject {
 
 	private final String[] on;
 

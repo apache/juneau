@@ -38,7 +38,7 @@ public class OpSwaggerAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationImpl.Builder<Builder> {
+	public static class Builder extends AnnotationObject.Builder<Builder> {
 
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		String deprecated = "", operationId = "";
@@ -183,7 +183,7 @@ public class OpSwaggerAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationImpl implements OpSwagger {
+	private static class Impl extends AnnotationObject implements OpSwagger {
 
 		private final ExternalDocs externalDocs;
 		private final String deprecated, operationId;

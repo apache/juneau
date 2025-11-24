@@ -38,7 +38,7 @@ public class ExternalDocsAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationImpl.Builder<Builder> {
+	public static class Builder extends AnnotationObject.Builder<Builder> {
 
 		String url = "";
 
@@ -71,7 +71,7 @@ public class ExternalDocsAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationImpl implements ExternalDocs {
+	private static class Impl extends AnnotationObject implements ExternalDocs {
 
 		private final String url;
 

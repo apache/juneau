@@ -39,14 +39,14 @@ import org.apache.juneau.common.utils.*;
  * Constructors must call the {@link #postConstruct()} method after all fields have been set to trigger this calculation.
  *
  */
-public class AnnotationImpl implements Annotation {
+public class AnnotationObject implements Annotation {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder for {@link AnnotationImpl} objects.
+	 * Builder for {@link AnnotationObject} objects.
 	 *
 	 * @param <B> The actual builder class.
 	 */
@@ -65,7 +65,7 @@ public class AnnotationImpl implements Annotation {
 		}
 
 		/**
-		 * Sets the {@link AnnotationImpl#description()} property on the target annotation.
+		 * Sets the {@link AnnotationObject#description()} property on the target annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -115,7 +115,7 @@ public class AnnotationImpl implements Annotation {
 	 *
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public AnnotationImpl(Builder<?> b) {
+	public AnnotationObject(Builder<?> b) {
 		this.annotationType = b.getAnnotationType();
 		this.description = copyOf(b.getDescription());
 	}

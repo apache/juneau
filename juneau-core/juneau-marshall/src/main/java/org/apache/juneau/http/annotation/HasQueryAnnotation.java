@@ -32,7 +32,7 @@ public class HasQueryAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationImpl.Builder<Builder> {
+	public static class Builder extends AnnotationObject.Builder<Builder> {
 
 		String name = "", value = "";
 
@@ -76,7 +76,7 @@ public class HasQueryAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationImpl implements HasQuery {
+	private static class Impl extends AnnotationObject implements HasQuery {
 
 		private final String name, value;
 

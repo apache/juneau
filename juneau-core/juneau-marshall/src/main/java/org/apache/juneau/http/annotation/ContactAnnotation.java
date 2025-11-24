@@ -32,7 +32,7 @@ public class ContactAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationImpl.Builder<Builder> {
+	public static class Builder extends AnnotationObject.Builder<Builder> {
 
 		String email = "", name = "", url = "";
 
@@ -87,7 +87,7 @@ public class ContactAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationImpl implements Contact {
+	private static class Impl extends AnnotationObject implements Contact {
 
 		private final String email, name, url;
 

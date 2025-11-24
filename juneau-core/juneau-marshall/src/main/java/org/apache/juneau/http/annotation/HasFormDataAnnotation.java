@@ -32,7 +32,7 @@ public class HasFormDataAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationImpl.Builder<Builder> {
+	public static class Builder extends AnnotationObject.Builder<Builder> {
 
 		String name = "", value = "";
 
@@ -76,7 +76,7 @@ public class HasFormDataAnnotation {
 
 	}
 
-	private static class Impl extends AnnotationImpl implements HasFormData {
+	private static class Impl extends AnnotationObject implements HasFormData {
 
 		private final String name, value;
 

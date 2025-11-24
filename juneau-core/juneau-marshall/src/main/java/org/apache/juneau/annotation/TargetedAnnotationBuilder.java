@@ -28,7 +28,7 @@ import org.apache.juneau.common.annotation.*;
  *
  * @param <B> The actual builder class.
  */
-public class TargetedAnnotationBuilder<B> extends AnnotationImpl.Builder<B> {
+public class TargetedAnnotationBuilder<B> extends AnnotationObject.Builder<B> {
 
 	String[] on = {};
 
