@@ -60,15 +60,15 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AppliedAnnotationObject.BuilderM&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		String[] description = {};
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> RestConverter&gt;[] converters = <strong class="jxr_keyword">new</strong> Class[0];
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> RestGuard&gt;[] guards = <strong class="jxr_keyword">new</strong> Class[0];
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> RestMatcher&gt;[] matchers = <strong class="jxr_keyword">new</strong> Class[0];
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> Encoder&gt;[] encoders = <strong class="jxr_keyword">new</strong> Class[0];
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> Serializer&gt;[] serializers = <strong class="jxr_keyword">new</strong> Class[0];
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		String clientVersion = <span class="jxr_string">""</span>, debug = <span class="jxr_string">""</span>, defaultAccept = <span class="jxr_string">""</span>, defaultCharset = <span class="jxr_string">""</span>, rolesDeclared = <span class="jxr_string">""</span>, roleGuard = <span class="jxr_string">""</span>, summary = <span class="jxr_string">""</span>, value = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		String[] defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {}, produces = {};
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">private</strong> String[] description = {};
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">private</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> RestConverter&gt;[] converters = <strong class="jxr_keyword">new</strong> Class[0];
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">private</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> RestGuard&gt;[] guards = <strong class="jxr_keyword">new</strong> Class[0];
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">private</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> RestMatcher&gt;[] matchers = <strong class="jxr_keyword">new</strong> Class[0];
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">private</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> Encoder&gt;[] encoders = <strong class="jxr_keyword">new</strong> Class[0];
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">private</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> Serializer&gt;[] serializers = <strong class="jxr_keyword">new</strong> Class[0];
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">private</strong> <a name="OpSwagger" href="../../../../../org/apache/juneau/rest/annotation/OpSwagger.html#OpSwagger">OpSwagger</a> swagger = OpSwaggerAnnotation.DEFAULT;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">private</strong> String clientVersion = <span class="jxr_string">""</span>, debug = <span class="jxr_string">""</span>, defaultAccept = <span class="jxr_string">""</span>, defaultCharset = <span class="jxr_string">""</span>, rolesDeclared = <span class="jxr_string">""</span>, roleGuard = <span class="jxr_string">""</span>, summary = <span class="jxr_string">""</span>, value = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">private</strong> String[] defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {}, produces = {};
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">		 * Constructor.</em>
