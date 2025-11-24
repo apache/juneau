@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">		 * @return A new {@link SubItems @SubItems} object.</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">public</strong> <a name="SubItems" href="../../../../org/apache/juneau/annotation/SubItems.html#SubItems">SubItems</a> build() {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Impl(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Object(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		}
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -459,7 +459,7 @@
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 	}
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AnnotationObject" href="../../../../org/apache/juneau/common/annotation/AnnotationObject.html#AnnotationObject">AnnotationObject</a> <strong class="jxr_keyword">implements</strong> <a name="SubItems" href="../../../../org/apache/juneau/annotation/SubItems.html#SubItems">SubItems</a> {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Object <strong class="jxr_keyword">extends</strong> <a name="AnnotationObject" href="../../../../org/apache/juneau/common/annotation/AnnotationObject.html#AnnotationObject">AnnotationObject</a> <strong class="jxr_keyword">implements</strong> <a name="SubItems" href="../../../../org/apache/juneau/annotation/SubItems.html#SubItems">SubItems</a> {
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] description;
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
@@ -467,7 +467,7 @@
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] _<strong class="jxr_keyword">default</strong>, _enum, df, e, items;
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		Impl(SubItemsAnnotation.Builder b) {
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		Object(SubItemsAnnotation.Builder b) {
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 			<strong class="jxr_keyword">this</strong>.description = copyOf(b.description);
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 			<strong class="jxr_keyword">this</strong>.$ref = b.$ref;

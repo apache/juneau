@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">		 * @return A new {@link OpSwagger @OpSwagger} object.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">public</strong> <a name="OpSwagger" href="../../../../../org/apache/juneau/rest/annotation/OpSwagger.html#OpSwagger">OpSwagger</a> build() {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Impl(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Object(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<em class="jxr_javadoccomment">/**</em>
@@ -205,14 +205,14 @@
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AnnotationObject.html#AnnotationObject">AnnotationObject</a> <strong class="jxr_keyword">implements</strong> <a name="OpSwagger" href="../../../../../org/apache/juneau/rest/annotation/OpSwagger.html#OpSwagger">OpSwagger</a> {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Object <strong class="jxr_keyword">extends</strong> <a name="AnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AnnotationObject.html#AnnotationObject">AnnotationObject</a> <strong class="jxr_keyword">implements</strong> <a name="OpSwagger" href="../../../../../org/apache/juneau/rest/annotation/OpSwagger.html#OpSwagger">OpSwagger</a> {
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] description;
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ExternalDocs" href="../../../../../org/apache/juneau/annotation/ExternalDocs.html#ExternalDocs">ExternalDocs</a> externalDocs;
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String deprecated, operationId;
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] consumes, parameters, produces, responses, schemes, summary, tags, value;
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		Impl(OpSwaggerAnnotation.Builder b) {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		Object(OpSwaggerAnnotation.Builder b) {
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<strong class="jxr_keyword">this</strong>.description = copyOf(b.description);
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">this</strong>.consumes = copyOf(b.consumes);

@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">		 * @return A new {@link Contact @Contact} object.</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">public</strong> <a name="Contact" href="../../../../../org/apache/juneau/http/annotation/Contact.html#Contact">Contact</a> build() {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Impl(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Object(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		}
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<em class="jxr_javadoccomment">/**</em>
@@ -109,12 +109,12 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AnnotationObject.html#AnnotationObject">AnnotationObject</a> <strong class="jxr_keyword">implements</strong> <a name="Contact" href="../../../../../org/apache/juneau/http/annotation/Contact.html#Contact">Contact</a> {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Object <strong class="jxr_keyword">extends</strong> <a name="AnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AnnotationObject.html#AnnotationObject">AnnotationObject</a> <strong class="jxr_keyword">implements</strong> <a name="Contact" href="../../../../../org/apache/juneau/http/annotation/Contact.html#Contact">Contact</a> {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] description;
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String email, name, url;
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		Impl(ContactAnnotation.Builder b) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		Object(ContactAnnotation.Builder b) {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">this</strong>.description = copyOf(b.description);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">this</strong>.email = b.email;
