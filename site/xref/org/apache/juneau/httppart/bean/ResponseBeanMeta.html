@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> Builder(annotations);
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		b.apply(m.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).innerType());
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">var</strong> ap = AP;
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> ap = AP;
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		rstream(ap.find(Response.<strong class="jxr_keyword">class</strong>, m)).forEach(x -&gt; b.apply(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		rstream(ap.find(StatusCode.<strong class="jxr_keyword">class</strong>, m)).forEach(x -&gt; b.apply(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">return</strong> b.build();
@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> Builder(annotations);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		b.apply(ci.innerType());
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">var</strong> ai = AP;
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> ai = AP;
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		rstream(ai.find(Response.<strong class="jxr_keyword">class</strong>, ci)).forEach(x -&gt; b.apply(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		rstream(ai.find(StatusCode.<strong class="jxr_keyword">class</strong>, ci)).forEach(x -&gt; b.apply(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">return</strong> b.build();
