@@ -83,7 +83,7 @@ public class UonAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		/**
 		 * Constructor.
@@ -103,7 +103,7 @@ public class UonAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Uon {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Uon {
 
 		Impl(UonAnnotation.Builder b) {
 			super(b);

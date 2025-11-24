@@ -79,7 +79,7 @@ public class SwapAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		Class<?> impl = void.class;
 		Class<?> value = void.class;
@@ -148,7 +148,7 @@ public class SwapAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Swap {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Swap {
 
 		private final Class<?> impl, value;
 		private final String template;

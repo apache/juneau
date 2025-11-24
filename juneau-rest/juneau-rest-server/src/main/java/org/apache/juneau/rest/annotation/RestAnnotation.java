@@ -59,7 +59,7 @@ public class RestAnnotation {
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
@@ -700,7 +700,7 @@ public class RestAnnotation {
 		}
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Rest {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Rest {
 
 		private final Class<? extends Encoder>[] encoders;
 		private final Class<? extends HttpPartParser> partParser;

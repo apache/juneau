@@ -83,7 +83,7 @@ public class XmlAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		String childName = "", namespace = "", prefix = "";
 		XmlFormat format = XmlFormat.DEFAULT;
@@ -150,7 +150,7 @@ public class XmlAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Xml {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Xml {
 
 		private final String childName, namespace, prefix;
 		private final XmlFormat format;

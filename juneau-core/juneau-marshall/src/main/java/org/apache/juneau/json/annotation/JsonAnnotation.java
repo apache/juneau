@@ -83,7 +83,7 @@ public class JsonAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		String wrapperAttr = "";
 
@@ -116,7 +116,7 @@ public class JsonAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Json {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Json {
 
 		private final String wrapperAttr;
 

@@ -79,7 +79,7 @@ public class UriAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		/**
 		 * Constructor.
@@ -99,7 +99,7 @@ public class UriAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Uri {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Uri {
 
 		Impl(UriAnnotation.Builder b) {
 			super(b);

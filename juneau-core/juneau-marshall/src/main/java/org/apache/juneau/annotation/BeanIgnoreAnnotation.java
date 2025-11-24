@@ -79,7 +79,7 @@ public class BeanIgnoreAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFCBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMFC<Builder> {
 
 		/**
 		 * Constructor.
@@ -99,7 +99,7 @@ public class BeanIgnoreAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements BeanIgnore {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements BeanIgnore {
 
 		Impl(BeanIgnoreAnnotation.Builder b) {
 			super(b);

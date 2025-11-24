@@ -16,37 +16,32 @@
  */
 package org.apache.juneau.common.annotation;
 
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
-
-import java.lang.annotation.*;
-import java.lang.reflect.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
- *
- * @param <B> The actual builder class.
  */
-public class TargetedAnnotationCBuilder<B> extends TargetedAnnotationBuilder<B> {
+public class AppliedOnTypeAnnotationObject extends AppliedAnnotationObject {
+
+	private final Class<?>[] onClass;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param annotationType The annotation type of the annotation implementation class.
+	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public TargetedAnnotationCBuilder(Class<? extends Annotation> annotationType) {
-		super(annotationType);
+	public AppliedOnTypeAnnotationObject(BuilderT<?> b) {
+		super(b);
+		this.onClass = copyOf(b.onClass);
 	}
 
 	/**
-	 * Appends the constructors that this annotation applies to.
+	 * The targets this annotation applies to.
 	 *
-	 * @param value The values to append.
-	 * @return This object.
+	 * @return The targets this annotation applies to.
 	 */
-	public B on(Constructor<?>...value) {
-		for (var v : value)
-			on(info(v).getFullName());
-		return asThis();
+	public Class<?>[] onClass() {
+		return onClass;
 	}
 }

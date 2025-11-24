@@ -80,7 +80,7 @@ public class ContentAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTM<Builder> {
 
 		String def = "";
 		String[] description = {};
@@ -138,7 +138,7 @@ public class ContentAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Content {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Content {
 
 		private final String def;
 		private final String[] description;

@@ -85,7 +85,7 @@ public class HtmlAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		String anchorText = "", link = "", style = "";
 		HtmlFormat format = HtmlFormat.HTML;
@@ -187,7 +187,7 @@ public class HtmlAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Html {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Html {
 
 		private boolean noTableHeaders, noTables;
 		private Class<? extends HtmlRender> render;

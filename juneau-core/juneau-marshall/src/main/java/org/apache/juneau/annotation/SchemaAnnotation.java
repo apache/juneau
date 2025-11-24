@@ -85,7 +85,7 @@ public class SchemaAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, ignore, r, readOnly, required, ro, sie, skipIfEmpty, ui, uniqueItems;
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
@@ -925,7 +925,7 @@ public class SchemaAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Schema {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Schema {
 
 		private final boolean aev, allowEmptyValue, exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, sie, skipIfEmpty, ignore;
 		private final ExternalDocs externalDocs;

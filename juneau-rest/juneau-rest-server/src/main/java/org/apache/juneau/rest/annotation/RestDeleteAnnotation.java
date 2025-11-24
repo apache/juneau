@@ -49,7 +49,7 @@ public class RestDeleteAnnotation {
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public static class Builder extends TargetedAnnotationMBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];

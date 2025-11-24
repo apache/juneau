@@ -83,7 +83,7 @@ public class UrlEncodingAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		boolean expandedParams;
 
@@ -116,7 +116,7 @@ public class UrlEncodingAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements UrlEncoding {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements UrlEncoding {
 
 		private final boolean expandedParams;
 

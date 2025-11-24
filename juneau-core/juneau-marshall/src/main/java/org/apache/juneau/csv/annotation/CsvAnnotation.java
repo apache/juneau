@@ -80,7 +80,7 @@ public class CsvAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		/**
 		 * Constructor.
@@ -100,7 +100,7 @@ public class CsvAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Csv {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Csv {
 
 		Impl(CsvAnnotation.Builder b) {
 			super(b);

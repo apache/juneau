@@ -81,7 +81,7 @@ public class StatusCodeAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTM<Builder> {
 
 		int value[] = {};
 
@@ -114,7 +114,7 @@ public class StatusCodeAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements StatusCode {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements StatusCode {
 
 		private final int[] value;
 

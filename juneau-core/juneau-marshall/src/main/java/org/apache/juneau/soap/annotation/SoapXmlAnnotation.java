@@ -80,7 +80,7 @@ public class SoapXmlAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		/**
 		 * Constructor.
@@ -100,7 +100,7 @@ public class SoapXmlAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements SoapXml {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements SoapXml {
 
 		Impl(SoapXmlAnnotation.Builder b) {
 			super(b);

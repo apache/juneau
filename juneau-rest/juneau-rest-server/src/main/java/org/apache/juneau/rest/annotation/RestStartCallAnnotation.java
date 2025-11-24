@@ -56,7 +56,7 @@ public class RestStartCallAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationMBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
 		/**
 		 * Constructor.

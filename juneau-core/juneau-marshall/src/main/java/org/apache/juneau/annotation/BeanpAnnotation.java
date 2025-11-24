@@ -79,7 +79,7 @@ public class BeanpAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderMF<Builder> {
 
 		Class<?> type = void.class;
 		Class<?>[] dictionary = new Class[0], params = new Class[0];

@@ -79,7 +79,7 @@ public class MarshalledAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
 		Class<?> implClass = void.class;
 		String example = "";
@@ -124,7 +124,7 @@ public class MarshalledAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Marshalled {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Marshalled {
 
 		private final Class<?> implClass;
 		private final String example;

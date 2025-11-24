@@ -83,7 +83,7 @@ public class MsgPackAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		/**
 		 * Constructor.
@@ -103,7 +103,7 @@ public class MsgPackAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements MsgPack {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements MsgPack {
 
 		Impl(MsgPackAnnotation.Builder b) {
 			super(b);

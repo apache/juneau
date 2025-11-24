@@ -54,7 +54,7 @@ public class RestOpAnnotation {
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public static class Builder extends TargetedAnnotationMBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];

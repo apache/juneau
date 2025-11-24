@@ -62,7 +62,7 @@ public class RdfAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		String namespace = "", prefix = "";
 		boolean beanUri;
@@ -117,31 +117,31 @@ public class RdfAnnotation {
 			return this;
 		}
 
-		@Override /* Overridden from TargetedAnnotationTBuilder */
+		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
 		public Builder on(Class<?>...value) {
 			super.on(value);
 			return this;
 		}
 
-		@Override /* Overridden from TargetedAnnotationTMFBuilder */
+		@Override /* Overridden from AppliedAnnotationObject.BuilderTMF */
 		public Builder on(Field...value) {
 			super.on(value);
 			return this;
 		}
 
-		@Override /* Overridden from TargetedAnnotationTMFBuilder */
+		@Override /* Overridden from AppliedAnnotationObject.BuilderTMF */
 		public Builder on(Method...value) {
 			super.on(value);
 			return this;
 		}
 
-		@Override /* Overridden from TargetedAnnotationBuilder */
+		@Override /* Overridden from AppliedAnnotationObject.Builder */
 		public Builder on(String...values) {
 			super.on(values);
 			return this;
 		}
 
-		@Override /* Overridden from TargetedAnnotationTBuilder */
+		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
 		public Builder onClass(Class<?>...value) {
 			super.onClass(value);
 			return this;
@@ -205,7 +205,7 @@ public class RdfAnnotation {
 		}
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Rdf {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Rdf {
 
 		private final boolean beanUri;
 		private final RdfCollectionFormat collectionFormat;

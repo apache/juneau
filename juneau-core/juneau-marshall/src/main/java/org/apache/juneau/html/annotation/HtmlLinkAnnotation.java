@@ -83,7 +83,7 @@ public class HtmlLinkAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
 		String nameProperty = "", uriProperty = "";
 
@@ -127,7 +127,7 @@ public class HtmlLinkAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements HtmlLink {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements HtmlLink {
 
 		private final String nameProperty, uriProperty;
 

@@ -81,7 +81,7 @@ public class ResponseAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTM<Builder> {
 
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
@@ -162,7 +162,7 @@ public class ResponseAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Response {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Response {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;

@@ -80,7 +80,7 @@ public class BeanAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
 		Class<?>[] dictionary = new Class[0];
 		Class<?> implClass = void.class;
@@ -318,7 +318,7 @@ public class BeanAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Bean {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Bean {
 
 		private final boolean findFluentSetters, sort;
 		private final Class<? extends BeanInterceptor<?>> interceptor;

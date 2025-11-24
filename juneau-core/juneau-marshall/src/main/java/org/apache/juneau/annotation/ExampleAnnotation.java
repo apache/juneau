@@ -79,7 +79,7 @@ public class ExampleAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		String value = "";
 
@@ -112,7 +112,7 @@ public class ExampleAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Example {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Example {
 
 		private final String value;
 

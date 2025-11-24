@@ -87,7 +87,7 @@ public class HeaderAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
@@ -178,7 +178,7 @@ public class HeaderAnnotation {
 
 	}
 
-	private static class Impl extends TargetedAnnotationTImpl implements Header {
+	private static class Impl extends AppliedOnTypeAnnotationObject implements Header {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
