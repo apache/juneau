@@ -159,6 +159,25 @@ public class ContentAnnotation {
 			super.on(value);
 			return this;
 		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
+		public Builder on(ClassInfo...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
+		public Builder onClass(ClassInfo...value) {
+			super.onClass(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderTM */
+		public Builder on(MethodInfo...value) {
+			super.on(value);
+			return this;
+		}
+
 	}
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Content {

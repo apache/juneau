@@ -230,6 +230,19 @@ public class BeanpAnnotation {
 			super.on(value);
 			return this;
 		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderMF */
+		public Builder on(FieldInfo...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderMF */
+		public Builder on(MethodInfo...value) {
+			super.on(value);
+			return this;
+		}
+
 	}
 
 	private static class Object extends AppliedAnnotationObject implements Beanp {

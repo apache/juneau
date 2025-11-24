@@ -134,6 +134,13 @@ public class BeancAnnotation {
 			super.on(value);
 			return this;
 		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderC */
+		public Builder on(ConstructorInfo...value) {
+			super.on(value);
+			return this;
+		}
+
 	}
 
 	private static class Object extends AppliedAnnotationObject implements Beanc {

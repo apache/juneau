@@ -131,6 +131,13 @@ public class RestInjectAnnotation {
 			return this;
 		}
 
+	
+		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
+		public Builder on(org.apache.juneau.common.reflect.MethodInfo...value) {
+			super.on(value);
+			return this;
+		}
+
 	}
 
 	private static class Object extends AppliedAnnotationObject implements RestInject {
