@@ -82,6 +82,7 @@ public class StatusCodeAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTM<Builder> {
 
+		String[] description = {};
 		int value[] = {};
 
 		/**
@@ -101,6 +102,17 @@ public class StatusCodeAnnotation {
 		}
 
 		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link StatusCode#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -115,10 +127,12 @@ public class StatusCodeAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements StatusCode {
 
+		private final String[] description;
 		private final int[] value;
 
 		Object(StatusCodeAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.value = Arrays.copyOf(b.value, b.value.length);
 			postConstruct();
 		}
@@ -126,6 +140,11 @@ public class StatusCodeAnnotation {
 		@Override /* Overridden from Response */
 		public int[] value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

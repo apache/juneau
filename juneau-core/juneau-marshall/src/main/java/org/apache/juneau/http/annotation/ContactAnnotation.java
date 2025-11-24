@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.lang.annotation.*;
 
 import org.apache.juneau.common.annotation.*;
@@ -34,6 +36,7 @@ public class ContactAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
+		String[] description = {};
 		String email = "", name = "", url = "";
 
 		/**
@@ -50,6 +53,17 @@ public class ContactAnnotation {
 		 */
 		public Contact build() {
 			return new Impl(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -89,10 +103,12 @@ public class ContactAnnotation {
 
 	private static class Impl extends AnnotationObject implements Contact {
 
+		private final String[] description;
 		private final String email, name, url;
 
 		Impl(ContactAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.email = b.email;
 			this.name = b.name;
 			this.url = b.url;
@@ -112,6 +128,11 @@ public class ContactAnnotation {
 		@Override /* Overridden from Contact */
 		public String url() {
 			return url;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

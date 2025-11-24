@@ -82,6 +82,7 @@ public class BeanAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
+		String[] description = {};
 		Class<?>[] dictionary = new Class[0];
 		Class<?> implClass = void.class;
 		Class<?> interfaceClass = void.class;
@@ -105,6 +106,17 @@ public class BeanAnnotation {
 		 */
 		public Bean build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -320,6 +332,7 @@ public class BeanAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Bean {
 
+		private final String[] description;
 		private final boolean findFluentSetters, sort;
 		private final Class<? extends BeanInterceptor<?>> interceptor;
 		private final Class<? extends PropertyNamer> propertyNamer;
@@ -329,6 +342,7 @@ public class BeanAnnotation {
 
 		Object(BeanAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.dictionary = copyOf(b.dictionary);
 			this.example = b.example;
 			this.excludeProperties = b.excludeProperties;
@@ -444,6 +458,11 @@ public class BeanAnnotation {
 		@Override /* Overridden from Bean */
 		public String xp() {
 			return xp;
+		}
+
+		@Override /* Overridden from Bean */
+		public String[] description() {
+			return description;
 		}
 	}
 

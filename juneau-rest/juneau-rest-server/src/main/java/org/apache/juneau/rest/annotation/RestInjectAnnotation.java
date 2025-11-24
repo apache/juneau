@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
@@ -54,7 +56,9 @@ public class RestInjectAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
-		String name, value;
+		String[] description = {};
+
+				String name, value;
 		String[] methodScope;
 
 		/**
@@ -71,6 +75,17 @@ public class RestInjectAnnotation {
 		 */
 		public RestInject build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -110,11 +125,13 @@ public class RestInjectAnnotation {
 
 	private static class Object extends AppliedAnnotationObject implements RestInject {
 
+		private final String[] description;
 		private final String name, value;
 		private final String[] methodScope;
 
 		Object(RestInjectAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.name = b.name;
 			this.value = b.value;
 			this.methodScope = b.methodScope;
@@ -134,6 +151,11 @@ public class RestInjectAnnotation {
 		@Override /* Overridden from RestInject */
 		public String value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

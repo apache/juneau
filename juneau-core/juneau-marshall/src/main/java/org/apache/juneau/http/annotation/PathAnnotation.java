@@ -90,6 +90,7 @@ public class PathAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
+		String[] description = {};
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
@@ -109,6 +110,17 @@ public class PathAnnotation {
 		 */
 		public Path build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -181,6 +193,7 @@ public class PathAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Path {
 
+		private final String[] description;
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String name, value, def;
@@ -188,6 +201,7 @@ public class PathAnnotation {
 
 		Object(PathAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.def = b.def;
 			this.name = b.name;
 			this.parser = b.parser;
@@ -225,6 +239,11 @@ public class PathAnnotation {
 		@Override /* Overridden from Path */
 		public String value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

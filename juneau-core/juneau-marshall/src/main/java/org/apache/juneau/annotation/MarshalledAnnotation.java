@@ -81,6 +81,7 @@ public class MarshalledAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
+		String[] description = {};
 		Class<?> implClass = void.class;
 		String example = "";
 
@@ -98,6 +99,17 @@ public class MarshalledAnnotation {
 		 */
 		public Marshalled build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -126,11 +138,13 @@ public class MarshalledAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Marshalled {
 
+		private final String[] description;
 		private final Class<?> implClass;
 		private final String example;
 
 		Object(MarshalledAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.example = b.example;
 			this.implClass = b.implClass;
 			postConstruct();
@@ -144,6 +158,11 @@ public class MarshalledAnnotation {
 		@Override /* Overridden from Marshalled */
 		public Class<?> implClass() {
 			return implClass;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

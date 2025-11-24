@@ -81,6 +81,7 @@ public class BeancAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderC<Builder> {
 
+		String[] description = {};
 		String properties = "";
 
 		/**
@@ -100,6 +101,17 @@ public class BeancAnnotation {
 		}
 
 		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Beanc#properties()}  property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -114,12 +126,19 @@ public class BeancAnnotation {
 
 	private static class Object extends AppliedAnnotationObject implements Beanc {
 
-		private String properties = "";
+		private final String[] description;
+		private final String properties;
 
 		Object(BeancAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.properties = b.properties;
 			postConstruct();
+		}
+
+		@Override /* Overridden from Beanc */
+		public String[] description() {
+			return description;
 		}
 
 		@Override /* Overridden from Beanc */

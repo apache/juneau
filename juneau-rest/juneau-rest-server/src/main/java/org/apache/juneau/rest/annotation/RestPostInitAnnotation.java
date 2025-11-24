@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
@@ -57,6 +59,7 @@ public class RestPostInitAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
+		String[] description = {};
 		boolean childFirst;
 
 		/**
@@ -76,6 +79,17 @@ public class RestPostInitAnnotation {
 		}
 
 		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestPostInit#childFirst()} property on this annotation.
 		 *
 		 * @return This object.
@@ -89,10 +103,12 @@ public class RestPostInitAnnotation {
 
 	private static class Object extends AppliedAnnotationObject implements RestPostInit {
 
+		private final String[] description;
 		private final boolean childFirst;
 
 		Object(RestPostInitAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.childFirst = b.childFirst;
 			postConstruct();
 		}
@@ -100,6 +116,11 @@ public class RestPostInitAnnotation {
 		@Override /* Overridden from RestHook */
 		public boolean childFirst() {
 			return childFirst;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

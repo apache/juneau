@@ -84,6 +84,7 @@ public class XmlAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
+		String[] description = {};
 		String childName = "", namespace = "", prefix = "";
 		XmlFormat format = XmlFormat.DEFAULT;
 
@@ -101,6 +102,17 @@ public class XmlAnnotation {
 		 */
 		public Xml build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -151,11 +163,13 @@ public class XmlAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Xml {
 
+		private final String[] description;
 		private final String childName, namespace, prefix;
 		private final XmlFormat format;
 
 		Object(XmlAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.childName = b.childName;
 			this.format = b.format;
 			this.namespace = b.namespace;
@@ -181,6 +195,11 @@ public class XmlAnnotation {
 		@Override /* Overridden from Xml */
 		public String prefix() {
 			return prefix;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

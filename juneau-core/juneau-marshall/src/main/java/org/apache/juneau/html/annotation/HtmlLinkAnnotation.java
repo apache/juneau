@@ -84,6 +84,7 @@ public class HtmlLinkAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
+		String[] description = {};
 		String nameProperty = "", uriProperty = "";
 
 		/**
@@ -100,6 +101,17 @@ public class HtmlLinkAnnotation {
 		 */
 		public HtmlLink build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -128,10 +140,12 @@ public class HtmlLinkAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements HtmlLink {
 
+		private final String[] description;
 		private final String nameProperty, uriProperty;
 
 		Object(HtmlLinkAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.nameProperty = b.nameProperty;
 			this.uriProperty = b.uriProperty;
 			postConstruct();
@@ -145,6 +159,11 @@ public class HtmlLinkAnnotation {
 		@Override /* Overridden from HtmlLink */
 		public String uriProperty() {
 			return uriProperty;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

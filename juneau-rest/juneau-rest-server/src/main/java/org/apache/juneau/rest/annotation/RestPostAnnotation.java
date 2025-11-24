@@ -52,6 +52,7 @@ public class RestPostAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
+		String[] description = {};
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
@@ -77,6 +78,17 @@ public class RestPostAnnotation {
 		 */
 		public RestPost build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -409,6 +421,7 @@ public class RestPostAnnotation {
 
 	private static class Object extends AppliedAnnotationObject implements RestPost {
 
+		private final String[] description;
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
@@ -421,6 +434,7 @@ public class RestPostAnnotation {
 
 		Object(RestPostAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.clientVersion = b.clientVersion;
 			this.consumes = copyOf(b.consumes);
 			this.converters = copyOf(b.converters);
@@ -572,6 +586,11 @@ public class RestPostAnnotation {
 		@Override /* Overridden from RestPost */
 		public String value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

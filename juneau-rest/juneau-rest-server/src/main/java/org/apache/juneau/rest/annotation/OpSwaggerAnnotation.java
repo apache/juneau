@@ -40,7 +40,10 @@ public class OpSwaggerAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
+		String[] description = {};
+
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
+
 		String deprecated = "", operationId = "";
 		String[] consumes = {}, parameters = {}, produces = {}, responses = {}, schemes = {}, summary = {}, tags = {}, value = {};
 
@@ -58,6 +61,17 @@ public class OpSwaggerAnnotation {
 		 */
 		public OpSwagger build() {
 			return new Impl(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -185,12 +199,14 @@ public class OpSwaggerAnnotation {
 
 	private static class Impl extends AnnotationObject implements OpSwagger {
 
+		private final String[] description;
 		private final ExternalDocs externalDocs;
 		private final String deprecated, operationId;
 		private final String[] consumes, parameters, produces, responses, schemes, summary, tags, value;
 
 		Impl(OpSwaggerAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.consumes = copyOf(b.consumes);
 			this.deprecated = b.deprecated;
 			this.externalDocs = b.externalDocs;
@@ -258,6 +274,11 @@ public class OpSwaggerAnnotation {
 		@Override /* Overridden from OpSwagger */
 		public String[] value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

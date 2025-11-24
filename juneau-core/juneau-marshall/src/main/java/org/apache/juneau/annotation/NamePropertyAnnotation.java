@@ -81,6 +81,8 @@ public class NamePropertyAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderMF<Builder> {
 
+		String[] description = {};
+
 		/**
 		 * Constructor.
 		 */
@@ -97,13 +99,31 @@ public class NamePropertyAnnotation {
 			return new Object(this);
 		}
 
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
 	}
 
 	private static class Object extends AppliedAnnotationObject implements NameProperty {
 
+		private final String[] description;
+
 		Object(NamePropertyAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			postConstruct();
+		}
+
+		@Override /* Overridden from NameProperty */
+		public String[] description() {
+			return description;
 		}
 	}
 

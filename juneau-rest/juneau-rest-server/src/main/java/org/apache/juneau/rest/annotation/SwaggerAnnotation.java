@@ -41,6 +41,7 @@ public class SwaggerAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
+		String[] description = {};
 		Contact contact = ContactAnnotation.DEFAULT;
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		License license = LicenseAnnotation.DEFAULT;
@@ -62,6 +63,17 @@ public class SwaggerAnnotation {
 		 */
 		public Swagger build() {
 			return new Impl(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -156,6 +168,7 @@ public class SwaggerAnnotation {
 
 	private static class Impl extends AnnotationObject implements Swagger {
 
+		private final String[] description;
 		private final Contact contact;
 		private final ExternalDocs externalDocs;
 		private final License license;
@@ -165,6 +178,7 @@ public class SwaggerAnnotation {
 
 		Impl(SwaggerAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.contact = b.contact;
 			this.externalDocs = b.externalDocs;
 			this.license = b.license;
@@ -214,6 +228,11 @@ public class SwaggerAnnotation {
 		@Override /* Overridden from Swagger */
 		public String version() {
 			return version;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

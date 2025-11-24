@@ -81,6 +81,7 @@ public class BeanpAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderMF<Builder> {
 
+		String[] description = {};
 		Class<?> type = void.class;
 		Class<?>[] dictionary = new Class[0], params = new Class[0];
 		String format = "", name = "", properties = "", ro = "", value = "", wo = "";
@@ -99,6 +100,17 @@ public class BeanpAnnotation {
 		 */
 		public Beanp build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -204,12 +216,14 @@ public class BeanpAnnotation {
 
 	private static class Object extends AppliedAnnotationObject implements Beanp {
 
+		private final String[] description;
 		private final Class<?> type;
 		private final Class<?>[] params, dictionary;
 		private final String name, value, properties, format, ro, wo;
 
 		Object(BeanpAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.dictionary = copyOf(b.dictionary);
 			this.format = b.format;
 			this.name = b.name;
@@ -265,6 +279,11 @@ public class BeanpAnnotation {
 		@Override /* Overridden from Beanp */
 		public String wo() {
 			return wo;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

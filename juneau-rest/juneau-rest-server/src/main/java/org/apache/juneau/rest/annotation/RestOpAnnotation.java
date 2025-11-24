@@ -55,6 +55,7 @@ public class RestOpAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
+		String[] description = {};
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
@@ -81,6 +82,17 @@ public class RestOpAnnotation {
 		 */
 		public RestOp build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -434,6 +446,7 @@ public class RestOpAnnotation {
 
 	private static class Object extends AppliedAnnotationObject implements RestOp {
 
+		private final String[] description;
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
@@ -446,6 +459,7 @@ public class RestOpAnnotation {
 
 		Object(RestOpAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.clientVersion = b.clientVersion;
 			this.consumes = copyOf(b.consumes);
 			this.converters = copyOf(b.converters);
@@ -603,6 +617,11 @@ public class RestOpAnnotation {
 		@Override /* Overridden from RestOp */
 		public String value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

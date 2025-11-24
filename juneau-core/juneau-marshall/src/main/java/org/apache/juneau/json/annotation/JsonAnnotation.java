@@ -84,6 +84,7 @@ public class JsonAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
+		String[] description = {};
 		String wrapperAttr = "";
 
 		/**
@@ -103,6 +104,17 @@ public class JsonAnnotation {
 		}
 
 		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Json#wrapperAttr} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -117,10 +129,12 @@ public class JsonAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Json {
 
+		private final String[] description;
 		private final String wrapperAttr;
 
 		Object(JsonAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.wrapperAttr = b.wrapperAttr;
 			postConstruct();
 		}
@@ -128,6 +142,11 @@ public class JsonAnnotation {
 		@Override /* Overridden from Json */
 		public String wrapperAttr() {
 			return wrapperAttr;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

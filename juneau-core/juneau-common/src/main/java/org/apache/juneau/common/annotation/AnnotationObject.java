@@ -53,7 +53,6 @@ public class AnnotationObject implements Annotation {
 	public static class Builder<B> {
 
 		Class<? extends Annotation> annotationType;
-		String[] description = {};
 
 		/**
 		 * Constructor.
@@ -64,32 +63,12 @@ public class AnnotationObject implements Annotation {
 			this.annotationType = annotationType;
 		}
 
-	/**
-	 * Sets the {@link AnnotationObject#description()} property on the target annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 * @since 9.2.0
-	 */
-	@SuppressWarnings("unchecked")
-	public B description(final String...value) {
-		description = value;
-		return (B)this;
-	}
-
-	/**
-	 * Returns the annotation type being built.
-	 *
-	 * @return The annotation type being built.
-	 */
-	public Class<? extends Annotation> getAnnotationType() { return annotationType; }
-
 		/**
-		 * Returns the description of this annotation builder.
+		 * Returns the annotation type being built.
 		 *
-		 * @return The description array, or <jk>null</jk> if not set.
+		 * @return The annotation type being built.
 		 */
-		public String[] getDescription() { return description; }
+		public Class<? extends Annotation> getAnnotationType() { return annotationType; }
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -97,7 +76,6 @@ public class AnnotationObject implements Annotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Class<? extends Annotation> annotationType;
-	private final String[] description;
 	private int hashCode = -1;
 
 	/**
@@ -107,7 +85,6 @@ public class AnnotationObject implements Annotation {
 	 */
 	public AnnotationObject(Builder<?> b) {
 		this.annotationType = b.getAnnotationType();
-		this.description = copyOf(b.getDescription());
 	}
 
 	/**
@@ -118,16 +95,6 @@ public class AnnotationObject implements Annotation {
 	@Override /* Overridden from Annotation */
 	public Class<? extends Annotation> annotationType() {
 		return annotationType;
-	}
-
-	/**
-	 * Returns the annotation description.
-	 *
-	 * @return the annotation description.
-	 * @since 9.2.0
-	 */
-	public String[] description() {
-		return description;
 	}
 
 	@Override /* Overridden from Object */

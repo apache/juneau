@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
@@ -40,6 +42,7 @@ public class ExternalDocsAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
+		String[] description = {};
 		String url = "";
 
 		/**
@@ -59,6 +62,17 @@ public class ExternalDocsAnnotation {
 		}
 
 		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link ExternalDocs#url} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -73,10 +87,12 @@ public class ExternalDocsAnnotation {
 
 	private static class Impl extends AnnotationObject implements ExternalDocs {
 
+		private final String[] description;
 		private final String url;
 
 		Impl(ExternalDocsAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.url = b.url;
 			postConstruct();
 		}
@@ -84,6 +100,11 @@ public class ExternalDocsAnnotation {
 		@Override
 		public String url() {
 			return url;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

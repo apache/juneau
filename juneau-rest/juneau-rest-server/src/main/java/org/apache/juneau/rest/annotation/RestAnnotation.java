@@ -60,6 +60,7 @@ public class RestAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
+		String[] description = {};
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Void.class;
@@ -144,6 +145,17 @@ public class RestAnnotation {
 		 */
 		public Rest build() {
 			return new Impl(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -701,6 +713,7 @@ public class RestAnnotation {
 
 	private static class Impl extends AppliedOnClassAnnotationObject implements Rest {
 
+		private final String[] description;
 		private final Class<? extends Encoder>[] encoders;
 		private final Class<? extends HttpPartParser> partParser;
 		private final Class<? extends HttpPartSerializer> partSerializer;
@@ -728,6 +741,7 @@ public class RestAnnotation {
 
 		Impl(RestAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.disableContentParam = b.disableContentParam;
 			this.allowedHeaderParams = b.allowedHeaderParams;
 			this.allowedMethodHeaders = b.allowedMethodHeaders;
@@ -1029,6 +1043,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String uriResolution() {
 			return uriResolution;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

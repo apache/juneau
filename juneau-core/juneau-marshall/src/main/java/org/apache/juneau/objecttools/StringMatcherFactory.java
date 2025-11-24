@@ -69,8 +69,8 @@ public class StringMatcherFactory extends MatcherFactory {
 			var ands = new LinkedList<Pattern>();
 			var nots = new LinkedList<Pattern>();
 
-		for (var s : StringUtils.splitQuoted(pattern, true)) {
-			char c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);
+			for (var s : StringUtils.splitQuoted(pattern, true)) {
+				char c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);
 
 				if (c0 == '/' && c9 == '/' && s.length() > 1) {
 					ands.add(Pattern.compile(strip(s)));

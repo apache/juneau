@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
@@ -57,6 +59,8 @@ public class RestInitAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
+		String[] description = {};
+
 		/**
 		 * Constructor.
 		 */
@@ -73,13 +77,32 @@ public class RestInitAnnotation {
 			return new Object(this);
 		}
 
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
 	}
 
 	private static class Object extends AppliedAnnotationObject implements RestInit {
 
+		private final String[] description;
+
 		Object(RestInitAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			postConstruct();
+		}
+
+		@Override /* Overridden from RestInit */
+		public String[] description() {
+			return description;
 		}
 	}
 

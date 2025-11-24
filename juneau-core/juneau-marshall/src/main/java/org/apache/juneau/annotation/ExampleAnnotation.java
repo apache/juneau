@@ -81,6 +81,7 @@ public class ExampleAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
+		String[] description = {};
 		String value = "";
 
 		/**
@@ -100,6 +101,17 @@ public class ExampleAnnotation {
 		}
 
 		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
+		/**
 		 * Sets the <c>value</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -114,10 +126,12 @@ public class ExampleAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Example {
 
+		private final String[] description;
 		private final String value;
 
 		Object(ExampleAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.value = b.value;
 			postConstruct();
 		}
@@ -125,6 +139,11 @@ public class ExampleAnnotation {
 		@Override /* Overridden from Example */
 		public String value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

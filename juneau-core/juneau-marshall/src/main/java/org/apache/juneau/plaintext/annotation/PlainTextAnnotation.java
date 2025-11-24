@@ -81,6 +81,8 @@ public class PlainTextAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
+		String[] description = {};
+
 		/**
 		 * Constructor.
 		 */
@@ -97,13 +99,31 @@ public class PlainTextAnnotation {
 			return new Object(this);
 		}
 
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
 	}
 
 	private static class Object extends AppliedOnClassAnnotationObject implements PlainText {
 
+		private final String[] description;
+
 		Object(PlainTextAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			postConstruct();
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

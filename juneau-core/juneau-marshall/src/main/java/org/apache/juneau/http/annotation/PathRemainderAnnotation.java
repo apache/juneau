@@ -95,10 +95,10 @@ public class PathRemainderAnnotation {
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
+		String[] description = {};
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String def = "";
-		String[] description = {};
 
 		/**
 		 * Constructor.
@@ -133,7 +133,6 @@ public class PathRemainderAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@Override
 		public Builder description(String...value) {
 			this.description = value;
 			return this;
@@ -175,16 +174,16 @@ public class PathRemainderAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements PathRemainder {
 
+		private final String[] description;
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String def;
-		private final String[] description;
 		private final Schema schema;
 
 		Object(PathRemainderAnnotation.Builder b) {
 			super(b);
-			this.def = b.def;
 			this.description = copyOf(b.description);
+			this.def = b.def;
 			this.parser = b.parser;
 			this.schema = b.schema;
 			this.serializer = b.serializer;
@@ -194,11 +193,6 @@ public class PathRemainderAnnotation {
 		@Override /* Overridden from PathRemainder */
 		public String def() {
 			return def;
-		}
-
-		@Override /* Overridden from PathRemainder */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* Overridden from PathRemainder */
@@ -214,6 +208,11 @@ public class PathRemainderAnnotation {
 		@Override /* Overridden from PathRemainder */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

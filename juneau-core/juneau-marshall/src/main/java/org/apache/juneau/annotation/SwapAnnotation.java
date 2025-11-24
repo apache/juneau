@@ -81,6 +81,7 @@ public class SwapAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
+		String[] description = {};
 		Class<?> impl = void.class;
 		Class<?> value = void.class;
 		String template = "";
@@ -100,6 +101,17 @@ public class SwapAnnotation {
 		 */
 		public Swap build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -150,12 +162,14 @@ public class SwapAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Swap {
 
+		private final String[] description;
 		private final Class<?> impl, value;
 		private final String template;
 		private final String[] mediaTypes;
 
 		Object(SwapAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.impl = b.impl;
 			this.mediaTypes = copyOf(b.mediaTypes);
 			this.template = b.template;
@@ -181,6 +195,11 @@ public class SwapAnnotation {
 		@Override /* Overridden from Swap */
 		public Class<?> value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

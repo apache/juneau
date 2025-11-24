@@ -42,6 +42,7 @@ public class SubItemsAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
+		String[] description = {};
 		String $ref = "", cf = "", collectionFormat = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "", t = "", type = "";
 		long maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
 		boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
@@ -94,6 +95,17 @@ public class SubItemsAnnotation {
 		 */
 		public SubItems build() {
 			return new Impl(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -441,6 +453,7 @@ public class SubItemsAnnotation {
 
 	private static class Impl extends AnnotationObject implements SubItems {
 
+		private final String[] description;
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 		private final long maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;
 		private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
@@ -448,6 +461,7 @@ public class SubItemsAnnotation {
 
 		Impl(SubItemsAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.$ref = b.$ref;
 			this._default = copyOf(b._default);
 			this._enum = copyOf(b._enum);
@@ -653,6 +667,11 @@ public class SubItemsAnnotation {
 		@Override /* Overridden from SubItems */
 		public boolean uniqueItems() {
 			return uniqueItems;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

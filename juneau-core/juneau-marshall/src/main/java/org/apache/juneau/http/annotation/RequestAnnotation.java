@@ -82,6 +82,7 @@ public class RequestAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderT<Builder> {
 
+		String[] description = {};
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 
@@ -99,6 +100,17 @@ public class RequestAnnotation {
 		 */
 		public Request build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -127,11 +139,13 @@ public class RequestAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Request {
 
+		private final String[] description;
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 
 		Object(RequestAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.parser = b.parser;
 			this.serializer = b.serializer;
 			postConstruct();
@@ -145,6 +159,11 @@ public class RequestAnnotation {
 		@Override /* Overridden from Request */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

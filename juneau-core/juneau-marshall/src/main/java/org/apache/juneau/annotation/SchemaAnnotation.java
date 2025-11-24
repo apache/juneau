@@ -271,6 +271,17 @@ public class SchemaAnnotation {
 		}
 
 		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Schema#cf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -927,6 +938,7 @@ public class SchemaAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Schema {
 
+		private final String[] description;
 		private final boolean aev, allowEmptyValue, exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, sie, skipIfEmpty, ignore;
 		private final ExternalDocs externalDocs;
 		private final Items items;
@@ -940,6 +952,7 @@ public class SchemaAnnotation {
 
 		Object(SchemaAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.$ref = b.$ref;
 			this._default = copyOf(b._default);
 			this._enum = copyOf(b._enum);
@@ -1384,6 +1397,11 @@ public class SchemaAnnotation {
 		@Override /* Overridden from Schema */
 		public String[] xml() {
 			return xml;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

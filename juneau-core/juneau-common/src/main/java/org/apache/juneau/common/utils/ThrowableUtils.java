@@ -74,9 +74,9 @@ public class ThrowableUtils {
 			if (cause.isInstance(e))
 				return opt(cause.cast(e));
 			e = e.getCause();
+		}
+		return opte();
 	}
-	return opte();
-}
 
 	/**
 	 * Convenience method for getting a stack trace as a string.

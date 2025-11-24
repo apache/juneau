@@ -84,6 +84,8 @@ public class UonAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
+		String[] description = {};
+
 		/**
 		 * Constructor.
 		 */
@@ -100,13 +102,31 @@ public class UonAnnotation {
 			return new Object(this);
 		}
 
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
 	}
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Uon {
 
+		private final String[] description;
+
 		Object(UonAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			postConstruct();
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

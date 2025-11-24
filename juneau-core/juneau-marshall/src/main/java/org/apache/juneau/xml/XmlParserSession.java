@@ -805,11 +805,11 @@ public class XmlParserSession extends ReaderParserSession {
 		if (tcm == null && nn(elementName) && ! elementName.equals(currAttr))
 			tcm = getClassMeta(elementName, pMeta, eType);
 		if (nn(tcm))
-		sType = eType = tcm;
+			sType = eType = tcm;
 
-	var o = (Object)null;
+		var o = (Object)null;
 
-	if (jsonType == NULL) {
+		if (jsonType == NULL) {
 			r.nextTag();	// Discard end tag
 			return null;
 		}

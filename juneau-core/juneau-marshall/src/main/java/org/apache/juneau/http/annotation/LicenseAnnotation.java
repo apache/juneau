@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.lang.annotation.*;
 
 import org.apache.juneau.common.annotation.*;
@@ -34,6 +36,7 @@ public class LicenseAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder<Builder> {
 
+		String[] description = {};
 		String name = "", url = "";
 
 		/**
@@ -50,6 +53,17 @@ public class LicenseAnnotation {
 		 */
 		public License build() {
 			return new Impl(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -78,10 +92,12 @@ public class LicenseAnnotation {
 
 	private static class Impl extends AnnotationObject implements License {
 
+		private final String[] description;
 		private final String name, url;
 
 		Impl(LicenseAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.name = b.name;
 			this.url = b.url;
 			postConstruct();
@@ -95,6 +111,11 @@ public class LicenseAnnotation {
 		@Override /* Overridden from License */
 		public String url() {
 			return url;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

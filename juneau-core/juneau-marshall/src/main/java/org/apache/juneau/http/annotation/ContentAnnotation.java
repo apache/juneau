@@ -119,7 +119,6 @@ public class ContentAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@Override
 		public Builder description(String...value) {
 			this.description = value;
 			return this;
@@ -140,14 +139,14 @@ public class ContentAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Content {
 
-		private final String def;
 		private final String[] description;
+		private final String def;
 		private final Schema schema;
 
 		Object(ContentAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.def = b.def;
-			this.description = b.description;
 			this.schema = b.schema;
 			postConstruct();
 		}
@@ -158,13 +157,13 @@ public class ContentAnnotation {
 		}
 
 		@Override /* Overridden from Content */
-		public String[] description() {
-			return description;
-		}
-
-		@Override /* Overridden from Content */
 		public Schema schema() {
 			return schema;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

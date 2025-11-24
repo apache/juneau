@@ -84,6 +84,7 @@ public class UrlEncodingAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
+		String[] description = {};
 		boolean expandedParams;
 
 		/**
@@ -103,6 +104,17 @@ public class UrlEncodingAnnotation {
 		}
 
 		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link UrlEncoding#expandedParams} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -117,10 +129,12 @@ public class UrlEncodingAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements UrlEncoding {
 
+		private final String[] description;
 		private final boolean expandedParams;
 
 		Object(UrlEncodingAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.expandedParams = b.expandedParams;
 			postConstruct();
 		}
@@ -128,6 +142,11 @@ public class UrlEncodingAnnotation {
 		@Override /* Overridden from UrlEncoding */
 		public boolean expandedParams() {
 			return expandedParams;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

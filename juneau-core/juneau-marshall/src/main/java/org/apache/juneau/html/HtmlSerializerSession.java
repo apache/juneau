@@ -232,31 +232,31 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (m.find())
 				return urlDecode(m.group(1));
 		}
-	return switch (getUriAnchorText()) {
-		case LAST_TOKEN -> {
-			s = resolveUri(s);
-			if (s.indexOf('/') != -1)
-				s = s.substring(s.lastIndexOf('/') + 1);
-			if (s.indexOf('?') != -1)
-				s = s.substring(0, s.indexOf('?'));
-			if (s.indexOf('#') != -1)
-				s = s.substring(0, s.indexOf('#'));
-			if (s.isEmpty())
-				s = "/";
-			yield urlDecode(s);
-		}
-		case URI_ANCHOR -> {
-			if (s.indexOf('#') != -1)
-				s = s.substring(s.lastIndexOf('#') + 1);
-			yield urlDecode(s);
-		}
-		case PROPERTY_NAME -> pMeta == null ? s : pMeta.getName();
-		case URI -> resolveUri(s);
-		case CONTEXT_RELATIVE -> relativizeUri("context:/", s);
-		case SERVLET_RELATIVE -> relativizeUri("servlet:/", s);
-		case PATH_RELATIVE -> relativizeUri("request:/", s);
-		default /* TO_STRING */ -> s;
-	};
+		return switch (getUriAnchorText()) {
+			case LAST_TOKEN -> {
+				s = resolveUri(s);
+				if (s.indexOf('/') != -1)
+					s = s.substring(s.lastIndexOf('/') + 1);
+				if (s.indexOf('?') != -1)
+					s = s.substring(0, s.indexOf('?'));
+				if (s.indexOf('#') != -1)
+					s = s.substring(0, s.indexOf('#'));
+				if (s.isEmpty())
+					s = "/";
+				yield urlDecode(s);
+			}
+			case URI_ANCHOR -> {
+				if (s.indexOf('#') != -1)
+					s = s.substring(s.lastIndexOf('#') + 1);
+				yield urlDecode(s);
+			}
+			case PROPERTY_NAME -> pMeta == null ? s : pMeta.getName();
+			case URI -> resolveUri(s);
+			case CONTEXT_RELATIVE -> relativizeUri("context:/", s);
+			case SERVLET_RELATIVE -> relativizeUri("servlet:/", s);
+			case PATH_RELATIVE -> relativizeUri("request:/", s);
+			default /* TO_STRING */ -> s;
+		};
 	}
 
 	@Override /* Overridden from XmlSerializer */

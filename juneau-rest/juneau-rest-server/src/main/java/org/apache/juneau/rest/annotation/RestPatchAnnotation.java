@@ -80,6 +80,17 @@ public class RestPatchAnnotation {
 		}
 
 		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestPatch#clientVersion()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -409,6 +420,7 @@ public class RestPatchAnnotation {
 
 	private static class Object extends AppliedAnnotationObject implements RestPatch {
 
+		private final String[] description;
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
@@ -421,6 +433,7 @@ public class RestPatchAnnotation {
 
 		Object(RestPatchAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.clientVersion = b.clientVersion;
 			this.consumes = copyOf(b.consumes);
 			this.converters = copyOf(b.converters);
@@ -572,6 +585,11 @@ public class RestPatchAnnotation {
 		@Override /* Overridden from RestPatch */
 		public String value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

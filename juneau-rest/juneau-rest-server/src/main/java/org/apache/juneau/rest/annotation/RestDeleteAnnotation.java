@@ -50,6 +50,7 @@ public class RestDeleteAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends AppliedAnnotationObject.BuilderM<Builder> {
 
+		String[] description = {};
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
 		Class<? extends Encoder>[] encoders = new Class[0];
@@ -71,6 +72,17 @@ public class RestDeleteAnnotation {
 		 */
 		public RestDelete build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -305,6 +317,7 @@ public class RestDeleteAnnotation {
 
 	private static class Object extends AppliedAnnotationObject implements RestDelete {
 
+		private final String[] description;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
 		private final Class<? extends Encoder>[] encoders;
@@ -314,6 +327,7 @@ public class RestDeleteAnnotation {
 
 		Object(RestDeleteAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.clientVersion = b.clientVersion;
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
@@ -417,6 +431,11 @@ public class RestDeleteAnnotation {
 		@Override /* Overridden from RestDelete */
 		public String value() {
 			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
 		}
 	}
 

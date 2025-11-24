@@ -86,6 +86,7 @@ public class HtmlAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF<Builder> {
 
+		String[] description = {};
 		String anchorText = "", link = "", style = "";
 		HtmlFormat format = HtmlFormat.HTML;
 		boolean noTableHeaders, noTables;
@@ -116,6 +117,17 @@ public class HtmlAnnotation {
 		 */
 		public Html build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -188,13 +200,15 @@ public class HtmlAnnotation {
 
 	private static class Object extends AppliedOnClassAnnotationObject implements Html {
 
-		private boolean noTableHeaders, noTables;
-		private Class<? extends HtmlRender> render;
+		private final String[] description;
+		private final boolean noTableHeaders, noTables;
+		private final Class<? extends HtmlRender> render;
 		private final String anchorText, link, style;
-		private HtmlFormat format;
+		private final HtmlFormat format;
 
 		Object(HtmlAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			this.anchorText = b.anchorText;
 			this.format = b.format;
 			this.link = b.link;
@@ -238,6 +252,11 @@ public class HtmlAnnotation {
 		@Override /* Overridden from Html */
 		public String style() {
 			return style;
+		}
+
+		@Override /* Overridden from Html */
+		public String[] description() {
+			return description;
 		}
 	}
 

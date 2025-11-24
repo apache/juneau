@@ -221,12 +221,12 @@ public class OpenApiParserSession extends UonParserSession {
 	@SuppressWarnings("unchecked")
 	@Override /* Overridden from HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
-	if (partType == null)
-		partType = HttpPartType.OTHER;
+		if (partType == null)
+			partType = HttpPartType.OTHER;
 
-	var isOptional = type.isOptional();
+		var isOptional = type.isOptional();
 
-	while (nn(type) && type.isOptional())
+		while (nn(type) && type.isOptional())
 			type = (ClassMeta<T>)type.getElementType();
 
 		if (type == null)
@@ -254,25 +254,25 @@ public class OpenApiParserSession extends UonParserSession {
 			in = schema.getDefault();
 		} else {
 
-		var swap = (ObjectSwap<T,Object>)type.getSwap(this);
-		var builder = (BuilderSwap<T,Object>)type.getBuilderSwap(this);
-		var sType = (ClassMeta<?>)null;
-		if (nn(builder))
+			var swap = (ObjectSwap<T,Object>)type.getSwap(this);
+			var builder = (BuilderSwap<T,Object>)type.getBuilderSwap(this);
+			var sType = (ClassMeta<?>)null;
+			if (nn(builder))
 				sType = builder.getBuilderClassMeta(this);
 			else if (nn(swap))
 				sType = swap.getSwapClassMeta(this);
 			else
 				sType = type;
 
-		if (sType.isOptional())
-			return (T)opt(parseInner(partType, schema, in, sType.getElementType()));
+			if (sType.isOptional())
+				return (T)opt(parseInner(partType, schema, in, sType.getElementType()));
 
-		var t = schema.getType(sType);
-		if (partType == null)
-			partType = HttpPartType.OTHER;
+			var t = schema.getType(sType);
+			if (partType == null)
+				partType = HttpPartType.OTHER;
 
-		var f = schema.getFormat(sType);
-		if (f == HttpPartFormat.NO_FORMAT)
+			var f = schema.getFormat(sType);
+			if (f == HttpPartFormat.NO_FORMAT)
 				f = ctx.getFormat();
 
 			if (t == STRING) {
@@ -354,25 +354,25 @@ public class OpenApiParserSession extends UonParserSession {
 					return super.parse(partType, schema, in, type);
 				return toType(super.parse(partType, schema, in, CM_Double), type);
 
-		} else if (t == ARRAY) {
+			} else if (t == ARRAY) {
 
-			var cf = schema.getCollectionFormat();
-			if (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
-				cf = ctx.getCollectionFormat();
+				var cf = schema.getCollectionFormat();
+				if (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
+					cf = ctx.getCollectionFormat();
 
-			if (cf == HttpPartCollectionFormat.UONC)
-				return super.parse(partType, schema, in, type);
+				if (cf == HttpPartCollectionFormat.UONC)
+					return super.parse(partType, schema, in, type);
 
-			if (type.isObject())
-				type = (ClassMeta<T>)CM_JsonList;
+				if (type.isObject())
+					type = (ClassMeta<T>)CM_JsonList;
 
-			var eType = type.isObject() ? string() : type.getElementType();
-			if (eType == null)
-				eType = schema.getParsedType().getElementType();
-			if (eType == null)
-				eType = string();
+				var eType = type.isObject() ? string() : type.getElementType();
+				if (eType == null)
+					eType = schema.getParsedType().getElementType();
+				if (eType == null)
+					eType = string();
 
-			var ss = new String[]{};
+				var ss = new String[] {};
 
 				if (cf == MULTI)
 					ss = a(in);
@@ -392,32 +392,32 @@ public class OpenApiParserSession extends UonParserSession {
 					ss = StringUtils.splita(in, ',');
 				}
 
-			var items = schema.getItems();
-			if (items == null)
-				items = HttpPartSchema.DEFAULT;
-			var o = Array.newInstance(eType.getInnerClass(), ss.length);
-			for (var i = 0; i < ss.length; i++)
+				var items = schema.getItems();
+				if (items == null)
+					items = HttpPartSchema.DEFAULT;
+				var o = Array.newInstance(eType.getInnerClass(), ss.length);
+				for (var i = 0; i < ss.length; i++)
 					Array.set(o, i, parse(partType, items, ss[i], eType));
 				if (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
 					return toType(toType(o, schema.getParsedType()), type);
 				return toType(o, type);
 
-		} else if (t == OBJECT) {
+			} else if (t == OBJECT) {
 
-			var cf = schema.getCollectionFormat();
-			if (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
-				cf = ctx.getCollectionFormat();
+				var cf = schema.getCollectionFormat();
+				if (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
+					cf = ctx.getCollectionFormat();
 
-			if (cf == HttpPartCollectionFormat.UONC)
-				return super.parse(partType, schema, in, type);
+				if (cf == HttpPartCollectionFormat.UONC)
+					return super.parse(partType, schema, in, type);
 
-			if (type.isObject())
-				type = (ClassMeta<T>)CM_JsonMap;
+				if (type.isObject())
+					type = (ClassMeta<T>)CM_JsonMap;
 
-			if (! type.isMapOrBean())
-				throw new ParseException("Invalid type {0} for part type OBJECT.", type);
+				if (! type.isMapOrBean())
+					throw new ParseException("Invalid type {0} for part type OBJECT.", type);
 
-			var ss = new String[]{};
+				var ss = new String[] {};
 
 				if (cf == MULTI)
 					ss = a(in);
@@ -437,9 +437,9 @@ public class OpenApiParserSession extends UonParserSession {
 					ss = StringUtils.splita(in, ',');
 				}
 
-			if (type.isBean()) {
-				var m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
-				for (var s : ss) {
+				if (type.isBean()) {
+					var m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
+					for (var s : ss) {
 						var kv = StringUtils.splita(s, '=', 2);
 						if (kv.length != 2)
 							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
@@ -453,13 +453,13 @@ public class OpenApiParserSession extends UonParserSession {
 					return m.getBean();
 				}
 
-			var eType = type.isObject() ? string() : type.getValueType();
-			if (eType == null)
-				eType = schema.getParsedType().getValueType();
-			if (eType == null)
-				eType = string();
+				var eType = type.isObject() ? string() : type.getValueType();
+				if (eType == null)
+					eType = schema.getParsedType().getValueType();
+				if (eType == null)
+					eType = string();
 
-			try {
+				try {
 					var m = (Map<String,Object>)type.newInstance();
 					if (m == null)
 						m = JsonMap.create();

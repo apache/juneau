@@ -81,6 +81,8 @@ public class BeanIgnoreAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMFC<Builder> {
 
+		String[] description = {};
+
 		/**
 		 * Constructor.
 		 */
@@ -97,13 +99,32 @@ public class BeanIgnoreAnnotation {
 			return new Object(this);
 		}
 
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
+		}
+
 	}
 
 	private static class Object extends AppliedOnClassAnnotationObject implements BeanIgnore {
 
+		private final String[] description;
+
 		Object(BeanIgnoreAnnotation.Builder b) {
 			super(b);
+			this.description = copyOf(b.description);
 			postConstruct();
+		}
+
+		@Override /* Overridden from BeanIgnore */
+		public String[] description() {
+			return description;
 		}
 	}
 

@@ -128,7 +128,7 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
-			var ap = AP;
+		var ap = AP;
 		rstream(ap.find(Response.class, m)).forEach(x -> b.apply(x.inner()));
 		rstream(ap.find(StatusCode.class, m)).forEach(x -> b.apply(x.inner()));
 		return b.build();
@@ -164,7 +164,7 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(ci.innerType());
-			var ai = AP;
+		var ai = AP;
 		rstream(ai.find(Response.class, ci)).forEach(x -> b.apply(x.inner()));
 		rstream(ai.find(StatusCode.class, ci)).forEach(x -> b.apply(x.inner()));
 		return b.build();

@@ -131,10 +131,10 @@ public class UriResolver {
 	 */
 	public Appendable append(Appendable a, Object o) {
 
-	try {
-		var uri = s(o);
-		uri = nullIfEmpty(uri);
-		var needsNormalize = hasDotSegments(uri) && nn(resolution);
+		try {
+			var uri = s(o);
+			uri = nullIfEmpty(uri);
+			var needsNormalize = hasDotSegments(uri) && nn(resolution);
 
 			// Absolute paths are not changed.
 			if (isAbsoluteUri(uri))
