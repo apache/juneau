@@ -178,7 +178,7 @@ public class QueryAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Query {
+	private static class Object extends AppliedOnClassAnnotationObject implements Query {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;

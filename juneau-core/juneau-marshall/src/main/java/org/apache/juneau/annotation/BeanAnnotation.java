@@ -318,7 +318,7 @@ public class BeanAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Bean {
+	private static class Object extends AppliedOnClassAnnotationObject implements Bean {
 
 		private final boolean findFluentSetters, sort;
 		private final Class<? extends BeanInterceptor<?>> interceptor;

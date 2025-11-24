@@ -112,7 +112,7 @@ public class ExampleAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Example {
+	private static class Object extends AppliedOnClassAnnotationObject implements Example {
 
 		private final String value;
 

@@ -22,7 +22,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
  */
-public class AppliedOnTypeAnnotationObject extends AppliedAnnotationObject {
+public class AppliedOnClassAnnotationObject extends AppliedAnnotationObject {
 
 	private final Class<?>[] onClass;
 
@@ -31,7 +31,7 @@ public class AppliedOnTypeAnnotationObject extends AppliedAnnotationObject {
 	 *
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public AppliedOnTypeAnnotationObject(BuilderT<?> b) {
+	public AppliedOnClassAnnotationObject(BuilderT<?> b) {
 		super(b);
 		this.onClass = copyOf(b.onClass);
 	}

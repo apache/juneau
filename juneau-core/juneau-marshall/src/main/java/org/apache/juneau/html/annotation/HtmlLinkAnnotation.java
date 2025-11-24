@@ -126,7 +126,7 @@ public class HtmlLinkAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements HtmlLink {
+	private static class Object extends AppliedOnClassAnnotationObject implements HtmlLink {
 
 		private final String nameProperty, uriProperty;
 

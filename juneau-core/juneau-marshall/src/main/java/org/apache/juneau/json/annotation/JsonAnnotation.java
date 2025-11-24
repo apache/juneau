@@ -115,7 +115,7 @@ public class JsonAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Json {
+	private static class Object extends AppliedOnClassAnnotationObject implements Json {
 
 		private final String wrapperAttr;
 

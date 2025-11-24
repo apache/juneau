@@ -148,7 +148,7 @@ public class SwapAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Swap {
+	private static class Object extends AppliedOnClassAnnotationObject implements Swap {
 
 		private final Class<?> impl, value;
 		private final String template;

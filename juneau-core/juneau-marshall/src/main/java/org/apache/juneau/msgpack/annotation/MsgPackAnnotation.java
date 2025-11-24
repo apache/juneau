@@ -102,7 +102,7 @@ public class MsgPackAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements MsgPack {
+	private static class Object extends AppliedOnClassAnnotationObject implements MsgPack {
 
 		Object(MsgPackAnnotation.Builder b) {
 			super(b);

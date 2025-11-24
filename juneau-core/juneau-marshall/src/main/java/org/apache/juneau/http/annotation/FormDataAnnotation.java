@@ -178,7 +178,7 @@ public class FormDataAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements FormData {
+	private static class Object extends AppliedOnClassAnnotationObject implements FormData {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;

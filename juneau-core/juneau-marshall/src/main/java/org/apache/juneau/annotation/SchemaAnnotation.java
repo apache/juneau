@@ -925,7 +925,7 @@ public class SchemaAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Schema {
+	private static class Object extends AppliedOnClassAnnotationObject implements Schema {
 
 		private final boolean aev, allowEmptyValue, exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, sie, skipIfEmpty, ignore;
 		private final ExternalDocs externalDocs;

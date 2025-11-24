@@ -99,7 +99,7 @@ public class PlainTextAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements PlainText {
+	private static class Object extends AppliedOnClassAnnotationObject implements PlainText {
 
 		Object(PlainTextAnnotation.Builder b) {
 			super(b);

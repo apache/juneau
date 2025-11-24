@@ -99,7 +99,7 @@ public class SoapXmlAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements SoapXml {
+	private static class Object extends AppliedOnClassAnnotationObject implements SoapXml {
 
 		Object(SoapXmlAnnotation.Builder b) {
 			super(b);

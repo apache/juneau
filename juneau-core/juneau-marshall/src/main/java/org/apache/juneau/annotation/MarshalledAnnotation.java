@@ -124,7 +124,7 @@ public class MarshalledAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Marshalled {
+	private static class Object extends AppliedOnClassAnnotationObject implements Marshalled {
 
 		private final Class<?> implClass;
 		private final String example;

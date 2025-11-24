@@ -149,7 +149,7 @@ public class XmlAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Xml {
+	private static class Object extends AppliedOnClassAnnotationObject implements Xml {
 
 		private final String childName, namespace, prefix;
 		private final XmlFormat format;

@@ -173,7 +173,7 @@ public class PathRemainderAnnotation {
 		}
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements PathRemainder {
+	private static class Object extends AppliedOnClassAnnotationObject implements PathRemainder {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;

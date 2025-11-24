@@ -699,7 +699,7 @@ public class RestAnnotation {
 		}
 	}
 
-	private static class Impl extends AppliedOnTypeAnnotationObject implements Rest {
+	private static class Impl extends AppliedOnClassAnnotationObject implements Rest {
 
 		private final Class<? extends Encoder>[] encoders;
 		private final Class<? extends HttpPartParser> partParser;

@@ -179,7 +179,7 @@ public class PathAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Path {
+	private static class Object extends AppliedOnClassAnnotationObject implements Path {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;

@@ -102,7 +102,7 @@ public class UonAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Uon {
+	private static class Object extends AppliedOnClassAnnotationObject implements Uon {
 
 		Object(UonAnnotation.Builder b) {
 			super(b);

@@ -102,7 +102,7 @@ public class OpenApiAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements OpenApi {
+	private static class Object extends AppliedOnClassAnnotationObject implements OpenApi {
 
 		Object(OpenApiAnnotation.Builder b) {
 			super(b);

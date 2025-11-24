@@ -115,7 +115,7 @@ public class UrlEncodingAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements UrlEncoding {
+	private static class Object extends AppliedOnClassAnnotationObject implements UrlEncoding {
 
 		private final boolean expandedParams;
 

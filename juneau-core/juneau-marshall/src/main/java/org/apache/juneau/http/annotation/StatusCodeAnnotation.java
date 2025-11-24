@@ -113,7 +113,7 @@ public class StatusCodeAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements StatusCode {
+	private static class Object extends AppliedOnClassAnnotationObject implements StatusCode {
 
 		private final int[] value;
 

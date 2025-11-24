@@ -99,7 +99,7 @@ public class BeanIgnoreAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements BeanIgnore {
+	private static class Object extends AppliedOnClassAnnotationObject implements BeanIgnore {
 
 		Object(BeanIgnoreAnnotation.Builder b) {
 			super(b);

@@ -162,7 +162,7 @@ public class ResponseAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Response {
+	private static class Object extends AppliedOnClassAnnotationObject implements Response {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;

@@ -186,7 +186,7 @@ public class HtmlAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Html {
+	private static class Object extends AppliedOnClassAnnotationObject implements Html {
 
 		private boolean noTableHeaders, noTables;
 		private Class<? extends HtmlRender> render;

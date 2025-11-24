@@ -138,7 +138,7 @@ public class ContentAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Content {
+	private static class Object extends AppliedOnClassAnnotationObject implements Content {
 
 		private final String def;
 		private final String[] description;

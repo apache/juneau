@@ -125,7 +125,7 @@ public class RequestAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Request {
+	private static class Object extends AppliedOnClassAnnotationObject implements Request {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;

@@ -204,7 +204,7 @@ public class RdfAnnotation {
 		}
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Rdf {
+	private static class Object extends AppliedOnClassAnnotationObject implements Rdf {
 
 		private final boolean beanUri;
 		private final RdfCollectionFormat collectionFormat;

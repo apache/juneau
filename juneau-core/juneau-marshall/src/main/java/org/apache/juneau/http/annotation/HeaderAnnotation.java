@@ -178,7 +178,7 @@ public class HeaderAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Header {
+	private static class Object extends AppliedOnClassAnnotationObject implements Header {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;

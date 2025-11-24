@@ -99,7 +99,7 @@ public class CsvAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Csv {
+	private static class Object extends AppliedOnClassAnnotationObject implements Csv {
 
 		Object(CsvAnnotation.Builder b) {
 			super(b);

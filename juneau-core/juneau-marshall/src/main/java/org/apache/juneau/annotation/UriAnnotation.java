@@ -99,7 +99,7 @@ public class UriAnnotation {
 
 	}
 
-	private static class Object extends AppliedOnTypeAnnotationObject implements Uri {
+	private static class Object extends AppliedOnClassAnnotationObject implements Uri {
 
 		Object(UriAnnotation.Builder b) {
 			super(b);
