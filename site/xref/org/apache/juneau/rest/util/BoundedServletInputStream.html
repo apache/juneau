@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Override <em class="jxr_comment">/* Overridden from InputStream */</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> read(<strong class="jxr_keyword">final</strong> byte[] b, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> len) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> read(byte[] b, <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">int</strong> len) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">long</strong> numBytes = Math.min(len, remain);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">int</strong> r = is.read(b, off, (<strong class="jxr_keyword">int</strong>)numBytes);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">if</strong> (r == -1)
@@ -135,7 +135,7 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	@Override <em class="jxr_comment">/* Overridden from InputStream */</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> skip(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> n) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> skip(<strong class="jxr_keyword">long</strong> n) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">long</strong> toSkip = Math.min(n, remain);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">long</strong> r = is.skip(toSkip);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		decrement(r);

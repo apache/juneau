@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * @param m The Java method.</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <a name="RrpcInterfaceMethodMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.html#RrpcInterfaceMethodMeta">RrpcInterfaceMethodMeta</a>(<strong class="jxr_keyword">final</strong> String restUrl, Method m) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <a name="RrpcInterfaceMethodMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.html#RrpcInterfaceMethodMeta">RrpcInterfaceMethodMeta</a>(String restUrl, Method m) {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">this</strong>.method = m;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">this</strong>.path = m.getName() + '/' + getMethodArgsSignature(m);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">this</strong>.url = trimSlashes(restUrl) + '/' + urlEncode(path);

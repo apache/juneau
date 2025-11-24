@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<strong class="jxr_keyword">final</strong> <a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> v = <strong class="jxr_keyword">new</strong> Value&lt;&gt;();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		v.listener(o -&gt; opSession.getResponse().setStatus(Integer.parseInt(o.toString())));
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">return</strong> v;
