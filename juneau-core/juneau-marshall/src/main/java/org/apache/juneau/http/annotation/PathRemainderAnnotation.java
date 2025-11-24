@@ -180,7 +180,7 @@ public class PathRemainderAnnotation {
 		private final String[] description;
 		private final Schema schema;
 
-		Impl(Builder b) {
+		Impl(PathRemainderAnnotation.Builder b) {
 			super(b);
 			this.def = b.def;
 			this.description = copyOf(b.description);

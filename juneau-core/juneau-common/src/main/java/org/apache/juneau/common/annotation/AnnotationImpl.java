@@ -41,6 +41,71 @@ import org.apache.juneau.common.utils.*;
  */
 public class AnnotationImpl implements Annotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder for {@link AnnotationImpl} objects.
+	 *
+	 * @param <B> The actual builder class.
+	 */
+	public static class Builder<B> {
+
+		Class<? extends Annotation> annotationType;
+		String[] description = {};
+
+		/**
+		 * Constructor.
+		 *
+		 * @param annotationType The annotation type of the annotation implementation class.
+		 */
+		public Builder(Class<? extends Annotation> annotationType) {
+			this.annotationType = annotationType;
+		}
+
+		/**
+		 * Sets the {@link AnnotationImpl#description()} property on the target annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 * @since 9.2.0
+		 */
+		public B description(final String...value) {
+			description = value;
+			return asThis();
+		}
+
+		/**
+		 * Returns this instance typed as {@code B}.
+		 *
+		 * @return this instance typed as {@code B}.
+		 * @since 9.2.0
+		 */
+		@SuppressWarnings("unchecked")
+		protected B asThis() {
+			return (B)this;
+		}
+
+		/**
+		 * Returns the annotation type being built.
+		 *
+		 * @return The annotation type being built.
+		 */
+		public Class<? extends Annotation> getAnnotationType() { return annotationType; }
+
+		/**
+		 * Returns the description of this annotation builder.
+		 *
+		 * @return The description array, or <jk>null</jk> if not set.
+		 */
+		public String[] getDescription() { return description; }
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final Class<? extends Annotation> annotationType;
 	private final String[] description;
 	private int hashCode = -1;
@@ -50,7 +115,7 @@ public class AnnotationImpl implements Annotation {
 	 *
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public AnnotationImpl(AnnotationBuilder<?> b) {
+	public AnnotationImpl(Builder<?> b) {
 		this.annotationType = b.getAnnotationType();
 		this.description = copyOf(b.getDescription());
 	}
@@ -117,6 +182,6 @@ public class AnnotationImpl implements Annotation {
 	 * This method must be called at the end of initialization to calculate the hashCode one time.
 	 */
 	protected void postConstruct() {
-		this.hashCode = AnnotationUtils.hash(this);
+		hashCode = AnnotationUtils.hash(this);
 	}
 }

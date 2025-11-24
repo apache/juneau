@@ -210,7 +210,7 @@ public class RdfAnnotation {
 		private final RdfCollectionFormat collectionFormat;
 		private final String namespace, prefix;
 
-		Impl(Builder b) {
+		Impl(RdfAnnotation.Builder b) {
 			super(b);
 			this.beanUri = b.beanUri;
 			this.collectionFormat = b.collectionFormat;

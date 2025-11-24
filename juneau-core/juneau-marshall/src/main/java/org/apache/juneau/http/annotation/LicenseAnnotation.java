@@ -32,7 +32,7 @@ public class LicenseAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationBuilder<Builder> {
+	public static class Builder extends AnnotationImpl.Builder<Builder> {
 
 		String name = "", url = "";
 
@@ -80,7 +80,7 @@ public class LicenseAnnotation {
 
 		private final String name, url;
 
-		Impl(Builder b) {
+		Impl(LicenseAnnotation.Builder b) {
 			super(b);
 			this.name = b.name;
 			this.url = b.url;

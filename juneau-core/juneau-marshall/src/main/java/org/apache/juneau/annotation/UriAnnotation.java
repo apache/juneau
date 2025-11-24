@@ -100,7 +100,7 @@ public class UriAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Uri {
 
-		Impl(Builder b) {
+		Impl(UriAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

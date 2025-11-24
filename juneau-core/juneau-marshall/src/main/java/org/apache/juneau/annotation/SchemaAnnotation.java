@@ -937,7 +937,7 @@ public class SchemaAnnotation {
 		private final String $id, contentMediaType, contentEncoding, exclusiveMaximumValue, exclusiveMinimumValue;
 		private final String[] _const, examples, $comment, prefixItems, unevaluatedItems, unevaluatedProperties, dependentSchemas, dependentRequired, _if, _then, _else, $defs;
 
-		Impl(Builder b) {
+		Impl(SchemaAnnotation.Builder b) {
 			super(b);
 			this.$ref = b.$ref;
 			this._default = copyOf(b._default);

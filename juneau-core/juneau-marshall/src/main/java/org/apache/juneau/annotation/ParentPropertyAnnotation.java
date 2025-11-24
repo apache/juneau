@@ -100,7 +100,7 @@ public class ParentPropertyAnnotation {
 
 	private static class Impl extends TargetedAnnotationImpl implements ParentProperty {
 
-		Impl(Builder b) {
+		Impl(ParentPropertyAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

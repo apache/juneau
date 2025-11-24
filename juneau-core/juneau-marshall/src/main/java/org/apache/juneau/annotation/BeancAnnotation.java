@@ -115,7 +115,7 @@ public class BeancAnnotation {
 
 		private String properties = "";
 
-		Impl(Builder b) {
+		Impl(BeancAnnotation.Builder b) {
 			super(b);
 			this.properties = b.properties;
 			postConstruct();

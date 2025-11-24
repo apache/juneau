@@ -101,7 +101,7 @@ public class CsvAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Csv {
 
-		Impl(Builder b) {
+		Impl(CsvAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

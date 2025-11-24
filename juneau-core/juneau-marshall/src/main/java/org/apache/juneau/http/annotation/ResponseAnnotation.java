@@ -169,7 +169,7 @@ public class ResponseAnnotation {
 		private final Schema schema;
 		private final String[] examples;
 
-		Impl(Builder b) {
+		Impl(ResponseAnnotation.Builder b) {
 			super(b);
 			this.examples = copyOf(b.examples);
 			this.headers = copyOf(b.headers);

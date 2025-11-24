@@ -101,7 +101,7 @@ public class PlainTextAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements PlainText {
 
-		Impl(Builder b) {
+		Impl(PlainTextAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

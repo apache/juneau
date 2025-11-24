@@ -119,7 +119,7 @@ public class UrlEncodingAnnotation {
 
 		private final boolean expandedParams;
 
-		Impl(Builder b) {
+		Impl(UrlEncodingAnnotation.Builder b) {
 			super(b);
 			this.expandedParams = b.expandedParams;
 			postConstruct();

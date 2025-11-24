@@ -77,7 +77,7 @@ public class RestPreCallAnnotation {
 
 	private static class Impl extends TargetedAnnotationImpl implements RestPreCall {
 
-		Impl(Builder b) {
+		Impl(RestPreCallAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

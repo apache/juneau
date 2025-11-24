@@ -312,7 +312,7 @@ public class RestDeleteAnnotation {
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
 		private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path;
 
-		Impl(Builder b) {
+		Impl(RestDeleteAnnotation.Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
 			this.debug = b.debug;

@@ -154,7 +154,7 @@ public class XmlAnnotation {
 		private final String childName, namespace, prefix;
 		private final XmlFormat format;
 
-		Impl(Builder b) {
+		Impl(XmlAnnotation.Builder b) {
 			super(b);
 			this.childName = b.childName;
 			this.format = b.format;

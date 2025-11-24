@@ -130,7 +130,7 @@ public class HtmlLinkAnnotation {
 
 		private final String nameProperty, uriProperty;
 
-		Impl(Builder b) {
+		Impl(HtmlLinkAnnotation.Builder b) {
 			super(b);
 			this.nameProperty = b.nameProperty;
 			this.uriProperty = b.uriProperty;

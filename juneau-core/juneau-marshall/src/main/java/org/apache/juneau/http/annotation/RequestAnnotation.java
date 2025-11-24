@@ -130,7 +130,7 @@ public class RequestAnnotation {
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 
-		Impl(Builder b) {
+		Impl(RequestAnnotation.Builder b) {
 			super(b);
 			this.parser = b.parser;
 			this.serializer = b.serializer;

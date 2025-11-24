@@ -100,7 +100,7 @@ public class BeanIgnoreAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements BeanIgnore {
 
-		Impl(Builder b) {
+		Impl(BeanIgnoreAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

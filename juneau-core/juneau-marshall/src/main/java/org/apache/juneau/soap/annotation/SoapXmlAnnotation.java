@@ -101,7 +101,7 @@ public class SoapXmlAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements SoapXml {
 
-		Impl(Builder b) {
+		Impl(SoapXmlAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

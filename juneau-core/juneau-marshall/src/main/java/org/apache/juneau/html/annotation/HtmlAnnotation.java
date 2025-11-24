@@ -193,7 +193,7 @@ public class HtmlAnnotation {
 		private final String anchorText, link, style;
 		private HtmlFormat format;
 
-		Impl(Builder b) {
+		Impl(HtmlAnnotation.Builder b) {
 			super(b);
 			this.anchorText = b.anchorText;
 			this.format = b.format;

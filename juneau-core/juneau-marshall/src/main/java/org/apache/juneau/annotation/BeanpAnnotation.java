@@ -207,7 +207,7 @@ public class BeanpAnnotation {
 		private final Class<?>[] params, dictionary;
 		private final String name, value, properties, format, ro, wo;
 
-		Impl(Builder b) {
+		Impl(BeanpAnnotation.Builder b) {
 			super(b);
 			this.dictionary = copyOf(b.dictionary);
 			this.format = b.format;

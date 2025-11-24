@@ -104,7 +104,7 @@ public class MsgPackAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements MsgPack {
 
-		Impl(Builder b) {
+		Impl(MsgPackAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

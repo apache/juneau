@@ -184,7 +184,7 @@ public class QueryAnnotation {
 		private final String name, value, def;
 		private final Schema schema;
 
-		Impl(Builder b) {
+		Impl(QueryAnnotation.Builder b) {
 			super(b);
 			this.name = b.name;
 			this.parser = b.parser;

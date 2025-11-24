@@ -117,7 +117,7 @@ public class StatusCodeAnnotation {
 
 		private final int[] value;
 
-		Impl(Builder b) {
+		Impl(StatusCodeAnnotation.Builder b) {
 			super(b);
 			this.value = Arrays.copyOf(b.value, b.value.length);
 			postConstruct();

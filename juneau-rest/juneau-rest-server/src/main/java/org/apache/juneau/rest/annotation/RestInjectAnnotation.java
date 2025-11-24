@@ -113,7 +113,7 @@ public class RestInjectAnnotation {
 		private final String name, value;
 		private final String[] methodScope;
 
-		Impl(Builder b) {
+		Impl(RestInjectAnnotation.Builder b) {
 			super(b);
 			this.name = b.name;
 			this.value = b.value;

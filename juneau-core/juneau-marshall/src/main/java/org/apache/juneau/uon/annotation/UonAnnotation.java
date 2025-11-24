@@ -104,7 +104,7 @@ public class UonAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Uon {
 
-		Impl(Builder b) {
+		Impl(UonAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

@@ -356,7 +356,7 @@ public class RestOptionsAnnotation {
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
 		private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path, produces;
 
-		Impl(Builder b) {
+		Impl(RestOptionsAnnotation.Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
 			this.converters = copyOf(b.converters);

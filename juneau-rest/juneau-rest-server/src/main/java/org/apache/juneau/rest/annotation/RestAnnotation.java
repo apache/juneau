@@ -726,7 +726,7 @@ public class RestAnnotation {
 		private final Path[] pathParams;
 		private final FormData[] formDataParams;
 
-		Impl(Builder b) {
+		Impl(RestAnnotation.Builder b) {
 			super(b);
 			this.disableContentParam = b.disableContentParam;
 			this.allowedHeaderParams = b.allowedHeaderParams;

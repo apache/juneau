@@ -115,7 +115,7 @@ public class ExampleAnnotation {
 
 		private final String value;
 
-		Impl(Builder b) {
+		Impl(ExampleAnnotation.Builder b) {
 			super(b);
 			this.value = b.value;
 			postConstruct();

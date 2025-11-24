@@ -27,7 +27,7 @@ import java.lang.reflect.*;
  *
  * @param <B> The actual builder class.
  */
-public class TargetedAnnotationMBuilder<B extends TargetedAnnotationMBuilder<B>> extends TargetedAnnotationBuilder<B> {
+public class TargetedAnnotationMBuilder<B> extends TargetedAnnotationBuilder<B> {
 
 	/**
 	 * Constructor.

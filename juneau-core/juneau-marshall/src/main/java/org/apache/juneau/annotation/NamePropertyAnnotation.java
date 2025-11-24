@@ -100,7 +100,7 @@ public class NamePropertyAnnotation {
 
 	private static class Impl extends TargetedAnnotationImpl implements NameProperty {
 
-		Impl(Builder b) {
+		Impl(NamePropertyAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

@@ -91,7 +91,7 @@ public class RestPostInitAnnotation {
 
 		private final boolean childFirst;
 
-		Impl(Builder b) {
+		Impl(RestPostInitAnnotation.Builder b) {
 			super(b);
 			this.childFirst = b.childFirst;
 			postConstruct();

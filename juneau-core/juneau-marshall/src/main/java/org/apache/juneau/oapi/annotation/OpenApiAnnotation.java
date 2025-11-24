@@ -104,7 +104,7 @@ public class OpenApiAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements OpenApi {
 
-		Impl(Builder b) {
+		Impl(OpenApiAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

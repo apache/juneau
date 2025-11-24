@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  *
  * @param <B> The actual builder class.
  */
-public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>> extends TargetedAnnotationBuilder<B> {
+public class TargetedAnnotationTBuilder<B> extends TargetedAnnotationBuilder<B> {
 
 	Class<?>[] onClass = {};
 

@@ -77,7 +77,7 @@ public class RestEndCallAnnotation {
 
 	private static class Impl extends TargetedAnnotationImpl implements RestEndCall {
 
-		Impl(Builder b) {
+		Impl(RestEndCallAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

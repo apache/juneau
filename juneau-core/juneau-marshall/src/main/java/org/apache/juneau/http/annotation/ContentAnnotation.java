@@ -143,7 +143,7 @@ public class ContentAnnotation {
 		private final String[] description;
 		private final Schema schema;
 
-		Impl(Builder b) {
+		Impl(ContentAnnotation.Builder b) {
 			super(b);
 			this.def = b.def;
 			this.description = b.description;

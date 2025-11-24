@@ -77,7 +77,7 @@ public class RestDestroyAnnotation {
 
 	private static class Impl extends TargetedAnnotationImpl implements RestDestroy {
 
-		Impl(Builder b) {
+		Impl(RestDestroyAnnotation.Builder b) {
 			super(b);
 			postConstruct();
 		}

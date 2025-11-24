@@ -119,7 +119,7 @@ public class JsonAnnotation {
 
 		private final String wrapperAttr;
 
-		Impl(Builder b) {
+		Impl(JsonAnnotation.Builder b) {
 			super(b);
 			this.wrapperAttr = b.wrapperAttr;
 			postConstruct();

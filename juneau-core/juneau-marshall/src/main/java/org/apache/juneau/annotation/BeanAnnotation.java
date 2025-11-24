@@ -326,7 +326,7 @@ public class BeanAnnotation {
 		private final Class<?>[] dictionary;
 		private final String example, excludeProperties, p, properties, readOnlyProperties, ro, typeName, typePropertyName, wo, writeOnlyProperties, xp;
 
-		Impl(Builder b) {
+		Impl(BeanAnnotation.Builder b) {
 			super(b);
 			this.dictionary = copyOf(b.dictionary);
 			this.example = b.example;

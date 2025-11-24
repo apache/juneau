@@ -184,7 +184,7 @@ public class HeaderAnnotation {
 		private final String name, value, def;
 		private final Schema schema;
 
-		Impl(Builder b) {
+		Impl(HeaderAnnotation.Builder b) {
 			super(b);
 			this.def = b.def;
 			this.name = b.name;

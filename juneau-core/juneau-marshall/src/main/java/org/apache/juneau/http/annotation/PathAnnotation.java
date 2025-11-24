@@ -185,7 +185,7 @@ public class PathAnnotation {
 		private final String name, value, def;
 		private final Schema schema;
 
-		Impl(Builder b) {
+		Impl(PathAnnotation.Builder b) {
 			super(b);
 			this.def = b.def;
 			this.name = b.name;

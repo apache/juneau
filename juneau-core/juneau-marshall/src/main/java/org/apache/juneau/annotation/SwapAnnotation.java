@@ -153,7 +153,7 @@ public class SwapAnnotation {
 		private final String template;
 		private final String[] mediaTypes;
 
-		Impl(Builder b) {
+		Impl(SwapAnnotation.Builder b) {
 			super(b);
 			this.impl = b.impl;
 			this.mediaTypes = copyOf(b.mediaTypes);

@@ -40,7 +40,7 @@ public class SubItemsAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationBuilder<Builder> {
+	public static class Builder extends AnnotationImpl.Builder<Builder> {
 
 		String $ref = "", cf = "", collectionFormat = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "", t = "", type = "";
 		long maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
@@ -446,7 +446,7 @@ public class SubItemsAnnotation {
 		private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
 		private final String[] _default, _enum, df, e, items;
 
-		Impl(Builder b) {
+		Impl(SubItemsAnnotation.Builder b) {
 			super(b);
 			this.$ref = b.$ref;
 			this._default = copyOf(b._default);

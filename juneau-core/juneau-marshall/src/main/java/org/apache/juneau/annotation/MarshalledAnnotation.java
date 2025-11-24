@@ -128,7 +128,7 @@ public class MarshalledAnnotation {
 		private final Class<?> implClass;
 		private final String example;
 
-		Impl(Builder b) {
+		Impl(MarshalledAnnotation.Builder b) {
 			super(b);
 			this.example = b.example;
 			this.implClass = b.implClass;

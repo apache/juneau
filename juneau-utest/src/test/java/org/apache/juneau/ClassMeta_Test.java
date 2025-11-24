@@ -292,7 +292,6 @@ class ClassMeta_Test extends TestBase {
 
 		var l1 = list();
 		c3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
-		System.err.println(l1);
 		assertList(l1, "7", "6", "3", "5", "1", "2");
 
 		var l2 = list();
