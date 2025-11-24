@@ -236,7 +236,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						swap = getPropertySwap(x);
 					if (! x.properties().isEmpty())
 						properties = splita(x.properties());
-					addAll(bdClasses, x.dictionary());
+					addAll(bdClasses, (Object[])x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
 					if (! x.wo().isEmpty())
@@ -256,7 +256,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						swap = getPropertySwap(x);
 					if (nn(properties) && ! x.properties().isEmpty())
 						properties = splita(x.properties());
-					addAll(bdClasses, x.dictionary());
+					addAll(bdClasses, (Object[])x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
 					if (! x.wo().isEmpty())
@@ -275,7 +275,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						swap = getPropertySwap(x);
 					if (nn(properties) && ! x.properties().isEmpty())
 						properties = splita(x.properties());
-					addAll(bdClasses, x.dictionary());
+					addAll(bdClasses, (Object[])x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
 					if (! x.wo().isEmpty())
