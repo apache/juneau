@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AnnotationImpl.Builder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AnnotationObject.Builder&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  		String email = <span class="jxr_string">""</span>, name = <span class="jxr_string">""</span>, url = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
@@ -95,7 +95,7 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AnnotationImpl" href="../../../../../org/apache/juneau/common/annotation/AnnotationImpl.html#AnnotationImpl">AnnotationImpl</a> <strong class="jxr_keyword">implements</strong> <a name="Contact" href="../../../../../org/apache/juneau/http/annotation/Contact.html#Contact">Contact</a> {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AnnotationObject.html#AnnotationObject">AnnotationObject</a> <strong class="jxr_keyword">implements</strong> <a name="Contact" href="../../../../../org/apache/juneau/http/annotation/Contact.html#Contact">Contact</a> {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String email, name, url;
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  

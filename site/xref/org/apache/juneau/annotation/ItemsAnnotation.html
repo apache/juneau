@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AnnotationImpl.Builder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AnnotationObject.Builder&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">boolean</strong> emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">long</strong> maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
@@ -442,7 +442,7 @@
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AnnotationImpl" href="../../../../org/apache/juneau/common/annotation/AnnotationImpl.html#AnnotationImpl">AnnotationImpl</a> <strong class="jxr_keyword">implements</strong> <a name="Items" href="../../../../org/apache/juneau/annotation/Items.html#Items">Items</a> {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="AnnotationObject" href="../../../../org/apache/juneau/common/annotation/AnnotationObject.html#AnnotationObject">AnnotationObject</a> <strong class="jxr_keyword">implements</strong> <a name="Items" href="../../../../org/apache/juneau/annotation/Items.html#Items">Items</a> {
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;
