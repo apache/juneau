@@ -98,9 +98,6 @@ import org.apache.juneau.json.*;
  *		will not try to recompile it.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @Documented
 @Target({ PARAMETER, METHOD, TYPE })

@@ -30,8 +30,6 @@ import org.apache.juneau.common.reflect.*;
 /**
  * Cache of object that convert POJOs to and from common types such as strings, readers, and input streams.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class Mutaters {
 	private static final ConcurrentHashMap<Class<?>,Map<Class<?>,Mutater<?,?>>> CACHE = new ConcurrentHashMap<>();

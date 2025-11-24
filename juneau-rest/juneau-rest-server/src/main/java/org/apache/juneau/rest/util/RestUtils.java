@@ -38,9 +38,6 @@ import jakarta.servlet.http.*;
 /**
  * Various reusable utility methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @SuppressWarnings("resource")
 public class RestUtils {

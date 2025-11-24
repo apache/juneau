@@ -49,8 +49,6 @@ import org.apache.juneau.common.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @SuppressWarnings("resource")
 public class BasicFileFinder implements FileFinder {

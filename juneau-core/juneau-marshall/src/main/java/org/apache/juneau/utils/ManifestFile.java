@@ -36,9 +36,6 @@ import org.apache.juneau.collections.*;
  * Copies the contents of a {@link Manifest} into an {@link JsonMap} so that the various convenience methods on that
  * class can be used to retrieve values.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  *
  * @serial exclude
  */

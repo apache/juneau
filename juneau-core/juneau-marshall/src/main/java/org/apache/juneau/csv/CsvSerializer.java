@@ -42,9 +42,6 @@ import org.apache.juneau.utils.*;
  * 		with complex nested objects.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 	/**

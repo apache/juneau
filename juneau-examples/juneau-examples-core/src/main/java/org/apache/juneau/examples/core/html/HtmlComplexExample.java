@@ -24,8 +24,6 @@ import org.apache.juneau.html.*;
 /**
  * Sample class which shows the complex usage of HtmlSerializer and HtmlParser.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class HtmlComplexExample {
 

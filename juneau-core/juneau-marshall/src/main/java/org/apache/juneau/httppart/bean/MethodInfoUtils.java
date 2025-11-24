@@ -25,8 +25,6 @@ import org.apache.juneau.common.reflect.*;
 /**
  * Utility methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 class MethodInfoUtils {
 

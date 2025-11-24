@@ -26,8 +26,6 @@ import jakarta.servlet.http.*;
 /**
  * Wraps an {@link HttpServletRequest} and preloads the content into memory for debugging purposes.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @SuppressWarnings("resource")
 public class CachingHttpServletRequest extends HttpServletRequestWrapper {

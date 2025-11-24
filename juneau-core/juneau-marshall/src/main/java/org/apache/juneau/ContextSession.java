@@ -38,8 +38,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='warn'>This class is not typically thread safe.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public abstract class ContextSession {
 	/**

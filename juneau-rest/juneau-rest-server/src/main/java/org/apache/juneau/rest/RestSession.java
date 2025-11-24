@@ -39,8 +39,6 @@ import jakarta.servlet.http.*;
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class RestSession extends ContextSession {
 	/**

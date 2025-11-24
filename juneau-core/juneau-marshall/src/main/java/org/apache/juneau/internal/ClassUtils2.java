@@ -22,9 +22,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 /**
  * Class-related utility methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class ClassUtils2 {
 

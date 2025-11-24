@@ -106,8 +106,6 @@ import jakarta.servlet.http.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @SuppressWarnings("resource")
 public class RestResponse extends HttpServletResponseWrapper {

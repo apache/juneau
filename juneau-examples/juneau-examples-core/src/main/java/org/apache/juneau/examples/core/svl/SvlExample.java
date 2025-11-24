@@ -21,8 +21,6 @@ import org.apache.juneau.svl.*;
 /**
  * Simple Variable Language examples.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class SvlExample {
 

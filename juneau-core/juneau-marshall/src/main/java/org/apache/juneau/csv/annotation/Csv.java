@@ -34,9 +34,6 @@ import org.apache.juneau.csv.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @Documented
 @Target({ TYPE, FIELD, METHOD })

@@ -19,8 +19,6 @@ package org.apache.juneau.http.annotation;
 /**
  * Static strings used for Swagger parameter formats.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ParameterType {
 

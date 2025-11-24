@@ -53,9 +53,6 @@ import org.apache.juneau.swaps.*;
  * Developers will typically not need access to this class.  The information provided by it is already exposed through
  * several methods on the {@link BeanMap} API.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {

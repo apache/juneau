@@ -23,8 +23,6 @@ import org.apache.juneau.annotation.*;
 /**
  * Complex Pojo class.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class PojoComplex {
 

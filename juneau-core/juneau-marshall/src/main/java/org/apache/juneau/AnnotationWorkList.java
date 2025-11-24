@@ -30,8 +30,6 @@ import org.apache.juneau.svl.*;
 /**
  * A list of {@link AnnotationWork} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @serial exclude
  */

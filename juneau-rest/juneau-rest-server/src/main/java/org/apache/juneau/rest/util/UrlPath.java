@@ -28,8 +28,6 @@ import org.apache.juneau.common.utils.*;
 /**
  * Represents a parsed URL path-info string.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class UrlPath {
 

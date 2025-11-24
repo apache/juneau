@@ -32,9 +32,6 @@ import java.beans.*;
  * <p>
  * See {@link Introspector#decapitalize(String)} for exact rules.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class BasicPropertyNamer implements PropertyNamer {
 

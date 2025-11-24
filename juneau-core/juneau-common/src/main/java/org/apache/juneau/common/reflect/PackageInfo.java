@@ -35,8 +35,6 @@ import org.apache.juneau.common.collections.*;
  * <p>
  * Provides caching and convenient access to package metadata and annotations.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class PackageInfo implements Annotatable {
 

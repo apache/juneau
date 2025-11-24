@@ -35,9 +35,6 @@ import org.apache.juneau.utils.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class CsvParser extends ReaderParser implements CsvMetaProvider {
 	/**

@@ -21,8 +21,6 @@ import org.apache.juneau.common.reflect.*;
 /**
  * Defines extended language-specific metadata associated with a bean.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ExtendedBeanMeta extends ExtendedMeta {
 

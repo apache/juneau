@@ -21,8 +21,6 @@ import java.lang.reflect.*;
 /**
  * HTTP utilities.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class HttpUtils {
 

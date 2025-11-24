@@ -114,9 +114,6 @@ import org.apache.juneau.oapi.*;
  *	will not try to recompile it.
  * </div>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @Documented
 @Target({ PARAMETER, METHOD, TYPE, FIELD })

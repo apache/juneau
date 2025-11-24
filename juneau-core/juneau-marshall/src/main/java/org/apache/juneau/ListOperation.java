@@ -19,8 +19,6 @@ package org.apache.juneau;
 /**
  * Identifies how to add elements to a list.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public enum ListOperation {
 

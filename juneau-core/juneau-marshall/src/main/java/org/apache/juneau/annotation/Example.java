@@ -60,9 +60,6 @@ import java.lang.annotation.*;
  * 	<jk>public class</jk> C {...}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @Documented
 @Target({ FIELD, METHOD, TYPE })

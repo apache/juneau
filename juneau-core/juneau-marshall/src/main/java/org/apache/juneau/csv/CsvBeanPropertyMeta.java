@@ -23,9 +23,6 @@ import org.apache.juneau.csv.annotation.*;
  * Metadata on bean properties specific to the CSV serializers and parsers pulled from the {@link Csv @Csv}
  * annotation on the bean property.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class CsvBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

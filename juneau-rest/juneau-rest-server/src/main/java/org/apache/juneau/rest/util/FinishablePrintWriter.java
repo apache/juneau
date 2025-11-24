@@ -25,8 +25,6 @@ import org.apache.juneau.encoders.*;
 /**
  * A wrapped {@link PrintWriter} with an added <c>finish()</c> method.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class FinishablePrintWriter extends PrintWriter implements Finishable {
 

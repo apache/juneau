@@ -23,8 +23,6 @@ import org.apache.juneau.common.utils.*;
 /**
  * Lightweight utility class for introspecting information about a constructor.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo>, Annotatable {
 	/**

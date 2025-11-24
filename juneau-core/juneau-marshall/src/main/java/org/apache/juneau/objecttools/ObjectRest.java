@@ -132,9 +132,6 @@ import org.apache.juneau.parser.*;
  * 	Map <jv>map</jv> = <jv>objectRest</jv>.getMap(<js>"/items/@name=foo"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ObjectRest {

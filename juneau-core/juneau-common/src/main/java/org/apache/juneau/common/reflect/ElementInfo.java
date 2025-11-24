@@ -28,8 +28,6 @@ import java.lang.reflect.Modifier;
  * <p>
  * Provides common modifier checking functionality for classes, methods, fields, constructors, and other reflection elements.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public abstract class ElementInfo {
 

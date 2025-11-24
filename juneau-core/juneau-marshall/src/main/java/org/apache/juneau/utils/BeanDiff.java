@@ -48,8 +48,6 @@ import org.apache.juneau.marshaller.*;
  * 	System.<jsf>err</jsf>.println(<jv>beanDiff</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @Bean(properties = "v1,v2")
 public class BeanDiff {

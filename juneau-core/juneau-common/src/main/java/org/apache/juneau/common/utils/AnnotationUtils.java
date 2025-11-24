@@ -27,8 +27,6 @@ import java.util.stream.*;
 /**
  * Annotation utilities.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class AnnotationUtils {
 

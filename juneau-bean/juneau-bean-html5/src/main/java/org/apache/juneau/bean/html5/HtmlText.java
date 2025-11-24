@@ -32,8 +32,6 @@ import org.apache.juneau.xml.annotation.*;
  * 	HtmlText <jv>htmlText</jv> = <jk>new</jk> HtmlText(<js>"&lt;span&gt;&amp;#2753;&lt;/span&gt;"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @Xml(format = XMLTEXT)
 public class HtmlText {

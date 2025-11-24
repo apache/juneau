@@ -26,8 +26,6 @@ import jakarta.servlet.*;
 /**
  * ServletInputStream wrapper around a normal input stream with support for limiting input.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class BoundedServletInputStream extends ServletInputStream {
 

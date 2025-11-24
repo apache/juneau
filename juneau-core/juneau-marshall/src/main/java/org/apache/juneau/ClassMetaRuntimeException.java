@@ -23,9 +23,6 @@ import java.text.*;
 /**
  * General class metadata runtime operation exception.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  *
  * @serial exclude
  */

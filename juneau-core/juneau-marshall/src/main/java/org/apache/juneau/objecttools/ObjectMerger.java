@@ -79,8 +79,6 @@ import org.apache.juneau.common.reflect.*;
  * 		For purposes of this interface, a getter is any method with zero arguments and a non-<c>void</c> return type.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ObjectMerger {
 

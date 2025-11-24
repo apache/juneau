@@ -80,9 +80,6 @@ import org.apache.juneau.oapi.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  * </ul>
  * <p>
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @Documented
 @Target({ PARAMETER, METHOD, TYPE, FIELD })

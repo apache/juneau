@@ -88,8 +88,6 @@ import org.apache.juneau.oapi.*;
  * The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
  * <br>Schema-based serialization and parsing is allowed just as if used as individual parameter types.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  * <p>
@@ -141,9 +139,6 @@ import org.apache.juneau.oapi.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  * </ul>
  * <p>
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @Documented
 @Target({ PARAMETER, TYPE, METHOD })

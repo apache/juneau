@@ -21,9 +21,6 @@ import java.util.*;
 /**
  * Class-related utility methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class ResourceBundleUtils {
 

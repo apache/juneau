@@ -27,8 +27,6 @@ import org.apache.juneau.common.reflect.*;
 /**
  * Defines an invalid usage of an annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @serial exclude
  */

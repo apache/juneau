@@ -33,9 +33,6 @@ import jakarta.servlet.http.*;
 /**
  * Sample REST resource for echoing HttpServletRequests back to the browser.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @Rest(
 	path="/echo",

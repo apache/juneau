@@ -24,8 +24,6 @@ import java.lang.annotation.*;
 /**
  * Applied to annotations that belong to a similar group (e.g. <c>RestOp</c> and <c>RestGet</c>).
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @Documented
 @Target({ ANNOTATION_TYPE })

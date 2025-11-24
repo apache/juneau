@@ -21,8 +21,6 @@ import org.apache.juneau.*;
 /**
  * Interface for providing access to {@link PlainTextClassMeta} and {@link PlainTextBeanPropertyMeta} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public interface PlainTextMetaProvider {
 

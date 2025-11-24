@@ -34,8 +34,6 @@ import org.apache.juneau.config.store.*;
  * 	<li class='jm'>{@link #exists(String)}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @SuppressWarnings({ "resource", "unused" })
 public class SqlStore extends ConfigStore {

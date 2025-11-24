@@ -29,8 +29,6 @@ import org.apache.juneau.svl.*;
 /**
  * Utility classes and methods for the {@link Example @Example} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ExampleAnnotation {
 	/**

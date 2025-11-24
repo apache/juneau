@@ -62,9 +62,6 @@ import org.apache.juneau.common.utils.*;
  * 		</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  *
  * @param <T> The class type that this metadata applies to.
  */

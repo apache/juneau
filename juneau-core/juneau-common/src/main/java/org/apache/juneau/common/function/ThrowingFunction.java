@@ -23,8 +23,6 @@ import java.util.function.*;
 /**
  * A subclass of {@link Function} that allows for thrown exceptions.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @param <T> the type of the input to the function.
  * @param <R> the type of the result of the function.

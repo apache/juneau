@@ -23,9 +23,6 @@ import org.apache.juneau.csv.annotation.*;
  * Metadata on classes specific to the CSV serializers and parsers pulled from the {@link Csv @Csv} annotation on
  * the class.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class CsvClassMeta extends ExtendedClassMeta {
 

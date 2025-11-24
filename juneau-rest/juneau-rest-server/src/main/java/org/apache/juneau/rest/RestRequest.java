@@ -167,9 +167,6 @@ import jakarta.servlet.http.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
 public class RestRequest extends HttpServletRequestWrapper {

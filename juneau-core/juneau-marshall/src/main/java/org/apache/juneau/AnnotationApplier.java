@@ -81,8 +81,6 @@ import org.apache.juneau.svl.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @param <A> The annotation that this applier reads from.
  * @param <B> The builder class to apply the annotation to.

@@ -25,8 +25,6 @@ import org.apache.juneau.microservice.console.*;
 /**
  * Implements an 'echo' console command that simply returns the command arguments as a comma-delimited list.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class EchoCommand extends ConsoleCommand {
 

@@ -23,9 +23,6 @@ import org.apache.juneau.soap.annotation.*;
  * Metadata on bean properties specific to the SOAP/XML serializers and parsers pulled from the {@link SoapXml @SoapXml}
  * annotation on the bean property.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class SoapXmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

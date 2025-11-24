@@ -23,8 +23,6 @@ import org.apache.juneau.common.annotation.*;
 /**
  * Utility classes and methods for the {@link HasQuery @HasQuery} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class HasQueryAnnotation {
 	/**

@@ -24,8 +24,6 @@ import jakarta.servlet.http.*;
 /**
  * Wraps an {@link HttpServletResponse} and caches the output stream in a separate buffer for debugging purposes.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 

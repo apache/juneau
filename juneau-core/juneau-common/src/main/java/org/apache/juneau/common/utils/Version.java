@@ -27,8 +27,6 @@ import java.util.*;
  * <p>
  * Used to compare version numbers.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class Version implements Comparable<Version> {
 

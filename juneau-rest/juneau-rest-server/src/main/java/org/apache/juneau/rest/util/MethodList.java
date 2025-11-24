@@ -22,8 +22,6 @@ import java.util.*;
 /**
  * A simple list of {@link Method} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @serial exclude
  */

@@ -31,8 +31,6 @@ import org.apache.juneau.json.*;
  * Sample class which shows the usage of DTO module which is a
  * Sub module of the core.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class BeanExample {
 

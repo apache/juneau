@@ -19,7 +19,5 @@ package org.apache.juneau;
 /**
  * Superclass of all extended metadata classes.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ExtendedMeta {}

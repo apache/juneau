@@ -21,8 +21,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 /**
  * A simple weighted average of numbers.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class WeightedAverage {
 	private Double value = 0d;

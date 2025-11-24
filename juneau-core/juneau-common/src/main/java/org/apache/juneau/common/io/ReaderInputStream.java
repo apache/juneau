@@ -68,8 +68,6 @@ import java.util.*;
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ReaderInputStream extends InputStream {
 	private static final int DEFAULT_BUFFER_SIZE = 1024;

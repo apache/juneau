@@ -50,9 +50,6 @@ import org.apache.juneau.swap.*;
  * 		thus can be safely cached and reused.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class BeanSession extends ContextSession {

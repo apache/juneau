@@ -19,8 +19,6 @@ package org.apache.juneau;
 /**
  * Possible values for encoding of byte arrays as strings.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public enum BinaryFormat {
 

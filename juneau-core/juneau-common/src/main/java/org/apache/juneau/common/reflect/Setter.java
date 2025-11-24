@@ -21,8 +21,6 @@ import java.lang.reflect.*;
 /**
  * Encapsulate a bean setter method that may be a method or field.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public interface Setter {
 

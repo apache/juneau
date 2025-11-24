@@ -36,9 +36,6 @@ import java.lang.reflect.*;
  * 	<li class='jm'>{@link BeanContext.Builder#beanMethodVisibility(Visibility)}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public enum Visibility {
 

@@ -30,8 +30,6 @@ import org.apache.juneau.plaintext.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)

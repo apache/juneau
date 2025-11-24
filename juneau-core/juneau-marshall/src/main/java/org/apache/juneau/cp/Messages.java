@@ -110,8 +110,6 @@ import org.apache.juneau.parser.ParseException;
  * 	String <jv>foo</jv> = <jsf>MESSAGES</jsf>.forLocale(Locale.<jsf>JAPAN</jsf>).getString(<js>"foo"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class Messages extends ResourceBundle {
 	/**

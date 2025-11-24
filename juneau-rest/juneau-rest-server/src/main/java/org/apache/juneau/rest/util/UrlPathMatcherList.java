@@ -23,8 +23,6 @@ import java.util.*;
 /**
  * A list of {@link UrlPathMatcher} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @serial exclude
  */

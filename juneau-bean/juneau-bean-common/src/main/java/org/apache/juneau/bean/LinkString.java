@@ -43,9 +43,6 @@ import org.apache.juneau.serializer.*;
  * When encountered by the {@link HtmlSerializer} class, this object gets converted to a hyperlink.
  * All other serializers simply convert it to a simple bean.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 @HtmlLink
 @Bean(findFluentSetters = true)

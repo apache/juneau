@@ -29,8 +29,6 @@ import static org.apache.juneau.common.utils.Utils.*;
  * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class VersionRange {
 

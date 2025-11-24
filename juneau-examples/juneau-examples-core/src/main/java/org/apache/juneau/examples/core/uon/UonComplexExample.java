@@ -24,8 +24,6 @@ import org.apache.juneau.uon.*;
 /**
  * UON complex example.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class UonComplexExample {
 	/**

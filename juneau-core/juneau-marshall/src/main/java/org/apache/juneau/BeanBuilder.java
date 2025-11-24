@@ -25,8 +25,6 @@ import org.apache.juneau.cp.*;
 /**
  * Base class for bean builders.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @param <T> The bean type that the builder creates.
  */

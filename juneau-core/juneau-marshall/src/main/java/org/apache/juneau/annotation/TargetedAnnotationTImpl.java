@@ -21,8 +21,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class TargetedAnnotationTImpl extends TargetedAnnotationImpl {
 

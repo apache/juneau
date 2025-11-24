@@ -25,8 +25,6 @@ import org.apache.juneau.common.annotation.*;
 /**
  * Utility classes and methods for the {@link Items @Items} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ItemsAnnotation {
 	/**

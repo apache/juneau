@@ -25,8 +25,6 @@ import org.apache.juneau.common.annotation.*;
 /**
  * Builder for {@link TargetedAnnotationImpl} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @param <B> The actual builder class.
  */

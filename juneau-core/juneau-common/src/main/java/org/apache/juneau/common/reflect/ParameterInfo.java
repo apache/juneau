@@ -31,8 +31,6 @@ import org.apache.juneau.common.function.ResettableSupplier;
 /**
  * Lightweight utility class for introspecting information about a method parameter.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ParameterInfo extends ElementInfo implements Annotatable {
 

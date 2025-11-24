@@ -21,8 +21,6 @@ import org.apache.juneau.annotation.*;
 /**
  * Sample pojo class.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class Pojo {
 	private final String id;

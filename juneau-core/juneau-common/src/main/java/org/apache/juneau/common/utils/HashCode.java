@@ -25,8 +25,6 @@ package org.apache.juneau.common.utils;
  * 	<jk>int</jk> <jv>hashCode</jv> = HashCode.<jsm>create</jsm>().add(<js>"foobar"</js>).add(<jv>myobject</jv>).add(123).get();
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class HashCode {
 

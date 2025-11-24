@@ -45,9 +45,6 @@ import org.apache.juneau.swap.*;
  * 	<jv>birthDate</jv>.setValue(<js>"'1901-03-03T04:05:06-5000'"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class BeanMapEntry implements Map.Entry<String,Object> {
 	private final BeanMap<?> beanMap;

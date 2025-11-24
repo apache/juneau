@@ -157,8 +157,6 @@ import org.apache.juneau.utils.*;
  * 	</tr>
  * </table>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ConverterUtils {
 

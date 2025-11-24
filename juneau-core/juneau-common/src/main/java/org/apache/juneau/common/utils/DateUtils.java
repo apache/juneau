@@ -38,8 +38,6 @@ import java.util.*;
  * <p>
  * This class was copied from HttpClient 4.3.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class DateUtils {
 

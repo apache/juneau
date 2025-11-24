@@ -33,8 +33,6 @@ import org.apache.juneau.common.reflect.*;
 /**
  * Utility methods for working with classes.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ClassUtils {
 	/**

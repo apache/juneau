@@ -25,8 +25,6 @@ import org.apache.juneau.bean.atom.*;
 /**
  * Atom feed example.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class AtomFeed {
 

@@ -21,8 +21,6 @@ import org.apache.juneau.*;
 /**
  * Interface for providing access to {@link CsvClassMeta} and {@link CsvBeanPropertyMeta} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public interface CsvMetaProvider {
 

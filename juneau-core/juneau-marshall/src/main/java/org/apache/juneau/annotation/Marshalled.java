@@ -37,8 +37,6 @@ import org.apache.juneau.*;
  * This annotation is typically only applied to non-bean classes.  The {@link Bean @Bean} annotation contains equivalent
  * functionality for bean classes.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @Documented
 @Target({ METHOD, TYPE })

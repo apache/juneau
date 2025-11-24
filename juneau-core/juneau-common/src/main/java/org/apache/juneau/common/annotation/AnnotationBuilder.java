@@ -21,8 +21,6 @@ import java.lang.annotation.*;
 /**
  * Builder for {@link AnnotationImpl} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @param <B> The actual builder class.
  */

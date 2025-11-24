@@ -34,8 +34,6 @@ import org.apache.juneau.rest.logger.*;
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class RestOpSession extends ContextSession {
 	/**

@@ -29,9 +29,6 @@ import org.apache.juneau.common.collections.*;
  * <p>
  * Loads the entire result set into an in-memory data structure, and then closes the result set object.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  *
  * @serial exclude
  */

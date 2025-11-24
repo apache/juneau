@@ -27,8 +27,6 @@ import java.lang.reflect.*;
  * This class provides common functionality for {@link FieldInfo}, {@link MethodInfo}, and {@link ConstructorInfo}
  * that mirrors the {@link AccessibleObject} API.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public abstract class AccessibleInfo extends ElementInfo {
 

@@ -25,9 +25,6 @@ import org.apache.juneau.serializer.annotation.*;
 /**
  * Sample REST resource showing how to implement a nested "router" resource page.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  *
  * @serial exclude
  */

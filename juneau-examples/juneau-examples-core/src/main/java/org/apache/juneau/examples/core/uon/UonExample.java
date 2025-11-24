@@ -22,8 +22,6 @@ import org.apache.juneau.uon.*;
 /**
  *	Sample class which shows the simple usage of UONSerializer.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class UonExample {
 

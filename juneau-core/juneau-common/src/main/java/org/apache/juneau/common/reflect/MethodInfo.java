@@ -32,8 +32,6 @@ import org.apache.juneau.common.utils.*;
 /**
  * Lightweight utility class for introspecting information about a method.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {
 	/**

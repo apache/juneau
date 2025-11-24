@@ -114,9 +114,6 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  *
  * @serial exclude
  */

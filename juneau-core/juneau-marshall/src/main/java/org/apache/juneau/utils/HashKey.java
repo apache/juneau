@@ -24,8 +24,6 @@ import java.util.*;
 /**
  * Represents a list of objects used to compare objects for equality.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class HashKey {
 	/**

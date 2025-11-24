@@ -28,8 +28,6 @@ import org.apache.juneau.common.reflect.*;
  * 	<li>{@link AnnotationApplier} - The applier for that annotation.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @SuppressWarnings("rawtypes")
 public class AnnotationWork {

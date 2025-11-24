@@ -23,9 +23,6 @@ import org.apache.juneau.annotation.*;
 /**
  * Same as {@link BeanMeta}, except the list of bean properties are limited by a  {@link Beanp#properties() @Beanp(properties)} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  *
  * @param <T> The class type that this metadata applies to.
  */

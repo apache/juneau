@@ -23,9 +23,6 @@ import java.io.*;
 /**
  * Similar to {@link StringReader} except reads from a generic {@link CharSequenceReader}.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class CharSequenceReader extends BufferedReader {
 

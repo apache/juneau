@@ -30,8 +30,6 @@ import org.apache.juneau.common.collections.*;
  * For example, given the pattern <js>"/foo/{bar}/*"</js> and the path <js>"/foo/123/baz/qux"</js>, this match gives
  * you a map containing <js>"{bar:123}"</js> and a remainder string containing <js>"baz/qux"</js>.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class UrlPathMatch {
 

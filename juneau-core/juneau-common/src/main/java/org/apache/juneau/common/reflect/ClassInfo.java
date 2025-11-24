@@ -62,8 +62,6 @@ import org.apache.juneau.common.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ClassInfo extends ElementInfo implements Annotatable {

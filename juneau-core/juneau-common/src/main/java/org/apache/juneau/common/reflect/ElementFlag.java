@@ -19,8 +19,6 @@ package org.apache.juneau.common.reflect;
 /**
  * Identifies possible modifiers and attributes on classes, methods, fields, and constructors.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public enum ElementFlag {
 

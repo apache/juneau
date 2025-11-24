@@ -107,9 +107,6 @@ import org.apache.juneau.serializer.*;
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  *
  * @serial exclude
  */

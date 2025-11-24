@@ -29,9 +29,6 @@ import static org.apache.juneau.common.utils.Utils.*;
  * 	<li><js>"FooBarURL"</js> -&gt; <js>"foo_bar_url"</js>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  */
 public class PropertyNamerULC implements PropertyNamer {
 

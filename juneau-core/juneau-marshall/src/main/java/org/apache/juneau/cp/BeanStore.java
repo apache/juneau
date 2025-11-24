@@ -82,8 +82,6 @@ import org.apache.juneau.common.reflect.*;
  * 	<li class='note'>Bean stores can be made thread-safe using {@link Builder#threadSafe()}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class BeanStore {
 	/**

@@ -28,8 +28,6 @@ import org.apache.juneau.common.reflect.*;
 /**
  * Various generic object utility methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class Utils2 extends Utils {
 

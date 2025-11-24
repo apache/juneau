@@ -34,9 +34,6 @@ import org.apache.juneau.serializer.annotation.*;
 /**
  * Sample resource that shows how to generate ATOM feeds.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
  *
  * @serial exclude
  */

@@ -27,8 +27,6 @@ import jakarta.servlet.*;
 /**
  * A wrapped {@link ServletOutputStream} with an added <c>finish()</c> method.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class FinishableServletOutputStream extends ServletOutputStream implements Finishable {
 

@@ -36,8 +36,6 @@ import org.apache.juneau.parser.*;
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 @SuppressWarnings("resource")
 public class PlainTextParserSession extends ReaderParserSession {

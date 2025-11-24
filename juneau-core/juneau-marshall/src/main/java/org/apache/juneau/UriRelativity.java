@@ -19,8 +19,6 @@ package org.apache.juneau;
 /**
  * Identifies what relative URIs are relative to.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public enum UriRelativity {
 

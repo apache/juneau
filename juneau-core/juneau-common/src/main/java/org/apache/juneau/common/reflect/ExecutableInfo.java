@@ -37,8 +37,6 @@ import java.util.stream.*;
  * <p>
  * Extends {@link AccessibleInfo} to provide {@link AccessibleObject} functionality.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public abstract class ExecutableInfo extends AccessibleInfo {
 

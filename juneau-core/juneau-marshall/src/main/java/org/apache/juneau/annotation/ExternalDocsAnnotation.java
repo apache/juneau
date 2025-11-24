@@ -29,8 +29,6 @@ import org.apache.juneau.parser.*;
 /**
  * Utility classes and methods for the {@link ExternalDocs @ExternalDocs} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class ExternalDocsAnnotation {
 	/**

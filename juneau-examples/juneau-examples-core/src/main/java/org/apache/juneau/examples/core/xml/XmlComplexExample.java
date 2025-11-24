@@ -24,8 +24,6 @@ import org.apache.juneau.xml.*;
 /**
  * Sample class which shows the complex usage of XmlSerializer.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class XmlComplexExample {
 

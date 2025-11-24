@@ -30,8 +30,6 @@ import org.apache.juneau.common.utils.*;
  *
  * Used to encapsulate basic resolution and retrieval of files regardless of where they are located.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class LocalDir {
 

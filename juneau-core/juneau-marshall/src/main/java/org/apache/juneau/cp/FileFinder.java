@@ -86,8 +86,6 @@ import org.apache.juneau.common.io.*;
  * 	<li>Any {@link Optional} beans optionally present in bean store passed into the constructor.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public interface FileFinder {
 	/**

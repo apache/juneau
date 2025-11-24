@@ -24,8 +24,6 @@ import java.text.*;
 /**
  * General exception that occurs when trying to execute a constructor, method, or field using reflection.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @serial exclude
  */

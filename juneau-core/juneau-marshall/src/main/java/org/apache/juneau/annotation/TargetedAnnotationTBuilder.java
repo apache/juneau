@@ -23,8 +23,6 @@ import java.lang.annotation.*;
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  *
  * @param <B> The actual builder class.
  */

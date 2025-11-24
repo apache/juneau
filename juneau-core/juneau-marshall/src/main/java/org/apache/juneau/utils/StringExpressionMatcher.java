@@ -49,8 +49,6 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='note'><jk>null</jk> or empty expressions always match as <jk>false</jk>.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class StringExpressionMatcher {
 

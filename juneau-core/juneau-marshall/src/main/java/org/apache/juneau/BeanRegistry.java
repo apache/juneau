@@ -47,8 +47,6 @@ import org.apache.juneau.cp.*;
  * 	<li>The dictionary name is used as element names when serialized to XML.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
  */
 public class BeanRegistry {
 
