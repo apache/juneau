@@ -19,8 +19,68 @@ package org.apache.juneau.common.annotation;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 /**
- * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
+ * An implementation of an annotation that can be dynamically applied to classes, methods, fields, and constructors,
+ * with additional support for type-safe class targeting via the {@link #onClass()} property.
  *
+ * <p>
+ * This class extends {@link AppliedAnnotationObject} to provide both string-based targeting (via {@link #on()})
+ * and type-safe class-based targeting (via {@link #onClass()}).
+ *
+ * <h5 class='section'>Difference between <c>on</c> and <c>onClass</c>:</h5>
+ * <ul class='spaced-list'>
+ * 	<li><b>{@link #on()}</b> - Returns string-based targets (e.g., <js>"com.example.MyClass"</js>)
+ * 		<br>Useful for:
+ * 		<ul>
+ * 			<li>Configuration files where class references aren't available
+ * 			<li>Targeting classes that may not be loaded yet
+ * 			<li>Pattern matching or wildcard targeting
+ * 		</ul>
+ * 	<li><b>{@link #onClass()}</b> - Returns Class object targets (e.g., <c>MyClass.<jk>class</jk></c>)
+ * 		<br>Useful for:
+ * 		<ul>
+ * 			<li>Type-safe programmatic configuration
+ * 			<li>Direct class references in code
+ * 			<li>Avoiding string-based name matching
+ * 		</ul>
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Using onClass() for type-safe targeting</jc>
+ * 	BeanAnnotation <jv>annotation</jv> = BeanAnnotation
+ * 		.<jsm>create</jsm>()
+ * 		.onClass(MyClass.<jk>class</jk>, MyOtherClass.<jk>class</jk>)
+ * 		.sort(<jk>true</jk>)
+ * 		.build();
+ *
+ * 	<jc>// Using on() for string-based targeting</jc>
+ * 	BeanAnnotation <jv>annotation2</jv> = BeanAnnotation
+ * 		.<jsm>create</jsm>()
+ * 		.on(<js>"com.example.MyClass"</js>, <js>"com.example.MyOtherClass"</js>)
+ * 		.sort(<jk>true</jk>)
+ * 		.build();
+ *
+ * 	<jc>// Can use both together</jc>
+ * 	BeanAnnotation <jv>annotation3</jv> = BeanAnnotation
+ * 		.<jsm>create</jsm>()
+ * 		.on(<js>"com.example.MyClass"</js>)  <jc>// String-based</jc>
+ * 		.onClass(MyOtherClass.<jk>class</jk>)  <jc>// Type-safe</jc>
+ * 		.sort(<jk>true</jk>)
+ * 		.build();
+ * </p>
+ *
+ * <h5 class='section'>Notes:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>The {@link #on()} method returns string representations of ALL targets (both string-based and class-based)
+ * 	<li>The {@link #onClass()} method returns only the Class object targets
+ * 	<li>When using {@link AppliedAnnotationObject.BuilderT#on(Class...) BuilderT.on(Class...)}, classes are converted to strings and stored in {@link #on()}
+ * 	<li>When using {@link AppliedAnnotationObject.BuilderT#onClass(Class...) BuilderT.onClass(Class...)}, classes are stored as Class objects in {@link #onClass()}
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link AppliedAnnotationObject} - Parent class documentation
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-common.Annotations">Overview &gt; juneau-common &gt; Annotations</a>
+ * </ul>
  */
 public class AppliedOnClassAnnotationObject extends AppliedAnnotationObject {
 
