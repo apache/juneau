@@ -124,7 +124,7 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void a01_basic_defaultValues() {
-		TestAnnotation a = TestAnnotationObject.create().build();
+		var a = TestAnnotationObject.create().build();
 		assertEquals("", a.value());
 		assertEquals(0, a.number());
 		assertEquals(false, a.flag());
@@ -133,7 +133,7 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void a02_basic_customValues() {
-		TestAnnotation a = TestAnnotationObject.create()
+		var a = TestAnnotationObject.create()
 			.value("test")
 			.number(42)
 			.flag(true)
@@ -148,7 +148,7 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void a03_basic_annotationType() {
-		TestAnnotation a = TestAnnotationObject.create().build();
+		var a = TestAnnotationObject.create().build();
 		assertEquals(TestAnnotation.class, a.annotationType());
 	}
 
@@ -158,14 +158,14 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void b01_equality_identical() {
-		TestAnnotation a1 = TestAnnotationObject.create()
+		var a1 = TestAnnotationObject.create()
 			.value("test")
 			.number(42)
 			.flag(true)
 			.array("a", "b")
 			.build();
 
-		TestAnnotation a2 = TestAnnotationObject.create()
+		var a2 = TestAnnotationObject.create()
 			.value("test")
 			.number(42)
 			.flag(true)
@@ -178,11 +178,11 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void b02_equality_different() {
-		TestAnnotation a1 = TestAnnotationObject.create()
+		var a1 = TestAnnotationObject.create()
 			.value("test1")
 			.build();
 
-		TestAnnotation a2 = TestAnnotationObject.create()
+		var a2 = TestAnnotationObject.create()
 			.value("test2")
 			.build();
 
@@ -194,8 +194,8 @@ class AnnotationObject_Test extends TestBase {
 		@TestAnnotation(value="test", number=42, flag=true, array={"a", "b"})
 		class TestClass {}
 
-		TestAnnotation declared = TestClass.class.getAnnotation(TestAnnotation.class);
-		TestAnnotation programmatic = TestAnnotationObject.create()
+		var declared = TestClass.class.getAnnotation(TestAnnotation.class);
+		var programmatic = TestAnnotationObject.create()
 			.value("test")
 			.number(42)
 			.flag(true)
@@ -208,19 +208,19 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void b04_hashCode_consistency() {
-		TestAnnotation a = TestAnnotationObject.create()
+		var a = TestAnnotationObject.create()
 			.value("test")
 			.number(42)
 			.build();
 
-		int hash1 = a.hashCode();
-		int hash2 = a.hashCode();
+		var hash1 = a.hashCode();
+		var hash2 = a.hashCode();
 		assertEquals(hash1, hash2, "hashCode should be consistent");
 	}
 
 	@Test
 	void b05_hashCode_notNegativeOne() {
-		TestAnnotation a = TestAnnotationObject.create().build();
+		var a = TestAnnotationObject.create().build();
 		assertNotEquals(-1, a.hashCode(), "hashCode should not be -1 after postConstruct");
 	}
 
@@ -230,8 +230,8 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void c01_toMap_defaultValues() {
-		TestAnnotation a = TestAnnotationObject.create().build();
-		Map<String, Object> map = ((TestAnnotationObject)a).toMap();
+		var a = TestAnnotationObject.create().build();
+		var map = ((TestAnnotationObject)a).toMap();
 
 		assertNotNull(map);
 		assertEquals("", map.get("value"));
@@ -242,13 +242,13 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void c02_toMap_customValues() {
-		TestAnnotation a = TestAnnotationObject.create()
+		var a = TestAnnotationObject.create()
 			.value("test")
 			.number(42)
 			.flag(true)
 			.array("a", "b")
 			.build();
-		Map<String, Object> map = ((TestAnnotationObject)a).toMap();
+		var map = ((TestAnnotationObject)a).toMap();
 
 		assertEquals("test", map.get("value"));
 		assertEquals(42, map.get("number"));
@@ -258,11 +258,11 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void c03_toMap_keySorted() {
-		TestAnnotation a = TestAnnotationObject.create().build();
-		Map<String, Object> map = ((TestAnnotationObject)a).toMap();
+		var a = TestAnnotationObject.create().build();
+		var map = ((TestAnnotationObject)a).toMap();
 
 		// Map should be ordered by key name
-		List<String> keys = new ArrayList<>(map.keySet());
+		var keys = new ArrayList<>(map.keySet());
 		assertEquals("array", keys.get(0));
 		assertEquals("flag", keys.get(1));
 		assertEquals("number", keys.get(2));
@@ -275,19 +275,19 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void d01_toString_notNull() {
-		TestAnnotation a = TestAnnotationObject.create().build();
-		String str = a.toString();
+		var a = TestAnnotationObject.create().build();
+		var str = a.toString();
 		assertNotNull(str);
 		assertFalse(str.isEmpty());
 	}
 
 	@Test
 	void d02_toString_containsValues() {
-		TestAnnotation a = TestAnnotationObject.create()
+		var a = TestAnnotationObject.create()
 			.value("test")
 			.number(42)
 			.build();
-		String str = a.toString();
+		var str = a.toString();
 
 		assertTrue(str.contains("test"));
 		assertTrue(str.contains("42"));
@@ -300,11 +300,11 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void e01_postConstruct_required() {
 		// Test that hashCode() throws exception if postConstruct() was not called
-		AnnotationObject obj = new AnnotationObject(new AnnotationObject.Builder(TestAnnotation.class)) {
+		var obj = new AnnotationObject(new AnnotationObject.Builder(TestAnnotation.class)) {
 			// Intentionally not calling postConstruct()
 		};
 
-		Exception e = assertThrows(IllegalArgumentException.class, () -> {
+		var e = assertThrows(IllegalArgumentException.class, () -> {
 			obj.hashCode();
 		});
 
@@ -314,13 +314,11 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void e02_postConstruct_called() {
 		// Test that hashCode() works correctly when postConstruct() is called
-		AnnotationObject obj = new AnnotationObject(new AnnotationObject.Builder(TestAnnotation.class)) {
-			{
-				postConstruct();
-			}
-		};
+		var a = TestAnnotationObject.create().build();
 
-		assertNotEquals(-1, obj.hashCode());
+		// Should not throw exception and should have valid hashcode
+		assertNotEquals(-1, a.hashCode());
+		assertNotEquals(0, a.hashCode());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -329,7 +327,7 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void f01_builder_fluentApi() {
-		TestAnnotation a = TestAnnotationObject.create()
+		var a = TestAnnotationObject.create()
 			.value("test")
 			.number(42)
 			.flag(true)
@@ -342,12 +340,12 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void f02_builder_multipleBuilds() {
-		TestAnnotationObject.Builder builder = TestAnnotationObject.create()
+		var builder = TestAnnotationObject.create()
 			.value("test")
 			.number(42);
 
-		TestAnnotation a1 = builder.build();
-		TestAnnotation a2 = builder.build();
+		var a1 = builder.build();
+		var a2 = builder.build();
 
 		// Different instances but equal
 		assertNotSame(a1, a2);
@@ -356,7 +354,7 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void f03_builder_getAnnotationType() {
-		TestAnnotationObject.Builder builder = TestAnnotationObject.create();
+		var builder = TestAnnotationObject.create();
 		assertEquals(TestAnnotation.class, builder.getAnnotationType());
 	}
 
@@ -367,11 +365,11 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void g01_arrayEquality_emptyVsNull() {
 		// Empty array and null should be handled consistently
-		TestAnnotation a1 = TestAnnotationObject.create()
+		var a1 = TestAnnotationObject.create()
 			.array()
 			.build();
 
-		TestAnnotation a2 = TestAnnotationObject.create()
+		var a2 = TestAnnotationObject.create()
 			.array(new String[0])
 			.build();
 
@@ -381,11 +379,11 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void g02_arrayEquality_deepEquals() {
 		// Arrays with same content should be equal
-		TestAnnotation a1 = TestAnnotationObject.create()
+		var a1 = TestAnnotationObject.create()
 			.array("a", "b", "c")
 			.build();
 
-		TestAnnotation a2 = TestAnnotationObject.create()
+		var a2 = TestAnnotationObject.create()
 			.array(new String[]{"a", "b", "c"})
 			.build();
 
@@ -395,11 +393,11 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void g03_arrayEquality_differentOrder() {
 		// Arrays with different order should not be equal
-		TestAnnotation a1 = TestAnnotationObject.create()
+		var a1 = TestAnnotationObject.create()
 			.array("a", "b", "c")
 			.build();
 
-		TestAnnotation a2 = TestAnnotationObject.create()
+		var a2 = TestAnnotationObject.create()
 			.array("c", "b", "a")
 			.build();
 
@@ -408,15 +406,15 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void g04_equality_differentType() {
-		TestAnnotation a = TestAnnotationObject.create().build();
-		Object other = new Object();
+		var a = TestAnnotationObject.create().build();
+		var other = new Object();
 
 		assertNotEquals(a, other);
 	}
 
 	@Test
 	void g05_equality_null() {
-		TestAnnotation a = TestAnnotationObject.create().build();
+		var a = TestAnnotationObject.create().build();
 		assertNotEquals(a, null);
 	}
 }
