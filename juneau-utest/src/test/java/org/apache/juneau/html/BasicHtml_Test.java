@@ -3110,7 +3110,7 @@ class BasicHtml_Test extends TestBase {
 	}
 
 	private static void assertInstancesOf(Class<?> c, Object...values) {
-		for (int i = 0; i < values.length; i++) {
+		for (var i = 0; i < values.length; i++) {
 			assertInstanceOf(c, values[i], fs("Object {0} not expected type.  Expected={1}, Actual={2}", i, c, scn(values[i])));
 		}
 	}

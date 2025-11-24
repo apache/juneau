@@ -95,7 +95,7 @@ public class TestUtils {
 		var tagWithContent = Pattern.compile("^(\\s*)<[^>]+>.*</[^>]+>$");
 		var lines = out.split("\n");
 		try {
-			for (int i = 0; i < lines.length; i++) {
+			for (var i = 0; i < lines.length; i++) {
 				var line = lines[i];
 				var m = startTag.matcher(line);
 				if (m.matches()) {
@@ -146,7 +146,7 @@ public class TestUtils {
 	}
 
 	private static void printLines(String[] lines) {
-		for (int i = 0; i < lines.length; i++)
+		for (var i = 0; i < lines.length; i++)
 			System.err.println(String.format("%4s:" + lines[i], i + 1));  // NOT DEBUG
 	}
 

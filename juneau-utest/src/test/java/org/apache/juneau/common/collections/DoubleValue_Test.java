@@ -178,7 +178,7 @@ class DoubleValue_Test extends TestBase {
 		double rate = 0.05; // 5% interest
 
 		// Apply interest 3 times
-		for (int i = 0; i < 3; i++) {
+		for (var i = 0; i < 3; i++) {
 			principal.set(principal.get() * (1 + rate));
 		}
 

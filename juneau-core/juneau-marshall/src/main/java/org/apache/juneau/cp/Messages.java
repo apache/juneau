@@ -259,7 +259,7 @@ public class Messages extends ResourceBundle {
 
 				var x = (Builder)null;
 
-				for (int i = mbl.length - 1; i >= 0; i--) {
+				for (var i = mbl.length - 1; i >= 0; i--) {
 					var c = firstNonNull(mbl[i].getA(), forClass);
 					var value = mbl[i].getB();
 					if (isJsonObject(value, true)) {

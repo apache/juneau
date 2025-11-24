@@ -263,7 +263,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			var oParams = o.getParameters();
 			i = params.size() - oParams.size();
 			if (i == 0) {
-				for (int j = 0; j < params.size() && i == 0; j++) {
+				for (var j = 0; j < params.size() && i == 0; j++) {
 					i = params.get(j).getParameterType().getName().compareTo(oParams.get(j).getParameterType().getName());
 				}
 			}
@@ -315,7 +315,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		var params = getParameters();
 		if (params.size() > 0) {
 			sb.append('(');
-			for (int i = 0; i < params.size(); i++) {
+			for (var i = 0; i < params.size(); i++) {
 				if (i > 0)
 					sb.append(',');
 				params.get(i).getParameterType().appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);

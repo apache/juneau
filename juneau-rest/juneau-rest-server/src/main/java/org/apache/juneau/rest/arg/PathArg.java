@@ -199,7 +199,7 @@ public class PathArg implements RestOpArg {
 			var i = pi.getIndex();
 			var mi = pi.getMethod();
 
-			for (int j = 0; j < i; j++) {
+			for (var j = 0; j < i; j++) {
 				var hasAnnotation = AP.has(Path.class, mi.getParameter(j));
 				if (hasAnnotation)
 					idx++;

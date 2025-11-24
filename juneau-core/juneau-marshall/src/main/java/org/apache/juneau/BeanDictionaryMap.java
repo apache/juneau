@@ -83,7 +83,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 			if (o instanceof Class)
 				return;
 			if (isArray(o)) {
-				for (int i = 0; i < Array.getLength(o); i++)
+				for (var i = 0; i < Array.getLength(o); i++)
 					assertValidParameter(Array.get(o, i));
 				return;
 			}

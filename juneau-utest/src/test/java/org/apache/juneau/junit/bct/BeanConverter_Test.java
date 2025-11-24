@@ -150,7 +150,7 @@ class BeanConverter_Test extends TestBase {
 
 			// Large collection
 			var largeList = list();
-			for (int i = 0; i < 1000; i++) {
+			for (var i = 0; i < 1000; i++) {
 				largeList.add(i);
 			}
 

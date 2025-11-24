@@ -47,7 +47,7 @@ public class RrpcInterfaceMethodMeta {
 		if (pt.length == 0)
 			return "";
 		sb.append('(');
-		for (int i = 0; i < pt.length; i++) {
+		for (var i = 0; i < pt.length; i++) {
 			var pti = ClassInfo.of(pt[i]);
 			if (i > 0)
 				sb.append(',');

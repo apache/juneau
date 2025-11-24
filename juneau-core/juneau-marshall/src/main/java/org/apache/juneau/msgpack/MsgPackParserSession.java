@@ -220,12 +220,12 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				o = is.readBinary();
 			else if (dt == ARRAY && sType.isObject()) {
 				var jl = new JsonList(this);
-				for (int i = 0; i < length; i++)
+				for (var i = 0; i < length; i++)
 					jl.add(parseAnything(object(), is, outer, pMeta));
 				o = jl;
 			} else if (dt == MAP && sType.isObject()) {
 				var jm = new JsonMap(this);
-				for (int i = 0; i < length; i++)
+				for (var i = 0; i < length; i++)
 					jm.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, jm, pMeta));
 				o = cast(jm, pMeta, eType);
 			}
@@ -237,7 +237,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			} else if (sType.isMap()) {
 				if (dt == MAP) {
 					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-					for (int i = 0; i < length; i++) {
+					for (var i = 0; i < length; i++) {
 						Object key = parseAnything(sType.getKeyType(), is, outer, pMeta);
 						var vt = sType.getValueType();
 						Object value = parseAnything(vt, is, m, pMeta);
@@ -251,7 +251,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
 					BeanMap m = builder == null ? newBeanMap(outer, sType.getInnerClass()) : toBeanMap(builder.create(this, eType));
-					for (int i = 0; i < length; i++) {
+					for (var i = 0; i < length; i++) {
 						String pName = parseAnything(string(), is, m.getBean(false), null);
 						var bpm = m.getPropertyMeta(pName);
 						if (bpm == null) {
@@ -280,12 +280,12 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			} else if (sType.isCollection()) {
 				if (dt == MAP) {
 					var m = new JsonMap(this);
-					for (int i = 0; i < length; i++)
+					for (var i = 0; i < length; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
 					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
-					for (int i = 0; i < length; i++)
+					for (var i = 0; i < length; i++)
 						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
 					o = l;
 				} else {
@@ -294,12 +294,12 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			} else if (sType.isArray() || sType.isArgs()) {
 				if (dt == MAP) {
 					var m = new JsonMap(this);
-					for (int i = 0; i < length; i++)
+					for (var i = 0; i < length; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
 					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
-					for (int i = 0; i < length; i++)
+					for (var i = 0; i < length; i++)
 						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
 					o = toArray(sType, l);
 				} else {
@@ -307,7 +307,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				}
 			} else if (dt == MAP) {
 				var m = new JsonMap(this);
-				for (int i = 0; i < length; i++)
+				for (var i = 0; i < length; i++)
 					m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast(m, pMeta, eType);

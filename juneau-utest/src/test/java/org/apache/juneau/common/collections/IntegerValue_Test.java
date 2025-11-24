@@ -325,7 +325,7 @@ class IntegerValue_Test extends TestBase {
 		a.set(0);
 		assertEquals(0, a.get());
 
-		for (int i = 0; i < 10; i++) {
+		for (var i = 0; i < 10; i++) {
 			a.getAndIncrement();
 		}
 		assertEquals(10, a.get());

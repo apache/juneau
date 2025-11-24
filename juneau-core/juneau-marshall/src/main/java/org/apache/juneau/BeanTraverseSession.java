@@ -281,7 +281,7 @@ public class BeanTraverseSession extends BeanSession {
 		stack.forEach(x -> {
 			if (full) {
 				sb.append("\n\t");
-				for (int i = 1; i < x.depth; i++)
+				for (var i = 1; i < x.depth; i++)
 					sb.append("  ");
 				if (x.depth > 0)
 					sb.append("->");

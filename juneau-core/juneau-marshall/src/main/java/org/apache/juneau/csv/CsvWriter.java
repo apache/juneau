@@ -189,7 +189,7 @@ public class CsvWriter extends SerializerWriter {
 		else {
 			var s = value.toString();
 			var mustQuote = false;
-			for (int i = 0; i < s.length() && ! mustQuote; i++) {
+			for (var i = 0; i < s.length() && ! mustQuote; i++) {
 				var c = s.charAt(i);
 				if (Character.isWhitespace(c) || c == ',')
 					mustQuote = true;

@@ -164,7 +164,7 @@ class ParserReader_Test extends TestBase {
 
 	private static String read(ParserReader r, int length) throws IOException {
 		var sb = new StringBuilder();
-		for (int i = 0; i < length; i++) {
+		for (var i = 0; i < length; i++) {
 			int c = r.read();
 			if (c == -1)
 				return sb.toString();

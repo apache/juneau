@@ -331,7 +331,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		if (l.size() == 1)
 			return l.get(0);
 		var sb = new StringBuilder(128);
-		for (int i = 0; i < l.size(); i++) {
+		for (var i = 0; i < l.size(); i++) {
 			if (i > 0)
 				sb.append(", ");
 			sb.append(l.get(i).getValue());

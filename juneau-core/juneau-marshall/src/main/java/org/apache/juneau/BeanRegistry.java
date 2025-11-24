@@ -180,7 +180,7 @@ public class BeanRegistry {
 			throw bex("Map entry had an empty array value.");
 		var type = (Type)Array.get(array, 0);
 		var args = new Type[len - 1];
-		for (int i = 1; i < len; i++)
+		for (var i = 1; i < len; i++)
 			args[i - 1] = (Type)Array.get(array, i);
 		return bc.getClassMeta(type, args);
 	}

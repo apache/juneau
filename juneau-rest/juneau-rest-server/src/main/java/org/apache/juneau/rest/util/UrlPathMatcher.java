@@ -100,7 +100,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 			this.vars = new String[parts.length];
 			List<String> vars = list();
 
-			for (int i = 0; i < parts.length; i++) {
+			for (var i = 0; i < parts.length; i++) {
 				Matcher m = VAR_PATTERN.matcher(parts[i]);
 				if (m.matches()) {
 					this.vars[i] = m.group(1);
@@ -147,7 +147,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 				}
 			}
 
-			for (int i = 0; i < parts.length; i++)
+			for (var i = 0; i < parts.length; i++)
 				if (vars[i] == null && (pip.length <= i || ! ("*".equals(parts[i]) || pip[i].equals(parts[i]))))
 					return null;
 
@@ -155,7 +155,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 			var j = 0;
 			if (nn(vals))
-				for (int i = 0; i < parts.length; i++)
+				for (var i = 0; i < parts.length; i++)
 					if (nn(vars[i]))
 						vals[j++] = pip[i];
 

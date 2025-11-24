@@ -43,7 +43,7 @@ public class ClassUtils2 {
 	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object...args) {
 		boolean needsShuffle = paramTypes.length != args.length;
 		if (! needsShuffle) {
-			for (int i = 0; i < paramTypes.length; i++) {
+			for (var i = 0; i < paramTypes.length; i++) {
 				if (! paramTypes[i].isInstance(args[i]))
 					needsShuffle = true;
 			}

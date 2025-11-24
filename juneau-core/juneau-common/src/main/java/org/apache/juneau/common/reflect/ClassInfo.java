@@ -1292,10 +1292,10 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			componentType.appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
 
 			if (arrayFormat == ClassArrayFormat.WORD) {
-				for (int i = 0; i < dim; i++)
+				for (var i = 0; i < dim; i++)
 					sb.append("Array");
 			} else if (arrayFormat == ClassArrayFormat.BRACKETS) {
-				for (int i = 0; i < dim; i++)
+				for (var i = 0; i < dim; i++)
 					sb.append("[]");
 			}
 			// JVM format is already in getName() - would need special handling
@@ -1318,7 +1318,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 					sb.append(ct.getName());
 					// Apply separator if not '$'
 					if (separator != '$' && sb.indexOf("$") != -1) {
-						for (int i = 0; i < sb.length(); i++) {
+						for (var i = 0; i < sb.length(); i++) {
 							if (sb.charAt(i) == '$')
 								sb.setCharAt(i, separator);
 						}
@@ -2380,13 +2380,13 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 		// Process all parent classes (includes this class)
 		var parents = getParents();
-		for (int i = 0; i < parents.size(); i++) {
+		for (var i = 0; i < parents.size(); i++) {
 			var parent = parents.get(i);
 			set.add(parent);
 
 			// Process interfaces declared on this parent (and their parent interfaces)
 			var declaredInterfaces = parent.getDeclaredInterfaces();
-			for (int j = 0; j < declaredInterfaces.size(); j++)
+			for (var j = 0; j < declaredInterfaces.size(); j++)
 				addInterfaceHierarchy(set, declaredInterfaces.get(j));
 		}
 
@@ -2405,7 +2405,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 		// Process parent interfaces recursively
 		var parentInterfaces = iface.getDeclaredInterfaces();
-		for (int i = 0; i < parentInterfaces.size(); i++)
+		for (var i = 0; i < parentInterfaces.size(); i++)
 			addInterfaceHierarchy(set, parentInterfaces.get(i));
 	}
 
@@ -2431,7 +2431,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 		// On all parent classes and interfaces (properly traversed to avoid duplicates)
 		var parentsAndInterfaces = getParentsAndInterfaces();
-		for (int i = 0; i < parentsAndInterfaces.size(); i++) {
+		for (var i = 0; i < parentsAndInterfaces.size(); i++) {
 			var ci = parentsAndInterfaces.get(i);
 			// Add declared annotations from this class/interface
 			for (var a : ci.inner().getDeclaredAnnotations())

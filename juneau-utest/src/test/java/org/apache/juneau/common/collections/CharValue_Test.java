@@ -176,7 +176,7 @@ class CharValue_Test extends TestBase {
 		var mostFrequent = CharValue.of('\0');
 		var maxCount = IntegerValue.create();
 		
-		for (char c = 'a'; c <= 'z'; c++) {
+		for (var c = 'a'; c <= 'z'; c++) {
 			final char current = c;
 			var count = IntegerValue.create();
 			text.chars().mapToObj(ch -> (char)ch).forEach(ch -> {

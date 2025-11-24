@@ -75,7 +75,7 @@ public class BenchmarkRunner {
 		list = new ArrayList<>(size);
 		map = new LinkedHashMap<>();
 
-		for (int i = 0; i < size; i++) {
+		for (var i = 0; i < size; i++) {
 			list.add(random.nextInt(100));
 			map.put(String.valueOf(i), random.nextInt(100));
 		}

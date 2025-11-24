@@ -3740,7 +3740,7 @@ public class BeanContext extends Context {
 			return cm;
 		ClassMeta<?>[] cma = new ClassMeta[args.length + 1];
 		cma[0] = cm;
-		for (int i = 0; i < Array.getLength(args); i++) {
+		for (var i = 0; i < Array.getLength(args); i++) {
 			var arg = (Type)Array.get(args, i);
 			cma[i + 1] = arg instanceof Class arg2 ? getClassMeta(arg2) : resolveClassMeta(arg, null);
 		}
@@ -4409,7 +4409,7 @@ public class BeanContext extends Context {
 				int varIndex = -1;
 				var gc = (Class)t4.getGenericDeclaration();
 				TypeVariable[] tvv = gc.getTypeParameters();
-				for (int i = 0; i < tvv.length; i++) {
+				for (var i = 0; i < tvv.length; i++) {
 					if (tvv[i].getName().equals(varName)) {
 						varIndex = i;
 					}

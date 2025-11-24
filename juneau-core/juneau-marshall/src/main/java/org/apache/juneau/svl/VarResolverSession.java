@@ -96,7 +96,7 @@ public class VarResolverSession {
 
 		int length = s.length();
 		var state = S1;
-		for (int i = 0; i < length; i++) {
+		for (var i = 0; i < length; i++) {
 			var c = s.charAt(i);
 			if (state == S1) {
 				if (c == '$') {

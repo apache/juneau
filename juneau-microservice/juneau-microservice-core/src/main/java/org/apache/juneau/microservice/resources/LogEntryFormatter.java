@@ -119,7 +119,7 @@ public class LogEntryFormatter extends Formatter {
 		// S4: Found $, looking for s.
 		var state = S1;
 		int i1 = 0;
-		for (int i = 0; i < format.length(); i++) {
+		for (var i = 0; i < format.length(); i++) {
 			var c = format.charAt(i);
 			if (state == S1) {
 				if (c == '%')

@@ -244,7 +244,7 @@ public class ListBuilder<E> {
 					if (o instanceof Collection<?> o2) {
 						o2.forEach(x -> addAny(x));
 					} else if (isArray(o)) {
-						for (int i = 0; i < Array.getLength(o); i++)
+						for (var i = 0; i < Array.getLength(o); i++)
 							addAny(Array.get(o, i));
 					} else if (elementType.isInstance(o)) {
 						add(elementType.cast(o));

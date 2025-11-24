@@ -43,7 +43,7 @@ public class MatchResultSwap extends ObjectSwap<MatchResult,List<String>> {
 	@Override /* Overridden from ObjectSwap */
 	public List<String> swap(BeanSession session, MatchResult o) {
 		List<String> l = listOfSize(o.groupCount());
-		for (int i = 0; i <= o.groupCount(); i++)
+		for (var i = 0; i <= o.groupCount(); i++)
 			l.add(o.group(i));
 		return l;
 	}

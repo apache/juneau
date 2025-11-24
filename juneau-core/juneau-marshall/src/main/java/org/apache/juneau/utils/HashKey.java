@@ -51,7 +51,7 @@ public class HashKey {
 		var x = (HashKey)o;
 		if (array.length != x.array.length)
 			return false;
-		for (int i = 0; i < array.length; i++)
+		for (var i = 0; i < array.length; i++)
 			if (ne(array[i], x.array[i]))
 				return false;
 		return true;

@@ -368,7 +368,7 @@ class AssertionArgs_Test extends TestBase {
 
 		// Simulate multiple threads modifying the same instance
 		var threads = new Thread[5];
-		for (int i = 0; i < threads.length; i++) {
+		for (var i = 0; i < threads.length; i++) {
 			final int threadId = i;
 			threads[i] = new Thread(() -> {
 				sharedArgs.setMessage("Thread " + threadId + " message");

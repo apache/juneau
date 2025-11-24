@@ -2239,7 +2239,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (c != 0)
 			return c;
 
-		for (int i = 0; i < method.getParameterCount(); i++) {
+		for (var i = 0; i < method.getParameterCount(); i++) {
 			c = compare(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
 			if (c != 0)
 				return c;

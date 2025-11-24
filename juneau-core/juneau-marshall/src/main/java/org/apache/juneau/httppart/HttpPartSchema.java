@@ -4221,7 +4221,7 @@ public class HttpPartSchema {
 						throw new SchemaValidationException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
 					if (nn(items))
-						for (int i = 0; i < Array.getLength(o); i++)
+						for (var i = 0; i < Array.getLength(o); i++)
 							items.validateOutput(Array.get(o, i), bc);
 				} else if (cm.isCollection()) {
 					Collection<?> c = (Collection<?>)o;
@@ -4576,7 +4576,7 @@ public class HttpPartSchema {
 	private boolean isValidUniqueItems(Object x) {
 		if (uniqueItems) {
 			var s = new HashSet<>();
-			for (int i = 0; i < Array.getLength(x); i++) {
+			for (var i = 0; i < Array.getLength(x); i++) {
 				var o = Array.get(x, i);
 				if (! s.add(o))
 					return false;

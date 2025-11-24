@@ -1216,7 +1216,7 @@ public class Config extends Context implements ConfigEventListener {
 
 	String removeMods(String mods, String x) {
 		if (nn(mods) && nn(x))
-			for (int i = mods.length() - 1; i > -1; i--)
+			for (var i = mods.length() - 1; i > -1; i--)
 				x = getMod(mods.charAt(i)).doRemove(x);
 		return x;
 	}

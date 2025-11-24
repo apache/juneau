@@ -192,7 +192,7 @@ public class HtmlParserSession extends XmlParserSession {
 	}
 
 	private static String getAttribute(XmlReader r, String name, String def) {
-		for (int i = 0; i < r.getAttributeCount(); i++)
+		for (var i = 0; i < r.getAttributeCount(); i++)
 			if (r.getAttributeLocalName(i).equals(name))
 				return r.getAttributeValue(i);
 		return def;
@@ -200,7 +200,7 @@ public class HtmlParserSession extends XmlParserSession {
 
 	private static Map<String,String> getAttributes(XmlReader r) {
 		var m = new TreeMap<String,String>();
-		for (int i = 0; i < r.getAttributeCount(); i++)
+		for (var i = 0; i < r.getAttributeCount(); i++)
 			m.put(r.getAttributeLocalName(i), r.getAttributeValue(i));
 		return m;
 	}
@@ -852,7 +852,7 @@ public class HtmlParserSession extends XmlParserSession {
 					}
 				} else {
 					sb.append('<').append(r.getLocalName());
-					for (int i = 0; i < r.getAttributeCount(); i++)
+					for (var i = 0; i < r.getAttributeCount(); i++)
 						sb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
 					sb.append('>');
 					depth++;

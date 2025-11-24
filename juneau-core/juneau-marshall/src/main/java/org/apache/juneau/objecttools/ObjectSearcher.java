@@ -130,12 +130,12 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 				return false;
 			}
 			if (cm.isArray()) {
-				for (int i = 0; i < Array.getLength(o); i++)
+				for (var i = 0; i < Array.getLength(o); i++)
 					if (matches(Array.get(o, i)))
 						return true;
 				return false;
 			}
-			for (int i = 0; i < factories.length; i++) {
+			for (var i = 0; i < factories.length; i++) {
 				if (factories[i].canMatch(cm)) {
 					if (matchers[i] == null)
 						matchers[i] = factories[i].create(searchPattern);
@@ -186,7 +186,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 				return true;
 			}
 			if (cm.isArray()) {
-				for (int i = 0; i < Array.getLength(o); i++)
+				for (var i = 0; i < Array.getLength(o); i++)
 					if (! matches(Array.get(o, i)))
 						return false;
 				return true;
@@ -259,7 +259,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		} else /* isArray */ {
 			var size = Array.getLength(input);
 			l = listOfSize(size);
-			for (int i = 0; i < size; i++) {
+			for (var i = 0; i < size; i++) {
 				var o = Array.get(input, i);
 				if (rowMatcher.matches(o))
 					l.add(o);

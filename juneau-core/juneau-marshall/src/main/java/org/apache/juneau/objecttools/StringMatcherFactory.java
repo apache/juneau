@@ -93,7 +93,7 @@ public class StringMatcherFactory extends MatcherFactory {
 					if (REGEX_CHARS.contains(s) || META_CHARS.contains(s)) {
 						var sb = new StringBuilder();
 						boolean isInEscape = false;
-						for (int i = 0; i < s.length(); i++) {
+						for (var i = 0; i < s.length(); i++) {
 							var c = s.charAt(i);
 							if (isInEscape) {
 								if (c == '?' || c == '*' || c == '\\')

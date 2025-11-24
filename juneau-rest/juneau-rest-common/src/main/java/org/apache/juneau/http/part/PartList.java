@@ -463,7 +463,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return The first matching part, or {@link Optional#empty()} if not found.
 	 */
 	public Optional<NameValuePair> getFirst(String name) {
-		for (int i = 0; i < size(); i++) {
+		for (var i = 0; i < size(); i++) {
 			var x = get(i);
 			if (eq(x.getName(), name))
 				return opt(x);
@@ -481,7 +481,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return The last matching part, or {@link Optional#empty()} if not found.
 	 */
 	public Optional<NameValuePair> getLast(String name) {
-		for (int i = size() - 1; i >= 0; i--) {
+		for (var i = size() - 1; i >= 0; i--) {
 			var x = get(i);
 			if (eq(x.getName(), name))
 				return opt(x);

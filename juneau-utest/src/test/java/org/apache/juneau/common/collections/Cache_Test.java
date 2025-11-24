@@ -188,7 +188,7 @@ class Cache_Test extends TestBase {
 			.maxSize(5)
 			.build();
 
-		for (int i = 1; i <= 5; i++) {
+		for (var i = 1; i <= 5; i++) {
 			final int index = i;
 			cache.get("key" + index, () -> "value" + index);
 		}
@@ -323,7 +323,7 @@ class Cache_Test extends TestBase {
 
 		// Submit 100 tasks that all try to cache the same key
 		var futures = new CompletableFuture[100];
-		for (int i = 0; i < 100; i++) {
+		for (var i = 0; i < 100; i++) {
 			futures[i] = CompletableFuture.runAsync(() -> {
 				cache.get(1, () -> {
 					callCount.incrementAndGet();
@@ -349,7 +349,7 @@ class Cache_Test extends TestBase {
 
 		// Submit tasks for different keys
 		var futures = new CompletableFuture[10];
-		for (int i = 0; i < 10; i++) {
+		for (var i = 0; i < 10; i++) {
 			final int key = i;
 			futures[i] = CompletableFuture.runAsync(() -> {
 				cache.get(key, () -> "value" + key);

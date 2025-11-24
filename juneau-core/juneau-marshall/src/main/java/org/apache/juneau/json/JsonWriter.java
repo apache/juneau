@@ -181,7 +181,7 @@ public class JsonWriter extends SerializerWriter {
 			// Look for characters that would require the attribute to be quoted.
 			// All possible numbers should be caught here.
 			if (! doConvert) {
-				for (int i = 0; i < s.length() && ! doConvert; i++) {
+				for (var i = 0; i < s.length() && ! doConvert; i++) {
 					var c = s.charAt(i);
 					doConvert |= ! (i == 0 ? validFirstAttrChars.contains(c) : validAttrChars.contains(c));
 				}
@@ -291,7 +291,7 @@ public class JsonWriter extends SerializerWriter {
 		if (s == null)
 			return this;
 		boolean doConvert = false;
-		for (int i = 0; i < s.length() && ! doConvert; i++) {
+		for (var i = 0; i < s.length() && ! doConvert; i++) {
 			var c = s.charAt(i);
 			doConvert |= ec.contains(c);
 		}
@@ -299,7 +299,7 @@ public class JsonWriter extends SerializerWriter {
 		if (! doConvert) {
 			w(s);
 		} else {
-			for (int i = 0; i < s.length(); i++) {
+			for (var i = 0; i < s.length(); i++) {
 				var c = s.charAt(i);
 				if (ec.contains(c)) {
 					if (c == '\n')

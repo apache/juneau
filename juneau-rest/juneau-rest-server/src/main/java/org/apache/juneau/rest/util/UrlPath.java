@@ -57,7 +57,7 @@ public class UrlPath {
 	UrlPath(String path) {
 		this.path = path;
 		parts = path == null ? new String[0] : StringUtils.splita(path.substring(1), '/');
-		for (int i = 0; i < parts.length; i++)
+		for (var i = 0; i < parts.length; i++)
 			parts[i] = urlDecode(parts[i]);
 	}
 

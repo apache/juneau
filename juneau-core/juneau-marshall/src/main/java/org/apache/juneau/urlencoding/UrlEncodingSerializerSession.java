@@ -213,7 +213,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	private static Map<Integer,Object> getCollectionMap(Object array) {
 		var m = new TreeMap<Integer,Object>();
-		for (int i = 0; i < Array.getLength(array); i++)
+		for (var i = 0; i < Array.getLength(array); i++)
 			m.put(i, Array.get(array, i));
 		return m;
 	}
@@ -316,7 +316,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 						super.serializeAnything(out, x, cMeta.getElementType(), key, pMeta);
 					});
 				} else /* array */ {
-					for (int i = 0; i < Array.getLength(value); i++) {
+					for (var i = 0; i < Array.getLength(value); i++) {
 						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
 						super.serializeAnything(out, Array.get(value, i), cMeta.getElementType(), key, pMeta);
@@ -366,7 +366,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 						super.serializeAnything(out, x, null, s(key), null);
 					});
 				} else /* array */ {
-					for (int i = 0; i < Array.getLength(value); i++) {
+					for (var i = 0; i < Array.getLength(value); i++) {
 						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
 						super.serializeAnything(out, Array.get(value, i), null, s(key), null);

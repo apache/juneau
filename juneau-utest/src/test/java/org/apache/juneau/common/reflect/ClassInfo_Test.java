@@ -1205,7 +1205,7 @@ public class ClassInfo_Test extends TestBase {
 
 	@Test
 	void getPrimitiveWrapper() {
-		for (int i = 0; i < primitives.size(); i++)
+		for (var i = 0; i < primitives.size(); i++)
 			assertEquals(of(primitives.get(i)).getPrimitiveWrapper(), primitiveWrappers.get(i));
 		assertNull(of(String.class).getPrimitiveWrapper());
 	}
@@ -1217,7 +1217,7 @@ public class ClassInfo_Test extends TestBase {
 
 	@Test
 	void getPrimitiveForWrapper() {
-		for (int i = 0; i < primitives.size(); i++)
+		for (var i = 0; i < primitives.size(); i++)
 			assertEquals(of(primitiveWrappers.get(i)).getPrimitiveForWrapper(), primitives.get(i));
 		assertNull(of(String.class).getPrimitiveForWrapper());
 	}
@@ -1229,7 +1229,7 @@ public class ClassInfo_Test extends TestBase {
 
 	@Test
 	void getWrapperIfPrimitive() {
-		for (int i = 0; i < primitives.size(); i++)
+		for (var i = 0; i < primitives.size(); i++)
 			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().inner(), primitiveWrappers.get(i));
 		assertEquals(of(String.class).getWrapperIfPrimitive().inner(), String.class);
 	}
@@ -1245,7 +1245,7 @@ public class ClassInfo_Test extends TestBase {
 
 	@Test
 	void getWrapperIfPrimitive_asClassInfo() {
-		for (int i = 0; i < primitives.size(); i++)
+		for (var i = 0; i < primitives.size(); i++)
 			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().inner(), primitiveWrappers.get(i));
 		assertEquals(of(String.class).getWrapperIfPrimitive().inner(), String.class);
 	}
@@ -1258,7 +1258,7 @@ public class ClassInfo_Test extends TestBase {
 
 	@Test
 	void getPrimitiveDefault() {
-		for (int i = 0; i < primitives.size(); i++)
+		for (var i = 0; i < primitives.size(); i++)
 			assertEquals(of(primitives.get(i)).getPrimitiveDefault(), primitiveDefaults.get(i));
 		assertNull(of(String.class).getPrimitiveDefault());
 	}

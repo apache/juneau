@@ -5915,7 +5915,7 @@ public class RestContext extends Context {
 
 		beanStore = BeanStore.of(beanStore, getResource());
 
-		for (int i = 0; i < params.size(); i++) {
+		for (var i = 0; i < params.size(); i++) {
 			var pi = params.get(i);
 			beanStore.addBean(ParameterInfo.class, pi);
 			for (var c : restOpArgs) {
@@ -6091,7 +6091,7 @@ public class RestContext extends Context {
 
 		// Loop until we find the correct processor for the POJO.
 		int loops = 5;
-		for (int i = 0; i < responseProcessors.length; i++) {
+		for (var i = 0; i < responseProcessors.length; i++) {
 			var j = responseProcessors[i].process(opSession);
 			if (j == FINISHED)
 				return;

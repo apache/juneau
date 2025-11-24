@@ -211,7 +211,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 					return false;
 				if (i2.hasNext())
 					return true;
-				for (int j = i; j < l.length; j++)
+				for (var j = i; j < l.length; j++)
 					if (l[j].size() > 0)
 						return true;
 				return false;

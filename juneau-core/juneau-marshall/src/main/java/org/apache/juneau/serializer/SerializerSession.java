@@ -304,7 +304,7 @@ public class SerializerSession extends BeanTraverseSession {
 		if (componentType.isPrimitive()) {
 			var l = Array.getLength(array);
 			var list = new ArrayList<>(l);
-			for (int i = 0; i < l; i++)
+			for (var i = 0; i < l; i++)
 				list.add(Array.get(array, i));
 			return list;
 		}

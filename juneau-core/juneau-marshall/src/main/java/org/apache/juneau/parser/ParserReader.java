@@ -113,7 +113,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * @return This object.
 	 */
 	public final ParserReader delete(int count) {
-		for (int i = 0; i < count; i++)
+		for (var i = 0; i < count; i++)
 			buff[iCurrent - i - 1] = 127;
 		holesExist = true;
 		return this;
@@ -144,7 +144,7 @@ public class ParserReader extends Reader implements Positionable {
 
 		// Holes are \u00FF 'delete' characters that we need to get rid of now.
 		if (holesExist) {
-			for (int i = iMark; i < iCurrent; i++) {
+			for (var i = iMark; i < iCurrent; i++) {
 				char c = buff[i];
 				if (c == 127)
 					offset++;
@@ -350,7 +350,7 @@ public class ParserReader extends Reader implements Positionable {
 			offset--;
 		}
 		// Fill in the gap with DEL characters.
-		for (int i = 1; i < offset; i++)
+		for (var i = 1; i < offset; i++)
 			buff[iCurrent - i] = 127;
 		holesExist |= (offset > 1);
 		return this;

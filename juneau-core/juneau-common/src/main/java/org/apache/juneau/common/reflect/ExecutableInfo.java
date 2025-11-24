@@ -322,7 +322,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		Class<?>[] pt = inner.getParameterTypes();
 		if (pt.length != args.length)
 			return false;
-		for (int i = 0; i < pt.length; i++)
+		for (var i = 0; i < pt.length; i++)
 			if (! pt[i].isInstance(args[i]))
 				return false;
 		return true;
@@ -725,7 +725,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			if (ptt.length + 1 == ptc.length) {
 				var ptt2 = new Type[ptc.length];
 				ptt2[0] = ptc[0];
-				for (int i = 0; i < ptt.length; i++)
+				for (var i = 0; i < ptt.length; i++)
 					ptt2[i + 1] = ptt[i];
 				genericTypes = ptt2;
 			} else {

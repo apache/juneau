@@ -183,7 +183,7 @@ public class StringExpressionMatcher {
 
 	private static Exp parseOperand(String operand) {
 		boolean hasMeta = false;
-		for (int i = 0; i < operand.length() && ! hasMeta; i++) {
+		for (var i = 0; i < operand.length() && ! hasMeta; i++) {
 			var c = operand.charAt(i);
 			hasMeta |= META.contains(c);
 		}

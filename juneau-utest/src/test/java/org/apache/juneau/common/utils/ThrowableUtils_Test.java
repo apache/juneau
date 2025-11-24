@@ -71,7 +71,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a03_findCause_longChain() {
 		Throwable cause = new IllegalStateException("root");
-		for (int i = 0; i < 10; i++) {
+		for (var i = 0; i < 10; i++) {
 			cause = new RuntimeException("level" + i, cause);
 		}
 

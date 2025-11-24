@@ -165,7 +165,7 @@ public class UonWriter extends SerializerWriter {
 
 		if (needsQuotes)
 			w(quoteChar);
-		for (int i = 0; i < s.length(); i++) {
+		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			if (esc.contains(c))
 				w('~');

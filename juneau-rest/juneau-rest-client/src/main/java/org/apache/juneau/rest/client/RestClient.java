@@ -6184,7 +6184,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		var headers = (String)null;
 		var uri = (String)null;
 		var content = (String)null;
-		for (int i = 0; i < callString.length(); i++) {
+		for (var i = 0; i < callString.length(); i++) {
 			var c = callString.charAt(i);
 			if (state == S1) {
 				if (isWhitespace(c)) {

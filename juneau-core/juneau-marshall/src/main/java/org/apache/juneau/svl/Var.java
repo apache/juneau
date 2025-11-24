@@ -71,7 +71,7 @@ public abstract class Var {
 		this.name = name;
 		this.streamed = streamed;
 
-		for (int i = 0; i < name.length(); i++) {
+		for (var i = 0; i < name.length(); i++) {
 			// Need to make sure only ASCII characters are used.
 			var c = name.charAt(i);
 			if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a'))

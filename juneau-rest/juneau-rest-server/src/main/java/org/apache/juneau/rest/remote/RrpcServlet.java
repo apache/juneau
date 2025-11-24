@@ -181,7 +181,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 			t.child(tr(td("No arguments").colspan(3).style("text-align:center")));
 		} else {
 			t.child(tr(th("Index"), th("Type"), th("Value")));
-			for (int i = 0; i < types.length; i++) {
+			for (var i = 0; i < types.length; i++) {
 				String type = Mutaters.toString(types[i]);
 				t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type("text"))));
 			}

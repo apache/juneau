@@ -446,7 +446,7 @@ public class BasicSwaggerProviderSession {
 					}
 				}
 				var methods = eci.getAllMethods();
-				for (int i = methods.size() - 1; i >= 0; i--) {
+				for (var i = methods.size() - 1; i >= 0; i--) {
 					var ecmi = methods.get(i);
 					var a = ecmi.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (a == null)
@@ -482,7 +482,7 @@ public class BasicSwaggerProviderSession {
 			}
 			if (mi.getReturnType().hasAnnotation(Response.class)) {
 				var methods = mi.getReturnType().getAllMethods();
-				for (int i = methods.size() - 1; i >= 0; i--) {
+				for (var i = methods.size() - 1; i >= 0; i--) {
 					var ecmi = methods.get(i);
 						if (ecmi.hasAnnotation(Header.class)) {
 							var a = ecmi.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);

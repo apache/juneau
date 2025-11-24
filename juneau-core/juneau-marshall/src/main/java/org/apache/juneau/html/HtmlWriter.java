@@ -390,7 +390,7 @@ public class HtmlWriter extends XmlWriter {
 			return this;
 		}
 
-		for (int i = 0; i < s.length(); i++) {
+		for (var i = 0; i < s.length(); i++) {
 			var test = s.charAt(i);
 			if (test == '&')
 				append("&amp;");

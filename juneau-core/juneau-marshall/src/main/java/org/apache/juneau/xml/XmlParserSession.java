@@ -252,7 +252,7 @@ public class XmlParserSession extends ReaderParserSession {
 		rsb.setLength(0);
 		rsb.append("<").append(t == 1 ? "" : "/").append(r.getLocalName());
 		if (t == 1)
-			for (int i = 0; i < r.getAttributeCount(); i++)
+			for (var i = 0; i < r.getAttributeCount(); i++)
 				rsb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
 		rsb.append('>');
 		return rsb.toString();
@@ -379,7 +379,7 @@ public class XmlParserSession extends ReaderParserSession {
 		var bMeta = m.getMeta();
 		var xmlMeta = getXmlBeanMeta(bMeta);
 
-		for (int i = 0; i < r.getAttributeCount(); i++) {
+		for (var i = 0; i < r.getAttributeCount(); i++) {
 			String key = getAttributeName(r, i);
 			if (! ("nil".equals(key) || isSpecialAttr(key))) {
 				var val = r.getAttributeValue(i);
@@ -551,7 +551,7 @@ public class XmlParserSession extends ReaderParserSession {
 	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
-		for (int i = 0; i < r.getAttributeCount(); i++) {
+		for (var i = 0; i < r.getAttributeCount(); i++) {
 			var a = r.getAttributeLocalName(i);
 			// TODO - Need better handling of namespaces here.
 			if (! isSpecialAttr(a)) {

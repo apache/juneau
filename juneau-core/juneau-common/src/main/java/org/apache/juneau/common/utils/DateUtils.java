@@ -514,7 +514,7 @@ public class DateUtils {
 		var state = S1;
 		var precision = ChronoField.YEAR; // Track precision as we go
 
-		for (int i = 0; i < seg.length(); i++) {
+		for (var i = 0; i < seg.length(); i++) {
 			var c = seg.charAt(i);
 
 			if (state == S1) {

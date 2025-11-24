@@ -396,7 +396,7 @@ public class OpenApiParserSession extends UonParserSession {
 			if (items == null)
 				items = HttpPartSchema.DEFAULT;
 			var o = Array.newInstance(eType.getInnerClass(), ss.length);
-			for (int i = 0; i < ss.length; i++)
+			for (var i = 0; i < ss.length; i++)
 					Array.set(o, i, parse(partType, items, ss[i], eType));
 				if (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
 					return toType(toType(o, schema.getParsedType()), type);

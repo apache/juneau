@@ -200,7 +200,7 @@ public class UonReader extends ParserReader {
 	private int readUTF8(int n, final int numBytes) throws IOException {
 		if (iCurrent + numBytes * 3 > iEnd)
 			return -1;
-		for (int i = 0; i < numBytes; i++) {
+		for (var i = 0; i < numBytes; i++) {
 			n <<= 6;
 			n += readHex() - 128;
 		}

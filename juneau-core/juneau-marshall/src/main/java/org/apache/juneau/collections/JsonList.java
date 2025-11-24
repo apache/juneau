@@ -488,7 +488,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @return This object.
 	 */
 	public JsonList appendReverse(Object...values) {
-		for (int i = values.length - 1; i >= 0; i--)
+		for (var i = values.length - 1; i >= 0; i--)
 			add(values[i]);
 		return this;
 	}

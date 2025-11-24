@@ -71,7 +71,7 @@ public class SwitchVar extends MultipartVar {
 		assertArg(args.length >= 2, "Invalid number of arguments passed to $SW var.  Must have 2 or more arguments.");
 
 		String stringArg = args[0];
-		for (int i = 1; i < args.length; i++) {
+		for (var i = 1; i < args.length; i++) {
 			String pattern = args[i];
 
 			String[] parts = splita(pattern, ':', 2);

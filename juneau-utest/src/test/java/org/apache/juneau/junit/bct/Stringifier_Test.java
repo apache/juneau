@@ -299,7 +299,7 @@ class Stringifier_Test extends TestBase {
 			Stringifier<List<?>> listStringifier = (converter, list) -> {
 				// Use the converter parameter to stringify elements
 				var sb = new StringBuilder("[");
-				for (int i = 0; i < list.size(); i++) {
+				for (var i = 0; i < list.size(); i++) {
 					if (i > 0) sb.append(",");
 					sb.append(converter.stringify(list.get(i)));
 				}
@@ -342,7 +342,7 @@ class Stringifier_Test extends TestBase {
 		void f01_performanceWithLargeStrings() {
 			Stringifier<String> largeStringHandler = (converter, str) -> {
 				var sb = new StringBuilder();
-				for (int i = 0; i < 1000; i++) {
+				for (var i = 0; i < 1000; i++) {
 					sb.append(str).append("_").append(i);
 					if (i < 999) sb.append(",");
 				}
@@ -364,7 +364,7 @@ class Stringifier_Test extends TestBase {
 			Stringifier<Integer> memoryTest = (converter, num) -> {
 				// Create a reasonably large string
 				var sb = new StringBuilder();
-				for (int i = 0; i < num; i++) {
+				for (var i = 0; i < num; i++) {
 					sb.append("item_").append(i);
 					if (i < num - 1) sb.append(",");
 				}

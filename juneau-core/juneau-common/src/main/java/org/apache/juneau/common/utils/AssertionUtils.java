@@ -242,7 +242,7 @@ public class AssertionUtils {
 	@SuppressWarnings("null")
 	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
 		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
-		for (int i = 0; i < o.length; i++)
+		for (var i = 0; i < o.length; i++)
 			assertArg(nn(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);
 		return o;
 	}

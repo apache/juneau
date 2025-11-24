@@ -761,7 +761,7 @@ public class BeanMeta<T> {
 			if (rt instanceof Class) {
 				Type[] gImpls = t2.getActualTypeArguments();
 				Class<?>[] gTypes = new Class[gImpls.length];
-				for (int i = 0; i < gImpls.length; i++) {
+				for (var i = 0; i < gImpls.length; i++) {
 					Type gt = gImpls[i];
 					if (gt instanceof Class<?> c)
 						gTypes[i] = c;
@@ -810,7 +810,7 @@ public class BeanMeta<T> {
 					// Check if parameter types match
 					var paramsMatch = true;
 					List<ParameterInfo> parentParams = parentMethod.getParameters();
-					for (int i = 0; i < params.size(); i++) {
+					for (var i = 0; i < params.size(); i++) {
 						if (! params.get(i).getParameterType().is(parentParams.get(i).getParameterType().inner())) {
 							paramsMatch = false;
 							break;

@@ -340,7 +340,7 @@ public class CollectionUtils {
 	 * @param action The action to perform.
 	 */
 	public static <E> void forEachReverse(E[] value, Consumer<E> action) {
-		for (int i = value.length - 1; i >= 0; i--)
+		for (var i = value.length - 1; i >= 0; i--)
 			action.accept(value[i]);
 	}
 
@@ -353,7 +353,7 @@ public class CollectionUtils {
 	 */
 	public static <E> void forEachReverse(List<E> value, Consumer<E> action) {
 		if (value instanceof ArrayList) {
-			for (int i = value.size() - 1; i >= 0; i--)
+			for (var i = value.size() - 1; i >= 0; i--)
 				action.accept(value.get(i));
 		} else {
 			ListIterator<E> i = value.listIterator(value.size());
@@ -1270,9 +1270,9 @@ public class CollectionUtils {
 		if (newElements.length == 0)
 			return array;
 		var a = (T[])Array.newInstance(array.getClass().getComponentType(), array.length + newElements.length);
-		for (int i = 0; i < array.length; i++)
+		for (var i = 0; i < array.length; i++)
 			a[i] = array[i];
-		for (int i = 0; i < newElements.length; i++)
+		for (var i = 0; i < newElements.length; i++)
 			a[i + array.length] = newElements[i];
 		return a;
 	}
@@ -1364,7 +1364,7 @@ public class CollectionUtils {
 	public static <T> int indexOf(T element, T[] array) {
 		if (element == null || array == null)
 			return -1;
-		for (int i = 0; i < array.length; i++)
+		for (var i = 0; i < array.length; i++)
 			if (eq(element, array[i]))
 				return i;
 		return -1;
@@ -1400,7 +1400,7 @@ public class CollectionUtils {
 	public static boolean equals(String[] a1, String[] a2) {
 		if (a1.length != a2.length)
 			return false;
-		for (int i = 0; i < a1.length; i++)
+		for (var i = 0; i < a1.length; i++)
 			if (ne(a1[i], a2[i]))
 				return false;
 		return true;
@@ -1421,7 +1421,7 @@ public class CollectionUtils {
 	 * @return The same array, reversed.
 	 */
 	public static <E> E[] reverse(E[] array) {
-		for (int i = 0; i < array.length / 2; i++) {
+		for (var i = 0; i < array.length / 2; i++) {
 			E temp = array[i];
 			array[i] = array[array.length - i - 1];
 			array[array.length - i - 1] = temp;
@@ -1522,7 +1522,7 @@ public class CollectionUtils {
 	public static List copyArrayToList(Object array, List list) {
 		if (nn(array)) {
 			var length = Array.getLength(array);
-			for (int i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 				list.add(Array.get(array, i));
 		}
 		return list;

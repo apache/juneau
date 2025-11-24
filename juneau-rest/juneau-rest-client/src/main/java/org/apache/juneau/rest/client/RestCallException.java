@@ -42,7 +42,7 @@ public class RestCallException extends HttpException {
 		message = emptyIfNull(message);
 
 		boolean needsCleaning = false;
-		for (int i = 0; i < message.length() && ! needsCleaning; i++)
+		for (var i = 0; i < message.length() && ! needsCleaning; i++)
 			if (message.charAt(i) < 32)
 				needsCleaning = true;
 
@@ -50,7 +50,7 @@ public class RestCallException extends HttpException {
 			return message;
 
 		var sb = new StringBuilder(message.length());
-		for (int i = 0; i < message.length(); i++) {
+		for (var i = 0; i < message.length(); i++) {
 			var c = message.charAt(i);
 			sb.append(c < 32 ? ' ' : c);
 		}

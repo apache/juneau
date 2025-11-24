@@ -277,7 +277,7 @@ public class SerializerWriter extends Writer {
 	 */
 	public SerializerWriter i(int indent) {
 		if (useWhitespace && indent <= maxIndent)
-			for (int i = 0; i < indent; i++)
+			for (var i = 0; i < indent; i++)
 				w('\t');
 		return this;
 	}
@@ -290,7 +290,7 @@ public class SerializerWriter extends Writer {
 	 */
 	public SerializerWriter ie(int indent) {
 		if (useWhitespace && indent <= maxIndent - 1)
-			for (int i = 0; i < indent; i++)
+			for (var i = 0; i < indent; i++)
 				w('\t');
 		return this;
 	}

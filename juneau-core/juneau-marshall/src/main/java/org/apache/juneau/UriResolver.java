@@ -77,7 +77,7 @@ public class UriResolver {
 	private static boolean hasDotSegments(String s) {
 		if (s == null)
 			return false;
-		for (int i = 0; i < s.length() - 1; i++) {
+		for (var i = 0; i < s.length() - 1; i++) {
 			var c = s.charAt(i);
 			if ((i == 0 && c == '/') || (c == '/' && s.charAt(i + 1) == '.'))
 				return true;

@@ -191,7 +191,7 @@ class Listifier_Test extends TestBase {
 		void c04_largeListHandling() {
 			Listifier<Integer> largeListGenerator = (converter, count) -> {
 				List<Object> result = list();
-				for (int i = 0; i < count; i++) {
+				for (var i = 0; i < count; i++) {
 					result.add("item_" + i);
 				}
 				return result;
@@ -280,7 +280,7 @@ class Listifier_Test extends TestBase {
 		void e01_performanceWithLargeLists() {
 			Listifier<Integer> rangeGenerator = (converter, count) -> {
 				List<Object> result = list();
-				for (int i = 0; i < count; i++) {
+				for (var i = 0; i < count; i++) {
 					result.add(i);
 				}
 				return result;
@@ -301,7 +301,7 @@ class Listifier_Test extends TestBase {
 			Listifier<String> memoryTest = (converter, str) -> {
 				// Create a reasonably sized list
 				List<Object> result = list();
-				for (int i = 0; i < 1000; i++) {
+				for (var i = 0; i < 1000; i++) {
 					result.add(str + "_" + i);
 				}
 				return result;

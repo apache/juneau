@@ -407,7 +407,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 					var sb = new OapiStringBuilder(cf);
 
 					if (type.isArray()) {
-						for (int i = 0; i < Array.getLength(value); i++)
+						for (var i = 0; i < Array.getLength(value); i++)
 							sb.append(serialize(partType, items, Array.get(value, i)));
 					} else if (type.isCollection()) {
 						((Collection<?>)value).forEach(x -> sb.append(serialize(partType, items, x)));
@@ -474,7 +474,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		var l = new JsonList();
 		HttpPartSchema items = s.getItems();
 		if (type.isArray()) {
-			for (int i = 0; i < Array.getLength(o); i++)
+			for (var i = 0; i < Array.getLength(o); i++)
 				l.add(toObject(partType, Array.get(o, i), items));
 		} else if (type.isCollection()) {
 			((Collection<?>)o).forEach(x -> l.add(toObject(partType, x, items)));

@@ -988,7 +988,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		// Process in reverse order (parent-to-child) to match the "ParentFirst" semantics
-		for (int i = parentMethods.size() - 1; i >= 0; i--) {
+		for (var i = parentMethods.size() - 1; i >= 0; i--) {
 			consumer.accept(parentMethods.get(i));
 		}
 	}

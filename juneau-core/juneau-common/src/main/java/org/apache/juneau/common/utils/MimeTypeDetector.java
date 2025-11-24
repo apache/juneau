@@ -201,7 +201,7 @@ public class MimeTypeDetector {
 							var parts = line.trim().split("\\s+");
 							if (parts.length >= 2) {
 								var mimeType = parts[0];
-								for (int i = 1; i < parts.length; i++) {
+								for (var i = 1; i < parts.length; i++) {
 									addExtensionType(parts[i], mimeType);
 								}
 							}

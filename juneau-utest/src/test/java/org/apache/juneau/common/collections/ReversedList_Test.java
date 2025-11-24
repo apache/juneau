@@ -393,7 +393,7 @@ class ReversedList_Test extends TestBase {
 	@Test
 	void i01_largeList() {
 		var original = new ArrayList<Integer>();
-		for (int i = 0; i < 1000; i++) {
+		for (var i = 0; i < 1000; i++) {
 			original.add(i);
 		}
 

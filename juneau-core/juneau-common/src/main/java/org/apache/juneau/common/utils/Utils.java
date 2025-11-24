@@ -200,7 +200,7 @@ public class Utils {
 			int l1 = Array.getLength(o1), l2 = Array.getLength(o2);
 			if (l1 != l2)
 				return false;
-			for (int i = 0; i < l1; i++)
+			for (var i = 0; i < l1; i++)
 				if (ne(Array.get(o1, i), Array.get(o2, i)))
 					return false;
 			return true;

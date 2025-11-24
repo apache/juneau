@@ -74,7 +74,7 @@ public class Version implements Comparable<Version> {
 			value = "0";
 		String[] sParts = splita(value, '.');
 		parts = new int[sParts.length];
-		for (int i = 0; i < sParts.length; i++) {
+		for (var i = 0; i < sParts.length; i++) {
 			try {
 				parts[i] = sParts[i].isEmpty() ? 0 : Integer.parseInt(sParts[i]);
 			} catch (@SuppressWarnings("unused") NumberFormatException e) {
@@ -189,7 +189,7 @@ public class Version implements Comparable<Version> {
 			else if (c < 0)
 				return true;
 		}
-		for (int i = parts.length; i < v.parts.length; i++)
+		for (var i = parts.length; i < v.parts.length; i++)
 			if (v.parts[i] != 0)
 				return false;
 		return ! exclusive;
@@ -234,7 +234,7 @@ public class Version implements Comparable<Version> {
 			else if (c < 0)
 				return true;
 		}
-		for (int i = parts.length; i < v.parts.length; i++)
+		for (var i = parts.length; i < v.parts.length; i++)
 			if (v.parts[i] > 0)
 				return true;
 		return ! exclusive;

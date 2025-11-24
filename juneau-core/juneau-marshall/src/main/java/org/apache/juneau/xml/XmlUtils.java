@@ -291,7 +291,7 @@ public class XmlUtils {
 
 			if (needsTextEncoding(s)) {
 				var len = s.length();
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					var c = s.charAt(i);
 					if ((i == 0 || i == len - 1) && Character.isWhitespace(c) && ! preserveWhitespace)
 						appendPaddedHexChar(w, c);
@@ -330,7 +330,7 @@ public class XmlUtils {
 				return s;
 			var len = s.length();
 			var sw = new StringWriter(s.length() * 2);
-			for (int i = 0; i < len; i++) {
+			for (var i = 0; i < len; i++) {
 				var c = s.charAt(i);
 				if ((i == 0 || i == len - 1) && Character.isWhitespace(c))
 					appendPaddedHexChar(sw, c);
@@ -359,14 +359,14 @@ public class XmlUtils {
 	 */
 	public static Namespace findNamespace(List<Xml> xmls, List<XmlSchema> schemas) {
 
-		for (int i = xmls.size() - 1; i >= 0; i--) {
+		for (var i = xmls.size() - 1; i >= 0; i--) {
 			var xml = xmls.get(i);
 			var ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);
 			if (nn(ns))
 				return ns;
 		}
 
-		for (int i = schemas.size() - 1; i >= 0; i--) {
+		for (var i = schemas.size() - 1; i >= 0; i--) {
 			var schema = schemas.get(i);
 			var ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
 			if (nn(ns))
@@ -426,7 +426,7 @@ public class XmlUtils {
 	}
 
 	private static Writer encodeElementNameInner(Writer w, String s) throws IOException {
-		for (int i = 0; i < s.length(); i++) {
+		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			// @formatter:off
 			if ((c >= 'A' && c <= 'Z')

@@ -479,7 +479,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return The first matching header, or {@link Optional#empty()} if not found.
 	 */
 	public Optional<Header> getFirst(String name) {
-		for (int i = 0; i < size(); i++) {
+		for (var i = 0; i < size(); i++) {
 			var x = get(i);
 			if (eq(x.getName(), name))
 				return opt(x);
@@ -497,7 +497,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return The last matching header, or {@link Optional#empty()} if not found.
 	 */
 	public Optional<Header> getLast(String name) {
-		for (int i = size() - 1; i >= 0; i--) {
+		for (var i = size() - 1; i >= 0; i--) {
 			var x = get(i);
 			if (eq(x.getName(), name))
 				return opt(x);

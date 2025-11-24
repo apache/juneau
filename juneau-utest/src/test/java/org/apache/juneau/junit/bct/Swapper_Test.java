@@ -398,7 +398,7 @@ class Swapper_Test extends TestBase {
 
 			// Test that simple swappers execute quickly
 			var start = System.nanoTime();
-			for (int i = 0; i < 1000; i++) {
+			for (var i = 0; i < 1000; i++) {
 				simpleSwapper.apply(converter, "test" + i);
 			}
 			var end = System.nanoTime();
@@ -420,7 +420,7 @@ class Swapper_Test extends TestBase {
 			var testList = l("z", "a", "m", "c", "x");
 
 			var start = System.nanoTime();
-			for (int i = 0; i < 100; i++) {
+			for (var i = 0; i < 100; i++) {
 				complexSwapper.apply(converter, testList);
 			}
 			var end = System.nanoTime();

@@ -170,7 +170,7 @@ class NestedTokenizer_Test extends TestBase {
 		assertSize(1, tokens);
 
 		var current = tokens.get(0);
-	for (int i = 1; i <= 5; i++) {
+	for (var i = 1; i <= 5; i++) {
 		assertEquals("l" + i, current.getValue());
 		assertSize(1, current.getNested());
 		current = current.getNested().get(0);
@@ -439,7 +439,7 @@ class NestedTokenizer_Test extends TestBase {
 	@Test void e02_performanceTest() {
 		// Test with large input to ensure reasonable performance
 		var sb = new StringBuilder();
-		for (int i = 0; i < 1000; i++) {
+		for (var i = 0; i < 1000; i++) {
 			if (i > 0) sb.append(",");
 			sb.append("token").append(i);
 			if (i % 10 == 0) {
@@ -476,7 +476,7 @@ class NestedTokenizer_Test extends TestBase {
 		} else {
 			assertTrue(actual.hasNested());
 			assertEquals(expectedNested.length, actual.getNested().size());
-			for (int i = 0; i < expectedNested.length; i++) {
+			for (var i = 0; i < expectedNested.length; i++) {
 				assertEquals(expectedNested[i], actual.getNested().get(i).getValue());
 			}
 		}

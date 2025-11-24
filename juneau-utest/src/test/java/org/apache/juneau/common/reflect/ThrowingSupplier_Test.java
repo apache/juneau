@@ -325,7 +325,7 @@ class ThrowingSupplier_Test extends TestBase {
 
 			// Test concurrent execution
 			var futures = new ArrayList<java.util.concurrent.CompletableFuture<String>>();
-			for (int i = 0; i < 10; i++) {
+			for (var i = 0; i < 10; i++) {
 				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -> safe(supplier)));
 			}
 
@@ -343,7 +343,7 @@ class ThrowingSupplier_Test extends TestBase {
 
 			// Test concurrent exception handling
 			var futures = new ArrayList<java.util.concurrent.CompletableFuture<RuntimeException>>();
-			for (int i = 0; i < 5; i++) {
+			for (var i = 0; i < 5; i++) {
 				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -> {
 					try {
 						safe(throwingSupplier);

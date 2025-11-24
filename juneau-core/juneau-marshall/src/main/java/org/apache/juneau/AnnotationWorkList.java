@@ -123,7 +123,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 				applyConstructors = a(AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class));
 			} else {
 				applyConstructors = new Constructor[cpa.value().length];
-				for (int i = 0; i < cpa.value().length; i++)
+				for (var i = 0; i < cpa.value().length; i++)
 					applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>)cpa.value()[i].getConstructor(VarResolverSession.class);
 			}
 

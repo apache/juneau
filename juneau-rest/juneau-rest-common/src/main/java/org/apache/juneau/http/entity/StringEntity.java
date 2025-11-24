@@ -98,7 +98,7 @@ public class StringEntity extends BasicHttpEntity {
 			return l;
 		String s = content();
 		if (getCharset() == UTF8)
-			for (int i = 0; i < s.length(); i++)
+			for (var i = 0; i < s.length(); i++)
 				if (s.charAt(i) > 127)
 					return -1;
 		return s.length();

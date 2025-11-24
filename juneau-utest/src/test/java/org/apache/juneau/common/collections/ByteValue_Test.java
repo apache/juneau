@@ -240,7 +240,7 @@ class ByteValue_Test extends TestBase {
 	@Test
 	void g01_counter() {
 		var a = ByteValue.create();
-		for (byte i = 0; i < 10; i++) {
+		for (var i = 0; i < 10; i++) {
 			a.increment();
 		}
 		assertEquals((byte)10, a.get());
@@ -257,7 +257,7 @@ class ByteValue_Test extends TestBase {
 	@Test
 	void g03_conditionalCounter() {
 		var a = ByteValue.create();
-		for (byte i = 0; i < 20; i++) {
+		for (var i = 0; i < 20; i++) {
 			a.setIf(i % 2 == 0, (byte)(a.get() + 1));
 		}
 		assertEquals((byte)10, a.get());  // 10 even numbers
