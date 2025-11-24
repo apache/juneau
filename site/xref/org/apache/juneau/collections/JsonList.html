@@ -162,7 +162,7 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		}
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		@Override <em class="jxr_comment">/* Overridden from List */</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">public</strong> ListIterator&lt;Object&gt; listIterator(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> location) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">public</strong> ListIterator&lt;Object&gt; listIterator(<strong class="jxr_keyword">int</strong> location) {
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList().listIterator(location);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		}
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
@@ -615,7 +615,7 @@
 <a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">	 * @param childType The child object type.</em>
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">	 * @return A new &lt;c&gt;Iterable&lt;/c&gt; object over this list.</em>
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	<strong class="jxr_keyword">public</strong> &lt;E&gt; Iterable&lt;E&gt; elements(<strong class="jxr_keyword">final</strong> Class&lt;E&gt; childType) {
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	<strong class="jxr_keyword">public</strong> &lt;E&gt; Iterable&lt;E&gt; elements(Class&lt;E&gt; childType) {
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">final</strong> Iterator&lt;?&gt; iterator = iterator();
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">return</strong> () -&gt; <strong class="jxr_keyword">new</strong> Iterator&lt;&gt;() {
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 

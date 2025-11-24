@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Override
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">public</strong> ListIterator&lt;E&gt; listIterator(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index) {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">public</strong> ListIterator&lt;E&gt; listIterator(<strong class="jxr_keyword">int</strong> index) {
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">if</strong> (! unmodifiable)
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">return</strong> overrideListIterator(index);
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * @param index Index of the first element to be returned from the list iterator.</em>
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * @return A list iterator over the elements in this list (in proper sequence), starting at the specified position in the list.</em>
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">public</strong> ListIterator&lt;E&gt; overrideListIterator(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">public</strong> ListIterator&lt;E&gt; overrideListIterator(<strong class="jxr_keyword">int</strong> index) {
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.listIterator(index);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 	}
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 

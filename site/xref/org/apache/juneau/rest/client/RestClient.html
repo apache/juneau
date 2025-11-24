@@ -6830,7 +6830,7 @@
 <a class="jxr_linenumber" name="L6822" href="#L6822">6822</a> <em class="jxr_javadoccomment">	 * @return The new proxy interface.</em>
 <a class="jxr_linenumber" name="L6823" href="#L6823">6823</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L6824" href="#L6824">6824</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L6825" href="#L6825">6825</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRemote(<strong class="jxr_keyword">final</strong> Class&lt;T&gt; interfaceClass, Object rootUrl, <strong class="jxr_keyword">final</strong> <a name="Serializer" href="../../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a> serializer, <strong class="jxr_keyword">final</strong> <a name="Parser" href="../../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> parser) {
+<a class="jxr_linenumber" name="L6825" href="#L6825">6825</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRemote(Class&lt;T&gt; interfaceClass, Object rootUrl, <a name="Serializer" href="../../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a> serializer, <a name="Parser" href="../../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> parser) {
 <a class="jxr_linenumber" name="L6826" href="#L6826">6826</a> 
 <a class="jxr_linenumber" name="L6827" href="#L6827">6827</a> 		<strong class="jxr_keyword">if</strong> (rootUrl == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L6828" href="#L6828">6828</a> 			rootUrl = <strong class="jxr_keyword">this</strong>.rootUrl;
@@ -7028,7 +7028,7 @@
 <a class="jxr_linenumber" name="L7020" href="#L7020">7020</a> <em class="jxr_javadoccomment">	 * @return The new proxy interface.</em>
 <a class="jxr_linenumber" name="L7021" href="#L7021">7021</a> <em class="jxr_javadoccomment">	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.</em>
 <a class="jxr_linenumber" name="L7022" href="#L7022">7022</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L7023" href="#L7023">7023</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRrpcInterface(<strong class="jxr_keyword">final</strong> Class&lt;T&gt; interfaceClass) {
+<a class="jxr_linenumber" name="L7023" href="#L7023">7023</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRrpcInterface(Class&lt;T&gt; interfaceClass) {
 <a class="jxr_linenumber" name="L7024" href="#L7024">7024</a> 		<strong class="jxr_keyword">return</strong> getRrpcInterface(interfaceClass, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L7025" href="#L7025">7025</a> 	}
 <a class="jxr_linenumber" name="L7026" href="#L7026">7026</a> 
@@ -7044,7 +7044,7 @@
 <a class="jxr_linenumber" name="L7036" href="#L7036">7036</a> <em class="jxr_javadoccomment">	 * @param uri The URI of the REST interface.</em>
 <a class="jxr_linenumber" name="L7037" href="#L7037">7037</a> <em class="jxr_javadoccomment">	 * @return The new proxy interface.</em>
 <a class="jxr_linenumber" name="L7038" href="#L7038">7038</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L7039" href="#L7039">7039</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRrpcInterface(<strong class="jxr_keyword">final</strong> Class&lt;T&gt; interfaceClass, <strong class="jxr_keyword">final</strong> Object uri) {
+<a class="jxr_linenumber" name="L7039" href="#L7039">7039</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRrpcInterface(Class&lt;T&gt; interfaceClass, Object uri) {
 <a class="jxr_linenumber" name="L7040" href="#L7040">7040</a> 		<strong class="jxr_keyword">return</strong> getRrpcInterface(interfaceClass, uri, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L7041" href="#L7041">7041</a> 	}
 <a class="jxr_linenumber" name="L7042" href="#L7042">7042</a> 
@@ -7063,7 +7063,7 @@
 <a class="jxr_linenumber" name="L7055" href="#L7055">7055</a> <em class="jxr_javadoccomment">	 * @return The new proxy interface.</em>
 <a class="jxr_linenumber" name="L7056" href="#L7056">7056</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L7057" href="#L7057">7057</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L7058" href="#L7058">7058</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRrpcInterface(<strong class="jxr_keyword">final</strong> Class&lt;T&gt; interfaceClass, Object uri, <strong class="jxr_keyword">final</strong> <a name="Serializer" href="../../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a> serializer, <strong class="jxr_keyword">final</strong> <a name="Parser" href="../../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> parser) {
+<a class="jxr_linenumber" name="L7058" href="#L7058">7058</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRrpcInterface(Class&lt;T&gt; interfaceClass, Object uri, <a name="Serializer" href="../../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a> serializer, <a name="Parser" href="../../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> parser) {
 <a class="jxr_linenumber" name="L7059" href="#L7059">7059</a> 
 <a class="jxr_linenumber" name="L7060" href="#L7060">7060</a> 		<strong class="jxr_keyword">if</strong> (uri == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L7061" href="#L7061">7061</a> 			<strong class="jxr_keyword">var</strong> rm = <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a>(interfaceClass, <span class="jxr_string">""</span>);

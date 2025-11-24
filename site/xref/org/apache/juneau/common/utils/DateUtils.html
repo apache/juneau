@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">		 * 	This simple date-format should not be used to {@link SimpleDateFormat#applyPattern(String) apply} to a</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">		 * 	different pattern.</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> SimpleDateFormat formatFor(<strong class="jxr_keyword">final</strong> String pattern) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> SimpleDateFormat formatFor(String pattern) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">var</strong> ref = THREADLOCAL_FORMATS.get();
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">var</strong> formats = ref.get();
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">if</strong> (formats == <strong class="jxr_keyword">null</strong>) {
@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the given date pattern is invalid.</em>
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * @see SimpleDateFormat</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String formatDate(<strong class="jxr_keyword">final</strong> Date date, <strong class="jxr_keyword">final</strong> String pattern) {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String formatDate(Date date, String pattern) {
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">return</strong> DateFormatHolder.formatFor(pattern).format(date);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
