@@ -212,5 +212,197 @@ class LongValue_Test extends TestBase {
 
 		assertEquals(8000L, maxTimestamp.get());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Increment/Decrement operations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void e01_increment() {
+		var v = LongValue.of(5L);
+		v.increment();
+		assertEquals(6L, v.get());
+	}
+
+	@Test
+	void e02_increment_fromNull() {
+		var v = new LongValue(null);
+		v.increment();
+		assertEquals(1L, v.get());  // null treated as 0, so 0+1 = 1
+	}
+
+	@Test
+	void e03_increment_largeValue() {
+		var v = LongValue.of(Long.MAX_VALUE - 1);
+		v.increment();
+		assertEquals(Long.MAX_VALUE, v.get());
+	}
+
+	@Test
+	void e04_decrement() {
+		var v = LongValue.of(5L);
+		v.decrement();
+		assertEquals(4L, v.get());
+	}
+
+	@Test
+	void e05_decrement_fromNull() {
+		var v = new LongValue(null);
+		v.decrement();
+		assertEquals(-1L, v.get());  // null treated as 0, so 0-1 = -1
+	}
+
+	@Test
+	void e06_decrement_minValue() {
+		var v = LongValue.of(Long.MIN_VALUE + 1);
+		v.decrement();
+		assertEquals(Long.MIN_VALUE, v.get());
+	}
+
+	@Test
+	void e07_incrementAndGet() {
+		var v = LongValue.of(5L);
+		var result = v.incrementAndGet();
+		assertEquals(6L, result);
+		assertEquals(6L, v.get());
+	}
+
+	@Test
+	void e08_incrementAndGet_fromNull() {
+		var v = new LongValue(null);
+		var result = v.incrementAndGet();
+		assertEquals(1L, result);
+		assertEquals(1L, v.get());
+	}
+
+	@Test
+	void e09_decrementAndGet() {
+		var v = LongValue.of(5L);
+		var result = v.decrementAndGet();
+		assertEquals(4L, result);
+		assertEquals(4L, v.get());
+	}
+
+	@Test
+	void e10_decrementAndGet_fromNull() {
+		var v = new LongValue(null);
+		var result = v.decrementAndGet();
+		assertEquals(-1L, result);
+		assertEquals(-1L, v.get());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Add operations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void f01_add() {
+		var v = LongValue.of(10L);
+		v.add(5L);
+		assertEquals(15L, v.get());
+	}
+
+	@Test
+	void f02_add_withNullValue() {
+		var v = LongValue.of(10L);
+		v.add(null);
+		assertEquals(10L, v.get());  // null treated as 0, so 10+0 = 10
+	}
+
+	@Test
+	void f03_add_toNullValue() {
+		var v = new LongValue(null);
+		v.add(5L);
+		assertEquals(5L, v.get());  // null treated as 0, so 0+5 = 5
+	}
+
+	@Test
+	void f04_add_bothNull() {
+		var v = new LongValue(null);
+		v.add(null);
+		assertEquals(0L, v.get());  // null+null = 0+0 = 0
+	}
+
+	@Test
+	void f05_add_largeValues() {
+		var v = LongValue.of(Long.MAX_VALUE - 100);
+		v.add(50L);
+		assertEquals(Long.MAX_VALUE - 50, v.get());
+	}
+
+	@Test
+	void f06_addAndGet() {
+		var v = LongValue.of(10L);
+		var result = v.addAndGet(5L);
+		assertEquals(15L, result);
+		assertEquals(15L, v.get());
+	}
+
+	@Test
+	void f07_addAndGet_withNullValue() {
+		var v = LongValue.of(10L);
+		var result = v.addAndGet(null);
+		assertEquals(10L, result);
+		assertEquals(10L, v.get());
+	}
+
+	@Test
+	void f08_addAndGet_toNullValue() {
+		var v = new LongValue(null);
+		var result = v.addAndGet(5L);
+		assertEquals(5L, result);
+		assertEquals(5L, v.get());
+	}
+
+	@Test
+	void f09_addAndGet_negative() {
+		var v = LongValue.of(10L);
+		var result = v.addAndGet(-3L);
+		assertEquals(7L, result);
+		assertEquals(7L, v.get());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Comparison operations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void g01_is() {
+		var v = LongValue.of(42L);
+		assertTrue(v.is(42L));
+		assertFalse(v.is(43L));
+		assertFalse(v.is(null));
+	}
+
+	@Test
+	void g02_is_withNullValue() {
+		var v = new LongValue(null);
+		assertFalse(v.is(42L));
+		assertTrue(v.is(null));
+	}
+
+	@Test
+	void g03_isAny() {
+		var v = LongValue.of(5L);
+		assertTrue(v.isAny(3L, 5L, 7L));
+		assertTrue(v.isAny(5L));
+		assertFalse(v.isAny(1L, 2L));
+		assertFalse(v.isAny());
+	}
+
+	@Test
+	void g04_isAny_nullValue() {
+		var v = new LongValue(null);
+		assertFalse(v.isAny(1L, 2L, 3L));
+		assertTrue(v.isAny((Long)null));
+		assertTrue(v.isAny(1L, null, 2L));
+	}
+
+	@Test
+	void g05_isAny_largeValues() {
+		var v = LongValue.of(Long.MAX_VALUE);
+		assertTrue(v.isAny(Long.MAX_VALUE, 1L, 2L));
+		assertFalse(v.isAny(Long.MIN_VALUE, 0L, 1L));
+	}
 }
 

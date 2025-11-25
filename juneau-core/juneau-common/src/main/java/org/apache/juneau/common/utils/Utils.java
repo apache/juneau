@@ -419,8 +419,7 @@ public class Utils {
 	 * @see AnnotationUtils#hash(Annotation)
 	 */
 	public static final int hash(Object...values) {
-		if (values == null)
-			return 0;
+		assertArgNotNull("values", values);
 		var result = 1;
 		for (var value : values) {
 			result = 31 * result + (value instanceof java.lang.annotation.Annotation ? AnnotationUtils.hash((java.lang.annotation.Annotation)value) : Objects.hashCode(value));

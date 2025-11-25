@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.concurrent.atomic.*;
@@ -171,6 +172,7 @@ public class BooleanValue extends Value<Boolean> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(Boolean...values) {
+		assertArgNotNull("values", values);
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 /**
@@ -143,6 +144,7 @@ public class StringValue extends Value<String> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(String...values) {
+		assertArgNotNull("values", values);
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

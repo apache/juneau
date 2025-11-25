@@ -416,4 +416,45 @@ class BidiMap_Test extends TestBase {
 		// Trying to add entries with duplicate values should throw
 		assertThrows(IllegalArgumentException.class, () -> map.putAll(toAdd));
 	}
+
+	//====================================================================================================
+	// isEmpty
+	//====================================================================================================
+
+	@Test void a29_isEmpty_emptyMap() {
+		var map = BidiMap.<String,Integer>create().build();
+
+		assertTrue(map.isEmpty());
+		assertSize(0, map);
+	}
+
+	@Test void a30_isEmpty_nonEmptyMap() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.build();
+
+		assertFalse(map.isEmpty());
+		assertSize(1, map);
+	}
+
+	@Test void a31_isEmpty_afterClear() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.add("two", 2)
+			.build();
+
+		assertFalse(map.isEmpty());
+		map.clear();
+		assertTrue(map.isEmpty());
+	}
+
+	@Test void a32_isEmpty_afterRemove() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.build();
+
+		assertFalse(map.isEmpty());
+		map.remove("one");
+		assertTrue(map.isEmpty());
+	}
 }

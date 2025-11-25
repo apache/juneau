@@ -278,5 +278,100 @@ class FloatValue_Test extends TestBase {
 		assertTrue(v.is(1.24e5f, 1000.0f));
 		assertFalse(v.is(1.24e5f, 100.0f));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// isAny(float, float...) - precision-based matching
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void e01_isAny_withinPrecision() {
+		var v = FloatValue.of(3.14f);
+		assertTrue(v.isAny(0.01f, 2.5f, 3.15f, 5.0f));  // Matches 3.15f within 0.01f
+		assertTrue(v.isAny(0.01f, 3.14f, 3.15f));       // Matches both
+		assertFalse(v.isAny(0.001f, 1.0f, 2.0f, 5.0f));  // No match within 0.001f
+	}
+
+	@Test
+	void e02_isAny_exactMatch() {
+		var v = FloatValue.of(5.0f);
+		assertTrue(v.isAny(0.0f, 5.0f, 6.0f, 7.0f));
+		assertTrue(v.isAny(0.0f, 1.0f, 5.0f));
+		assertFalse(v.isAny(0.0f, 1.0f, 2.0f, 3.0f));
+	}
+
+	@Test
+	void e03_isAny_nullValue() {
+		var v = new FloatValue(null);
+		assertFalse(v.isAny(0.01f, 1.0f, 2.0f, 3.0f));
+		assertFalse(v.isAny(0.0f, 0.0f, 1.0f));
+	}
+
+	@Test
+	void e04_isAny_emptyArray() {
+		var v = FloatValue.of(3.14f);
+		assertFalse(v.isAny(0.01f));  // Only precision, no values
+	}
+
+	@Test
+	void e05_isAny_zeroPrecision() {
+		var v = FloatValue.of(5.0f);
+		assertTrue(v.isAny(0.0f, 5.0f, 6.0f));
+		assertFalse(v.isAny(0.0f, 5.001f, 6.0f));
+	}
+
+	@Test
+	void e06_isAny_largePrecision() {
+		var v = FloatValue.of(100.0f);
+		assertTrue(v.isAny(100.0f, 50.0f, 150.0f, 200.0f));
+		assertTrue(v.isAny(100.0f, 0.0f, 201.0f));  // 0.0f matches (100.0f - 0.0f = 100.0f <= 100.0f)
+		assertTrue(v.isAny(100.0f, 0.0f, 202.0f));  // 0.0f matches (100.0f - 0.0f = 100.0f <= 100.0f)
+		assertFalse(v.isAny(99.0f, 0.0f, 202.0f));  // Neither matches (100.0f - 0.0f = 100.0f > 99.0f, 100.0f - 202.0f = 102.0f > 99.0f)
+	}
+
+	@Test
+	void e07_isAny_precisionComparison() {
+		var v = FloatValue.of(3.14159f);
+		assertFalse(v.isAny(0.001f, 3.14f, 3.15f)); // Not within 0.001f
+		assertTrue(v.isAny(0.002f, 3.14f, 3.15f));  // Within 0.002f
+	}
+
+	@Test
+	void e08_isAny_negativeValues() {
+		var v = FloatValue.of(-5.5f);
+		assertTrue(v.isAny(0.2f, -5.4f, -5.6f, -5.0f));
+		assertTrue(v.isAny(0.0f, -5.5f, -6.0f));
+		assertFalse(v.isAny(0.4f, -5.0f, -6.0f));
+	}
+
+	@Test
+	void e09_isAny_negativePrecision_throwsException() {
+		var v = FloatValue.of(3.14f);
+		assertThrows(IllegalArgumentException.class, () -> v.isAny(-0.01f, 3.14f, 3.15f));
+	}
+
+	@Test
+	void e10_isAny_boundaryValue() {
+		var v = FloatValue.of(10.0f);
+		assertTrue(v.isAny(0.5f, 9.5f, 10.5f, 11.0f)); // 9.5f and 10.5f are exactly at boundary
+		assertTrue(v.isAny(0.5f, 9.5f, 10.51f, 11.0f)); // 9.5f matches (10.0f - 9.5f = 0.5f <= 0.5f)
+		assertFalse(v.isAny(0.49f, 9.5f, 10.51f, 11.0f)); // None match (10.0f - 9.5f = 0.5f > 0.49f, 10.0f - 10.51f = 0.51f > 0.49f)
+	}
+
+	@Test
+	void e11_isAny_verySmallNumbers() {
+		var v = FloatValue.of(0.0001f);
+		assertTrue(v.isAny(0.00015f, 0.0002f, 0.0003f));
+		assertFalse(v.isAny(0.00005f, 0.0002f, 0.0003f));
+	}
+
+	@Test
+	void e12_isAny_afterSet() {
+		var v = FloatValue.of(1.0f);
+		assertTrue(v.isAny(0.01f, 1.0f, 2.0f));
+
+		v.set(2.0f);
+		assertFalse(v.isAny(0.01f, 1.0f, 1.5f));
+		assertTrue(v.isAny(0.01f, 2.0f, 2.5f));
+	}
 }
 

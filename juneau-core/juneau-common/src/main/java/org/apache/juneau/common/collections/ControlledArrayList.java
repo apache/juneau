@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
@@ -50,10 +51,10 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	 * Constructor.
 	 *
 	 * @param unmodifiable If <jk>true</jk>, this list cannot be modified through normal list operation methods on the {@link List} interface.
-	 * @param list The initial contents of this list.
+	 * @param list The initial contents of this list. Must not be <jk>null</jk>.
 	 */
 	public ControlledArrayList(boolean unmodifiable, List<? extends E> list) {
-		super(list);
+		super(assertArgNotNull("list", list));
 		this.unmodifiable = unmodifiable;
 	}
 

@@ -18,6 +18,7 @@ package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.collections.CacheMode.*;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -254,11 +255,12 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 * @param key2 Second key component. Can be <jk>null</jk>.
 	 * @param key3 Third key component. Can be <jk>null</jk>.
 	 * @param key4 Fourth key component. Can be <jk>null</jk>.
-	 * @param supplier The supplier to compute the value if it's not in the cache. Can be <jk>null</jk>.
+	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 * 
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, java.util.function.Supplier<V> supplier) {
+		assertArgNotNull("supplier", supplier);
 		if (cacheMode == NONE)
 			return supplier.get();
 		var wrapped = Tuple4.of(key1, key2, key3, key4);
@@ -267,7 +269,10 @@ public class Cache4<K1,K2,K3,K4,V> {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
-			map.putIfAbsent(wrapped, v);
+			if (v == null)
+				map.remove(wrapped);
+			else
+				map.putIfAbsent(wrapped, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
@@ -286,6 +291,8 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 * 
 	 */
 	public V put(K1 key1, K2 key2, K3 key3, K4 key4, V value) {
+		if (value == null)
+			return map.remove(Tuple4.of(key1, key2, key3, key4));
 		return map.put(Tuple4.of(key1, key2, key3, key4), value);
 	}
 

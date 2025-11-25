@@ -204,5 +204,161 @@ class ShortValue_Test extends TestBase {
 
 		assertEquals((short)15, sum.get());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Increment/Decrement operations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void e01_increment() {
+		var v = ShortValue.of((short)5);
+		v.increment();
+		assertEquals((short)6, v.get());
+	}
+
+	@Test
+	void e02_increment_fromNull() {
+		var v = new ShortValue(null);
+		v.increment();
+		assertEquals((short)1, v.get());  // null treated as 0, so 0+1 = 1
+	}
+
+	@Test
+	void e03_decrement() {
+		var v = ShortValue.of((short)5);
+		v.decrement();
+		assertEquals((short)4, v.get());
+	}
+
+	@Test
+	void e04_decrement_fromNull() {
+		var v = new ShortValue(null);
+		v.decrement();
+		assertEquals((short)-1, v.get());  // null treated as 0, so 0-1 = -1
+	}
+
+	@Test
+	void e05_incrementAndGet() {
+		var v = ShortValue.of((short)5);
+		var result = v.incrementAndGet();
+		assertEquals((short)6, result);
+		assertEquals((short)6, v.get());
+	}
+
+	@Test
+	void e06_incrementAndGet_fromNull() {
+		var v = new ShortValue(null);
+		var result = v.incrementAndGet();
+		assertEquals((short)1, result);
+		assertEquals((short)1, v.get());
+	}
+
+	@Test
+	void e07_decrementAndGet() {
+		var v = ShortValue.of((short)5);
+		var result = v.decrementAndGet();
+		assertEquals((short)4, result);
+		assertEquals((short)4, v.get());
+	}
+
+	@Test
+	void e08_decrementAndGet_fromNull() {
+		var v = new ShortValue(null);
+		var result = v.decrementAndGet();
+		assertEquals((short)-1, result);
+		assertEquals((short)-1, v.get());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Add operations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void f01_add() {
+		var v = ShortValue.of((short)10);
+		v.add((short)5);
+		assertEquals((short)15, v.get());
+	}
+
+	@Test
+	void f02_add_withNullValue() {
+		var v = ShortValue.of((short)10);
+		v.add(null);
+		assertEquals((short)10, v.get());  // null treated as 0, so 10+0 = 10
+	}
+
+	@Test
+	void f03_add_toNullValue() {
+		var v = new ShortValue(null);
+		v.add((short)5);
+		assertEquals((short)5, v.get());  // null treated as 0, so 0+5 = 5
+	}
+
+	@Test
+	void f04_add_bothNull() {
+		var v = new ShortValue(null);
+		v.add(null);
+		assertEquals((short)0, v.get());  // null+null = 0+0 = 0
+	}
+
+	@Test
+	void f05_addAndGet() {
+		var v = ShortValue.of((short)10);
+		var result = v.addAndGet((short)5);
+		assertEquals((short)15, result);
+		assertEquals((short)15, v.get());
+	}
+
+	@Test
+	void f06_addAndGet_withNullValue() {
+		var v = ShortValue.of((short)10);
+		var result = v.addAndGet(null);
+		assertEquals((short)10, result);
+		assertEquals((short)10, v.get());
+	}
+
+	@Test
+	void f07_addAndGet_toNullValue() {
+		var v = new ShortValue(null);
+		var result = v.addAndGet((short)5);
+		assertEquals((short)5, result);
+		assertEquals((short)5, v.get());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Comparison operations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void g01_is() {
+		var v = ShortValue.of((short)42);
+		assertTrue(v.is((short)42));
+		assertFalse(v.is((short)43));
+		assertFalse(v.is(null));
+	}
+
+	@Test
+	void g02_is_withNullValue() {
+		var v = new ShortValue(null);
+		assertFalse(v.is((short)42));
+		assertTrue(v.is(null));
+	}
+
+	@Test
+	void g03_isAny() {
+		var v = ShortValue.of((short)5);
+		assertTrue(v.isAny((short)3, (short)5, (short)7));
+		assertTrue(v.isAny((short)5));
+		assertFalse(v.isAny((short)1, (short)2));
+		assertFalse(v.isAny());
+	}
+
+	@Test
+	void g04_isAny_nullValue() {
+		var v = new ShortValue(null);
+		assertFalse(v.isAny((short)1, (short)2, (short)3));
+		assertTrue(v.isAny((Short)null));
+		assertTrue(v.isAny((short)1, null, (short)2));
+	}
 }
 

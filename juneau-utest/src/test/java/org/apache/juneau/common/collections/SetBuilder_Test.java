@@ -268,7 +268,7 @@ class SetBuilder_Test extends TestBase {
 
 	@Test
 	void h01_elementType() {
-		var b = new SetBuilder<String>(null);
+		var b = new SetBuilder<>(String.class);
 		b.elementType(String.class);
 
 		var set = b.add("a", "b").build();
@@ -362,5 +362,309 @@ class SetBuilder_Test extends TestBase {
 
 		assertList(set, "x", "y");
 		assertSame(existing, set);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// AddAll edge cases
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void k01_addAll_whenSetIsNull() {
+		// Test addAll when set is null (should create new LinkedHashSet from collection)
+		var existing = l("a", "b", "c");
+		var set = SetBuilder.create(String.class)
+			.addAll(existing)
+			.build();
+
+		assertList(set, "a", "b", "c");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Converters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void l01_converters_emptyArray() {
+		var set = SetBuilder.create(String.class)
+			.converters()  // Empty array
+			.add("a")
+			.build();
+
+		assertList(set, "a");
+	}
+
+	@Test
+	void l02_converters_withConverter() {
+		var converter = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Integer.class && o instanceof String) {
+					return type.cast(Integer.parseInt((String)o));
+				}
+				return null;
+			}
+		};
+
+		var set = SetBuilder.create(Integer.class)
+			.converters(converter)
+			.addAny("1", "2", "3")
+			.build();
+
+		assertList(set, 1, 2, 3);
+	}
+
+	@Test
+	void l03_converters_multipleConverters() {
+		var converter1 = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				return null;  // Doesn't handle this
+			}
+		};
+
+		var converter2 = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Integer.class && o instanceof String) {
+					return type.cast(Integer.parseInt((String)o));
+				}
+				return null;
+			}
+		};
+
+		var set = SetBuilder.create(Integer.class)
+			.converters(converter1, converter2)
+			.addAny("1", "2")
+			.build();
+
+		assertList(set, 1, 2);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// AddAny
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m01_addAny_withDirectValues() {
+		var set = SetBuilder.create(String.class)
+			.addAny("a", "b", "c")
+			.build();
+
+		assertList(set, "a", "b", "c");
+	}
+
+	@Test
+	void m02_addAny_withCollection() {
+		var collection = l("a", "b", "c");
+		var set = SetBuilder.create(String.class)
+			.addAny(collection)
+			.build();
+
+		assertList(set, "a", "b", "c");
+	}
+
+	@Test
+	void m03_addAny_withArray() {
+		var array = new String[]{"a", "b", "c"};
+		var set = SetBuilder.create(String.class)
+			.addAny(array)
+			.build();
+
+		assertList(set, "a", "b", "c");
+	}
+
+	@Test
+	void m04_addAny_withNestedCollection() {
+		var nested = l(l("a", "b"), l("c", "d"));
+		var set = SetBuilder.create(String.class)
+			.addAny(nested)
+			.build();
+
+		assertList(set, "a", "b", "c", "d");
+	}
+
+	@Test
+	void m05_addAny_withNestedArray() {
+		var nested = new Object[]{new String[]{"a", "b"}, new String[]{"c", "d"}};
+		var set = SetBuilder.create(String.class)
+			.addAny(nested)
+			.build();
+
+		assertList(set, "a", "b", "c", "d");
+	}
+
+	@Test
+	void m06_addAny_withNullValues() {
+		var set = SetBuilder.create(String.class)
+			.addAny("a", null, "b", null, "c")
+			.build();
+
+		assertList(set, "a", "b", "c");
+	}
+
+	@Test
+	void m07_addAny_withTypeConversion() {
+		var converter = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Integer.class && o instanceof String) {
+					return type.cast(Integer.parseInt((String)o));
+				}
+				return null;
+			}
+		};
+
+		var set = SetBuilder.create(Integer.class)
+			.converters(converter)
+			.addAny("1", "2", "3")
+			.build();
+
+		assertList(set, 1, 2, 3);
+	}
+
+	@Test
+	void m08_addAny_withConverterToCollection() {
+		// This test verifies that when a converter converts an object to a List,
+		// that List gets processed recursively by addAny.
+		// Since String matches String.class directly, we need to use a wrapper type
+		// that doesn't match, so the converter path is taken.
+		class StringWrapper {
+			final String value;
+			StringWrapper(String value) { this.value = value; }
+		}
+		
+		var converter = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == List.class && o instanceof StringWrapper) {
+					// Convert wrapper to List by splitting the string value
+					var s = ((StringWrapper)o).value;
+					return type.cast(l(s.split(",")));
+				}
+				return null;
+			}
+		};
+
+		var set = SetBuilder.create(String.class)
+			.converters(converter)
+			.addAny(new StringWrapper("a,b,c"))
+			.build();
+
+		assertList(set, "a", "b", "c");
+	}
+
+	@Test
+	void m09_addAny_noElementType() {
+		assertThrows(IllegalArgumentException.class, () -> new SetBuilder<String>(null));
+	}
+
+	@Test
+	void m10_addAny_noConverters_throwsException() {
+		// When converters is null and we try to add a non-matching type, it should throw
+		assertThrows(RuntimeException.class, () -> {
+			SetBuilder.create(Integer.class)
+				.addAny("not-an-integer")
+				.build();
+		});
+	}
+
+	@Test
+	void m11_addAny_converterReturnsNull() {
+		// Converter exists but returns null (can't convert)
+		var converter = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				return null;  // Can't convert
+			}
+		};
+
+		// Should throw RuntimeException when converter can't convert
+		assertThrows(RuntimeException.class, () -> {
+			SetBuilder.create(Integer.class)
+				.converters(converter)
+				.addAny("not-an-integer")
+				.build();
+		});
+	}
+
+	@Test
+	void m12_addAny_withNullArray() {
+		var set = SetBuilder.create(String.class)
+			.addAny((Object[])null)
+			.build();
+
+		assertEmpty(set);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// AddJson
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void n01_addJson() {
+		// addJson is a wrapper around addAny, so it should work similarly
+		// Note: This will depend on converters being able to parse JSON strings
+		// For now, we'll test that it calls addAny correctly
+		var set = SetBuilder.create(String.class)
+			.addJson("a", "b", "c")
+			.build();
+
+		// Since there's no JSON parser converter by default, these are treated as strings
+		assertList(set, "a", "b", "c");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Build edge cases
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void o01_build_sparseWithNullSet() {
+		var set = SetBuilder.create(String.class)
+			.sparse()
+			.build();
+
+		assertNull(set);
+	}
+
+	@Test
+	void o02_build_sparseWithEmptySet() {
+		var existing = new LinkedHashSet<String>();
+
+		var set = SetBuilder.create(String.class)
+			.to(existing)
+			.sparse()
+			.build();
+
+		assertNull(set);
+	}
+
+	@Test
+	void o03_build_notSparseWithNullSet() {
+		var set = SetBuilder.create(String.class)
+			.build();
+
+		assertNotNull(set);
+		assertEmpty(set);
+	}
+
+	@Test
+	void o04_build_sortedWithNullSet() {
+		var set = SetBuilder.create(String.class)
+			.sorted()
+			.build();
+
+		assertNotNull(set);
+		assertTrue(set instanceof TreeSet);
+		assertEmpty(set);
+	}
+
+	@Test
+	void o05_build_unmodifiableWithNullSet() {
+		var set = SetBuilder.create(String.class)
+			.unmodifiable()
+			.build();
+
+		assertNotNull(set);
+		assertThrows(UnsupportedOperationException.class, () -> set.add("a"));
 	}
 }

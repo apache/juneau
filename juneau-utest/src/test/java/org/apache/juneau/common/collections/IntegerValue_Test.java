@@ -137,10 +137,59 @@ class IntegerValue_Test extends TestBase {
 	}
 
 	@Test
+	void b09b_add_null() {
+		var a = IntegerValue.of(10);
+		a.add(null);
+		assertEquals(10, a.get()); // null should be treated as 0
+	}
+
+	@Test
+	void b09c_add_negative() {
+		var a = IntegerValue.of(10);
+		a.add(-3);
+		assertEquals(7, a.get());
+	}
+
+	@Test
+	void b09d_add_zero() {
+		var a = IntegerValue.of(10);
+		a.add(0);
+		assertEquals(10, a.get());
+	}
+
+	@Test
+	void b09e_add_chain() {
+		var a = IntegerValue.of(0);
+		a.add(5).add(10).add(15);
+		assertEquals(30, a.get());
+	}
+
+	@Test
 	void b10_addAndGet() {
 		var a = IntegerValue.of(10);
 		assertEquals(15, a.addAndGet(5));
 		assertEquals(15, a.get());
+	}
+
+	@Test
+	void b10b_addAndGet_null() {
+		var a = IntegerValue.of(10);
+		assertEquals(10, a.addAndGet(null)); // null should be treated as 0
+		assertEquals(10, a.get());
+	}
+
+	@Test
+	void b10c_addAndGet_negative() {
+		var a = IntegerValue.of(10);
+		assertEquals(7, a.addAndGet(-3));
+		assertEquals(7, a.get());
+	}
+
+	@Test
+	void b10d_addAndGet_zero() {
+		var a = IntegerValue.of(10);
+		assertEquals(10, a.addAndGet(0));
+		assertEquals(10, a.get());
 	}
 
 	@Test

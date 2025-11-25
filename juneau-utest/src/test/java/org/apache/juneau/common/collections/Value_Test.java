@@ -20,6 +20,8 @@ import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Type;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -382,6 +384,181 @@ class Value_Test extends TestBase {
 		var key2 = Value.of("key");
 		map.put(key1, "value");
 		assertEquals("value", map.get(key2), "HashMap should work with Value's hashCode and equals");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// isType(Type)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void h01_isType_parameterizedType() {
+		java.lang.reflect.Type type = new java.lang.reflect.ParameterizedType() {
+			@Override
+			public Type[] getActualTypeArguments() {
+				return new Type[]{String.class};
+			}
+			@Override
+			public Type getRawType() {
+				return Value.class;
+			}
+			@Override
+			public Type getOwnerType() {
+				return null;
+			}
+		};
+		assertTrue(Value.isType(type), "ParameterizedType with Value.class as raw type should return true");
+	}
+
+	@Test
+	void h02_isType_parameterizedType_differentRawType() {
+		java.lang.reflect.Type type = new java.lang.reflect.ParameterizedType() {
+			@Override
+			public Type[] getActualTypeArguments() {
+				return new Type[]{String.class};
+			}
+			@Override
+			public Type getRawType() {
+				return String.class; // Not Value.class
+			}
+			@Override
+			public Type getOwnerType() {
+				return null;
+			}
+		};
+		assertFalse(Value.isType(type), "ParameterizedType with different raw type should return false");
+	}
+
+	@Test
+	void h03_isType_valueClass() {
+		assertTrue(Value.isType(Value.class), "Value.class should return true");
+	}
+
+	@Test
+	void h04_isType_valueSubclass() {
+		assertTrue(Value.isType(IntegerValue.class), "IntegerValue (subclass of Value) should return true");
+		assertTrue(Value.isType(StringValue.class), "StringValue (subclass of Value) should return true");
+	}
+
+	@Test
+	void h05_isType_nonValueClass() {
+		assertFalse(Value.isType(String.class), "String.class should return false");
+		assertFalse(Value.isType(Integer.class), "Integer.class should return false");
+	}
+
+	@Test
+	void h06_isType_null() {
+		// null should be handled gracefully
+		assertFalse(Value.isType(null), "null type should return false");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// unwrap(Type)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void i01_unwrap_parameterizedValueType() throws Exception {
+		java.lang.reflect.Type valueType = new java.lang.reflect.ParameterizedType() {
+			@Override
+			public Type[] getActualTypeArguments() {
+				return new Type[]{String.class};
+			}
+			@Override
+			public Type getRawType() {
+				return Value.class;
+			}
+			@Override
+			public Type getOwnerType() {
+				return null;
+			}
+		};
+		Type unwrapped = Value.unwrap(valueType);
+		assertEquals(String.class, unwrapped, "Should unwrap Value<String> to String");
+	}
+
+	@Test
+	void i02_unwrap_valueSubclass() {
+		Type unwrapped = Value.unwrap(IntegerValue.class);
+		assertEquals(Integer.class, unwrapped, "Should unwrap IntegerValue to Integer");
+	}
+
+	@Test
+	void i03_unwrap_nonValueType() {
+		Type unwrapped = Value.unwrap(String.class);
+		assertEquals(String.class, unwrapped, "Non-Value type should be returned as-is");
+	}
+
+	@Test
+	void i04_unwrap_valueClass() {
+		// Value.class itself (without parameter) cannot be unwrapped because it has no type parameter
+		// getParameterType throws IllegalArgumentException when the class is not a subclass
+		assertThrows(IllegalArgumentException.class, () -> {
+			Value.unwrap(Value.class);
+		}, "Value.class without parameter should throw IllegalArgumentException");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toString()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void j01_toString_withValue() {
+		var v = Value.of("hello");
+		assertEquals("Value(hello)", v.toString());
+	}
+
+	@Test
+	void j02_toString_withNull() {
+		var v = Value.empty();
+		assertEquals("Value(null)", v.toString());
+	}
+
+	@Test
+	void j03_toString_withInteger() {
+		var v = Value.of(42);
+		assertEquals("Value(42)", v.toString());
+	}
+
+	@Test
+	void j04_toString_afterSet() {
+		var v = Value.of("initial");
+		assertEquals("Value(initial)", v.toString());
+		v.set("updated");
+		assertEquals("Value(updated)", v.toString());
+	}
+
+	@Test
+	void j05_toString_withCustomObject() {
+		var obj = new A1();
+		var v = Value.of(obj);
+		String result = v.toString();
+		assertTrue(result.startsWith("Value("), "Should start with 'Value('");
+		assertTrue(result.endsWith(")"), "Should end with ')'");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Value() - default constructor
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void k01_defaultConstructor_createsEmpty() {
+		var v = new Value<String>();
+		assertNull(v.get(), "Default constructor should create empty Value");
+		assertTrue(v.isEmpty(), "Default constructor should create empty Value");
+		assertFalse(v.isPresent(), "Default constructor should create empty Value");
+	}
+
+	@Test
+	void k02_defaultConstructor_canSetValue() {
+		var v = new Value<String>();
+		v.set("test");
+		assertEquals("test", v.get(), "Should be able to set value after default constructor");
+	}
+
+	@Test
+	void k03_defaultConstructor_equalsEmpty() {
+		var v1 = new Value<String>();
+		var v2 = Value.empty();
+		assertEquals(v1, v2, "Default constructor should equal Value.empty()");
 	}
 }
 

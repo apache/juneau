@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.util.*;
 
 /**
@@ -75,9 +77,7 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 	 * @throws IllegalArgumentException if list is <jk>null</jk>.
 	 */
 	public ReversedList(List<E> list) {
-		if (list == null)
-			throw new IllegalArgumentException("List cannot be null");
-		this.list = list;
+		this.list = assertArgNotNull("list", list);
 	}
 
 	/**

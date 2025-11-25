@@ -252,10 +252,92 @@ class Cache_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// Weak cache mode
+	//====================================================================================================
+
+	@Test void a13_weakMode_basicCaching() {
+		var cache = Cache.of(String.class, String.class)
+			.cacheMode(WEAK)
+			.build();
+		var callCount = new AtomicInteger();
+
+		// First call - cache miss
+		var result1 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "value1";
+		});
+
+		// Second call - cache hit
+		var result2 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "should not be called";
+		});
+
+		assertEquals("value1", result1);
+		assertEquals("value1", result2);
+		assertSame(result1, result2);
+		assertEquals(1, callCount.get()); // Supplier only called once
+		assertSize(1, cache);
+		assertEquals(1, cache.getCacheHits());
+	}
+
+	@Test void a14_weakMode_multipleKeys() {
+		var cache = Cache.of(String.class, Integer.class)
+			.cacheMode(WEAK)
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("two", () -> 2);
+		cache.get("three", () -> 3);
+
+		assertSize(3, cache);
+		assertEquals(0, cache.getCacheHits());
+
+		// Verify all cached
+		assertEquals(1, cache.get("one", () -> 999));
+		assertEquals(2, cache.get("two", () -> 999));
+		assertEquals(3, cache.get("three", () -> 999));
+		assertEquals(3, cache.getCacheHits());
+	}
+
+	@Test void a15_weakMode_clear() {
+		var cache = Cache.of(String.class, Integer.class)
+			.cacheMode(WEAK)
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("two", () -> 2);
+		assertSize(2, cache);
+
+		cache.clear();
+		assertEmpty(cache);
+	}
+
+	@Test void a16_weakMode_maxSize() {
+		var cache = Cache.of(String.class, Integer.class)
+			.cacheMode(WEAK)
+			.maxSize(3)
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("two", () -> 2);
+		cache.get("three", () -> 3);
+		assertSize(3, cache);
+
+		// 4th item doesn't trigger eviction yet
+		cache.get("four", () -> 4);
+		assertSize(4, cache);
+
+		// 5th item triggers eviction
+		cache.get("five", () -> 5);
+		assertSize(1, cache);
+	}
+
+	//====================================================================================================
 	// Builder configuration
 	//====================================================================================================
 
-	@Test void a13_builder_defaults() {
+	@Test void a17_builder_defaults() {
 		var cache = Cache.of(String.class, String.class).build();
 
 		// Should work with defaults
@@ -263,7 +345,7 @@ class Cache_Test extends TestBase {
 		assertSize(1, cache);
 	}
 
-	@Test void a14_builder_chaining() {
+	@Test void a18_builder_chaining() {
 		var cache = Cache.of(String.class, String.class)
 			.maxSize(100)
 			.cacheMode(NONE)
@@ -278,7 +360,7 @@ class Cache_Test extends TestBase {
 	// Cache hits statistics
 	//====================================================================================================
 
-	@Test void a15_cacheHits_countsCorrectly() {
+	@Test void a19_cacheHits_countsCorrectly() {
 		var cache = Cache.of(String.class, Integer.class).build();
 
 		assertEquals(0, cache.getCacheHits());
@@ -297,7 +379,7 @@ class Cache_Test extends TestBase {
 		assertEquals(3, cache.getCacheHits());
 	}
 
-	@Test void a16_cacheHits_persistsAfterClear() {
+	@Test void a20_cacheHits_persistsAfterClear() {
 		var cache = Cache.of(String.class, Integer.class).build();
 
 		cache.get("one", () -> 1);
@@ -316,7 +398,7 @@ class Cache_Test extends TestBase {
 	// Thread safety and concurrency
 	//====================================================================================================
 
-	@Test void a17_concurrentAccess() throws Exception {
+	@Test void a21_concurrentAccess() throws Exception {
 		var cache = Cache.of(Integer.class, String.class).build();
 		var executor = Executors.newFixedThreadPool(10);
 		var callCount = new AtomicInteger();
@@ -343,7 +425,7 @@ class Cache_Test extends TestBase {
 		executor.shutdown();
 	}
 
-	@Test void a18_concurrentDifferentKeys() throws Exception {
+	@Test void a22_concurrentDifferentKeys() throws Exception {
 		var cache = Cache.of(Integer.class, String.class).build();
 		var executor = Executors.newFixedThreadPool(10);
 
@@ -368,7 +450,7 @@ class Cache_Test extends TestBase {
 	// Different key/value types
 	//====================================================================================================
 
-	@Test void a19_integerKeys() {
+	@Test void a23_integerKeys() {
 		var cache = Cache.of(Integer.class, String.class).build();
 
 		cache.get(1, () -> "one");
@@ -379,7 +461,7 @@ class Cache_Test extends TestBase {
 		assertEquals(1, cache.getCacheHits());
 	}
 
-	@Test void a20_classKeys() {
+	@Test void a24_classKeys() {
 		var cache = Cache.of(Class.class, String.class).build();
 
 		cache.get(String.class, () -> "String");
@@ -393,7 +475,7 @@ class Cache_Test extends TestBase {
 	// Edge cases
 	//====================================================================================================
 
-	@Test void a21_sameKeyDifferentValues_returnsFirstCached() {
+	@Test void a25_sameKeyDifferentValues_returnsFirstCached() {
 		var cache = Cache.of(String.class, String.class).build();
 
 		var result1 = cache.get("key", () -> "first");
@@ -404,7 +486,7 @@ class Cache_Test extends TestBase {
 		assertSize(1, cache);
 	}
 
-	@Test void a22_emptyCache_operations() {
+	@Test void a26_emptyCache_operations() {
 		var cache = Cache.of(String.class, String.class).build();
 
 		assertEmpty(cache);
@@ -413,7 +495,7 @@ class Cache_Test extends TestBase {
 		assertEmpty(cache);
 	}
 
-	@Test void a23_maxSize_exactBoundary() {
+	@Test void a27_maxSize_exactBoundary() {
 		var cache = Cache.of(Integer.class, String.class)
 			.maxSize(3)
 			.build();
@@ -429,6 +511,329 @@ class Cache_Test extends TestBase {
 		cache.get(2, () -> "should not call");
 		assertSize(3, cache);
 		assertEquals(2, cache.getCacheHits());
+	}
+
+	//====================================================================================================
+	// logOnExit configuration
+	//====================================================================================================
+
+	@Test void a28_logOnExit_withStringId() {
+		// Test that logOnExit(String) enables logging and sets the id
+		var cache = Cache.of(String.class, String.class)
+			.logOnExit("TestCache")
+			.build();
+
+		// Use the cache to generate some statistics
+		cache.get("key1", () -> "value1");
+		cache.get("key1", () -> "should not be called"); // Cache hit
+		cache.get("key2", () -> "value2");
+
+		// Verify cache works normally
+		assertSize(2, cache);
+		assertEquals(1, cache.getCacheHits());
+
+		// Note: We can't easily test that the shutdown hook was actually registered
+		// without triggering JVM shutdown, but we can verify the cache was created
+		// and works correctly with logOnExit enabled
+	}
+
+	@Test void a29_logOnExit_withBooleanTrue() {
+		// Test that logOnExit(boolean, String) with true enables logging
+		var cache = Cache.of(String.class, Integer.class)
+			.logOnExit(true, "MyCache")
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("one", () -> 999); // Cache hit
+
+		assertSize(1, cache);
+		assertEquals(1, cache.getCacheHits());
+	}
+
+	@Test void a30_logOnExit_withBooleanFalse() {
+		// Test that logOnExit(boolean, String) with false disables logging
+		var cache = Cache.of(String.class, Integer.class)
+			.logOnExit(false, "DisabledCache")
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("two", () -> 2);
+
+		assertSize(2, cache);
+		assertEquals(0, cache.getCacheHits());
+	}
+
+	@Test void a31_logOnExit_chaining() {
+		// Test that logOnExit can be chained with other builder methods
+		var cache = Cache.of(String.class, String.class)
+			.maxSize(100)
+			.logOnExit("ChainedCache")
+			.supplier(k -> "value-" + k)
+			.build();
+
+		var result = cache.get("test");
+		assertEquals("value-test", result);
+		assertSize(1, cache);
+	}
+
+	@Test void a32_logOnExit_multipleCalls_lastWins() {
+		// Test that calling logOnExit multiple times updates the id
+		var cache = Cache.of(String.class, String.class)
+			.logOnExit("FirstId")
+			.logOnExit("SecondId")
+			.logOnExit(true, "FinalId")
+			.build();
+
+		cache.get("key", () -> "value");
+		assertSize(1, cache);
+		// The final id should be "FinalId" (though we can't easily verify this without
+		// checking the shutdown hook, the cache should still work correctly)
+	}
+
+	//====================================================================================================
+	// put() method
+	//====================================================================================================
+
+	@Test void a33_put_directInsertion() {
+		var cache = Cache.of(String.class, String.class).build();
+
+		// Put a value directly
+		var previous = cache.put("key1", "value1");
+		assertNull(previous, "Should return null for new key");
+		assertEquals("value1", cache.get("key1", () -> "should not be called"));
+		assertSize(1, cache);
+	}
+
+	@Test void a34_put_overwritesExisting() {
+		var cache = Cache.of(String.class, String.class).build();
+
+		cache.put("key1", "value1");
+		var previous = cache.put("key1", "value2");
+		assertEquals("value1", previous, "Should return previous value");
+		assertEquals("value2", cache.get("key1", () -> "should not be called"));
+		assertSize(1, cache);
+	}
+
+	@Test void a35_put_withNullValue() {
+		var cache = Cache.of(String.class, String.class).build();
+
+		cache.put("key1", "value1");
+		var previous = cache.put("key1", null);
+		assertEquals("value1", previous);
+		// Null values are not cached, so get() will call supplier
+		var callCount = new AtomicInteger();
+		var result = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "supplied";
+		});
+		assertEquals("supplied", result);
+		assertEquals(1, callCount.get());
+	}
+
+	//====================================================================================================
+	// isEmpty() method
+	//====================================================================================================
+
+	@Test void a36_isEmpty_newCache() {
+		var cache = Cache.of(String.class, String.class).build();
+		assertTrue(cache.isEmpty());
+	}
+
+	@Test void a37_isEmpty_afterPut() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put("key1", "value1");
+		assertFalse(cache.isEmpty());
+	}
+
+	@Test void a38_isEmpty_afterGet() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.get("key1", () -> "value1");
+		assertFalse(cache.isEmpty());
+	}
+
+	@Test void a39_isEmpty_afterClear() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put("key1", "value1");
+		cache.put("key2", "value2");
+		assertFalse(cache.isEmpty());
+		cache.clear();
+		assertTrue(cache.isEmpty());
+	}
+
+	@Test void a40_isEmpty_disabledCache() {
+		var cache = Cache.of(String.class, String.class)
+			.cacheMode(NONE)
+			.build();
+		cache.get("key1", () -> "value1");
+		assertTrue(cache.isEmpty(), "Disabled cache should always be empty");
+	}
+
+	//====================================================================================================
+	// containsKey() method
+	//====================================================================================================
+
+	@Test void a41_containsKey_notPresent() {
+		var cache = Cache.of(String.class, String.class).build();
+		assertFalse(cache.containsKey("key1"));
+	}
+
+	@Test void a42_containsKey_afterPut() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put("key1", "value1");
+		assertTrue(cache.containsKey("key1"));
+		assertFalse(cache.containsKey("key2"));
+	}
+
+	@Test void a43_containsKey_afterGet() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.get("key1", () -> "value1");
+		assertTrue(cache.containsKey("key1"));
+	}
+
+	@Test void a44_containsKey_afterClear() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put("key1", "value1");
+		assertTrue(cache.containsKey("key1"));
+		cache.clear();
+		assertFalse(cache.containsKey("key1"));
+	}
+
+	@Test void a45_containsKey_nullKey() {
+		var cache = Cache.of(String.class, String.class).build();
+		// Null keys are now cached, so containsKey should return true after get()
+		cache.get(null, () -> "value");
+		assertTrue(cache.containsKey(null));
+	}
+
+	//====================================================================================================
+	// Array key support
+	//====================================================================================================
+
+	@Test void a46_arrayKeys_contentBasedEquality() {
+		var cache = Cache.of(String[].class, String.class).build();
+
+		var key1 = new String[]{"a", "b", "c"};
+		var key2 = new String[]{"a", "b", "c"}; // Same content, different instance
+
+		cache.get(key1, () -> "value1");
+		// Should be a cache hit even though it's a different array instance
+		var result = cache.get(key2, () -> "should not be called");
+		assertEquals("value1", result);
+		assertEquals(1, cache.getCacheHits());
+		assertSize(1, cache);
+	}
+
+	@Test void a47_arrayKeys_differentContent() {
+		var cache = Cache.of(String[].class, String.class).build();
+
+		var key1 = new String[]{"a", "b", "c"};
+		var key2 = new String[]{"a", "b", "d"}; // Different content
+
+		cache.get(key1, () -> "value1");
+		var result = cache.get(key2, () -> "value2");
+		assertEquals("value2", result);
+		assertSize(2, cache);
+	}
+
+	@Test void a48_arrayKeys_put() {
+		var cache = Cache.of(String[].class, String.class).build();
+
+		var key1 = new String[]{"a", "b"};
+		var key2 = new String[]{"a", "b"}; // Same content
+
+		cache.put(key1, "value1");
+		assertTrue(cache.containsKey(key2));
+		assertEquals("value1", cache.get(key2, () -> "should not be called"));
+	}
+
+	//====================================================================================================
+	// Null value handling
+	//====================================================================================================
+
+	@Test void a49_nullValue_notCached() {
+		var cache = Cache.of(String.class, String.class).build();
+		var callCount = new AtomicInteger();
+
+		// Supplier returns null - should not be cached
+		var result1 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return null;
+		});
+		assertNull(result1);
+		assertEquals(1, callCount.get());
+
+		// Second call should invoke supplier again (not cached)
+		var result2 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return null;
+		});
+		assertNull(result2);
+		assertEquals(2, callCount.get());
+		assertTrue(cache.isEmpty(), "Null values should not be cached");
+	}
+
+	@Test void a50_nullValue_afterPut() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put("key1", "value1");
+		cache.put("key1", null);
+		// After putting null, the key should be removed
+		var callCount = new AtomicInteger();
+		var result = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "supplied";
+		});
+		assertEquals("supplied", result);
+		assertEquals(1, callCount.get());
+	}
+
+	//====================================================================================================
+	// create() static method
+	//====================================================================================================
+
+	@Test void a51_create_basic() {
+		var cache = Cache.<String, String>create()
+			.supplier(k -> "value-" + k)
+			.build();
+
+		var result = cache.get("test");
+		assertEquals("value-test", result);
+		assertSize(1, cache);
+	}
+
+	@Test void a52_create_withConfiguration() {
+		var cache = Cache.<String, Integer>create()
+			.maxSize(50)
+			.cacheMode(WEAK)
+			.supplier(k -> k.length())
+			.build();
+
+		var result = cache.get("hello");
+		assertEquals(5, result);
+		assertSize(1, cache);
+	}
+
+	//====================================================================================================
+	// disableCaching() builder method
+	//====================================================================================================
+
+	@Test void a53_disableCaching() {
+		var cache = Cache.of(String.class, String.class)
+			.cacheMode(NONE)
+			.build();
+
+		var callCount = new AtomicInteger();
+		cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "value1";
+		});
+		cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "value1";
+		});
+
+		assertEquals(2, callCount.get(), "Supplier should be called every time when disabled");
+		assertTrue(cache.isEmpty());
+		assertEquals(0, cache.getCacheHits());
 	}
 }
 

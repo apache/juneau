@@ -20,6 +20,8 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -211,5 +213,64 @@ class SimpleMap_Test extends TestBase {
 		assertEquals("one", map.get(1));
 		assertEquals("null-key", map.get(null));
 		assertEquals("three", map.get(3));
+	}
+
+	//====================================================================================================
+	// Entry setValue
+	//====================================================================================================
+
+	@Test
+	void d01_entrySetValue() {
+		String[] keys = { "key1", "key2", "key3" };
+		String[] values = { "value1", "value2", "value3" };
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
+		// Get an entry and modify its value
+		var entry = map.entrySet().iterator().next();
+		String oldValue = entry.setValue("newValue");
+
+		// Verify the value was updated in the map
+		assertEquals("newValue", map.get(entry.getKey()));
+		assertEquals("newValue", entry.getValue());
+		assertTrue(oldValue.equals("value1") || oldValue.equals("value2") || oldValue.equals("value3"));
+	}
+
+	@Test
+	void d02_entrySetValue_updatesUnderlyingArray() {
+		var keys = a("key1", "key2");
+		var values = a("value1", "value2");
+
+		var map = new SimpleMap<>(keys, values);
+
+		// Find the entry for "key1"
+		Map.Entry<String,String> entry = null;
+		for (var e : map.entrySet()) {
+			if ("key1".equals(e.getKey())) {
+				entry = e;
+				break;
+			}
+		}
+
+		assertNotNull(entry);
+		var oldValue = entry.setValue("updated");
+		assertEquals("value1", oldValue);
+		assertEquals("updated", map.get("key1"));
+		assertEquals("updated", entry.getValue());
+	}
+
+	@Test
+	void d03_entrySetValue_nullValue() {
+		String[] keys = { "key1" };
+		String[] values = { "value1" };
+
+		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
+
+		var entry = map.entrySet().iterator().next();
+		String oldValue = entry.setValue(null);
+
+		assertEquals("value1", oldValue);
+		assertNull(map.get("key1"));
+		assertNull(entry.getValue());
 	}
 }

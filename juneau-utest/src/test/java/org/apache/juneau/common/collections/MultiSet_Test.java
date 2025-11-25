@@ -121,5 +121,62 @@ class MultiSet_Test extends TestBase {
 		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().next());
 		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().remove());
 	}
+
+	@Test
+	void hasNext_whenCurrentIteratorExhausted_butMoreCollectionsHaveElements() {
+		// Test the hasNext() logic when current iterator is exhausted but remaining collections have elements
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3", "4"));
+		var l3 = l(a("5", "6"));
+		var ms = new MultiSet<>(l1, l2, l3);
+		var it = ms.iterator();
+
+		// Exhaust the first collection's iterator
+		assertTrue(it.hasNext());
+		assertEquals("1", it.next());
+		assertTrue(it.hasNext());
+		assertEquals("2", it.next());
+
+		// Now i2.hasNext() should be false, but hasNext() should return true
+		// because there are more collections with elements (testing lines 214-216)
+		assertTrue(it.hasNext()); // Should check remaining collections
+		assertEquals("3", it.next());
+
+		// Continue to exhaust second collection
+		assertTrue(it.hasNext());
+		assertEquals("4", it.next());
+
+		// Now should check third collection
+		assertTrue(it.hasNext());
+		assertEquals("5", it.next());
+		assertTrue(it.hasNext());
+		assertEquals("6", it.next());
+		assertFalse(it.hasNext());
+	}
+
+	@Test
+	void hasNext_withEmptyCollectionsInBetween() {
+		// Test hasNext() when there are empty collections between non-empty ones
+		var l1 = l(a("1"));
+		var l2 = l(new String[0]);
+		var l3 = l(a("2"));
+		var l4 = l(new String[0]);
+		var l5 = l(a("3"));
+		var ms = new MultiSet<>(l1, l2, l3, l4, l5);
+		var it = ms.iterator();
+
+		// Exhaust first collection
+		assertTrue(it.hasNext());
+		assertEquals("1", it.next());
+
+		// Now hasNext() should skip empty collections and find l3
+		assertTrue(it.hasNext()); // Should skip l2 (empty) and find l3
+		assertEquals("2", it.next());
+
+		// Should skip l4 (empty) and find l5
+		assertTrue(it.hasNext());
+		assertEquals("3", it.next());
+		assertFalse(it.hasNext());
+	}
 }
 

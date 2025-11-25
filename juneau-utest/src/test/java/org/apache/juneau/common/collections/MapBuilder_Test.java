@@ -634,8 +634,9 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void k07_addAny_noKeyOrValueType() {
-		var builder = new MapBuilder<String,Integer>(null, null);
-		assertThrows(IllegalStateException.class, () -> builder.addAny(new LinkedHashMap<>()));
+		assertThrows(IllegalArgumentException.class, () -> new MapBuilder<String,Integer>(null, null));
+		assertThrows(IllegalArgumentException.class, () -> new MapBuilder<String,Integer>(String.class, null));
+		assertThrows(IllegalArgumentException.class, () -> new MapBuilder<String,Integer>(null, Integer.class));
 	}
 
 	@Test

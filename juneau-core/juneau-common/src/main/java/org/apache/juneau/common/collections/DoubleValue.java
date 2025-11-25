@@ -151,6 +151,7 @@ public class DoubleValue extends Value<Double> {
 	 */
 	public boolean isAny(double precision, double...values) {
 		assertArg(precision >= 0, "Precision must be non-negative");
+		assertArgNotNull("values", values);
 		var v = get();
 		if (v == null)
 			return false;

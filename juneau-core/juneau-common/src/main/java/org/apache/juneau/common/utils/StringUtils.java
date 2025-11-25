@@ -1471,6 +1471,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string is one of the specified values.
 	 */
 	public static boolean isOneOf(String s, String...values) {
+		assertArgNotNull("values", values);
 		for (var value : values)
 			if (eq(s, value))
 				return true;
@@ -2260,6 +2261,32 @@ public class StringUtils {
 	}
 
 	/**
+	 * Removes multiple substrings from a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	removeAll(<js>"hello world test"</js>, <js>"hello"</js>, <js>"test"</js>);  <jc>// " world "</jc>
+	 * 	removeAll(<jk>null</jk>, <js>"x"</js>);                                     <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param str The string to process.
+	 * @param remove The substrings to remove.
+	 * @return The string with all specified substrings removed, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String removeAll(String str, String... remove) {
+		if (str == null)
+			return null;
+		if (isEmpty(str) || remove == null || remove.length == 0)
+			return str;
+		var result = str;
+		for (var r : remove) {
+			if (r != null)
+				result = result.replace(r, "");
+		}
+		return result;
+	}
+
+	/**
 	 * Removes control characters from a string, replacing them with spaces.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -2360,6 +2387,148 @@ public class StringUtils {
 		for (var i = 0; i < count; i++)
 			sb.append(pattern);
 		return sb.toString();
+	}
+
+	/**
+	 * Wraps text to a specified line length.
+	 *
+	 * <p>
+	 * Wraps text by breaking at word boundaries (spaces). Words longer than the wrap length
+	 * will be broken at the wrap length. Existing newlines are preserved.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	wrap(<js>"hello world test"</js>, 10);  <jc>// "hello world\ntest"</jc>
+	 * 	wrap(<jk>null</jk>, 10);                <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param str The string to wrap.
+	 * @param wrapLength The maximum line length (must be &gt; 0).
+	 * @return The wrapped string, or <jk>null</jk> if input is <jk>null</jk>.
+	 * @throws IllegalArgumentException if wrapLength is &lt;= 0.
+	 */
+	public static String wrap(String str, int wrapLength) {
+		return wrap(str, wrapLength, "\n");
+	}
+
+	/**
+	 * Wraps text to a specified line length with a custom newline string.
+	 *
+	 * <p>
+	 * Wraps text by breaking at word boundaries (spaces). Words longer than the wrap length
+	 * will be broken at the wrap length. Existing newlines are preserved.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	wrap(<js>"hello world test"</js>, 10, <js>"<br>"</js>);  <jc>// "hello world<br>test"</jc>
+	 * 	wrap(<jk>null</jk>, 10, <js>"\n"</js>);                  <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param str The string to wrap.
+	 * @param wrapLength The maximum line length (must be &gt; 0).
+	 * @param newline The string to use as line separator.
+	 * @return The wrapped string, or <jk>null</jk> if input is <jk>null</jk>.
+	 * @throws IllegalArgumentException if wrapLength is &lt;= 0 or newline is <jk>null</jk>.
+	 */
+	public static String wrap(String str, int wrapLength, String newline) {
+		if (str == null)
+			return null;
+		if (isEmpty(str))
+			return str;
+		if (wrapLength <= 0)
+			throw illegalArg("wrapLength must be > 0: {0}", wrapLength);
+		if (newline == null)
+			throw illegalArg("newline cannot be null");
+
+		var result = new StringBuilder();
+		var lines = str.split("\r?\n", -1);  // Preserve empty lines
+
+		for (var lineIdx = 0; lineIdx < lines.length; lineIdx++) {
+			var line = lines[lineIdx];
+			if (line.isEmpty()) {
+				if (lineIdx < lines.length - 1)
+					result.append(newline);
+				continue;
+			}
+
+			// Split into words first, then combine words that fit
+			var words = line.split(" +");  // Split on one or more spaces
+			var currentLine = new StringBuilder();
+			
+			for (var word : words) {
+				if (word.isEmpty())
+					continue;
+					
+				var wordLength = word.length();
+				var currentLength = currentLine.length();
+				
+				if (currentLength == 0) {
+					// First word on line
+					// Only break single words if there are multiple words in the input
+					// (single long words should not be broken for readability)
+					if (wordLength > wrapLength && words.length > 1) {
+						// Word is too long and there are other words, break it
+						if (result.length() > 0)
+							result.append(newline);
+						var wordPos = 0;
+						while (wordPos < wordLength) {
+							if (wordPos > 0)
+								result.append(newline);
+							var remaining = wordLength - wordPos;
+							if (remaining <= wrapLength) {
+								result.append(word.substring(wordPos));
+								break;
+							}
+							result.append(word.substring(wordPos, wordPos + wrapLength));
+							wordPos += wrapLength;
+						}
+					} else {
+						currentLine.append(word);
+					}
+				} else {
+					// Check if we can add this word to current line
+					var neededLength = currentLength + 1 + wordLength;  // current + space + word
+					// Break if it would fit exactly or exceed - prefer breaking for readability
+					if (neededLength < wrapLength) {
+						// Fits with room to spare
+						currentLine.append(' ').append(word);
+					} else {
+						// Doesn't fit or fits exactly - start new line
+						if (result.length() > 0)
+							result.append(newline);
+						result.append(currentLine);
+						currentLine.setLength(0);
+						if (wordLength > wrapLength && words.length > 1) {
+							// Word is too long and there are other words, break it
+							result.append(newline);
+							var wordPos = 0;
+							while (wordPos < wordLength) {
+								if (wordPos > 0)
+									result.append(newline);
+								var remaining = wordLength - wordPos;
+								if (remaining <= wrapLength) {
+									result.append(word.substring(wordPos));
+									break;
+								}
+								result.append(word.substring(wordPos, wordPos + wrapLength));
+								wordPos += wrapLength;
+							}
+						} else {
+							currentLine.append(word);
+						}
+					}
+				}
+			}
+			
+			// Append any remaining line
+			if (currentLine.length() > 0) {
+				if (result.length() > 0)
+					result.append(newline);
+				result.append(currentLine);
+			}
+		}
+
+		return result.toString();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -3575,6 +3744,326 @@ public class StringUtils {
 		if (isEmpty(str))
 			return str;
 		return Character.toLowerCase(str.charAt(0)) + str.substring(1);
+	}
+
+	/**
+	 * Helper method to split a string into words.
+	 * Detects word boundaries from separators (spaces, underscores, hyphens) and case changes.
+	 *
+	 * @param str The string to split.
+	 * @return A list of words, or empty list if input is null or empty.
+	 */
+	static List<String> splitWords(String str) {
+		if (str == null || isEmpty(str))
+			return Collections.emptyList();
+
+		var words = new ArrayList<String>();
+		var sb = new StringBuilder();
+		var wasLowerCase = false;
+		var wasUpperCase = false;
+		var consecutiveUpperCount = 0;
+
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
+			var isSeparator = (c == ' ' || c == '_' || c == '-' || c == '\t');
+			var isUpperCase = Character.isUpperCase(c);
+			var isLowerCase = Character.isLowerCase(c);
+			var isLetter = Character.isLetter(c);
+
+			if (isSeparator) {
+				if (sb.length() > 0) {
+					words.add(sb.toString());
+					sb.setLength(0);
+				}
+				wasLowerCase = false;
+				wasUpperCase = false;
+				consecutiveUpperCount = 0;
+			} else if (isLetter) {
+				// Detect word boundary:
+				// 1. Uppercase after lowercase (e.g., "helloWorld" → "hello", "World")
+				// 2. Uppercase after consecutive uppercase when next is lowercase (e.g., "XMLHttp" → "XML", "Http")
+				// 3. Lowercase after 2+ consecutive uppercase (e.g., "XMLHttp" → "XML", "Http")
+				if (sb.length() > 0) {
+					if (isUpperCase && wasLowerCase) {
+						// Case 1: uppercase after lowercase (e.g., "helloWorld" → "hello", "World")
+						words.add(sb.toString());
+						sb.setLength(0);
+						consecutiveUpperCount = 0;
+					} else if (isUpperCase && wasUpperCase && consecutiveUpperCount >= 2) {
+						// Case 2: uppercase after uppercase - check if this starts a new word
+						// Look ahead to see if next character is lowercase
+						// This handles "XMLHttp" where 'H' starts "Http"
+						// We need at least 2 consecutive uppercase letters before this one to split
+						if (i + 1 < str.length()) {
+							var nextChar = str.charAt(i + 1);
+							if (Character.isLowerCase(nextChar)) {
+								// This uppercase starts a new word, split before it
+								words.add(sb.toString());
+								sb.setLength(0);
+								consecutiveUpperCount = 0;
+							}
+						}
+					} else if (isLowerCase && wasUpperCase && consecutiveUpperCount >= 2) {
+						// Case 3: lowercase after 2+ consecutive uppercase
+						// Split all but the last uppercase (e.g., "XMLH" → "XML" + "H")
+						var splitPoint = sb.length() - 1;
+						words.add(sb.substring(0, splitPoint));
+						sb.delete(0, splitPoint);
+						consecutiveUpperCount = 0;
+					}
+				}
+				sb.append(c);
+				// Update state AFTER appending
+				wasLowerCase = isLowerCase;
+				wasUpperCase = isUpperCase;
+				if (isUpperCase) {
+					consecutiveUpperCount++;
+				} else {
+					consecutiveUpperCount = 0;
+				}
+			} else {
+				// Non-letter characters (digits, etc.) - treat as part of current word
+				sb.append(c);
+				wasLowerCase = false;
+				wasUpperCase = false;
+				consecutiveUpperCount = 0;
+			}
+		}
+
+		if (sb.length() > 0)
+			words.add(sb.toString());
+
+		return words;
+	}
+
+	/**
+	 * Converts a string to camelCase format.
+	 *
+	 * <p>
+	 * Handles various input formats:
+	 * <ul>
+	 *   <li>Space-separated: "hello world" → "helloWorld"</li>
+	 *   <li>Underscore-separated: "hello_world" → "helloWorld"</li>
+	 *   <li>Hyphen-separated: "hello-world" → "helloWorld"</li>
+	 *   <li>PascalCase: "HelloWorld" → "helloWorld"</li>
+	 *   <li>Already camelCase: "helloWorld" → "helloWorld"</li>
+	 *   <li>Mixed case: "Hello_World-Test" → "helloWorldTest"</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	camelCase(<jk>null</jk>);                    <jc>// null</jc>
+	 * 	camelCase(<js>""</js>);                      <jc>// ""</jc>
+	 * 	camelCase(<js>"hello world"</js>);           <jc>// "helloWorld"</jc>
+	 * 	camelCase(<js>"hello_world"</js>);           <jc>// "helloWorld"</jc>
+	 * 	camelCase(<js>"hello-world"</js>);           <jc>// "helloWorld"</jc>
+	 * 	camelCase(<js>"HelloWorld"</js>);            <jc>// "helloWorld"</jc>
+	 * 	camelCase(<js>"helloWorld"</js>);            <jc>// "helloWorld"</jc>
+	 * 	camelCase(<js>"  hello   world  "</js>);     <jc>// "helloWorld"</jc>
+	 * </p>
+	 *
+	 * @param str The string to convert.
+	 * @return The camelCase string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String camelCase(String str) {
+		if (str == null)
+			return null;
+		if (isEmpty(str))
+			return str;
+
+		var words = splitWords(str);
+		if (words.isEmpty())
+			return "";
+
+		var result = new StringBuilder();
+		for (var i = 0; i < words.size(); i++) {
+			var word = words.get(i);
+			if (i == 0) {
+				result.append(uncapitalize(word));
+			} else {
+				result.append(capitalize(word.toLowerCase()));
+			}
+		}
+
+		return result.toString();
+	}
+
+	/**
+	 * Converts a string to snake_case format.
+	 *
+	 * <p>
+	 * Handles various input formats:
+	 * <ul>
+	 *   <li>Space-separated: "hello world" → "hello_world"</li>
+	 *   <li>CamelCase: "helloWorld" → "hello_world"</li>
+	 *   <li>PascalCase: "HelloWorld" → "hello_world"</li>
+	 *   <li>Kebab-case: "hello-world" → "hello_world"</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	snakeCase(<jk>null</jk>);                    <jc>// null</jc>
+	 * 	snakeCase(<js>""</js>);                      <jc>// ""</jc>
+	 * 	snakeCase(<js>"hello world"</js>);           <jc>// "hello_world"</jc>
+	 * 	snakeCase(<js>"helloWorld"</js>);            <jc>// "hello_world"</jc>
+	 * 	snakeCase(<js>"HelloWorld"</js>);            <jc>// "hello_world"</jc>
+	 * 	snakeCase(<js>"hello-world"</js>);           <jc>// "hello_world"</jc>
+	 * </p>
+	 *
+	 * @param str The string to convert.
+	 * @return The snake_case string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String snakeCase(String str) {
+		if (str == null)
+			return null;
+		if (isEmpty(str))
+			return str;
+
+		var words = splitWords(str);
+		if (words.isEmpty())
+			return "";
+
+		var result = new StringBuilder();
+		for (var i = 0; i < words.size(); i++) {
+			if (i > 0)
+				result.append('_');
+			result.append(words.get(i).toLowerCase());
+		}
+
+		return result.toString();
+	}
+
+	/**
+	 * Converts a string to kebab-case format.
+	 *
+	 * <p>
+	 * Handles various input formats:
+	 * <ul>
+	 *   <li>Space-separated: "hello world" → "hello-world"</li>
+	 *   <li>CamelCase: "helloWorld" → "hello-world"</li>
+	 *   <li>PascalCase: "HelloWorld" → "hello-world"</li>
+	 *   <li>Snake_case: "hello_world" → "hello-world"</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	kebabCase(<jk>null</jk>);                    <jc>// null</jc>
+	 * 	kebabCase(<js>""</js>);                      <jc>// ""</jc>
+	 * 	kebabCase(<js>"hello world"</js>);           <jc>// "hello-world"</jc>
+	 * 	kebabCase(<js>"helloWorld"</js>);            <jc>// "hello-world"</jc>
+	 * 	kebabCase(<js>"HelloWorld"</js>);            <jc>// "hello-world"</jc>
+	 * 	kebabCase(<js>"hello_world"</js>);           <jc>// "hello-world"</jc>
+	 * </p>
+	 *
+	 * @param str The string to convert.
+	 * @return The kebab-case string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String kebabCase(String str) {
+		if (str == null)
+			return null;
+		if (isEmpty(str))
+			return str;
+
+		var words = splitWords(str);
+		if (words.isEmpty())
+			return "";
+
+		var result = new StringBuilder();
+		for (var i = 0; i < words.size(); i++) {
+			if (i > 0)
+				result.append('-');
+			result.append(words.get(i).toLowerCase());
+		}
+
+		return result.toString();
+	}
+
+	/**
+	 * Converts a string to PascalCase format.
+	 *
+	 * <p>
+	 * Handles various input formats:
+	 * <ul>
+	 *   <li>Space-separated: "hello world" → "HelloWorld"</li>
+	 *   <li>CamelCase: "helloWorld" → "HelloWorld"</li>
+	 *   <li>Snake_case: "hello_world" → "HelloWorld"</li>
+	 *   <li>Kebab-case: "hello-world" → "HelloWorld"</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	pascalCase(<jk>null</jk>);                    <jc>// null</jc>
+	 * 	pascalCase(<js>""</js>);                      <jc>// ""</jc>
+	 * 	pascalCase(<js>"hello world"</js>);           <jc>// "HelloWorld"</jc>
+	 * 	pascalCase(<js>"helloWorld"</js>);            <jc>// "HelloWorld"</jc>
+	 * 	pascalCase(<js>"hello_world"</js>);           <jc>// "HelloWorld"</jc>
+	 * 	pascalCase(<js>"hello-world"</js>);           <jc>// "HelloWorld"</jc>
+	 * </p>
+	 *
+	 * @param str The string to convert.
+	 * @return The PascalCase string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String pascalCase(String str) {
+		if (str == null)
+			return null;
+		if (isEmpty(str))
+			return str;
+
+		var words = splitWords(str);
+		if (words.isEmpty())
+			return "";
+
+		var result = new StringBuilder();
+		for (var word : words) {
+			result.append(capitalize(word.toLowerCase()));
+		}
+
+		return result.toString();
+	}
+
+	/**
+	 * Converts a string to Title Case format (first letter of each word capitalized, separated by spaces).
+	 *
+	 * <p>
+	 * Handles various input formats:
+	 * <ul>
+	 *   <li>CamelCase: "helloWorld" → "Hello World"</li>
+	 *   <li>PascalCase: "HelloWorld" → "Hello World"</li>
+	 *   <li>Snake_case: "hello_world" → "Hello World"</li>
+	 *   <li>Kebab-case: "hello-world" → "Hello World"</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	titleCase(<jk>null</jk>);                    <jc>// null</jc>
+	 * 	titleCase(<js>""</js>);                      <jc>// ""</jc>
+	 * 	titleCase(<js>"hello world"</js>);           <jc>// "Hello World"</jc>
+	 * 	titleCase(<js>"helloWorld"</js>);            <jc>// "Hello World"</jc>
+	 * 	titleCase(<js>"hello_world"</js>);           <jc>// "Hello World"</jc>
+	 * 	titleCase(<js>"hello-world"</js>);           <jc>// "Hello World"</jc>
+	 * </p>
+	 *
+	 * @param str The string to convert.
+	 * @return The Title Case string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String titleCase(String str) {
+		if (str == null)
+			return null;
+		if (isEmpty(str))
+			return str;
+
+		var words = splitWords(str);
+		if (words.isEmpty())
+			return "";
+
+		var result = new StringBuilder();
+		for (var i = 0; i < words.size(); i++) {
+			if (i > 0)
+				result.append(' ');
+			result.append(capitalize(words.get(i).toLowerCase()));
+		}
+
+		return result.toString();
 	}
 
 	/**

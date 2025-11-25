@@ -217,6 +217,92 @@ class Cache2_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// d2 - Weak cache mode
+	//====================================================================================================
+
+	@Test
+	void d02_weakMode_basicCaching() {
+		var callCount = new AtomicInteger();
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.cacheMode(WEAK)
+			.supplier((k1, k2) -> {
+				callCount.incrementAndGet();
+				return k1 + ":" + k2;
+			})
+			.build();
+
+		// First call - cache miss
+		var result1 = x.get("user", 123);
+
+		// Second call - cache hit
+		var result2 = x.get("user", 123);
+
+		assertEquals("user:123", result1);
+		assertEquals("user:123", result2);
+		assertSame(result1, result2);
+		assertEquals(1, callCount.get()); // Supplier only called once
+		assertSize(1, x);
+		assertEquals(1, x.getCacheHits());
+	}
+
+	@Test
+	void d03_weakMode_multipleKeys() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.cacheMode(WEAK)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		x.get("user", 123);
+		x.get("admin", 456);
+		x.get("guest", 789);
+
+		assertSize(3, x);
+		assertEquals(0, x.getCacheHits());
+
+		// Verify all cached
+		assertEquals("user:123", x.get("user", 123));
+		assertEquals("admin:456", x.get("admin", 456));
+		assertEquals("guest:789", x.get("guest", 789));
+		assertEquals(3, x.getCacheHits());
+	}
+
+	@Test
+	void d04_weakMode_clear() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.cacheMode(WEAK)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		x.get("user", 123);
+		x.get("admin", 456);
+		assertSize(2, x);
+
+		x.clear();
+		assertEmpty(x);
+	}
+
+	@Test
+	void d05_weakMode_maxSize() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.cacheMode(WEAK)
+			.maxSize(2)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		x.get("k1", 1);
+		x.get("k2", 2);
+		assertSize(2, x);
+
+		// 3rd item doesn't trigger eviction yet
+		x.get("k3", 3);
+		assertSize(3, x);
+
+		// 4th item triggers eviction
+		x.get("k4", 4);
+		assertSize(1, x);
+	}
+
+	//====================================================================================================
 	// e - Max size and eviction
 	//====================================================================================================
 
@@ -304,6 +390,140 @@ class Cache2_Test extends TestBase {
 
 		assertEquals("CUSTOM", result);
 		assertSize(1, x);
+	}
+
+	//====================================================================================================
+	// i - put() method
+	//====================================================================================================
+
+	@Test
+	void i01_put_directInsertion() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		var previous = x.put("user", 123, "value1");
+		assertNull(previous);
+		assertEquals("value1", x.get("user", 123, () -> "should not be called"));
+		assertSize(1, x);
+	}
+
+	@Test
+	void i02_put_overwritesExisting() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		x.put("user", 123, "value1");
+		var previous = x.put("user", 123, "value2");
+		assertEquals("value1", previous);
+		assertEquals("value2", x.get("user", 123, () -> "should not be called"));
+	}
+
+	//====================================================================================================
+	// j - isEmpty() method
+	//====================================================================================================
+
+	@Test
+	void j01_isEmpty_newCache() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		assertTrue(x.isEmpty());
+	}
+
+	@Test
+	void j02_isEmpty_afterPut() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		x.put("user", 123, "value");
+		assertFalse(x.isEmpty());
+	}
+
+	@Test
+	void j03_isEmpty_afterClear() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		x.put("user", 123, "value");
+		x.clear();
+		assertTrue(x.isEmpty());
+	}
+
+	//====================================================================================================
+	// k - containsKey() method
+	//====================================================================================================
+
+	@Test
+	void k01_containsKey_notPresent() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		assertFalse(x.containsKey("user", 123));
+	}
+
+	@Test
+	void k02_containsKey_afterPut() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		x.put("user", 123, "value");
+		assertTrue(x.containsKey("user", 123));
+		assertFalse(x.containsKey("user", 456));
+	}
+
+	@Test
+	void k03_containsKey_afterGet() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+		x.get("user", 123);
+		assertTrue(x.containsKey("user", 123));
+	}
+
+	//====================================================================================================
+	// l - create() static method
+	//====================================================================================================
+
+	@Test
+	void l01_create_basic() {
+		var x = Cache2.<String, Integer, String>create()
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		var result = x.get("user", 123);
+		assertEquals("user:123", result);
+		assertSize(1, x);
+	}
+
+	//====================================================================================================
+	// m - disableCaching() builder method
+	//====================================================================================================
+
+	@Test
+	void m01_disableCaching() {
+		var callCount = new AtomicInteger();
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.cacheMode(NONE)
+			.supplier((k1, k2) -> {
+				callCount.incrementAndGet();
+				return "value";
+			})
+			.build();
+
+		x.get("user", 123);
+		x.get("user", 123);
+		assertEquals(2, callCount.get());
+		assertTrue(x.isEmpty());
+	}
+
+	//====================================================================================================
+	// n - Null value handling
+	//====================================================================================================
+
+	@Test
+	void n01_nullValue_notCached() {
+		var callCount = new AtomicInteger();
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+
+		var result1 = x.get("user", 123, () -> {
+			callCount.incrementAndGet();
+			return null;
+		});
+		assertNull(result1);
+
+		var result2 = x.get("user", 123, () -> {
+			callCount.incrementAndGet();
+			return null;
+		});
+		assertNull(result2);
+		assertEquals(2, callCount.get());
+		assertTrue(x.isEmpty());
 	}
 }
 

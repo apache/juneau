@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 /**
@@ -241,6 +242,7 @@ public class CharValue extends Value<Character> {
 	 * @return <jk>true</jk> if the current value matches any of the specified characters.
 	 */
 	public boolean isAny(Character...values) {
+		assertArgNotNull("values", values);
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

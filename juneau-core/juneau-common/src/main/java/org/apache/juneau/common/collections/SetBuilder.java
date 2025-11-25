@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.list;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -118,22 +119,22 @@ public class SetBuilder<E> {
 	 * Static creator.
 	 *
 	 * @param <E> The element type.
-	 * @param elementType The element type.
+	 * @param elementType The element type. Must not be <jk>null</jk>.
 	 * @param elementTypeArgs Optional element type arguments.
 	 * @return A new builder.
 	 */
 	public static <E> SetBuilder<E> create(Class<E> elementType) {
-		return new SetBuilder<>(elementType);
+		return new SetBuilder<>(assertArgNotNull("elementType", elementType));
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param elementType The element type.
+	 * @param elementType The element type. Must not be <jk>null</jk>.
 	 * @param elementTypeArgs The element type generic arguments if there are any.
 	 */
 	public SetBuilder(Class<E> elementType) {
-		this.elementType = elementType;
+		this.elementType = assertArgNotNull("elementType", elementType);
 	}
 
 	/**
@@ -171,6 +172,7 @@ public class SetBuilder<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	public SetBuilder<E> add(E...values) {
+		assertArgNotNull("values", values);
 		for (var v : values)
 			add(v);
 		return this;
@@ -210,8 +212,6 @@ public class SetBuilder<E> {
 	 * @return This object.
 	 */
 	public SetBuilder<E> addAny(Object...values) {
-		if (elementType == null)
-			throw new IllegalStateException("Unknown element type. Cannot use this method.");
 		if (nn(values)) {
 			for (var o : values) {
 				if (nn(o)) {
@@ -234,6 +234,8 @@ public class SetBuilder<E> {
 								else
 									throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
 							}
+						} else {
+							throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
 						}
 					}
 				}
@@ -327,11 +329,11 @@ public class SetBuilder<E> {
 	/**
 	 * Specifies the element type on this list.
 	 *
-	 * @param value The element type.
+	 * @param value The element type. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SetBuilder<E> elementType(Class<E> value) {
-		this.elementType = value;
+		this.elementType = assertArgNotNull("value", value);
 		return this;
 	}
 
@@ -348,11 +350,11 @@ public class SetBuilder<E> {
 	/**
 	 * Converts the set into a {@link SortedSet} using the specified comparator.
 	 *
-	 * @param comparator The comparator to use for sorting.
+	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SetBuilder<E> sorted(Comparator<E> comparator) {
-		this.comparator = comparator;
+		this.comparator = assertArgNotNull("comparator", comparator);
 		return this;
 	}
 

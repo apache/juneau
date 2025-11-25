@@ -278,6 +278,7 @@ public class ClassUtils {
 	 * 	matches (fast path optimization).
 	 */
 	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object...args) {
+		assertArgNotNull("args", args);
 		var needsShuffle = paramTypes.length != args.length;
 		if (! needsShuffle) {
 			for (var i = 0; i < paramTypes.length; i++) {

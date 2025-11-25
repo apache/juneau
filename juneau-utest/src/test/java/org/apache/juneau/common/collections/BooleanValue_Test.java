@@ -241,5 +241,115 @@ class BooleanValue_Test extends TestBase {
 		assertNull(state.get());
 		assertTrue(state.isNotTrue());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// is(Boolean) - equality comparison
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void e01_is_whenTrue() {
+		var v = BooleanValue.of(true);
+		assertTrue(v.is(true));
+		assertFalse(v.is(false));
+		assertFalse(v.is(null));
+	}
+
+	@Test
+	void e02_is_whenFalse() {
+		var v = BooleanValue.of(false);
+		assertFalse(v.is(true));
+		assertTrue(v.is(false));
+		assertFalse(v.is(null));
+	}
+
+	@Test
+	void e03_is_whenNull() {
+		var v = new BooleanValue(null);
+		assertFalse(v.is(true));
+		assertFalse(v.is(false));
+		assertTrue(v.is(null));
+	}
+
+	@Test
+	void e04_is_afterSet() {
+		var v = BooleanValue.of(true);
+		assertTrue(v.is(true));
+
+		v.set(false);
+		assertFalse(v.is(true));
+		assertTrue(v.is(false));
+
+		v.set(null);
+		assertFalse(v.is(true));
+		assertFalse(v.is(false));
+		assertTrue(v.is(null));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// isAny(Boolean...) - matching any value
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void f01_isAny_whenTrue() {
+		var v = BooleanValue.of(true);
+		assertTrue(v.isAny(true, null));
+		assertTrue(v.isAny(true, false));
+		assertTrue(v.isAny(true));
+		assertFalse(v.isAny(false, null));
+		assertFalse(v.isAny(false));
+		assertFalse(v.isAny());
+	}
+
+	@Test
+	void f02_isAny_whenFalse() {
+		var v = BooleanValue.of(false);
+		assertTrue(v.isAny(false, null));
+		assertTrue(v.isAny(true, false));
+		assertTrue(v.isAny(false));
+		assertFalse(v.isAny(true, null));
+		assertFalse(v.isAny(true));
+		assertFalse(v.isAny());
+	}
+
+	@Test
+	void f03_isAny_whenNull() {
+		var v = new BooleanValue(null);
+		assertTrue(v.isAny((Boolean)null, true));
+		assertTrue(v.isAny(false, (Boolean)null));
+		assertTrue(v.isAny((Boolean)null));
+		assertFalse(v.isAny(true, false));
+		assertFalse(v.isAny(true));
+		assertFalse(v.isAny(false));
+		assertFalse(v.isAny());
+		
+		// Test that null array throws IllegalArgumentException
+		assertThrows(IllegalArgumentException.class, () -> v.isAny((Boolean[])null));
+	}
+
+	@Test
+	void f04_isAny_afterSet() {
+		var v = BooleanValue.of(true);
+		assertTrue(v.isAny(true, false));
+
+		v.set(false);
+		assertTrue(v.isAny(true, false));
+		assertFalse(v.isAny(true, null));
+
+		v.set(null);
+		assertTrue(v.isAny(null, true));
+		assertFalse(v.isAny(true, false));
+	}
+
+	@Test
+	void f05_isAny_allThreeStates() {
+		var vTrue = BooleanValue.of(true);
+		var vFalse = BooleanValue.of(false);
+		var vNull = new BooleanValue(null);
+
+		// All should match when all three states are provided
+		assertTrue(vTrue.isAny(true, false, null));
+		assertTrue(vFalse.isAny(true, false, null));
+		assertTrue(vNull.isAny(true, false, null));
+	}
 }
 

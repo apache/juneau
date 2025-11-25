@@ -238,7 +238,7 @@ class ListBuilder_Test extends TestBase {
 
 	@Test
 	void g01_elementType() {
-		var b = new ListBuilder<String>(null);
+		var b = new ListBuilder<>(String.class);
 		b.elementType(String.class);
 
 		var list = b.add("a", "b").build();
@@ -343,6 +343,290 @@ class ListBuilder_Test extends TestBase {
 		assertTrue(list.contains("x"));
 		assertTrue(list.contains("y"));
 		assertSame(existing, list);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// AddAll edge cases
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void j01_addAll_whenListIsNull() {
+		// Test addAll when list is null (should create new LinkedList from collection)
+		var existing = l("a", "b", "c");
+		var list = ListBuilder.create(String.class)
+			.addAll(existing)
+			.build();
+
+		assertList(list, "a", "b", "c");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Converters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void k01_converters_emptyArray() {
+		var list = ListBuilder.create(String.class)
+			.converters()  // Empty array
+			.add("a")
+			.build();
+
+		assertList(list, "a");
+	}
+
+	@Test
+	void k02_converters_withConverter() {
+		var converter = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Integer.class && o instanceof String) {
+					return type.cast(Integer.parseInt((String)o));
+				}
+				return null;
+			}
+		};
+
+		var list = ListBuilder.create(Integer.class)
+			.converters(converter)
+			.addAny("1", "2", "3")
+			.build();
+
+		assertList(list, 1, 2, 3);
+	}
+
+	@Test
+	void k03_converters_multipleConverters() {
+		var converter1 = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				return null;  // Doesn't handle this
+			}
+		};
+
+		var converter2 = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Integer.class && o instanceof String) {
+					return type.cast(Integer.parseInt((String)o));
+				}
+				return null;
+			}
+		};
+
+		var list = ListBuilder.create(Integer.class)
+			.converters(converter1, converter2)
+			.addAny("1", "2")
+			.build();
+
+		assertList(list, 1, 2);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// AddAny
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void l01_addAny_withDirectValues() {
+		var list = ListBuilder.create(String.class)
+			.addAny("a", "b", "c")
+			.build();
+
+		assertList(list, "a", "b", "c");
+	}
+
+	@Test
+	void l02_addAny_withCollection() {
+		var collection = l("a", "b", "c");
+		var list = ListBuilder.create(String.class)
+			.addAny(collection)
+			.build();
+
+		assertList(list, "a", "b", "c");
+	}
+
+	@Test
+	void l03_addAny_withArray() {
+		var array = new String[]{"a", "b", "c"};
+		var list = ListBuilder.create(String.class)
+			.addAny((Object)array)
+			.build();
+
+		assertList(list, "a", "b", "c");
+	}
+
+	@Test
+	void l04_addAny_withNestedCollection() {
+		var nested = l(l("a", "b"), l("c", "d"));
+		var list = ListBuilder.create(String.class)
+			.addAny(nested)
+			.build();
+
+		assertList(list, "a", "b", "c", "d");
+	}
+
+	@Test
+	void l05_addAny_withNestedArray() {
+		var nested = new Object[]{new String[]{"a", "b"}, new String[]{"c", "d"}};
+		var list = ListBuilder.create(String.class)
+			.addAny(nested)
+			.build();
+
+		assertList(list, "a", "b", "c", "d");
+	}
+
+	@Test
+	void l06_addAny_withNullValues() {
+		var list = ListBuilder.create(String.class)
+			.addAny("a", null, "b", null, "c")
+			.build();
+
+		assertList(list, "a", "b", "c");
+	}
+
+	@Test
+	void l07_addAny_withTypeConversion() {
+		var converter = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Integer.class && o instanceof String) {
+					return type.cast(Integer.parseInt((String)o));
+				}
+				return null;
+			}
+		};
+
+		var list = ListBuilder.create(Integer.class)
+			.converters(converter)
+			.addAny("1", "2", "3")
+			.build();
+
+		assertList(list, 1, 2, 3);
+	}
+
+	@Test
+	void l08_addAny_withConverterToCollection() {
+		// This test verifies that when a converter converts an object to a List,
+		// that List gets processed recursively by addAny.
+		class StringWrapper {
+			final String value;
+			StringWrapper(String value) { this.value = value; }
+		}
+		
+		var converter = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == List.class && o instanceof StringWrapper) {
+					// Convert wrapper to List by splitting the string value
+					var s = ((StringWrapper)o).value;
+					return type.cast(l(s.split(",")));
+				}
+				return null;
+			}
+		};
+
+		var list = ListBuilder.create(String.class)
+			.converters(converter)
+			.addAny(new StringWrapper("a,b,c"))
+			.build();
+
+		assertList(list, "a", "b", "c");
+	}
+
+	@Test
+	void l09_addAny_noElementType() {
+		assertThrows(IllegalArgumentException.class, () -> new ListBuilder<String>(null));
+	}
+
+	@Test
+	void l10_addAny_noConverters_throwsException() {
+		// When converters is null and we try to add a non-matching type, it should throw
+		assertThrows(RuntimeException.class, () -> {
+			ListBuilder.create(Integer.class)
+				.addAny("not-an-integer")
+				.build();
+		});
+	}
+
+	@Test
+	void l11_addAny_converterReturnsNull() {
+		// Converter exists but returns null (can't convert)
+		var converter = new org.apache.juneau.common.utils.Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				return null;  // Can't convert
+			}
+		};
+
+		// Should throw RuntimeException when converter can't convert
+		assertThrows(RuntimeException.class, () -> {
+			ListBuilder.create(Integer.class)
+				.converters(converter)
+				.addAny("not-an-integer")
+				.build();
+		});
+	}
+
+	@Test
+	void l12_addAny_withNullArray() {
+		var list = ListBuilder.create(String.class)
+			.addAny((Object[])null)
+			.build();
+
+		assertEmpty(list);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Build edge cases
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m01_build_sparseWithNullList() {
+		var list = ListBuilder.create(String.class)
+			.sparse()
+			.build();
+
+		assertNull(list);
+	}
+
+	@Test
+	void m02_build_sparseWithEmptyList() {
+		var existing = new ArrayList<String>();
+
+		var list = ListBuilder.create(String.class)
+			.to(existing)
+			.sparse()
+			.build();
+
+		assertNull(list);
+	}
+
+	@Test
+	void m03_build_notSparseWithNullList() {
+		var list = ListBuilder.create(String.class)
+			.build();
+
+		assertNotNull(list);
+		assertEmpty(list);
+	}
+
+	@Test
+	void m04_build_sortedWithNullList() {
+		var list = ListBuilder.create(String.class)
+			.sorted()
+			.build();
+
+		assertNotNull(list);
+		assertEmpty(list);
+	}
+
+	@Test
+	void m05_build_unmodifiableWithNullList() {
+		var list = ListBuilder.create(String.class)
+			.unmodifiable()
+			.build();
+
+		assertNotNull(list);
+		assertThrows(UnsupportedOperationException.class, () -> list.add("a"));
 	}
 }
 

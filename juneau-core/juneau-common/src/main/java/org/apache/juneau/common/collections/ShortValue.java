@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.concurrent.atomic.*;
@@ -261,6 +262,7 @@ public class ShortValue extends Value<Short> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(Short...values) {
+		assertArgNotNull("values", values);
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

@@ -434,6 +434,78 @@ class ControlledArrayList_Test extends TestBase {
 			assertEquals(1, it.previous());
 			assertFalse(it.hasPrevious());
 		}
+
+		@Test
+		void d08_listIteratorWithIndex_previous() {
+			var x1 = new ControlledArrayList<>(false, l(1, 2, 3, 4));
+			var x2 = new ControlledArrayList<>(true, l(1, 2, 3, 4));
+
+			// Test modifiable list
+			var it1 = x1.listIterator(2);
+			assertTrue(it1.hasPrevious());
+			assertEquals(1, it1.previousIndex());
+			assertEquals(2, it1.previous()); // Should return element at index 1 (which is 2)
+			assertEquals(0, it1.previousIndex());
+			assertEquals(1, it1.previous()); // Should return element at index 0 (which is 1)
+			assertFalse(it1.hasPrevious());
+
+			// Test unmodifiable list
+			var it2 = x2.listIterator(2);
+			assertTrue(it2.hasPrevious());
+			assertEquals(1, it2.previousIndex());
+			assertEquals(2, it2.previous()); // Should return element at index 1 (which is 2)
+			assertEquals(0, it2.previousIndex());
+			assertEquals(1, it2.previous()); // Should return element at index 0 (which is 1)
+			assertFalse(it2.hasPrevious());
+		}
+
+		@Test
+		void d09_listIteratorWithIndex_previousFromEnd() {
+			var x1 = new ControlledArrayList<>(false, l(1, 2, 3));
+			var x2 = new ControlledArrayList<>(true, l(1, 2, 3));
+
+			// Test modifiable list - start at end
+			var it1 = x1.listIterator(3);
+			assertFalse(it1.hasNext());
+			assertTrue(it1.hasPrevious());
+			assertEquals(2, it1.previousIndex());
+			assertEquals(3, it1.previous()); // Should return element at index 2 (which is 3)
+			assertEquals(2, it1.previous()); // Should return element at index 1 (which is 2)
+			assertEquals(1, it1.previous()); // Should return element at index 0 (which is 1)
+			assertFalse(it1.hasPrevious());
+
+			// Test unmodifiable list - start at end
+			var it2 = x2.listIterator(3);
+			assertFalse(it2.hasNext());
+			assertTrue(it2.hasPrevious());
+			assertEquals(2, it2.previousIndex());
+			assertEquals(3, it2.previous()); // Should return element at index 2 (which is 3)
+			assertEquals(2, it2.previous()); // Should return element at index 1 (which is 2)
+			assertEquals(1, it2.previous()); // Should return element at index 0 (which is 1)
+			assertFalse(it2.hasPrevious());
+		}
+
+		@Test
+		void d10_listIteratorWithIndex_previousBidirectional() {
+			var x1 = new ControlledArrayList<>(false, l(1, 2, 3, 4));
+			var x2 = new ControlledArrayList<>(true, l(1, 2, 3, 4));
+
+			// Test modifiable list - bidirectional from middle
+			var it1 = x1.listIterator(2);
+			assertEquals(3, it1.next());
+			assertEquals(3, it1.previous());
+			assertEquals(2, it1.previous());
+			assertEquals(2, it1.next());
+			assertEquals(3, it1.next());
+
+			// Test unmodifiable list - bidirectional from middle
+			var it2 = x2.listIterator(2);
+			assertEquals(3, it2.next());
+			assertEquals(3, it2.previous());
+			assertEquals(2, it2.previous());
+			assertEquals(2, it2.next());
+			assertEquals(3, it2.next());
+		}
 	}
 
 	@Nested

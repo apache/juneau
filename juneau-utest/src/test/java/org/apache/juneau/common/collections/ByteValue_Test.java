@@ -126,6 +126,27 @@ class ByteValue_Test extends TestBase {
 	}
 
 	@Test
+	void c02b_addAndGet_null() {
+		var a = ByteValue.of((byte)10);
+		assertEquals((byte)10, a.addAndGet(null)); // null should be treated as 0
+		assertEquals((byte)10, a.get());
+	}
+
+	@Test
+	void c02c_addAndGet_negative() {
+		var a = ByteValue.of((byte)10);
+		assertEquals((byte)7, a.addAndGet((byte)-3));
+		assertEquals((byte)7, a.get());
+	}
+
+	@Test
+	void c02d_addAndGet_zero() {
+		var a = ByteValue.of((byte)10);
+		assertEquals((byte)10, a.addAndGet((byte)0));
+		assertEquals((byte)10, a.get());
+	}
+
+	@Test
 	void c03_add_null() {
 		var a = ByteValue.of((byte)10);
 		a.add(null);

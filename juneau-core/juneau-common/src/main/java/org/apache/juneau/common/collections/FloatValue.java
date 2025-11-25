@@ -152,6 +152,7 @@ public class FloatValue extends Value<Float> {
 	 */
 	public boolean isAny(float precision, float...values) {
 		assertArg(precision >= 0, "Precision must be non-negative");
+		assertArgNotNull("values", values);
 		var v = get();
 		if (v == null)
 			return false;

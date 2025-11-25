@@ -18,6 +18,7 @@ package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.collections.CacheMode.*;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -265,6 +266,7 @@ public class Cache3<K1,K2,K3,V> {
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, java.util.function.Supplier<V> supplier) {
+		assertArgNotNull("supplier", supplier);
 		if (cacheMode == NONE)
 			return supplier.get();
 		var wrapped = Tuple3.of(key1, key2, key3);
@@ -273,7 +275,10 @@ public class Cache3<K1,K2,K3,V> {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
-			map.putIfAbsent(wrapped, v);
+			if (v == null)
+				map.remove(wrapped);
+			else
+				map.putIfAbsent(wrapped, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
@@ -290,6 +295,8 @@ public class Cache3<K1,K2,K3,V> {
 	 * @return The previous value associated with the key triplet, or <jk>null</jk> if there was no mapping.
 	 */
 	public V put(K1 key1, K2 key2, K3 key3, V value) {
+		if (value == null)
+			return map.remove(Tuple3.of(key1, key2, key3));
 		return map.put(Tuple3.of(key1, key2, key3), value);
 	}
 

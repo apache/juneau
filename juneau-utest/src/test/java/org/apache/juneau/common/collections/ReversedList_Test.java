@@ -429,5 +429,85 @@ class ReversedList_Test extends TestBase {
 		assertEquals("B", array[1]);
 		assertEquals("A", array[2]);
 	}
+
+	//====================================================================================================
+	// listIterator with index parameter
+	//====================================================================================================
+
+	@Test
+	void j01_listIterator_withIndex_start() {
+		var original = List.of("A", "B", "C", "D");
+		var reversed = new ReversedList<>(original);
+
+		var it = reversed.listIterator(0);
+		assertEquals("D", it.next());
+		assertEquals("C", it.next());
+		assertEquals("B", it.next());
+		assertEquals("A", it.next());
+		assertFalse(it.hasNext());
+	}
+
+	@Test
+	void j02_listIterator_withIndex_middle() {
+		var original = List.of("A", "B", "C", "D");
+		var reversed = new ReversedList<>(original);
+
+		var it = reversed.listIterator(2);
+		assertEquals("B", it.next());
+		assertEquals("A", it.next());
+		assertFalse(it.hasNext());
+	}
+
+	@Test
+	void j03_listIterator_withIndex_end() {
+		var original = List.of("A", "B", "C", "D");
+		var reversed = new ReversedList<>(original);
+
+		var it = reversed.listIterator(4);
+		assertFalse(it.hasNext());
+		assertTrue(it.hasPrevious());
+		assertEquals("A", it.previous());
+	}
+
+	@Test
+	void j04_listIterator_withIndex_bidirectional() {
+		var original = List.of("A", "B", "C", "D");
+		var reversed = new ReversedList<>(original);
+
+		var it = reversed.listIterator(2);
+		assertEquals(2, it.nextIndex());
+		assertEquals(1, it.previousIndex());
+		assertEquals("B", it.next());
+		assertEquals(3, it.nextIndex());
+		assertEquals(2, it.previousIndex());
+		assertEquals("B", it.previous());
+		assertEquals("C", it.previous());
+	}
+
+	@Test
+	void j05_listIterator_withIndex_outOfBounds_negative() {
+		var original = List.of("A", "B", "C");
+		var reversed = new ReversedList<>(original);
+
+		assertThrows(IndexOutOfBoundsException.class, () -> reversed.listIterator(-1));
+	}
+
+	@Test
+	void j06_listIterator_withIndex_outOfBounds_tooLarge() {
+		var original = List.of("A", "B", "C");
+		var reversed = new ReversedList<>(original);
+
+		assertThrows(IndexOutOfBoundsException.class, () -> reversed.listIterator(4));
+	}
+
+	@Test
+	void j07_listIterator_withIndex_emptyList() {
+		var original = List.<String>of();
+		var reversed = new ReversedList<>(original);
+
+		var it = reversed.listIterator(0);
+		assertFalse(it.hasNext());
+		assertFalse(it.hasPrevious());
+	}
 }
 

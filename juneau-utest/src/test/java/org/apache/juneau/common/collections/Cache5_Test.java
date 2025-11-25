@@ -100,6 +100,88 @@ class Cache5_Test extends TestBase {
 	}
 
 	@Test
+	void a04b_weakMode_basicCaching() {
+		var callCount = new AtomicInteger();
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.cacheMode(WEAK)
+			.supplier((k1, k2, k3, k4, k5) -> {
+				callCount.incrementAndGet();
+				return k1 + ":" + k2 + ":" + k3 + ":" + k4 + ":" + k5;
+			})
+			.build();
+
+		// First call - cache miss
+		var result1 = x.get("en", "US", "west", "formal", 1);
+
+		// Second call - cache hit
+		var result2 = x.get("en", "US", "west", "formal", 1);
+
+		assertEquals("en:US:west:formal:1", result1);
+		assertEquals("en:US:west:formal:1", result2);
+		assertSame(result1, result2);
+		assertEquals(1, callCount.get()); // Supplier only called once
+		assertSize(1, x);
+		assertEquals(1, x.getCacheHits());
+	}
+
+	@Test
+	void a04c_weakMode_multipleKeys() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.cacheMode(WEAK)
+			.supplier((k1, k2, k3, k4, k5) -> k1 + ":" + k2 + ":" + k3 + ":" + k4 + ":" + k5)
+			.build();
+
+		x.get("en", "US", "west", "formal", 1);
+		x.get("fr", "FR", "north", "formal", 2);
+		x.get("de", "DE", "south", "formal", 3);
+
+		assertSize(3, x);
+		assertEquals(0, x.getCacheHits());
+
+		// Verify all cached
+		assertEquals("en:US:west:formal:1", x.get("en", "US", "west", "formal", 1));
+		assertEquals("fr:FR:north:formal:2", x.get("fr", "FR", "north", "formal", 2));
+		assertEquals("de:DE:south:formal:3", x.get("de", "DE", "south", "formal", 3));
+		assertEquals(3, x.getCacheHits());
+	}
+
+	@Test
+	void a04d_weakMode_clear() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.cacheMode(WEAK)
+			.supplier((k1, k2, k3, k4, k5) -> "value")
+			.build();
+
+		x.get("en", "US", "west", "formal", 1);
+		x.get("fr", "FR", "north", "formal", 2);
+		assertSize(2, x);
+
+		x.clear();
+		assertEmpty(x);
+	}
+
+	@Test
+	void a04e_weakMode_maxSize() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.cacheMode(WEAK)
+			.maxSize(2)
+			.supplier((k1, k2, k3, k4, k5) -> "value")
+			.build();
+
+		x.get("en", "US", "west", "formal", 1);
+		x.get("fr", "FR", "north", "formal", 2);
+		assertSize(2, x);
+
+		// 3rd item doesn't trigger eviction yet
+		x.get("de", "DE", "south", "formal", 3);
+		assertSize(3, x);
+
+		// 4th item triggers eviction
+		x.get("es", "ES", "east", "formal", 4);
+		assertSize(1, x);
+	}
+
+	@Test
 	void a05_maxSize() {
 		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
 			.maxSize(2)
@@ -129,6 +211,81 @@ class Cache5_Test extends TestBase {
 		x.get("en", "US", "west", "formal", 1); // Hit
 		x.get("en", "US", "west", "formal", 1); // Hit
 		assertEquals(2, x.getCacheHits());
+	}
+
+	//====================================================================================================
+	// b - put(), isEmpty(), containsKey()
+	//====================================================================================================
+
+	@Test
+	void b01_put() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class).build();
+		var previous = x.put("en", "US", "west", "formal", 1, "value");
+		assertNull(previous);
+		assertEquals("value", x.get("en", "US", "west", "formal", 1, () -> "should not be called"));
+	}
+
+	@Test
+	void b02_isEmpty() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class).build();
+		assertTrue(x.isEmpty());
+		x.put("en", "US", "west", "formal", 1, "value");
+		assertFalse(x.isEmpty());
+		x.clear();
+		assertTrue(x.isEmpty());
+	}
+
+	@Test
+	void b03_containsKey() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class).build();
+		assertFalse(x.containsKey("en", "US", "west", "formal", 1));
+		x.put("en", "US", "west", "formal", 1, "value");
+		assertTrue(x.containsKey("en", "US", "west", "formal", 1));
+	}
+
+	//====================================================================================================
+	// c - create(), disableCaching(), null values
+	//====================================================================================================
+
+	@Test
+	void c01_create() {
+		var x = Cache5.<String, String, String, String, Integer, String>create()
+			.supplier((k1, k2, k3, k4, k5) -> k1 + ":" + k2 + ":" + k3 + ":" + k4 + ":" + k5)
+			.build();
+		var result = x.get("en", "US", "west", "formal", 1);
+		assertEquals("en:US:west:formal:1", result);
+	}
+
+	@Test
+	void c02_disableCaching() {
+		var callCount = new AtomicInteger();
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.cacheMode(NONE)
+			.supplier((k1, k2, k3, k4, k5) -> {
+				callCount.incrementAndGet();
+				return "value";
+			})
+			.build();
+		x.get("en", "US", "west", "formal", 1);
+		x.get("en", "US", "west", "formal", 1);
+		assertEquals(2, callCount.get());
+		assertTrue(x.isEmpty());
+	}
+
+	@Test
+	void c03_nullValue_notCached() {
+		var callCount = new AtomicInteger();
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class).build();
+		x.get("en", "US", "west", "formal", 1, () -> {
+			callCount.incrementAndGet();
+			return null;
+		});
+		x.get("en", "US", "west", "formal", 1, () -> {
+			callCount.incrementAndGet();
+			return null;
+		});
+		assertEquals(2, callCount.get());
+		assertTrue(x.isEmpty());
 	}
 }
 

@@ -280,5 +280,100 @@ class DoubleValue_Test extends TestBase {
 		assertTrue(v.is(1.24e10, 1e8));
 		assertFalse(v.is(1.24e10, 1e7));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// isAny(double, double...) - precision-based matching
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void e01_isAny_withinPrecision() {
+		var v = DoubleValue.of(3.14159);
+		assertTrue(v.isAny(0.01, 2.5, 3.15, 5.0));  // Matches 3.15 within 0.01
+		assertTrue(v.isAny(0.01, 3.14, 3.15));       // Matches both
+		assertFalse(v.isAny(0.001, 1.0, 2.0, 5.0));  // No match within 0.001
+	}
+
+	@Test
+	void e02_isAny_exactMatch() {
+		var v = DoubleValue.of(5.0);
+		assertTrue(v.isAny(0.0, 5.0, 6.0, 7.0));
+		assertTrue(v.isAny(0.0, 1.0, 5.0));
+		assertFalse(v.isAny(0.0, 1.0, 2.0, 3.0));
+	}
+
+	@Test
+	void e03_isAny_nullValue() {
+		var v = new DoubleValue(null);
+		assertFalse(v.isAny(0.01, 1.0, 2.0, 3.0));
+		assertFalse(v.isAny(0.0, 0.0, 1.0));
+	}
+
+	@Test
+	void e04_isAny_emptyArray() {
+		var v = DoubleValue.of(3.14);
+		assertFalse(v.isAny(0.01));  // Only precision, no values
+	}
+
+	@Test
+	void e05_isAny_zeroPrecision() {
+		var v = DoubleValue.of(5.0);
+		assertTrue(v.isAny(0.0, 5.0, 6.0));
+		assertFalse(v.isAny(0.0, 5.0001, 6.0));
+	}
+
+	@Test
+	void e06_isAny_largePrecision() {
+		var v = DoubleValue.of(100.0);
+		assertTrue(v.isAny(100.0, 50.0, 150.0, 200.0));
+		assertTrue(v.isAny(100.0, 0.0, 201.0));  // 0.0 matches (100.0 - 0.0 = 100.0 <= 100.0)
+		assertTrue(v.isAny(100.0, 0.0, 202.0));  // 0.0 matches (100.0 - 0.0 = 100.0 <= 100.0)
+		assertFalse(v.isAny(99.0, 0.0, 202.0));  // Neither matches (100.0 - 0.0 = 100.0 > 99.0, 100.0 - 202.0 = 102.0 > 99.0)
+	}
+
+	@Test
+	void e07_isAny_floatingPointRoundingError() {
+		var v = DoubleValue.of(0.1 + 0.2); // Actually 0.30000000000000004
+		assertFalse(v.isAny(0.0, 0.3, 0.4)); // Exact match fails
+		assertTrue(v.isAny(0.000001, 0.3, 0.4)); // But within small precision
+	}
+
+	@Test
+	void e08_isAny_negativeValues() {
+		var v = DoubleValue.of(-5.5);
+		assertTrue(v.isAny(0.2, -5.4, -5.6, -5.0));
+		assertTrue(v.isAny(0.0, -5.5, -6.0));
+		assertFalse(v.isAny(0.4, -5.0, -6.0));
+	}
+
+	@Test
+	void e09_isAny_negativePrecision_throwsException() {
+		var v = DoubleValue.of(3.14);
+		assertThrows(IllegalArgumentException.class, () -> v.isAny(-0.01, 3.14, 3.15));
+	}
+
+	@Test
+	void e10_isAny_boundaryValue() {
+		var v = DoubleValue.of(10.0);
+		assertTrue(v.isAny(0.5, 9.5, 10.5, 11.0)); // 9.5 and 10.5 are exactly at boundary
+		assertTrue(v.isAny(0.5, 9.5, 10.51, 11.0)); // 9.5 matches (10.0 - 9.5 = 0.5 <= 0.5)
+		assertFalse(v.isAny(0.49, 9.5, 10.51, 11.0)); // None match (10.0 - 9.5 = 0.5 > 0.49, 10.0 - 10.51 = 0.51 > 0.49)
+	}
+
+	@Test
+	void e11_isAny_verySmallNumbers() {
+		var v = DoubleValue.of(0.0000001);
+		assertTrue(v.isAny(0.00000015, 0.0000002, 0.0000003));
+		assertFalse(v.isAny(0.00000005, 0.0000002, 0.0000003));
+	}
+
+	@Test
+	void e12_isAny_afterSet() {
+		var v = DoubleValue.of(1.0);
+		assertTrue(v.isAny(0.01, 1.0, 2.0));
+
+		v.set(2.0);
+		assertFalse(v.isAny(0.01, 1.0, 1.5));
+		assertTrue(v.isAny(0.01, 2.0, 2.5));
+	}
 }
 

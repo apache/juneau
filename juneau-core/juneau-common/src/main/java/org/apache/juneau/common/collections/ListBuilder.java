@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.list;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -111,11 +112,11 @@ public class ListBuilder<E> {
 	 * </p>
 	 *
 	 * @param <E> The element type.
-	 * @param elementType The element type class. Required for type-safe operations.
+	 * @param elementType The element type class. Required for type-safe operations. Must not be <jk>null</jk>.
 	 * @return A new list builder instance.
 	 */
 	public static <E> ListBuilder<E> create(Class<E> elementType) {
-		return new ListBuilder<>(elementType);
+		return new ListBuilder<>(assertArgNotNull("elementType", elementType));
 	}
 
 	private List<E> list;
@@ -128,10 +129,10 @@ public class ListBuilder<E> {
 	/**
 	 * Constructor.
 	 *
-	 * @param elementType The element type.
+	 * @param elementType The element type. Must not be <jk>null</jk>.
 	 */
 	public ListBuilder(Class<E> elementType) {
-		this.elementType = elementType;
+		this.elementType = assertArgNotNull("elementType", elementType);
 	}
 
 	/**
@@ -169,6 +170,7 @@ public class ListBuilder<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	public ListBuilder<E> add(E...values) {
+		assertArgNotNull("values", values);
 		for (var v : values)
 			add(v);
 		return this;
@@ -236,8 +238,6 @@ public class ListBuilder<E> {
 	 * @throws RuntimeException if a value cannot be converted to the element type.
 	 */
 	public ListBuilder<E> addAny(Object...values) {
-		if (elementType == null)
-			throw new IllegalStateException("Unknown element type. Cannot use this method.");
 		if (nn(values)) {
 			for (var o : values) {
 				if (nn(o)) {
@@ -260,6 +260,8 @@ public class ListBuilder<E> {
 								else
 									throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
 							}
+						} else {
+							throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
 						}
 					}
 				}
@@ -325,11 +327,11 @@ public class ListBuilder<E> {
 	/**
 	 * Specifies the element type on this list.
 	 *
-	 * @param value The element type.
+	 * @param value The element type. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public ListBuilder<E> elementType(Class<E> value) {
-		this.elementType = value;
+		this.elementType = assertArgNotNull("value", value);
 		return this;
 	}
 
@@ -346,11 +348,11 @@ public class ListBuilder<E> {
 	/**
 	 * Sorts the contents of the list using the specified comparator.
 	 *
-	 * @param comparator The comparator to use for sorting.
+	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public ListBuilder<E> sorted(Comparator<E> comparator) {
-		this.comparator = comparator;
+		this.comparator = assertArgNotNull("comparator", comparator);
 		return this;
 	}
 

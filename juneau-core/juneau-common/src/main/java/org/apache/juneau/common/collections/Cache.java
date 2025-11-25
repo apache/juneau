@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.collections.CacheMode.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static java.util.Collections.*;
@@ -501,6 +502,7 @@ public class Cache<K,V> {
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 */
 	public V get(K key, Supplier<V> supplier) {
+		assertArgNotNull("supplier", supplier);
 		if (disableCaching)
 			return supplier.get();
 		Tuple1<K> wrapped = wrap(key);
@@ -527,6 +529,8 @@ public class Cache<K,V> {
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
 	 */
 	public V put(K key, V value) {
+		if (value == null)
+			return map.remove(wrap(key));
 		return map.put(wrap(key), value);
 	}
 

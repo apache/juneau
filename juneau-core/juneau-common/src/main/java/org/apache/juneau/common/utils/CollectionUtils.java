@@ -1099,6 +1099,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> TreeSet<E> sortedSet(E...values) {
+		assertArgNotNull("values", values);
 		var l = new TreeSet<E>();
 		for (var v : values)
 			l.add(v);

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -124,12 +125,12 @@ public class MapBuilder<K,V> {
 	 *
 	 * @param <K> Key type.
 	 * @param <V> Value type.
-	 * @param keyType The key type.
-	 * @param valueType The value type.
+	 * @param keyType The key type. Must not be <jk>null</jk>.
+	 * @param valueType The value type. Must not be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static <K,V> MapBuilder<K,V> create(Class<K> keyType, Class<V> valueType) {
-		return new MapBuilder<>(keyType, valueType);
+		return new MapBuilder<>(assertArgNotNull("keyType", keyType), assertArgNotNull("valueType", valueType));
 	}
 
 	/**
@@ -149,12 +150,12 @@ public class MapBuilder<K,V> {
 	/**
 	 * Constructor.
 	 *
-	 * @param keyType The key type.
-	 * @param valueType The value type.
+	 * @param keyType The key type. Must not be <jk>null</jk>.
+	 * @param valueType The value type. Must not be <jk>null</jk>.
 	 */
 	public MapBuilder(Class<K> keyType, Class<V> valueType) {
-		this.keyType = keyType;
-		this.valueType = valueType;
+		this.keyType = assertArgNotNull("keyType", keyType);
+		this.valueType = assertArgNotNull("valueType", valueType);
 	}
 
 	/**
@@ -212,8 +213,6 @@ public class MapBuilder<K,V> {
 	 */
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> addAny(Object...values) {
-		if (keyType == null || valueType == null)
-			throw new IllegalStateException("Unknown key and value types. Cannot use this method.");
 		for (var o : values) {
 			if (nn(o)) {
 				if (o instanceof Map o2) {
@@ -238,6 +237,7 @@ public class MapBuilder<K,V> {
 	 */
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> addPairs(Object...pairs) {
+		assertArgNotNull("pairs", pairs);
 		if (pairs.length % 2 != 0)
 			throw illegalArg("Odd number of parameters passed into AMap.ofPairs()");
 		for (var i = 0; i < pairs.length; i += 2)
@@ -343,11 +343,11 @@ public class MapBuilder<K,V> {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param filter The filter predicate.
+	 * @param filter The filter predicate. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> filtered(java.util.function.Predicate<Object> filter) {
-		this.filter = filter;
+		this.filter = assertArgNotNull("filter", filter);
 		return this;
 	}
 
@@ -406,11 +406,11 @@ public class MapBuilder<K,V> {
 	/**
 	 * Converts the set into a {@link SortedMap} using the specified comparator.
 	 *
-	 * @param comparator The comparator to use for sorting.
+	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> sorted(Comparator<K> comparator) {
-		this.comparator = comparator;
+		this.comparator = assertArgNotNull("comparator", comparator);
 		return this;
 	}
 
