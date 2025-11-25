@@ -122,7 +122,7 @@ public class BeanStoreEntry<T> {
 	protected JsonMap properties() {
 		// @formatter:off
 		return filteredMap()
-			.append("type", scn(getType()))
+			.append("type", cns(getType()))
 			.append("bean", identity(get()))
 			.append("name", getName());
 		// @formatter:on

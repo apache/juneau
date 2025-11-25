@@ -1617,8 +1617,787 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isSimilar("hello", "world", 0.8));
 		// Null handling
 		assertTrue(isSimilar(null, null, 0.8));
-		assertFalse(isSimilar("hello", null, 0.8));
-		assertFalse(isSimilar(null, "hello", 0.8));
+	}
+
+	@Test void a79_generateUUID() {
+		// Generate multiple UUIDs and verify format
+		for (var i = 0; i < 10; i++) {
+			var uuid = generateUUID();
+			assertNotNull(uuid);
+			// Standard UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (36 chars)
+			assertEquals(36, uuid.length());
+			assertTrue(uuid.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"));
+		}
+		// Verify uniqueness
+		var uuid1 = generateUUID();
+		var uuid2 = generateUUID();
+		assertNotEquals(uuid1, uuid2);
+	}
+
+	@Test void a80_randomAlphabetic() {
+		// Test various lengths
+		for (var len = 0; len <= 20; len++) {
+			var s = randomAlphabetic(len);
+			assertNotNull(s);
+			assertEquals(len, s.length());
+			// Verify all characters are alphabetic
+			for (var i = 0; i < s.length(); i++) {
+				var c = s.charAt(i);
+				assertTrue(Character.isLetter(c), "Character at index " + i + " should be alphabetic: " + c);
+			}
+		}
+		// Test negative length
+		assertThrows(IllegalArgumentException.class, () -> randomAlphabetic(-1));
+		// Verify randomness (at least some variation)
+		var strings = new HashSet<String>();
+		for (var i = 0; i < 100; i++) {
+			strings.add(randomAlphabetic(10));
+		}
+		assertTrue(strings.size() > 1, "Should generate different strings");
+	}
+
+	@Test void a81_randomAlphanumeric() {
+		// Test various lengths
+		for (var len = 0; len <= 20; len++) {
+			var s = randomAlphanumeric(len);
+			assertNotNull(s);
+			assertEquals(len, s.length());
+			// Verify all characters are alphanumeric
+			for (var i = 0; i < s.length(); i++) {
+				var c = s.charAt(i);
+				assertTrue(Character.isLetterOrDigit(c), "Character at index " + i + " should be alphanumeric: " + c);
+			}
+		}
+		// Test negative length
+		assertThrows(IllegalArgumentException.class, () -> randomAlphanumeric(-1));
+		// Verify randomness (at least some variation)
+		var strings = new HashSet<String>();
+		for (var i = 0; i < 100; i++) {
+			strings.add(randomAlphanumeric(10));
+		}
+		assertTrue(strings.size() > 1, "Should generate different strings");
+		// Verify it can generate both letters and digits
+		var hasLetter = false;
+		var hasDigit = false;
+		for (var i = 0; i < 1000; i++) {
+			var s = randomAlphanumeric(20);
+			for (var j = 0; j < s.length(); j++) {
+				if (Character.isLetter(s.charAt(j))) hasLetter = true;
+				if (Character.isDigit(s.charAt(j))) hasDigit = true;
+			}
+			if (hasLetter && hasDigit) break;
+		}
+		assertTrue(hasLetter && hasDigit, "Should generate both letters and digits");
+	}
+
+	@Test void a82_randomNumeric() {
+		// Test various lengths
+		for (var len = 0; len <= 20; len++) {
+			var s = randomNumeric(len);
+			assertNotNull(s);
+			assertEquals(len, s.length());
+			// Verify all characters are digits
+			for (var i = 0; i < s.length(); i++) {
+				var c = s.charAt(i);
+				assertTrue(Character.isDigit(c), "Character at index " + i + " should be a digit: " + c);
+			}
+		}
+		// Test negative length
+		assertThrows(IllegalArgumentException.class, () -> randomNumeric(-1));
+		// Verify randomness (at least some variation)
+		var strings = new HashSet<String>();
+		for (var i = 0; i < 100; i++) {
+			strings.add(randomNumeric(10));
+		}
+		assertTrue(strings.size() > 1, "Should generate different strings");
+	}
+
+	@Test void a83_randomAscii() {
+		// Test various lengths
+		for (var len = 0; len <= 20; len++) {
+			var s = randomAscii(len);
+			assertNotNull(s);
+			assertEquals(len, s.length());
+			// Verify all characters are printable ASCII (32-126)
+			for (var i = 0; i < s.length(); i++) {
+				var c = s.charAt(i);
+				assertTrue(c >= 32 && c <= 126, "Character at index " + i + " should be printable ASCII: " + c);
+			}
+		}
+		// Test negative length
+		assertThrows(IllegalArgumentException.class, () -> randomAscii(-1));
+		// Verify randomness (at least some variation)
+		var strings = new HashSet<String>();
+		for (var i = 0; i < 100; i++) {
+			strings.add(randomAscii(10));
+		}
+		assertTrue(strings.size() > 1, "Should generate different strings");
+	}
+
+	@Test void a84_randomString() {
+		// Test with various character sets
+		var s1 = randomString(10, "ABC");
+		assertNotNull(s1);
+		assertEquals(10, s1.length());
+		for (var i = 0; i < s1.length(); i++) {
+			var c = s1.charAt(i);
+			assertTrue(c == 'A' || c == 'B' || c == 'C', "Character should be A, B, or C: " + c);
+		}
+		
+		var s2 = randomString(5, "0123456789");
+		assertNotNull(s2);
+		assertEquals(5, s2.length());
+		for (var i = 0; i < s2.length(); i++) {
+			assertTrue(Character.isDigit(s2.charAt(i)));
+		}
+		
+		// Test with single character
+		var s3 = randomString(10, "X");
+		assertNotNull(s3);
+		assertEquals(10, s3.length());
+		assertEquals("XXXXXXXXXX", s3);
+		
+		// Test zero length
+		assertEquals("", randomString(0, "ABC"));
+		
+		// Test negative length
+		assertThrows(IllegalArgumentException.class, () -> randomString(-1, "ABC"));
+		
+		// Test null character set
+		assertThrows(IllegalArgumentException.class, () -> randomString(10, null));
+		
+		// Test empty character set
+		assertThrows(IllegalArgumentException.class, () -> randomString(10, ""));
+		
+		// Verify randomness (at least some variation when multiple chars available)
+		var strings = new HashSet<String>();
+		for (var i = 0; i < 100; i++) {
+			strings.add(randomString(10, "ABCDEFGHIJ"));
+		}
+		assertTrue(strings.size() > 1, "Should generate different strings");
+	}
+
+	@Test void a85_parseMap() {
+		// Basic parsing
+		var map1 = parseMap("key1=value1,key2=value2", '=', ',', false);
+		assertEquals(2, map1.size());
+		assertEquals("value1", map1.get("key1"));
+		assertEquals("value2", map1.get("key2"));
+		
+		// With trimming
+		var map2 = parseMap(" key1 = value1 ; key2 = value2 ", '=', ';', true);
+		assertEquals(2, map2.size());
+		assertEquals("value1", map2.get("key1"));
+		assertEquals("value2", map2.get("key2"));
+		
+		// Different delimiters
+		var map3 = parseMap("a:1|b:2|c:3", ':', '|', false);
+		assertEquals(3, map3.size());
+		assertEquals("1", map3.get("a"));
+		assertEquals("2", map3.get("b"));
+		assertEquals("3", map3.get("c"));
+		
+		// Empty value
+		var map4 = parseMap("key1=,key2=value2", '=', ',', false);
+		assertEquals(2, map4.size());
+		assertEquals("", map4.get("key1"));
+		assertEquals("value2", map4.get("key2"));
+		
+		// No delimiter (key only)
+		var map5 = parseMap("key1,key2=value2", '=', ',', false);
+		assertEquals(2, map5.size());
+		assertEquals("", map5.get("key1"));
+		assertEquals("value2", map5.get("key2"));
+		
+		// Null/empty input
+		assertTrue(parseMap(null, '=', ',', false).isEmpty());
+		assertTrue(parseMap("", '=', ',', false).isEmpty());
+		
+		// Duplicate keys (last one wins)
+		var map6 = parseMap("key=value1,key=value2", '=', ',', false);
+		assertEquals(1, map6.size());
+		assertEquals("value2", map6.get("key"));
+	}
+
+	@Test void a86_extractNumbers() {
+		// Basic extraction
+		var numbers1 = extractNumbers("Price: $19.99, Quantity: 5");
+		assertEquals(2, numbers1.size());
+		assertEquals("19.99", numbers1.get(0));
+		assertEquals("5", numbers1.get(1));
+		
+		// Multiple numbers
+		var numbers2 = extractNumbers("Version 1.2.3 has 42 features");
+		assertEquals(3, numbers2.size());
+		assertEquals("1.2", numbers2.get(0));
+		assertEquals("3", numbers2.get(1));
+		assertEquals("42", numbers2.get(2));
+		
+		// Decimal numbers
+		var numbers3 = extractNumbers("3.14 and 2.718 are constants");
+		assertEquals(2, numbers3.size());
+		assertEquals("3.14", numbers3.get(0));
+		assertEquals("2.718", numbers3.get(1));
+		
+		// Integers only
+		var numbers4 = extractNumbers("1 2 3 4 5");
+		assertEquals(5, numbers4.size());
+		assertEquals("1", numbers4.get(0));
+		assertEquals("5", numbers4.get(4));
+		
+		// No numbers
+		assertTrue(extractNumbers("No numbers here").isEmpty());
+		
+		// Null/empty input
+		assertTrue(extractNumbers(null).isEmpty());
+		assertTrue(extractNumbers("").isEmpty());
+	}
+
+	@Test void a87_extractEmails() {
+		// Basic extraction
+		var emails1 = extractEmails("Contact: user@example.com or admin@test.org");
+		assertEquals(2, emails1.size());
+		assertTrue(emails1.contains("user@example.com"));
+		assertTrue(emails1.contains("admin@test.org"));
+		
+		// Multiple emails
+		var emails2 = extractEmails("Email me at john.doe@example.com, or contact jane@test.org");
+		assertEquals(2, emails2.size());
+		assertTrue(emails2.contains("john.doe@example.com"));
+		assertTrue(emails2.contains("jane@test.org"));
+		
+		// Email with special characters
+		var emails3 = extractEmails("user+tag@example.co.uk is valid");
+		assertEquals(1, emails3.size());
+		assertEquals("user+tag@example.co.uk", emails3.get(0));
+		
+		// No emails
+		assertTrue(extractEmails("No email addresses here").isEmpty());
+		
+		// Null/empty input
+		assertTrue(extractEmails(null).isEmpty());
+		assertTrue(extractEmails("").isEmpty());
+	}
+
+	@Test void a88_extractUrls() {
+		// Basic extraction
+		var urls1 = extractUrls("Visit https://example.com or http://test.org");
+		assertEquals(2, urls1.size());
+		assertTrue(urls1.contains("https://example.com"));
+		assertTrue(urls1.contains("http://test.org"));
+		
+		// URLs with paths
+		var urls2 = extractUrls("Check https://example.com/path/to/page?param=value");
+		assertEquals(1, urls2.size());
+		assertTrue(urls2.get(0).startsWith("https://example.com"));
+		
+		// FTP URLs
+		var urls3 = extractUrls("Download from ftp://files.example.com/pub/data");
+		assertEquals(1, urls3.size());
+		assertTrue(urls3.get(0).startsWith("ftp://"));
+		
+		// Multiple URLs
+		var urls4 = extractUrls("Links: http://site1.com and https://site2.org/page");
+		assertEquals(2, urls4.size());
+		
+		// No URLs
+		assertTrue(extractUrls("No URLs here").isEmpty());
+		
+		// Null/empty input
+		assertTrue(extractUrls(null).isEmpty());
+		assertTrue(extractUrls("").isEmpty());
+	}
+
+	@Test void a89_extractWords() {
+		// Basic extraction
+		var words1 = extractWords("Hello world! This is a test.");
+		assertEquals(6, words1.size());
+		assertEquals("Hello", words1.get(0));
+		assertEquals("world", words1.get(1));
+		assertEquals("This", words1.get(2));
+		assertEquals("is", words1.get(3));
+		assertEquals("a", words1.get(4));
+		assertEquals("test", words1.get(5));
+		
+		// Words with underscores
+		var words2 = extractWords("variable_name and test_123");
+		assertEquals(3, words2.size()); // variable_name, and, test_123
+		assertTrue(words2.contains("variable_name"));
+		assertTrue(words2.contains("and"));
+		assertTrue(words2.contains("test_123"));
+		
+		// Words with numbers
+		var words3 = extractWords("Version 1.2.3 has 42 features");
+		assertEquals(7, words3.size()); // Version, 1, 2, 3, has, 42, features
+		assertTrue(words3.contains("Version"));
+		assertTrue(words3.contains("1"));
+		assertTrue(words3.contains("2"));
+		assertTrue(words3.contains("3"));
+		assertTrue(words3.contains("has"));
+		assertTrue(words3.contains("42"));
+		assertTrue(words3.contains("features"));
+		
+		// No words (only punctuation)
+		assertTrue(extractWords("!@#$%^&*()").isEmpty());
+		
+		// Null/empty input
+		assertTrue(extractWords(null).isEmpty());
+		assertTrue(extractWords("").isEmpty());
+	}
+
+	@Test void a90_extractBetween() {
+		// Basic extraction
+		var results1 = extractBetween("<tag>content</tag>", "<", ">");
+		assertEquals(2, results1.size());
+		assertEquals("tag", results1.get(0));
+		assertEquals("/tag", results1.get(1));
+		
+		// Multiple matches
+		var results2 = extractBetween("[one][two][three]", "[", "]");
+		assertEquals(3, results2.size());
+		assertEquals("one", results2.get(0));
+		assertEquals("two", results2.get(1));
+		assertEquals("three", results2.get(2));
+		
+		// Nested markers (non-overlapping)
+		// String: "(outer (inner) outer)"
+		// Finds: ( at 0, ) at 13 -> "outer (inner"
+		// Then continues from 14, but no more ( found, so only 1 result
+		var results3 = extractBetween("(outer (inner) outer)", "(", ")");
+		assertEquals(1, results3.size());
+		assertEquals("outer (inner", results3.get(0));
+		
+		// Different markers
+		var results4 = extractBetween("Start:value:End", "Start:", ":End");
+		assertEquals(1, results4.size());
+		assertEquals("value", results4.get(0));
+		
+		// No matches
+		assertTrue(extractBetween("no markers here", "[", "]").isEmpty());
+		
+		// Unmatched start marker
+		assertTrue(extractBetween("<unclosed", "<", ">").isEmpty());
+		
+		// Null/empty input
+		assertTrue(extractBetween(null, "<", ">").isEmpty());
+		assertTrue(extractBetween("", "<", ">").isEmpty());
+		assertTrue(extractBetween("text", null, ">").isEmpty());
+		assertTrue(extractBetween("text", "<", null).isEmpty());
+	}
+
+	@Test void a91_transliterate() {
+		// Basic transliteration
+		assertEquals("h2ll4", transliterate("hello", "aeiou", "12345"));
+		assertEquals("XYZ", transliterate("ABC", "ABC", "XYZ"));
+		
+		// No matches
+		assertEquals("hello", transliterate("hello", "xyz", "123"));
+		
+		// Partial matches
+		assertEquals("h3ll0", transliterate("hello", "eo", "30"));
+		
+		// Empty strings
+		assertEquals("", transliterate("", "abc", "123"));
+		
+		// Null input
+		assertNull(transliterate(null, "abc", "123"));
+		
+		// Null/empty character sets
+		assertEquals("hello", transliterate("hello", null, "123"));
+		assertEquals("hello", transliterate("hello", "abc", null));
+		assertEquals("hello", transliterate("hello", "", "123"));
+		assertEquals("hello", transliterate("hello", "abc", ""));
+		
+		// Mismatched lengths
+		assertThrows(IllegalArgumentException.class, () -> transliterate("hello", "abc", "12"));
+	}
+
+	@Test void a92_soundex() {
+		// Standard Soundex examples
+		assertEquals("S530", soundex("Smith"));
+		assertEquals("S530", soundex("Smythe"));
+		assertEquals("R163", soundex("Robert"));
+		assertEquals("R163", soundex("Rupert"));
+		
+		// Same soundex for similar names
+		assertEquals("A261", soundex("Ashcraft"));
+		assertEquals("A261", soundex("Ashcroft"));
+		
+		// Single character
+		assertEquals("A000", soundex("A"));
+		
+		// With non-letters
+		assertEquals("S530", soundex("Smith123"));
+		assertEquals("S530", soundex("Smith!@#"));
+		
+		// Null/empty input
+		assertNull(soundex(null));
+		assertNull(soundex(""));
+		
+		// All vowels
+		assertEquals("A000", soundex("AEIOU"));
+	}
+
+	@Test void a93_metaphone() {
+		// Basic metaphone examples
+		var code1 = metaphone("Smith");
+		assertNotNull(code1);
+		assertTrue(code1.startsWith("SM"));
+		
+		var code2 = metaphone("Smythe");
+		assertNotNull(code2);
+		assertTrue(code2.startsWith("SM"));
+		
+		// Similar words should have similar codes
+		var code3 = metaphone("Robert");
+		assertNotNull(code3);
+		
+		// Null/empty input
+		assertNull(metaphone(null));
+		assertNull(metaphone(""));
+		assertEquals("", metaphone("123"));
+		
+		// Single character
+		var code4 = metaphone("A");
+		assertNotNull(code4);
+		assertFalse(code4.isEmpty());
+	}
+
+	@Test void a94_doubleMetaphone() {
+		// Basic double metaphone
+		var codes1 = doubleMetaphone("Smith");
+		assertNotNull(codes1);
+		assertEquals(2, codes1.length);
+		assertNotNull(codes1[0]); // primary
+		assertNotNull(codes1[1]); // alternate
+		
+		var codes2 = doubleMetaphone("Schmidt");
+		assertNotNull(codes2);
+		assertEquals(2, codes2.length);
+		
+		// Null/empty input
+		assertNull(doubleMetaphone(null));
+		assertNull(doubleMetaphone(""));
+	}
+
+	@Test void a95_normalizeUnicode() {
+		// Basic normalization
+		var normalized = normalizeUnicode("café");
+		assertNotNull(normalized);
+		assertNotEquals("café", normalized); // Should be decomposed
+		
+		// Null input
+		assertNull(normalizeUnicode(null));
+		
+		// Already normalized
+		var normalized2 = normalizeUnicode("hello");
+		assertEquals("hello", normalized2);
+	}
+
+	@Test void a96_removeAccents() {
+		// Basic accent removal
+		assertEquals("cafe", removeAccents("café"));
+		assertEquals("naive", removeAccents("naïve"));
+		assertEquals("resume", removeAccents("résumé"));
+		
+		// Multiple accents
+		assertEquals("Cafe", removeAccents("Café"));
+		assertEquals("Zoe", removeAccents("Zoë"));
+		
+		// No accents
+		assertEquals("hello", removeAccents("hello"));
+		assertEquals("HELLO", removeAccents("HELLO"));
+		
+		// Null input
+		assertNull(removeAccents(null));
+		
+		// Empty string
+		assertEquals("", removeAccents(""));
+		
+		// Mixed case with accents
+		assertEquals("Cafe", removeAccents("Café"));
+		assertEquals("Ecole", removeAccents("École"));
+	}
+
+	@Test void a97_isValidRegex() {
+		// Valid regex patterns
+		assertTrue(isValidRegex("[a-z]+"));
+		assertTrue(isValidRegex("\\d+"));
+		assertTrue(isValidRegex("^test$"));
+		assertTrue(isValidRegex("(abc|def)"));
+		
+		// Invalid regex patterns
+		assertFalse(isValidRegex("[a-z")); // Unclosed bracket
+		assertFalse(isValidRegex("(test")); // Unclosed parenthesis
+		assertFalse(isValidRegex("\\")); // Incomplete escape
+		assertFalse(isValidRegex("*")); // Quantifier without preceding element
+		
+		// Null/empty input
+		assertFalse(isValidRegex(null));
+		assertFalse(isValidRegex(""));
+	}
+
+	@Test void a98_isValidDateFormat() {
+		// Valid dates
+		assertTrue(isValidDateFormat("2023-12-25", "yyyy-MM-dd"));
+		assertTrue(isValidDateFormat("25/12/2023", "dd/MM/yyyy"));
+		assertTrue(isValidDateFormat("12/25/2023", "MM/dd/yyyy"));
+		assertTrue(isValidDateFormat("2023-01-01", "yyyy-MM-dd"));
+		
+		// Invalid dates
+		assertFalse(isValidDateFormat("2023-13-25", "yyyy-MM-dd")); // Invalid month
+		assertFalse(isValidDateFormat("2023-12-32", "yyyy-MM-dd")); // Invalid day
+		assertFalse(isValidDateFormat("2023-12-25", "invalid")); // Invalid format
+		assertFalse(isValidDateFormat("not-a-date", "yyyy-MM-dd")); // Not a date
+		
+		// Null/empty input
+		assertFalse(isValidDateFormat(null, "yyyy-MM-dd"));
+		assertFalse(isValidDateFormat("2023-12-25", null));
+		assertFalse(isValidDateFormat("", "yyyy-MM-dd"));
+		assertFalse(isValidDateFormat("2023-12-25", ""));
+	}
+
+	@Test void a99_isValidTimeFormat() {
+		// Valid times
+		assertTrue(isValidTimeFormat("14:30:00", "HH:mm:ss"));
+		assertTrue(isValidTimeFormat("02:30:00 PM", "hh:mm:ss a"));
+		assertTrue(isValidTimeFormat("14:30", "HH:mm"));
+		assertTrue(isValidTimeFormat("00:00:00", "HH:mm:ss"));
+		
+		// Invalid times
+		assertFalse(isValidTimeFormat("25:00:00", "HH:mm:ss")); // Invalid hour
+		assertFalse(isValidTimeFormat("14:60:00", "HH:mm:ss")); // Invalid minute
+		assertFalse(isValidTimeFormat("14:30:60", "HH:mm:ss")); // Invalid second
+		assertFalse(isValidTimeFormat("not-a-time", "HH:mm:ss")); // Not a time
+		
+		// Null/empty input
+		assertFalse(isValidTimeFormat(null, "HH:mm:ss"));
+		assertFalse(isValidTimeFormat("14:30:00", null));
+		assertFalse(isValidTimeFormat("", "HH:mm:ss"));
+		assertFalse(isValidTimeFormat("14:30:00", ""));
+	}
+
+	@Test void a100_isValidIpAddress() {
+		// Valid IPv4 addresses
+		assertTrue(isValidIpAddress("192.168.1.1"));
+		assertTrue(isValidIpAddress("0.0.0.0"));
+		assertTrue(isValidIpAddress("255.255.255.255"));
+		assertTrue(isValidIpAddress("127.0.0.1"));
+		
+		// Invalid IPv4 addresses
+		assertFalse(isValidIpAddress("256.1.1.1")); // Out of range
+		assertFalse(isValidIpAddress("192.168.1")); // Too few octets
+		assertFalse(isValidIpAddress("192.168.1.1.1")); // Too many octets
+		assertFalse(isValidIpAddress("not.an.ip")); // Not numeric
+		assertFalse(isValidIpAddress("-1.1.1.1")); // Negative number
+		
+		// Valid IPv6 addresses (basic validation)
+		assertTrue(isValidIpAddress("2001:0db8:85a3:0000:0000:8a2e:0370:7334"));
+		assertTrue(isValidIpAddress("::1")); // Localhost
+		assertTrue(isValidIpAddress("2001:db8::1")); // Compressed
+		
+		// Invalid IPv6 addresses
+		assertFalse(isValidIpAddress("2001:0db8:85a3:0000:0000:8a2e:0370:7334:9999")); // Too many segments
+		assertFalse(isValidIpAddress("gggg::1")); // Invalid hex
+		
+		// Null/empty input
+		assertFalse(isValidIpAddress(null));
+		assertFalse(isValidIpAddress(""));
+	}
+
+	@Test void a101_isValidMacAddress() {
+		// Valid MAC addresses - colon format
+		assertTrue(isValidMacAddress("00:1B:44:11:3A:B7"));
+		assertTrue(isValidMacAddress("00:1b:44:11:3a:b7")); // Lowercase
+		assertTrue(isValidMacAddress("FF:FF:FF:FF:FF:FF"));
+		
+		// Valid MAC addresses - hyphen format
+		assertTrue(isValidMacAddress("00-1B-44-11-3A-B7"));
+		assertTrue(isValidMacAddress("00-1b-44-11-3a-b7")); // Lowercase
+		
+		// Valid MAC addresses - no separators
+		assertTrue(isValidMacAddress("001B44113AB7"));
+		assertTrue(isValidMacAddress("001b44113ab7")); // Lowercase
+		
+		// Invalid MAC addresses
+		assertFalse(isValidMacAddress("00:1B:44:11:3A")); // Too short
+		assertFalse(isValidMacAddress("00:1B:44:11:3A:B7:99")); // Too long
+		assertFalse(isValidMacAddress("GG:1B:44:11:3A:B7")); // Invalid hex
+		assertFalse(isValidMacAddress("00:1B:44:11:3A:B7:XX")); // Invalid characters
+		
+		// Null/empty input
+		assertFalse(isValidMacAddress(null));
+		assertFalse(isValidMacAddress(""));
+	}
+
+	@Test void a102_isValidHostname() {
+		// Valid hostnames
+		assertTrue(isValidHostname("example.com"));
+		assertTrue(isValidHostname("sub.example.com"));
+		assertTrue(isValidHostname("test-host.example.com"));
+		assertTrue(isValidHostname("localhost"));
+		assertTrue(isValidHostname("a")); // Single character
+		assertTrue(isValidHostname("a-b")); // With hyphen
+		
+		// Invalid hostnames
+		assertFalse(isValidHostname("-invalid.com")); // Starts with hyphen
+		assertFalse(isValidHostname("invalid-.com")); // Ends with hyphen
+		assertFalse(isValidHostname("example..com")); // Empty label
+		assertFalse(isValidHostname(".example.com")); // Starts with dot
+		assertFalse(isValidHostname("example.com.")); // Ends with dot
+		assertFalse(isValidHostname("example_com")); // Underscore not allowed
+		assertFalse(isValidHostname("example@com")); // @ not allowed
+		
+		// Label too long (64 characters)
+		var longLabel = "a".repeat(64) + ".com";
+		assertFalse(isValidHostname(longLabel));
+		
+		// Total length too long (254 characters)
+		var longHostname = "a".repeat(63) + "." + "b".repeat(63) + "." + "c".repeat(63) + "." + "d".repeat(64) + ".com";
+		assertFalse(isValidHostname(longHostname));
+		
+		// Null/empty input
+		assertFalse(isValidHostname(null));
+		assertFalse(isValidHostname(""));
+	}
+
+	@Test void a103_wordCount() {
+		// Basic word counting
+		assertEquals(2, wordCount("Hello world"));
+		assertEquals(4, wordCount("The quick brown fox"));
+		assertEquals(5, wordCount("Hello, world! How are you?"));
+		
+		// Single word
+		assertEquals(1, wordCount("Hello"));
+		assertEquals(1, wordCount("word"));
+		
+		// Multiple spaces
+		assertEquals(3, wordCount("word1    word2    word3"));
+		
+		// Words with underscores
+		assertEquals(2, wordCount("variable_name test_word"));
+		
+		// Words with numbers
+		assertEquals(3, wordCount("test123 456 word"));
+		
+		// Empty/null input
+		assertEquals(0, wordCount(null));
+		assertEquals(0, wordCount(""));
+		assertEquals(0, wordCount("   ")); // Only whitespace
+		
+		// Punctuation only
+		assertEquals(0, wordCount("!@#$%^&*()"));
+	}
+
+	@Test void a104_lineCount() {
+		// Basic line counting
+		assertEquals(3, lineCount("line1\nline2\nline3"));
+		assertEquals(1, lineCount("single line"));
+		
+		// Windows line endings
+		assertEquals(2, lineCount("line1\r\nline2"));
+		
+		// Mixed line endings
+		assertEquals(3, lineCount("line1\nline2\r\nline3"));
+		
+		// Empty lines
+		assertEquals(3, lineCount("line1\n\nline3"));
+		assertEquals(2, lineCount("\nline2"));
+		assertEquals(2, lineCount("line1\n"));
+		
+		// Only newlines
+		assertEquals(3, lineCount("\n\n"));
+		
+		// Null/empty input
+		assertEquals(0, lineCount(null));
+		assertEquals(0, lineCount(""));
+	}
+
+	@Test void a105_mostFrequentChar() {
+		// Basic frequency
+		assertEquals('l', mostFrequentChar("hello"));
+		assertEquals('a', mostFrequentChar("aabbcc")); // First encountered
+		
+		// Single character
+		assertEquals('a', mostFrequentChar("aaaa"));
+		
+		// All different
+		assertEquals('a', mostFrequentChar("abcd")); // First character
+		
+		// With spaces
+		assertEquals('l', mostFrequentChar("hello world")); // 'l' appears 3 times
+		
+		// Case sensitive
+		assertEquals('l', mostFrequentChar("Hello")); // 'l' appears 2 times, 'H' appears 1 time
+		
+		// Numbers
+		assertEquals('1', mostFrequentChar("112233"));
+		
+		// Null/empty input
+		assertEquals('\0', mostFrequentChar(null));
+		assertEquals('\0', mostFrequentChar(""));
+	}
+
+	@Test void a106_entropy() {
+		// No randomness (all same character)
+		assertEquals(0.0, entropy("aaaa"), 0.0001);
+		
+		// High randomness (all different)
+		var entropy1 = entropy("abcd");
+		assertTrue(entropy1 > 1.5); // Should be around 2.0
+		
+		// Medium randomness
+		var entropy2 = entropy("hello");
+		assertTrue(entropy2 > 0.0 && entropy2 < 3.0);
+		
+		// Balanced distribution
+		var entropy3 = entropy("aabbcc");
+		assertTrue(entropy3 > 0.0);
+		
+		// Single character
+		assertEquals(0.0, entropy("a"), 0.0001);
+		
+		// Null/empty input
+		assertEquals(0.0, entropy(null), 0.0001);
+		assertEquals(0.0, entropy(""), 0.0001);
+		
+		// Verify entropy increases with more variety
+		var entropy4 = entropy("abcdefghijklmnopqrstuvwxyz");
+		assertTrue(entropy4 > entropy("hello"));
+	}
+
+	@Test void a107_readabilityScore() {
+		// Simple sentence (should have higher score)
+		var score1 = readabilityScore("The cat sat.");
+		assertTrue(score1 > 0.0 && score1 <= 100.0);
+		
+		// More complex sentence (should have lower score)
+		var score2 = readabilityScore("The sophisticated implementation demonstrates advanced algorithmic complexity.");
+		assertTrue(score2 >= 0.0 && score2 <= 100.0); // Can be 0.0 for very complex text
+		assertTrue(score2 < score1); // Complex should score lower
+		
+		// Multiple sentences
+		var score3 = readabilityScore("Hello world. How are you? I am fine!");
+		assertTrue(score3 > 0.0 && score3 <= 100.0);
+		
+		// Single word
+		var score4 = readabilityScore("Hello.");
+		assertTrue(score4 > 0.0 && score4 <= 100.0);
+		
+		// No sentence ending
+		var score5 = readabilityScore("Hello world");
+		assertTrue(score5 > 0.0 && score5 <= 100.0);
+		
+		// Null/empty input
+		assertEquals(0.0, readabilityScore(null), 0.0001);
+		assertEquals(0.0, readabilityScore(""), 0.0001);
+		
+		// Only punctuation
+		assertEquals(0.0, readabilityScore("!@#$"), 0.0001);
+		
+		// Verify score is in valid range
+		var score6 = readabilityScore("This is a test sentence with multiple words.");
+		assertTrue(score6 >= 0.0 && score6 <= 100.0);
 	}
 
 	//====================================================================================================

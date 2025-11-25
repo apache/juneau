@@ -17,7 +17,6 @@
 package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -28,13 +27,47 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
+import org.apache.juneau.common.utils.*;
 
 /**
- * Lightweight wrapper around a {@link Package} object.
+ * Lightweight wrapper around a {@link Package} object providing convenient access to package metadata and annotations.
  *
  * <p>
- * Provides caching and convenient access to package metadata and annotations.
+ * This class provides a cached wrapper around Java {@link Package} objects, extending the standard API with
+ * convenient methods for accessing package annotations and metadata. Instances are cached and reused for efficiency.
  *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Cached instances - package info objects are cached and reused
+ * 	<li>Annotation support - get annotations declared on the package
+ * 	<li>Convenient access - easy access to package name and metadata
+ * 	<li>Thread-safe - instances are immutable and safe for concurrent access
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Accessing package-level annotations
+ * 	<li>Working with package metadata
+ * 	<li>Building frameworks that need to analyze package information
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Get PackageInfo from a class</jc>
+ * 	PackageInfo <jv>pi</jv> = PackageInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ *
+ * 	<jc>// Get package name</jc>
+ * 	String <jv>name</jv> = <jv>pi</jv>.getName();
+ *
+ * 	<jc>// Get annotations</jc>
+ * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> =
+ * 		<jv>pi</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link ClassInfo} - Class introspection
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * </ul>
  */
 public class PackageInfo implements Annotatable {
 
@@ -89,7 +122,7 @@ public class PackageInfo implements Annotatable {
 	protected PackageInfo(Package inner) {
 		assertArgNotNull("inner", inner);
 		this.inner = inner;
-		this.annotations = memoize(() -> opt(inner).map(pkg -> stream(pkg.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
+		this.annotations = memoize(() -> opt(inner).map(pkg -> stream(pkg.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
 	}
 
 	/**

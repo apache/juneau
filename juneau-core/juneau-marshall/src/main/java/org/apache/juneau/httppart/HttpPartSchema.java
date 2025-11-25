@@ -2847,7 +2847,7 @@ public class HttpPartSchema {
 		 * @since 9.2.0
 		 */
 		Builder applyJakartaValidation(Annotation a) {
-			String simpleName = scn(a.annotationType());
+			String simpleName = cns(a.annotationType());
 
 			try {
 				switch (simpleName) {

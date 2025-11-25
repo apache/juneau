@@ -19,7 +19,6 @@ package org.apache.juneau.common.reflect;
 import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -30,20 +29,75 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.utils.*;
+
 /**
- * Lightweight utility class for introspecting information about a field.
+ * Lightweight utility class for introspecting information about a Java field.
  *
  * <p>
- * Extends {@link AccessibleInfo} to provide {@link AccessibleObject} functionality.
+ * This class provides a convenient wrapper around {@link Field} that extends the standard Java reflection
+ * API with additional functionality for field introspection, annotation handling, and value access.
+ * It extends {@link AccessibleInfo} to provide {@link AccessibleObject} functionality for accessing
+ * private fields.
  *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Field introspection - access field metadata, type, modifiers
+ * 	<li>Annotation support - get annotations declared on the field
+ * 	<li>Value access - get and set field values with type safety
+ * 	<li>Accessibility control - make private fields accessible
+ * 	<li>Thread-safe - instances are immutable and safe for concurrent access
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Introspecting field metadata for code generation or analysis
+ * 	<li>Accessing field values in beans or data objects
+ * 	<li>Finding annotations on fields
+ * 	<li>Working with field types and modifiers
+ * 	<li>Building frameworks that need to analyze or manipulate field values
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Get FieldInfo from a class</jc>
+ * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ * 	FieldInfo <jv>field</jv> = <jv>ci</jv>.getField(<js>"myField"</js>);
+ *
+ * 	<jc>// Get field type</jc>
+ * 	ClassInfo <jv>type</jv> = <jv>field</jv>.getType();
+ *
+ * 	<jc>// Get annotations</jc>
+ * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> =
+ * 		<jv>field</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
+ *
+ * 	<jc>// Access field value</jc>
+ * 	MyClass <jv>obj</jv> = <jk>new</jk> MyClass();
+ * 	<jv>field</jv>.accessible();  <jc>// Make accessible if private</jc>
+ * 	Object <jv>value</jv> = <jv>field</jv>.get(<jv>obj</jv>);
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link ClassInfo} - Class introspection
+ * 	<li class='jc'>{@link MethodInfo} - Method introspection
+ * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * </ul>
  */
 public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, Annotatable {
 	/**
-	 * Convenience method for instantiating a {@link FieldInfo};
+	 * Creates a FieldInfo wrapper for the specified field.
 	 *
-	 * @param declaringClass The class that declares this method.
-	 * @param inner The field being wrapped.
-	 * @return A new {@link FieldInfo} object.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+	 * 	Field <jv>f</jv> = MyClass.<jk>class</jk>.getField(<js>"myField"</js>);
+	 * 	FieldInfo <jv>fi</jv> = FieldInfo.<jsm>of</jsm>(<jv>ci</jv>, <jv>f</jv>);
+	 * </p>
+	 *
+	 * @param declaringClass The ClassInfo for the class that declares this field. Must not be <jk>null</jk>.
+	 * @param inner The field being wrapped. Must not be <jk>null</jk>.
+	 * @return A new FieldInfo object wrapping the field.
 	 */
 	public static FieldInfo of(ClassInfo declaringClass, Field inner) {
 		assertArgNotNull("declaringClass", declaringClass);
@@ -51,10 +105,19 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	}
 
 	/**
-	 * Convenience method for instantiating a {@link FieldInfo};
+	 * Creates a FieldInfo wrapper for the specified field.
 	 *
-	 * @param inner The field being wrapped.
-	 * @return A new {@link FieldInfo} object.
+	 * <p>
+	 * This convenience method automatically determines the declaring class from the field.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Field <jv>f</jv> = MyClass.<jk>class</jk>.getField(<js>"myField"</js>);
+	 * 	FieldInfo <jv>fi</jv> = FieldInfo.<jsm>of</jsm>(<jv>f</jv>);
+	 * </p>
+	 *
+	 * @param inner The field being wrapped. Must not be <jk>null</jk>.
+	 * @return A new FieldInfo object wrapping the field.
 	 */
 	public static FieldInfo of(Field inner) {
 		assertArgNotNull("inner", inner);
@@ -70,7 +133,12 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	/**
 	 * Constructor.
 	 *
-	 * @param declaringClass The class that declares this method.
+	 * <p>
+	 * Creates a new FieldInfo wrapper for the specified field. This constructor is protected
+	 * and should not be called directly. Use the static factory methods {@link #of(Field)} or
+	 * obtain FieldInfo instances from {@link ClassInfo#getField(Field)}.
+	 *
+	 * @param declaringClass The ClassInfo for the class that declares this field.
 	 * @param inner The field being wrapped.
 	 */
 	protected FieldInfo(ClassInfo declaringClass, Field inner) {
@@ -79,7 +147,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.type = memoize(() -> ClassInfo.of(inner.getType()));
-		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> ai(this, a)).toList());
+		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
 		this.fullName = memoize(this::findFullName);
 	}
 

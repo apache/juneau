@@ -21,12 +21,56 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.reflect.*;
 
 /**
- * Base class for reflection info classes that wrap {@link AccessibleObject}.
+ * Abstract base class for reflection info classes that wrap {@link AccessibleObject}.
  *
  * <p>
- * This class provides common functionality for {@link FieldInfo}, {@link MethodInfo}, and {@link ConstructorInfo}
- * that mirrors the {@link AccessibleObject} API.
+ * This class extends {@link ElementInfo} to provide common functionality for reflection elements that can be made
+ * accessible (fields, methods, and constructors). It mirrors the {@link AccessibleObject} API, allowing private
+ * members to be accessed via reflection.
  *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Accessibility control - make private members accessible
+ * 	<li>Security exception handling - gracefully handles security exceptions
+ * 	<li>Accessibility checking - check if an element is accessible
+ * 	<li>Fluent API - methods return <c>this</c> for method chaining
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Accessing private fields, methods, or constructors
+ * 	<li>Building frameworks that need to work with non-public members
+ * 	<li>Testing scenarios where private members need to be accessed
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Make accessible</jc>
+ * 	AccessibleInfo <jv>ai</jv> = ...;
+ * 	<jv>ai</jv>.setAccessible();  <jc>// Makes private member accessible</jc>
+ *
+ * 	<jc>// Check accessibility</jc>
+ * 	<jk>if</jk> (! <jv>ai</jv>.isAccessible()) {
+ * 		<jv>ai</jv>.setAccessible();
+ * 	}
+ *
+ * 	<jc>// Fluent API</jc>
+ * 	<jv>ai</jv>.accessible();  <jc>// Returns this after making accessible</jc>
+ * </p>
+ *
+ * <h5 class='section'>Security:</h5>
+ * <p>
+ * The {@link #setAccessible()} method attempts to make the element accessible and quietly ignores
+ * {@link SecurityException} if the security manager denies access. This allows code to work in
+ * both secure and non-secure environments.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link ElementInfo} - Base class for all reflection elements
+ * 	<li class='jc'>{@link FieldInfo} - Field introspection
+ * 	<li class='jc'>{@link MethodInfo} - Method introspection
+ * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * </ul>
  */
 public abstract class AccessibleInfo extends ElementInfo {
 

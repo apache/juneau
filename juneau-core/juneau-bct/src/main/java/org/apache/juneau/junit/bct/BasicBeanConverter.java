@@ -823,7 +823,7 @@ public class BasicBeanConverter implements BeanConverter {
 			.computeIfAbsent(c, this::findListifier)
 			.map(x -> (Listifier)x)
 			.map(x -> (List<Object>)x.apply(this, o2))
-			.orElseThrow(() -> illegalArg("Object of type {0} could not be converted to a list.", scn(o2)));
+			.orElseThrow(() -> illegalArg("Object of type {0} could not be converted to a list.", cns(o2)));
 		// @formatter:on
 	}
 
@@ -884,7 +884,7 @@ public class BasicBeanConverter implements BeanConverter {
 		// @formatter:on
 		if (isEmpty.isPresent()) return isEmpty.get() ? 0 : 1;
 
-		throw illegalArg("Object of type {0} does not have a determinable size.", scn(o));
+		throw illegalArg("Object of type {0} does not have a determinable size.", cns(o));
 	}
 
 	@Override

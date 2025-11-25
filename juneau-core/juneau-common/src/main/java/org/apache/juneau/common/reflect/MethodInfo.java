@@ -30,27 +30,87 @@ import java.util.stream.*;
 import org.apache.juneau.common.utils.*;
 
 /**
- * Lightweight utility class for introspecting information about a method.
+ * Lightweight utility class for introspecting information about a Java method.
  *
+ * <p>
+ * This class provides a convenient wrapper around {@link Method} that extends the standard Java reflection
+ * API with additional functionality for method introspection, annotation handling, and hierarchy traversal.
+ * It's designed to be lightweight, thread-safe, and cached for efficient reuse.
+ *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Method introspection - access method metadata, parameters, return type, exceptions
+ * 	<li>Annotation support - get annotations from method and overridden methods in hierarchy
+ * 	<li>Hierarchy traversal - find matching methods in parent classes and interfaces
+ * 	<li>Type-safe access - wrapper around reflection with convenient methods
+ * 	<li>Thread-safe - instances are immutable and safe for concurrent access
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Introspecting method metadata for code generation or analysis
+ * 	<li>Finding annotations on methods including those from parent classes
+ * 	<li>Discovering method hierarchies and overridden methods
+ * 	<li>Working with method parameters and return types
+ * 	<li>Building frameworks that need to analyze method signatures
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Get MethodInfo from a class</jc>
+ * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ * 	MethodInfo <jv>method</jv> = <jv>ci</jv>.getMethod(<js>"myMethod"</js>);
+ *
+ * 	<jc>// Get return type</jc>
+ * 	ClassInfo <jv>returnType</jv> = <jv>method</jv>.getReturnType();
+ *
+ * 	<jc>// Get annotations including from parent methods</jc>
+ * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> =
+ * 		<jv>method</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
+ *
+ * 	<jc>// Find matching methods in hierarchy</jc>
+ * 	List&lt;MethodInfo&gt; <jv>matching</jv> = <jv>method</jv>.getMatchingMethods();
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link ClassInfo} - Class introspection
+ * 	<li class='jc'>{@link FieldInfo} - Field introspection
+ * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
+ * 	<li class='jc'>{@link ParameterInfo} - Parameter introspection
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * </ul>
  */
 public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {
 	/**
-	 * Convenience method for instantiating a {@link MethodInfo};
+	 * Creates a MethodInfo wrapper for the specified method.
 	 *
-	 * @param declaringClass The class that declares this method.
-	 * @param inner The method being wrapped.
-	 * @return A new {@link MethodInfo} object.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
+	 * 	MethodInfo <jv>mi</jv> = MethodInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>, <jv>m</jv>);
+	 * </p>
+	 *
+	 * @param declaringClass The class that declares this method. Must not be <jk>null</jk>.
+	 * @param inner The method being wrapped. Must not be <jk>null</jk>.
+	 * @return A new MethodInfo object wrapping the method.
 	 */
 	public static MethodInfo of(Class<?> declaringClass, Method inner) {
 		return ClassInfo.of(declaringClass).getMethod(inner);
 	}
 
 	/**
-	 * Convenience method for instantiating a {@link MethodInfo};
+	 * Creates a MethodInfo wrapper for the specified method.
 	 *
-	 * @param declaringClass The class that declares this method.
-	 * @param inner The method being wrapped.
-	 * @return A new {@link MethodInfo} object.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+	 * 	Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
+	 * 	MethodInfo <jv>mi</jv> = MethodInfo.<jsm>of</jsm>(<jv>ci</jv>, <jv>m</jv>);
+	 * </p>
+	 *
+	 * @param declaringClass The ClassInfo for the class that declares this method. Must not be <jk>null</jk>.
+	 * @param inner The method being wrapped. Must not be <jk>null</jk>.
+	 * @return A new MethodInfo object wrapping the method.
 	 */
 	public static MethodInfo of(ClassInfo declaringClass, Method inner) {
 		assertArgNotNull("declaringClass", declaringClass);
@@ -58,10 +118,19 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
-	 * Convenience method for instantiating a {@link MethodInfo};
+	 * Creates a MethodInfo wrapper for the specified method.
 	 *
-	 * @param inner The method being wrapped.
-	 * @return A new {@link MethodInfo} object.
+	 * <p>
+	 * This convenience method automatically determines the declaring class from the method.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
+	 * 	MethodInfo <jv>mi</jv> = MethodInfo.<jsm>of</jsm>(<jv>m</jv>);
+	 * </p>
+	 *
+	 * @param inner The method being wrapped. Must not be <jk>null</jk>.
+	 * @return A new MethodInfo object wrapping the method.
 	 */
 	public static MethodInfo of(Method inner) {
 		assertArgNotNull("inner", inner);
@@ -76,7 +145,12 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	/**
 	 * Constructor.
 	 *
-	 * @param declaringClass The class that declares this method.
+	 * <p>
+	 * Creates a new MethodInfo wrapper for the specified method. This constructor is protected
+	 * and should not be called directly. Use the static factory methods {@link #of(Method)} or
+	 * obtain MethodInfo instances from {@link ClassInfo#getMethod(Method)}.
+	 *
+	 * @param declaringClass The ClassInfo for the class that declares this method.
 	 * @param inner The method being wrapped.
 	 */
 	protected MethodInfo(ClassInfo declaringClass, Method inner) {

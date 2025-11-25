@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.function;
 
+import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
@@ -76,10 +77,9 @@ class Function2_Test extends TestBase {
 
 	@Test void b04_andThen_withNullAfter() {
 		Function2<Integer,Integer,Integer> first = (a, b) -> a + b;
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'after' cannot be null", () -> {
 			first.andThen(null);
 		});
-		assertTrue(ex.getMessage().contains("Argument 'after' cannot be null"));
 	}
 
 	@Test void b05_andThen_afterReturnsNull() {

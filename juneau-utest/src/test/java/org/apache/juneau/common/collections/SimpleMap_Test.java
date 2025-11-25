@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -118,11 +119,9 @@ class SimpleMap_Test extends TestBase {
 		String[] keys = { "key1", "key2", "key1" };
 		String[] values = { "value1", "value2", "value3" };
 
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: key1", () -> {
 			new SimpleMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("Duplicate key found: key1"));
 	}
 
 	@Test
@@ -130,11 +129,9 @@ class SimpleMap_Test extends TestBase {
 		String[] keys = { null, "key2", null };
 		String[] values = { "value1", "value2", "value3" };
 
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: null", () -> {
 			new SimpleMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("Duplicate key found: null"));
 	}
 
 	@Test
@@ -142,11 +139,9 @@ class SimpleMap_Test extends TestBase {
 		String[] keys = { "key1", null, "key2", "key1" };
 		String[] values = { "value1", "value2", "value3", "value4" };
 
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: key1", () -> {
 			new SimpleMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("Duplicate key found: key1"));
 	}
 
 	@Test
@@ -171,13 +166,9 @@ class SimpleMap_Test extends TestBase {
 		var keys = a("key1", "key2", "key3");
 		var values = a("value1", "value2");
 
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, java.util.List.of("array lengths differ", "3", "2"), () -> {
 			new SimpleMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("array lengths differ"));
-		assertTrue(ex.getMessage().contains("3")); // keys length
-		assertTrue(ex.getMessage().contains("2")); // values length
 	}
 
 	@Test
@@ -185,13 +176,9 @@ class SimpleMap_Test extends TestBase {
 		var keys = a("key1", "key2");
 		var values = a("value1", "value2", "value3", "value4");
 
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, java.util.List.of("array lengths differ", "2", "4"), () -> {
 			new SimpleMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("array lengths differ"));
-		assertTrue(ex.getMessage().contains("2")); // keys length
-		assertTrue(ex.getMessage().contains("4")); // values length
 	}
 
 	@Test
@@ -199,11 +186,9 @@ class SimpleMap_Test extends TestBase {
 		var keys = new String[0];
 		var values = a("value1");
 
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "array lengths differ", () -> {
 			new SimpleMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("array lengths differ"));
 	}
 
 	@Test
@@ -211,11 +196,9 @@ class SimpleMap_Test extends TestBase {
 		var keys = a("key1", "key2");
 		var values = new String[0];
 
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "array lengths differ", () -> {
 			new SimpleMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("array lengths differ"));
 	}
 
 	//====================================================================================================
@@ -251,11 +234,9 @@ class SimpleMap_Test extends TestBase {
 
 		SimpleMap<String,String> map = new SimpleMap<>(keys, values);
 
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "No key 'null' defined in map", () -> {
 			map.put(null, "newValue");
 		});
-
-		assertTrue(ex.getMessage().contains("No key 'null' defined in map"));
 	}
 
 	@Test

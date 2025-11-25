@@ -206,7 +206,7 @@ class Discriminator_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"mapping,propertyName,x1,x2",
 				"LinkedHashMap,String,String,<null>"
 			);

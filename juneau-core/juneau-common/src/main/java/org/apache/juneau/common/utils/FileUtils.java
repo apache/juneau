@@ -88,10 +88,13 @@ public class FileUtils {
 	 */
 	public static File createTempFile(String name, String contents) throws IOException {
 		var f = createTempFile(name);
-		try (var r = new StringReader(contents); Writer w = new FileWriter(f)) {
-			pipe(r, w);
-			w.flush();
+		if (contents != null) {
+			try (var r = new StringReader(contents); Writer w = new FileWriter(f)) {
+				pipe(r, w);
+				w.flush();
+			}
 		}
+		// If contents is null, create an empty file
 		return f;
 	}
 
@@ -166,7 +169,10 @@ public class FileUtils {
 		if (isEmpty(path))
 			return null;
 		path = trimTrailingSlashes(path);
-		var i = path.lastIndexOf('/');
+		if (isEmpty(path))
+			return null;  // Path contained only slashes
+		// Handle both forward slashes (Unix) and backslashes (Windows)
+		var i = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
 		return i == -1 ? path : path.substring(i + 1);
 	}
 

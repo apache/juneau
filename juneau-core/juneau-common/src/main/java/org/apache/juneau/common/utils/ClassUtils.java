@@ -21,11 +21,9 @@ import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
@@ -319,12 +317,12 @@ public class ClassUtils {
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", scn(c), scn(pt));
+			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", cns(c), cns(pt));
 		}
 
 		var gsc = cc.getGenericSuperclass();
 
-		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", scn(pt));
+		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", cns(pt));
 
 		var cpt = (ParameterizedType)gsc;
 		var atArgs = cpt.getActualTypeArguments();
@@ -484,42 +482,6 @@ public class ClassUtils {
 	}
 
 	/**
-	 * Returns a stream of nested annotations in a repeated annotation if the specified annotation is a repeated annotation,
-	 * or a singleton stream with the same annotation if not.
-	 *
-	 * <p>
-	 * This method is a stream-based alternative to {@link #splitRepeated(Annotation)} that avoids creating intermediate arrays.
-	 *
-	 * <p>
-	 * <b>Example:</b>
-	 * <p class='bjava'>
-	 * 	<jc>// Given an annotation that may be repeatable</jc>
-	 * 	Annotation <jv>annotation</jv> = ...;
-	 *
-	 * 	<jc>// Stream individual annotations (expanded if repeatable)</jc>
-	 * 	streamRepeated(<jv>annotation</jv>)
-	 * 		.forEach(<jv>a</jv> -&gt; System.<jsf>out</jsf>.println(<jv>a</jv>));
-	 * </p>
-	 *
-	 * @param a The annotation to split.
-	 * @return A stream of nested annotations, or a singleton stream with the same annotation if it's not repeated.
-	 * 	Never <jk>null</jk>.
-	 */
-	public static Stream<Annotation> streamRepeated(Annotation a) {
-		try {
-			var ci = info(a.annotationType());
-			var mi = ci.getRepeatedAnnotationMethod();
-			if (nn(mi)) {
-				Annotation[] annotations = mi.invoke(a);
-				return Arrays.stream(annotations);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return Stream.of(a);
-	}
-
-	/**
 	 * Returns the generic parameter type of the Value type.
 	 *
 	 * @param t The type to find the parameter type of.
@@ -558,7 +520,7 @@ public class ClassUtils {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static boolean isVoid(Class c) {
-		return c == null || c == void.class || c == Void.class || scn(c).equalsIgnoreCase("void");
+		return c == null || c == void.class || c == Void.class || cns(c).equalsIgnoreCase("void");
 	}
 
 	/**
@@ -641,7 +603,7 @@ public class ClassUtils {
 	 * @param value The object to get the simple class name for.
 	 * @return The simple name of the class or <jk>null</jk> if the value was null.
 	 */
-	public static String simpleClassName(Object value) {
+	public static String classNameSimple(Object value) {
 		if (value instanceof ClassInfo value2)
 			return value2.getNameSimple();
 		return value == null ? null : value instanceof Class<?> c ? c.getSimpleName() : value.getClass().getSimpleName();
@@ -685,14 +647,14 @@ public class ClassUtils {
 	 * @param value The object to get the simple qualified class name for.
 	 * @return The simple qualified name of the class or <jk>null</jk> if the value was null.
 	 */
-	public static String simpleQualifiedClassName(Object value) {
+	public static String classNameSimpleQualified(Object value) {
 		if (value == null)
 			return null;
 		var clazz = value instanceof Class<?> ? (Class<?>)value : value.getClass();
 
 		// Handle array types by recursively getting component type
 		if (clazz.isArray()) {
-			return simpleQualifiedClassName(clazz.getComponentType()) + "[]";
+			return classNameSimpleQualified(clazz.getComponentType()) + "[]";
 		}
 
 		// Handle non-array types

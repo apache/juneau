@@ -234,7 +234,7 @@ class HeaderInfo_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"allowEmptyValue,allowReserved,deprecated,description,x-example,examples,explode,required,schema,style,x1,x2",
 				"Boolean,Boolean,Boolean,String,String,LinkedHashMap,Boolean,Boolean,SchemaInfo,String,String,<null>"
 			);

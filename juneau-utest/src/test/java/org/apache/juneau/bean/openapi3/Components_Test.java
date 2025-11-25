@@ -212,7 +212,7 @@ class Components_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"callbacks,examples,headers,links,parameters,requestBodies,responses,schemas,securitySchemes,x1,x2",
 				"LinkedHashMap,LinkedHashMap,LinkedHashMap,LinkedHashMap,LinkedHashMap,LinkedHashMap,LinkedHashMap,LinkedHashMap,LinkedHashMap,String,<null>"
 			);

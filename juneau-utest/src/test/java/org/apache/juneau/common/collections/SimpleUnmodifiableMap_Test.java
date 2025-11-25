@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -122,11 +123,9 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		var keys = a("key1", "key2", "key1");
 		var values = a("value1", "value2", "value3");
 
-		var ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: key1", () -> {
 			new SimpleUnmodifiableMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("Duplicate key found: key1"));
 	}
 
 	@Test
@@ -134,11 +133,9 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		var keys = a(null, "key2", null);
 		var values = a("value1", "value2", "value3");
 
-		var ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: null", () -> {
 			new SimpleUnmodifiableMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("Duplicate key found: null"));
 	}
 
 	@Test
@@ -146,11 +143,9 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		var keys = a("key1", null, "key2", "key1");
 		var values = a("value1", "value2", "value3", "value4");
 
-		var ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: key1", () -> {
 			new SimpleUnmodifiableMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("Duplicate key found: key1"));
 	}
 
 	@Test
@@ -206,13 +201,9 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		var keys = a("key1", "key2", "key3");
 		var values = a("value1", "value2");
 
-		var ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, java.util.List.of("array lengths differ", "3", "2"), () -> {
 			new SimpleUnmodifiableMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("array lengths differ"));
-		assertTrue(ex.getMessage().contains("3")); // keys length
-		assertTrue(ex.getMessage().contains("2")); // values length
 	}
 
 	@Test
@@ -220,13 +211,9 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		var keys = a("key1", "key2");
 		var values = a("value1", "value2", "value3", "value4");
 
-		var ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, java.util.List.of("array lengths differ", "2", "4"), () -> {
 			new SimpleUnmodifiableMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("array lengths differ"));
-		assertTrue(ex.getMessage().contains("2")); // keys length
-		assertTrue(ex.getMessage().contains("4")); // values length
 	}
 
 	@Test
@@ -234,11 +221,9 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		var keys = new String[0];
 		var values = a("value1");
 
-		var ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "array lengths differ", () -> {
 			new SimpleUnmodifiableMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("array lengths differ"));
 	}
 
 	@Test
@@ -246,11 +231,9 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		var keys = a("key1", "key2");
 		var values = new String[0];
 
-		var ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "array lengths differ", () -> {
 			new SimpleUnmodifiableMap<>(keys, values);
 		});
-
-		assertTrue(ex.getMessage().contains("array lengths differ"));
 	}
 
 	//====================================================================================================

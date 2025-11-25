@@ -21,11 +21,54 @@ import static org.apache.juneau.common.utils.AssertionUtils.*;
 import java.io.*;
 
 /**
- * Wraps an existing {@link Writer} where the {@link #close()} method is a no-op.
+ * A wrapper around a {@link Writer} that prevents the underlying writer from being closed.
  *
  * <p>
- * Useful in cases where you're working with streams that should not be implicitly closed.
+ * This class wraps an existing {@link Writer} and intercepts the {@link #close()} method,
+ * making it a no-op (except for flushing). All other operations are delegated to the underlying
+ * writer. This is useful when you need to pass a writer to code that will close it, but you
+ * want to keep the underlying writer open for further use.
  *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Prevents closing - {@link #close()} flushes but doesn't close the underlying writer
+ * 	<li>Transparent delegation - all other operations pass through to the wrapped writer
+ * 	<li>Useful for resource management - allows multiple consumers without premature closing
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Passing writers to APIs that close them, but you need to keep the writer open
+ * 	<li>Multiple operations on the same writer where intermediate operations might close it
+ * 	<li>Resource management scenarios where you control the writer lifecycle
+ * 	<li>Wrapping system writers that should not be closed
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Wrap a writer that should not be closed</jc>
+ * 	FileWriter <jv>fw</jv> = <jk>new</jk> FileWriter(<js>"output.txt"</js>);
+ * 	NoCloseWriter <jv>wrapper</jv> = <jk>new</jk> NoCloseWriter(<jv>fw</jv>);
+ *
+ * 	<jc>// Pass to code that might close it</jc>
+ * 	<jv>someMethod</jv>(<jv>wrapper</jv>);  <jc>// May call close(), but fw remains open</jc>
+ *
+ * 	<jc>// Continue using the original writer</jc>
+ * 	<jv>fw</jv>.write(<js>"more data"</js>);
+ * 	<jv>fw</jv>.close();  <jc>// Close when actually done</jc>
+ * </p>
+ *
+ * <h5 class='section'>Important Notes:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>The {@link #close()} method flushes the writer but does not close the underlying writer
+ * 	<li>You are responsible for closing the underlying writer when you're done with it
+ * 	<li>This wrapper does not prevent resource leaks - ensure the underlying writer is eventually closed
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link NoCloseOutputStream} - OutputStream counterpart
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonIO">juneau-common-io</a>
+ * </ul>
  */
 public class NoCloseWriter extends Writer {
 
@@ -34,7 +77,17 @@ public class NoCloseWriter extends Writer {
 	/**
 	 * Constructor.
 	 *
-	 * @param w The writer to wrap.  Must not be <jk>null</jk>.
+	 * <p>
+	 * Creates a new NoCloseWriter that wraps the specified Writer. The wrapper will prevent
+	 * the underlying writer from being closed via the {@link #close()} method.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	FileWriter <jv>fw</jv> = <jk>new</jk> FileWriter(<js>"file.txt"</js>);
+	 * 	NoCloseWriter <jv>wrapper</jv> = <jk>new</jk> NoCloseWriter(<jv>fw</jv>);
+	 * </p>
+	 *
+	 * @param w The Writer to wrap. Must not be <jk>null</jk>.
 	 */
 	public NoCloseWriter(Writer w) {
 		this.w = assertArgNotNull("w", w);
@@ -55,6 +108,23 @@ public class NoCloseWriter extends Writer {
 		return w.append(csq, start, end);
 	}
 
+	/**
+	 * Flushes the writer but does not close the underlying Writer.
+	 *
+	 * <p>
+	 * This method flushes any buffered data to the underlying writer but does not close it.
+	 * The underlying writer remains open and can continue to be used after this method is called.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	FileWriter <jv>fw</jv> = <jk>new</jk> FileWriter(<js>"file.txt"</js>);
+	 * 	NoCloseWriter <jv>wrapper</jv> = <jk>new</jk> NoCloseWriter(<jv>fw</jv>);
+	 * 	<jv>wrapper</jv>.close();  <jc>// Flushes but doesn't close fw</jc>
+	 * 	<jv>fw</jv>.write(<js>"still works"</js>);  <jc>// fw is still open</jc>
+	 * </p>
+	 *
+	 * @throws IOException If an I/O error occurs while flushing.
+	 */
 	@Override /* Overridden from Writer */
 	public void close() throws IOException {
 		w.flush();

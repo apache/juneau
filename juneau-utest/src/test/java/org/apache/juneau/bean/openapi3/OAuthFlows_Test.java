@@ -200,7 +200,7 @@ class OAuthFlows_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"authorizationCode,clientCredentials,implicit,password,x1,x2",
 				"OAuthFlow,OAuthFlow,OAuthFlow,OAuthFlow,String,<null>"
 			);

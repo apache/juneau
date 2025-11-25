@@ -23,11 +23,47 @@ import java.lang.annotation.*;
 import java.lang.reflect.Modifier;
 
 /**
- * Base class for all reflection wrapper objects.
+ * Abstract base class for all reflection wrapper objects providing common modifier checking functionality.
  *
  * <p>
- * Provides common modifier checking functionality for classes, methods, fields, constructors, and other reflection elements.
+ * This class provides the foundation for all reflection info wrappers (classes, methods, fields, constructors, etc.)
+ * by providing common functionality for checking Java language modifiers and element flags. Subclasses extend this
+ * to provide specific functionality for their element type.
  *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Modifier checking - check for public, private, protected, static, final, etc.
+ * 	<li>Flag checking - check for element flags using {@link ElementFlag}
+ * 	<li>Combined flag checking - check for multiple flags at once
+ * 	<li>Extensible - subclasses can add element-specific flag checks
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Checking modifiers on reflection elements
+ * 	<li>Filtering elements by flags
+ * 	<li>Building frameworks that need to analyze element characteristics
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Check modifiers</jc>
+ * 	ElementInfo <jv>ei</jv> = ...;
+ * 	<jk>boolean</jk> <jv>isPublic</jv> = <jv>ei</jv>.isPublic();
+ * 	<jk>boolean</jk> <jv>isStatic</jv> = <jv>ei</jv>.isStatic();
+ *
+ * 	<jc>// Check flags</jc>
+ * 	<jk>boolean</jk> <jv>hasFlag</jv> = <jv>ei</jv>.hasFlag(ElementFlag.PUBLIC);
+ * 	<jk>boolean</jk> <jv>hasAllFlags</jv> = <jv>ei</jv>.hasAllFlags(ElementFlag.PUBLIC, ElementFlag.STATIC);
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link ElementFlag} - Element flags enumeration
+ * 	<li class='jc'>{@link ClassInfo} - Class introspection
+ * 	<li class='jc'>{@link MethodInfo} - Method introspection
+ * 	<li class='jc'>{@link FieldInfo} - Field introspection
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * </ul>
  */
 public abstract class ElementInfo {
 

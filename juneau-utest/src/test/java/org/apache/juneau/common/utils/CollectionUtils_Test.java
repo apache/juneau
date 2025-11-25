@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -450,29 +451,23 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a37_m_duplicateKey_nonNull() {
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: key1", () -> {
 			m("key1", "value1", "key2", "value2", "key1", "value3");
 		});
-
-		assertTrue(ex.getMessage().contains("Duplicate key found: key1"));
 	}
 
 	@Test
 	void a38_m_duplicateKey_nullKeys() {
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: null", () -> {
 			m(null, "value1", "key2", "value2", null, "value3");
 		});
-
-		assertTrue(ex.getMessage().contains("Duplicate key found: null"));
 	}
 
 	@Test
 	void a39_m_duplicateKey_inLargerMap() {
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: a", () -> {
 			m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "a", 6);
 		});
-
-		assertTrue(ex.getMessage().contains("Duplicate key found: a"));
 	}
 
 	@Test

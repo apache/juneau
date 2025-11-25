@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.common.reflect;
 
-import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -27,11 +26,68 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.common.function.ResettableSupplier;
+import org.apache.juneau.common.utils.*;
 
 /**
- * Lightweight utility class for introspecting information about a method parameter.
+ * Lightweight utility class for introspecting information about a method or constructor parameter.
  *
- */
+ * <p>
+ * This class provides a convenient wrapper around {@link Parameter} that extends the standard Java reflection
+ * API with additional functionality for parameter introspection, annotation handling, and name resolution.
+ * It supports resolving parameter names from bytecode (when compiled with <c>-parameters</c>) or from
+ * {@link org.apache.juneau.annotation.Name @Name} annotations.
+ *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Parameter introspection - access parameter metadata, type, annotations
+ * 	<li>Name resolution - resolve parameter names from bytecode or annotations
+ * 	<li>Qualifier support - extract qualifier names from annotations
+ * 	<li>Hierarchy traversal - find matching parameters in parent methods/constructors
+ * 	<li>Annotation support - get annotations declared on the parameter
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Introspecting parameter metadata for code generation or analysis
+ * 	<li>Resolving parameter names for dependency injection frameworks
+ * 	<li>Finding annotations on parameters
+ * 	<li>Working with parameter types and qualifiers
+ * 	<li>Building frameworks that need to analyze method/constructor signatures
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Get ParameterInfo from a method</jc>
+ * 	MethodInfo <jv>mi</jv> = ...;
+ * 	ParameterInfo <jv>param</jv> = <jv>mi</jv>.getParameters().get(0);
+ *
+	 * 	<jc>// Get parameter type</jc>
+	 * 	ClassInfo <jv>type</jv> = <jv>param</jv>.getParameterType();
+	 *
+	 * 	<jc>// Get resolved name (from bytecode or @Name annotation)</jc>
+	 * 	String <jv>name</jv> = <jv>param</jv>.getResolvedName();
+	 *
+	 * 	<jc>// Get annotations</jc>
+	 * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> =
+	 * 		<jv>param</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
+	 * </p>
+	 *
+	 * <h5 class='section'>Parameter Name Resolution:</h5>
+	 * <p>
+	 * Parameter names are resolved in the following order:
+	 * <ol class='spaced-list'>
+	 * 	<li>{@link org.apache.juneau.annotation.Name @Name} annotation value (if present)
+	 * 	<li>Bytecode parameter names (if compiled with <c>-parameters</c> flag)
+	 * 	<li><c>arg0</c>, <c>arg1</c>, etc. (fallback if names unavailable)
+	 * </ol>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link MethodInfo} - Method introspection
+	 * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
+	 * 	<li class='jc'>{@link ExecutableInfo} - Common executable functionality
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+	 * </ul>
+	 */
 public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	/**
@@ -62,10 +118,15 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Constructor.
 	 *
-	 * @param executable The constructor or method wrapper.
+	 * <p>
+	 * Creates a new ParameterInfo wrapper for the specified parameter. This constructor is protected
+	 * and should not be called directly. ParameterInfo instances are typically obtained from
+	 * {@link ExecutableInfo#getParameters()}.
+	 *
+	 * @param executable The ExecutableInfo (MethodInfo or ConstructorInfo) that contains this parameter.
 	 * @param inner The parameter being wrapped.
-	 * @param index The parameter index.
-	 * @param type The parameter type.
+	 * @param index The zero-based index of this parameter in the method/constructor signature.
+	 * @param type The ClassInfo representing the parameter type.
 	 */
 	// TODO - Investigate if we can construct ClassInfo directly from parameter.
 	protected ParameterInfo(ExecutableInfo executable, Parameter inner, int index, ClassInfo type) {
@@ -74,7 +135,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		this.inner = inner;
 		this.index = index;
 		this.type = type;
-		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> ai(this, a)).toList());
+		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
 		this.matchingParameters = memoize(this::findMatchingParameters);
 	}
 

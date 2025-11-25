@@ -200,7 +200,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 			msg = e.getMessage();
 			if (nn(msg) && scrubForXssVulnerabilities)
 				msg = msg.replace('<', ' ').replace('>', ' ').replace('&', ' ');
-			var cls = scn(e);
+			var cls = cns(e);
 			if (msg == null)
 				sb.append(f("\nCaused by ({0})", cls));
 			else

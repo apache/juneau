@@ -19,7 +19,6 @@ package org.apache.juneau.common.reflect;
 import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -31,12 +30,56 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.utils.*;
+
 /**
- * Contains common methods between {@link ConstructorInfo} and {@link MethodInfo}.
+ * Abstract base class containing common functionality for {@link ConstructorInfo} and {@link MethodInfo}.
  *
  * <p>
- * Extends {@link AccessibleInfo} to provide {@link AccessibleObject} functionality.
+ * This class provides shared functionality for both constructors and methods, which are both types of
+ * {@link Executable} in Java. It extends {@link AccessibleInfo} to provide {@link AccessibleObject}
+ * functionality for accessing private methods and constructors.
  *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Parameter introspection - access method/constructor parameters
+ * 	<li>Exception handling - get declared exceptions
+ * 	<li>Annotation support - get annotations declared on the executable
+ * 	<li>Name formatting - get short and fully qualified names
+ * 	<li>Parameter matching - match parameters by type (strict and lenient)
+ * 	<li>Accessibility control - make private executables accessible
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Working with both methods and constructors in a unified way
+ * 	<li>Finding methods/constructors that match specific parameter types
+ * 	<li>Introspecting parameter and exception information
+ * 	<li>Building frameworks that need to analyze executable signatures
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Get ExecutableInfo (could be MethodInfo or ConstructorInfo)</jc>
+ * 	MethodInfo <jv>mi</jv> = ...;
+ * 	ExecutableInfo <jv>ei</jv> = <jv>mi</jv>;  <jc>// MethodInfo extends ExecutableInfo</jc>
+ *
+ * 	<jc>// Get parameters</jc>
+ * 	List&lt;ParameterInfo&gt; <jv>params</jv> = <jv>ei</jv>.getParameters();
+ *
+ * 	<jc>// Get exceptions</jc>
+ * 	List&lt;ClassInfo&gt; <jv>exceptions</jv> = <jv>ei</jv>.getExceptions();
+ *
+ * 	<jc>// Check parameter matching</jc>
+ * 	<jk>boolean</jk> <jv>matches</jv> = <jv>ei</jv>.parameterMatches(String.<jk>class</jk>, Integer.<jk>class</jk>);
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link MethodInfo} - Method introspection
+ * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
+ * 	<li class='jc'>{@link ParameterInfo} - Parameter introspection
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * </ul>
  */
 public abstract class ExecutableInfo extends AccessibleInfo {
 
@@ -53,8 +96,13 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param declaringClass The class that declares this method or constructor.
-	 * @param inner The constructor or method that this info represents.
+	 * <p>
+	 * Creates a new ExecutableInfo wrapper for the specified executable (method or constructor).
+	 * This constructor is protected and should not be called directly. Use the constructors
+	 * of {@link MethodInfo} or {@link ConstructorInfo} instead.
+	 *
+	 * @param declaringClass The ClassInfo for the class that declares this method or constructor.
+	 * @param inner The constructor or method that this info represents. Must not be <jk>null</jk>.
 	 */
 	protected ExecutableInfo(ClassInfo declaringClass, Executable inner) {
 		super(inner, assertArgNotNull("inner", inner).getModifiers());
@@ -63,7 +111,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		this.isConstructor = inner instanceof Constructor;
 		this.parameters = memoize(this::findParameters);
 		this.exceptions = memoize(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).toList());
-		this.declaredAnnotations = memoize(() -> stream(inner.getDeclaredAnnotations()).flatMap(a -> streamRepeated(a)).map(a -> ai((Annotatable)this, a)).toList());
+		this.declaredAnnotations = memoize(() -> stream(inner.getDeclaredAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai((Annotatable)this, a)).toList());
 		this.shortName = memoize(() -> f("{0}({1})", getSimpleName(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
 		this.fullName = memoize(this::findFullName);
 	}
@@ -281,7 +329,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The simple name of the underlying method;
 	 */
-	public final String getSimpleName() { return isConstructor ? scn(inner.getDeclaringClass()) : inner.getName(); }
+	public final String getSimpleName() { return isConstructor ? cns(inner.getDeclaringClass()) : inner.getName(); }
 
 	/**
 	 * Returns <jk>true</jk> if this executable can accept the specified arguments in the specified order.

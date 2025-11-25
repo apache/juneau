@@ -1694,6 +1694,489 @@ public class StringUtils {
 	}
 
 	/**
+	 * Validates if a string is a valid regular expression pattern.
+	 *
+	 * <p>
+	 * Attempts to compile the regex pattern to verify it's syntactically correct.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isValidRegex(<js>"[a-z]+"</js>);        <jc>// true</jc>
+	 * 	isValidRegex(<js>"[a-z"</js>);          <jc>// false (unclosed bracket)</jc>
+	 * 	isValidRegex(<js>"(test"</js>);         <jc>// false (unclosed parenthesis)</jc>
+	 * </p>
+	 *
+	 * @param regex The regex pattern to validate. Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the string is a valid regex pattern, <jk>false</jk> otherwise.
+	 */
+	public static boolean isValidRegex(String regex) {
+		if (isEmpty(regex))
+			return false;
+		try {
+			Pattern.compile(regex);
+			return true;
+		} catch (PatternSyntaxException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Validates if a date string matches the specified date format.
+	 *
+	 * <p>
+	 * Uses {@link SimpleDateFormat} to parse the date string according to the format pattern.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isValidDateFormat(<js>"2023-12-25"</js>, <js>"yyyy-MM-dd"</js>);  <jc>// true</jc>
+	 * 	isValidDateFormat(<js>"25/12/2023"</js>, <js>"dd/MM/yyyy"</js>);  <jc>// true</jc>
+	 * 	isValidDateFormat(<js>"2023-13-25"</js>, <js>"yyyy-MM-dd"</js>);  <jc>// false (invalid month)</jc>
+	 * </p>
+	 *
+	 * @param dateStr The date string to validate. Can be <jk>null</jk>.
+	 * @param format The date format pattern (e.g., "yyyy-MM-dd"). Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the date string matches the format, <jk>false</jk> otherwise.
+	 */
+	public static boolean isValidDateFormat(String dateStr, String format) {
+		if (isEmpty(dateStr) || isEmpty(format))
+			return false;
+		try {
+			var sdf = new SimpleDateFormat(format);
+			sdf.setLenient(false); // Strict parsing
+			sdf.parse(dateStr);
+			return true;
+		} catch (ParseException | IllegalArgumentException e) {
+			// IllegalArgumentException thrown for invalid format patterns
+			return false;
+		}
+	}
+
+	/**
+	 * Validates if a time string matches the specified time format.
+	 *
+	 * <p>
+	 * Uses {@link SimpleDateFormat} to parse the time string according to the format pattern.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isValidTimeFormat(<js>"14:30:00"</js>, <js>"HH:mm:ss"</js>);  <jc>// true</jc>
+	 * 	isValidTimeFormat(<js>"2:30 PM"</js>, <js>"h:mm a"</js>);     <jc>// true</jc>
+	 * 	isValidTimeFormat(<js>"25:00:00"</js>, <js>"HH:mm:ss"</js>);  <jc>// false (invalid hour)</jc>
+	 * </p>
+	 *
+	 * @param timeStr The time string to validate. Can be <jk>null</jk>.
+	 * @param format The time format pattern (e.g., "HH:mm:ss"). Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the time string matches the format, <jk>false</jk> otherwise.
+	 */
+	public static boolean isValidTimeFormat(String timeStr, String format) {
+		if (isEmpty(timeStr) || isEmpty(format))
+			return false;
+		try {
+			var sdf = new SimpleDateFormat(format);
+			sdf.setLenient(false); // Strict parsing
+			sdf.parse(timeStr);
+			return true;
+		} catch (ParseException | IllegalArgumentException e) {
+			// IllegalArgumentException thrown for invalid format patterns
+			return false;
+		}
+	}
+
+	/**
+	 * Validates if a string is a valid IP address (IPv4 or IPv6).
+	 *
+	 * <p>
+	 * Supports both IPv4 (e.g., "192.168.1.1") and IPv6 (e.g., "2001:0db8:85a3:0000:0000:8a2e:0370:7334") formats.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isValidIpAddress(<js>"192.168.1.1"</js>);                    <jc>// true</jc>
+	 * 	isValidIpAddress(<js>"2001:0db8:85a3::8a2e:0370:7334"</js>); <jc>// true</jc>
+	 * 	isValidIpAddress(<js>"256.1.1.1"</js>);                      <jc>// false</jc>
+	 * 	isValidIpAddress(<js>"not.an.ip"</js>);                      <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param ip The IP address string to validate. Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the string is a valid IP address, <jk>false</jk> otherwise.
+	 */
+	public static boolean isValidIpAddress(String ip) {
+		if (isEmpty(ip))
+			return false;
+		try {
+			// Try IPv4 first
+			if (ip.contains(".") && !ip.contains(":")) {
+				var parts = ip.split("\\.");
+				if (parts.length != 4)
+					return false;
+				for (var part : parts) {
+					var num = Integer.parseInt(part);
+					if (num < 0 || num > 255)
+						return false;
+				}
+				return true;
+			}
+			// Try IPv6 - use InetAddress for reliable validation
+			if (ip.contains(":")) {
+				try {
+					InetAddress.getByName(ip);
+					return true;
+				} catch (UnknownHostException e) {
+					return false;
+				}
+			}
+			return false;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Validates if a string is a valid MAC address.
+	 *
+	 * <p>
+	 * Supports common MAC address formats:
+	 * <ul>
+	 *   <li>Colon-separated: <js>"00:1B:44:11:3A:B7"</js></li>
+	 *   <li>Hyphen-separated: <js>"00-1B-44-11-3A-B7"</js></li>
+	 *   <li>No separators: <js>"001B44113AB7"</js></li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isValidMacAddress(<js>"00:1B:44:11:3A:B7"</js>);  <jc>// true</jc>
+	 * 	isValidMacAddress(<js>"00-1B-44-11-3A-B7"</js>);  <jc>// true</jc>
+	 * 	isValidMacAddress(<js>"001B44113AB7"</js>);       <jc>// true</jc>
+	 * 	isValidMacAddress(<js>"00:1B:44:11:3A"</js>);     <jc>// false (too short)</jc>
+	 * </p>
+	 *
+	 * @param mac The MAC address string to validate. Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the string is a valid MAC address, <jk>false</jk> otherwise.
+	 */
+	public static boolean isValidMacAddress(String mac) {
+		if (isEmpty(mac))
+			return false;
+		
+		// Remove separators and check if it's 12 hex digits
+		var cleaned = mac.replaceAll("[:-]", "").toUpperCase();
+		if (cleaned.length() != 12)
+			return false;
+		
+		// Check if all characters are valid hex digits
+		return cleaned.matches("^[0-9A-F]{12}$");
+	}
+
+	/**
+	 * Validates if a string is a valid hostname.
+	 *
+	 * <p>
+	 * Validates hostnames according to RFC 1123. A valid hostname:
+	 * <ul>
+	 *   <li>Can contain letters, digits, and hyphens</li>
+	 *   <li>Cannot start or end with a hyphen</li>
+	 *   <li>Each label (dot-separated part) can be up to 63 characters</li>
+	 *   <li>Total length can be up to 253 characters</li>
+	 *   <li>Labels cannot be empty</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isValidHostname(<js>"example.com"</js>);        <jc>// true</jc>
+	 * 	isValidHostname(<js>"sub.example.com"</js>);    <jc>// true</jc>
+	 * 	isValidHostname(<js>"-invalid.com"</js>);       <jc>// false (starts with hyphen)</jc>
+	 * 	isValidHostname(<js>"example..com"</js>);       <jc>// false (empty label)</jc>
+	 * </p>
+	 *
+	 * @param hostname The hostname string to validate. Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the string is a valid hostname, <jk>false</jk> otherwise.
+	 */
+	public static boolean isValidHostname(String hostname) {
+		if (isEmpty(hostname))
+			return false;
+		
+		// Cannot start or end with a dot
+		if (hostname.startsWith(".") || hostname.endsWith("."))
+			return false;
+		
+		// Total length cannot exceed 253 characters
+		if (hostname.length() > 253)
+			return false;
+		
+		// Split by dots (use -1 to preserve trailing empty strings)
+		var labels = hostname.split("\\.", -1);
+		
+		// Must have at least one label
+		if (labels.length == 0)
+			return false;
+		
+		// Check each label
+		for (var label : labels) {
+			// Label cannot be empty
+			if (label.isEmpty())
+				return false;
+			
+			// Label cannot exceed 63 characters
+			if (label.length() > 63)
+				return false;
+			
+			// Label cannot start or end with hyphen
+			if (label.startsWith("-") || label.endsWith("-"))
+				return false;
+			
+			// Label can only contain letters, digits, and hyphens
+			if (!label.matches("^[a-zA-Z0-9-]+$"))
+				return false;
+		}
+		
+		return true;
+	}
+
+	/**
+	 * Counts the number of words in a string.
+	 *
+	 * <p>
+	 * A word is defined as a sequence of one or more word characters (letters, digits, underscores)
+	 * separated by non-word characters.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	wordCount(<js>"Hello world"</js>);              <jc>// 2</jc>
+	 * 	wordCount(<js>"The quick brown fox"</js>);      <jc>// 4</jc>
+	 * 	wordCount(<js>"Hello, world! How are you?"</js>); <jc>// 5</jc>
+	 * </p>
+	 *
+	 * @param str The string to count words in. Can be <jk>null</jk>.
+	 * @return The number of words, or <c>0</c> if the string is <jk>null</jk> or empty.
+	 */
+	public static int wordCount(String str) {
+		if (isEmpty(str))
+			return 0;
+		
+		var count = 0;
+		var inWord = false;
+		
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
+			if (Character.isLetterOrDigit(c) || c == '_') {
+				if (!inWord) {
+					count++;
+					inWord = true;
+				}
+			} else {
+				inWord = false;
+			}
+		}
+		
+		return count;
+	}
+
+	/**
+	 * Counts the number of lines in a string.
+	 *
+	 * <p>
+	 * Counts newline characters. A string ending without a newline is counted as one line.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	lineCount(<js>"line1\nline2\nline3"</js>);      <jc>// 3</jc>
+	 * 	lineCount(<js>"single line"</js>);              <jc>// 1</jc>
+	 * 	lineCount(<js>"line1\r\nline2"</js>);          <jc>// 2</jc>
+	 * </p>
+	 *
+	 * @param str The string to count lines in. Can be <jk>null</jk>.
+	 * @return The number of lines, or <c>0</c> if the string is <jk>null</jk> or empty.
+	 */
+	public static int lineCount(String str) {
+		if (isEmpty(str))
+			return 0;
+		
+		var count = 1; // At least one line
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
+			if (c == '\n') {
+				count++;
+			} else if (c == '\r') {
+				// Handle \r\n as a single line break
+				if (i + 1 < str.length() && str.charAt(i + 1) == '\n') {
+					i++; // Skip the \n
+				}
+				count++;
+			}
+		}
+		
+		return count;
+	}
+
+	/**
+	 * Finds the most frequent character in a string.
+	 *
+	 * <p>
+	 * Returns the character that appears most often. If multiple characters have the same
+	 * frequency, returns the first one encountered.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	mostFrequentChar(<js>"hello"</js>);     <jc>// 'l'</jc>
+	 * 	mostFrequentChar(<js>"aabbcc"</js>);    <jc>// 'a' (first encountered)</jc>
+	 * </p>
+	 *
+	 * @param str The string to analyze. Can be <jk>null</jk>.
+	 * @return The most frequent character, or <c>'\0'</c> if the string is <jk>null</jk> or empty.
+	 */
+	public static char mostFrequentChar(String str) {
+		if (isEmpty(str))
+			return '\0';
+		
+		var charCounts = new int[Character.MAX_VALUE + 1];
+		var maxCount = 0;
+		var maxChar = '\0';
+		
+		// Count occurrences of each character
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
+			charCounts[c]++;
+			if (charCounts[c] > maxCount) {
+				maxCount = charCounts[c];
+				maxChar = c;
+			}
+		}
+		
+		return maxChar;
+	}
+
+	/**
+	 * Calculates the entropy of a string.
+	 *
+	 * <p>
+	 * Entropy measures the randomness or information content of a string.
+	 * Higher entropy indicates more randomness. The formula used is:
+	 * <c>H(X) = -Σ P(x) * log2(P(x))</c>
+	 * where P(x) is the probability of character x.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	entropy(<js>"aaaa"</js>);        <jc>// 0.0 (no randomness)</jc>
+	 * 	entropy(<js>"abcd"</js>);        <jc>// 2.0 (high randomness)</jc>
+	 * 	entropy(<js>"hello"</js>);       <jc>// ~2.32</jc>
+	 * </p>
+	 *
+	 * @param str The string to calculate entropy for. Can be <jk>null</jk>.
+	 * @return The entropy value (0.0 or higher), or <c>0.0</c> if the string is <jk>null</jk> or empty.
+	 */
+	public static double entropy(String str) {
+		if (isEmpty(str))
+			return 0.0;
+		
+		var length = str.length();
+		if (length == 0)
+			return 0.0;
+		
+		// Count character frequencies
+		var charCounts = new int[Character.MAX_VALUE + 1];
+		for (var i = 0; i < length; i++) {
+			charCounts[str.charAt(i)]++;
+		}
+		
+		// Calculate entropy
+		var entropy = 0.0;
+		for (var count : charCounts) {
+			if (count > 0) {
+				var probability = (double) count / length;
+				entropy -= probability * (Math.log(probability) / Math.log(2.0));
+			}
+		}
+		
+		return entropy;
+	}
+
+	/**
+	 * Calculates a simple readability score for a string.
+	 *
+	 * <p>
+	 * Uses a simplified Flesch Reading Ease-like formula based on:
+	 * <ul>
+	 *   <li>Average words per sentence</li>
+	 *   <li>Average syllables per word (estimated)</li>
+	 * </ul>
+	 * Returns a score from 0-100, where higher scores indicate easier reading.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	readabilityScore(<js>"The cat sat."</js>);      <jc>// Higher score (simple)</jc>
+	 * 	readabilityScore(<js>"The sophisticated..."</js>); <jc>// Lower score (complex)</jc>
+	 * </p>
+	 *
+	 * @param str The string to analyze. Can be <jk>null</jk>.
+	 * @return A readability score from 0-100, or <c>0.0</c> if the string is <jk>null</jk> or empty.
+	 */
+	public static double readabilityScore(String str) {
+		if (isEmpty(str))
+			return 0.0;
+		
+		var words = extractWords(str);
+		if (words.isEmpty())
+			return 0.0;
+		
+		// Count sentences (ending with . ! ?)
+		var sentenceCount = 0;
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
+			if (c == '.' || c == '!' || c == '?') {
+				sentenceCount++;
+			}
+		}
+		if (sentenceCount == 0)
+			sentenceCount = 1; // At least one sentence
+		
+		// Calculate average words per sentence
+		var avgWordsPerSentence = (double) words.size() / sentenceCount;
+		
+		// Estimate average syllables per word (simplified: count vowel groups)
+		var totalSyllables = 0;
+		for (var word : words) {
+			totalSyllables += estimateSyllables(word);
+		}
+		var avgSyllablesPerWord = (double) totalSyllables / words.size();
+		
+		// Simplified Flesch Reading Ease formula
+		// Score = 206.835 - (1.015 * ASL) - (84.6 * ASW)
+		// Where ASL = average sentence length (words), ASW = average syllables per word
+		var score = 206.835 - (1.015 * avgWordsPerSentence) - (84.6 * avgSyllablesPerWord);
+		
+		// Clamp to 0-100 range
+		return Math.max(0.0, Math.min(100.0, score));
+	}
+
+	/**
+	 * Helper method to estimate the number of syllables in a word.
+	 */
+	private static int estimateSyllables(String word) {
+		if (word == null || word.isEmpty())
+			return 1;
+		
+		var lower = word.toLowerCase();
+		var count = 0;
+		var prevWasVowel = false;
+		
+		for (var i = 0; i < lower.length(); i++) {
+			var c = lower.charAt(i);
+			var isVowel = (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'y');
+			
+			if (isVowel && !prevWasVowel) {
+				count++;
+			}
+			prevWasVowel = isVowel;
+		}
+		
+		// Handle silent 'e' at the end
+		if (lower.endsWith("e") && count > 1) {
+			count--;
+		}
+		
+		// At least one syllable
+		return Math.max(1, count);
+	}
+
+	/**
 	 * Finds the index of the first occurrence of a substring within a string.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -3197,6 +3680,158 @@ public class StringUtils {
 	}
 
 	/**
+	 * Generates a random UUID string in standard format.
+	 *
+	 * <p>
+	 * Returns a UUID in the format: <c>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</c>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	generateUUID();  <jc>// "550e8400-e29b-41d4-a716-446655440000"</jc>
+	 * </p>
+	 *
+	 * @return A new random UUID string.
+	 */
+	public static String generateUUID() {
+		return UUID.randomUUID().toString();
+	}
+
+	/**
+	 * Generates a random alphabetic string of the specified length.
+	 *
+	 * <p>
+	 * Characters are composed of upper-case and lower-case ASCII letters (a-z, A-Z).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	randomAlphabetic(<jk>5</jk>);  <jc>// "aBcDe"</jc>
+	 * </p>
+	 *
+	 * @param length The length of the generated string.
+	 * @return A new random alphabetic string.
+	 */
+	public static String randomAlphabetic(int length) {
+		if (length < 0)
+			throw new IllegalArgumentException("Length must be non-negative: " + length);
+		var sb = new StringBuilder(length);
+		for (var i = 0; i < length; i++) {
+			var c = RANDOM.nextInt(52);
+			if (c < 26)
+				sb.append((char)('a' + c));
+			else
+				sb.append((char)('A' + c - 26));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Generates a random alphanumeric string of the specified length.
+	 *
+	 * <p>
+	 * Characters are composed of upper-case and lower-case ASCII letters and digits (a-z, A-Z, 0-9).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	randomAlphanumeric(<jk>8</jk>);  <jc>// "aB3dE5fG"</jc>
+	 * </p>
+	 *
+	 * @param length The length of the generated string.
+	 * @return A new random alphanumeric string.
+	 */
+	public static String randomAlphanumeric(int length) {
+		if (length < 0)
+			throw new IllegalArgumentException("Length must be non-negative: " + length);
+		var sb = new StringBuilder(length);
+		for (var i = 0; i < length; i++) {
+			var c = RANDOM.nextInt(62);
+			if (c < 10)
+				sb.append((char)('0' + c));
+			else if (c < 36)
+				sb.append((char)('a' + c - 10));
+			else
+				sb.append((char)('A' + c - 36));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Generates a random numeric string of the specified length.
+	 *
+	 * <p>
+	 * Characters are composed of digits (0-9).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	randomNumeric(<jk>6</jk>);  <jc>// "123456"</jc>
+	 * </p>
+	 *
+	 * @param length The length of the generated string.
+	 * @return A new random numeric string.
+	 */
+	public static String randomNumeric(int length) {
+		if (length < 0)
+			throw new IllegalArgumentException("Length must be non-negative: " + length);
+		var sb = new StringBuilder(length);
+		for (var i = 0; i < length; i++) {
+			sb.append((char)('0' + RANDOM.nextInt(10)));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Generates a random ASCII string of the specified length.
+	 *
+	 * <p>
+	 * Characters are composed of printable ASCII characters (32-126).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	randomAscii(<jk>10</jk>);  <jc>// "!@#$%^&*()"</jc>
+	 * </p>
+	 *
+	 * @param length The length of the generated string.
+	 * @return A new random ASCII string.
+	 */
+	public static String randomAscii(int length) {
+		if (length < 0)
+			throw new IllegalArgumentException("Length must be non-negative: " + length);
+		var sb = new StringBuilder(length);
+		for (var i = 0; i < length; i++) {
+			sb.append((char)(32 + RANDOM.nextInt(95))); // 95 printable ASCII chars (32-126)
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Generates a random string of the specified length using characters from the given character set.
+	 *
+	 * <p>
+	 * Each character in the generated string is randomly selected from the provided character set.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	randomString(<jk>5</jk>, <js>"ABC"</js>);  <jc>// "BACAB"</jc>
+	 * </p>
+	 *
+	 * @param length The length of the generated string.
+	 * @param chars The character set to use. Must not be null or empty.
+	 * @return A new random string.
+	 * @throws IllegalArgumentException If chars is null or empty, or length is negative.
+	 */
+	public static String randomString(int length, String chars) {
+		if (length < 0)
+			throw new IllegalArgumentException("Length must be non-negative: " + length);
+		if (chars == null || chars.isEmpty())
+			throw new IllegalArgumentException("Character set must not be null or empty");
+		var sb = new StringBuilder(length);
+		var charsLen = chars.length();
+		for (var i = 0; i < length; i++) {
+			sb.append(chars.charAt(RANDOM.nextInt(charsLen)));
+		}
+		return sb.toString();
+	}
+
+	/**
 	 * Removes all occurrences of a substring from a string.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -4330,6 +4965,583 @@ public class StringUtils {
 		if (end == -1)
 			return null;
 		return str.substring(start + open.length(), end);
+	}
+
+	/**
+	 * Parses a string containing key-value pairs into a map.
+	 *
+	 * <p>
+	 * Splits the string by the entry delimiter, then splits each entry by the key-value delimiter.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	parseMap(<js>"key1=value1,key2=value2"</js>, <js>'='</js>, <js>','</js>, <jk>false</jk>);
+	 * 	<jc>// {"key1":"value1","key2":"value2"}</jc>
+	 * 	parseMap(<js>" key1 = value1 ; key2 = value2 "</js>, <js>'='</js>, <js>';'</js>, <jk>true</jk>);
+	 * 	<jc>// {"key1":"value1","key2":"value2"}</jc>
+	 * </p>
+	 *
+	 * @param str The string to parse. Can be <jk>null</jk>.
+	 * @param keyValueDelimiter The character that separates keys from values.
+	 * @param entryDelimiter The character that separates entries.
+	 * @param trimKeys If <jk>true</jk>, trims whitespace from keys and values.
+	 * @return A map containing the parsed key-value pairs, or an empty map if the string is <jk>null</jk> or empty.
+	 */
+	public static Map<String, String> parseMap(String str, char keyValueDelimiter, char entryDelimiter, boolean trimKeys) {
+		var result = new LinkedHashMap<String, String>();
+		if (isEmpty(str))
+			return result;
+		
+		var entries = split(str, entryDelimiter);
+		for (var entry : entries) {
+			if (isEmpty(entry))
+				continue;
+			var delimiterIndex = entry.indexOf(keyValueDelimiter);
+			if (delimiterIndex == -1) {
+				// No delimiter found, treat entire entry as key with empty value
+				var key = trimKeys ? entry.trim() : entry;
+				result.put(key, "");
+			} else {
+				var key = entry.substring(0, delimiterIndex);
+				var value = entry.substring(delimiterIndex + 1);
+				if (trimKeys) {
+					key = key.trim();
+					value = value.trim();
+				}
+				result.put(key, value);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Extracts all numeric sequences from a string.
+	 *
+	 * <p>
+	 * Finds all sequences of digits (including decimal numbers with dots).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	extractNumbers(<js>"Price: $19.99, Quantity: 5"</js>);
+	 * 	<jc>// ["19.99", "5"]</jc>
+	 * 	extractNumbers(<js>"Version 1.2.3"</js>);
+	 * 	<jc>// ["1.2", "3"]</jc>
+	 * </p>
+	 *
+	 * @param str The string to extract numbers from. Can be <jk>null</jk>.
+	 * @return A list of numeric strings found in the input, or an empty list if the string is <jk>null</jk> or empty.
+	 */
+	public static List<String> extractNumbers(String str) {
+		if (isEmpty(str))
+			return Collections.emptyList();
+		
+		var result = new ArrayList<String>();
+		var pattern = Pattern.compile("\\d+(?:\\.\\d+)?");
+		var matcher = pattern.matcher(str);
+		while (matcher.find()) {
+			result.add(matcher.group());
+		}
+		return result;
+	}
+
+	/**
+	 * Extracts all email addresses from a string.
+	 *
+	 * <p>
+	 * Uses a basic email regex pattern to find email addresses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	extractEmails(<js>"Contact: user@example.com or admin@test.org"</js>);
+	 * 	<jc>// ["user@example.com", "admin@test.org"]</jc>
+	 * </p>
+	 *
+	 * @param str The string to extract emails from. Can be <jk>null</jk>.
+	 * @return A list of email addresses found in the input, or an empty list if the string is <jk>null</jk> or empty.
+	 */
+	public static List<String> extractEmails(String str) {
+		if (isEmpty(str))
+			return Collections.emptyList();
+		
+		var result = new ArrayList<String>();
+		// Email regex pattern (same as isEmail but without ^ and $ anchors)
+		var pattern = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
+		var matcher = pattern.matcher(str);
+		while (matcher.find()) {
+			result.add(matcher.group());
+		}
+		return result;
+	}
+
+	/**
+	 * Extracts all URLs from a string.
+	 *
+	 * <p>
+	 * Uses a basic URL regex pattern to find URLs (http, https, ftp).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	extractUrls(<js>"Visit https://example.com or http://test.org"</js>);
+	 * 	<jc>// ["https://example.com", "http://test.org"]</jc>
+	 * </p>
+	 *
+	 * @param str The string to extract URLs from. Can be <jk>null</jk>.
+	 * @return A list of URLs found in the input, or an empty list if the string is <jk>null</jk> or empty.
+	 */
+	public static List<String> extractUrls(String str) {
+		if (isEmpty(str))
+			return Collections.emptyList();
+		
+		var result = new ArrayList<String>();
+		// Basic URL pattern: protocol://domain/path
+		var pattern = Pattern.compile("(?:https?|ftp)://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+", Pattern.CASE_INSENSITIVE);
+		var matcher = pattern.matcher(str);
+		while (matcher.find()) {
+			result.add(matcher.group());
+		}
+		return result;
+	}
+
+	/**
+	 * Extracts all words from a string.
+	 *
+	 * <p>
+	 * A word is defined as a sequence of letters, digits, and underscores.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	extractWords(<js>"Hello world! This is a test."</js>);
+	 * 	<jc>// ["Hello", "world", "This", "is", "a", "test"]</jc>
+	 * </p>
+	 *
+	 * @param str The string to extract words from. Can be <jk>null</jk>.
+	 * @return A list of words found in the input, or an empty list if the string is <jk>null</jk> or empty.
+	 */
+	public static List<String> extractWords(String str) {
+		if (isEmpty(str))
+			return Collections.emptyList();
+		
+		var result = new ArrayList<String>();
+		// Word pattern: sequence of word characters (letters, digits, underscore)
+		var pattern = Pattern.compile("\\w+");
+		var matcher = pattern.matcher(str);
+		while (matcher.find()) {
+			result.add(matcher.group());
+		}
+		return result;
+	}
+
+	/**
+	 * Extracts all text segments between start and end markers.
+	 *
+	 * <p>
+	 * Finds all occurrences of text between the start and end markers (non-overlapping).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	extractBetween(<js>"&lt;tag&gt;content&lt;/tag&gt;"</js>, <js>"&lt;"</js>, <js>"&gt;"</js>);
+	 * 	<jc>// ["tag", "/tag"]</jc>
+	 * 	extractBetween(<js>"[one][two][three]"</js>, <js>"["</js>, <js>"]"</js>);
+	 * 	<jc>// ["one", "two", "three"]</jc>
+	 * </p>
+	 *
+	 * @param str The string to extract from. Can be <jk>null</jk>.
+	 * @param start The start marker. Can be <jk>null</jk>.
+	 * @param end The end marker. Can be <jk>null</jk>.
+	 * @return A list of text segments found between the markers, or an empty list if any parameter is <jk>null</jk> or empty.
+	 */
+	public static List<String> extractBetween(String str, String start, String end) {
+		if (isEmpty(str) || isEmpty(start) || isEmpty(end))
+			return Collections.emptyList();
+		
+		var result = new ArrayList<String>();
+		var startIndex = 0;
+		while (true) {
+			var startPos = str.indexOf(start, startIndex);
+			if (startPos == -1)
+				break;
+			var endPos = str.indexOf(end, startPos + start.length());
+			if (endPos == -1)
+				break;
+			result.add(str.substring(startPos + start.length(), endPos));
+			startIndex = endPos + end.length();
+		}
+		return result;
+	}
+
+	/**
+	 * Transliterates characters in a string by mapping characters from one set to another.
+	 *
+	 * <p>
+	 * Performs character-by-character translation. If a character is found in <c>fromChars</c>,
+	 * it is replaced with the corresponding character at the same position in <c>toChars</c>.
+	 * Characters not found in <c>fromChars</c> are left unchanged.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	transliterate(<js>"hello"</js>, <js>"aeiou"</js>, <js>"12345"</js>);
+	 * 	<jc>// "h2ll4"</jc>
+	 * 	transliterate(<js>"ABC"</js>, <js>"ABC"</js>, <js>"XYZ"</js>);
+	 * 	<jc>// "XYZ"</jc>
+	 * </p>
+	 *
+	 * @param str The string to transliterate. Can be <jk>null</jk>.
+	 * @param fromChars The source character set. Can be <jk>null</jk>.
+	 * @param toChars The target character set. Can be <jk>null</jk>.
+	 * @return The transliterated string, or <jk>null</jk> if input is <jk>null</jk>.
+	 * @throws IllegalArgumentException If <c>fromChars</c> and <c>toChars</c> have different lengths.
+	 */
+	public static String transliterate(String str, String fromChars, String toChars) {
+		if (str == null)
+			return null;
+		if (fromChars == null || toChars == null || fromChars.isEmpty() || toChars.isEmpty())
+			return str;
+		if (fromChars.length() != toChars.length())
+			throw new IllegalArgumentException("fromChars and toChars must have the same length");
+		
+		var sb = new StringBuilder(str.length());
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
+			var index = fromChars.indexOf(c);
+			if (index >= 0)
+				sb.append(toChars.charAt(index));
+			else
+				sb.append(c);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Generates a Soundex code for a string.
+	 *
+	 * <p>
+	 * Soundex is a phonetic algorithm for indexing names by sound. The code consists of
+	 * a letter followed by three digits. Similar-sounding names produce the same code.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	soundex(<js>"Smith"</js>);   <jc>// "S530"</jc>
+	 * 	soundex(<js>"Smythe"</js>);  <jc>// "S530"</jc>
+	 * 	soundex(<js>"Robert"</js>);  <jc>// "R163"</jc>
+	 * </p>
+	 *
+	 * @param str The string to generate a Soundex code for. Can be <jk>null</jk>.
+	 * @return The Soundex code (1 letter + 3 digits), or <jk>null</jk> if input is <jk>null</jk> or empty.
+	 */
+	public static String soundex(String str) {
+		if (isEmpty(str))
+			return null;
+		
+		var upper = str.toUpperCase();
+		var result = new StringBuilder(4);
+		result.append(upper.charAt(0));
+		
+		// Soundex mapping: 0 = AEIOUHWY, 1 = BFPV, 2 = CGJKQSXZ, 3 = DT, 4 = L, 5 = MN, 6 = R
+		// H/W/Y don't get codes but don't break sequences either
+		// Initialize lastCode to a value that won't match any real code
+		var lastCode = '\0';
+		
+		for (var i = 1; i < upper.length() && result.length() < 4; i++) {
+			var c = upper.charAt(i);
+			var code = getSoundexCode(c);
+			if (code == '0') {
+				// H/W/Y/vowels - don't add code, but don't update lastCode either
+				// This allows sequences to continue across H/W/Y/vowels
+				continue;
+			}
+			if (code != lastCode) {
+				result.append(code);
+				lastCode = code;
+			}
+			// If code == lastCode, skip it (consecutive same codes)
+		}
+		
+		// Pad with zeros if needed
+		while (result.length() < 4) {
+			result.append('0');
+		}
+		
+		return result.toString();
+	}
+
+	/**
+	 * Helper method to get Soundex code for a character.
+	 */
+	private static char getSoundexCode(char c) {
+		if (c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' || c == 'H' || c == 'W' || c == 'Y')
+			return '0';
+		if (c == 'B' || c == 'F' || c == 'P' || c == 'V')
+			return '1';
+		if (c == 'C' || c == 'G' || c == 'J' || c == 'K' || c == 'Q' || c == 'S' || c == 'X' || c == 'Z')
+			return '2';
+		if (c == 'D' || c == 'T')
+			return '3';
+		if (c == 'L')
+			return '4';
+		if (c == 'M' || c == 'N')
+			return '5';
+		if (c == 'R')
+			return '6';
+		return '0'; // Non-letter characters
+	}
+
+	/**
+	 * Generates a Metaphone code for a string.
+	 *
+	 * <p>
+	 * Metaphone is a phonetic algorithm that produces codes representing how words sound.
+	 * It's more accurate than Soundex for English words.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	metaphone(<js>"Smith"</js>);   <jc>// "SM0"</jc>
+	 * 	metaphone(<js>"Smythe"</js>);  <jc>// "SM0"</jc>
+	 * 	metaphone(<js>"Robert"</js>);  <jc>// "RBRT"</jc>
+	 * </p>
+	 *
+	 * @param str The string to generate a Metaphone code for. Can be <jk>null</jk>.
+	 * @return The Metaphone code, or <jk>null</jk> if input is <jk>null</jk> or empty.
+	 */
+	public static String metaphone(String str) {
+		if (isEmpty(str))
+			return null;
+		
+		var upper = str.toUpperCase().replaceAll("[^A-Z]", "");
+		if (upper.isEmpty())
+			return "";
+		
+		var result = new StringBuilder();
+		var i = 0;
+		var len = upper.length();
+		
+		// Handle initial characters
+		if (upper.startsWith("KN") || upper.startsWith("GN") || upper.startsWith("PN") || upper.startsWith("AE") || upper.startsWith("WR")) {
+			i = 1;
+		} else if (upper.startsWith("X")) {
+			result.append('S');
+			i = 1;
+		} else if (upper.startsWith("WH")) {
+			result.append('W');
+			i = 2;
+		}
+		
+		// Process remaining characters
+		while (i < len && result.length() < 4) {
+			var c = upper.charAt(i);
+			var prev = i > 0 ? upper.charAt(i - 1) : '\0';
+			var next = i < len - 1 ? upper.charAt(i + 1) : '\0';
+			var next2 = i < len - 2 ? upper.charAt(i + 2) : '\0';
+			
+			// Skip duplicates (except C)
+			if (c == prev && c != 'C') {
+				i++;
+				continue;
+			}
+			
+			switch (c) {
+				case 'B':
+					if (prev != 'M' || next != '\0')
+						result.append('B');
+					break;
+				case 'C':
+					if (next == 'H') {
+						if (prev == 'S')
+							result.append('K');
+						else
+							result.append('X');
+						i++;
+					} else if (next == 'I' || next == 'E' || next == 'Y') {
+						result.append('S');
+					} else {
+						result.append('K');
+					}
+					break;
+				case 'D':
+					if (next == 'G' && (next2 == 'E' || next2 == 'I' || next2 == 'Y')) {
+						result.append('J');
+						i++;
+					} else {
+						result.append('T');
+					}
+					break;
+				case 'F':
+				case 'J':
+				case 'L':
+				case 'M':
+				case 'N':
+				case 'R':
+					result.append(c);
+					break;
+				case 'G':
+					if (next == 'H' && (next2 == 'A' || next2 == 'E' || next2 == 'I' || next2 == 'O' || next2 == 'U')) {
+						// Silent GH
+					} else if (next == 'N' && (next2 == 'E' || next2 == 'D')) {
+						// Silent GN
+					} else if ((next == 'E' || next == 'I' || next == 'Y') && prev != 'G') {
+						result.append('J');
+					} else {
+						result.append('K');
+					}
+					break;
+				case 'H':
+					if (!isVowel(prev) || !isVowel(next))
+						result.append('H');
+					break;
+				case 'K':
+					if (prev != 'C')
+						result.append('K');
+					break;
+				case 'P':
+					if (next == 'H') {
+						result.append('F');
+						i++;
+					} else {
+						result.append('P');
+					}
+					break;
+				case 'Q':
+					result.append('K');
+					break;
+				case 'S':
+					if (next == 'H') {
+						result.append('X');
+						i++;
+					} else if (next == 'I' && (next2 == 'O' || next2 == 'A')) {
+						result.append('X');
+						i++;
+					} else {
+						result.append('S');
+					}
+					break;
+				case 'T':
+					if (next == 'H') {
+						result.append('0'); // TH sound
+						i++;
+					} else if (next == 'I' && (next2 == 'O' || next2 == 'A')) {
+						result.append('X');
+						i++;
+					} else {
+						result.append('T');
+					}
+					break;
+				case 'V':
+					result.append('F');
+					break;
+				case 'W', 'Y':
+					if (isVowel(next))
+						result.append(c);
+					break;
+				case 'X':
+					if (i == 0)
+						result.append('S');
+					else
+						result.append("KS");
+					break;
+				case 'Z':
+					result.append('S');
+					break;
+			}
+			i++;
+		}
+		
+		return result.length() > 0 ? result.toString() : upper.substring(0, Math.min(1, upper.length()));
+	}
+
+	/**
+	 * Helper method to check if a character is a vowel.
+	 */
+	private static boolean isVowel(char c) {
+		return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+	}
+
+	/**
+	 * Generates a Double Metaphone code for a string.
+	 *
+	 * <p>
+	 * Double Metaphone is an improved version of Metaphone that returns two codes:
+	 * a primary code and an alternate code. This handles more edge cases and variations.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	doubleMetaphone(<js>"Smith"</js>);   <jc>// "SM0"</jc>
+	 * 	doubleMetaphone(<js>"Schmidt"</js>); <jc>// "XMT"</jc>
+	 * </p>
+	 *
+	 * @param str The string to generate a Double Metaphone code for. Can be <jk>null</jk>.
+	 * @return An array with two elements: [primary code, alternate code]. Returns <jk>null</jk> if input is <jk>null</jk> or empty.
+	 */
+	public static String[] doubleMetaphone(String str) {
+		if (isEmpty(str))
+			return null;
+		
+		// For simplicity, return the same code for both primary and alternate
+		// A full Double Metaphone implementation would be much more complex
+		var primary = metaphone(str);
+		if (primary == null)
+			return null;
+		
+		// Generate alternate code (simplified - full implementation would have different rules)
+		var alternate = primary;
+		
+		return new String[]{primary, alternate};
+	}
+
+	/**
+	 * Normalizes Unicode characters in a string.
+	 *
+	 * <p>
+	 * Uses Unicode normalization form NFD (Canonical Decomposition).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	normalizeUnicode(<js>"café"</js>);
+	 * 	<jc>// Normalized form</jc>
+	 * </p>
+	 *
+	 * @param str The string to normalize. Can be <jk>null</jk>.
+	 * @return The normalized string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String normalizeUnicode(String str) {
+		if (str == null)
+			return null;
+		return Normalizer.normalize(str, Normalizer.Form.NFD);
+	}
+
+	/**
+	 * Removes diacritical marks (accents) from characters in a string.
+	 *
+	 * <p>
+	 * Normalizes the string to NFD form and removes combining diacritical marks.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	removeAccents(<js>"café"</js>);     <jc>// "cafe"</jc>
+	 * 	removeAccents(<js>"naïve"</js>);    <jc>// "naive"</jc>
+	 * 	removeAccents(<js>"résumé"</js>);   <jc>// "resume"</jc>
+	 * </p>
+	 *
+	 * @param str The string to remove accents from. Can be <jk>null</jk>.
+	 * @return The string with accents removed, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String removeAccents(String str) {
+		if (str == null)
+			return null;
+		
+		// Normalize to NFD (decomposed form)
+		var normalized = Normalizer.normalize(str, Normalizer.Form.NFD);
+		
+		// Remove combining diacritical marks (Unicode category Mn)
+		var sb = new StringBuilder(normalized.length());
+		for (var i = 0; i < normalized.length(); i++) {
+			var c = normalized.charAt(i);
+			var type = Character.getType(c);
+			// Mn = Nonspacing_Mark (combining marks)
+			if (type != Character.NON_SPACING_MARK) {
+				sb.append(c);
+			}
+		}
+		
+		return sb.toString();
 	}
 
 	/**
@@ -5613,15 +6825,15 @@ public class StringUtils {
 		if (o instanceof Enum o2)
 			return o2.name();
 		if (o instanceof Class o2)
-			return scn(o2);
+			return cns(o2);
 		if (o instanceof Executable o2) {
 			var sb = new StringBuilder(64);
-			sb.append(o2 instanceof Constructor ? scn(o2.getDeclaringClass()) : o2.getName()).append('(');
+			sb.append(o2 instanceof Constructor ? cns(o2.getDeclaringClass()) : o2.getName()).append('(');
 			var pt = o2.getParameterTypes();
 			for (var i = 0; i < pt.length; i++) {
 				if (i > 0)
 					sb.append(',');
-				sb.append(scn(pt[i]));
+				sb.append(cns(pt[i]));
 			}
 			sb.append(')');
 			return sb.toString();

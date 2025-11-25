@@ -31,23 +31,23 @@ class MethodInfoUtils {
 	static void assertArgType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
 		var params = m.getParameters();
 		if (params.size() != 1)
-			throw new InvalidAnnotationException("Only one parameter can be passed to method with @{0} annotation.  Method=''{0}''", scn(a), m);
+			throw new InvalidAnnotationException("Only one parameter can be passed to method with @{0} annotation.  Method=''{0}''", cns(a), m);
 		var rt = params.get(0).getParameterType().inner();
 		for (var cc : c)
 			if (rt == cc)
 				return;
-		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", scn(a), m);
+		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", cns(a), m);
 	}
 
 	static void assertNoArgs(MethodInfo m, Class<?> a) throws InvalidAnnotationException {
 		if (m.hasParameters())
-			throw new InvalidAnnotationException("Method with @{0} annotation cannot have arguments.  Method=''{1}''", scn(a), m);
+			throw new InvalidAnnotationException("Method with @{0} annotation cannot have arguments.  Method=''{1}''", cns(a), m);
 	}
 
 	static void assertReturnNotVoid(MethodInfo m, Class<?> a) throws InvalidAnnotationException {
 		var rt = m.getReturnType();
 		if (rt.is(void.class))
-			throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", scn(a), m);
+			throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", cns(a), m);
 	}
 
 	static void assertReturnType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
@@ -55,6 +55,6 @@ class MethodInfoUtils {
 		for (var cc : c)
 			if (rt.is(cc))
 				return;
-		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", scn(a), m);
+		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", cns(a), m);
 	}
 }

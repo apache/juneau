@@ -23,12 +23,98 @@ import java.util.*;
 import java.util.function.*;
 
 /**
- * An array list that allows you to control whether it's read-only via a constructor parameter.
+ * An {@link ArrayList} that allows you to control whether it's read-only via a constructor parameter.
  *
  * <p>
- * Override methods such as {@link #overrideAdd(int, Object)} are provided that bypass the unmodifiable restriction
- * on the list.  They allow you to manipulate the list while not exposing the ability to manipulate the list through
- * any of the methods provided by the {@link List} interface (meaning you can pass the object around as an unmodifiable List).
+ * This class provides a unique capability: it can appear as an unmodifiable list to external code (via the standard
+ * {@link List} interface methods) while still allowing internal code to modify it through special "override" methods.
+ * This is useful when you need to pass a list to code that should not modify it, but you still need to modify it
+ * internally.
+ *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li><b>Controlled Mutability:</b> Can be configured as modifiable or unmodifiable at construction time
+ * 	<li><b>Override Methods:</b> Special methods (e.g., {@link #overrideAdd(Object)}) bypass the unmodifiable restriction
+ * 	<li><b>Standard List Interface:</b> Implements all standard {@link List} methods with proper unmodifiable enforcement
+ * 	<li><b>Iterator Protection:</b> Iterators returned from unmodifiable lists prevent modification operations
+ * 	<li><b>Dynamic Control:</b> Can be made unmodifiable after construction via {@link #setUnmodifiable()}
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Passing a list to external code that should not modify it, while maintaining internal modification capability
+ * 	<li>Building a list internally and then "freezing" it before exposing it to clients
+ * 	<li>Creating a list that appears read-only to consumers but can be modified by trusted internal code
+ * 	<li>Implementing defensive copying patterns where the original list needs to remain mutable internally
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a list that appears unmodifiable to external code</jc>
+ * 	ControlledArrayList&lt;String&gt; <jv>list</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>true</jk>);
+ *
+ * 	<jc>// Internal code can still modify using override methods</jc>
+ * 	<jv>list</jv>.overrideAdd(<js>"item1"</js>);
+ * 	<jv>list</jv>.overrideAdd(<js>"item2"</js>);
+ *
+ * 	<jc>// External code sees it as unmodifiable</jc>
+ * 	<jv>list</jv>.add(<js>"item3"</js>);  <jc>// Throws UnsupportedOperationException</jc>
+ *
+ * 	<jc>// Pass to external code safely</jc>
+ * 	processList(<jv>list</jv>);  <jc>// External code cannot modify it</jc>
+ *
+ * 	<jc>// But internal code can still modify</jc>
+ * 	<jv>list</jv>.overrideAdd(<js>"item3"</js>);  <jc>// Works!</jc>
+ * </p>
+ *
+ * <h5 class='section'>Override Methods:</h5>
+ * <p>
+ * The "override" methods (e.g., {@link #overrideAdd(Object)}, {@link #overrideRemove(int)}) bypass the unmodifiable
+ * restriction and allow modification regardless of the list's modifiable state. These methods are intended for use
+ * by trusted internal code that needs to modify the list even when it's marked as unmodifiable.
+ *
+ * <p class='bjava'>
+ * 	<jc>// Create unmodifiable list</jc>
+ * 	ControlledArrayList&lt;String&gt; <jv>list</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>true</jk>);
+ *
+ * 	<jc>// Standard methods throw exceptions</jc>
+ * 	<jv>list</jv>.add(<js>"x"</js>);        <jc>// UnsupportedOperationException</jc>
+ * 	<jv>list</jv>.remove(0);               <jc>// UnsupportedOperationException</jc>
+ *
+ * 	<jc>// Override methods work</jc>
+ * 	<jv>list</jv>.overrideAdd(<js>"x"</js>);     <jc>// OK</jc>
+ * 	<jv>list</jv>.overrideRemove(0);            <jc>// OK</jc>
+ * </p>
+ *
+ * <h5 class='section'>Iterator Behavior:</h5>
+ * <p>
+ * When the list is unmodifiable, iterators returned by {@link #iterator()} and {@link #listIterator()} are read-only.
+ * Attempting to call {@link Iterator#remove()} or {@link ListIterator#set(Object)} on these iterators will throw
+ * {@link UnsupportedOperationException}. However, the override methods can still be used to modify the list.
+ *
+ * <h5 class='section'>Thread Safety:</h5>
+ * <p>
+ * This class is <b>not thread-safe</b>. If multiple threads access a ControlledArrayList concurrently, and at least
+ * one thread modifies the list structurally, it must be synchronized externally. The unmodifiable flag does not
+ * provide thread-safety; it only controls whether standard {@link List} interface methods can modify the list.
+ *
+ * <h5 class='section'>Example - Building and Freezing:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Build a list internally</jc>
+ * 	ControlledArrayList&lt;String&gt; <jv>config</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>false</jk>);
+ * 	<jv>config</jv>.add(<js>"setting1"</js>);
+ * 	<jv>config</jv>.add(<js>"setting2"</js>);
+ *
+ * 	<jc>// Freeze it before exposing</jc>
+ * 	<jv>config</jv>.setUnmodifiable();
+ *
+ * 	<jc>// Now safe to expose - external code cannot modify</jc>
+ * 	<jk>return</jk> <jv>config</jv>;
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonCollections">juneau-common-collections</a>
+ * </ul>
  *
  * @param <E> The element type.
  */
@@ -41,7 +127,20 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	/**
 	 * Constructor.
 	 *
-	 * @param unmodifiable If <jk>true</jk>, this list cannot be modified through normal list operation methods on the {@link List} interface.
+	 * <p>
+	 * Creates an empty list with the specified modifiability setting.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create an empty unmodifiable list</jc>
+	 * 	ControlledArrayList&lt;String&gt; <jv>list</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>true</jk>);
+	 *
+	 * 	<jc>// Create an empty modifiable list</jc>
+	 * 	ControlledArrayList&lt;String&gt; <jv>list2</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>false</jk>);
+	 * </p>
+	 *
+	 * @param unmodifiable If <jk>true</jk>, this list cannot be modified through normal list operation methods
+	 *                     on the {@link List} interface. Use override methods to modify when unmodifiable.
 	 */
 	public ControlledArrayList(boolean unmodifiable) {
 		this.unmodifiable = unmodifiable;
@@ -50,7 +149,21 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	/**
 	 * Constructor.
 	 *
-	 * @param unmodifiable If <jk>true</jk>, this list cannot be modified through normal list operation methods on the {@link List} interface.
+	 * <p>
+	 * Creates a list with the specified initial contents and modifiability setting.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create an unmodifiable list with initial contents</jc>
+	 * 	List&lt;String&gt; <jv>initial</jv> = List.of(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * 	ControlledArrayList&lt;String&gt; <jv>list</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>true</jk>, <jv>initial</jv>);
+	 *
+	 * 	<jc>// Standard methods throw exceptions</jc>
+	 * 	<jv>list</jv>.add(<js>"d"</js>);  <jc>// UnsupportedOperationException</jc>
+	 * </p>
+	 *
+	 * @param unmodifiable If <jk>true</jk>, this list cannot be modified through normal list operation methods
+	 *                     on the {@link List} interface. Use override methods to modify when unmodifiable.
 	 * @param list The initial contents of this list. Must not be <jk>null</jk>.
 	 */
 	public ControlledArrayList(boolean unmodifiable, List<? extends E> list) {
@@ -89,9 +202,22 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this list is modifiable.
+	 * Returns <jk>true</jk> if this list is modifiable through standard {@link List} interface methods.
 	 *
-	 * @return <jk>true</jk> if this list is modifiable.
+	 * <p>
+	 * Note that even when this method returns <jk>false</jk>, the list can still be modified using
+	 * the override methods (e.g., {@link #overrideAdd(Object)}).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ControlledArrayList&lt;String&gt; <jv>list</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>true</jk>);
+	 * 	<jsm>assertFalse</jsm>(<jv>list</jv>.isModifiable());  <jc>// Standard methods cannot modify</jc>
+	 *
+	 * 	ControlledArrayList&lt;String&gt; <jv>list2</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>false</jk>);
+	 * 	<jsm>assertTrue</jsm>(<jv>list2</jv>.isModifiable());  <jc>// Standard methods can modify</jc>
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this list is modifiable through standard {@link List} interface methods.
 	 */
 	public boolean isModifiable() { return ! unmodifiable; }
 
@@ -193,8 +319,20 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	/**
 	 * Same as {@link #add(Object)} but bypasses the modifiable flag.
 	 *
-	 * @param element Element to be stored at the specified position.
-	 * @return <jk>true</jk>.
+	 * <p>
+	 * This method allows you to add an element to the list even when it's marked as unmodifiable.
+	 * It's intended for use by trusted internal code that needs to modify the list regardless of
+	 * its modifiable state.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ControlledArrayList&lt;String&gt; <jv>list</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>true</jk>);
+	 * 	<jv>list</jv>.add(<js>"x"</js>);           <jc>// Throws UnsupportedOperationException</jc>
+	 * 	<jv>list</jv>.overrideAdd(<js>"x"</js>);   <jc>// Works!</jc>
+	 * </p>
+	 *
+	 * @param element Element to be added to this list.
+	 * @return <jk>true</jk> (as specified by {@link Collection#add(Object)}).
 	 */
 	public boolean overrideAdd(E element) {
 		return super.add(element);
@@ -379,11 +517,24 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	}
 
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Makes this list unmodifiable through standard {@link List} interface methods.
 	 *
-	 * @return This object.
+	 * <p>
+	 * After calling this method, all standard modification methods (e.g., {@link #add(Object)},
+	 * {@link #remove(int)}) will throw {@link UnsupportedOperationException}. However, the override
+	 * methods (e.g., {@link #overrideAdd(Object)}) can still be used to modify the list.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ControlledArrayList&lt;String&gt; <jv>list</jv> = <jk>new</jk> ControlledArrayList&lt;&gt;(<jk>false</jk>);
+	 * 	<jv>list</jv>.add(<js>"a"</js>);  <jc>// Works</jc>
+	 *
+	 * 	<jv>list</jv>.setUnmodifiable();
+	 * 	<jv>list</jv>.add(<js>"b"</js>);  <jc>// Throws UnsupportedOperationException</jc>
+	 * 	<jv>list</jv>.overrideAdd(<js>"b"</js>);  <jc>// Still works</jc>
+	 * </p>
+	 *
+	 * @return This object for method chaining.
 	 */
 	public ControlledArrayList<E> setUnmodifiable() {
 		unmodifiable = true;
@@ -402,7 +553,13 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	}
 
 	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this list.
+	 *
+	 * <p>
+	 * This method is called by all standard {@link List} interface modification methods to enforce
+	 * the unmodifiable restriction. Override methods bypass this check.
+	 *
+	 * @throws UnsupportedOperationException if the list is unmodifiable.
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)

@@ -3796,11 +3796,11 @@ public class RestContext extends Context {
 
 			for (var m : map.values()) {
 				if (! beanStore.hasAllParams(m))
-					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(), beanStore.getMissingParams(m));
+					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", cns(m.getDeclaringClass()), m.getSignature(), beanStore.getMissingParams(m));
 				try {
 					m.invoke(r, beanStore.getParams(m));
 				} catch (Exception e) {
-					throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", scn(m.getDeclaringClass()), m.getSignature());
+					throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", cns(m.getDeclaringClass()), m.getSignature());
 				}
 			}
 		}
@@ -4603,13 +4603,13 @@ public class RestContext extends Context {
 						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
 						for (var m : initMap.values()) {
 							if (! beanStore.hasAllParams(m)) {
-								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(),
+								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", cns(m.getDeclaringClass()), m.getSignature(),
 									beanStore.getMissingParams(m));
 							}
 							try {
 								m.invoke(resource.get(), beanStore.getParams(m));
 							} catch (Exception e) {
-								throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", scn(m.getDeclaringClass()), m.getSignature());
+								throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", cns(m.getDeclaringClass()), m.getSignature());
 							}
 						}
 

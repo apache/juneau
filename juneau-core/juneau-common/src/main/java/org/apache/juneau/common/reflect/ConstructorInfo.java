@@ -21,16 +21,68 @@ import java.lang.reflect.*;
 import org.apache.juneau.common.utils.*;
 
 /**
- * Lightweight utility class for introspecting information about a constructor.
+ * Lightweight utility class for introspecting information about a Java constructor.
  *
+ * <p>
+ * This class provides a convenient wrapper around {@link Constructor} that extends the standard Java reflection
+ * API with additional functionality for constructor introspection, annotation handling, and instance creation.
+ * It extends {@link ExecutableInfo} to provide common functionality shared with methods.
+ *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Constructor introspection - access constructor metadata, parameters, exceptions
+ * 	<li>Annotation support - get annotations declared on the constructor
+ * 	<li>Instance creation - create new instances with type safety
+ * 	<li>Accessibility control - make private constructors accessible
+ * 	<li>Thread-safe - instances are immutable and safe for concurrent access
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Introspecting constructor metadata for code generation or analysis
+ * 	<li>Creating instances of classes dynamically
+ * 	<li>Finding annotations on constructors
+ * 	<li>Working with constructor parameters and exceptions
+ * 	<li>Building frameworks that need to instantiate objects
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Get ConstructorInfo from a class</jc>
+ * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ * 	ConstructorInfo <jv>ctor</jv> = <jv>ci</jv>.getConstructor(String.<jk>class</jk>);
+ *
+ * 	<jc>// Get annotations</jc>
+ * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> =
+ * 		<jv>ctor</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
+ *
+ * 	<jc>// Create instance</jc>
+ * 	<jv>ctor</jv>.accessible();  <jc>// Make accessible if private</jc>
+ * 	MyClass <jv>obj</jv> = <jv>ctor</jv>.invoke(<js>"arg"</js>);
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link ClassInfo} - Class introspection
+ * 	<li class='jc'>{@link MethodInfo} - Method introspection
+ * 	<li class='jc'>{@link FieldInfo} - Field introspection
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * </ul>
  */
 public class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo>, Annotatable {
+
 	/**
-	 * Convenience method for instantiating a {@link ConstructorInfo};
+	 * Creates a ConstructorInfo wrapper for the specified constructor.
 	 *
-	 * @param declaringClass The class that declares this method.
-	 * @param inner The constructor being wrapped.
-	 * @return A new {@link ConstructorInfo} object.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+	 * 	Constructor&lt;?&gt; <jv>c</jv> = MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>);
+	 * 	ConstructorInfo <jv>ci2</jv> = ConstructorInfo.<jsm>of</jsm>(<jv>ci</jv>, <jv>c</jv>);
+	 * </p>
+	 *
+	 * @param declaringClass The ClassInfo for the class that declares this constructor. Must not be <jk>null</jk>.
+	 * @param inner The constructor being wrapped. Must not be <jk>null</jk>.
+	 * @return A new ConstructorInfo object wrapping the constructor.
 	 */
 	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> inner) {
 		assertArgNotNull("declaringClass", declaringClass);
@@ -38,10 +90,19 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	/**
-	 * Convenience method for instantiating a {@link ConstructorInfo};
+	 * Creates a ConstructorInfo wrapper for the specified constructor.
 	 *
-	 * @param inner The constructor being wrapped.
-	 * @return A new {@link ConstructorInfo} object.
+	 * <p>
+	 * This convenience method automatically determines the declaring class from the constructor.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Constructor&lt;?&gt; <jv>c</jv> = MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>);
+	 * 	ConstructorInfo <jv>ci</jv> = ConstructorInfo.<jsm>of</jsm>(<jv>c</jv>);
+	 * </p>
+	 *
+	 * @param inner The constructor being wrapped. Must not be <jk>null</jk>.
+	 * @return A new ConstructorInfo object wrapping the constructor.
 	 */
 	public static ConstructorInfo of(Constructor<?> inner) {
 		assertArgNotNull("inner", inner);
@@ -53,7 +114,12 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	/**
 	 * Constructor.
 	 *
-	 * @param declaringClass The class that declares this method.
+	 * <p>
+	 * Creates a new ConstructorInfo wrapper for the specified constructor. This constructor is protected
+	 * and should not be called directly. Use the static factory methods {@link #of(Constructor)} or
+	 * obtain ConstructorInfo instances from {@link ClassInfo#getConstructor(Constructor)}.
+	 *
+	 * @param declaringClass The ClassInfo for the class that declares this constructor.
 	 * @param inner The constructor being wrapped.
 	 */
 	protected ConstructorInfo(ClassInfo declaringClass, Constructor<?> inner) {
@@ -84,10 +150,16 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	/**
-	 * Returns the wrapped method.
+	 * Returns the wrapped constructor.
 	 *
-	 * @param <T> The inner class type.
-	 * @return The wrapped method.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ConstructorInfo <jv>ci</jv> = ...;
+	 * 	Constructor&lt;MyClass&gt; <jv>ctor</jv> = <jv>ci</jv>.inner();
+	 * </p>
+	 *
+	 * @param <T> The class type of the constructor.
+	 * @return The wrapped constructor.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Constructor<T> inner() {

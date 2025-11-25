@@ -200,7 +200,7 @@ class Example_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"description,externalValue,summary,value,x1,x2",
 				"String,String,String,String,String,<null>"
 			);

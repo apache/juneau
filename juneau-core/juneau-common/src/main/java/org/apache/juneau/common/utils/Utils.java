@@ -843,7 +843,7 @@ public class Utils {
 		try {
 			return o.toString();
 		} catch (Throwable t) { // NOSONAR
-			return scn(t) + ": " + t.getMessage();
+			return cns(t) + ": " + t.getMessage();
 		}
 	}
 
@@ -954,7 +954,7 @@ public class Utils {
 	}
 
 	/**
-	 * Shortcut for calling {@link ClassUtils#simpleClassName(Object)}.
+	 * Shortcut for calling {@link ClassUtils#classNameSimple(Object)}.
 	 *
 	 * <p>
 	 * Returns only the simple class name without any package or outer class information.
@@ -985,12 +985,12 @@ public class Utils {
 	 * @param value The object to get the simple class name for.
 	 * @return The simple name of the class or <jk>null</jk> if the value was null.
 	 */
-	public static String scn(Object value) {
-		return ClassUtils.simpleClassName(value);
+	public static String cns(Object value) {
+		return ClassUtils.classNameSimple(value);
 	}
 
 	/**
-	 * Shortcut for calling {@link ClassUtils#simpleQualifiedClassName(Object)}.
+	 * Shortcut for calling {@link ClassUtils#classNameSimpleQualified(Object)}.
 	 *
 	 * <p>
 	 * Returns the simple class name including outer class names, but without the package.
@@ -1027,8 +1027,8 @@ public class Utils {
 	 * @param value The object to get the simple qualified class name for.
 	 * @return The simple qualified name of the class or <jk>null</jk> if the value was null.
 	 */
-	public static String sqcn(Object value) {
-		return ClassUtils.simpleQualifiedClassName(value);
+	public static String cnsq(Object value) {
+		return ClassUtils.classNameSimpleQualified(value);
 	}
 
 	/**
@@ -1224,6 +1224,6 @@ public class Utils {
 			o = opt.orElse(null);
 		if (o == null)
 			return null;
-		return sqcn(o) + "@" + System.identityHashCode(o);
+		return cnsq(o) + "@" + System.identityHashCode(o);
 	}
 }

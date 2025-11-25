@@ -633,7 +633,7 @@ public class Stringifiers {
 	 */
 	private static String stringifyClass(BeanConverter bc, Class<?> clazz) {
 		return switch (bc.getSetting("classNameFormat", "default")) {
-			case "simple" -> scn(clazz);
+			case "simple" -> cns(clazz);
 			case "canonical" -> clazz.getCanonicalName();
 			default -> cn(clazz);
 		};

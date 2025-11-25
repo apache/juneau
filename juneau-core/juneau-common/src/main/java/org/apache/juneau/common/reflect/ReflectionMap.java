@@ -540,7 +540,7 @@ public class ReflectionMap<V> {
 		// c.getSimpleName() == "Builder"
 		// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"
 		// c.getPackage() == "org.apache.juneau.a.rttests"
-		var cSimple = scn(c);
+		var cSimple = cns(c);
 		var cFull = cn(c);
 		if (eq(simpleName, cSimple) || eq(fullName, cFull) || "*".equals(simpleName))
 			return true;

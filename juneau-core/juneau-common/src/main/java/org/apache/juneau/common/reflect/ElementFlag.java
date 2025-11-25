@@ -17,8 +17,62 @@
 package org.apache.juneau.common.reflect;
 
 /**
- * Identifies possible modifiers and attributes on classes, methods, fields, and constructors.
+ * Enumeration of possible modifiers and attributes that can be present on classes, methods, fields, and constructors.
  *
+ * <p>
+ * This enum provides a comprehensive set of flags for identifying Java language modifiers (public, private, static, etc.)
+ * and other attributes (synthetic, deprecated, etc.) that can be present on program elements. Each modifier has both
+ * a positive flag (e.g., <c>PUBLIC</c>) and a negated flag (e.g., <c>NOT_PUBLIC</c>) for convenient filtering.
+ *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Java modifiers - all standard Java modifiers (public, private, protected, static, final, etc.)
+ * 	<li>Negated flags - each modifier has a corresponding NOT_* flag for filtering
+ * 	<li>Non-modifier attributes - flags for synthetic, deprecated, bridge methods, etc.
+ * 	<li>Type attributes - flags for identifying classes, interfaces, enums, records, annotations
+ * </ul>
+ *
+ * <h5 class='section'>Use Cases:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Filtering classes, methods, fields by modifiers
+ * 	<li>Identifying special attributes (synthetic, deprecated, bridge methods)
+ * 	<li>Type checking (enum, record, annotation, interface)
+ * 	<li>Building frameworks that need to analyze program element characteristics
+ * </ul>
+ *
+ * <h5 class='section'>Usage:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Check if a class is public</jc>
+ * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ * 	<jk>boolean</jk> <jv>isPublic</jv> = <jv>ci</jv>.hasFlag(ElementFlag.PUBLIC);
+ *
+ * 	<jc>// Filter methods by modifier</jc>
+ * 	List&lt;MethodInfo&gt; <jv>staticMethods</jv> = <jv>ci</jv>.getMethods()
+ * 		.stream()
+ * 		.filter(<jv>m</jv> -&gt; <jv>m</jv>.hasFlag(ElementFlag.STATIC))
+ * 		.toList();
+ *
+ * 	<jc>// Check for deprecated methods</jc>
+ * 	<jk>boolean</jk> <jv>isDeprecated</jv> = <jv>method</jv>.hasFlag(ElementFlag.DEPRECATED);
+ * </p>
+ *
+ * <h5 class='section'>Modifier Flags:</h5>
+ * <p>
+ * Standard Java modifiers: <c>PUBLIC</c>, <c>PRIVATE</c>, <c>PROTECTED</c>, <c>STATIC</c>, <c>FINAL</c>,
+ * <c>SYNCHRONIZED</c>, <c>VOLATILE</c>, <c>TRANSIENT</c>, <c>NATIVE</c>, <c>ABSTRACT</c>, <c>STRICT</c>.
+ * Each has a corresponding <c>NOT_*</c> flag.
+ *
+ * <h5 class='section'>Attribute Flags:</h5>
+ * <p>
+ * Non-modifier attributes: <c>ANNOTATION</c>, <c>ANONYMOUS</c>, <c>ARRAY</c>, <c>BRIDGE</c>, <c>CLASS</c>,
+ * <c>CONSTRUCTOR</c>, <c>DEFAULT</c>, <c>DEPRECATED</c>, <c>ENUM</c>, <c>ENUM_CONSTANT</c>, <c>HAS_PARAMS</c>,
+ * <c>LOCAL</c>, <c>MEMBER</c>, <c>NON_STATIC_MEMBER</c>, <c>PRIMITIVE</c>, <c>RECORD</c>, <c>SEALED</c>,
+ * <c>SYNTHETIC</c>, <c>VARARGS</c>.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link ElementInfo} - Base class that uses these flags
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * </ul>
  */
 public enum ElementFlag {
 

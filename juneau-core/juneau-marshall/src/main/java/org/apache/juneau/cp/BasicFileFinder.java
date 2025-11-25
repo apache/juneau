@@ -120,7 +120,7 @@ public class BasicFileFinder implements FileFinder {
 	public String toString() {
 		// @formatter:off
 		return filteredMap()
-			.append("class", scn(getClass()))
+			.append("class", cns(getClass()))
 			.append("roots", roots)
 			.append("cachingLimit", cachingLimit)
 			.append("include", includePatterns)

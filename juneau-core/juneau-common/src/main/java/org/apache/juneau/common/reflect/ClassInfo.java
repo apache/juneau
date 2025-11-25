@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.AnnotationUtils.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;

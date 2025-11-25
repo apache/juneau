@@ -389,6 +389,8 @@ public class DateUtils {
 
 		var state = S1;
 		var needsT = false;
+		var timezoneAfterHour = false;  // Track if timezone found after hour (S4)
+		var timezoneAfterMinute = false;  // Track if timezone found after minute (S5)
 		for (var i = 0; i < in.length(); i++) {
 			var c = in.charAt(i);
 			if (state == S1) {
@@ -407,9 +409,17 @@ public class DateUtils {
 			} else if (state == S4) {
 				if (c == ':')
 					state = S5;
+				else if (c == 'Z' || c == '+' || c == '-') {
+					state = S7;  // Timezone immediately after hour (e.g., "2011-01-15T12Z")
+					timezoneAfterHour = true;
+				}
 			} else if (state == S5) {
 				if (c == ':')
 					state = S6;
+				else if (c == 'Z' || c == '+' || c == '-') {
+					state = S7;  // Timezone immediately after minute (e.g., "2011-01-15T12:30Z")
+					timezoneAfterMinute = true;
+				}
 			} else if (state == S6) {
 				if (c == 'Z' || c == '+' || c == '-')
 					state = S7;
@@ -426,7 +436,34 @@ public class DateUtils {
 			case S4 -> in + ":00:00";
 			case S5 -> in + ":00";
 			case S6 -> in;  // Complete time, no timezone
-			case S7 -> in;  // Complete time with timezone
+			case S7 -> {
+				// Complete time with timezone, but may need to add missing components
+				if (timezoneAfterHour) {
+					// Timezone found after hour, need to add :00:00 before timezone
+					var tzIndex = in.length();
+					for (var i = in.length() - 1; i >= 0; i--) {
+						var ch = in.charAt(i);
+						if (ch == 'Z' || ch == '+' || ch == '-') {
+							tzIndex = i;
+							break;
+						}
+					}
+					yield in.substring(0, tzIndex) + ":00:00" + in.substring(tzIndex);
+				} else if (timezoneAfterMinute) {
+					// Timezone found after minute, need to add :00 before timezone
+					var tzIndex = in.length();
+					for (var i = in.length() - 1; i >= 0; i--) {
+						var ch = in.charAt(i);
+						if (ch == 'Z' || ch == '+' || ch == '-') {
+							tzIndex = i;
+							break;
+						}
+					}
+					yield in.substring(0, tzIndex) + ":00" + in.substring(tzIndex);
+				} else {
+					yield in;  // Complete time with timezone (already has seconds)
+				}
+			}
 			default -> in;
 		};
 

@@ -234,7 +234,7 @@ class SecurityScheme_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"authorizationUrl,description,flow,in,name,scopes,tokenUrl,type,x3,x4",
 				"String,String,String,String,String,LinkedHashMap,String,String,String,<null>"
 			);

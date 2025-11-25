@@ -222,7 +222,7 @@ class SecurityRequirement_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"a1,b1,x1,x2",
 				"ArrayList,ArrayList,String,<null>"
 			);

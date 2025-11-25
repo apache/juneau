@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.util.*;
 
 /**
@@ -29,10 +31,11 @@ public class ResourceBundleUtils {
 	 *
 	 * @param baseName The base name of the resource bundle, a fully qualified class name.
 	 * @param locale The locale for which a resource bundle is desired.
-	 * @param loader The class loader from which to load the resource bundle.
+	 * @param loader The class loader from which to load the resource bundle. Must not be <jk>null</jk>.
 	 * @return The matching resource bundle, or <jk>null</jk> if it could not be found.
 	 */
 	public static ResourceBundle findBundle(String baseName, Locale locale, ClassLoader loader) {
+		assertArgNotNull("loader", loader);
 		try {
 			return ResourceBundle.getBundle(baseName, locale, loader);
 		} catch (@SuppressWarnings("unused") MissingResourceException e) {}

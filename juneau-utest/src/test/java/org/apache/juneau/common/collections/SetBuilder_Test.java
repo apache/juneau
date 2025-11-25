@@ -467,7 +467,7 @@ class SetBuilder_Test extends TestBase {
 	void m03_addAny_withArray() {
 		var array = new String[]{"a", "b", "c"};
 		var set = SetBuilder.create(String.class)
-			.addAny(array)
+			.addAny((Object)array)
 			.build();
 
 		assertList(set, "a", "b", "c");
@@ -532,7 +532,7 @@ class SetBuilder_Test extends TestBase {
 			final String value;
 			StringWrapper(String value) { this.value = value; }
 		}
-		
+
 		var converter = new org.apache.juneau.common.utils.Converter() {
 			@Override
 			public <T> T convertTo(Class<T> type, Object o) {

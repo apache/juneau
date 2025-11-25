@@ -395,7 +395,7 @@ class ParameterInfo_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"allowEmptyValue,collectionFormat,default,description,enum,example,examples,exclusiveMaximum,exclusiveMinimum,format,in,items,maxItems,maxLength,maximum,minItems,minLength,minimum,multipleOf,name,pattern,required,schema,type,uniqueItems,x3,x4",
 				"Boolean,String,String,String,LinkedHashSet,String,LinkedHashMap,Boolean,Boolean,String,String,Items,Integer,Integer,Integer,Integer,Integer,Integer,Integer,String,String,Boolean,SchemaInfo,String,Boolean,String,<null>"
 			);

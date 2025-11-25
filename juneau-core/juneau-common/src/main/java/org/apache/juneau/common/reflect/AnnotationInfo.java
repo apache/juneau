@@ -142,7 +142,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * @return The simple class name of the annotation (e.g., {@code "Override"} for {@code @Override}).
 	 */
-	public String getName() { return scn(a.annotationType()); }
+	public String getName() { return cns(a.annotationType()); }
 
 	/**
 	 * Returns the value of a specific annotation method.
@@ -419,7 +419,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return A simple string representation of this annotation.
 	 */
 	public String toSimpleString() {
-		return "@" + scn(a.annotationType()) + "(on=" + annotatable.getLabel() + ")";
+		return "@" + cns(a.annotationType()) + "(on=" + annotatable.getLabel() + ")";
 	}
 
 	/**
