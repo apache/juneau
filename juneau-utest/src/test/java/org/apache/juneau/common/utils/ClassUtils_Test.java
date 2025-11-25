@@ -332,7 +332,7 @@ class ClassUtils_Test {
 	public void h01_getMatchingArgs_exactMatch() {
 		var paramTypes = a(String.class, Integer.class);
 		var args = a("test", 123);
-		var result = getMatchingArgs(paramTypes, args);
+		var result = getMatchingArgs(paramTypes, (Object[])args);
 		assertSame(args, result); // Should return original array (fast path)
 		assertEquals("test", result[0]);
 		assertEquals(123, result[1]);
@@ -342,7 +342,7 @@ class ClassUtils_Test {
 	public void h02_getMatchingArgs_wrongOrder() {
 		var paramTypes = a(Integer.class, String.class);
 		var args = a("test", 123);
-		var result = getMatchingArgs(paramTypes, args);
+		var result = getMatchingArgs(paramTypes, (Object[])args);
 		assertEquals(2, result.length);
 		assertEquals(123, result[0]);
 		assertEquals("test", result[1]);
@@ -352,7 +352,7 @@ class ClassUtils_Test {
 	public void h03_getMatchingArgs_extraArgs() {
 		var paramTypes = a(String.class);
 		var args = a("test", 123, true);
-		var result = getMatchingArgs(paramTypes, args);
+		var result = getMatchingArgs(paramTypes, (Object[])args);
 		assertEquals(1, result.length);
 		assertEquals("test", result[0]);
 	}
@@ -361,7 +361,7 @@ class ClassUtils_Test {
 	public void h04_getMatchingArgs_missingArgs() {
 		var paramTypes = a(String.class, Integer.class, Boolean.class);
 		var args = a("test");
-		var result = getMatchingArgs(paramTypes, args);
+		var result = getMatchingArgs(paramTypes, (Object[])args);
 		assertEquals(3, result.length);
 		assertEquals("test", result[0]);
 		assertNull(result[1]);
@@ -372,7 +372,7 @@ class ClassUtils_Test {
 	public void h05_getMatchingArgs_primitiveTypes() {
 		var paramTypes = a(int.class, String.class);
 		var args = a("test", 123);
-		var result = getMatchingArgs(paramTypes, args);
+		var result = getMatchingArgs(paramTypes, (Object[])args);
 		assertEquals(2, result.length);
 		assertEquals(123, result[0]);
 		assertEquals("test", result[1]);
@@ -382,7 +382,7 @@ class ClassUtils_Test {
 	public void h06_getMatchingArgs_typeHierarchy() {
 		var paramTypes = a(Number.class, String.class);
 		var args = a("test", 123);
-		var result = getMatchingArgs(paramTypes, args);
+		var result = getMatchingArgs(paramTypes, (Object[])args);
 		assertEquals(2, result.length);
 		assertEquals(123, result[0]);
 		assertEquals("test", result[1]);

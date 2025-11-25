@@ -54,6 +54,47 @@ public class StringUtils {
 	public static final Predicate<String> NOT_EMPTY = Utils::isNotEmpty;
 
 	/**
+	 * Empty string constant.
+	 */
+	public static final String EMPTY = "";
+
+	/**
+	 * Single space constant.
+	 */
+	public static final String SPACE = " ";
+
+	/**
+	 * Newline constant (line feed character).
+	 */
+	public static final String NEWLINE = "\n";
+
+	/**
+	 * Tab constant.
+	 */
+	public static final String TAB = "\t";
+
+	/**
+	 * Carriage return + line feed constant (Windows line ending).
+	 */
+	public static final String CRLF = "\r\n";
+
+	/**
+	 * Common separator characters constant.
+	 *
+	 * <p>
+	 * Contains commonly used separator characters: comma, semicolon, colon, pipe, and tab.
+	 */
+	public static final String COMMON_SEPARATORS = ",;:|" + TAB;
+
+	/**
+	 * All whitespace characters constant.
+	 *
+	 * <p>
+	 * Contains all standard whitespace characters: space, tab, newline, carriage return, form feed, and vertical tab.
+	 */
+	public static final String WHITESPACE_CHARS = " \t\n\r\f\u000B";
+
+	/**
 	 * Thread-local cache of MessageFormat objects for improved performance.
 	 *
 	 * <p>MessageFormat objects are not thread-safe, so we use a ThreadLocal cache
@@ -3335,6 +3376,59 @@ public class StringUtils {
 	 */
 	public static String nullIfEmpty(String value) {
 		return isEmpty(value) ? null : value;
+	}
+
+	/**
+	 * Returns the specified string, or an empty string if that string is <jk>null</jk>.
+	 *
+	 * @param str The string value to check.
+	 * @return The string value, or an empty string if the string is <jk>null</jk>.
+	 */
+	public static String emptyIfNull(String str) {
+		return str == null ? "" : str;
+	}
+
+	/**
+	 * Returns the specified string, or the default string if that string is <jk>null</jk> or empty.
+	 *
+	 * @param str The string value to check.
+	 * @param defaultStr The default string to return if the string is <jk>null</jk> or empty.
+	 * @return The string value, or the default string if the string is <jk>null</jk> or empty.
+	 */
+	public static String defaultIfEmpty(String str, String defaultStr) {
+		return isEmpty(str) ? defaultStr : str;
+	}
+
+	/**
+	 * Returns the specified string, or the default string if that string is <jk>null</jk> or blank.
+	 *
+	 * @param str The string value to check.
+	 * @param defaultStr The default string to return if the string is <jk>null</jk> or blank.
+	 * @return The string value, or the default string if the string is <jk>null</jk> or blank.
+	 */
+	public static String defaultIfBlank(String str, String defaultStr) {
+		return isBlank(str) ? defaultStr : str;
+	}
+
+	/**
+	 * Safely converts an object to a string, returning <jk>null</jk> if the object is <jk>null</jk>.
+	 *
+	 * @param obj The object to convert to a string.
+	 * @return The string representation of the object, or <jk>null</jk> if the object is <jk>null</jk>.
+	 */
+	public static String toString(Object obj) {
+		return obj == null ? null : obj.toString();
+	}
+
+	/**
+	 * Safely converts an object to a string, returning the default string if the object is <jk>null</jk>.
+	 *
+	 * @param obj The object to convert to a string.
+	 * @param defaultStr The default string to return if the object is <jk>null</jk>.
+	 * @return The string representation of the object, or the default string if the object is <jk>null</jk>.
+	 */
+	public static String toString(Object obj, String defaultStr) {
+		return obj == null ? defaultStr : obj.toString();
 	}
 
 	/**
@@ -6846,6 +6940,446 @@ public class StringUtils {
 			return readable(l);
 		}
 		return o.toString();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String Array and Collection Utilities
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Converts a collection of strings to a string array.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if the collection is <jk>null</jk>.
+	 * Returns an empty array if the collection is empty.
+	 *
+	 * @param collection The collection to convert. Can be <jk>null</jk>.
+	 * @return A new string array containing the collection elements, or <jk>null</jk> if the collection was <jk>null</jk>.
+	 */
+	public static String[] toStringArray(Collection<String> collection) {
+		if (collection == null)
+			return null;  // NOSONAR - Intentional.
+		return collection.toArray(new String[collection.size()]);
+	}
+
+	/**
+	 * Filters a string array using the specified predicate.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if the array is <jk>null</jk>.
+	 * Returns an empty array if the predicate is <jk>null</jk> or no elements match.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	String[] <jv>array</jv> = {<js>"foo"</js>, <js>""</js>, <js>"bar"</js>, <jk>null</jk>, <js>"baz"</js>};
+	 * 	String[] <jv>filtered</jv> = filter(<jv>array</jv>, StringUtils.<jsf>NOT_EMPTY</jsf>);
+	 * 	<jc>// Returns: ["foo", "bar", "baz"]</jc>
+	 *
+	 * 	String[] <jv>longStrings</jv> = filter(<jv>array</jv>, s -&gt; s != <jk>null</jk> &amp;&amp; s.length() &gt; 3);
+	 * 	<jc>// Returns: ["baz"]</jc>
+	 * </p>
+	 *
+	 * @param array The array to filter. Can be <jk>null</jk>.
+	 * @param predicate The predicate to apply to each element. Can be <jk>null</jk>.
+	 * @return A new array containing only the elements that match the predicate, or <jk>null</jk> if the array was <jk>null</jk>.
+	 */
+	public static String[] filter(String[] array, Predicate<String> predicate) {
+		if (array == null)
+			return null;  // NOSONAR - Intentional.
+		if (predicate == null)
+			return new String[0];
+		return Arrays.stream(array)
+			.filter(predicate)
+			.toArray(String[]::new);
+	}
+
+	/**
+	 * Maps each element of a string array using the specified function.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if the array is <jk>null</jk>.
+	 * Returns an array with <jk>null</jk> elements if the function is <jk>null</jk> or returns <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	String[] <jv>array</jv> = {<js>"foo"</js>, <js>"bar"</js>, <js>"baz"</js>};
+	 * 	String[] <jv>uppercased</jv> = map(<jv>array</jv>, String::toUpperCase);
+	 * 	<jc>// Returns: ["FOO", "BAR", "BAZ"]</jc>
+	 *
+	 * 	String[] <jv>prefixed</jv> = map(<jv>array</jv>, s -&gt; <js>"prefix-"</js> + s);
+	 * 	<jc>// Returns: ["prefix-foo", "prefix-bar", "prefix-baz"]</jc>
+	 * </p>
+	 *
+	 * @param array The array to map. Can be <jk>null</jk>.
+	 * @param mapper The function to apply to each element. Can be <jk>null</jk>.
+	 * @return A new array with the mapped elements, or <jk>null</jk> if the array was <jk>null</jk>.
+	 */
+	public static String[] mapped(String[] array, Function<String, String> mapper) {
+		if (array == null)
+			return null;  // NOSONAR - Intentional.
+		if (mapper == null)
+			return Arrays.copyOf(array, array.length);
+		return Arrays.stream(array)
+			.map(mapper)
+			.toArray(String[]::new);
+	}
+
+	/**
+	 * Removes duplicate elements from a string array, preserving order.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if the array is <jk>null</jk>.
+	 * Uses a {@link LinkedHashSet} to preserve insertion order while removing duplicates.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	String[] <jv>array</jv> = {<js>"foo"</js>, <js>"bar"</js>, <js>"foo"</js>, <js>"baz"</js>, <js>"bar"</js>};
+	 * 	String[] <jv>unique</jv> = distinct(<jv>array</jv>);
+	 * 	<jc>// Returns: ["foo", "bar", "baz"]</jc>
+	 * </p>
+	 *
+	 * @param array The array to process. Can be <jk>null</jk>.
+	 * @return A new array with duplicate elements removed, or <jk>null</jk> if the array was <jk>null</jk>.
+	 */
+	public static String[] distinct(String[] array) {
+		if (array == null)
+			return null;  // NOSONAR - Intentional.
+		return Arrays.stream(array)
+			.collect(Collectors.toCollection(LinkedHashSet::new))
+			.toArray(new String[0]);
+	}
+
+	/**
+	 * Sorts a string array in natural order.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if the array is <jk>null</jk>.
+	 * This method creates a copy of the array and sorts it, leaving the original array unchanged.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	String[] <jv>array</jv> = {<js>"zebra"</js>, <js>"apple"</js>, <js>"banana"</js>};
+	 * 	String[] <jv>sorted</jv> = sort(<jv>array</jv>);
+	 * 	<jc>// Returns: ["apple", "banana", "zebra"]</jc>
+	 * </p>
+	 *
+	 * @param array The array to sort. Can be <jk>null</jk>.
+	 * @return A new sorted array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 */
+	public static String[] sort(String[] array) {
+		if (array == null)
+			return null;  // NOSONAR - Intentional.
+		var result = Arrays.copyOf(array, array.length);
+		Arrays.sort(result);
+		return result;
+	}
+
+	/**
+	 * Sorts a string array in case-insensitive order.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if the array is <jk>null</jk>.
+	 * This method creates a copy of the array and sorts it using case-insensitive comparison,
+	 * leaving the original array unchanged.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	String[] <jv>array</jv> = {<js>"Zebra"</js>, <js>"apple"</js>, <js>"Banana"</js>};
+	 * 	String[] <jv>sorted</jv> = sortIgnoreCase(<jv>array</jv>);
+	 * 	<jc>// Returns: ["apple", "Banana", "Zebra"]</jc>
+	 * </p>
+	 *
+	 * @param array The array to sort. Can be <jk>null</jk>.
+	 * @return A new sorted array (case-insensitive), or <jk>null</jk> if the array was <jk>null</jk>.
+	 */
+	public static String[] sortIgnoreCase(String[] array) {
+		if (array == null)
+			return null;  // NOSONAR - Intentional.
+		var result = Arrays.copyOf(array, array.length);
+		Arrays.sort(result, String.CASE_INSENSITIVE_ORDER);
+		return result;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String Builder Utilities
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Appends a string to a StringBuilder if the string is not empty.
+	 *
+	 * <p>
+	 * Returns the same StringBuilder instance for method chaining.
+	 * If the string is <jk>null</jk> or empty, nothing is appended.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
+	 * 	appendIfNotEmpty(<jv>sb</jv>, <js>"hello"</js>);  <jc>// Appends "hello"</jc>
+	 * 	appendIfNotEmpty(<jv>sb</jv>, <js>""</js>);       <jc>// Does nothing</jc>
+	 * 	appendIfNotEmpty(<jv>sb</jv>, <jk>null</jk>);     <jc>// Does nothing</jc>
+	 * 	appendIfNotEmpty(<jv>sb</jv>, <js>"world"</js>);  <jc>// Appends "world"</jc>
+	 * 	<jc>// Result: "helloworld"</jc>
+	 * </p>
+	 *
+	 * @param sb The StringBuilder to append to. Must not be <jk>null</jk>.
+	 * @param str The string to append if not empty. Can be <jk>null</jk>.
+	 * @return The same StringBuilder instance for method chaining.
+	 * @throws IllegalArgumentException If <c>sb</c> is <jk>null</jk>.
+	 */
+	public static StringBuilder appendIfNotEmpty(StringBuilder sb, String str) {
+		assertArgNotNull("sb", sb);
+		if (isNotEmpty(str))
+			sb.append(str);
+		return sb;
+	}
+
+	/**
+	 * Appends a string to a StringBuilder if the string is not blank.
+	 *
+	 * <p>
+	 * Returns the same StringBuilder instance for method chaining.
+	 * If the string is <jk>null</jk>, empty, or contains only whitespace, nothing is appended.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
+	 * 	appendIfNotBlank(<jv>sb</jv>, <js>"hello"</js>);  <jc>// Appends "hello"</jc>
+	 * 	appendIfNotBlank(<jv>sb</jv>, <js>"   "</js>);    <jc>// Does nothing</jc>
+	 * 	appendIfNotBlank(<jv>sb</jv>, <jk>null</jk>);     <jc>// Does nothing</jc>
+	 * 	appendIfNotBlank(<jv>sb</jv>, <js>"world"</js>);  <jc>// Appends "world"</jc>
+	 * 	<jc>// Result: "helloworld"</jc>
+	 * </p>
+	 *
+	 * @param sb The StringBuilder to append to. Must not be <jk>null</jk>.
+	 * @param str The string to append if not blank. Can be <jk>null</jk>.
+	 * @return The same StringBuilder instance for method chaining.
+	 * @throws IllegalArgumentException If <c>sb</c> is <jk>null</jk>.
+	 */
+	public static StringBuilder appendIfNotBlank(StringBuilder sb, String str) {
+		assertArgNotNull("sb", sb);
+		if (isNotBlank(str))
+			sb.append(str);
+		return sb;
+	}
+
+	/**
+	 * Appends a string to a StringBuilder with a separator, only adding the separator if the StringBuilder is not empty.
+	 *
+	 * <p>
+	 * Returns the same StringBuilder instance for method chaining.
+	 * If the StringBuilder is empty, only the string is appended (no separator).
+	 * If the StringBuilder is not empty, the separator is appended first, then the string.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
+	 * 	appendWithSeparator(<jv>sb</jv>, <js>"first"</js>, <js>", "</js>);   <jc>// Appends "first"</jc>
+	 * 	appendWithSeparator(<jv>sb</jv>, <js>"second"</js>, <js>", "</js>);  <jc>// Appends ", second"</jc>
+	 * 	appendWithSeparator(<jv>sb</jv>, <js>"third"</js>, <js>", "</js>);   <jc>// Appends ", third"</jc>
+	 * 	<jc>// Result: "first, second, third"</jc>
+	 * </p>
+	 *
+	 * @param sb The StringBuilder to append to. Must not be <jk>null</jk>.
+	 * @param str The string to append. Can be <jk>null</jk>.
+	 * @param separator The separator to add before the string if the StringBuilder is not empty. Can be <jk>null</jk>.
+	 * @return The same StringBuilder instance for method chaining.
+	 * @throws IllegalArgumentException If <c>sb</c> is <jk>null</jk>.
+	 */
+	public static StringBuilder appendWithSeparator(StringBuilder sb, String str, String separator) {
+		assertArgNotNull("sb", sb);
+		if (str != null) {
+			if (sb.length() > 0 && separator != null)
+				sb.append(separator);
+			sb.append(str);
+		}
+		return sb;
+	}
+
+	/**
+	 * Builds a string using a functional approach with a StringBuilder.
+	 *
+	 * <p>
+	 * Creates a new StringBuilder, applies the consumer to it, and returns the resulting string.
+	 * This provides a functional way to build strings without manually managing the StringBuilder.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	String <jv>result</jv> = buildString(<jv>sb</jv> -&gt; {
+	 * 		<jv>sb</jv>.append(<js>"Hello"</js>);
+	 * 		<jv>sb</jv>.append(<js>" "</js>);
+	 * 		<jv>sb</jv>.append(<js>"World"</js>);
+	 * 	});
+	 * 	<jc>// Returns: "Hello World"</jc>
+	 *
+	 * 	String <jv>joined</jv> = buildString(<jv>sb</jv> -&gt; {
+	 * 		appendWithSeparator(<jv>sb</jv>, <js>"a"</js>, <js>", "</js>);
+	 * 		appendWithSeparator(<jv>sb</jv>, <js>"b"</js>, <js>", "</js>);
+	 * 		appendWithSeparator(<jv>sb</jv>, <js>"c"</js>, <js>", "</js>);
+	 * 	});
+	 * 	<jc>// Returns: "a, b, c"</jc>
+	 * </p>
+	 *
+	 * @param builder The consumer that builds the string using the provided StringBuilder.
+	 * @return The built string.
+	 * @throws IllegalArgumentException If <c>builder</c> is <jk>null</jk>.
+	 */
+	public static String buildString(Consumer<StringBuilder> builder) {
+		assertArgNotNull("builder", builder);
+		var sb = new StringBuilder();
+		builder.accept(sb);
+		return sb.toString();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Performance and Memory Utilities
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Interns a string, returning the canonical representation.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if the input string is <jk>null</jk>.
+	 * This method provides a null-safe wrapper around {@link String#intern()}.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	String <jv>s1</jv> = <jk>new</jk> String(<js>"test"</js>);
+	 * 	String <jv>s2</jv> = <jk>new</jk> String(<js>"test"</js>);
+	 * 	assertTrue(<jv>s1</jv> != <jv>s2</jv>);  <jc>// Different objects</jc>
+	 *
+	 * 	String <jv>i1</jv> = intern(<jv>s1</jv>);
+	 * 	String <jv>i2</jv> = intern(<jv>s2</jv>);
+	 * 	assertTrue(<jv>i1</jv> == <jv>i2</jv>);  <jc>// Same interned object</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Performance Note:</h5>
+	 * <p>String interning stores strings in a special pool, which can save memory when the same string
+	 * values are used repeatedly. However, the intern pool has limited size and interning can be slow,
+	 * so use judiciously for strings that are known to be repeated frequently.</p>
+	 *
+	 * @param str The string to intern. Can be <jk>null</jk>.
+	 * @return The interned string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static String intern(String str) {
+		return str == null ? null : str.intern();
+	}
+
+	/**
+	 * Checks if a string is already interned.
+	 *
+	 * <p>
+	 * Returns <jk>false</jk> if the input string is <jk>null</jk>.
+	 * A string is considered interned if it is the same object reference as its interned version.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	String <jv>s1</jv> = <js>"test"</js>;  <jc>// String literal is automatically interned</jc>
+	 * 	assertTrue(isInterned(<jv>s1</jv>));
+	 *
+	 * 	String <jv>s2</jv> = <jk>new</jk> String(<js>"test"</js>);  <jc>// New object, not interned</jc>
+	 * 	assertFalse(isInterned(<jv>s2</jv>));
+	 *
+	 * 	String <jv>s3</jv> = intern(<jv>s2</jv>);  <jc>// Now interned</jc>
+	 * 	assertTrue(isInterned(<jv>s3</jv>));
+	 * </p>
+	 *
+	 * @param str The string to check. Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the string is interned, <jk>false</jk> otherwise.
+	 */
+	public static boolean isInterned(String str) {
+		if (str == null)
+			return false;
+		return str == str.intern();
+	}
+
+	/**
+	 * Calculates the approximate memory size of a string in bytes.
+	 *
+	 * <p>
+	 * Returns <c>0</c> if the input string is <jk>null</jk>.
+	 * This method provides an estimate based on typical JVM object layout:
+	 * <ul>
+	 *   <li>String object overhead: ~24 bytes (object header + fields)</li>
+	 *   <li>char[] array overhead: ~16 bytes (array header)</li>
+	 *   <li>Character data: 2 bytes per character</li>
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Note:</b> Actual memory usage may vary based on JVM implementation, object alignment,
+	 * and whether compressed OOPs are enabled. This is an approximation for informational purposes.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	getStringSize(<jk>null</jk>);        <jc>// Returns: 0</jc>
+	 * 	getStringSize(<js>""</js>);          <jc>// Returns: ~40 bytes</jc>
+	 * 	getStringSize(<js>"hello"</js>);     <jc>// Returns: ~50 bytes (40 + 10)</jc>
+	 * 	getStringSize(<js>"test"</js>);      <jc>// Returns: ~48 bytes (40 + 8)</jc>
+	 * </p>
+	 *
+	 * @param str The string to measure. Can be <jk>null</jk>.
+	 * @return The approximate memory size in bytes, or <c>0</c> if the input was <jk>null</jk>.
+	 */
+	public static long getStringSize(String str) {
+		if (str == null)
+			return 0;
+		// String object overhead: ~24 bytes (object header + fields: value, hash, coder)
+		// char[] array overhead: ~16 bytes (array header)
+		// Character data: 2 bytes per character
+		return 24L + 16L + (2L * str.length());
+	}
+
+	/**
+	 * Provides optimization suggestions for a string based on its characteristics.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if the input string is <jk>null</jk> or if no optimizations are suggested.
+	 * Returns a string containing optimization suggestions separated by newlines.
+	 *
+	 * <h5 class='section'>Optimization Suggestions:</h5>
+	 * <ul>
+	 *   <li><b>Large strings:</b> Suggests using StringBuilder for concatenation</li>
+	 *   <li><b>Frequently used strings:</b> Suggests interning</li>
+	 *   <li><b>Character manipulation:</b> Suggests using char[] for intensive operations</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	optimizeString(<jk>null</jk>);                    <jc>// Returns: null</jc>
+	 * 	optimizeString(<js>"short"</js>);                 <jc>// Returns: null (no suggestions)</jc>
+	 * 	optimizeString(<js>"very long string..."</js>);   <jc>// Returns: suggestions for large strings</jc>
+	 * </p>
+	 *
+	 * @param str The string to analyze. Can be <jk>null</jk>.
+	 * @return A string with optimization suggestions, or <jk>null</jk> if no suggestions or input was <jk>null</jk>.
+	 */
+	public static String optimizeString(String str) {
+		if (str == null)
+			return null;
+
+		var suggestions = new ArrayList<String>();
+		var length = str.length();
+
+		// Suggest StringBuilder for large strings or frequent concatenation scenarios
+		if (length > 1000) {
+			suggestions.add("Consider using StringBuilder for concatenation operations");
+		}
+
+		// Suggest interning for medium-length strings that might be repeated
+		if (length > 10 && length < 100 && !isInterned(str)) {
+			suggestions.add("Consider interning if this string is used frequently");
+		}
+
+		// Suggest char[] for intensive character manipulation
+		if (length > 100) {
+			suggestions.add("For intensive character manipulation, consider using char[]");
+		}
+
+		// Suggest compression for very large strings
+		if (length > 10000) {
+			suggestions.add("For very large strings, consider compression if storage is a concern");
+		}
+
+		return suggestions.isEmpty() ? null : String.join(NEWLINE, suggestions);
 	}
 
 	/**

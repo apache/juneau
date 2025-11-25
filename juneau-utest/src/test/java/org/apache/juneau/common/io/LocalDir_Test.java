@@ -100,7 +100,7 @@ class LocalDir_Test extends TestBase {
 	@Test void c03_resolve_filesystem_directory() {
 		var dir = new LocalDir(TEST_DIR);
 		// Resolving a directory should return null
-		var file = dir.resolve(".");
+		assertDoesNotThrow(()->dir.resolve("."));
 		// May be null if "." is treated as a directory
 	}
 
@@ -122,7 +122,7 @@ class LocalDir_Test extends TestBase {
 
 	@Test void d03_resolve_classpath_nullPath() {
 		var dir = new LocalDir(LocalDir_Test.class, null);
-		var file = dir.resolve("files/Test3.properties");
+		assertDoesNotThrow(()->dir.resolve("files/Test3.properties"));
 		// May or may not be null depending on classpath structure
 	}
 

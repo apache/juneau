@@ -315,7 +315,7 @@ public class XmlParserSession extends ReaderParserSession {
 		int eventType = r.next();
 		var sb = getStringBuilder();
 		while (eventType != END_ELEMENT) {
-			if (eventType == CHARACTERS || eventType == CDATA || eventType == SPACE || eventType == ENTITY_REFERENCE) {
+			if (eventType == CHARACTERS || eventType == CDATA || eventType == XMLStreamConstants.SPACE || eventType == ENTITY_REFERENCE) {
 				sb.append(r.getText());
 			} else if (eventType == PROCESSING_INSTRUCTION || eventType == COMMENT) {
 				// skipping

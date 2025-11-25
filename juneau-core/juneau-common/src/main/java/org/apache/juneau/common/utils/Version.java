@@ -190,6 +190,11 @@ public class Version implements Comparable<Version> {
 		for (var i = parts.length; i < v.parts.length; i++)
 			if (v.parts[i] != 0)
 				return false;
+		// If this version has more parts than v, check if any extra parts are non-zero
+		// If they are, then this > v, so return true (this is greater than v)
+		for (var i = v.parts.length; i < parts.length; i++)
+			if (parts[i] > 0)
+				return true;  // this > v, so always return true
 		return ! exclusive;
 	}
 

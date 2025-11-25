@@ -45,9 +45,4 @@ public class SystemUtils {
 	public static void shutdownMessage(Supplier<String> message) {
 		SHUTDOWN_MESSAGES.add(message);
 	}
-
-	/**
-	 * Constructor.
-	 */
-	protected SystemUtils() {}
 }

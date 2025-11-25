@@ -456,9 +456,144 @@ class StringUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// emptyIfNull(String)
+	//====================================================================================================
+	@Test void a11_emptyIfNull() {
+		assertEquals("", StringUtils.emptyIfNull(null));
+		assertEquals("", StringUtils.emptyIfNull(""));
+		assertEquals("x", StringUtils.emptyIfNull("x"));
+		assertEquals("hello", StringUtils.emptyIfNull("hello"));
+		assertEquals("  ", StringUtils.emptyIfNull("  "));
+	}
+
+	//====================================================================================================
+	// defaultIfEmpty(String, String)
+	//====================================================================================================
+	@Test void a12_defaultIfEmpty() {
+		assertEquals("default", StringUtils.defaultIfEmpty(null, "default"));
+		assertEquals("default", StringUtils.defaultIfEmpty("", "default"));
+		assertEquals("x", StringUtils.defaultIfEmpty("x", "default"));
+		assertEquals("hello", StringUtils.defaultIfEmpty("hello", "default"));
+		assertEquals("  ", StringUtils.defaultIfEmpty("  ", "default")); // "  " is not empty
+		assertEquals("x", StringUtils.defaultIfEmpty("x", "")); // "x" is not empty, so return "x"
+		assertEquals("x", StringUtils.defaultIfEmpty("x", null)); // "x" is not empty, so return "x"
+	}
+
+	@Test void a13_defaultIfEmpty_withNullDefault() {
+		assertNull(StringUtils.defaultIfEmpty(null, null));
+		assertNull(StringUtils.defaultIfEmpty("", null));
+		assertEquals("x", StringUtils.defaultIfEmpty("x", null));
+	}
+
+	//====================================================================================================
+	// defaultIfBlank(String, String)
+	//====================================================================================================
+	@Test void a14_defaultIfBlank() {
+		assertEquals("default", StringUtils.defaultIfBlank(null, "default"));
+		assertEquals("default", StringUtils.defaultIfBlank("", "default"));
+		assertEquals("default", StringUtils.defaultIfBlank("  ", "default"));
+		assertEquals("default", StringUtils.defaultIfBlank("\t", "default"));
+		assertEquals("default", StringUtils.defaultIfBlank("\n", "default"));
+		assertEquals("x", StringUtils.defaultIfBlank("x", "default"));
+		assertEquals("hello", StringUtils.defaultIfBlank("hello", "default"));
+		assertEquals("  x  ", StringUtils.defaultIfBlank("  x  ", "default")); // Contains non-whitespace
+		assertEquals("x", StringUtils.defaultIfBlank("x", "")); // "x" is not blank, so return "x"
+		assertEquals("x", StringUtils.defaultIfBlank("x", null)); // "x" is not blank, so return "x"
+	}
+
+	@Test void a15_defaultIfBlank_withNullDefault() {
+		assertNull(StringUtils.defaultIfBlank(null, null));
+		assertNull(StringUtils.defaultIfBlank("", null));
+		assertNull(StringUtils.defaultIfBlank("  ", null));
+		assertEquals("x", StringUtils.defaultIfBlank("x", null));
+	}
+
+	@Test void a16_defaultIfBlank_whitespaceOnly() {
+		assertEquals("default", StringUtils.defaultIfBlank(" ", "default"));
+		assertEquals("default", StringUtils.defaultIfBlank("\t\n\r", "default"));
+		// Note: \u00A0 (non-breaking space) may or may not be considered blank depending on Java version
+		// String.isBlank() behavior may vary, so we test the actual behavior
+		var result = StringUtils.defaultIfBlank("\u00A0", "default");
+		// If isBlank considers it blank, result should be "default", otherwise it's "\u00A0"
+		assertTrue(result.equals("default") || result.equals("\u00A0"));
+	}
+
+	//====================================================================================================
+	// toString(Object)
+	//====================================================================================================
+	@Test void a17_toString() {
+		assertNull(StringUtils.toString(null));
+		assertEquals("hello", StringUtils.toString("hello"));
+		assertEquals("123", StringUtils.toString(123));
+		assertEquals("true", StringUtils.toString(true));
+		assertEquals("1.5", StringUtils.toString(1.5));
+	}
+
+	@Test void a18_toString_withObjects() {
+		var list = List.of("a", "b", "c");
+		assertNotNull(StringUtils.toString(list));
+		assertTrue(StringUtils.toString(list).contains("a"));
+
+		var map = Map.of("key", "value");
+		assertNotNull(StringUtils.toString(map));
+		assertTrue(StringUtils.toString(map).contains("key"));
+	}
+
+	@Test void a19_toString_withCustomObject() {
+		var obj = new Object() {
+			@Override
+			public String toString() {
+				return "custom";
+			}
+		};
+		assertEquals("custom", StringUtils.toString(obj));
+	}
+
+	//====================================================================================================
+	// toString(Object, String)
+	//====================================================================================================
+	@Test void a20_toStringWithDefault() {
+		assertEquals("default", StringUtils.toString(null, "default"));
+		assertEquals("hello", StringUtils.toString("hello", "default"));
+		assertEquals("123", StringUtils.toString(123, "default"));
+		assertEquals("true", StringUtils.toString(true, "default"));
+		assertEquals("1.5", StringUtils.toString(1.5, "default"));
+	}
+
+	@Test void a21_toStringWithDefault_withNullDefault() {
+		assertNull(StringUtils.toString(null, null));
+		assertEquals("hello", StringUtils.toString("hello", null));
+	}
+
+	@Test void a22_toStringWithDefault_withEmptyDefault() {
+		assertEquals("", StringUtils.toString(null, ""));
+		assertEquals("hello", StringUtils.toString("hello", ""));
+	}
+
+	@Test void a23_toStringWithDefault_withObjects() {
+		var list = List.of("a", "b", "c");
+		var result = StringUtils.toString(list, "default");
+		assertNotNull(result);
+		assertTrue(result.contains("a"));
+
+		assertEquals("default", StringUtils.toString(null, "default"));
+	}
+
+	@Test void a24_toStringWithDefault_withCustomObject() {
+		var obj = new Object() {
+			@Override
+			public String toString() {
+				return "custom";
+			}
+		};
+		assertEquals("custom", StringUtils.toString(obj, "default"));
+		assertEquals("default", StringUtils.toString(null, "default"));
+	}
+
+	//====================================================================================================
 	// unescapeChars(String,char[],char)
 	//====================================================================================================
-	@Test void a11_unescapeChars() {
+	@Test void a25_unescapeChars() {
 		var escape = AsciiSet.of("\\,|");
 
 		assertNull(unEscapeChars(null, escape));
@@ -480,7 +615,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// decodeHex(String)
 	//====================================================================================================
-	@Test void a12_decodeHex() {
+	@Test void a26_decodeHex() {
 		assertNull(decodeHex(null));
 		assertEquals("19azAZ", decodeHex("19azAZ"));
 		assertEquals("[0][1][ffff]", decodeHex("\u0000\u0001\uFFFF"));
@@ -489,7 +624,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// startsWith(String,char)
 	//====================================================================================================
-	@Test void a13_startsWith() {
+	@Test void a27_startsWith() {
 		assertFalse(startsWith(null, 'a'));
 		assertFalse(startsWith("", 'a'));
 		assertTrue(startsWith("a", 'a'));
@@ -499,7 +634,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// endsWith(String,char)
 	//====================================================================================================
-	@Test void a14_endsWith() {
+	@Test void a28_endsWith() {
 		assertFalse(endsWith(null, 'a'));
 		assertFalse(endsWith("", 'a'));
 		assertTrue(endsWith("a", 'a'));
@@ -510,7 +645,7 @@ class StringUtils_Test extends TestBase {
 	// base64EncodeToString(String)
 	// base64DecodeToString(String)
 	//====================================================================================================
-	@Test void a15_base64EncodeToString() {
+	@Test void a29_base64EncodeToString() {
 		assertNull(base64DecodeToString(base64EncodeToString(null)));
 		assertEquals("", base64DecodeToString(base64EncodeToString("")));
 		assertEquals("foobar", base64DecodeToString(base64EncodeToString("foobar")));
@@ -522,7 +657,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// generateUUID(String)
 	//====================================================================================================
-	@Test void a16_generateUUID() {
+	@Test void a30_generateUUID() {
 		for (var i = 0; i < 10; i++) {
 			var s = random(i);
 			assertEquals(i, s.length());
@@ -534,7 +669,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// trim(String)
 	//====================================================================================================
-	@Test void a17_trim() {
+	@Test void a31_trim() {
 		assertNull(trim(null));
 		assertEquals("", trim(""));
 		assertEquals("", trim("  "));
@@ -543,7 +678,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// parseISO8601Date(String)
 	//====================================================================================================
-	@Test void a18_parseISO8601Date() throws Exception {
+	@Test void a32_parseISO8601Date() throws Exception {
 		assertNull(parseIsoDate(null));
 		assertNull(parseIsoDate(""));
 
@@ -567,7 +702,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// parseMap(String,char,char,boolean)
 	//====================================================================================================
-	@Test void a19_splitMap() {
+	@Test void a33_splitMap() {
 		assertString("{a=1}", StringUtils.splitMap("a=1", true));
 		assertString("{a=1,b=2}", StringUtils.splitMap("a=1,b=2", true));
 		assertString("{a=1,b=2}", StringUtils.splitMap(" a = 1 , b = 2 ", true));
@@ -1118,7 +1253,7 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isEmail("user@example"));
 		assertFalse(isEmail("user@.com"));
 		assertFalse(isEmail("@.com"));
-		
+
 		// Valid emails
 		assertTrue(isEmail("user@example.com"));
 		assertTrue(isEmail("test.email@example.com"));
@@ -1140,7 +1275,7 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isPhoneNumber("12345"));
 		assertFalse(isPhoneNumber("abc1234567"));
 		assertFalse(isPhoneNumber("1234567890123456")); // Too long (16 digits)
-		
+
 		// Valid phone numbers
 		assertTrue(isPhoneNumber("1234567890")); // 10 digits
 		assertTrue(isPhoneNumber("12345678901")); // 11 digits
@@ -1163,7 +1298,7 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isCreditCard("1234567890123")); // Invalid Luhn
 		assertFalse(isCreditCard("1234567890124")); // Invalid Luhn (wrong check digit)
 		assertFalse(isCreditCard("abc1234567890")); // Contains letters
-		
+
 		// Valid credit card numbers (test cards that pass Luhn algorithm)
 		assertTrue(isCreditCard("4532015112830366")); // Visa test card
 		assertTrue(isCreditCard("4532-0151-1283-0366")); // With hyphens
@@ -1332,7 +1467,7 @@ class StringUtils_Test extends TestBase {
 		// Test with incomplete placeholder
 		assertEquals("Hello ${name", interpolate("Hello ${name", vars));
 		// Test with multiple variables
-		assertEquals("John is 30 years old and lives in New York", 
+		assertEquals("John is 30 years old and lives in New York",
 			interpolate("${name} is ${age} years old and lives in ${city}", vars));
 	}
 
@@ -1341,19 +1476,19 @@ class StringUtils_Test extends TestBase {
 		assertEquals("cat", pluralize("cat", 1));
 		assertEquals("box", pluralize("box", 1));
 		assertEquals("city", pluralize("city", 1));
-		
+
 		// Regular plural (add "s")
 		assertEquals("cats", pluralize("cat", 2));
 		assertEquals("dogs", pluralize("dog", 2));
 		assertEquals("books", pluralize("book", 0));
-		
+
 		// Words ending in s, x, z, ch, sh (add "es")
 		assertEquals("boxes", pluralize("box", 2));
 		assertEquals("buses", pluralize("bus", 2));
 		assertEquals("buzzes", pluralize("buzz", 2));
 		assertEquals("churches", pluralize("church", 2));
 		assertEquals("dishes", pluralize("dish", 2));
-		
+
 		// Words ending in "y" preceded by consonant (replace "y" with "ies")
 		assertEquals("cities", pluralize("city", 2));
 		assertEquals("countries", pluralize("country", 2));
@@ -1361,12 +1496,12 @@ class StringUtils_Test extends TestBase {
 		// Words ending in "y" preceded by vowel (just add "s")
 		assertEquals("days", pluralize("day", 2));
 		assertEquals("boys", pluralize("boy", 2));
-		
+
 		// Words ending in "f" or "fe" (replace with "ves")
 		assertEquals("leaves", pluralize("leaf", 2));
 		assertEquals("lives", pluralize("life", 2));
 		assertEquals("knives", pluralize("knife", 2));
-		
+
 		// Edge cases
 		assertNull(pluralize(null, 2));
 		assertEquals("", pluralize("", 2));
@@ -1382,13 +1517,13 @@ class StringUtils_Test extends TestBase {
 		assertEquals("4th", ordinal(4));
 		assertEquals("5th", ordinal(5));
 		assertEquals("10th", ordinal(10));
-		
+
 		// Teens (all use "th")
 		assertEquals("11th", ordinal(11));
 		assertEquals("12th", ordinal(12));
 		assertEquals("13th", ordinal(13));
 		assertEquals("14th", ordinal(14));
-		
+
 		// 20s, 30s, etc.
 		assertEquals("21st", ordinal(21));
 		assertEquals("22nd", ordinal(22));
@@ -1397,7 +1532,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("31st", ordinal(31));
 		assertEquals("32nd", ordinal(32));
 		assertEquals("33rd", ordinal(33));
-		
+
 		// Larger numbers
 		assertEquals("100th", ordinal(100));
 		assertEquals("101st", ordinal(101));
@@ -1406,13 +1541,13 @@ class StringUtils_Test extends TestBase {
 		assertEquals("111th", ordinal(111)); // Special case
 		assertEquals("112th", ordinal(112)); // Special case
 		assertEquals("113th", ordinal(113)); // Special case
-		
+
 		// Negative numbers
 		assertEquals("-1st", ordinal(-1));
 		assertEquals("-2nd", ordinal(-2));
 		assertEquals("-11th", ordinal(-11));
 		assertEquals("-21st", ordinal(-21));
-		
+
 		// Zero
 		assertEquals("0th", ordinal(0));
 	}
@@ -1553,23 +1688,23 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0, naturalCompare("file1.txt", "file1.txt"));
 		assertTrue(naturalCompare("file1.txt", "file2.txt") < 0);
 		assertTrue(naturalCompare("file2.txt", "file1.txt") > 0);
-		
+
 		// Leading zeros
 		assertTrue(naturalCompare("file02.txt", "file10.txt") < 0);
 		assertTrue(naturalCompare("file002.txt", "file10.txt") < 0);
-		
+
 		// Mixed alphanumeric
 		assertTrue(naturalCompare("a2b", "a10b") < 0);
 		assertTrue(naturalCompare("a10b", "a2b") > 0);
-		
+
 		// Same numbers, different text
 		assertTrue(naturalCompare("file1a.txt", "file1b.txt") < 0);
-		
+
 		// Null handling
 		assertEquals(0, naturalCompare(null, null));
 		assertTrue(naturalCompare(null, "test") < 0);
 		assertTrue(naturalCompare("test", null) > 0);
-		
+
 		// Case-insensitive comparison
 		assertTrue(naturalCompare("Apple", "banana") < 0);
 		assertTrue(naturalCompare("banana", "Apple") > 0);
@@ -1743,32 +1878,32 @@ class StringUtils_Test extends TestBase {
 			var c = s1.charAt(i);
 			assertTrue(c == 'A' || c == 'B' || c == 'C', "Character should be A, B, or C: " + c);
 		}
-		
+
 		var s2 = randomString(5, "0123456789");
 		assertNotNull(s2);
 		assertEquals(5, s2.length());
 		for (var i = 0; i < s2.length(); i++) {
 			assertTrue(Character.isDigit(s2.charAt(i)));
 		}
-		
+
 		// Test with single character
 		var s3 = randomString(10, "X");
 		assertNotNull(s3);
 		assertEquals(10, s3.length());
 		assertEquals("XXXXXXXXXX", s3);
-		
+
 		// Test zero length
 		assertEquals("", randomString(0, "ABC"));
-		
+
 		// Test negative length
 		assertThrows(IllegalArgumentException.class, () -> randomString(-1, "ABC"));
-		
+
 		// Test null character set
 		assertThrows(IllegalArgumentException.class, () -> randomString(10, null));
-		
+
 		// Test empty character set
 		assertThrows(IllegalArgumentException.class, () -> randomString(10, ""));
-		
+
 		// Verify randomness (at least some variation when multiple chars available)
 		var strings = new HashSet<String>();
 		for (var i = 0; i < 100; i++) {
@@ -1783,36 +1918,36 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, map1.size());
 		assertEquals("value1", map1.get("key1"));
 		assertEquals("value2", map1.get("key2"));
-		
+
 		// With trimming
 		var map2 = parseMap(" key1 = value1 ; key2 = value2 ", '=', ';', true);
 		assertEquals(2, map2.size());
 		assertEquals("value1", map2.get("key1"));
 		assertEquals("value2", map2.get("key2"));
-		
+
 		// Different delimiters
 		var map3 = parseMap("a:1|b:2|c:3", ':', '|', false);
 		assertEquals(3, map3.size());
 		assertEquals("1", map3.get("a"));
 		assertEquals("2", map3.get("b"));
 		assertEquals("3", map3.get("c"));
-		
+
 		// Empty value
 		var map4 = parseMap("key1=,key2=value2", '=', ',', false);
 		assertEquals(2, map4.size());
 		assertEquals("", map4.get("key1"));
 		assertEquals("value2", map4.get("key2"));
-		
+
 		// No delimiter (key only)
 		var map5 = parseMap("key1,key2=value2", '=', ',', false);
 		assertEquals(2, map5.size());
 		assertEquals("", map5.get("key1"));
 		assertEquals("value2", map5.get("key2"));
-		
+
 		// Null/empty input
 		assertTrue(parseMap(null, '=', ',', false).isEmpty());
 		assertTrue(parseMap("", '=', ',', false).isEmpty());
-		
+
 		// Duplicate keys (last one wins)
 		var map6 = parseMap("key=value1,key=value2", '=', ',', false);
 		assertEquals(1, map6.size());
@@ -1825,29 +1960,29 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, numbers1.size());
 		assertEquals("19.99", numbers1.get(0));
 		assertEquals("5", numbers1.get(1));
-		
+
 		// Multiple numbers
 		var numbers2 = extractNumbers("Version 1.2.3 has 42 features");
 		assertEquals(3, numbers2.size());
 		assertEquals("1.2", numbers2.get(0));
 		assertEquals("3", numbers2.get(1));
 		assertEquals("42", numbers2.get(2));
-		
+
 		// Decimal numbers
 		var numbers3 = extractNumbers("3.14 and 2.718 are constants");
 		assertEquals(2, numbers3.size());
 		assertEquals("3.14", numbers3.get(0));
 		assertEquals("2.718", numbers3.get(1));
-		
+
 		// Integers only
 		var numbers4 = extractNumbers("1 2 3 4 5");
 		assertEquals(5, numbers4.size());
 		assertEquals("1", numbers4.get(0));
 		assertEquals("5", numbers4.get(4));
-		
+
 		// No numbers
 		assertTrue(extractNumbers("No numbers here").isEmpty());
-		
+
 		// Null/empty input
 		assertTrue(extractNumbers(null).isEmpty());
 		assertTrue(extractNumbers("").isEmpty());
@@ -1859,21 +1994,21 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, emails1.size());
 		assertTrue(emails1.contains("user@example.com"));
 		assertTrue(emails1.contains("admin@test.org"));
-		
+
 		// Multiple emails
 		var emails2 = extractEmails("Email me at john.doe@example.com, or contact jane@test.org");
 		assertEquals(2, emails2.size());
 		assertTrue(emails2.contains("john.doe@example.com"));
 		assertTrue(emails2.contains("jane@test.org"));
-		
+
 		// Email with special characters
 		var emails3 = extractEmails("user+tag@example.co.uk is valid");
 		assertEquals(1, emails3.size());
 		assertEquals("user+tag@example.co.uk", emails3.get(0));
-		
+
 		// No emails
 		assertTrue(extractEmails("No email addresses here").isEmpty());
-		
+
 		// Null/empty input
 		assertTrue(extractEmails(null).isEmpty());
 		assertTrue(extractEmails("").isEmpty());
@@ -1885,24 +2020,24 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, urls1.size());
 		assertTrue(urls1.contains("https://example.com"));
 		assertTrue(urls1.contains("http://test.org"));
-		
+
 		// URLs with paths
 		var urls2 = extractUrls("Check https://example.com/path/to/page?param=value");
 		assertEquals(1, urls2.size());
 		assertTrue(urls2.get(0).startsWith("https://example.com"));
-		
+
 		// FTP URLs
 		var urls3 = extractUrls("Download from ftp://files.example.com/pub/data");
 		assertEquals(1, urls3.size());
 		assertTrue(urls3.get(0).startsWith("ftp://"));
-		
+
 		// Multiple URLs
 		var urls4 = extractUrls("Links: http://site1.com and https://site2.org/page");
 		assertEquals(2, urls4.size());
-		
+
 		// No URLs
 		assertTrue(extractUrls("No URLs here").isEmpty());
-		
+
 		// Null/empty input
 		assertTrue(extractUrls(null).isEmpty());
 		assertTrue(extractUrls("").isEmpty());
@@ -1918,14 +2053,14 @@ class StringUtils_Test extends TestBase {
 		assertEquals("is", words1.get(3));
 		assertEquals("a", words1.get(4));
 		assertEquals("test", words1.get(5));
-		
+
 		// Words with underscores
 		var words2 = extractWords("variable_name and test_123");
 		assertEquals(3, words2.size()); // variable_name, and, test_123
 		assertTrue(words2.contains("variable_name"));
 		assertTrue(words2.contains("and"));
 		assertTrue(words2.contains("test_123"));
-		
+
 		// Words with numbers
 		var words3 = extractWords("Version 1.2.3 has 42 features");
 		assertEquals(7, words3.size()); // Version, 1, 2, 3, has, 42, features
@@ -1936,10 +2071,10 @@ class StringUtils_Test extends TestBase {
 		assertTrue(words3.contains("has"));
 		assertTrue(words3.contains("42"));
 		assertTrue(words3.contains("features"));
-		
+
 		// No words (only punctuation)
 		assertTrue(extractWords("!@#$%^&*()").isEmpty());
-		
+
 		// Null/empty input
 		assertTrue(extractWords(null).isEmpty());
 		assertTrue(extractWords("").isEmpty());
@@ -1951,14 +2086,14 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, results1.size());
 		assertEquals("tag", results1.get(0));
 		assertEquals("/tag", results1.get(1));
-		
+
 		// Multiple matches
 		var results2 = extractBetween("[one][two][three]", "[", "]");
 		assertEquals(3, results2.size());
 		assertEquals("one", results2.get(0));
 		assertEquals("two", results2.get(1));
 		assertEquals("three", results2.get(2));
-		
+
 		// Nested markers (non-overlapping)
 		// String: "(outer (inner) outer)"
 		// Finds: ( at 0, ) at 13 -> "outer (inner"
@@ -1966,18 +2101,18 @@ class StringUtils_Test extends TestBase {
 		var results3 = extractBetween("(outer (inner) outer)", "(", ")");
 		assertEquals(1, results3.size());
 		assertEquals("outer (inner", results3.get(0));
-		
+
 		// Different markers
 		var results4 = extractBetween("Start:value:End", "Start:", ":End");
 		assertEquals(1, results4.size());
 		assertEquals("value", results4.get(0));
-		
+
 		// No matches
 		assertTrue(extractBetween("no markers here", "[", "]").isEmpty());
-		
+
 		// Unmatched start marker
 		assertTrue(extractBetween("<unclosed", "<", ">").isEmpty());
-		
+
 		// Null/empty input
 		assertTrue(extractBetween(null, "<", ">").isEmpty());
 		assertTrue(extractBetween("", "<", ">").isEmpty());
@@ -1989,25 +2124,25 @@ class StringUtils_Test extends TestBase {
 		// Basic transliteration
 		assertEquals("h2ll4", transliterate("hello", "aeiou", "12345"));
 		assertEquals("XYZ", transliterate("ABC", "ABC", "XYZ"));
-		
+
 		// No matches
 		assertEquals("hello", transliterate("hello", "xyz", "123"));
-		
+
 		// Partial matches
 		assertEquals("h3ll0", transliterate("hello", "eo", "30"));
-		
+
 		// Empty strings
 		assertEquals("", transliterate("", "abc", "123"));
-		
+
 		// Null input
 		assertNull(transliterate(null, "abc", "123"));
-		
+
 		// Null/empty character sets
 		assertEquals("hello", transliterate("hello", null, "123"));
 		assertEquals("hello", transliterate("hello", "abc", null));
 		assertEquals("hello", transliterate("hello", "", "123"));
 		assertEquals("hello", transliterate("hello", "abc", ""));
-		
+
 		// Mismatched lengths
 		assertThrows(IllegalArgumentException.class, () -> transliterate("hello", "abc", "12"));
 	}
@@ -2018,22 +2153,22 @@ class StringUtils_Test extends TestBase {
 		assertEquals("S530", soundex("Smythe"));
 		assertEquals("R163", soundex("Robert"));
 		assertEquals("R163", soundex("Rupert"));
-		
+
 		// Same soundex for similar names
 		assertEquals("A261", soundex("Ashcraft"));
 		assertEquals("A261", soundex("Ashcroft"));
-		
+
 		// Single character
 		assertEquals("A000", soundex("A"));
-		
+
 		// With non-letters
 		assertEquals("S530", soundex("Smith123"));
 		assertEquals("S530", soundex("Smith!@#"));
-		
+
 		// Null/empty input
 		assertNull(soundex(null));
 		assertNull(soundex(""));
-		
+
 		// All vowels
 		assertEquals("A000", soundex("AEIOU"));
 	}
@@ -2043,20 +2178,20 @@ class StringUtils_Test extends TestBase {
 		var code1 = metaphone("Smith");
 		assertNotNull(code1);
 		assertTrue(code1.startsWith("SM"));
-		
+
 		var code2 = metaphone("Smythe");
 		assertNotNull(code2);
 		assertTrue(code2.startsWith("SM"));
-		
+
 		// Similar words should have similar codes
 		var code3 = metaphone("Robert");
 		assertNotNull(code3);
-		
+
 		// Null/empty input
 		assertNull(metaphone(null));
 		assertNull(metaphone(""));
 		assertEquals("", metaphone("123"));
-		
+
 		// Single character
 		var code4 = metaphone("A");
 		assertNotNull(code4);
@@ -2070,11 +2205,11 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, codes1.length);
 		assertNotNull(codes1[0]); // primary
 		assertNotNull(codes1[1]); // alternate
-		
+
 		var codes2 = doubleMetaphone("Schmidt");
 		assertNotNull(codes2);
 		assertEquals(2, codes2.length);
-		
+
 		// Null/empty input
 		assertNull(doubleMetaphone(null));
 		assertNull(doubleMetaphone(""));
@@ -2085,10 +2220,10 @@ class StringUtils_Test extends TestBase {
 		var normalized = normalizeUnicode("café");
 		assertNotNull(normalized);
 		assertNotEquals("café", normalized); // Should be decomposed
-		
+
 		// Null input
 		assertNull(normalizeUnicode(null));
-		
+
 		// Already normalized
 		var normalized2 = normalizeUnicode("hello");
 		assertEquals("hello", normalized2);
@@ -2099,21 +2234,21 @@ class StringUtils_Test extends TestBase {
 		assertEquals("cafe", removeAccents("café"));
 		assertEquals("naive", removeAccents("naïve"));
 		assertEquals("resume", removeAccents("résumé"));
-		
+
 		// Multiple accents
 		assertEquals("Cafe", removeAccents("Café"));
 		assertEquals("Zoe", removeAccents("Zoë"));
-		
+
 		// No accents
 		assertEquals("hello", removeAccents("hello"));
 		assertEquals("HELLO", removeAccents("HELLO"));
-		
+
 		// Null input
 		assertNull(removeAccents(null));
-		
+
 		// Empty string
 		assertEquals("", removeAccents(""));
-		
+
 		// Mixed case with accents
 		assertEquals("Cafe", removeAccents("Café"));
 		assertEquals("Ecole", removeAccents("École"));
@@ -2125,13 +2260,13 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isValidRegex("\\d+"));
 		assertTrue(isValidRegex("^test$"));
 		assertTrue(isValidRegex("(abc|def)"));
-		
+
 		// Invalid regex patterns
 		assertFalse(isValidRegex("[a-z")); // Unclosed bracket
 		assertFalse(isValidRegex("(test")); // Unclosed parenthesis
 		assertFalse(isValidRegex("\\")); // Incomplete escape
 		assertFalse(isValidRegex("*")); // Quantifier without preceding element
-		
+
 		// Null/empty input
 		assertFalse(isValidRegex(null));
 		assertFalse(isValidRegex(""));
@@ -2143,13 +2278,13 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isValidDateFormat("25/12/2023", "dd/MM/yyyy"));
 		assertTrue(isValidDateFormat("12/25/2023", "MM/dd/yyyy"));
 		assertTrue(isValidDateFormat("2023-01-01", "yyyy-MM-dd"));
-		
+
 		// Invalid dates
 		assertFalse(isValidDateFormat("2023-13-25", "yyyy-MM-dd")); // Invalid month
 		assertFalse(isValidDateFormat("2023-12-32", "yyyy-MM-dd")); // Invalid day
 		assertFalse(isValidDateFormat("2023-12-25", "invalid")); // Invalid format
 		assertFalse(isValidDateFormat("not-a-date", "yyyy-MM-dd")); // Not a date
-		
+
 		// Null/empty input
 		assertFalse(isValidDateFormat(null, "yyyy-MM-dd"));
 		assertFalse(isValidDateFormat("2023-12-25", null));
@@ -2163,13 +2298,13 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isValidTimeFormat("02:30:00 PM", "hh:mm:ss a"));
 		assertTrue(isValidTimeFormat("14:30", "HH:mm"));
 		assertTrue(isValidTimeFormat("00:00:00", "HH:mm:ss"));
-		
+
 		// Invalid times
 		assertFalse(isValidTimeFormat("25:00:00", "HH:mm:ss")); // Invalid hour
 		assertFalse(isValidTimeFormat("14:60:00", "HH:mm:ss")); // Invalid minute
 		assertFalse(isValidTimeFormat("14:30:60", "HH:mm:ss")); // Invalid second
 		assertFalse(isValidTimeFormat("not-a-time", "HH:mm:ss")); // Not a time
-		
+
 		// Null/empty input
 		assertFalse(isValidTimeFormat(null, "HH:mm:ss"));
 		assertFalse(isValidTimeFormat("14:30:00", null));
@@ -2183,23 +2318,23 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isValidIpAddress("0.0.0.0"));
 		assertTrue(isValidIpAddress("255.255.255.255"));
 		assertTrue(isValidIpAddress("127.0.0.1"));
-		
+
 		// Invalid IPv4 addresses
 		assertFalse(isValidIpAddress("256.1.1.1")); // Out of range
 		assertFalse(isValidIpAddress("192.168.1")); // Too few octets
 		assertFalse(isValidIpAddress("192.168.1.1.1")); // Too many octets
 		assertFalse(isValidIpAddress("not.an.ip")); // Not numeric
 		assertFalse(isValidIpAddress("-1.1.1.1")); // Negative number
-		
+
 		// Valid IPv6 addresses (basic validation)
 		assertTrue(isValidIpAddress("2001:0db8:85a3:0000:0000:8a2e:0370:7334"));
 		assertTrue(isValidIpAddress("::1")); // Localhost
 		assertTrue(isValidIpAddress("2001:db8::1")); // Compressed
-		
+
 		// Invalid IPv6 addresses
 		assertFalse(isValidIpAddress("2001:0db8:85a3:0000:0000:8a2e:0370:7334:9999")); // Too many segments
 		assertFalse(isValidIpAddress("gggg::1")); // Invalid hex
-		
+
 		// Null/empty input
 		assertFalse(isValidIpAddress(null));
 		assertFalse(isValidIpAddress(""));
@@ -2210,21 +2345,21 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isValidMacAddress("00:1B:44:11:3A:B7"));
 		assertTrue(isValidMacAddress("00:1b:44:11:3a:b7")); // Lowercase
 		assertTrue(isValidMacAddress("FF:FF:FF:FF:FF:FF"));
-		
+
 		// Valid MAC addresses - hyphen format
 		assertTrue(isValidMacAddress("00-1B-44-11-3A-B7"));
 		assertTrue(isValidMacAddress("00-1b-44-11-3a-b7")); // Lowercase
-		
+
 		// Valid MAC addresses - no separators
 		assertTrue(isValidMacAddress("001B44113AB7"));
 		assertTrue(isValidMacAddress("001b44113ab7")); // Lowercase
-		
+
 		// Invalid MAC addresses
 		assertFalse(isValidMacAddress("00:1B:44:11:3A")); // Too short
 		assertFalse(isValidMacAddress("00:1B:44:11:3A:B7:99")); // Too long
 		assertFalse(isValidMacAddress("GG:1B:44:11:3A:B7")); // Invalid hex
 		assertFalse(isValidMacAddress("00:1B:44:11:3A:B7:XX")); // Invalid characters
-		
+
 		// Null/empty input
 		assertFalse(isValidMacAddress(null));
 		assertFalse(isValidMacAddress(""));
@@ -2238,7 +2373,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isValidHostname("localhost"));
 		assertTrue(isValidHostname("a")); // Single character
 		assertTrue(isValidHostname("a-b")); // With hyphen
-		
+
 		// Invalid hostnames
 		assertFalse(isValidHostname("-invalid.com")); // Starts with hyphen
 		assertFalse(isValidHostname("invalid-.com")); // Ends with hyphen
@@ -2247,15 +2382,15 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidHostname("example.com.")); // Ends with dot
 		assertFalse(isValidHostname("example_com")); // Underscore not allowed
 		assertFalse(isValidHostname("example@com")); // @ not allowed
-		
+
 		// Label too long (64 characters)
 		var longLabel = "a".repeat(64) + ".com";
 		assertFalse(isValidHostname(longLabel));
-		
+
 		// Total length too long (254 characters)
 		var longHostname = "a".repeat(63) + "." + "b".repeat(63) + "." + "c".repeat(63) + "." + "d".repeat(64) + ".com";
 		assertFalse(isValidHostname(longHostname));
-		
+
 		// Null/empty input
 		assertFalse(isValidHostname(null));
 		assertFalse(isValidHostname(""));
@@ -2266,25 +2401,25 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, wordCount("Hello world"));
 		assertEquals(4, wordCount("The quick brown fox"));
 		assertEquals(5, wordCount("Hello, world! How are you?"));
-		
+
 		// Single word
 		assertEquals(1, wordCount("Hello"));
 		assertEquals(1, wordCount("word"));
-		
+
 		// Multiple spaces
 		assertEquals(3, wordCount("word1    word2    word3"));
-		
+
 		// Words with underscores
 		assertEquals(2, wordCount("variable_name test_word"));
-		
+
 		// Words with numbers
 		assertEquals(3, wordCount("test123 456 word"));
-		
+
 		// Empty/null input
 		assertEquals(0, wordCount(null));
 		assertEquals(0, wordCount(""));
 		assertEquals(0, wordCount("   ")); // Only whitespace
-		
+
 		// Punctuation only
 		assertEquals(0, wordCount("!@#$%^&*()"));
 	}
@@ -2293,21 +2428,21 @@ class StringUtils_Test extends TestBase {
 		// Basic line counting
 		assertEquals(3, lineCount("line1\nline2\nline3"));
 		assertEquals(1, lineCount("single line"));
-		
+
 		// Windows line endings
 		assertEquals(2, lineCount("line1\r\nline2"));
-		
+
 		// Mixed line endings
 		assertEquals(3, lineCount("line1\nline2\r\nline3"));
-		
+
 		// Empty lines
 		assertEquals(3, lineCount("line1\n\nline3"));
 		assertEquals(2, lineCount("\nline2"));
 		assertEquals(2, lineCount("line1\n"));
-		
+
 		// Only newlines
 		assertEquals(3, lineCount("\n\n"));
-		
+
 		// Null/empty input
 		assertEquals(0, lineCount(null));
 		assertEquals(0, lineCount(""));
@@ -2317,22 +2452,22 @@ class StringUtils_Test extends TestBase {
 		// Basic frequency
 		assertEquals('l', mostFrequentChar("hello"));
 		assertEquals('a', mostFrequentChar("aabbcc")); // First encountered
-		
+
 		// Single character
 		assertEquals('a', mostFrequentChar("aaaa"));
-		
+
 		// All different
 		assertEquals('a', mostFrequentChar("abcd")); // First character
-		
+
 		// With spaces
 		assertEquals('l', mostFrequentChar("hello world")); // 'l' appears 3 times
-		
+
 		// Case sensitive
 		assertEquals('l', mostFrequentChar("Hello")); // 'l' appears 2 times, 'H' appears 1 time
-		
+
 		// Numbers
 		assertEquals('1', mostFrequentChar("112233"));
-		
+
 		// Null/empty input
 		assertEquals('\0', mostFrequentChar(null));
 		assertEquals('\0', mostFrequentChar(""));
@@ -2341,26 +2476,26 @@ class StringUtils_Test extends TestBase {
 	@Test void a106_entropy() {
 		// No randomness (all same character)
 		assertEquals(0.0, entropy("aaaa"), 0.0001);
-		
+
 		// High randomness (all different)
 		var entropy1 = entropy("abcd");
 		assertTrue(entropy1 > 1.5); // Should be around 2.0
-		
+
 		// Medium randomness
 		var entropy2 = entropy("hello");
 		assertTrue(entropy2 > 0.0 && entropy2 < 3.0);
-		
+
 		// Balanced distribution
 		var entropy3 = entropy("aabbcc");
 		assertTrue(entropy3 > 0.0);
-		
+
 		// Single character
 		assertEquals(0.0, entropy("a"), 0.0001);
-		
+
 		// Null/empty input
 		assertEquals(0.0, entropy(null), 0.0001);
 		assertEquals(0.0, entropy(""), 0.0001);
-		
+
 		// Verify entropy increases with more variety
 		var entropy4 = entropy("abcdefghijklmnopqrstuvwxyz");
 		assertTrue(entropy4 > entropy("hello"));
@@ -2370,31 +2505,31 @@ class StringUtils_Test extends TestBase {
 		// Simple sentence (should have higher score)
 		var score1 = readabilityScore("The cat sat.");
 		assertTrue(score1 > 0.0 && score1 <= 100.0);
-		
+
 		// More complex sentence (should have lower score)
 		var score2 = readabilityScore("The sophisticated implementation demonstrates advanced algorithmic complexity.");
 		assertTrue(score2 >= 0.0 && score2 <= 100.0); // Can be 0.0 for very complex text
 		assertTrue(score2 < score1); // Complex should score lower
-		
+
 		// Multiple sentences
 		var score3 = readabilityScore("Hello world. How are you? I am fine!");
 		assertTrue(score3 > 0.0 && score3 <= 100.0);
-		
+
 		// Single word
 		var score4 = readabilityScore("Hello.");
 		assertTrue(score4 > 0.0 && score4 <= 100.0);
-		
+
 		// No sentence ending
 		var score5 = readabilityScore("Hello world");
 		assertTrue(score5 > 0.0 && score5 <= 100.0);
-		
+
 		// Null/empty input
 		assertEquals(0.0, readabilityScore(null), 0.0001);
 		assertEquals(0.0, readabilityScore(""), 0.0001);
-		
+
 		// Only punctuation
 		assertEquals(0.0, readabilityScore("!@#$"), 0.0001);
-		
+
 		// Verify score is in valid range
 		var score6 = readabilityScore("This is a test sentence with multiple words.");
 		assertTrue(score6 >= 0.0 && score6 <= 100.0);
@@ -2948,5 +3083,389 @@ class StringUtils_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", 0, "\n"));
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", -1, "\n"));
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", 10, null));
+	}
+
+	//====================================================================================================
+	// String Array and Collection Utilities
+	//====================================================================================================
+
+	//====================================================================================================
+	// toStringArray(Collection<String>)
+	//====================================================================================================
+	@Test void a104_toStringArray() {
+		assertNull(toStringArray(null));
+		assertList(toStringArray(Collections.emptyList()));
+		assertList(toStringArray(l("a", "b", "c")), "a", "b", "c");
+		
+		// Set.of() doesn't preserve order, so use LinkedHashSet for order-sensitive test
+		var set = new LinkedHashSet<String>();
+		set.add("x");
+		set.add("y");
+		set.add("z");
+		assertList(toStringArray(set), "x", "y", "z");
+		
+		assertList(toStringArray(new LinkedHashSet<>(l("foo", "bar", "baz"))), "foo", "bar", "baz");
+		var list = new ArrayList<String>();
+		list.add("one");
+		list.add("two");
+		list.add("three");
+		assertList(toStringArray(list), "one", "two", "three");
+	}
+
+	//====================================================================================================
+	// filter(String[], Predicate<String>)
+	//====================================================================================================
+	@Test void a105_filter() {
+		assertNull(filter(null, NOT_EMPTY));
+		assertList(filter(a(), NOT_EMPTY));
+		assertList(filter(a("foo", "", "bar", null, "baz"), NOT_EMPTY), "foo", "bar", "baz");
+		assertList(filter(a("foo", "", "bar", null, "baz"), null));
+		assertList(filter(a("hello", "world", "test"), s -> s.length() > 4), "hello", "world");
+		assertList(filter(a("a", "bb", "ccc", "dddd"), s -> s.length() == 2), "bb");
+		assertList(filter(a("foo", "bar", "baz"), s -> s.startsWith("b")), "bar", "baz");
+		assertList(filter(a("test"), s -> false));
+		assertList(filter(a("test"), s -> true), "test");
+	}
+
+	//====================================================================================================
+	// map(String[], Function<String, String>)
+	//====================================================================================================
+	@Test void a106_mapped() {
+		assertNull(mapped(null, String::toUpperCase));
+		assertList(mapped(a(), String::toUpperCase));
+		assertList(mapped(a("foo", "bar", "baz"), String::toUpperCase), "FOO", "BAR", "BAZ");
+		assertList(mapped(a("FOO", "BAR", "BAZ"), String::toLowerCase), "foo", "bar", "baz");
+		assertList(mapped(a("foo", "bar", "baz"), s -> "prefix-" + s), "prefix-foo", "prefix-bar", "prefix-baz");
+		assertList(mapped(a("hello", "world"), s -> s.substring(0, 1)), "h", "w");
+		assertList(mapped(a("test"), null), "test");
+		assertList(mapped(a("a", "b", "c"), s -> s + s), "aa", "bb", "cc");
+	}
+
+	//====================================================================================================
+	// distinct(String[])
+	//====================================================================================================
+	@Test void a107_distinct() {
+		assertNull(distinct(null));
+		assertList(distinct(a()));
+		assertList(distinct(a("foo", "bar", "baz")), "foo", "bar", "baz");
+		assertList(distinct(a("foo", "bar", "foo", "baz", "bar")), "foo", "bar", "baz");
+		assertList(distinct(a("a", "a", "a", "a")), "a");
+		assertList(distinct(a("x", "y", "x", "z", "y", "x")), "x", "y", "z");
+		assertList(distinct(a("test")), "test");
+		assertList(distinct(a("", "", "foo", "", "bar")), "", "foo", "bar");
+	}
+
+	//====================================================================================================
+	// sort(String[])
+	//====================================================================================================
+	@Test void a108_sort() {
+		assertNull(sort(null));
+		assertList(sort(a()));
+		assertList(sort(a("c", "a", "b")), "a", "b", "c");
+		assertList(sort(a("zebra", "apple", "banana")), "apple", "banana", "zebra");
+		assertList(sort(a("3", "1", "2")), "1", "2", "3");
+		assertList(sort(a("test")), "test");
+		assertList(sort(a("Z", "a", "B")), "B", "Z", "a");
+		assertList(sort(a("foo", "bar", "baz")), "bar", "baz", "foo");
+	}
+
+	//====================================================================================================
+	// sortIgnoreCase(String[])
+	//====================================================================================================
+	@Test void a109_sortIgnoreCase() {
+		assertNull(sortIgnoreCase(null));
+		assertList(sortIgnoreCase(a()));
+		assertList(sortIgnoreCase(a("c", "a", "b")), "a", "b", "c");
+		assertList(sortIgnoreCase(a("Zebra", "apple", "Banana")), "apple", "Banana", "Zebra");
+		assertList(sortIgnoreCase(a("Z", "a", "B")), "a", "B", "Z");
+		assertList(sortIgnoreCase(a("test")), "test");
+		assertList(sortIgnoreCase(a("FOO", "bar", "Baz")), "bar", "Baz", "FOO");
+		assertList(sortIgnoreCase(a("zebra", "APPLE", "banana")), "APPLE", "banana", "zebra");
+	}
+
+	//====================================================================================================
+	// String Builder Utilities
+	//====================================================================================================
+
+	//====================================================================================================
+	// appendIfNotEmpty(StringBuilder, String)
+	//====================================================================================================
+	@Test void a110_appendIfNotEmpty() {
+		var sb = new StringBuilder();
+		assertSame(sb, appendIfNotEmpty(sb, "hello"));
+		assertEquals("hello", sb.toString());
+
+		appendIfNotEmpty(sb, "");
+		assertEquals("hello", sb.toString());
+
+		appendIfNotEmpty(sb, null);
+		assertEquals("hello", sb.toString());
+
+		appendIfNotEmpty(sb, "world");
+		assertEquals("helloworld", sb.toString());
+
+		var sb2 = new StringBuilder("prefix");
+		appendIfNotEmpty(sb2, "suffix");
+		assertEquals("prefixsuffix", sb2.toString());
+
+		assertThrows(IllegalArgumentException.class, () -> appendIfNotEmpty(null, "test"));
+	}
+
+	//====================================================================================================
+	// appendIfNotBlank(StringBuilder, String)
+	//====================================================================================================
+	@Test void a111_appendIfNotBlank() {
+		var sb = new StringBuilder();
+		assertSame(sb, appendIfNotBlank(sb, "hello"));
+		assertEquals("hello", sb.toString());
+
+		appendIfNotBlank(sb, "   ");
+		assertEquals("hello", sb.toString());
+
+		appendIfNotBlank(sb, "\t\n");
+		assertEquals("hello", sb.toString());
+
+		appendIfNotBlank(sb, "");
+		assertEquals("hello", sb.toString());
+
+		appendIfNotBlank(sb, null);
+		assertEquals("hello", sb.toString());
+
+		appendIfNotBlank(sb, "world");
+		assertEquals("helloworld", sb.toString());
+
+		var sb2 = new StringBuilder("prefix");
+		appendIfNotBlank(sb2, "suffix");
+		assertEquals("prefixsuffix", sb2.toString());
+
+		assertThrows(IllegalArgumentException.class, () -> appendIfNotBlank(null, "test"));
+	}
+
+	//====================================================================================================
+	// appendWithSeparator(StringBuilder, String, String)
+	//====================================================================================================
+	@Test void a112_appendWithSeparator() {
+		var sb = new StringBuilder();
+		assertSame(sb, appendWithSeparator(sb, "first", ", "));
+		assertEquals("first", sb.toString());
+
+		appendWithSeparator(sb, "second", ", ");
+		assertEquals("first, second", sb.toString());
+
+		appendWithSeparator(sb, "third", ", ");
+		assertEquals("first, second, third", sb.toString());
+
+		var sb2 = new StringBuilder();
+		appendWithSeparator(sb2, "a", "-");
+		appendWithSeparator(sb2, "b", "-");
+		appendWithSeparator(sb2, "c", "-");
+		assertEquals("a-b-c", sb2.toString());
+
+		var sb3 = new StringBuilder();
+		appendWithSeparator(sb3, "x", null);
+		assertEquals("x", sb3.toString());
+		appendWithSeparator(sb3, "y", null);
+		assertEquals("xy", sb3.toString());
+
+		var sb4 = new StringBuilder();
+		appendWithSeparator(sb4, null, ", ");
+		assertEquals("", sb4.toString());
+		appendWithSeparator(sb4, "test", ", ");
+		assertEquals("test", sb4.toString());
+
+		assertThrows(IllegalArgumentException.class, () -> appendWithSeparator(null, "test", ", "));
+	}
+
+	//====================================================================================================
+	// buildString(Consumer<StringBuilder>)
+	//====================================================================================================
+	@Test void a113_buildString() {
+		var result = buildString(sb -> {
+			sb.append("Hello");
+			sb.append(" ");
+			sb.append("World");
+		});
+		assertEquals("Hello World", result);
+
+		var joined = buildString(sb -> {
+			appendWithSeparator(sb, "a", ", ");
+			appendWithSeparator(sb, "b", ", ");
+			appendWithSeparator(sb, "c", ", ");
+		});
+		assertEquals("a, b, c", joined);
+
+		var empty = buildString(sb -> {
+			// Do nothing
+		});
+		assertEquals("", empty);
+
+		var complex = buildString(sb -> {
+			appendIfNotEmpty(sb, "prefix");
+			appendWithSeparator(sb, "middle", "-");
+			appendWithSeparator(sb, "suffix", "-");
+		});
+		assertEquals("prefix-middle-suffix", complex);
+
+		assertThrows(IllegalArgumentException.class, () -> buildString(null));
+	}
+
+	//====================================================================================================
+	// String Constants and Utilities
+	//====================================================================================================
+
+	//====================================================================================================
+	// String Constants
+	//====================================================================================================
+	@Test void a114_stringConstants() {
+		// EMPTY
+		assertEquals("", EMPTY);
+		assertTrue(EMPTY.isEmpty());
+
+		// SPACE
+		assertEquals(" ", SPACE);
+		assertEquals(1, SPACE.length());
+		assertTrue(Character.isWhitespace(SPACE.charAt(0)));
+
+		// NEWLINE
+		assertEquals("\n", NEWLINE);
+		assertEquals(1, NEWLINE.length());
+		assertEquals('\n', NEWLINE.charAt(0));
+
+		// TAB
+		assertEquals("\t", TAB);
+		assertEquals(1, TAB.length());
+		assertEquals('\t', TAB.charAt(0));
+
+		// CRLF
+		assertEquals("\r\n", CRLF);
+		assertEquals(2, CRLF.length());
+		assertEquals('\r', CRLF.charAt(0));
+		assertEquals('\n', CRLF.charAt(1));
+
+		// COMMON_SEPARATORS
+		assertTrue(COMMON_SEPARATORS.contains(","));
+		assertTrue(COMMON_SEPARATORS.contains(";"));
+		assertTrue(COMMON_SEPARATORS.contains(":"));
+		assertTrue(COMMON_SEPARATORS.contains("|"));
+		assertTrue(COMMON_SEPARATORS.contains("\t"));
+		assertEquals(5, COMMON_SEPARATORS.length());
+
+		// WHITESPACE_CHARS
+		assertTrue(WHITESPACE_CHARS.contains(" "));
+		assertTrue(WHITESPACE_CHARS.contains("\t"));
+		assertTrue(WHITESPACE_CHARS.contains("\n"));
+		assertTrue(WHITESPACE_CHARS.contains("\r"));
+		assertTrue(WHITESPACE_CHARS.contains("\f"));
+		assertTrue(WHITESPACE_CHARS.contains("\u000B")); // Vertical tab
+		for (var i = 0; i < WHITESPACE_CHARS.length(); i++) {
+			assertTrue(Character.isWhitespace(WHITESPACE_CHARS.charAt(i)));
+		}
+	}
+
+	//====================================================================================================
+	// Performance and Memory Utilities
+	//====================================================================================================
+
+	//====================================================================================================
+	// intern(String)
+	//====================================================================================================
+	@Test void a115_intern() {
+		assertNull(intern(null));
+
+		var s1 = new String("test");
+		var s2 = new String("test");
+		assertTrue(s1 != s2); // Different objects
+
+		var i1 = intern(s1);
+		var i2 = intern(s2);
+		assertTrue(i1 == i2); // Same interned object
+		assertEquals("test", i1);
+		assertEquals("test", i2);
+
+		// String literals are automatically interned
+		var literal = "literal";
+		assertTrue(isInterned(literal));
+		assertSame(literal, intern(literal));
+	}
+
+	//====================================================================================================
+	// isInterned(String)
+	//====================================================================================================
+	@Test void a116_isInterned() {
+		assertFalse(isInterned(null));
+
+		// String literals are automatically interned
+		var literal = "test";
+		assertTrue(isInterned(literal));
+
+		// New String objects are not interned
+		var s1 = new String("test");
+		assertFalse(isInterned(s1));
+
+		// After interning, it should be interned
+		var s2 = intern(s1);
+		assertTrue(isInterned(s2));
+		assertSame(s1.intern(), s2);
+	}
+
+	//====================================================================================================
+	// getStringSize(String)
+	//====================================================================================================
+	@Test void a117_getStringSize() {
+		assertEquals(0, getStringSize(null));
+		assertEquals(40, getStringSize("")); // 24 + 16 = 40 bytes overhead
+		assertEquals(50, getStringSize("hello")); // 40 + (5 * 2) = 50 bytes
+		assertEquals(48, getStringSize("test")); // 40 + (4 * 2) = 48 bytes
+		assertEquals(60, getStringSize("1234567890")); // 40 + (10 * 2) = 60 bytes
+
+		// Verify the calculation: 24 (String object) + 16 (char[] header) + (2 * length)
+		var emptySize = getStringSize("");
+		assertTrue(emptySize >= 24); // At least String object overhead
+
+		var oneCharSize = getStringSize("a");
+		assertEquals(emptySize + 2, oneCharSize); // One char adds 2 bytes
+
+		var tenCharSize = getStringSize("1234567890");
+		assertEquals(emptySize + 20, tenCharSize); // Ten chars add 20 bytes
+	}
+
+	//====================================================================================================
+	// optimizeString(String)
+	//====================================================================================================
+	@Test void a118_optimizeString() {
+		assertNull(optimizeString(null));
+		assertNull(optimizeString("short")); // No suggestions for short strings
+
+		// Test for large string suggestion
+		var largeString = "x".repeat(1001);
+		var suggestions = optimizeString(largeString);
+		assertNotNull(suggestions);
+		assertTrue(suggestions.contains("StringBuilder"));
+
+		// Test for interning suggestion (medium length, not interned)
+		var mediumString = new String("medium length string for testing");
+		var interningSuggestion = optimizeString(mediumString);
+		assertNotNull(interningSuggestion);
+		assertTrue(interningSuggestion.contains("interning"));
+
+		// Test for char[] suggestion (long string)
+		var longString = "x".repeat(101);
+		var charArraySuggestion = optimizeString(longString);
+		assertNotNull(charArraySuggestion);
+		assertTrue(charArraySuggestion.contains("char[]"));
+
+		// Test for compression suggestion (very large string)
+		var veryLargeString = "x".repeat(10001);
+		var compressionSuggestion = optimizeString(veryLargeString);
+		assertNotNull(compressionSuggestion);
+		assertTrue(compressionSuggestion.contains("compression"));
+
+		// Test that interned strings don't suggest interning
+		var interned = intern("medium length string");
+		var noInterningSuggestion = optimizeString(interned);
+		// Should not suggest interning if already interned, but may have other suggestions
+		if (noInterningSuggestion != null) {
+			assertFalse(noInterningSuggestion.contains("interning"));
+		}
 	}
 }

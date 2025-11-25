@@ -1925,6 +1925,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <T> LinkedHashSet<T> set(T...values) {  // NOSONAR
+		assertArgNotNull("values", values);
 		return new LinkedHashSet<>(Arrays.asList(values));
 	}
 
