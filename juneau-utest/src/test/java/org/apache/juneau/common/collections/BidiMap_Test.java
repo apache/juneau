@@ -346,6 +346,22 @@ class BidiMap_Test extends TestBase {
 		assertNull(map.getKey(1));
 	}
 
+	@Test void a22b_overwriteInBuilder_differentValue() {
+		// Test line 123: overwriting a key with a different value
+		// This should remove the old value from tracking
+		var map = BidiMap.<String,Integer>create()
+			.add("key1", 100)
+			.add("key2", 200)
+			.add("key1", 300)  // Overwrite key1 with different value (line 123)
+			.build();
+
+		assertSize(2, map);
+		assertEquals(300, map.get("key1"));
+		assertEquals(200, map.get("key2"));
+		assertEquals("key1", map.getKey(300));
+		assertNull(map.getKey(100)); // Old value should be removed
+	}
+
 	@Test void a23_duplicateValuesInBuilder() {
 		// Duplicate values are not allowed
 		assertThrows(IllegalArgumentException.class, () ->
@@ -354,6 +370,113 @@ class BidiMap_Test extends TestBase {
 				.add("uno", 1)
 				.build()
 		);
+	}
+
+	@Test void a23b_duplicateValuesInBuilder_overwritingKey() {
+		// Test line 127: trying to add a value that's already mapped to a different key
+		// This should throw IllegalArgumentException
+		// The condition is: values.contains(value) && ! value.equals(existingValue)
+		// where existingValue is the value currently mapped to the key being added
+		assertThrows(IllegalArgumentException.class, () ->
+			BidiMap.<String,Integer>create()
+				.add("key1", 100)
+				.add("key2", 200)
+				.add("key1", 200)  // Try to map key1 to 200, but 200 is already mapped to key2
+				.build()
+		);
+	}
+
+	@Test void a23c_overwriteKeyWithSameValue() {
+		// Test line 127: overwriting a key with the same value should not throw
+		// The condition is: values.contains(value) && ! value.equals(existingValue)
+		// When value.equals(existingValue), the condition is false, so assertArg passes
+		var map = BidiMap.<String,Integer>create()
+			.add("key1", 100)
+			.add("key2", 200)
+			.add("key1", 100)  // Overwrite key1 with the same value (should be allowed)
+			.build();
+
+		assertSize(2, map);
+		assertEquals(100, map.get("key1"));
+		assertEquals(200, map.get("key2"));
+	}
+
+	@Test void a23d_overwriteKeyWithNewValue_notInValues() {
+		// Test line 127: overwriting a key with a new value not in the values set
+		// The condition is: values.contains(value) && ! value.equals(existingValue)
+		// When !values.contains(value), the condition is false, so assertArg passes
+		var map = BidiMap.<String,Integer>create()
+			.add("key1", 100)
+			.add("key2", 200)
+			.add("key1", 300)  // Overwrite key1 with a new value not in values set
+			.build();
+
+		assertSize(2, map);
+		assertEquals(300, map.get("key1"));
+		assertEquals(200, map.get("key2"));
+	}
+
+	//====================================================================================================
+	// Constructor coverage - toMap merge function (lines 185-186)
+	//====================================================================================================
+
+	@Test void a24_constructorMergeFunction_duplicateKeysInBuilder() {
+		// Test lines 185-186: The toMap merge function (a, b) -> b
+		// Note: Since the builder uses LinkedHashMap, duplicate keys are overwritten before
+		// reaching the constructor, so the merge function may not be called in practice.
+		// However, this test verifies that the constructor correctly processes entries
+		// and that the merge function is present as a safety measure.
+		var map = BidiMap.<String,Integer>create()
+			.add("key1", 100)
+			.add("key1", 200)  // Overwrite - LinkedHashMap handles this
+			.add("key1", 300)  // Overwrite again
+			.build();
+
+		// The last value should win (merge function behavior: (a, b) -> b)
+		assertSize(1, map);
+		assertEquals(300, map.get("key1"));
+		assertEquals("key1", map.getKey(300));
+	}
+
+	@Test void a25_constructorMergeFunction_duplicateValuesInBuilder() {
+		// Test line 186: The reverse map's toMap merge function (a, b) -> b
+		// Note: The builder prevents duplicate values, so the merge function may not be called.
+		// However, this test verifies that the constructor correctly processes entries
+		// and handles value overwrites correctly.
+		var map = BidiMap.<String,Integer>create()
+			.add("key1", 100)
+			.add("key2", 200)
+			.add("key1", 300)  // Overwrite key1, removing 100 from reverse map
+			.build();
+
+		// Verify the reverse map correctly reflects the overwrite
+		assertSize(2, map);
+		assertEquals(300, map.get("key1"));
+		assertEquals(200, map.get("key2"));
+		assertEquals("key1", map.getKey(300));
+		assertEquals("key2", map.getKey(200));
+		assertNull(map.getKey(100)); // Old value should be removed
+	}
+
+	@Test void a26_constructorWithNullEntries_filteredCorrectly() {
+		// Test lines 185-186: Verify that null keys and values are filtered correctly
+		// in both forward and reverse maps during construction
+		var map = BidiMap.<String,Integer>create()
+			.add("key1", 1)
+			.add(null, 2)      // Null key - should be filtered
+			.add("key3", null) // Null value - should be filtered
+			.add(null, null)   // Both null - should be filtered
+			.add("key5", 5)
+			.build();
+
+		// Only non-null entries should be present
+		assertSize(2, map);
+		assertEquals(1, map.get("key1"));
+		assertEquals(5, map.get("key5"));
+		assertEquals("key1", map.getKey(1));
+		assertEquals("key5", map.getKey(5));
+		assertNull(map.get(null));
+		assertNull(map.getKey(null));
 	}
 
 	@Test void a24_sizeAfterOperations() {

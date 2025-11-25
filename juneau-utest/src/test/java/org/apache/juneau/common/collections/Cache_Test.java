@@ -620,6 +620,8 @@ class Cache_Test extends TestBase {
 		cache.put("key1", "value1");
 		var previous = cache.put("key1", null);
 		assertEquals("value1", previous);
+		// Null values are not cached, so key should be removed
+		assertFalse(cache.containsKey("key1"), "Key should be removed when null value is put");
 		// Null values are not cached, so get() will call supplier
 		var callCount = new AtomicInteger();
 		var result = cache.get("key1", () -> {
@@ -628,6 +630,17 @@ class Cache_Test extends TestBase {
 		});
 		assertEquals("supplied", result);
 		assertEquals(1, callCount.get());
+		// After get() with non-null supplier, key is now in cache again
+		assertTrue(cache.containsKey("key1"), "Key should be in cache after get() with non-null supplier");
+	}
+
+	@Test void a35b_put_withNullValue_newKey() {
+		var cache = Cache.of(String.class, String.class).build();
+		// Putting null for a new key should return null and not add anything
+		var previous = cache.put("key1", null);
+		assertNull(previous);
+		assertFalse(cache.containsKey("key1"));
+		assertTrue(cache.isEmpty());
 	}
 
 	//====================================================================================================
@@ -703,6 +716,84 @@ class Cache_Test extends TestBase {
 		// Null keys are now cached, so containsKey should return true after get()
 		cache.get(null, () -> "value");
 		assertTrue(cache.containsKey(null));
+	}
+
+	//====================================================================================================
+	// remove() method
+	//====================================================================================================
+
+	@Test void a46_remove_existingKey() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put("key1", "value1");
+		var removed = cache.remove("key1");
+		assertEquals("value1", removed);
+		assertFalse(cache.containsKey("key1"));
+		assertTrue(cache.isEmpty());
+	}
+
+	@Test void a47_remove_nonExistentKey() {
+		var cache = Cache.of(String.class, String.class).build();
+		var removed = cache.remove("key1");
+		assertNull(removed);
+	}
+
+	@Test void a48_remove_afterGet() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.get("key1", () -> "value1");
+		var removed = cache.remove("key1");
+		assertEquals("value1", removed);
+		assertFalse(cache.containsKey("key1"));
+	}
+
+	@Test void a49_remove_nullKey() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put(null, "value1");
+		var removed = cache.remove(null);
+		assertEquals("value1", removed);
+		assertFalse(cache.containsKey(null));
+	}
+
+	//====================================================================================================
+	// containsValue() method
+	//====================================================================================================
+
+	@Test void a50_containsValue_present() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put("key1", "value1");
+		cache.put("key2", "value2");
+		assertTrue(cache.containsValue("value1"));
+		assertTrue(cache.containsValue("value2"));
+		assertFalse(cache.containsValue("value3"));
+	}
+
+	@Test void a51_containsValue_notPresent() {
+		var cache = Cache.of(String.class, String.class).build();
+		assertFalse(cache.containsValue("value1"));
+	}
+
+	@Test void a52_containsValue_afterRemove() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put("key1", "value1");
+		assertTrue(cache.containsValue("value1"));
+		cache.remove("key1");
+		assertFalse(cache.containsValue("value1"));
+	}
+
+	@Test void a53_containsValue_afterClear() {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.put("key1", "value1");
+		cache.put("key2", "value2");
+		assertTrue(cache.containsValue("value1"));
+		cache.clear();
+		assertFalse(cache.containsValue("value1"));
+		assertFalse(cache.containsValue("value2"));
+	}
+
+	@Test void a54_containsValue_nullValue() {
+		var cache = Cache.of(String.class, String.class).build();
+		// Null values can't be cached, so containsValue(null) should return false
+		cache.get("key1", () -> null);
+		assertFalse(cache.containsValue(null));
 	}
 
 	//====================================================================================================

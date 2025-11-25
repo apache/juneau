@@ -341,6 +341,9 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	 * @return <jk>true</jk> if the cache contains the value.
 	 */
 	public boolean containsValue(V value) {
+		// ConcurrentHashMap doesn't allow null values, so null can never be in the cache
+		if (value == null)
+			return false;
 		return map.containsValue(value);
 	}
 

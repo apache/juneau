@@ -226,6 +226,15 @@ class Cache5_Test extends TestBase {
 	}
 
 	@Test
+	void b01b_put_withNullValue() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class).build();
+		x.put("en", "US", "west", "formal", 1, "value1");
+		var previous = x.put("en", "US", "west", "formal", 1, null);
+		assertEquals("value1", previous);
+		assertFalse(x.containsKey("en", "US", "west", "formal", 1));
+	}
+
+	@Test
 	void b02_isEmpty() {
 		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class).build();
 		assertTrue(x.isEmpty());
@@ -286,6 +295,51 @@ class Cache5_Test extends TestBase {
 		});
 		assertEquals(2, callCount.get());
 		assertTrue(x.isEmpty());
+	}
+
+	//====================================================================================================
+	// d - remove() and containsValue()
+	//====================================================================================================
+
+	@Test
+	void d01_remove() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class).build();
+		x.put("en", "US", "west", "formal", 1, "value1");
+		var removed = x.remove("en", "US", "west", "formal", 1);
+		assertEquals("value1", removed);
+		assertFalse(x.containsKey("en", "US", "west", "formal", 1));
+	}
+
+	@Test
+	void d02_containsValue() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class).build();
+		x.put("en", "US", "west", "formal", 1, "value1");
+		assertTrue(x.containsValue("value1"));
+		assertFalse(x.containsValue("value2"));
+	}
+
+	//====================================================================================================
+	// e - logOnExit() builder methods
+	//====================================================================================================
+
+	@Test
+	void e01_logOnExit_withStringId() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.logOnExit("TestCache5")
+			.supplier((k1, k2, k3, k4, k5) -> k1 + ":" + k2 + ":" + k3 + ":" + k4 + ":" + k5)
+			.build();
+		x.get("en", "US", "west", "formal", 1);
+		assertSize(1, x);
+	}
+
+	@Test
+	void e02_logOnExit_withBoolean() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.logOnExit(true, "MyCache5")
+			.supplier((k1, k2, k3, k4, k5) -> k1 + ":" + k2 + ":" + k3 + ":" + k4 + ":" + k5)
+			.build();
+		x.get("en", "US", "west", "formal", 1);
+		assertSize(1, x);
 	}
 }
 

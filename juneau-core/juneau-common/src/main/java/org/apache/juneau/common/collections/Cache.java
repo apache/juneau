@@ -529,8 +529,12 @@ public class Cache<K,V> {
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
 	 */
 	public V put(K key, V value) {
-		if (value == null)
-			return map.remove(wrap(key));
+		if (value == null) {
+			Tuple1<K> wrapped = wrap(key);
+			V result = map.remove(wrapped);
+			wrapperCache.remove(key); // Clean up wrapper cache
+			return result;
+		}
 		return map.put(wrap(key), value);
 	}
 
@@ -595,6 +599,9 @@ public class Cache<K,V> {
 	 * @return <jk>true</jk> if the cache contains the value.
 	 */
 	public boolean containsValue(V value) {
+		// ConcurrentHashMap doesn't allow null values, so null can never be in the cache
+		if (value == null)
+			return false;
 		return map.containsValue(value);
 	}
 

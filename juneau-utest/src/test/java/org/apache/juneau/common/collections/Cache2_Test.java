@@ -414,6 +414,24 @@ class Cache2_Test extends TestBase {
 		assertEquals("value2", x.get("user", 123, () -> "should not be called"));
 	}
 
+	@Test
+	void i03_put_withNullValue() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		x.put("user", 123, "value1");
+		var previous = x.put("user", 123, null);
+		assertEquals("value1", previous);
+		assertFalse(x.containsKey("user", 123));
+	}
+
+	@Test
+	void i04_put_withNullValue_newKey() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		var previous = x.put("user", 123, null);
+		assertNull(previous);
+		assertFalse(x.containsKey("user", 123));
+		assertTrue(x.isEmpty());
+	}
+
 	//====================================================================================================
 	// j - isEmpty() method
 	//====================================================================================================
@@ -464,6 +482,80 @@ class Cache2_Test extends TestBase {
 			.build();
 		x.get("user", 123);
 		assertTrue(x.containsKey("user", 123));
+	}
+
+	//====================================================================================================
+	// l - remove() method
+	//====================================================================================================
+
+	@Test
+	void l02_remove_existingKey() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		x.put("user", 123, "value1");
+		var removed = x.remove("user", 123);
+		assertEquals("value1", removed);
+		assertFalse(x.containsKey("user", 123));
+	}
+
+	@Test
+	void l03_remove_nonExistentKey() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		var removed = x.remove("user", 123);
+		assertNull(removed);
+	}
+
+	//====================================================================================================
+	// m - containsValue() method
+	//====================================================================================================
+
+	@Test
+	void m02_containsValue_present() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		x.put("user", 123, "value1");
+		x.put("admin", 456, "value2");
+		assertTrue(x.containsValue("value1"));
+		assertTrue(x.containsValue("value2"));
+		assertFalse(x.containsValue("value3"));
+	}
+
+	@Test
+	void m03_containsValue_notPresent() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		assertFalse(x.containsValue("value1"));
+	}
+
+	//====================================================================================================
+	// n - logOnExit() builder methods
+	//====================================================================================================
+
+	@Test
+	void n02_logOnExit_withStringId() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.logOnExit("TestCache2")
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+		x.get("user", 123);
+		assertSize(1, x);
+	}
+
+	@Test
+	void n03_logOnExit_withBooleanTrue() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.logOnExit(true, "MyCache2")
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+		x.get("user", 123);
+		assertSize(1, x);
+	}
+
+	@Test
+	void n04_logOnExit_withBooleanFalse() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.logOnExit(false, "DisabledCache2")
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+		x.get("user", 123);
+		assertSize(1, x);
 	}
 
 	//====================================================================================================

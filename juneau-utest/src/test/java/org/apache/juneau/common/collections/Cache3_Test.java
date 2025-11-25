@@ -224,6 +224,15 @@ class Cache3_Test extends TestBase {
 	}
 
 	@Test
+	void b01b_put_withNullValue() {
+		var x = Cache3.of(String.class, String.class, Integer.class, String.class).build();
+		x.put("en", "US", 1, "value1");
+		var previous = x.put("en", "US", 1, null);
+		assertEquals("value1", previous);
+		assertFalse(x.containsKey("en", "US", 1));
+	}
+
+	@Test
 	void b02_isEmpty() {
 		var x = Cache3.of(String.class, String.class, Integer.class, String.class).build();
 		assertTrue(x.isEmpty());
@@ -285,6 +294,51 @@ class Cache3_Test extends TestBase {
 		});
 		assertEquals(2, callCount.get());
 		assertTrue(x.isEmpty());
+	}
+
+	//====================================================================================================
+	// d - remove() and containsValue()
+	//====================================================================================================
+
+	@Test
+	void d01_remove() {
+		var x = Cache3.of(String.class, String.class, Integer.class, String.class).build();
+		x.put("en", "US", 1, "value1");
+		var removed = x.remove("en", "US", 1);
+		assertEquals("value1", removed);
+		assertFalse(x.containsKey("en", "US", 1));
+	}
+
+	@Test
+	void d02_containsValue() {
+		var x = Cache3.of(String.class, String.class, Integer.class, String.class).build();
+		x.put("en", "US", 1, "value1");
+		assertTrue(x.containsValue("value1"));
+		assertFalse(x.containsValue("value2"));
+	}
+
+	//====================================================================================================
+	// e - logOnExit() builder methods
+	//====================================================================================================
+
+	@Test
+	void e01_logOnExit_withStringId() {
+		var x = Cache3.of(String.class, String.class, Integer.class, String.class)
+			.logOnExit("TestCache3")
+			.supplier((k1, k2, k3) -> k1 + ":" + k2 + ":" + k3)
+			.build();
+		x.get("en", "US", 1);
+		assertSize(1, x);
+	}
+
+	@Test
+	void e02_logOnExit_withBoolean() {
+		var x = Cache3.of(String.class, String.class, Integer.class, String.class)
+			.logOnExit(true, "MyCache3")
+			.supplier((k1, k2, k3) -> k1 + ":" + k2 + ":" + k3)
+			.build();
+		x.get("en", "US", 1);
+		assertSize(1, x);
 	}
 }
 

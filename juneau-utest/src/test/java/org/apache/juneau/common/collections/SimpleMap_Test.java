@@ -164,10 +164,65 @@ class SimpleMap_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// Array length mismatch
+	//====================================================================================================
+	@Test
+	void c01_arrayLengthMismatch_keysLonger() {
+		var keys = a("key1", "key2", "key3");
+		var values = a("value1", "value2");
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			new SimpleMap<>(keys, values);
+		});
+
+		assertTrue(ex.getMessage().contains("array lengths differ"));
+		assertTrue(ex.getMessage().contains("3")); // keys length
+		assertTrue(ex.getMessage().contains("2")); // values length
+	}
+
+	@Test
+	void c02_arrayLengthMismatch_valuesLonger() {
+		var keys = a("key1", "key2");
+		var values = a("value1", "value2", "value3", "value4");
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			new SimpleMap<>(keys, values);
+		});
+
+		assertTrue(ex.getMessage().contains("array lengths differ"));
+		assertTrue(ex.getMessage().contains("2")); // keys length
+		assertTrue(ex.getMessage().contains("4")); // values length
+	}
+
+	@Test
+	void c03_arrayLengthMismatch_emptyKeys() {
+		var keys = new String[0];
+		var values = a("value1");
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			new SimpleMap<>(keys, values);
+		});
+
+		assertTrue(ex.getMessage().contains("array lengths differ"));
+	}
+
+	@Test
+	void c04_arrayLengthMismatch_emptyValues() {
+		var keys = a("key1", "key2");
+		var values = new String[0];
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			new SimpleMap<>(keys, values);
+		});
+
+		assertTrue(ex.getMessage().contains("array lengths differ"));
+	}
+
+	//====================================================================================================
 	// Edge cases
 	//====================================================================================================
 	@Test
-	void c01_emptyMap_noNullKeys() {
+	void c05_emptyMap_noNullKeys() {
 		String[] keys = {};
 		String[] values = {};
 
@@ -179,7 +234,7 @@ class SimpleMap_Test extends TestBase {
 	}
 
 	@Test
-	void c02_getLookup_nullKeyNotInMap() {
+	void c06_getLookup_nullKeyNotInMap() {
 		String[] keys = { "key1", "key2" };
 		String[] values = { "value1", "value2" };
 
@@ -190,7 +245,7 @@ class SimpleMap_Test extends TestBase {
 	}
 
 	@Test
-	void c03_putOperation_cannotAddNewNullKey() {
+	void c07_putOperation_cannotAddNewNullKey() {
 		String[] keys = { "key1" };
 		String[] values = { "value1" };
 
@@ -204,7 +259,7 @@ class SimpleMap_Test extends TestBase {
 	}
 
 	@Test
-	void c04_complexTypes_nullKey() {
+	void c08_complexTypes_nullKey() {
 		var keys = a(1, null, 3);
 		var values = a("one", "null-key", "three");
 
