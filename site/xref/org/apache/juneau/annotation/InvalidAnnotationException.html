@@ -57,7 +57,7 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.findFirst()
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			.ifPresent(a -&gt; {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidAnnotationException" href="../../../../org/apache/juneau/annotation/InvalidAnnotationException.html#InvalidAnnotationException">InvalidAnnotationException</a>(<span class="jxr_string">"@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''"</span>, scn(a), scn(onMethod.getDeclaringClass()), onMethod);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidAnnotationException" href="../../../../org/apache/juneau/annotation/InvalidAnnotationException.html#InvalidAnnotationException">InvalidAnnotationException</a>(<span class="jxr_string">"@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''"</span>, cns(a), cns(onMethod.getDeclaringClass()), onMethod);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  			});
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}

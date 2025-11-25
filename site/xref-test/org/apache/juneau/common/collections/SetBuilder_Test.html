@@ -475,7 +475,7 @@
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 	<strong class="jxr_keyword">void</strong> m03_addAny_withArray() {
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<strong class="jxr_keyword">var</strong> array = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>};
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">var</strong> set = SetBuilder.create(String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.addAny(array)
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.addAny((Object)array)
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 			.build();
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 		assertList(set, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
@@ -540,7 +540,7 @@
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 			<strong class="jxr_keyword">final</strong> String value;
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 			StringWrapper(String value) { <strong class="jxr_keyword">this</strong>.value = value; }
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 		}
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">var</strong> converter = <strong class="jxr_keyword">new</strong> org.apache.juneau.common.utils.Converter() {
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 			@Override
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 			<strong class="jxr_keyword">public</strong> &lt;T&gt; T convertTo(Class&lt;T&gt; type, Object o) {

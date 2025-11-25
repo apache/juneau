@@ -3804,11 +3804,11 @@
 <a class="jxr_linenumber" name="L3796" href="#L3796">3796</a> 
 <a class="jxr_linenumber" name="L3797" href="#L3797">3797</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : map.values()) {
 <a class="jxr_linenumber" name="L3798" href="#L3798">3798</a> 				<strong class="jxr_keyword">if</strong> (! beanStore.hasAllParams(m))
-<a class="jxr_linenumber" name="L3799" href="#L3799">3799</a> 					<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, scn(m.getDeclaringClass()), m.getSignature(), beanStore.getMissingParams(m));
+<a class="jxr_linenumber" name="L3799" href="#L3799">3799</a> 					<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, cns(m.getDeclaringClass()), m.getSignature(), beanStore.getMissingParams(m));
 <a class="jxr_linenumber" name="L3800" href="#L3800">3800</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3801" href="#L3801">3801</a> 					m.invoke(r, beanStore.getParams(m));
 <a class="jxr_linenumber" name="L3802" href="#L3802">3802</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L3803" href="#L3803">3803</a> 					<strong class="jxr_keyword">throw</strong> servletException(e, <span class="jxr_string">"Exception thrown from @RestInit method {0}.{1}."</span>, scn(m.getDeclaringClass()), m.getSignature());
+<a class="jxr_linenumber" name="L3803" href="#L3803">3803</a> 					<strong class="jxr_keyword">throw</strong> servletException(e, <span class="jxr_string">"Exception thrown from @RestInit method {0}.{1}."</span>, cns(m.getDeclaringClass()), m.getSignature());
 <a class="jxr_linenumber" name="L3804" href="#L3804">3804</a> 				}
 <a class="jxr_linenumber" name="L3805" href="#L3805">3805</a> 			}
 <a class="jxr_linenumber" name="L3806" href="#L3806">3806</a> 		}
@@ -4611,13 +4611,13 @@
 <a class="jxr_linenumber" name="L4603" href="#L4603">4603</a> 						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>, rocb);
 <a class="jxr_linenumber" name="L4604" href="#L4604">4604</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : initMap.values()) {
 <a class="jxr_linenumber" name="L4605" href="#L4605">4605</a> 							<strong class="jxr_keyword">if</strong> (! beanStore.hasAllParams(m)) {
-<a class="jxr_linenumber" name="L4606" href="#L4606">4606</a> 								<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, scn(m.getDeclaringClass()), m.getSignature(),
+<a class="jxr_linenumber" name="L4606" href="#L4606">4606</a> 								<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, cns(m.getDeclaringClass()), m.getSignature(),
 <a class="jxr_linenumber" name="L4607" href="#L4607">4607</a> 									beanStore.getMissingParams(m));
 <a class="jxr_linenumber" name="L4608" href="#L4608">4608</a> 							}
 <a class="jxr_linenumber" name="L4609" href="#L4609">4609</a> 							<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L4610" href="#L4610">4610</a> 								m.invoke(resource.get(), beanStore.getParams(m));
 <a class="jxr_linenumber" name="L4611" href="#L4611">4611</a> 							} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L4612" href="#L4612">4612</a> 								<strong class="jxr_keyword">throw</strong> servletException(e, <span class="jxr_string">"Exception thrown from @RestInit method {0}.{1}."</span>, scn(m.getDeclaringClass()), m.getSignature());
+<a class="jxr_linenumber" name="L4612" href="#L4612">4612</a> 								<strong class="jxr_keyword">throw</strong> servletException(e, <span class="jxr_string">"Exception thrown from @RestInit method {0}.{1}."</span>, cns(m.getDeclaringClass()), m.getSignature());
 <a class="jxr_linenumber" name="L4613" href="#L4613">4613</a> 							}
 <a class="jxr_linenumber" name="L4614" href="#L4614">4614</a> 						}
 <a class="jxr_linenumber" name="L4615" href="#L4615">4615</a> 

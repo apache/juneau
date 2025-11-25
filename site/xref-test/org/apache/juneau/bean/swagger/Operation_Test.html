@@ -417,7 +417,7 @@
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 			assertMapped(
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				TESTER.bean(), (obj,prop) -&gt; scn(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				TESTER.bean(), (obj,prop) -&gt; cns(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 				<span class="jxr_string">"consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags,x3,x4"</span>,
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 				<span class="jxr_string">"LinkedHashSet,Boolean,String,ExternalDocumentation,String,ArrayList,LinkedHashSet,LinkedHashMap,LinkedHashSet,ArrayList,String,LinkedHashSet,String,&lt;null&gt;"</span>
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 			);

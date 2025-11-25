@@ -389,14 +389,14 @@
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 					ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"onClass"</span>)).ifPresent(mi -&gt; {
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 						<strong class="jxr_keyword">if</strong> (! mi.getReturnType().is(Class[].<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 							<strong class="jxr_keyword">throw</strong> bex(<span class="jxr_string">"Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array."</span>, scn(a));
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 							<strong class="jxr_keyword">throw</strong> bex(<span class="jxr_string">"Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array."</span>, cns(a));
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : (Class&lt;?&gt;[])mi.accessible().invoke(a))
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 							runtimeAnnotations.append(c.getName(), a);
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 					});
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 					ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"on"</span>)).ifPresent(mi -&gt; {
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 						<strong class="jxr_keyword">if</strong> (! mi.getReturnType().is(String[].<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 							<strong class="jxr_keyword">throw</strong> bex(<span class="jxr_string">"Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array."</span>, scn(a));
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 							<strong class="jxr_keyword">throw</strong> bex(<span class="jxr_string">"Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array."</span>, cns(a));
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : (String[])mi.accessible().invoke(a))
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 							runtimeAnnotations.append(s, a);
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 					});

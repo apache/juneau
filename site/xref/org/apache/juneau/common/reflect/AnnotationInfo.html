@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * @return The simple class name of the annotation (e.g., {@code "Override"} for {@code @Override}).</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> scn(a.annotationType()); }
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> cns(a.annotationType()); }
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * Returns the value of a specific annotation method.</em>
@@ -427,7 +427,7 @@
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * @return A simple string representation of this annotation.</em>
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<strong class="jxr_keyword">public</strong> String toSimpleString() {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"@"</span> + scn(a.annotationType()) + <span class="jxr_string">"(on="</span> + annotatable.getLabel() + <span class="jxr_string">")"</span>;
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"@"</span> + cns(a.annotationType()) + <span class="jxr_string">"(on="</span> + annotatable.getLabel() + <span class="jxr_string">")"</span>;
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 	}
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<em class="jxr_javadoccomment">/**</em>

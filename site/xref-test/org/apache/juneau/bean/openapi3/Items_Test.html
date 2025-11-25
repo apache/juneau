@@ -292,7 +292,7 @@
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			assertMapped(
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				TESTER.bean(), (obj,prop) -&gt; scn(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				TESTER.bean(), (obj,prop) -&gt; cns(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 				<span class="jxr_string">"additionalItems,allOf,collectionFormat,default,discriminator,enum,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,pattern,properties,readOnly,required,title,type,uniqueItems,xml,x1,x2"</span>,
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 				<span class="jxr_string">"SchemaInfo,ArrayList,String,String,String,ArrayList,String,Boolean,Boolean,ExternalDocumentation,String,Items,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,String,LinkedHashMap,Boolean,ArrayList,String,String,Boolean,Xml,String,&lt;null&gt;"</span>
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 			);

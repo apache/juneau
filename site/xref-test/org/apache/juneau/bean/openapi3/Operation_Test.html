@@ -342,7 +342,7 @@
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 			assertMapped(
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 				TESTER.bean(), (obj,prop) -&gt; scn(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 				TESTER.bean(), (obj,prop) -&gt; cns(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 				<span class="jxr_string">"callbacks,deprecated,description,externalDocs,operationId,parameters,requestBody,responses,security,servers,summary,tags,x1,x2"</span>,
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 				<span class="jxr_string">"LinkedHashMap,Boolean,String,ExternalDocumentation,String,ArrayList,RequestBodyInfo,LinkedHashMap,ArrayList,ArrayList,String,ArrayList,String,&lt;null&gt;"</span>
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 			);

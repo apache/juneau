@@ -223,7 +223,7 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			assertMapped(
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				TESTER.bean(), (obj,prop) -&gt; scn(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				TESTER.bean(), (obj,prop) -&gt; cns(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 				<span class="jxr_string">"delete,description,get,head,options,parameters,patch,post,put,servers,summary,trace,x1,x2"</span>,
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 				<span class="jxr_string">"Operation,String,Operation,Operation,Operation,ArrayList,Operation,Operation,Operation,ArrayList,String,Operation,String,&lt;null&gt;"</span>
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 			);

@@ -327,7 +327,7 @@
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 			assertMapped(
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 				TESTER.bean(), (obj,prop) -&gt; scn(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 				TESTER.bean(), (obj,prop) -&gt; cns(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 				<span class="jxr_string">"additionalProperties,allOf,default,description,discriminator,enum,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maximum,maxItems,maxLength,maxProperties,minimum,minItems,minLength,minProperties,multipleOf,pattern,properties,readOnly,$ref,required,requiredProperties,title,type,uniqueItems,xml,x1,x2"</span>,
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 				<span class="jxr_string">"SchemaInfo,LinkedHashSet,String,String,String,LinkedHashSet,String,Boolean,Boolean,ExternalDocumentation,String,Items,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,String,LinkedHashMap,Boolean,String,Boolean,LinkedHashSet,String,String,Boolean,Xml,String,&lt;null&gt;"</span>
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			);

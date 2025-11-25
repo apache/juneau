@@ -851,7 +851,7 @@
 <a class="jxr_linenumber" name="L843" href="#L843">843</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L844" href="#L844">844</a> 			<strong class="jxr_keyword">return</strong> o.toString();
 <a class="jxr_linenumber" name="L845" href="#L845">845</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) { <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> 			<strong class="jxr_keyword">return</strong> scn(t) + <span class="jxr_string">": "</span> + t.getMessage();
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> 			<strong class="jxr_keyword">return</strong> cns(t) + <span class="jxr_string">": "</span> + t.getMessage();
 <a class="jxr_linenumber" name="L847" href="#L847">847</a> 		}
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> 	}
 <a class="jxr_linenumber" name="L849" href="#L849">849</a> 
@@ -962,7 +962,7 @@
 <a class="jxr_linenumber" name="L954" href="#L954">954</a> 	}
 <a class="jxr_linenumber" name="L955" href="#L955">955</a> 
 <a class="jxr_linenumber" name="L956" href="#L956">956</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link ClassUtils#simpleClassName(Object)}.</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link ClassUtils#classNameSimple(Object)}.</em>
 <a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 * Returns only the simple class name without any package or outer class information.</em>
@@ -993,12 +993,12 @@
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 * @param value The object to get the simple class name for.</em>
 <a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 * @return The simple name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
 <a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String scn(Object value) {
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<strong class="jxr_keyword">return</strong> ClassUtils.simpleClassName(value);
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String cns(Object value) {
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<strong class="jxr_keyword">return</strong> ClassUtils.classNameSimple(value);
 <a class="jxr_linenumber" name="L990" href="#L990">990</a> 	}
 <a class="jxr_linenumber" name="L991" href="#L991">991</a> 
 <a class="jxr_linenumber" name="L992" href="#L992">992</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link ClassUtils#simpleQualifiedClassName(Object)}.</em>
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link ClassUtils#classNameSimpleQualified(Object)}.</em>
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * Returns the simple class name including outer class names, but without the package.</em>
@@ -1035,8 +1035,8 @@
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> <em class="jxr_javadoccomment">	 * @param value The object to get the simple qualified class name for.</em>
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">	 * @return The simple qualified name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
 <a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String sqcn(Object value) {
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		<strong class="jxr_keyword">return</strong> ClassUtils.simpleQualifiedClassName(value);
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String cnsq(Object value) {
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		<strong class="jxr_keyword">return</strong> ClassUtils.classNameSimpleQualified(value);
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	}
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 
 <a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1232,7 +1232,7 @@
 <a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 			o = opt.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 		<strong class="jxr_keyword">return</strong> sqcn(o) + <span class="jxr_string">"@"</span> + System.identityHashCode(o);
+<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 		<strong class="jxr_keyword">return</strong> cnsq(o) + <span class="jxr_string">"@"</span> + System.identityHashCode(o);
 <a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 	}
 <a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> }
 </pre>

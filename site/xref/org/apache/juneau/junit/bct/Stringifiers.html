@@ -641,7 +641,7 @@
 <a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String stringifyClass(<a name="BeanConverter" href="../../../../../org/apache/juneau/junit/bct/BeanConverter.html#BeanConverter">BeanConverter</a> bc, Class&lt;?&gt; clazz) {
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (bc.getSetting(<span class="jxr_string">"classNameFormat"</span>, <span class="jxr_string">"default"</span>)) {
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"simple"</span> -&gt; scn(clazz);
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"simple"</span> -&gt; cns(clazz);
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"canonical"</span> -&gt; clazz.getCanonicalName();
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 			<strong class="jxr_keyword">default</strong> -&gt; cn(clazz);
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 		};
