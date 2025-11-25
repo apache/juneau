@@ -62,7 +62,7 @@ public class PropertyNotFoundException extends RuntimeException {
 	 * @param objectType The type of object on which the property was sought
 	 */
 	public PropertyNotFoundException(String propertyName, Class<?> objectType) {
-		super(f("Property ''{0}'' not found on object of type {1}", propertyName, cns(objectType)));
+		super(mf("Property ''{0}'' not found on object of type {1}", propertyName, cns(objectType)));
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class PropertyNotFoundException extends RuntimeException {
 	 * @param cause The underlying cause of the exception
 	 */
 	public PropertyNotFoundException(String propertyName, Class<?> objectType, Throwable cause) {
-		super(f("Property ''{0}'' not found on object of type {1}", propertyName, cns(objectType)), cause);
+		super(mf("Property ''{0}'' not found on object of type {1}", propertyName, cns(objectType)), cause);
 	}
 
 	/**

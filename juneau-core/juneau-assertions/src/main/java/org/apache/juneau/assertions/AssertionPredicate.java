@@ -96,7 +96,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 				if (nn(p)) {
 					var b = p.test(t);
 					if (! b) {
-						var m = format(MSG_predicateTestFailed, i + 1);
+						var m = mformat(MSG_predicateTestFailed, i + 1);
 						if (p instanceof AssertionPredicate p2) // NOSONAR - Intentional.
 							m += "\n\t" + p2.getFailureMessage();
 						failedMessage.set(m);
@@ -139,7 +139,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			if (nn(p)) {
 				var b = p.test(t);
 				if (b) {
-					failedMessage.set(format(MSG_predicateTestsUnexpectedlyPassed));
+					failedMessage.set(mformat(MSG_predicateTestsUnexpectedlyPassed));
 					return false;
 				}
 			}
@@ -179,7 +179,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			for (var p : inner)
 				if (nn(p) && p.test(t))
 					return true;
-			var m = format(MSG_noPredicateTestsPassed);
+			var m = mformat(MSG_noPredicateTestsPassed);
 			failedMessage.set(m);
 			return false;
 		}
@@ -250,7 +250,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 				else
 					oargs[i] = a;
 			}
-			m = format(m, oargs);
+			m = mformat(m, oargs);
 			if (inner instanceof AssertionPredicate inner2) // NOSONAR - Intentional.
 				m += "\n\t" + inner2.getFailureMessage();
 			failedMessage.set(m);

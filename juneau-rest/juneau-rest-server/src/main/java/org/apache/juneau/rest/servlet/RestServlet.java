@@ -169,7 +169,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, String msg, Object...args) {
-		doLog(level, null, () -> StringUtils.format(msg, args));
+		doLog(level, null, () -> StringUtils.mformat(msg, args));
 	}
 
 	/**
@@ -184,7 +184,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, Throwable cause, String msg, Object...args) {
-		doLog(level, cause, () -> StringUtils.format(msg, args));
+		doLog(level, cause, () -> StringUtils.mformat(msg, args));
 	}
 
 	/**

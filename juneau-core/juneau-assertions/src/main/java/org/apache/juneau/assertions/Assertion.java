@@ -213,9 +213,9 @@ public class Assertion {
 	 * @return A new {@link BasicAssertionError}.
 	 */
 	protected BasicAssertionError error(Throwable cause, String msg, Object...args) {
-		msg = format(msg, args);
+		msg = mformat(msg, args);
 		if (nn(this.msg))
-			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
+			msg = mformat(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
 		if (nn(out))
 			out.println(msg);
 		if (nn(throwable)) {

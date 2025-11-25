@@ -75,7 +75,7 @@ public class ComboInput<T> {
 	}
 
 	public ComboInput<T> verify(Predicate<T> verify, String msg, Object...args) {
-		this.verify.add(x -> verify.test(x) ? null : format(msg, args));
+		this.verify.add(x -> verify.test(x) ? null : mformat(msg, args));
 		return this;
 	}
 

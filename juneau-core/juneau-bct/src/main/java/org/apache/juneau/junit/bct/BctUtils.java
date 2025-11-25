@@ -60,7 +60,7 @@ public class BctUtils {
 	 * @return A new {@link AssertionFailedError} with formatted message and values.
 	 */
 	public static AssertionFailedError assertEqualsFailed(Object expected, Object actual, Supplier<String> messageSupplier) {
-		return new AssertionFailedError(opt(messageSupplier).map(x -> x.get()).orElse("Equals assertion failed.") + f(" ==> expected: <{0}> but was: <{1}>", expected, actual), expected, actual);
+		return new AssertionFailedError(opt(messageSupplier).map(x -> x.get()).orElse("Equals assertion failed.") + mf(" ==> expected: <{0}> but was: <{1}>", expected, actual), expected, actual);
 	}
 
 	/**

@@ -40,7 +40,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicRuntimeException(String message, Object...args) {
-		super(format(message, args));
+		super(mformat(message, args));
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicRuntimeException(Throwable cause, String message, Object...args) {
-		super(format(message, args), cause);
+		super(mformat(message, args), cause);
 	}
 
 	@Override /* Overridden from Throwable */
@@ -112,7 +112,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 */
 	public BasicRuntimeException setMessage(String message, Object...args) {
 		assertModifiable();
-		this.message = format(message, args);
+		this.message = mformat(message, args);
 		return this;
 	}
 

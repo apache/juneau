@@ -1096,7 +1096,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 	@MethodSource("testers")
 	void a01_testAbsoluteResource(Tester t) {
 		var x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-		assertEquals(t.results.aResource, x, fs("{0}: testAbsolute() failed", t.label));
+		assertEquals(t.results.aResource, x, mfs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest

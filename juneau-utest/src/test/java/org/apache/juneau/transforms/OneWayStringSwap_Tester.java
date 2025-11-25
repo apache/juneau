@@ -94,11 +94,11 @@ public class OneWayStringSwap_Tester<T> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), mfs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new AssertionError("Test [" + label + " swap] failed with exception: " + e.getLocalizedMessage(), e);
-			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), mfs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		}
 	}
 

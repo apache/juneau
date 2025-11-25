@@ -738,7 +738,7 @@ public class StringUtils {
 	 * @param args The arguments.
 	 * @return The formatted string.
 	 */
-	public static String format(String pattern, Object...args) {
+	public static String mformat(String pattern, Object...args) {
 		if (args == null || args.length == 0)
 			return pattern;
 

@@ -24,6 +24,6 @@ class SwaggerException extends ParseException {
 	private static final long serialVersionUID = 1L;
 
 	SwaggerException(Exception e, String location, Object...locationArgs) {
-		super(e, "Swagger exception:  at " + format(location, locationArgs));
+		super(e, "Swagger exception:  at " + mformat(location, locationArgs));
 	}
 }

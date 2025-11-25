@@ -70,7 +70,7 @@ public abstract class RestObject {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, String msg, Object...args) {
-		doLog(level, null, () -> format(msg, args));
+		doLog(level, null, () -> mformat(msg, args));
 	}
 
 	/**
@@ -85,7 +85,7 @@ public abstract class RestObject {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, Throwable cause, String msg, Object...args) {
-		doLog(level, cause, () -> format(msg, args));
+		doLog(level, cause, () -> mformat(msg, args));
 	}
 
 	/**

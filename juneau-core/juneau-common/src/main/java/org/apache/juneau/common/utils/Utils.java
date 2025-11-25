@@ -295,7 +295,7 @@ public class Utils {
 	 * @param args The arguments to substitute into the pattern.
 	 * @return The formatted string.
 	 */
-	public static String f(String pattern, Object...args) {
+	public static String mf(String pattern, Object...args) {
 		if (args.length == 0)
 			return pattern;
 		return MessageFormat.format(pattern, args);
@@ -400,10 +400,10 @@ public class Utils {
 	 * @param pattern The message pattern using <js>{0}</js>, <js>{1}</js>, etc. placeholders.
 	 * @param args The arguments to substitute into the pattern placeholders.
 	 * @return A {@link Supplier} that will format the string when {@code get()} is called.
-	 * @see StringUtils#format(String, Object...)
+	 * @see StringUtils#mformat(String, Object...)
 	 */
-	public static Supplier<String> fs(String pattern, Object...args) {
-		return () -> format(pattern, args);
+	public static Supplier<String> mfs(String pattern, Object...args) {
+		return () -> mformat(pattern, args);
 	}
 
 	/**

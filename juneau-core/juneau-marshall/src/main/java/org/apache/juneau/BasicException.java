@@ -38,7 +38,7 @@ public abstract class BasicException extends Exception {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicException(String message, Object...args) {
-		super(format(message, args));
+		super(mformat(message, args));
 	}
 
 	/**

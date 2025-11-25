@@ -152,7 +152,7 @@ public class LinkString implements Comparable<LinkString> {
 			} catch (SchemaValidationException | SerializeException e) {
 				throw toRex(e);
 			}
-		this.uri = java.net.URI.create(format(value, args));
+		this.uri = java.net.URI.create(mformat(value, args));
 		return this;
 	}
 

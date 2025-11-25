@@ -138,7 +138,7 @@ public class ThrowableUtils {
 	 * @return A new IllegalArgumentException with the formatted message.
 	 */
 	public static IllegalArgumentException illegalArg(String msg, Object...args) {
-		return new IllegalArgumentException(args.length == 0 ? msg : f(msg, args));
+		return new IllegalArgumentException(args.length == 0 ? msg : mf(msg, args));
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class ThrowableUtils {
 	 * @return A new IllegalArgumentException with the formatted message and cause.
 	 */
 	public static IllegalArgumentException illegalArg(Throwable cause, String msg, Object...args) {
-		return new IllegalArgumentException(args.length == 0 ? msg : f(msg, args), cause);
+		return new IllegalArgumentException(args.length == 0 ? msg : mf(msg, args), cause);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class ThrowableUtils {
 	 * @return A new IOException with the formatted message.
 	 */
 	public static java.io.IOException ioex(String msg, Object...args) {
-		return new java.io.IOException(args.length == 0 ? msg : f(msg, args));
+		return new java.io.IOException(args.length == 0 ? msg : mf(msg, args));
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class ThrowableUtils {
 	 * @return A new IOException with the formatted message and cause.
 	 */
 	public static java.io.IOException ioex(Throwable cause, String msg, Object...args) {
-		return new java.io.IOException(args.length == 0 ? msg : f(msg, args), cause);
+		return new java.io.IOException(args.length == 0 ? msg : mf(msg, args), cause);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message.
 	 */
 	public static RuntimeException rex(String msg, Object...args) {
-		return new RuntimeException(args.length == 0 ? msg : f(msg, args));
+		return new RuntimeException(args.length == 0 ? msg : mf(msg, args));
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message and cause.
 	 */
 	public static RuntimeException rex(Throwable cause, String msg, Object...args) {
-		return new RuntimeException(args.length == 0 ? msg : f(msg, args), cause);
+		return new RuntimeException(args.length == 0 ? msg : mf(msg, args), cause);
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message.
 	 */
 	public static BeanRuntimeException bex(String msg, Object...args) {
-		return new BeanRuntimeException(args.length == 0 ? msg : f(msg, args));
+		return new BeanRuntimeException(args.length == 0 ? msg : mf(msg, args));
 	}
 
 	/**
@@ -294,7 +294,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message and cause.
 	 */
 	public static BeanRuntimeException bex(Throwable cause, String msg, Object...args) {
-		return new BeanRuntimeException(args.length == 0 ? msg : f(msg, args), cause);
+		return new BeanRuntimeException(args.length == 0 ? msg : mf(msg, args), cause);
 	}
 
 	/**
@@ -324,7 +324,7 @@ public class ThrowableUtils {
 	 * @return A new UnsupportedOperationException with the formatted message.
 	 */
 	public static UnsupportedOperationException unsupportedOp(String msg, Object...args) {
-		return new UnsupportedOperationException(args.length == 0 ? msg : f(msg, args));
+		return new UnsupportedOperationException(args.length == 0 ? msg : mf(msg, args));
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class ThrowableUtils {
 	 * @return A new UnsupportedOperationException with the formatted message and cause.
 	 */
 	public static UnsupportedOperationException unsupportedOp(Throwable cause, String msg, Object...args) {
-		return new UnsupportedOperationException(args.length == 0 ? msg : f(msg, args), cause);
+		return new UnsupportedOperationException(args.length == 0 ? msg : mf(msg, args), cause);
 	}
 
 	/**

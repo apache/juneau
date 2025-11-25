@@ -178,7 +178,7 @@ class MediaRanges_FindMatch_Test extends TestBase {
 		var a = accept(input.accept);
 		var mt = JsonParser.DEFAULT.parse(input.mediaTypes, MediaType[].class);
 		var r = a.match(l(mt));
-		assertEquals(input.expected, r, fs("{0} failed", input.label));
+		assertEquals(input.expected, r, mfs("{0} failed", input.label));
 	}
 
 	@ParameterizedTest

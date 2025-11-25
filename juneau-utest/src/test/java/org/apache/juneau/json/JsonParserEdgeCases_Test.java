@@ -399,10 +399,10 @@ class JsonParserEdgeCases_Test extends TestBase {
 				fail("ParseException expected.  Test="+input.name+", Input=" + input.jsonReadable);
 			} catch (ParseException e) {
 				if (input.errorText != null)
-					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+					assertTrue(e.getRootCause().getMessage().contains(input.errorText), mfs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
 			} catch (IOException e) {
 				if (input.errorText != null)
-					assertTrue(e.getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
+					assertTrue(e.getMessage().contains(input.errorText), mfs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
 			} catch (AssertionError e) {
 				throw e;
 			} catch (Throwable t) {
@@ -415,10 +415,10 @@ class JsonParserEdgeCases_Test extends TestBase {
 				p.parse(input.json, Object.class);
 			} catch (ParseException e) {
 				if (input.errorText != null)
-					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+					assertTrue(e.getRootCause().getMessage().contains(input.errorText), mfs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
 			} catch (IOException e) {
 				if (input.errorText != null)
-					assertTrue(e.getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
+					assertTrue(e.getMessage().contains(input.errorText), mfs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
 			} catch (Throwable t) {
 				fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
 			}
@@ -444,7 +444,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 				p.parse(input.json, Object.class);
 			} catch (ParseException e) {
 				if (input.errorText != null)
-					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+					assertTrue(e.getRootCause().getMessage().contains(input.errorText), mfs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
 			} catch (AssertionError e) {
 				throw e;
 			} catch (Throwable t) {
@@ -457,7 +457,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 				p.parse(input.json, Object.class);
 			} catch (ParseException e) {
 				if (input.errorText != null)
-					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+					assertTrue(e.getRootCause().getMessage().contains(input.errorText), mfs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
 			} catch (Throwable t) {
 				fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
 			}

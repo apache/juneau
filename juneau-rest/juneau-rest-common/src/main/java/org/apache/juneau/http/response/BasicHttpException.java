@@ -132,7 +132,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public BasicHttpException(int statusCode, Throwable cause, String msg, Object...args) {
 		super(cause, msg, args);
 		setStatusCode(statusCode);
-		setContent(f(msg, args));
+		setContent(mf(msg, args));
 	}
 
 	/**
@@ -202,9 +202,9 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 				msg = msg.replace('<', ' ').replace('>', ' ').replace('&', ' ');
 			var cls = cns(e);
 			if (msg == null)
-				sb.append(f("\nCaused by ({0})", cls));
+				sb.append(mf("\nCaused by ({0})", cls));
 			else
-				sb.append(f("\nCaused by ({0}): {1}", cls, msg));
+				sb.append(mf("\nCaused by ({0}): {1}", cls, msg));
 			e = e.getCause();
 		}
 		return sb.toString();

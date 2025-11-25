@@ -3096,14 +3096,14 @@ class StringUtils_Test extends TestBase {
 		assertNull(toStringArray(null));
 		assertList(toStringArray(Collections.emptyList()));
 		assertList(toStringArray(l("a", "b", "c")), "a", "b", "c");
-		
+
 		// Set.of() doesn't preserve order, so use LinkedHashSet for order-sensitive test
 		var set = new LinkedHashSet<String>();
 		set.add("x");
 		set.add("y");
 		set.add("z");
 		assertList(toStringArray(set), "x", "y", "z");
-		
+
 		assertList(toStringArray(new LinkedHashSet<>(l("foo", "bar", "baz"))), "foo", "bar", "baz");
 		var list = new ArrayList<String>();
 		list.add("one");

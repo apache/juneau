@@ -406,7 +406,7 @@ class Path_Test extends TestBase {
 			return format("f: {0}", path.toString());
 		}
 	private static String format(String msg, Object...args) {
-		return StringUtils.format(msg, args);
+		return StringUtils.mformat(msg, args);
 	}
 	}
 

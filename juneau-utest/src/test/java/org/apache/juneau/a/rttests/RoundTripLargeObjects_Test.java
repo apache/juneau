@@ -111,17 +111,17 @@ class RoundTripLargeObjects_Test extends TestBase {
 
 		// Initialization run.
 		r = s.serialize(a);
-		System.err.println(format("Serialized size: {0,number} ", (r instanceof String ? r.toString().length() : ((byte[])r).length))); // NOT DEBUG
+		System.err.println(mformat("Serialized size: {0,number} ", (r instanceof String ? r.toString().length() : ((byte[])r).length))); // NOT DEBUG
 		p.parse(r, A.class);
 
 		startTime = System.currentTimeMillis();
 		for (var i = 0; i < numRuns; i++)
 			r = s.serialize(a);
-		System.err.println(format("Average serialize time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
+		System.err.println(mformat("Average serialize time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 		startTime = System.currentTimeMillis();
 		for (var i = 0; i < numRuns; i++)
 			p.parse(r, A.class);
-		System.err.println(format("Average parsed time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
+		System.err.println(mformat("Average parsed time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 	}
 
 	public static class A {
