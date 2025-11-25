@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.Converter;
 import org.junit.jupiter.api.*;
 
 class MapBuilder_Test extends TestBase {
@@ -343,5 +344,401 @@ class MapBuilder_Test extends TestBase {
 		assertSize(2, map);
 		assertMap(map, "x=10", "y=20");
 		assertSame(existing, map);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Filtering
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void i01_filtered_customPredicate() {
+		var map = MapBuilder.create(String.class, String.class)
+			.filtered(x -> x != null && !x.equals(""))
+			.add("a", "foo")
+			.add("b", null)     // Not added
+			.add("c", "")       // Not added
+			.add("d", "bar")
+			.build();
+
+		assertMap(map, "a=foo", "d=bar");
+	}
+
+	@Test
+	void i02_filtered_defaultFilter() {
+		var map = MapBuilder.create(String.class, Object.class)
+			.filtered()
+			.add("name", "John")
+			.add("age", -1)              // Not added
+			.add("enabled", false)       // Not added
+			.add("tags", new String[0])  // Not added
+			.add("emptyMap", new LinkedHashMap<>())  // Not added
+			.add("emptyList", new ArrayList<>())     // Not added
+			.add("value", 42)
+			.build();
+
+		assertMap(map, "name=John", "value=42");
+	}
+
+	@Test
+	void i03_filtered_rejectsValue() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.filtered(x -> x != null && (Integer)x > 0)
+			.add("a", 1)
+			.add("b", -1)  // Not added
+			.add("c", 0)   // Not added
+			.add("d", 2)
+			.build();
+
+		assertMap(map, "a=1", "d=2");
+	}
+
+	@Test
+	void i04_add_withFilter() {
+		var map = MapBuilder.create(String.class, String.class)
+			.filtered(x -> x != null && x instanceof String && ((String)x).length() > 2)
+			.add("a", "foo")   // Added
+			.add("b", "ab")    // Not added (length <= 2)
+			.add("c", "bar")   // Added
+			.build();
+
+		assertMap(map, "a=foo", "c=bar");
+	}
+
+	@Test
+	void i05_addAll_withFilter() {
+		var existing = new LinkedHashMap<String,String>();
+		existing.put("x", "longvalue");
+		existing.put("y", "ab");  // Will be filtered out
+		existing.put("z", "another");
+
+		var map = MapBuilder.create(String.class, String.class)
+			.filtered(x -> x != null && x instanceof String && ((String)x).length() > 2)
+			.addAll(existing)
+			.build();
+
+		assertMap(map, "x=longvalue", "z=another");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Converters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void j01_converters_emptyArray() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.converters()  // Empty array
+			.add("a", 1)
+			.build();
+
+		assertMap(map, "a=1");
+	}
+
+	@Test
+	void j02_converters_withConverter() {
+		Converter converter = new Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Integer.class && o instanceof String) {
+					return type.cast(Integer.parseInt((String)o));
+				}
+				return null;
+			}
+		};
+
+		var inputMap = new LinkedHashMap<String,String>();
+		inputMap.put("a", "1");
+		inputMap.put("b", "2");
+
+		var map = MapBuilder.create(String.class, Integer.class)
+			.converters(converter)
+			.addAny(inputMap)
+			.build();
+
+		assertMap(map, "a=1", "b=2");
+	}
+
+	@Test
+	void j03_converters_multipleConverters() {
+		Converter converter1 = new Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				return null;  // Doesn't handle this
+			}
+		};
+
+		Converter converter2 = new Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Integer.class && o instanceof String) {
+					return type.cast(Integer.parseInt((String)o));
+				}
+				return null;
+			}
+		};
+
+		var inputMap = new LinkedHashMap<String,String>();
+		inputMap.put("a", "1");
+
+		var map = MapBuilder.create(String.class, Integer.class)
+			.converters(converter1, converter2)
+			.addAny(inputMap)
+			.build();
+
+		assertMap(map, "a=1");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// AddAny
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void k01_addAny_withMap() {
+		var inputMap = new LinkedHashMap<String,Integer>();
+		inputMap.put("a", 1);
+		inputMap.put("b", 2);
+
+		var map = MapBuilder.create(String.class, Integer.class)
+			.addAny(inputMap)
+			.build();
+
+		assertMap(map, "a=1", "b=2");
+	}
+
+	@Test
+	void k02_addAny_withMultipleMaps() {
+		var map1 = new LinkedHashMap<String,Integer>();
+		map1.put("a", 1);
+		map1.put("b", 2);
+
+		var map2 = new LinkedHashMap<String,Integer>();
+		map2.put("c", 3);
+		map2.put("d", 4);
+
+		var map = MapBuilder.create(String.class, Integer.class)
+			.addAny(map1, map2)
+			.build();
+
+		assertMap(map, "a=1", "b=2", "c=3", "d=4");
+	}
+
+	@Test
+	void k03_addAny_withNullMap() {
+		var inputMap = new LinkedHashMap<String,Integer>();
+		inputMap.put("a", 1);
+		inputMap.put("b", 2);
+
+		var map = MapBuilder.create(String.class, Integer.class)
+			.addAny(inputMap, null)  // null map should be ignored
+			.build();
+
+		assertMap(map, "a=1", "b=2");
+	}
+
+	@Test
+	void k03b_addAny_withNullValueInMap() {
+		// addAny uses toType which doesn't handle null values
+		var inputMap = new LinkedHashMap<String,Integer>();
+		inputMap.put("a", 1);
+		inputMap.put("b", null);
+
+		assertThrows(RuntimeException.class, () -> {
+			MapBuilder.create(String.class, Integer.class)
+				.addAny(inputMap)
+				.build();
+		});
+	}
+
+	@Test
+	void k04_addAny_withTypeConversion() {
+		var converter = new Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == String.class && o instanceof Integer) {
+					return type.cast(String.valueOf(o));
+				}
+				if (type == Integer.class && o instanceof String) {
+					return type.cast(Integer.parseInt((String)o));
+				}
+				return null;
+			}
+		};
+
+		var inputMap = new LinkedHashMap<Integer,String>();
+		inputMap.put(1, "10");
+		inputMap.put(2, "20");
+
+		var map = MapBuilder.create(String.class, Integer.class)
+			.converters(converter)
+			.addAny(inputMap)
+			.build();
+
+		assertMap(map, "1=10", "2=20");
+	}
+
+	@Test
+	void k05_addAny_withConverterToMap() {
+		var converter = new Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Map.class && o instanceof String) {
+					var m = new LinkedHashMap<String,String>();
+					// Simple parsing: "key1=value1,key2=value2"
+					var s = (String)o;
+					for (var pair : s.split(",")) {
+						var kv = pair.split("=");
+						if (kv.length == 2) {
+							m.put(kv[0], kv[1]);
+						}
+					}
+					return type.cast(m);
+				}
+				return null;
+			}
+		};
+
+		var map = MapBuilder.create(String.class, String.class)
+			.converters(converter)
+			.addAny("a=1,b=2")
+			.build();
+
+		assertMap(map, "a=1", "b=2");
+	}
+
+	@Test
+	void k06_addAny_withConverterToMap_recursive() {
+		var converter = new Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				if (type == Map.class && o instanceof String) {
+					var m = new LinkedHashMap<String,String>();
+					var s = (String)o;
+					for (var pair : s.split(",")) {
+						var kv = pair.split("=");
+						if (kv.length == 2) {
+							m.put(kv[0], kv[1]);
+						}
+					}
+					return type.cast(m);
+				}
+				return null;
+			}
+		};
+
+		var map = MapBuilder.create(String.class, String.class)
+			.converters(converter)
+			.addAny("x=foo", "y=bar")
+			.build();
+
+		assertMap(map, "x=foo", "y=bar");
+	}
+
+	@Test
+	void k07_addAny_noKeyOrValueType() {
+		var builder = new MapBuilder<String,Integer>(null, null);
+		assertThrows(IllegalStateException.class, () -> builder.addAny(new LinkedHashMap<>()));
+	}
+
+	@Test
+	void k08_addAny_conversionFailure() {
+		// When converters is null and we try to add a non-Map, it will throw NPE
+		assertThrows(NullPointerException.class, () -> {
+			MapBuilder.create(String.class, Integer.class)
+				.addAny("not-a-map")
+				.build();
+		});
+	}
+
+	@Test
+	void k09_addAny_converterReturnsNull() {
+		// Converter exists but returns null (can't convert)
+		var converter = new Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				return null;  // Can't convert
+			}
+		};
+
+		// Should throw RuntimeException when converter can't convert non-Map object
+		assertThrows(RuntimeException.class, () -> {
+			MapBuilder.create(String.class, Integer.class)
+				.converters(converter)
+				.addAny("not-a-map")
+				.build();
+		});
+	}
+
+	@Test
+	void k10_addAny_toType_conversionFailure() {
+		var converter = new Converter() {
+			@Override
+			public <T> T convertTo(Class<T> type, Object o) {
+				return null;  // Can't convert
+			}
+		};
+
+		var inputMap = new LinkedHashMap<String,String>();
+		inputMap.put("a", "not-an-integer");
+
+		assertThrows(RuntimeException.class, () -> {
+			MapBuilder.create(String.class, Integer.class)
+				.converters(converter)
+				.addAny(inputMap)
+				.build();
+		});
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Build edge cases
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void l01_build_sparseWithNullMap() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.sparse()
+			.build();
+
+		assertNull(map);
+	}
+
+	@Test
+	void l02_build_sparseWithEmptyMap() {
+		var existing = new LinkedHashMap<String,Integer>();
+
+		var map = MapBuilder.create(String.class, Integer.class)
+			.to(existing)
+			.sparse()
+			.build();
+
+		assertNull(map);
+	}
+
+	@Test
+	void l03_build_notSparseWithNullMap() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.build();
+
+		assertNotNull(map);
+		assertEmpty(map);
+	}
+
+	@Test
+	void l04_build_sortedWithNullMap() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.sorted()
+			.build();
+
+		assertNotNull(map);
+		assertTrue(map instanceof TreeMap);
+		assertEmpty(map);
+	}
+
+	@Test
+	void l05_build_unmodifiableWithNullMap() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.unmodifiable()
+			.build();
+
+		assertNotNull(map);
+		assertThrows(UnsupportedOperationException.class, () -> map.put("a", 1));
 	}
 }
