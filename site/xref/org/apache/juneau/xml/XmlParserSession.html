@@ -323,7 +323,7 @@
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">int</strong> eventType = r.next();
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> sb = getStringBuilder();
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">while</strong> (eventType != END_ELEMENT) {
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">if</strong> (eventType == CHARACTERS || eventType == CDATA || eventType == SPACE || eventType == ENTITY_REFERENCE) {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">if</strong> (eventType == CHARACTERS || eventType == CDATA || eventType == XMLStreamConstants.SPACE || eventType == ENTITY_REFERENCE) {
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 				sb.append(r.getText());
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (eventType == PROCESSING_INSTRUCTION || eventType == COMMENT) {
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 				<em class="jxr_comment">// skipping</em>
