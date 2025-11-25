@@ -1522,6 +1522,105 @@ class StringUtils_Test extends TestBase {
 		assertFalse(pattern.matcher("filextxt").matches());
 	}
 
+	@Test void a73_equalsIgnoreCase() {
+		assertTrue(equalsIgnoreCase("Hello", "hello"));
+		assertTrue(equalsIgnoreCase("HELLO", "hello"));
+		assertTrue(equalsIgnoreCase("Hello", "HELLO"));
+		assertTrue(equalsIgnoreCase("Hello", "Hello"));
+		assertFalse(equalsIgnoreCase("Hello", "World"));
+		assertTrue(equalsIgnoreCase(null, null));
+		assertFalse(equalsIgnoreCase(null, "test"));
+		assertFalse(equalsIgnoreCase("test", null));
+		assertTrue(equalsIgnoreCase("", ""));
+	}
+
+	@Test void a74_compareIgnoreCase() {
+		assertTrue(compareIgnoreCase("apple", "BANANA") < 0);
+		assertTrue(compareIgnoreCase("BANANA", "apple") > 0);
+		assertEquals(0, compareIgnoreCase("Hello", "hello"));
+		assertEquals(0, compareIgnoreCase("HELLO", "hello"));
+		assertTrue(compareIgnoreCase("Zebra", "apple") > 0);
+		assertTrue(compareIgnoreCase("apple", "Zebra") < 0);
+		assertEquals(0, compareIgnoreCase(null, null));
+		assertTrue(compareIgnoreCase(null, "test") < 0);
+		assertTrue(compareIgnoreCase("test", null) > 0);
+	}
+
+	@Test void a75_naturalCompare() {
+		// Numbers should be compared numerically
+		assertTrue(naturalCompare("file2.txt", "file10.txt") < 0);
+		assertTrue(naturalCompare("file10.txt", "file2.txt") > 0);
+		assertEquals(0, naturalCompare("file1.txt", "file1.txt"));
+		assertTrue(naturalCompare("file1.txt", "file2.txt") < 0);
+		assertTrue(naturalCompare("file2.txt", "file1.txt") > 0);
+		
+		// Leading zeros
+		assertTrue(naturalCompare("file02.txt", "file10.txt") < 0);
+		assertTrue(naturalCompare("file002.txt", "file10.txt") < 0);
+		
+		// Mixed alphanumeric
+		assertTrue(naturalCompare("a2b", "a10b") < 0);
+		assertTrue(naturalCompare("a10b", "a2b") > 0);
+		
+		// Same numbers, different text
+		assertTrue(naturalCompare("file1a.txt", "file1b.txt") < 0);
+		
+		// Null handling
+		assertEquals(0, naturalCompare(null, null));
+		assertTrue(naturalCompare(null, "test") < 0);
+		assertTrue(naturalCompare("test", null) > 0);
+		
+		// Case-insensitive comparison
+		assertTrue(naturalCompare("Apple", "banana") < 0);
+		assertTrue(naturalCompare("banana", "Apple") > 0);
+	}
+
+	@Test void a76_levenshteinDistance() {
+		assertEquals(0, levenshteinDistance("hello", "hello"));
+		assertEquals(3, levenshteinDistance("kitten", "sitting")); // kitten -> sitten (s), sitten -> sittin (i), sittin -> sitting (g)
+		assertEquals(3, levenshteinDistance("abc", ""));
+		assertEquals(3, levenshteinDistance("", "abc"));
+		assertEquals(1, levenshteinDistance("hello", "hallo")); // e -> a (1 substitution)
+		assertEquals(1, levenshteinDistance("hello", "helo")); // Remove one 'l' (1 deletion)
+		assertEquals(1, levenshteinDistance("hello", "hell")); // Remove 'o' (1 deletion)
+		assertEquals(1, levenshteinDistance("hello", "hellox")); // Add 'x' (1 insertion)
+		// Null handling
+		assertEquals(0, levenshteinDistance(null, null));
+		assertEquals(5, levenshteinDistance("hello", null));
+		assertEquals(5, levenshteinDistance(null, "hello"));
+	}
+
+	@Test void a77_similarity() {
+		assertEquals(1.0, similarity("hello", "hello"), 0.0001);
+		assertEquals(0.0, similarity("abc", "xyz"), 0.0001);
+		// kitten -> sitting: distance = 3, maxLen = 7, similarity = 1 - 3/7 = 4/7 ≈ 0.571
+		assertEquals(4.0/7.0, similarity("kitten", "sitting"), 0.01);
+		assertEquals(1.0, similarity("", ""), 0.0001);
+		assertEquals(0.0, similarity("abc", ""), 0.0001);
+		assertEquals(0.0, similarity("", "abc"), 0.0001);
+		// Null handling
+		assertEquals(1.0, similarity(null, null), 0.0001);
+		assertEquals(0.0, similarity("hello", null), 0.0001);
+		assertEquals(0.0, similarity(null, "hello"), 0.0001);
+		// Similar strings
+		// "hello" vs "hallo": distance = 1, maxLen = 5, similarity = 1 - 1/5 = 0.8
+		assertEquals(0.8, similarity("hello", "hallo"), 0.0001);
+	}
+
+	@Test void a78_isSimilar() {
+		assertTrue(isSimilar("hello", "hello", 0.8));
+		assertTrue(isSimilar("hello", "hello", 1.0));
+		assertFalse(isSimilar("kitten", "sitting", 0.8));
+		assertTrue(isSimilar("kitten", "sitting", 0.5));
+		assertFalse(isSimilar("abc", "xyz", 0.5));
+		assertTrue(isSimilar("hello", "hallo", 0.8));
+		assertFalse(isSimilar("hello", "world", 0.8));
+		// Null handling
+		assertTrue(isSimilar(null, null, 0.8));
+		assertFalse(isSimilar("hello", null, 0.8));
+		assertFalse(isSimilar(null, "hello", 0.8));
+	}
+
 	//====================================================================================================
 	// String manipulation methods
 	//====================================================================================================

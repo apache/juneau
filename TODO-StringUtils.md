@@ -3,7 +3,7 @@
 This document outlines recommended methods to add to the `StringUtils` class to make it a comprehensive string utility library suitable for external use.
 
 ## Current Status
-The `StringUtils` class currently has 187+ public static methods covering:
+The `StringUtils` class currently has 198+ public static methods covering:
 - Base64 encoding/decoding
 - Hex encoding/decoding  
 - URL encoding/decoding
@@ -82,23 +82,23 @@ The `StringUtils` class currently has 187+ public static methods covering:
 
 ### 6. String Formatting and Templates
 - ✅ `format(String template, Object... args)` - Implemented (could be enhanced)
-- [ ] `formatWithNamedArgs(String template, Map<String, Object> args)` - Format with named placeholders
-- [ ] `interpolate(String template, Map<String, Object> variables)` - Variable interpolation
-- [ ] `pluralize(String word, int count)` - Simple pluralization
-- [ ] `ordinal(int number)` - Convert number to ordinal (1st, 2nd, 3rd, etc.)
+- ✅ `formatWithNamedArgs(String template, Map<String, Object> args)` - Format with named placeholders - Implemented
+- ✅ `interpolate(String template, Map<String, Object> variables)` - Variable interpolation - Implemented
+- ✅ `pluralize(String word, int count)` - Simple pluralization - Implemented
+- ✅ `ordinal(int number)` - Convert number to ordinal (1st, 2nd, 3rd, etc.) - Implemented
 
 ### 7. String Cleaning and Sanitization
 - ✅ `clean(String str)` - Implemented
 - ✅ `normalizeWhitespace(String str)` - Implemented
 - ✅ `removeControlChars(String str)` - Implemented
 - ✅ `removeNonPrintable(String str)` - Implemented
-- [ ] `sanitize(String str)` - Basic HTML/XML sanitization
-- [ ] `escapeHtml(String str)` - Escape HTML entities
-- [ ] `unescapeHtml(String str)` - Unescape HTML entities
-- [ ] `escapeXml(String str)` - Escape XML entities
-- [ ] `unescapeXml(String str)` - Unescape XML entities
-- [ ] `escapeSql(String str)` - Escape SQL strings (basic)
-- [ ] `escapeRegex(String str)` - Escape regex special characters
+- ✅ `sanitize(String str)` - Basic HTML/XML sanitization - Implemented
+- ✅ `escapeHtml(String str)` - Escape HTML entities - Implemented
+- ✅ `unescapeHtml(String str)` - Unescape HTML entities - Implemented
+- ✅ `escapeXml(String str)` - Escape XML entities - Implemented
+- ✅ `unescapeXml(String str)` - Unescape XML entities - Implemented
+- ✅ `escapeSql(String str)` - Escape SQL strings (basic) - Implemented
+- ✅ `escapeRegex(String str)` - Escape regex special characters - Implemented
 
 ### 8. String Comparison and Sorting
 - [ ] `equalsIgnoreCase(String str1, String str2)` - Case-insensitive equals
@@ -197,7 +197,7 @@ The `StringUtils` class currently has 187+ public static methods covering:
 
 ### Medium Priority (Useful Utilities)
 1. ✅ String searching and matching methods - Completed
-2. String formatting and templates
+2. ✅ String formatting and templates - Completed
 3. String comparison and sorting methods
 4. String generation and random methods
 5. String parsing and extraction methods

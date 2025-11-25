@@ -2286,6 +2286,243 @@ public class StringUtils {
 	}
 
 	/**
+	 * Compares two strings for equality, ignoring case.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"hello"</js>);     <jc>// true</jc>
+	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"WORLD"</js>);     <jc>// false</jc>
+	 * 	equalsIgnoreCase(<jk>null</jk>, <jk>null</jk>);           <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param str1 The first string.
+	 * @param str2 The second string.
+	 * @return <jk>true</jk> if the strings are equal ignoring case, <jk>false</jk> otherwise.
+	 */
+	public static boolean equalsIgnoreCase(String str1, String str2) {
+		if (str1 == str2)
+			return true;
+		if (str1 == null || str2 == null)
+			return false;
+		return str1.equalsIgnoreCase(str2);
+	}
+
+	/**
+	 * Compares two strings lexicographically, ignoring case.
+	 *
+	 * <p>
+	 * Returns a negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second string, ignoring case.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	compareIgnoreCase(<js>"apple"</js>, <js>"BANANA"</js>);   <jc>// negative (apple &lt; banana)</jc>
+	 * 	compareIgnoreCase(<js>"Hello"</js>, <js>"hello"</js>);    <jc>// 0 (equal)</jc>
+	 * 	compareIgnoreCase(<js>"Zebra"</js>, <js>"apple"</js>);    <jc>// positive (zebra &gt; apple)</jc>
+	 * </p>
+	 *
+	 * @param str1 The first string.
+	 * @param str2 The second string.
+	 * @return A negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second.
+	 */
+	public static int compareIgnoreCase(String str1, String str2) {
+		if (str1 == str2)
+			return 0;
+		if (str1 == null)
+			return -1;
+		if (str2 == null)
+			return 1;
+		return str1.compareToIgnoreCase(str2);
+	}
+
+	/**
+	 * Performs natural string comparison that handles numbers correctly.
+	 *
+	 * <p>
+	 * Compares strings in a way that numbers are compared numerically rather than lexicographically.
+	 * For example, "file2.txt" comes before "file10.txt" in natural order.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	naturalCompare(<js>"file2.txt"</js>, <js>"file10.txt"</js>);   <jc>// negative (2 &lt; 10)</jc>
+	 * 	naturalCompare(<js>"file10.txt"</js>, <js>"file2.txt"</js>);   <jc>// positive (10 &gt; 2)</jc>
+	 * 	naturalCompare(<js>"file1.txt"</js>, <js>"file1.txt"</js>);    <jc>// 0 (equal)</jc>
+	 * </p>
+	 *
+	 * @param str1 The first string.
+	 * @param str2 The second string.
+	 * @return A negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second.
+	 */
+	public static int naturalCompare(String str1, String str2) {
+		if (str1 == str2)
+			return 0;
+		if (str1 == null)
+			return -1;
+		if (str2 == null)
+			return 1;
+		
+		var len1 = str1.length();
+		var len2 = str2.length();
+		var i1 = 0;
+		var i2 = 0;
+		
+		while (i1 < len1 && i2 < len2) {
+			var c1 = str1.charAt(i1);
+			var c2 = str2.charAt(i2);
+			
+			// If both are digits, compare numerically
+			if (Character.isDigit(c1) && Character.isDigit(c2)) {
+				// Skip leading zeros
+				while (i1 < len1 && str1.charAt(i1) == '0')
+					i1++;
+				while (i2 < len2 && str2.charAt(i2) == '0')
+					i2++;
+				
+				// Find end of number sequences
+				var end1 = i1;
+				var end2 = i2;
+				while (end1 < len1 && Character.isDigit(str1.charAt(end1)))
+					end1++;
+				while (end2 < len2 && Character.isDigit(str2.charAt(end2)))
+					end2++;
+				
+				// Compare lengths first (longer number is larger)
+				var lenNum1 = end1 - i1;
+				var lenNum2 = end2 - i2;
+				if (lenNum1 != lenNum2)
+					return lenNum1 - lenNum2;
+				
+				// Same length, compare digit by digit
+				for (var j = 0; j < lenNum1; j++) {
+					var d1 = str1.charAt(i1 + j);
+					var d2 = str2.charAt(i2 + j);
+					if (d1 != d2)
+						return d1 - d2;
+				}
+				
+				i1 = end1;
+				i2 = end2;
+			} else {
+				// Compare characters (case-insensitive)
+				var cmp = Character.toLowerCase(c1) - Character.toLowerCase(c2);
+				if (cmp != 0)
+					return cmp;
+				i1++;
+				i2++;
+			}
+		}
+		
+		return len1 - len2;
+	}
+
+	/**
+	 * Calculates the Levenshtein distance (edit distance) between two strings.
+	 *
+	 * <p>
+	 * The Levenshtein distance is the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into another.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	levenshteinDistance(<js>"kitten"</js>, <js>"sitting"</js>);     <jc>// 3</jc>
+	 * 	levenshteinDistance(<js>"hello"</js>, <js>"hello"</js>);        <jc>// 0</jc>
+	 * 	levenshteinDistance(<js>"abc"</js>, <js>""</js>);               <jc>// 3</jc>
+	 * </p>
+	 *
+	 * @param str1 The first string.
+	 * @param str2 The second string.
+	 * @return The Levenshtein distance between the two strings.
+	 */
+	public static int levenshteinDistance(String str1, String str2) {
+		if (str1 == null)
+			str1 = "";
+		if (str2 == null)
+			str2 = "";
+		
+		var len1 = str1.length();
+		var len2 = str2.length();
+		
+		// Use dynamic programming with optimized space (only need previous row)
+		var prev = new int[len2 + 1];
+		var curr = new int[len2 + 1];
+		
+		// Initialize first row
+		for (var j = 0; j <= len2; j++)
+			prev[j] = j;
+		
+		for (var i = 1; i <= len1; i++) {
+			curr[0] = i;
+			for (var j = 1; j <= len2; j++) {
+				if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+					curr[j] = prev[j - 1];
+				} else {
+					curr[j] = 1 + Math.min(Math.min(prev[j], curr[j - 1]), prev[j - 1]);
+				}
+			}
+			// Swap arrays
+			var temp = prev;
+			prev = curr;
+			curr = temp;
+		}
+		
+		return prev[len2];
+	}
+
+	/**
+	 * Calculates the similarity percentage between two strings using Levenshtein distance.
+	 *
+	 * <p>
+	 * Returns a value between 0.0 (completely different) and 1.0 (identical).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	similarity(<js>"hello"</js>, <js>"hello"</js>);           <jc>// 1.0 (100%)</jc>
+	 * 	similarity(<js>"kitten"</js>, <js>"sitting"</js>);        <jc>// ~0.57 (57%)</jc>
+	 * 	similarity(<js>"abc"</js>, <js>"xyz"</js>);               <jc>// 0.0 (0%)</jc>
+	 * </p>
+	 *
+	 * @param str1 The first string.
+	 * @param str2 The second string.
+	 * @return A similarity value between 0.0 and 1.0, where 1.0 means identical.
+	 */
+	public static double similarity(String str1, String str2) {
+		if (str1 == null)
+			str1 = "";
+		if (str2 == null)
+			str2 = "";
+		
+		if (str1.equals(str2))
+			return 1.0;
+		
+		var maxLen = Math.max(str1.length(), str2.length());
+		if (maxLen == 0)
+			return 1.0;
+		
+		var distance = levenshteinDistance(str1, str2);
+		return 1.0 - ((double)distance / maxLen);
+	}
+
+	/**
+	 * Checks if two strings are similar based on a similarity threshold.
+	 *
+	 * <p>
+	 * Uses the {@link #similarity(String, String)} method to calculate similarity and compares it to the threshold.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isSimilar(<js>"hello"</js>, <js>"hello"</js>, <js>0.8</js>);        <jc>// true</jc>
+	 * 	isSimilar(<js>"kitten"</js>, <js>"sitting"</js>, <js>0.8</js>);     <jc>// false</jc>
+	 * 	isSimilar(<js>"kitten"</js>, <js>"sitting"</js>, <js>0.5</js>);     <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param str1 The first string.
+	 * @param str2 The second string.
+	 * @param threshold The similarity threshold (0.0 to 1.0).
+	 * @return <jk>true</jk> if the similarity is greater than or equal to the threshold, <jk>false</jk> otherwise.
+	 */
+	public static boolean isSimilar(String str1, String str2, double threshold) {
+		return similarity(str1, str2) >= threshold;
+	}
+
+	/**
 	 * Join the specified tokens into a delimited string.
 	 *
 	 * @param tokens The tokens to join.
