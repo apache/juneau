@@ -628,223 +628,314 @@
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">var</strong> previous = cache.put(<span class="jxr_string">"key1"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 		assertEquals(<span class="jxr_string">"value1"</span>, previous);
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<em class="jxr_comment">// Null values are not cached, so get() will call supplier</em>
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			callCount.incrementAndGet();
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"supplied"</span>;
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		});
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		assertEquals(<span class="jxr_string">"supplied"</span>, result);
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		assertEquals(1, callCount.get());
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	}
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	<em class="jxr_comment">// isEmpty() method</em>
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<em class="jxr_comment">// Null values are not cached, so key should be removed</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key1"</span>), <span class="jxr_string">"Key should be removed when null value is put"</span>);
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<em class="jxr_comment">// Null values are not cached, so get() will call supplier</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 			callCount.incrementAndGet();
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"supplied"</span>;
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		});
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		assertEquals(<span class="jxr_string">"supplied"</span>, result);
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		assertEquals(1, callCount.get());
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 		<em class="jxr_comment">// After get() with non-null supplier, key is now in cache again</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		assertTrue(cache.containsKey(<span class="jxr_string">"key1"</span>), <span class="jxr_string">"Key should be in cache after get() with non-null supplier"</span>);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	}
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	@Test <strong class="jxr_keyword">void</strong> a36_isEmpty_newCache() {
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	@Test <strong class="jxr_keyword">void</strong> a35b_put_withNullValue_newKey() {
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		assertTrue(cache.isEmpty());
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	}
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	@Test <strong class="jxr_keyword">void</strong> a37_isEmpty_afterPut() {
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		assertFalse(cache.isEmpty());
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	}
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	@Test <strong class="jxr_keyword">void</strong> a38_isEmpty_afterGet() {
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		assertFalse(cache.isEmpty());
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 	}
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 	@Test <strong class="jxr_keyword">void</strong> a39_isEmpty_afterClear() {
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		cache.put(<span class="jxr_string">"key2"</span>, <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<em class="jxr_comment">// Putting null for a new key should return null and not add anything</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		<strong class="jxr_keyword">var</strong> previous = cache.put(<span class="jxr_string">"key1"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		assertNull(previous);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		assertTrue(cache.isEmpty());
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	}
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	<em class="jxr_comment">// isEmpty() method</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	@Test <strong class="jxr_keyword">void</strong> a36_isEmpty_newCache() {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		assertTrue(cache.isEmpty());
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	}
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	@Test <strong class="jxr_keyword">void</strong> a37_isEmpty_afterPut() {
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 		assertFalse(cache.isEmpty());
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		cache.clear();
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		assertTrue(cache.isEmpty());
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	}
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	@Test <strong class="jxr_keyword">void</strong> a40_isEmpty_disabledCache() {
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			.cacheMode(NONE)
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			.build();
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		assertTrue(cache.isEmpty(), <span class="jxr_string">"Disabled cache should always be empty"</span>);
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	}
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	<em class="jxr_comment">// containsKey() method</em>
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	@Test <strong class="jxr_keyword">void</strong> a41_containsKey_notPresent() {
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key1"</span>));
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 	}
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	@Test <strong class="jxr_keyword">void</strong> a42_containsKey_afterPut() {
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		assertTrue(cache.containsKey(<span class="jxr_string">"key1"</span>));
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key2"</span>));
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	}
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 	@Test <strong class="jxr_keyword">void</strong> a43_containsKey_afterGet() {
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		assertTrue(cache.containsKey(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	}
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	@Test <strong class="jxr_keyword">void</strong> a38_isEmpty_afterGet() {
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		assertFalse(cache.isEmpty());
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	}
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	@Test <strong class="jxr_keyword">void</strong> a39_isEmpty_afterClear() {
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		cache.put(<span class="jxr_string">"key2"</span>, <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		assertFalse(cache.isEmpty());
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		cache.clear();
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		assertTrue(cache.isEmpty());
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	}
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	@Test <strong class="jxr_keyword">void</strong> a40_isEmpty_disabledCache() {
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 			.cacheMode(NONE)
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 			.build();
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		assertTrue(cache.isEmpty(), <span class="jxr_string">"Disabled cache should always be empty"</span>);
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	}
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	<em class="jxr_comment">// containsKey() method</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	@Test <strong class="jxr_keyword">void</strong> a41_containsKey_notPresent() {
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key1"</span>));
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 	}
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 	@Test <strong class="jxr_keyword">void</strong> a44_containsKey_afterClear() {
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 	@Test <strong class="jxr_keyword">void</strong> a42_containsKey_afterPut() {
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 		assertTrue(cache.containsKey(<span class="jxr_string">"key1"</span>));
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		cache.clear();
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key1"</span>));
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 	}
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	@Test <strong class="jxr_keyword">void</strong> a45_containsKey_nullKey() {
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<em class="jxr_comment">// Null keys are now cached, so containsKey should return true after get()</em>
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		cache.get(<strong class="jxr_keyword">null</strong>, () -&gt; <span class="jxr_string">"value"</span>);
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 		assertTrue(cache.containsKey(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	}
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	<em class="jxr_comment">// Array key support</em>
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 	@Test <strong class="jxr_keyword">void</strong> a46_arrayKeys_contentBasedEquality() {
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String[].<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">var</strong> key1 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>};
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		<strong class="jxr_keyword">var</strong> key2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>}; <em class="jxr_comment">// Same content, different instance</em>
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		cache.get(key1, () -&gt; <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		<em class="jxr_comment">// Should be a cache hit even though it's a different array instance</em>
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(key2, () -&gt; <span class="jxr_string">"should not be called"</span>);
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		assertEquals(<span class="jxr_string">"value1"</span>, result);
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		assertEquals(1, cache.getCacheHits());
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 		assertSize(1, cache);
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 	}
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> 
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> 	@Test <strong class="jxr_keyword">void</strong> a47_arrayKeys_differentContent() {
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String[].<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		<strong class="jxr_keyword">var</strong> key1 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>};
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		<strong class="jxr_keyword">var</strong> key2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"d"</span>}; <em class="jxr_comment">// Different content</em>
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		cache.get(key1, () -&gt; <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(key2, () -&gt; <span class="jxr_string">"value2"</span>);
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		assertEquals(<span class="jxr_string">"value2"</span>, result);
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		assertSize(2, cache);
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> 	}
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 	@Test <strong class="jxr_keyword">void</strong> a48_arrayKeys_put() {
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String[].<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<strong class="jxr_keyword">var</strong> key1 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>};
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		<strong class="jxr_keyword">var</strong> key2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>}; <em class="jxr_comment">// Same content</em>
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> 
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> 		cache.put(key1, <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		assertTrue(cache.containsKey(key2));
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> 		assertEquals(<span class="jxr_string">"value1"</span>, cache.get(key2, () -&gt; <span class="jxr_string">"should not be called"</span>));
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 	}
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 	<em class="jxr_comment">// Null value handling</em>
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> 	@Test <strong class="jxr_keyword">void</strong> a49_nullValue_notCached() {
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<em class="jxr_comment">// Supplier returns null - should not be cached</em>
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">var</strong> result1 = cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 			callCount.incrementAndGet();
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		});
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		assertNull(result1);
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		assertEquals(1, callCount.get());
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		<em class="jxr_comment">// Second call should invoke supplier again (not cached)</em>
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		<strong class="jxr_keyword">var</strong> result2 = cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 			callCount.incrementAndGet();
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		});
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		assertNull(result2);
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		assertEquals(2, callCount.get());
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		assertTrue(cache.isEmpty(), <span class="jxr_string">"Null values should not be cached"</span>);
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	}
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> 	@Test <strong class="jxr_keyword">void</strong> a50_nullValue_afterPut() {
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		cache.put(<span class="jxr_string">"key1"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<em class="jxr_comment">// After putting null, the key should be removed</em>
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 			callCount.incrementAndGet();
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"supplied"</span>;
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		});
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		assertEquals(<span class="jxr_string">"supplied"</span>, result);
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		assertEquals(1, callCount.get());
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 	}
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<em class="jxr_comment">// create() static method</em>
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 	@Test <strong class="jxr_keyword">void</strong> a51_create_basic() {
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.&lt;String, String&gt;create()
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 			.supplier(k -&gt; <span class="jxr_string">"value-"</span> + k)
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 			.build();
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(<span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		assertEquals(<span class="jxr_string">"value-test"</span>, result);
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		assertSize(1, cache);
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 	}
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key2"</span>));
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	}
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 	@Test <strong class="jxr_keyword">void</strong> a43_containsKey_afterGet() {
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		assertTrue(cache.containsKey(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	}
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	@Test <strong class="jxr_keyword">void</strong> a44_containsKey_afterClear() {
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		assertTrue(cache.containsKey(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		cache.clear();
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 	}
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 	@Test <strong class="jxr_keyword">void</strong> a45_containsKey_nullKey() {
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		<em class="jxr_comment">// Null keys are now cached, so containsKey should return true after get()</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		cache.get(<strong class="jxr_keyword">null</strong>, () -&gt; <span class="jxr_string">"value"</span>);
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		assertTrue(cache.containsKey(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	}
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	<em class="jxr_comment">// remove() method</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 	@Test <strong class="jxr_keyword">void</strong> a46_remove_existingKey() {
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">var</strong> removed = cache.remove(<span class="jxr_string">"key1"</span>);
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		assertEquals(<span class="jxr_string">"value1"</span>, removed);
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		assertTrue(cache.isEmpty());
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 	}
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 	@Test <strong class="jxr_keyword">void</strong> a47_remove_nonExistentKey() {
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<strong class="jxr_keyword">var</strong> removed = cache.remove(<span class="jxr_string">"key1"</span>);
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 		assertNull(removed);
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 	}
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 	@Test <strong class="jxr_keyword">void</strong> a48_remove_afterGet() {
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 		<strong class="jxr_keyword">var</strong> removed = cache.remove(<span class="jxr_string">"key1"</span>);
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 		assertEquals(<span class="jxr_string">"value1"</span>, removed);
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		assertFalse(cache.containsKey(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 	}
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	@Test <strong class="jxr_keyword">void</strong> a49_remove_nullKey() {
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 		cache.put(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		<strong class="jxr_keyword">var</strong> removed = cache.remove(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		assertEquals(<span class="jxr_string">"value1"</span>, removed);
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		assertFalse(cache.containsKey(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 	}
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 	<em class="jxr_comment">// containsValue() method</em>
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	@Test <strong class="jxr_keyword">void</strong> a50_containsValue_present() {
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		cache.put(<span class="jxr_string">"key2"</span>, <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		assertTrue(cache.containsValue(<span class="jxr_string">"value1"</span>));
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		assertTrue(cache.containsValue(<span class="jxr_string">"value2"</span>));
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		assertFalse(cache.containsValue(<span class="jxr_string">"value3"</span>));
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 	}
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 	@Test <strong class="jxr_keyword">void</strong> a51_containsValue_notPresent() {
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		assertFalse(cache.containsValue(<span class="jxr_string">"value1"</span>));
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 	}
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 	@Test <strong class="jxr_keyword">void</strong> a52_containsValue_afterRemove() {
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		assertTrue(cache.containsValue(<span class="jxr_string">"value1"</span>));
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		cache.remove(<span class="jxr_string">"key1"</span>);
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		assertFalse(cache.containsValue(<span class="jxr_string">"value1"</span>));
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 	}
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 	@Test <strong class="jxr_keyword">void</strong> a53_containsValue_afterClear() {
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		cache.put(<span class="jxr_string">"key2"</span>, <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		assertTrue(cache.containsValue(<span class="jxr_string">"value1"</span>));
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		cache.clear();
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		assertFalse(cache.containsValue(<span class="jxr_string">"value1"</span>));
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		assertFalse(cache.containsValue(<span class="jxr_string">"value2"</span>));
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	}
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 	@Test <strong class="jxr_keyword">void</strong> a54_containsValue_nullValue() {
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		<em class="jxr_comment">// Null values can't be cached, so containsValue(null) should return false</em>
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		assertFalse(cache.containsValue(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 	}
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 	<em class="jxr_comment">// Array key support</em>
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 	@Test <strong class="jxr_keyword">void</strong> a52_create_withConfiguration() {
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.&lt;String, Integer&gt;create()
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 			.maxSize(50)
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 			.cacheMode(WEAK)
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 			.supplier(k -&gt; k.length())
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 			.build();
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(<span class="jxr_string">"hello"</span>);
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		assertEquals(5, result);
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		assertSize(1, cache);
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	}
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> 	<em class="jxr_comment">// disableCaching() builder method</em>
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> 
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> 	@Test <strong class="jxr_keyword">void</strong> a53_disableCaching() {
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> 			.cacheMode(NONE)
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 			.build();
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 			callCount.incrementAndGet();
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"value1"</span>;
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		});
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> 			callCount.incrementAndGet();
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"value1"</span>;
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		});
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 		assertEquals(2, callCount.get(), <span class="jxr_string">"Supplier should be called every time when disabled"</span>);
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> 		assertTrue(cache.isEmpty());
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> 		assertEquals(0, cache.getCacheHits());
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> 	}
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> }
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 	@Test <strong class="jxr_keyword">void</strong> a46_arrayKeys_contentBasedEquality() {
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String[].<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<strong class="jxr_keyword">var</strong> key1 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>};
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		<strong class="jxr_keyword">var</strong> key2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>}; <em class="jxr_comment">// Same content, different instance</em>
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		cache.get(key1, () -&gt; <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		<em class="jxr_comment">// Should be a cache hit even though it's a different array instance</em>
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(key2, () -&gt; <span class="jxr_string">"should not be called"</span>);
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		assertEquals(<span class="jxr_string">"value1"</span>, result);
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		assertEquals(1, cache.getCacheHits());
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		assertSize(1, cache);
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	}
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 	@Test <strong class="jxr_keyword">void</strong> a47_arrayKeys_differentContent() {
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String[].<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 		<strong class="jxr_keyword">var</strong> key1 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>};
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 		<strong class="jxr_keyword">var</strong> key2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"d"</span>}; <em class="jxr_comment">// Different content</em>
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 		cache.get(key1, () -&gt; <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(key2, () -&gt; <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 		assertEquals(<span class="jxr_string">"value2"</span>, result);
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		assertSize(2, cache);
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 	}
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 	@Test <strong class="jxr_keyword">void</strong> a48_arrayKeys_put() {
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String[].<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		<strong class="jxr_keyword">var</strong> key1 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>};
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 		<strong class="jxr_keyword">var</strong> key2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>}; <em class="jxr_comment">// Same content</em>
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 		cache.put(key1, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 		assertTrue(cache.containsKey(key2));
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		assertEquals(<span class="jxr_string">"value1"</span>, cache.get(key2, () -&gt; <span class="jxr_string">"should not be called"</span>));
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 	}
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> 
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 	<em class="jxr_comment">// Null value handling</em>
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> 
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> 	@Test <strong class="jxr_keyword">void</strong> a49_nullValue_notCached() {
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> 		<em class="jxr_comment">// Supplier returns null - should not be cached</em>
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 		<strong class="jxr_keyword">var</strong> result1 = cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 			callCount.incrementAndGet();
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> 		});
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		assertNull(result1);
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 		assertEquals(1, callCount.get());
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 		<em class="jxr_comment">// Second call should invoke supplier again (not cached)</em>
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		<strong class="jxr_keyword">var</strong> result2 = cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 			callCount.incrementAndGet();
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> 		});
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 		assertNull(result2);
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		assertEquals(2, callCount.get());
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 		assertTrue(cache.isEmpty(), <span class="jxr_string">"Null values should not be cached"</span>);
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 	}
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 	@Test <strong class="jxr_keyword">void</strong> a50_nullValue_afterPut() {
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 		cache.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 		cache.put(<span class="jxr_string">"key1"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 		<em class="jxr_comment">// After putting null, the key should be removed</em>
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 			callCount.incrementAndGet();
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"supplied"</span>;
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 		});
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		assertEquals(<span class="jxr_string">"supplied"</span>, result);
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 		assertEquals(1, callCount.get());
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 	}
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> 	<em class="jxr_comment">// create() static method</em>
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 	@Test <strong class="jxr_keyword">void</strong> a51_create_basic() {
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.&lt;String, String&gt;create()
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 			.supplier(k -&gt; <span class="jxr_string">"value-"</span> + k)
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 			.build();
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(<span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 		assertEquals(<span class="jxr_string">"value-test"</span>, result);
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		assertSize(1, cache);
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 	}
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 	@Test <strong class="jxr_keyword">void</strong> a52_create_withConfiguration() {
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.&lt;String, Integer&gt;create()
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 			.maxSize(50)
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 			.cacheMode(WEAK)
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 			.supplier(k -&gt; k.length())
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 			.build();
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		<strong class="jxr_keyword">var</strong> result = cache.get(<span class="jxr_string">"hello"</span>);
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		assertEquals(5, result);
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		assertSize(1, cache);
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	}
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	<em class="jxr_comment">// disableCaching() builder method</em>
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 	@Test <strong class="jxr_keyword">void</strong> a53_disableCaching() {
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">var</strong> cache = Cache.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 			.cacheMode(NONE)
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 			.build();
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			callCount.incrementAndGet();
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"value1"</span>;
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		});
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		cache.get(<span class="jxr_string">"key1"</span>, () -&gt; {
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 			callCount.incrementAndGet();
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"value1"</span>;
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		});
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		assertEquals(2, callCount.get(), <span class="jxr_string">"Supplier should be called every time when disabled"</span>);
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		assertTrue(cache.isEmpty());
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 		assertEquals(0, cache.getCacheHits());
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	}
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> }
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

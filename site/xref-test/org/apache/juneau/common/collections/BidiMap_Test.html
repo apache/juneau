@@ -354,118 +354,241 @@
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertNull(map.getKey(1));
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	@Test <strong class="jxr_keyword">void</strong> a23_duplicateValuesInBuilder() {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<em class="jxr_comment">// Duplicate values are not allowed</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt;
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 				.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 				.add(<span class="jxr_string">"uno"</span>, 1)
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 				.build()
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	}
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	@Test <strong class="jxr_keyword">void</strong> a24_sizeAfterOperations() {
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create().build();
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertEmpty(map);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		map.put(<span class="jxr_string">"one"</span>, 1);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertSize(1, map);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		map.put(<span class="jxr_string">"two"</span>, 2);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		assertSize(2, map);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		map.remove(<span class="jxr_string">"one"</span>);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertSize(1, map);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		map.clear();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertEmpty(map);
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@Test <strong class="jxr_keyword">void</strong> a25_differentKeyValueTypes() {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;Integer,String&gt;create()
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			.add(1, <span class="jxr_string">"one"</span>)
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			.add(2, <span class="jxr_string">"two"</span>)
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			.build();
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertEquals(<span class="jxr_string">"one"</span>, map.get(1));
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertEquals(Integer.valueOf(2), map.getKey(<span class="jxr_string">"two"</span>));
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	@Test <strong class="jxr_keyword">void</strong> a26_put_duplicateValueThrowsException() {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			.build();
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<em class="jxr_comment">// Trying to add a different key with the same value should throw</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; map.put(<span class="jxr_string">"uno"</span>, 1));
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	@Test <strong class="jxr_keyword">void</strong> a27_put_sameKeyDifferentValueAllowed() {
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			.build();
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<em class="jxr_comment">// Updating the same key with a different value is allowed</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertEquals(1, map.put(<span class="jxr_string">"one"</span>, 10));
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertEquals(10, map.get(<span class="jxr_string">"one"</span>));
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		assertEquals(<span class="jxr_string">"one"</span>, map.getKey(10));
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertNull(map.getKey(1));
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	@Test <strong class="jxr_keyword">void</strong> a28_putAll_duplicateValueThrowsException() {
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			.build();
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> toAdd = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Integer&gt;();
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		toAdd.put(<span class="jxr_string">"uno"</span>, 1);
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<em class="jxr_comment">// Trying to add entries with duplicate values should throw</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; map.putAll(toAdd));
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<em class="jxr_comment">// isEmpty</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	@Test <strong class="jxr_keyword">void</strong> a29_isEmpty_emptyMap() {
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create().build();
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		assertTrue(map.isEmpty());
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertSize(0, map);
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	@Test <strong class="jxr_keyword">void</strong> a30_isEmpty_nonEmptyMap() {
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			.build();
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		assertFalse(map.isEmpty());
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertSize(1, map);
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	@Test <strong class="jxr_keyword">void</strong> a31_isEmpty_afterClear() {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			.add(<span class="jxr_string">"two"</span>, 2)
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			.build();
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		assertFalse(map.isEmpty());
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		map.clear();
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		assertTrue(map.isEmpty());
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	}
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	@Test <strong class="jxr_keyword">void</strong> a32_isEmpty_afterRemove() {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			.build();
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		assertFalse(map.isEmpty());
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		map.remove(<span class="jxr_string">"one"</span>);
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		assertTrue(map.isEmpty());
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	@Test <strong class="jxr_keyword">void</strong> a22b_overwriteInBuilder_differentValue() {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<em class="jxr_comment">// Test line 123: overwriting a key with a different value</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<em class="jxr_comment">// This should remove the old value from tracking</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			.add(<span class="jxr_string">"key1"</span>, 100)
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			.add(<span class="jxr_string">"key2"</span>, 200)
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			.add(<span class="jxr_string">"key1"</span>, 300)  <em class="jxr_comment">// Overwrite key1 with different value (line 123)</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			.build();
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertSize(2, map);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertEquals(300, map.get(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		assertEquals(200, map.get(<span class="jxr_string">"key2"</span>));
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertEquals(<span class="jxr_string">"key1"</span>, map.getKey(300));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertNull(map.getKey(100)); <em class="jxr_comment">// Old value should be removed</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	@Test <strong class="jxr_keyword">void</strong> a23_duplicateValuesInBuilder() {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<em class="jxr_comment">// Duplicate values are not allowed</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt;
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 				.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 				.add(<span class="jxr_string">"uno"</span>, 1)
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 				.build()
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test <strong class="jxr_keyword">void</strong> a23b_duplicateValuesInBuilder_overwritingKey() {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<em class="jxr_comment">// Test line 127: trying to add a value that's already mapped to a different key</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<em class="jxr_comment">// This should throw IllegalArgumentException</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<em class="jxr_comment">// The condition is: values.contains(value) &amp;&amp; ! value.equals(existingValue)</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<em class="jxr_comment">// where existingValue is the value currently mapped to the key being added</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt;
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 				.add(<span class="jxr_string">"key1"</span>, 100)
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 				.add(<span class="jxr_string">"key2"</span>, 200)
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 				.add(<span class="jxr_string">"key1"</span>, 200)  <em class="jxr_comment">// Try to map key1 to 200, but 200 is already mapped to key2</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 				.build()
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@Test <strong class="jxr_keyword">void</strong> a23c_overwriteKeyWithSameValue() {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<em class="jxr_comment">// Test line 127: overwriting a key with the same value should not throw</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<em class="jxr_comment">// The condition is: values.contains(value) &amp;&amp; ! value.equals(existingValue)</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<em class="jxr_comment">// When value.equals(existingValue), the condition is false, so assertArg passes</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			.add(<span class="jxr_string">"key1"</span>, 100)
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			.add(<span class="jxr_string">"key2"</span>, 200)
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			.add(<span class="jxr_string">"key1"</span>, 100)  <em class="jxr_comment">// Overwrite key1 with the same value (should be allowed)</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			.build();
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertSize(2, map);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		assertEquals(100, map.get(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertEquals(200, map.get(<span class="jxr_string">"key2"</span>));
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	@Test <strong class="jxr_keyword">void</strong> a23d_overwriteKeyWithNewValue_notInValues() {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<em class="jxr_comment">// Test line 127: overwriting a key with a new value not in the values set</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<em class="jxr_comment">// The condition is: values.contains(value) &amp;&amp; ! value.equals(existingValue)</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<em class="jxr_comment">// When !values.contains(value), the condition is false, so assertArg passes</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			.add(<span class="jxr_string">"key1"</span>, 100)
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			.add(<span class="jxr_string">"key2"</span>, 200)
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			.add(<span class="jxr_string">"key1"</span>, 300)  <em class="jxr_comment">// Overwrite key1 with a new value not in values set</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			.build();
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertSize(2, map);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertEquals(300, map.get(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		assertEquals(200, map.get(<span class="jxr_string">"key2"</span>));
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	<em class="jxr_comment">// Constructor coverage - toMap merge function (lines 185-186)</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	@Test <strong class="jxr_keyword">void</strong> a24_constructorMergeFunction_duplicateKeysInBuilder() {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<em class="jxr_comment">// Test lines 185-186: The toMap merge function (a, b) -&gt; b</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<em class="jxr_comment">// Note: Since the builder uses LinkedHashMap, duplicate keys are overwritten before</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<em class="jxr_comment">// reaching the constructor, so the merge function may not be called in practice.</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<em class="jxr_comment">// However, this test verifies that the constructor correctly processes entries</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<em class="jxr_comment">// and that the merge function is present as a safety measure.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			.add(<span class="jxr_string">"key1"</span>, 100)
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			.add(<span class="jxr_string">"key1"</span>, 200)  <em class="jxr_comment">// Overwrite - LinkedHashMap handles this</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			.add(<span class="jxr_string">"key1"</span>, 300)  <em class="jxr_comment">// Overwrite again</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			.build();
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<em class="jxr_comment">// The last value should win (merge function behavior: (a, b) -&gt; b)</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		assertSize(1, map);
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertEquals(300, map.get(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		assertEquals(<span class="jxr_string">"key1"</span>, map.getKey(300));
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	}
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	@Test <strong class="jxr_keyword">void</strong> a25_constructorMergeFunction_duplicateValuesInBuilder() {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<em class="jxr_comment">// Test line 186: The reverse map's toMap merge function (a, b) -&gt; b</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<em class="jxr_comment">// Note: The builder prevents duplicate values, so the merge function may not be called.</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<em class="jxr_comment">// However, this test verifies that the constructor correctly processes entries</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<em class="jxr_comment">// and handles value overwrites correctly.</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			.add(<span class="jxr_string">"key1"</span>, 100)
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			.add(<span class="jxr_string">"key2"</span>, 200)
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			.add(<span class="jxr_string">"key1"</span>, 300)  <em class="jxr_comment">// Overwrite key1, removing 100 from reverse map</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			.build();
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<em class="jxr_comment">// Verify the reverse map correctly reflects the overwrite</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		assertSize(2, map);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		assertEquals(300, map.get(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		assertEquals(200, map.get(<span class="jxr_string">"key2"</span>));
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		assertEquals(<span class="jxr_string">"key1"</span>, map.getKey(300));
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		assertEquals(<span class="jxr_string">"key2"</span>, map.getKey(200));
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		assertNull(map.getKey(100)); <em class="jxr_comment">// Old value should be removed</em>
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 	}
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> }
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	@Test <strong class="jxr_keyword">void</strong> a26_constructorWithNullEntries_filteredCorrectly() {
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<em class="jxr_comment">// Test lines 185-186: Verify that null keys and values are filtered correctly</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<em class="jxr_comment">// in both forward and reverse maps during construction</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			.add(<span class="jxr_string">"key1"</span>, 1)
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			.add(<strong class="jxr_keyword">null</strong>, 2)      <em class="jxr_comment">// Null key - should be filtered</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			.add(<span class="jxr_string">"key3"</span>, <strong class="jxr_keyword">null</strong>) <em class="jxr_comment">// Null value - should be filtered</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			.add(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>)   <em class="jxr_comment">// Both null - should be filtered</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			.add(<span class="jxr_string">"key5"</span>, 5)
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.build();
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<em class="jxr_comment">// Only non-null entries should be present</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		assertSize(2, map);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		assertEquals(1, map.get(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		assertEquals(5, map.get(<span class="jxr_string">"key5"</span>));
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		assertEquals(<span class="jxr_string">"key1"</span>, map.getKey(1));
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		assertEquals(<span class="jxr_string">"key5"</span>, map.getKey(5));
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		assertNull(map.get(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		assertNull(map.getKey(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	}
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	@Test <strong class="jxr_keyword">void</strong> a24_sizeAfterOperations() {
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create().build();
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		assertEmpty(map);
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		map.put(<span class="jxr_string">"one"</span>, 1);
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		assertSize(1, map);
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		map.put(<span class="jxr_string">"two"</span>, 2);
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		assertSize(2, map);
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		map.remove(<span class="jxr_string">"one"</span>);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		assertSize(1, map);
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		map.clear();
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		assertEmpty(map);
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	}
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	@Test <strong class="jxr_keyword">void</strong> a25_differentKeyValueTypes() {
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;Integer,String&gt;create()
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 			.add(1, <span class="jxr_string">"one"</span>)
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 			.add(2, <span class="jxr_string">"two"</span>)
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 			.build();
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		assertEquals(<span class="jxr_string">"one"</span>, map.get(1));
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		assertEquals(Integer.valueOf(2), map.getKey(<span class="jxr_string">"two"</span>));
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	}
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	@Test <strong class="jxr_keyword">void</strong> a26_put_duplicateValueThrowsException() {
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			.build();
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<em class="jxr_comment">// Trying to add a different key with the same value should throw</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; map.put(<span class="jxr_string">"uno"</span>, 1));
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	}
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	@Test <strong class="jxr_keyword">void</strong> a27_put_sameKeyDifferentValueAllowed() {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 			.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 			.build();
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<em class="jxr_comment">// Updating the same key with a different value is allowed</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		assertEquals(1, map.put(<span class="jxr_string">"one"</span>, 10));
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		assertEquals(10, map.get(<span class="jxr_string">"one"</span>));
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		assertEquals(<span class="jxr_string">"one"</span>, map.getKey(10));
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		assertNull(map.getKey(1));
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	}
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	@Test <strong class="jxr_keyword">void</strong> a28_putAll_duplicateValueThrowsException() {
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 			.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 			.build();
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">var</strong> toAdd = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Integer&gt;();
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		toAdd.put(<span class="jxr_string">"uno"</span>, 1);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<em class="jxr_comment">// Trying to add entries with duplicate values should throw</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; map.putAll(toAdd));
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	}
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<em class="jxr_comment">// isEmpty</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	@Test <strong class="jxr_keyword">void</strong> a29_isEmpty_emptyMap() {
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create().build();
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		assertTrue(map.isEmpty());
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		assertSize(0, map);
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 	}
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	@Test <strong class="jxr_keyword">void</strong> a30_isEmpty_nonEmptyMap() {
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			.build();
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		assertFalse(map.isEmpty());
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		assertSize(1, map);
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	}
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	@Test <strong class="jxr_keyword">void</strong> a31_isEmpty_afterClear() {
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			.add(<span class="jxr_string">"two"</span>, 2)
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			.build();
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		assertFalse(map.isEmpty());
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		map.clear();
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		assertTrue(map.isEmpty());
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	@Test <strong class="jxr_keyword">void</strong> a32_isEmpty_afterRemove() {
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 			.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 			.build();
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		assertFalse(map.isEmpty());
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		map.remove(<span class="jxr_string">"one"</span>);
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		assertTrue(map.isEmpty());
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	}
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
