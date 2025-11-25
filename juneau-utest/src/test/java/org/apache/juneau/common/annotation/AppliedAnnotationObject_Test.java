@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.annotation;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -33,18 +34,20 @@ class AppliedAnnotationObject_Test extends TestBase {
 	// Test annotation for testing purposes
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR})
+	@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR })
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface TestAppliedAnnotation {
+	public @interface TA {
 		String[] on() default {};
+
 		String value() default "";
+
 		int number() default 0;
 	}
 
 	/**
-	 * Implementation of TestAppliedAnnotation using AppliedAnnotationObject with basic Builder
+	 * Implementation of TA using AppliedAnnotationObject with basic Builder
 	 */
-	public static class TestAppliedAnnotationObject extends AppliedAnnotationObject implements TestAppliedAnnotation {
+	public static class TAO extends AppliedAnnotationObject implements TA {
 
 		private final String value;
 		private final int number;
@@ -54,7 +57,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 			int number = 0;
 
 			public Builder() {
-				super(TestAppliedAnnotation.class);
+				super(TA.class);
 			}
 
 			public Builder value(String value) {
@@ -73,8 +76,8 @@ class AppliedAnnotationObject_Test extends TestBase {
 				return this;
 			}
 
-			public TestAppliedAnnotation build() {
-				return new TestAppliedAnnotationObject(this);
+			public TA build() {
+				return new TAO(this);
 			}
 		}
 
@@ -82,7 +85,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 			return new Builder();
 		}
 
-		public TestAppliedAnnotationObject(Builder b) {
+		public TAO(Builder b) {
 			super(b);
 			value = b.value;
 			number = b.number;
@@ -103,18 +106,22 @@ class AppliedAnnotationObject_Test extends TestBase {
 	// Test classes for targeting
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class TargetClass1 {
+	public static class TC {
 		public String field1;
 		public int field2;
 
-		public TargetClass1() {}
-		public TargetClass1(String s) {}
+		public TC() {}
+
+		public TC(String s) {}
 
 		public void method1() {}
-		public String method2(int x) { return null; }
+
+		public String method2(int x) {
+			return null;
+		}
 	}
 
-	public static class TargetClass2 {}
+	public static class TC2 {}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Nested test classes
@@ -122,109 +129,80 @@ class AppliedAnnotationObject_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Basic on() tests with strings")
-	class BasicOnTests {
+	class A_BasicOnTests extends TestBase {
 
 		@Test
-		void noTargets() {
-			var a = TestAppliedAnnotationObject.create().build();
-			assertArrayEquals(new String[0], a.on());
+		void a01_noTargets() {
+			var a = TAO.create().build();
+			assertList(a.on());
 		}
 
 		@Test
-		void singleTarget() {
-			var a = TestAppliedAnnotationObject.create()
-				.on("com.example.MyClass")
-				.build();
+		void a02_singleTarget() {
+			var a = TAO.create().on("com.example.MyClass").build();
 
-			assertArrayEquals(new String[]{"com.example.MyClass"}, a.on());
+			assertList(a.on(), "com.example.MyClass");
 		}
 
 		@Test
-		void multipleTargets() {
-			var a = TestAppliedAnnotationObject.create()
-				.on("com.example.Class1")
-				.on("com.example.Class2")
-				.build();
+		void a03_multipleTargets() {
+			var a = TAO.create().on("com.example.Class1").on("com.example.Class2").build();
 
-			assertArrayEquals(new String[]{"com.example.Class1", "com.example.Class2"}, a.on());
+			assertList(a.on(), "com.example.Class1", "com.example.Class2");
 		}
 
 		@Test
-		void varargsTargets() {
-			var a = TestAppliedAnnotationObject.create()
-				.on("target1", "target2", "target3")
-				.build();
+		void a04_varargsTargets() {
+			var a = TAO.create().on("target1", "target2", "target3").build();
 
-			assertArrayEquals(new String[]{"target1", "target2", "target3"}, a.on());
+			assertList(a.on(), "target1", "target2", "target3");
 		}
 
 		@Test
-		void withOtherProperties() {
-			var a = TestAppliedAnnotationObject.create()
-				.on("com.example.MyClass")
-				.value("test")
-				.number(42)
-				.build();
+		void a05_withOtherProperties() {
+			var a = TAO.create().on("com.example.MyClass").value("test").number(42).build();
 
-			assertArrayEquals(new String[]{"com.example.MyClass"}, a.on());
-			assertEquals("test", a.value());
-			assertEquals(42, a.number());
+			assertBean(a, "on,value,number", "[com.example.MyClass],test,42");
 		}
 	}
 
 	@Nested
 	@DisplayName("Equality and hashcode tests")
-	class EqualityAndHashCodeTests {
+	class B_EqualityAndHashCodeTests extends TestBase {
 
 		@Test
-		void sameTargets() {
-			var a1 = TestAppliedAnnotationObject.create()
-				.on("target1", "target2")
-				.value("test")
-				.build();
+		void b01_sameTargets() {
+			var a1 = TAO.create().on("target1", "target2").value("test").build();
 
-			var a2 = TestAppliedAnnotationObject.create()
-				.on("target1", "target2")
-				.value("test")
-				.build();
+			var a2 = TAO.create().on("target1", "target2").value("test").build();
 
 			assertEquals(a1, a2);
 			assertEquals(a1.hashCode(), a2.hashCode());
 		}
 
 		@Test
-		void differentTargets() {
-			var a1 = TestAppliedAnnotationObject.create()
-				.on("target1")
-				.build();
+		void b02_differentTargets() {
+			var a1 = TAO.create().on("target1").build();
 
-			var a2 = TestAppliedAnnotationObject.create()
-				.on("target2")
-				.build();
+			var a2 = TAO.create().on("target2").build();
 
 			assertNotEquals(a1, a2);
 		}
 
 		@Test
-		void differentTargetOrder() {
+		void b03_differentTargetOrder() {
 			// Arrays with different order should not be equal
-			var a1 = TestAppliedAnnotationObject.create()
-				.on("target1", "target2")
-				.build();
+			var a1 = TAO.create().on("target1", "target2").build();
 
-			var a2 = TestAppliedAnnotationObject.create()
-				.on("target2", "target1")
-				.build();
+			var a2 = TAO.create().on("target2", "target1").build();
 
 			assertNotEquals(a1, a2);
 		}
 
 		@Test
-		void noTargetsVsWithTargets() {
-			var a1 = TestAppliedAnnotationObject.create().build();
-			var a2 = TestAppliedAnnotationObject.create()
-				.on("target1")
-				.build();
+		void b04_noTargetsVsWithTargets() {
+			var a1 = TAO.create().build();
+			var a2 = TAO.create().on("target1").build();
 
 			assertNotEquals(a1, a2);
 		}
@@ -232,12 +210,12 @@ class AppliedAnnotationObject_Test extends TestBase {
 
 	@Nested
 	@DisplayName("BuilderT - Class targeting tests")
-	class BuilderTTests {
+	class C_BuilderTTests extends TestBase {
 
 		/**
 		 * Implementation with BuilderT for class targeting
 		 */
-		public static class TestAppliedAnnotationObjectT extends AppliedAnnotationObject implements TestAppliedAnnotation {
+		public static class C extends AppliedOnClassAnnotationObject implements TA {
 
 			private final String value;
 
@@ -245,7 +223,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 				String value = "";
 
 				public Builder() {
-					super(TestAppliedAnnotation.class);
+					super(TA.class);
 				}
 
 				public Builder value(String value) {
@@ -271,8 +249,20 @@ class AppliedAnnotationObject_Test extends TestBase {
 					return this;
 				}
 
-				public TestAppliedAnnotation build() {
-					return new TestAppliedAnnotationObjectT(this);
+				@Override
+				public Builder onClass(Class<?>...value) {
+					super.onClass(value);
+					return this;
+				}
+
+				@Override
+				public Builder onClass(ClassInfo...value) {
+					super.onClass(value);
+					return this;
+				}
+
+				public TA build() {
+					return new C(this);
 				}
 			}
 
@@ -280,7 +270,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 				return new Builder();
 			}
 
-			public TestAppliedAnnotationObjectT(Builder b) {
+			public C(Builder b) {
 				super(b);
 				value = b.value;
 			}
@@ -297,62 +287,60 @@ class AppliedAnnotationObject_Test extends TestBase {
 		}
 
 		@Test
-		void onClassArray() {
-			var a = TestAppliedAnnotationObjectT.create()
-				.on(TargetClass1.class, TargetClass2.class)
-				.build();
+		void c01_onClassArray() {
+			var a = C.create().on(TC.class, TC2.class).build();
 
-			String[] expected = {
-				CNAME + "$TargetClass1",
-				CNAME + "$TargetClass2"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), CNAME + "$TC", CNAME + "$TC2");
 		}
 
 		@Test
-		void onClassInfo() {
-			var ci1 = ClassInfo.of(TargetClass1.class);
-			var ci2 = ClassInfo.of(TargetClass2.class);
+		void c02_onClassInfo() {
+			var ci1 = ClassInfo.of(TC.class);
+			var ci2 = ClassInfo.of(TC2.class);
 
-			var a = TestAppliedAnnotationObjectT.create()
-				.on(ci1, ci2)
-				.build();
+			var a = C.create().on(ci1, ci2).build();
 
-			String[] expected = {
-				CNAME + "$TargetClass1",
-				CNAME + "$TargetClass2"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), CNAME + "$TC", CNAME + "$TC2");
 		}
 
 		@Test
-		void mixedTargeting() {
-			var a = TestAppliedAnnotationObjectT.create()
-				.on("com.example.StringTarget")
-				.on(TargetClass1.class)
-				.build();
+		void c03_mixedTargeting() {
+			var a = C.create().on("com.example.StringTarget").on(TC.class).build();
 
-			String[] expected = {
-				"com.example.StringTarget",
-				CNAME + "$TargetClass1"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), "com.example.StringTarget", CNAME + "$TC");
+		}
+
+		@Test
+		void c04_onClassClass() {
+			var a = (AppliedOnClassAnnotationObject)C.create().onClass(TC.class, TC2.class).build();
+
+			assertList(a.onClass(), TC.class, TC2.class);
+		}
+
+		@Test
+		void c05_onClassClassInfo() {
+			var ci1 = ClassInfo.of(TC.class);
+			var ci2 = ClassInfo.of(TC2.class);
+
+			var a = (AppliedOnClassAnnotationObject)C.create().onClass(ci1, ci2).build();
+
+			assertList(a.onClass(), TC.class, TC2.class);
 		}
 	}
 
 	@Nested
 	@DisplayName("BuilderM - Method targeting tests")
-	class BuilderMTests {
+	class D_BuilderMTests extends TestBase {
 
 		/**
 		 * Implementation with BuilderM for method targeting
 		 */
-		public static class TestAppliedAnnotationObjectM extends AppliedAnnotationObject implements TestAppliedAnnotation {
+		public static class D extends AppliedAnnotationObject implements TA {
 
 			public static class Builder extends AppliedAnnotationObject.BuilderM {
 
 				public Builder() {
-					super(TestAppliedAnnotation.class);
+					super(TA.class);
 				}
 
 				@Override
@@ -373,8 +361,8 @@ class AppliedAnnotationObject_Test extends TestBase {
 					return this;
 				}
 
-				public TestAppliedAnnotation build() {
-					return new TestAppliedAnnotationObjectM(this);
+				public TA build() {
+					return new D(this);
 				}
 			}
 
@@ -382,7 +370,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 				return new Builder();
 			}
 
-			public TestAppliedAnnotationObjectM(Builder b) {
+			public D(Builder b) {
 				super(b);
 			}
 
@@ -398,51 +386,39 @@ class AppliedAnnotationObject_Test extends TestBase {
 		}
 
 		@Test
-		void onMethod() throws Exception {
-			Method m1 = TargetClass1.class.getMethod("method1");
-			Method m2 = TargetClass1.class.getMethod("method2", int.class);
+		void d01_onMethod() throws Exception {
+			var m1 = TC.class.getMethod("method1");
+			var m2 = TC.class.getMethod("method2", int.class);
 
-			var a = TestAppliedAnnotationObjectM.create()
-				.on(m1, m2)
-				.build();
+			var a = D.create().on(m1, m2).build();
 
-			String[] expected = {
-				CNAME + "$TargetClass1.method1()",
-				CNAME + "$TargetClass1.method2(int)"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), CNAME + "$TC.method1()", CNAME + "$TC.method2(int)");
 		}
 
 		@Test
-		void onMethodInfo() throws Exception {
-			var mi1 = MethodInfo.of(TargetClass1.class.getMethod("method1"));
-			var mi2 = MethodInfo.of(TargetClass1.class.getMethod("method2", int.class));
+		void d02_onMethodInfo() throws Exception {
+			var mi1 = MethodInfo.of(TC.class.getMethod("method1"));
+			var mi2 = MethodInfo.of(TC.class.getMethod("method2", int.class));
 
-			var a = TestAppliedAnnotationObjectM.create()
-				.on(mi1, mi2)
-				.build();
+			var a = D.create().on(mi1, mi2).build();
 
-			String[] expected = {
-				CNAME + "$TargetClass1.method1()",
-				CNAME + "$TargetClass1.method2(int)"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), CNAME + "$TC.method1()", CNAME + "$TC.method2(int)");
 		}
 	}
 
 	@Nested
 	@DisplayName("BuilderC - Constructor targeting tests")
-	class BuilderCTests {
+	class E_BuilderCTests extends TestBase {
 
 		/**
 		 * Implementation with BuilderC for constructor targeting
 		 */
-		public static class TestAppliedAnnotationObjectC extends AppliedAnnotationObject implements TestAppliedAnnotation {
+		public static class E extends AppliedAnnotationObject implements TA {
 
 			public static class Builder extends AppliedAnnotationObject.BuilderC {
 
 				public Builder() {
-					super(TestAppliedAnnotation.class);
+					super(TA.class);
 				}
 
 				@Override
@@ -463,8 +439,8 @@ class AppliedAnnotationObject_Test extends TestBase {
 					return this;
 				}
 
-				public TestAppliedAnnotation build() {
-					return new TestAppliedAnnotationObjectC(this);
+				public TA build() {
+					return new E(this);
 				}
 			}
 
@@ -472,7 +448,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 				return new Builder();
 			}
 
-			public TestAppliedAnnotationObjectC(Builder b) {
+			public E(Builder b) {
 				super(b);
 			}
 
@@ -488,51 +464,39 @@ class AppliedAnnotationObject_Test extends TestBase {
 		}
 
 		@Test
-		void onConstructor() throws Exception {
-			Constructor<?> c1 = TargetClass1.class.getConstructor();
-			Constructor<?> c2 = TargetClass1.class.getConstructor(String.class);
+		void e01_onConstructor() throws Exception {
+			var c1 = TC.class.getConstructor();
+			var c2 = TC.class.getConstructor(String.class);
 
-			var a = TestAppliedAnnotationObjectC.create()
-				.on(c1, c2)
-				.build();
+			var a = E.create().on(c1, c2).build();
 
-			String[] expected = {
-				CNAME + "$TargetClass1()",
-				CNAME + "$TargetClass1(java.lang.String)"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), CNAME + "$TC()", CNAME + "$TC(java.lang.String)");
 		}
 
 		@Test
-		void onConstructorInfo() throws Exception {
-			var ci1 = ConstructorInfo.of(TargetClass1.class.getConstructor());
-			var ci2 = ConstructorInfo.of(TargetClass1.class.getConstructor(String.class));
+		void e02_onConstructorInfo() throws Exception {
+			var ci1 = ConstructorInfo.of(TC.class.getConstructor());
+			var ci2 = ConstructorInfo.of(TC.class.getConstructor(String.class));
 
-			var a = TestAppliedAnnotationObjectC.create()
-				.on(ci1, ci2)
-				.build();
+			var a = E.create().on(ci1, ci2).build();
 
-			String[] expected = {
-				CNAME + "$TargetClass1()",
-				CNAME + "$TargetClass1(java.lang.String)"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), CNAME + "$TC()", CNAME + "$TC(java.lang.String)");
 		}
 	}
 
 	@Nested
 	@DisplayName("BuilderMF - Method and Field targeting tests")
-	class BuilderMFTests {
+	class F_BuilderMFTests extends TestBase {
 
 		/**
 		 * Implementation with BuilderMF for method and field targeting
 		 */
-		public static class TestAppliedAnnotationObjectMF extends AppliedAnnotationObject implements TestAppliedAnnotation {
+		public static class F extends AppliedAnnotationObject implements TA {
 
 			public static class Builder extends AppliedAnnotationObject.BuilderMF {
 
 				public Builder() {
-					super(TestAppliedAnnotation.class);
+					super(TA.class);
 				}
 
 				@Override
@@ -565,8 +529,8 @@ class AppliedAnnotationObject_Test extends TestBase {
 					return this;
 				}
 
-				public TestAppliedAnnotation build() {
-					return new TestAppliedAnnotationObjectMF(this);
+				public TA build() {
+					return new F(this);
 				}
 			}
 
@@ -574,7 +538,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 				return new Builder();
 			}
 
-			public TestAppliedAnnotationObjectMF(Builder b) {
+			public F(Builder b) {
 				super(b);
 			}
 
@@ -590,110 +554,422 @@ class AppliedAnnotationObject_Test extends TestBase {
 		}
 
 		@Test
-		void onField() throws Exception {
-			Field f1 = TargetClass1.class.getField("field1");
-			Field f2 = TargetClass1.class.getField("field2");
+		void f01_onField() throws Exception {
+			var f1 = TC.class.getField("field1");
+			var f2 = TC.class.getField("field2");
 
-			var a = TestAppliedAnnotationObjectMF.create()
-				.on(f1, f2)
-				.build();
+			var a = F.create().on(f1, f2).build();
 
-			String[] expected = {
-				CNAME + "$TargetClass1.field1",
-				CNAME + "$TargetClass1.field2"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), CNAME + "$TC.field1", CNAME + "$TC.field2");
 		}
 
 		@Test
-		void onFieldInfo() throws Exception {
-			var fi1 = FieldInfo.of(ClassInfo.of(TargetClass1.class), TargetClass1.class.getField("field1"));
-			var fi2 = FieldInfo.of(ClassInfo.of(TargetClass1.class), TargetClass1.class.getField("field2"));
+		void f02_onFieldInfo() throws Exception {
+			var fi1 = FieldInfo.of(ClassInfo.of(TC.class), TC.class.getField("field1"));
+			var fi2 = FieldInfo.of(ClassInfo.of(TC.class), TC.class.getField("field2"));
 
-			var a = TestAppliedAnnotationObjectMF.create()
-				.on(fi1, fi2)
-				.build();
+			var a = F.create().on(fi1, fi2).build();
 
-			String[] expected = {
-				CNAME + "$TargetClass1.field1",
-				CNAME + "$TargetClass1.field2"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), CNAME + "$TC.field1", CNAME + "$TC.field2");
 		}
 
 		@Test
-		void mixedMethodsAndFields() throws Exception {
-			Method m = TargetClass1.class.getMethod("method1");
-			Field f = TargetClass1.class.getField("field1");
+		void f03_mixedMethodsAndFields() throws Exception {
+			var m = TC.class.getMethod("method1");
+			var f = TC.class.getField("field1");
 
-			var a = TestAppliedAnnotationObjectMF.create()
-				.on(m)
-				.on(f)
-				.build();
+			var a = F.create().on(m).on(f).build();
 
-			String[] expected = {
-				CNAME + "$TargetClass1.method1()",
-				CNAME + "$TargetClass1.field1"
-			};
-			assertArrayEquals(expected, a.on());
+			assertList(a.on(), CNAME + "$TC.method1()", CNAME + "$TC.field1");
+		}
+
+		@Test
+		void f04_onMethodInfo() throws Exception {
+			var mi1 = MethodInfo.of(TC.class.getMethod("method1"));
+			var mi2 = MethodInfo.of(TC.class.getMethod("method2", int.class));
+
+			var a = F.create().on(mi1, mi2).build();
+
+			assertList(a.on(), CNAME + "$TC.method1()", CNAME + "$TC.method2(int)");
+		}
+	}
+
+	@Nested
+	@DisplayName("BuilderTM - Class and Method targeting tests")
+	class G_BuilderTMTests extends TestBase {
+
+		/**
+		 * Implementation with BuilderTM for class and method targeting
+		 */
+		public static class G extends AppliedOnClassAnnotationObject implements TA {
+
+			public static class Builder extends AppliedAnnotationObject.BuilderTM {
+
+				public Builder() {
+					super(TA.class);
+				}
+
+				@Override
+				public Builder on(String...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Class<?>...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(ClassInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Method...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(MethodInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder onClass(Class<?>...value) {
+					super.onClass(value);
+					return this;
+				}
+
+				public TA build() {
+					return new G(this);
+				}
+			}
+
+			public static Builder create() {
+				return new Builder();
+			}
+
+			public G(Builder b) {
+				super(b);
+			}
+
+			@Override
+			public String value() {
+				return "";
+			}
+
+			@Override
+			public int number() {
+				return 0;
+			}
+		}
+
+		@Test
+		void g01_onClassAndMethod() throws Exception {
+			var m = TC.class.getMethod("method1");
+
+			var a = G.create().on(TC.class).on(m).build();
+
+			assertList(a.on(), CNAME + "$TC", CNAME + "$TC.method1()");
+		}
+
+		@Test
+		void g02_onMethodInfo() throws Exception {
+			var mi = MethodInfo.of(TC.class.getMethod("method1"));
+
+			var a = G.create().on(mi).build();
+
+			assertList(a.on(), CNAME + "$TC.method1()");
+		}
+
+		@Test
+		void g03_onClassClass() {
+			var a = (AppliedOnClassAnnotationObject) G.create().onClass(TC.class, TC2.class).build();
+
+			assertList(a.onClass(), TC.class, TC2.class);
+		}
+	}
+
+	@Nested
+	@DisplayName("BuilderTMF - Class, Method, and Field targeting tests")
+	class H_BuilderTMFTests extends TestBase {
+
+		/**
+		 * Implementation with BuilderTMF for class, method, and field targeting
+		 */
+		public static class H extends AppliedOnClassAnnotationObject implements TA {
+
+			public static class Builder extends AppliedAnnotationObject.BuilderTMF {
+
+				public Builder() {
+					super(TA.class);
+				}
+
+				@Override
+				public Builder on(String...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Class<?>...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(ClassInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Method...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(MethodInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Field...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(FieldInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				public TA build() {
+					return new H(this);
+				}
+			}
+
+			public static Builder create() {
+				return new Builder();
+			}
+
+			public H(Builder b) {
+				super(b);
+			}
+
+			@Override
+			public String value() {
+				return "";
+			}
+
+			@Override
+			public int number() {
+				return 0;
+			}
+		}
+
+		@Test
+		void h01_onClassMethodAndField() throws Exception {
+			var m = TC.class.getMethod("method1");
+			var f = TC.class.getField("field1");
+
+			var a = H.create().on(TC.class).on(m).on(f).build();
+
+			assertList(a.on(), CNAME + "$TC", CNAME + "$TC.method1()", CNAME + "$TC.field1");
+		}
+
+		@Test
+		void h02_onMethodInfo() throws Exception {
+			var mi = MethodInfo.of(TC.class.getMethod("method1"));
+
+			var a = H.create().on(mi).build();
+
+			assertList(a.on(), CNAME + "$TC.method1()");
+		}
+
+		@Test
+		void h03_onFieldInfo() throws Exception {
+			var fi = FieldInfo.of(ClassInfo.of(TC.class), TC.class.getField("field1"));
+
+			var a = H.create().on(fi).build();
+
+			assertList(a.on(), CNAME + "$TC.field1");
+		}
+	}
+
+	@Nested
+	@DisplayName("BuilderTMFC - Class, Method, Field, and Constructor targeting tests")
+	class I_BuilderTMFCTests extends TestBase {
+
+		/**
+		 * Implementation with BuilderTMFC for complete targeting
+		 */
+		public static class I extends AppliedOnClassAnnotationObject implements TA {
+
+			public static class Builder extends AppliedAnnotationObject.BuilderTMFC {
+
+				public Builder() {
+					super(TA.class);
+				}
+
+				@Override
+				public Builder on(String...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Class<?>...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Method...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(MethodInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Field...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(FieldInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(Constructor<?>...value) {
+					super.on(value);
+					return this;
+				}
+
+				@Override
+				public Builder on(ConstructorInfo...value) {
+					super.on(value);
+					return this;
+				}
+
+				public TA build() {
+					return new I(this);
+				}
+			}
+
+			public static Builder create() {
+				return new Builder();
+			}
+
+			public I(Builder b) {
+				super(b);
+			}
+
+			@Override
+			public String value() {
+				return "";
+			}
+
+			@Override
+			public int number() {
+				return 0;
+			}
+		}
+
+		@Test
+		void i01_onAllTypes() throws Exception {
+			var m = TC.class.getMethod("method1");
+			var f = TC.class.getField("field1");
+			var c = TC.class.getConstructor();
+
+			var a = I.create().on(TC.class).on(m).on(f).on(c).build();
+
+			assertList(a.on(), CNAME + "$TC", CNAME + "$TC.method1()", CNAME + "$TC.field1", CNAME + "$TC()");
+		}
+
+		@Test
+		void i02_onMethodInfo() throws Exception {
+			var mi = MethodInfo.of(TC.class.getMethod("method1"));
+
+			var a = I.create().on(mi).build();
+
+			assertList(a.on(), CNAME + "$TC.method1()");
+		}
+
+		@Test
+		void i03_onFieldInfo() throws Exception {
+			var fi = FieldInfo.of(ClassInfo.of(TC.class), TC.class.getField("field1"));
+
+			var a = I.create().on(fi).build();
+
+			assertList(a.on(), CNAME + "$TC.field1");
+		}
+
+		@Test
+		void i04_onConstructorInfo() throws Exception {
+			var ci = ConstructorInfo.of(TC.class.getConstructor(String.class));
+
+			var a = I.create().on(ci).build();
+
+			assertList(a.on(), CNAME + "$TC(java.lang.String)");
 		}
 	}
 
 	@Nested
 	@DisplayName("Fluent API tests")
-	class FluentApiTests {
+	class J_FluentApiTests extends TestBase {
 
 		@Test
-		void chaining() {
-			var a = TestAppliedAnnotationObject.create()
-				.on("target1")
-				.value("test")
-				.on("target2")
-				.number(42)
-				.on("target3")
-				.build();
+		void j01_chaining() {
+			var a = TAO.create().on("target1").value("test").on("target2").number(42).on("target3").build();
 
-			assertArrayEquals(new String[]{"target1", "target2", "target3"}, a.on());
-			assertEquals("test", a.value());
-			assertEquals(42, a.number());
+			assertBean(a, "on,value,number", "[target1,target2,target3],test,42");
 		}
 	}
 
 	@Nested
 	@DisplayName("toMap() tests")
-	class ToMapTests {
+	class K_ToMapTests extends TestBase {
 
 		@Test
-		void withTargets() {
-			var a = TestAppliedAnnotationObject.create()
-				.on("target1", "target2")
-				.value("test")
-				.build();
+		void k01_withTargets() {
+			var a = TAO.create().on("target1", "target2").value("test").build();
 
-			var map = ((TestAppliedAnnotationObject)a).toMap();
-			assertArrayEquals(new String[]{"target1", "target2"}, (String[])map.get("on"));
-			assertEquals("test", map.get("value"));
+			var map = ((TAO)a).toMap();
+			assertBean(map, "on,value", "[target1,target2],test");
 		}
 	}
 
 	@Nested
 	@DisplayName("Edge case tests")
-	class EdgeCaseTests {
+	class L_EdgeCaseTests extends TestBase {
 
 		@Test
-		void emptyTargets() {
-			var a = TestAppliedAnnotationObject.create()
-				.on()
-				.build();
+		void l01_emptyTargets() {
+			var a = TAO.create().on().build();
 
-			assertArrayEquals(new String[0], a.on());
+			assertList(a.on());
 		}
 
 		@Test
-		void builderReuse() {
-			var builder = TestAppliedAnnotationObject.create()
-				.on("target1")
-				.value("test");
+		void l02_builderReuse() {
+			var builder = TAO.create().on("target1").value("test");
 
 			var a1 = builder.build();
 			var a2 = builder.build();
@@ -706,78 +982,46 @@ class AppliedAnnotationObject_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Null validation tests")
-	class NullValidationTests {
+	class M_NullValidationTests extends TestBase {
 
 		@Test
-		void nullClass_throwsException() {
-			assertThrows(IllegalArgumentException.class, () ->
-				BuilderTTests.TestAppliedAnnotationObjectT.create()
-					.on((Class<?>)null)
-					.build()
-			);
+		void m01_nullClass_throwsException() {
+			assertThrows(IllegalArgumentException.class, () -> C_BuilderTTests.C.create().on((Class<?>)null).build());
 		}
 
 		@Test
-		void nullClassInfo_throwsException() {
-			assertThrows(IllegalArgumentException.class, () ->
-				BuilderTTests.TestAppliedAnnotationObjectT.create()
-					.on((ClassInfo)null)
-					.build()
-			);
+		void m02_nullClassInfo_throwsException() {
+			assertThrows(IllegalArgumentException.class, () -> C_BuilderTTests.C.create().on((ClassInfo)null).build());
 		}
 
 		@Test
-		void nullMethod_throwsException() {
-			assertThrows(IllegalArgumentException.class, () ->
-				BuilderMTests.TestAppliedAnnotationObjectM.create()
-					.on((java.lang.reflect.Method)null)
-					.build()
-			);
+		void m03_nullMethod_throwsException() {
+			assertThrows(IllegalArgumentException.class, () -> D_BuilderMTests.D.create().on((java.lang.reflect.Method)null).build());
 		}
 
 		@Test
-		void nullMethodInfo_throwsException() {
-			assertThrows(IllegalArgumentException.class, () ->
-				BuilderMTests.TestAppliedAnnotationObjectM.create()
-					.on((MethodInfo)null)
-					.build()
-			);
+		void m04_nullMethodInfo_throwsException() {
+			assertThrows(IllegalArgumentException.class, () -> D_BuilderMTests.D.create().on((MethodInfo)null).build());
 		}
 
 		@Test
-		void nullField_throwsException() {
-			assertThrows(IllegalArgumentException.class, () ->
-				BuilderMFTests.TestAppliedAnnotationObjectMF.create()
-					.on((java.lang.reflect.Field)null)
-					.build()
-			);
+		void m05_nullField_throwsException() {
+			assertThrows(IllegalArgumentException.class, () -> F_BuilderMFTests.F.create().on((java.lang.reflect.Field)null).build());
 		}
 
 		@Test
-		void nullFieldInfo_throwsException() {
-			assertThrows(IllegalArgumentException.class, () ->
-				BuilderMFTests.TestAppliedAnnotationObjectMF.create()
-					.on((FieldInfo)null)
-					.build()
-			);
+		void m06_nullFieldInfo_throwsException() {
+			assertThrows(IllegalArgumentException.class, () -> F_BuilderMFTests.F.create().on((FieldInfo)null).build());
 		}
 
 		@Test
-		void nullConstructor_throwsException() {
-			assertThrows(IllegalArgumentException.class, () ->
-				BuilderCTests.TestAppliedAnnotationObjectC.create()
-					.on((java.lang.reflect.Constructor<?>)null)
-					.build()
-			);
+		void m07_nullConstructor_throwsException() {
+			assertThrows(IllegalArgumentException.class, () -> E_BuilderCTests.E.create().on((java.lang.reflect.Constructor<?>)null).build());
 		}
 
 		@Test
-		void nullConstructorInfo_throwsException() {
-			assertThrows(IllegalArgumentException.class, () ->
-				BuilderCTests.TestAppliedAnnotationObjectC.create()
-					.on((ConstructorInfo)null)
-					.build()
-			);
+		void m08_nullConstructorInfo_throwsException() {
+			assertThrows(IllegalArgumentException.class, () -> E_BuilderCTests.E.create().on((ConstructorInfo)null).build());
 		}
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.annotation;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -30,19 +31,22 @@ class AnnotationObject_Test extends TestBase {
 	// Test annotation for testing purposes
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Target({ElementType.TYPE, ElementType.METHOD})
+	@Target({ ElementType.TYPE, ElementType.METHOD })
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface TestAnnotation {
+	public @interface TA {
 		String value() default "";
+
 		int number() default 0;
+
 		boolean flag() default false;
+
 		String[] array() default {};
 	}
 
 	/**
-	 * Implementation of TestAnnotation using AnnotationObject
+	 * Implementation of TA using AnnotationObject
 	 */
-	public static class TestAnnotationObject extends AnnotationObject implements TestAnnotation {
+	public static class T extends AnnotationObject implements TA {
 
 		private final String value;
 		private final int number;
@@ -56,31 +60,31 @@ class AnnotationObject_Test extends TestBase {
 			String[] array = {};
 
 			public Builder() {
-				super(TestAnnotation.class);
+				super(TA.class);
 			}
 
-			public Builder value(String value) {
-				this.value = value;
+			public Builder value(String _value) {
+				value = _value;
 				return this;
 			}
 
-			public Builder number(int number) {
-				this.number = number;
+			public Builder number(int value) {
+				number = value;
 				return this;
 			}
 
-			public Builder flag(boolean flag) {
-				this.flag = flag;
+			public Builder flag(boolean value) {
+				flag = value;
 				return this;
 			}
 
-			public Builder array(String...array) {
-				this.array = array;
+			public Builder array(String...value) {
+				array = value;
 				return this;
 			}
 
-			public TestAnnotation build() {
-				return new TestAnnotationObject(this);
+			public TA build() {
+				return new T(this);
 			}
 		}
 
@@ -88,12 +92,12 @@ class AnnotationObject_Test extends TestBase {
 			return new Builder();
 		}
 
-		public TestAnnotationObject(Builder b) {
+		public T(Builder b) {
 			super(b);
 			value = b.value;
 			number = b.number;
 			flag = b.flag;
-			this.array = Arrays.copyOf(b.array, b.array.length);
+			array = Arrays.copyOf(b.array, b.array.length);
 		}
 
 		@Override
@@ -123,32 +127,20 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void a01_basic_defaultValues() {
-		var a = TestAnnotationObject.create().build();
-		assertEquals("", a.value());
-		assertEquals(0, a.number());
-		assertEquals(false, a.flag());
-		assertArrayEquals(new String[0], a.array());
+		var a = T.create().build();
+		assertBean(a, "value,number,flag,array", ",0,false,[]");
 	}
 
 	@Test
 	void a02_basic_customValues() {
-		var a = TestAnnotationObject.create()
-			.value("test")
-			.number(42)
-			.flag(true)
-			.array("a", "b", "c")
-			.build();
-
-		assertEquals("test", a.value());
-		assertEquals(42, a.number());
-		assertEquals(true, a.flag());
-		assertArrayEquals(new String[]{"a", "b", "c"}, a.array());
+		var a = T.create().value("a").number(1).flag(true).array("b1", "b2").build();
+		assertBean(a, "value,number,flag,array", "a,1,true,[b1,b2]");
 	}
 
 	@Test
 	void a03_basic_annotationType() {
-		var a = TestAnnotationObject.create().build();
-		assertEquals(TestAnnotation.class, a.annotationType());
+		var a = T.create().build();
+		assertEquals(TA.class, a.annotationType());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -157,19 +149,9 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void b01_equality_identical() {
-		var a1 = TestAnnotationObject.create()
-			.value("test")
-			.number(42)
-			.flag(true)
-			.array("a", "b")
-			.build();
+		var a1 = T.create().value("a").number(1).flag(true).array("b1", "b2").build();
 
-		var a2 = TestAnnotationObject.create()
-			.value("test")
-			.number(42)
-			.flag(true)
-			.array("a", "b")
-			.build();
+		var a2 = T.create().value("a").number(1).flag(true).array("b1", "b2").build();
 
 		assertEquals(a1, a2);
 		assertEquals(a1.hashCode(), a2.hashCode());
@@ -177,29 +159,20 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void b02_equality_different() {
-		var a1 = TestAnnotationObject.create()
-			.value("test1")
-			.build();
+		var a1 = T.create().value("a1").build();
 
-		var a2 = TestAnnotationObject.create()
-			.value("test2")
-			.build();
+		var a2 = T.create().value("a2").build();
 
 		assertNotEquals(a1, a2);
 	}
 
 	@Test
 	void b03_equality_withDeclaredAnnotation() {
-		@TestAnnotation(value="test", number=42, flag=true, array={"a", "b"})
-		class TestClass {}
+		@TA(value = "a", number = 1, flag = true, array = { "b1", "b2" })
+		class B {}
 
-		var declared = TestClass.class.getAnnotation(TestAnnotation.class);
-		var programmatic = TestAnnotationObject.create()
-			.value("test")
-			.number(42)
-			.flag(true)
-			.array("a", "b")
-			.build();
+		var declared = B.class.getAnnotation(TA.class);
+		var programmatic = T.create().value("a").number(1).flag(true).array("b1", "b2").build();
 
 		assertEquals(declared, programmatic);
 		assertEquals(declared.hashCode(), programmatic.hashCode());
@@ -207,10 +180,7 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void b04_hashCode_consistency() {
-		var a = TestAnnotationObject.create()
-			.value("test")
-			.number(42)
-			.build();
+		var a = T.create().value("a").number(1).build();
 
 		var hash1 = a.hashCode();
 		var hash2 = a.hashCode();
@@ -219,8 +189,8 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void b05_hashCode_notNegativeOne() {
-		var a = TestAnnotationObject.create().build();
-		assertNotEquals(-1, a.hashCode(), "hashCode should not be -1 after postConstruct");
+		var a = T.create().build();
+		assertNotEquals(-1, a.hashCode());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -229,43 +199,24 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void c01_toMap_defaultValues() {
-		var a = TestAnnotationObject.create().build();
-		var map = ((TestAnnotationObject)a).toMap();
-
-		assertNotNull(map);
-		assertEquals("", map.get("value"));
-		assertEquals(0, map.get("number"));
-		assertEquals(false, map.get("flag"));
-		assertArrayEquals(new String[0], (String[])map.get("array"));
+		var a = T.create().build();
+		assertBean(((T)a).toMap(), "value,number,flag,array", ",0,false,[]");
 	}
 
 	@Test
 	void c02_toMap_customValues() {
-		var a = TestAnnotationObject.create()
-			.value("test")
-			.number(42)
-			.flag(true)
-			.array("a", "b")
-			.build();
-		var map = ((TestAnnotationObject)a).toMap();
+		var a = T.create().value("a").number(1).flag(true).array("b1", "b2").build();
 
-		assertEquals("test", map.get("value"));
-		assertEquals(42, map.get("number"));
-		assertEquals(true, map.get("flag"));
-		assertArrayEquals(new String[]{"a", "b"}, (String[])map.get("array"));
+		assertBean(((T)a).toMap(), "value,number,flag,array", "a,1,true,[b1,b2]");
 	}
 
 	@Test
 	void c03_toMap_keySorted() {
-		var a = TestAnnotationObject.create().build();
-		var map = ((TestAnnotationObject)a).toMap();
+		var a = T.create().build();
+		var map = ((T)a).toMap();
 
 		// Map should be ordered by key name
-		var keys = new ArrayList<>(map.keySet());
-		assertEquals("array", keys.get(0));
-		assertEquals("flag", keys.get(1));
-		assertEquals("number", keys.get(2));
-		assertEquals("value", keys.get(3));
+		assertList(map.keySet(), "array", "flag", "number", "value");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -274,7 +225,7 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void d01_toString_notNull() {
-		var a = TestAnnotationObject.create().build();
+		var a = T.create().build();
 		var str = a.toString();
 		assertNotNull(str);
 		assertFalse(str.isEmpty());
@@ -282,14 +233,9 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void d02_toString_containsValues() {
-		var a = TestAnnotationObject.create()
-			.value("test")
-			.number(42)
-			.build();
-		var str = a.toString();
+		var a = T.create().value("a").number(1).build();
 
-		assertTrue(str.contains("test"));
-		assertTrue(str.contains("42"));
+		assertContainsAll(a.toString(), "a", "1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -298,11 +244,7 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void e01_constructor_nullAnnotationType() {
-		var e = assertThrows(IllegalArgumentException.class, () -> {
-			new AnnotationObject.Builder(null);
-		});
-
-		assertTrue(e.getMessage().contains("annotationType"));
+		assertThrows(IllegalArgumentException.class, () -> new AnnotationObject.Builder(null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -311,22 +253,14 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void f01_builder_fluentApi() {
-		var a = TestAnnotationObject.create()
-			.value("test")
-			.number(42)
-			.flag(true)
-			.array("a", "b")
-			.build();
+		var a = T.create().value("a").number(1).flag(true).array("b1", "b2").build();
 
-		assertNotNull(a);
-		assertEquals("test", a.value());
+		assertBean(a, "value,number,flag,array", "a,1,true,[b1,b2]");
 	}
 
 	@Test
 	void f02_builder_multipleBuilds() {
-		var builder = TestAnnotationObject.create()
-			.value("test")
-			.number(42);
+		var builder = T.create().value("a").number(1);
 
 		var a1 = builder.build();
 		var a2 = builder.build();
@@ -338,8 +272,8 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void f03_builder_getAnnotationType() {
-		var builder = TestAnnotationObject.create();
-		assertEquals(TestAnnotation.class, builder.getAnnotationType());
+		var builder = T.create();
+		assertEquals(TA.class, builder.getAnnotationType());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -349,13 +283,9 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void g01_arrayEquality_emptyVsNull() {
 		// Empty array and null should be handled consistently
-		var a1 = TestAnnotationObject.create()
-			.array()
-			.build();
+		var a1 = T.create().array().build();
 
-		var a2 = TestAnnotationObject.create()
-			.array(new String[0])
-			.build();
+		var a2 = T.create().array(new String[0]).build();
 
 		assertEquals(a1, a2);
 	}
@@ -363,13 +293,9 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void g02_arrayEquality_deepEquals() {
 		// Arrays with same content should be equal
-		var a1 = TestAnnotationObject.create()
-			.array("a", "b", "c")
-			.build();
+		var a1 = T.create().array("a", "b", "c").build();
 
-		var a2 = TestAnnotationObject.create()
-			.array(new String[]{"a", "b", "c"})
-			.build();
+		var a2 = T.create().array(new String[] { "a", "b", "c" }).build();
 
 		assertEquals(a1, a2);
 	}
@@ -377,20 +303,16 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void g03_arrayEquality_differentOrder() {
 		// Arrays with different order should not be equal
-		var a1 = TestAnnotationObject.create()
-			.array("a", "b", "c")
-			.build();
+		var a1 = T.create().array("a", "b", "c").build();
 
-		var a2 = TestAnnotationObject.create()
-			.array("c", "b", "a")
-			.build();
+		var a2 = T.create().array("c", "b", "a").build();
 
 		assertNotEquals(a1, a2);
 	}
 
 	@Test
 	void g04_equality_differentType() {
-		var a = TestAnnotationObject.create().build();
+		var a = T.create().build();
 		var other = new Object();
 
 		assertNotEquals(a, other);
@@ -398,7 +320,7 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void g05_equality_null() {
-		var a = TestAnnotationObject.create().build();
+		var a = T.create().build();
 		assertNotEquals(a, null);
 	}
 
@@ -408,9 +330,6 @@ class AnnotationObject_Test extends TestBase {
 
 	@Test
 	void h01_nullBuilder_throwsException() {
-		assertThrows(IllegalArgumentException.class, () ->
-			new TestAnnotationObject(null)
-		);
+		assertThrows(IllegalArgumentException.class, () -> new T(null));
 	}
 }
-
