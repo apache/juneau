@@ -303,7 +303,7 @@
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * @param args The arguments to substitute into the pattern.</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * @return The formatted string.</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String f(String pattern, Object...args) {
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String mf(String pattern, Object...args) {
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">if</strong> (args.length == 0)
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">return</strong> pattern;
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">return</strong> MessageFormat.format(pattern, args);
@@ -408,10 +408,10 @@
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * @param pattern The message pattern using &lt;js&gt;{0}&lt;/js&gt;, &lt;js&gt;{1}&lt;/js&gt;, etc. placeholders.</em>
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * @param args The arguments to substitute into the pattern placeholders.</em>
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * @return A {@link Supplier} that will format the string when {@code get()} is called.</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * @see StringUtils#format(String, Object...)</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * @see StringUtils#mformat(String, Object...)</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Supplier&lt;String&gt; fs(String pattern, Object...args) {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">return</strong> () -&gt; format(pattern, args);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Supplier&lt;String&gt; mfs(String pattern, Object...args) {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">return</strong> () -&gt; mformat(pattern, args);
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 	}
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<em class="jxr_javadoccomment">/**</em>

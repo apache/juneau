@@ -1191,7 +1191,7 @@
 <a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 	<strong class="jxr_keyword">void</strong> a01_serializeNormal(Input input) {
 <a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 			<strong class="jxr_keyword">var</strong> r = s1.serialize(input.in);
-<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 			assertEquals(input.e1, r, fs(<span class="jxr_string">"{0} serialize-normal failed"</span>, input.label));
+<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 			assertEquals(input.e1, r, mfs(<span class="jxr_string">"{0} serialize-normal failed"</span>, input.label));
 <a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 		} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
@@ -1207,7 +1207,7 @@
 <a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 			<strong class="jxr_keyword">var</strong> c = input.in == <strong class="jxr_keyword">null</strong> ? Object.<strong class="jxr_keyword">class</strong> : input.in.getClass();
 <a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 			<strong class="jxr_keyword">var</strong> o = parser.parse(r, c);
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 			r = s1.serialize(o);
-<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 			assertEquals(input.e1, r, fs(<span class="jxr_string">"{0} parse-normal failed"</span>, input.label));
+<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 			assertEquals(input.e1, r, mfs(<span class="jxr_string">"{0} parse-normal failed"</span>, input.label));
 <a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 		} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
@@ -1220,7 +1220,7 @@
 <a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 	<strong class="jxr_keyword">void</strong> a03_serializeReadable(Input input) {
 <a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 			<strong class="jxr_keyword">var</strong> r = s2.serialize(input.in);
-<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 			assertEquals(input.e2, r, fs(<span class="jxr_string">"{0} serialize-readable failed"</span>, input.label));
+<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 			assertEquals(input.e2, r, mfs(<span class="jxr_string">"{0} serialize-readable failed"</span>, input.label));
 <a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 		} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
@@ -1236,7 +1236,7 @@
 <a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 			<strong class="jxr_keyword">var</strong> c = input.in == <strong class="jxr_keyword">null</strong> ? Object.<strong class="jxr_keyword">class</strong> : input.in.getClass();
 <a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 			<strong class="jxr_keyword">var</strong> o = parser.parse(r, c);
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 			r = s2.serialize(o);
-<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 			assertEquals(input.e2, r, fs(<span class="jxr_string">"{0} parse-readable failed"</span>, input.label));
+<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 			assertEquals(input.e2, r, mfs(<span class="jxr_string">"{0} parse-readable failed"</span>, input.label));
 <a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 		} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
@@ -1249,7 +1249,7 @@
 <a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 	<strong class="jxr_keyword">void</strong> a05_serializeNsEnabled(Input input) {
 <a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 			<strong class="jxr_keyword">var</strong> r = s3.serialize(input.in);
-<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 			assertEquals(input.e3, r, fs(<span class="jxr_string">"{0} serialize-ns-enabled failed"</span>, input.label));
+<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 			assertEquals(input.e3, r, mfs(<span class="jxr_string">"{0} serialize-ns-enabled failed"</span>, input.label));
 <a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 		} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
@@ -1265,7 +1265,7 @@
 <a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 			<strong class="jxr_keyword">var</strong> c = input.in == <strong class="jxr_keyword">null</strong> ? Object.<strong class="jxr_keyword">class</strong> : input.in.getClass();
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 			<strong class="jxr_keyword">var</strong> o = parser.parse(r, c);
 <a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 			r = s3.serialize(o);
-<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 			assertEquals(input.e3, r, fs(<span class="jxr_string">"{0} parse-ns-enabled failed"</span>, input.label));
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 			assertEquals(input.e3, r, mfs(<span class="jxr_string">"{0} parse-ns-enabled failed"</span>, input.label));
 <a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 		} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {

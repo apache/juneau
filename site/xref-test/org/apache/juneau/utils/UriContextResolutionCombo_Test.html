@@ -1104,7 +1104,7 @@
 <a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 	<strong class="jxr_keyword">void</strong> a01_testAbsoluteResource(Tester t) {
 <a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		assertEquals(t.results.aResource, x, fs(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		assertEquals(t.results.aResource, x, mfs(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
 <a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 	}
 <a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 
 <a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 	@ParameterizedTest

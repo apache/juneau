@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * @return This instance for method chaining.</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">public</strong> <a name="AssertionArgs" href="../../../../../org/apache/juneau/junit/bct/AssertionArgs.html#AssertionArgs">AssertionArgs</a> setMessage(String message, Object...args) {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		messageSupplier = fs(message, args);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		messageSupplier = mfs(message, args);
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
@@ -268,7 +268,7 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * @return A supplier that produces the composed error message.</em>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">protected</strong> Supplier&lt;String&gt; getMessage(String msg, Object...args) {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">return</strong> messageSupplier == <strong class="jxr_keyword">null</strong> ? fs(msg, args) : fs(<span class="jxr_string">"{0}, Caused by: {1}"</span>, messageSupplier.get(), f(msg, args));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">return</strong> messageSupplier == <strong class="jxr_keyword">null</strong> ? mfs(msg, args) : mfs(<span class="jxr_string">"{0}, Caused by: {1}"</span>, messageSupplier.get(), mf(msg, args));
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> }
 </pre>

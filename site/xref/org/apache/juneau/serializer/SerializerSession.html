@@ -988,7 +988,7 @@
 <a class="jxr_linenumber" name="L980" href="#L980">980</a> 	@Override
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> onError(Throwable t, String msg, Object...args) {
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 		<strong class="jxr_keyword">if</strong> (nn(listener))
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 			listener.onError(<strong class="jxr_keyword">this</strong>, t, format(msg, args));
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 			listener.onError(<strong class="jxr_keyword">this</strong>, t, mformat(msg, args));
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 		<strong class="jxr_keyword">super</strong>.onError(t, msg, args);
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 	}
 <a class="jxr_linenumber" name="L986" href="#L986">986</a> 

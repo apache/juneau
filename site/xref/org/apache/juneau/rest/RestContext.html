@@ -4908,11 +4908,11 @@
 <a class="jxr_linenumber" name="L4900" href="#L4900">4900</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,RestContext&gt; getGlobalRegistry() { <strong class="jxr_keyword">return</strong> u(REGISTRY); }
 <a class="jxr_linenumber" name="L4901" href="#L4901">4901</a> 
 <a class="jxr_linenumber" name="L4902" href="#L4902">4902</a> 	<strong class="jxr_keyword">static</strong> ServletException servletException(String msg, Object...args) {
-<a class="jxr_linenumber" name="L4903" href="#L4903">4903</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ServletException(f(msg, args));
+<a class="jxr_linenumber" name="L4903" href="#L4903">4903</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ServletException(mf(msg, args));
 <a class="jxr_linenumber" name="L4904" href="#L4904">4904</a> 	}
 <a class="jxr_linenumber" name="L4905" href="#L4905">4905</a> 
 <a class="jxr_linenumber" name="L4906" href="#L4906">4906</a> 	<strong class="jxr_keyword">static</strong> ServletException servletException(Throwable t, String msg, Object...args) {
-<a class="jxr_linenumber" name="L4907" href="#L4907">4907</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ServletException(f(msg, args), t);
+<a class="jxr_linenumber" name="L4907" href="#L4907">4907</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ServletException(mf(msg, args), t);
 <a class="jxr_linenumber" name="L4908" href="#L4908">4908</a> 	}
 <a class="jxr_linenumber" name="L4909" href="#L4909">4909</a> 
 <a class="jxr_linenumber" name="L4910" href="#L4910">4910</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;?&gt; resource;
@@ -5108,7 +5108,7 @@
 <a class="jxr_linenumber" name="L5100" href="#L5100">5100</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5101" href="#L5101">5101</a> 				x.invoke(beanStore, getResource());
 <a class="jxr_linenumber" name="L5102" href="#L5102">5102</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L5103" href="#L5103">5103</a> 				getLogger().log(Level.WARNING, unwrap(e), () -&gt; f(<span class="jxr_string">"Error occurred invoking servlet-destroy method ''{0}''."</span>, x.getFullName()));
+<a class="jxr_linenumber" name="L5103" href="#L5103">5103</a> 				getLogger().log(Level.WARNING, unwrap(e), () -&gt; mf(<span class="jxr_string">"Error occurred invoking servlet-destroy method ''{0}''."</span>, x.getFullName()));
 <a class="jxr_linenumber" name="L5104" href="#L5104">5104</a> 			}
 <a class="jxr_linenumber" name="L5105" href="#L5105">5105</a> 		}
 <a class="jxr_linenumber" name="L5106" href="#L5106">5106</a> 
@@ -5901,7 +5901,7 @@
 <a class="jxr_linenumber" name="L5893" href="#L5893">5893</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5894" href="#L5894">5894</a> 				x.invoke(session.getBeanStore(), session.getResource());
 <a class="jxr_linenumber" name="L5895" href="#L5895">5895</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L5896" href="#L5896">5896</a> 				getLogger().log(Level.WARNING, unwrap(e), () -&gt; f(<span class="jxr_string">"Error occurred invoking finish-call method ''{0}''."</span>, x.getFullName()));
+<a class="jxr_linenumber" name="L5896" href="#L5896">5896</a> 				getLogger().log(Level.WARNING, unwrap(e), () -&gt; mf(<span class="jxr_string">"Error occurred invoking finish-call method ''{0}''."</span>, x.getFullName()));
 <a class="jxr_linenumber" name="L5897" href="#L5897">5897</a> 			}
 <a class="jxr_linenumber" name="L5898" href="#L5898">5898</a> 		}
 <a class="jxr_linenumber" name="L5899" href="#L5899">5899</a> 	}

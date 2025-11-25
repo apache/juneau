@@ -221,9 +221,9 @@
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * @return A new {@link BasicAssertionError}.</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">protected</strong> <a name="BasicAssertionError" href="../../../../org/apache/juneau/BasicAssertionError.html#BasicAssertionError">BasicAssertionError</a> error(Throwable cause, String msg, Object...args) {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		msg = format(msg, args);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		msg = mformat(msg, args);
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">if</strong> (nn(<strong class="jxr_keyword">this</strong>.msg))
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			msg = format(<strong class="jxr_keyword">this</strong>.msg, <strong class="jxr_keyword">this</strong>.msgArgs).replace(<span class="jxr_string">"&lt;&lt;&lt;MSG&gt;&gt;&gt;"</span>, msg);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			msg = mformat(<strong class="jxr_keyword">this</strong>.msg, <strong class="jxr_keyword">this</strong>.msgArgs).replace(<span class="jxr_string">"&lt;&lt;&lt;MSG&gt;&gt;&gt;"</span>, msg);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">if</strong> (nn(out))
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			out.println(msg);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">if</strong> (nn(throwable)) {

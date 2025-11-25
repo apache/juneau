@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">this</strong>.parameters = memoize(<strong class="jxr_keyword">this</strong>::findParameters);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">this</strong>.exceptions = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getExceptionTypes()).map(ClassInfo::of).toList());
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">this</strong>.declaredAnnotations = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getDeclaredAnnotations()).flatMap(a -&gt; AnnotationUtils.streamRepeated(a)).map(a -&gt; ai((<a name="Annotatable" href="../../../../../org/apache/juneau/common/reflect/Annotatable.html#Annotatable">Annotatable</a>)<strong class="jxr_keyword">this</strong>, a)).toList());
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">this</strong>.shortName = memoize(() -&gt; f(<span class="jxr_string">"{0}({1})"</span>, getSimpleName(), getParameters().stream().map(p -&gt; p.getParameterType().getNameSimple()).collect(joining(<span class="jxr_string">","</span>))));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">this</strong>.shortName = memoize(() -&gt; mf(<span class="jxr_string">"{0}({1})"</span>, getSimpleName(), getParameters().stream().map(p -&gt; p.getParameterType().getNameSimple()).collect(joining(<span class="jxr_string">","</span>))));
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">this</strong>.fullName = memoize(<strong class="jxr_keyword">this</strong>::findFullName);
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
@@ -761,9 +761,9 @@
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkIndex(<strong class="jxr_keyword">int</strong> index) {
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">int</strong> pc = getParameterCount();
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 		<strong class="jxr_keyword">if</strong> (pc == 0)
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IndexOutOfBoundsException(format(<span class="jxr_string">"Invalid index ''{0}''.  No parameters."</span>, index));
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IndexOutOfBoundsException(mformat(<span class="jxr_string">"Invalid index ''{0}''.  No parameters."</span>, index));
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">if</strong> (index &lt; 0 || index &gt;= pc)
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IndexOutOfBoundsException(format(<span class="jxr_string">"Invalid index ''{0}''.  Parameter count: {1}"</span>, index, pc));
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IndexOutOfBoundsException(mformat(<span class="jxr_string">"Invalid index ''{0}''.  Parameter count: {1}"</span>, index, pc));
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 	}
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">private</strong> List&lt;ParameterInfo&gt; findParameters() {

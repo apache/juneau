@@ -407,10 +407,10 @@
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 				fail(<span class="jxr_string">"ParseException expected.  Test="</span>+input.name+<span class="jxr_string">", Input="</span> + input.jsonReadable);
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 			} <strong class="jxr_keyword">catch</strong> (ParseException e) {
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 				<strong class="jxr_keyword">if</strong> (input.errorText != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), mfs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 			} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 				<strong class="jxr_keyword">if</strong> (input.errorText != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 					assertTrue(e.getMessage().contains(input.errorText), fs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getMessage()));
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 					assertTrue(e.getMessage().contains(input.errorText), mfs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getMessage()));
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 			} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 				<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 			} <strong class="jxr_keyword">catch</strong> (Throwable t) {
@@ -423,10 +423,10 @@
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 				p.parse(input.json, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 			} <strong class="jxr_keyword">catch</strong> (ParseException e) {
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 				<strong class="jxr_keyword">if</strong> (input.errorText != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), mfs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 			} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 				<strong class="jxr_keyword">if</strong> (input.errorText != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 					assertTrue(e.getMessage().contains(input.errorText), fs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getMessage()));
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 					assertTrue(e.getMessage().contains(input.errorText), mfs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getMessage()));
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 			} <strong class="jxr_keyword">catch</strong> (Throwable t) {
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 				fail(<span class="jxr_string">"Expected ParseException.  Test="</span>+input.name+<span class="jxr_string">", Input="</span> + input.jsonReadable + <span class="jxr_string">", Exception="</span> + t.getClass().getName() + <span class="jxr_string">","</span> +t.getLocalizedMessage());
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			}
@@ -452,7 +452,7 @@
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 				p.parse(input.json, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 			} <strong class="jxr_keyword">catch</strong> (ParseException e) {
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 				<strong class="jxr_keyword">if</strong> (input.errorText != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), mfs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 			} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 				<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 			} <strong class="jxr_keyword">catch</strong> (Throwable t) {
@@ -465,7 +465,7 @@
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 				p.parse(input.json, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 			} <strong class="jxr_keyword">catch</strong> (ParseException e) {
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 				<strong class="jxr_keyword">if</strong> (input.errorText != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), mfs(<span class="jxr_string">"Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}"</span>, input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 			} <strong class="jxr_keyword">catch</strong> (Throwable t) {
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 				fail(<span class="jxr_string">"Expected ParseException.  Test="</span>+input.name+<span class="jxr_string">", Input="</span> + input.jsonReadable + <span class="jxr_string">", Exception="</span> + t.getClass().getName() + <span class="jxr_string">","</span> +t.getLocalizedMessage());
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 			}

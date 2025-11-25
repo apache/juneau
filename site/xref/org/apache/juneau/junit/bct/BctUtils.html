@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * @return A new {@link AssertionFailedError} with formatted message and values.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> AssertionFailedError assertEqualsFailed(Object expected, Object actual, Supplier&lt;String&gt; messageSupplier) {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AssertionFailedError(opt(messageSupplier).map(x -&gt; x.get()).orElse(<span class="jxr_string">"Equals assertion failed."</span>) + f(<span class="jxr_string">" ==&gt; expected: &lt;{0}&gt; but was: &lt;{1}&gt;"</span>, expected, actual), expected, actual);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AssertionFailedError(opt(messageSupplier).map(x -&gt; x.get()).orElse(<span class="jxr_string">"Equals assertion failed."</span>) + mf(<span class="jxr_string">" ==&gt; expected: &lt;{0}&gt; but was: &lt;{1}&gt;"</span>, expected, actual), expected, actual);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<em class="jxr_javadoccomment">/**</em>

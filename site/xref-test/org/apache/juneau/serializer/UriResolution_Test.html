@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  					System.out.println(r);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  				}
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  				assertEquals(expected, r, fs(<span class="jxr_string">"{0}/{1} serialize-normal failed"</span>, label, s.getClass().getSimpleName()));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  				assertEquals(expected, r, mfs(<span class="jxr_string">"{0}/{1} serialize-normal failed"</span>, label, s.getClass().getSimpleName()));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  				<strong class="jxr_keyword">throw</strong> e;
@@ -83,7 +83,7 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  				<strong class="jxr_keyword">var</strong> m = p.parse(r, TreeMap.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  				<strong class="jxr_keyword">var</strong> r2 = Json5Serializer.DEFAULT.toString(m);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  				assertEquals(r2, results.json, fs(<span class="jxr_string">"{0}/{1} parse failed"</span>, label, s.getClass().getSimpleName()));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  				assertEquals(r2, results.json, mfs(<span class="jxr_string">"{0}/{1} parse failed"</span>, label, s.getClass().getSimpleName()));
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  				<strong class="jxr_keyword">throw</strong> e;

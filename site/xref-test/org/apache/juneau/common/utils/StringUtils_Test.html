@@ -3104,14 +3104,14 @@
 <a class="jxr_linenumber" name="L3096" href="#L3096">3096</a> 		assertNull(toStringArray(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L3097" href="#L3097">3097</a> 		assertList(toStringArray(Collections.emptyList()));
 <a class="jxr_linenumber" name="L3098" href="#L3098">3098</a> 		assertList(toStringArray(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)), <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
-<a class="jxr_linenumber" name="L3099" href="#L3099">3099</a> 		
+<a class="jxr_linenumber" name="L3099" href="#L3099">3099</a> 
 <a class="jxr_linenumber" name="L3100" href="#L3100">3100</a> 		<em class="jxr_comment">// Set.of() doesn't preserve order, so use LinkedHashSet for order-sensitive test</em>
 <a class="jxr_linenumber" name="L3101" href="#L3101">3101</a> 		<strong class="jxr_keyword">var</strong> set = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;String&gt;();
 <a class="jxr_linenumber" name="L3102" href="#L3102">3102</a> 		set.add(<span class="jxr_string">"x"</span>);
 <a class="jxr_linenumber" name="L3103" href="#L3103">3103</a> 		set.add(<span class="jxr_string">"y"</span>);
 <a class="jxr_linenumber" name="L3104" href="#L3104">3104</a> 		set.add(<span class="jxr_string">"z"</span>);
 <a class="jxr_linenumber" name="L3105" href="#L3105">3105</a> 		assertList(toStringArray(set), <span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"z"</span>);
-<a class="jxr_linenumber" name="L3106" href="#L3106">3106</a> 		
+<a class="jxr_linenumber" name="L3106" href="#L3106">3106</a> 
 <a class="jxr_linenumber" name="L3107" href="#L3107">3107</a> 		assertList(toStringArray(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>, <span class="jxr_string">"baz"</span>))), <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>, <span class="jxr_string">"baz"</span>);
 <a class="jxr_linenumber" name="L3108" href="#L3108">3108</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
 <a class="jxr_linenumber" name="L3109" href="#L3109">3109</a> 		list.add(<span class="jxr_string">"one"</span>);

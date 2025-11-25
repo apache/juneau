@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertEqualsAll(Object...values) {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 1; i &lt; values.length; i++) {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			assertEquals(values[0], values[i], fs(<span class="jxr_string">"Elements at index {0} and {1} did not match. {0}={2}, {1}={3}"</span>, 0, i, r(values[0]), r(values[i])));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			assertEquals(values[0], values[i], mfs(<span class="jxr_string">"Elements at index {0} and {1} did not match. {0}={2}, {1}={3}"</span>, 0, i, r(values[0]), r(values[i])));
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		}
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
@@ -179,7 +179,7 @@
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertNotEqualsAny(Object actual, Object...values) {
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertNotNull(actual, <span class="jxr_string">"Value was null."</span>);
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; values.length; i++) {
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			assertNotEquals(values[i], actual, fs(<span class="jxr_string">"Element at index {0} unexpectedly matched.  expected={1}, actual={2}"</span>, i, values[i], s(actual)));
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			assertNotEquals(values[i], actual, mfs(<span class="jxr_string">"Element at index {0} unexpectedly matched.  expected={1}, actual={2}"</span>, i, values[i], s(actual)));
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		}
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
@@ -192,21 +192,21 @@
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Throwable&gt; T assertThrowable(Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt; expectedType, String expectedSubstring, T t) {
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> messages = getMessages(t);
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertTrue(messages.contains(expectedSubstring), fs(<span class="jxr_string">"Expected message to contain: {0}.\nActual:\n{1}"</span>, expectedSubstring, messages));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertTrue(messages.contains(expectedSubstring), mfs(<span class="jxr_string">"Expected message to contain: {0}.\nActual:\n{1}"</span>, expectedSubstring, messages));
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Throwable&gt; T assertThrowsWithMessage(Class&lt;T&gt; expectedType, List&lt;String&gt; expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> exception = Assertions.assertThrows(expectedType, executable);
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> messages = getMessages(exception);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		expectedSubstrings.stream().forEach(x -&gt; assertTrue(messages.contains(x), fs(<span class="jxr_string">"Expected message to contain: {0}.\nActual:\n{1}"</span>, x, messages)));
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		expectedSubstrings.stream().forEach(x -&gt; assertTrue(messages.contains(x), mfs(<span class="jxr_string">"Expected message to contain: {0}.\nActual:\n{1}"</span>, x, messages)));
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">return</strong> exception;
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Throwable&gt; T assertThrowsWithMessage(Class&lt;T&gt; expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> exception = Assertions.assertThrows(expectedType, executable);
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> messages = getMessages(exception);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertTrue(messages.contains(expectedSubstring), fs(<span class="jxr_string">"Expected message to contain: {0}.\nActual:\n{1}"</span>, expectedSubstring, messages));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertTrue(messages.contains(expectedSubstring), mfs(<span class="jxr_string">"Expected message to contain: {0}.\nActual:\n{1}"</span>, expectedSubstring, messages));
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">return</strong> exception;
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 

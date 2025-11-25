@@ -160,7 +160,7 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> | <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<strong class="jxr_keyword">throw</strong> toRex(e);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			}
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">this</strong>.uri = java.net.URI.create(format(value, args));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">this</strong>.uri = java.net.URI.create(mformat(value, args));
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	}
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 
