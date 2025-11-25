@@ -56,12 +56,15 @@ public class LocalFile {
 	 * Constructor for file system file.
 	 *
 	 * @param path Filesystem file location.  Must not be <jk>null</jk>.
+	 * 	Must not be a root path (must have a filename).
 	 */
 	public LocalFile(Path path) {
 		this.clazz = null;
 		this.clazzPath = null;
 		this.path = assertArgNotNull("path", path);
-		this.name = path.getFileName().toString();
+		var fileName = path.getFileName();
+		assertArg(fileName != null, "Argument 'path' must not be a root path (must have a filename).");
+		this.name = opt(fileName).map(Object::toString).orElse(null);
 	}
 
 	/**
@@ -95,8 +98,12 @@ public class LocalFile {
 			if (nn(cache))
 				return new ByteArrayInputStream(cache);
 		}
-		if (nn(clazz))
-			return clazz.getResourceAsStream(clazzPath);
+		if (nn(clazz)) {
+			var is = clazz.getResourceAsStream(clazzPath);
+			if (is == null)
+				throw new IOException("Classpath resource not found: " + clazzPath + " (relative to " + clazz.getName() + ")");
+			return is;
+		}
 		return Files.newInputStream(path);
 	}
 

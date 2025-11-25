@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.common.io;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.nio.*;
 import java.nio.charset.*;
-import java.util.*;
 
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
@@ -95,8 +96,8 @@ public class ReaderInputStream extends InputStream {
 	 * Construct a new {@link ReaderInputStream} with a default input buffer size of
 	 * <c>1024</c> characters.
 	 *
-	 * @param reader the target {@link Reader}
-	 * @param charset the charset encoding
+	 * @param reader the target {@link Reader}.  Must not be <jk>null</jk>.
+	 * @param charset the charset encoding.  Must not be <jk>null</jk>.
 	 */
 	public ReaderInputStream(Reader reader, Charset charset) {
 		this(reader, charset, DEFAULT_BUFFER_SIZE);
@@ -105,14 +106,15 @@ public class ReaderInputStream extends InputStream {
 	/**
 	 * Construct a new {@link ReaderInputStream}.
 	 *
-	 * @param reader the target {@link Reader}
-	 * @param charset the charset encoding
-	 * @param bufferSize the size of the input buffer in number of characters
+	 * @param reader the target {@link Reader}.  Must not be <jk>null</jk>.
+	 * @param charset the charset encoding.  Must not be <jk>null</jk>.
+	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
+	@SuppressWarnings("resource")
 	public ReaderInputStream(Reader reader, Charset charset, int bufferSize) {
 		// @formatter:off
-		this(reader,
-			 charset.newEncoder()
+		this(assertArgNotNull("reader", reader),
+			 assertArgNotNull("charset", charset).newEncoder()
 					.onMalformedInput(CodingErrorAction.REPLACE)
 					.onUnmappableCharacter(CodingErrorAction.REPLACE),
 			 bufferSize
@@ -123,8 +125,8 @@ public class ReaderInputStream extends InputStream {
 	/**
 	 * Construct a new {@link ReaderInputStream}.
 	 *
-	 * @param reader the target {@link Reader}
-	 * @param encoder the charset encoder
+	 * @param reader the target {@link Reader}.  Must not be <jk>null</jk>.
+	 * @param encoder the charset encoder.  Must not be <jk>null</jk>.
 	 * @since 2.1
 	 */
 	public ReaderInputStream(Reader reader, CharsetEncoder encoder) {
@@ -134,13 +136,14 @@ public class ReaderInputStream extends InputStream {
 	/**
 	 * Construct a new {@link ReaderInputStream}.
 	 *
-	 * @param reader the target {@link Reader}
-	 * @param encoder the charset encoder
-	 * @param bufferSize the size of the input buffer in number of characters
+	 * @param reader the target {@link Reader}.  Must not be <jk>null</jk>.
+	 * @param encoder the charset encoder.  Must not be <jk>null</jk>.
+	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
 	public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize) {
-		this.reader = reader;
-		this.encoder = encoder;
+		this.reader = assertArgNotNull("reader", reader);
+		this.encoder = assertArgNotNull("encoder", encoder);
+		assertArg(bufferSize > 0, "Argument 'bufferSize' must be positive.");
 		this.encoderIn = CharBuffer.allocate(bufferSize);
 		this.encoderIn.flip(); // Fixes Java 11 issue.
 		this.encoderOut = ByteBuffer.allocate(128);
@@ -151,8 +154,8 @@ public class ReaderInputStream extends InputStream {
 	 * Construct a new {@link ReaderInputStream} with a default input buffer size of
 	 * <c>1024</c> characters.
 	 *
-	 * @param reader the target {@link Reader}
-	 * @param charsetName the name of the charset encoding
+	 * @param reader the target {@link Reader}.  Must not be <jk>null</jk>.
+	 * @param charsetName the name of the charset encoding.  Must not be <jk>null</jk>.
 	 */
 	public ReaderInputStream(Reader reader, String charsetName) {
 		this(reader, charsetName, DEFAULT_BUFFER_SIZE);
@@ -161,12 +164,12 @@ public class ReaderInputStream extends InputStream {
 	/**
 	 * Construct a new {@link ReaderInputStream}.
 	 *
-	 * @param reader the target {@link Reader}
-	 * @param charsetName the name of the charset encoding
-	 * @param bufferSize the size of the input buffer in number of characters
+	 * @param reader the target {@link Reader}.  Must not be <jk>null</jk>.
+	 * @param charsetName the name of the charset encoding.  Must not be <jk>null</jk>.
+	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
 	public ReaderInputStream(Reader reader, String charsetName, int bufferSize) {
-		this(reader, Charset.forName(charsetName), bufferSize);
+		this(reader, Charset.forName(assertArgNotNull("charsetName", charsetName)), bufferSize);
 	}
 
 	/**
@@ -209,6 +212,7 @@ public class ReaderInputStream extends InputStream {
 	 */
 	@Override
 	public int read(byte[] b) throws IOException {
+		assertArgNotNull("b", b);
 		return read(b, 0, b.length);
 	}
 
@@ -224,7 +228,7 @@ public class ReaderInputStream extends InputStream {
 	 */
 	@Override
 	public int read(byte[] array, int off, int len) throws IOException {
-		Objects.requireNonNull(array, "array");
+		assertArgNotNull("array", array);
 		if (len < 0 || off < 0 || (off + len) > array.length) {
 			throw new IndexOutOfBoundsException("Array Size=" + array.length + ", offset=" + off + ", length=" + len);
 		}

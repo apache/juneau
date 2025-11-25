@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.function;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -73,10 +74,10 @@ public class ResettableSupplier<T> implements Supplier<T> {
 	/**
 	 * Constructor.
 	 *
-	 * @param supplier The underlying supplier to call when computing values.
+	 * @param supplier The underlying supplier to call when computing values.  Must not be <jk>null</jk>.
 	 */
 	public ResettableSupplier(Supplier<T> supplier) {
-		this.supplier = supplier;
+		this.supplier = assertArgNotNull("supplier", supplier);
 	}
 
 	/**

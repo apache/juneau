@@ -3,7 +3,7 @@
 This document outlines recommended methods to add to the `StringUtils` class to make it a comprehensive string utility library suitable for external use.
 
 ## Current Status
-The `StringUtils` class currently has 174+ public static methods covering:
+The `StringUtils` class currently has 187+ public static methods covering:
 - Base64 encoding/decoding
 - Hex encoding/decoding  
 - URL encoding/decoding
@@ -28,10 +28,10 @@ The `StringUtils` class currently has 174+ public static methods covering:
 - ✅ `isAlphaNumeric(String str)` - Implemented
 - ✅ `isDigit(String str)` - Implemented
 - ✅ `isWhitespace(String str)` - Implemented
-- [ ] `isEmpty(String str)` - Check if string is null or empty (already has isNotEmpty)
-- [ ] `isEmail(String str)` - Basic email validation
-- [ ] `isPhoneNumber(String str)` - Basic phone number validation
-- [ ] `isCreditCard(String str)` - Credit card number validation (Luhn algorithm)
+- ✅ `isEmpty(String str)` - Check if string is null or empty - Implemented
+- ✅ `isEmail(String str)` - Basic email validation - Implemented
+- ✅ `isPhoneNumber(String str)` - Basic phone number validation - Implemented
+- ✅ `isCreditCard(String str)` - Credit card number validation (Luhn algorithm) - Implemented
 
 ### 3. String Manipulation
 - ✅ `capitalize(String str)` - Implemented
@@ -60,15 +60,15 @@ The `StringUtils` class currently has 174+ public static methods covering:
 
 ### 4. String Searching and Matching
 - ✅ `countChars(String str, char search)` - Implemented (similar to countMatches for char)
-- [ ] `indexOf(String str, String search)` - Find index of substring
-- [ ] `indexOfIgnoreCase(String str, String search)` - Case-insensitive indexOf
-- [ ] `lastIndexOf(String str, String search)` - Find last index of substring
-- [ ] `lastIndexOfIgnoreCase(String str, String search)` - Case-insensitive lastIndexOf
-- [ ] `containsIgnoreCase(String str, String search)` - Case-insensitive contains
-- [ ] `startsWithIgnoreCase(String str, String prefix)` - Case-insensitive startsWith
-- [ ] `endsWithIgnoreCase(String str, String suffix)` - Case-insensitive endsWith
-- [ ] `matches(String str, String regex)` - Check if string matches regex
-- [ ] `countMatches(String str, String search)` - Count occurrences of substring
+- ✅ `indexOf(String str, String search)` - Find index of substring - Implemented
+- ✅ `indexOfIgnoreCase(String str, String search)` - Case-insensitive indexOf - Implemented
+- ✅ `lastIndexOf(String str, String search)` - Find last index of substring - Implemented
+- ✅ `lastIndexOfIgnoreCase(String str, String search)` - Case-insensitive lastIndexOf - Implemented
+- ✅ `containsIgnoreCase(String str, String search)` - Case-insensitive contains - Implemented
+- ✅ `startsWithIgnoreCase(String str, String prefix)` - Case-insensitive startsWith - Implemented
+- ✅ `endsWithIgnoreCase(String str, String suffix)` - Case-insensitive endsWith - Implemented
+- ✅ `matches(String str, String regex)` - Check if string matches regex - Implemented
+- ✅ `countMatches(String str, String search)` - Count occurrences of substring - Implemented
 
 ### 5. Case Conversion
 - ✅ `lc(String str)` - Implemented (toLowerCase wrapper)
@@ -196,7 +196,7 @@ The `StringUtils` class currently has 174+ public static methods covering:
 5. ✅ String cleaning and sanitization methods - Completed
 
 ### Medium Priority (Useful Utilities)
-1. String searching and matching methods
+1. ✅ String searching and matching methods - Completed
 2. String formatting and templates
 3. String comparison and sorting methods
 4. String generation and random methods

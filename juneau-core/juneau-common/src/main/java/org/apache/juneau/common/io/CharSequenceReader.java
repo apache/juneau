@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.io;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -71,6 +72,7 @@ public class CharSequenceReader extends BufferedReader {
 
 	@Override /* Overridden from Reader */
 	public int read(char[] cbuf, int off, int len) {
+		assertArgNotNull("cbuf", cbuf);
 		if (next >= length)
 			return -1;
 		int n = Math.min(length - next, len);

@@ -1100,6 +1100,428 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isWhitespace("hello"));
 	}
 
+	@Test void a49_isEmpty() {
+		assertTrue(StringUtils.isEmpty(null));
+		assertTrue(StringUtils.isEmpty(""));
+		assertFalse(StringUtils.isEmpty(" "));
+		assertFalse(StringUtils.isEmpty("a"));
+		assertFalse(StringUtils.isEmpty("hello"));
+	}
+
+	@Test void a50_isEmail() {
+		assertFalse(isEmail(null));
+		assertFalse(isEmail(""));
+		assertFalse(isEmail(" "));
+		assertFalse(isEmail("invalid"));
+		assertFalse(isEmail("@example.com"));
+		assertFalse(isEmail("user@"));
+		assertFalse(isEmail("user@example"));
+		assertFalse(isEmail("user@.com"));
+		assertFalse(isEmail("@.com"));
+		
+		// Valid emails
+		assertTrue(isEmail("user@example.com"));
+		assertTrue(isEmail("test.email@example.com"));
+		assertTrue(isEmail("user+tag@example.com"));
+		assertTrue(isEmail("user_name@example.com"));
+		assertTrue(isEmail("user-name@example.com"));
+		assertTrue(isEmail("user123@example.com"));
+		assertTrue(isEmail("user@example.co.uk"));
+		assertTrue(isEmail("user@subdomain.example.com"));
+		assertTrue(isEmail("a@b.co"));
+		assertTrue(isEmail("user.name+tag+sorting@example.com"));
+	}
+
+	@Test void a51_isPhoneNumber() {
+		assertFalse(isPhoneNumber(null));
+		assertFalse(isPhoneNumber(""));
+		assertFalse(isPhoneNumber(" "));
+		assertFalse(isPhoneNumber("123"));
+		assertFalse(isPhoneNumber("12345"));
+		assertFalse(isPhoneNumber("abc1234567"));
+		assertFalse(isPhoneNumber("1234567890123456")); // Too long (16 digits)
+		
+		// Valid phone numbers
+		assertTrue(isPhoneNumber("1234567890")); // 10 digits
+		assertTrue(isPhoneNumber("12345678901")); // 11 digits
+		assertTrue(isPhoneNumber("123456789012345")); // 15 digits (max)
+		assertTrue(isPhoneNumber("(123) 456-7890"));
+		assertTrue(isPhoneNumber("123-456-7890"));
+		assertTrue(isPhoneNumber("123.456.7890"));
+		assertTrue(isPhoneNumber("123 456 7890"));
+		assertTrue(isPhoneNumber("+1 123-456-7890"));
+		assertTrue(isPhoneNumber("+44 20 1234 5678"));
+		assertTrue(isPhoneNumber("+1 (123) 456-7890"));
+	}
+
+	@Test void a52_isCreditCard() {
+		assertFalse(isCreditCard(null));
+		assertFalse(isCreditCard(""));
+		assertFalse(isCreditCard(" "));
+		assertFalse(isCreditCard("1234567890")); // Too short
+		assertFalse(isCreditCard("12345678901234567890")); // Too long (20 digits)
+		assertFalse(isCreditCard("1234567890123")); // Invalid Luhn
+		assertFalse(isCreditCard("1234567890124")); // Invalid Luhn (wrong check digit)
+		assertFalse(isCreditCard("abc1234567890")); // Contains letters
+		
+		// Valid credit card numbers (test cards that pass Luhn algorithm)
+		assertTrue(isCreditCard("4532015112830366")); // Visa test card
+		assertTrue(isCreditCard("4532-0151-1283-0366")); // With hyphens
+		assertTrue(isCreditCard("4532 0151 1283 0366")); // With spaces
+		assertTrue(isCreditCard("5425233430109903")); // MasterCard test card
+		assertTrue(isCreditCard("378282246310005")); // American Express test card
+		assertTrue(isCreditCard("6011111111111117")); // Discover test card
+		assertTrue(isCreditCard("4111111111111111")); // Visa test card
+		assertTrue(isCreditCard("5555555555554444")); // MasterCard test card
+	}
+
+	@Test void a53_indexOf() {
+		assertEquals(6, StringUtils.indexOf("hello world", "world"));
+		assertEquals(0, StringUtils.indexOf("hello world", "hello"));
+		assertEquals(2, StringUtils.indexOf("hello world", "llo"));
+		assertEquals(-1, StringUtils.indexOf("hello world", "xyz"));
+		assertEquals(-1, StringUtils.indexOf((String)null, "test"));
+		assertEquals(-1, StringUtils.indexOf("test", (String)null));
+		assertEquals(-1, StringUtils.indexOf((String)null, (String)null));
+		assertEquals(0, StringUtils.indexOf("hello", "hello"));
+		assertEquals(-1, StringUtils.indexOf("hello", "hello world"));
+	}
+
+	@Test void a54_indexOfIgnoreCase() {
+		assertEquals(6, indexOfIgnoreCase("Hello World", "world"));
+		assertEquals(6, indexOfIgnoreCase("Hello World", "WORLD"));
+		assertEquals(0, indexOfIgnoreCase("Hello World", "hello"));
+		assertEquals(0, indexOfIgnoreCase("Hello World", "HELLO"));
+		assertEquals(2, indexOfIgnoreCase("Hello World", "LLO"));
+		assertEquals(-1, indexOfIgnoreCase("Hello World", "xyz"));
+		assertEquals(-1, indexOfIgnoreCase(null, "test"));
+		assertEquals(-1, indexOfIgnoreCase("test", null));
+		assertEquals(-1, indexOfIgnoreCase(null, null));
+	}
+
+	@Test void a55_lastIndexOf() {
+		assertEquals(12, lastIndexOf("hello world world", "world"));
+		assertEquals(6, lastIndexOf("hello world", "world"));
+		assertEquals(0, lastIndexOf("hello world", "hello"));
+		assertEquals(-1, lastIndexOf("hello world", "xyz"));
+		assertEquals(-1, lastIndexOf(null, "test"));
+		assertEquals(-1, lastIndexOf("test", null));
+		assertEquals(-1, lastIndexOf(null, null));
+		assertEquals(4, lastIndexOf("ababab", "ab")); // "ab" appears at positions 0, 2, 4
+	}
+
+	@Test void a56_lastIndexOfIgnoreCase() {
+		assertEquals(12, lastIndexOfIgnoreCase("Hello World World", "world"));
+		assertEquals(12, lastIndexOfIgnoreCase("Hello World World", "WORLD"));
+		assertEquals(6, lastIndexOfIgnoreCase("Hello World", "world"));
+		assertEquals(6, lastIndexOfIgnoreCase("Hello World", "WORLD"));
+		assertEquals(0, lastIndexOfIgnoreCase("Hello World", "hello"));
+		assertEquals(-1, lastIndexOfIgnoreCase("Hello World", "xyz"));
+		assertEquals(-1, lastIndexOfIgnoreCase(null, "test"));
+		assertEquals(-1, lastIndexOfIgnoreCase("test", null));
+		assertEquals(-1, lastIndexOfIgnoreCase(null, null));
+		assertEquals(4, lastIndexOfIgnoreCase("AbAbAb", "ab"));
+	}
+
+	@Test void a57_containsIgnoreCase() {
+		assertTrue(containsIgnoreCase("Hello World", "world"));
+		assertTrue(containsIgnoreCase("Hello World", "WORLD"));
+		assertTrue(containsIgnoreCase("Hello World", "hello"));
+		assertTrue(containsIgnoreCase("Hello World", "HELLO"));
+		assertTrue(containsIgnoreCase("Hello World", "lo wo"));
+		assertFalse(containsIgnoreCase("Hello World", "xyz"));
+		assertFalse(containsIgnoreCase(null, "test"));
+		assertFalse(containsIgnoreCase("test", null));
+		assertFalse(containsIgnoreCase(null, null));
+		assertTrue(containsIgnoreCase("Hello", "hello"));
+	}
+
+	@Test void a58_startsWithIgnoreCase() {
+		assertTrue(startsWithIgnoreCase("Hello World", "hello"));
+		assertTrue(startsWithIgnoreCase("Hello World", "HELLO"));
+		assertTrue(startsWithIgnoreCase("Hello World", "Hello"));
+		assertTrue(startsWithIgnoreCase("hello world", "HELLO"));
+		assertFalse(startsWithIgnoreCase("Hello World", "world"));
+		assertFalse(startsWithIgnoreCase("Hello World", "xyz"));
+		assertFalse(startsWithIgnoreCase(null, "test"));
+		assertFalse(startsWithIgnoreCase("test", null));
+		assertFalse(startsWithIgnoreCase(null, null));
+		assertTrue(startsWithIgnoreCase("Hello", "hello"));
+	}
+
+	@Test void a59_endsWithIgnoreCase() {
+		assertTrue(endsWithIgnoreCase("Hello World", "world"));
+		assertTrue(endsWithIgnoreCase("Hello World", "WORLD"));
+		assertTrue(endsWithIgnoreCase("Hello World", "World"));
+		assertTrue(endsWithIgnoreCase("hello world", "WORLD"));
+		assertFalse(endsWithIgnoreCase("Hello World", "hello"));
+		assertFalse(endsWithIgnoreCase("Hello World", "xyz"));
+		assertFalse(endsWithIgnoreCase(null, "test"));
+		assertFalse(endsWithIgnoreCase("test", null));
+		assertFalse(endsWithIgnoreCase(null, null));
+		assertTrue(endsWithIgnoreCase("Hello", "hello"));
+	}
+
+	@Test void a60_matches() {
+		assertTrue(matches("12345", "\\d+"));
+		assertTrue(matches("abc123", "^[a-z]+\\d+$"));
+		assertTrue(matches("hello", "^hello$"));
+		assertTrue(matches("test@example.com", "^[a-z]+@[a-z]+\\.[a-z]+$"));
+		assertFalse(matches("abc", "\\d+"));
+		assertFalse(matches("123", "^[a-z]+$"));
+		assertFalse(matches(null, "\\d+"));
+		assertFalse(matches("test", null));
+		assertFalse(matches(null, null));
+		// Test with invalid regex - should throw PatternSyntaxException
+		assertThrows(java.util.regex.PatternSyntaxException.class, () -> matches("test", "["));
+	}
+
+	@Test void a61_countMatches() {
+		assertEquals(2, countMatches("hello world world", "world"));
+		assertEquals(3, countMatches("ababab", "ab"));
+		assertEquals(4, countMatches("aaaa", "a"));
+		assertEquals(2, countMatches("hello hello", "hello"));
+		assertEquals(0, countMatches("hello", "xyz"));
+		assertEquals(0, countMatches(null, "test"));
+		assertEquals(0, countMatches("test", null));
+		assertEquals(0, countMatches(null, null));
+		assertEquals(0, countMatches("", "test"));
+		assertEquals(0, countMatches("test", ""));
+		assertEquals(1, countMatches("hello", "hello"));
+		assertEquals(0, countMatches("hello", "hello world"));
+		// Test overlapping matches - should not count overlapping
+		assertEquals(2, countMatches("aaaa", "aa")); // "aa" appears at positions 0 and 2
+	}
+
+	@Test void a62_formatWithNamedArgs() {
+		var args = new HashMap<String, Object>();
+		args.put("name", "John");
+		args.put("age", 30);
+		args.put("city", "New York");
+		assertEquals("Hello John, you are 30 years old", formatWithNamedArgs("Hello {name}, you are {age} years old", args));
+		assertEquals("Welcome to New York", formatWithNamedArgs("Welcome to {city}", args));
+		assertEquals("Hello {unknown}", formatWithNamedArgs("Hello {unknown}", args)); // Unknown placeholder kept
+		assertEquals("No placeholders", formatWithNamedArgs("No placeholders", args));
+		assertNull(formatWithNamedArgs(null, args));
+		assertEquals("Template", formatWithNamedArgs("Template", null));
+		assertEquals("Template", formatWithNamedArgs("Template", new HashMap<>()));
+		// Test with null values
+		var argsWithNull = new HashMap<String, Object>();
+		argsWithNull.put("name", "John");
+		argsWithNull.put("value", null);
+		assertEquals("Hello John, value: ", formatWithNamedArgs("Hello {name}, value: {value}", argsWithNull));
+	}
+
+	@Test void a63_interpolate() {
+		var vars = new HashMap<String, Object>();
+		vars.put("name", "John");
+		vars.put("city", "New York");
+		vars.put("age", 30);
+		assertEquals("Hello John, welcome to New York", interpolate("Hello ${name}, welcome to ${city}", vars));
+		assertEquals("Age: 30", interpolate("Age: ${age}", vars));
+		assertEquals("Hello ${unknown}", interpolate("Hello ${unknown}", vars)); // Unknown variable kept
+		assertEquals("No variables", interpolate("No variables", vars));
+		assertNull(interpolate(null, vars));
+		assertEquals("Template", interpolate("Template", null));
+		assertEquals("Template", interpolate("Template", new HashMap<>()));
+		// Test with null values
+		var varsWithNull = new HashMap<String, Object>();
+		varsWithNull.put("name", "John");
+		varsWithNull.put("value", null);
+		assertEquals("Hello John, value: null", interpolate("Hello ${name}, value: ${value}", varsWithNull));
+		// Test with incomplete placeholder
+		assertEquals("Hello ${name", interpolate("Hello ${name", vars));
+		// Test with multiple variables
+		assertEquals("John is 30 years old and lives in New York", 
+			interpolate("${name} is ${age} years old and lives in ${city}", vars));
+	}
+
+	@Test void a64_pluralize() {
+		// Singular (count = 1)
+		assertEquals("cat", pluralize("cat", 1));
+		assertEquals("box", pluralize("box", 1));
+		assertEquals("city", pluralize("city", 1));
+		
+		// Regular plural (add "s")
+		assertEquals("cats", pluralize("cat", 2));
+		assertEquals("dogs", pluralize("dog", 2));
+		assertEquals("books", pluralize("book", 0));
+		
+		// Words ending in s, x, z, ch, sh (add "es")
+		assertEquals("boxes", pluralize("box", 2));
+		assertEquals("buses", pluralize("bus", 2));
+		assertEquals("buzzes", pluralize("buzz", 2));
+		assertEquals("churches", pluralize("church", 2));
+		assertEquals("dishes", pluralize("dish", 2));
+		
+		// Words ending in "y" preceded by consonant (replace "y" with "ies")
+		assertEquals("cities", pluralize("city", 2));
+		assertEquals("countries", pluralize("country", 2));
+		assertEquals("flies", pluralize("fly", 2));
+		// Words ending in "y" preceded by vowel (just add "s")
+		assertEquals("days", pluralize("day", 2));
+		assertEquals("boys", pluralize("boy", 2));
+		
+		// Words ending in "f" or "fe" (replace with "ves")
+		assertEquals("leaves", pluralize("leaf", 2));
+		assertEquals("lives", pluralize("life", 2));
+		assertEquals("knives", pluralize("knife", 2));
+		
+		// Edge cases
+		assertNull(pluralize(null, 2));
+		assertEquals("", pluralize("", 2));
+		assertEquals("a", pluralize("a", 1));
+		assertEquals("as", pluralize("a", 2));
+	}
+
+	@Test void a65_ordinal() {
+		// Basic ordinals
+		assertEquals("1st", ordinal(1));
+		assertEquals("2nd", ordinal(2));
+		assertEquals("3rd", ordinal(3));
+		assertEquals("4th", ordinal(4));
+		assertEquals("5th", ordinal(5));
+		assertEquals("10th", ordinal(10));
+		
+		// Teens (all use "th")
+		assertEquals("11th", ordinal(11));
+		assertEquals("12th", ordinal(12));
+		assertEquals("13th", ordinal(13));
+		assertEquals("14th", ordinal(14));
+		
+		// 20s, 30s, etc.
+		assertEquals("21st", ordinal(21));
+		assertEquals("22nd", ordinal(22));
+		assertEquals("23rd", ordinal(23));
+		assertEquals("24th", ordinal(24));
+		assertEquals("31st", ordinal(31));
+		assertEquals("32nd", ordinal(32));
+		assertEquals("33rd", ordinal(33));
+		
+		// Larger numbers
+		assertEquals("100th", ordinal(100));
+		assertEquals("101st", ordinal(101));
+		assertEquals("102nd", ordinal(102));
+		assertEquals("103rd", ordinal(103));
+		assertEquals("111th", ordinal(111)); // Special case
+		assertEquals("112th", ordinal(112)); // Special case
+		assertEquals("113th", ordinal(113)); // Special case
+		
+		// Negative numbers
+		assertEquals("-1st", ordinal(-1));
+		assertEquals("-2nd", ordinal(-2));
+		assertEquals("-11th", ordinal(-11));
+		assertEquals("-21st", ordinal(-21));
+		
+		// Zero
+		assertEquals("0th", ordinal(0));
+	}
+
+	@Test void a66_sanitize() {
+		assertNull(sanitize(null));
+		assertEquals("", sanitize(""));
+		assertEquals("Hello World", sanitize("Hello World"));
+		assertEquals("&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;", sanitize("<script>alert('xss')</script>"));
+		assertEquals("Hello &lt;b&gt;World&lt;/b&gt;", sanitize("Hello <b>World</b>"));
+		assertEquals("&lt;img src=&quot;x&quot; onerror=&quot;alert(1)&quot;&gt;", sanitize("<img src=\"x\" onerror=\"alert(1)\">"));
+	}
+
+	@Test void a67_escapeHtml() {
+		assertNull(escapeHtml(null));
+		assertEquals("", escapeHtml(""));
+		assertEquals("Hello World", escapeHtml("Hello World"));
+		assertEquals("&lt;script&gt;", escapeHtml("<script>"));
+		assertEquals("&quot;Hello&quot;", escapeHtml("\"Hello\""));
+		assertEquals("It&#39;s a test", escapeHtml("It's a test"));
+		assertEquals("&amp;", escapeHtml("&"));
+		assertEquals("&lt;tag&gt;text&lt;/tag&gt;", escapeHtml("<tag>text</tag>"));
+		// Test all entities
+		assertEquals("&amp;", escapeHtml("&"));
+		assertEquals("&lt;", escapeHtml("<"));
+		assertEquals("&gt;", escapeHtml(">"));
+		assertEquals("&quot;", escapeHtml("\""));
+		assertEquals("&#39;", escapeHtml("'"));
+	}
+
+	@Test void a68_unescapeHtml() {
+		assertNull(unescapeHtml(null));
+		assertEquals("", unescapeHtml(""));
+		assertEquals("Hello World", unescapeHtml("Hello World"));
+		assertEquals("<script>", unescapeHtml("&lt;script&gt;"));
+		assertEquals("\"Hello\"", unescapeHtml("&quot;Hello&quot;"));
+		assertEquals("It's a test", unescapeHtml("It&#39;s a test"));
+		assertEquals("It's a test", unescapeHtml("It&apos;s a test"));
+		assertEquals("&", unescapeHtml("&amp;"));
+		assertEquals("<tag>text</tag>", unescapeHtml("&lt;tag&gt;text&lt;/tag&gt;"));
+		// Test round-trip
+		assertEquals("Hello & World", unescapeHtml(escapeHtml("Hello & World")));
+		assertEquals("<script>alert('xss')</script>", unescapeHtml(escapeHtml("<script>alert('xss')</script>")));
+	}
+
+	@Test void a69_escapeXml() {
+		assertNull(escapeXml(null));
+		assertEquals("", escapeXml(""));
+		assertEquals("Hello World", escapeXml("Hello World"));
+		assertEquals("&lt;tag&gt;", escapeXml("<tag>"));
+		assertEquals("&quot;Hello&quot;", escapeXml("\"Hello\""));
+		assertEquals("It&apos;s a test", escapeXml("It's a test"));
+		assertEquals("&amp;", escapeXml("&"));
+		assertEquals("&lt;tag attr=&apos;value&apos;&gt;text&lt;/tag&gt;", escapeXml("<tag attr='value'>text</tag>"));
+		// Test all entities
+		assertEquals("&amp;", escapeXml("&"));
+		assertEquals("&lt;", escapeXml("<"));
+		assertEquals("&gt;", escapeXml(">"));
+		assertEquals("&quot;", escapeXml("\""));
+		assertEquals("&apos;", escapeXml("'"));
+	}
+
+	@Test void a70_unescapeXml() {
+		assertNull(unescapeXml(null));
+		assertEquals("", unescapeXml(""));
+		assertEquals("Hello World", unescapeXml("Hello World"));
+		assertEquals("<tag>", unescapeXml("&lt;tag&gt;"));
+		assertEquals("\"Hello\"", unescapeXml("&quot;Hello&quot;"));
+		assertEquals("It's a test", unescapeXml("It&apos;s a test"));
+		assertEquals("&", unescapeXml("&amp;"));
+		assertEquals("<tag attr='value'>text</tag>", unescapeXml("&lt;tag attr=&apos;value&apos;&gt;text&lt;/tag&gt;"));
+		// Test round-trip
+		assertEquals("Hello & World", unescapeXml(escapeXml("Hello & World")));
+		assertEquals("<tag>text</tag>", unescapeXml(escapeXml("<tag>text</tag>")));
+	}
+
+	@Test void a71_escapeSql() {
+		assertNull(escapeSql(null));
+		assertEquals("", escapeSql(""));
+		assertEquals("Hello World", escapeSql("Hello World"));
+		assertEquals("O''Brien", escapeSql("O'Brien"));
+		assertEquals("It''s a test", escapeSql("It's a test"));
+		assertEquals("''", escapeSql("'"));
+		assertEquals("''''", escapeSql("''"));
+		assertEquals("John''s book", escapeSql("John's book"));
+	}
+
+	@Test void a72_escapeRegex() {
+		assertNull(escapeRegex(null));
+		assertEquals("", escapeRegex(""));
+		assertEquals("Hello World", escapeRegex("Hello World"));
+		assertEquals("file\\.txt", escapeRegex("file.txt"));
+		assertEquals("price: \\$10\\.99", escapeRegex("price: $10.99"));
+		assertEquals("test\\*test", escapeRegex("test*test"));
+		assertEquals("test\\+test", escapeRegex("test+test"));
+		assertEquals("test\\?test", escapeRegex("test?test"));
+		assertEquals("\\^start", escapeRegex("^start"));
+		assertEquals("end\\$", escapeRegex("end$"));
+		assertEquals("test\\{test\\}", escapeRegex("test{test}"));
+		assertEquals("test\\(test\\)", escapeRegex("test(test)"));
+		assertEquals("test\\[test\\]", escapeRegex("test[test]"));
+		assertEquals("test\\|test", escapeRegex("test|test"));
+		assertEquals("test\\\\test", escapeRegex("test\\test"));
+		// Test that escaped regex can be used in Pattern
+		var pattern = java.util.regex.Pattern.compile(escapeRegex("file.txt"));
+		assertTrue(pattern.matcher("file.txt").matches());
+		assertFalse(pattern.matcher("filextxt").matches());
+	}
+
 	//====================================================================================================
 	// String manipulation methods
 	//====================================================================================================

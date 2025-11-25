@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.io;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.nio.charset.*;
 
@@ -86,10 +88,11 @@ public class FileWriterBuilder {
 	 * @throws FileNotFoundException If file could not be found.
 	 */
 	public Writer build() throws FileNotFoundException {
+		assertArgNotNull("file", file);
 		var os = (OutputStream)new FileOutputStream(file, append);
 		if (buffered)
 			os = new BufferedOutputStream(os);
-		return new OutputStreamWriter(os, cs);
+		return new OutputStreamWriter(os, cs != null ? cs : Charset.defaultCharset());
 	}
 
 	/**
@@ -111,10 +114,11 @@ public class FileWriterBuilder {
 	 * @param cs
 	 * 	The character encoding.
 	 * 	The default is {@link Charset#defaultCharset()}.
+	 * 	Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public FileWriterBuilder charset(String cs) {
-		this.cs = Charset.forName(cs);
+		this.cs = Charset.forName(assertArgNotNull("cs", cs));
 		return this;
 	}
 

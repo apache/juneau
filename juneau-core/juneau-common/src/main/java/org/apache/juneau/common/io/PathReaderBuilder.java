@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.io;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -116,11 +117,11 @@ public class PathReaderBuilder {
 	/**
 	 * Sets the path of the path being written from.
 	 *
-	 * @param path The path of the path being written from.
+	 * @param path The path of the path being written from.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public PathReaderBuilder path(String path) {
-		this.path = Paths.get(path);
+		this.path = Paths.get(assertArgNotNull("path", path));
 		return this;
 	}
 }

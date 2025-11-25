@@ -89,8 +89,22 @@ public class LocalDir {
 	 * @return The file if it exists, or <jk>null</jk> if it does not.
 	 */
 	public LocalFile resolve(String path) {
+		assertArgNotNull("path", path);
 		if (nn(clazz)) {
-			String p = clazzPath == null ? path : ("/".equals(clazzPath) ? "" : clazzPath) + '/' + path;
+			String p;
+			if (clazzPath == null) {
+				// Relative to class package - keep path relative
+				p = path;
+			} else if ("/".equals(clazzPath)) {
+				// Root - make path absolute
+				p = path.startsWith("/") ? path : "/" + path;
+			} else if (clazzPath.startsWith("/")) {
+				// Absolute clazzPath - make resolved path absolute
+				p = clazzPath + '/' + path;
+			} else {
+				// Relative clazzPath - keep resolved path relative
+				p = clazzPath + '/' + path;
+			}
 			if (isClasspathFile(clazz.getResource(p)))
 				return new LocalFile(clazz, p);
 		} else {
@@ -116,17 +130,14 @@ public class LocalDir {
 	 * We perform a test to make the behavior the same regardless of whether we're packaged or not.
 	 */
 	private static boolean isClasspathFile(URL url) {
-		try {
+		return safeSupplier(() -> {
 			if (url == null)
 				return false;
 			var uri = url.toURI();
 			if (uri.toString().startsWith("file:"))
 				if (Files.isDirectory(Paths.get(uri)))
 					return false;
-		} catch (URISyntaxException e) {
-			e.printStackTrace();  // Untestable.
-			return false;
-		}
-		return true;
+			return true;
+		});
 	}
 }

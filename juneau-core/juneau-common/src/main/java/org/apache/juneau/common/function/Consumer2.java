@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.function;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.util.function.*;
 
 /**
@@ -30,10 +32,11 @@ public interface Consumer2<A,B> {
 	/**
 	 * Returns a composed {@link Consumer} that performs, in sequence, this operation followed by the <c>after</c> operation.
 	 *
-	 * @param after The operation to perform after this operation.
+	 * @param after The operation to perform after this operation.  Must not be <jk>null</jk>.
 	 * @return A composed {@link Consumer} that performs in sequence this operation followed by the after operation.
 	 */
 	default Consumer2<A,B> andThen(Consumer2<? super A,? super B> after) {  // NOSONAR - false positive on generics
+		assertArgNotNull("after", after);
 		return (A a, B b) -> {
 			apply(a, b);
 			after.apply(a, b);

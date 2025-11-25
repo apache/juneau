@@ -14,20 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common.function;
 
+package org.apache.juneau.common.utils;
+
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class Tuple3Function_Test extends TestBase {
+/**
+ * Tests {@link IOUtils}.
+ */
+class IOUtils_Test extends TestBase {
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Basic tests.
-	//------------------------------------------------------------------------------------------------------------------
-	@Test void a01_basic() {
-		Function3<Integer,Integer,Integer,Integer> x = (a,b,c)->a+b+c;
-		assertEquals(6, x.apply(1,2,3));
+	@Test void a01_readPath() throws IOException {
+		var p = new Properties();
+		p.load(new StringReader(read(Paths.get("src/test/resources/files/Test3.properties"))));
+		assertEquals("files/Test3.properties", p.get("file"));
 	}
 }

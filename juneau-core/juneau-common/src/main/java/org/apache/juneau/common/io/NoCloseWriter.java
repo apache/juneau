@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.io;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 
 /**
@@ -32,10 +34,10 @@ public class NoCloseWriter extends Writer {
 	/**
 	 * Constructor.
 	 *
-	 * @param w The writer to wrap.
+	 * @param w The writer to wrap.  Must not be <jk>null</jk>.
 	 */
 	public NoCloseWriter(Writer w) {
-		this.w = w;
+		this.w = assertArgNotNull("w", w);
 	}
 
 	@Override /* Overridden from Writer */
@@ -70,11 +72,13 @@ public class NoCloseWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(char[] cbuf) throws IOException {
+		assertArgNotNull("cbuf", cbuf);
 		w.write(cbuf);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(char[] cbuf, int off, int len) throws IOException {
+		assertArgNotNull("cbuf", cbuf);
 		w.write(cbuf, off, len);
 	}
 
@@ -85,11 +89,13 @@ public class NoCloseWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(String str) throws IOException {
+		assertArgNotNull("str", str);
 		w.write(str);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(String str, int off, int len) throws IOException {
+		assertArgNotNull("str", str);
 		w.write(str, off, len);
 	}
 }

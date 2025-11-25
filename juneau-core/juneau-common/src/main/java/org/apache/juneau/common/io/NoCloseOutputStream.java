@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.io;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 
 /**
@@ -32,10 +34,10 @@ public class NoCloseOutputStream extends OutputStream {
 	/**
 	 * Constructor.
 	 *
-	 * @param os The output stream to wrap.
+	 * @param os The output stream to wrap.  Must not be <jk>null</jk>.
 	 */
 	public NoCloseOutputStream(OutputStream os) {
-		this.os = os;
+		this.os = assertArgNotNull("os", os);
 	}
 
 	@Override /* Overridden from OutputStream */
@@ -50,11 +52,13 @@ public class NoCloseOutputStream extends OutputStream {
 
 	@Override /* Overridden from OutputStream */
 	public void write(byte[] b) throws IOException {
+		assertArgNotNull("b", b);
 		os.write(b);
 	}
 
 	@Override /* Overridden from OutputStream */
 	public void write(byte[] b, int off, int len) throws IOException {
+		assertArgNotNull("b", b);
 		os.write(b, off, len);
 	}
 

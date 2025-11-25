@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.io;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.nio.charset.*;
 
@@ -69,7 +71,8 @@ public class FileReaderBuilder {
 	public Reader build() throws FileNotFoundException {
 		if (allowNoFile && (file == null || ! file.exists()))
 			return new StringReader("");
-		return new InputStreamReader(new FileInputStream(file), cs);
+		assertArgNotNull("file", file);
+		return new InputStreamReader(new FileInputStream(file), cs != null ? cs : Charset.defaultCharset());
 	}
 
 	/**
@@ -91,10 +94,11 @@ public class FileReaderBuilder {
 	 * @param cs
 	 * 	The character encoding.
 	 * 	The default is {@link Charset#defaultCharset()}.
+	 * 	Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public FileReaderBuilder charset(String cs) {
-		this.cs = Charset.forName(cs);
+		this.cs = Charset.forName(assertArgNotNull("cs", cs));
 		return this;
 	}
 

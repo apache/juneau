@@ -14,20 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common.function;
+package org.apache.juneau.common.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class Tuple2Function_Test extends TestBase {
+class WeightedAverage_Test extends TestBase {
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Basic tests.
-	//------------------------------------------------------------------------------------------------------------------
-	@Test void a01_basic() {
-		Function2<Integer,Integer,Integer> x = (a,b)->a+b;
-		assertEquals(3, x.apply(1,2));
+	@Test void a01_empty() {
+		var w = new WeightedAverage();
+		assertEquals(0f, w.getValue(), 0.01);
+	}
+
+	@Test void a02_basic() {
+		var w = new WeightedAverage();
+		w.add(0,100).add(1,1).add(1,2).add(1,3).add(0,100);
+		assertEquals(2f, w.getValue(), 0.01);
+	}
+
+	@Test void a03_basicWithNullValue() {
+		var w = new WeightedAverage();
+		w.add(1,1).add(1,null).add(1,3);
+		assertEquals(2f, w.getValue(), 0.01);
+	}
+
+	@Test void a04_differingWeights() {
+		var w = new WeightedAverage();
+		w.add(10,1).add(20,3);
+		assertEquals(2.33f, w.getValue(), 0.01);
 	}
 }

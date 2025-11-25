@@ -1566,6 +1566,726 @@ public class StringUtils {
 	}
 
 	/**
+	 * Checks if a string is null or empty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isEmpty(<jk>null</jk>);    <jc>// true</jc>
+	 * 	isEmpty(<js>""</js>);      <jc>// true</jc>
+	 * 	isEmpty(<js>"abc"</js>);   <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is null or empty.
+	 */
+	public static boolean isEmpty(String str) {
+		return str == null || str.isEmpty();
+	}
+
+	/**
+	 * Checks if a string is a valid email address.
+	 *
+	 * <p>
+	 * Performs basic email validation using a simple regex pattern.
+	 * This is not a complete RFC 5321/5322 validation, but covers most common email formats.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isEmail(<jk>null</jk>);                    <jc>// false</jc>
+	 * 	isEmail(<js>""</js>);                      <jc>// false</jc>
+	 * 	isEmail(<js>"user@example.com"</js>);      <jc>// true</jc>
+	 * 	isEmail(<js>"invalid.email"</js>);         <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is a valid email address.
+	 */
+	public static boolean isEmail(String str) {
+		if (isEmpty(str))
+			return false;
+		// Basic email regex: local@domain
+		// Allows letters, digits, dots, underscores, hyphens, and plus signs in local part
+		// Domain must have at least one dot and valid TLD
+		return str.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+	}
+
+	/**
+	 * Checks if a string is a valid phone number.
+	 *
+	 * <p>
+	 * Performs basic phone number validation.
+	 * Accepts various formats including:
+	 * <ul>
+	 *   <li>Digits only: <js>"1234567890"</js></li>
+	 *   <li>With separators: <js>"(123) 456-7890"</js>, <js>"123-456-7890"</js>, <js>"123.456.7890"</js></li>
+	 *   <li>With country code: <js>"+1 123-456-7890"</js></li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isPhoneNumber(<jk>null</jk>);              <jc>// false</jc>
+	 * 	isPhoneNumber(<js>""</js>);                <jc>// false</jc>
+	 * 	isPhoneNumber(<js>"1234567890"</js>);      <jc>// true</jc>
+	 * 	isPhoneNumber(<js>"(123) 456-7890"</js>);  <jc>// true</jc>
+	 * 	isPhoneNumber(<js>"123"</js>);             <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is a valid phone number.
+	 */
+	public static boolean isPhoneNumber(String str) {
+		if (isEmpty(str))
+			return false;
+		// Remove common phone number separators and check if remaining is 10-15 digits
+		// Allows: digits, spaces, parentheses, hyphens, dots, plus sign (for country code)
+		var cleaned = str.replaceAll("[\\s()\\-\\.]", "");
+		if (cleaned.startsWith("+"))
+			cleaned = cleaned.substring(1);
+		// Phone numbers should have 10-15 digits (10 for US, up to 15 for international)
+		return cleaned.matches("^\\d{10,15}$");
+	}
+
+	/**
+	 * Checks if a string is a valid credit card number using the Luhn algorithm.
+	 *
+	 * <p>
+	 * Validates credit card numbers by:
+	 * <ul>
+	 *   <li>Removing spaces and hyphens</li>
+	 *   <li>Checking that all remaining characters are digits</li>
+	 *   <li>Verifying the number passes the Luhn algorithm check</li>
+	 *   <li>Ensuring the number is between 13-19 digits (standard credit card length)</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isCreditCard(<jk>null</jk>);                    <jc>// false</jc>
+	 * 	isCreditCard(<js>""</js>);                      <jc>// false</jc>
+	 * 	isCreditCard(<js>"4532015112830366"</js>);      <jc>// true (Visa test card)</jc>
+	 * 	isCreditCard(<js>"4532-0151-1283-0366"</js>);   <jc>// true (with separators)</jc>
+	 * 	isCreditCard(<js>"1234567890"</js>);            <jc>// false (invalid Luhn)</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is a valid credit card number.
+	 */
+	public static boolean isCreditCard(String str) {
+		if (isEmpty(str))
+			return false;
+		// Remove spaces and hyphens
+		var cleaned = str.replaceAll("[\\s\\-]", "");
+		// Must be all digits and 13-19 digits long
+		if (!cleaned.matches("^\\d{13,19}$"))
+			return false;
+		// Apply Luhn algorithm
+		var sum = 0;
+		var alternate = false;
+		for (var i = cleaned.length() - 1; i >= 0; i--) {
+			var digit = Character.getNumericValue(cleaned.charAt(i));
+			if (alternate) {
+				digit *= 2;
+				if (digit > 9)
+					digit = (digit % 10) + 1;
+			}
+			sum += digit;
+			alternate = !alternate;
+		}
+		return (sum % 10) == 0;
+	}
+
+	/**
+	 * Finds the index of the first occurrence of a substring within a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	indexOf(<js>"hello world"</js>, <js>"world"</js>);     <jc>// 6</jc>
+	 * 	indexOf(<js>"hello world"</js>, <js>"xyz"</js>);       <jc>// -1</jc>
+	 * 	indexOf(<jk>null</jk>, <js>"test"</js>);               <jc>// -1</jc>
+	 * </p>
+	 *
+	 * @param str The string to search in.
+	 * @param search The substring to search for.
+	 * @return The index of the first occurrence, or <c>-1</c> if not found or if either parameter is <jk>null</jk>.
+	 */
+	public static int indexOf(String str, String search) {
+		if (str == null || search == null)
+			return -1;
+		return str.indexOf(search);
+	}
+
+	/**
+	 * Finds the index of the first occurrence of a substring within a string, ignoring case.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	indexOfIgnoreCase(<js>"Hello World"</js>, <js>"world"</js>);     <jc>// 6</jc>
+	 * 	indexOfIgnoreCase(<js>"Hello World"</js>, <js>"WORLD"</js>);     <jc>// 6</jc>
+	 * 	indexOfIgnoreCase(<js>"hello world"</js>, <js>"xyz"</js>);       <jc>// -1</jc>
+	 * </p>
+	 *
+	 * @param str The string to search in.
+	 * @param search The substring to search for.
+	 * @return The index of the first occurrence, or <c>-1</c> if not found or if either parameter is <jk>null</jk>.
+	 */
+	public static int indexOfIgnoreCase(String str, String search) {
+		if (str == null || search == null)
+			return -1;
+		return str.toLowerCase().indexOf(search.toLowerCase());
+	}
+
+	/**
+	 * Finds the index of the last occurrence of a substring within a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	lastIndexOf(<js>"hello world world"</js>, <js>"world"</js>);     <jc>// 12</jc>
+	 * 	lastIndexOf(<js>"hello world"</js>, <js>"xyz"</js>);             <jc>// -1</jc>
+	 * 	lastIndexOf(<jk>null</jk>, <js>"test"</js>);                     <jc>// -1</jc>
+	 * </p>
+	 *
+	 * @param str The string to search in.
+	 * @param search The substring to search for.
+	 * @return The index of the last occurrence, or <c>-1</c> if not found or if either parameter is <jk>null</jk>.
+	 */
+	public static int lastIndexOf(String str, String search) {
+		if (str == null || search == null)
+			return -1;
+		return str.lastIndexOf(search);
+	}
+
+	/**
+	 * Finds the index of the last occurrence of a substring within a string, ignoring case.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	lastIndexOfIgnoreCase(<js>"Hello World World"</js>, <js>"world"</js>);     <jc>// 12</jc>
+	 * 	lastIndexOfIgnoreCase(<js>"Hello World"</js>, <js>"WORLD"</js>);           <jc>// 6</jc>
+	 * 	lastIndexOfIgnoreCase(<js>"hello world"</js>, <js>"xyz"</js>);             <jc>// -1</jc>
+	 * </p>
+	 *
+	 * @param str The string to search in.
+	 * @param search The substring to search for.
+	 * @return The index of the last occurrence, or <c>-1</c> if not found or if either parameter is <jk>null</jk>.
+	 */
+	public static int lastIndexOfIgnoreCase(String str, String search) {
+		if (str == null || search == null)
+			return -1;
+		return str.toLowerCase().lastIndexOf(search.toLowerCase());
+	}
+
+	/**
+	 * Checks if a string contains a substring, ignoring case.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	containsIgnoreCase(<js>"Hello World"</js>, <js>"world"</js>);     <jc>// true</jc>
+	 * 	containsIgnoreCase(<js>"Hello World"</js>, <js>"WORLD"</js>);     <jc>// true</jc>
+	 * 	containsIgnoreCase(<js>"hello world"</js>, <js>"xyz"</js>);       <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to search in.
+	 * @param search The substring to search for.
+	 * @return <jk>true</jk> if the string contains the substring (ignoring case), <jk>false</jk> otherwise.
+	 */
+	public static boolean containsIgnoreCase(String str, String search) {
+		if (str == null || search == null)
+			return false;
+		return str.toLowerCase().contains(search.toLowerCase());
+	}
+
+	/**
+	 * Checks if a string starts with a prefix, ignoring case.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	startsWithIgnoreCase(<js>"Hello World"</js>, <js>"hello"</js>);     <jc>// true</jc>
+	 * 	startsWithIgnoreCase(<js>"Hello World"</js>, <js>"HELLO"</js>);     <jc>// true</jc>
+	 * 	startsWithIgnoreCase(<js>"hello world"</js>, <js>"world"</js>);     <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @param prefix The prefix to check for.
+	 * @return <jk>true</jk> if the string starts with the prefix (ignoring case), <jk>false</jk> otherwise.
+	 */
+	public static boolean startsWithIgnoreCase(String str, String prefix) {
+		if (str == null || prefix == null)
+			return false;
+		return str.toLowerCase().startsWith(prefix.toLowerCase());
+	}
+
+	/**
+	 * Checks if a string ends with a suffix, ignoring case.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	endsWithIgnoreCase(<js>"Hello World"</js>, <js>"world"</js>);     <jc>// true</jc>
+	 * 	endsWithIgnoreCase(<js>"Hello World"</js>, <js>"WORLD"</js>);     <jc>// true</jc>
+	 * 	endsWithIgnoreCase(<js>"hello world"</js>, <js>"hello"</js>);     <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @param suffix The suffix to check for.
+	 * @return <jk>true</jk> if the string ends with the suffix (ignoring case), <jk>false</jk> otherwise.
+	 */
+	public static boolean endsWithIgnoreCase(String str, String suffix) {
+		if (str == null || suffix == null)
+			return false;
+		return str.toLowerCase().endsWith(suffix.toLowerCase());
+	}
+
+	/**
+	 * Checks if a string matches a regular expression pattern.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	matches(<js>"12345"</js>, <js>"\\d+"</js>);              <jc>// true</jc>
+	 * 	matches(<js>"abc123"</js>, <js>"^[a-z]+\\d+$"</js>);     <jc>// true</jc>
+	 * 	matches(<js>"abc"</js>, <js>"\\d+"</js>);                <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @param regex The regular expression pattern.
+	 * @return <jk>true</jk> if the string matches the pattern, <jk>false</jk> otherwise.
+	 * @throws PatternSyntaxException If the regex pattern is invalid.
+	 */
+	public static boolean matches(String str, String regex) {
+		if (str == null || regex == null)
+			return false;
+		return str.matches(regex);
+	}
+
+	/**
+	 * Counts the number of occurrences of a substring within a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	countMatches(<js>"hello world world"</js>, <js>"world"</js>);     <jc>// 2</jc>
+	 * 	countMatches(<js>"ababab"</js>, <js>"ab"</js>);                    <jc>// 3</jc>
+	 * 	countMatches(<js>"hello"</js>, <js>"xyz"</js>);                    <jc>// 0</jc>
+	 * </p>
+	 *
+	 * @param str The string to search in.
+	 * @param search The substring to count.
+	 * @return The number of occurrences, or <c>0</c> if not found or if either parameter is <jk>null</jk> or empty.
+	 */
+	public static int countMatches(String str, String search) {
+		if (isEmpty(str) || isEmpty(search))
+			return 0;
+		var count = 0;
+		var index = 0;
+		while ((index = str.indexOf(search, index)) != -1) {
+			count++;
+			index += search.length();
+		}
+		return count;
+	}
+
+	/**
+	 * Formats a string template with named arguments using <js>"{name}"</js> placeholders.
+	 *
+	 * <p>
+	 * Similar to {@link #replaceVars(String, Map)} but designed for formatting scenarios.
+	 * Replaces placeholders of the form <js>"{name}"</js> with values from the map.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	var args = Map.of(<js>"name"</js>, <js>"John"</js>, <js>"age"</js>, <js>30</js>);
+	 * 	formatWithNamedArgs(<js>"Hello {name}, you are {age} years old"</js>, args);
+	 * 	<jc>// Returns: "Hello John, you are 30 years old"</jc>
+	 * </p>
+	 *
+	 * @param template The template string with <js>"{name}"</js> placeholders.
+	 * @param args The map containing the named argument values.
+	 * @return The formatted string with placeholders replaced, or the original template if args is null or empty.
+	 */
+	public static String formatWithNamedArgs(String template, Map<String, Object> args) {
+		if (template == null)
+			return null;
+		if (args == null || args.isEmpty())
+			return template;
+		return replaceVars(template, args);
+	}
+
+	/**
+	 * Interpolates variables in a template string using <js>"${name}"</js> syntax.
+	 *
+	 * <p>
+	 * Replaces variables of the form <js>"${name}"</js> with values from the map.
+	 * This is similar to shell variable interpolation syntax.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	var vars = Map.of(<js>"name"</js>, <js>"John"</js>, <js>"city"</js>, <js>"New York"</js>);
+	 * 	interpolate(<js>"Hello ${name}, welcome to ${city}"</js>, vars);
+	 * 	<jc>// Returns: "Hello John, welcome to New York"</jc>
+	 * </p>
+	 *
+	 * @param template The template string with <js>"${name}"</js> variables.
+	 * @param variables The map containing the variable values.
+	 * @return The interpolated string with variables replaced, or the original template if variables is null or empty.
+	 */
+	public static String interpolate(String template, Map<String, Object> variables) {
+		if (template == null)
+			return null;
+		if (variables == null || variables.isEmpty())
+			return template;
+		
+		var result = new StringBuilder();
+		var i = 0;
+		var length = template.length();
+		
+		while (i < length) {
+			var dollarIndex = template.indexOf("${", i);
+			if (dollarIndex == -1) {
+				// No more variables, append the rest
+				result.append(template.substring(i));
+				break;
+			}
+			
+			// Append text before the variable
+			result.append(template.substring(i, dollarIndex));
+			
+			// Find the closing brace
+			var braceIndex = template.indexOf('}', dollarIndex + 2);
+			if (braceIndex == -1) {
+				// No closing brace, append the rest as-is
+				result.append(template.substring(dollarIndex));
+				break;
+			}
+			
+			// Extract variable name
+			var varName = template.substring(dollarIndex + 2, braceIndex);
+			var value = variables.get(varName);
+			
+			if (variables.containsKey(varName)) {
+				// Variable exists in map (even if null)
+				result.append(value != null ? value.toString() : "null");
+			} else {
+				// Variable not found, keep the original placeholder
+				result.append("${").append(varName).append("}");
+			}
+			
+			i = braceIndex + 1;
+		}
+		
+		return result.toString();
+	}
+
+	/**
+	 * Pluralizes a word based on a count.
+	 *
+	 * <p>
+	 * Simple pluralization that adds "s" to most words, with basic rules for words ending in "s", "x", "z", "ch", "sh" (add "es"),
+	 * and words ending in "y" preceded by a consonant (replace "y" with "ies").
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	pluralize(<js>"cat"</js>, <js>1</js>);        <jc>// "cat"</jc>
+	 * 	pluralize(<js>"cat"</js>, <js>2</js>);        <jc>// "cats"</jc>
+	 * 	pluralize(<js>"box"</js>, <js>2</js>);        <jc>// "boxes"</jc>
+	 * 	pluralize(<js>"city"</js>, <js>2</js>);       <jc>// "cities"</jc>
+	 * </p>
+	 *
+	 * @param word The word to pluralize.
+	 * @param count The count to determine if pluralization is needed.
+	 * @return The pluralized word if count is not 1, otherwise the original word.
+	 */
+	public static String pluralize(String word, int count) {
+		if (word == null || word.isEmpty())
+			return word;
+		if (count == 1)
+			return word;
+		
+		var lower = word.toLowerCase();
+		var length = word.length();
+		
+		// Words ending in s, x, z, ch, sh -> add "es"
+		if (lower.endsWith("s") || lower.endsWith("x") || lower.endsWith("z") ||
+			lower.endsWith("ch") || lower.endsWith("sh")) {
+			return word + "es";
+		}
+		
+		// Words ending in "y" preceded by a consonant -> replace "y" with "ies"
+		if (length > 1 && lower.endsWith("y")) {
+			var secondLast = lower.charAt(length - 2);
+			if (secondLast != 'a' && secondLast != 'e' && secondLast != 'i' && 
+				secondLast != 'o' && secondLast != 'u') {
+				return word.substring(0, length - 1) + "ies";
+			}
+		}
+		
+		// Words ending in "f" or "fe" -> replace with "ves" (basic rule)
+		if (lower.endsWith("f")) {
+			return word.substring(0, length - 1) + "ves";
+		}
+		if (lower.endsWith("fe")) {
+			return word.substring(0, length - 2) + "ves";
+		}
+		
+		// Default: add "s"
+		return word + "s";
+	}
+
+	/**
+	 * Converts a number to its ordinal form (1st, 2nd, 3rd, 4th, etc.).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ordinal(<js>1</js>);     <jc>// "1st"</jc>
+	 * 	ordinal(<js>2</js>);     <jc>// "2nd"</jc>
+	 * 	ordinal(<js>3</js>);     <jc>// "3rd"</jc>
+	 * 	ordinal(<js>4</js>);     <jc>// "4th"</jc>
+	 * 	ordinal(<js>11</js>);    <jc>// "11th"</jc>
+	 * 	ordinal(<js>21</js>);    <jc>// "21st"</jc>
+	 * </p>
+	 *
+	 * @param number The number to convert.
+	 * @return The ordinal string representation of the number.
+	 */
+	public static String ordinal(int number) {
+		var abs = Math.abs(number);
+		var suffix = "th";
+		
+		// Special cases for 11, 12, 13 (all use "th")
+		if (abs % 100 != 11 && abs % 100 != 12 && abs % 100 != 13) {
+			var lastDigit = abs % 10;
+			if (lastDigit == 1)
+				suffix = "st";
+			else if (lastDigit == 2)
+				suffix = "nd";
+			else if (lastDigit == 3)
+				suffix = "rd";
+		}
+		
+		return number + suffix;
+	}
+
+	/**
+	 * Basic HTML/XML sanitization - removes or escapes potentially dangerous content.
+	 *
+	 * <p>
+	 * Removes HTML/XML tags and escapes special characters to prevent XSS attacks.
+	 * This is a basic sanitization - for production use, consider a more robust library.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	sanitize(<js>"&lt;script&gt;alert('xss')&lt;/script&gt;"</js>);     <jc>// "&amp;lt;script&amp;gt;alert('xss')&amp;lt;/script&amp;gt;"</jc>
+	 * 	sanitize(<js>"Hello &lt;b&gt;World&lt;/b&gt;"</js>);                <jc>// "Hello &amp;lt;b&amp;gt;World&amp;lt;/b&amp;gt;"</jc>
+	 * </p>
+	 *
+	 * @param str The string to sanitize.
+	 * @return The sanitized string with HTML/XML tags escaped, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String sanitize(String str) {
+		if (str == null)
+			return null;
+		// Escape HTML/XML special characters
+		return escapeHtml(str);
+	}
+
+	/**
+	 * Escapes HTML entities in a string.
+	 *
+	 * <p>
+	 * Escapes the following characters:
+	 * <ul>
+	 *   <li><js>'&amp;'</js> → <js>"&amp;amp;"</js></li>
+	 *   <li><js>'&lt;'</js> → <js>"&amp;lt;"</js></li>
+	 *   <li><js>'&gt;'</js> → <js>"&amp;gt;"</js></li>
+	 *   <li><js>'"'</js> → <js>"&amp;quot;"</js></li>
+	 *   <li><js>'\''</js> → <js>"&amp;#39;"</js></li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	escapeHtml(<js>"&lt;script&gt;alert('xss')&lt;/script&gt;"</js>);
+	 * 	<jc>// Returns: "&amp;lt;script&amp;gt;alert(&amp;#39;xss&amp;#39;)&amp;lt;/script&amp;gt;"</jc>
+	 * </p>
+	 *
+	 * @param str The string to escape.
+	 * @return The escaped string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String escapeHtml(String str) {
+		if (str == null)
+			return null;
+		var sb = new StringBuilder(str.length() * 2);
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
+			switch (c) {
+				case '&' -> sb.append("&amp;");
+				case '<' -> sb.append("&lt;");
+				case '>' -> sb.append("&gt;");
+				case '"' -> sb.append("&quot;");
+				case '\'' -> sb.append("&#39;");
+				default -> sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Unescapes HTML entities in a string.
+	 *
+	 * <p>
+	 * Unescapes the following HTML entities:
+	 * <ul>
+	 *   <li><js>"&amp;amp;"</js> → <js>'&amp;'</js></li>
+	 *   <li><js>"&amp;lt;"</js> → <js>'&lt;'</js></li>
+	 *   <li><js>"&amp;gt;"</js> → <js>'&gt;'</js></li>
+	 *   <li><js>"&amp;quot;"</js> → <js>'"'</js></li>
+	 *   <li><js>"&amp;#39;"</js> or <js>"&amp;apos;"</js> → <js>'\''</js></li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	unescapeHtml(<js>"&amp;lt;script&amp;gt;"</js>);     <jc>// Returns: "&lt;script&gt;"</jc>
+	 * </p>
+	 *
+	 * @param str The string to unescape.
+	 * @return The unescaped string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String unescapeHtml(String str) {
+		if (str == null)
+			return null;
+		// Must unescape &amp; last to avoid interfering with other entities
+		return str.replace("&lt;", "<")
+			.replace("&gt;", ">")
+			.replace("&quot;", "\"")
+			.replace("&#39;", "'")
+			.replace("&apos;", "'")
+			.replace("&amp;", "&");
+	}
+
+	/**
+	 * Escapes XML entities in a string.
+	 *
+	 * <p>
+	 * Escapes the following characters:
+	 * <ul>
+	 *   <li><js>'&amp;'</js> → <js>"&amp;amp;"</js></li>
+	 *   <li><js>'&lt;'</js> → <js>"&amp;lt;"</js></li>
+	 *   <li><js>'&gt;'</js> → <js>"&amp;gt;"</js></li>
+	 *   <li><js>'"'</js> → <js>"&amp;quot;"</js></li>
+	 *   <li><js>'\''</js> → <js>"&amp;apos;"</js></li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	escapeXml(<js>"&lt;tag attr='value'&gt;text&lt;/tag&gt;"</js>);
+	 * 	<jc>// Returns: "&amp;lt;tag attr=&amp;apos;value&amp;apos;&amp;gt;text&amp;lt;/tag&amp;gt;"</jc>
+	 * </p>
+	 *
+	 * @param str The string to escape.
+	 * @return The escaped string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String escapeXml(String str) {
+		if (str == null)
+			return null;
+		var sb = new StringBuilder(str.length() * 2);
+		for (var i = 0; i < str.length(); i++) {
+			var c = str.charAt(i);
+			switch (c) {
+				case '&' -> sb.append("&amp;");
+				case '<' -> sb.append("&lt;");
+				case '>' -> sb.append("&gt;");
+				case '"' -> sb.append("&quot;");
+				case '\'' -> sb.append("&apos;");
+				default -> sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Unescapes XML entities in a string.
+	 *
+	 * <p>
+	 * Unescapes the following XML entities:
+	 * <ul>
+	 *   <li><js>"&amp;amp;"</js> → <js>'&amp;'</js></li>
+	 *   <li><js>"&amp;lt;"</js> → <js>'&lt;'</js></li>
+	 *   <li><js>"&amp;gt;"</js> → <js>'&gt;'</js></li>
+	 *   <li><js>"&amp;quot;"</js> → <js>'"'</js></li>
+	 *   <li><js>"&amp;apos;"</js> → <js>'\''</js></li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	unescapeXml(<js>"&amp;lt;tag&amp;gt;"</js>);     <jc>// Returns: "&lt;tag&gt;"</jc>
+	 * </p>
+	 *
+	 * @param str The string to unescape.
+	 * @return The unescaped string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String unescapeXml(String str) {
+		if (str == null)
+			return null;
+		// Must unescape &amp; last to avoid interfering with other entities
+		return str.replace("&lt;", "<")
+			.replace("&gt;", ">")
+			.replace("&quot;", "\"")
+			.replace("&apos;", "'")
+			.replace("&amp;", "&");
+	}
+
+	/**
+	 * Escapes SQL string literals by doubling single quotes.
+	 *
+	 * <p>
+	 * Basic SQL escaping for string literals. Escapes single quotes by doubling them.
+	 * This is a basic implementation - for production use, consider using prepared statements.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	escapeSql(<js>"O'Brien"</js>);     <jc>// Returns: "O''Brien"</jc>
+	 * 	escapeSql(<js>"It's a test"</js>); <jc>// Returns: "It''s a test"</jc>
+	 * </p>
+	 *
+	 * @param str The string to escape.
+	 * @return The escaped string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String escapeSql(String str) {
+		if (str == null)
+			return null;
+		return str.replace("'", "''");
+	}
+
+	/**
+	 * Escapes regex special characters in a string.
+	 *
+	 * <p>
+	 * Escapes the following regex special characters: <js>\.*+?^${}()[]|\\</js>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	escapeRegex(<js>"file.txt"</js>);        <jc>// Returns: "file\\.txt"</jc>
+	 * 	escapeRegex(<js>"price: $10.99"</js>);   <jc>// Returns: "price: \\$10\\.99"</jc>
+	 * </p>
+	 *
+	 * @param str The string to escape.
+	 * @return The escaped string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String escapeRegex(String str) {
+		if (str == null)
+			return null;
+		// Escape regex special characters: . * + ? ^ $ { } ( ) [ ] | \
+		return str.replace("\\", "\\\\")
+			.replace(".", "\\.")
+			.replace("*", "\\*")
+			.replace("+", "\\+")
+			.replace("?", "\\?")
+			.replace("^", "\\^")
+			.replace("$", "\\$")
+			.replace("{", "\\{")
+			.replace("}", "\\}")
+			.replace("(", "\\(")
+			.replace(")", "\\)")
+			.replace("[", "\\[")
+			.replace("]", "\\]")
+			.replace("|", "\\|");
+	}
+
+	/**
 	 * Join the specified tokens into a delimited string.
 	 *
 	 * @param tokens The tokens to join.

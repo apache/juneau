@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.io;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 
 /**
@@ -46,6 +48,7 @@ public class StringBuilderWriter extends Writer {
 	 * @throws IllegalArgumentException If <tt>initialSize</tt> is negative.
 	 */
 	public StringBuilderWriter(int initialSize) {
+		assertArg(initialSize >= 0, "Argument 'initialSize' cannot be negative.");
 		sb = new StringBuilder(initialSize);
 		lock = null;
 	}
@@ -53,10 +56,10 @@ public class StringBuilderWriter extends Writer {
 	/**
 	 * Create a new string writer around an existing string builder.
 	 *
-	 * @param sb The string builder being wrapped.
+	 * @param sb The string builder being wrapped.  Must not be <jk>null</jk>.
 	 */
 	public StringBuilderWriter(StringBuilder sb) {
-		this.sb = sb;
+		this.sb = assertArgNotNull("sb", sb);
 		lock = null;
 	}
 
@@ -95,21 +98,24 @@ public class StringBuilderWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(char cbuf[], int start, int length) {
+		assertArgNotNull("cbuf", cbuf);
 		sb.append(cbuf, start, length);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(int c) {
-		sb.append((char)c);
+		sb.appendCodePoint(c);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(String str) {
+		assertArgNotNull("str", str);
 		sb.append(str);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(String str, int off, int len) {
+		assertArgNotNull("str", str);
 		sb.append(str.substring(off, off + len));
 	}
 }
