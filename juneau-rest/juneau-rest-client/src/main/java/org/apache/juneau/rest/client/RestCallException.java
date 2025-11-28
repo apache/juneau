@@ -61,7 +61,7 @@ public class RestCallException extends HttpException {
 	private static String format(String msg, Object...args) {
 		if (args.length == 0)
 			return clean(msg);
-		return clean(mf(msg, args));
+		return clean(f(msg, args));
 	}
 
 	private final int statusCode;

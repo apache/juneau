@@ -46,7 +46,7 @@ public class Console {
 	 * @param args The arguments sent to the formatter.
 	 */
 	public static final void err(String msg, Object...args) {
-		System.err.println(mf(msg, args));  // NOT DEBUG
+		System.err.println(f(msg, args));  // NOT DEBUG
 	}
 
 	/**
@@ -67,6 +67,6 @@ public class Console {
 	 * @param args The arguments sent to the formatter.
 	 */
 	public static final void out(String msg, Object...args) {
-		System.out.println(mf(msg, args));
+		System.out.println(f(msg, args));
 	}
 }

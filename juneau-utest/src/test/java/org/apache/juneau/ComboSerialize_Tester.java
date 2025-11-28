@@ -173,7 +173,7 @@ public class ComboSerialize_Tester<T> {
 				}
 			}
 
-			assertEquals(exp, r, mfs("{0}/{1} serialize-normal failed.", label, testName));
+			assertEquals(exp, r, fs("{0}/{1} serialize-normal failed.", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;

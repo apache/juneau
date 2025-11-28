@@ -58,7 +58,7 @@ public class BeanRuntimeException extends RuntimeException {
 
 	private static String getMessage(Throwable cause, Class<?> c, String msg, Object...args) {
 		if (nn(msg))
-			return (c == null ? "" : cn(c) + ": ") + mf(msg, args);
+			return (c == null ? "" : cn(c) + ": ") + f(msg, args);
 		if (nn(cause))
 			return (c == null ? "" : cn(c) + ": ") + cause.getMessage();
 		return null;

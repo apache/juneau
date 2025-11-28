@@ -38,7 +38,7 @@ public class ExecutableException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ExecutableException(String message, Object...args) {
-		super(mf(message, args));
+		super(f(message, args));
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class ExecutableException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ExecutableException(Throwable causedBy, String message, Object...args) {
-		super(mf(message, args), causedBy);
+		super(f(message, args), causedBy);
 	}
 
 	/**

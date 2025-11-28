@@ -289,17 +289,6 @@ public class Utils {
 	}
 
 	/**
-	 * Same as MessageFormat.format().
-	 *
-	 * @param pattern The message pattern.
-	 * @param args The arguments to substitute into the pattern.
-	 * @return The formatted string.
-	 */
-	public static String mf(String pattern, Object...args) {
-		return StringFormat.format(pattern, args);
-	}
-
-	/**
 	 * Returns the first non-null value in the specified array
 	 *
 	 * @param <T> The value types.
@@ -377,31 +366,6 @@ public class Utils {
 		}
 		sb.append("\\E");
 		return java.util.regex.Pattern.compile(sb.toString(), flags);
-	}
-
-	/**
-	 * Creates a formatted string supplier with message arguments for lazy evaluation.
-	 *
-	 * <p>This method returns a {@link Supplier} that formats the string pattern with the provided arguments
-	 * only when the supplier's {@code get()} method is called. This is useful for expensive string formatting
-	 * operations that may not always be needed, such as error messages in assertions.</p>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Lazy evaluation - string is only formatted if assertion fails</jc>
-	 * 	assertTrue(condition, fs(<js>"Expected {0} but got {1}"</js>, expected, actual));
-	 *
-	 * 	<jc>// Can be used anywhere a Supplier&lt;String&gt; is expected</jc>
-	 * 	Supplier&lt;String&gt; <jv>messageSupplier</jv> = fs(<js>"Processing item {0} of {1}"</js>, i, total);
-	 * </p>
-	 *
-	 * @param pattern The message pattern using <js>{0}</js>, <js>{1}</js>, etc. placeholders.
-	 * @param args The arguments to substitute into the pattern placeholders.
-	 * @return A {@link Supplier} that will format the string when {@code get()} is called.
-	 * @see StringUtils#mformat(String, Object...)
-	 */
-	public static Supplier<String> mfs(String pattern, Object...args) {
-		return () -> StringFormat.format(pattern, args);
 	}
 
 	/**

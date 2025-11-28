@@ -4900,11 +4900,11 @@ public class RestContext extends Context {
 	public static final Map<Class<?>,RestContext> getGlobalRegistry() { return u(REGISTRY); }
 
 	static ServletException servletException(String msg, Object...args) {
-		return new ServletException(mf(msg, args));
+		return new ServletException(f(msg, args));
 	}
 
 	static ServletException servletException(Throwable t, String msg, Object...args) {
-		return new ServletException(mf(msg, args), t);
+		return new ServletException(f(msg, args), t);
 	}
 
 	private final Supplier<?> resource;
@@ -5100,7 +5100,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> mf("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
 			}
 		}
 
@@ -5893,7 +5893,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), session.getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> mf("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
 		}
 	}

@@ -73,17 +73,17 @@ class BeanConfig_Test extends TestBase {
 
 		var pm1 = bc.toBeanMap(p1);
 
-		assertEquals(pm1.size(), m1.size(), mfs("Bean Map size failed for: {0} / {1} / {2}", p1, pm1.size(), m1.size()));
-		assertEquals(pm1.keySet(), m1.keySet(), mfs("Bean Map key set equality failed for: {0} / {1} / {2}", p1, pm1.keySet() , m1.keySet()));
-		assertEquals(m1.keySet(), pm1.keySet(), mfs("Bean Map key set reverse equality failed for: {0} / {1} / {2}", p1, pm1.keySet(), m1.keySet()));
-		assertEquals(pm1, m1, mfs("Bean Map equality failed for: {0} / {1} / {2}", p1, pm1, m1));  // NOSONAR
+		assertEquals(pm1.size(), m1.size(), fs("Bean Map size failed for: {0} / {1} / {2}", p1, pm1.size(), m1.size()));
+		assertEquals(pm1.keySet(), m1.keySet(), fs("Bean Map key set equality failed for: {0} / {1} / {2}", p1, pm1.keySet() , m1.keySet()));
+		assertEquals(m1.keySet(), pm1.keySet(), fs("Bean Map key set reverse equality failed for: {0} / {1} / {2}", p1, pm1.keySet(), m1.keySet()));
+		assertEquals(pm1, m1, fs("Bean Map equality failed for: {0} / {1} / {2}", p1, pm1, m1));  // NOSONAR
 		assertThrows(BeanRuntimeException.class, ()->bc.newBeanMap(Address.class));  // Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.
 		assertNull(bc.newBeanMap(java.lang.Integer.class), "java.lang.Integer incorrectly designated as bean type.");
 		assertNull(bc.newBeanMap(java.lang.Class.class), "java.lang.Class incorrectly designated as bean type.");
 
 		var bm1 = bc.toBeanMap(new Address("street", "city", "state", "zip"));
 
-		assertEquals(bm1.size(), m2.size(), mfs("Bean Adapter map's key set has wrong size: {0} / {1} / {2}", a, bm1.size(), m2.size()));
+		assertEquals(bm1.size(), m2.size(), fs("Bean Adapter map's key set has wrong size: {0} / {1} / {2}", a, bm1.size(), m2.size()));
 
 		var iter = bm1.keySet().iterator();
 		var temp = new HashSet<>();
@@ -93,16 +93,16 @@ class BeanConfig_Test extends TestBase {
 			count++;
 		}
 
-		assertEquals(count, m2.size(), mfs("Iteration count over bean adpater key set failed: {0} / {1} / {2}", a, count, m2.size()));
-		assertEquals(m2.keySet(), temp, mfs("Iteration over bean adpater key set failed: {0} / {1} / {2}", a, bm1.keySet(), m2.keySet()));
-		assertNotNull(bc.toBeanMap(p2), mfs("Failed to identify class as bean type: {0}", p2.getClass()));
+		assertEquals(count, m2.size(), fs("Iteration count over bean adpater key set failed: {0} / {1} / {2}", a, count, m2.size()));
+		assertEquals(m2.keySet(), temp, fs("Iteration over bean adpater key set failed: {0} / {1} / {2}", a, bm1.keySet(), m2.keySet()));
+		assertNotNull(bc.toBeanMap(p2), fs("Failed to identify class as bean type: {0}", p2.getClass()));
 
 		var m5 = bc.toBeanMap(p2);
 		@SuppressWarnings("cast")
 		var es1 = (Set)m5.entrySet();
 
-		assertEquals(es1, m3.entrySet(), mfs("Entry set equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
-		assertEquals(m3.entrySet(), es1, mfs("Entry set reverse equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
+		assertEquals(es1, m3.entrySet(), fs("Entry set equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
+		assertEquals(m3.entrySet(), es1, fs("Entry set reverse equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
 
 		iter = es1.iterator();
 		temp = new HashSet<>();
@@ -112,8 +112,8 @@ class BeanConfig_Test extends TestBase {
 			count++;
 		}
 
-		assertEquals(count, m3.size(), mfs("Iteration count over bean adpater entry set failed: {0} / {1} / {2}", a, count, m3.size()));
-		assertEquals(m3.entrySet(), temp, mfs("Iteration over bean adpater entry set failed: {0} / {1} / {2}", a, es1, m3.entrySet()));
+		assertEquals(count, m3.size(), fs("Iteration count over bean adpater entry set failed: {0} / {1} / {2}", a, count, m3.size()));
+		assertEquals(m3.entrySet(), temp, fs("Iteration over bean adpater entry set failed: {0} / {1} / {2}", a, es1, m3.entrySet()));
 	}
 
 	public static class Person {
@@ -133,7 +133,7 @@ class BeanConfig_Test extends TestBase {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return mf("Person(name: {0}, age: {1})", name, age);
+			return f("Person(name: {0}, age: {1})", name, age);
 		}
 	}
 
@@ -170,7 +170,7 @@ class BeanConfig_Test extends TestBase {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return mf("Address(street: {0}, city: {1}, state: {2}, zip: {3})", street, city, state, zip);
+			return f("Address(street: {0}, city: {1}, state: {2}, zip: {3})", street, city, state, zip);
 		}
 	}
 
@@ -328,7 +328,7 @@ class BeanConfig_Test extends TestBase {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return mf("toString():name={0},age={1}", name, age);
+			return f("toString():name={0},age={1}", name, age);
 		}
 	}
 
@@ -358,7 +358,7 @@ class BeanConfig_Test extends TestBase {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return mf("toString():name={0},age={1}", name, age);
+			return f("toString():name={0},age={1}", name, age);
 		}
 	}
 
@@ -399,10 +399,10 @@ class BeanConfig_Test extends TestBase {
 		var f1 = (A) Proxy.newProxyInstance(this.getClass().getClassLoader(), a(A.class), new AHandler());
 
 		var bm1 = session.toBeanMap(f1);
-		assertNotNull(bm1, mfs("Failed to obtain bean adapter for proxy: {0}", f1));
+		assertNotNull(bm1, fs("Failed to obtain bean adapter for proxy: {0}", f1));
 
 		var bm2 = session.newBeanMap(A.class);
-		assertNotNull(bm2, mfs("Failed to create dynamic proxy bean for interface: {0}", A.class.getName()));
+		assertNotNull(bm2, fs("Failed to create dynamic proxy bean for interface: {0}", A.class.getName()));
 
 		bm2.put("a", "Hello");
 		bm2.put("b", Integer.valueOf(50));
@@ -410,8 +410,8 @@ class BeanConfig_Test extends TestBase {
 		f1.setB(50);
 
 		assertBean(bm2, "a,b", "Hello,50");
-		assertEquals(bm1, bm2, mfs("Failed equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
-		assertEquals(bm2, bm1, mfs("Failed reverse equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
+		assertEquals(bm1, bm2, fs("Failed equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
+		assertEquals(bm2, bm1, fs("Failed reverse equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
 	}
 
 	public interface A {

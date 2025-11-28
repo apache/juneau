@@ -194,7 +194,7 @@ public class AssertionArgs {
 	 * @return This instance for method chaining.
 	 */
 	public AssertionArgs setMessage(String message, Object...args) {
-		messageSupplier = mfs(message, args);
+		messageSupplier = fs(message, args);
 		return this;
 	}
 
@@ -260,6 +260,6 @@ public class AssertionArgs {
 	 * @return A supplier that produces the composed error message.
 	 */
 	protected Supplier<String> getMessage(String msg, Object...args) {
-		return messageSupplier == null ? mfs(msg, args) : mfs("{0}, Caused by: {1}", messageSupplier.get(), mf(msg, args));
+		return messageSupplier == null ? fs(msg, args) : fs("{0}, Caused by: {1}", messageSupplier.get(), f(msg, args));
 	}
 }
