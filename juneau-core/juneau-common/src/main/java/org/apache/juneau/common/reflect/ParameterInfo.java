@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -116,12 +117,42 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	private final ResettableSupplier<String> resolvedQualifier = memoizeResettable(this::findQualifierInternal);  // Resolved qualifier from @Named annotation.
 
 	/**
+	 * Creates a ParameterInfo wrapper for the specified parameter.
+	 *
+	 * <p>
+	 * This convenience method automatically determines the declaring executable from the parameter
+	 * and finds the matching ParameterInfo.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Parameter <jv>p</jv> = ...;
+	 * 	ParameterInfo <jv>pi</jv> = ParameterInfo.<jsm>of</jsm>(<jv>p</jv>);
+	 * </p>
+	 *
+	 * @param inner The parameter being wrapped. Must not be <jk>null</jk>.
+	 * @return A ParameterInfo object wrapping the parameter.
+	 * @throws IllegalArgumentException If the parameter is <jk>null</jk> or cannot be found in its declaring executable.
+	 */
+	public static ParameterInfo of(Parameter inner) {
+		assertArgNotNull("inner", inner);
+		var exec = inner.getDeclaringExecutable();
+		ExecutableInfo execInfo = exec instanceof Constructor ? ConstructorInfo.of((Constructor<?>)exec) : MethodInfo.of((Method)exec);
+		var params = execInfo.getParameters();
+		for (var param : params) {
+			if (param.inner() == inner) {
+				return param;
+			}
+		}
+		throw new IllegalArgumentException("Parameter not found in declaring executable: " + inner);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * <p>
 	 * Creates a new ParameterInfo wrapper for the specified parameter. This constructor is protected
 	 * and should not be called directly. ParameterInfo instances are typically obtained from
-	 * {@link ExecutableInfo#getParameters()}.
+	 * {@link ExecutableInfo#getParameters()} or {@link #of(Parameter)}.
 	 *
 	 * @param executable The ExecutableInfo (MethodInfo or ConstructorInfo) that contains this parameter.
 	 * @param inner The parameter being wrapped.

@@ -847,11 +847,7 @@ public class StringUtils {
 	 * @see #mformat(String, Object...) for MessageFormat-style formatting
 	 */
 	public static String format(String pattern, Object...args) {
-		if (pattern == null)
-			return null;
-		if (args == null || args.length == 0)
-			return pattern;
-		return String.format(pattern, args);
+		return StringFormat.format(pattern, args);
 	}
 
 	/**

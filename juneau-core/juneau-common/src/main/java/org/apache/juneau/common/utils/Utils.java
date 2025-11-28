@@ -296,8 +296,6 @@ public class Utils {
 	 * @return The formatted string.
 	 */
 	public static String mf(String pattern, Object...args) {
-		if (args.length == 0)
-			return pattern;
 		return StringFormat.format(pattern, args);
 	}
 
@@ -403,7 +401,7 @@ public class Utils {
 	 * @see StringUtils#mformat(String, Object...)
 	 */
 	public static Supplier<String> mfs(String pattern, Object...args) {
-		return () -> mformat(pattern, args);
+		return () -> StringFormat.format(pattern, args);
 	}
 
 	/**

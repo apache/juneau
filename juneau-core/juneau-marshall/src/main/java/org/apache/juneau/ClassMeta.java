@@ -1842,7 +1842,7 @@ public class ClassMeta<T> implements Type {
 		if (isEnum()) {
 			var t = (T)enumValues.getKey(arg);
 			if (t == null && ! beanContext.isIgnoreUnknownEnumValues())
-				throw new ExecutableException("Could not resolve enum value '" + arg + "' on class '" + getInnerClass().getName() + "'");
+				throw new ExecutableException("Could not resolve enum value ''{0}'' on class ''{1}''", arg, getInnerClass().getName());
 			return t;
 		}
 

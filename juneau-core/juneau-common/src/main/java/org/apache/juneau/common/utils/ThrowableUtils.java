@@ -236,7 +236,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message and cause.
 	 */
 	public static RuntimeException rex(Throwable cause, String msg, Object...args) {
-		return new RuntimeException(args.length == 0 ? msg : mf(msg, args), cause);
+		return new RuntimeException(mf(msg, args), cause);
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message.
 	 */
 	public static BeanRuntimeException bex(String msg, Object...args) {
-		return new BeanRuntimeException(args.length == 0 ? msg : mf(msg, args));
+		return new BeanRuntimeException(msg, args);
 	}
 
 	/**

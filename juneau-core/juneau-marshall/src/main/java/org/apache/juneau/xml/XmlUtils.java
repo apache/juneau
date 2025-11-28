@@ -479,7 +479,7 @@ public class XmlUtils {
 					if (xmlNs.prefix().equals(prefix))
 						return Namespace.of(prefix, xmlNs.namespaceURI());
 			}
-			throw bex("Found @Xml.prefix annotation with no matching URI.  prefix='" + prefix + "'");
+			throw bex("Found @Xml.prefix annotation with no matching URI.  prefix=''{0}''", prefix);
 		}
 
 		// If only namespaceURI specified, need to search for prefix.
