@@ -372,35 +372,63 @@ public class Utils {
 	 * Shortcut for calling {@link StringUtils#format(String, Object...)}.
 	 *
 	 * <p>
-	 * This method provides a convenient shorthand for printf-style string formatting.
+	 * This method provides a convenient shorthand for string formatting that supports both
+	 * MessageFormat-style and printf-style formatting in the same pattern.
+	 *
+	 * <h5 class='section'>Format Support:</h5>
+	 * <ul>
+	 *   <li><b>Printf-style:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%.2f"</js>, <js>"%1$s"</js>, etc.</li>
+	 *   <li><b>MessageFormat-style:</b> <js>"{0}"</js>, <js>"{1,number}"</js>, <js>"{2,date}"</js>, etc.</li>
+	 *   <li><b>Un-numbered MessageFormat:</b> <js>"{}"</js> - Sequential placeholders that are automatically numbered</li>
+	 *   <li><b>Mixed formats:</b> Both styles can be used in the same pattern</li>
+	 * </ul>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Basic formatting</jc>
+	 * 	<jc>// Printf-style formatting</jc>
 	 * 	f(<js>"Hello %s, you have %d items"</js>, <js>"John"</js>, 5);
 	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
 	 *
 	 * 	<jc>// Floating point</jc>
 	 * 	f(<js>"Price: $%.2f"</js>, 19.99);
 	 * 	<jc>// Returns: "Price: $19.99"</jc>
+	 *
+	 * 	<jc>// MessageFormat-style formatting</jc>
+	 * 	f(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
+	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
+	 *
+	 * 	<jc>// Un-numbered MessageFormat placeholders (sequential)</jc>
+	 * 	f(<js>"Hello {}, you have {} items"</js>, <js>"John"</js>, 5);
+	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
+	 *
+	 * 	<jc>// Mixed format styles in the same pattern</jc>
+	 * 	f(<js>"User {0} has %d items and %s status"</js>, <js>"Alice"</js>, 10, <js>"active"</js>);
+	 * 	<jc>// Returns: "User Alice has 10 items and active status"</jc>
 	 * </p>
 	 *
-	 * @param pattern The printf-style format string.
+	 * @param pattern The format string supporting both MessageFormat and printf-style placeholders.
 	 * @param args The arguments to format.
 	 * @return The formatted string.
 	 * @see StringUtils#format(String, Object...)
-	 * @see #mf(String, Object...) for MessageFormat-style formatting
+	 * @see StringFormat for detailed format specification
+	 * @see #mf(String, Object...) for MessageFormat-only formatting
 	 */
 	public static String f(String pattern, Object...args) {
 		return format(pattern, args);
 	}
 
 	/**
-	 * Creates a formatted string supplier with printf-style format arguments for lazy evaluation.
+	 * Creates a formatted string supplier with format arguments for lazy evaluation.
 	 *
 	 * <p>This method returns a {@link Supplier} that formats the string pattern with the provided arguments
 	 * only when the supplier's {@code get()} method is called. This is useful for expensive string formatting
 	 * operations that may not always be needed, such as error messages in assertions.</p>
+	 *
+	 * <p>
+	 * Supports both MessageFormat-style and printf-style formatting in the same pattern.
+	 * Also supports un-numbered MessageFormat placeholders: <js>"{}"</js> - Sequential placeholders that are automatically numbered.
+	 * See {@link #f(String, Object...)} for format specification details.
+	 * </p>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
@@ -409,13 +437,21 @@ public class Utils {
 	 *
 	 * 	<jc>// Can be used anywhere a Supplier&lt;String&gt; is expected</jc>
 	 * 	Supplier&lt;String&gt; <jv>messageSupplier</jv> = fs(<js>"Processing item %d of %d"</js>, i, total);
+	 *
+	 * 	<jc>// Mixed format styles</jc>
+	 * 	Supplier&lt;String&gt; <jv>msg</jv> = fs(<js>"User {0} has %d items"</js>, <js>"Alice"</js>, 10);
+	 *
+	 * 	<jc>// Un-numbered MessageFormat placeholders</jc>
+	 * 	Supplier&lt;String&gt; <jv>msg2</jv> = fs(<js>"Hello {}, you have {} items"</js>, <js>"John"</js>, 5);
 	 * </p>
 	 *
-	 * @param pattern The printf-style format string using <js>%s</js>, <js>%d</js>, etc. placeholders.
+	 * @param pattern The format string supporting both MessageFormat and printf-style placeholders
+	 * 	(e.g., <js>"{0}"</js>, <js>"%s"</js>, <js>"%d"</js>, etc.).
 	 * @param args The arguments to substitute into the pattern placeholders.
 	 * @return A {@link Supplier} that will format the string when {@code get()} is called.
 	 * @see StringUtils#format(String, Object...)
-	 * @see #mfs(String, Object...) for MessageFormat-style formatting
+	 * @see #f(String, Object...) for format specification details
+	 * @see #mfs(String, Object...) for MessageFormat-only formatting
 	 */
 	public static Supplier<String> fs(String pattern, Object...args) {
 		return () -> format(pattern, args);

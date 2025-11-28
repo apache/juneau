@@ -262,33 +262,33 @@ class StringUtils_Test extends TestBase {
 	void a03_replaceVars() throws Exception {
 		var m = JsonMap.ofJson("{a:'A',b:1,c:true,d:'{e}',e:'E{f}E',f:'F',g:'{a}',h:'a',i:null}");
 
-		assertEquals("xxx", replaceVars("xxx", m));
-		assertEquals("A", replaceVars("{a}", m));
-		assertEquals("AA", replaceVars("{a}{a}", m));
-		assertEquals("xAx", replaceVars("x{a}x", m));
-		assertEquals("xAxAx", replaceVars("x{a}x{a}x", m));
-		assertEquals("1", replaceVars("{b}", m));
-		assertEquals("11", replaceVars("{b}{b}", m));
-		assertEquals("x1x", replaceVars("x{b}x", m));
-		assertEquals("x1x1x", replaceVars("x{b}x{b}x", m));
-		assertEquals("true", replaceVars("{c}", m));
-		assertEquals("truetrue", replaceVars("{c}{c}", m));
-		assertEquals("xtruextruex", replaceVars("x{c}x{c}x", m));
-		assertEquals("EFE", replaceVars("{d}", m));
-		assertEquals("EFEEFE", replaceVars("{d}{d}", m));
-		assertEquals("xEFEx", replaceVars("x{d}x", m));
-		assertEquals("xEFExEFEx", replaceVars("x{d}x{d}x", m));
-		assertEquals("A", replaceVars("{g}", m));
-		assertEquals("AA", replaceVars("{g}{g}", m));
-		assertEquals("xAx", replaceVars("x{g}x", m));
-		assertEquals("xAxAx", replaceVars("x{g}x{g}x", m));
-		assertEquals("{x}", replaceVars("{x}", m));
-		assertEquals("{x}{x}", replaceVars("{x}{x}", m));
-		assertEquals("x{x}x{x}x", replaceVars("x{x}x{x}x", m));
-		assertEquals("{A}", replaceVars("{{g}}", m));
-		assertEquals("A", replaceVars("{{h}}", m));
-		assertEquals("{}", replaceVars("{{i}}", m));
-		assertEquals("{}", replaceVars("{}", m));
+		assertEquals("xxx", formatNamed("xxx", m));
+		assertEquals("A", formatNamed("{a}", m));
+		assertEquals("AA", formatNamed("{a}{a}", m));
+		assertEquals("xAx", formatNamed("x{a}x", m));
+		assertEquals("xAxAx", formatNamed("x{a}x{a}x", m));
+		assertEquals("1", formatNamed("{b}", m));
+		assertEquals("11", formatNamed("{b}{b}", m));
+		assertEquals("x1x", formatNamed("x{b}x", m));
+		assertEquals("x1x1x", formatNamed("x{b}x{b}x", m));
+		assertEquals("true", formatNamed("{c}", m));
+		assertEquals("truetrue", formatNamed("{c}{c}", m));
+		assertEquals("xtruextruex", formatNamed("x{c}x{c}x", m));
+		assertEquals("EFE", formatNamed("{d}", m));
+		assertEquals("EFEEFE", formatNamed("{d}{d}", m));
+		assertEquals("xEFEx", formatNamed("x{d}x", m));
+		assertEquals("xEFExEFEx", formatNamed("x{d}x{d}x", m));
+		assertEquals("A", formatNamed("{g}", m));
+		assertEquals("AA", formatNamed("{g}{g}", m));
+		assertEquals("xAx", formatNamed("x{g}x", m));
+		assertEquals("xAxAx", formatNamed("x{g}x{g}x", m));
+		assertEquals("{x}", formatNamed("{x}", m));
+		assertEquals("{x}{x}", formatNamed("{x}{x}", m));
+		assertEquals("x{x}x{x}x", formatNamed("x{x}x{x}x", m));
+		assertEquals("{A}", formatNamed("{{g}}", m));
+		assertEquals("A", formatNamed("{{h}}", m));
+		assertEquals("{}", formatNamed("{{i}}", m));
+		assertEquals("{}", formatNamed("{}", m));
 	}
 
 	//====================================================================================================
@@ -1450,23 +1450,23 @@ class StringUtils_Test extends TestBase {
 	}
 
 	@Test
-	void a62_formatWithNamedArgs() {
+	void a62_formatNamed() {
 		var args = new HashMap<String,Object>();
 		args.put("name", "John");
 		args.put("age", 30);
 		args.put("city", "New York");
-		assertEquals("Hello John, you are 30 years old", formatWithNamedArgs("Hello {name}, you are {age} years old", args));
-		assertEquals("Welcome to New York", formatWithNamedArgs("Welcome to {city}", args));
-		assertEquals("Hello {unknown}", formatWithNamedArgs("Hello {unknown}", args)); // Unknown placeholder kept
-		assertEquals("No placeholders", formatWithNamedArgs("No placeholders", args));
-		assertNull(formatWithNamedArgs(null, args));
-		assertEquals("Template", formatWithNamedArgs("Template", null));
-		assertEquals("Template", formatWithNamedArgs("Template", new HashMap<>()));
+		assertEquals("Hello John, you are 30 years old", formatNamed("Hello {name}, you are {age} years old", args));
+		assertEquals("Welcome to New York", formatNamed("Welcome to {city}", args));
+		assertEquals("Hello {unknown}", formatNamed("Hello {unknown}", args)); // Unknown placeholder kept
+		assertEquals("No placeholders", formatNamed("No placeholders", args));
+		assertNull(formatNamed(null, args));
+		assertEquals("Template", formatNamed("Template", null));
+		assertEquals("Template", formatNamed("Template", new HashMap<>()));
 		// Test with null values
 		var argsWithNull = new HashMap<String,Object>();
 		argsWithNull.put("name", "John");
 		argsWithNull.put("value", null);
-		assertEquals("Hello John, value: ", formatWithNamedArgs("Hello {name}, value: {value}", argsWithNull));
+		assertEquals("Hello John, value: ", formatNamed("Hello {name}, value: {value}", argsWithNull));
 	}
 
 	//====================================================================================================

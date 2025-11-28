@@ -650,7 +650,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return A new string with variables replaced, or the same string if no variables were found.
 	 */
 	public String resolveVars(String s) {
-		return replaceVars(s, this);
+		return formatNamed(s, this);
 	}
 
 	/**

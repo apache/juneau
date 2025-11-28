@@ -37,7 +37,7 @@ import org.apache.juneau.rest.util.*;
 class MockPathResolver {
 
 	private static String fixSegment(String s, Map<String,Object> pathVars) {
-		s = replaceVars(emptyIfNull(s), pathVars);
+		s = formatNamed(emptyIfNull(s), pathVars);
 		if (s.isEmpty() || s.equals("/"))
 			return "";
 		s = trimTrailingSlashes(s);

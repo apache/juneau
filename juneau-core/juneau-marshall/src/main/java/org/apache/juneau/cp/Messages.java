@@ -283,7 +283,7 @@ public class Messages extends ResourceBundle {
 			var cl = forClass.getClassLoader();
 			var m = JsonMap.of("name", name, "package", forClass.getPackage().getName());
 			for (var bn : baseNames) {
-				bn = StringUtils.replaceVars(bn, m);
+				bn = StringUtils.formatNamed(bn, m);
 				var rb = findBundle(bn, locale, cl);
 				if (nn(rb))
 					return rb;

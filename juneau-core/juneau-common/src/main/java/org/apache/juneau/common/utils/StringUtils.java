@@ -734,6 +734,12 @@ public class StringUtils {
 	 * to allow proper formatting. For simple placeholders (e.g., {@code {0}}), arguments are converted to
 	 * readable strings using {@link #convertToReadable(Object)}.
 	 *
+	 * <p>
+	 * Supports standard MessageFormat placeholders: <js>"{0}"</js>, <js>"{1,number}"</js>, <js>"{2,date}"</js>, etc.
+	 * Also supports un-numbered placeholders: <js>"{}"</js> - Sequential placeholders that are automatically numbered.
+	 * Note: For un-numbered placeholders, use {@link #format(String, Object...)} instead, as this method uses
+	 * standard {@link MessageFormat} which requires explicit indices.
+	 *
 	 * @param pattern The string pattern.
 	 * @param args The arguments.
 	 * @return The formatted string.
@@ -764,17 +770,22 @@ public class StringUtils {
 	}
 
 	/**
-	 * Formats a string using printf-style format specifiers.
+	 * Formats a string using printf-style and/or MessageFormat-style format specifiers.
 	 *
 	 * <p>
-	 * This method provides printf-style formatting similar to C's <c>printf()</c> function and Java's
-	 * {@link String#format(String, Object...)}. It uses the same format specifier syntax.
+	 * This method provides unified string formatting that supports both printf-style formatting
+	 * (similar to C's <c>printf()</c> function and Java's {@link String#format(String, Object...)})
+	 * and MessageFormat-style formatting in the same pattern.
 	 *
-	 * <p>
-	 * This is the primary formatting method using printf-style syntax (e.g., <js>"%s"</js>, <js>"%d"</js>, <js>"%f"</js>).
-	 * For MessageFormat-style formatting, use {@link #mformat(String, Object...)}.
+	 * <h5 class='section'>Format Support:</h5>
+	 * <ul>
+	 *   <li><b>Printf-style:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%.2f"</js>, <js>"%1$s"</js>, etc.</li>
+	 *   <li><b>MessageFormat-style:</b> <js>"{0}"</js>, <js>"{1,number}"</js>, <js>"{2,date}"</js>, etc.</li>
+	 *   <li><b>Un-numbered MessageFormat:</b> <js>"{}"</js> - Sequential placeholders that are automatically numbered</li>
+	 *   <li><b>Mixed formats:</b> Both styles can be used in the same pattern</li>
+	 * </ul>
 	 *
-	 * <h5 class='section'>Format Specifiers:</h5>
+	 * <h5 class='section'>Printf Format Specifiers:</h5>
 	 * <ul>
 	 *   <li><b>%s</b> - String</li>
 	 *   <li><b>%d</b> - Decimal integer</li>
@@ -794,12 +805,15 @@ public class StringUtils {
 	 *
 	 * <h5 class='section'>Format Specifier Syntax:</h5>
 	 * <p>
-	 * Format specifiers follow this pattern: <c>%[argument_index$][flags][width][.precision]conversion</c>
+	 * Printf format specifiers follow this pattern: <c>%[argument_index$][flags][width][.precision]conversion</c>
+	 * </p>
+	 * <p>
+	 * MessageFormat placeholders follow this pattern: <c>{argument_index[,format_type[,format_style]]}</c>
 	 * </p>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Basic string and number formatting</jc>
+	 * 	<jc>// Printf-style formatting</jc>
 	 * 	format(<js>"Hello %s, you have %d items"</js>, <js>"John"</js>, 5);
 	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
 	 *
@@ -807,29 +821,42 @@ public class StringUtils {
 	 * 	format(<js>"Price: $%.2f"</js>, 19.99);
 	 * 	<jc>// Returns: "Price: $19.99"</jc>
 	 *
-	 * 	<jc>// Width and alignment</jc>
+	 * 	<jc>// MessageFormat-style formatting</jc>
+	 * 	format(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
+	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
+	 *
+	 * 	<jc>// Un-numbered MessageFormat placeholders (sequential)</jc>
+	 * 	format(<js>"Hello {}, you have {} items"</js>, <js>"John"</js>, 5);
+	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
+	 *
+	 * 	<jc>// Mixed format styles in the same pattern</jc>
+	 * 	format(<js>"User {0} has %d items and %s status"</js>, <js>"Alice"</js>, 10, <js>"active"</js>);
+	 * 	<jc>// Returns: "User Alice has 10 items and active status"</jc>
+	 *
+	 * 	<jc>// Width and alignment (printf)</jc>
 	 * 	format(<js>"Name: %-20s Age: %3d"</js>, <js>"John"</js>, 25);
 	 * 	<jc>// Returns: "Name: John                 Age:  25"</jc>
 	 *
-	 * 	<jc>// Hexadecimal</jc>
+	 * 	<jc>// Hexadecimal (printf)</jc>
 	 * 	format(<js>"Color: #%06X"</js>, 0xFF5733);
 	 * 	<jc>// Returns: "Color: #FF5733"</jc>
 	 *
-	 * 	<jc>// Scientific notation</jc>
-	 * 	format(<js>"Value: %.2e"</js>, 1234567.0);
-	 * 	<jc>// Returns: "Value: 1.23e+06"</jc>
-	 *
 	 * 	<jc>// Argument index (reuse arguments)</jc>
-	 * 	format(<js>"%1$s loves %2$s, and %1$s also loves %3$s"</js>, <js>"Alice"</js>, <js>"Bob"</js>, <js>"Charlie"</js>);
+	 * 	format(<js>"%1$s loves %2$s, and {0} also loves %3$s"</js>, <js>"Alice"</js>, <js>"Bob"</js>, <js>"Charlie"</js>);
 	 * 	<jc>// Returns: "Alice loves Bob, and Alice also loves Charlie"</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>Comparison with mformat():</h5>
+	 * <p>
+	 * This method supports both formats, while {@link #mformat(String, Object...)} only supports MessageFormat-style.
+	 * </p>
 	 * <p class='bjava'>
-	 * 	<jc>// Printf style (this method)</jc>
+	 * 	<jc>// Both styles supported (this method)</jc>
 	 * 	format(<js>"Hello %s, you have %d items"</js>, <js>"John"</js>, 5);
+	 * 	format(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
+	 * 	format(<js>"User {0} has %d items"</js>, <js>"Alice"</js>, 10);
 	 *
-	 * 	<jc>// MessageFormat style</jc>
+	 * 	<jc>// MessageFormat style only</jc>
 	 * 	mformat(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
 	 * </p>
 	 *
@@ -839,12 +866,13 @@ public class StringUtils {
 	 * or cause a {@link NullPointerException} for numeric conversions (consistent with {@link String#format(String, Object...)}).
 	 * </p>
 	 *
-	 * @param pattern The printf-style format string.
+	 * @param pattern The format string supporting both MessageFormat and printf-style placeholders.
 	 * @param args The arguments to format.
 	 * @return The formatted string.
 	 * @throws java.util.IllegalFormatException If the format string is invalid or arguments don't match the format specifiers.
+	 * @see StringFormat for detailed format specification
 	 * @see String#format(String, Object...)
-	 * @see #mformat(String, Object...) for MessageFormat-style formatting
+	 * @see #mformat(String, Object...) for MessageFormat-only formatting
 	 */
 	public static String format(String pattern, Object...args) {
 		return StringFormat.format(pattern, args);
@@ -2488,32 +2516,6 @@ public class StringUtils {
 			index += search.length();
 		}
 		return count;
-	}
-
-	/**
-	 * Formats a string template with named arguments using <js>"{name}"</js> placeholders.
-	 *
-	 * <p>
-	 * Similar to {@link #replaceVars(String, Map)} but designed for formatting scenarios.
-	 * Replaces placeholders of the form <js>"{name}"</js> with values from the map.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	var args = Map.of(<js>"name"</js>, <js>"John"</js>, <js>"age"</js>, <js>30</js>);
-	 * 	formatWithNamedArgs(<js>"Hello {name}, you are {age} years old"</js>, args);
-	 * 	<jc>// Returns: "Hello John, you are 30 years old"</jc>
-	 * </p>
-	 *
-	 * @param template The template string with <js>"{name}"</js> placeholders.
-	 * @param args The map containing the named argument values.
-	 * @return The formatted string with placeholders replaced, or the original template if args is null or empty.
-	 */
-	public static String formatWithNamedArgs(String template, Map<String,Object> args) {
-		if (template == null)
-			return null;
-		if (args == null || args.isEmpty())
-			return template;
-		return replaceVars(template, args);
 	}
 
 	/**
@@ -4312,6 +4314,10 @@ public class StringUtils {
 	 * Simple utility for replacing variables of the form <js>"{key}"</js> with values in the specified map.
 	 *
 	 * <p>
+	 * Supports named MessageFormat-style variables: <js>"{key}"</js> where <c>key</c> is a map key.
+	 * For un-numbered sequential placeholders <js>"{}"</js>, use {@link #format(String, Object...)} instead.
+	 *
+	 * <p>
 	 * Nested variables are supported in both the input string and map values.
 	 *
 	 * <p>
@@ -4324,7 +4330,7 @@ public class StringUtils {
 	 * @param m The map containing the variable values.
 	 * @return The new string with variables replaced, or the original string if it didn't have variables in it.
 	 */
-	public static String replaceVars(String s, Map<String,Object> m) {
+	public static String formatNamed(String s, Map<String,Object> m) {
 
 		if (s == null)
 			return null;
@@ -4360,7 +4366,7 @@ public class StringUtils {
 						depth--;
 					} else {
 						var key = s.substring(x + 1, i);
-						key = (hasInternalVar ? replaceVars(key, m) : key);
+						key = (hasInternalVar ? formatNamed(key, m) : key);
 						hasInternalVar = false;
 						// JUNEAU-248: Check if key exists in map by attempting to get it
 						// For regular maps: use containsKey() OR nn(get()) check
@@ -4377,7 +4383,7 @@ public class StringUtils {
 							var v = val.toString();
 							// If the replacement also contains variables, replace them now.
 							if (v.indexOf('{') != -1)
-								v = replaceVars(v, m);
+								v = formatNamed(v, m);
 							out.append(v);
 						}
 						state = S1;
