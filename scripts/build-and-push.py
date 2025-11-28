@@ -31,6 +31,8 @@ Usage: python3 build-and-push.py "commit message"
 """
 
 import argparse
+import os
+import platform
 import subprocess
 import sys
 from pathlib import Path
@@ -73,6 +75,138 @@ def run_command(cmd, description, cwd=None):
         return False
 
 
+def play_sound(success=True):
+    """
+    Play a system sound to indicate success or failure.
+    
+    Args:
+        success: True for success sound, False for failure sound
+    """
+    try:
+        system = platform.system()
+        if system == "Darwin":  # macOS
+            if success:
+                # Success sound
+                sound_path = "/System/Library/Sounds/Glass.aiff"
+            else:
+                # Failure sound
+                sound_path = "/System/Library/Sounds/Basso.aiff"
+            
+            if os.path.exists(sound_path):
+                subprocess.run(
+                    ["afplay", sound_path],
+                    capture_output=True,
+                    timeout=5
+                )
+        elif system == "Linux":
+            # Try to use paplay (PulseAudio) or aplay (ALSA)
+            if success:
+                # Try to play a beep or use speaker-test
+                try:
+                    subprocess.run(
+                        ["paplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"],
+                        capture_output=True,
+                        timeout=5
+                    )
+                except:
+                    # Fallback to speaker-test
+                    subprocess.run(
+                        ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
+                        capture_output=True,
+                        timeout=2
+                    )
+            else:
+                try:
+                    subprocess.run(
+                        ["paplay", "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"],
+                        capture_output=True,
+                        timeout=5
+                    )
+                except:
+                    # Fallback to speaker-test with lower frequency
+                    subprocess.run(
+                        ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
+                        capture_output=True,
+                        timeout=2
+                    )
+        elif system == "Windows":
+            # Use winsound module
+            import winsound
+            if success:
+                winsound.MessageBeep(winsound.MB_OK)
+            else:
+                winsound.MessageBeep(winsound.MB_ICONHAND)
+    except Exception:
+        # Silently fail if sound can't be played
+        pass
+
+
+def play_sound(success=True):
+    """
+    Play a system sound to indicate success or failure.
+    
+    Args:
+        success: True for success sound, False for failure sound
+    """
+    try:
+        system = platform.system()
+        if system == "Darwin":  # macOS
+            if success:
+                # Success sound
+                sound_path = "/System/Library/Sounds/Glass.aiff"
+            else:
+                # Failure sound
+                sound_path = "/System/Library/Sounds/Basso.aiff"
+            
+            if os.path.exists(sound_path):
+                subprocess.run(
+                    ["afplay", sound_path],
+                    capture_output=True,
+                    timeout=5
+                )
+        elif system == "Linux":
+            # Try to use paplay (PulseAudio) or aplay (ALSA)
+            if success:
+                # Try to play a beep or use speaker-test
+                try:
+                    subprocess.run(
+                        ["paplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"],
+                        capture_output=True,
+                        timeout=5
+                    )
+                except:
+                    # Fallback to speaker-test
+                    subprocess.run(
+                        ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
+                        capture_output=True,
+                        timeout=2
+                    )
+            else:
+                try:
+                    subprocess.run(
+                        ["paplay", "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"],
+                        capture_output=True,
+                        timeout=5
+                    )
+                except:
+                    # Fallback to speaker-test with lower frequency
+                    subprocess.run(
+                        ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
+                        capture_output=True,
+                        timeout=2
+                    )
+        elif system == "Windows":
+            # Use winsound module
+            import winsound
+            if success:
+                winsound.MessageBeep(winsound.MB_OK)
+            else:
+                winsound.MessageBeep(winsound.MB_ICONHAND)
+    except Exception:
+        # Silently fail if sound can't be played
+        pass
+
+
 def check_git_status(repo_dir):
     """Check if there are any changes to commit."""
     try:
@@ -86,6 +220,122 @@ def check_git_status(repo_dir):
         return len(result.stdout.strip()) > 0
     except Exception as e:
         print(f"⚠ Warning: Could not check git status: {e}")
+        return True
+
+
+def play_sound(success=True):
+    """
+    Play a system sound to indicate success or failure.
+    
+    Args:
+        success: True for success sound, False for failure sound
+    """
+    try:
+        system = platform.system()
+        if system == "Darwin":  # macOS
+            if success:
+                # Success sound
+                sound_path = "/System/Library/Sounds/Glass.aiff"
+            else:
+                # Failure sound
+                sound_path = "/System/Library/Sounds/Basso.aiff"
+            
+            if os.path.exists(sound_path):
+                subprocess.run(
+                    ["afplay", sound_path],
+                    capture_output=True,
+                    timeout=5
+                )
+        elif system == "Linux":
+            # Try to use paplay (PulseAudio) or aplay (ALSA)
+            if success:
+                # Try to play a beep or use speaker-test
+                try:
+                    subprocess.run(
+                        ["paplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"],
+                        capture_output=True,
+                        timeout=5
+                    )
+                except:
+                    # Fallback to speaker-test
+                    subprocess.run(
+                        ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
+                        capture_output=True,
+                        timeout=2
+                    )
+            else:
+                try:
+                    subprocess.run(
+                        ["paplay", "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"],
+                        capture_output=True,
+                        timeout=5
+                    )
+                except:
+                    # Fallback to speaker-test with lower frequency
+                    subprocess.run(
+                        ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
+                        capture_output=True,
+                        timeout=2
+                    )
+        elif system == "Windows":
+            # Use winsound module
+            import winsound
+            if success:
+                winsound.MessageBeep(winsound.MB_OK)
+            else:
+                winsound.MessageBeep(winsound.MB_ICONHAND)
+    except Exception:
+        # Silently fail if sound can't be played
+        pass
+
+
+def prompt_pgp_passphrase():
+    """
+    Make a dummy PGP call to prompt for passphrase early in the execution.
+    
+    This ensures the user is prompted for their PGP passphrase at the beginning
+    rather than waiting until signing is needed near the end of the process.
+    """
+    print("\n🔐 Prompting for PGP passphrase (dummy call)...")
+    try:
+        # Create a small dummy file to sign
+        import tempfile
+        import os
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as tmp:
+            tmp.write("dummy")
+            tmp_path = tmp.name
+        
+        try:
+            # Attempt to sign the dummy file (this will prompt for passphrase)
+            # Don't use --batch so it will prompt interactively for passphrase
+            # Use --yes to auto-confirm overwrite prompts, but allow passphrase prompt
+            result = subprocess.run(
+                ["gpg", "--yes", "--clearsign", tmp_path],
+                capture_output=False,  # Don't capture output so user can see the prompt
+                text=True,
+                timeout=60  # 60 second timeout for passphrase entry
+            )
+            # Clean up the dummy file and signature
+            try:
+                os.unlink(tmp_path)
+                if os.path.exists(tmp_path + ".asc"):
+                    os.unlink(tmp_path + ".asc")
+            except:
+                pass
+            print("✅ PGP passphrase entered successfully")
+            return True
+        except subprocess.TimeoutExpired:
+            print("⚠ PGP passphrase prompt timed out (this is okay if signing isn't needed)")
+            return True
+        except FileNotFoundError:
+            print("⚠ gpg command not found - skipping PGP passphrase prompt")
+            return True
+        except Exception as e:
+            # If signing fails for any reason, that's okay - we're just trying to prompt early
+            print(f"⚠ Could not prompt for PGP passphrase: {e}")
+            return True
+    except Exception as e:
+        print(f"⚠ Could not set up PGP passphrase prompt: {e}")
         return True
 
 
@@ -147,6 +397,8 @@ Examples:
     if args.dry_run:
         print("\nSteps that would be executed:")
         step_num = 1
+        print(f"  {step_num}. Prompt for PGP passphrase (dummy call)")
+        step_num += 1
         if not args.skip_tests:
             print(f"  {step_num}. Run tests: mvn test")
             step_num += 1
@@ -161,6 +413,9 @@ Examples:
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
     
+    # Prompt for PGP passphrase early (before any time-consuming operations)
+    prompt_pgp_passphrase()
+    
     step_num = 1
     
     # Step 1: Run tests (optional)
@@ -171,6 +426,7 @@ Examples:
             juneau_root
         ):
             print("\n❌ Build process aborted due to test failures.")
+            play_sound(success=False)
             return 1
         step_num += 1
     else:
@@ -184,6 +440,7 @@ Examples:
         juneau_root
     ):
         print("\n❌ Build process aborted due to build failure.")
+        play_sound(success=False)
         return 1
     step_num += 1
     
@@ -195,6 +452,7 @@ Examples:
             juneau_root
         ):
             print("\n❌ Build process aborted due to Javadoc generation failure.")
+            play_sound(success=False)
             return 1
         step_num += 1
     else:
@@ -205,6 +463,7 @@ Examples:
     if not check_git_status(juneau_root):
         print(f"\n⚠ Warning: No changes detected. Skipping commit and push.")
         print("🎉 Build completed successfully (nothing to commit)!")
+        play_sound(success=True)
         return 0
     
     # Step 4: Git add and commit
@@ -215,6 +474,7 @@ Examples:
         juneau_root
     ):
         print("\n❌ Build process aborted due to git add failure.")
+        play_sound(success=False)
         return 1
     
     if not run_command(
@@ -223,6 +483,7 @@ Examples:
         juneau_root
     ):
         print("\n❌ Build process aborted due to git commit failure.")
+        play_sound(success=False)
         return 1
     print(f"✅ Step {step_num}: Git commit completed.")
     step_num += 1
@@ -235,6 +496,7 @@ Examples:
     ):
         print("\n❌ Build process aborted due to git push failure.")
         print("⚠ Your changes have been committed locally but not pushed.")
+        play_sound(success=False)
         return 1
     
     # Success!
@@ -242,6 +504,7 @@ Examples:
     print("🎉 All operations completed successfully!")
     print(f"📦 Commit message: '{args.message}'")
     print("=" * 70)
+    play_sound(success=True)
     return 0
 
 
