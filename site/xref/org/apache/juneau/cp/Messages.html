@@ -291,7 +291,7 @@
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">var</strong> cl = forClass.getClassLoader();
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">var</strong> m = JsonMap.of(<span class="jxr_string">"name"</span>, name, <span class="jxr_string">"package"</span>, forClass.getPackage().getName());
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bn : baseNames) {
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				bn = StringUtils.replaceVars(bn, m);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				bn = StringUtils.formatNamed(bn, m);
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 				<strong class="jxr_keyword">var</strong> rb = findBundle(bn, locale, cl);
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 				<strong class="jxr_keyword">if</strong> (nn(rb))
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 					<strong class="jxr_keyword">return</strong> rb;
