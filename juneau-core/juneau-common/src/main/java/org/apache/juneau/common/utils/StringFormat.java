@@ -299,6 +299,12 @@ public final class StringFormat {
 
 		@Override
 		void append(StringBuilder sb, Object[] args, Locale locale) {
+			// %n is special - it doesn't consume an argument, just outputs a line separator
+			if (format == 'n') {
+				sb.append(System.lineSeparator());
+				return;
+			}
+
 			// String.format() throws MissingFormatArgumentException when argument is missing
 			if (args == null || index >= args.length || index < 0) {
 				throw new MissingFormatArgumentException(content);

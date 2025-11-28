@@ -298,7 +298,7 @@ public class Utils {
 	public static String mf(String pattern, Object...args) {
 		if (args.length == 0)
 			return pattern;
-		return MessageFormat.format(pattern, args);
+		return StringFormat.format(pattern, args);
 	}
 
 	/**
