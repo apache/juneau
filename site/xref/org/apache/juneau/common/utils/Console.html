@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 * @param args The arguments sent to the formatter.</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> err(String msg, Object...args) {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		System.err.println(mf(msg, args));  <em class="jxr_comment">// NOT DEBUG</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		System.err.println(f(msg, args));  <em class="jxr_comment">// NOT DEBUG</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * @param args The arguments sent to the formatter.</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> out(String msg, Object...args) {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		System.out.println(mf(msg, args));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		System.out.println(f(msg, args));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  }
 </pre>

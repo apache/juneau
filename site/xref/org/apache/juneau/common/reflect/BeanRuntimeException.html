@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getMessage(Throwable cause, Class&lt;?&gt; c, String msg, Object...args) {
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">if</strong> (nn(msg))
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">return</strong> (c == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : cn(c) + <span class="jxr_string">": "</span>) + mf(msg, args);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">return</strong> (c == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : cn(c) + <span class="jxr_string">": "</span>) + f(msg, args);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (nn(cause))
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">return</strong> (c == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : cn(c) + <span class="jxr_string">": "</span>) + cause.getMessage();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

@@ -81,17 +81,17 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> pm1 = bc.toBeanMap(p1);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(pm1.size(), m1.size(), mfs(<span class="jxr_string">"Bean Map size failed for: {0} / {1} / {2}"</span>, p1, pm1.size(), m1.size()));
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(pm1.keySet(), m1.keySet(), mfs(<span class="jxr_string">"Bean Map key set equality failed for: {0} / {1} / {2}"</span>, p1, pm1.keySet() , m1.keySet()));
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertEquals(m1.keySet(), pm1.keySet(), mfs(<span class="jxr_string">"Bean Map key set reverse equality failed for: {0} / {1} / {2}"</span>, p1, pm1.keySet(), m1.keySet()));
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertEquals(pm1, m1, mfs(<span class="jxr_string">"Bean Map equality failed for: {0} / {1} / {2}"</span>, p1, pm1, m1));  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(pm1.size(), m1.size(), fs(<span class="jxr_string">"Bean Map size failed for: {0} / {1} / {2}"</span>, p1, pm1.size(), m1.size()));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(pm1.keySet(), m1.keySet(), fs(<span class="jxr_string">"Bean Map key set equality failed for: {0} / {1} / {2}"</span>, p1, pm1.keySet() , m1.keySet()));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertEquals(m1.keySet(), pm1.keySet(), fs(<span class="jxr_string">"Bean Map key set reverse equality failed for: {0} / {1} / {2}"</span>, p1, pm1.keySet(), m1.keySet()));
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertEquals(pm1, m1, fs(<span class="jxr_string">"Bean Map equality failed for: {0} / {1} / {2}"</span>, p1, pm1, m1));  <em class="jxr_comment">// NOSONAR</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertThrows(BeanRuntimeException.<strong class="jxr_keyword">class</strong>, ()-&gt;bc.newBeanMap(Address.<strong class="jxr_keyword">class</strong>));  <em class="jxr_comment">// Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertNull(bc.newBeanMap(java.lang.Integer.<strong class="jxr_keyword">class</strong>), <span class="jxr_string">"java.lang.Integer incorrectly designated as bean type."</span>);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertNull(bc.newBeanMap(java.lang.Class.<strong class="jxr_keyword">class</strong>), <span class="jxr_string">"java.lang.Class incorrectly designated as bean type."</span>);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> bm1 = bc.toBeanMap(<strong class="jxr_keyword">new</strong> Address(<span class="jxr_string">"street"</span>, <span class="jxr_string">"city"</span>, <span class="jxr_string">"state"</span>, <span class="jxr_string">"zip"</span>));
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertEquals(bm1.size(), m2.size(), mfs(<span class="jxr_string">"Bean Adapter map's key set has wrong size: {0} / {1} / {2}"</span>, a, bm1.size(), m2.size()));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertEquals(bm1.size(), m2.size(), fs(<span class="jxr_string">"Bean Adapter map's key set has wrong size: {0} / {1} / {2}"</span>, a, bm1.size(), m2.size()));
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> iter = bm1.keySet().iterator();
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> temp = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
@@ -101,16 +101,16 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  			count++;
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		}
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertEquals(count, m2.size(), mfs(<span class="jxr_string">"Iteration count over bean adpater key set failed: {0} / {1} / {2}"</span>, a, count, m2.size()));
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(m2.keySet(), temp, mfs(<span class="jxr_string">"Iteration over bean adpater key set failed: {0} / {1} / {2}"</span>, a, bm1.keySet(), m2.keySet()));
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertNotNull(bc.toBeanMap(p2), mfs(<span class="jxr_string">"Failed to identify class as bean type: {0}"</span>, p2.getClass()));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertEquals(count, m2.size(), fs(<span class="jxr_string">"Iteration count over bean adpater key set failed: {0} / {1} / {2}"</span>, a, count, m2.size()));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(m2.keySet(), temp, fs(<span class="jxr_string">"Iteration over bean adpater key set failed: {0} / {1} / {2}"</span>, a, bm1.keySet(), m2.keySet()));
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertNotNull(bc.toBeanMap(p2), fs(<span class="jxr_string">"Failed to identify class as bean type: {0}"</span>, p2.getClass()));
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> m5 = bc.toBeanMap(p2);
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		@SuppressWarnings(<span class="jxr_string">"cast"</span>)
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> es1 = (Set)m5.entrySet();
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertEquals(es1, m3.entrySet(), mfs(<span class="jxr_string">"Entry set equality failed: {0} / {1} / {2}"</span>, p2, es1, m3.entrySet()));
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(m3.entrySet(), es1, mfs(<span class="jxr_string">"Entry set reverse equality failed: {0} / {1} / {2}"</span>, p2, es1, m3.entrySet()));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertEquals(es1, m3.entrySet(), fs(<span class="jxr_string">"Entry set equality failed: {0} / {1} / {2}"</span>, p2, es1, m3.entrySet()));
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(m3.entrySet(), es1, fs(<span class="jxr_string">"Entry set reverse equality failed: {0} / {1} / {2}"</span>, p2, es1, m3.entrySet()));
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		iter = es1.iterator();
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		temp = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
@@ -120,8 +120,8 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			count++;
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		}
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertEquals(count, m3.size(), mfs(<span class="jxr_string">"Iteration count over bean adpater entry set failed: {0} / {1} / {2}"</span>, a, count, m3.size()));
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertEquals(m3.entrySet(), temp, mfs(<span class="jxr_string">"Iteration over bean adpater entry set failed: {0} / {1} / {2}"</span>, a, es1, m3.entrySet()));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertEquals(count, m3.size(), fs(<span class="jxr_string">"Iteration count over bean adpater entry set failed: {0} / {1} / {2}"</span>, a, count, m3.size()));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertEquals(m3.entrySet(), temp, fs(<span class="jxr_string">"Iteration over bean adpater entry set failed: {0} / {1} / {2}"</span>, a, es1, m3.entrySet()));
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Person {
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">return</strong> mf(<span class="jxr_string">"Person(name: {0}, age: {1})"</span>, name, age);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">return</strong> f(<span class="jxr_string">"Person(name: {0}, age: {1})"</span>, name, age);
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		}
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
@@ -178,7 +178,7 @@
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">return</strong> mf(<span class="jxr_string">"Address(street: {0}, city: {1}, state: {2}, zip: {3})"</span>, street, city, state, zip);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">return</strong> f(<span class="jxr_string">"Address(street: {0}, city: {1}, state: {2}, zip: {3})"</span>, street, city, state, zip);
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		}
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
@@ -336,7 +336,7 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">return</strong> mf(<span class="jxr_string">"toString():name={0},age={1}"</span>, name, age);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">return</strong> f(<span class="jxr_string">"toString():name={0},age={1}"</span>, name, age);
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 		}
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 
@@ -366,7 +366,7 @@
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">return</strong> mf(<span class="jxr_string">"toString():name={0},age={1}"</span>, name, age);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">return</strong> f(<span class="jxr_string">"toString():name={0},age={1}"</span>, name, age);
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		}
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 
@@ -407,10 +407,10 @@
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">var</strong> f1 = (A) Proxy.newProxyInstance(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader(), a(A.<strong class="jxr_keyword">class</strong>), <strong class="jxr_keyword">new</strong> AHandler());
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">var</strong> bm1 = session.toBeanMap(f1);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertNotNull(bm1, mfs(<span class="jxr_string">"Failed to obtain bean adapter for proxy: {0}"</span>, f1));
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertNotNull(bm1, fs(<span class="jxr_string">"Failed to obtain bean adapter for proxy: {0}"</span>, f1));
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> bm2 = session.newBeanMap(A.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertNotNull(bm2, mfs(<span class="jxr_string">"Failed to create dynamic proxy bean for interface: {0}"</span>, A.<strong class="jxr_keyword">class</strong>.getName()));
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertNotNull(bm2, fs(<span class="jxr_string">"Failed to create dynamic proxy bean for interface: {0}"</span>, A.<strong class="jxr_keyword">class</strong>.getName()));
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 		bm2.put(<span class="jxr_string">"a"</span>, <span class="jxr_string">"Hello"</span>);
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		bm2.put(<span class="jxr_string">"b"</span>, Integer.valueOf(50));
@@ -418,8 +418,8 @@
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		f1.setB(50);
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertBean(bm2, <span class="jxr_string">"a,b"</span>, <span class="jxr_string">"Hello,50"</span>);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertEquals(bm1, bm2, mfs(<span class="jxr_string">"Failed equality test of dynamic proxies beans: {0} / {1}"</span>, bm1, bm2));
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertEquals(bm2, bm1, mfs(<span class="jxr_string">"Failed reverse equality test of dynamic proxies beans: {0} / {1}"</span>, bm1, bm2));
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertEquals(bm1, bm2, fs(<span class="jxr_string">"Failed equality test of dynamic proxies beans: {0} / {1}"</span>, bm1, bm2));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertEquals(bm2, bm1, fs(<span class="jxr_string">"Failed reverse equality test of dynamic proxies beans: {0} / {1}"</span>, bm1, bm2));
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 	}
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> A {
