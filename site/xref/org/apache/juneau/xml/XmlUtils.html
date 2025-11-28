@@ -487,7 +487,7 @@
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 					<strong class="jxr_keyword">if</strong> (xmlNs.prefix().equals(prefix))
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 						<strong class="jxr_keyword">return</strong> Namespace.of(prefix, xmlNs.namespaceURI());
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 			}
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">throw</strong> bex(<span class="jxr_string">"Found @Xml.prefix annotation with no matching URI.  prefix='"</span> + prefix + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">throw</strong> bex(<span class="jxr_string">"Found @Xml.prefix annotation with no matching URI.  prefix=''{0}''"</span>, prefix);
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 		}
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<em class="jxr_comment">// If only namespaceURI specified, need to search for prefix.</em>

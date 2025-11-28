@@ -244,7 +244,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * @return A new RuntimeException with the formatted message and cause.</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RuntimeException rex(Throwable cause, String msg, Object...args) {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeException(args.length == 0 ? msg : mf(msg, args), cause);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeException(mf(msg, args), cause);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -255,7 +255,7 @@
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * @return A new RuntimeException with the formatted message.</em>
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> bex(String msg, Object...args) {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(args.length == 0 ? msg : mf(msg, args));
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(msg, args);
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 	}
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<em class="jxr_javadoccomment">/**</em>

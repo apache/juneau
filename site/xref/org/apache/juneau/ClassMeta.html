@@ -1850,7 +1850,7 @@
 <a class="jxr_linenumber" name="L1842" href="#L1842">1842</a> 		<strong class="jxr_keyword">if</strong> (isEnum()) {
 <a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 			<strong class="jxr_keyword">var</strong> t = (T)enumValues.getKey(arg);
 <a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 			<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> &amp;&amp; ! beanContext.isIgnoreUnknownEnumValues())
-<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve enum value '"</span> + arg + <span class="jxr_string">"' on class '"</span> + getInnerClass().getName() + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve enum value ''{0}'' on class ''{1}''"</span>, arg, getInnerClass().getName());
 <a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 			<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 		}
 <a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 
