@@ -153,7 +153,10 @@ import org.apache.juneau.common.function.*;
 public class Cache<K,V> {
 
 	// Internal map with Tuple1 keys for content-based equality (especially for arrays)
+	// If threadLocal is true, this is null and threadLocalMap is used instead
 	private final Map<Tuple1<K>,V> map;
+	private final ThreadLocal<Map<Tuple1<K>,V>> threadLocalMap;
+	private final boolean isThreadLocal;
 
 	/**
 	 * Cache of Tuple1 wrapper objects to minimize object creation on repeated get/put calls.
@@ -161,8 +164,24 @@ public class Cache<K,V> {
 	 * <p>
 	 * Uses WeakHashMap so wrappers can be GC'd when keys are no longer referenced.
 	 * This provides a significant performance improvement for caches with repeated key access.
+	 * If threadLocal is true, this is null and threadLocalWrapperCache is used instead.
 	 */
 	private final Map<K,Tuple1<K>> wrapperCache;
+	private final ThreadLocal<Map<K,Tuple1<K>>> threadLocalWrapperCache;
+
+	/**
+	 * Gets the map for the current thread.
+	 *
+	 * @return The map for the current thread.
+	 */
+	private Map<Tuple1<K>,V> getMap() { return isThreadLocal ? threadLocalMap.get() : map; }
+
+	/**
+	 * Gets the wrapper cache for the current thread.
+	 *
+	 * @return The wrapper cache for the current thread.
+	 */
+	private Map<K,Tuple1<K>> getWrapperCache() { return isThreadLocal ? threadLocalWrapperCache.get() : wrapperCache; }
 
 	/**
 	 * Gets or creates a Tuple1 wrapper for the given key.
@@ -175,7 +194,7 @@ public class Cache<K,V> {
 	 * @return A cached or new Tuple1 wrapper for the key.
 	 */
 	private Tuple1<K> wrap(K key) {
-		return wrapperCache.computeIfAbsent(key, k -> Tuple1.of(k));
+		return getWrapperCache().computeIfAbsent(key, k -> Tuple1.of(k));
 	}
 
 	/**
@@ -211,6 +230,7 @@ public class Cache<K,V> {
 		int maxSize;
 		String id;
 		boolean logOnExit;
+		boolean threadLocal;
 		Function<K,V> supplier;
 
 		Builder() {
@@ -263,6 +283,68 @@ public class Cache<K,V> {
 		 */
 		public Builder<K,V> cacheMode(CacheMode value) {
 			cacheMode = value;
+			return this;
+		}
+
+		/**
+		 * Sets the caching mode to {@link CacheMode#WEAK WEAK}.
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>cacheMode(CacheMode.WEAK)</c>.
+		 *
+		 * <p>
+		 * Weak caching uses {@link WeakHashMap} for storage, allowing cache entries to be
+		 * garbage collected when keys are no longer strongly referenced elsewhere.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Weak caching for Class metadata</jc>
+		 * 	Cache&lt;Class&lt;?&gt;,ClassMeta&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(Class.<jk>class</jk>, ClassMeta.<jk>class</jk>)
+		 * 		.<jsm>weak</jsm>()
+		 * 		.build();
+		 * </p>
+		 *
+		 * @return This object for method chaining.
+		 * @see #cacheMode(CacheMode)
+		 */
+		public Builder<K,V> weak() {
+			return cacheMode(WEAK);
+		}
+
+		/**
+		 * Enables thread-local caching.
+		 *
+		 * <p>
+		 * When enabled, each thread gets its own separate cache instance. This is useful for
+		 * thread-unsafe objects like {@link java.text.MessageFormat} that need to be cached per thread.
+		 *
+		 * <p>
+		 * This is a shortcut for wrapping a cache in a {@link ThreadLocal}, but provides a cleaner API.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Thread-local cache for MessageFormat instances</jc>
+		 * 	Cache&lt;String,MessageFormat&gt; <jv>cache</jv> = Cache
+		 * 		.<jsm>of</jsm>(String.<jk>class</jk>, MessageFormat.<jk>class</jk>)
+		 * 		.maxSize(100)
+		 * 		.<jsm>threadLocal</jsm>()
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is equivalent to:
+		 * <p class='bjava'>
+		 * 	ThreadLocal&lt;Cache&lt;String,MessageFormat&gt;&gt; <jv>cache</jv> =
+		 * 		ThreadLocal.<jsm>withInitial</jsm>(() -&gt; Cache
+		 * 			.<jsm>of</jsm>(String.<jk>class</jk>, MessageFormat.<jk>class</jk>)
+		 * 			.maxSize(100)
+		 * 			.build());
+		 * </p>
+		 *
+		 * @return This object for method chaining.
+		 */
+		public Builder<K,V> threadLocal() {
+			threadLocal = true;
 			return this;
 		}
 
@@ -424,12 +506,30 @@ public class Cache<K,V> {
 		this.maxSize = builder.maxSize;
 		this.disableCaching = builder.cacheMode == NONE;
 		this.supplier = builder.supplier != null ? builder.supplier : (K) -> null;
-		if (builder.cacheMode == WEAK) {
-			this.map = synchronizedMap(new WeakHashMap<>());
-			this.wrapperCache = synchronizedMap(new WeakHashMap<>());
+		this.isThreadLocal = builder.threadLocal;
+
+		if (isThreadLocal) {
+			// Thread-local mode: each thread gets its own map
+			if (builder.cacheMode == WEAK) {
+				this.threadLocalMap = ThreadLocal.withInitial(() -> synchronizedMap(new WeakHashMap<>()));
+				this.threadLocalWrapperCache = ThreadLocal.withInitial(() -> synchronizedMap(new WeakHashMap<>()));
+			} else {
+				this.threadLocalMap = ThreadLocal.withInitial(() -> new ConcurrentHashMap<>());
+				this.threadLocalWrapperCache = ThreadLocal.withInitial(() -> synchronizedMap(new WeakHashMap<>()));
+			}
+			this.map = null;
+			this.wrapperCache = null;
 		} else {
-			this.map = new ConcurrentHashMap<>();
-			this.wrapperCache = synchronizedMap(new WeakHashMap<>());
+			// Normal mode: shared map across all threads
+			if (builder.cacheMode == WEAK) {
+				this.map = synchronizedMap(new WeakHashMap<>());
+				this.wrapperCache = synchronizedMap(new WeakHashMap<>());
+			} else {
+				this.map = new ConcurrentHashMap<>();
+				this.wrapperCache = synchronizedMap(new WeakHashMap<>());
+			}
+			this.threadLocalMap = null;
+			this.threadLocalWrapperCache = null;
 		}
 		if (builder.logOnExit) {
 			shutdownMessage(() -> builder.id + ":  hits=" + cacheHits.get() + ", misses: " + size());
@@ -505,16 +605,17 @@ public class Cache<K,V> {
 		assertArgNotNull("supplier", supplier);
 		if (disableCaching)
 			return supplier.get();
+		var m = getMap();
 		Tuple1<K> wrapped = wrap(key);
-		V v = map.get(wrapped);
+		V v = m.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
 			if (v == null)
-				map.remove(wrapped);
+				m.remove(wrapped);
 			else
-				map.putIfAbsent(wrapped, v);
+				m.putIfAbsent(wrapped, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
@@ -529,13 +630,14 @@ public class Cache<K,V> {
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
 	 */
 	public V put(K key, V value) {
+		var m = getMap();
 		if (value == null) {
 			Tuple1<K> wrapped = wrap(key);
-			V result = map.remove(wrapped);
-			wrapperCache.remove(key); // Clean up wrapper cache
+			V result = m.remove(wrapped);
+			getWrapperCache().remove(key); // Clean up wrapper cache
 			return result;
 		}
-		return map.put(wrap(key), value);
+		return m.put(wrap(key), value);
 	}
 
 	/**
@@ -572,7 +674,7 @@ public class Cache<K,V> {
 	 * @return The number of cached entries.
 	 */
 	public int size() {
-		return map.size();
+		return getMap().size();
 	}
 
 	/**
@@ -580,7 +682,7 @@ public class Cache<K,V> {
 	 *
 	 * @return <jk>true</jk> if the cache is empty.
 	 */
-	public boolean isEmpty() { return map.isEmpty(); }
+	public boolean isEmpty() { return getMap().isEmpty(); }
 
 	/**
 	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key.
@@ -589,7 +691,7 @@ public class Cache<K,V> {
 	 * @return <jk>true</jk> if the cache contains the key.
 	 */
 	public boolean containsKey(K key) {
-		return map.containsKey(wrap(key));
+		return getMap().containsKey(wrap(key));
 	}
 
 	/**
@@ -602,7 +704,7 @@ public class Cache<K,V> {
 		// ConcurrentHashMap doesn't allow null values, so null can never be in the cache
 		if (value == null)
 			return false;
-		return map.containsValue(value);
+		return getMap().containsValue(value);
 	}
 
 	/**
@@ -612,9 +714,10 @@ public class Cache<K,V> {
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
 	 */
 	public V remove(K key) {
-		Tuple1<K> wrapped = wrap(key);
-		V result = map.remove(wrapped);
-		wrapperCache.remove(key); // Clean up wrapper cache
+		var m = getMap();
+		var wrapped = wrap(key);
+		V result = m.remove(wrapped);
+		getWrapperCache().remove(key); // Clean up wrapper cache
 		return result;
 	}
 
@@ -622,7 +725,7 @@ public class Cache<K,V> {
 	 * Removes all entries from the cache.
 	 */
 	public void clear() {
-		map.clear();
-		wrapperCache.clear(); // Clean up wrapper cache
+		getMap().clear();
+		getWrapperCache().clear(); // Clean up wrapper cache
 	}
 }

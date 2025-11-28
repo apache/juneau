@@ -39,7 +39,8 @@ class StringUtils_Test extends TestBase {
 	// isNumeric(String,Class)
 	// parseNumber(String,Class)
 	//====================================================================================================
-	@Test void a01_testParser() {
+	@Test
+	void a01_testParser() {
 
 		// Integers
 		assertTrue(isNumeric("123"));
@@ -144,9 +145,9 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isNumeric("0x123e1"));
 		assertEquals(0x123e1, parseNumber("0x123e1", null));
 
-		assertThrows(NumberFormatException.class, ()->parseNumber("x", Number.class));
-		assertThrows(NumberFormatException.class, ()->parseNumber("x", null));
-		assertThrowsWithMessage(NumberFormatException.class, "Unsupported Number type", ()->parseNumber("x", BadNumber.class));
+		assertThrows(NumberFormatException.class, () -> parseNumber("x", Number.class));
+		assertThrows(NumberFormatException.class, () -> parseNumber("x", null));
+		assertThrowsWithMessage(NumberFormatException.class, "Unsupported Number type", () -> parseNumber("x", BadNumber.class));
 	}
 
 	@SuppressWarnings("serial")
@@ -155,7 +156,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void a02_numberRanges() {
+	@Test
+	void a02_numberRanges() {
 		// An integer range is -2,147,483,648 to 2,147,483,647
 
 		assertFalse(isNumeric(null));
@@ -246,17 +248,18 @@ class StringUtils_Test extends TestBase {
 
 		s = String.valueOf("214748364x");
 		assertFalse(isNumeric(s));
-		assertThrows(NumberFormatException.class, ()->parseNumber("214748364x", Number.class));
+		assertThrows(NumberFormatException.class, () -> parseNumber("214748364x", Number.class));
 
 		s = String.valueOf("2147483640x");
 		assertFalse(isNumeric(s));
-		assertThrows(NumberFormatException.class, ()->parseNumber("2147483640x", Long.class));
+		assertThrows(NumberFormatException.class, () -> parseNumber("2147483640x", Long.class));
 	}
 
 	//====================================================================================================
 	// testReplaceVars
 	//====================================================================================================
-	@Test void a03_replaceVars() throws Exception {
+	@Test
+	void a03_replaceVars() throws Exception {
 		var m = JsonMap.ofJson("{a:'A',b:1,c:true,d:'{e}',e:'E{f}E',f:'F',g:'{a}',h:'a',i:null}");
 
 		assertEquals("xxx", replaceVars("xxx", m));
@@ -291,39 +294,13 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// isFloat(String)
 	//====================================================================================================
-	@Test void a04_isFloat() {
-		var valid = a(
-			"+1.0",
-			"-1.0",
-			".0",
-			"NaN",
-			"Infinity",
-			"1e1",
-			"-1e-1",
-			"+1e+1",
-			"-1.1e-1",
-			"+1.1e+1",
-			"1.1f",
-			"1.1F",
-			"1.1d",
-			"1.1D",
-			"0x1.fffffffffffffp1023",
-			"0x1.FFFFFFFFFFFFFP1023"
-		);
+	@Test
+	void a04_isFloat() {
+		var valid = a("+1.0", "-1.0", ".0", "NaN", "Infinity", "1e1", "-1e-1", "+1e+1", "-1.1e-1", "+1.1e+1", "1.1f", "1.1F", "1.1d", "1.1D", "0x1.fffffffffffffp1023", "0x1.FFFFFFFFFFFFFP1023");
 		for (var s : valid)
 			assertTrue(isFloat(s));
 
-		var invalid = a(
-			null,
-			"",
-			"a",
-			"+",
-			"-",
-			".",
-			"a",
-			"+a",
-			"11a"
-		);
+		var invalid = a(null, "", "a", "+", "-", ".", "a", "+a", "11a");
 		for (var s : invalid)
 			assertFalse(isFloat(s));
 	}
@@ -331,35 +308,13 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// isDecimal(String)
 	//====================================================================================================
-	@Test void a05_isDecimal() {
-		var valid = a(
-			"+1",
-			"-1",
-			"0x123",
-			"0X123",
-			"0xdef",
-			"0XDEF",
-			"#def",
-			"#DEF",
-			"0123"
-		);
+	@Test
+	void a05_isDecimal() {
+		var valid = a("+1", "-1", "0x123", "0X123", "0xdef", "0XDEF", "#def", "#DEF", "0123");
 		for (var s : valid)
 			assertTrue(isDecimal(s));
 
-		var invalid = a(
-			null,
-			"",
-			"a",
-			"+",
-			"-",
-			".",
-			"0xdeg",
-			"0XDEG",
-			"#deg",
-			"#DEG",
-			"0128",
-			"012A"
-		);
+		var invalid = a(null, "", "a", "+", "-", ".", "0xdeg", "0XDEG", "#deg", "#DEG", "0128", "012A");
 		for (var s : invalid)
 			assertFalse(isDecimal(s));
 	}
@@ -372,34 +327,36 @@ class StringUtils_Test extends TestBase {
 	// join(int[],char)
 	// join(Collection,char)
 	//====================================================================================================
-	@Test void a01_join() {
+	@Test
+	void a01_join() {
 		assertNull(StringUtils.join((Object[])null, ","));
 		assertEquals("1", StringUtils.join(a(1), ","));
-		assertEquals("1,2", StringUtils.join(a(1,2), ","));
+		assertEquals("1,2", StringUtils.join(a(1, 2), ","));
 
 		assertNull(StringUtils.join((Collection<?>)null, ","));
 		assertEquals("1", StringUtils.join(l(a(1)), ","));
-		assertEquals("1,2", StringUtils.join(l(a(1,2)), ","));
+		assertEquals("1,2", StringUtils.join(l(a(1, 2)), ","));
 
 		assertNull(StringUtils.join((Object[])null, ','));
-		assertEquals("x,y,z", StringUtils.join(a("x,y","z"), ','));
+		assertEquals("x,y,z", StringUtils.join(a("x,y", "z"), ','));
 
 		assertNull(StringUtils.join((int[])null, ','));
 		assertEquals("1", StringUtils.join(ints(1), ','));
-		assertEquals("1,2", StringUtils.join(ints(1,2), ','));
+		assertEquals("1,2", StringUtils.join(ints(1, 2), ','));
 
 		assertNull(StringUtils.join((Collection<?>)null, ','));
 		assertEquals("1", StringUtils.join(l(a(1)), ','));
-		assertEquals("1,2", StringUtils.join(l(a(1,2)), ','));
+		assertEquals("1,2", StringUtils.join(l(a(1, 2)), ','));
 
 		assertNull(StringUtils.joine((List<?>)null, ','));
-		assertEquals("x\\,y,z", StringUtils.joine(l(a("x,y","z")), ','));
+		assertEquals("x\\,y,z", StringUtils.joine(l(a("x,y", "z")), ','));
 	}
 
 	//====================================================================================================
 	// split(String,char)
 	//====================================================================================================
-	@Test void a07_split() {
+	@Test
+	void a07_split() {
 		assertNull(StringUtils.splita((String)null));
 		assertEmpty(StringUtils.splita(""));
 		assertList(StringUtils.splita("1"), "1");
@@ -413,7 +370,8 @@ class StringUtils_Test extends TestBase {
 		assertList(StringUtils.splita("1,2\\\\,"), "1", "2\\", "");
 	}
 
-	@Test void a08_split2() {
+	@Test
+	void a08_split2() {
 		assertEmpty(split2test(null));
 		assertString("[]", split2test(""));
 		assertString("[1]", split2test("1"));
@@ -436,7 +394,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// split(String,char,int)
 	//====================================================================================================
-	@Test void a09_splitWithLimit() {
+	@Test
+	void a09_splitWithLimit() {
 		assertString("[boo,and,foo]", StringUtils.splita("boo:and:foo", ':', 10));
 		assertString("[boo,and:foo]", StringUtils.splita("boo:and:foo", ':', 2));
 		assertString("[boo:and:foo]", StringUtils.splita("boo:and:foo", ':', 1));
@@ -449,7 +408,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// nullIfEmpty(String)
 	//====================================================================================================
-	@Test void a10_nullIfEmpty() {
+	@Test
+	void a10_nullIfEmpty() {
 		assertNull(StringUtils.nullIfEmpty(null));
 		assertNull(StringUtils.nullIfEmpty(""));
 		assertNotNull(StringUtils.nullIfEmpty("x"));
@@ -458,7 +418,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// emptyIfNull(String)
 	//====================================================================================================
-	@Test void a11_emptyIfNull() {
+	@Test
+	void a11_emptyIfNull() {
 		assertEquals("", StringUtils.emptyIfNull(null));
 		assertEquals("", StringUtils.emptyIfNull(""));
 		assertEquals("x", StringUtils.emptyIfNull("x"));
@@ -469,7 +430,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// defaultIfEmpty(String, String)
 	//====================================================================================================
-	@Test void a12_defaultIfEmpty() {
+	@Test
+	void a12_defaultIfEmpty() {
 		assertEquals("default", StringUtils.defaultIfEmpty(null, "default"));
 		assertEquals("default", StringUtils.defaultIfEmpty("", "default"));
 		assertEquals("x", StringUtils.defaultIfEmpty("x", "default"));
@@ -479,7 +441,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("x", StringUtils.defaultIfEmpty("x", null)); // "x" is not empty, so return "x"
 	}
 
-	@Test void a13_defaultIfEmpty_withNullDefault() {
+	@Test
+	void a13_defaultIfEmpty_withNullDefault() {
 		assertNull(StringUtils.defaultIfEmpty(null, null));
 		assertNull(StringUtils.defaultIfEmpty("", null));
 		assertEquals("x", StringUtils.defaultIfEmpty("x", null));
@@ -488,7 +451,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// defaultIfBlank(String, String)
 	//====================================================================================================
-	@Test void a14_defaultIfBlank() {
+	@Test
+	void a14_defaultIfBlank() {
 		assertEquals("default", StringUtils.defaultIfBlank(null, "default"));
 		assertEquals("default", StringUtils.defaultIfBlank("", "default"));
 		assertEquals("default", StringUtils.defaultIfBlank("  ", "default"));
@@ -501,14 +465,16 @@ class StringUtils_Test extends TestBase {
 		assertEquals("x", StringUtils.defaultIfBlank("x", null)); // "x" is not blank, so return "x"
 	}
 
-	@Test void a15_defaultIfBlank_withNullDefault() {
+	@Test
+	void a15_defaultIfBlank_withNullDefault() {
 		assertNull(StringUtils.defaultIfBlank(null, null));
 		assertNull(StringUtils.defaultIfBlank("", null));
 		assertNull(StringUtils.defaultIfBlank("  ", null));
 		assertEquals("x", StringUtils.defaultIfBlank("x", null));
 	}
 
-	@Test void a16_defaultIfBlank_whitespaceOnly() {
+	@Test
+	void a16_defaultIfBlank_whitespaceOnly() {
 		assertEquals("default", StringUtils.defaultIfBlank(" ", "default"));
 		assertEquals("default", StringUtils.defaultIfBlank("\t\n\r", "default"));
 		// Note: \u00A0 (non-breaking space) may or may not be considered blank depending on Java version
@@ -521,7 +487,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// toString(Object)
 	//====================================================================================================
-	@Test void a17_toString() {
+	@Test
+	void a17_toString() {
 		assertNull(StringUtils.toString(null));
 		assertEquals("hello", StringUtils.toString("hello"));
 		assertEquals("123", StringUtils.toString(123));
@@ -529,7 +496,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("1.5", StringUtils.toString(1.5));
 	}
 
-	@Test void a18_toString_withObjects() {
+	@Test
+	void a18_toString_withObjects() {
 		var list = List.of("a", "b", "c");
 		assertNotNull(StringUtils.toString(list));
 		assertTrue(StringUtils.toString(list).contains("a"));
@@ -539,7 +507,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(StringUtils.toString(map).contains("key"));
 	}
 
-	@Test void a19_toString_withCustomObject() {
+	@Test
+	void a19_toString_withCustomObject() {
 		var obj = new Object() {
 			@Override
 			public String toString() {
@@ -552,7 +521,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// toString(Object, String)
 	//====================================================================================================
-	@Test void a20_toStringWithDefault() {
+	@Test
+	void a20_toStringWithDefault() {
 		assertEquals("default", StringUtils.toString(null, "default"));
 		assertEquals("hello", StringUtils.toString("hello", "default"));
 		assertEquals("123", StringUtils.toString(123, "default"));
@@ -560,17 +530,20 @@ class StringUtils_Test extends TestBase {
 		assertEquals("1.5", StringUtils.toString(1.5, "default"));
 	}
 
-	@Test void a21_toStringWithDefault_withNullDefault() {
+	@Test
+	void a21_toStringWithDefault_withNullDefault() {
 		assertNull(StringUtils.toString(null, null));
 		assertEquals("hello", StringUtils.toString("hello", null));
 	}
 
-	@Test void a22_toStringWithDefault_withEmptyDefault() {
+	@Test
+	void a22_toStringWithDefault_withEmptyDefault() {
 		assertEquals("", StringUtils.toString(null, ""));
 		assertEquals("hello", StringUtils.toString("hello", ""));
 	}
 
-	@Test void a23_toStringWithDefault_withObjects() {
+	@Test
+	void a23_toStringWithDefault_withObjects() {
 		var list = List.of("a", "b", "c");
 		var result = StringUtils.toString(list, "default");
 		assertNotNull(result);
@@ -579,7 +552,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("default", StringUtils.toString(null, "default"));
 	}
 
-	@Test void a24_toStringWithDefault_withCustomObject() {
+	@Test
+	void a24_toStringWithDefault_withCustomObject() {
 		var obj = new Object() {
 			@Override
 			public String toString() {
@@ -593,7 +567,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// unescapeChars(String,char[],char)
 	//====================================================================================================
-	@Test void a25_unescapeChars() {
+	@Test
+	void a25_unescapeChars() {
 		var escape = AsciiSet.of("\\,|");
 
 		assertNull(unEscapeChars(null, escape));
@@ -615,7 +590,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// decodeHex(String)
 	//====================================================================================================
-	@Test void a26_decodeHex() {
+	@Test
+	void a26_decodeHex() {
 		assertNull(decodeHex(null));
 		assertEquals("19azAZ", decodeHex("19azAZ"));
 		assertEquals("[0][1][ffff]", decodeHex("\u0000\u0001\uFFFF"));
@@ -624,7 +600,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// startsWith(String,char)
 	//====================================================================================================
-	@Test void a27_startsWith() {
+	@Test
+	void a27_startsWith() {
 		assertFalse(startsWith(null, 'a'));
 		assertFalse(startsWith("", 'a'));
 		assertTrue(startsWith("a", 'a'));
@@ -634,7 +611,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// endsWith(String,char)
 	//====================================================================================================
-	@Test void a28_endsWith() {
+	@Test
+	void a28_endsWith() {
 		assertFalse(endsWith(null, 'a'));
 		assertFalse(endsWith("", 'a'));
 		assertTrue(endsWith("a", 'a'));
@@ -645,19 +623,21 @@ class StringUtils_Test extends TestBase {
 	// base64EncodeToString(String)
 	// base64DecodeToString(String)
 	//====================================================================================================
-	@Test void a29_base64EncodeToString() {
+	@Test
+	void a29_base64EncodeToString() {
 		assertNull(base64DecodeToString(base64EncodeToString(null)));
 		assertEquals("", base64DecodeToString(base64EncodeToString("")));
 		assertEquals("foobar", base64DecodeToString(base64EncodeToString("foobar")));
 		assertEquals("\u0000\uffff", base64DecodeToString(base64EncodeToString("\u0000\uffff")));
-		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid BASE64 string length.  Must be multiple of 4.", ()->base64Decode("a"));
-		assertThrows(IllegalArgumentException.class, ()->base64Decode("aaa"));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid BASE64 string length.  Must be multiple of 4.", () -> base64Decode("a"));
+		assertThrows(IllegalArgumentException.class, () -> base64Decode("aaa"));
 	}
 
 	//====================================================================================================
 	// generateUUID(String)
 	//====================================================================================================
-	@Test void a30_generateUUID() {
+	@Test
+	void a30_generateUUID() {
 		for (var i = 0; i < 10; i++) {
 			var s = random(i);
 			assertEquals(i, s.length());
@@ -669,7 +649,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// trim(String)
 	//====================================================================================================
-	@Test void a31_trim() {
+	@Test
+	void a31_trim() {
 		assertNull(trim(null));
 		assertEquals("", trim(""));
 		assertEquals("", trim("  "));
@@ -678,7 +659,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// parseISO8601Date(String)
 	//====================================================================================================
-	@Test void a32_parseISO8601Date() throws Exception {
+	@Test
+	void a32_parseISO8601Date() throws Exception {
 		assertNull(parseIsoDate(null));
 		assertNull(parseIsoDate(""));
 
@@ -702,7 +684,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// parseMap(String,char,char,boolean)
 	//====================================================================================================
-	@Test void a33_splitMap() {
+	@Test
+	void a33_splitMap() {
 		assertString("{a=1}", StringUtils.splitMap("a=1", true));
 		assertString("{a=1,b=2}", StringUtils.splitMap("a=1,b=2", true));
 		assertString("{a=1,b=2}", StringUtils.splitMap(" a = 1 , b = 2 ", true));
@@ -718,7 +701,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// isAbsoluteUri(String)
 	//====================================================================================================
-	@Test void a10_isAbsoluteUri() {
+	@Test
+	void a10_isAbsoluteUri() {
 		assertFalse(isAbsoluteUri(null));
 		assertFalse(isAbsoluteUri(""));
 		assertTrue(isAbsoluteUri("http://foo"));
@@ -734,7 +718,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// getAuthorityUri(String)
 	//====================================================================================================
-	@Test void a21_getAuthorityUri() {
+	@Test
+	void a21_getAuthorityUri() {
 		assertEquals("http://foo", getAuthorityUri("http://foo"));
 		assertEquals("http://foo:123", getAuthorityUri("http://foo:123"));
 		assertEquals("http://foo:123", getAuthorityUri("http://foo:123/"));
@@ -744,7 +729,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// splitQuoted(String)
 	//====================================================================================================
-	@Test void a22_splitQuoted() {
+	@Test
+	void a22_splitQuoted() {
 		assertNull(StringUtils.splitQuoted(null));
 		assertEmpty(StringUtils.splitQuoted(""));
 		assertEmpty(StringUtils.splitQuoted(" \t "));
@@ -769,7 +755,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// firstNonWhitespaceChar(String)
 	//====================================================================================================
-	@Test void a23_firstNonWhitespaceChar() {
+	@Test
+	void a23_firstNonWhitespaceChar() {
 		assertEquals('f', firstNonWhitespaceChar("foo"));
 		assertEquals('f', firstNonWhitespaceChar(" foo"));
 		assertEquals('f', firstNonWhitespaceChar("\tfoo"));
@@ -782,7 +769,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// lastNonWhitespaceChar(String)
 	//====================================================================================================
-	@Test void a24_lastNonWhitespaceChar() {
+	@Test
+	void a24_lastNonWhitespaceChar() {
 		assertEquals('r', lastNonWhitespaceChar("bar"));
 		assertEquals('r', lastNonWhitespaceChar(" bar "));
 		assertEquals('r', lastNonWhitespaceChar("\tbar\t"));
@@ -795,7 +783,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// testIsJsonObject(Object)
 	//====================================================================================================
-	@Test void a25_isJsonObject() {
+	@Test
+	void a25_isJsonObject() {
 		assertTrue(isJsonObject("{foo:'bar'}", true));
 		assertTrue(isJsonObject(" { foo:'bar' } ", true));
 		assertFalse(isJsonObject(" { foo:'bar'  ", true));
@@ -806,7 +795,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// isJsonArray(Object)
 	//====================================================================================================
-	@Test void a26_isJsonArray() {
+	@Test
+	void a26_isJsonArray() {
 		assertTrue(isJsonArray("[123,'bar']", true));
 		assertTrue(isJsonArray(" [ 123,'bar' ] ", true));
 		assertFalse(isJsonArray(" [ 123,'bar'  ", true));
@@ -817,7 +807,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// addLineNumbers(String)
 	//====================================================================================================
-	@Test void a27_addLineNumbers() {
+	@Test
+	void a27_addLineNumbers() {
 		assertNull(getNumberedLines(null));
 		assertEquals("1: \n", getNumberedLines(""));
 		assertEquals("1: foo\n", getNumberedLines("foo"));
@@ -827,18 +818,20 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// compare(String,String)
 	//====================================================================================================
-	@Test void a28_compare() {
-		assertTrue(compare("a","b") < 0);
-		assertTrue(compare("b","a") > 0);
-		assertTrue(compare(null,"b") < 0);
-		assertTrue(compare("b",null) > 0);
-		assertEquals(0, compare(null,null));
+	@Test
+	void a28_compare() {
+		assertTrue(compare("a", "b") < 0);
+		assertTrue(compare("b", "a") > 0);
+		assertTrue(compare(null, "b") < 0);
+		assertTrue(compare("b", null) > 0);
+		assertEquals(0, compare(null, null));
 	}
 
 	//====================================================================================================
 	// matchPattern(String)
 	//====================================================================================================
-	@Test void a29_getMatchPattern() {
+	@Test
+	void a29_getMatchPattern() {
 		assertTrue(StringUtils.getMatchPattern("a").matcher("a").matches());
 		assertTrue(StringUtils.getMatchPattern("*a*").matcher("aaa").matches());
 		assertFalse(StringUtils.getMatchPattern("*b*").matcher("aaa").matches());
@@ -847,7 +840,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// getDuration(String)
 	//====================================================================================================
-	@Test void a30_getDuration() {
+	@Test
+	void a30_getDuration() {
 		assertEquals(-1, getDuration(null));
 		assertEquals(-1, getDuration(""));
 		assertEquals(-1, getDuration(" "));
@@ -855,83 +849,79 @@ class StringUtils_Test extends TestBase {
 		assertEquals(10, getDuration("10"));
 		assertEquals(10, getDuration("10"));
 
-		long
-			s = 1000,
-			m = s * 60,
-			h = m * 60,
-			d = h * 24,
-			w = d * 7;
+		long s = 1000, m = s * 60, h = m * 60, d = h * 24, w = d * 7;
 
-		assertEquals(10*s, getDuration("10s"));
-		assertEquals(10*s, getDuration("10 s"));
-		assertEquals(10*s, getDuration("  10  s  "));
-		assertEquals(10*s, getDuration("10sec"));
-		assertEquals(10*s, getDuration("10 sec"));
-		assertEquals(10*s, getDuration("  10  sec  "));
-		assertEquals(10*s, getDuration("10seconds"));
-		assertEquals(10*s, getDuration("10 seconds"));
-		assertEquals(10*s, getDuration("  10  seconds  "));
-		assertEquals(10*s, getDuration("10S"));
-		assertEquals(10*s, getDuration("10 S"));
-		assertEquals(10*s, getDuration("  10  S  "));
+		assertEquals(10 * s, getDuration("10s"));
+		assertEquals(10 * s, getDuration("10 s"));
+		assertEquals(10 * s, getDuration("  10  s  "));
+		assertEquals(10 * s, getDuration("10sec"));
+		assertEquals(10 * s, getDuration("10 sec"));
+		assertEquals(10 * s, getDuration("  10  sec  "));
+		assertEquals(10 * s, getDuration("10seconds"));
+		assertEquals(10 * s, getDuration("10 seconds"));
+		assertEquals(10 * s, getDuration("  10  seconds  "));
+		assertEquals(10 * s, getDuration("10S"));
+		assertEquals(10 * s, getDuration("10 S"));
+		assertEquals(10 * s, getDuration("  10  S  "));
 
-		assertEquals(10*m, getDuration("10m"));
-		assertEquals(10*m, getDuration("10 m"));
-		assertEquals(10*m, getDuration("  10  m  "));
-		assertEquals(10*m, getDuration("10min"));
-		assertEquals(10*m, getDuration("10 min"));
-		assertEquals(10*m, getDuration("  10  min  "));
-		assertEquals(10*m, getDuration("10minutes"));
-		assertEquals(10*m, getDuration("10 minutes"));
-		assertEquals(10*m, getDuration("  10  minutes  "));
-		assertEquals(10*m, getDuration("10M"));
-		assertEquals(10*m, getDuration("10 M"));
-		assertEquals(10*m, getDuration("  10  M  "));
+		assertEquals(10 * m, getDuration("10m"));
+		assertEquals(10 * m, getDuration("10 m"));
+		assertEquals(10 * m, getDuration("  10  m  "));
+		assertEquals(10 * m, getDuration("10min"));
+		assertEquals(10 * m, getDuration("10 min"));
+		assertEquals(10 * m, getDuration("  10  min  "));
+		assertEquals(10 * m, getDuration("10minutes"));
+		assertEquals(10 * m, getDuration("10 minutes"));
+		assertEquals(10 * m, getDuration("  10  minutes  "));
+		assertEquals(10 * m, getDuration("10M"));
+		assertEquals(10 * m, getDuration("10 M"));
+		assertEquals(10 * m, getDuration("  10  M  "));
 
-		assertEquals(10*h, getDuration("10h"));
-		assertEquals(10*h, getDuration("10 h"));
-		assertEquals(10*h, getDuration("  10  h  "));
-		assertEquals(10*h, getDuration("10hour"));
-		assertEquals(10*h, getDuration("10 hour"));
-		assertEquals(10*h, getDuration("  10  hour  "));
-		assertEquals(10*h, getDuration("10hours"));
-		assertEquals(10*h, getDuration("10 hours"));
-		assertEquals(10*h, getDuration("  10  hours  "));
-		assertEquals(10*h, getDuration("10H"));
-		assertEquals(10*h, getDuration("10 H"));
-		assertEquals(10*h, getDuration("  10  H  "));
+		assertEquals(10 * h, getDuration("10h"));
+		assertEquals(10 * h, getDuration("10 h"));
+		assertEquals(10 * h, getDuration("  10  h  "));
+		assertEquals(10 * h, getDuration("10hour"));
+		assertEquals(10 * h, getDuration("10 hour"));
+		assertEquals(10 * h, getDuration("  10  hour  "));
+		assertEquals(10 * h, getDuration("10hours"));
+		assertEquals(10 * h, getDuration("10 hours"));
+		assertEquals(10 * h, getDuration("  10  hours  "));
+		assertEquals(10 * h, getDuration("10H"));
+		assertEquals(10 * h, getDuration("10 H"));
+		assertEquals(10 * h, getDuration("  10  H  "));
 
-		assertEquals(10*d, getDuration("10d"));
-		assertEquals(10*d, getDuration("10 d"));
-		assertEquals(10*d, getDuration("  10  d  "));
-		assertEquals(10*d, getDuration("10day"));
-		assertEquals(10*d, getDuration("10 day"));
-		assertEquals(10*d, getDuration("  10  day  "));
-		assertEquals(10*d, getDuration("10days"));
-		assertEquals(10*d, getDuration("10 days"));
-		assertEquals(10*d, getDuration("  10  days  "));
-		assertEquals(10*d, getDuration("10D"));
-		assertEquals(10*d, getDuration("10 D"));
-		assertEquals(10*d, getDuration("  10  D  "));
+		assertEquals(10 * d, getDuration("10d"));
+		assertEquals(10 * d, getDuration("10 d"));
+		assertEquals(10 * d, getDuration("  10  d  "));
+		assertEquals(10 * d, getDuration("10day"));
+		assertEquals(10 * d, getDuration("10 day"));
+		assertEquals(10 * d, getDuration("  10  day  "));
+		assertEquals(10 * d, getDuration("10days"));
+		assertEquals(10 * d, getDuration("10 days"));
+		assertEquals(10 * d, getDuration("  10  days  "));
+		assertEquals(10 * d, getDuration("10D"));
+		assertEquals(10 * d, getDuration("10 D"));
+		assertEquals(10 * d, getDuration("  10  D  "));
 
-		assertEquals(10*w, getDuration("10w"));
-		assertEquals(10*w, getDuration("10 w"));
-		assertEquals(10*w, getDuration("  10  w  "));
-		assertEquals(10*w, getDuration("10week"));
-		assertEquals(10*w, getDuration("10 week"));
-		assertEquals(10*w, getDuration("  10  week  "));
-		assertEquals(10*w, getDuration("10weeks"));
-		assertEquals(10*w, getDuration("10 weeks"));
-		assertEquals(10*w, getDuration("  10  weeks  "));
-		assertEquals(10*w, getDuration("10W"));
-		assertEquals(10*w, getDuration("10 W"));
-		assertEquals(10*w, getDuration("  10  W  "));
+		assertEquals(10 * w, getDuration("10w"));
+		assertEquals(10 * w, getDuration("10 w"));
+		assertEquals(10 * w, getDuration("  10  w  "));
+		assertEquals(10 * w, getDuration("10week"));
+		assertEquals(10 * w, getDuration("10 week"));
+		assertEquals(10 * w, getDuration("  10  week  "));
+		assertEquals(10 * w, getDuration("10weeks"));
+		assertEquals(10 * w, getDuration("10 weeks"));
+		assertEquals(10 * w, getDuration("  10  weeks  "));
+		assertEquals(10 * w, getDuration("10W"));
+		assertEquals(10 * w, getDuration("10 W"));
+		assertEquals(10 * w, getDuration("  10  W  "));
 	}
 
 	//====================================================================================================
 	// getDuration(String)
 	//====================================================================================================
-	@Test void a31_stripInvalidHttpHeaderChars() {
+	@Test
+	void a31_stripInvalidHttpHeaderChars() {
 		assertEquals("xxx", stripInvalidHttpHeaderChars("xxx"));
 		assertEquals("\t []^x", stripInvalidHttpHeaderChars("\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u0020\\[]^x"));
 	}
@@ -939,7 +929,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// abbreviate(String,int)
 	//====================================================================================================
-	@Test void a32_abbrevate() {
+	@Test
+	void a32_abbrevate() {
 		assertNull(abbreviate(null, 0));
 		assertEquals("foo", abbreviate("foo", 3));
 		assertEquals("...", abbreviate("fooo", 3));
@@ -950,10 +941,11 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// splitMethodArgs(String)
 	//====================================================================================================
-	@Test void a33_splitMethodArgs() {
+	@Test
+	void a33_splitMethodArgs() {
 		assertList(StringUtils.splitMethodArgs("java.lang.String"), "java.lang.String");
 		assertList(StringUtils.splitMethodArgs("java.lang.String,java.lang.Integer"), "java.lang.String", "java.lang.Integer");
-		assertList(StringUtils.splitMethodArgs("x,y"), "x","y");
+		assertList(StringUtils.splitMethodArgs("x,y"), "x", "y");
 		assertList(StringUtils.splitMethodArgs("x,y<a,b>,z"), "x", "y<a,b>", "z");
 		assertList(StringUtils.splitMethodArgs("x,y<a<b,c>,d<e,f>>,z"), "x", "y<a<b,c>,d<e,f>>", "z");
 	}
@@ -961,7 +953,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// fixUrl(String)
 	//====================================================================================================
-	@Test void a34_fixUrl() {
+	@Test
+	void a34_fixUrl() {
 		assertEquals(null, fixUrl(null));
 		assertEquals("", fixUrl(""));
 		assertEquals("xxx", fixUrl("xxx"));
@@ -974,7 +967,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// diffPosition(String,String)
 	//====================================================================================================
-	@Test void a35_diffPosition() {
+	@Test
+	void a35_diffPosition() {
 		assertEquals(-1, diffPosition("a", "a"));
 		assertEquals(-1, diffPosition(null, null));
 		assertEquals(0, diffPosition("a", "b"));
@@ -988,7 +982,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// diffPositionIc(String,String)
 	//====================================================================================================
-	@Test void a36_diffPositionIc() {
+	@Test
+	void a36_diffPositionIc() {
 		assertEquals(-1, diffPositionIc("a", "a"));
 		assertEquals(-1, diffPositionIc("a", "A"));
 		assertEquals(-1, diffPositionIc(null, null));
@@ -1003,7 +998,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// splitNested(String)
 	//====================================================================================================
-	@Test void a37_splitNested() {
+	@Test
+	void a37_splitNested() {
 		assertNull(StringUtils.splitNested(null));
 		assertEmpty(StringUtils.splitNested(""));
 		assertList(StringUtils.splitNested("a"), "a");
@@ -1019,9 +1015,10 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// splitNestedInner(String)
 	//====================================================================================================
-	@Test void a38_splitNestedInner() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "String was null.", ()->StringUtils.splitNestedInner(null));
-		assertThrowsWithMessage(IllegalArgumentException.class, "String was empty.", ()->StringUtils.splitNestedInner(""));
+	@Test
+	void a38_splitNestedInner() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "String was null.", () -> StringUtils.splitNestedInner(null));
+		assertThrowsWithMessage(IllegalArgumentException.class, "String was empty.", () -> StringUtils.splitNestedInner(""));
 		assertList(StringUtils.splitNestedInner("a{b}"), "b");
 		assertList(StringUtils.splitNestedInner(" a { b } "), "b");
 		assertList(StringUtils.splitNestedInner("a{b,c}"), "b", "c");
@@ -1031,7 +1028,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// toHex2(int)
 	//====================================================================================================
-	@Test void a38_toHex2() {
+	@Test
+	void a38_toHex2() {
 		// Test zero
 		assertString("00", toHex2(0));
 
@@ -1045,14 +1043,14 @@ class StringUtils_Test extends TestBase {
 		assertString("FF", toHex2(255));
 
 		// Test values outside valid range - should throw exception
-		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(256));
-		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(511));
-		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(Integer.MAX_VALUE));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", () -> toHex2(256));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", () -> toHex2(511));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", () -> toHex2(Integer.MAX_VALUE));
 
 		// Test negative numbers - should throw exception
-		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(-1));
-		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(-100));
-		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(Integer.MIN_VALUE));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", () -> toHex2(-1));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", () -> toHex2(-100));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", () -> toHex2(Integer.MIN_VALUE));
 
 		// Test edge cases
 		assertString("0A", toHex2(10));
@@ -1065,7 +1063,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// toHex4(int)
 	//====================================================================================================
-	@Test void a39_toHex4() {
+	@Test
+	void a39_toHex4() {
 		// Test zero
 		assertString("0000", toHex4(0));
 
@@ -1091,9 +1090,9 @@ class StringUtils_Test extends TestBase {
 		assertString("FFFF", toHex4(Integer.MAX_VALUE));
 
 		// Test negative numbers - should throw exception
-		assertThrowsWithMessage(NumberFormatException.class, "toHex4 can only be used on non-negative numbers", ()->toHex4(-1));
-		assertThrowsWithMessage(NumberFormatException.class, "toHex4 can only be used on non-negative numbers", ()->toHex4(-100));
-		assertThrowsWithMessage(NumberFormatException.class, "toHex4 can only be used on non-negative numbers", ()->toHex4(Integer.MIN_VALUE));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex4 can only be used on non-negative numbers", () -> toHex4(-1));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex4 can only be used on non-negative numbers", () -> toHex4(-100));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex4 can only be used on non-negative numbers", () -> toHex4(Integer.MIN_VALUE));
 
 		// Test edge cases
 		assertString("000A", toHex4(10));
@@ -1106,7 +1105,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// toHex8(long)
 	//====================================================================================================
-	@Test void a40_toHex8() {
+	@Test
+	void a40_toHex8() {
 		// Test zero
 		assertString("00000000", toHex8(0));
 
@@ -1135,9 +1135,9 @@ class StringUtils_Test extends TestBase {
 		assertString("FFFFFFFF", toHex8(Long.MAX_VALUE));
 
 		// Test negative numbers - should throw exception
-		assertThrowsWithMessage(NumberFormatException.class, "toHex8 can only be used on non-negative numbers", ()->toHex8(-1));
-		assertThrowsWithMessage(NumberFormatException.class, "toHex8 can only be used on non-negative numbers", ()->toHex8(-100));
-		assertThrowsWithMessage(NumberFormatException.class, "toHex8 can only be used on non-negative numbers", ()->toHex8(Long.MIN_VALUE));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex8 can only be used on non-negative numbers", () -> toHex8(-1));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex8 can only be used on non-negative numbers", () -> toHex8(-100));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex8 can only be used on non-negative numbers", () -> toHex8(Long.MIN_VALUE));
 
 		// Test edge cases
 		assertString("0000000A", toHex8(10));
@@ -1151,7 +1151,8 @@ class StringUtils_Test extends TestBase {
 	// String validation methods
 	//====================================================================================================
 
-	@Test void a41_isBlank() {
+	@Test
+	void a41_isBlank() {
 		assertTrue(StringUtils.isBlank(null));
 		assertTrue(StringUtils.isBlank(""));
 		assertTrue(StringUtils.isBlank("   "));
@@ -1161,7 +1162,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(StringUtils.isBlank("a"));
 	}
 
-	@Test void a42_isNotBlank() {
+	@Test
+	void a42_isNotBlank() {
 		assertFalse(isNotBlank(null));
 		assertFalse(isNotBlank(""));
 		assertFalse(isNotBlank("   "));
@@ -1171,7 +1173,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isNotBlank("a"));
 	}
 
-	@Test void a43_isEmpty() {
+	@Test
+	void a43_isEmpty() {
 		assertTrue(Utils.isEmpty((String)null));
 		assertTrue(Utils.isEmpty(""));
 		assertFalse(Utils.isEmpty("   "));
@@ -1179,7 +1182,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(Utils.isEmpty("a"));
 	}
 
-	@Test void a44_hasText() {
+	@Test
+	void a44_hasText() {
 		assertFalse(hasText(null));
 		assertFalse(hasText(""));
 		assertFalse(hasText("   "));
@@ -1189,7 +1193,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(hasText("a"));
 	}
 
-	@Test void a45_isAlpha() {
+	@Test
+	void a45_isAlpha() {
 		assertFalse(isAlpha(null));
 		assertFalse(isAlpha(""));
 		assertTrue(isAlpha("abc"));
@@ -1201,7 +1206,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isAlpha("123"));
 	}
 
-	@Test void a46_isAlphaNumeric() {
+	@Test
+	void a46_isAlphaNumeric() {
 		assertFalse(isAlphaNumeric(null));
 		assertFalse(isAlphaNumeric(""));
 		assertTrue(isAlphaNumeric("abc"));
@@ -1213,7 +1219,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isAlphaNumeric("abc_123"));
 	}
 
-	@Test void a47_isDigit() {
+	@Test
+	void a47_isDigit() {
 		assertFalse(isDigit(null));
 		assertFalse(isDigit(""));
 		assertTrue(isDigit("123"));
@@ -1225,7 +1232,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isDigit("12-3"));
 	}
 
-	@Test void a48_isWhitespace() {
+	@Test
+	void a48_isWhitespace() {
 		assertFalse(isWhitespace(null));
 		assertTrue(isWhitespace(""));
 		assertTrue(isWhitespace("   "));
@@ -1235,7 +1243,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isWhitespace("hello"));
 	}
 
-	@Test void a49_isEmpty() {
+	@Test
+	void a49_isEmpty() {
 		assertTrue(StringUtils.isEmpty(null));
 		assertTrue(StringUtils.isEmpty(""));
 		assertFalse(StringUtils.isEmpty(" "));
@@ -1243,7 +1252,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(StringUtils.isEmpty("hello"));
 	}
 
-	@Test void a50_isEmail() {
+	@Test
+	void a50_isEmail() {
 		assertFalse(isEmail(null));
 		assertFalse(isEmail(""));
 		assertFalse(isEmail(" "));
@@ -1267,7 +1277,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isEmail("user.name+tag+sorting@example.com"));
 	}
 
-	@Test void a51_isPhoneNumber() {
+	@Test
+	void a51_isPhoneNumber() {
 		assertFalse(isPhoneNumber(null));
 		assertFalse(isPhoneNumber(""));
 		assertFalse(isPhoneNumber(" "));
@@ -1289,7 +1300,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isPhoneNumber("+1 (123) 456-7890"));
 	}
 
-	@Test void a52_isCreditCard() {
+	@Test
+	void a52_isCreditCard() {
 		assertFalse(isCreditCard(null));
 		assertFalse(isCreditCard(""));
 		assertFalse(isCreditCard(" "));
@@ -1310,7 +1322,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isCreditCard("5555555555554444")); // MasterCard test card
 	}
 
-	@Test void a53_indexOf() {
+	@Test
+	void a53_indexOf() {
 		assertEquals(6, StringUtils.indexOf("hello world", "world"));
 		assertEquals(0, StringUtils.indexOf("hello world", "hello"));
 		assertEquals(2, StringUtils.indexOf("hello world", "llo"));
@@ -1322,7 +1335,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(-1, StringUtils.indexOf("hello", "hello world"));
 	}
 
-	@Test void a54_indexOfIgnoreCase() {
+	@Test
+	void a54_indexOfIgnoreCase() {
 		assertEquals(6, indexOfIgnoreCase("Hello World", "world"));
 		assertEquals(6, indexOfIgnoreCase("Hello World", "WORLD"));
 		assertEquals(0, indexOfIgnoreCase("Hello World", "hello"));
@@ -1334,7 +1348,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(-1, indexOfIgnoreCase(null, null));
 	}
 
-	@Test void a55_lastIndexOf() {
+	@Test
+	void a55_lastIndexOf() {
 		assertEquals(12, lastIndexOf("hello world world", "world"));
 		assertEquals(6, lastIndexOf("hello world", "world"));
 		assertEquals(0, lastIndexOf("hello world", "hello"));
@@ -1345,7 +1360,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(4, lastIndexOf("ababab", "ab")); // "ab" appears at positions 0, 2, 4
 	}
 
-	@Test void a56_lastIndexOfIgnoreCase() {
+	@Test
+	void a56_lastIndexOfIgnoreCase() {
 		assertEquals(12, lastIndexOfIgnoreCase("Hello World World", "world"));
 		assertEquals(12, lastIndexOfIgnoreCase("Hello World World", "WORLD"));
 		assertEquals(6, lastIndexOfIgnoreCase("Hello World", "world"));
@@ -1358,7 +1374,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(4, lastIndexOfIgnoreCase("AbAbAb", "ab"));
 	}
 
-	@Test void a57_containsIgnoreCase() {
+	@Test
+	void a57_containsIgnoreCase() {
 		assertTrue(containsIgnoreCase("Hello World", "world"));
 		assertTrue(containsIgnoreCase("Hello World", "WORLD"));
 		assertTrue(containsIgnoreCase("Hello World", "hello"));
@@ -1371,7 +1388,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(containsIgnoreCase("Hello", "hello"));
 	}
 
-	@Test void a58_startsWithIgnoreCase() {
+	@Test
+	void a58_startsWithIgnoreCase() {
 		assertTrue(startsWithIgnoreCase("Hello World", "hello"));
 		assertTrue(startsWithIgnoreCase("Hello World", "HELLO"));
 		assertTrue(startsWithIgnoreCase("Hello World", "Hello"));
@@ -1384,7 +1402,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(startsWithIgnoreCase("Hello", "hello"));
 	}
 
-	@Test void a59_endsWithIgnoreCase() {
+	@Test
+	void a59_endsWithIgnoreCase() {
 		assertTrue(endsWithIgnoreCase("Hello World", "world"));
 		assertTrue(endsWithIgnoreCase("Hello World", "WORLD"));
 		assertTrue(endsWithIgnoreCase("Hello World", "World"));
@@ -1397,7 +1416,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(endsWithIgnoreCase("Hello", "hello"));
 	}
 
-	@Test void a60_matches() {
+	@Test
+	void a60_matches() {
 		assertTrue(matches("12345", "\\d+"));
 		assertTrue(matches("abc123", "^[a-z]+\\d+$"));
 		assertTrue(matches("hello", "^hello$"));
@@ -1411,7 +1431,8 @@ class StringUtils_Test extends TestBase {
 		assertThrows(java.util.regex.PatternSyntaxException.class, () -> matches("test", "["));
 	}
 
-	@Test void a61_countMatches() {
+	@Test
+	void a61_countMatches() {
 		assertEquals(2, countMatches("hello world world", "world"));
 		assertEquals(3, countMatches("ababab", "ab"));
 		assertEquals(4, countMatches("aaaa", "a"));
@@ -1428,8 +1449,9 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, countMatches("aaaa", "aa")); // "aa" appears at positions 0 and 2
 	}
 
-	@Test void a62_formatWithNamedArgs() {
-		var args = new HashMap<String, Object>();
+	@Test
+	void a62_formatWithNamedArgs() {
+		var args = new HashMap<String,Object>();
 		args.put("name", "John");
 		args.put("age", 30);
 		args.put("city", "New York");
@@ -1441,14 +1463,73 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Template", formatWithNamedArgs("Template", null));
 		assertEquals("Template", formatWithNamedArgs("Template", new HashMap<>()));
 		// Test with null values
-		var argsWithNull = new HashMap<String, Object>();
+		var argsWithNull = new HashMap<String,Object>();
 		argsWithNull.put("name", "John");
 		argsWithNull.put("value", null);
 		assertEquals("Hello John, value: ", formatWithNamedArgs("Hello {name}, value: {value}", argsWithNull));
 	}
 
-	@Test void a63_interpolate() {
-		var vars = new HashMap<String, Object>();
+	//====================================================================================================
+	// format(String, Object...)
+	//====================================================================================================
+	@Test
+	void a62b_format() {
+		// Basic string and number formatting
+		assertEquals("Hello John, you have 5 items", format("Hello %s, you have %d items", "John", 5));
+		assertEquals("Hello world", format("Hello %s", "world"));
+
+		// Floating point with precision
+		assertEquals("Price: $19.99", format("Price: $%.2f", 19.99));
+		assertEquals("Value: 3.14", format("Value: %.2f", 3.14159));
+		assertEquals("Value: 3.142", format("Value: %.3f", 3.14159));
+
+		// Width and alignment
+		assertEquals("Name: John                 Age:  25", format("Name: %-20s Age: %3d", "John", 25));
+		assertEquals("Name:                 John Age:  25", format("Name: %20s Age: %3d", "John", 25));
+		assertEquals("Number:   42", format("Number: %4d", 42));
+		assertEquals("Number: 0042", format("Number: %04d", 42));
+
+		// Hexadecimal
+		assertEquals("Color: #FF5733", format("Color: #%06X", 0xFF5733));
+		assertEquals("Hex: ff5733", format("Hex: %x", 0xFF5733));
+		assertEquals("Hex: FF5733", format("Hex: %X", 0xFF5733));
+		assertEquals("Hex: 255", format("Hex: %d", 0xFF));
+
+		// Octal
+		assertEquals("Octal: 377", format("Octal: %o", 255));
+
+		// Scientific notation
+		assertEquals("Value: 1.23e+06", format("Value: %.2e", 1234567.0));
+		assertEquals("Value: 1.23E+06", format("Value: %.2E", 1234567.0));
+
+		// Boolean
+		assertEquals("Flag: true", format("Flag: %b", true));
+		assertEquals("Flag: false", format("Flag: %b", false));
+		assertEquals("Flag: true", format("Flag: %b", "anything"));
+
+		// Character
+		assertEquals("Char: A", format("Char: %c", 'A'));
+		assertEquals("Char: A", format("Char: %c", 65));
+
+		// Argument index (reuse arguments)
+		assertEquals("Alice loves Bob, and Alice also loves Charlie", format("%1$s loves %2$s, and %1$s also loves %3$s", "Alice", "Bob", "Charlie"));
+
+		// Literal percent sign
+		assertEquals("Progress: 50%", format("Progress: %d%%", 50));
+		assertEquals("Discount: 25% off", format("Discount: %d%% off", 25));
+
+		// Line separator
+		var result = format("Line 1%nLine 2");
+		assertTrue(result.contains("Line 1"));
+		assertTrue(result.contains("Line 2"));
+
+		// Multiple format specifiers
+		assertEquals("Name: John, Age: 30, Salary: $50000.00", format("Name: %s, Age: %d, Salary: $%.2f", "John", 30, 50000.0));
+	}
+
+	@Test
+	void a63_interpolate() {
+		var vars = new HashMap<String,Object>();
 		vars.put("name", "John");
 		vars.put("city", "New York");
 		vars.put("age", 30);
@@ -1460,18 +1541,18 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Template", interpolate("Template", null));
 		assertEquals("Template", interpolate("Template", new HashMap<>()));
 		// Test with null values
-		var varsWithNull = new HashMap<String, Object>();
+		var varsWithNull = new HashMap<String,Object>();
 		varsWithNull.put("name", "John");
 		varsWithNull.put("value", null);
 		assertEquals("Hello John, value: null", interpolate("Hello ${name}, value: ${value}", varsWithNull));
 		// Test with incomplete placeholder
 		assertEquals("Hello ${name", interpolate("Hello ${name", vars));
 		// Test with multiple variables
-		assertEquals("John is 30 years old and lives in New York",
-			interpolate("${name} is ${age} years old and lives in ${city}", vars));
+		assertEquals("John is 30 years old and lives in New York", interpolate("${name} is ${age} years old and lives in ${city}", vars));
 	}
 
-	@Test void a64_pluralize() {
+	@Test
+	void a64_pluralize() {
 		// Singular (count = 1)
 		assertEquals("cat", pluralize("cat", 1));
 		assertEquals("box", pluralize("box", 1));
@@ -1509,7 +1590,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("as", pluralize("a", 2));
 	}
 
-	@Test void a65_ordinal() {
+	@Test
+	void a65_ordinal() {
 		// Basic ordinals
 		assertEquals("1st", ordinal(1));
 		assertEquals("2nd", ordinal(2));
@@ -1552,7 +1634,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("0th", ordinal(0));
 	}
 
-	@Test void a66_sanitize() {
+	@Test
+	void a66_sanitize() {
 		assertNull(sanitize(null));
 		assertEquals("", sanitize(""));
 		assertEquals("Hello World", sanitize("Hello World"));
@@ -1561,7 +1644,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("&lt;img src=&quot;x&quot; onerror=&quot;alert(1)&quot;&gt;", sanitize("<img src=\"x\" onerror=\"alert(1)\">"));
 	}
 
-	@Test void a67_escapeHtml() {
+	@Test
+	void a67_escapeHtml() {
 		assertNull(escapeHtml(null));
 		assertEquals("", escapeHtml(""));
 		assertEquals("Hello World", escapeHtml("Hello World"));
@@ -1578,7 +1662,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("&#39;", escapeHtml("'"));
 	}
 
-	@Test void a68_unescapeHtml() {
+	@Test
+	void a68_unescapeHtml() {
 		assertNull(unescapeHtml(null));
 		assertEquals("", unescapeHtml(""));
 		assertEquals("Hello World", unescapeHtml("Hello World"));
@@ -1593,7 +1678,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("<script>alert('xss')</script>", unescapeHtml(escapeHtml("<script>alert('xss')</script>")));
 	}
 
-	@Test void a69_escapeXml() {
+	@Test
+	void a69_escapeXml() {
 		assertNull(escapeXml(null));
 		assertEquals("", escapeXml(""));
 		assertEquals("Hello World", escapeXml("Hello World"));
@@ -1610,7 +1696,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("&apos;", escapeXml("'"));
 	}
 
-	@Test void a70_unescapeXml() {
+	@Test
+	void a70_unescapeXml() {
 		assertNull(unescapeXml(null));
 		assertEquals("", unescapeXml(""));
 		assertEquals("Hello World", unescapeXml("Hello World"));
@@ -1624,7 +1711,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("<tag>text</tag>", unescapeXml(escapeXml("<tag>text</tag>")));
 	}
 
-	@Test void a71_escapeSql() {
+	@Test
+	void a71_escapeSql() {
 		assertNull(escapeSql(null));
 		assertEquals("", escapeSql(""));
 		assertEquals("Hello World", escapeSql("Hello World"));
@@ -1635,7 +1723,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("John''s book", escapeSql("John's book"));
 	}
 
-	@Test void a72_escapeRegex() {
+	@Test
+	void a72_escapeRegex() {
 		assertNull(escapeRegex(null));
 		assertEquals("", escapeRegex(""));
 		assertEquals("Hello World", escapeRegex("Hello World"));
@@ -1657,7 +1746,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(pattern.matcher("filextxt").matches());
 	}
 
-	@Test void a73_equalsIgnoreCase() {
+	@Test
+	void a73_equalsIgnoreCase() {
 		assertTrue(equalsIgnoreCase("Hello", "hello"));
 		assertTrue(equalsIgnoreCase("HELLO", "hello"));
 		assertTrue(equalsIgnoreCase("Hello", "HELLO"));
@@ -1669,7 +1759,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(equalsIgnoreCase("", ""));
 	}
 
-	@Test void a74_compareIgnoreCase() {
+	@Test
+	void a74_compareIgnoreCase() {
 		assertTrue(compareIgnoreCase("apple", "BANANA") < 0);
 		assertTrue(compareIgnoreCase("BANANA", "apple") > 0);
 		assertEquals(0, compareIgnoreCase("Hello", "hello"));
@@ -1681,7 +1772,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(compareIgnoreCase("test", null) > 0);
 	}
 
-	@Test void a75_naturalCompare() {
+	@Test
+	void a75_naturalCompare() {
 		// Numbers should be compared numerically
 		assertTrue(naturalCompare("file2.txt", "file10.txt") < 0);
 		assertTrue(naturalCompare("file10.txt", "file2.txt") > 0);
@@ -1710,7 +1802,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(naturalCompare("banana", "Apple") > 0);
 	}
 
-	@Test void a76_levenshteinDistance() {
+	@Test
+	void a76_levenshteinDistance() {
 		assertEquals(0, levenshteinDistance("hello", "hello"));
 		assertEquals(3, levenshteinDistance("kitten", "sitting")); // kitten -> sitten (s), sitten -> sittin (i), sittin -> sitting (g)
 		assertEquals(3, levenshteinDistance("abc", ""));
@@ -1725,11 +1818,12 @@ class StringUtils_Test extends TestBase {
 		assertEquals(5, levenshteinDistance(null, "hello"));
 	}
 
-	@Test void a77_similarity() {
+	@Test
+	void a77_similarity() {
 		assertEquals(1.0, similarity("hello", "hello"), 0.0001);
 		assertEquals(0.0, similarity("abc", "xyz"), 0.0001);
 		// kitten -> sitting: distance = 3, maxLen = 7, similarity = 1 - 3/7 = 4/7 ≈ 0.571
-		assertEquals(4.0/7.0, similarity("kitten", "sitting"), 0.01);
+		assertEquals(4.0 / 7.0, similarity("kitten", "sitting"), 0.01);
 		assertEquals(1.0, similarity("", ""), 0.0001);
 		assertEquals(0.0, similarity("abc", ""), 0.0001);
 		assertEquals(0.0, similarity("", "abc"), 0.0001);
@@ -1742,7 +1836,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0.8, similarity("hello", "hallo"), 0.0001);
 	}
 
-	@Test void a78_isSimilar() {
+	@Test
+	void a78_isSimilar() {
 		assertTrue(isSimilar("hello", "hello", 0.8));
 		assertTrue(isSimilar("hello", "hello", 1.0));
 		assertFalse(isSimilar("kitten", "sitting", 0.8));
@@ -1754,7 +1849,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isSimilar(null, null, 0.8));
 	}
 
-	@Test void a79_generateUUID() {
+	@Test
+	void a79_generateUUID() {
 		// Generate multiple UUIDs and verify format
 		for (var i = 0; i < 10; i++) {
 			var uuid = generateUUID();
@@ -1769,7 +1865,8 @@ class StringUtils_Test extends TestBase {
 		assertNotEquals(uuid1, uuid2);
 	}
 
-	@Test void a80_randomAlphabetic() {
+	@Test
+	void a80_randomAlphabetic() {
 		// Test various lengths
 		for (var len = 0; len <= 20; len++) {
 			var s = randomAlphabetic(len);
@@ -1791,7 +1888,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(strings.size() > 1, "Should generate different strings");
 	}
 
-	@Test void a81_randomAlphanumeric() {
+	@Test
+	void a81_randomAlphanumeric() {
 		// Test various lengths
 		for (var len = 0; len <= 20; len++) {
 			var s = randomAlphanumeric(len);
@@ -1817,15 +1915,19 @@ class StringUtils_Test extends TestBase {
 		for (var i = 0; i < 1000; i++) {
 			var s = randomAlphanumeric(20);
 			for (var j = 0; j < s.length(); j++) {
-				if (Character.isLetter(s.charAt(j))) hasLetter = true;
-				if (Character.isDigit(s.charAt(j))) hasDigit = true;
+				if (Character.isLetter(s.charAt(j)))
+					hasLetter = true;
+				if (Character.isDigit(s.charAt(j)))
+					hasDigit = true;
 			}
-			if (hasLetter && hasDigit) break;
+			if (hasLetter && hasDigit)
+				break;
 		}
 		assertTrue(hasLetter && hasDigit, "Should generate both letters and digits");
 	}
 
-	@Test void a82_randomNumeric() {
+	@Test
+	void a82_randomNumeric() {
 		// Test various lengths
 		for (var len = 0; len <= 20; len++) {
 			var s = randomNumeric(len);
@@ -1847,7 +1949,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(strings.size() > 1, "Should generate different strings");
 	}
 
-	@Test void a83_randomAscii() {
+	@Test
+	void a83_randomAscii() {
 		// Test various lengths
 		for (var len = 0; len <= 20; len++) {
 			var s = randomAscii(len);
@@ -1869,7 +1972,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(strings.size() > 1, "Should generate different strings");
 	}
 
-	@Test void a84_randomString() {
+	@Test
+	void a84_randomString() {
 		// Test with various character sets
 		var s1 = randomString(10, "ABC");
 		assertNotNull(s1);
@@ -1912,7 +2016,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(strings.size() > 1, "Should generate different strings");
 	}
 
-	@Test void a85_parseMap() {
+	@Test
+	void a85_parseMap() {
 		// Basic parsing
 		var map1 = parseMap("key1=value1,key2=value2", '=', ',', false);
 		assertEquals(2, map1.size());
@@ -1954,7 +2059,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("value2", map6.get("key"));
 	}
 
-	@Test void a86_extractNumbers() {
+	@Test
+	void a86_extractNumbers() {
 		// Basic extraction
 		var numbers1 = extractNumbers("Price: $19.99, Quantity: 5");
 		assertEquals(2, numbers1.size());
@@ -1988,7 +2094,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(extractNumbers("").isEmpty());
 	}
 
-	@Test void a87_extractEmails() {
+	@Test
+	void a87_extractEmails() {
 		// Basic extraction
 		var emails1 = extractEmails("Contact: user@example.com or admin@test.org");
 		assertEquals(2, emails1.size());
@@ -2014,7 +2121,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(extractEmails("").isEmpty());
 	}
 
-	@Test void a88_extractUrls() {
+	@Test
+	void a88_extractUrls() {
 		// Basic extraction
 		var urls1 = extractUrls("Visit https://example.com or http://test.org");
 		assertEquals(2, urls1.size());
@@ -2043,7 +2151,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(extractUrls("").isEmpty());
 	}
 
-	@Test void a89_extractWords() {
+	@Test
+	void a89_extractWords() {
 		// Basic extraction
 		var words1 = extractWords("Hello world! This is a test.");
 		assertEquals(6, words1.size());
@@ -2080,7 +2189,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(extractWords("").isEmpty());
 	}
 
-	@Test void a90_extractBetween() {
+	@Test
+	void a90_extractBetween() {
 		// Basic extraction
 		var results1 = extractBetween("<tag>content</tag>", "<", ">");
 		assertEquals(2, results1.size());
@@ -2120,7 +2230,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(extractBetween("text", "<", null).isEmpty());
 	}
 
-	@Test void a91_transliterate() {
+	@Test
+	void a91_transliterate() {
 		// Basic transliteration
 		assertEquals("h2ll4", transliterate("hello", "aeiou", "12345"));
 		assertEquals("XYZ", transliterate("ABC", "ABC", "XYZ"));
@@ -2147,7 +2258,8 @@ class StringUtils_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> transliterate("hello", "abc", "12"));
 	}
 
-	@Test void a92_soundex() {
+	@Test
+	void a92_soundex() {
 		// Standard Soundex examples
 		assertEquals("S530", soundex("Smith"));
 		assertEquals("S530", soundex("Smythe"));
@@ -2173,7 +2285,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("A000", soundex("AEIOU"));
 	}
 
-	@Test void a93_metaphone() {
+	@Test
+	void a93_metaphone() {
 		// Basic metaphone examples
 		var code1 = metaphone("Smith");
 		assertNotNull(code1);
@@ -2198,7 +2311,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(code4.isEmpty());
 	}
 
-	@Test void a94_doubleMetaphone() {
+	@Test
+	void a94_doubleMetaphone() {
 		// Basic double metaphone
 		var codes1 = doubleMetaphone("Smith");
 		assertNotNull(codes1);
@@ -2215,7 +2329,8 @@ class StringUtils_Test extends TestBase {
 		assertNull(doubleMetaphone(""));
 	}
 
-	@Test void a95_normalizeUnicode() {
+	@Test
+	void a95_normalizeUnicode() {
 		// Basic normalization
 		var normalized = normalizeUnicode("café");
 		assertNotNull(normalized);
@@ -2229,7 +2344,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("hello", normalized2);
 	}
 
-	@Test void a96_removeAccents() {
+	@Test
+	void a96_removeAccents() {
 		// Basic accent removal
 		assertEquals("cafe", removeAccents("café"));
 		assertEquals("naive", removeAccents("naïve"));
@@ -2254,7 +2370,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Ecole", removeAccents("École"));
 	}
 
-	@Test void a97_isValidRegex() {
+	@Test
+	void a97_isValidRegex() {
 		// Valid regex patterns
 		assertTrue(isValidRegex("[a-z]+"));
 		assertTrue(isValidRegex("\\d+"));
@@ -2272,7 +2389,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidRegex(""));
 	}
 
-	@Test void a98_isValidDateFormat() {
+	@Test
+	void a98_isValidDateFormat() {
 		// Valid dates
 		assertTrue(isValidDateFormat("2023-12-25", "yyyy-MM-dd"));
 		assertTrue(isValidDateFormat("25/12/2023", "dd/MM/yyyy"));
@@ -2292,7 +2410,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidDateFormat("2023-12-25", ""));
 	}
 
-	@Test void a99_isValidTimeFormat() {
+	@Test
+	void a99_isValidTimeFormat() {
 		// Valid times
 		assertTrue(isValidTimeFormat("14:30:00", "HH:mm:ss"));
 		assertTrue(isValidTimeFormat("02:30:00 PM", "hh:mm:ss a"));
@@ -2312,7 +2431,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidTimeFormat("14:30:00", ""));
 	}
 
-	@Test void a100_isValidIpAddress() {
+	@Test
+	void a100_isValidIpAddress() {
 		// Valid IPv4 addresses
 		assertTrue(isValidIpAddress("192.168.1.1"));
 		assertTrue(isValidIpAddress("0.0.0.0"));
@@ -2340,7 +2460,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidIpAddress(""));
 	}
 
-	@Test void a101_isValidMacAddress() {
+	@Test
+	void a101_isValidMacAddress() {
 		// Valid MAC addresses - colon format
 		assertTrue(isValidMacAddress("00:1B:44:11:3A:B7"));
 		assertTrue(isValidMacAddress("00:1b:44:11:3a:b7")); // Lowercase
@@ -2365,7 +2486,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidMacAddress(""));
 	}
 
-	@Test void a102_isValidHostname() {
+	@Test
+	void a102_isValidHostname() {
 		// Valid hostnames
 		assertTrue(isValidHostname("example.com"));
 		assertTrue(isValidHostname("sub.example.com"));
@@ -2396,7 +2518,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidHostname(""));
 	}
 
-	@Test void a103_wordCount() {
+	@Test
+	void a103_wordCount() {
 		// Basic word counting
 		assertEquals(2, wordCount("Hello world"));
 		assertEquals(4, wordCount("The quick brown fox"));
@@ -2424,7 +2547,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0, wordCount("!@#$%^&*()"));
 	}
 
-	@Test void a104_lineCount() {
+	@Test
+	void a104_lineCount() {
 		// Basic line counting
 		assertEquals(3, lineCount("line1\nline2\nline3"));
 		assertEquals(1, lineCount("single line"));
@@ -2448,7 +2572,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0, lineCount(""));
 	}
 
-	@Test void a105_mostFrequentChar() {
+	@Test
+	void a105_mostFrequentChar() {
 		// Basic frequency
 		assertEquals('l', mostFrequentChar("hello"));
 		assertEquals('a', mostFrequentChar("aabbcc")); // First encountered
@@ -2473,7 +2598,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals('\0', mostFrequentChar(""));
 	}
 
-	@Test void a106_entropy() {
+	@Test
+	void a106_entropy() {
 		// No randomness (all same character)
 		assertEquals(0.0, entropy("aaaa"), 0.0001);
 
@@ -2501,7 +2627,8 @@ class StringUtils_Test extends TestBase {
 		assertTrue(entropy4 > entropy("hello"));
 	}
 
-	@Test void a107_readabilityScore() {
+	@Test
+	void a107_readabilityScore() {
 		// Simple sentence (should have higher score)
 		var score1 = readabilityScore("The cat sat.");
 		assertTrue(score1 > 0.0 && score1 <= 100.0);
@@ -2539,7 +2666,8 @@ class StringUtils_Test extends TestBase {
 	// String manipulation methods
 	//====================================================================================================
 
-	@Test void a49_capitalize() {
+	@Test
+	void a49_capitalize() {
 		assertNull(capitalize(null));
 		assertEquals("", capitalize(""));
 		assertEquals("Hello", capitalize("hello"));
@@ -2549,7 +2677,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("123", capitalize("123"));
 	}
 
-	@Test void a50_uncapitalize() {
+	@Test
+	void a50_uncapitalize() {
 		assertNull(uncapitalize(null));
 		assertEquals("", uncapitalize(""));
 		assertEquals("hello", uncapitalize("hello"));
@@ -2559,7 +2688,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("123", uncapitalize("123"));
 	}
 
-	@Test void a51_reverse() {
+	@Test
+	void a51_reverse() {
 		assertNull(StringUtils.reverse(null));
 		assertEquals("", reverse(""));
 		assertEquals("olleh", reverse("hello"));
@@ -2567,7 +2697,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("cba", reverse("abc"));
 	}
 
-	@Test void a52_remove() {
+	@Test
+	void a52_remove() {
 		assertNull(remove(null, "x"));
 		assertEquals("hello", remove("hello", null));
 		assertEquals("hello", remove("hello", ""));
@@ -2576,7 +2707,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", remove("xxx", "x"));
 	}
 
-	@Test void a53_removeStart() {
+	@Test
+	void a53_removeStart() {
 		assertNull(removeStart(null, "x"));
 		assertEquals("hello", removeStart("hello", null));
 		assertEquals("hello", removeStart("hello", ""));
@@ -2585,7 +2717,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", removeStart("hello", "hello"));
 	}
 
-	@Test void a54_removeEnd() {
+	@Test
+	void a54_removeEnd() {
 		assertNull(removeEnd(null, "x"));
 		assertEquals("hello", removeEnd("hello", null));
 		assertEquals("hello", removeEnd("hello", ""));
@@ -2594,7 +2727,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", removeEnd("hello", "hello"));
 	}
 
-	@Test void a55_substringBefore() {
+	@Test
+	void a55_substringBefore() {
 		assertNull(substringBefore(null, "."));
 		assertEquals("hello.world", substringBefore("hello.world", null));
 		assertEquals("hello", substringBefore("hello.world", "."));
@@ -2602,7 +2736,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", substringBefore(".world", "."));
 	}
 
-	@Test void a56_substringAfter() {
+	@Test
+	void a56_substringAfter() {
 		assertNull(substringAfter(null, "."));
 		assertEquals("", substringAfter("hello.world", null));
 		assertEquals("world", substringAfter("hello.world", "."));
@@ -2610,7 +2745,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("world", substringAfter("hello.world", "."));
 	}
 
-	@Test void a57_substringBetween() {
+	@Test
+	void a57_substringBetween() {
 		assertNull(substringBetween(null, "<", ">"));
 		assertNull(substringBetween("<hello>", null, ">"));
 		assertNull(substringBetween("<hello>", "<", null));
@@ -2620,7 +2756,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", substringBetween("<>", "<", ">"));
 	}
 
-	@Test void a58_left() {
+	@Test
+	void a58_left() {
 		assertNull(left(null, 3));
 		assertEquals("", left("", 3));
 		assertEquals("hel", left("hello", 3));
@@ -2629,7 +2766,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", left("hello", -1));
 	}
 
-	@Test void a59_right() {
+	@Test
+	void a59_right() {
 		assertNull(right(null, 3));
 		assertEquals("", right("", 3));
 		assertEquals("llo", right("hello", 3));
@@ -2638,7 +2776,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", right("hello", -1));
 	}
 
-	@Test void a60_mid() {
+	@Test
+	void a60_mid() {
 		assertNull(mid(null, 1, 3));
 		assertEquals("", mid("", 1, 3));
 		assertEquals("ell", mid("hello", 1, 3));
@@ -2648,7 +2787,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", mid("hello", 1, -1));
 	}
 
-	@Test void a61_padLeft() {
+	@Test
+	void a61_padLeft() {
 		assertEquals("     ", padLeft(null, 5, ' '));
 		assertEquals("     ", padLeft("", 5, ' '));
 		assertEquals("   hello", padLeft("hello", 8, ' '));
@@ -2656,7 +2796,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("00123", padLeft("123", 5, '0'));
 	}
 
-	@Test void a62_padRight() {
+	@Test
+	void a62_padRight() {
 		assertEquals("     ", padRight(null, 5, ' '));
 		assertEquals("     ", padRight("", 5, ' '));
 		assertEquals("hello   ", padRight("hello", 8, ' '));
@@ -2664,7 +2805,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("12300", padRight("123", 5, '0'));
 	}
 
-	@Test void a63_padCenter() {
+	@Test
+	void a63_padCenter() {
 		assertEquals("     ", padCenter(null, 5, ' '));
 		assertEquals("     ", padCenter("", 5, ' '));
 		assertEquals("  hi  ", padCenter("hi", 6, ' '));
@@ -2677,7 +2819,8 @@ class StringUtils_Test extends TestBase {
 	// String joining and splitting methods
 	//====================================================================================================
 
-	@Test void a64_joinObjectArray() {
+	@Test
+	void a64_joinObjectArray() {
 		assertNull(StringUtils.join((Object[])null, ","));
 		assertEquals("", StringUtils.join(a(), ","));
 		assertEquals("a,b,c", StringUtils.join(a("a", "b", "c"), ","));
@@ -2687,7 +2830,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("a;b;c", StringUtils.join(a("a", "b", "c"), ";"));
 	}
 
-	@Test void a65_joinIntArray() {
+	@Test
+	void a65_joinIntArray() {
 		assertEquals("", StringUtils.join((int[])null, ","));
 		assertEquals("", StringUtils.join(ints(), ","));
 		assertEquals("1,2,3", StringUtils.join(ints(1, 2, 3), ","));
@@ -2695,7 +2839,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("123", StringUtils.join(ints(1, 2, 3), ""));
 	}
 
-	@Test void a66_joinCollection() {
+	@Test
+	void a66_joinCollection() {
 		assertNull(StringUtils.join((Collection<?>)null, ","));
 		assertEquals("", StringUtils.join(Collections.emptyList(), ","));
 		assertEquals("a,b,c", StringUtils.join(l("a", "b", "c"), ","));
@@ -2703,17 +2848,20 @@ class StringUtils_Test extends TestBase {
 		assertEquals("a,null,c", StringUtils.join(l("a", null, "c"), ","));
 	}
 
-	@Test void a67_joinObjectArrayChar() {
+	@Test
+	void a67_joinObjectArrayChar() {
 		assertEquals("a,b,c", StringUtils.join(a("a", "b", "c"), ','));
 		assertEquals("1-2-3", StringUtils.join(a(1, 2, 3), '-'));
 	}
 
-	@Test void a68_joinIntArrayChar() {
+	@Test
+	void a68_joinIntArrayChar() {
 		assertEquals("1,2,3", StringUtils.join(ints(1, 2, 3), ','));
 		assertEquals("1-2-3", StringUtils.join(ints(1, 2, 3), '-'));
 	}
 
-	@Test void a69_joinCollectionChar() {
+	@Test
+	void a69_joinCollectionChar() {
 		assertEquals("a,b,c", StringUtils.join(l("a", "b", "c"), ','));
 		assertEquals("1-2-3", StringUtils.join(l(1, 2, 3), '-'));
 	}
@@ -2722,7 +2870,8 @@ class StringUtils_Test extends TestBase {
 	// String cleaning and sanitization methods
 	//====================================================================================================
 
-	@Test void a72_clean() {
+	@Test
+	void a72_clean() {
 		assertNull(clean(null));
 		assertEquals("", clean(""));
 		assertEquals("hello world", clean("hello\u0000\u0001world"));
@@ -2730,7 +2879,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("test", clean("test"));
 	}
 
-	@Test void a73_normalizeWhitespace() {
+	@Test
+	void a73_normalizeWhitespace() {
 		assertNull(normalizeWhitespace(null));
 		assertEquals("", normalizeWhitespace(""));
 		assertEquals("hello world", normalizeWhitespace("hello  \t\n  world"));
@@ -2738,7 +2888,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("a b c", normalizeWhitespace("a  b  c"));
 	}
 
-	@Test void a74_removeControlChars() {
+	@Test
+	void a74_removeControlChars() {
 		assertNull(removeControlChars(null));
 		assertEquals("", removeControlChars(""));
 		assertEquals("hello  world", removeControlChars("hello\u0000\u0001world"));
@@ -2746,14 +2897,16 @@ class StringUtils_Test extends TestBase {
 		assertEquals("test", removeControlChars("test"));
 	}
 
-	@Test void a75_removeNonPrintable() {
+	@Test
+	void a75_removeNonPrintable() {
 		assertNull(removeNonPrintable(null));
 		assertEquals("", removeNonPrintable(""));
 		assertEquals("helloworld", removeNonPrintable("hello\u0000world"));
 		assertEquals("test", removeNonPrintable("test"));
 	}
 
-	@Test void a76_swapCase() {
+	@Test
+	void a76_swapCase() {
 		assertNull(swapCase(null));
 		assertEquals("", swapCase(""));
 		assertEquals("hELLO wORLD", swapCase("Hello World"));
@@ -2764,14 +2917,16 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// lc / uc
 	//====================================================================================================
-	@Test void a77_lc() {
+	@Test
+	void a77_lc() {
 		assertNull(lc(null));
 		assertEquals("", lc(""));
 		assertEquals("hello", lc("HELLO"));
 		assertEquals("hello world", lc("Hello World"));
 	}
 
-	@Test void a78_uc() {
+	@Test
+	void a78_uc() {
 		assertNull(uc(null));
 		assertEquals("", uc(""));
 		assertEquals("HELLO", uc("hello"));
@@ -2781,7 +2936,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// eqic
 	//====================================================================================================
-	@Test void a79_eqic() {
+	@Test
+	void a79_eqic() {
 		assertTrue(eqic(null, null));
 		assertFalse(eqic("test", null));
 		assertFalse(eqic(null, "test"));
@@ -2796,7 +2952,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// articlized
 	//====================================================================================================
-	@Test void a80_articlized() {
+	@Test
+	void a80_articlized() {
 		assertEquals("an apple", articlized("apple"));
 		assertEquals("an Apple", articlized("Apple"));
 		assertEquals("a banana", articlized("banana"));
@@ -2810,7 +2967,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// obfuscate
 	//====================================================================================================
-	@Test void a81_obfuscate() {
+	@Test
+	void a81_obfuscate() {
 		assertEquals("*", obfuscate(null));
 		assertEquals("*", obfuscate(""));
 		assertEquals("*", obfuscate("a"));
@@ -2822,7 +2980,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// firstNonEmpty / firstNonBlank
 	//====================================================================================================
-	@Test void a82_firstNonEmpty() {
+	@Test
+	void a82_firstNonEmpty() {
 		assertEquals("test", firstNonEmpty("test"));
 		assertEquals("test", firstNonEmpty(null, "test"));
 		assertEquals("test", firstNonEmpty("", "test"));
@@ -2834,7 +2993,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(" ", firstNonEmpty(" "));
 	}
 
-	@Test void a83_firstNonBlank() {
+	@Test
+	void a83_firstNonBlank() {
 		assertEquals("test", firstNonBlank("test"));
 		assertEquals("test", firstNonBlank(null, "test"));
 		assertEquals("test", firstNonBlank("", "test"));
@@ -2850,7 +3010,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// cdlToList / cdlToSet
 	//====================================================================================================
-	@Test void a86_cdlToList() {
+	@Test
+	void a86_cdlToList() {
 		assertEquals(l("a", "b", "c"), cdlToList("a,b,c"));
 		assertEquals(l("a", "b", "c"), cdlToList(" a , b , c "));
 		assertEquals(l(), cdlToList(null));
@@ -2858,7 +3019,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(l("a"), cdlToList("a"));
 	}
 
-	@Test void a87_cdlToSet() {
+	@Test
+	void a87_cdlToSet() {
 		assertEquals(new LinkedHashSet<>(l("a", "b", "c")), cdlToSet("a,b,c"));
 		assertEquals(new LinkedHashSet<>(l("a", "b", "c")), cdlToSet(" a , b , c "));
 		assertEquals(set(), cdlToSet(null));
@@ -2869,13 +3031,15 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// join
 	//====================================================================================================
-	@Test void a88_join_varargs() {
+	@Test
+	void a88_join_varargs() {
 		assertEquals("a,b,c", join("a", "b", "c"));
 		assertEquals("a", join("a"));
 		assertEquals("", join());
 	}
 
-	@Test void a89_join_collection() {
+	@Test
+	void a89_join_collection() {
 		assertEquals("a,b,c", join(l("a", "b", "c")));
 		assertEquals("1,2,3", join(l(1, 2, 3)));
 		assertEquals("a", join(l("a")));
@@ -2885,7 +3049,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// contains / notContains
 	//====================================================================================================
-	@Test void a90_contains_strings() {
+	@Test
+	void a90_contains_strings() {
 		assertTrue(contains("test", "te"));
 		assertTrue(contains("test", "st"));
 		assertTrue(contains("test", "test"));
@@ -2896,7 +3061,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(contains("test", (String[])null));
 	}
 
-	@Test void a91_contains_chars() {
+	@Test
+	void a91_contains_chars() {
 		assertTrue(contains("test", 't'));
 		assertTrue(contains("test", 'e'));
 		assertTrue(contains("test", 't', 'x'));
@@ -2906,13 +3072,15 @@ class StringUtils_Test extends TestBase {
 		assertFalse(contains("test", (char[])null));
 	}
 
-	@Test void a92_notContains_strings() {
+	@Test
+	void a92_notContains_strings() {
 		assertFalse(notContains("test", "te"));
 		assertTrue(notContains("test", "xx"));
 		assertTrue(notContains(null, "test"));
 	}
 
-	@Test void a93_notContains_chars() {
+	@Test
+	void a93_notContains_chars() {
 		assertFalse(notContains("test", 't'));
 		assertTrue(notContains("test", 'x'));
 		assertTrue(notContains(null, 't'));
@@ -2921,7 +3089,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// stringSupplier
 	//====================================================================================================
-	@Test void a94_stringSupplier() {
+	@Test
+	void a94_stringSupplier() {
 		assertEquals("test", stringSupplier(() -> "test").get());
 		assertEquals("[1,2,3]", stringSupplier(() -> l(1, 2, 3)).get());
 		assertNull(stringSupplier(() -> null).get());
@@ -2930,19 +3099,21 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// readable
 	//====================================================================================================
-	@Test void a95_readable() {
+	@Test
+	void a95_readable() {
 		assertNull(readable(null));
 		assertEquals("[a,b,c]", readable(l("a", "b", "c")));
 		assertEquals("{foo=bar}", readable(m("foo", "bar")));
 		assertEquals("[1,2,3]", readable(ints(1, 2, 3)));
-	assertEquals("test", readable(opt("test")));
-	assertNull(readable(opte()));
+		assertEquals("test", readable(opt("test")));
+		assertNull(readable(opte()));
 	}
 
 	//====================================================================================================
 	// removeAll(String, String...)
 	//====================================================================================================
-	@Test void a96_removeAll() {
+	@Test
+	void a96_removeAll() {
 		assertNull(removeAll(null, "x"));
 		assertEquals("hello world test", removeAll("hello world test"));
 		assertEquals("hello world test", removeAll("hello world test", (String[])null));
@@ -2957,7 +3128,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// camelCase(String)
 	//====================================================================================================
-	@Test void a97_camelCase() {
+	@Test
+	void a97_camelCase() {
 		assertNull(camelCase(null));
 		assertEquals("", camelCase(""));
 		assertEquals("helloWorld", camelCase("hello world"));
@@ -2980,7 +3152,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// snakeCase(String)
 	//====================================================================================================
-	@Test void a98_snakeCase() {
+	@Test
+	void a98_snakeCase() {
 		assertNull(snakeCase(null));
 		assertEquals("", snakeCase(""));
 		assertEquals("hello_world", snakeCase("hello world"));
@@ -2998,7 +3171,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// kebabCase(String)
 	//====================================================================================================
-	@Test void a99_kebabCase() {
+	@Test
+	void a99_kebabCase() {
 		assertNull(kebabCase(null));
 		assertEquals("", kebabCase(""));
 		assertEquals("hello-world", kebabCase("hello world"));
@@ -3016,7 +3190,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// pascalCase(String)
 	//====================================================================================================
-	@Test void a100_pascalCase() {
+	@Test
+	void a100_pascalCase() {
 		assertNull(pascalCase(null));
 		assertEquals("", pascalCase(""));
 		assertEquals("HelloWorld", pascalCase("hello world"));
@@ -3034,7 +3209,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// titleCase(String)
 	//====================================================================================================
-	@Test void a101_titleCase() {
+	@Test
+	void a101_titleCase() {
 		assertNull(titleCase(null));
 		assertEquals("", titleCase(""));
 		assertEquals("Hello World", titleCase("hello world"));
@@ -3052,7 +3228,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// wrap(String, int)
 	//====================================================================================================
-	@Test void a102_wrap() {
+	@Test
+	void a102_wrap() {
 		assertNull(wrap(null, 10));
 		assertEquals("", wrap("", 10));
 		assertEquals("hello\nworld", wrap("hello world", 10));
@@ -3070,7 +3247,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// wrap(String, int, String)
 	//====================================================================================================
-	@Test void a103_wrapWithNewline() {
+	@Test
+	void a103_wrapWithNewline() {
 		assertNull(wrap(null, 10, "<br>"));
 		assertEquals("", wrap("", 10, "<br>"));
 		assertEquals("hello<br>world", wrap("hello world", 10, "<br>"));
@@ -3092,7 +3270,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// toStringArray(Collection<String>)
 	//====================================================================================================
-	@Test void a104_toStringArray() {
+	@Test
+	void a104_toStringArray() {
 		assertNull(toStringArray(null));
 		assertList(toStringArray(Collections.emptyList()));
 		assertList(toStringArray(l("a", "b", "c")), "a", "b", "c");
@@ -3115,7 +3294,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// filter(String[], Predicate<String>)
 	//====================================================================================================
-	@Test void a105_filter() {
+	@Test
+	void a105_filter() {
 		assertNull(filter(null, NOT_EMPTY));
 		assertList(filter(a(), NOT_EMPTY));
 		assertList(filter(a("foo", "", "bar", null, "baz"), NOT_EMPTY), "foo", "bar", "baz");
@@ -3130,7 +3310,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// map(String[], Function<String, String>)
 	//====================================================================================================
-	@Test void a106_mapped() {
+	@Test
+	void a106_mapped() {
 		assertNull(mapped(null, String::toUpperCase));
 		assertList(mapped(a(), String::toUpperCase));
 		assertList(mapped(a("foo", "bar", "baz"), String::toUpperCase), "FOO", "BAR", "BAZ");
@@ -3144,7 +3325,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// distinct(String[])
 	//====================================================================================================
-	@Test void a107_distinct() {
+	@Test
+	void a107_distinct() {
 		assertNull(distinct(null));
 		assertList(distinct(a()));
 		assertList(distinct(a("foo", "bar", "baz")), "foo", "bar", "baz");
@@ -3158,7 +3340,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// sort(String[])
 	//====================================================================================================
-	@Test void a108_sort() {
+	@Test
+	void a108_sort() {
 		assertNull(sort(null));
 		assertList(sort(a()));
 		assertList(sort(a("c", "a", "b")), "a", "b", "c");
@@ -3172,7 +3355,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// sortIgnoreCase(String[])
 	//====================================================================================================
-	@Test void a109_sortIgnoreCase() {
+	@Test
+	void a109_sortIgnoreCase() {
 		assertNull(sortIgnoreCase(null));
 		assertList(sortIgnoreCase(a()));
 		assertList(sortIgnoreCase(a("c", "a", "b")), "a", "b", "c");
@@ -3190,7 +3374,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// appendIfNotEmpty(StringBuilder, String)
 	//====================================================================================================
-	@Test void a110_appendIfNotEmpty() {
+	@Test
+	void a110_appendIfNotEmpty() {
 		var sb = new StringBuilder();
 		assertSame(sb, appendIfNotEmpty(sb, "hello"));
 		assertEquals("hello", sb.toString());
@@ -3214,7 +3399,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// appendIfNotBlank(StringBuilder, String)
 	//====================================================================================================
-	@Test void a111_appendIfNotBlank() {
+	@Test
+	void a111_appendIfNotBlank() {
 		var sb = new StringBuilder();
 		assertSame(sb, appendIfNotBlank(sb, "hello"));
 		assertEquals("hello", sb.toString());
@@ -3244,7 +3430,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// appendWithSeparator(StringBuilder, String, String)
 	//====================================================================================================
-	@Test void a112_appendWithSeparator() {
+	@Test
+	void a112_appendWithSeparator() {
 		var sb = new StringBuilder();
 		assertSame(sb, appendWithSeparator(sb, "first", ", "));
 		assertEquals("first", sb.toString());
@@ -3279,7 +3466,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// buildString(Consumer<StringBuilder>)
 	//====================================================================================================
-	@Test void a113_buildString() {
+	@Test
+	void a113_buildString() {
 		var result = buildString(sb -> {
 			sb.append("Hello");
 			sb.append(" ");
@@ -3316,7 +3504,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// String Constants
 	//====================================================================================================
-	@Test void a114_stringConstants() {
+	@Test
+	void a114_stringConstants() {
 		// EMPTY
 		assertEquals("", EMPTY);
 		assertTrue(EMPTY.isEmpty());
@@ -3369,7 +3558,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// intern(String)
 	//====================================================================================================
-	@Test void a115_intern() {
+	@Test
+	void a115_intern() {
 		assertNull(intern(null));
 
 		var s1 = new String("test");
@@ -3391,7 +3581,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// isInterned(String)
 	//====================================================================================================
-	@Test void a116_isInterned() {
+	@Test
+	void a116_isInterned() {
 		assertFalse(isInterned(null));
 
 		// String literals are automatically interned
@@ -3411,7 +3602,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// getStringSize(String)
 	//====================================================================================================
-	@Test void a117_getStringSize() {
+	@Test
+	void a117_getStringSize() {
 		assertEquals(0, getStringSize(null));
 		assertEquals(40, getStringSize("")); // 24 + 16 = 40 bytes overhead
 		assertEquals(50, getStringSize("hello")); // 40 + (5 * 2) = 50 bytes
@@ -3432,7 +3624,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	// optimizeString(String)
 	//====================================================================================================
-	@Test void a118_optimizeString() {
+	@Test
+	void a118_optimizeString() {
 		assertNull(optimizeString(null));
 		assertNull(optimizeString("short")); // No suggestions for short strings
 

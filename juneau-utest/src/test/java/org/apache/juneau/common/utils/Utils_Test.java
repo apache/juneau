@@ -38,5 +38,56 @@ class Utils_Test extends TestBase {
 
 		assertFalse(nn(null));
 	}
+
+	//====================================================================================================
+	// f(String, Object...)
+	//====================================================================================================
+	@Test
+	void a02_f() {
+		// Basic formatting
+		assertEquals("Hello John, you have 5 items", f("Hello %s, you have %d items", "John", 5));
+		assertEquals("Hello world", f("Hello %s", "world"));
+
+		// Floating point
+		assertEquals("Price: $19.99", f("Price: $%.2f", 19.99));
+		assertEquals("Value: 3.14", f("Value: %.2f", 3.14159));
+
+		// Multiple arguments
+		assertEquals("Name: John, Age: 30, Salary: $50000.00",
+			f("Name: %s, Age: %d, Salary: $%.2f", "John", 30, 50000.0));
+
+		// Null handling
+		assertEquals("Value: null", f("Value: %s", (String)null));
+		assertNull(f(null, "test"));
+		assertEquals("test", f("test"));
+	}
+
+	//====================================================================================================
+	// fs(String, Object...)
+	//====================================================================================================
+	@Test
+	void a03_fs() {
+		// Basic supplier
+		var supplier = fs("Hello %s, you have %d items", "John", 5);
+		assertNotNull(supplier);
+		assertEquals("Hello John, you have 5 items", supplier.get());
+
+		// Lazy evaluation - format only when get() is called
+		var lazySupplier = fs("Price: $%.2f", 19.99);
+		assertEquals("Price: $19.99", lazySupplier.get());
+
+		// Multiple calls return same result
+		var supplier2 = fs("Value: %s", "test");
+		assertEquals("Value: test", supplier2.get());
+		assertEquals("Value: test", supplier2.get());
+
+		// Null handling
+		var nullSupplier = fs(null, "test");
+		assertNull(nullSupplier.get());
+
+		// Empty pattern
+		var emptySupplier = fs("");
+		assertEquals("", emptySupplier.get());
+	}
 }
 

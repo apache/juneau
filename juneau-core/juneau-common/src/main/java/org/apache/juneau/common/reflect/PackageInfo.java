@@ -122,7 +122,8 @@ public class PackageInfo implements Annotatable {
 	protected PackageInfo(Package inner) {
 		assertArgNotNull("inner", inner);
 		this.inner = inner;
-		this.annotations = memoize(() -> opt(inner).map(pkg -> stream(pkg.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
+		this.annotations = memoize(
+			() -> opt(inner).map(pkg -> stream(pkg.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
 	}
 
 	/**

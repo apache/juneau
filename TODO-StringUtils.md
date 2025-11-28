@@ -220,7 +220,7 @@ The `StringUtils` class currently has 225+ public static methods covering:
 
 ## Existing Methods to Consider Enhancing
 
-- `format(String pattern, Object...args)` - Could be enhanced with more formatting options
+- ✅ `format(String pattern, Object...args)` - Could be enhanced with more formatting options
 - `parseNumber(String s, Class<? extends Number> type)` - Could add more number types
 - `getDuration(String s)` - Could support more duration formats
 - `replaceVars(String s, Map<String,Object> m)` - Could add more variable syntax options

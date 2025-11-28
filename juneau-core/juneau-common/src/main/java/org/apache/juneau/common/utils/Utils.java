@@ -407,6 +407,59 @@ public class Utils {
 	}
 
 	/**
+	 * Shortcut for calling {@link StringUtils#format(String, Object...)}.
+	 *
+	 * <p>
+	 * This method provides a convenient shorthand for printf-style string formatting.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Basic formatting</jc>
+	 * 	f(<js>"Hello %s, you have %d items"</js>, <js>"John"</js>, 5);
+	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
+	 *
+	 * 	<jc>// Floating point</jc>
+	 * 	f(<js>"Price: $%.2f"</js>, 19.99);
+	 * 	<jc>// Returns: "Price: $19.99"</jc>
+	 * </p>
+	 *
+	 * @param pattern The printf-style format string.
+	 * @param args The arguments to format.
+	 * @return The formatted string.
+	 * @see StringUtils#format(String, Object...)
+	 * @see #mf(String, Object...) for MessageFormat-style formatting
+	 */
+	public static String f(String pattern, Object...args) {
+		return format(pattern, args);
+	}
+
+	/**
+	 * Creates a formatted string supplier with printf-style format arguments for lazy evaluation.
+	 *
+	 * <p>This method returns a {@link Supplier} that formats the string pattern with the provided arguments
+	 * only when the supplier's {@code get()} method is called. This is useful for expensive string formatting
+	 * operations that may not always be needed, such as error messages in assertions.</p>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Lazy evaluation - string is only formatted if assertion fails</jc>
+	 * 	assertTrue(condition, fs(<js>"Expected %s but got %s"</js>, expected, actual));
+	 *
+	 * 	<jc>// Can be used anywhere a Supplier&lt;String&gt; is expected</jc>
+	 * 	Supplier&lt;String&gt; <jv>messageSupplier</jv> = fs(<js>"Processing item %d of %d"</js>, i, total);
+	 * </p>
+	 *
+	 * @param pattern The printf-style format string using <js>%s</js>, <js>%d</js>, etc. placeholders.
+	 * @param args The arguments to substitute into the pattern placeholders.
+	 * @return A {@link Supplier} that will format the string when {@code get()} is called.
+	 * @see StringUtils#format(String, Object...)
+	 * @see #mfs(String, Object...) for MessageFormat-style formatting
+	 */
+	public static Supplier<String> fs(String pattern, Object...args) {
+		return () -> format(pattern, args);
+	}
+
+	/**
 	 * Calculates a hash code for the specified values.
 	 *
 	 * <p>

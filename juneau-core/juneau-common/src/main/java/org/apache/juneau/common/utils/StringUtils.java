@@ -105,7 +105,7 @@ public class StringUtils {
 	 *   <li>Object allocation for frequently used patterns</li>
 	 * </ul>
 	 */
-	private static final ThreadLocal<Cache<String,MessageFormat>> MESSAGE_FORMAT_CACHE = ThreadLocal.withInitial(() -> Cache.of(String.class, MessageFormat.class).maxSize(100).build());
+	private static final Cache<String,MessageFormat> MESSAGE_FORMAT_CACHE = Cache.of(String.class, MessageFormat.class).maxSize(100).threadLocal().build();
 
 	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
 
@@ -746,9 +746,8 @@ public class StringUtils {
 		if (c % 2 != 0)
 			throw new AssertionError("Dangling single quote found in pattern: " + pattern);
 
-		// Get or create a cached MessageFormat for this pattern (thread-safe via ThreadLocal)
-		var cache = MESSAGE_FORMAT_CACHE.get();
-		var mf = cache.get(pattern, () -> new MessageFormat(pattern));
+		// Get or create a cached MessageFormat for this pattern (thread-safe via thread-local cache)
+		var mf = MESSAGE_FORMAT_CACHE.get(pattern, () -> new MessageFormat(pattern));
 
 		// Determine which arguments have format types and need to preserve their original type
 		var formats = mf.getFormatsByArgumentIndex();
@@ -762,6 +761,97 @@ public class StringUtils {
 		}
 
 		return mf.format(args2);
+	}
+
+	/**
+	 * Formats a string using printf-style format specifiers.
+	 *
+	 * <p>
+	 * This method provides printf-style formatting similar to C's <c>printf()</c> function and Java's
+	 * {@link String#format(String, Object...)}. It uses the same format specifier syntax.
+	 *
+	 * <p>
+	 * This is the primary formatting method using printf-style syntax (e.g., <js>"%s"</js>, <js>"%d"</js>, <js>"%f"</js>).
+	 * For MessageFormat-style formatting, use {@link #mformat(String, Object...)}.
+	 *
+	 * <h5 class='section'>Format Specifiers:</h5>
+	 * <ul>
+	 *   <li><b>%s</b> - String</li>
+	 *   <li><b>%d</b> - Decimal integer</li>
+	 *   <li><b>%f</b> - Floating point</li>
+	 *   <li><b>%x</b> - Hexadecimal (lowercase)</li>
+	 *   <li><b>%X</b> - Hexadecimal (uppercase)</li>
+	 *   <li><b>%o</b> - Octal</li>
+	 *   <li><b>%b</b> - Boolean</li>
+	 *   <li><b>%c</b> - Character</li>
+	 *   <li><b>%e</b> - Scientific notation (lowercase)</li>
+	 *   <li><b>%E</b> - Scientific notation (uppercase)</li>
+	 *   <li><b>%g</b> - General format (lowercase)</li>
+	 *   <li><b>%G</b> - General format (uppercase)</li>
+	 *   <li><b>%n</b> - Platform-specific line separator</li>
+	 *   <li><b>%%</b> - Literal percent sign</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Format Specifier Syntax:</h5>
+	 * <p>
+	 * Format specifiers follow this pattern: <c>%[argument_index$][flags][width][.precision]conversion</c>
+	 * </p>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Basic string and number formatting</jc>
+	 * 	format(<js>"Hello %s, you have %d items"</js>, <js>"John"</js>, 5);
+	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
+	 *
+	 * 	<jc>// Floating point with precision</jc>
+	 * 	format(<js>"Price: $%.2f"</js>, 19.99);
+	 * 	<jc>// Returns: "Price: $19.99"</jc>
+	 *
+	 * 	<jc>// Width and alignment</jc>
+	 * 	format(<js>"Name: %-20s Age: %3d"</js>, <js>"John"</js>, 25);
+	 * 	<jc>// Returns: "Name: John                 Age:  25"</jc>
+	 *
+	 * 	<jc>// Hexadecimal</jc>
+	 * 	format(<js>"Color: #%06X"</js>, 0xFF5733);
+	 * 	<jc>// Returns: "Color: #FF5733"</jc>
+	 *
+	 * 	<jc>// Scientific notation</jc>
+	 * 	format(<js>"Value: %.2e"</js>, 1234567.0);
+	 * 	<jc>// Returns: "Value: 1.23e+06"</jc>
+	 *
+	 * 	<jc>// Argument index (reuse arguments)</jc>
+	 * 	format(<js>"%1$s loves %2$s, and %1$s also loves %3$s"</js>, <js>"Alice"</js>, <js>"Bob"</js>, <js>"Charlie"</js>);
+	 * 	<jc>// Returns: "Alice loves Bob, and Alice also loves Charlie"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Comparison with mformat():</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Printf style (this method)</jc>
+	 * 	format(<js>"Hello %s, you have %d items"</js>, <js>"John"</js>, 5);
+	 *
+	 * 	<jc>// MessageFormat style</jc>
+	 * 	mformat(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
+	 * </p>
+	 *
+	 * <h5 class='section'>Null Handling:</h5>
+	 * <p>
+	 * Null arguments are formatted as the string <js>"null"</js> for string conversions,
+	 * or cause a {@link NullPointerException} for numeric conversions (consistent with {@link String#format(String, Object...)}).
+	 * </p>
+	 *
+	 * @param pattern The printf-style format string.
+	 * @param args The arguments to format.
+	 * @return The formatted string.
+	 * @throws java.util.IllegalFormatException If the format string is invalid or arguments don't match the format specifiers.
+	 * @see String#format(String, Object...)
+	 * @see #mformat(String, Object...) for MessageFormat-style formatting
+	 */
+	public static String format(String pattern, Object...args) {
+		if (pattern == null)
+			return null;
+		if (args == null || args.length == 0)
+			return pattern;
+		return String.format(pattern, args);
 	}
 
 	/**
@@ -1716,7 +1806,7 @@ public class StringUtils {
 		// Remove spaces and hyphens
 		var cleaned = str.replaceAll("[\\s\\-]", "");
 		// Must be all digits and 13-19 digits long
-		if (!cleaned.matches("^\\d{13,19}$"))
+		if (! cleaned.matches("^\\d{13,19}$"))
 			return false;
 		// Apply Luhn algorithm
 		var sum = 0;
@@ -1729,7 +1819,7 @@ public class StringUtils {
 					digit = (digit % 10) + 1;
 			}
 			sum += digit;
-			alternate = !alternate;
+			alternate = ! alternate;
 		}
 		return (sum % 10) == 0;
 	}
@@ -1845,7 +1935,7 @@ public class StringUtils {
 			return false;
 		try {
 			// Try IPv4 first
-			if (ip.contains(".") && !ip.contains(":")) {
+			if (ip.contains(".") && ! ip.contains(":")) {
 				var parts = ip.split("\\.");
 				if (parts.length != 4)
 					return false;
@@ -1896,12 +1986,12 @@ public class StringUtils {
 	public static boolean isValidMacAddress(String mac) {
 		if (isEmpty(mac))
 			return false;
-		
+
 		// Remove separators and check if it's 12 hex digits
 		var cleaned = mac.replaceAll("[:-]", "").toUpperCase();
 		if (cleaned.length() != 12)
 			return false;
-		
+
 		// Check if all characters are valid hex digits
 		return cleaned.matches("^[0-9A-F]{12}$");
 	}
@@ -1933,41 +2023,41 @@ public class StringUtils {
 	public static boolean isValidHostname(String hostname) {
 		if (isEmpty(hostname))
 			return false;
-		
+
 		// Cannot start or end with a dot
 		if (hostname.startsWith(".") || hostname.endsWith("."))
 			return false;
-		
+
 		// Total length cannot exceed 253 characters
 		if (hostname.length() > 253)
 			return false;
-		
+
 		// Split by dots (use -1 to preserve trailing empty strings)
 		var labels = hostname.split("\\.", -1);
-		
+
 		// Must have at least one label
 		if (labels.length == 0)
 			return false;
-		
+
 		// Check each label
 		for (var label : labels) {
 			// Label cannot be empty
 			if (label.isEmpty())
 				return false;
-			
+
 			// Label cannot exceed 63 characters
 			if (label.length() > 63)
 				return false;
-			
+
 			// Label cannot start or end with hyphen
 			if (label.startsWith("-") || label.endsWith("-"))
 				return false;
-			
+
 			// Label can only contain letters, digits, and hyphens
-			if (!label.matches("^[a-zA-Z0-9-]+$"))
+			if (! label.matches("^[a-zA-Z0-9-]+$"))
 				return false;
 		}
-		
+
 		return true;
 	}
 
@@ -1991,14 +2081,14 @@ public class StringUtils {
 	public static int wordCount(String str) {
 		if (isEmpty(str))
 			return 0;
-		
+
 		var count = 0;
 		var inWord = false;
-		
+
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
 			if (Character.isLetterOrDigit(c) || c == '_') {
-				if (!inWord) {
+				if (! inWord) {
 					count++;
 					inWord = true;
 				}
@@ -2006,7 +2096,7 @@ public class StringUtils {
 				inWord = false;
 			}
 		}
-		
+
 		return count;
 	}
 
@@ -2029,7 +2119,7 @@ public class StringUtils {
 	public static int lineCount(String str) {
 		if (isEmpty(str))
 			return 0;
-		
+
 		var count = 1; // At least one line
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
@@ -2043,7 +2133,7 @@ public class StringUtils {
 				count++;
 			}
 		}
-		
+
 		return count;
 	}
 
@@ -2066,11 +2156,11 @@ public class StringUtils {
 	public static char mostFrequentChar(String str) {
 		if (isEmpty(str))
 			return '\0';
-		
+
 		var charCounts = new int[Character.MAX_VALUE + 1];
 		var maxCount = 0;
 		var maxChar = '\0';
-		
+
 		// Count occurrences of each character
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
@@ -2080,7 +2170,7 @@ public class StringUtils {
 				maxChar = c;
 			}
 		}
-		
+
 		return maxChar;
 	}
 
@@ -2106,26 +2196,26 @@ public class StringUtils {
 	public static double entropy(String str) {
 		if (isEmpty(str))
 			return 0.0;
-		
+
 		var length = str.length();
 		if (length == 0)
 			return 0.0;
-		
+
 		// Count character frequencies
 		var charCounts = new int[Character.MAX_VALUE + 1];
 		for (var i = 0; i < length; i++) {
 			charCounts[str.charAt(i)]++;
 		}
-		
+
 		// Calculate entropy
 		var entropy = 0.0;
 		for (var count : charCounts) {
 			if (count > 0) {
-				var probability = (double) count / length;
+				var probability = (double)count / length;
 				entropy -= probability * (Math.log(probability) / Math.log(2.0));
 			}
 		}
-		
+
 		return entropy;
 	}
 
@@ -2152,11 +2242,11 @@ public class StringUtils {
 	public static double readabilityScore(String str) {
 		if (isEmpty(str))
 			return 0.0;
-		
+
 		var words = extractWords(str);
 		if (words.isEmpty())
 			return 0.0;
-		
+
 		// Count sentences (ending with . ! ?)
 		var sentenceCount = 0;
 		for (var i = 0; i < str.length(); i++) {
@@ -2167,22 +2257,22 @@ public class StringUtils {
 		}
 		if (sentenceCount == 0)
 			sentenceCount = 1; // At least one sentence
-		
+
 		// Calculate average words per sentence
-		var avgWordsPerSentence = (double) words.size() / sentenceCount;
-		
+		var avgWordsPerSentence = (double)words.size() / sentenceCount;
+
 		// Estimate average syllables per word (simplified: count vowel groups)
 		var totalSyllables = 0;
 		for (var word : words) {
 			totalSyllables += estimateSyllables(word);
 		}
-		var avgSyllablesPerWord = (double) totalSyllables / words.size();
-		
+		var avgSyllablesPerWord = (double)totalSyllables / words.size();
+
 		// Simplified Flesch Reading Ease formula
 		// Score = 206.835 - (1.015 * ASL) - (84.6 * ASW)
 		// Where ASL = average sentence length (words), ASW = average syllables per word
 		var score = 206.835 - (1.015 * avgWordsPerSentence) - (84.6 * avgSyllablesPerWord);
-		
+
 		// Clamp to 0-100 range
 		return Math.max(0.0, Math.min(100.0, score));
 	}
@@ -2193,26 +2283,26 @@ public class StringUtils {
 	private static int estimateSyllables(String word) {
 		if (word == null || word.isEmpty())
 			return 1;
-		
+
 		var lower = word.toLowerCase();
 		var count = 0;
 		var prevWasVowel = false;
-		
+
 		for (var i = 0; i < lower.length(); i++) {
 			var c = lower.charAt(i);
 			var isVowel = (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'y');
-			
-			if (isVowel && !prevWasVowel) {
+
+			if (isVowel && ! prevWasVowel) {
 				count++;
 			}
 			prevWasVowel = isVowel;
 		}
-		
+
 		// Handle silent 'e' at the end
 		if (lower.endsWith("e") && count > 1) {
 			count--;
 		}
-		
+
 		// At least one syllable
 		return Math.max(1, count);
 	}
@@ -2422,7 +2512,7 @@ public class StringUtils {
 	 * @param args The map containing the named argument values.
 	 * @return The formatted string with placeholders replaced, or the original template if args is null or empty.
 	 */
-	public static String formatWithNamedArgs(String template, Map<String, Object> args) {
+	public static String formatWithNamedArgs(String template, Map<String,Object> args) {
 		if (template == null)
 			return null;
 		if (args == null || args.isEmpty())
@@ -2448,16 +2538,16 @@ public class StringUtils {
 	 * @param variables The map containing the variable values.
 	 * @return The interpolated string with variables replaced, or the original template if variables is null or empty.
 	 */
-	public static String interpolate(String template, Map<String, Object> variables) {
+	public static String interpolate(String template, Map<String,Object> variables) {
 		if (template == null)
 			return null;
 		if (variables == null || variables.isEmpty())
 			return template;
-		
+
 		var result = new StringBuilder();
 		var i = 0;
 		var length = template.length();
-		
+
 		while (i < length) {
 			var dollarIndex = template.indexOf("${", i);
 			if (dollarIndex == -1) {
@@ -2465,10 +2555,10 @@ public class StringUtils {
 				result.append(template.substring(i));
 				break;
 			}
-			
+
 			// Append text before the variable
 			result.append(template.substring(i, dollarIndex));
-			
+
 			// Find the closing brace
 			var braceIndex = template.indexOf('}', dollarIndex + 2);
 			if (braceIndex == -1) {
@@ -2476,11 +2566,11 @@ public class StringUtils {
 				result.append(template.substring(dollarIndex));
 				break;
 			}
-			
+
 			// Extract variable name
 			var varName = template.substring(dollarIndex + 2, braceIndex);
 			var value = variables.get(varName);
-			
+
 			if (variables.containsKey(varName)) {
 				// Variable exists in map (even if null)
 				result.append(value != null ? value.toString() : "null");
@@ -2488,10 +2578,10 @@ public class StringUtils {
 				// Variable not found, keep the original placeholder
 				result.append("${").append(varName).append("}");
 			}
-			
+
 			i = braceIndex + 1;
 		}
-		
+
 		return result.toString();
 	}
 
@@ -2519,25 +2609,23 @@ public class StringUtils {
 			return word;
 		if (count == 1)
 			return word;
-		
+
 		var lower = word.toLowerCase();
 		var length = word.length();
-		
+
 		// Words ending in s, x, z, ch, sh -> add "es"
-		if (lower.endsWith("s") || lower.endsWith("x") || lower.endsWith("z") ||
-			lower.endsWith("ch") || lower.endsWith("sh")) {
+		if (lower.endsWith("s") || lower.endsWith("x") || lower.endsWith("z") || lower.endsWith("ch") || lower.endsWith("sh")) {
 			return word + "es";
 		}
-		
+
 		// Words ending in "y" preceded by a consonant -> replace "y" with "ies"
 		if (length > 1 && lower.endsWith("y")) {
 			var secondLast = lower.charAt(length - 2);
-			if (secondLast != 'a' && secondLast != 'e' && secondLast != 'i' && 
-				secondLast != 'o' && secondLast != 'u') {
+			if (secondLast != 'a' && secondLast != 'e' && secondLast != 'i' && secondLast != 'o' && secondLast != 'u') {
 				return word.substring(0, length - 1) + "ies";
 			}
 		}
-		
+
 		// Words ending in "f" or "fe" -> replace with "ves" (basic rule)
 		if (lower.endsWith("f")) {
 			return word.substring(0, length - 1) + "ves";
@@ -2545,7 +2633,7 @@ public class StringUtils {
 		if (lower.endsWith("fe")) {
 			return word.substring(0, length - 2) + "ves";
 		}
-		
+
 		// Default: add "s"
 		return word + "s";
 	}
@@ -2569,7 +2657,7 @@ public class StringUtils {
 	public static String ordinal(int number) {
 		var abs = Math.abs(number);
 		var suffix = "th";
-		
+
 		// Special cases for 11, 12, 13 (all use "th")
 		if (abs % 100 != 11 && abs % 100 != 12 && abs % 100 != 13) {
 			var lastDigit = abs % 10;
@@ -2580,7 +2668,7 @@ public class StringUtils {
 			else if (lastDigit == 3)
 				suffix = "rd";
 		}
-		
+
 		return number + suffix;
 	}
 
@@ -2672,12 +2760,7 @@ public class StringUtils {
 		if (str == null)
 			return null;
 		// Must unescape &amp; last to avoid interfering with other entities
-		return str.replace("&lt;", "<")
-			.replace("&gt;", ">")
-			.replace("&quot;", "\"")
-			.replace("&#39;", "'")
-			.replace("&apos;", "'")
-			.replace("&amp;", "&");
+		return str.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"").replace("&#39;", "'").replace("&apos;", "'").replace("&amp;", "&");
 	}
 
 	/**
@@ -2745,11 +2828,7 @@ public class StringUtils {
 		if (str == null)
 			return null;
 		// Must unescape &amp; last to avoid interfering with other entities
-		return str.replace("&lt;", "<")
-			.replace("&gt;", ">")
-			.replace("&quot;", "\"")
-			.replace("&apos;", "'")
-			.replace("&amp;", "&");
+		return str.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"").replace("&apos;", "'").replace("&amp;", "&");
 	}
 
 	/**
@@ -2793,20 +2872,8 @@ public class StringUtils {
 		if (str == null)
 			return null;
 		// Escape regex special characters: . * + ? ^ $ { } ( ) [ ] | \
-		return str.replace("\\", "\\\\")
-			.replace(".", "\\.")
-			.replace("*", "\\*")
-			.replace("+", "\\+")
-			.replace("?", "\\?")
-			.replace("^", "\\^")
-			.replace("$", "\\$")
-			.replace("{", "\\{")
-			.replace("}", "\\}")
-			.replace("(", "\\(")
-			.replace(")", "\\)")
-			.replace("[", "\\[")
-			.replace("]", "\\]")
-			.replace("|", "\\|");
+		return str.replace("\\", "\\\\").replace(".", "\\.").replace("*", "\\*").replace("+", "\\+").replace("?", "\\?").replace("^", "\\^").replace("$", "\\$").replace("{", "\\{").replace("}", "\\}")
+			.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]").replace("|", "\\|");
 	}
 
 	/**
@@ -2883,16 +2950,16 @@ public class StringUtils {
 			return -1;
 		if (str2 == null)
 			return 1;
-		
+
 		var len1 = str1.length();
 		var len2 = str2.length();
 		var i1 = 0;
 		var i2 = 0;
-		
+
 		while (i1 < len1 && i2 < len2) {
 			var c1 = str1.charAt(i1);
 			var c2 = str2.charAt(i2);
-			
+
 			// If both are digits, compare numerically
 			if (Character.isDigit(c1) && Character.isDigit(c2)) {
 				// Skip leading zeros
@@ -2900,7 +2967,7 @@ public class StringUtils {
 					i1++;
 				while (i2 < len2 && str2.charAt(i2) == '0')
 					i2++;
-				
+
 				// Find end of number sequences
 				var end1 = i1;
 				var end2 = i2;
@@ -2908,13 +2975,13 @@ public class StringUtils {
 					end1++;
 				while (end2 < len2 && Character.isDigit(str2.charAt(end2)))
 					end2++;
-				
+
 				// Compare lengths first (longer number is larger)
 				var lenNum1 = end1 - i1;
 				var lenNum2 = end2 - i2;
 				if (lenNum1 != lenNum2)
 					return lenNum1 - lenNum2;
-				
+
 				// Same length, compare digit by digit
 				for (var j = 0; j < lenNum1; j++) {
 					var d1 = str1.charAt(i1 + j);
@@ -2922,7 +2989,7 @@ public class StringUtils {
 					if (d1 != d2)
 						return d1 - d2;
 				}
-				
+
 				i1 = end1;
 				i2 = end2;
 			} else {
@@ -2934,7 +3001,7 @@ public class StringUtils {
 				i2++;
 			}
 		}
-		
+
 		return len1 - len2;
 	}
 
@@ -2960,18 +3027,18 @@ public class StringUtils {
 			str1 = "";
 		if (str2 == null)
 			str2 = "";
-		
+
 		var len1 = str1.length();
 		var len2 = str2.length();
-		
+
 		// Use dynamic programming with optimized space (only need previous row)
 		var prev = new int[len2 + 1];
 		var curr = new int[len2 + 1];
-		
+
 		// Initialize first row
 		for (var j = 0; j <= len2; j++)
 			prev[j] = j;
-		
+
 		for (var i = 1; i <= len1; i++) {
 			curr[0] = i;
 			for (var j = 1; j <= len2; j++) {
@@ -2986,7 +3053,7 @@ public class StringUtils {
 			prev = curr;
 			curr = temp;
 		}
-		
+
 		return prev[len2];
 	}
 
@@ -3012,14 +3079,14 @@ public class StringUtils {
 			str1 = "";
 		if (str2 == null)
 			str2 = "";
-		
+
 		if (str1.equals(str2))
 			return 1.0;
-		
+
 		var maxLen = Math.max(str1.length(), str2.length());
 		if (maxLen == 0)
 			return 1.0;
-		
+
 		var distance = levenshteinDistance(str1, str2);
 		return 1.0 - ((double)distance / maxLen);
 	}
@@ -3959,7 +4026,7 @@ public class StringUtils {
 	 * @param remove The substrings to remove.
 	 * @return The string with all specified substrings removed, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
-	public static String removeAll(String str, String... remove) {
+	public static String removeAll(String str, String...remove) {
 		if (str == null)
 			return null;
 		if (isEmpty(str) || remove == null || remove.length == 0)
@@ -4140,14 +4207,14 @@ public class StringUtils {
 			// Split into words first, then combine words that fit
 			var words = line.split(" +");  // Split on one or more spaces
 			var currentLine = new StringBuilder();
-			
+
 			for (var word : words) {
 				if (word.isEmpty())
 					continue;
-					
+
 				var wordLength = word.length();
 				var currentLength = currentLine.length();
-				
+
 				if (currentLength == 0) {
 					// First word on line
 					// Only break single words if there are multiple words in the input
@@ -4205,7 +4272,7 @@ public class StringUtils {
 					}
 				}
 			}
-			
+
 			// Append any remaining line
 			if (currentLine.length() > 0) {
 				if (result.length() > 0)
@@ -5081,11 +5148,11 @@ public class StringUtils {
 	 * @param trimKeys If <jk>true</jk>, trims whitespace from keys and values.
 	 * @return A map containing the parsed key-value pairs, or an empty map if the string is <jk>null</jk> or empty.
 	 */
-	public static Map<String, String> parseMap(String str, char keyValueDelimiter, char entryDelimiter, boolean trimKeys) {
-		var result = new LinkedHashMap<String, String>();
+	public static Map<String,String> parseMap(String str, char keyValueDelimiter, char entryDelimiter, boolean trimKeys) {
+		var result = new LinkedHashMap<String,String>();
 		if (isEmpty(str))
 			return result;
-		
+
 		var entries = split(str, entryDelimiter);
 		for (var entry : entries) {
 			if (isEmpty(entry))
@@ -5128,7 +5195,7 @@ public class StringUtils {
 	public static List<String> extractNumbers(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		var pattern = Pattern.compile("\\d+(?:\\.\\d+)?");
 		var matcher = pattern.matcher(str);
@@ -5156,7 +5223,7 @@ public class StringUtils {
 	public static List<String> extractEmails(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		// Email regex pattern (same as isEmail but without ^ and $ anchors)
 		var pattern = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
@@ -5185,7 +5252,7 @@ public class StringUtils {
 	public static List<String> extractUrls(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		// Basic URL pattern: protocol://domain/path
 		var pattern = Pattern.compile("(?:https?|ftp)://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+", Pattern.CASE_INSENSITIVE);
@@ -5214,7 +5281,7 @@ public class StringUtils {
 	public static List<String> extractWords(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		// Word pattern: sequence of word characters (letters, digits, underscore)
 		var pattern = Pattern.compile("\\w+");
@@ -5247,7 +5314,7 @@ public class StringUtils {
 	public static List<String> extractBetween(String str, String start, String end) {
 		if (isEmpty(str) || isEmpty(start) || isEmpty(end))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		var startIndex = 0;
 		while (true) {
@@ -5292,7 +5359,7 @@ public class StringUtils {
 			return str;
 		if (fromChars.length() != toChars.length())
 			throw new IllegalArgumentException("fromChars and toChars must have the same length");
-		
+
 		var sb = new StringBuilder(str.length());
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
@@ -5325,16 +5392,16 @@ public class StringUtils {
 	public static String soundex(String str) {
 		if (isEmpty(str))
 			return null;
-		
+
 		var upper = str.toUpperCase();
 		var result = new StringBuilder(4);
 		result.append(upper.charAt(0));
-		
+
 		// Soundex mapping: 0 = AEIOUHWY, 1 = BFPV, 2 = CGJKQSXZ, 3 = DT, 4 = L, 5 = MN, 6 = R
 		// H/W/Y don't get codes but don't break sequences either
 		// Initialize lastCode to a value that won't match any real code
 		var lastCode = '\0';
-		
+
 		for (var i = 1; i < upper.length() && result.length() < 4; i++) {
 			var c = upper.charAt(i);
 			var code = getSoundexCode(c);
@@ -5349,12 +5416,12 @@ public class StringUtils {
 			}
 			// If code == lastCode, skip it (consecutive same codes)
 		}
-		
+
 		// Pad with zeros if needed
 		while (result.length() < 4) {
 			result.append('0');
 		}
-		
+
 		return result.toString();
 	}
 
@@ -5399,15 +5466,15 @@ public class StringUtils {
 	public static String metaphone(String str) {
 		if (isEmpty(str))
 			return null;
-		
+
 		var upper = str.toUpperCase().replaceAll("[^A-Z]", "");
 		if (upper.isEmpty())
 			return "";
-		
+
 		var result = new StringBuilder();
 		var i = 0;
 		var len = upper.length();
-		
+
 		// Handle initial characters
 		if (upper.startsWith("KN") || upper.startsWith("GN") || upper.startsWith("PN") || upper.startsWith("AE") || upper.startsWith("WR")) {
 			i = 1;
@@ -5418,20 +5485,20 @@ public class StringUtils {
 			result.append('W');
 			i = 2;
 		}
-		
+
 		// Process remaining characters
 		while (i < len && result.length() < 4) {
 			var c = upper.charAt(i);
 			var prev = i > 0 ? upper.charAt(i - 1) : '\0';
 			var next = i < len - 1 ? upper.charAt(i + 1) : '\0';
 			var next2 = i < len - 2 ? upper.charAt(i + 2) : '\0';
-			
+
 			// Skip duplicates (except C)
 			if (c == prev && c != 'C') {
 				i++;
 				continue;
 			}
-			
+
 			switch (c) {
 				case 'B':
 					if (prev != 'M' || next != '\0')
@@ -5478,7 +5545,7 @@ public class StringUtils {
 					}
 					break;
 				case 'H':
-					if (!isVowel(prev) || !isVowel(next))
+					if (! isVowel(prev) || ! isVowel(next))
 						result.append('H');
 					break;
 				case 'K':
@@ -5534,10 +5601,12 @@ public class StringUtils {
 				case 'Z':
 					result.append('S');
 					break;
+				default:
+					break;
 			}
 			i++;
 		}
-		
+
 		return result.length() > 0 ? result.toString() : upper.substring(0, Math.min(1, upper.length()));
 	}
 
@@ -5567,17 +5636,17 @@ public class StringUtils {
 	public static String[] doubleMetaphone(String str) {
 		if (isEmpty(str))
 			return null;
-		
+
 		// For simplicity, return the same code for both primary and alternate
 		// A full Double Metaphone implementation would be much more complex
 		var primary = metaphone(str);
 		if (primary == null)
 			return null;
-		
+
 		// Generate alternate code (simplified - full implementation would have different rules)
 		var alternate = primary;
-		
-		return new String[]{primary, alternate};
+
+		return new String[] { primary, alternate };
 	}
 
 	/**
@@ -5620,10 +5689,10 @@ public class StringUtils {
 	public static String removeAccents(String str) {
 		if (str == null)
 			return null;
-		
+
 		// Normalize to NFD (decomposed form)
 		var normalized = Normalizer.normalize(str, Normalizer.Form.NFD);
-		
+
 		// Remove combining diacritical marks (Unicode category Mn)
 		var sb = new StringBuilder(normalized.length());
 		for (var i = 0; i < normalized.length(); i++) {
@@ -5634,7 +5703,7 @@ public class StringUtils {
 				sb.append(c);
 			}
 		}
-		
+
 		return sb.toString();
 	}
 
@@ -6988,9 +7057,7 @@ public class StringUtils {
 			return null;  // NOSONAR - Intentional.
 		if (predicate == null)
 			return new String[0];
-		return Arrays.stream(array)
-			.filter(predicate)
-			.toArray(String[]::new);
+		return Arrays.stream(array).filter(predicate).toArray(String[]::new);
 	}
 
 	/**
@@ -7014,14 +7081,12 @@ public class StringUtils {
 	 * @param mapper The function to apply to each element. Can be <jk>null</jk>.
 	 * @return A new array with the mapped elements, or <jk>null</jk> if the array was <jk>null</jk>.
 	 */
-	public static String[] mapped(String[] array, Function<String, String> mapper) {
+	public static String[] mapped(String[] array, Function<String,String> mapper) {
 		if (array == null)
 			return null;  // NOSONAR - Intentional.
 		if (mapper == null)
 			return Arrays.copyOf(array, array.length);
-		return Arrays.stream(array)
-			.map(mapper)
-			.toArray(String[]::new);
+		return Arrays.stream(array).map(mapper).toArray(String[]::new);
 	}
 
 	/**
@@ -7044,9 +7109,7 @@ public class StringUtils {
 	public static String[] distinct(String[] array) {
 		if (array == null)
 			return null;  // NOSONAR - Intentional.
-		return Arrays.stream(array)
-			.collect(Collectors.toCollection(LinkedHashSet::new))
-			.toArray(new String[0]);
+		return Arrays.stream(array).collect(Collectors.toCollection(LinkedHashSet::new)).toArray(new String[0]);
 	}
 
 	/**
@@ -7365,7 +7428,7 @@ public class StringUtils {
 		}
 
 		// Suggest interning for medium-length strings that might be repeated
-		if (length > 10 && length < 100 && !isInterned(str)) {
+		if (length > 10 && length < 100 && ! isInterned(str)) {
 			suggestions.add("Consider interning if this string is used frequently");
 		}
 
