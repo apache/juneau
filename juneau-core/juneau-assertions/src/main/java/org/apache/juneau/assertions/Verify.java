@@ -83,7 +83,7 @@ public class Verify {
 		if (expected == o)
 			return null;
 		if (expected == null || o == null || ! expected.equals(o))
-			return nn(msg) ? msg.get() : mformat(MSG_unexpectedValue, expected, o);
+			return nn(msg) ? msg.get() : f(MSG_unexpectedValue, r(expected), r(o));
 		return null;
 	}
 
@@ -112,7 +112,7 @@ public class Verify {
 		if ((type == null && o == null) || (nn(type) && type.isInstance(o)))
 			return null;
 		var c = o == null ? null : o.getClass();
-		return nn(msg) ? msg.get() : mformat(MSG_unexpectedType, type, c);
+		return nn(msg) ? msg.get() : f(MSG_unexpectedType, cn(type), cn(c));
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class Verify {
 	 * @return This object.
 	 */
 	public Verify msg(String msg, Object args) {
-		this.msg = () -> mformat(msg, args);
+		this.msg = fs(msg, args);
 		return this;
 	}
 }

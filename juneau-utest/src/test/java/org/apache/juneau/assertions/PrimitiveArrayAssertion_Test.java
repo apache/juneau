@@ -147,7 +147,7 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 	@Test void ca04b_is_predicate() {
 		byte[] x1 = {1,2};
 		byteArray(x1).is(x->x.length==2);
-		assertThrown(()->byteArray(x1).is(x->x.length==3)).asMessage().asOneLine().is("Unexpected value: '[1, 2]'.");
+		assertThrown(()->byteArray(x1).is(x->x.length==3)).asMessage().asOneLine().is("Unexpected value: '0102'.");
 		assertThrown(()->byteArray(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='[1, 2]'.");
 	}
 

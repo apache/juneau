@@ -210,7 +210,7 @@ class BeanListAssertion_Test extends TestBase {
 	@Test void ca04b_is_predicate() {
 		var x1 = l(A1,A2);
 		test(x1).is(x->x.size()==2);
-		assertThrown(()->test(x1).is(x->x.size()==3)).asMessage().asOneLine().is("Unexpected value: '[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(x1).is(x->x.size()==3)).asMessage().asOneLine().is("Unexpected value: '[(a=1,b=2),(a=3,b=4)]'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='[(a=1,b=2), (a=3,b=4)]'.");
 	}
 

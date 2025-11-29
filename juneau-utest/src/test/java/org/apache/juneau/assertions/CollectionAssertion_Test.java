@@ -151,7 +151,7 @@ class CollectionAssertion_Test extends TestBase {
 	@Test void ca04b_is_predicate() {
 		var x1 = l(1,2);
 		test(x1).is(x->x.size()==2);
-		assertThrown(()->test(x1).is(x->x.size()==3)).asMessage().asOneLine().is("Unexpected value: '[1, 2]'.");
+		assertThrown(()->test(x1).is(x->x.size()==3)).asMessage().asOneLine().is("Unexpected value: '[1,2]'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='[1, 2]'.");
 	}
 

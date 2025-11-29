@@ -164,7 +164,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void ca04b_is_predicate() {
 		var x1 = MID1;
 		test(x1).is(x->x!=null);
-		assertThrown(()->test(x1).is(x->x==null)).asMessage().asOneLine().isMatches("Unexpected value: '*2000'.");
+		assertThrown(()->test(x1).is(x->x==null)).asMessage().asOneLine().isMatches("Unexpected value: '*2000*'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().isMatches("Value unexpectedly matched.  Value='*2000'.");
 	}
 
