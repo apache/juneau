@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	@Test <strong class="jxr_keyword">void</strong> ca04b_is_predicate() {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> x1 = l(1,2);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		test(x1).is(x-&gt;x.size()==2);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertThrown(()-&gt;test(x1).is(x-&gt;x.size()==3)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value: '[1, 2]'."</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertThrown(()-&gt;test(x1).is(x-&gt;x.size()==3)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value: '[1,2]'."</span>);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertThrown(()-&gt;test(x1).is(ne(x1))).asMessage().asOneLine().is(<span class="jxr_string">"Value unexpectedly matched.  Value='[1, 2]'."</span>);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 

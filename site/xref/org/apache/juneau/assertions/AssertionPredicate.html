@@ -104,7 +104,7 @@
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  				<strong class="jxr_keyword">if</strong> (nn(p)) {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  					<strong class="jxr_keyword">var</strong> b = p.test(t);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  					<strong class="jxr_keyword">if</strong> (! b) {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  						<strong class="jxr_keyword">var</strong> m = mformat(MSG_predicateTestFailed, i + 1);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  						<strong class="jxr_keyword">var</strong> m = f(MSG_predicateTestFailed, i + 1);
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 						<strong class="jxr_keyword">if</strong> (p instanceof <a name="AssertionPredicate" href="../../../../org/apache/juneau/assertions/AssertionPredicate.html#AssertionPredicate">AssertionPredicate</a> p2) <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 							m += <span class="jxr_string">"\n\t"</span> + p2.getFailureMessage();
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 						failedMessage.set(m);
@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">if</strong> (nn(p)) {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 				<strong class="jxr_keyword">var</strong> b = p.test(t);
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 				<strong class="jxr_keyword">if</strong> (b) {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 					failedMessage.set(mformat(MSG_predicateTestsUnexpectedlyPassed));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 					failedMessage.set(f(MSG_predicateTestsUnexpectedlyPassed));
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 					<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 				}
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			}
@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : <strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">if</strong> (nn(p) &amp;&amp; p.test(t))
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">var</strong> m = mformat(MSG_noPredicateTestsPassed);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">var</strong> m = f(MSG_noPredicateTestsPassed);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			failedMessage.set(m);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		}

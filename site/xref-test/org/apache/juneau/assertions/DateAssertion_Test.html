@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	@Test <strong class="jxr_keyword">void</strong> ca04b_is_predicate() {
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> x1 = MID1;
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		test(x1).is(x-&gt;x!=<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertThrown(()-&gt;test(x1).is(x-&gt;x==<strong class="jxr_keyword">null</strong>)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Unexpected value: '*2000'."</span>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertThrown(()-&gt;test(x1).is(x-&gt;x==<strong class="jxr_keyword">null</strong>)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Unexpected value: '*2000*'."</span>);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertThrown(()-&gt;test(x1).is(ne(x1))).asMessage().asOneLine().isMatches(<span class="jxr_string">"Value unexpectedly matched.  Value='*2000'."</span>);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 
