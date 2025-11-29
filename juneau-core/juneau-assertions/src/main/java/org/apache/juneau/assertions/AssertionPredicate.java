@@ -245,12 +245,12 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			var oargs = new Object[this.args.length];
 			for (var i = 0; i < oargs.length; i++) {
 				var a = this.args[i];
-			if (a instanceof Function a2) // NOSONAR - Intentional.
-				oargs[i] = a2.apply(t);
+				if (a instanceof Function a2) // NOSONAR - Intentional.
+					oargs[i] = a2.apply(t);
 				else
-					oargs[i] = a;
+					oargs[i] = r(a);
 			}
-			m = mformat(m, oargs);
+			m = f(m, oargs);
 			if (inner instanceof AssertionPredicate inner2) // NOSONAR - Intentional.
 				m += "\n\t" + inner2.getFailureMessage();
 			failedMessage.set(m);

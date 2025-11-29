@@ -170,7 +170,7 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> exactType(Class<?> type) {
 		assertArgNotNull("type", type);
-		return test(x -> x != null && x.getClass().equals(type), MSG_valueWasNotExpectedType, type, TYPENAME);
+		return test(x -> x != null && x.getClass().equals(type), MSG_valueWasNotExpectedType, cn(type), TYPENAME);
 	}
 
 	/**
@@ -382,7 +382,7 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> type(Class<?> type) {
 		assertArgNotNull("type", type);
-		return test(x -> x != null && type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, type, TYPENAME);
+		return test(x -> x != null && type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, cn(type), TYPENAME);
 	}
 
 	/**
