@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 	@Override
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addWarning(String msg, Object...args) {
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">if</strong> (isDebug())
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			LOG.log(Level.WARNING, () -&gt; args.length == 0 ? msg : MessageFormat.format(msg, args));
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			LOG.log(Level.WARNING, () -&gt; args.length == 0 ? msg : f(msg, args));
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">super</strong>.addWarning(msg, args);
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 	}
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 

@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * @return A new IllegalArgumentException with the formatted message.</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> IllegalArgumentException illegalArg(String msg, Object...args) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(args.length == 0 ? msg : f(msg, args));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(f(msg, args));
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -168,7 +168,7 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 * @return A new IllegalArgumentException with the formatted message and cause.</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> IllegalArgumentException illegalArg(Throwable cause, String msg, Object...args) {
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(args.length == 0 ? msg : f(msg, args), cause);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(f(msg, args), cause);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -179,7 +179,7 @@
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * @return A new IOException with the formatted message.</em>
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> java.io.IOException ioex(String msg, Object...args) {
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> java.io.IOException(args.length == 0 ? msg : f(msg, args));
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> java.io.IOException(f(msg, args));
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -201,7 +201,7 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * @return A new IOException with the formatted message and cause.</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> java.io.IOException ioex(Throwable cause, String msg, Object...args) {
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> java.io.IOException(args.length == 0 ? msg : f(msg, args), cause);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> java.io.IOException(f(msg, args), cause);
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * @return A new RuntimeException with the formatted message.</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RuntimeException rex(String msg, Object...args) {
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeException(args.length == 0 ? msg : f(msg, args));
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeException(f(msg, args));
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -302,7 +302,7 @@
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * @return A new RuntimeException with the formatted message and cause.</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> bex(Throwable cause, String msg, Object...args) {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(args.length == 0 ? msg : f(msg, args), cause);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(f(msg, args), cause);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -332,7 +332,7 @@
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * @return A new UnsupportedOperationException with the formatted message.</em>
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> UnsupportedOperationException unsupportedOp(String msg, Object...args) {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(args.length == 0 ? msg : f(msg, args));
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(f(msg, args));
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 	}
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -354,7 +354,7 @@
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * @return A new UnsupportedOperationException with the formatted message and cause.</em>
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> UnsupportedOperationException unsupportedOp(Throwable cause, String msg, Object...args) {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(args.length == 0 ? msg : f(msg, args), cause);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(f(msg, args), cause);
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<em class="jxr_javadoccomment">/**</em>

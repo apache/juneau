@@ -1163,7 +1163,7 @@
 <a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
 <a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> log(Level level, String message, Object...args) {
-<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 		<strong class="jxr_keyword">var</strong> msg = args.length == 0 ? message : MessageFormat.format(message, args);
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 		<strong class="jxr_keyword">var</strong> msg = args.length == 0 ? message : f(message, args);
 <a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 		getLogger().log(level, msg);
 <a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 	}
 <a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 

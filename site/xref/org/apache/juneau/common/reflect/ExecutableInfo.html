@@ -761,9 +761,9 @@
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkIndex(<strong class="jxr_keyword">int</strong> index) {
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">int</strong> pc = getParameterCount();
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 		<strong class="jxr_keyword">if</strong> (pc == 0)
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IndexOutOfBoundsException(mformat(<span class="jxr_string">"Invalid index ''{0}''.  No parameters."</span>, index));
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IndexOutOfBoundsException(f(<span class="jxr_string">"Invalid index ''{0}''.  No parameters."</span>, index));
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">if</strong> (index &lt; 0 || index &gt;= pc)
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IndexOutOfBoundsException(mformat(<span class="jxr_string">"Invalid index ''{0}''.  Parameter count: {1}"</span>, index, pc));
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IndexOutOfBoundsException(f(<span class="jxr_string">"Invalid index ''{0}''.  Parameter count: {1}"</span>, index, pc));
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 	}
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">private</strong> List&lt;ParameterInfo&gt; findParameters() {
