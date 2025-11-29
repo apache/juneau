@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">if</strong> (nn(value)) {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">var</strong> c = value.getClass();
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">if</strong> (! (c.isArray() &amp;&amp; c.getComponentType().isPrimitive()))
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicAssertionError" href="../../../../org/apache/juneau/BasicAssertionError.html#BasicAssertionError">BasicAssertionError</a>(MSG_objectWasNotAnArray, value.getClass());
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicAssertionError" href="../../../../org/apache/juneau/BasicAssertionError.html#BasicAssertionError">BasicAssertionError</a>(MSG_objectWasNotAnArray, cn(value.getClass()));
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 
