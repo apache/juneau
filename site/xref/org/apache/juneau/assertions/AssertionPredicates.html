@@ -178,7 +178,7 @@
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; AssertionPredicate&lt;T&gt; exactType(Class&lt;?&gt; type) {
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">return</strong> test(x -&gt; x != <strong class="jxr_keyword">null</strong> &amp;&amp; x.getClass().equals(type), MSG_valueWasNotExpectedType, type, TYPENAME);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">return</strong> test(x -&gt; x != <strong class="jxr_keyword">null</strong> &amp;&amp; x.getClass().equals(type), MSG_valueWasNotExpectedType, cn(type), TYPENAME);
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -390,7 +390,7 @@
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; AssertionPredicate&lt;T&gt; type(Class&lt;?&gt; type) {
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">return</strong> test(x -&gt; x != <strong class="jxr_keyword">null</strong> &amp;&amp; type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, type, TYPENAME);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">return</strong> test(x -&gt; x != <strong class="jxr_keyword">null</strong> &amp;&amp; type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, cn(type), TYPENAME);
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 	}
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<em class="jxr_javadoccomment">/**</em>

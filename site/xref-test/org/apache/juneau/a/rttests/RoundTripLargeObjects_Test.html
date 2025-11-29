@@ -126,11 +126,11 @@
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		startTime = System.currentTimeMillis();
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; numRuns; i++)
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 			r = s.serialize(a);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		System.err.println(mformat(<span class="jxr_string">"Average serialize time: {0,number}ms"</span>, (System.currentTimeMillis()-startTime)/numRuns)); <em class="jxr_comment">// NOT DEBUG</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		System.err.println(f(<span class="jxr_string">"Average serialize time: {0,number}ms"</span>, (System.currentTimeMillis()-startTime)/numRuns)); <em class="jxr_comment">// NOT DEBUG</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		startTime = System.currentTimeMillis();
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; numRuns; i++)
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			p.parse(r, A.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		System.err.println(mformat(<span class="jxr_string">"Average parsed time: {0,number}ms"</span>, (System.currentTimeMillis()-startTime)/numRuns)); <em class="jxr_comment">// NOT DEBUG</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		System.err.println(f(<span class="jxr_string">"Average parsed time: {0,number}ms"</span>, (System.currentTimeMillis()-startTime)/numRuns)); <em class="jxr_comment">// NOT DEBUG</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A {
