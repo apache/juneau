@@ -18,6 +18,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.reflect.ReflectionUtils.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.time.*;
@@ -502,6 +503,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		Object o = orElse(null);
 		if (o == null || c.isInstance(o))
 			return c.cast(o);
-		throw new BasicAssertionError(MSG_objectWasNotType, info(c).getNameFull(), o.getClass());
+		throw new BasicAssertionError(MSG_objectWasNotType, info(c).getNameFull(), cn(o.getClass()));
 	}
 }

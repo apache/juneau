@@ -159,7 +159,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		if (nn(value)) {
 			var c = value.getClass();
 			if (! (c.isArray() && c.getComponentType().isPrimitive()))
-				throw new BasicAssertionError(MSG_objectWasNotAnArray, value.getClass());
+				throw new BasicAssertionError(MSG_objectWasNotAnArray, cn(value.getClass()));
 		}
 	}
 

@@ -54,7 +54,7 @@ public class BasicAssertionError extends AssertionError {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicAssertionError(String message, Object...args) {
-		super(mformat(message, args));
+		super(f(message, args));
 	}
 
 	/**
