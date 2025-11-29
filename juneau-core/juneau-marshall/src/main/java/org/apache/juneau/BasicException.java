@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
 
@@ -38,7 +39,7 @@ public abstract class BasicException extends Exception {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicException(String message, Object...args) {
-		super(mformat(message, args));
+		super(f(message, args));
 	}
 
 	/**

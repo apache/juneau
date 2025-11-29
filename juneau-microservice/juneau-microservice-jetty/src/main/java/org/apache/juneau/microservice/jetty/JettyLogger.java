@@ -57,23 +57,7 @@ public class JettyLogger implements LocationAwareLogger {
 	 * @return The formatted message string.
 	 */
 	private static String format(String msg, Object...args) {
-		msg = String.valueOf(msg);
-		if (args.length == 0)
-			return msg;
-		var sb = new StringBuilder();
-		int start = 0;
-		for (var arg : args) {
-			int bi = msg.indexOf("{}", start);
-			if (bi < 0) {
-				sb.append(msg.substring(start)).append(" ").append(arg);
-				start = msg.length();
-			} else {
-				sb.append(msg.substring(start, bi)).append(String.valueOf(arg));
-				start = bi + 2;
-			}
-		}
-		sb.append(msg.substring(start));
-		return sb.toString();
+		return f(msg, args);
 	}
 
 	/**

@@ -383,31 +383,28 @@ class Path_Test extends TestBase {
 	public static class F  {
 		@RestGet(path="/")
 		public String a(RequestPathParams path) {
-			return format("a: {0}", path.toString());
+			return Utils.f("a: {0}", path.toString());
 		}
 		@RestGet(path="/*")
 		public String b(RequestPathParams path) {
-			return format("b: {0}", path.toString());
+			return Utils.f("b: {0}", path.toString());
 		}
 		@RestGet(path="/fc")
 		public String c(RequestPathParams path) {
-			return format("c: {0}", path.toString());
+			return Utils.f("c: {0}", path.toString());
 		}
 		@RestGet(path="/fd/{c}/{d}")
 		public String d(RequestPathParams path) {
-			return format("d: {0}", path.toString());
+			return Utils.f("d: {0}", path.toString());
 		}
 		@RestGet(path="/fe/{a}/{b}")
 		public String e(RequestPathParams path) {
-			return format("e: {0}", path.toString());
+			return Utils.f("e: {0}", path.toString());
 		}
 		@RestGet(path="/ff/{c}/{d}/*")
 		public String f(RequestPathParams path) {
-			return format("f: {0}", path.toString());
+			return Utils.f("f: {0}", path.toString());
 		}
-	private static String format(String msg, Object...args) {
-		return StringUtils.mformat(msg, args);
-	}
 	}
 
 	@Test void f01_pathVariablesOnClass() throws Exception {

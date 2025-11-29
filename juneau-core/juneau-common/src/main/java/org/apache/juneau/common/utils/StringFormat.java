@@ -114,7 +114,7 @@ public final class StringFormat {
 	 *
 	 * <p>
 	 * This is a convenience method that creates a StringFormat instance and formats it.
-	 * If the pattern contains no format specifiers (no '%', '{', or '''), the pattern is returned as-is.
+	 * If no arguments are passed in, the pattern is simply returned as-is.
 	 *
 	 * @param pattern The format pattern.
 	 * @param args The arguments to format.
@@ -122,7 +122,7 @@ public final class StringFormat {
 	 * @throws IllegalArgumentException If the pattern is <jk>null</jk> or format specifiers are invalid.
 	 */
 	public static String format(String pattern, Object...args) {
-		if (!hasArgs(pattern))
+		if (args.length == 0)
 			return pattern;
 		return of(pattern).format(args);
 	}
@@ -132,7 +132,7 @@ public final class StringFormat {
 	 *
 	 * <p>
 	 * This is a convenience method that creates a StringFormat instance and formats it.
-	 * If the pattern contains no format specifiers (no '%', '{', or '''), the pattern is returned as-is.
+	 * If no arguments are passed in, the pattern is returned as-is.
 	 *
 	 * @param pattern The format pattern.
 	 * @param locale The locale to use for formatting. If <jk>null</jk>, uses the default locale.
@@ -141,7 +141,7 @@ public final class StringFormat {
 	 * @throws IllegalArgumentException If the pattern is <jk>null</jk> or format specifiers are invalid.
 	 */
 	public static String format(String pattern, Locale locale, Object...args) {
-		if (!hasArgs(pattern))
+		if (args.length == 0)
 			return pattern;
 		return of(pattern).format(locale, args);
 	}

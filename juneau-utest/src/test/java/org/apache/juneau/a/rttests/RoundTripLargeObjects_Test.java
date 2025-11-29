@@ -17,6 +17,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
@@ -111,7 +112,7 @@ class RoundTripLargeObjects_Test extends TestBase {
 
 		// Initialization run.
 		r = s.serialize(a);
-		System.err.println(mformat("Serialized size: {0,number} ", (r instanceof String ? r.toString().length() : ((byte[])r).length))); // NOT DEBUG
+		System.err.println(f("Serialized size: {0,number} ", (r instanceof String ? r.toString().length() : ((byte[])r).length))); // NOT DEBUG
 		p.parse(r, A.class);
 
 		startTime = System.currentTimeMillis();

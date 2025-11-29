@@ -76,7 +76,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return A new request.
 	 */
 	public static MockServletRequest create(String method, String uri, Object...pathArgs) {
-		return create().method(method).uri(mformat(uri, pathArgs));
+		return create().method(method).uri(f(uri, pathArgs));
 	}
 
 	private String method = "GET";

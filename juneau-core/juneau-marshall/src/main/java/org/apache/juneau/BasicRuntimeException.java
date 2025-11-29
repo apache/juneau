@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -40,7 +39,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicRuntimeException(String message, Object...args) {
-		super(mformat(message, args));
+		super(f(message, args));
 	}
 
 	/**
@@ -60,7 +59,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicRuntimeException(Throwable cause, String message, Object...args) {
-		super(mformat(message, args), cause);
+		super(f(message, args), cause);
 	}
 
 	@Override /* Overridden from Throwable */
@@ -112,7 +111,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 */
 	public BasicRuntimeException setMessage(String message, Object...args) {
 		assertModifiable();
-		this.message = mformat(message, args);
+		this.message = f(message, args);
 		return this;
 	}
 

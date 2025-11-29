@@ -215,7 +215,7 @@ public class Assertion {
 	protected BasicAssertionError error(Throwable cause, String msg, Object...args) {
 		msg = mformat(msg, args);
 		if (nn(this.msg))
-			msg = mformat(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
+			msg = f(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
 		if (nn(out))
 			out.println(msg);
 		if (nn(throwable)) {

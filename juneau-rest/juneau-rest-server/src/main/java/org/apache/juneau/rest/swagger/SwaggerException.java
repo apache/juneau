@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.swagger;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.parser.*;
 
@@ -24,6 +25,6 @@ class SwaggerException extends ParseException {
 	private static final long serialVersionUID = 1L;
 
 	SwaggerException(Exception e, String location, Object...locationArgs) {
-		super(e, "Swagger exception:  at " + mformat(location, locationArgs));
+		super(e, "Swagger exception:  at " + f(location, locationArgs));
 	}
 }

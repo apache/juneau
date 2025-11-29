@@ -60,7 +60,7 @@ public class ParseException extends BasicRuntimeException {
 
 	private static String getMessage(ParserSession session, String msg, Object...args) {
 		if (args.length != 0)
-			msg = mformat(msg, args);
+			msg = f(msg, args);
 
 		if (nn(session)) {
 			Position p = session.getPosition();

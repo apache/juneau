@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
@@ -46,7 +47,7 @@ public class ArgException extends InternalServerError {
 	 * @param args The message args.
 	 */
 	public ArgException(ParameterInfo pi, String msg, Object...args) {
-		super(mformat(msg, args) + " on parameter " + pi.getIndex() + " of method " + pi.getMethod().getFullName() + ".");
+		super(f(msg, args) + " on parameter " + pi.getIndex() + " of method " + pi.getMethod().getFullName() + ".");
 	}
 
 	/**

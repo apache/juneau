@@ -58,7 +58,7 @@ class Utils_Test extends TestBase {
 
 		// Null handling
 		assertEquals("Value: null", f("Value: %s", (String)null));
-		assertNull(f(null, "test"));
+		assertThrows(IllegalArgumentException.class, ()->f(null, "test"));
 		assertEquals("test", f("test"));
 	}
 
@@ -83,7 +83,7 @@ class Utils_Test extends TestBase {
 
 		// Null handling
 		var nullSupplier = fs(null, "test");
-		assertNull(nullSupplier.get());
+		assertThrows(IllegalArgumentException.class, ()->nullSupplier.get());
 
 		// Empty pattern
 		var emptySupplier = fs("");

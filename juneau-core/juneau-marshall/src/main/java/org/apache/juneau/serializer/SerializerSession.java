@@ -980,7 +980,7 @@ public class SerializerSession extends BeanTraverseSession {
 	@Override
 	protected void onError(Throwable t, String msg, Object...args) {
 		if (nn(listener))
-			listener.onError(this, t, mformat(msg, args));
+			listener.onError(this, t, f(msg, args));
 		super.onError(t, msg, args);
 	}
 

@@ -60,7 +60,7 @@ public class SerializeException extends BasicRuntimeException {
 	}
 
 	private static String getMessage(SerializerSession session, String msg, Object...args) {
-		msg = mformat(msg, args);
+		msg = f(msg, args);
 		if (nn(session)) {
 			Map<String,Object> m = session.getLastLocation();
 			if (nn(m) && ! m.isEmpty())

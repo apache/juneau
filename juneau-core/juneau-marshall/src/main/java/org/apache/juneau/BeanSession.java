@@ -309,7 +309,7 @@ public class BeanSession extends ContextSession {
 	@Override
 	public void addWarning(String msg, Object...args) {
 		if (isDebug())
-			LOG.log(Level.WARNING, () -> args.length == 0 ? msg : MessageFormat.format(msg, args));
+			LOG.log(Level.WARNING, () -> args.length == 0 ? msg : f(msg, args));
 		super.addWarning(msg, args);
 	}
 

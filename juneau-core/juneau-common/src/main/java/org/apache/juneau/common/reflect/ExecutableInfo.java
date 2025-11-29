@@ -753,9 +753,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	private void checkIndex(int index) {
 		int pc = getParameterCount();
 		if (pc == 0)
-			throw new IndexOutOfBoundsException(mformat("Invalid index ''{0}''.  No parameters.", index));
+			throw new IndexOutOfBoundsException(f("Invalid index ''{0}''.  No parameters.", index));
 		if (index < 0 || index >= pc)
-			throw new IndexOutOfBoundsException(mformat("Invalid index ''{0}''.  Parameter count: {1}", index, pc));
+			throw new IndexOutOfBoundsException(f("Invalid index ''{0}''.  Parameter count: {1}", index, pc));
 	}
 
 	private List<ParameterInfo> findParameters() {

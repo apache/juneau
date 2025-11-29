@@ -316,7 +316,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 			super(builder);
 		}
 		@Override
-		public void log(Level level,String msg,Object...args) {
+		public void log(Level level,String msg, Object...args) {
 			lastMessage = msg;
 		}
 	}

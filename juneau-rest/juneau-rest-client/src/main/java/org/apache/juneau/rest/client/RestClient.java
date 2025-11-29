@@ -7537,10 +7537,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		return request(op(method, uri, body));
 	}
 
-	private static Supplier<String> msg(String msg, Object...args) {
-		return () -> args.length == 0 ? msg : MessageFormat.format(msg, args);
-	}
-
 	private static RestOperation op(String method, Object url, Object body) {
 		return RestOperation.of(method, url, body);
 	}
@@ -7691,9 +7687,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param args The arguments.
 	 */
 	protected void log(Level level, String msg, Object...args) {
-		logger.log(level, msg(msg, args));
+		logger.log(level, f(msg, args));
 		if (logToConsole)
-			console.println(msg(msg, args).get());
+			console.println(f(msg, args));
 	}
 
 	/**
@@ -7705,9 +7701,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param args Optional message arguments.
 	 */
 	protected void log(Level level, Throwable t, String msg, Object...args) {
-		logger.log(level, t, msg(msg, args));
+		logger.log(level, t, fs(msg, args));
 		if (logToConsole) {
-			console.println(msg(msg, args).get());
+			console.println(f(msg, args));
 			if (nn(t))
 				t.printStackTrace(console);
 		}
