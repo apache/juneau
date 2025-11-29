@@ -107,7 +107,7 @@ public final class StringFormat {
 
 	private static final AsciiSet PRINTF_CONVERSION_CHARS = AsciiSet.of("bBhHsScCdoxXeEfgGaAtTn%");
 	private static final AsciiSet PRINTF_FORMAT_CHARS = AsciiSet.of("-+ 0(#.*$");
-	private static final AsciiSet FORMAT_CHARS = AsciiSet.of("%{'");
+	private static final AsciiSet FORMAT_CHARS = AsciiSet.of("%{");
 
 	/**
 	 * Formats a pattern string with the given arguments using the default locale.
