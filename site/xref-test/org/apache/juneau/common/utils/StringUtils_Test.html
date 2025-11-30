@@ -3108,18 +3108,18 @@
 <a class="jxr_linenumber" name="L3100" href="#L3100">3100</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L3101" href="#L3101">3101</a> 	@Test
 <a class="jxr_linenumber" name="L3102" href="#L3102">3102</a> 	<strong class="jxr_keyword">void</strong> a77_lc() {
-<a class="jxr_linenumber" name="L3103" href="#L3103">3103</a> 		assertNull(lc(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L3104" href="#L3104">3104</a> 		assertEquals(<span class="jxr_string">""</span>, lc(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L3105" href="#L3105">3105</a> 		assertEquals(<span class="jxr_string">"hello"</span>, lc(<span class="jxr_string">"HELLO"</span>));
-<a class="jxr_linenumber" name="L3106" href="#L3106">3106</a> 		assertEquals(<span class="jxr_string">"hello world"</span>, lc(<span class="jxr_string">"Hello World"</span>));
+<a class="jxr_linenumber" name="L3103" href="#L3103">3103</a> 		assertNull(lowerCase(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3104" href="#L3104">3104</a> 		assertEquals(<span class="jxr_string">""</span>, lowerCase(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L3105" href="#L3105">3105</a> 		assertEquals(<span class="jxr_string">"hello"</span>, lowerCase(<span class="jxr_string">"HELLO"</span>));
+<a class="jxr_linenumber" name="L3106" href="#L3106">3106</a> 		assertEquals(<span class="jxr_string">"hello world"</span>, lowerCase(<span class="jxr_string">"Hello World"</span>));
 <a class="jxr_linenumber" name="L3107" href="#L3107">3107</a> 	}
 <a class="jxr_linenumber" name="L3108" href="#L3108">3108</a> 
 <a class="jxr_linenumber" name="L3109" href="#L3109">3109</a> 	@Test
 <a class="jxr_linenumber" name="L3110" href="#L3110">3110</a> 	<strong class="jxr_keyword">void</strong> a78_uc() {
-<a class="jxr_linenumber" name="L3111" href="#L3111">3111</a> 		assertNull(uc(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L3112" href="#L3112">3112</a> 		assertEquals(<span class="jxr_string">""</span>, uc(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L3113" href="#L3113">3113</a> 		assertEquals(<span class="jxr_string">"HELLO"</span>, uc(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L3114" href="#L3114">3114</a> 		assertEquals(<span class="jxr_string">"HELLO WORLD"</span>, uc(<span class="jxr_string">"Hello World"</span>));
+<a class="jxr_linenumber" name="L3111" href="#L3111">3111</a> 		assertNull(upperCase(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3112" href="#L3112">3112</a> 		assertEquals(<span class="jxr_string">""</span>, upperCase(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L3113" href="#L3113">3113</a> 		assertEquals(<span class="jxr_string">"HELLO"</span>, upperCase(<span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L3114" href="#L3114">3114</a> 		assertEquals(<span class="jxr_string">"HELLO WORLD"</span>, upperCase(<span class="jxr_string">"Hello World"</span>));
 <a class="jxr_linenumber" name="L3115" href="#L3115">3115</a> 	}
 <a class="jxr_linenumber" name="L3116" href="#L3116">3116</a> 
 <a class="jxr_linenumber" name="L3117" href="#L3117">3117</a> 	<em class="jxr_comment">//====================================================================================================</em>
@@ -3582,275 +3582,301 @@
 <a class="jxr_linenumber" name="L3574" href="#L3574">3574</a> 		appendIfNotEmpty(sb2, <span class="jxr_string">"suffix"</span>);
 <a class="jxr_linenumber" name="L3575" href="#L3575">3575</a> 		assertEquals(<span class="jxr_string">"prefixsuffix"</span>, sb2.toString());
 <a class="jxr_linenumber" name="L3576" href="#L3576">3576</a> 
-<a class="jxr_linenumber" name="L3577" href="#L3577">3577</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; appendIfNotEmpty(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>));
-<a class="jxr_linenumber" name="L3578" href="#L3578">3578</a> 	}
-<a class="jxr_linenumber" name="L3579" href="#L3579">3579</a> 
-<a class="jxr_linenumber" name="L3580" href="#L3580">3580</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3581" href="#L3581">3581</a> 	<em class="jxr_comment">// appendIfNotBlank(StringBuilder, String)</em>
-<a class="jxr_linenumber" name="L3582" href="#L3582">3582</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3583" href="#L3583">3583</a> 	@Test
-<a class="jxr_linenumber" name="L3584" href="#L3584">3584</a> 	<strong class="jxr_keyword">void</strong> a111_appendIfNotBlank() {
-<a class="jxr_linenumber" name="L3585" href="#L3585">3585</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L3586" href="#L3586">3586</a> 		assertSame(sb, appendIfNotBlank(sb, <span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L3587" href="#L3587">3587</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
-<a class="jxr_linenumber" name="L3588" href="#L3588">3588</a> 
-<a class="jxr_linenumber" name="L3589" href="#L3589">3589</a> 		appendIfNotBlank(sb, <span class="jxr_string">"   "</span>);
-<a class="jxr_linenumber" name="L3590" href="#L3590">3590</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
-<a class="jxr_linenumber" name="L3591" href="#L3591">3591</a> 
-<a class="jxr_linenumber" name="L3592" href="#L3592">3592</a> 		appendIfNotBlank(sb, <span class="jxr_string">"\t\n"</span>);
-<a class="jxr_linenumber" name="L3593" href="#L3593">3593</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
-<a class="jxr_linenumber" name="L3594" href="#L3594">3594</a> 
-<a class="jxr_linenumber" name="L3595" href="#L3595">3595</a> 		appendIfNotBlank(sb, <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L3596" href="#L3596">3596</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
-<a class="jxr_linenumber" name="L3597" href="#L3597">3597</a> 
-<a class="jxr_linenumber" name="L3598" href="#L3598">3598</a> 		appendIfNotBlank(sb, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L3599" href="#L3599">3599</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
-<a class="jxr_linenumber" name="L3600" href="#L3600">3600</a> 
-<a class="jxr_linenumber" name="L3601" href="#L3601">3601</a> 		appendIfNotBlank(sb, <span class="jxr_string">"world"</span>);
-<a class="jxr_linenumber" name="L3602" href="#L3602">3602</a> 		assertEquals(<span class="jxr_string">"helloworld"</span>, sb.toString());
-<a class="jxr_linenumber" name="L3603" href="#L3603">3603</a> 
-<a class="jxr_linenumber" name="L3604" href="#L3604">3604</a> 		<strong class="jxr_keyword">var</strong> sb2 = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"prefix"</span>);
-<a class="jxr_linenumber" name="L3605" href="#L3605">3605</a> 		appendIfNotBlank(sb2, <span class="jxr_string">"suffix"</span>);
-<a class="jxr_linenumber" name="L3606" href="#L3606">3606</a> 		assertEquals(<span class="jxr_string">"prefixsuffix"</span>, sb2.toString());
+<a class="jxr_linenumber" name="L3577" href="#L3577">3577</a> 		<em class="jxr_comment">// Auto-create StringBuilder if null and append occurs</em>
+<a class="jxr_linenumber" name="L3578" href="#L3578">3578</a> 		<strong class="jxr_keyword">var</strong> sb3 = appendIfNotEmpty(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L3579" href="#L3579">3579</a> 		assertNotNull(sb3);
+<a class="jxr_linenumber" name="L3580" href="#L3580">3580</a> 		assertEquals(<span class="jxr_string">"test"</span>, sb3.toString());
+<a class="jxr_linenumber" name="L3581" href="#L3581">3581</a> 
+<a class="jxr_linenumber" name="L3582" href="#L3582">3582</a> 		<em class="jxr_comment">// Return null if null and no append occurs</em>
+<a class="jxr_linenumber" name="L3583" href="#L3583">3583</a> 		assertNull(appendIfNotEmpty(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3584" href="#L3584">3584</a> 		assertNull(appendIfNotEmpty(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L3585" href="#L3585">3585</a> 	}
+<a class="jxr_linenumber" name="L3586" href="#L3586">3586</a> 
+<a class="jxr_linenumber" name="L3587" href="#L3587">3587</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3588" href="#L3588">3588</a> 	<em class="jxr_comment">// appendIfNotBlank(StringBuilder, String)</em>
+<a class="jxr_linenumber" name="L3589" href="#L3589">3589</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3590" href="#L3590">3590</a> 	@Test
+<a class="jxr_linenumber" name="L3591" href="#L3591">3591</a> 	<strong class="jxr_keyword">void</strong> a111_appendIfNotBlank() {
+<a class="jxr_linenumber" name="L3592" href="#L3592">3592</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L3593" href="#L3593">3593</a> 		assertSame(sb, appendIfNotBlank(sb, <span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L3594" href="#L3594">3594</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
+<a class="jxr_linenumber" name="L3595" href="#L3595">3595</a> 
+<a class="jxr_linenumber" name="L3596" href="#L3596">3596</a> 		appendIfNotBlank(sb, <span class="jxr_string">"   "</span>);
+<a class="jxr_linenumber" name="L3597" href="#L3597">3597</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
+<a class="jxr_linenumber" name="L3598" href="#L3598">3598</a> 
+<a class="jxr_linenumber" name="L3599" href="#L3599">3599</a> 		appendIfNotBlank(sb, <span class="jxr_string">"\t\n"</span>);
+<a class="jxr_linenumber" name="L3600" href="#L3600">3600</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
+<a class="jxr_linenumber" name="L3601" href="#L3601">3601</a> 
+<a class="jxr_linenumber" name="L3602" href="#L3602">3602</a> 		appendIfNotBlank(sb, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L3603" href="#L3603">3603</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
+<a class="jxr_linenumber" name="L3604" href="#L3604">3604</a> 
+<a class="jxr_linenumber" name="L3605" href="#L3605">3605</a> 		appendIfNotBlank(sb, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L3606" href="#L3606">3606</a> 		assertEquals(<span class="jxr_string">"hello"</span>, sb.toString());
 <a class="jxr_linenumber" name="L3607" href="#L3607">3607</a> 
-<a class="jxr_linenumber" name="L3608" href="#L3608">3608</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; appendIfNotBlank(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>));
-<a class="jxr_linenumber" name="L3609" href="#L3609">3609</a> 	}
+<a class="jxr_linenumber" name="L3608" href="#L3608">3608</a> 		appendIfNotBlank(sb, <span class="jxr_string">"world"</span>);
+<a class="jxr_linenumber" name="L3609" href="#L3609">3609</a> 		assertEquals(<span class="jxr_string">"helloworld"</span>, sb.toString());
 <a class="jxr_linenumber" name="L3610" href="#L3610">3610</a> 
-<a class="jxr_linenumber" name="L3611" href="#L3611">3611</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3612" href="#L3612">3612</a> 	<em class="jxr_comment">// appendWithSeparator(StringBuilder, String, String)</em>
-<a class="jxr_linenumber" name="L3613" href="#L3613">3613</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3614" href="#L3614">3614</a> 	@Test
-<a class="jxr_linenumber" name="L3615" href="#L3615">3615</a> 	<strong class="jxr_keyword">void</strong> a112_appendWithSeparator() {
-<a class="jxr_linenumber" name="L3616" href="#L3616">3616</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L3617" href="#L3617">3617</a> 		assertSame(sb, appendWithSeparator(sb, <span class="jxr_string">"first"</span>, <span class="jxr_string">", "</span>));
-<a class="jxr_linenumber" name="L3618" href="#L3618">3618</a> 		assertEquals(<span class="jxr_string">"first"</span>, sb.toString());
+<a class="jxr_linenumber" name="L3611" href="#L3611">3611</a> 		<strong class="jxr_keyword">var</strong> sb2 = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"prefix"</span>);
+<a class="jxr_linenumber" name="L3612" href="#L3612">3612</a> 		appendIfNotBlank(sb2, <span class="jxr_string">"suffix"</span>);
+<a class="jxr_linenumber" name="L3613" href="#L3613">3613</a> 		assertEquals(<span class="jxr_string">"prefixsuffix"</span>, sb2.toString());
+<a class="jxr_linenumber" name="L3614" href="#L3614">3614</a> 
+<a class="jxr_linenumber" name="L3615" href="#L3615">3615</a> 		<em class="jxr_comment">// Auto-create StringBuilder if null and append occurs</em>
+<a class="jxr_linenumber" name="L3616" href="#L3616">3616</a> 		<strong class="jxr_keyword">var</strong> sb3 = appendIfNotBlank(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L3617" href="#L3617">3617</a> 		assertNotNull(sb3);
+<a class="jxr_linenumber" name="L3618" href="#L3618">3618</a> 		assertEquals(<span class="jxr_string">"test"</span>, sb3.toString());
 <a class="jxr_linenumber" name="L3619" href="#L3619">3619</a> 
-<a class="jxr_linenumber" name="L3620" href="#L3620">3620</a> 		appendWithSeparator(sb, <span class="jxr_string">"second"</span>, <span class="jxr_string">", "</span>);
-<a class="jxr_linenumber" name="L3621" href="#L3621">3621</a> 		assertEquals(<span class="jxr_string">"first, second"</span>, sb.toString());
-<a class="jxr_linenumber" name="L3622" href="#L3622">3622</a> 
-<a class="jxr_linenumber" name="L3623" href="#L3623">3623</a> 		appendWithSeparator(sb, <span class="jxr_string">"third"</span>, <span class="jxr_string">", "</span>);
-<a class="jxr_linenumber" name="L3624" href="#L3624">3624</a> 		assertEquals(<span class="jxr_string">"first, second, third"</span>, sb.toString());
-<a class="jxr_linenumber" name="L3625" href="#L3625">3625</a> 
-<a class="jxr_linenumber" name="L3626" href="#L3626">3626</a> 		<strong class="jxr_keyword">var</strong> sb2 = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L3627" href="#L3627">3627</a> 		appendWithSeparator(sb2, <span class="jxr_string">"a"</span>, <span class="jxr_string">"-"</span>);
-<a class="jxr_linenumber" name="L3628" href="#L3628">3628</a> 		appendWithSeparator(sb2, <span class="jxr_string">"b"</span>, <span class="jxr_string">"-"</span>);
-<a class="jxr_linenumber" name="L3629" href="#L3629">3629</a> 		appendWithSeparator(sb2, <span class="jxr_string">"c"</span>, <span class="jxr_string">"-"</span>);
-<a class="jxr_linenumber" name="L3630" href="#L3630">3630</a> 		assertEquals(<span class="jxr_string">"a-b-c"</span>, sb2.toString());
-<a class="jxr_linenumber" name="L3631" href="#L3631">3631</a> 
-<a class="jxr_linenumber" name="L3632" href="#L3632">3632</a> 		<strong class="jxr_keyword">var</strong> sb3 = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L3633" href="#L3633">3633</a> 		appendWithSeparator(sb3, <span class="jxr_string">"x"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L3634" href="#L3634">3634</a> 		assertEquals(<span class="jxr_string">"x"</span>, sb3.toString());
-<a class="jxr_linenumber" name="L3635" href="#L3635">3635</a> 		appendWithSeparator(sb3, <span class="jxr_string">"y"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L3636" href="#L3636">3636</a> 		assertEquals(<span class="jxr_string">"xy"</span>, sb3.toString());
-<a class="jxr_linenumber" name="L3637" href="#L3637">3637</a> 
-<a class="jxr_linenumber" name="L3638" href="#L3638">3638</a> 		<strong class="jxr_keyword">var</strong> sb4 = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L3639" href="#L3639">3639</a> 		appendWithSeparator(sb4, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">", "</span>);
-<a class="jxr_linenumber" name="L3640" href="#L3640">3640</a> 		assertEquals(<span class="jxr_string">""</span>, sb4.toString());
-<a class="jxr_linenumber" name="L3641" href="#L3641">3641</a> 		appendWithSeparator(sb4, <span class="jxr_string">"test"</span>, <span class="jxr_string">", "</span>);
-<a class="jxr_linenumber" name="L3642" href="#L3642">3642</a> 		assertEquals(<span class="jxr_string">"test"</span>, sb4.toString());
-<a class="jxr_linenumber" name="L3643" href="#L3643">3643</a> 
-<a class="jxr_linenumber" name="L3644" href="#L3644">3644</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; appendWithSeparator(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>, <span class="jxr_string">", "</span>));
-<a class="jxr_linenumber" name="L3645" href="#L3645">3645</a> 	}
-<a class="jxr_linenumber" name="L3646" href="#L3646">3646</a> 
-<a class="jxr_linenumber" name="L3647" href="#L3647">3647</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3648" href="#L3648">3648</a> 	<em class="jxr_comment">// buildString(Consumer&lt;StringBuilder&gt;)</em>
-<a class="jxr_linenumber" name="L3649" href="#L3649">3649</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3650" href="#L3650">3650</a> 	@Test
-<a class="jxr_linenumber" name="L3651" href="#L3651">3651</a> 	<strong class="jxr_keyword">void</strong> a113_buildString() {
-<a class="jxr_linenumber" name="L3652" href="#L3652">3652</a> 		<strong class="jxr_keyword">var</strong> result = buildString(sb -&gt; {
-<a class="jxr_linenumber" name="L3653" href="#L3653">3653</a> 			sb.append(<span class="jxr_string">"Hello"</span>);
-<a class="jxr_linenumber" name="L3654" href="#L3654">3654</a> 			sb.append(<span class="jxr_string">" "</span>);
-<a class="jxr_linenumber" name="L3655" href="#L3655">3655</a> 			sb.append(<span class="jxr_string">"World"</span>);
-<a class="jxr_linenumber" name="L3656" href="#L3656">3656</a> 		});
-<a class="jxr_linenumber" name="L3657" href="#L3657">3657</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, result);
-<a class="jxr_linenumber" name="L3658" href="#L3658">3658</a> 
-<a class="jxr_linenumber" name="L3659" href="#L3659">3659</a> 		<strong class="jxr_keyword">var</strong> joined = buildString(sb -&gt; {
-<a class="jxr_linenumber" name="L3660" href="#L3660">3660</a> 			appendWithSeparator(sb, <span class="jxr_string">"a"</span>, <span class="jxr_string">", "</span>);
-<a class="jxr_linenumber" name="L3661" href="#L3661">3661</a> 			appendWithSeparator(sb, <span class="jxr_string">"b"</span>, <span class="jxr_string">", "</span>);
-<a class="jxr_linenumber" name="L3662" href="#L3662">3662</a> 			appendWithSeparator(sb, <span class="jxr_string">"c"</span>, <span class="jxr_string">", "</span>);
-<a class="jxr_linenumber" name="L3663" href="#L3663">3663</a> 		});
-<a class="jxr_linenumber" name="L3664" href="#L3664">3664</a> 		assertEquals(<span class="jxr_string">"a, b, c"</span>, joined);
-<a class="jxr_linenumber" name="L3665" href="#L3665">3665</a> 
-<a class="jxr_linenumber" name="L3666" href="#L3666">3666</a> 		<strong class="jxr_keyword">var</strong> empty = buildString(sb -&gt; {
-<a class="jxr_linenumber" name="L3667" href="#L3667">3667</a> 			<em class="jxr_comment">// Do nothing</em>
-<a class="jxr_linenumber" name="L3668" href="#L3668">3668</a> 		});
-<a class="jxr_linenumber" name="L3669" href="#L3669">3669</a> 		assertEquals(<span class="jxr_string">""</span>, empty);
-<a class="jxr_linenumber" name="L3670" href="#L3670">3670</a> 
-<a class="jxr_linenumber" name="L3671" href="#L3671">3671</a> 		<strong class="jxr_keyword">var</strong> complex = buildString(sb -&gt; {
-<a class="jxr_linenumber" name="L3672" href="#L3672">3672</a> 			appendIfNotEmpty(sb, <span class="jxr_string">"prefix"</span>);
-<a class="jxr_linenumber" name="L3673" href="#L3673">3673</a> 			appendWithSeparator(sb, <span class="jxr_string">"middle"</span>, <span class="jxr_string">"-"</span>);
-<a class="jxr_linenumber" name="L3674" href="#L3674">3674</a> 			appendWithSeparator(sb, <span class="jxr_string">"suffix"</span>, <span class="jxr_string">"-"</span>);
-<a class="jxr_linenumber" name="L3675" href="#L3675">3675</a> 		});
-<a class="jxr_linenumber" name="L3676" href="#L3676">3676</a> 		assertEquals(<span class="jxr_string">"prefix-middle-suffix"</span>, complex);
-<a class="jxr_linenumber" name="L3677" href="#L3677">3677</a> 
-<a class="jxr_linenumber" name="L3678" href="#L3678">3678</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; buildString(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L3679" href="#L3679">3679</a> 	}
-<a class="jxr_linenumber" name="L3680" href="#L3680">3680</a> 
-<a class="jxr_linenumber" name="L3681" href="#L3681">3681</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3682" href="#L3682">3682</a> 	<em class="jxr_comment">// String Constants and Utilities</em>
-<a class="jxr_linenumber" name="L3683" href="#L3683">3683</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3620" href="#L3620">3620</a> 		<em class="jxr_comment">// Return null if null and no append occurs</em>
+<a class="jxr_linenumber" name="L3621" href="#L3621">3621</a> 		assertNull(appendIfNotBlank(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3622" href="#L3622">3622</a> 		assertNull(appendIfNotBlank(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L3623" href="#L3623">3623</a> 		assertNull(appendIfNotBlank(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"   "</span>));
+<a class="jxr_linenumber" name="L3624" href="#L3624">3624</a> 		assertNull(appendIfNotBlank(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"\t\n"</span>));
+<a class="jxr_linenumber" name="L3625" href="#L3625">3625</a> 	}
+<a class="jxr_linenumber" name="L3626" href="#L3626">3626</a> 
+<a class="jxr_linenumber" name="L3627" href="#L3627">3627</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3628" href="#L3628">3628</a> 	<em class="jxr_comment">// appendWithSeparator(StringBuilder, String, String)</em>
+<a class="jxr_linenumber" name="L3629" href="#L3629">3629</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3630" href="#L3630">3630</a> 	@Test
+<a class="jxr_linenumber" name="L3631" href="#L3631">3631</a> 	<strong class="jxr_keyword">void</strong> a112_appendWithSeparator() {
+<a class="jxr_linenumber" name="L3632" href="#L3632">3632</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L3633" href="#L3633">3633</a> 		assertSame(sb, appendWithSeparator(sb, <span class="jxr_string">"first"</span>, <span class="jxr_string">", "</span>));
+<a class="jxr_linenumber" name="L3634" href="#L3634">3634</a> 		assertEquals(<span class="jxr_string">"first"</span>, sb.toString());
+<a class="jxr_linenumber" name="L3635" href="#L3635">3635</a> 
+<a class="jxr_linenumber" name="L3636" href="#L3636">3636</a> 		appendWithSeparator(sb, <span class="jxr_string">"second"</span>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3637" href="#L3637">3637</a> 		assertEquals(<span class="jxr_string">"first, second"</span>, sb.toString());
+<a class="jxr_linenumber" name="L3638" href="#L3638">3638</a> 
+<a class="jxr_linenumber" name="L3639" href="#L3639">3639</a> 		appendWithSeparator(sb, <span class="jxr_string">"third"</span>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3640" href="#L3640">3640</a> 		assertEquals(<span class="jxr_string">"first, second, third"</span>, sb.toString());
+<a class="jxr_linenumber" name="L3641" href="#L3641">3641</a> 
+<a class="jxr_linenumber" name="L3642" href="#L3642">3642</a> 		<strong class="jxr_keyword">var</strong> sb2 = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L3643" href="#L3643">3643</a> 		appendWithSeparator(sb2, <span class="jxr_string">"a"</span>, <span class="jxr_string">"-"</span>);
+<a class="jxr_linenumber" name="L3644" href="#L3644">3644</a> 		appendWithSeparator(sb2, <span class="jxr_string">"b"</span>, <span class="jxr_string">"-"</span>);
+<a class="jxr_linenumber" name="L3645" href="#L3645">3645</a> 		appendWithSeparator(sb2, <span class="jxr_string">"c"</span>, <span class="jxr_string">"-"</span>);
+<a class="jxr_linenumber" name="L3646" href="#L3646">3646</a> 		assertEquals(<span class="jxr_string">"a-b-c"</span>, sb2.toString());
+<a class="jxr_linenumber" name="L3647" href="#L3647">3647</a> 
+<a class="jxr_linenumber" name="L3648" href="#L3648">3648</a> 		<strong class="jxr_keyword">var</strong> sb3 = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L3649" href="#L3649">3649</a> 		appendWithSeparator(sb3, <span class="jxr_string">"x"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L3650" href="#L3650">3650</a> 		assertEquals(<span class="jxr_string">"x"</span>, sb3.toString());
+<a class="jxr_linenumber" name="L3651" href="#L3651">3651</a> 		appendWithSeparator(sb3, <span class="jxr_string">"y"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L3652" href="#L3652">3652</a> 		assertEquals(<span class="jxr_string">"xy"</span>, sb3.toString());
+<a class="jxr_linenumber" name="L3653" href="#L3653">3653</a> 
+<a class="jxr_linenumber" name="L3654" href="#L3654">3654</a> 		<strong class="jxr_keyword">var</strong> sb4 = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L3655" href="#L3655">3655</a> 		appendWithSeparator(sb4, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3656" href="#L3656">3656</a> 		assertEquals(<span class="jxr_string">""</span>, sb4.toString());
+<a class="jxr_linenumber" name="L3657" href="#L3657">3657</a> 		appendWithSeparator(sb4, <span class="jxr_string">"test"</span>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3658" href="#L3658">3658</a> 		assertEquals(<span class="jxr_string">"test"</span>, sb4.toString());
+<a class="jxr_linenumber" name="L3659" href="#L3659">3659</a> 
+<a class="jxr_linenumber" name="L3660" href="#L3660">3660</a> 		<em class="jxr_comment">// Auto-create StringBuilder if null and append occurs</em>
+<a class="jxr_linenumber" name="L3661" href="#L3661">3661</a> 		<strong class="jxr_keyword">var</strong> sb5 = appendWithSeparator(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3662" href="#L3662">3662</a> 		assertNotNull(sb5);
+<a class="jxr_linenumber" name="L3663" href="#L3663">3663</a> 		assertEquals(<span class="jxr_string">"test"</span>, sb5.toString());
+<a class="jxr_linenumber" name="L3664" href="#L3664">3664</a> 
+<a class="jxr_linenumber" name="L3665" href="#L3665">3665</a> 		<strong class="jxr_keyword">var</strong> sb6 = appendWithSeparator(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"first"</span>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3666" href="#L3666">3666</a> 		appendWithSeparator(sb6, <span class="jxr_string">"second"</span>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3667" href="#L3667">3667</a> 		assertEquals(<span class="jxr_string">"first, second"</span>, sb6.toString());
+<a class="jxr_linenumber" name="L3668" href="#L3668">3668</a> 
+<a class="jxr_linenumber" name="L3669" href="#L3669">3669</a> 		<em class="jxr_comment">// Return null if null and no append occurs</em>
+<a class="jxr_linenumber" name="L3670" href="#L3670">3670</a> 		assertNull(appendWithSeparator(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">", "</span>));
+<a class="jxr_linenumber" name="L3671" href="#L3671">3671</a> 	}
+<a class="jxr_linenumber" name="L3672" href="#L3672">3672</a> 
+<a class="jxr_linenumber" name="L3673" href="#L3673">3673</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3674" href="#L3674">3674</a> 	<em class="jxr_comment">// buildString(Consumer&lt;StringBuilder&gt;)</em>
+<a class="jxr_linenumber" name="L3675" href="#L3675">3675</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3676" href="#L3676">3676</a> 	@Test
+<a class="jxr_linenumber" name="L3677" href="#L3677">3677</a> 	<strong class="jxr_keyword">void</strong> a113_buildString() {
+<a class="jxr_linenumber" name="L3678" href="#L3678">3678</a> 		<strong class="jxr_keyword">var</strong> result = buildString(sb -&gt; {
+<a class="jxr_linenumber" name="L3679" href="#L3679">3679</a> 			sb.append(<span class="jxr_string">"Hello"</span>);
+<a class="jxr_linenumber" name="L3680" href="#L3680">3680</a> 			sb.append(<span class="jxr_string">" "</span>);
+<a class="jxr_linenumber" name="L3681" href="#L3681">3681</a> 			sb.append(<span class="jxr_string">"World"</span>);
+<a class="jxr_linenumber" name="L3682" href="#L3682">3682</a> 		});
+<a class="jxr_linenumber" name="L3683" href="#L3683">3683</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, result);
 <a class="jxr_linenumber" name="L3684" href="#L3684">3684</a> 
-<a class="jxr_linenumber" name="L3685" href="#L3685">3685</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3686" href="#L3686">3686</a> 	<em class="jxr_comment">// String Constants</em>
-<a class="jxr_linenumber" name="L3687" href="#L3687">3687</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3688" href="#L3688">3688</a> 	@Test
-<a class="jxr_linenumber" name="L3689" href="#L3689">3689</a> 	<strong class="jxr_keyword">void</strong> a114_stringConstants() {
-<a class="jxr_linenumber" name="L3690" href="#L3690">3690</a> 		<em class="jxr_comment">// EMPTY</em>
-<a class="jxr_linenumber" name="L3691" href="#L3691">3691</a> 		assertEquals(<span class="jxr_string">""</span>, EMPTY);
-<a class="jxr_linenumber" name="L3692" href="#L3692">3692</a> 		assertTrue(EMPTY.isEmpty());
-<a class="jxr_linenumber" name="L3693" href="#L3693">3693</a> 
-<a class="jxr_linenumber" name="L3694" href="#L3694">3694</a> 		<em class="jxr_comment">// SPACE</em>
-<a class="jxr_linenumber" name="L3695" href="#L3695">3695</a> 		assertEquals(<span class="jxr_string">" "</span>, SPACE);
-<a class="jxr_linenumber" name="L3696" href="#L3696">3696</a> 		assertEquals(1, SPACE.length());
-<a class="jxr_linenumber" name="L3697" href="#L3697">3697</a> 		assertTrue(Character.isWhitespace(SPACE.charAt(0)));
-<a class="jxr_linenumber" name="L3698" href="#L3698">3698</a> 
-<a class="jxr_linenumber" name="L3699" href="#L3699">3699</a> 		<em class="jxr_comment">// NEWLINE</em>
-<a class="jxr_linenumber" name="L3700" href="#L3700">3700</a> 		assertEquals(<span class="jxr_string">"\n"</span>, NEWLINE);
-<a class="jxr_linenumber" name="L3701" href="#L3701">3701</a> 		assertEquals(1, NEWLINE.length());
-<a class="jxr_linenumber" name="L3702" href="#L3702">3702</a> 		assertEquals('\n', NEWLINE.charAt(0));
+<a class="jxr_linenumber" name="L3685" href="#L3685">3685</a> 		<strong class="jxr_keyword">var</strong> joined = buildString(sb -&gt; {
+<a class="jxr_linenumber" name="L3686" href="#L3686">3686</a> 			appendWithSeparator(sb, <span class="jxr_string">"a"</span>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3687" href="#L3687">3687</a> 			appendWithSeparator(sb, <span class="jxr_string">"b"</span>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3688" href="#L3688">3688</a> 			appendWithSeparator(sb, <span class="jxr_string">"c"</span>, <span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L3689" href="#L3689">3689</a> 		});
+<a class="jxr_linenumber" name="L3690" href="#L3690">3690</a> 		assertEquals(<span class="jxr_string">"a, b, c"</span>, joined);
+<a class="jxr_linenumber" name="L3691" href="#L3691">3691</a> 
+<a class="jxr_linenumber" name="L3692" href="#L3692">3692</a> 		<strong class="jxr_keyword">var</strong> empty = buildString(sb -&gt; {
+<a class="jxr_linenumber" name="L3693" href="#L3693">3693</a> 			<em class="jxr_comment">// Do nothing</em>
+<a class="jxr_linenumber" name="L3694" href="#L3694">3694</a> 		});
+<a class="jxr_linenumber" name="L3695" href="#L3695">3695</a> 		assertEquals(<span class="jxr_string">""</span>, empty);
+<a class="jxr_linenumber" name="L3696" href="#L3696">3696</a> 
+<a class="jxr_linenumber" name="L3697" href="#L3697">3697</a> 		<strong class="jxr_keyword">var</strong> complex = buildString(sb -&gt; {
+<a class="jxr_linenumber" name="L3698" href="#L3698">3698</a> 			appendIfNotEmpty(sb, <span class="jxr_string">"prefix"</span>);
+<a class="jxr_linenumber" name="L3699" href="#L3699">3699</a> 			appendWithSeparator(sb, <span class="jxr_string">"middle"</span>, <span class="jxr_string">"-"</span>);
+<a class="jxr_linenumber" name="L3700" href="#L3700">3700</a> 			appendWithSeparator(sb, <span class="jxr_string">"suffix"</span>, <span class="jxr_string">"-"</span>);
+<a class="jxr_linenumber" name="L3701" href="#L3701">3701</a> 		});
+<a class="jxr_linenumber" name="L3702" href="#L3702">3702</a> 		assertEquals(<span class="jxr_string">"prefix-middle-suffix"</span>, complex);
 <a class="jxr_linenumber" name="L3703" href="#L3703">3703</a> 
-<a class="jxr_linenumber" name="L3704" href="#L3704">3704</a> 		<em class="jxr_comment">// TAB</em>
-<a class="jxr_linenumber" name="L3705" href="#L3705">3705</a> 		assertEquals(<span class="jxr_string">"\t"</span>, TAB);
-<a class="jxr_linenumber" name="L3706" href="#L3706">3706</a> 		assertEquals(1, TAB.length());
-<a class="jxr_linenumber" name="L3707" href="#L3707">3707</a> 		assertEquals('\t', TAB.charAt(0));
-<a class="jxr_linenumber" name="L3708" href="#L3708">3708</a> 
-<a class="jxr_linenumber" name="L3709" href="#L3709">3709</a> 		<em class="jxr_comment">// CRLF</em>
-<a class="jxr_linenumber" name="L3710" href="#L3710">3710</a> 		assertEquals(<span class="jxr_string">"\r\n"</span>, CRLF);
-<a class="jxr_linenumber" name="L3711" href="#L3711">3711</a> 		assertEquals(2, CRLF.length());
-<a class="jxr_linenumber" name="L3712" href="#L3712">3712</a> 		assertEquals('\r', CRLF.charAt(0));
-<a class="jxr_linenumber" name="L3713" href="#L3713">3713</a> 		assertEquals('\n', CRLF.charAt(1));
-<a class="jxr_linenumber" name="L3714" href="#L3714">3714</a> 
-<a class="jxr_linenumber" name="L3715" href="#L3715">3715</a> 		<em class="jxr_comment">// COMMON_SEPARATORS</em>
-<a class="jxr_linenumber" name="L3716" href="#L3716">3716</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">","</span>));
-<a class="jxr_linenumber" name="L3717" href="#L3717">3717</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">";"</span>));
-<a class="jxr_linenumber" name="L3718" href="#L3718">3718</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">":"</span>));
-<a class="jxr_linenumber" name="L3719" href="#L3719">3719</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">"|"</span>));
-<a class="jxr_linenumber" name="L3720" href="#L3720">3720</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">"\t"</span>));
-<a class="jxr_linenumber" name="L3721" href="#L3721">3721</a> 		assertEquals(5, COMMON_SEPARATORS.length());
-<a class="jxr_linenumber" name="L3722" href="#L3722">3722</a> 
-<a class="jxr_linenumber" name="L3723" href="#L3723">3723</a> 		<em class="jxr_comment">// WHITESPACE_CHARS</em>
-<a class="jxr_linenumber" name="L3724" href="#L3724">3724</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">" "</span>));
-<a class="jxr_linenumber" name="L3725" href="#L3725">3725</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\t"</span>));
-<a class="jxr_linenumber" name="L3726" href="#L3726">3726</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\n"</span>));
-<a class="jxr_linenumber" name="L3727" href="#L3727">3727</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\r"</span>));
-<a class="jxr_linenumber" name="L3728" href="#L3728">3728</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\f"</span>));
-<a class="jxr_linenumber" name="L3729" href="#L3729">3729</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\u000B"</span>)); <em class="jxr_comment">// Vertical tab</em>
-<a class="jxr_linenumber" name="L3730" href="#L3730">3730</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; WHITESPACE_CHARS.length(); i++) {
-<a class="jxr_linenumber" name="L3731" href="#L3731">3731</a> 			assertTrue(Character.isWhitespace(WHITESPACE_CHARS.charAt(i)));
-<a class="jxr_linenumber" name="L3732" href="#L3732">3732</a> 		}
-<a class="jxr_linenumber" name="L3733" href="#L3733">3733</a> 	}
+<a class="jxr_linenumber" name="L3704" href="#L3704">3704</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; buildString(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3705" href="#L3705">3705</a> 	}
+<a class="jxr_linenumber" name="L3706" href="#L3706">3706</a> 
+<a class="jxr_linenumber" name="L3707" href="#L3707">3707</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3708" href="#L3708">3708</a> 	<em class="jxr_comment">// String Constants and Utilities</em>
+<a class="jxr_linenumber" name="L3709" href="#L3709">3709</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3710" href="#L3710">3710</a> 
+<a class="jxr_linenumber" name="L3711" href="#L3711">3711</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3712" href="#L3712">3712</a> 	<em class="jxr_comment">// String Constants</em>
+<a class="jxr_linenumber" name="L3713" href="#L3713">3713</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3714" href="#L3714">3714</a> 	@Test
+<a class="jxr_linenumber" name="L3715" href="#L3715">3715</a> 	<strong class="jxr_keyword">void</strong> a114_stringConstants() {
+<a class="jxr_linenumber" name="L3716" href="#L3716">3716</a> 		<em class="jxr_comment">// EMPTY</em>
+<a class="jxr_linenumber" name="L3717" href="#L3717">3717</a> 		assertEquals(<span class="jxr_string">""</span>, EMPTY);
+<a class="jxr_linenumber" name="L3718" href="#L3718">3718</a> 		assertTrue(EMPTY.isEmpty());
+<a class="jxr_linenumber" name="L3719" href="#L3719">3719</a> 
+<a class="jxr_linenumber" name="L3720" href="#L3720">3720</a> 		<em class="jxr_comment">// SPACE</em>
+<a class="jxr_linenumber" name="L3721" href="#L3721">3721</a> 		assertEquals(<span class="jxr_string">" "</span>, SPACE);
+<a class="jxr_linenumber" name="L3722" href="#L3722">3722</a> 		assertEquals(1, SPACE.length());
+<a class="jxr_linenumber" name="L3723" href="#L3723">3723</a> 		assertTrue(Character.isWhitespace(SPACE.charAt(0)));
+<a class="jxr_linenumber" name="L3724" href="#L3724">3724</a> 
+<a class="jxr_linenumber" name="L3725" href="#L3725">3725</a> 		<em class="jxr_comment">// NEWLINE</em>
+<a class="jxr_linenumber" name="L3726" href="#L3726">3726</a> 		assertEquals(<span class="jxr_string">"\n"</span>, NEWLINE);
+<a class="jxr_linenumber" name="L3727" href="#L3727">3727</a> 		assertEquals(1, NEWLINE.length());
+<a class="jxr_linenumber" name="L3728" href="#L3728">3728</a> 		assertEquals('\n', NEWLINE.charAt(0));
+<a class="jxr_linenumber" name="L3729" href="#L3729">3729</a> 
+<a class="jxr_linenumber" name="L3730" href="#L3730">3730</a> 		<em class="jxr_comment">// TAB</em>
+<a class="jxr_linenumber" name="L3731" href="#L3731">3731</a> 		assertEquals(<span class="jxr_string">"\t"</span>, TAB);
+<a class="jxr_linenumber" name="L3732" href="#L3732">3732</a> 		assertEquals(1, TAB.length());
+<a class="jxr_linenumber" name="L3733" href="#L3733">3733</a> 		assertEquals('\t', TAB.charAt(0));
 <a class="jxr_linenumber" name="L3734" href="#L3734">3734</a> 
-<a class="jxr_linenumber" name="L3735" href="#L3735">3735</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3736" href="#L3736">3736</a> 	<em class="jxr_comment">// Performance and Memory Utilities</em>
-<a class="jxr_linenumber" name="L3737" href="#L3737">3737</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3738" href="#L3738">3738</a> 
-<a class="jxr_linenumber" name="L3739" href="#L3739">3739</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3740" href="#L3740">3740</a> 	<em class="jxr_comment">// intern(String)</em>
-<a class="jxr_linenumber" name="L3741" href="#L3741">3741</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3742" href="#L3742">3742</a> 	@Test
-<a class="jxr_linenumber" name="L3743" href="#L3743">3743</a> 	<strong class="jxr_keyword">void</strong> a115_intern() {
-<a class="jxr_linenumber" name="L3744" href="#L3744">3744</a> 		assertNull(intern(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L3745" href="#L3745">3745</a> 
-<a class="jxr_linenumber" name="L3746" href="#L3746">3746</a> 		<strong class="jxr_keyword">var</strong> s1 = <strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L3747" href="#L3747">3747</a> 		<strong class="jxr_keyword">var</strong> s2 = <strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L3748" href="#L3748">3748</a> 		assertTrue(s1 != s2); <em class="jxr_comment">// Different objects</em>
-<a class="jxr_linenumber" name="L3749" href="#L3749">3749</a> 
-<a class="jxr_linenumber" name="L3750" href="#L3750">3750</a> 		<strong class="jxr_keyword">var</strong> i1 = intern(s1);
-<a class="jxr_linenumber" name="L3751" href="#L3751">3751</a> 		<strong class="jxr_keyword">var</strong> i2 = intern(s2);
-<a class="jxr_linenumber" name="L3752" href="#L3752">3752</a> 		assertTrue(i1 == i2); <em class="jxr_comment">// Same interned object</em>
-<a class="jxr_linenumber" name="L3753" href="#L3753">3753</a> 		assertEquals(<span class="jxr_string">"test"</span>, i1);
-<a class="jxr_linenumber" name="L3754" href="#L3754">3754</a> 		assertEquals(<span class="jxr_string">"test"</span>, i2);
-<a class="jxr_linenumber" name="L3755" href="#L3755">3755</a> 
-<a class="jxr_linenumber" name="L3756" href="#L3756">3756</a> 		<em class="jxr_comment">// String literals are automatically interned</em>
-<a class="jxr_linenumber" name="L3757" href="#L3757">3757</a> 		<strong class="jxr_keyword">var</strong> literal = <span class="jxr_string">"literal"</span>;
-<a class="jxr_linenumber" name="L3758" href="#L3758">3758</a> 		assertTrue(isInterned(literal));
-<a class="jxr_linenumber" name="L3759" href="#L3759">3759</a> 		assertSame(literal, intern(literal));
-<a class="jxr_linenumber" name="L3760" href="#L3760">3760</a> 	}
-<a class="jxr_linenumber" name="L3761" href="#L3761">3761</a> 
-<a class="jxr_linenumber" name="L3762" href="#L3762">3762</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3763" href="#L3763">3763</a> 	<em class="jxr_comment">// isInterned(String)</em>
-<a class="jxr_linenumber" name="L3764" href="#L3764">3764</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3765" href="#L3765">3765</a> 	@Test
-<a class="jxr_linenumber" name="L3766" href="#L3766">3766</a> 	<strong class="jxr_keyword">void</strong> a116_isInterned() {
-<a class="jxr_linenumber" name="L3767" href="#L3767">3767</a> 		assertFalse(isInterned(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L3768" href="#L3768">3768</a> 
-<a class="jxr_linenumber" name="L3769" href="#L3769">3769</a> 		<em class="jxr_comment">// String literals are automatically interned</em>
-<a class="jxr_linenumber" name="L3770" href="#L3770">3770</a> 		<strong class="jxr_keyword">var</strong> literal = <span class="jxr_string">"test"</span>;
-<a class="jxr_linenumber" name="L3771" href="#L3771">3771</a> 		assertTrue(isInterned(literal));
-<a class="jxr_linenumber" name="L3772" href="#L3772">3772</a> 
-<a class="jxr_linenumber" name="L3773" href="#L3773">3773</a> 		<em class="jxr_comment">// New String objects are not interned</em>
-<a class="jxr_linenumber" name="L3774" href="#L3774">3774</a> 		<strong class="jxr_keyword">var</strong> s1 = <strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L3775" href="#L3775">3775</a> 		assertFalse(isInterned(s1));
-<a class="jxr_linenumber" name="L3776" href="#L3776">3776</a> 
-<a class="jxr_linenumber" name="L3777" href="#L3777">3777</a> 		<em class="jxr_comment">// After interning, it should be interned</em>
-<a class="jxr_linenumber" name="L3778" href="#L3778">3778</a> 		<strong class="jxr_keyword">var</strong> s2 = intern(s1);
-<a class="jxr_linenumber" name="L3779" href="#L3779">3779</a> 		assertTrue(isInterned(s2));
-<a class="jxr_linenumber" name="L3780" href="#L3780">3780</a> 		assertSame(s1.intern(), s2);
-<a class="jxr_linenumber" name="L3781" href="#L3781">3781</a> 	}
-<a class="jxr_linenumber" name="L3782" href="#L3782">3782</a> 
-<a class="jxr_linenumber" name="L3783" href="#L3783">3783</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3784" href="#L3784">3784</a> 	<em class="jxr_comment">// getStringSize(String)</em>
-<a class="jxr_linenumber" name="L3785" href="#L3785">3785</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3786" href="#L3786">3786</a> 	@Test
-<a class="jxr_linenumber" name="L3787" href="#L3787">3787</a> 	<strong class="jxr_keyword">void</strong> a117_getStringSize() {
-<a class="jxr_linenumber" name="L3788" href="#L3788">3788</a> 		assertEquals(0, getStringSize(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L3789" href="#L3789">3789</a> 		assertEquals(40, getStringSize(<span class="jxr_string">""</span>)); <em class="jxr_comment">// 24 + 16 = 40 bytes overhead</em>
-<a class="jxr_linenumber" name="L3790" href="#L3790">3790</a> 		assertEquals(50, getStringSize(<span class="jxr_string">"hello"</span>)); <em class="jxr_comment">// 40 + (5 * 2) = 50 bytes</em>
-<a class="jxr_linenumber" name="L3791" href="#L3791">3791</a> 		assertEquals(48, getStringSize(<span class="jxr_string">"test"</span>)); <em class="jxr_comment">// 40 + (4 * 2) = 48 bytes</em>
-<a class="jxr_linenumber" name="L3792" href="#L3792">3792</a> 		assertEquals(60, getStringSize(<span class="jxr_string">"1234567890"</span>)); <em class="jxr_comment">// 40 + (10 * 2) = 60 bytes</em>
-<a class="jxr_linenumber" name="L3793" href="#L3793">3793</a> 
-<a class="jxr_linenumber" name="L3794" href="#L3794">3794</a> 		<em class="jxr_comment">// Verify the calculation: 24 (String object) + 16 (char[] header) + (2 * length)</em>
-<a class="jxr_linenumber" name="L3795" href="#L3795">3795</a> 		<strong class="jxr_keyword">var</strong> emptySize = getStringSize(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L3796" href="#L3796">3796</a> 		assertTrue(emptySize &gt;= 24); <em class="jxr_comment">// At least String object overhead</em>
-<a class="jxr_linenumber" name="L3797" href="#L3797">3797</a> 
-<a class="jxr_linenumber" name="L3798" href="#L3798">3798</a> 		<strong class="jxr_keyword">var</strong> oneCharSize = getStringSize(<span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L3799" href="#L3799">3799</a> 		assertEquals(emptySize + 2, oneCharSize); <em class="jxr_comment">// One char adds 2 bytes</em>
-<a class="jxr_linenumber" name="L3800" href="#L3800">3800</a> 
-<a class="jxr_linenumber" name="L3801" href="#L3801">3801</a> 		<strong class="jxr_keyword">var</strong> tenCharSize = getStringSize(<span class="jxr_string">"1234567890"</span>);
-<a class="jxr_linenumber" name="L3802" href="#L3802">3802</a> 		assertEquals(emptySize + 20, tenCharSize); <em class="jxr_comment">// Ten chars add 20 bytes</em>
-<a class="jxr_linenumber" name="L3803" href="#L3803">3803</a> 	}
-<a class="jxr_linenumber" name="L3804" href="#L3804">3804</a> 
-<a class="jxr_linenumber" name="L3805" href="#L3805">3805</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3806" href="#L3806">3806</a> 	<em class="jxr_comment">// optimizeString(String)</em>
-<a class="jxr_linenumber" name="L3807" href="#L3807">3807</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3808" href="#L3808">3808</a> 	@Test
-<a class="jxr_linenumber" name="L3809" href="#L3809">3809</a> 	<strong class="jxr_keyword">void</strong> a118_optimizeString() {
-<a class="jxr_linenumber" name="L3810" href="#L3810">3810</a> 		assertNull(optimizeString(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L3811" href="#L3811">3811</a> 		assertNull(optimizeString(<span class="jxr_string">"short"</span>)); <em class="jxr_comment">// No suggestions for short strings</em>
-<a class="jxr_linenumber" name="L3812" href="#L3812">3812</a> 
-<a class="jxr_linenumber" name="L3813" href="#L3813">3813</a> 		<em class="jxr_comment">// Test for large string suggestion</em>
-<a class="jxr_linenumber" name="L3814" href="#L3814">3814</a> 		<strong class="jxr_keyword">var</strong> largeString = <span class="jxr_string">"x"</span>.repeat(1001);
-<a class="jxr_linenumber" name="L3815" href="#L3815">3815</a> 		<strong class="jxr_keyword">var</strong> suggestions = optimizeString(largeString);
-<a class="jxr_linenumber" name="L3816" href="#L3816">3816</a> 		assertNotNull(suggestions);
-<a class="jxr_linenumber" name="L3817" href="#L3817">3817</a> 		assertTrue(suggestions.contains(<span class="jxr_string">"StringBuilder"</span>));
-<a class="jxr_linenumber" name="L3818" href="#L3818">3818</a> 
-<a class="jxr_linenumber" name="L3819" href="#L3819">3819</a> 		<em class="jxr_comment">// Test for interning suggestion (medium length, not interned)</em>
-<a class="jxr_linenumber" name="L3820" href="#L3820">3820</a> 		<strong class="jxr_keyword">var</strong> mediumString = <strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"medium length string for testing"</span>);
-<a class="jxr_linenumber" name="L3821" href="#L3821">3821</a> 		<strong class="jxr_keyword">var</strong> interningSuggestion = optimizeString(mediumString);
-<a class="jxr_linenumber" name="L3822" href="#L3822">3822</a> 		assertNotNull(interningSuggestion);
-<a class="jxr_linenumber" name="L3823" href="#L3823">3823</a> 		assertTrue(interningSuggestion.contains(<span class="jxr_string">"interning"</span>));
-<a class="jxr_linenumber" name="L3824" href="#L3824">3824</a> 
-<a class="jxr_linenumber" name="L3825" href="#L3825">3825</a> 		<em class="jxr_comment">// Test for char[] suggestion (long string)</em>
-<a class="jxr_linenumber" name="L3826" href="#L3826">3826</a> 		<strong class="jxr_keyword">var</strong> longString = <span class="jxr_string">"x"</span>.repeat(101);
-<a class="jxr_linenumber" name="L3827" href="#L3827">3827</a> 		<strong class="jxr_keyword">var</strong> charArraySuggestion = optimizeString(longString);
-<a class="jxr_linenumber" name="L3828" href="#L3828">3828</a> 		assertNotNull(charArraySuggestion);
-<a class="jxr_linenumber" name="L3829" href="#L3829">3829</a> 		assertTrue(charArraySuggestion.contains(<span class="jxr_string">"char[]"</span>));
+<a class="jxr_linenumber" name="L3735" href="#L3735">3735</a> 		<em class="jxr_comment">// CRLF</em>
+<a class="jxr_linenumber" name="L3736" href="#L3736">3736</a> 		assertEquals(<span class="jxr_string">"\r\n"</span>, CRLF);
+<a class="jxr_linenumber" name="L3737" href="#L3737">3737</a> 		assertEquals(2, CRLF.length());
+<a class="jxr_linenumber" name="L3738" href="#L3738">3738</a> 		assertEquals('\r', CRLF.charAt(0));
+<a class="jxr_linenumber" name="L3739" href="#L3739">3739</a> 		assertEquals('\n', CRLF.charAt(1));
+<a class="jxr_linenumber" name="L3740" href="#L3740">3740</a> 
+<a class="jxr_linenumber" name="L3741" href="#L3741">3741</a> 		<em class="jxr_comment">// COMMON_SEPARATORS</em>
+<a class="jxr_linenumber" name="L3742" href="#L3742">3742</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">","</span>));
+<a class="jxr_linenumber" name="L3743" href="#L3743">3743</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">";"</span>));
+<a class="jxr_linenumber" name="L3744" href="#L3744">3744</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">":"</span>));
+<a class="jxr_linenumber" name="L3745" href="#L3745">3745</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">"|"</span>));
+<a class="jxr_linenumber" name="L3746" href="#L3746">3746</a> 		assertTrue(COMMON_SEPARATORS.contains(<span class="jxr_string">"\t"</span>));
+<a class="jxr_linenumber" name="L3747" href="#L3747">3747</a> 		assertEquals(5, COMMON_SEPARATORS.length());
+<a class="jxr_linenumber" name="L3748" href="#L3748">3748</a> 
+<a class="jxr_linenumber" name="L3749" href="#L3749">3749</a> 		<em class="jxr_comment">// WHITESPACE_CHARS</em>
+<a class="jxr_linenumber" name="L3750" href="#L3750">3750</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L3751" href="#L3751">3751</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\t"</span>));
+<a class="jxr_linenumber" name="L3752" href="#L3752">3752</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\n"</span>));
+<a class="jxr_linenumber" name="L3753" href="#L3753">3753</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\r"</span>));
+<a class="jxr_linenumber" name="L3754" href="#L3754">3754</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\f"</span>));
+<a class="jxr_linenumber" name="L3755" href="#L3755">3755</a> 		assertTrue(WHITESPACE_CHARS.contains(<span class="jxr_string">"\u000B"</span>)); <em class="jxr_comment">// Vertical tab</em>
+<a class="jxr_linenumber" name="L3756" href="#L3756">3756</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; WHITESPACE_CHARS.length(); i++) {
+<a class="jxr_linenumber" name="L3757" href="#L3757">3757</a> 			assertTrue(Character.isWhitespace(WHITESPACE_CHARS.charAt(i)));
+<a class="jxr_linenumber" name="L3758" href="#L3758">3758</a> 		}
+<a class="jxr_linenumber" name="L3759" href="#L3759">3759</a> 	}
+<a class="jxr_linenumber" name="L3760" href="#L3760">3760</a> 
+<a class="jxr_linenumber" name="L3761" href="#L3761">3761</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3762" href="#L3762">3762</a> 	<em class="jxr_comment">// Performance and Memory Utilities</em>
+<a class="jxr_linenumber" name="L3763" href="#L3763">3763</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3764" href="#L3764">3764</a> 
+<a class="jxr_linenumber" name="L3765" href="#L3765">3765</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3766" href="#L3766">3766</a> 	<em class="jxr_comment">// intern(String)</em>
+<a class="jxr_linenumber" name="L3767" href="#L3767">3767</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3768" href="#L3768">3768</a> 	@Test
+<a class="jxr_linenumber" name="L3769" href="#L3769">3769</a> 	<strong class="jxr_keyword">void</strong> a115_intern() {
+<a class="jxr_linenumber" name="L3770" href="#L3770">3770</a> 		assertNull(intern(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3771" href="#L3771">3771</a> 
+<a class="jxr_linenumber" name="L3772" href="#L3772">3772</a> 		<strong class="jxr_keyword">var</strong> s1 = <strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L3773" href="#L3773">3773</a> 		<strong class="jxr_keyword">var</strong> s2 = <strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L3774" href="#L3774">3774</a> 		assertTrue(s1 != s2); <em class="jxr_comment">// Different objects</em>
+<a class="jxr_linenumber" name="L3775" href="#L3775">3775</a> 
+<a class="jxr_linenumber" name="L3776" href="#L3776">3776</a> 		<strong class="jxr_keyword">var</strong> i1 = intern(s1);
+<a class="jxr_linenumber" name="L3777" href="#L3777">3777</a> 		<strong class="jxr_keyword">var</strong> i2 = intern(s2);
+<a class="jxr_linenumber" name="L3778" href="#L3778">3778</a> 		assertTrue(i1 == i2); <em class="jxr_comment">// Same interned object</em>
+<a class="jxr_linenumber" name="L3779" href="#L3779">3779</a> 		assertEquals(<span class="jxr_string">"test"</span>, i1);
+<a class="jxr_linenumber" name="L3780" href="#L3780">3780</a> 		assertEquals(<span class="jxr_string">"test"</span>, i2);
+<a class="jxr_linenumber" name="L3781" href="#L3781">3781</a> 
+<a class="jxr_linenumber" name="L3782" href="#L3782">3782</a> 		<em class="jxr_comment">// String literals are automatically interned</em>
+<a class="jxr_linenumber" name="L3783" href="#L3783">3783</a> 		<strong class="jxr_keyword">var</strong> literal = <span class="jxr_string">"literal"</span>;
+<a class="jxr_linenumber" name="L3784" href="#L3784">3784</a> 		assertTrue(isInterned(literal));
+<a class="jxr_linenumber" name="L3785" href="#L3785">3785</a> 		assertSame(literal, intern(literal));
+<a class="jxr_linenumber" name="L3786" href="#L3786">3786</a> 	}
+<a class="jxr_linenumber" name="L3787" href="#L3787">3787</a> 
+<a class="jxr_linenumber" name="L3788" href="#L3788">3788</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3789" href="#L3789">3789</a> 	<em class="jxr_comment">// isInterned(String)</em>
+<a class="jxr_linenumber" name="L3790" href="#L3790">3790</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3791" href="#L3791">3791</a> 	@Test
+<a class="jxr_linenumber" name="L3792" href="#L3792">3792</a> 	<strong class="jxr_keyword">void</strong> a116_isInterned() {
+<a class="jxr_linenumber" name="L3793" href="#L3793">3793</a> 		assertFalse(isInterned(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3794" href="#L3794">3794</a> 
+<a class="jxr_linenumber" name="L3795" href="#L3795">3795</a> 		<em class="jxr_comment">// String literals are automatically interned</em>
+<a class="jxr_linenumber" name="L3796" href="#L3796">3796</a> 		<strong class="jxr_keyword">var</strong> literal = <span class="jxr_string">"test"</span>;
+<a class="jxr_linenumber" name="L3797" href="#L3797">3797</a> 		assertTrue(isInterned(literal));
+<a class="jxr_linenumber" name="L3798" href="#L3798">3798</a> 
+<a class="jxr_linenumber" name="L3799" href="#L3799">3799</a> 		<em class="jxr_comment">// New String objects are not interned</em>
+<a class="jxr_linenumber" name="L3800" href="#L3800">3800</a> 		<strong class="jxr_keyword">var</strong> s1 = <strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L3801" href="#L3801">3801</a> 		assertFalse(isInterned(s1));
+<a class="jxr_linenumber" name="L3802" href="#L3802">3802</a> 
+<a class="jxr_linenumber" name="L3803" href="#L3803">3803</a> 		<em class="jxr_comment">// After interning, it should be interned</em>
+<a class="jxr_linenumber" name="L3804" href="#L3804">3804</a> 		<strong class="jxr_keyword">var</strong> s2 = intern(s1);
+<a class="jxr_linenumber" name="L3805" href="#L3805">3805</a> 		assertTrue(isInterned(s2));
+<a class="jxr_linenumber" name="L3806" href="#L3806">3806</a> 		assertSame(s1.intern(), s2);
+<a class="jxr_linenumber" name="L3807" href="#L3807">3807</a> 	}
+<a class="jxr_linenumber" name="L3808" href="#L3808">3808</a> 
+<a class="jxr_linenumber" name="L3809" href="#L3809">3809</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3810" href="#L3810">3810</a> 	<em class="jxr_comment">// getStringSize(String)</em>
+<a class="jxr_linenumber" name="L3811" href="#L3811">3811</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3812" href="#L3812">3812</a> 	@Test
+<a class="jxr_linenumber" name="L3813" href="#L3813">3813</a> 	<strong class="jxr_keyword">void</strong> a117_getStringSize() {
+<a class="jxr_linenumber" name="L3814" href="#L3814">3814</a> 		assertEquals(0, getStringSize(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3815" href="#L3815">3815</a> 		assertEquals(40, getStringSize(<span class="jxr_string">""</span>)); <em class="jxr_comment">// 24 + 16 = 40 bytes overhead</em>
+<a class="jxr_linenumber" name="L3816" href="#L3816">3816</a> 		assertEquals(50, getStringSize(<span class="jxr_string">"hello"</span>)); <em class="jxr_comment">// 40 + (5 * 2) = 50 bytes</em>
+<a class="jxr_linenumber" name="L3817" href="#L3817">3817</a> 		assertEquals(48, getStringSize(<span class="jxr_string">"test"</span>)); <em class="jxr_comment">// 40 + (4 * 2) = 48 bytes</em>
+<a class="jxr_linenumber" name="L3818" href="#L3818">3818</a> 		assertEquals(60, getStringSize(<span class="jxr_string">"1234567890"</span>)); <em class="jxr_comment">// 40 + (10 * 2) = 60 bytes</em>
+<a class="jxr_linenumber" name="L3819" href="#L3819">3819</a> 
+<a class="jxr_linenumber" name="L3820" href="#L3820">3820</a> 		<em class="jxr_comment">// Verify the calculation: 24 (String object) + 16 (char[] header) + (2 * length)</em>
+<a class="jxr_linenumber" name="L3821" href="#L3821">3821</a> 		<strong class="jxr_keyword">var</strong> emptySize = getStringSize(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L3822" href="#L3822">3822</a> 		assertTrue(emptySize &gt;= 24); <em class="jxr_comment">// At least String object overhead</em>
+<a class="jxr_linenumber" name="L3823" href="#L3823">3823</a> 
+<a class="jxr_linenumber" name="L3824" href="#L3824">3824</a> 		<strong class="jxr_keyword">var</strong> oneCharSize = getStringSize(<span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L3825" href="#L3825">3825</a> 		assertEquals(emptySize + 2, oneCharSize); <em class="jxr_comment">// One char adds 2 bytes</em>
+<a class="jxr_linenumber" name="L3826" href="#L3826">3826</a> 
+<a class="jxr_linenumber" name="L3827" href="#L3827">3827</a> 		<strong class="jxr_keyword">var</strong> tenCharSize = getStringSize(<span class="jxr_string">"1234567890"</span>);
+<a class="jxr_linenumber" name="L3828" href="#L3828">3828</a> 		assertEquals(emptySize + 20, tenCharSize); <em class="jxr_comment">// Ten chars add 20 bytes</em>
+<a class="jxr_linenumber" name="L3829" href="#L3829">3829</a> 	}
 <a class="jxr_linenumber" name="L3830" href="#L3830">3830</a> 
-<a class="jxr_linenumber" name="L3831" href="#L3831">3831</a> 		<em class="jxr_comment">// Test for compression suggestion (very large string)</em>
-<a class="jxr_linenumber" name="L3832" href="#L3832">3832</a> 		<strong class="jxr_keyword">var</strong> veryLargeString = <span class="jxr_string">"x"</span>.repeat(10001);
-<a class="jxr_linenumber" name="L3833" href="#L3833">3833</a> 		<strong class="jxr_keyword">var</strong> compressionSuggestion = optimizeString(veryLargeString);
-<a class="jxr_linenumber" name="L3834" href="#L3834">3834</a> 		assertNotNull(compressionSuggestion);
-<a class="jxr_linenumber" name="L3835" href="#L3835">3835</a> 		assertTrue(compressionSuggestion.contains(<span class="jxr_string">"compression"</span>));
-<a class="jxr_linenumber" name="L3836" href="#L3836">3836</a> 
-<a class="jxr_linenumber" name="L3837" href="#L3837">3837</a> 		<em class="jxr_comment">// Test that interned strings don't suggest interning</em>
-<a class="jxr_linenumber" name="L3838" href="#L3838">3838</a> 		<strong class="jxr_keyword">var</strong> interned = intern(<span class="jxr_string">"medium length string"</span>);
-<a class="jxr_linenumber" name="L3839" href="#L3839">3839</a> 		<strong class="jxr_keyword">var</strong> noInterningSuggestion = optimizeString(interned);
-<a class="jxr_linenumber" name="L3840" href="#L3840">3840</a> 		<em class="jxr_comment">// Should not suggest interning if already interned, but may have other suggestions</em>
-<a class="jxr_linenumber" name="L3841" href="#L3841">3841</a> 		<strong class="jxr_keyword">if</strong> (noInterningSuggestion != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L3842" href="#L3842">3842</a> 			assertFalse(noInterningSuggestion.contains(<span class="jxr_string">"interning"</span>));
-<a class="jxr_linenumber" name="L3843" href="#L3843">3843</a> 		}
-<a class="jxr_linenumber" name="L3844" href="#L3844">3844</a> 	}
-<a class="jxr_linenumber" name="L3845" href="#L3845">3845</a> }
+<a class="jxr_linenumber" name="L3831" href="#L3831">3831</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3832" href="#L3832">3832</a> 	<em class="jxr_comment">// optimizeString(String)</em>
+<a class="jxr_linenumber" name="L3833" href="#L3833">3833</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L3834" href="#L3834">3834</a> 	@Test
+<a class="jxr_linenumber" name="L3835" href="#L3835">3835</a> 	<strong class="jxr_keyword">void</strong> a118_optimizeString() {
+<a class="jxr_linenumber" name="L3836" href="#L3836">3836</a> 		assertNull(optimizeString(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3837" href="#L3837">3837</a> 		assertNull(optimizeString(<span class="jxr_string">"short"</span>)); <em class="jxr_comment">// No suggestions for short strings</em>
+<a class="jxr_linenumber" name="L3838" href="#L3838">3838</a> 
+<a class="jxr_linenumber" name="L3839" href="#L3839">3839</a> 		<em class="jxr_comment">// Test for large string suggestion</em>
+<a class="jxr_linenumber" name="L3840" href="#L3840">3840</a> 		<strong class="jxr_keyword">var</strong> largeString = <span class="jxr_string">"x"</span>.repeat(1001);
+<a class="jxr_linenumber" name="L3841" href="#L3841">3841</a> 		<strong class="jxr_keyword">var</strong> suggestions = optimizeString(largeString);
+<a class="jxr_linenumber" name="L3842" href="#L3842">3842</a> 		assertNotNull(suggestions);
+<a class="jxr_linenumber" name="L3843" href="#L3843">3843</a> 		assertTrue(suggestions.contains(<span class="jxr_string">"StringBuilder"</span>));
+<a class="jxr_linenumber" name="L3844" href="#L3844">3844</a> 
+<a class="jxr_linenumber" name="L3845" href="#L3845">3845</a> 		<em class="jxr_comment">// Test for interning suggestion (medium length, not interned)</em>
+<a class="jxr_linenumber" name="L3846" href="#L3846">3846</a> 		<strong class="jxr_keyword">var</strong> mediumString = <strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"medium length string for testing"</span>);
+<a class="jxr_linenumber" name="L3847" href="#L3847">3847</a> 		<strong class="jxr_keyword">var</strong> interningSuggestion = optimizeString(mediumString);
+<a class="jxr_linenumber" name="L3848" href="#L3848">3848</a> 		assertNotNull(interningSuggestion);
+<a class="jxr_linenumber" name="L3849" href="#L3849">3849</a> 		assertTrue(interningSuggestion.contains(<span class="jxr_string">"interning"</span>));
+<a class="jxr_linenumber" name="L3850" href="#L3850">3850</a> 
+<a class="jxr_linenumber" name="L3851" href="#L3851">3851</a> 		<em class="jxr_comment">// Test for char[] suggestion (long string)</em>
+<a class="jxr_linenumber" name="L3852" href="#L3852">3852</a> 		<strong class="jxr_keyword">var</strong> longString = <span class="jxr_string">"x"</span>.repeat(101);
+<a class="jxr_linenumber" name="L3853" href="#L3853">3853</a> 		<strong class="jxr_keyword">var</strong> charArraySuggestion = optimizeString(longString);
+<a class="jxr_linenumber" name="L3854" href="#L3854">3854</a> 		assertNotNull(charArraySuggestion);
+<a class="jxr_linenumber" name="L3855" href="#L3855">3855</a> 		assertTrue(charArraySuggestion.contains(<span class="jxr_string">"char[]"</span>));
+<a class="jxr_linenumber" name="L3856" href="#L3856">3856</a> 
+<a class="jxr_linenumber" name="L3857" href="#L3857">3857</a> 		<em class="jxr_comment">// Test for compression suggestion (very large string)</em>
+<a class="jxr_linenumber" name="L3858" href="#L3858">3858</a> 		<strong class="jxr_keyword">var</strong> veryLargeString = <span class="jxr_string">"x"</span>.repeat(10001);
+<a class="jxr_linenumber" name="L3859" href="#L3859">3859</a> 		<strong class="jxr_keyword">var</strong> compressionSuggestion = optimizeString(veryLargeString);
+<a class="jxr_linenumber" name="L3860" href="#L3860">3860</a> 		assertNotNull(compressionSuggestion);
+<a class="jxr_linenumber" name="L3861" href="#L3861">3861</a> 		assertTrue(compressionSuggestion.contains(<span class="jxr_string">"compression"</span>));
+<a class="jxr_linenumber" name="L3862" href="#L3862">3862</a> 
+<a class="jxr_linenumber" name="L3863" href="#L3863">3863</a> 		<em class="jxr_comment">// Test that interned strings don't suggest interning</em>
+<a class="jxr_linenumber" name="L3864" href="#L3864">3864</a> 		<strong class="jxr_keyword">var</strong> interned = intern(<span class="jxr_string">"medium length string"</span>);
+<a class="jxr_linenumber" name="L3865" href="#L3865">3865</a> 		<strong class="jxr_keyword">var</strong> noInterningSuggestion = optimizeString(interned);
+<a class="jxr_linenumber" name="L3866" href="#L3866">3866</a> 		<em class="jxr_comment">// Should not suggest interning if already interned, but may have other suggestions</em>
+<a class="jxr_linenumber" name="L3867" href="#L3867">3867</a> 		<strong class="jxr_keyword">if</strong> (noInterningSuggestion != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L3868" href="#L3868">3868</a> 			assertFalse(noInterningSuggestion.contains(<span class="jxr_string">"interning"</span>));
+<a class="jxr_linenumber" name="L3869" href="#L3869">3869</a> 		}
+<a class="jxr_linenumber" name="L3870" href="#L3870">3870</a> 	}
+<a class="jxr_linenumber" name="L3871" href="#L3871">3871</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

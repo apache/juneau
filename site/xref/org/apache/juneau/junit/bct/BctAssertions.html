@@ -920,7 +920,7 @@
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 		assertNotNull(value, <span class="jxr_string">"Value was null."</span>);
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 
 <a class="jxr_linenumber" name="L914" href="#L914">914</a> 		<strong class="jxr_keyword">var</strong> v = args.getBeanConverter().orElse(DEFAULT_CONVERTER).stringify(value);
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<strong class="jxr_keyword">var</strong> m = getGlobMatchPattern(pattern).matcher(v);
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<strong class="jxr_keyword">var</strong> m = StringUtils.getGlobMatchPattern(pattern).matcher(v);
 <a class="jxr_linenumber" name="L916" href="#L916">916</a> 		assertTrue(m.matches(), args.getMessage(<span class="jxr_string">"Pattern didn''t match. ==&gt; pattern: &lt;{0}&gt; but was: &lt;{1}&gt;"</span>, pattern, v));
 <a class="jxr_linenumber" name="L917" href="#L917">917</a> 	}
 <a class="jxr_linenumber" name="L918" href="#L918">918</a> 

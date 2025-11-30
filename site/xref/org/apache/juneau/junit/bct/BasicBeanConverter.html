@@ -907,114 +907,134 @@
 <a class="jxr_linenumber" name="L899" href="#L899">899</a> 		<strong class="jxr_keyword">var</strong> c = o.getClass();
 <a class="jxr_linenumber" name="L900" href="#L900">900</a> 		<strong class="jxr_keyword">var</strong> stringifier = stringifierMap.computeIfAbsent(c, <strong class="jxr_keyword">this</strong>::findStringifier);
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> 		<strong class="jxr_keyword">if</strong> (stringifier.isEmpty()) {
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 			stringifier = of(canListify(o) ? (bc, o2) -&gt; bc.stringify(bc.listify(o2)) : (bc, o2) -&gt; safeToString(o2));
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 			stringifier = of(canListify(o) ? (bc, o2) -&gt; bc.stringify(bc.listify(o2)) : (bc, o2) -&gt; <strong class="jxr_keyword">this</strong>.safeToString(o2));
 <a class="jxr_linenumber" name="L903" href="#L903">903</a> 			stringifierMap.putIfAbsent(c, stringifier);
 <a class="jxr_linenumber" name="L904" href="#L904">904</a> 		}
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 		<strong class="jxr_keyword">var</strong> o2 = o;
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">return</strong> stringifier.map(x -&gt; (<a name="Stringifier" href="../../../../../org/apache/juneau/junit/bct/Stringifier.html#Stringifier">Stringifier</a>)x).map(x -&gt; x.apply(<strong class="jxr_keyword">this</strong>, o2)).map(Utils::safeToString).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">return</strong> stringifier.map(x -&gt; (<a name="Stringifier" href="../../../../../org/apache/juneau/junit/bct/Stringifier.html#Stringifier">Stringifier</a>)x).map(x -&gt; x.apply(<strong class="jxr_keyword">this</strong>, o2)).map(<strong class="jxr_keyword">this</strong>::safeToString).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> 	}
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 * Builder class for configuring BasicBeanConverter instances.</em>
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 * Safely converts an object to a string, catching any exceptions thrown by toString().</em>
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This builder provides a fluent interface for registering custom type handlers</em>
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> <em class="jxr_javadoccomment">	 * and configuring conversion settings. All registration methods support method chaining</em>
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> <em class="jxr_javadoccomment">	 * for convenient configuration.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Handler Registration:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Stringifiers:&lt;/b&gt; Custom string conversion logic for specific types&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Listifiers:&lt;/b&gt; Custom list conversion logic for collection-like types&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Swappers:&lt;/b&gt; Pre-processing transformation logic for wrapper types&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Registration Order:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Handlers are checked in reverse registration order (last registered wins).</em>
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> <em class="jxr_javadoccomment">	 * This allows overriding default handlers by registering more specific ones later.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Support:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;All handlers support class inheritance and interface implementation.</em>
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> <em class="jxr_javadoccomment">	 * When looking up a handler, the system checks:&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;Exact class match&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;Interface matches (in order of interface declaration)&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;Superclass matches (walking up the inheritance hierarchy)&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> <em class="jxr_javadoccomment">	 * This helper method ensures that exceptions thrown by problematic {@code toString()} implementations</em>
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> <em class="jxr_javadoccomment">	 * don't propagate up the call stack. Instead, it returns a descriptive error message containing</em>
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> <em class="jxr_javadoccomment">	 * the exception type and message.</em>
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> <em class="jxr_javadoccomment">	 * @param o The object to convert to a string. May be any object including &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> <em class="jxr_javadoccomment">	 * @return The string representation of the object, or a formatted error message if toString() throws an exception.</em>
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">	 *    Returns &lt;js&gt;"null"&lt;/js&gt; if the object is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 	<strong class="jxr_keyword">private</strong> String safeToString(Object o) {
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 			<strong class="jxr_keyword">return</strong> o.toString();
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) { <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 			<strong class="jxr_keyword">return</strong> cns(t) + <span class="jxr_string">": "</span> + t.getMessage();
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		}
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 	}
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> <em class="jxr_javadoccomment">	 * Builder class for configuring BasicBeanConverter instances.</em>
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This builder provides a fluent interface for registering custom type handlers</em>
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 * and configuring conversion settings. All registration methods support method chaining</em>
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 * for convenient configuration.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;converter&lt;/jv&gt; = BasicBeanConverter.&lt;jsm&gt;builder&lt;/jsm&gt;()</em>
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 *       .defaultSettings()</em>
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Custom stringification for LocalDateTime&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> <em class="jxr_javadoccomment">	 *       .addStringifier(LocalDateTime.&lt;jk&gt;class&lt;/jk&gt;, (&lt;jp&gt;dt&lt;/jp&gt;, &lt;jp&gt;conv&lt;/jp&gt;) -&gt;</em>
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> <em class="jxr_javadoccomment">	 *          &lt;jp&gt;dt&lt;/jp&gt;.format(DateTimeFormatter.&lt;jsf&gt;ISO_LOCAL_DATE_TIME&lt;/jsf&gt;))</em>
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Custom collection handling for custom type&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">	 *       .addListifier(MyIterable.&lt;jk&gt;class&lt;/jk&gt;, (&lt;jp&gt;iter&lt;/jp&gt;, &lt;jp&gt;conv&lt;/jp&gt;) -&gt;</em>
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 *          &lt;jp&gt;iter&lt;/jp&gt;.stream().collect(toList()))</em>
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Custom transformation for wrapper type&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 *       .addSwapper(LazyValue.&lt;jk&gt;class&lt;/jk&gt;, (&lt;jp&gt;lazy&lt;/jp&gt;, &lt;jp&gt;conv&lt;/jp&gt;) -&gt;</em>
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 *          &lt;jp&gt;lazy&lt;/jp&gt;.isComputed() ? &lt;jp&gt;lazy&lt;/jp&gt;.get() : &lt;jk&gt;null&lt;/jk&gt;)</em>
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Configure settings&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">	 *       .addSetting(&lt;jsf&gt;SETTING_nullValue&lt;/jsf&gt;, &lt;js&gt;"&amp;lt;null&amp;gt;"&lt;/js&gt;)</em>
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">	 *       .addSetting(&lt;jsf&gt;SETTING_fieldSeparator&lt;/jsf&gt;, &lt;js&gt;" | "&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Handler Registration:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Stringifiers:&lt;/b&gt; Custom string conversion logic for specific types&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Listifiers:&lt;/b&gt; Custom list conversion logic for collection-like types&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Swappers:&lt;/b&gt; Pre-processing transformation logic for wrapper types&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Registration Order:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Handlers are checked in reverse registration order (last registered wins).</em>
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">	 * This allows overriding default handlers by registering more specific ones later.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Support:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;All handlers support class inheritance and interface implementation.</em>
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 * When looking up a handler, the system checks:&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;Exact class match&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;Interface matches (in order of interface declaration)&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;Superclass matches (walking up the inheritance hierarchy)&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
 <a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Add default handlers for common types&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 *       .defaultSettings()</em>
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 *       .build();</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 	@Override
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 	<strong class="jxr_keyword">public</strong> Object swap(Object o) {
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 		<strong class="jxr_keyword">var</strong> c = o.getClass();
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 		<strong class="jxr_keyword">var</strong> swapper = swapperMap.computeIfAbsent(c, <strong class="jxr_keyword">this</strong>::findSwapper);
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		<strong class="jxr_keyword">if</strong> (swapper.isPresent())
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 			<strong class="jxr_keyword">return</strong> swap(swapper.map(x -&gt; (<a name="Swapper" href="../../../../../org/apache/juneau/junit/bct/Swapper.html#Swapper">Swapper</a>)x).map(x -&gt; x.apply(<strong class="jxr_keyword">this</strong>, o)).orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 		<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 	}
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;Listifier&lt;?&gt;&gt; findListifier(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 			<strong class="jxr_keyword">return</strong> empty();
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		<strong class="jxr_keyword">var</strong> l = listifiers.stream().filter(x -&gt; x.forClass.isAssignableFrom(c)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		<strong class="jxr_keyword">if</strong> (nn(l))
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 			<strong class="jxr_keyword">return</strong> of(l.function);
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 		<strong class="jxr_keyword">return</strong> findListifier(c.getSuperclass());
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	}
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;Sizer&lt;?&gt;&gt; findSizer(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 			<strong class="jxr_keyword">return</strong> empty();
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<strong class="jxr_keyword">var</strong> s = sizers.stream().filter(x -&gt; x.forClass.isAssignableFrom(c)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 			<strong class="jxr_keyword">return</strong> of(s.function);
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<strong class="jxr_keyword">return</strong> findSizer(c.getSuperclass());
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	}
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;Stringifier&lt;?&gt;&gt; findStringifier(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 			<strong class="jxr_keyword">return</strong> empty();
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		<strong class="jxr_keyword">var</strong> s = stringifiers.stream().filter(x -&gt; x.forClass.isAssignableFrom(c)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 			<strong class="jxr_keyword">return</strong> of(s.function);
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		<strong class="jxr_keyword">return</strong> findStringifier(c.getSuperclass());
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 	}
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;Swapper&lt;?&gt;&gt; findSwapper(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 			<strong class="jxr_keyword">return</strong> empty();
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		<strong class="jxr_keyword">var</strong> s = swappers.stream().filter(x -&gt; x.forClass.isAssignableFrom(c)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 			<strong class="jxr_keyword">return</strong> of(s.function);
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		<strong class="jxr_keyword">return</strong> findSwapper(c.getSuperclass());
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 	}
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> }
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;converter&lt;/jv&gt; = BasicBeanConverter.&lt;jsm&gt;builder&lt;/jsm&gt;()</em>
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 *       .defaultSettings()</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Custom stringification for LocalDateTime&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> <em class="jxr_javadoccomment">	 *       .addStringifier(LocalDateTime.&lt;jk&gt;class&lt;/jk&gt;, (&lt;jp&gt;dt&lt;/jp&gt;, &lt;jp&gt;conv&lt;/jp&gt;) -&gt;</em>
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">	 *          &lt;jp&gt;dt&lt;/jp&gt;.format(DateTimeFormatter.&lt;jsf&gt;ISO_LOCAL_DATE_TIME&lt;/jsf&gt;))</em>
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Custom collection handling for custom type&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> <em class="jxr_javadoccomment">	 *       .addListifier(MyIterable.&lt;jk&gt;class&lt;/jk&gt;, (&lt;jp&gt;iter&lt;/jp&gt;, &lt;jp&gt;conv&lt;/jp&gt;) -&gt;</em>
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> <em class="jxr_javadoccomment">	 *          &lt;jp&gt;iter&lt;/jp&gt;.stream().collect(toList()))</em>
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Custom transformation for wrapper type&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> <em class="jxr_javadoccomment">	 *       .addSwapper(LazyValue.&lt;jk&gt;class&lt;/jk&gt;, (&lt;jp&gt;lazy&lt;/jp&gt;, &lt;jp&gt;conv&lt;/jp&gt;) -&gt;</em>
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 *          &lt;jp&gt;lazy&lt;/jp&gt;.isComputed() ? &lt;jp&gt;lazy&lt;/jp&gt;.get() : &lt;jk&gt;null&lt;/jk&gt;)</em>
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Configure settings&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 *       .addSetting(&lt;jsf&gt;SETTING_nullValue&lt;/jsf&gt;, &lt;js&gt;"&amp;lt;null&amp;gt;"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 *       .addSetting(&lt;jsf&gt;SETTING_fieldSeparator&lt;/jsf&gt;, &lt;js&gt;" | "&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 *       &lt;jc&gt;// Add default handlers for common types&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 *       .defaultSettings()</em>
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">	 *       .build();</em>
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	@Override
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	<strong class="jxr_keyword">public</strong> Object swap(Object o) {
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<strong class="jxr_keyword">var</strong> c = o.getClass();
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 		<strong class="jxr_keyword">var</strong> swapper = swapperMap.computeIfAbsent(c, <strong class="jxr_keyword">this</strong>::findSwapper);
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<strong class="jxr_keyword">if</strong> (swapper.isPresent())
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 			<strong class="jxr_keyword">return</strong> swap(swapper.map(x -&gt; (<a name="Swapper" href="../../../../../org/apache/juneau/junit/bct/Swapper.html#Swapper">Swapper</a>)x).map(x -&gt; x.apply(<strong class="jxr_keyword">this</strong>, o)).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	}
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;Listifier&lt;?&gt;&gt; findListifier(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 			<strong class="jxr_keyword">return</strong> empty();
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		<strong class="jxr_keyword">var</strong> l = listifiers.stream().filter(x -&gt; x.forClass.isAssignableFrom(c)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		<strong class="jxr_keyword">if</strong> (nn(l))
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 			<strong class="jxr_keyword">return</strong> of(l.function);
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		<strong class="jxr_keyword">return</strong> findListifier(c.getSuperclass());
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 	}
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;Sizer&lt;?&gt;&gt; findSizer(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 			<strong class="jxr_keyword">return</strong> empty();
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		<strong class="jxr_keyword">var</strong> s = sizers.stream().filter(x -&gt; x.forClass.isAssignableFrom(c)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 			<strong class="jxr_keyword">return</strong> of(s.function);
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 		<strong class="jxr_keyword">return</strong> findSizer(c.getSuperclass());
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 	}
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;Stringifier&lt;?&gt;&gt; findStringifier(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 			<strong class="jxr_keyword">return</strong> empty();
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">var</strong> s = stringifiers.stream().filter(x -&gt; x.forClass.isAssignableFrom(c)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 			<strong class="jxr_keyword">return</strong> of(s.function);
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		<strong class="jxr_keyword">return</strong> findStringifier(c.getSuperclass());
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 	}
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;Swapper&lt;?&gt;&gt; findSwapper(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 			<strong class="jxr_keyword">return</strong> empty();
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		<strong class="jxr_keyword">var</strong> s = swappers.stream().filter(x -&gt; x.forClass.isAssignableFrom(c)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 			<strong class="jxr_keyword">return</strong> of(s.function);
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		<strong class="jxr_keyword">return</strong> findSwapper(c.getSuperclass());
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 	}
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
