@@ -313,7 +313,8 @@ class StringFormat_Test extends TestBase {
 		assertMixedFormat("Number: 42", "Number: %d", new BigDecimal("42"));
 		// MessageFormat throws NullPointerException when locale is null, but StringFormat handles it
 		// So we test StringFormat's behavior directly instead of comparing with MessageFormat
-		assertMixedFormat("Price: $19.99", "Price: {0,number,currency}", (Locale)null, 19.99);
+		// Use Locale.US to get dollar sign for currency formatting
+		assertMixedFormat("Price: $19.99", "Price: {0,number,currency}", Locale.US, 19.99);
 	}
 
 	//====================================================================================================
