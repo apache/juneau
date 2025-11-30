@@ -28,7 +28,7 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.compare;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.containsAny;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.contains;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.reverse;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.eqic;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
@@ -3242,11 +3242,11 @@
 <a class="jxr_linenumber" name="L3234" href="#L3234">3234</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"te"</span>));
 <a class="jxr_linenumber" name="L3235" href="#L3235">3235</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"st"</span>));
 <a class="jxr_linenumber" name="L3236" href="#L3236">3236</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"test"</span>));
-<a class="jxr_linenumber" name="L3237" href="#L3237">3237</a> 		assertTrue(containsAny(<span class="jxr_string">"test"</span>, <span class="jxr_string">"te"</span>, <span class="jxr_string">"xx"</span>));
+<a class="jxr_linenumber" name="L3237" href="#L3237">3237</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"te"</span>, <span class="jxr_string">"xx"</span>));
 <a class="jxr_linenumber" name="L3238" href="#L3238">3238</a> 		assertFalse(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"xx"</span>));
-<a class="jxr_linenumber" name="L3239" href="#L3239">3239</a> 		assertFalse(containsAny(<span class="jxr_string">"test"</span>, <span class="jxr_string">"xx"</span>, <span class="jxr_string">"yy"</span>));
+<a class="jxr_linenumber" name="L3239" href="#L3239">3239</a> 		assertFalse(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"xx"</span>, <span class="jxr_string">"yy"</span>));
 <a class="jxr_linenumber" name="L3240" href="#L3240">3240</a> 		assertFalse(contains(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>));
-<a class="jxr_linenumber" name="L3241" href="#L3241">3241</a> 		assertFalse(containsAny(<span class="jxr_string">"test"</span>, (String[])<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3241" href="#L3241">3241</a> 		assertFalse(contains(<span class="jxr_string">"test"</span>, (String[])<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L3242" href="#L3242">3242</a> 	}
 <a class="jxr_linenumber" name="L3243" href="#L3243">3243</a> 
 <a class="jxr_linenumber" name="L3244" href="#L3244">3244</a> 	@Test

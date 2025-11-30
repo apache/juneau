@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.containsAny;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.contains;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
@@ -365,7 +365,7 @@
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<strong class="jxr_keyword">public</strong> <a name="Parameter" href="../../../../../org/apache/juneau/bean/openapi3/Parameter.html#Parameter">Parameter</a> setIn(String value) {
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! containsAny(value, VALID_IN))
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_IN))
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_IN));
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">this</strong>.in = value;
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -411,7 +411,7 @@
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">public</strong> <a name="Parameter" href="../../../../../org/apache/juneau/bean/openapi3/Parameter.html#Parameter">Parameter</a> setStyle(String value) {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! containsAny(value, VALID_STYLES))
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_STYLES))
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_STYLES));
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">this</strong>.style = value;
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;

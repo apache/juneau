@@ -27,7 +27,7 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.containsAny;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.contains;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
@@ -442,7 +442,7 @@
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setCollectionFormat(String value) {
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! containsAny(value, VALID_COLLECTION_FORMATS))
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_COLLECTION_FORMATS))
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values=[{1}]"</span>, value, toCdl(VALID_COLLECTION_FORMATS));
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 		collectionFormat = value;
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -714,7 +714,7 @@
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setType(String value) {
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! containsAny(value, VALID_TYPES))
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_TYPES))
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}"</span>, value, Json5Serializer.DEFAULT.toString(VALID_TYPES));
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 		type = value;
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
