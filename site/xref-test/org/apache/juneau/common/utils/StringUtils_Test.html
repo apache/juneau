@@ -3242,22 +3242,22 @@
 <a class="jxr_linenumber" name="L3234" href="#L3234">3234</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"te"</span>));
 <a class="jxr_linenumber" name="L3235" href="#L3235">3235</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"st"</span>));
 <a class="jxr_linenumber" name="L3236" href="#L3236">3236</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"test"</span>));
-<a class="jxr_linenumber" name="L3237" href="#L3237">3237</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"te"</span>, <span class="jxr_string">"xx"</span>));
+<a class="jxr_linenumber" name="L3237" href="#L3237">3237</a> 		assertTrue(containsAny(<span class="jxr_string">"test"</span>, <span class="jxr_string">"te"</span>, <span class="jxr_string">"xx"</span>));
 <a class="jxr_linenumber" name="L3238" href="#L3238">3238</a> 		assertFalse(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"xx"</span>));
-<a class="jxr_linenumber" name="L3239" href="#L3239">3239</a> 		assertFalse(contains(<span class="jxr_string">"test"</span>, <span class="jxr_string">"xx"</span>, <span class="jxr_string">"yy"</span>));
+<a class="jxr_linenumber" name="L3239" href="#L3239">3239</a> 		assertFalse(containsAny(<span class="jxr_string">"test"</span>, <span class="jxr_string">"xx"</span>, <span class="jxr_string">"yy"</span>));
 <a class="jxr_linenumber" name="L3240" href="#L3240">3240</a> 		assertFalse(contains(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>));
-<a class="jxr_linenumber" name="L3241" href="#L3241">3241</a> 		assertFalse(contains(<span class="jxr_string">"test"</span>, (String[])<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3241" href="#L3241">3241</a> 		assertFalse(containsAny(<span class="jxr_string">"test"</span>, (String[])<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L3242" href="#L3242">3242</a> 	}
 <a class="jxr_linenumber" name="L3243" href="#L3243">3243</a> 
 <a class="jxr_linenumber" name="L3244" href="#L3244">3244</a> 	@Test
 <a class="jxr_linenumber" name="L3245" href="#L3245">3245</a> 	<strong class="jxr_keyword">void</strong> a91_contains_chars() {
 <a class="jxr_linenumber" name="L3246" href="#L3246">3246</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, 't'));
 <a class="jxr_linenumber" name="L3247" href="#L3247">3247</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, 'e'));
-<a class="jxr_linenumber" name="L3248" href="#L3248">3248</a> 		assertTrue(contains(<span class="jxr_string">"test"</span>, 't', 'x'));
+<a class="jxr_linenumber" name="L3248" href="#L3248">3248</a> 		assertTrue(containsAny(<span class="jxr_string">"test"</span>, 't', 'x'));
 <a class="jxr_linenumber" name="L3249" href="#L3249">3249</a> 		assertFalse(contains(<span class="jxr_string">"test"</span>, 'x'));
-<a class="jxr_linenumber" name="L3250" href="#L3250">3250</a> 		assertFalse(contains(<span class="jxr_string">"test"</span>, 'x', 'y'));
+<a class="jxr_linenumber" name="L3250" href="#L3250">3250</a> 		assertFalse(containsAny(<span class="jxr_string">"test"</span>, 'x', 'y'));
 <a class="jxr_linenumber" name="L3251" href="#L3251">3251</a> 		assertFalse(contains(<strong class="jxr_keyword">null</strong>, 't'));
-<a class="jxr_linenumber" name="L3252" href="#L3252">3252</a> 		assertFalse(contains(<span class="jxr_string">"test"</span>, (<strong class="jxr_keyword">char</strong>[])<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L3252" href="#L3252">3252</a> 		assertFalse(containsAny(<span class="jxr_string">"test"</span>, (<strong class="jxr_keyword">char</strong>[])<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L3253" href="#L3253">3253</a> 	}
 <a class="jxr_linenumber" name="L3254" href="#L3254">3254</a> 
 <a class="jxr_linenumber" name="L3255" href="#L3255">3255</a> 	@Test
