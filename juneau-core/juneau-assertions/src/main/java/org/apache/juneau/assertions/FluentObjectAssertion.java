@@ -298,7 +298,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		if (this.value == value)
 			return returns();
 		if (! equals(orElse(null), value))
-			throw error(MSG_unexpectedValue, value, this.value);
+			throw error(MSG_unexpectedValue, r(value), r(this.value));
 		return returns();
 	}
 
@@ -314,7 +314,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		for (var v : values)
 			if (equals(orElse(null), v))
 				return returns();
-		throw error(MSG_expectedValueNotFound, values, value);
+		throw error(MSG_expectedValueNotFound, r(values), r(value));
 	}
 
 	/**
@@ -375,7 +375,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 */
 	public R isNot(T value) throws AssertionError {
 		if (equals(orElse(null), value))
-			throw error(MSG_unexpectedValueDidNotExpect, value, orElse(null));
+			throw error(MSG_unexpectedValueDidNotExpect, r(value), r(orElse(null)));
 		return returns();
 	}
 
@@ -390,7 +390,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public final R isNotAny(T...values) throws AssertionError {
 		for (var v : values)
 			if (equals(orElse(null), v))
-				throw error(MSG_unexpectedValueFound, v, value);
+				throw error(MSG_unexpectedValueFound, r(v), r(value));
 		return returns();
 	}
 
@@ -434,7 +434,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R isSame(T value) throws AssertionError {
 		if (this.value == value)
 			return returns();
-		throw error(MSG_notTheSameValue, value, identity(value), this.value, identity(this.value));
+		throw error(MSG_notTheSameValue, r(value), identity(value), r(this.value), identity(this.value));
 	}
 
 	/**
@@ -631,7 +631,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The inner value as a string, or <jk>null</jk> if the value was null.
 	 */
 	protected String valueAsString() {
-		return s(value);
+		return readable(value);
 	}
 
 	/**

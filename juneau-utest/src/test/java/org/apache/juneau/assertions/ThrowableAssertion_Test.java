@@ -120,7 +120,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x2 = throwable(x1);
 		var nil = n(Throwable.class);
 		test(x1).asMessages().isString("[1]");
-		test(x2).asMessages().isString("[java.lang.RuntimeException: 1, 1]");
+		test(x2).asMessages().isString("[java.lang.RuntimeException: 1,1]");
 		test(nil).asMessages().isNull();
 	}
 
@@ -138,7 +138,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x2 = throwable(x1);
 		var nil = n(Throwable.class);
 		test(x1).asLocalizedMessages().isString("[1]");
-		test(x2).asLocalizedMessages().isString("[java.lang.RuntimeException: 1, 1]");
+		test(x2).asLocalizedMessages().isString("[java.lang.RuntimeException: 1,1]");
 		test(nil).asLocalizedMessages().isNull();
 	}
 

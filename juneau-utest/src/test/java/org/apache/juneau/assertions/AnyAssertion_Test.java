@@ -178,7 +178,7 @@ class AnyAssertion_Test extends TestBase {
 	@Test void bb08_asByteArray() {
 		byte[] x1 = {1}, nil = null;
 		var x2 = "";
-		test(x1).asByteArray().isString("[1]");
+		test(x1).asByteArray().isString("01");
 		test(nil).asByteArray().isNull();
 		assertThrown(()->test(x2).asByteArray()).asMessage().asOneLine().is("Object was not type 'byte[]'.  Actual='java.lang.String'.");
 	}
@@ -240,7 +240,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = date("2000-06-01T12:34:56Z");
 		var nil = n(Date.class);
 		var x2 = "";
-		test(x1).asDate().asString().isMatches("*2000");
+		test(x1).asDate().asString().isMatches("*2000*");
 		test(nil).asDate().isNull();
 		assertThrown(()->test(x2).asDate()).asMessage().asOneLine().is("Object was not type 'java.util.Date'.  Actual='java.lang.String'.");
 	}

@@ -68,7 +68,7 @@ public class ArrayAssertion_Test extends TestBase {
 	@Test void ba01a_asString() {
 		var x = a(1,2);
 		var nil = na(Integer.class);
-		test(x).asString().is("[1, 2]");
+		test(x).asString().is("[1,2]");
 		test(nil).asString().isNull();
 	}
 
@@ -179,16 +179,16 @@ public class ArrayAssertion_Test extends TestBase {
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
-		assertThrown(()->test(x1).is(x1b)).asMessage().asOneLine().is("Unexpected value.  Expect='[null, 1, 3]'.  Actual='[null, 1, 2]'.");
-		assertThrown(()->test(x1).is(nil)).asMessage().asOneLine().is("Unexpected value.  Expect='null'.  Actual='[null, 1, 2]'.");
-		assertThrown(()->test(nil).is(x1b)).asMessage().asOneLine().is("Unexpected value.  Expect='[null, 1, 3]'.  Actual='null'.");
+		assertThrown(()->test(x1).is(x1b)).asMessage().asOneLine().is("Unexpected value.  Expect='[null,1,3]'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(x1).is(nil)).asMessage().asOneLine().is("Unexpected value.  Expect='null'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(nil).is(x1b)).asMessage().asOneLine().is("Unexpected value.  Expect='[null,1,3]'.  Actual='null'.");
 	}
 
 	@Test void ca04b_is_predicate() {
 		var x1 = a(null,1,2);
 		test(x1).is(x->x.length==3);
 		assertThrown(()->test(x1).is(x->x.length==2)).asMessage().asOneLine().is("Unexpected value: '[null,1,2]'.");
-		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='[null, 1, 2]'.");
+		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='[null,1,2]'.");
 	}
 
 	@Test void ca05_isNot() {
@@ -199,7 +199,7 @@ public class ArrayAssertion_Test extends TestBase {
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
-		assertThrown(()->test(x1).isNot(x1a)).asMessage().asOneLine().is("Unexpected value.  Did not expect='[null, 1, 2]'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x1).isNot(x1a)).asMessage().asOneLine().is("Unexpected value.  Did not expect='[null,1,2]'.  Actual='[null,1,2]'.");
 		assertThrown(()->test(nil).isNot(nil)).asMessage().asOneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
@@ -209,9 +209,9 @@ public class ArrayAssertion_Test extends TestBase {
 		var x2 = a(null,1,3);
 		var nil = na(Integer.class);
 		test(x1).isAny(x1a, x2);
-		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[null, 1, 3]]'.  Actual='[null, 1, 2]'.");
-		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='[null, 1, 2]'.");
-		assertThrown(()->test(nil).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[null, 1, 3]]'.  Actual='null'.");
+		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[null,1,3]]'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(nil).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[null,1,3]]'.  Actual='null'.");
 	}
 
 	@Test void ca07_isNotAny() {
@@ -222,7 +222,7 @@ public class ArrayAssertion_Test extends TestBase {
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1a)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='[null, 1, 2]'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x1).isNotAny(x1a)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='[null,1,2]'.  Actual='[null,1,2]'.");
 		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
@@ -232,9 +232,9 @@ public class ArrayAssertion_Test extends TestBase {
 		var nil = na(Integer.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[null, 1, 2](Integer[]@*)'.  Actual='[null, 1, 2](Integer[]@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[null, 1, 2](Integer[]@*)'.  Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='[null, 1, 2](Integer[]@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[null,1,2](Integer[]@*)'.  Actual='[null,1,2](Integer[]@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[null,1,2](Integer[]@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='[null,1,2](Integer[]@*)'.");
 	}
 
 	@Test void ca09_isSameJsonAs() {
@@ -297,10 +297,10 @@ public class ArrayAssertion_Test extends TestBase {
 	@Test void ca14_isString() {
 		var x = a(null,1,2);
 		var nil = na(Integer.class);
-		test(x).isString("[null, 1, 2]");
+		test(x).isString("[null,1,2]");
 		test(nil).isString(null);
-		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='[null, 1, 2]'.");
-		assertThrown(()->test(x).isString(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(x).isString(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='[null,1,2]'.");
 		assertThrown(()->test(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
@@ -329,7 +329,7 @@ public class ArrayAssertion_Test extends TestBase {
 		var nil = na(Integer.class);
 		test(x1).isAny(x -> x .equals(3));
 		test(x1).isAny(eq(3));
-		assertThrown(()->test(x1).isAny(x -> x.equals(4))).asMessage().asOneLine().is("Array did not contain any matching value.  Value='[2, 3, 1]'.");
+		assertThrown(()->test(x1).isAny(x -> x.equals(4))).asMessage().asOneLine().is("Array did not contain any matching value.  Value='[2,3,1]'.");
 		assertThrows(IllegalArgumentException.class, ()->test(x1).isAny((Predicate<Integer>)null), "Argument 'test' cannot be null.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isAny(x->true), "Value was null.");
 	}
@@ -367,7 +367,7 @@ public class ArrayAssertion_Test extends TestBase {
 		var nil = na(Integer.class);
 		test(x1).isContains(null);
 		test(x1).isContains(1);
-		assertThrown(()->test(x1).isContains(3)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x1).isContains(3)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[null,1,2]'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isContains(3), "Value was null.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isContains(null), "Value was null.");
 	}
@@ -376,8 +376,8 @@ public class ArrayAssertion_Test extends TestBase {
 		var x1 = a(null,1,2);
 		var nil = na(Integer.class);
 		test(x1).isNotContains(3);
-		assertThrown(()->test(x1).isNotContains(1)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[null, 1, 2]'.");
-		assertThrown(()->test(x1).isNotContains(null)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='null'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x1).isNotContains(1)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(x1).isNotContains(null)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='null'.  Actual='[null,1,2]'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotContains(3), "Value was null.");
 	}
 

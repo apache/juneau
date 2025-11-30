@@ -127,14 +127,14 @@ class StringListAssertion_Test extends TestBase {
 	@Test void bc03a_sorted() {
 		var x = l("2","1");
 		var nil = listn(String.class);
-		test(x).asSorted().isString("[1, 2]");
+		test(x).asSorted().isString("[1,2]");
 		test(nil).asSorted().isNull();
 	}
 
 	@Test void bc03b_sorted_wComparator() {
 		var x = l("2","1");
 		var nil = listn(String.class);
-		test(x).asSorted(null).isString("[1, 2]");
+		test(x).asSorted(null).isString("[1,2]");
 		test(nil).asSorted(null).isNull();
 	}
 

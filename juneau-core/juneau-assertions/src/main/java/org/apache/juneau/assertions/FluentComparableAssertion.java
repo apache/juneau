@@ -17,6 +17,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -175,7 +176,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	public R isGt(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (value().compareTo(value) <= 0)
-			throw error(MSG_valueWasNotGreaterThanExpected, value, value());
+			throw error(MSG_valueWasNotGreaterThanExpected, r(value), r(value()));
 		return returns();
 	}
 
@@ -190,7 +191,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	public R isGte(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (value().compareTo(value) < 0)
-			throw error(MSG_valueWasNotGreaterOrEqualsToExpected, value, value());
+			throw error(MSG_valueWasNotGreaterOrEqualsToExpected, r(value), r(value()));
 		return returns();
 	}
 
@@ -205,7 +206,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	public R isLt(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (value().compareTo(value) >= 0)
-			throw error(MSG_valueWasNotLessThanExpected, value, value());
+			throw error(MSG_valueWasNotLessThanExpected, r(value), r(value()));
 		return returns();
 	}
 
@@ -220,7 +221,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	public R isLte(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (value().compareTo(value) > 0)
-			throw error(MSG_valueWasNotLessOrEqualsToExpected, value, value());
+			throw error(MSG_valueWasNotLessOrEqualsToExpected, r(value), r(value()));
 		return returns();
 	}
 

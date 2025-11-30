@@ -190,7 +190,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 			return returns();
 		value().forEach(x -> {
 			if (! test.test(x))
-				throw error(MSG_collectionDidNotContainTestedValue, value());
+				throw error(MSG_collectionDidNotContainTestedValue, r(value()));
 		});
 		return returns();
 	}
@@ -208,7 +208,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		for (var v : value())
 			if (test.test(v))
 				return returns();
-		throw error(MSG_collectionDidNotContainTestedValue, value());
+		throw error(MSG_collectionDidNotContainTestedValue, r(value()));
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		for (var v : value())
 			if (eq(v, entry))
 				return returns();
-		throw error(MSG_collectionDidNotContainExpectedValue, entry, value());
+		throw error(MSG_collectionDidNotContainExpectedValue, r(entry), r(value()));
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	public R isNotContains(E entry) throws AssertionError {
 		value().forEach(x -> {
 			if (eq(x, entry))
-				throw error(MSG_collectionContainedUnexpectedValue, entry, value());
+				throw error(MSG_collectionContainedUnexpectedValue, r(entry), r(value()));
 		});
 		return returns();
 	}

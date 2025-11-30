@@ -17,7 +17,6 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
@@ -188,7 +187,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	/**
 	 * Argument placeholder for tested value.
 	 */
-	public static final Function<Object,String> VALUE = StringUtils::stringifyDeep;
+	public static final Function<Object,String> VALUE = StringUtils::readable;
 	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
 	// @formatter:off
 	private static final String
@@ -246,7 +245,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			for (var i = 0; i < oargs.length; i++) {
 				var a = this.args[i];
 				if (a instanceof Function a2) // NOSONAR - Intentional.
-					oargs[i] = a2.apply(t);
+					oargs[i] = r(a2.apply(t));
 				else
 					oargs[i] = r(a);
 			}

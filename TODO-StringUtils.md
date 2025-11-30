@@ -224,3 +224,13 @@ The `StringUtils` class currently has 225+ public static methods covering:
 - `parseNumber(String s, Class<? extends Number> type)` - Could add more number types
 - `getDuration(String s)` - Could support more duration formats
 - `replaceVars(String s, Map<String,Object> m)` - Could add more variable syntax options
+
+## Methods to Review/Deprecate
+
+- ⚠️ `stringifyDeep(Object o)` - Determine if this method is still required or if it can be replaced with `readable()`. Currently used in:
+  - `FluentObjectAssertion.equals()` for array comparison (line 566)
+  - Previously used in `AssertionPredicate.VALUE` but has been replaced with `readable()`
+  - Review differences in behavior between `stringifyDeep()` and `readable()`:
+    - `stringifyDeep()` uses `toString()` for Collections (adds spaces: `[a, b, c]`)
+    - `readable()` uses `Collectors.joining(",")` for Collections (no spaces: `[a,b,c]`)
+  - If `stringifyDeep()` can be replaced, update all usages and consider deprecating/removing the method

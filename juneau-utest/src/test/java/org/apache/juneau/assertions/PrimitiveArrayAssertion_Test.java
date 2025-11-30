@@ -65,7 +65,7 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		byte[] x = {1}, nil = null;
-		byteArray(x).asString().is("[1]");
+		byteArray(x).asString().is("01");
 		byteArray(nil).asString().isNull();
 	}
 
@@ -139,16 +139,16 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		intArray(x1).is(x1);
 		intArray(x1).is(x1a);
 		intArray(nil).is(nil);
-		assertThrown(()->intArray(x1).is(x2)).asMessage().asOneLine().is("Unexpected value.  Expect='[3, 4]'.  Actual='[1, 2]'.");
-		assertThrown(()->intArray(x1).is(nil)).asMessage().asOneLine().is("Unexpected value.  Expect='null'.  Actual='[1, 2]'.");
-		assertThrown(()->intArray(nil).is(x2)).asMessage().asOneLine().is("Unexpected value.  Expect='[3, 4]'.  Actual='null'.");
+		assertThrown(()->intArray(x1).is(x2)).asMessage().asOneLine().is("Unexpected value.  Expect='[3,4]'.  Actual='[1,2]'.");
+		assertThrown(()->intArray(x1).is(nil)).asMessage().asOneLine().is("Unexpected value.  Expect='null'.  Actual='[1,2]'.");
+		assertThrown(()->intArray(nil).is(x2)).asMessage().asOneLine().is("Unexpected value.  Expect='[3,4]'.  Actual='null'.");
 	}
 
 	@Test void ca04b_is_predicate() {
 		byte[] x1 = {1,2};
 		byteArray(x1).is(x->x.length==2);
 		assertThrown(()->byteArray(x1).is(x->x.length==3)).asMessage().asOneLine().is("Unexpected value: '0102'.");
-		assertThrown(()->byteArray(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='[1, 2]'.");
+		assertThrown(()->byteArray(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='0102'.");
 	}
 
 	@Test void ca05_isNot() {
@@ -156,16 +156,16 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		byteArray(x1).isNot(x2);
 		byteArray(x1).isNot(nil);
 		byteArray(nil).isNot(x1);
-		assertThrown(()->byteArray(x1).isNot(x1a)).asMessage().asOneLine().is("Unexpected value.  Did not expect='[1, 2]'.  Actual='[1, 2]'.");
+		assertThrown(()->byteArray(x1).isNot(x1a)).asMessage().asOneLine().is("Unexpected value.  Did not expect='0102'.  Actual='0102'.");
 		assertThrown(()->byteArray(nil).isNot(nil)).asMessage().asOneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
 	@Test void ca06_isAny() {
 		byte[] x1 = {1,2}, x1a = {1,2}, x2 = {2,3}, nil = null;
 		byteArray(x1).isAny(x1a, x2);
-		assertThrown(()->byteArray(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[2, 3]]'.  Actual='[1, 2]'.");
-		assertThrown(()->byteArray(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='[1, 2]'.");
-		assertThrown(()->byteArray(nil).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[2, 3]]'.  Actual='null'.");
+		assertThrown(()->byteArray(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[0203]'.  Actual='0102'.");
+		assertThrown(()->byteArray(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='0102'.");
+		assertThrown(()->byteArray(nil).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[0203]'.  Actual='null'.");
 	}
 
 	@Test void ca07_isNotAny() {
@@ -173,7 +173,7 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		byteArray(x1).isNotAny(x2);
 		byteArray(x1).isNotAny();
 		byteArray(nil).isNotAny(x2);
-		assertThrown(()->byteArray(x1).isNotAny(x1a)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='[1, 2]'.  Actual='[1, 2]'.");
+		assertThrown(()->byteArray(x1).isNotAny(x1a)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='0102'.  Actual='0102'.");
 		assertThrown(()->byteArray(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
@@ -181,9 +181,9 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		byte[] x1 = {1,2}, x1a = {1,2}, nil = null;
 		byteArray(x1).isSame(x1);
 		byteArray(nil).isSame(nil);
-		assertThrown(()->byteArray(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[1, 2](byte[]@*)'.  Actual='[1, 2](byte[]@*)'.");
-		assertThrown(()->byteArray(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[1, 2](byte[]@*)'.  Actual='null(null)'.");
-		assertThrown(()->byteArray(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='[1, 2](byte[]@*)'.");
+		assertThrown(()->byteArray(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='0102(byte[]@*)'.  Actual='0102(byte[]@*)'.");
+		assertThrown(()->byteArray(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='0102(byte[]@*)'.  Actual='null(null)'.");
+		assertThrown(()->byteArray(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='0102(byte[]@*)'.");
 	}
 
 	@Test void ca09_isSameJsonAs() {
@@ -234,10 +234,10 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		byte[] x = {1,2}, nil = null;
-		byteArray(x).isString("[1, 2]");
+		byteArray(x).isString("0102");
 		byteArray(nil).isString(null);
-		assertThrown(()->byteArray(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='[1, 2]'.");
-		assertThrown(()->byteArray(x).isString(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='[1, 2]'.");
+		assertThrown(()->byteArray(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='0102'.");
+		assertThrown(()->byteArray(x).isString(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='0102'.");
 		assertThrown(()->byteArray(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
@@ -263,7 +263,7 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		int[] x1 = {2,3,1}, nil = null;
 		intArray(x1).isAny(x -> x .equals(3));
 		intArray(x1).isAny(eq(3));
-		assertThrown(()->intArray(x1).isAny(x -> x.equals(4))).asMessage().asOneLine().is("Array did not contain any matching value.  Value='[2, 3, 1]'.");
+		assertThrown(()->intArray(x1).isAny(x -> x.equals(4))).asMessage().asOneLine().is("Array did not contain any matching value.  Value='[2,3,1]'.");
 		assertThrows(IllegalArgumentException.class, ()->intArray(x1).isAny((Predicate<Integer>)null), "Argument 'test' cannot be null.");
 		assertThrows(BasicAssertionError.class, ()->intArray(nil).isAny(x->true), "Value was null.");
 	}
@@ -294,7 +294,7 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 	@Test void cb06_contains() {
 		int[] x1 = {1,2}, nil = null;
 		intArray(x1).isContains(1);
-		assertThrown(()->intArray(x1).isContains(3)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[1, 2]'.");
+		assertThrown(()->intArray(x1).isContains(3)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[1,2]'.");
 		assertThrows(BasicAssertionError.class, ()->intArray(nil).isContains(3), "Value was null.");
 		assertThrows(BasicAssertionError.class, ()->intArray(nil).isContains(null), "Value was null.");
 	}
@@ -302,7 +302,7 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 	@Test void cb07_doesNotContain() {
 		int[] x1 = {1,2}, nil = null;
 		intArray(x1).isNotContains(3);
-		assertThrown(()->intArray(x1).isNotContains(1)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[1, 2]'.");
+		assertThrown(()->intArray(x1).isNotContains(1)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[1,2]'.");
 		assertThrows(BasicAssertionError.class, ()->intArray(nil).isNotContains(3), "Value was null.");
 	}
 

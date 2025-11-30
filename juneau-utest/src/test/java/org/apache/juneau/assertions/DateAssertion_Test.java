@@ -72,7 +72,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void ba01a_asString() {
 		var x = MID1;
 		var nil = n(Date.class);
-		test(x).asString().isMatches("*2000");
+		test(x).asString().isMatches("*2000*");
 		test(nil).asString().isNull();
 	}
 
@@ -80,7 +80,7 @@ class DateAssertion_Test extends TestBase {
 		var x = MID1;
 		var nil = n(Date.class);
 		var s = Json5Serializer.DEFAULT;
-		test(x).asString(s).isMatches("'2000-*'");
+		test(x).asString(s).isMatches("'*2000-*'");
 		test(nil).asString(s).is("null");
 	}
 
@@ -92,14 +92,14 @@ class DateAssertion_Test extends TestBase {
 	@Test void ba02_asJson() {
 		var x = MID1;
 		var nil = n(Date.class);
-		test(x).asJson().isMatches("'2000-*'");
+		test(x).asJson().isMatches("'*2000-*'");
 		test(nil).asJson().is("null");
 	}
 
 	@Test void ba03_asJsonSorted() {
 		var x1 = MID1;
 		var nil = n(Date.class);
-		test(x1).asJsonSorted().isMatches("'2000-*'");
+		test(x1).asJsonSorted().isMatches("'*2000-*'");
 		test(nil).asJsonSorted().is("null");
 	}
 
@@ -156,16 +156,16 @@ class DateAssertion_Test extends TestBase {
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
-		assertThrown(()->test(x1).is(x2)).asMessage().asOneLine().isMatches("Unexpected value.  Expect='*2010'.  Actual='*2000'.");
-		assertThrown(()->test(x1).is(nil)).asMessage().asOneLine().isMatches("Unexpected value.  Expect='null'.  Actual='*2000'.");
-		assertThrown(()->test(nil).is(x2)).asMessage().asOneLine().isMatches("Unexpected value.  Expect='*2010'.  Actual='null'.");
+		assertThrown(()->test(x1).is(x2)).asMessage().asOneLine().isMatches("Unexpected value.  Expect='*2010*'.  Actual='*2000*'.");
+		assertThrown(()->test(x1).is(nil)).asMessage().asOneLine().isMatches("Unexpected value.  Expect='null'.  Actual='*2000*'.");
+		assertThrown(()->test(nil).is(x2)).asMessage().asOneLine().isMatches("Unexpected value.  Expect='*2010*'.  Actual='null'.");
 	}
 
 	@Test void ca04b_is_predicate() {
 		var x1 = MID1;
 		test(x1).is(x->x!=null);
 		assertThrown(()->test(x1).is(x->x==null)).asMessage().asOneLine().isMatches("Unexpected value: '*2000*'.");
-		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().isMatches("Value unexpectedly matched.  Value='*2000'.");
+		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().isMatches("Value unexpectedly matched.  Value='*2000*'.");
 	}
 
 	@Test void ca05_isNot() {
@@ -176,7 +176,7 @@ class DateAssertion_Test extends TestBase {
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
-		assertThrown(()->test(x1).isNot(x1a)).asMessage().asOneLine().isMatches("Unexpected value.  Did not expect='*2000'.  Actual='*2000'.");
+		assertThrown(()->test(x1).isNot(x1a)).asMessage().asOneLine().isMatches("Unexpected value.  Did not expect='*2000*'.  Actual='*2000*'.");
 		assertThrown(()->test(nil).isNot(nil)).asMessage().asOneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
@@ -186,9 +186,9 @@ class DateAssertion_Test extends TestBase {
 		var x2 = MID2;
 		var nil = n(Date.class);
 		test(x1).isAny(x1a, x2);
-		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().isMatches("Expected value not found.  Expect='[*2010]'.  Actual='*2000'.");
-		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().isMatches("Expected value not found.  Expect='[]'.  Actual='*2000'.");
-		assertThrown(()->test(nil).isAny(x2)).asMessage().asOneLine().isMatches("Expected value not found.  Expect='[*2010]'.  Actual='null'.");
+		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().isMatches("Expected value not found.  Expect='[*2010*]'.  Actual='*2000*'.");
+		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().isMatches("Expected value not found.  Expect='[]'.  Actual='*2000*'.");
+		assertThrown(()->test(nil).isAny(x2)).asMessage().asOneLine().isMatches("Expected value not found.  Expect='[*2010*]'.  Actual='null'.");
 	}
 
 	@Test void ca07_isNotAny() {
@@ -199,7 +199,7 @@ class DateAssertion_Test extends TestBase {
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1a)).asMessage().asOneLine().isMatches("Unexpected value found.  Unexpected='*2000'.  Actual='*2000'.");
+		assertThrown(()->test(x1).isNotAny(x1a)).asMessage().asOneLine().isMatches("Unexpected value found.  Unexpected='*2000*'.  Actual='*2000*'.");
 		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
@@ -209,9 +209,9 @@ class DateAssertion_Test extends TestBase {
 		var nil = n(Date.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='*2000(Date@*)'.  Actual='*2000(Date@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='*2000(Date@*)'.  Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='*2000(Date@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='*2000*(Date@*)'.  Actual='*2000*(Date@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='*2000*(Date@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='*2000*(Date@*)'.");
 	}
 
 	@Test void ca09_isSameJsonAs() {
@@ -221,9 +221,9 @@ class DateAssertion_Test extends TestBase {
 		var nil = n(Date.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
-		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''2010*''.  Actual=''2000*''.");
-		assertThrown(()->test(nil).isSameJsonAs(x2)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''2010*''.  Actual='null'.");
-		assertThrown(()->test(x1).isSameJsonAs(nil)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect='null'.  Actual=''2000*''.");
+		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''*2010*''.  Actual=''*2000*''.");
+		assertThrown(()->test(nil).isSameJsonAs(x2)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''*2010*''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameJsonAs(nil)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect='null'.  Actual=''*2000*''.");
 	}
 
 	@Test void ca10_isSameSortedJsonAs() {
@@ -233,9 +233,9 @@ class DateAssertion_Test extends TestBase {
 		var nil = n(Date.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
-		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''2010*''.  Actual=''2000*''.");
-		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''2010*''.  Actual='null'.");
-		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect='null'.  Actual=''2000*''.");
+		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''*2010*''.  Actual=''*2000*''.");
+		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''*2010*''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect='null'.  Actual=''*2000*''.");
 	}
 
 	@Test void ca11_isSameSerializedAs() {
@@ -246,9 +246,9 @@ class DateAssertion_Test extends TestBase {
 		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
-		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''2010*''.  Actual=''2000*''.");
-		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''2010*''.  Actual='null'.");
-		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect='null'.  Actual=''2000*''.");
+		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''*2010*''.  Actual=''*2000*''.");
+		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''*2010*''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect='null'.  Actual=''*2000*''.");
 	}
 
 	@Test void ca12_isType() {
@@ -274,10 +274,10 @@ class DateAssertion_Test extends TestBase {
 	@Test void ca14_isString() {
 		var x = MID1;
 		var nil = n(Date.class);
-		test(x).isString(x.toString());
+		test(x).isString(r(x));
 		test(nil).isString(null);
-		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='bad'.  Actual='*2000'.");
-		assertThrown(()->test(x).isString(null)).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='null'.  Actual='*2000'.");
+		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='bad'.  Actual='*2000*'.");
+		assertThrown(()->test(x).isString(null)).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='null'.  Actual='*2000*'.");
 		assertThrown(()->test(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
@@ -285,8 +285,8 @@ class DateAssertion_Test extends TestBase {
 		var x = MID1;
 		var nil = n(Date.class);
 		test(nil).isJson("null");
-		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='bad'.  Actual=''2000*''.");
-		assertThrown(()->test(x).isJson(null)).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='null'.  Actual=''2000*''.");
+		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='bad'.  Actual=''*2000*''.");
+		assertThrown(()->test(x).isJson(null)).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='null'.  Actual=''*2000*''.");
 		assertThrown(()->test(nil).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
@@ -295,8 +295,8 @@ class DateAssertion_Test extends TestBase {
 		var x2 = MID2;
 		var nil = n(Date.class);
 		test(x2).isGt(x1);
-		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().isMatches("Value was not greater than expected.  Expect='*2000'.  Actual='*2000'.");
-		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().isMatches("Value was not greater than expected.  Expect='*2010'.  Actual='*2000'.");
+		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().isMatches("Value was not greater than expected.  Expect='*2000*'.  Actual='*2000*'.");
+		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().isMatches("Value was not greater than expected.  Expect='*2010*'.  Actual='*2000*'.");
 		assertThrows(IllegalArgumentException.class, ()->test(x1).isGt(nil), "Argument 'value' cannot be null.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isGt(x2), "Value was null.");
 	}
@@ -307,7 +307,7 @@ class DateAssertion_Test extends TestBase {
 		var nil = n(Date.class);
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
-		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().isMatches("Value was not greater than or equals to expected.  Expect='*2010'.  Actual='*2000'.");
+		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().isMatches("Value was not greater than or equals to expected.  Expect='*2010*'.  Actual='*2000*'.");
 		assertThrows(IllegalArgumentException.class, ()->test(x1).isGte(nil), "Argument 'value' cannot be null.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isGte(x2), "Value was null.");
 	}
@@ -317,8 +317,8 @@ class DateAssertion_Test extends TestBase {
 		var x2 = MID2;
 		var nil = n(Date.class);
 		test(x1).isLt(x2);
-		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().isMatches("Value was not less than expected.  Expect='*2000'.  Actual='*2000'.");
-		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().isMatches("Value was not less than expected.  Expect='*2000'.  Actual='*2010'.");
+		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().isMatches("Value was not less than expected.  Expect='*2000*'.  Actual='*2000*'.");
+		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().isMatches("Value was not less than expected.  Expect='*2000*'.  Actual='*2010*'.");
 		assertThrows(IllegalArgumentException.class, ()->test(x2).isLt(nil), "Argument 'value' cannot be null.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isLt(x1), "Value was null.");
 	}
@@ -329,7 +329,7 @@ class DateAssertion_Test extends TestBase {
 		var nil = n(Date.class);
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
-		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().isMatches("Value was not less than or equals to expected.  Expect='*2000'.  Actual='*2010'.");
+		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().isMatches("Value was not less than or equals to expected.  Expect='*2000*'.  Actual='*2010*'.");
 		assertThrows(IllegalArgumentException.class, ()->test(x2).isLte(nil), "Argument 'value' cannot be null.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isLte(x1), "Value was null.");
 	}
@@ -343,7 +343,7 @@ class DateAssertion_Test extends TestBase {
 		test(x1).isBetween(x1, x3);
 		test(x2).isBetween(x1, x3);
 		test(x3).isBetween(x1, x3);
-		assertThrown(()->test(x4).isBetween(x1, x3)).asMessage().asOneLine().isMatches("Value was not less than or equals to expected.  Expect='*2010'.  Actual='*2100'.");
+		assertThrown(()->test(x4).isBetween(x1, x3)).asMessage().asOneLine().isMatches("Value was not less than or equals to expected.  Expect='*2010*'.  Actual='*2100*'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isBetween(x1, x3), "Value was null.");
 		assertThrows(IllegalArgumentException.class, ()->test(x1).isBetween(nil, x3), "Argument 'lower' cannot be null.");
 		assertThrown(()->test(x1).isBetween(x1, nil)).asMessage().asOneLine().is("Argument 'upper' cannot be null.");

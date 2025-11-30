@@ -207,7 +207,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 
 	@Override /* Overridden from FluentBaseAssertion */
 	public FluentStringAssertion<R> asString() {
-		return new FluentStringAssertion<>(this, toString(), returns());
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : r(value()), returns());
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
@@ -260,7 +260,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		for (int i = 0, j = length2(); i < j; i++)
 			if (test.test(at(i)))
 				return returns();
-		throw error(MSG_arrayDidntContainAnyMatchingValue, value());
+		throw error(MSG_arrayDidntContainAnyMatchingValue, r(value()));
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		for (int i = 0, j = length2(); i < j; i++)
 			if (eq(at(i), entry))
 				return returns();
-		throw error(MSG_arrayDidNotContainExpectedValue, entry, value());
+		throw error(MSG_arrayDidNotContainExpectedValue, r(entry), r(value()));
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public R isNotContains(E entry) throws AssertionError {
 		for (var i = 0; i < length2(); i++)
 			if (eq(at(i), entry))
-				throw error(MSG_arrayContainedUnexpectedValue, entry, value());
+				throw error(MSG_arrayContainedUnexpectedValue, r(entry), r(value()));
 		return returns();
 	}
 

@@ -95,19 +95,20 @@ import org.apache.juneau.common.collections.*;
  */
 public final class StringFormat {
 
-	private static final Cache<String,StringFormat> CACHE = Cache.of(String.class, StringFormat.class).maxSize(1000).weak().build();
+	private static final CacheMode CACHE_MODE = CacheMode.parse(System.getProperty("juneau.StringFormat.caching", "FULL"));
 
-	private static final Cache2<Locale,String,MessageFormat> MESSAGE_FORMAT_CACHE = Cache2.of(Locale.class, String.class, MessageFormat.class).maxSize(100).threadLocal().weak()
+	private static final Cache<String,StringFormat> CACHE = Cache.of(String.class, StringFormat.class).maxSize(1000).cacheMode(CACHE_MODE).build();
+
+	private static final Cache2<Locale,String,MessageFormat> MESSAGE_FORMAT_CACHE = Cache2.of(Locale.class, String.class, MessageFormat.class).maxSize(100).threadLocal().cacheMode(CACHE_MODE)
 		.supplier((locale, content) -> new MessageFormat(content, locale)).build();
 
-	private static final Cache<Locale,NumberFormat> NUMBER_FORMAT_CACHE = Cache.of(Locale.class, NumberFormat.class).maxSize(50).threadLocal().weak().supplier(NumberFormat::getInstance).build();
+	private static final Cache<Locale,NumberFormat> NUMBER_FORMAT_CACHE = Cache.of(Locale.class, NumberFormat.class).maxSize(50).threadLocal().cacheMode(CACHE_MODE).supplier(NumberFormat::getInstance).build();
 
-	private static final Cache<Locale,DateFormat> DATE_FORMAT_CACHE = Cache.of(Locale.class, DateFormat.class).maxSize(50).threadLocal().weak()
+	private static final Cache<Locale,DateFormat> DATE_FORMAT_CACHE = Cache.of(Locale.class, DateFormat.class).maxSize(50).threadLocal().cacheMode(CACHE_MODE)
 		.supplier(locale -> DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale)).build();
 
 	private static final AsciiSet PRINTF_CONVERSION_CHARS = AsciiSet.of("bBhHsScCdoxXeEfgGaAtTn%");
 	private static final AsciiSet PRINTF_FORMAT_CHARS = AsciiSet.of("-+ 0(#.*$");
-	private static final AsciiSet FORMAT_CHARS = AsciiSet.of("%{");
 
 	/**
 	 * Formats a pattern string with the given arguments using the default locale.
@@ -144,33 +145,6 @@ public final class StringFormat {
 		if (args.length == 0)
 			return pattern;
 		return of(pattern).format(locale, args);
-	}
-
-	/**
-	 * Checks if a pattern contains any format specifiers.
-	 *
-	 * <p>
-	 * Returns <jk>true</jk> if the pattern contains any of the following characters:
-	 * <ul>
-	 *   <li><js>'%'</js> - Printf-style format specifier</li>
-	 *   <li><js>'{'</js> - MessageFormat-style placeholder</li>
-	 *   <li><js>'''</js> - MessageFormat quote</li>
-	 * </ul>
-	 *
-	 * <p>
-	 * Uses {@link AsciiSet} for efficient single-pass scanning of the string.
-	 *
-	 * @param pattern The pattern to check.
-	 * @return <jk>true</jk> if the pattern contains format specifiers, <jk>false</jk> otherwise.
-	 */
-	private static boolean hasArgs(String pattern) {
-		if (pattern == null || pattern.isEmpty())
-			return false;
-		for (var i = 0; i < pattern.length(); i++) {
-			if (FORMAT_CHARS.contains(pattern.charAt(i)))
-				return true;
-		}
-		return false;
 	}
 
 	/**

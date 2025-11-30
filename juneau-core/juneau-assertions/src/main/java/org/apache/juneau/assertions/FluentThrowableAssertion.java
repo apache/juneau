@@ -190,7 +190,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		var t = map(Throwable::getCause).orElse(null);
 		if (t == null || type.isInstance(t))
 			return new FluentThrowableAssertion<>(this, type.cast(t), returns());
-		throw error(MSG_causedByExceptionNotExpectedType, type, t.getClass());
+		throw error(MSG_causedByExceptionNotExpectedType, cn(type), cn(t.getClass()));
 	}
 
 	/**

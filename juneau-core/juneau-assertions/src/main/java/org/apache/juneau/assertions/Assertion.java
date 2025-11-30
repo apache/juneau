@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -213,7 +212,7 @@ public class Assertion {
 	 * @return A new {@link BasicAssertionError}.
 	 */
 	protected BasicAssertionError error(Throwable cause, String msg, Object...args) {
-		msg = mformat(msg, args);
+		msg = f(msg, args);
 		if (nn(this.msg))
 			msg = f(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
 		if (nn(out))

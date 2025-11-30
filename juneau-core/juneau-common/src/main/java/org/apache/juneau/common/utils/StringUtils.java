@@ -41,8 +41,6 @@ import java.util.regex.*;
 import java.util.stream.*;
 import java.util.zip.*;
 
-import org.apache.juneau.common.collections.*;
-
 /**
  * Reusable string utility methods.
  */
@@ -93,19 +91,6 @@ public class StringUtils {
 	 * Contains all standard whitespace characters: space, tab, newline, carriage return, form feed, and vertical tab.
 	 */
 	public static final String WHITESPACE_CHARS = " \t\n\r\f\u000B";
-
-	/**
-	 * Thread-local cache of MessageFormat objects for improved performance.
-	 *
-	 * <p>MessageFormat objects are not thread-safe, so we use a ThreadLocal cache
-	 * to ensure each thread has its own set of cached formatters. This avoids:
-	 * <ul>
-	 *   <li>Repeated parsing of the same patterns</li>
-	 *   <li>Thread synchronization overhead</li>
-	 *   <li>Object allocation for frequently used patterns</li>
-	 * </ul>
-	 */
-	private static final Cache<String,MessageFormat> MESSAGE_FORMAT_CACHE = Cache.of(String.class, MessageFormat.class).maxSize(100).threadLocal().build();
 
 	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
 
@@ -721,52 +706,6 @@ public class StringUtils {
 		}
 		return in;
 
-	}
-
-	/**
-	 * Similar to {@link MessageFormat#format(String, Object...)} except allows you to specify POJO arguments.
-	 *
-	 * <p>This method uses a thread-local cache of {@link MessageFormat} objects for improved performance
-	 * when the same patterns are used repeatedly. The cache is limited to 100 entries per thread to prevent
-	 * unbounded growth.
-	 *
-	 * <p>For arguments with format types (e.g., {@code {0,number,#.##}}), the original argument is preserved
-	 * to allow proper formatting. For simple placeholders (e.g., {@code {0}}), arguments are converted to
-	 * readable strings using {@link #convertToReadable(Object)}.
-	 *
-	 * <p>
-	 * Supports standard MessageFormat placeholders: <js>"{0}"</js>, <js>"{1,number}"</js>, <js>"{2,date}"</js>, etc.
-	 * Also supports un-numbered placeholders: <js>"{}"</js> - Sequential placeholders that are automatically numbered.
-	 * Note: For un-numbered placeholders, use {@link #format(String, Object...)} instead, as this method uses
-	 * standard {@link MessageFormat} which requires explicit indices.
-	 *
-	 * @param pattern The string pattern.
-	 * @param args The arguments.
-	 * @return The formatted string.
-	 */
-	public static String mformat(String pattern, Object...args) {
-		if (args == null || args.length == 0)
-			return pattern;
-
-		var c = countChars(pattern, '\'');
-		if (c % 2 != 0)
-			throw new AssertionError("Dangling single quote found in pattern: " + pattern);
-
-		// Get or create a cached MessageFormat for this pattern (thread-safe via thread-local cache)
-		var mf = MESSAGE_FORMAT_CACHE.get(pattern, () -> new MessageFormat(pattern));
-
-		// Determine which arguments have format types and need to preserve their original type
-		var formats = mf.getFormatsByArgumentIndex();
-
-		var args2 = new Object[args.length];
-		for (var i = 0; i < args.length; i++) {
-			// If there's a Format specified for this index, keep the original argument
-			// Otherwise, convert to readable string for better output
-			var hasFormat = i < formats.length && nn(formats[i]);
-			args2[i] = hasFormat ? args[i] : convertToReadable(args[i]);
-		}
-
-		return mf.format(args2);
 	}
 
 	/**
@@ -6617,40 +6556,6 @@ public class StringUtils {
 			return new StringBuilder(in);
 		sb.append(in);
 		return sb;
-	}
-
-	/**
-	 * Converts an array to a List, handling both primitive and object arrays.
-	 *
-	 * @param array The array to convert.
-	 * @return A List containing the array elements.
-	 */
-	private static List<Object> arrayAsList(Object array) {
-		if (array.getClass().getComponentType().isPrimitive()) {
-			var l = new ArrayList<>(Array.getLength(array));
-			for (var i = 0; i < Array.getLength(array); i++)
-				l.add(Array.get(array, i));
-			return l;
-		}
-		return l((Object[])array);
-	}
-
-	/**
-	 * Converts an object to a readable string representation for formatting.
-	 *
-	 * @param o The object to convert.
-	 * @return A readable string representation of the object.
-	 */
-	private static String convertToReadable(Object o) {
-		if (o == null)
-			return null;
-		if (o instanceof Class<?> o2)
-			return o2.getName();
-		if (o instanceof Method o2)
-			return o2.getName();
-		if (isArray(o))
-			return arrayAsList(o).stream().map(StringUtils::convertToReadable).collect(Collectors.joining(", ", "[", "]"));
-		return o.toString();
 	}
 
 	/**
