@@ -282,8 +282,8 @@ public class Utils {
 			return 1;
 		}
 
-		if (o1.getClass() == o2.getClass() && o1 instanceof Comparable o1_2)
-			return o1_2.compareTo(o2);
+		if (eq(o1.getClass(), o2.getClass()) && o1 instanceof Comparable o1a)
+			return o1a.compareTo(o2);
 
 		return 0;
 	}

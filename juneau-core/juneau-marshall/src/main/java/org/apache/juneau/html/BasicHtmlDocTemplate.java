@@ -20,6 +20,9 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.AsideFloat.*;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 
@@ -38,6 +41,18 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 	private static boolean exists(String s) {
 		return nn(s) && ! "NONE".equals(s);
+	}
+
+	private static boolean isEmptyObject(Object o) {
+		if (o == null)
+			return true;
+		if (o instanceof Collection<?> o2)
+			return o2.isEmpty();
+		if (o instanceof Map<?,?> o2)
+			return o2.isEmpty();
+		if (isArray(o))
+			return (java.lang.reflect.Array.getLength(o) == 0);
+		return o.toString().isEmpty();
 	}
 
 	@Override /* Overridden from HtmlDocTemplate */
@@ -68,7 +83,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 		if (o == null) {
 			w.append(6, "<null/>").nl(6);
-		} else if (isEmpty(o)) {
+		} else if (isEmptyObject(o)) {
 			String m = session.getNoResultsMessage();
 			if (exists(m))
 				w.append(6, session.resolve(m)).nl(6);

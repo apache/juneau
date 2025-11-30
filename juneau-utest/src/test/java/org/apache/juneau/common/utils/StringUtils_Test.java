@@ -1353,14 +1353,6 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isNotBlank("a"));
 	}
 
-	@Test
-	void a43_isEmpty() {
-		assertTrue(Utils.isEmpty((String)null));
-		assertTrue(Utils.isEmpty(""));
-		assertFalse(Utils.isEmpty("   "));
-		assertFalse(Utils.isEmpty("hello"));
-		assertFalse(Utils.isEmpty("a"));
-	}
 
 	@Test
 	void a44_hasText() {
