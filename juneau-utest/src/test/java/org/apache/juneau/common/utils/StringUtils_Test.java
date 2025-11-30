@@ -21,7 +21,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.compare;
 import static org.apache.juneau.common.utils.StringUtils.containsAny;
-import static org.apache.juneau.common.utils.StringUtils.eqic;
 import static org.apache.juneau.common.utils.StringUtils.reverse;
 import static org.apache.juneau.common.utils.Utils.eqic;
 import static org.apache.juneau.junit.bct.BctAssertions.*;

@@ -250,6 +250,9 @@ public class Utils {
 	}
 
 	/**
+	 * Convenience method for calling {@link StringUtils#equalsIgnoreCase(String, String)}.
+	 *
+	 * <p>
 	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
 	 *
 	 * @param s1 String 1.
@@ -257,11 +260,21 @@ public class Utils {
 	 * @return <jk>true</jk> if the strings are equal.
 	 */
 	public static boolean eqic(String s1, String s2) {
-		if (s1 == null)
-			return s2 == null;
-		if (s2 == null)
-			return false;
-		return s1.equalsIgnoreCase(s2);
+		return StringUtils.equalsIgnoreCase(s1, s2);
+	}
+
+	/**
+	 * Convenience method for calling {@link StringUtils#equalsIgnoreCase(Object, Object)}.
+	 *
+	 * <p>
+	 * Tests two objects for case-insensitive string equality by converting them to strings.
+	 *
+	 * @param o1 Object 1.
+	 * @param o2 Object 2.
+	 * @return <jk>true</jk> if both objects are equal ignoring case.
+	 */
+	public static boolean eqic(Object o1, Object o2) {
+		return StringUtils.equalsIgnoreCase(o1, o2);
 	}
 
 	/**

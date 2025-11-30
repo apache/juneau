@@ -6796,7 +6796,7 @@ public class StringUtils {
 	 * @param b Object 2.
 	 * @return <jk>true</jk> if both objects are equal ignoring case.
 	 */
-	public static boolean eqic(Object a, Object b) {
+	public static boolean equalsIgnoreCase(Object a, Object b) {
 		if (a == null && b == null)
 			return true;
 		if (a == null || b == null)
