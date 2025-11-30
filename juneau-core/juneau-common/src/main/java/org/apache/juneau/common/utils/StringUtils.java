@@ -294,11 +294,28 @@ public class StringUtils {
 	/**
 	 * Returns the character at the specified index in the string without throwing exceptions.
 	 *
+	 * <p>
+	 * This is a null-safe and bounds-safe version of {@link String#charAt(int)}.
+	 * Returns <c>0</c> (null character) if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The index is negative</li>
+	 *   <li>The index is greater than or equal to the string length</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	charAt(<js>"Hello"</js>, 0);     <jc>// 'H'</jc>
+	 * 	charAt(<js>"Hello"</js>, 4);     <jc>// 'o'</jc>
+	 * 	charAt(<js>"Hello"</js>, 5);     <jc>// 0 (out of bounds)</jc>
+	 * 	charAt(<js>"Hello"</js>, -1);    <jc>// 0 (out of bounds)</jc>
+	 * 	charAt(<jk>null</jk>, 0);        <jc>// 0 (null string)</jc>
+	 * </p>
+	 *
 	 * @param s The string.
 	 * @param i The index position.
-	 * @return
-	 * 	The character at the specified index, or <c>0</c> if the index is out-of-range or the string
-	 * 	is <jk>null</jk>.
+	 * @return The character at the specified index, or <c>0</c> if the index is out-of-range or the string is <jk>null</jk>.
+	 * @see String#charAt(int)
 	 */
 	public static char charAt(String s, int i) {
 		if (s == null || i < 0 || i >= s.length())
@@ -326,11 +343,31 @@ public class StringUtils {
 	}
 
 	/**
-	 * Compares two strings, but gracefully handles <jk>nulls</jk>.
+	 * Compares two strings lexicographically, but gracefully handles <jk>null</jk> values.
+	 *
+	 * <p>
+	 * Null handling:
+	 * <ul>
+	 *   <li>Both <jk>null</jk> → returns <c>0</c> (equal)</li>
+	 *   <li>First <jk>null</jk> → returns {@link Integer#MIN_VALUE}</li>
+	 *   <li>Second <jk>null</jk> → returns {@link Integer#MAX_VALUE}</li>
+	 *   <li>Neither <jk>null</jk> → returns the same as {@link String#compareTo(String)}</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	compare(<js>"apple"</js>, <js>"banana"</js>);   <jc>// negative (apple &lt; banana)</jc>
+	 * 	compare(<js>"banana"</js>, <js>"apple"</js>);   <jc>// positive (banana &gt; apple)</jc>
+	 * 	compare(<js>"apple"</js>, <js>"apple"</js>);    <jc>// 0 (equal)</jc>
+	 * 	compare(<jk>null</jk>, <jk>null</jk>);          <jc>// 0 (equal)</jc>
+	 * 	compare(<jk>null</jk>, <js>"apple"</js>);       <jc>// Integer.MIN_VALUE</jc>
+	 * 	compare(<js>"apple"</js>, <jk>null</jk>);       <jc>// Integer.MAX_VALUE</jc>
+	 * </p>
 	 *
 	 * @param s1 The first string.
 	 * @param s2 The second string.
-	 * @return The same as {@link String#compareTo(String)}.
+	 * @return A negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second.
+	 * @see String#compareTo(String)
 	 */
 	public static int compare(String s1, String s2) {
 		if (s1 == null && s2 == null)
@@ -343,11 +380,26 @@ public class StringUtils {
 	}
 
 	/**
-	 * Converts string into a GZipped input stream.
+	 * Compresses a UTF-8 string into a GZIP-compressed byte array.
 	 *
-	 * @param contents The contents to compress.
-	 * @return The input stream converted to GZip.
-	 * @throws Exception Exception occurred.
+	 * <p>
+	 * This method compresses the input string using GZIP compression. The string is first converted to
+	 * UTF-8 bytes, then compressed. Use {@link #decompress(byte[])} to decompress the result.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Compress a string</jc>
+	 * 	byte[] <jv>compressed</jv> = compress(<js>"Hello World"</js>);
+	 *
+	 * 	<jc>// Decompress it back</jc>
+	 * 	String <jv>decompressed</jv> = decompress(<jv>compressed</jv>);
+	 * 	<jc>// Returns: "Hello World"</jc>
+	 * </p>
+	 *
+	 * @param contents The UTF-8 string to compress.
+	 * @return The GZIP-compressed byte array.
+	 * @throws Exception If compression fails.
+	 * @see #decompress(byte[])
 	 */
 	public static byte[] compress(String contents) throws Exception {
 		var baos = new ByteArrayOutputStream(contents.length() >> 1);
@@ -360,11 +412,28 @@ public class StringUtils {
 	}
 
 	/**
-	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 * Checks if a string contains any of the specified characters.
+	 *
+	 * <p>
+	 * This is a null-safe operation that returns <jk>false</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>None of the specified characters are found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	contains(<js>"Hello World"</js>, <js>'o'</js>, <js>'x'</js>);   <jc>// true (contains 'o')</jc>
+	 * 	contains(<js>"Hello World"</js>, <js>'x'</js>, <js>'y'</js>);   <jc>// false</jc>
+	 * 	contains(<jk>null</jk>, <js>'a'</js>);                          <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param s The string to check.
 	 * @param values The characters to check for.
 	 * @return <jk>true</jk> if the string contains any of the specified characters.
+	 * @see #contains(String, CharSequence)
+	 * @see #contains(String, String...)
 	 */
 	public static boolean contains(String s, char...values) {
 		if (s == null || values == null || values.length == 0)
@@ -377,11 +446,24 @@ public class StringUtils {
 	}
 
 	/**
-	 * Same as {@link String#contains(CharSequence)} except returns <jk>null</jk> if the value is null.
+	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 *
+	 * <p>
+	 * Returns <jk>false</jk> if the string is <jk>null</jk>, otherwise behaves the same as
+	 * {@link String#contains(CharSequence)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	contains(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// true</jc>
+	 * 	contains(<js>"Hello World"</js>, <js>"Foo"</js>);     <jc>// false</jc>
+	 * 	contains(<jk>null</jk>, <js>"Hello"</js>);            <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param value The string to check.
-	 * @param substring The value to check for.
-	 * @return <jk>true</jk> if the value contains the specified substring.
+	 * @param substring The substring to check for.
+	 * @return <jk>true</jk> if the value contains the specified substring, <jk>false</jk> if the string is <jk>null</jk>.
+	 * @see #contains(String, char...)
+	 * @see #contains(String, String...)
 	 */
 	public static boolean contains(String value, CharSequence substring) {
 		return nn(value) && value.contains(substring);
@@ -400,10 +482,10 @@ public class StringUtils {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	containsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// true (contains "Hello")</jc>
-	 * 	containsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// false</jc>
-	 * 	containsAny(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// false</jc>
-	 * 	containsAny(<js>"Hello"</js>);                                          <jc>// false (no values to check)</jc>
+	 * 	contains(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// true (contains "Hello")</jc>
+	 * 	contains(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// false</jc>
+	 * 	contains(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// false</jc>
+	 * 	contains(<js>"Hello"</js>);                                          <jc>// false (no values to check)</jc>
 	 * </p>
 	 *
 	 * @param s The string to check.
@@ -424,11 +506,21 @@ public class StringUtils {
 	}
 
 	/**
-	 * Counts the number of the specified character in the specified string.
+	 * Counts the number of occurrences of the specified character in the specified string.
+	 *
+	 * <p>
+	 * Returns <c>0</c> if the string is <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	countChars(<js>"Hello World"</js>, <js>'o'</js>);   <jc>// 2</jc>
+	 * 	countChars(<js>"Hello World"</js>, <js>'x'</js>);   <jc>// 0</jc>
+	 * 	countChars(<jk>null</jk>, <js>'a'</js>);            <jc>// 0</jc>
+	 * </p>
 	 *
 	 * @param s The string to check.
-	 * @param c The character to check for.
-	 * @return The number of those characters or zero if the string was <jk>null</jk>.
+	 * @param c The character to count.
+	 * @return The number of occurrences of the character, or <c>0</c> if the string was <jk>null</jk>.
 	 */
 	public static int countChars(String s, char c) {
 		var count = 0;
@@ -443,8 +535,20 @@ public class StringUtils {
 	/**
 	 * Debug method for rendering non-ASCII character sequences.
 	 *
+	 * <p>
+	 * Converts non-printable and non-ASCII characters (outside the range <c>0x20-0x7E</c>) to hexadecimal
+	 * sequences in the format <js>"[hex]"</js>. Printable ASCII characters are left unchanged.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	decodeHex(<js>"Hello"</js>);              <jc>// "Hello"</jc>
+	 * 	decodeHex(<js>"Hello\u0000World"</js>);   <jc>// "Hello[0]World"</jc>
+	 * 	decodeHex(<js>"Hello\u00A9"</js>);        <jc>// "Hello[a9]"</jc>
+	 * 	decodeHex(<jk>null</jk>);                 <jc>// null</jc>
+	 * </p>
+	 *
 	 * @param s The string to decode.
-	 * @return A string with non-ASCII characters converted to <js>"[hex]"</js> sequences.
+	 * @return A string with non-ASCII characters converted to <js>"[hex]"</js> sequences, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
 	public static String decodeHex(String s) {
 		if (s == null)
@@ -460,22 +564,51 @@ public class StringUtils {
 	}
 
 	/**
-	 * Converts a GZipped input stream into a string.
+	 * Decompresses a GZIP-compressed byte array into a UTF-8 string.
 	 *
-	 * @param is The contents to decompress.
-	 * @return The string.
-	 * @throws Exception Exception occurred.
+	 * <p>
+	 * This method is the inverse of {@link #compress(String)}. It takes a byte array that was compressed
+	 * using GZIP compression and decompresses it into a UTF-8 encoded string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Compress a string</jc>
+	 * 	byte[] <jv>compressed</jv> = compress(<js>"Hello World"</js>);
+	 *
+	 * 	<jc>// Decompress it back</jc>
+	 * 	String <jv>decompressed</jv> = decompress(<jv>compressed</jv>);
+	 * 	<jc>// Returns: "Hello World"</jc>
+	 * </p>
+	 *
+	 * @param is The GZIP-compressed byte array to decompress.
+	 * @return The decompressed UTF-8 string.
+	 * @throws Exception If decompression fails or the input is not valid GZIP data.
+	 * @see #compress(String)
 	 */
 	public static String decompress(byte[] is) throws Exception {
 		return read(new GZIPInputStream(new ByteArrayInputStream(is)));
 	}
 
 	/**
-	 * Finds the position where the two strings differ.
+	 * Finds the position where the two strings first differ.
+	 *
+	 * <p>
+	 * This method compares strings character by character and returns the index of the first position
+	 * where they differ. If the strings are equal, returns <c>-1</c>. If one string is a prefix of the other,
+	 * returns the length of the shorter string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	diffPosition(<js>"apple"</js>, <js>"apple"</js>);      <jc>// -1 (equal)</jc>
+	 * 	diffPosition(<js>"apple"</js>, <js>"apricot"</js>);    <jc>// 2 (differs at 'p' vs 'r')</jc>
+	 * 	diffPosition(<js>"apple"</js>, <js>"app"</js>);        <jc>// 3 (shorter string ends here)</jc>
+	 * 	diffPosition(<js>"app"</js>, <js>"apple"</js>);        <jc>// 3 (shorter string ends here)</jc>
+	 * </p>
 	 *
 	 * @param s1 The first string.
 	 * @param s2 The second string.
 	 * @return The position where the two strings differ, or <c>-1</c> if they're equal.
+	 * @see #diffPositionIc(String, String)
 	 */
 	public static int diffPosition(String s1, String s2) {
 		s1 = emptyIfNull(s1);
@@ -494,11 +627,24 @@ public class StringUtils {
 	}
 
 	/**
-	 * Finds the position where the two strings differ ignoring case.
+	 * Finds the position where the two strings first differ, ignoring case.
+	 *
+	 * <p>
+	 * This method compares strings character by character (case-insensitive) and returns the index of the first position
+	 * where they differ. If the strings are equal (ignoring case), returns <c>-1</c>. If one string is a prefix of the other,
+	 * returns the length of the shorter string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	diffPositionIc(<js>"Apple"</js>, <js>"apple"</js>);      <jc>// -1 (equal ignoring case)</jc>
+	 * 	diffPositionIc(<js>"Apple"</js>, <js>"Apricot"</js>);    <jc>// 2 (differs at 'p' vs 'r')</jc>
+	 * 	diffPositionIc(<js>"APPLE"</js>, <js>"app"</js>);        <jc>// 3 (shorter string ends here)</jc>
+	 * </p>
 	 *
 	 * @param s1 The first string.
 	 * @param s2 The second string.
-	 * @return The position where the two strings differ, or <c>-1</c> if they're equal.
+	 * @return The position where the two strings differ, or <c>-1</c> if they're equal (ignoring case).
+	 * @see #diffPosition(String, String)
 	 */
 	public static int diffPositionIc(String s1, String s2) {
 		s1 = emptyIfNull(s1);
@@ -517,11 +663,24 @@ public class StringUtils {
 	}
 
 	/**
-	 * An efficient method for checking if a string ends with a character.
+	 * Checks if a string ends with the specified character.
 	 *
-	 * @param s The string to check.  Can be <jk>null</jk>.
+	 * <p>
+	 * This is a null-safe operation. Returns <jk>false</jk> if the string is <jk>null</jk> or empty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	endsWith(<js>"Hello"</js>, <js>'o'</js>);     <jc>// true</jc>
+	 * 	endsWith(<js>"Hello"</js>, <js>'H'</js>);     <jc>// false</jc>
+	 * 	endsWith(<jk>null</jk>, <js>'o'</js>);        <jc>// false</jc>
+	 * 	endsWith(<js>""</js>, <js>'o'</js>);          <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check. Can be <jk>null</jk>.
 	 * @param c The character to check for.
 	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with the specified character.
+	 * @see #endsWith(String, char...)
+	 * @see String#endsWith(String)
 	 */
 	public static boolean endsWith(String s, char c) {
 		if (nn(s)) {
@@ -533,11 +692,24 @@ public class StringUtils {
 	}
 
 	/**
-	 * Same as {@link #endsWith(String, char)} except check for multiple characters.
+	 * Checks if a string ends with any of the specified characters.
 	 *
-	 * @param s The string to check.  Can be <jk>null</jk>.
+	 * <p>
+	 * This is a null-safe operation. Returns <jk>false</jk> if the string is <jk>null</jk>, empty,
+	 * or the characters array is <jk>null</jk> or empty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	endsWith(<js>"Hello"</js>, <js>'o'</js>, <js>'x'</js>);     <jc>// true (ends with 'o')</jc>
+	 * 	endsWith(<js>"Hello"</js>, <js>'x'</js>, <js>'y'</js>);     <jc>// false</jc>
+	 * 	endsWith(<jk>null</jk>, <js>'o'</js>);                      <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check. Can be <jk>null</jk>.
 	 * @param c The characters to check for.
-	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with the specified character.
+	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with any of the specified characters.
+	 * @see #endsWith(String, char)
+	 * @see String#endsWith(String)
 	 */
 	public static boolean endsWith(String s, char...c) {
 		if (nn(s)) {
