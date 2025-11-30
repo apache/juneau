@@ -89,35 +89,19 @@ public class ReflectionUtils {
 	}
 
 	/**
-	 * Returns the {@link ClassInfo} wrapper for the class of the specified object.
+	 * Returns the {@link ConstructorInfo} wrapper for the specified constructor.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	MyClass <jv>obj</jv> = <jk>new</jk> MyClass();
-	 * 	ClassInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>obj</jv>);
+	 * 	Constructor&lt;?&gt; <jv>c</jv> = MyClass.<jk>class</jk>.getConstructor();
+	 * 	ConstructorInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>c</jv>);
 	 * </p>
 	 *
-	 * @param o The object whose class to wrap. Can be <jk>null</jk>.
-	 * @return The {@link ClassInfo} wrapper for the object's class, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @param o The constructor to wrap. Can be <jk>null</jk>.
+	 * @return The {@link ConstructorInfo} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
-	public static final ClassInfo info(Object o) {
-		return ClassInfo.of(o);
-	}
-
-	/**
-	 * Returns the {@link MethodInfo} wrapper for the specified method.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
-	 * 	MethodInfo <jv>mi</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>m</jv>);
-	 * </p>
-	 *
-	 * @param o The method to wrap. Can be <jk>null</jk>.
-	 * @return The {@link MethodInfo} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
-	 */
-	public static final MethodInfo info(Method o) {
-		return MethodInfo.of(o);
+	public static final ConstructorInfo info(Constructor<?> o) {
+		return ConstructorInfo.of(o);
 	}
 
 	/**
@@ -137,18 +121,34 @@ public class ReflectionUtils {
 	}
 
 	/**
-	 * Returns the {@link ConstructorInfo} wrapper for the specified constructor.
+	 * Returns the {@link MethodInfo} wrapper for the specified method.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Constructor&lt;?&gt; <jv>c</jv> = MyClass.<jk>class</jk>.getConstructor();
-	 * 	ConstructorInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>c</jv>);
+	 * 	Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
+	 * 	MethodInfo <jv>mi</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>m</jv>);
 	 * </p>
 	 *
-	 * @param o The constructor to wrap. Can be <jk>null</jk>.
-	 * @return The {@link ConstructorInfo} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @param o The method to wrap. Can be <jk>null</jk>.
+	 * @return The {@link MethodInfo} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
-	public static final ConstructorInfo info(Constructor<?> o) {
-		return ConstructorInfo.of(o);
+	public static final MethodInfo info(Method o) {
+		return MethodInfo.of(o);
+	}
+
+	/**
+	 * Returns the {@link ClassInfo} wrapper for the class of the specified object.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	MyClass <jv>obj</jv> = <jk>new</jk> MyClass();
+	 * 	ClassInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>obj</jv>);
+	 * </p>
+	 *
+	 * @param o The object whose class to wrap. Can be <jk>null</jk>.
+	 * @return The {@link ClassInfo} wrapper for the object's class, or <jk>null</jk> if the input is <jk>null</jk>.
+	 */
+	public static final ClassInfo info(Object o) {
+		return ClassInfo.of(o);
 	}
 }

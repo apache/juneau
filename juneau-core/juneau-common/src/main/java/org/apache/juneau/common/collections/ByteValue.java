@@ -100,74 +100,6 @@ public class ByteValue extends Value<Byte> {
 	}
 
 	/**
-	 * Increments the value by 1.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
-	 * 	<jv>counter</jv>.increment();
-	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public ByteValue increment() {
-		set((byte)(get() + 1));
-		return this;
-	}
-
-	/**
-	 * Decrements the value by 1.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
-	 * 	<jv>counter</jv>.decrement();
-	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public ByteValue decrement() {
-		set((byte)(get() - 1));
-		return this;
-	}
-
-	/**
-	 * Increments the value by 1 and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
-	 * 	<jk>byte</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
-	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return The incremented value.
-	 */
-	public Byte incrementAndGet() {
-		set((byte)(get() + 1));
-		return get();
-	}
-
-	/**
-	 * Decrements the value by 1 and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
-	 * 	<jk>byte</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
-	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return The decremented value.
-	 */
-	public Byte decrementAndGet() {
-		set((byte)(get() - 1));
-		return get();
-	}
-
-	/**
 	 * Adds the specified value to the current value.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -200,6 +132,74 @@ public class ByteValue extends Value<Byte> {
 	 */
 	public Byte addAndGet(Byte x) {
 		set((byte)(get() + (x == null ? 0 : x)));
+		return get();
+	}
+
+	/**
+	 * Decrements the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
+	 * 	<jv>counter</jv>.decrement();
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public ByteValue decrement() {
+		set((byte)(get() - 1));
+		return this;
+	}
+
+	/**
+	 * Decrements the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
+	 * 	<jk>byte</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return The decremented value.
+	 */
+	public Byte decrementAndGet() {
+		set((byte)(get() - 1));
+		return get();
+	}
+
+	/**
+	 * Increments the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
+	 * 	<jv>counter</jv>.increment();
+	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public ByteValue increment() {
+		set((byte)(get() + 1));
+		return this;
+	}
+
+	/**
+	 * Increments the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
+	 * 	<jk>byte</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
+	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return The incremented value.
+	 */
+	public Byte incrementAndGet() {
+		set((byte)(get() + 1));
 		return get();
 	}
 

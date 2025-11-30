@@ -108,13 +108,6 @@ import org.apache.juneau.common.utils.*;
  */
 public class SetBuilder<E> {
 
-	private Set<E> set;
-	private boolean unmodifiable, sparse;
-	private Comparator<E> comparator;
-
-	private Class<E> elementType;
-	private List<Converter> converters;
-
 	/**
 	 * Static creator.
 	 *
@@ -126,6 +119,13 @@ public class SetBuilder<E> {
 	public static <E> SetBuilder<E> create(Class<E> elementType) {
 		return new SetBuilder<>(assertArgNotNull("elementType", elementType));
 	}
+	private Set<E> set;
+	private boolean unmodifiable, sparse;
+
+	private Comparator<E> comparator;
+	private Class<E> elementType;
+
+	private List<Converter> converters;
 
 	/**
 	 * Constructor.
@@ -135,20 +135,6 @@ public class SetBuilder<E> {
 	 */
 	public SetBuilder(Class<E> elementType) {
 		this.elementType = assertArgNotNull("elementType", elementType);
-	}
-
-	/**
-	 * Specifies the set to append to.
-	 *
-	 * <p>
-	 * If not specified, uses a new {@link LinkedHashSet}.
-	 *
-	 * @param set The set to append to.
-	 * @return This object.
-	 */
-	public SetBuilder<E> to(Set<E> set) {
-		this.set = set;
-		return this;
 	}
 
 	/**
@@ -245,21 +231,6 @@ public class SetBuilder<E> {
 	}
 
 	/**
-	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
-	 *
-	 * @param values Converters to register. Ignored if {@code null}.
-	 * @return This object.
-	 */
-	public SetBuilder<E> converters(Converter...values) {
-		if (values.length == 0)
-			return this;
-		if (converters == null)
-			converters = list();
-		converters.addAll(l(values));
-		return this;
-	}
-
-	/**
 	 * Adds a value to this set if the specified flag is true.
 	 *
 	 * @param flag The flag.
@@ -316,6 +287,21 @@ public class SetBuilder<E> {
 	}
 
 	/**
+	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+	 *
+	 * @param values Converters to register. Ignored if {@code null}.
+	 * @return This object.
+	 */
+	public SetBuilder<E> converters(Converter...values) {
+		if (values.length == 0)
+			return this;
+		if (converters == null)
+			converters = list();
+		converters.addAll(l(values));
+		return this;
+	}
+
+	/**
 	 * Forces the existing set to be copied instead of appended to.
 	 *
 	 * @return This object.
@@ -368,6 +354,20 @@ public class SetBuilder<E> {
 	 */
 	public SetBuilder<E> sparse() {
 		this.sparse = true;
+		return this;
+	}
+
+	/**
+	 * Specifies the set to append to.
+	 *
+	 * <p>
+	 * If not specified, uses a new {@link LinkedHashSet}.
+	 *
+	 * @param set The set to append to.
+	 * @return This object.
+	 */
+	public SetBuilder<E> to(Set<E> set) {
+		this.set = set;
 		return this;
 	}
 

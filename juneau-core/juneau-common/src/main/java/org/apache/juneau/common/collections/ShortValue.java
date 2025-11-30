@@ -95,6 +95,82 @@ public class ShortValue extends Value<Short> {
 	}
 
 	/**
+	 * Adds the specified value to the current value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)10);
+	 * 	<jv>value</jv>.add((<jk>short</jk>)5);
+	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return This object.
+	 */
+	public ShortValue add(Short x) {
+		var v = get();
+		set((short)((v == null ? 0 : v) + (x == null ? 0 : x)));
+		return this;
+	}
+
+	/**
+	 * Adds the specified value to the current value and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)10);
+	 * 	<jk>short</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>short</jk>)5);  <jc>// Returns 15</jc>
+	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return The new value after addition.
+	 */
+	public Short addAndGet(Short x) {
+		var v = get();
+		var result = (short)((v == null ? 0 : v) + (x == null ? 0 : x));
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Decrements the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jv>counter</jv>.decrement();
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public ShortValue decrement() {
+		var v = get();
+		set((short)((v == null ? 0 : v) - 1));
+		return this;
+	}
+
+	/**
+	 * Decrements the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return The decremented value.
+	 */
+	public Short decrementAndGet() {
+		var v = get();
+		var result = (short)((v == null ? 0 : v) - 1);
+		set(result);
+		return result;
+	}
+
+	/**
 	 * Returns the current value and then increments it.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -131,24 +207,6 @@ public class ShortValue extends Value<Short> {
 	}
 
 	/**
-	 * Decrements the value by 1.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
-	 * 	<jv>counter</jv>.decrement();
-	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public ShortValue decrement() {
-		var v = get();
-		set((short)((v == null ? 0 : v) - 1));
-		return this;
-	}
-
-	/**
 	 * Increments the value by 1 and returns the new value.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -163,64 +221,6 @@ public class ShortValue extends Value<Short> {
 	public Short incrementAndGet() {
 		var v = get();
 		var result = (short)((v == null ? 0 : v) + 1);
-		set(result);
-		return result;
-	}
-
-	/**
-	 * Decrements the value by 1 and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
-	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
-	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return The decremented value.
-	 */
-	public Short decrementAndGet() {
-		var v = get();
-		var result = (short)((v == null ? 0 : v) - 1);
-		set(result);
-		return result;
-	}
-
-	/**
-	 * Adds the specified value to the current value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)10);
-	 * 	<jv>value</jv>.add((<jk>short</jk>)5);
-	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @param x The value to add.
-	 * @return This object.
-	 */
-	public ShortValue add(Short x) {
-		var v = get();
-		set((short)((v == null ? 0 : v) + (x == null ? 0 : x)));
-		return this;
-	}
-
-	/**
-	 * Adds the specified value to the current value and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)10);
-	 * 	<jk>short</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>short</jk>)5);  <jc>// Returns 15</jc>
-	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @param x The value to add.
-	 * @return The new value after addition.
-	 */
-	public Short addAndGet(Short x) {
-		var v = get();
-		var result = (short)((v == null ? 0 : v) + (x == null ? 0 : x));
 		set(result);
 		return result;
 	}

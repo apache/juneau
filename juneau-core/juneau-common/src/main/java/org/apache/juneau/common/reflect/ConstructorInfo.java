@@ -149,6 +149,12 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		return i;
 	}
 
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.CONSTRUCTOR_TYPE; }
+
+	@Override /* Annotatable */
+	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getShortName(); }
+
 	/**
 	 * Returns the wrapped constructor.
 	 *
@@ -205,10 +211,4 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotatable interface methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() { return AnnotatableType.CONSTRUCTOR_TYPE; }
-
-	@Override /* Annotatable */
-	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getShortName(); }
 }

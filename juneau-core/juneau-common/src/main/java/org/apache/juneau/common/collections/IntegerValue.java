@@ -100,6 +100,76 @@ public class IntegerValue extends Value<Integer> {
 	}
 
 	/**
+	 * Adds the specified value to the current value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(10);
+	 * 	<jv>value</jv>.add(5);
+	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return This object.
+	 */
+	public IntegerValue add(Integer x) {
+		set(get() + (x == null ? 0 : x));
+		return this;
+	}
+
+	/**
+	 * Adds the specified value to the current value and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(10);
+	 * 	<jk>int</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5);  <jc>// Returns 15</jc>
+	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return The new value after addition.
+	 */
+	public Integer addAndGet(Integer x) {
+		set(get() + (x == null ? 0 : x));
+		return get();
+	}
+
+	/**
+	 * Decrements the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
+	 * 	<jv>counter</jv>.decrement();
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public IntegerValue decrement() {
+		set(get() - 1);
+		return this;
+	}
+
+	/**
+	 * Decrements the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
+	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return The decremented value.
+	 */
+	public Integer decrementAndGet() {
+		set(get() - 1);
+		return get();
+	}
+
+	/**
 	 * Returns the current value and then increments it.
 	 *
 	 * <p>
@@ -139,23 +209,6 @@ public class IntegerValue extends Value<Integer> {
 	}
 
 	/**
-	 * Decrements the value by 1.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
-	 * 	<jv>counter</jv>.decrement();
-	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public IntegerValue decrement() {
-		set(get() - 1);
-		return this;
-	}
-
-	/**
 	 * Increments the value by 1 and returns the new value.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -169,59 +222,6 @@ public class IntegerValue extends Value<Integer> {
 	 */
 	public Integer incrementAndGet() {
 		set(get() + 1);
-		return get();
-	}
-
-	/**
-	 * Decrements the value by 1 and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
-	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
-	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return The decremented value.
-	 */
-	public Integer decrementAndGet() {
-		set(get() - 1);
-		return get();
-	}
-
-	/**
-	 * Adds the specified value to the current value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(10);
-	 * 	<jv>value</jv>.add(5);
-	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @param x The value to add.
-	 * @return This object.
-	 */
-	public IntegerValue add(Integer x) {
-		set(get() + (x == null ? 0 : x));
-		return this;
-	}
-
-	/**
-	 * Adds the specified value to the current value and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(10);
-	 * 	<jk>int</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5);  <jc>// Returns 15</jc>
-	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @param x The value to add.
-	 * @return The new value after addition.
-	 */
-	public Integer addAndGet(Integer x) {
-		set(get() + (x == null ? 0 : x));
 		return get();
 	}
 

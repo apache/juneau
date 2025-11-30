@@ -65,6 +65,16 @@ public class Utils {
 	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
 
 	/**
+	 * Converts an object to a boolean.
+	 *
+	 * @param val The object to convert.
+	 * @return The boolean value, or <jk>false</jk> if the value was <jk>null</jk>.
+	 */
+	public static boolean b(Object val) {
+		return opt(val).map(Object::toString).map(Boolean::valueOf).orElse(false);
+	}
+
+	/**
 	 * Casts an object to a specific type if it's an instance of that type.
 	 *
 	 * <p>
@@ -119,6 +129,119 @@ public class Utils {
 		if (c.isInstance(o))
 			return c.cast(o);
 		return null;
+	}
+
+	/**
+	 * Shortcut for calling {@link ClassUtils#className(Object)}.
+	 *
+	 * <p>
+	 * Returns the fully-qualified class name including the full package path.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular classes</jc>
+	 * 	cn(String.<jk>class</jk>);                  <jc>// "java.lang.String"</jc>
+	 * 	cn(<jk>new</jk> HashMap&lt;&gt;());                <jc>// "java.util.HashMap"</jc>
+	 *
+	 * 	<jc>// Inner classes</jc>
+	 * 	cn(Map.Entry.<jk>class</jk>);               <jc>// "java.util.Map$Entry"</jc>
+	 *
+	 * 	<jc>// Primitives</jc>
+	 * 	cn(<jk>int</jk>.<jk>class</jk>);                      <jc>// "int"</jc>
+	 * 	cn(<jk>boolean</jk>.<jk>class</jk>);                  <jc>// "boolean"</jc>
+	 *
+	 * 	<jc>// Arrays</jc>
+	 * 	cn(String[].<jk>class</jk>);                <jc>// "[Ljava.lang.String;"</jc>
+	 * 	cn(<jk>int</jk>[].<jk>class</jk>);                    <jc>// "[I"</jc>
+	 * 	cn(String[][].<jk>class</jk>);              <jc>// "[[Ljava.lang.String;"</jc>
+	 *
+	 * 	<jc>// Null</jc>
+	 * 	cn(<jk>null</jk>);                          <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param value The object to get the class name for.
+	 * @return The name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String cn(Object value) {
+		return ClassUtils.className(value);
+	}
+
+	/**
+	 * Shortcut for calling {@link ClassUtils#classNameSimple(Object)}.
+	 *
+	 * <p>
+	 * Returns only the simple class name without any package or outer class information.
+	 * For inner classes, only the innermost class name is returned.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular classes</jc>
+	 * 	scn(String.<jk>class</jk>);            <jc>// "String"</jc>
+	 * 	scn(<jk>new</jk> HashMap&lt;&gt;());          <jc>// "HashMap"</jc>
+	 *
+	 * 	<jc>// Inner classes</jc>
+	 * 	scn(Map.Entry.<jk>class</jk>);         <jc>// "Entry"</jc>
+	 *
+	 * 	<jc>// Primitives</jc>
+	 * 	scn(<jk>int</jk>.<jk>class</jk>);                <jc>// "int"</jc>
+	 * 	scn(<jk>boolean</jk>.<jk>class</jk>);            <jc>// "boolean"</jc>
+	 *
+	 * 	<jc>// Arrays</jc>
+	 * 	scn(String[].<jk>class</jk>);          <jc>// "String[]"</jc>
+	 * 	scn(<jk>int</jk>[].<jk>class</jk>);              <jc>// "int[]"</jc>
+	 * 	scn(String[][].<jk>class</jk>);        <jc>// "String[][]"</jc>
+	 *
+	 * 	<jc>// Null</jc>
+	 * 	scn(<jk>null</jk>);                    <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param value The object to get the simple class name for.
+	 * @return The simple name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String cns(Object value) {
+		return ClassUtils.classNameSimple(value);
+	}
+
+	/**
+	 * Shortcut for calling {@link ClassUtils#classNameSimpleQualified(Object)}.
+	 *
+	 * <p>
+	 * Returns the simple class name including outer class names, but without the package.
+	 * Inner class separators ($) are replaced with dots (.).
+	 * Array types are properly formatted with brackets.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular classes</jc>
+	 * 	sqcn(String.<jk>class</jk>);                     <jc>// "String"</jc>
+	 * 	sqcn(<jk>new</jk> HashMap&lt;&gt;());                   <jc>// "HashMap"</jc>
+	 *
+	 * 	<jc>// Inner classes</jc>
+	 * 	sqcn(Map.Entry.<jk>class</jk>);                  <jc>// "Map.Entry"</jc>
+	 * 	sqcn(Outer.Inner.Deep.<jk>class</jk>);           <jc>// "Outer.Inner.Deep"</jc>
+	 *
+	 * 	<jc>// Primitives</jc>
+	 * 	sqcn(<jk>int</jk>.<jk>class</jk>);                         <jc>// "int"</jc>
+	 * 	sqcn(<jk>boolean</jk>.<jk>class</jk>);                     <jc>// "boolean"</jc>
+	 *
+	 * 	<jc>// Object arrays</jc>
+	 * 	sqcn(String[].<jk>class</jk>);                   <jc>// "String[]"</jc>
+	 * 	sqcn(Map.Entry[].<jk>class</jk>);                <jc>// "Map.Entry[]"</jc>
+	 * 	sqcn(String[][].<jk>class</jk>);                 <jc>// "String[][]"</jc>
+	 *
+	 * 	<jc>// Primitive arrays</jc>
+	 * 	sqcn(<jk>int</jk>[].<jk>class</jk>);                       <jc>// "int[]"</jc>
+	 * 	sqcn(<jk>boolean</jk>[][].<jk>class</jk>);                 <jc>// "boolean[][]"</jc>
+	 *
+	 * 	<jc>// Null</jc>
+	 * 	sqcn(<jk>null</jk>);                             <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param value The object to get the simple qualified class name for.
+	 * @return The simple qualified name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String cnsq(Object value) {
+		return ClassUtils.classNameSimpleQualified(value);
 	}
 
 	/**
@@ -389,20 +512,6 @@ public class Utils {
 	}
 
 	/**
-	 * Convenience method for calling {@link StringUtils#equalsIgnoreCase(String, String)}.
-	 *
-	 * <p>
-	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
-	 *
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are equal.
-	 */
-	public static boolean eqic(String s1, String s2) {
-		return StringUtils.equalsIgnoreCase(s1, s2);
-	}
-
-	/**
 	 * Convenience method for calling {@link StringUtils#equalsIgnoreCase(Object, Object)}.
 	 *
 	 * <p>
@@ -417,33 +526,17 @@ public class Utils {
 	}
 
 	/**
-	 * Returns the first non-null value in the specified array.
+	 * Convenience method for calling {@link StringUtils#equalsIgnoreCase(String, String)}.
 	 *
 	 * <p>
-	 * This method iterates through the provided values and returns the first one that is not <jk>null</jk>.
-	 * Useful for providing default values or selecting the first available option.
+	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	firstNonNull(<jk>null</jk>, <jk>null</jk>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// "Hello"</jc>
-	 * 	firstNonNull(<js>"Hello"</js>, <js>"World"</js>);                                <jc>// "Hello"</jc>
-	 * 	firstNonNull(<jk>null</jk>, <jk>null</jk>);                                      <jc>// null</jc>
-	 * 	firstNonNull();                                                                  <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param <T> The value types.
-	 * @param t The values to check.
-	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
-	 * @see StringUtils#firstNonEmpty(String...)
-	 * @see StringUtils#firstNonBlank(String...)
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are equal.
 	 */
-	@SafeVarargs
-	public static <T> T firstNonNull(T...t) {
-		if (nn(t))
-			for (var tt : t)
-				if (nn(tt))
-					return tt;
-		return null;
+	public static boolean eqic(String s1, String s2) {
+		return StringUtils.equalsIgnoreCase(s1, s2);
 	}
 
 	/**
@@ -493,6 +586,36 @@ public class Utils {
 	 */
 	public static String f(String pattern, Object...args) {
 		return format(pattern, args);
+	}
+
+	/**
+	 * Returns the first non-null value in the specified array.
+	 *
+	 * <p>
+	 * This method iterates through the provided values and returns the first one that is not <jk>null</jk>.
+	 * Useful for providing default values or selecting the first available option.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	firstNonNull(<jk>null</jk>, <jk>null</jk>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// "Hello"</jc>
+	 * 	firstNonNull(<js>"Hello"</js>, <js>"World"</js>);                                <jc>// "Hello"</jc>
+	 * 	firstNonNull(<jk>null</jk>, <jk>null</jk>);                                      <jc>// null</jc>
+	 * 	firstNonNull();                                                                  <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param <T> The value types.
+	 * @param t The values to check.
+	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
+	 * @see StringUtils#firstNonEmpty(String...)
+	 * @see StringUtils#firstNonBlank(String...)
+	 */
+	@SafeVarargs
+	public static <T> T firstNonNull(T...t) {
+		if (nn(t))
+			for (var tt : t)
+				if (nn(tt))
+					return tt;
+		return null;
 	}
 
 	/**
@@ -573,6 +696,19 @@ public class Utils {
 	}
 
 	/**
+	 * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"
+	 * @param o The object to convert to a string.
+	 * @return An identity string.
+	 */
+	public static String identity(Object o) {
+		if (o instanceof Optional<?> opt)
+			o = opt.orElse(null);
+		if (o == null)
+			return null;
+		return cnsq(o) + "@" + System.identityHashCode(o);
+	}
+
+	/**
 	 * Checks if the specified object is an array.
 	 *
 	 * <p>
@@ -596,32 +732,33 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is empty.
+	 * Returns <jk>true</jk> if the specified number is inclusively between the two values.
 	 *
-	 * <p>
-	 * Return <jk>true</jk> if the value is any of the following:
-	 * <ul>
-	 * 	<li><jk>null</jk>
-	 * 	<li>An empty Collection
-	 * 	<li>An empty Map
-	 * 	<li>An empty array
-	 * 	<li>An empty CharSequence
-	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
-	 * </ul>
-	 *
-	 * @param o The object to test.
-	 * @return <jk>true</jk> if the specified object is empty.
+	 * @param n The number to check.
+	 * @param lower The lower bound (inclusive).
+	 * @param higher The upper bound (inclusive).
+	 * @return <jk>true</jk> if the number is between the bounds.
 	 */
-	public static boolean isEmpty(Object o) {
-		if (o == null)
-			return true;
-		if (o instanceof Collection<?> o2)
-			return o2.isEmpty();
-		if (o instanceof Map<?,?> o2)
-			return o2.isEmpty();
-		if (isArray(o))
-			return (Array.getLength(o) == 0);
-		return o.toString().isEmpty();
+	public static boolean isBetween(int n, int lower, int higher) {
+		return n >= lower && n <= higher;
+	}
+
+	/**
+	 * Checks if a string is empty (null or zero length).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isEmpty(<jk>null</jk>);       <jc>// true</jc>
+	 * 	isEmpty(<js>""</js>);         <jc>// true</jc>
+	 * 	isEmpty(<js>"   "</js>);      <jc>// false</jc>
+	 * 	isEmpty(<js>"hello"</js>);    <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is null or has zero length.
+	 */
+	public static boolean isEmpty(CharSequence str) {
+		return str == null || str.isEmpty();
 	}
 
 	/**
@@ -675,62 +812,56 @@ public class Utils {
 	}
 
 	/**
-	 * Checks if a string is empty (null or zero length).
+	 * Returns <jk>true</jk> if the specified object is empty.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	isEmpty(<jk>null</jk>);       <jc>// true</jc>
-	 * 	isEmpty(<js>""</js>);         <jc>// true</jc>
-	 * 	isEmpty(<js>"   "</js>);      <jc>// false</jc>
-	 * 	isEmpty(<js>"hello"</js>);    <jc>// false</jc>
-	 * </p>
+	 * <p>
+	 * Return <jk>true</jk> if the value is any of the following:
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li>An empty Collection
+	 * 	<li>An empty Map
+	 * 	<li>An empty array
+	 * 	<li>An empty CharSequence
+	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
+	 * </ul>
 	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is null or has zero length.
+	 * @param o The object to test.
+	 * @return <jk>true</jk> if the specified object is empty.
 	 */
-	public static boolean isEmpty(CharSequence str) {
-		return str == null || str.isEmpty();
+	public static boolean isEmpty(Object o) {
+		if (o == null)
+			return true;
+		if (o instanceof Collection<?> o2)
+			return o2.isEmpty();
+		if (o instanceof Map<?,?> o2)
+			return o2.isEmpty();
+		if (isArray(o))
+			return (Array.getLength(o) == 0);
+		return o.toString().isEmpty();
 	}
 
 	/**
-	 * Checks if the specified object is not <jk>null</jk> and not empty.
+	 * Checks if the specified string is not <jk>null</jk> and not empty.
 	 *
 	 * <p>
-	 * This method works on any of the following data types:
-	 * <ul>
-	 *   <li>String, CharSequence - checks if length > 0</li>
-	 *   <li>Collection - checks if not empty</li>
-	 *   <li>Map - checks if not empty</li>
-	 *   <li>Array - checks if length > 0</li>
-	 *   <li>All other types - converts to string and checks if not empty</li>
-	 * </ul>
+	 * This is the inverse of {@link #isEmpty(CharSequence)}.
+	 * Note: This method does not check for blank strings (whitespace-only strings).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	isNotEmpty(<js>"Hello"</js>);                    <jc>// true</jc>
-	 * 	isNotEmpty(Arrays.asList(1, 2));                <jc>// true</jc>
-	 * 	isNotEmpty(Map.of(<js>"key"</js>, <js>"value"</js>));  <jc>// true</jc>
-	 * 	isNotEmpty(<jk>null</jk>);                       <jc>// false</jc>
-	 * 	isNotEmpty(<js>""</js>);                         <jc>// false</jc>
-	 * 	isNotEmpty(Collections.emptyList());            <jc>// false</jc>
+	 * 	isNotEmpty(<js>"Hello"</js>);     <jc>// true</jc>
+	 * 	isNotEmpty(<js>"   "</js>);       <jc>// true (whitespace is not empty)</jc>
+	 * 	isNotEmpty(<jk>null</jk>);        <jc>// false</jc>
+	 * 	isNotEmpty(<js>""</js>);          <jc>// false</jc>
 	 * </p>
 	 *
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
-	 * @see #isEmpty(Object)
+	 * @param o The string to check.
+	 * @return <jk>true</jk> if string is not <jk>null</jk> and not empty.
+	 * @see #isEmpty(CharSequence)
+	 * @see StringUtils#isNotBlank(String)
 	 */
-	public static boolean isNotEmpty(Object value) {
-		if (value == null)
-			return false;
-		if (value instanceof CharSequence value2)
-			return ! value2.isEmpty();
-		if (value instanceof Collection<?> value2)
-			return ! value2.isEmpty();
-		if (value instanceof Map<?,?> value2)
-			return ! value2.isEmpty();
-		if (isArray(value))
-			return Array.getLength(value) > 0;
-		return isNotEmpty(s(value));
+	public static boolean isNotEmpty(CharSequence o) {
+		return ! isEmpty(o);
 	}
 
 	/**
@@ -776,27 +907,44 @@ public class Utils {
 	}
 
 	/**
-	 * Checks if the specified string is not <jk>null</jk> and not empty.
+	 * Checks if the specified object is not <jk>null</jk> and not empty.
 	 *
 	 * <p>
-	 * This is the inverse of {@link #isEmpty(CharSequence)}.
-	 * Note: This method does not check for blank strings (whitespace-only strings).
+	 * This method works on any of the following data types:
+	 * <ul>
+	 *   <li>String, CharSequence - checks if length > 0</li>
+	 *   <li>Collection - checks if not empty</li>
+	 *   <li>Map - checks if not empty</li>
+	 *   <li>Array - checks if length > 0</li>
+	 *   <li>All other types - converts to string and checks if not empty</li>
+	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	isNotEmpty(<js>"Hello"</js>);     <jc>// true</jc>
-	 * 	isNotEmpty(<js>"   "</js>);       <jc>// true (whitespace is not empty)</jc>
-	 * 	isNotEmpty(<jk>null</jk>);        <jc>// false</jc>
-	 * 	isNotEmpty(<js>""</js>);          <jc>// false</jc>
+	 * 	isNotEmpty(<js>"Hello"</js>);                    <jc>// true</jc>
+	 * 	isNotEmpty(Arrays.asList(1, 2));                <jc>// true</jc>
+	 * 	isNotEmpty(Map.of(<js>"key"</js>, <js>"value"</js>));  <jc>// true</jc>
+	 * 	isNotEmpty(<jk>null</jk>);                       <jc>// false</jc>
+	 * 	isNotEmpty(<js>""</js>);                         <jc>// false</jc>
+	 * 	isNotEmpty(Collections.emptyList());            <jc>// false</jc>
 	 * </p>
 	 *
-	 * @param o The string to check.
-	 * @return <jk>true</jk> if string is not <jk>null</jk> and not empty.
-	 * @see #isEmpty(CharSequence)
-	 * @see StringUtils#isNotBlank(String)
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
+	 * @see #isEmpty(Object)
 	 */
-	public static boolean isNotEmpty(CharSequence o) {
-		return ! isEmpty(o);
+	public static boolean isNotEmpty(Object value) {
+		if (value == null)
+			return false;
+		if (value instanceof CharSequence value2)
+			return ! value2.isEmpty();
+		if (value instanceof Collection<?> value2)
+			return ! value2.isEmpty();
+		if (value instanceof Map<?,?> value2)
+			return ! value2.isEmpty();
+		if (isArray(value))
+			return Array.getLength(value) > 0;
+		return isNotEmpty(s(value));
 	}
 
 	/**
@@ -867,494 +1015,16 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>null</jk> for the specified type.
+	 * Convenience method for calling {@link StringUtils#lowerCase(String)}.
 	 *
 	 * <p>
-	 * This is a convenience method that allows you to explicitly return <jk>null</jk> with a type
-	 * parameter, which can help with type inference in some contexts.
+	 * Converts the string to lowercase if not null.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	String <jv>result</jv> = n(String.<jk>class</jk>);     <jc>// null</jc>
-	 * 	List&lt;String&gt; <jv>list</jv> = n(List.<jk>class</jk>);  <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param <T> The type.
-	 * @param type The type class (unused, but helps with type inference).
-	 * @return <jk>null</jk>.
+	 * @param value The string to convert.
+	 * @return The lowercase string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	public static <T> T n(Class<T> type) {
-		return null;
-	}
-
-	/**
-	 * Null-safe not-equals check.
-	 *
-	 * <p>
-	 * This is the inverse of {@link #eq(Object, Object)}. Returns <jk>true</jk> if the objects
-	 * are not equal, handling <jk>null</jk> values gracefully.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ne(<js>"Hello"</js>, <js>"World"</js>);     <jc>// true</jc>
-	 * 	ne(<js>"Hello"</js>, <js>"Hello"</js>);     <jc>// false</jc>
-	 * 	ne(<jk>null</jk>, <jk>null</jk>);          <jc>// false</jc>
-	 * 	ne(<js>"Hello"</js>, <jk>null</jk>);       <jc>// true</jc>
-	 * </p>
-	 *
-	 * @param <T> The object type.
-	 * @param s1 Object 1.
-	 * @param s2 Object 2.
-	 * @return <jk>true</jk> if the objects are not equal.
-	 * @see #eq(Object, Object)
-	 */
-	public static <T> boolean ne(T s1, T s2) {
-		return ! eq(s1, s2);
-	}
-
-	/**
-	 * Tests two objects for inequality using a custom predicate, gracefully handling nulls.
-	 *
-	 * <p>
-	 * This is the inverse of {@link #eq(Object, Object, BiPredicate)}. The predicate is only called
-	 * if both objects are non-null and not the same reference.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Role <jv>r1</jv> = <jk>new</jk> Role(1, <js>"admin"</js>);
-	 * 	Role <jv>r2</jv> = <jk>new</jk> Role(2, <js>"user"</js>);
-	 * 	ne(<jv>r1</jv>, <jv>r2</jv>, (x,y) -&gt; x.id == y.id);  <jc>// true (different IDs)</jc>
-	 * </p>
-	 *
-	 * @param <T> Object 1 type.
-	 * @param <U> Object 2 type.
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @param test The predicate to use for equality testing (only called if both objects are non-null and different references).
-	 * @return <jk>true</jk> if the objects are not equal based on the test, or if one is <jk>null</jk> and the other is not.
-	 * @see #eq(Object, Object, BiPredicate)
-	 */
-	public static <T,U> boolean ne(T o1, U o2, BiPredicate<T,U> test) {
-		if (o1 == null)
-			return nn(o2);
-		if (o2 == null)
-			return true;
-		if (o1 == o2)
-			return false;
-		return ! test.test(o1, o2);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk>.
-	 *
-	 * <p>
-	 * Equivalent to <c><jv>o</jv> != <jk>null</jk></c>, but with a more readable method name.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.common.utils.Utils.*;
-	 *
-	 * 	<jk>if</jk> (<jsm>nn</jsm>(<jv>myObject</jv>)) {
-	 * 		<jc>// Do something with non-null object</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
-	 */
-	public static boolean nn(Object o) {
-		return isNotNull(o);
-	}
-
-	/**
-	 * Tests two strings for non-equality ignoring case, but gracefully handles nulls.
-	 *
-	 * <p>
-	 * This is the inverse of {@link #eqic(String, String)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	neic(<js>"Hello"</js>, <js>"World"</js>);     <jc>// true</jc>
-	 * 	neic(<js>"Hello"</js>, <js>"hello"</js>);     <jc>// false (equal ignoring case)</jc>
-	 * 	neic(<jk>null</jk>, <jk>null</jk>);          <jc>// false (both null)</jc>
-	 * 	neic(<js>"Hello"</js>, <jk>null</jk>);       <jc>// true</jc>
-	 * </p>
-	 *
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are not equal ignoring case.
-	 * @see #eqic(String, String)
-	 */
-	public static boolean neic(String s1, String s2) {
-		return ! eqic(s1, s2);
-	}
-
-	/**
-	 * Shortcut for calling {@link Optional#ofNullable(Object)}.
-	 *
-	 * <p>
-	 * This is a convenience method that provides a shorter name for wrapping objects in an Optional.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Optional&lt;String&gt; <jv>opt1</jv> = opt(<js>"Hello"</js>);     <jc>// Optional.of("Hello")</jc>
-	 * 	Optional&lt;String&gt; <jv>opt2</jv> = opt(<jk>null</jk>);        <jc>// Optional.empty()</jc>
-	 * </p>
-	 *
-	 * @param <T> The object type.
-	 * @param t The object to wrap in an Optional.
-	 * @return An Optional containing the specified object, or empty if <jk>null</jk>.
-	 * @see Optional#ofNullable(Object)
-	 * @see #opte()
-	 */
-	public static final <T> Optional<T> opt(T t) {
-		return Optional.ofNullable(t);
-	}
-
-	/**
-	 * Returns an empty Optional.
-	 *
-	 * <p>
-	 * This is a convenience method that provides a shorter name for creating an empty Optional.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Optional&lt;String&gt; <jv>empty</jv> = opte();  <jc>// Optional.empty()</jc>
-	 * </p>
-	 *
-	 * @param <T> The object type.
-	 * @return An empty Optional.
-	 * @see Optional#empty()
-	 * @see #opt(Object)
-	 */
-	public static final <T> Optional<T> opte() {
-		return Optional.empty();
-	}
-
-	/**
-	 * Prints all the specified lines to System.out with line numbers.
-	 *
-	 * <p>
-	 * Each line is printed with a 4-digit line number prefix (e.g., "   1:", "   2:", etc.).
-	 * This is useful for debugging or displaying formatted output.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	printLines(<jk>new</jk> String[]{<js>"First line"</js>, <js>"Second line"</js>});
-	 * 	<jc>// Output:</jc>
-	 * 	<jc>//    1:First line</jc>
-	 * 	<jc>//    2:Second line</jc>
-	 * </p>
-	 *
-	 * @param lines The lines to print.
-	 */
-	public static final void printLines(String[] lines) {
-		for (var i = 0; i < lines.length; i++)
-			System.out.println(String.format("%4s:" + lines[i], i + 1)); // NOSONAR - NOT DEBUG
-	}
-
-	/**
-	 * Shortcut for calling {@link StringUtils#readable(Object)}.
-	 *
-	 * <p>Converts an arbitrary object to a readable string format suitable for debugging and testing.
-	 *
-	 * @param o The object to convert to readable format. Can be <jk>null</jk>.
-	 * @return A readable string representation of the object, or <jk>null</jk> if the input was <jk>null</jk>.
-	 * @see StringUtils#readable(Object)
-	 */
-	public static String r(Object o) {
-		return readable(o);
-	}
-
-	/**
-	 * Shortcut for converting an object to a string.
-	 *
-	 * <p>
-	 * This is a null-safe string conversion. Returns <jk>null</jk> if the object is <jk>null</jk>,
-	 * otherwise returns the result of calling {@link Object#toString()} on the object.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	s(<js>"Hello"</js>);     <jc>// "Hello"</jc>
-	 * 	s(123);                 <jc>// "123"</jc>
-	 * 	s(<jk>null</jk>);        <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param val The object to convert.
-	 * @return The string representation of the object, or <jk>null</jk> if the object is <jk>null</jk>.
-	 * @see Object#toString()
-	 * @see #emptyIfNull(Object)
-	 */
-	public static String s(Object val) {
-		return val == null ? null : val.toString();
-	}
-
-	/**
-	 * Runs a snippet of code and encapsulates any throwable inside a {@link RuntimeException}.
-	 *
-	 * @param snippet The snippet of code to run.
-	 */
-	public static void safe(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (RuntimeException t) {
-			throw t;
-		} catch (Throwable t) {
-			throw ThrowableUtils.toRex(t);
-		}
-	}
-
-	/**
-	 * Used to wrap code that returns a value but throws an exception.
-	 * Useful in cases where you're trying to execute code in a fluent method call
-	 * or are trying to eliminate untestable catch blocks in code.
-	 *
-	 * @param <T> The return type.
-	 * @param s The supplier that may throw an exception.
-	 * @return The result of the supplier execution.
-	 */
-	public static <T> T safe(ThrowingSupplier<T> s) {
-		try {
-			return s.get();
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw rex(e);
-		}
-	}
-
-	/**
-	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
-	 *
-	 * @param <T> The supplier type.
-	 * @param supplier The supplier throwing an exception.
-	 * @return The supplied result.
-	 * @throws RuntimeException if supplier threw an exception.
-	 */
-	public static <T> T safeSupplier(ThrowableUtils.SupplierWithThrowable<T> supplier) {
-		try {
-			return supplier.get();
-		} catch (RuntimeException t) {
-			throw t;
-		} catch (Throwable t) {
-			throw toRex(t);
-		}
-	}
-
-	/**
-	 * Helper method for creating StringBuilder objects.
-	 *
-	 * @param value The string value to wrap in a StringBuilder.
-	 * @return A new StringBuilder containing the specified value.
-	 */
-	public static StringBuilder sb(String value) {
-		return new StringBuilder(value);
-	}
-
-	/**
-	 * Converts a property name to an environment variable name.
-	 *
-	 * @param name The property name to convert.
-	 * @return The environment variable name (uppercase with dots replaced by underscores).
-	 */
-	private static String envName(String name) {
-		return PROPERTY_TO_ENV.computeIfAbsent(name, x -> x.toUpperCase().replace(".", "_"));
-	}
-
-	/**
-	 * Converts a string to the specified type using registered conversion functions.
-	 *
-	 * @param <T> The target type.
-	 * @param s The string to convert.
-	 * @param def The default value (used to determine the target type).
-	 * @return The converted value, or <jk>null</jk> if the string or default is <jk>null</jk>.
-	 * @throws RuntimeException If the type is not supported for conversion.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static <T> T toType(String s, T def) {
-		if (s == null || def == null)
-			return null;
-		var c = (Class<T>)def.getClass();
-		if (c == String.class)
-			return (T)s;
-		if (c.isEnum())
-			return (T)Enum.valueOf((Class<? extends Enum>)c, s);
-		var f = (Function<String,T>)ENV_FUNCTIONS.get(c);
-		if (f == null)
-			throw rex("Invalid env type: {0}", c);
-		return f.apply(s);
-	}
-
-	/** Constructor - This class is meant to be subclasses. */
-	protected Utils() {}
-
-	/**
-	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
-	 *
-	 * @param o The object to unwrap.
-	 * @return The unwrapped object.
-	 */
-	public static Object unwrap(Object o) {
-		if (o instanceof Supplier<?> o2)
-			o = unwrap(o2.get());
-		if (o instanceof Value<?> o2)
-			o = unwrap(o2.get());
-		if (o instanceof Optional<?> o2)
-			o = unwrap(o2.orElse(null));
-		return o;
-	}
-
-	// TODO: Look for cases of getClass().getName() and getClass().getSimpleName() in the code and replace with cn() and scn().
-	// These utility methods provide cleaner, more concise syntax and null-safe handling.
-	// Search patterns:
-	//   - Replace: getClass().getName() -> cn(this) or cn(object)
-	//   - Replace: getClass().getSimpleName() -> scn(this) or scn(object)
-	//   - Replace: obj.getClass().getName() -> cn(obj)
-	//   - Replace: obj.getClass().getSimpleName() -> scn(obj)
-
-	/**
-	 * Shortcut for calling {@link ClassUtils#className(Object)}.
-	 *
-	 * <p>
-	 * Returns the fully-qualified class name including the full package path.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Regular classes</jc>
-	 * 	cn(String.<jk>class</jk>);                  <jc>// "java.lang.String"</jc>
-	 * 	cn(<jk>new</jk> HashMap&lt;&gt;());                <jc>// "java.util.HashMap"</jc>
-	 *
-	 * 	<jc>// Inner classes</jc>
-	 * 	cn(Map.Entry.<jk>class</jk>);               <jc>// "java.util.Map$Entry"</jc>
-	 *
-	 * 	<jc>// Primitives</jc>
-	 * 	cn(<jk>int</jk>.<jk>class</jk>);                      <jc>// "int"</jc>
-	 * 	cn(<jk>boolean</jk>.<jk>class</jk>);                  <jc>// "boolean"</jc>
-	 *
-	 * 	<jc>// Arrays</jc>
-	 * 	cn(String[].<jk>class</jk>);                <jc>// "[Ljava.lang.String;"</jc>
-	 * 	cn(<jk>int</jk>[].<jk>class</jk>);                    <jc>// "[I"</jc>
-	 * 	cn(String[][].<jk>class</jk>);              <jc>// "[[Ljava.lang.String;"</jc>
-	 *
-	 * 	<jc>// Null</jc>
-	 * 	cn(<jk>null</jk>);                          <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param value The object to get the class name for.
-	 * @return The name of the class or <jk>null</jk> if the value was null.
-	 */
-	public static String cn(Object value) {
-		return ClassUtils.className(value);
-	}
-
-	/**
-	 * Shortcut for calling {@link ClassUtils#classNameSimple(Object)}.
-	 *
-	 * <p>
-	 * Returns only the simple class name without any package or outer class information.
-	 * For inner classes, only the innermost class name is returned.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Regular classes</jc>
-	 * 	scn(String.<jk>class</jk>);            <jc>// "String"</jc>
-	 * 	scn(<jk>new</jk> HashMap&lt;&gt;());          <jc>// "HashMap"</jc>
-	 *
-	 * 	<jc>// Inner classes</jc>
-	 * 	scn(Map.Entry.<jk>class</jk>);         <jc>// "Entry"</jc>
-	 *
-	 * 	<jc>// Primitives</jc>
-	 * 	scn(<jk>int</jk>.<jk>class</jk>);                <jc>// "int"</jc>
-	 * 	scn(<jk>boolean</jk>.<jk>class</jk>);            <jc>// "boolean"</jc>
-	 *
-	 * 	<jc>// Arrays</jc>
-	 * 	scn(String[].<jk>class</jk>);          <jc>// "String[]"</jc>
-	 * 	scn(<jk>int</jk>[].<jk>class</jk>);              <jc>// "int[]"</jc>
-	 * 	scn(String[][].<jk>class</jk>);        <jc>// "String[][]"</jc>
-	 *
-	 * 	<jc>// Null</jc>
-	 * 	scn(<jk>null</jk>);                    <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param value The object to get the simple class name for.
-	 * @return The simple name of the class or <jk>null</jk> if the value was null.
-	 */
-	public static String cns(Object value) {
-		return ClassUtils.classNameSimple(value);
-	}
-
-	/**
-	 * Shortcut for calling {@link ClassUtils#classNameSimpleQualified(Object)}.
-	 *
-	 * <p>
-	 * Returns the simple class name including outer class names, but without the package.
-	 * Inner class separators ($) are replaced with dots (.).
-	 * Array types are properly formatted with brackets.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Regular classes</jc>
-	 * 	sqcn(String.<jk>class</jk>);                     <jc>// "String"</jc>
-	 * 	sqcn(<jk>new</jk> HashMap&lt;&gt;());                   <jc>// "HashMap"</jc>
-	 *
-	 * 	<jc>// Inner classes</jc>
-	 * 	sqcn(Map.Entry.<jk>class</jk>);                  <jc>// "Map.Entry"</jc>
-	 * 	sqcn(Outer.Inner.Deep.<jk>class</jk>);           <jc>// "Outer.Inner.Deep"</jc>
-	 *
-	 * 	<jc>// Primitives</jc>
-	 * 	sqcn(<jk>int</jk>.<jk>class</jk>);                         <jc>// "int"</jc>
-	 * 	sqcn(<jk>boolean</jk>.<jk>class</jk>);                     <jc>// "boolean"</jc>
-	 *
-	 * 	<jc>// Object arrays</jc>
-	 * 	sqcn(String[].<jk>class</jk>);                   <jc>// "String[]"</jc>
-	 * 	sqcn(Map.Entry[].<jk>class</jk>);                <jc>// "Map.Entry[]"</jc>
-	 * 	sqcn(String[][].<jk>class</jk>);                 <jc>// "String[][]"</jc>
-	 *
-	 * 	<jc>// Primitive arrays</jc>
-	 * 	sqcn(<jk>int</jk>[].<jk>class</jk>);                       <jc>// "int[]"</jc>
-	 * 	sqcn(<jk>boolean</jk>[][].<jk>class</jk>);                 <jc>// "boolean[][]"</jc>
-	 *
-	 * 	<jc>// Null</jc>
-	 * 	sqcn(<jk>null</jk>);                             <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param value The object to get the simple qualified class name for.
-	 * @return The simple qualified name of the class or <jk>null</jk> if the value was null.
-	 */
-	public static String cnsq(Object value) {
-		return ClassUtils.classNameSimpleQualified(value);
-	}
-
-	/**
-	 * Converts an object to a boolean.
-	 *
-	 * @param val The object to convert.
-	 * @return The boolean value, or <jk>false</jk> if the value was <jk>null</jk>.
-	 */
-	public static boolean b(Object val) {
-		return opt(val).map(Object::toString).map(Boolean::valueOf).orElse(false);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified number is inclusively between the two values.
-	 *
-	 * @param n The number to check.
-	 * @param lower The lower bound (inclusive).
-	 * @param higher The upper bound (inclusive).
-	 * @return <jk>true</jk> if the number is between the bounds.
-	 */
-	public static boolean isBetween(int n, int lower, int higher) {
-		return n >= lower && n <= higher;
-	}
-
-	/**
-	 * Shortcut for calling {@link StringUtils#stringSupplier(Supplier)}.
-	 *
-	 * @param s The supplier.
-	 * @return A string supplier that calls {@link #r(Object)} on the supplied value.
-	 */
-	public static Supplier<String> ss(Supplier<?> s) {
-		return stringSupplier(s);
+	public static String lc(String value) {
+		return StringUtils.lowerCase(value);
 	}
 
 	/**
@@ -1461,16 +1131,306 @@ public class Utils {
 	}
 
 	/**
-	 * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"
-	 * @param o The object to convert to a string.
-	 * @return An identity string.
+	 * Returns <jk>null</jk> for the specified type.
+	 *
+	 * <p>
+	 * This is a convenience method that allows you to explicitly return <jk>null</jk> with a type
+	 * parameter, which can help with type inference in some contexts.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	String <jv>result</jv> = n(String.<jk>class</jk>);     <jc>// null</jc>
+	 * 	List&lt;String&gt; <jv>list</jv> = n(List.<jk>class</jk>);  <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param <T> The type.
+	 * @param type The type class (unused, but helps with type inference).
+	 * @return <jk>null</jk>.
 	 */
-	public static String identity(Object o) {
-		if (o instanceof Optional<?> opt)
-			o = opt.orElse(null);
-		if (o == null)
-			return null;
-		return cnsq(o) + "@" + System.identityHashCode(o);
+	public static <T> T n(Class<T> type) {
+		return null;
+	}
+
+	/**
+	 * Null-safe not-equals check.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #eq(Object, Object)}. Returns <jk>true</jk> if the objects
+	 * are not equal, handling <jk>null</jk> values gracefully.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ne(<js>"Hello"</js>, <js>"World"</js>);     <jc>// true</jc>
+	 * 	ne(<js>"Hello"</js>, <js>"Hello"</js>);     <jc>// false</jc>
+	 * 	ne(<jk>null</jk>, <jk>null</jk>);          <jc>// false</jc>
+	 * 	ne(<js>"Hello"</js>, <jk>null</jk>);       <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param <T> The object type.
+	 * @param s1 Object 1.
+	 * @param s2 Object 2.
+	 * @return <jk>true</jk> if the objects are not equal.
+	 * @see #eq(Object, Object)
+	 */
+	public static <T> boolean ne(T s1, T s2) {
+		return ! eq(s1, s2);
+	}
+
+	/**
+	 * Tests two objects for inequality using a custom predicate, gracefully handling nulls.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #eq(Object, Object, BiPredicate)}. The predicate is only called
+	 * if both objects are non-null and not the same reference.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Role <jv>r1</jv> = <jk>new</jk> Role(1, <js>"admin"</js>);
+	 * 	Role <jv>r2</jv> = <jk>new</jk> Role(2, <js>"user"</js>);
+	 * 	ne(<jv>r1</jv>, <jv>r2</jv>, (x,y) -&gt; x.id == y.id);  <jc>// true (different IDs)</jc>
+	 * </p>
+	 *
+	 * @param <T> Object 1 type.
+	 * @param <U> Object 2 type.
+	 * @param o1 Object 1.
+	 * @param o2 Object 2.
+	 * @param test The predicate to use for equality testing (only called if both objects are non-null and different references).
+	 * @return <jk>true</jk> if the objects are not equal based on the test, or if one is <jk>null</jk> and the other is not.
+	 * @see #eq(Object, Object, BiPredicate)
+	 */
+	public static <T,U> boolean ne(T o1, U o2, BiPredicate<T,U> test) {
+		if (o1 == null)
+			return nn(o2);
+		if (o2 == null)
+			return true;
+		if (o1 == o2)
+			return false;
+		return ! test.test(o1, o2);
+	}
+
+	/**
+	 * Tests two strings for non-equality ignoring case, but gracefully handles nulls.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #eqic(String, String)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	neic(<js>"Hello"</js>, <js>"World"</js>);     <jc>// true</jc>
+	 * 	neic(<js>"Hello"</js>, <js>"hello"</js>);     <jc>// false (equal ignoring case)</jc>
+	 * 	neic(<jk>null</jk>, <jk>null</jk>);          <jc>// false (both null)</jc>
+	 * 	neic(<js>"Hello"</js>, <jk>null</jk>);       <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are not equal ignoring case.
+	 * @see #eqic(String, String)
+	 */
+	public static boolean neic(String s1, String s2) {
+		return ! eqic(s1, s2);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 *
+	 * <p>
+	 * Equivalent to <c><jv>o</jv> != <jk>null</jk></c>, but with a more readable method name.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.common.utils.Utils.*;
+	 *
+	 * 	<jk>if</jk> (<jsm>nn</jsm>(<jv>myObject</jv>)) {
+	 * 		<jc>// Do something with non-null object</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 */
+	public static boolean nn(Object o) {
+		return isNotNull(o);
+	}
+
+	/**
+	 * Shortcut for calling {@link Optional#ofNullable(Object)}.
+	 *
+	 * <p>
+	 * This is a convenience method that provides a shorter name for wrapping objects in an Optional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Optional&lt;String&gt; <jv>opt1</jv> = opt(<js>"Hello"</js>);     <jc>// Optional.of("Hello")</jc>
+	 * 	Optional&lt;String&gt; <jv>opt2</jv> = opt(<jk>null</jk>);        <jc>// Optional.empty()</jc>
+	 * </p>
+	 *
+	 * @param <T> The object type.
+	 * @param t The object to wrap in an Optional.
+	 * @return An Optional containing the specified object, or empty if <jk>null</jk>.
+	 * @see Optional#ofNullable(Object)
+	 * @see #opte()
+	 */
+	public static final <T> Optional<T> opt(T t) {
+		return Optional.ofNullable(t);
+	}
+
+	/**
+	 * Returns an empty Optional.
+	 *
+	 * <p>
+	 * This is a convenience method that provides a shorter name for creating an empty Optional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Optional&lt;String&gt; <jv>empty</jv> = opte();  <jc>// Optional.empty()</jc>
+	 * </p>
+	 *
+	 * @param <T> The object type.
+	 * @return An empty Optional.
+	 * @see Optional#empty()
+	 * @see #opt(Object)
+	 */
+	public static final <T> Optional<T> opte() {
+		return Optional.empty();
+	}
+
+	/**
+	 * Prints all the specified lines to System.out with line numbers.
+	 *
+	 * <p>
+	 * Each line is printed with a 4-digit line number prefix (e.g., "   1:", "   2:", etc.).
+	 * This is useful for debugging or displaying formatted output.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	printLines(<jk>new</jk> String[]{<js>"First line"</js>, <js>"Second line"</js>});
+	 * 	<jc>// Output:</jc>
+	 * 	<jc>//    1:First line</jc>
+	 * 	<jc>//    2:Second line</jc>
+	 * </p>
+	 *
+	 * @param lines The lines to print.
+	 */
+	public static final void printLines(String[] lines) {
+		for (var i = 0; i < lines.length; i++)
+			System.out.println(String.format("%4s:" + lines[i], i + 1)); // NOSONAR - NOT DEBUG
+	}
+
+	/**
+	 * Shortcut for calling {@link StringUtils#readable(Object)}.
+	 *
+	 * <p>Converts an arbitrary object to a readable string format suitable for debugging and testing.
+	 *
+	 * @param o The object to convert to readable format. Can be <jk>null</jk>.
+	 * @return A readable string representation of the object, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @see StringUtils#readable(Object)
+	 */
+	public static String r(Object o) {
+		return readable(o);
+	}
+
+	// TODO: Look for cases of getClass().getName() and getClass().getSimpleName() in the code and replace with cn() and scn().
+	// These utility methods provide cleaner, more concise syntax and null-safe handling.
+	// Search patterns:
+	//   - Replace: getClass().getName() -> cn(this) or cn(object)
+	//   - Replace: getClass().getSimpleName() -> scn(this) or scn(object)
+	//   - Replace: obj.getClass().getName() -> cn(obj)
+	//   - Replace: obj.getClass().getSimpleName() -> scn(obj)
+
+	/**
+	 * Shortcut for converting an object to a string.
+	 *
+	 * <p>
+	 * This is a null-safe string conversion. Returns <jk>null</jk> if the object is <jk>null</jk>,
+	 * otherwise returns the result of calling {@link Object#toString()} on the object.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	s(<js>"Hello"</js>);     <jc>// "Hello"</jc>
+	 * 	s(123);                 <jc>// "123"</jc>
+	 * 	s(<jk>null</jk>);        <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param val The object to convert.
+	 * @return The string representation of the object, or <jk>null</jk> if the object is <jk>null</jk>.
+	 * @see Object#toString()
+	 * @see #emptyIfNull(Object)
+	 */
+	public static String s(Object val) {
+		return val == null ? null : val.toString();
+	}
+
+	/**
+	 * Runs a snippet of code and encapsulates any throwable inside a {@link RuntimeException}.
+	 *
+	 * @param snippet The snippet of code to run.
+	 */
+	public static void safe(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw ThrowableUtils.toRex(t);
+		}
+	}
+
+	/**
+	 * Used to wrap code that returns a value but throws an exception.
+	 * Useful in cases where you're trying to execute code in a fluent method call
+	 * or are trying to eliminate untestable catch blocks in code.
+	 *
+	 * @param <T> The return type.
+	 * @param s The supplier that may throw an exception.
+	 * @return The result of the supplier execution.
+	 */
+	public static <T> T safe(ThrowingSupplier<T> s) {
+		try {
+			return s.get();
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw rex(e);
+		}
+	}
+
+	/**
+	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
+	 *
+	 * @param <T> The supplier type.
+	 * @param supplier The supplier throwing an exception.
+	 * @return The supplied result.
+	 * @throws RuntimeException if supplier threw an exception.
+	 */
+	public static <T> T safeSupplier(ThrowableUtils.SupplierWithThrowable<T> supplier) {
+		try {
+			return supplier.get();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw toRex(t);
+		}
+	}
+
+	/**
+	 * Helper method for creating StringBuilder objects.
+	 *
+	 * @param value The string value to wrap in a StringBuilder.
+	 * @return A new StringBuilder containing the specified value.
+	 */
+	public static StringBuilder sb(String value) {
+		return new StringBuilder(value);
+	}
+
+	/**
+	 * Shortcut for calling {@link StringUtils#stringSupplier(Supplier)}.
+	 *
+	 * @param s The supplier.
+	 * @return A string supplier that calls {@link #r(Object)} on the supplied value.
+	 */
+	public static Supplier<String> ss(Supplier<?> s) {
+		return stringSupplier(s);
 	}
 
 	/**
@@ -1487,15 +1447,55 @@ public class Utils {
 	}
 
 	/**
-	 * Convenience method for calling {@link StringUtils#lowerCase(String)}.
+	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
 	 *
-	 * <p>
-	 * Converts the string to lowercase if not null.
-	 *
-	 * @param value The string to convert.
-	 * @return The lowercase string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @param o The object to unwrap.
+	 * @return The unwrapped object.
 	 */
-	public static String lc(String value) {
-		return StringUtils.lowerCase(value);
+	public static Object unwrap(Object o) {
+		if (o instanceof Supplier<?> o2)
+			o = unwrap(o2.get());
+		if (o instanceof Value<?> o2)
+			o = unwrap(o2.get());
+		if (o instanceof Optional<?> o2)
+			o = unwrap(o2.orElse(null));
+		return o;
 	}
+
+	/**
+	 * Converts a property name to an environment variable name.
+	 *
+	 * @param name The property name to convert.
+	 * @return The environment variable name (uppercase with dots replaced by underscores).
+	 */
+	private static String envName(String name) {
+		return PROPERTY_TO_ENV.computeIfAbsent(name, x -> x.toUpperCase().replace(".", "_"));
+	}
+
+	/**
+	 * Converts a string to the specified type using registered conversion functions.
+	 *
+	 * @param <T> The target type.
+	 * @param s The string to convert.
+	 * @param def The default value (used to determine the target type).
+	 * @return The converted value, or <jk>null</jk> if the string or default is <jk>null</jk>.
+	 * @throws RuntimeException If the type is not supported for conversion.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static <T> T toType(String s, T def) {
+		if (s == null || def == null)
+			return null;
+		var c = (Class<T>)def.getClass();
+		if (c == String.class)
+			return (T)s;
+		if (c.isEnum())
+			return (T)Enum.valueOf((Class<? extends Enum>)c, s);
+		var f = (Function<String,T>)ENV_FUNCTIONS.get(c);
+		if (f == null)
+			throw rex("Invalid env type: {0}", c);
+		return f.apply(s);
+	}
+
+	/** Constructor - This class is meant to be subclasses. */
+	protected Utils() {}
 }

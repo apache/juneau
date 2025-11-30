@@ -175,98 +175,60 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	}
 
 	/**
-	 * Builder for applied annotations targeting classes.
+	 * Builder for applied annotations targeting constructors.
 	 *
 	 * <p>
-	 * Adds type-safe class targeting methods to the base builder:
+	 * Adds constructor targeting capabilities to the base builder:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link #on(Class...) on(Class...)} - Target by class, stored as strings in {@link AppliedAnnotationObject#on()}
-	 * 	<li class='jm'>{@link #on(ClassInfo...) on(ClassInfo...)} - Target by ClassInfo, stored as strings
-	 * 	<li class='jm'>{@link #onClass(Class...) onClass(Class...)} - Target by class, stored as Class objects in {@link AppliedOnClassAnnotationObject#onClass()}
-	 * 	<li class='jm'>{@link #onClass(ClassInfo...) onClass(ClassInfo...)} - Target by ClassInfo, stored as Class objects
+	 * 	<li class='jm'>{@link #on(Constructor...) on(Constructor...)} - Target by Constructor reflection object
+	 * 	<li class='jm'>{@link #on(ConstructorInfo...) on(ConstructorInfo...)} - Target by ConstructorInfo wrapper
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Target classes using type-safe references</jc>
+	 * 	<jc>// Target specific constructors</jc>
+	 * 	Constructor&lt;?&gt; <jv>ctor</jv> = MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
+	 *
 	 * 	MyAnnotation <jv>annotation</jv> = MyAnnotation
 	 * 		.<jsm>create</jsm>()
-	 * 		.on(MyClass.<jk>class</jk>, MyOtherClass.<jk>class</jk>)  <jc>// Stored as strings</jc>
-	 * 		.onClass(ThirdClass.<jk>class</jk>)  <jc>// Stored as Class object</jc>
+	 * 		.on(<jv>ctor</jv>)
 	 * 		.build();
 	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Use {@link #on(Class...)} when you want string-based matching (e.g., for configuration)
-	 * 	<li>Use {@link #onClass(Class...)} when you need direct Class object references
-	 * 	<li>Both can be used together on the same builder
-	 * </ul>
 	 */
-	public static class BuilderT extends Builder {
-
-		Class<?>[] onClass = {};
+	public static class BuilderC extends Builder {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param annotationType The annotation type of the annotation implementation class.
 		 */
-		public BuilderT(Class<? extends Annotation> annotationType) {
+		public BuilderC(Class<? extends Annotation> annotationType) {
 			super(annotationType);
 		}
 
 		/**
-		 * Appends the classes that this annotation applies to.
+		 * Appends the constructors that this annotation applies to.
 		 *
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		public BuilderT on(Class<?>...value) {
+		public BuilderC on(Constructor<?>...value) {
 			assertVarargsNotNull("value", value);
 			for (var v : value)
-				on = addAll(on, v.getName());
+				on(info(v).getFullName());
 			return this;
 		}
 
 		/**
-		 * Appends the classes that this annotation applies to.
+		 * Appends the constructors that this annotation applies to.
 		 *
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		public BuilderT on(ClassInfo...value) {
+		public BuilderC on(ConstructorInfo...value) {
 			assertVarargsNotNull("value", value);
 			for (var v : value)
-				on = addAll(on, v.inner().getName());
-			return this;
-		}
-
-		/**
-		 * Appends the classes that this annotation applies to.
-		 *
-		 * @param value The values to append.
-		 * @return This object.
-		 */
-		@SuppressWarnings("unchecked")
-		public BuilderT onClass(Class<?>...value) {
-			assertVarargsNotNull("value", value);
-			for (var v : value)
-				onClass = addAll(onClass, v);
-			return this;
-		}
-
-		/**
-		 * Appends the classes that this annotation applies to.
-		 *
-		 * @param value The values to append.
-		 * @return This object.
-		 */
-		@SuppressWarnings("unchecked")
-		public BuilderT onClass(ClassInfo...value) {
-			assertVarargsNotNull("value", value);
-			for (var v : value)
-				onClass = addAll(onClass, v.inner());
+				on(v.getFullName());
 			return this;
 		}
 	}
@@ -324,65 +286,6 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @return This object.
 		 */
 		public BuilderM on(MethodInfo...value) {
-			assertVarargsNotNull("value", value);
-			for (var v : value)
-				on(v.getFullName());
-			return this;
-		}
-	}
-
-	/**
-	 * Builder for applied annotations targeting constructors.
-	 *
-	 * <p>
-	 * Adds constructor targeting capabilities to the base builder:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link #on(Constructor...) on(Constructor...)} - Target by Constructor reflection object
-	 * 	<li class='jm'>{@link #on(ConstructorInfo...) on(ConstructorInfo...)} - Target by ConstructorInfo wrapper
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Target specific constructors</jc>
-	 * 	Constructor&lt;?&gt; <jv>ctor</jv> = MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
-	 *
-	 * 	MyAnnotation <jv>annotation</jv> = MyAnnotation
-	 * 		.<jsm>create</jsm>()
-	 * 		.on(<jv>ctor</jv>)
-	 * 		.build();
-	 * </p>
-	 */
-	public static class BuilderC extends Builder {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param annotationType The annotation type of the annotation implementation class.
-		 */
-		public BuilderC(Class<? extends Annotation> annotationType) {
-			super(annotationType);
-		}
-
-		/**
-		 * Appends the constructors that this annotation applies to.
-		 *
-		 * @param value The values to append.
-		 * @return This object.
-		 */
-		public BuilderC on(Constructor<?>...value) {
-			assertVarargsNotNull("value", value);
-			for (var v : value)
-				on(info(v).getFullName());
-			return this;
-		}
-
-		/**
-		 * Appends the constructors that this annotation applies to.
-		 *
-		 * @param value The values to append.
-		 * @return This object.
-		 */
-		public BuilderC on(ConstructorInfo...value) {
 			assertVarargsNotNull("value", value);
 			for (var v : value)
 				on(v.getFullName());
@@ -475,6 +378,103 @@ public class AppliedAnnotationObject extends AnnotationObject {
 			assertVarargsNotNull("value", value);
 			for (var v : value)
 				on(v.getFullName());
+			return this;
+		}
+	}
+
+	/**
+	 * Builder for applied annotations targeting classes.
+	 *
+	 * <p>
+	 * Adds type-safe class targeting methods to the base builder:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link #on(Class...) on(Class...)} - Target by class, stored as strings in {@link AppliedAnnotationObject#on()}
+	 * 	<li class='jm'>{@link #on(ClassInfo...) on(ClassInfo...)} - Target by ClassInfo, stored as strings
+	 * 	<li class='jm'>{@link #onClass(Class...) onClass(Class...)} - Target by class, stored as Class objects in {@link AppliedOnClassAnnotationObject#onClass()}
+	 * 	<li class='jm'>{@link #onClass(ClassInfo...) onClass(ClassInfo...)} - Target by ClassInfo, stored as Class objects
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Target classes using type-safe references</jc>
+	 * 	MyAnnotation <jv>annotation</jv> = MyAnnotation
+	 * 		.<jsm>create</jsm>()
+	 * 		.on(MyClass.<jk>class</jk>, MyOtherClass.<jk>class</jk>)  <jc>// Stored as strings</jc>
+	 * 		.onClass(ThirdClass.<jk>class</jk>)  <jc>// Stored as Class object</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Use {@link #on(Class...)} when you want string-based matching (e.g., for configuration)
+	 * 	<li>Use {@link #onClass(Class...)} when you need direct Class object references
+	 * 	<li>Both can be used together on the same builder
+	 * </ul>
+	 */
+	public static class BuilderT extends Builder {
+
+		Class<?>[] onClass = {};
+
+		/**
+		 * Constructor.
+		 *
+		 * @param annotationType The annotation type of the annotation implementation class.
+		 */
+		public BuilderT(Class<? extends Annotation> annotationType) {
+			super(annotationType);
+		}
+
+		/**
+		 * Appends the classes that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderT on(Class<?>...value) {
+			assertVarargsNotNull("value", value);
+			for (var v : value)
+				on = addAll(on, v.getName());
+			return this;
+		}
+
+		/**
+		 * Appends the classes that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		public BuilderT on(ClassInfo...value) {
+			assertVarargsNotNull("value", value);
+			for (var v : value)
+				on = addAll(on, v.inner().getName());
+			return this;
+		}
+
+		/**
+		 * Appends the classes that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked")
+		public BuilderT onClass(Class<?>...value) {
+			assertVarargsNotNull("value", value);
+			for (var v : value)
+				onClass = addAll(onClass, v);
+			return this;
+		}
+
+		/**
+		 * Appends the classes that this annotation applies to.
+		 *
+		 * @param value The values to append.
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked")
+		public BuilderT onClass(ClassInfo...value) {
+			assertVarargsNotNull("value", value);
+			for (var v : value)
+				onClass = addAll(onClass, v.inner());
 			return this;
 		}
 	}

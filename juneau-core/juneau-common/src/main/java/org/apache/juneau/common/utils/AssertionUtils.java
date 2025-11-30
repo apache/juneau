@@ -103,6 +103,21 @@ public class AssertionUtils {
 	}
 
 	/**
+	 * Throws an {@link IllegalArgumentException} if the specified string is <jk>null</jk> or blank.
+	 *
+	 * @param name The argument name.
+	 * @param o The object to check.
+	 * @return The same object.
+	 * @throws IllegalArgumentException Thrown if the specified string is <jk>null</jk> or blank.
+	 */
+	@SuppressWarnings("null")
+	public static final String assertArgNotNullOrBlank(String name, String o) throws IllegalArgumentException {
+		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		assertArg(! o.isBlank(), "Argument ''{0}'' cannot be blank.", name);
+		return o;
+	}
+
+	/**
 	 * Throws an {@link IllegalArgumentException} if any of the specified arguments are <jk>null</jk>.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -198,21 +213,6 @@ public class AssertionUtils {
 	}
 
 	/**
-	 * Throws an {@link IllegalArgumentException} if the specified string is <jk>null</jk> or blank.
-	 *
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same object.
-	 * @throws IllegalArgumentException Thrown if the specified string is <jk>null</jk> or blank.
-	 */
-	@SuppressWarnings("null")
-	public static final String assertArgNotNullOrBlank(String name, String o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
-		assertArg(! o.isBlank(), "Argument ''{0}'' cannot be blank.", name);
-		return o;
-	}
-
-	/**
 	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
 	 *
 	 * @param <E> The element type.
@@ -231,23 +231,6 @@ public class AssertionUtils {
 	}
 
 	/**
-	 * Throws an {@link IllegalArgumentException} if the specified varargs array or any of its elements are <jk>null</jk>.
-	 *
-	 * @param <T> The element type.
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same object.
-	 * @throws IllegalArgumentException Thrown if the specified varargs array or any of its elements are <jk>null</jk>.
-	 */
-	@SuppressWarnings("null")
-	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
-		for (var i = 0; i < o.length; i++)
-			assertArg(nn(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);
-		return o;
-	}
-
-	/**
 	 * Throws an {@link AssertionError} if the specified actual value is not one of the expected values.
 	 *
 	 * @param <T> The value type.
@@ -263,6 +246,23 @@ public class AssertionUtils {
 				return actual;
 		}
 		throw new AssertionError("Invalid value specified: " + actual);
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified varargs array or any of its elements are <jk>null</jk>.
+	 *
+	 * @param <T> The element type.
+	 * @param name The argument name.
+	 * @param o The object to check.
+	 * @return The same object.
+	 * @throws IllegalArgumentException Thrown if the specified varargs array or any of its elements are <jk>null</jk>.
+	 */
+	@SuppressWarnings("null")
+	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
+		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		for (var i = 0; i < o.length; i++)
+			assertArg(nn(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);
+		return o;
 	}
 
 }

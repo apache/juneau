@@ -136,20 +136,6 @@ public class ListBuilder<E> {
 	}
 
 	/**
-	 * Specifies the list to append to.
-	 *
-	 * <p>
-	 * If not specified, uses a new {@link ArrayList}.
-	 *
-	 * @param list The list to append to.
-	 * @return This object.
-	 */
-	public ListBuilder<E> to(List<E> list) {
-		this.list = list;
-		return this;
-	}
-
-	/**
 	 * Adds a single value to this list.
 	 *
 	 * @param value The value to add to this list.
@@ -192,21 +178,6 @@ public class ListBuilder<E> {
 			else
 				list.addAll(value);
 		}
-		return this;
-	}
-
-	/**
-	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
-	 *
-	 * @param values Converters to register. Ignored if {@code null}.
-	 * @return This object.
-	 */
-	public ListBuilder<E> converters(Converter...values) {
-		if (values.length == 0)
-			return this;
-		if (converters == null)
-			converters = list();
-		converters.addAll(l(values));
 		return this;
 	}
 
@@ -314,6 +285,21 @@ public class ListBuilder<E> {
 	}
 
 	/**
+	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+	 *
+	 * @param values Converters to register. Ignored if {@code null}.
+	 * @return This object.
+	 */
+	public ListBuilder<E> converters(Converter...values) {
+		if (values.length == 0)
+			return this;
+		if (converters == null)
+			converters = list();
+		converters.addAll(l(values));
+		return this;
+	}
+
+	/**
 	 * Forces the existing list to be copied instead of appended to.
 	 *
 	 * @return This object.
@@ -366,6 +352,20 @@ public class ListBuilder<E> {
 	 */
 	public ListBuilder<E> sparse() {
 		this.sparse = true;
+		return this;
+	}
+
+	/**
+	 * Specifies the list to append to.
+	 *
+	 * <p>
+	 * If not specified, uses a new {@link ArrayList}.
+	 *
+	 * @param list The list to append to.
+	 * @return This object.
+	 */
+	public ListBuilder<E> to(List<E> list) {
+		this.list = list;
 		return this;
 	}
 

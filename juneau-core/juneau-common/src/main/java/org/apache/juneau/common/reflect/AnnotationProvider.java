@@ -184,41 +184,6 @@ public class AnnotationProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Caching mode for annotation lookups.
-	 *
-	 * <p>
-	 * System property: <c>juneau.annotationProvider.caching</c>
-	 * <br>Valid values: <c>NONE</c>, <c>WEAK</c>, <c>FULL</c> (case-insensitive)
-	 * <br>Default: <c>FULL</c>
-	 *
-	 * <ul>
-	 * 	<li><c>NONE</c> - Disables all caching (always recompute)
-	 * 	<li><c>WEAK</c> - Uses WeakHashMap (allows GC of cached entries)
-	 * 	<li><c>FULL</c> - Uses ConcurrentHashMap (best performance)
-	 * </ul>
-	 */
-	private static final CacheMode CACHING_MODE = CacheMode.parse(System.getProperty("juneau.annotationProvider.caching", "FULL"));
-
-	/**
-	 * Enable logging of cache statistics on JVM shutdown.
-	 *
-	 * <p>
-	 * System property: <c>juneau.annotationProvider.caching.logOnExit</c>
-	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
-	 * <br>Default: <c>FALSE</c>
-	 */
-	private static final boolean LOG_ON_EXIT = b(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
-
-	/**
-	 * Default instance.
-	 */
-	public static final AnnotationProvider INSTANCE = new AnnotationProvider(create().logOnExit());
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Builder for creating configured {@link AnnotationProvider} instances.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -245,54 +210,39 @@ public class AnnotationProvider {
 		}
 
 		/**
-		 * Builds a new {@link AnnotationProvider} instance with the configured settings.
-		 *
-		 * @return A new immutable {@link AnnotationProvider} instance.
-		 */
-		public AnnotationProvider build() {
-			if ((runtimeAnnotations == null || runtimeAnnotations.isEmpty()) && INSTANCE != null)
-				return INSTANCE;
-			return new AnnotationProvider(this);
-		}
-
-		/**
-		 * Sets the caching mode for annotation lookups.
+		 * Adds runtime annotations to be applied to classes, methods, fields, and constructors.
 		 *
 		 * <p>
-		 * Available modes:
-		 * <ul>
-		 * 	<li><c>NONE</c> - Disables all caching (always recompute)
-		 * 	<li><c>WEAK</c> - Uses WeakHashMap (allows GC of cached entries)
-		 * 	<li><c>FULL</c> - Uses ConcurrentHashMap (best performance)
-		 * </ul>
+		 * This is a convenience method that delegates to {@link #addRuntimeAnnotations(List)}.
+		 * See that method for detailed documentation on how runtime annotations work.
 		 *
-		 * @param value The caching mode.
-		 * @return This object for method chaining.
-		 */
-		public Builder cacheMode(CacheMode value) {
-			cacheMode = value;
-			return this;
-		}
-
-		/**
-		 * Enables logging of cache statistics on JVM shutdown.
+		 * <p class='bjava'>
+		 * 	<jc>// Example: Add multiple runtime annotations using varargs</jc>
+		 * 	Bean <jv>beanAnnotation</jv> = BeanAnnotation
+		 * 		.<jsm>create</jsm>()
+		 * 		.onClass(MyClass.<jk>class</jk>)
+		 * 		.typeName(<js>"MyType"</js>)
+		 * 		.build();
 		 *
-		 * @return This object for method chaining.
-		 */
-		public Builder logOnExit() {
-			logOnExit = true;
-			return this;
-		}
-
-		/**
-		 * Conditionally enables logging of cache statistics on JVM shutdown.
+		 * 	Swap <jv>swapAnnotation</jv> = SwapAnnotation
+		 * 		.<jsm>create</jsm>()
+		 * 		.on(<js>"com.example.MyClass.getValue"</js>)
+		 * 		.value(MySwap.<jk>class</jk>)
+		 * 		.build();
 		 *
-		 * @param value Whether to log on exit.
+		 * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
+		 * 		.<jsm>create</jsm>()
+		 * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>swapAnnotation</jv>)  <jc>// Varargs</jc>
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param annotations The runtime annotation objects to add (varargs).
 		 * @return This object for method chaining.
+		 * @throws BeanRuntimeException If any annotation is invalid.
+		 * @see #addRuntimeAnnotations(List)
 		 */
-		public Builder logOnExit(boolean value) {
-			logOnExit = value;
-			return this;
+		public Builder addRuntimeAnnotations(Annotation...annotations) {
+			return addRuntimeAnnotations(l(annotations));
 		}
 
 		/**
@@ -403,41 +353,91 @@ public class AnnotationProvider {
 		}
 
 		/**
-		 * Adds runtime annotations to be applied to classes, methods, fields, and constructors.
+		 * Builds a new {@link AnnotationProvider} instance with the configured settings.
+		 *
+		 * @return A new immutable {@link AnnotationProvider} instance.
+		 */
+		public AnnotationProvider build() {
+			if ((runtimeAnnotations == null || runtimeAnnotations.isEmpty()) && INSTANCE != null)
+				return INSTANCE;
+			return new AnnotationProvider(this);
+		}
+
+		/**
+		 * Sets the caching mode for annotation lookups.
 		 *
 		 * <p>
-		 * This is a convenience method that delegates to {@link #addRuntimeAnnotations(List)}.
-		 * See that method for detailed documentation on how runtime annotations work.
+		 * Available modes:
+		 * <ul>
+		 * 	<li><c>NONE</c> - Disables all caching (always recompute)
+		 * 	<li><c>WEAK</c> - Uses WeakHashMap (allows GC of cached entries)
+		 * 	<li><c>FULL</c> - Uses ConcurrentHashMap (best performance)
+		 * </ul>
 		 *
-		 * <p class='bjava'>
-		 * 	<jc>// Example: Add multiple runtime annotations using varargs</jc>
-		 * 	Bean <jv>beanAnnotation</jv> = BeanAnnotation
-		 * 		.<jsm>create</jsm>()
-		 * 		.onClass(MyClass.<jk>class</jk>)
-		 * 		.typeName(<js>"MyType"</js>)
-		 * 		.build();
-		 *
-		 * 	Swap <jv>swapAnnotation</jv> = SwapAnnotation
-		 * 		.<jsm>create</jsm>()
-		 * 		.on(<js>"com.example.MyClass.getValue"</js>)
-		 * 		.value(MySwap.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
-		 * 		.<jsm>create</jsm>()
-		 * 		.addRuntimeAnnotations(<jv>beanAnnotation</jv>, <jv>swapAnnotation</jv>)  <jc>// Varargs</jc>
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param annotations The runtime annotation objects to add (varargs).
+		 * @param value The caching mode.
 		 * @return This object for method chaining.
-		 * @throws BeanRuntimeException If any annotation is invalid.
-		 * @see #addRuntimeAnnotations(List)
 		 */
-		public Builder addRuntimeAnnotations(Annotation...annotations) {
-			return addRuntimeAnnotations(l(annotations));
+		public Builder cacheMode(CacheMode value) {
+			cacheMode = value;
+			return this;
+		}
+
+		/**
+		 * Enables logging of cache statistics on JVM shutdown.
+		 *
+		 * @return This object for method chaining.
+		 */
+		public Builder logOnExit() {
+			logOnExit = true;
+			return this;
+		}
+
+		/**
+		 * Conditionally enables logging of cache statistics on JVM shutdown.
+		 *
+		 * @param value Whether to log on exit.
+		 * @return This object for method chaining.
+		 */
+		public Builder logOnExit(boolean value) {
+			logOnExit = value;
+			return this;
 		}
 	}
+
+	/**
+	 * Caching mode for annotation lookups.
+	 *
+	 * <p>
+	 * System property: <c>juneau.annotationProvider.caching</c>
+	 * <br>Valid values: <c>NONE</c>, <c>WEAK</c>, <c>FULL</c> (case-insensitive)
+	 * <br>Default: <c>FULL</c>
+	 *
+	 * <ul>
+	 * 	<li><c>NONE</c> - Disables all caching (always recompute)
+	 * 	<li><c>WEAK</c> - Uses WeakHashMap (allows GC of cached entries)
+	 * 	<li><c>FULL</c> - Uses ConcurrentHashMap (best performance)
+	 * </ul>
+	 */
+	private static final CacheMode CACHING_MODE = CacheMode.parse(System.getProperty("juneau.annotationProvider.caching", "FULL"));
+
+	/**
+	 * Enable logging of cache statistics on JVM shutdown.
+	 *
+	 * <p>
+	 * System property: <c>juneau.annotationProvider.caching.logOnExit</c>
+	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
+	 * <br>Default: <c>FALSE</c>
+	 */
+	private static final boolean LOG_ON_EXIT = b(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Default instance.
+	 */
+	public static final AnnotationProvider INSTANCE = new AnnotationProvider(create().logOnExit());
 
 	/**
 	 * Creates a new {@link Builder} for constructing an annotation provider.
@@ -448,9 +448,17 @@ public class AnnotationProvider {
 		return new Builder();
 	}
 
+	private static <A extends Annotation> AnnotationInfo<A> ai(Annotatable on, A value) {
+		return AnnotationInfo.of(on, value);
+	}
 	private final Cache<Object,List<AnnotationInfo<Annotation>>> runtimeCache;
 	private final Cache3<Class<?>,ElementInfo,AnnotationTraversal[],List> cache;
+
 	private final ReflectionMap<Annotation> annotationMap;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Stream-based traversal methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -474,10 +482,6 @@ public class AnnotationProvider {
 		this.annotationMap = opt(builder.runtimeAnnotations).map(x -> x.build()).orElse(null);
 		// @formatter:on
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Stream-based traversal methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Finds annotations from a class using configurable traversal options.
@@ -514,71 +518,53 @@ public class AnnotationProvider {
 	}
 
 	/**
-	 * Finds all annotations from a class using configurable traversal options, without filtering by annotation type.
+	 * Finds annotations from a constructor using configurable traversal options.
 	 *
 	 * <p>
-	 * This method provides a flexible API for traversing all class annotations.
-	 * Unlike {@link #find(Class, ClassInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 * This method provides a flexible, stream-based API for traversing constructor annotations without creating intermediate lists.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Get all annotations from class only</jc>
-	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l1</jv> =
-	 * 		find(<jv>ci</jv>, SELF);
-	 *
-	 * 	<jc>// Get all annotations from class and parents</jc>
-	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l2</jv> =
-	 * 		find(<jv>ci</jv>, SELF, PARENTS);
-	 * </p>
-	 *
-	 * @param c The class to search.
-	 * @param traversals The traversal options (what to search and order).
-	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
-	 */
-	public List<AnnotationInfo<? extends Annotation>> find(ClassInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull("c", c);
-		return cache.get(null, c, traversals);
-	}
-
-	/**
-	 * Checks if a class has the specified annotation.
-	 *
-	 * <p>
-	 * This is a convenience method equivalent to:
-	 * <p class='bjava'>
-	 * 	find(<jv>type</jv>, <jv>clazz</jv>, <jv>traversals</jv>).findFirst().isPresent()
-	 * </p>
-	 *
-	 * <h5 class='section'>Supported Traversal Types:</h5>
-	 * <ul>
-	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this class
-	 * 	<li>{@link AnnotationTraversal#PARENTS PARENTS} - Parent classes and interfaces (child-to-parent order)
-	 * 	<li>{@link AnnotationTraversal#PACKAGE PACKAGE} - The package annotations
-	 * </ul>
-	 *
-	 * <p>
-	 * <b>Default:</b> If no traversals are specified, defaults to: {@code PARENTS, PACKAGE}
-	 * <br>Note: {@code PARENTS} includes the class itself plus all parent classes and interfaces.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if class has @MyAnnotation anywhere in hierarchy</jc>
-	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
-	 *
-	 * 	<jc>// Check only on the class itself</jc>
-	 * 	<jk>boolean</jk> <jv>hasIt2</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF);
+	 * 	<jc>// Search constructor annotations</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
+	 * 		findAnnotations(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF);
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param c The class to search.
-	 * @param traversals
-	 * 	The traversal options. If not specified, defaults to {@code SELF, PARENTS, PACKAGE}.
-	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#PARENTS PARENTS}, {@link AnnotationTraversal#PACKAGE PACKAGE}
-	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
+	 * @param c The constructor to search.
+	 * @param traversals The traversal options.
+	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, ClassInfo c, AnnotationTraversal...traversals) {
-		return ! find(type, c, traversals).isEmpty();
+	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo c, AnnotationTraversal...traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("c", c);
+		return cache.get(type, c, traversals);
+	}
+
+	/**
+	 * Finds annotations from a field using configurable traversal options.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing field annotations without creating intermediate lists.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Search field annotations</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
+	 * 		findAnnotations(MyAnnotation.<jk>class</jk>, <jv>fi</jv>, SELF);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param f The field to search.
+	 * @param traversals The traversal options.
+	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, FieldInfo f, AnnotationTraversal...traversals) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("f", f);
+		return cache.get(type, f, traversals);
 	}
 
 	/**
@@ -608,74 +594,6 @@ public class AnnotationProvider {
 		assertArgNotNull("type", type);
 		assertArgNotNull("m", m);
 		return cache.get(type, m, traversals);
-	}
-
-	/**
-	 * Finds all annotations from a method using configurable traversal options, without filtering by annotation type.
-	 *
-	 * <p>
-	 * This method provides a flexible API for traversing all method annotations.
-	 * Unlike {@link #find(Class, MethodInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get all annotations from method and matching parent methods</jc>
-	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l1</jv> =
-	 * 		find(<jv>mi</jv>, SELF, MATCHING_METHODS);
-	 *
-	 * 	<jc>// Get all annotations from method, matching methods, and return type</jc>
-	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l2</jv> =
-	 * 		find(<jv>mi</jv>, SELF, MATCHING_METHODS, RETURN_TYPE);
-	 * </p>
-	 *
-	 * @param m The method to search.
-	 * @param traversals The traversal options.
-	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
-	 */
-	public List<AnnotationInfo<? extends Annotation>> find(MethodInfo m, AnnotationTraversal...traversals) {
-		assertArgNotNull("m", m);
-		return cache.get(null, m, traversals);
-	}
-
-	/**
-	 * Checks if a method has the specified annotation.
-	 *
-	 * <p>
-	 * This is a convenience method equivalent to:
-	 * <p class='bjava'>
-	 * 	find(<jv>type</jv>, <jv>method</jv>, <jv>traversals</jv>).findFirst().isPresent()
-	 * </p>
-	 *
-	 * <h5 class='section'>Supported Traversal Types:</h5>
-	 * <ul>
-	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this method
-	 * 	<li>{@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS} - Matching methods in parent classes (child-to-parent)
-	 * 	<li>{@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE} - The return type hierarchy (includes class parents and package)
-	 * 	<li>{@link AnnotationTraversal#PACKAGE PACKAGE} - The declaring class's package annotations
-	 * </ul>
-	 *
-	 * <p>
-	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if method has @MyAnnotation anywhere in hierarchy</jc>
-	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>mi</jv>);
-	 *
-	 * 	<jc>// Check only on the method itself</jc>
-	 * 	<jk>boolean</jk> <jv>hasIt2</jv> = has(MyAnnotation.<jk>class</jk>, <jv>mi</jv>, SELF);
-	 * </p>
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param m The method to search.
-	 * @param traversals
-	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}.
-	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS}, {@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE}, {@link AnnotationTraversal#PACKAGE PACKAGE}
-	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
-	 */
-	public <A extends Annotation> boolean has(Class<A> type, MethodInfo m, AnnotationTraversal...traversals) {
-		return ! find(type, m, traversals).isEmpty();
 	}
 
 	/**
@@ -724,6 +642,106 @@ public class AnnotationProvider {
 	}
 
 	/**
+	 * Finds all annotations from a class using configurable traversal options, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This method provides a flexible API for traversing all class annotations.
+	 * Unlike {@link #find(Class, ClassInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations from class only</jc>
+	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l1</jv> =
+	 * 		find(<jv>ci</jv>, SELF);
+	 *
+	 * 	<jc>// Get all annotations from class and parents</jc>
+	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l2</jv> =
+	 * 		find(<jv>ci</jv>, SELF, PARENTS);
+	 * </p>
+	 *
+	 * @param c The class to search.
+	 * @param traversals The traversal options (what to search and order).
+	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public List<AnnotationInfo<? extends Annotation>> find(ClassInfo c, AnnotationTraversal...traversals) {
+		assertArgNotNull("c", c);
+		return cache.get(null, c, traversals);
+	}
+
+	/**
+	 * Finds all annotations from a constructor using configurable traversal options, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing all constructor annotations without creating intermediate lists.
+	 * Unlike {@link #find(Class, ConstructorInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations from constructor</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
+	 * 		find(<jv>ci</jv>, SELF);
+	 * </p>
+	 *
+	 * @param c The constructor to search.
+	 * @param traversals The traversal options.
+	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public List<AnnotationInfo<? extends Annotation>> find(ConstructorInfo c, AnnotationTraversal...traversals) {
+		assertArgNotNull("c", c);
+		return cache.get(null, c, traversals);
+	}
+
+	/**
+	 * Finds all annotations from a field using configurable traversal options, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This method provides a flexible, stream-based API for traversing all field annotations without creating intermediate lists.
+	 * Unlike {@link #find(Class, FieldInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations from field</jc>
+	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
+	 * 		find(<jv>fi</jv>, SELF);
+	 * </p>
+	 *
+	 * @param f The field to search.
+	 * @param traversals The traversal options.
+	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public List<AnnotationInfo<? extends Annotation>> find(FieldInfo f, AnnotationTraversal...traversals) {
+		assertArgNotNull("f", f);
+		return cache.get(null, f, traversals);
+	}
+
+	/**
+	 * Finds all annotations from a method using configurable traversal options, without filtering by annotation type.
+	 *
+	 * <p>
+	 * This method provides a flexible API for traversing all method annotations.
+	 * Unlike {@link #find(Class, MethodInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations from method and matching parent methods</jc>
+	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l1</jv> =
+	 * 		find(<jv>mi</jv>, SELF, MATCHING_METHODS);
+	 *
+	 * 	<jc>// Get all annotations from method, matching methods, and return type</jc>
+	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l2</jv> =
+	 * 		find(<jv>mi</jv>, SELF, MATCHING_METHODS, RETURN_TYPE);
+	 * </p>
+	 *
+	 * @param m The method to search.
+	 * @param traversals The traversal options.
+	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 */
+	public List<AnnotationInfo<? extends Annotation>> find(MethodInfo m, AnnotationTraversal...traversals) {
+		assertArgNotNull("m", m);
+		return cache.get(null, m, traversals);
+	}
+
+	/**
 	 * Finds all annotations from a parameter using configurable traversal options, without filtering by annotation type.
 	 *
 	 * <p>
@@ -763,91 +781,79 @@ public class AnnotationProvider {
 	}
 
 	/**
-	 * Checks if a parameter has the specified annotation.
+	 * Checks if a class has the specified annotation.
 	 *
 	 * <p>
 	 * This is a convenience method equivalent to:
 	 * <p class='bjava'>
-	 * 	find(<jv>type</jv>, <jv>parameter</jv>, <jv>traversals</jv>).findFirst().isPresent()
+	 * 	find(<jv>type</jv>, <jv>clazz</jv>, <jv>traversals</jv>).findFirst().isPresent()
 	 * </p>
 	 *
 	 * <h5 class='section'>Supported Traversal Types:</h5>
 	 * <ul>
-	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
-	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)
-	 * 	<li>{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this class
+	 * 	<li>{@link AnnotationTraversal#PARENTS PARENTS} - Parent classes and interfaces (child-to-parent order)
+	 * 	<li>{@link AnnotationTraversal#PACKAGE PACKAGE} - The package annotations
 	 * </ul>
 	 *
 	 * <p>
-	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code PARENTS, PACKAGE}
+	 * <br>Note: {@code PARENTS} includes the class itself plus all parent classes and interfaces.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Check if parameter has @MyAnnotation anywhere in hierarchy</jc>
-	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>pi</jv>);
+	 * 	<jc>// Check if class has @MyAnnotation anywhere in hierarchy</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
 	 *
-	 * 	<jc>// Check only on the parameter itself</jc>
-	 * 	<jk>boolean</jk> <jv>hasIt2</jv> = has(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF);
+	 * 	<jc>// Check only on the class itself</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt2</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF);
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param p The parameter to search.
+	 * @param c The class to search.
 	 * @param traversals
-	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
-	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
+	 * 	The traversal options. If not specified, defaults to {@code SELF, PARENTS, PACKAGE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#PARENTS PARENTS}, {@link AnnotationTraversal#PACKAGE PACKAGE}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, ParameterInfo p, AnnotationTraversal...traversals) {
-		return ! find(type, p, traversals).isEmpty();
+	public <A extends Annotation> boolean has(Class<A> type, ClassInfo c, AnnotationTraversal...traversals) {
+		return ! find(type, c, traversals).isEmpty();
 	}
 
 	/**
-	 * Finds annotations from a field using configurable traversal options.
+	 * Checks if a constructor has the specified annotation.
 	 *
 	 * <p>
-	 * This method provides a flexible, stream-based API for traversing field annotations without creating intermediate lists.
-	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * This is a convenience method equivalent to:
 	 * <p class='bjava'>
-	 * 	<jc>// Search field annotations</jc>
-	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
-	 * 		findAnnotations(MyAnnotation.<jk>class</jk>, <jv>fi</jv>, SELF);
+	 * 	find(<jv>type</jv>, <jv>constructor</jv>, <jv>traversals</jv>).findFirst().isPresent()
+	 * </p>
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this constructor
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if constructor has @MyAnnotation</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param f The field to search.
-	 * @param traversals The traversal options.
-	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
+	 * @param c The constructor to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
+	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, FieldInfo f, AnnotationTraversal...traversals) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("f", f);
-		return cache.get(type, f, traversals);
-	}
-
-	/**
-	 * Finds all annotations from a field using configurable traversal options, without filtering by annotation type.
-	 *
-	 * <p>
-	 * This method provides a flexible, stream-based API for traversing all field annotations without creating intermediate lists.
-	 * Unlike {@link #find(Class, FieldInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get all annotations from field</jc>
-	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
-	 * 		find(<jv>fi</jv>, SELF);
-	 * </p>
-	 *
-	 * @param f The field to search.
-	 * @param traversals The traversal options.
-	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
-	 */
-	public List<AnnotationInfo<? extends Annotation>> find(FieldInfo f, AnnotationTraversal...traversals) {
-		assertArgNotNull("f", f);
-		return cache.get(null, f, traversals);
+	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo c, AnnotationTraversal...traversals) {
+		return ! find(type, c, traversals).isEmpty();
 	}
 
 	/**
@@ -886,110 +892,88 @@ public class AnnotationProvider {
 	}
 
 	/**
-	 * Finds annotations from a constructor using configurable traversal options.
-	 *
-	 * <p>
-	 * This method provides a flexible, stream-based API for traversing constructor annotations without creating intermediate lists.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Search constructor annotations</jc>
-	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
-	 * 		findAnnotations(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF);
-	 * </p>
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to search for.
-	 * @param c The constructor to search.
-	 * @param traversals The traversal options.
-	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
-	 */
-	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("c", c);
-		return cache.get(type, c, traversals);
-	}
-
-	/**
-	 * Finds all annotations from a constructor using configurable traversal options, without filtering by annotation type.
-	 *
-	 * <p>
-	 * This method provides a flexible, stream-based API for traversing all constructor annotations without creating intermediate lists.
-	 * Unlike {@link #find(Class, ConstructorInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get all annotations from constructor</jc>
-	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
-	 * 		find(<jv>ci</jv>, SELF);
-	 * </p>
-	 *
-	 * @param c The constructor to search.
-	 * @param traversals The traversal options.
-	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
-	 */
-	public List<AnnotationInfo<? extends Annotation>> find(ConstructorInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull("c", c);
-		return cache.get(null, c, traversals);
-	}
-
-	/**
-	 * Checks if a constructor has the specified annotation.
+	 * Checks if a method has the specified annotation.
 	 *
 	 * <p>
 	 * This is a convenience method equivalent to:
 	 * <p class='bjava'>
-	 * 	find(<jv>type</jv>, <jv>constructor</jv>, <jv>traversals</jv>).findFirst().isPresent()
+	 * 	find(<jv>type</jv>, <jv>method</jv>, <jv>traversals</jv>).findFirst().isPresent()
 	 * </p>
 	 *
 	 * <h5 class='section'>Supported Traversal Types:</h5>
 	 * <ul>
-	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this constructor
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this method
+	 * 	<li>{@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS} - Matching methods in parent classes (child-to-parent)
+	 * 	<li>{@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE} - The return type hierarchy (includes class parents and package)
+	 * 	<li>{@link AnnotationTraversal#PACKAGE PACKAGE} - The declaring class's package annotations
 	 * </ul>
 	 *
 	 * <p>
-	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF}
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Check if constructor has @MyAnnotation</jc>
-	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
+	 * 	<jc>// Check if method has @MyAnnotation anywhere in hierarchy</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>mi</jv>);
+	 *
+	 * 	<jc>// Check only on the method itself</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt2</jv> = has(MyAnnotation.<jk>class</jk>, <jv>mi</jv>, SELF);
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to search for.
-	 * @param c The constructor to search.
+	 * @param m The method to search.
 	 * @param traversals
-	 * 	The traversal options. If not specified, defaults to {@code SELF}.
-	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS}, {@link AnnotationTraversal#RETURN_TYPE RETURN_TYPE}, {@link AnnotationTraversal#PACKAGE PACKAGE}
 	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
 	 */
-	public <A extends Annotation> boolean has(Class<A> type, ConstructorInfo c, AnnotationTraversal...traversals) {
-		return ! find(type, c, traversals).isEmpty();
+	public <A extends Annotation> boolean has(Class<A> type, MethodInfo m, AnnotationTraversal...traversals) {
+		return ! find(type, m, traversals).isEmpty();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private List load(Object o) {
-		if (o instanceof Class o2) {
-			var ci = ClassInfo.of(o2);
-			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
-		}
-		if (o instanceof Method o2) {
-			var mi = info(o2);
-			return annotationMap == null ? liste() : annotationMap.find(mi.inner()).map(a -> ai(mi, a)).toList();
-		}
-		if (o instanceof Field o2) {
-			var fi = info(o2);
-			return annotationMap == null ? liste() : annotationMap.find(fi.inner()).map(a -> ai(fi, a)).toList();
-		}
-		if (o instanceof Constructor o2) {
-			var ci = info(o2);
-			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
-		}
-		throw unsupportedOp();
+	/**
+	 * Checks if a parameter has the specified annotation.
+	 *
+	 * <p>
+	 * This is a convenience method equivalent to:
+	 * <p class='bjava'>
+	 * 	find(<jv>type</jv>, <jv>parameter</jv>, <jv>traversals</jv>).findFirst().isPresent()
+	 * </p>
+	 *
+	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <ul>
+	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
+	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)
+	 * 	<li>{@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE} - The parameter's type hierarchy (includes class parents and package)
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if parameter has @MyAnnotation anywhere in hierarchy</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>pi</jv>);
+	 *
+	 * 	<jc>// Check only on the parameter itself</jc>
+	 * 	<jk>boolean</jk> <jv>hasIt2</jv> = has(MyAnnotation.<jk>class</jk>, <jv>pi</jv>, SELF);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to search for.
+	 * @param p The parameter to search.
+	 * @param traversals
+	 * 	The traversal options. If not specified, defaults to {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}.
+	 * 	<br>Valid values: {@link AnnotationTraversal#SELF SELF}, {@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS}, {@link AnnotationTraversal#PARAMETER_TYPE PARAMETER_TYPE}
+	 * @return <jk>true</jk> if the annotation is found, <jk>false</jk> otherwise.
+	 */
+	public <A extends Annotation> boolean has(Class<A> type, ParameterInfo p, AnnotationTraversal...traversals) {
+		return ! find(type, p, traversals).isEmpty();
 	}
 
 	/**
@@ -1081,7 +1065,23 @@ public class AnnotationProvider {
 		return l;
 	}
 
-	private static <A extends Annotation> AnnotationInfo<A> ai(Annotatable on, A value) {
-		return AnnotationInfo.of(on, value);
+	private List load(Object o) {
+		if (o instanceof Class o2) {
+			var ci = ClassInfo.of(o2);
+			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
+		}
+		if (o instanceof Method o2) {
+			var mi = info(o2);
+			return annotationMap == null ? liste() : annotationMap.find(mi.inner()).map(a -> ai(mi, a)).toList();
+		}
+		if (o instanceof Field o2) {
+			var fi = info(o2);
+			return annotationMap == null ? liste() : annotationMap.find(fi.inner()).map(a -> ai(fi, a)).toList();
+		}
+		if (o instanceof Constructor o2) {
+			var ci = info(o2);
+			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
+		}
+		throw unsupportedOp();
 	}
 }

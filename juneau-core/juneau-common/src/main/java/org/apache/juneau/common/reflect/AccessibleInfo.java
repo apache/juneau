@@ -91,21 +91,6 @@ public abstract class AccessibleInfo extends ElementInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 *
-	 * @return <jk>true</jk> if call was successful.
-	 */
-	public boolean setAccessible() {
-		try {
-			if (nn(inner))
-				inner.setAccessible(true);
-			return true;
-		} catch (@SuppressWarnings("unused") SecurityException e) {
-			return false;
-		}
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this object is accessible.
 	 *
 	 * <p>
@@ -125,6 +110,21 @@ public abstract class AccessibleInfo extends ElementInfo {
 		try {
 			return (boolean)AccessibleObject.class.getMethod("isAccessible").invoke(inner);
 		} catch (@SuppressWarnings("unused") Exception ex) {
+			return false;
+		}
+	}
+
+	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 *
+	 * @return <jk>true</jk> if call was successful.
+	 */
+	public boolean setAccessible() {
+		try {
+			if (nn(inner))
+				inner.setAccessible(true);
+			return true;
+		} catch (@SuppressWarnings("unused") SecurityException e) {
 			return false;
 		}
 	}

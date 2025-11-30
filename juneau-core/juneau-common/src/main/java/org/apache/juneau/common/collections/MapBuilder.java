@@ -111,15 +111,6 @@ import org.apache.juneau.common.utils.*;
  */
 public class MapBuilder<K,V> {
 
-	private Map<K,V> map;
-	private boolean unmodifiable = false, sparse = false;
-	private Comparator<K> comparator;
-	private java.util.function.Predicate<Object> filter;
-
-	private Class<K> keyType;
-	private Class<V> valueType;
-	private List<Converter> converters;
-
 	/**
 	 * Static creator.
 	 *
@@ -132,20 +123,15 @@ public class MapBuilder<K,V> {
 	public static <K,V> MapBuilder<K,V> create(Class<K> keyType, Class<V> valueType) {
 		return new MapBuilder<>(assertArgNotNull("keyType", keyType), assertArgNotNull("valueType", valueType));
 	}
+	private Map<K,V> map;
+	private boolean unmodifiable = false, sparse = false;
+	private Comparator<K> comparator;
 
-	/**
-	 * Specifies the map to append to.
-	 *
-	 * <p>
-	 * If not specified, uses a new {@link LinkedHashMap}.
-	 *
-	 * @param map The map to append to.
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> to(Map<K,V> map) {
-		this.map = map;
-		return this;
-	}
+	private java.util.function.Predicate<Object> filter;
+	private Class<K> keyType;
+	private Class<V> valueType;
+
+	private List<Converter> converters;
 
 	/**
 	 * Constructor.
@@ -246,41 +232,6 @@ public class MapBuilder<K,V> {
 	}
 
 	/**
-	 * Converts an object to the specified type.
-	 *
-	 * @param <T> The type to convert to.
-	 * @param c The type to convert to.
-	 * @param o The object to convert.
-	 * @return The converted object.
-	 * @throws RuntimeException If the object cannot be converted to the specified type.
-	 */
-	private <T> T toType(Class<T> c, Object o) {
-		if (c.isInstance(o))
-			return c.cast(o);
-		if (nn(converters)) {
-			var e = converters.stream().map(x -> x.convertTo(c, o)).filter(Utils::nn).findFirst().orElse(null);
-			if (nn(e))
-				return e;
-		}
-		throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(c));
-	}
-
-	/**
-	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
-	 *
-	 * @param values Converters to register. Ignored if {@code null}.
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> converters(Converter...values) {
-		if (values.length == 0)
-			return this;
-		if (converters == null)
-			converters = list();
-		converters.addAll(l(values));
-		return this;
-	}
-
-	/**
 	 * Builds the map.
 	 *
 	 * @return A map conforming to the settings on this builder.
@@ -314,6 +265,21 @@ public class MapBuilder<K,V> {
 	}
 
 	/**
+	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+	 *
+	 * @param values Converters to register. Ignored if {@code null}.
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> converters(Converter...values) {
+		if (values.length == 0)
+			return this;
+		if (converters == null)
+			converters = list();
+		converters.addAll(l(values));
+		return this;
+	}
+
+	/**
 	 * Forces the existing set to be copied instead of appended to.
 	 *
 	 * @return This object.
@@ -321,33 +287,6 @@ public class MapBuilder<K,V> {
 	public MapBuilder<K,V> copy() {
 		if (nn(map))
 			map = new LinkedHashMap<>(map);
-		return this;
-	}
-
-	/**
-	 * Applies a filter predicate to values added via {@link #add(Object, Object)}.
-	 *
-	 * <p>
-	 * Values where the predicate returns {@code true} will be kept; values where it returns {@code false} will not be added.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.common.utils.CollectionUtils.*;
-	 *
-	 * 	<jc>// Keep only non-null, non-empty string values</jc>
-	 * 	Map&lt;String,String&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
-	 * 		.filtered(<jv>x</jv> -&gt; <jv>x</jv> != <jk>null</jk> &amp;&amp; !<jv>x</jv>.equals(<js>""</js>))
-	 * 		.add(<js>"a"</js>, <js>"foo"</js>)
-	 * 		.add(<js>"b"</js>, <jk>null</jk>)     <jc>// Not added</jc>
-	 * 		.add(<js>"c"</js>, <js>""</js>)       <jc>// Not added</jc>
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param filter The filter predicate. Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> filtered(java.util.function.Predicate<Object> filter) {
-		this.filter = assertArgNotNull("filter", filter);
 		return this;
 	}
 
@@ -394,6 +333,33 @@ public class MapBuilder<K,V> {
 	}
 
 	/**
+	 * Applies a filter predicate to values added via {@link #add(Object, Object)}.
+	 *
+	 * <p>
+	 * Values where the predicate returns {@code true} will be kept; values where it returns {@code false} will not be added.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.common.utils.CollectionUtils.*;
+	 *
+	 * 	<jc>// Keep only non-null, non-empty string values</jc>
+	 * 	Map&lt;String,String&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+	 * 		.filtered(<jv>x</jv> -&gt; <jv>x</jv> != <jk>null</jk> &amp;&amp; !<jv>x</jv>.equals(<js>""</js>))
+	 * 		.add(<js>"a"</js>, <js>"foo"</js>)
+	 * 		.add(<js>"b"</js>, <jk>null</jk>)     <jc>// Not added</jc>
+	 * 		.add(<js>"c"</js>, <js>""</js>)       <jc>// Not added</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param filter The filter predicate. Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> filtered(java.util.function.Predicate<Object> filter) {
+		this.filter = assertArgNotNull("filter", filter);
+		return this;
+	}
+
+	/**
 	 * Converts the set into a {@link SortedMap}.
 	 *
 	 * @return This object.
@@ -428,6 +394,20 @@ public class MapBuilder<K,V> {
 	}
 
 	/**
+	 * Specifies the map to append to.
+	 *
+	 * <p>
+	 * If not specified, uses a new {@link LinkedHashMap}.
+	 *
+	 * @param map The map to append to.
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> to(Map<K,V> map) {
+		this.map = map;
+		return this;
+	}
+
+	/**
 	 * When specified, {@link #build()} will return an unmodifiable map.
 	 *
 	 * @return This object.
@@ -435,5 +415,25 @@ public class MapBuilder<K,V> {
 	public MapBuilder<K,V> unmodifiable() {
 		this.unmodifiable = true;
 		return this;
+	}
+
+	/**
+	 * Converts an object to the specified type.
+	 *
+	 * @param <T> The type to convert to.
+	 * @param c The type to convert to.
+	 * @param o The object to convert.
+	 * @return The converted object.
+	 * @throws RuntimeException If the object cannot be converted to the specified type.
+	 */
+	private <T> T toType(Class<T> c, Object o) {
+		if (c.isInstance(o))
+			return c.cast(o);
+		if (nn(converters)) {
+			var e = converters.stream().map(x -> x.convertTo(c, o)).filter(Utils::nn).findFirst().orElse(null);
+			if (nn(e))
+				return e;
+		}
+		throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(c));
 	}
 }

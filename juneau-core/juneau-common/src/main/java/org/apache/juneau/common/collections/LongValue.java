@@ -95,6 +95,82 @@ public class LongValue extends Value<Long> {
 	}
 
 	/**
+	 * Adds the specified value to the current value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	LongValue <jv>value</jv> = LongValue.<jsm>of</jsm>(10L);
+	 * 	<jv>value</jv>.add(5L);
+	 * 	<jsm>assertEquals</jsm>(15L, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return This object.
+	 */
+	public LongValue add(Long x) {
+		var v = get();
+		set((v == null ? 0L : v) + (x == null ? 0L : x));
+		return this;
+	}
+
+	/**
+	 * Adds the specified value to the current value and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	LongValue <jv>value</jv> = LongValue.<jsm>of</jsm>(10L);
+	 * 	<jk>long</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5L);  <jc>// Returns 15L</jc>
+	 * 	<jsm>assertEquals</jsm>(15L, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return The new value after addition.
+	 */
+	public Long addAndGet(Long x) {
+		var v = get();
+		var result = (v == null ? 0L : v) + (x == null ? 0L : x);
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Decrements the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	LongValue <jv>counter</jv> = LongValue.<jsm>of</jsm>(5L);
+	 * 	<jv>counter</jv>.decrement();
+	 * 	<jsm>assertEquals</jsm>(4L, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public LongValue decrement() {
+		var v = get();
+		set((v == null ? 0L : v) - 1L);
+		return this;
+	}
+
+	/**
+	 * Decrements the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	LongValue <jv>counter</jv> = LongValue.<jsm>of</jsm>(5L);
+	 * 	<jk>long</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4L</jc>
+	 * 	<jsm>assertEquals</jsm>(4L, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return The decremented value.
+	 */
+	public Long decrementAndGet() {
+		var v = get();
+		var result = (v == null ? 0L : v) - 1L;
+		set(result);
+		return result;
+	}
+
+	/**
 	 * Returns the current value and then increments it.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -131,24 +207,6 @@ public class LongValue extends Value<Long> {
 	}
 
 	/**
-	 * Decrements the value by 1.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	LongValue <jv>counter</jv> = LongValue.<jsm>of</jsm>(5L);
-	 * 	<jv>counter</jv>.decrement();
-	 * 	<jsm>assertEquals</jsm>(4L, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public LongValue decrement() {
-		var v = get();
-		set((v == null ? 0L : v) - 1L);
-		return this;
-	}
-
-	/**
 	 * Increments the value by 1 and returns the new value.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -163,64 +221,6 @@ public class LongValue extends Value<Long> {
 	public Long incrementAndGet() {
 		var v = get();
 		var result = (v == null ? 0L : v) + 1L;
-		set(result);
-		return result;
-	}
-
-	/**
-	 * Decrements the value by 1 and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	LongValue <jv>counter</jv> = LongValue.<jsm>of</jsm>(5L);
-	 * 	<jk>long</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4L</jc>
-	 * 	<jsm>assertEquals</jsm>(4L, <jv>counter</jv>.get());
-	 * </p>
-	 *
-	 * @return The decremented value.
-	 */
-	public Long decrementAndGet() {
-		var v = get();
-		var result = (v == null ? 0L : v) - 1L;
-		set(result);
-		return result;
-	}
-
-	/**
-	 * Adds the specified value to the current value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	LongValue <jv>value</jv> = LongValue.<jsm>of</jsm>(10L);
-	 * 	<jv>value</jv>.add(5L);
-	 * 	<jsm>assertEquals</jsm>(15L, <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @param x The value to add.
-	 * @return This object.
-	 */
-	public LongValue add(Long x) {
-		var v = get();
-		set((v == null ? 0L : v) + (x == null ? 0L : x));
-		return this;
-	}
-
-	/**
-	 * Adds the specified value to the current value and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	LongValue <jv>value</jv> = LongValue.<jsm>of</jsm>(10L);
-	 * 	<jk>long</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5L);  <jc>// Returns 15L</jc>
-	 * 	<jsm>assertEquals</jsm>(15L, <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @param x The value to add.
-	 * @return The new value after addition.
-	 */
-	public Long addAndGet(Long x) {
-		var v = get();
-		var result = (v == null ? 0L : v) + (x == null ? 0L : x);
 		set(result);
 		return result;
 	}

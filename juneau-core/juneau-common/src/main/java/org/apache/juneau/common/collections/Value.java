@@ -177,6 +177,72 @@ public class Value<T> {
 		set(t);
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object obj) {
+		return obj instanceof Value<?> obj2 && eq(this, obj2, (x, y) -> eq(x.t, y.t));
+	}
+
+	/**
+	 * If a value is present, and the value matches the given predicate, returns a {@link Value} describing the
+	 * value, otherwise returns an empty {@link Value}.
+	 *
+	 * <p>
+	 * This method is analogous to {@link java.util.Optional#filter(Predicate)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Value&lt;String&gt; <jv>filtered</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 3);
+	 * 	<jsm>assertTrue</jsm>(<jv>filtered</jv>.isPresent());
+	 *
+	 * 	Value&lt;String&gt; <jv>filtered2</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 10);
+	 * 	<jsm>assertFalse</jsm>(<jv>filtered2</jv>.isPresent());
+	 * </p>
+	 *
+	 * @param predicate The predicate to apply to the value, if present. Must not be <jk>null</jk>.
+	 * @return A {@link Value} describing the value if it is present and matches the predicate, otherwise an empty {@link Value}.
+	 */
+	public Value<T> filter(Predicate<? super T> predicate) {
+		assertArgNotNull("predicate", predicate);
+		if (t == null)
+			return Value.empty();
+		return predicate.test(t) ? this : Value.empty();
+	}
+
+	/**
+	 * If a value is present, returns the result of applying the given {@link Value}-bearing mapping function to
+	 * the value, otherwise returns an empty {@link Value}.
+	 *
+	 * <p>
+	 * This method is similar to {@link #map(Function)}, but the mapping function returns a {@link Value} rather
+	 * than a simple value. This is analogous to {@link java.util.Optional#flatMap(Function)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Value&lt;Integer&gt; <jv>length</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Value.<jsm>of</jsm>(<jv>s</jv>.length()));
+	 * 	<jsm>assertEquals</jsm>(5, <jv>length</jv>.get());
+	 *
+	 * 	<jc>// Returns empty if mapper returns empty</jc>
+	 * 	Value&lt;String&gt; <jv>empty</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Value.<jsm>empty</jsm>());
+	 * 	<jsm>assertFalse</jsm>(<jv>empty</jv>.isPresent());
+	 * </p>
+	 *
+	 * @param <T2> The type of value in the {@link Value} returned by the mapping function.
+	 * @param mapper The mapping function to apply to the value, if present. Must not be <jk>null</jk>.
+	 * @return The result of applying the {@link Value}-bearing mapping function to the value if present,
+	 *         otherwise an empty {@link Value}.
+	 */
+	public <T2> Value<T2> flatMap(Function<? super T,? extends Value<? extends T2>> mapper) {
+		assertArgNotNull("mapper", mapper);
+		if (t == null)
+			return Value.empty();
+		var result = mapper.apply(t);
+		@SuppressWarnings("unchecked")
+		var cast = (Value<T2>)result;
+		return cast;
+	}
+
 	/**
 	 * Returns the value.
 	 *
@@ -184,6 +250,25 @@ public class Value<T> {
 	 */
 	public T get() {
 		return t;
+	}
+
+	/**
+	 * Returns the current value and then sets it to the specified value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"old"</js>);
+	 * 	String <jv>oldValue</jv> = <jv>value</jv>.getAndSet(<js>"new"</js>);  <jc>// Returns "old"</jc>
+	 * 	String <jv>newValue</jv> = <jv>value</jv>.get();                   <jc>// Returns "new"</jc>
+	 * </p>
+	 *
+	 * @param t The new value.
+	 * @return The value before it was set.
+	 */
+	public T getAndSet(T t) {
+		var t2 = this.t;
+		set(t);
+		return t2;
 	}
 
 	/**
@@ -207,23 +292,9 @@ public class Value<T> {
 		return t2;
 	}
 
-	/**
-	 * Returns the current value and then sets it to the specified value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"old"</js>);
-	 * 	String <jv>oldValue</jv> = <jv>value</jv>.getAndSet(<js>"new"</js>);  <jc>// Returns "old"</jc>
-	 * 	String <jv>newValue</jv> = <jv>value</jv>.get();                   <jc>// Returns "new"</jc>
-	 * </p>
-	 *
-	 * @param t The new value.
-	 * @return The value before it was set.
-	 */
-	public T getAndSet(T t) {
-		var t2 = this.t;
-		set(t);
-		return t2;
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return t == null ? 0 : t.hashCode();
 	}
 
 	/**
@@ -244,20 +315,6 @@ public class Value<T> {
 		if (nn(t))
 			consumer.accept(t);
 	}
-
-	/**
-	 * Returns <jk>true</jk> if the value is empty.
-	 *
-	 * @return <jk>true</jk> if the value is empty.
-	 */
-	public boolean isEmpty() { return t == null; }
-
-	/**
-	 * Returns <jk>true</jk> if the value is set.
-	 *
-	 * @return <jk>true</jk> if the value is set.
-	 */
-	public boolean isPresent() { return nn(get()); }
 
 	/**
 	 * Checks if the current value equals the specified value using {@link org.apache.juneau.common.utils.Utils#eq(Object, Object)}.
@@ -289,6 +346,20 @@ public class Value<T> {
 	public boolean is(T other) {
 		return eq(t, other);
 	}
+
+	/**
+	 * Returns <jk>true</jk> if the value is empty.
+	 *
+	 * @return <jk>true</jk> if the value is empty.
+	 */
+	public boolean isEmpty() { return t == null; }
+
+	/**
+	 * Returns <jk>true</jk> if the value is set.
+	 *
+	 * @return <jk>true</jk> if the value is set.
+	 */
+	public boolean isPresent() { return nn(get()); }
 
 	/**
 	 * Registers a listener that will be called whenever the value is changed via {@link #set(Object)}.
@@ -409,6 +480,27 @@ public class Value<T> {
 	}
 
 	/**
+	 * Sets the value only if the specified condition is <jk>true</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"old"</js>);
+	 * 	<jv>value</jv>.setIf(<jk>true</jk>, <js>"new"</js>);   <jc>// Sets to "new"</jc>
+	 * 	<jv>value</jv>.setIf(<jk>false</jk>, <js>"newer"</js>);  <jc>// Does nothing</jc>
+	 * 	<jsm>assertEquals</jsm>(<js>"new"</js>, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param condition The condition to check.
+	 * @param t The value to set if condition is <jk>true</jk>.
+	 * @return This object.
+	 */
+	public Value<T> setIf(boolean condition, T t) {
+		if (condition)
+			set(t);
+		return this;
+	}
+
+	/**
 	 * Sets the value only if it is currently empty (<jk>null</jk>).
 	 *
 	 * <p>
@@ -431,25 +523,9 @@ public class Value<T> {
 		return this;
 	}
 
-	/**
-	 * Sets the value only if the specified condition is <jk>true</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"old"</js>);
-	 * 	<jv>value</jv>.setIf(<jk>true</jk>, <js>"new"</js>);   <jc>// Sets to "new"</jc>
-	 * 	<jv>value</jv>.setIf(<jk>false</jk>, <js>"newer"</js>);  <jc>// Does nothing</jc>
-	 * 	<jsm>assertEquals</jsm>(<js>"new"</js>, <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @param condition The condition to check.
-	 * @param t The value to set if condition is <jk>true</jk>.
-	 * @return This object.
-	 */
-	public Value<T> setIf(boolean condition, T t) {
-		if (condition)
-			set(t);
-		return this;
+	@Override /* Overridden from Object */
+	public String toString() {
+		return "Value(" + t + ")";
 	}
 
 	/**
@@ -477,81 +553,5 @@ public class Value<T> {
 		if (nn(t))
 			set(updater.apply(t));
 		return this;
-	}
-
-	/**
-	 * If a value is present, and the value matches the given predicate, returns a {@link Value} describing the
-	 * value, otherwise returns an empty {@link Value}.
-	 *
-	 * <p>
-	 * This method is analogous to {@link java.util.Optional#filter(Predicate)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
-	 * 	Value&lt;String&gt; <jv>filtered</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 3);
-	 * 	<jsm>assertTrue</jsm>(<jv>filtered</jv>.isPresent());
-	 *
-	 * 	Value&lt;String&gt; <jv>filtered2</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 10);
-	 * 	<jsm>assertFalse</jsm>(<jv>filtered2</jv>.isPresent());
-	 * </p>
-	 *
-	 * @param predicate The predicate to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return A {@link Value} describing the value if it is present and matches the predicate, otherwise an empty {@link Value}.
-	 */
-	public Value<T> filter(Predicate<? super T> predicate) {
-		assertArgNotNull("predicate", predicate);
-		if (t == null)
-			return Value.empty();
-		return predicate.test(t) ? this : Value.empty();
-	}
-
-	/**
-	 * If a value is present, returns the result of applying the given {@link Value}-bearing mapping function to
-	 * the value, otherwise returns an empty {@link Value}.
-	 *
-	 * <p>
-	 * This method is similar to {@link #map(Function)}, but the mapping function returns a {@link Value} rather
-	 * than a simple value. This is analogous to {@link java.util.Optional#flatMap(Function)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
-	 * 	Value&lt;Integer&gt; <jv>length</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Value.<jsm>of</jsm>(<jv>s</jv>.length()));
-	 * 	<jsm>assertEquals</jsm>(5, <jv>length</jv>.get());
-	 *
-	 * 	<jc>// Returns empty if mapper returns empty</jc>
-	 * 	Value&lt;String&gt; <jv>empty</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Value.<jsm>empty</jsm>());
-	 * 	<jsm>assertFalse</jsm>(<jv>empty</jv>.isPresent());
-	 * </p>
-	 *
-	 * @param <T2> The type of value in the {@link Value} returned by the mapping function.
-	 * @param mapper The mapping function to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return The result of applying the {@link Value}-bearing mapping function to the value if present,
-	 *         otherwise an empty {@link Value}.
-	 */
-	public <T2> Value<T2> flatMap(Function<? super T,? extends Value<? extends T2>> mapper) {
-		assertArgNotNull("mapper", mapper);
-		if (t == null)
-			return Value.empty();
-		var result = mapper.apply(t);
-		@SuppressWarnings("unchecked")
-		var cast = (Value<T2>)result;
-		return cast;
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object obj) {
-		return obj instanceof Value<?> obj2 && eq(this, obj2, (x, y) -> eq(x.t, y.t));
-	}
-
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return t == null ? 0 : t.hashCode();
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return "Value(" + t + ")";
 	}
 }

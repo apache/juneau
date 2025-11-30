@@ -26,8 +26,6 @@ import org.apache.juneau.common.reflect.*;
  */
 public final class PredicateUtils {
 
-	private PredicateUtils() {}
-
 	/**
 	 * Returns a predicate that is the short-circuiting AND of the provided predicates.
 	 *
@@ -52,39 +50,6 @@ public final class PredicateUtils {
 	}
 
 	/**
-	 * Returns a predicate that is the short-circuiting OR of the provided predicates.
-	 *
-	 * <p>
-	 * {@code null} entries are ignored. If all entries are {@code null} or no predicates are provided,
-	 * the returned predicate always returns {@code false}.
-	 *
-	 * @param <T> The input type of the predicate.
-	 * @param predicates The predicates to combine.
-	 * @return A composed predicate representing the logical OR.
-	 */
-	@SafeVarargs
-	public static <T> Predicate<T> or(Predicate<T>...predicates) {
-		Predicate<T> result = t -> false;
-		if (nn(predicates)) {
-			for (var p : predicates) {
-				if (nn(p))
-					result = result.or(p);
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Returns a predicate that tests whether the input value is an instance of the specified type.
-	 *
-	 * @param type The class object representing the target type.
-	 * @return A predicate that returns {@code true} if the value is an instance of {@code type}.
-	 */
-	public static Predicate<?> isType(Class<?> type) {
-		return v -> nn(type) && type.isInstance(v);
-	}
-
-	/**
 	 * Returns a predicate that evaluates to true only when the value is an instance of the given type and the provided
 	 * predicate also returns true for the cast value.
 	 *
@@ -102,18 +67,6 @@ public final class PredicateUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
-	
-	 * @param <T> The type being tested.
-	 * @param predicate The predicate.
-	 * @param value The value to test.
-	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
-	 */
-	public static <T> boolean test(Predicate<T> predicate, T value) {
-		return (predicate == null || predicate.test(value));
-	}
-
-	/**
 	 * Consumes the specified value if the predicate is <jk>null</jk> or matches the specified value.
 	 *
 	 * @param <T> The type being consumed.
@@ -124,56 +77,6 @@ public final class PredicateUtils {
 	public static <T> void consumeIf(Predicate<T> predicate, Consumer<T> consumer, T value) {
 		if (test(predicate, value))
 			consumer.accept(value);
-	}
-
-	/**
-	 * Returns a function that prints the input value to stderr and returns it unchanged.
-	 *
-	 * <p>
-	 * Useful for debugging streams by inserting into a stream pipeline with {@code .map(peek())}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	list.stream()
-	 * 		.map(peek())
-	 * 		.filter(x -&gt; x != <jk>null</jk>)
-	 * 		.collect(Collectors.toList());
-	 * </p>
-	 *
-	 * @param <T> The type of value.
-	 * @return A function that prints and returns the value.
-	 */
-	public static <T> Function<T,T> peek() {
-		return v -> {
-			System.err.println(v);
-			return v;
-		};
-	}
-
-	/**
-	 * Returns a function that prints the input value to stderr using a custom formatter and returns it unchanged.
-	 *
-	 * <p>
-	 * Useful for debugging streams by inserting into a stream pipeline with {@code .map(peek(...))}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	list.stream()
-	 * 		.map(peek(<js>"Processing: {0}"</js>, x -&gt; x.getName()))
-	 * 		.filter(x -&gt; x != <jk>null</jk>)
-	 * 		.collect(Collectors.toList());
-	 * </p>
-	 *
-	 * @param <T> The type of value.
-	 * @param message A format string using {@code {0}} as placeholder for the formatted value.
-	 * @param formatter A function to extract/format the value for display.
-	 * @return A function that prints and returns the value.
-	 */
-	public static <T> Function<T,T> peek(String message, Function<T,?> formatter) {
-		return v -> {
-			System.err.println(message.replace("{0}", String.valueOf(formatter.apply(v))));
-			return v;
-		};
 	}
 
 	/**
@@ -240,4 +143,101 @@ public final class PredicateUtils {
 	public static Predicate<ElementInfo> isAny(ElementFlag...flags) {
 		return ei -> ei.isAny(flags);
 	}
+
+	/**
+	 * Returns a predicate that tests whether the input value is an instance of the specified type.
+	 *
+	 * @param type The class object representing the target type.
+	 * @return A predicate that returns {@code true} if the value is an instance of {@code type}.
+	 */
+	public static Predicate<?> isType(Class<?> type) {
+		return v -> nn(type) && type.isInstance(v);
+	}
+
+	/**
+	 * Returns a predicate that is the short-circuiting OR of the provided predicates.
+	 *
+	 * <p>
+	 * {@code null} entries are ignored. If all entries are {@code null} or no predicates are provided,
+	 * the returned predicate always returns {@code false}.
+	 *
+	 * @param <T> The input type of the predicate.
+	 * @param predicates The predicates to combine.
+	 * @return A composed predicate representing the logical OR.
+	 */
+	@SafeVarargs
+	public static <T> Predicate<T> or(Predicate<T>...predicates) {
+		Predicate<T> result = t -> false;
+		if (nn(predicates)) {
+			for (var p : predicates) {
+				if (nn(p))
+					result = result.or(p);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns a function that prints the input value to stderr and returns it unchanged.
+	 *
+	 * <p>
+	 * Useful for debugging streams by inserting into a stream pipeline with {@code .map(peek())}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	list.stream()
+	 * 		.map(peek())
+	 * 		.filter(x -&gt; x != <jk>null</jk>)
+	 * 		.collect(Collectors.toList());
+	 * </p>
+	 *
+	 * @param <T> The type of value.
+	 * @return A function that prints and returns the value.
+	 */
+	public static <T> Function<T,T> peek() {
+		return v -> {
+			System.err.println(v);
+			return v;
+		};
+	}
+
+	/**
+	 * Returns a function that prints the input value to stderr using a custom formatter and returns it unchanged.
+	 *
+	 * <p>
+	 * Useful for debugging streams by inserting into a stream pipeline with {@code .map(peek(...))}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	list.stream()
+	 * 		.map(peek(<js>"Processing: {0}"</js>, x -&gt; x.getName()))
+	 * 		.filter(x -&gt; x != <jk>null</jk>)
+	 * 		.collect(Collectors.toList());
+	 * </p>
+	 *
+	 * @param <T> The type of value.
+	 * @param message A format string using {@code {0}} as placeholder for the formatted value.
+	 * @param formatter A function to extract/format the value for display.
+	 * @return A function that prints and returns the value.
+	 */
+	public static <T> Function<T,T> peek(String message, Function<T,?> formatter) {
+		return v -> {
+			System.err.println(message.replace("{0}", String.valueOf(formatter.apply(v))));
+			return v;
+		};
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
+	
+	 * @param <T> The type being tested.
+	 * @param predicate The predicate.
+	 * @param value The value to test.
+	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
+	 */
+	public static <T> boolean test(Predicate<T> predicate, T value) {
+		return (predicate == null || predicate.test(value));
+	}
+
+	private PredicateUtils() {}
 }

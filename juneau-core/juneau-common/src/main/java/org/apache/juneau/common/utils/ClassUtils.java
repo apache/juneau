@@ -153,6 +153,99 @@ public class ClassUtils {
 	}
 
 	/**
+	 * Returns the simple (non-qualified) class name for the specified object.
+	 *
+	 * <p>
+	 * This method returns only the simple class name without any package or outer class information.
+	 * For inner classes, only the innermost class name is returned.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular classes</jc>
+	 * 	simpleClassName(String.<jk>class</jk>);            <jc>// "String"</jc>
+	 * 	simpleClassName(<jk>new</jk> HashMap&lt;&gt;());          <jc>// "HashMap"</jc>
+	 *
+	 * 	<jc>// Inner classes</jc>
+	 * 	simpleClassName(Map.Entry.<jk>class</jk>);         <jc>// "Entry"</jc>
+	 *
+	 * 	<jc>// Primitives</jc>
+	 * 	simpleClassName(<jk>int</jk>.<jk>class</jk>);                <jc>// "int"</jc>
+	 * 	simpleClassName(<jk>boolean</jk>.<jk>class</jk>);            <jc>// "boolean"</jc>
+	 *
+	 * 	<jc>// Arrays</jc>
+	 * 	simpleClassName(String[].<jk>class</jk>);          <jc>// "String[]"</jc>
+	 * 	simpleClassName(<jk>int</jk>[].<jk>class</jk>);              <jc>// "int[]"</jc>
+	 * 	simpleClassName(String[][].<jk>class</jk>);        <jc>// "String[][]"</jc>
+	 *
+	 * 	<jc>// Null</jc>
+	 * 	simpleClassName(<jk>null</jk>);                    <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param value The object to get the simple class name for.
+	 * @return The simple name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String classNameSimple(Object value) {
+		if (value instanceof ClassInfo value2)
+			return value2.getNameSimple();
+		return value == null ? null : value instanceof Class<?> c ? c.getSimpleName() : value.getClass().getSimpleName();
+	}
+
+	/**
+	 * Returns the simple qualified class name for the specified object.
+	 *
+	 * <p>
+	 * This returns the simple class name including outer class names, but without the package.
+	 * Inner class separators ($) are replaced with dots (.).
+	 * Array types are properly formatted with brackets.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular classes</jc>
+	 * 	simpleQualifiedClassName(String.<jk>class</jk>);                     <jc>// "String"</jc>
+	 * 	simpleQualifiedClassName(<jk>new</jk> HashMap&lt;&gt;());                   <jc>// "HashMap"</jc>
+	 *
+	 * 	<jc>// Inner classes</jc>
+	 * 	simpleQualifiedClassName(Map.Entry.<jk>class</jk>);                  <jc>// "Map.Entry"</jc>
+	 * 	simpleQualifiedClassName(Outer.Inner.Deep.<jk>class</jk>);           <jc>// "Outer.Inner.Deep"</jc>
+	 *
+	 * 	<jc>// Primitives</jc>
+	 * 	simpleQualifiedClassName(<jk>int</jk>.<jk>class</jk>);                         <jc>// "int"</jc>
+	 * 	simpleQualifiedClassName(<jk>boolean</jk>.<jk>class</jk>);                     <jc>// "boolean"</jc>
+	 *
+	 * 	<jc>// Object arrays</jc>
+	 * 	simpleQualifiedClassName(String[].<jk>class</jk>);                   <jc>// "String[]"</jc>
+	 * 	simpleQualifiedClassName(Map.Entry[].<jk>class</jk>);                <jc>// "Map.Entry[]"</jc>
+	 * 	simpleQualifiedClassName(String[][].<jk>class</jk>);                 <jc>// "String[][]"</jc>
+	 *
+	 * 	<jc>// Primitive arrays</jc>
+	 * 	simpleQualifiedClassName(<jk>int</jk>[].<jk>class</jk>);                       <jc>// "int[]"</jc>
+	 * 	simpleQualifiedClassName(<jk>boolean</jk>[][].<jk>class</jk>);                 <jc>// "boolean[][]"</jc>
+	 *
+	 * 	<jc>// Null</jc>
+	 * 	simpleQualifiedClassName(<jk>null</jk>);                             <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param value The object to get the simple qualified class name for.
+	 * @return The simple qualified name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String classNameSimpleQualified(Object value) {
+		if (value == null)
+			return null;
+		var clazz = value instanceof Class<?> ? (Class<?>)value : value.getClass();
+
+		// Handle array types by recursively getting component type
+		if (clazz.isArray()) {
+			return classNameSimpleQualified(clazz.getComponentType()) + "[]";
+		}
+
+		// Handle non-array types
+		var className = clazz.getName();
+		var lastDot = className.lastIndexOf('.');
+		var simpleName = lastDot == -1 ? className : className.substring(lastDot + 1);
+		return simpleName.replace('$', '.');
+	}
+
+	/**
 	 * Extracts generic type parameter mappings from a class's superclass declaration and adds them to a type map.
 	 *
 	 * <p>
@@ -443,6 +536,26 @@ public class ClassUtils {
 	}
 
 	/**
+	 * Returns the generic parameter type of the Value type.
+	 *
+	 * @param t The type to find the parameter type of.
+	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
+	 */
+	public static Type getValueParameterType(Type t) {
+		if (t instanceof ParameterizedType t2) {
+			if (t2.getRawType() == Value.class) {
+				var ta = t2.getActualTypeArguments();
+				if (ta.length > 0)
+					return ta[0];
+			}
+		} else if ((t instanceof Class<?> t3) && Value.class.isAssignableFrom(t3)) {
+			return getParameterType(t3, 0, Value.class);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Checks if one generic declaration (typically a class) is an inner class of another.
 	 *
 	 * <p>
@@ -479,26 +592,6 @@ public class ClassUtils {
 					return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Returns the generic parameter type of the Value type.
-	 *
-	 * @param t The type to find the parameter type of.
-	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
-	 */
-	public static Type getValueParameterType(Type t) {
-		if (t instanceof ParameterizedType t2) {
-			if (t2.getRawType() == Value.class) {
-				var ta = t2.getActualTypeArguments();
-				if (ta.length > 0)
-					return ta[0];
-			}
-		} else if ((t instanceof Class<?> t3) && Value.class.isAssignableFrom(t3)) {
-			return getParameterType(t3, 0, Value.class);
-		}
-
-		return null;
 	}
 
 	/**
@@ -569,99 +662,6 @@ public class ClassUtils {
 		} catch (@SuppressWarnings("unused") SecurityException e) {
 			return false;
 		}
-	}
-
-	/**
-	 * Returns the simple (non-qualified) class name for the specified object.
-	 *
-	 * <p>
-	 * This method returns only the simple class name without any package or outer class information.
-	 * For inner classes, only the innermost class name is returned.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Regular classes</jc>
-	 * 	simpleClassName(String.<jk>class</jk>);            <jc>// "String"</jc>
-	 * 	simpleClassName(<jk>new</jk> HashMap&lt;&gt;());          <jc>// "HashMap"</jc>
-	 *
-	 * 	<jc>// Inner classes</jc>
-	 * 	simpleClassName(Map.Entry.<jk>class</jk>);         <jc>// "Entry"</jc>
-	 *
-	 * 	<jc>// Primitives</jc>
-	 * 	simpleClassName(<jk>int</jk>.<jk>class</jk>);                <jc>// "int"</jc>
-	 * 	simpleClassName(<jk>boolean</jk>.<jk>class</jk>);            <jc>// "boolean"</jc>
-	 *
-	 * 	<jc>// Arrays</jc>
-	 * 	simpleClassName(String[].<jk>class</jk>);          <jc>// "String[]"</jc>
-	 * 	simpleClassName(<jk>int</jk>[].<jk>class</jk>);              <jc>// "int[]"</jc>
-	 * 	simpleClassName(String[][].<jk>class</jk>);        <jc>// "String[][]"</jc>
-	 *
-	 * 	<jc>// Null</jc>
-	 * 	simpleClassName(<jk>null</jk>);                    <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param value The object to get the simple class name for.
-	 * @return The simple name of the class or <jk>null</jk> if the value was null.
-	 */
-	public static String classNameSimple(Object value) {
-		if (value instanceof ClassInfo value2)
-			return value2.getNameSimple();
-		return value == null ? null : value instanceof Class<?> c ? c.getSimpleName() : value.getClass().getSimpleName();
-	}
-
-	/**
-	 * Returns the simple qualified class name for the specified object.
-	 *
-	 * <p>
-	 * This returns the simple class name including outer class names, but without the package.
-	 * Inner class separators ($) are replaced with dots (.).
-	 * Array types are properly formatted with brackets.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Regular classes</jc>
-	 * 	simpleQualifiedClassName(String.<jk>class</jk>);                     <jc>// "String"</jc>
-	 * 	simpleQualifiedClassName(<jk>new</jk> HashMap&lt;&gt;());                   <jc>// "HashMap"</jc>
-	 *
-	 * 	<jc>// Inner classes</jc>
-	 * 	simpleQualifiedClassName(Map.Entry.<jk>class</jk>);                  <jc>// "Map.Entry"</jc>
-	 * 	simpleQualifiedClassName(Outer.Inner.Deep.<jk>class</jk>);           <jc>// "Outer.Inner.Deep"</jc>
-	 *
-	 * 	<jc>// Primitives</jc>
-	 * 	simpleQualifiedClassName(<jk>int</jk>.<jk>class</jk>);                         <jc>// "int"</jc>
-	 * 	simpleQualifiedClassName(<jk>boolean</jk>.<jk>class</jk>);                     <jc>// "boolean"</jc>
-	 *
-	 * 	<jc>// Object arrays</jc>
-	 * 	simpleQualifiedClassName(String[].<jk>class</jk>);                   <jc>// "String[]"</jc>
-	 * 	simpleQualifiedClassName(Map.Entry[].<jk>class</jk>);                <jc>// "Map.Entry[]"</jc>
-	 * 	simpleQualifiedClassName(String[][].<jk>class</jk>);                 <jc>// "String[][]"</jc>
-	 *
-	 * 	<jc>// Primitive arrays</jc>
-	 * 	simpleQualifiedClassName(<jk>int</jk>[].<jk>class</jk>);                       <jc>// "int[]"</jc>
-	 * 	simpleQualifiedClassName(<jk>boolean</jk>[][].<jk>class</jk>);                 <jc>// "boolean[][]"</jc>
-	 *
-	 * 	<jc>// Null</jc>
-	 * 	simpleQualifiedClassName(<jk>null</jk>);                             <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param value The object to get the simple qualified class name for.
-	 * @return The simple qualified name of the class or <jk>null</jk> if the value was null.
-	 */
-	public static String classNameSimpleQualified(Object value) {
-		if (value == null)
-			return null;
-		var clazz = value instanceof Class<?> ? (Class<?>)value : value.getClass();
-
-		// Handle array types by recursively getting component type
-		if (clazz.isArray()) {
-			return classNameSimpleQualified(clazz.getComponentType()) + "[]";
-		}
-
-		// Handle non-array types
-		var className = clazz.getName();
-		var lastDot = className.lastIndexOf('.');
-		var simpleName = lastDot == -1 ? className : className.substring(lastDot + 1);
-		return simpleName.replace('$', '.');
 	}
 
 	/**

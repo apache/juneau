@@ -106,16 +106,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	static final ResettableSupplier<Boolean> DISABLE_PARAM_NAME_DETECTION = memoizeResettable(() -> Boolean.getBoolean("juneau.disableParamNameDetection"));
 
-	private final ExecutableInfo executable;
-	private final Parameter inner;
-	private final int index;
-	private final ClassInfo type;
-
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations declared directly on this parameter.
-	private final Supplier<List<ParameterInfo>> matchingParameters;  // Matching parameters in parent methods.
-	private final ResettableSupplier<String> resolvedName = memoizeResettable(this::findNameInternal);  // Resolved name from @Name annotation or bytecode.
-	private final ResettableSupplier<String> resolvedQualifier = memoizeResettable(this::findQualifierInternal);  // Resolved qualifier from @Named annotation.
-
 	/**
 	 * Creates a ParameterInfo wrapper for the specified parameter.
 	 *
@@ -145,6 +135,20 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		}
 		throw new IllegalArgumentException("Parameter not found in declaring executable: " + inner);
 	}
+	static void reset() {
+		DISABLE_PARAM_NAME_DETECTION.reset();
+	}
+	private final ExecutableInfo executable;
+	private final Parameter inner;
+
+	private final int index;
+	private final ClassInfo type;
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations declared directly on this parameter.
+	private final Supplier<List<ParameterInfo>> matchingParameters;  // Matching parameters in parent methods.
+
+	private final ResettableSupplier<String> resolvedName = memoizeResettable(this::findNameInternal);  // Resolved name from @Name annotation or bytecode.
+
+	private final ResettableSupplier<String> resolvedQualifier = memoizeResettable(this::findQualifierInternal);  // Resolved qualifier from @Named annotation.
 
 	/**
 	 * Constructor.
@@ -171,13 +175,36 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns the wrapped {@link Parameter} object.
+	 * Returns <jk>true</jk> if this parameter can accept the specified value.
 	 *
-	 * @return The wrapped {@link Parameter} object.
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if this parameter can accept the specified value.
 	 */
-	public Parameter inner() {
-		return inner;
+	public boolean canAccept(Object value) {
+		return getParameterType().isInstance(value);
 	}
+
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.PARAMETER_TYPE; }
+
+	/**
+	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the type of this parameter.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getAnnotatedType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get annotated type: void method(@NotNull String value)</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	AnnotatedType <jv>aType</jv> = <jv>pi</jv>.getAnnotatedType();
+	 * 	<jc>// Check for @NotNull on the type</jc>
+	 * </p>
+	 *
+	 * @return An {@link AnnotatedType} object representing the type of this parameter.
+	 * @see Parameter#getAnnotatedType()
+	 */
+	public AnnotatedType getAnnotatedType() { return inner.getAnnotatedType(); }
 
 	/**
 	 * Returns all annotations declared on this parameter.
@@ -198,16 +225,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotations.get(); }
 
 	/**
-	 * Returns <jk>true</jk> if this parameter can accept the specified value.
-	 *
-	 * @param value The value to check.
-	 * @return <jk>true</jk> if this parameter can accept the specified value.
-	 */
-	public boolean canAccept(Object value) {
-		return getParameterType().isInstance(value);
-	}
-
-	/**
 	 * Returns a stream of annotation infos of the specified type declared on this parameter.
 	 *
 	 * @param <A> The annotation type.
@@ -217,6 +234,48 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		return getAnnotations().stream().filter(x -> x.isType(type)).map(x -> (AnnotationInfo<A>)x);
+	}
+
+	/**
+	 * Returns the constructor that this parameter belongs to.
+	 *
+	 * @return The constructor that this parameter belongs to, or <jk>null</jk> if it belongs to a method.
+	 */
+	public ConstructorInfo getConstructor() { return executable.isConstructor() ? (ConstructorInfo)executable : null; }
+
+	/**
+	 * Returns the {@link ExecutableInfo} which declares this parameter.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getDeclaringExecutable()} but returns {@link ExecutableInfo} instead.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get the method or constructor that declares this parameter</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	ExecutableInfo <jv>executable</jv> = <jv>pi</jv>.getDeclaringExecutable();
+	 * 	<jk>if</jk> (<jv>executable</jv>.isConstructor()) {
+	 * 		ConstructorInfo <jv>ci</jv> = (ConstructorInfo)<jv>executable</jv>;
+	 * 	}
+	 * </p>
+	 *
+	 * @return The {@link ExecutableInfo} declaring this parameter.
+	 * @see Parameter#getDeclaringExecutable()
+	 */
+	public ExecutableInfo getDeclaringExecutable() { return executable; }
+
+	/**
+	 * Returns the index position of this parameter.
+	 *
+	 * @return The index position of this parameter.
+	 */
+	public int getIndex() { return index; }
+
+	@Override /* Annotatable */
+	public String getLabel() {
+		var exec = getDeclaringExecutable();
+		var label = exec.getDeclaringClass().getNameSimple() + "." + exec.getShortName();
+		return label + "[" + index + "]";
 	}
 
 	/**
@@ -249,6 +308,284 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	public List<ParameterInfo> getMatchingParameters() { return matchingParameters.get(); }
 
+	/**
+	 * Returns the method that this parameter belongs to.
+	 *
+	 * @return The method that this parameter belongs to, or <jk>null</jk> if it belongs to a constructor.
+	 */
+	public MethodInfo getMethod() { return executable.isConstructor() ? null : (MethodInfo)executable; }
+
+	/**
+	 * Returns the Java language modifiers for the parameter represented by this object, as an integer.
+	 *
+	 * <p>
+	 * The {@link java.lang.reflect.Modifier} class should be used to decode the modifiers.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getModifiers()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if parameter is final</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>int</jk> <jv>modifiers</jv> = <jv>pi</jv>.getModifiers();
+	 * 	<jk>boolean</jk> <jv>isFinal</jv> = Modifier.<jsm>isFinal</jsm>(<jv>modifiers</jv>);
+	 * </p>
+	 *
+	 * @return The Java language modifiers for this parameter.
+	 * @see Parameter#getModifiers()
+	 * @see java.lang.reflect.Modifier
+	 */
+	@Override
+	public int getModifiers() { return inner.getModifiers(); }
+
+	/**
+	 * Returns the name of the parameter.
+	 *
+	 * <p>
+	 * Searches for the name in the following order:
+	 * <ol>
+	 * 	<li>@Name annotation value (takes precedence over bytecode parameter names)
+	 * 	<li>Bytecode parameter name (if compiled with -parameters flag)
+	 * 	<li>Matching parameters in parent classes/interfaces (for methods)
+	 * 	<li>Synthetic name like "arg0", "arg1", etc. (fallback)
+	 * </ol>
+	 *
+	 * <p>
+	 * This method works with any annotation named "Name" (from any package) that has a <c>String value()</c> method.
+	 *
+	 * @return The name of the parameter, never <jk>null</jk>.
+	 * @see Parameter#getName()
+	 */
+	public String getName() {
+		var name = getResolvedName();
+		return name != null ? name : inner.getName();
+	}
+
+	/**
+	 * Returns a {@link Type} object that identifies the parameterized type for this parameter.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getParameterizedType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get generic type information for parameter: List&lt;String&gt; values</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	Type <jv>type</jv> = <jv>pi</jv>.getParameterizedType();
+	 * 	<jk>if</jk> (<jv>type</jv> <jk>instanceof</jk> ParameterizedType) {
+	 * 		ParameterizedType <jv>pType</jv> = (ParameterizedType)<jv>type</jv>;
+	 * 		<jc>// pType.getActualTypeArguments()[0] is String.class</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return A {@link Type} object identifying the parameterized type.
+	 * @see Parameter#getParameterizedType()
+	 */
+	public Type getParameterizedType() { return inner.getParameterizedType(); }
+
+	/**
+	 * Returns the class type of this parameter.
+	 *
+	 * @return The class type of this parameter.
+	 */
+	public ClassInfo getParameterType() { return type; }
+
+	/**
+	 * Finds the name of this parameter for bean property mapping.
+	 *
+	 * <p>
+	 * Searches for the parameter name in the following order:
+	 * <ol>
+	 * 	<li>{@link org.apache.juneau.annotation.Name @Name} annotation value
+	 * 	<li>Bytecode parameter name (if available and not disabled via system property)
+	 * 	<li>Matching parameters in parent classes/interfaces
+	 * </ol>
+	 *
+	 * <p>
+	 * This method is used for mapping constructor parameters to bean properties.
+	 *
+	 * <p>
+	 * <b>Note:</b> This is different from {@link #getResolvedQualifier()} which looks for {@link org.apache.juneau.annotation.Named @Named}
+	 * annotations for bean injection purposes.
+	 *
+	 * @return The parameter name if found, or <jk>null</jk> if not available.
+	 * @see #getResolvedQualifier()
+	 * @see #getName()
+	 */
+	public String getResolvedName() { return resolvedName.get(); }
+
+	/**
+	 * Finds the bean injection qualifier for this parameter.
+	 *
+	 * <p>
+	 * Searches for the {@link org.apache.juneau.annotation.Named @Named} annotation value to determine
+	 * which named bean should be injected.
+	 *
+	 * <p>
+	 * This method is used by the {@link org.apache.juneau.cp.BeanStore} for bean injection.
+	 *
+	 * <p>
+	 * <b>Note:</b> This is different from {@link #getResolvedName()} which looks for {@link org.apache.juneau.annotation.Name @Name}
+	 * annotations for bean property mapping.
+	 *
+	 * @return The bean qualifier name if {@code @Named} annotation is found, or <jk>null</jk> if not annotated.
+	 * @see #getResolvedName()
+	 */
+	public String getResolvedQualifier() { return resolvedQualifier.get(); }
+
+	/**
+	 * Returns <jk>true</jk> if the parameter has a name.
+	 *
+	 * <p>
+	 * This returns <jk>true</jk> if the parameter has an annotation with the simple name "Name",
+	 * or if the parameter's name is present in the class file.
+	 *
+	 * @return <jk>true</jk> if the parameter has a name.
+	 */
+	public boolean hasName() {
+		return getResolvedName() != null;
+	}
+
+	/**
+	 * Returns the wrapped {@link Parameter} object.
+	 *
+	 * @return The wrapped {@link Parameter} object.
+	 */
+	public Parameter inner() {
+		return inner;
+	}
+
+	@Override
+	public boolean is(ElementFlag flag) {
+		return switch (flag) {
+			case SYNTHETIC -> isSynthetic();
+			case NOT_SYNTHETIC -> ! isSynthetic();
+			case VARARGS -> isVarArgs();
+			case NOT_VARARGS -> ! isVarArgs();
+			default -> super.is(flag);
+		};
+	}
+
+	@Override
+	public boolean isAll(ElementFlag...flags) {
+		return stream(flags).allMatch(this::is);
+	}
+
+	@Override
+	public boolean isAny(ElementFlag...flags) {
+		return stream(flags).anyMatch(this::is);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this parameter is implicitly declared in source code.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if this parameter is neither explicitly nor implicitly declared in source code.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#isImplicit()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Filter out implicit parameters</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>if</jk> (! <jv>pi</jv>.isImplicit()) {
+	 * 		<jc>// Process explicit parameter</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this parameter is implicitly declared.
+	 * @see Parameter#isImplicit()
+	 */
+	public boolean isImplicit() { return inner.isImplicit(); }
+
+	/**
+	 * Returns <jk>true</jk> if the parameter has a name according to the <c>.class</c> file.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#isNamePresent()}.
+	 *
+	 * <p>
+	 * <b>Note:</b> This method is different from {@link #hasName()} which also checks for the presence
+	 * of a <c>@Name</c> annotation. This method only checks if the name is present in the bytecode.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if parameter name is in bytecode</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>if</jk> (<jv>pi</jv>.isNamePresent()) {
+	 * 		String <jv>name</jv> = <jv>pi</jv>.getName();
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if the parameter has a name in the bytecode.
+	 * @see Parameter#isNamePresent()
+	 * @see #hasName()
+	 */
+	public boolean isNamePresent() { return inner.isNamePresent(); }
+
+	/**
+	 * Returns <jk>true</jk> if this parameter is a synthetic construct as defined by the Java Language Specification.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#isSynthetic()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Filter out compiler-generated parameters</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>if</jk> (! <jv>pi</jv>.isSynthetic()) {
+	 * 		<jc>// Process real parameter</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this parameter is a synthetic construct.
+	 * @see Parameter#isSynthetic()
+	 */
+	public boolean isSynthetic() { return inner.isSynthetic(); }
+
+	/**
+	 * Returns <jk>true</jk> if the parameter type is an exact match for the specified class.
+	 *
+	 * @param c The type to check.
+	 * @return <jk>true</jk> if the parameter type is an exact match for the specified class.
+	 */
+	public boolean isType(Class<?> c) {
+		return getParameterType().is(c);
+	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// High Priority Methods (direct Parameter API compatibility)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if this parameter represents a variable argument list.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#isVarArgs()}.
+	 *
+	 * <p>
+	 * Only returns <jk>true</jk> for the last parameter of a variable arity method.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if this is a varargs parameter</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>if</jk> (<jv>pi</jv>.isVarArgs()) {
+	 * 		<jc>// Handle variable arguments</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this parameter represents a variable argument list.
+	 * @see Parameter#isVarArgs()
+	 */
+	public boolean isVarArgs() { return inner.isVarArgs(); }
+
+	@Override
+	public String toString() {
+		return (executable.getSimpleName()) + "[" + index + "]";
+	}
+
 	private List<ParameterInfo> findMatchingParameters() {
 		if (executable instanceof ConstructorInfo executable2) {
 			// For constructors: search parent class constructors for parameters with matching index and type
@@ -279,54 +616,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		return ((MethodInfo)executable).getMatchingMethods().stream().map(m -> m.getParameter(index)).toList();
 	}
 
-	/**
-	 * Returns the constructor that this parameter belongs to.
-	 *
-	 * @return The constructor that this parameter belongs to, or <jk>null</jk> if it belongs to a method.
-	 */
-	public ConstructorInfo getConstructor() { return executable.isConstructor() ? (ConstructorInfo)executable : null; }
-
-	/**
-	 * Returns the index position of this parameter.
-	 *
-	 * @return The index position of this parameter.
-	 */
-	public int getIndex() { return index; }
-
-	/**
-	 * Returns the method that this parameter belongs to.
-	 *
-	 * @return The method that this parameter belongs to, or <jk>null</jk> if it belongs to a constructor.
-	 */
-	public MethodInfo getMethod() { return executable.isConstructor() ? null : (MethodInfo)executable; }
-
-	/**
-	 * Finds the name of this parameter for bean property mapping.
-	 *
-	 * <p>
-	 * Searches for the parameter name in the following order:
-	 * <ol>
-	 * 	<li>{@link org.apache.juneau.annotation.Name @Name} annotation value
-	 * 	<li>Bytecode parameter name (if available and not disabled via system property)
-	 * 	<li>Matching parameters in parent classes/interfaces
-	 * </ol>
-	 *
-	 * <p>
-	 * This method is used for mapping constructor parameters to bean properties.
-	 *
-	 * <p>
-	 * <b>Note:</b> This is different from {@link #getResolvedQualifier()} which looks for {@link org.apache.juneau.annotation.Named @Named}
-	 * annotations for bean injection purposes.
-	 *
-	 * @return The parameter name if found, or <jk>null</jk> if not available.
-	 * @see #getResolvedQualifier()
-	 * @see #getName()
-	 */
-	public String getResolvedName() { return resolvedName.get(); }
-
-	static void reset() {
-		DISABLE_PARAM_NAME_DETECTION.reset();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotatable interface methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private String findNameInternal() {
 		// Search through matching parameters in hierarchy for @Name annotations only.
@@ -350,25 +642,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		return null;
 	}
 
-	/**
-	 * Finds the bean injection qualifier for this parameter.
-	 *
-	 * <p>
-	 * Searches for the {@link org.apache.juneau.annotation.Named @Named} annotation value to determine
-	 * which named bean should be injected.
-	 *
-	 * <p>
-	 * This method is used by the {@link org.apache.juneau.cp.BeanStore} for bean injection.
-	 *
-	 * <p>
-	 * <b>Note:</b> This is different from {@link #getResolvedName()} which looks for {@link org.apache.juneau.annotation.Name @Name}
-	 * annotations for bean property mapping.
-	 *
-	 * @return The bean qualifier name if {@code @Named} annotation is found, or <jk>null</jk> if not annotated.
-	 * @see #getResolvedName()
-	 */
-	public String getResolvedQualifier() { return resolvedQualifier.get(); }
-
 	private String findQualifierInternal() {
 		// Search through matching parameters in hierarchy for @Named or javax.inject.Qualifier annotations
 		// @formatter:off
@@ -380,278 +653,5 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			.findFirst()
 			.orElse(null);
 		// @formatter:on
-	}
-
-	/**
-	 * Returns the name of the parameter.
-	 *
-	 * <p>
-	 * Searches for the name in the following order:
-	 * <ol>
-	 * 	<li>@Name annotation value (takes precedence over bytecode parameter names)
-	 * 	<li>Bytecode parameter name (if compiled with -parameters flag)
-	 * 	<li>Matching parameters in parent classes/interfaces (for methods)
-	 * 	<li>Synthetic name like "arg0", "arg1", etc. (fallback)
-	 * </ol>
-	 *
-	 * <p>
-	 * This method works with any annotation named "Name" (from any package) that has a <c>String value()</c> method.
-	 *
-	 * @return The name of the parameter, never <jk>null</jk>.
-	 * @see Parameter#getName()
-	 */
-	public String getName() {
-		var name = getResolvedName();
-		return name != null ? name : inner.getName();
-	}
-
-	/**
-	 * Returns the class type of this parameter.
-	 *
-	 * @return The class type of this parameter.
-	 */
-	public ClassInfo getParameterType() { return type; }
-
-	/**
-	 * Returns <jk>true</jk> if the parameter has a name.
-	 *
-	 * <p>
-	 * This returns <jk>true</jk> if the parameter has an annotation with the simple name "Name",
-	 * or if the parameter's name is present in the class file.
-	 *
-	 * @return <jk>true</jk> if the parameter has a name.
-	 */
-	public boolean hasName() {
-		return getResolvedName() != null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the parameter type is an exact match for the specified class.
-	 *
-	 * @param c The type to check.
-	 * @return <jk>true</jk> if the parameter type is an exact match for the specified class.
-	 */
-	public boolean isType(Class<?> c) {
-		return getParameterType().is(c);
-	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// High Priority Methods (direct Parameter API compatibility)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the {@link ExecutableInfo} which declares this parameter.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#getDeclaringExecutable()} but returns {@link ExecutableInfo} instead.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get the method or constructor that declares this parameter</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	ExecutableInfo <jv>executable</jv> = <jv>pi</jv>.getDeclaringExecutable();
-	 * 	<jk>if</jk> (<jv>executable</jv>.isConstructor()) {
-	 * 		ConstructorInfo <jv>ci</jv> = (ConstructorInfo)<jv>executable</jv>;
-	 * 	}
-	 * </p>
-	 *
-	 * @return The {@link ExecutableInfo} declaring this parameter.
-	 * @see Parameter#getDeclaringExecutable()
-	 */
-	public ExecutableInfo getDeclaringExecutable() { return executable; }
-
-	/**
-	 * Returns the Java language modifiers for the parameter represented by this object, as an integer.
-	 *
-	 * <p>
-	 * The {@link java.lang.reflect.Modifier} class should be used to decode the modifiers.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#getModifiers()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if parameter is final</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	<jk>int</jk> <jv>modifiers</jv> = <jv>pi</jv>.getModifiers();
-	 * 	<jk>boolean</jk> <jv>isFinal</jv> = Modifier.<jsm>isFinal</jsm>(<jv>modifiers</jv>);
-	 * </p>
-	 *
-	 * @return The Java language modifiers for this parameter.
-	 * @see Parameter#getModifiers()
-	 * @see java.lang.reflect.Modifier
-	 */
-	@Override
-	public int getModifiers() { return inner.getModifiers(); }
-
-	/**
-	 * Returns <jk>true</jk> if the parameter has a name according to the <c>.class</c> file.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#isNamePresent()}.
-	 *
-	 * <p>
-	 * <b>Note:</b> This method is different from {@link #hasName()} which also checks for the presence
-	 * of a <c>@Name</c> annotation. This method only checks if the name is present in the bytecode.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if parameter name is in bytecode</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	<jk>if</jk> (<jv>pi</jv>.isNamePresent()) {
-	 * 		String <jv>name</jv> = <jv>pi</jv>.getName();
-	 * 	}
-	 * </p>
-	 *
-	 * @return <jk>true</jk> if the parameter has a name in the bytecode.
-	 * @see Parameter#isNamePresent()
-	 * @see #hasName()
-	 */
-	public boolean isNamePresent() { return inner.isNamePresent(); }
-
-	/**
-	 * Returns <jk>true</jk> if this parameter is implicitly declared in source code.
-	 *
-	 * <p>
-	 * Returns <jk>true</jk> if this parameter is neither explicitly nor implicitly declared in source code.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#isImplicit()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Filter out implicit parameters</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	<jk>if</jk> (! <jv>pi</jv>.isImplicit()) {
-	 * 		<jc>// Process explicit parameter</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @return <jk>true</jk> if this parameter is implicitly declared.
-	 * @see Parameter#isImplicit()
-	 */
-	public boolean isImplicit() { return inner.isImplicit(); }
-
-	/**
-	 * Returns <jk>true</jk> if this parameter is a synthetic construct as defined by the Java Language Specification.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#isSynthetic()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Filter out compiler-generated parameters</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	<jk>if</jk> (! <jv>pi</jv>.isSynthetic()) {
-	 * 		<jc>// Process real parameter</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @return <jk>true</jk> if this parameter is a synthetic construct.
-	 * @see Parameter#isSynthetic()
-	 */
-	public boolean isSynthetic() { return inner.isSynthetic(); }
-
-	@Override
-	public boolean is(ElementFlag flag) {
-		return switch (flag) {
-			case SYNTHETIC -> isSynthetic();
-			case NOT_SYNTHETIC -> ! isSynthetic();
-			case VARARGS -> isVarArgs();
-			case NOT_VARARGS -> ! isVarArgs();
-			default -> super.is(flag);
-		};
-	}
-
-	@Override
-	public boolean isAll(ElementFlag...flags) {
-		return stream(flags).allMatch(this::is);
-	}
-
-	@Override
-	public boolean isAny(ElementFlag...flags) {
-		return stream(flags).anyMatch(this::is);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this parameter represents a variable argument list.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#isVarArgs()}.
-	 *
-	 * <p>
-	 * Only returns <jk>true</jk> for the last parameter of a variable arity method.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if this is a varargs parameter</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	<jk>if</jk> (<jv>pi</jv>.isVarArgs()) {
-	 * 		<jc>// Handle variable arguments</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @return <jk>true</jk> if this parameter represents a variable argument list.
-	 * @see Parameter#isVarArgs()
-	 */
-	public boolean isVarArgs() { return inner.isVarArgs(); }
-
-	/**
-	 * Returns a {@link Type} object that identifies the parameterized type for this parameter.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#getParameterizedType()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get generic type information for parameter: List&lt;String&gt; values</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	Type <jv>type</jv> = <jv>pi</jv>.getParameterizedType();
-	 * 	<jk>if</jk> (<jv>type</jv> <jk>instanceof</jk> ParameterizedType) {
-	 * 		ParameterizedType <jv>pType</jv> = (ParameterizedType)<jv>type</jv>;
-	 * 		<jc>// pType.getActualTypeArguments()[0] is String.class</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @return A {@link Type} object identifying the parameterized type.
-	 * @see Parameter#getParameterizedType()
-	 */
-	public Type getParameterizedType() { return inner.getParameterizedType(); }
-
-	/**
-	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the type of this parameter.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#getAnnotatedType()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get annotated type: void method(@NotNull String value)</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	AnnotatedType <jv>aType</jv> = <jv>pi</jv>.getAnnotatedType();
-	 * 	<jc>// Check for @NotNull on the type</jc>
-	 * </p>
-	 *
-	 * @return An {@link AnnotatedType} object representing the type of this parameter.
-	 * @see Parameter#getAnnotatedType()
-	 */
-	public AnnotatedType getAnnotatedType() { return inner.getAnnotatedType(); }
-
-	@Override
-	public String toString() {
-		return (executable.getSimpleName()) + "[" + index + "]";
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotatable interface methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() { return AnnotatableType.PARAMETER_TYPE; }
-
-	@Override /* Annotatable */
-	public String getLabel() {
-		var exec = getDeclaringExecutable();
-		var label = exec.getDeclaringClass().getNameSimple() + "." + exec.getShortName();
-		return label + "[" + index + "]";
 	}
 }

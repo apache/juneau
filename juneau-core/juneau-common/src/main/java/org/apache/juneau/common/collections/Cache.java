@@ -152,51 +152,6 @@ import org.apache.juneau.common.function.*;
  */
 public class Cache<K,V> {
 
-	// Internal map with Tuple1 keys for content-based equality (especially for arrays)
-	// If threadLocal is true, this is null and threadLocalMap is used instead
-	private final Map<Tuple1<K>,V> map;
-	private final ThreadLocal<Map<Tuple1<K>,V>> threadLocalMap;
-	private final boolean isThreadLocal;
-
-	/**
-	 * Cache of Tuple1 wrapper objects to minimize object creation on repeated get/put calls.
-	 *
-	 * <p>
-	 * Uses WeakHashMap so wrappers can be GC'd when keys are no longer referenced.
-	 * This provides a significant performance improvement for caches with repeated key access.
-	 * If threadLocal is true, this is null and threadLocalWrapperCache is used instead.
-	 */
-	private final Map<K,Tuple1<K>> wrapperCache;
-	private final ThreadLocal<Map<K,Tuple1<K>>> threadLocalWrapperCache;
-
-	/**
-	 * Gets the map for the current thread.
-	 *
-	 * @return The map for the current thread.
-	 */
-	private Map<Tuple1<K>,V> getMap() { return isThreadLocal ? threadLocalMap.get() : map; }
-
-	/**
-	 * Gets the wrapper cache for the current thread.
-	 *
-	 * @return The wrapper cache for the current thread.
-	 */
-	private Map<K,Tuple1<K>> getWrapperCache() { return isThreadLocal ? threadLocalWrapperCache.get() : wrapperCache; }
-
-	/**
-	 * Gets or creates a Tuple1 wrapper for the given key.
-	 *
-	 * <p>
-	 * The Tuple1 wrapper provides content-based equality for arrays and other objects.
-	 * By caching these wrappers, we avoid creating new Tuple1 objects on every cache access.
-	 *
-	 * @param key The key to wrap.
-	 * @return A cached or new Tuple1 wrapper for the key.
-	 */
-	private Tuple1<K> wrap(K key) {
-		return getWrapperCache().computeIfAbsent(key, k -> Tuple1.of(k));
-	}
-
 	/**
 	 * Builder for creating configured {@link Cache} instances.
 	 *
@@ -287,64 +242,19 @@ public class Cache<K,V> {
 		}
 
 		/**
-		 * Sets the caching mode to {@link CacheMode#WEAK WEAK}.
+		 * Conditionally enables logging of cache statistics when the JVM exits.
 		 *
 		 * <p>
-		 * This is a shortcut for calling <c>cacheMode(CacheMode.WEAK)</c>.
+		 * When enabled, the cache will register a shutdown hook that logs the cache name,
+		 * total cache hits, and total cache misses (size of cache) to help analyze cache effectiveness.
 		 *
-		 * <p>
-		 * Weak caching uses {@link WeakHashMap} for storage, allowing cache entries to be
-		 * garbage collected when keys are no longer strongly referenced elsewhere.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Weak caching for Class metadata</jc>
-		 * 	Cache&lt;Class&lt;?&gt;,ClassMeta&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(Class.<jk>class</jk>, ClassMeta.<jk>class</jk>)
-		 * 		.<jsm>weak</jsm>()
-		 * 		.build();
-		 * </p>
-		 *
-		 * @return This object for method chaining.
-		 * @see #cacheMode(CacheMode)
-		 */
-		public Builder<K,V> weak() {
-			return cacheMode(WEAK);
-		}
-
-		/**
-		 * Enables thread-local caching.
-		 *
-		 * <p>
-		 * When enabled, each thread gets its own separate cache instance. This is useful for
-		 * thread-unsafe objects like {@link java.text.MessageFormat} that need to be cached per thread.
-		 *
-		 * <p>
-		 * This is a shortcut for wrapping a cache in a {@link ThreadLocal}, but provides a cleaner API.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Thread-local cache for MessageFormat instances</jc>
-		 * 	Cache&lt;String,MessageFormat&gt; <jv>cache</jv> = Cache
-		 * 		.<jsm>of</jsm>(String.<jk>class</jk>, MessageFormat.<jk>class</jk>)
-		 * 		.maxSize(100)
-		 * 		.<jsm>threadLocal</jsm>()
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is equivalent to:
-		 * <p class='bjava'>
-		 * 	ThreadLocal&lt;Cache&lt;String,MessageFormat&gt;&gt; <jv>cache</jv> =
-		 * 		ThreadLocal.<jsm>withInitial</jsm>(() -&gt; Cache
-		 * 			.<jsm>of</jsm>(String.<jk>class</jk>, MessageFormat.<jk>class</jk>)
-		 * 			.maxSize(100)
-		 * 			.build());
-		 * </p>
-		 *
+		 * @param value Whether to enable logging on exit.
+		 * @param id The identifier to use in the log message.
 		 * @return This object for method chaining.
 		 */
-		public Builder<K,V> threadLocal() {
-			threadLocal = true;
+		public Builder<K,V> logOnExit(boolean value, String id) {
+			this.id = id;
+			this.logOnExit = value;
 			return this;
 		}
 
@@ -375,23 +285,6 @@ public class Cache<K,V> {
 		public Builder<K,V> logOnExit(String id) {
 			this.id = id;
 			this.logOnExit = true;
-			return this;
-		}
-
-		/**
-		 * Conditionally enables logging of cache statistics when the JVM exits.
-		 *
-		 * <p>
-		 * When enabled, the cache will register a shutdown hook that logs the cache name,
-		 * total cache hits, and total cache misses (size of cache) to help analyze cache effectiveness.
-		 *
-		 * @param value Whether to enable logging on exit.
-		 * @param id The identifier to use in the log message.
-		 * @return This object for method chaining.
-		 */
-		public Builder<K,V> logOnExit(boolean value, String id) {
-			this.id = id;
-			this.logOnExit = value;
 			return this;
 		}
 
@@ -445,8 +338,69 @@ public class Cache<K,V> {
 			supplier = value;
 			return this;
 		}
-	}
 
+		/**
+		 * Enables thread-local caching.
+		 *
+		 * <p>
+		 * When enabled, each thread gets its own separate cache instance. This is useful for
+		 * thread-unsafe objects like {@link java.text.MessageFormat} that need to be cached per thread.
+		 *
+		 * <p>
+		 * This is a shortcut for wrapping a cache in a {@link ThreadLocal}, but provides a cleaner API.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Thread-local cache for MessageFormat instances</jc>
+		 * 	Cache&lt;String,MessageFormat&gt; <jv>cache</jv> = Cache
+		 * 		.<jsm>of</jsm>(String.<jk>class</jk>, MessageFormat.<jk>class</jk>)
+		 * 		.maxSize(100)
+		 * 		.<jsm>threadLocal</jsm>()
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is equivalent to:
+		 * <p class='bjava'>
+		 * 	ThreadLocal&lt;Cache&lt;String,MessageFormat&gt;&gt; <jv>cache</jv> =
+		 * 		ThreadLocal.<jsm>withInitial</jsm>(() -&gt; Cache
+		 * 			.<jsm>of</jsm>(String.<jk>class</jk>, MessageFormat.<jk>class</jk>)
+		 * 			.maxSize(100)
+		 * 			.build());
+		 * </p>
+		 *
+		 * @return This object for method chaining.
+		 */
+		public Builder<K,V> threadLocal() {
+			threadLocal = true;
+			return this;
+		}
+
+		/**
+		 * Sets the caching mode to {@link CacheMode#WEAK WEAK}.
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>cacheMode(CacheMode.WEAK)</c>.
+		 *
+		 * <p>
+		 * Weak caching uses {@link WeakHashMap} for storage, allowing cache entries to be
+		 * garbage collected when keys are no longer strongly referenced elsewhere.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Weak caching for Class metadata</jc>
+		 * 	Cache&lt;Class&lt;?&gt;,ClassMeta&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(Class.<jk>class</jk>, ClassMeta.<jk>class</jk>)
+		 * 		.<jsm>weak</jsm>()
+		 * 		.build();
+		 * </p>
+		 *
+		 * @return This object for method chaining.
+		 * @see #cacheMode(CacheMode)
+		 */
+		public Builder<K,V> weak() {
+			return cacheMode(WEAK);
+		}
+	}
 	/**
 	 * Creates a new {@link Builder} for constructing a cache with explicit type parameters.
 	 *
@@ -470,7 +424,6 @@ public class Cache<K,V> {
 	public static <K,V> Builder<K,V> create() {
 		return new Builder<>();
 	}
-
 	/**
 	 * Creates a new {@link Builder} for constructing a cache.
 	 *
@@ -492,11 +445,32 @@ public class Cache<K,V> {
 		return new Builder<>();
 	}
 
-	private final int maxSize;
-	private final boolean disableCaching;
-	private final Function<K,V> supplier;
-	private final AtomicInteger cacheHits = new AtomicInteger();
+	// Internal map with Tuple1 keys for content-based equality (especially for arrays)
+	// If threadLocal is true, this is null and threadLocalMap is used instead
+	private final Map<Tuple1<K>,V> map;
+	private final ThreadLocal<Map<Tuple1<K>,V>> threadLocalMap;
 
+	private final boolean isThreadLocal;
+
+	/**
+	 * Cache of Tuple1 wrapper objects to minimize object creation on repeated get/put calls.
+	 *
+	 * <p>
+	 * Uses WeakHashMap so wrappers can be GC'd when keys are no longer referenced.
+	 * This provides a significant performance improvement for caches with repeated key access.
+	 * If threadLocal is true, this is null and threadLocalWrapperCache is used instead.
+	 */
+	private final Map<K,Tuple1<K>> wrapperCache;
+
+	private final ThreadLocal<Map<K,Tuple1<K>>> threadLocalWrapperCache;
+
+	private final int maxSize;
+
+	private final boolean disableCaching;
+
+	private final Function<K,V> supplier;
+
+	private final AtomicInteger cacheHits = new AtomicInteger();
 	/**
 	 * Constructor.
 	 *
@@ -534,6 +508,35 @@ public class Cache<K,V> {
 		if (builder.logOnExit) {
 			shutdownMessage(() -> builder.id + ":  hits=" + cacheHits.get() + ", misses: " + size());
 		}
+	}
+	/**
+	 * Removes all entries from the cache.
+	 */
+	public void clear() {
+		getMap().clear();
+		getWrapperCache().clear(); // Clean up wrapper cache
+	}
+	/**
+	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key.
+	 *
+	 * @param key The key to check.
+	 * @return <jk>true</jk> if the cache contains the key.
+	 */
+	public boolean containsKey(K key) {
+		return getMap().containsKey(wrap(key));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the cache contains the value.
+	 */
+	public boolean containsValue(V value) {
+		// ConcurrentHashMap doesn't allow null values, so null can never be in the cache
+		if (value == null)
+			return false;
+		return getMap().containsValue(value);
 	}
 
 	/**
@@ -623,24 +626,6 @@ public class Cache<K,V> {
 	}
 
 	/**
-	 * Associates the specified value with the specified key in this cache.
-	 *
-	 * @param key The cache key. Can be <jk>null</jk>.
-	 * @param value The value to associate with the key.
-	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
-	 */
-	public V put(K key, V value) {
-		var m = getMap();
-		if (value == null) {
-			Tuple1<K> wrapped = wrap(key);
-			V result = m.remove(wrapped);
-			getWrapperCache().remove(key); // Clean up wrapper cache
-			return result;
-		}
-		return m.put(wrap(key), value);
-	}
-
-	/**
 	 * Returns the total number of cache hits since this cache was created.
 	 *
 	 * <p>
@@ -669,15 +654,6 @@ public class Cache<K,V> {
 	public int getCacheHits() { return cacheHits.get(); }
 
 	/**
-	 * Returns the number of entries in the cache.
-	 *
-	 * @return The number of cached entries.
-	 */
-	public int size() {
-		return getMap().size();
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the cache contains no entries.
 	 *
 	 * @return <jk>true</jk> if the cache is empty.
@@ -685,26 +661,21 @@ public class Cache<K,V> {
 	public boolean isEmpty() { return getMap().isEmpty(); }
 
 	/**
-	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key.
+	 * Associates the specified value with the specified key in this cache.
 	 *
-	 * @param key The key to check.
-	 * @return <jk>true</jk> if the cache contains the key.
+	 * @param key The cache key. Can be <jk>null</jk>.
+	 * @param value The value to associate with the key.
+	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
 	 */
-	public boolean containsKey(K key) {
-		return getMap().containsKey(wrap(key));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
-	 *
-	 * @param value The value to check.
-	 * @return <jk>true</jk> if the cache contains the value.
-	 */
-	public boolean containsValue(V value) {
-		// ConcurrentHashMap doesn't allow null values, so null can never be in the cache
-		if (value == null)
-			return false;
-		return getMap().containsValue(value);
+	public V put(K key, V value) {
+		var m = getMap();
+		if (value == null) {
+			Tuple1<K> wrapped = wrap(key);
+			V result = m.remove(wrapped);
+			getWrapperCache().remove(key); // Clean up wrapper cache
+			return result;
+		}
+		return m.put(wrap(key), value);
 	}
 
 	/**
@@ -722,10 +693,39 @@ public class Cache<K,V> {
 	}
 
 	/**
-	 * Removes all entries from the cache.
+	 * Returns the number of entries in the cache.
+	 *
+	 * @return The number of cached entries.
 	 */
-	public void clear() {
-		getMap().clear();
-		getWrapperCache().clear(); // Clean up wrapper cache
+	public int size() {
+		return getMap().size();
+	}
+
+	/**
+	 * Gets the map for the current thread.
+	 *
+	 * @return The map for the current thread.
+	 */
+	private Map<Tuple1<K>,V> getMap() { return isThreadLocal ? threadLocalMap.get() : map; }
+
+	/**
+	 * Gets the wrapper cache for the current thread.
+	 *
+	 * @return The wrapper cache for the current thread.
+	 */
+	private Map<K,Tuple1<K>> getWrapperCache() { return isThreadLocal ? threadLocalWrapperCache.get() : wrapperCache; }
+
+	/**
+	 * Gets or creates a Tuple1 wrapper for the given key.
+	 *
+	 * <p>
+	 * The Tuple1 wrapper provides content-based equality for arrays and other objects.
+	 * By caching these wrappers, we avoid creating new Tuple1 objects on every cache access.
+	 *
+	 * @param key The key to wrap.
+	 * @return A cached or new Tuple1 wrapper for the key.
+	 */
+	private Tuple1<K> wrap(K key) {
+		return getWrapperCache().computeIfAbsent(key, k -> Tuple1.of(k));
 	}
 }

@@ -476,18 +476,6 @@ public class ReflectionMap<V> {
 		return new Builder<>();
 	}
 
-	private static boolean argsMatch(String[] names, Class<?>[] args) {
-		if (names == null)
-			return true;
-		if (names.length != args.length)
-			return false;
-		for (var i = 0; i < args.length; i++) {
-			if (! argMatches(names[i], args[i]))
-				return false;
-		}
-		return true;
-	}
-
 	private static boolean argMatches(String pattern, Class<?> type) {
 		// Extract base type and dimensions from pattern
 		var patternDims = 0;
@@ -517,22 +505,16 @@ public class ReflectionMap<V> {
 		return eq(patternBase, typeBase.getSimpleName()) || eq(patternBase, typeBase.getName());
 	}
 
-	private static String stripGenerics(String type) {
-		if (type.indexOf('<') == -1)
-			return type;
-		var sb = new StringBuilder(type.length());
-		var depth = 0;
-		for (var i = 0; i < type.length(); i++) {
-			var c = type.charAt(i);
-			if (c == '<') {
-				depth++;
-			} else if (c == '>') {
-				depth--;
-			} else if (depth == 0) {
-				sb.append(c);
-			}
+	private static boolean argsMatch(String[] names, Class<?>[] args) {
+		if (names == null)
+			return true;
+		if (names.length != args.length)
+			return false;
+		for (var i = 0; i < args.length; i++) {
+			if (! argMatches(names[i], args[i]))
+				return false;
 		}
-		return sb.toString();
+		return true;
 	}
 
 	private static boolean classMatches(String simpleName, String fullName, Class<?> c) {
@@ -590,6 +572,24 @@ public class ReflectionMap<V> {
 			}
 			consumer.accept(key.substring(m).trim());
 		}
+	}
+
+	private static String stripGenerics(String type) {
+		if (type.indexOf('<') == -1)
+			return type;
+		var sb = new StringBuilder(type.length());
+		var depth = 0;
+		for (var i = 0; i < type.length(); i++) {
+			var c = type.charAt(i);
+			if (c == '<') {
+				depth++;
+			} else if (c == '>') {
+				depth--;
+			} else if (depth == 0) {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 
 	final List<ClassEntry<V>> classEntries;

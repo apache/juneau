@@ -93,80 +93,6 @@ public class CharValue extends Value<Character> {
 	}
 
 	/**
-	 * Increments the value by 1.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
-	 * 	<jv>value</jv>.increment();
-	 * 	<jsm>assertEquals</jsm>('B', <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public CharValue increment() {
-		var v = get();
-		set((char)((v == null ? 0 : v) + 1));
-		return this;
-	}
-
-	/**
-	 * Decrements the value by 1.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
-	 * 	<jv>value</jv>.decrement();
-	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public CharValue decrement() {
-		var v = get();
-		set((char)((v == null ? 0 : v) - 1));
-		return this;
-	}
-
-	/**
-	 * Increments the value by 1 and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
-	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.incrementAndGet();  <jc>// Returns 'B'</jc>
-	 * 	<jsm>assertEquals</jsm>('B', <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @return The incremented value.
-	 */
-	public Character incrementAndGet() {
-		var v = get();
-		var result = (char)((v == null ? 0 : v) + 1);
-		set(result);
-		return result;
-	}
-
-	/**
-	 * Decrements the value by 1 and returns the new value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
-	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.decrementAndGet();  <jc>// Returns 'A'</jc>
-	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
-	 * </p>
-	 *
-	 * @return The decremented value.
-	 */
-	public Character decrementAndGet() {
-		var v = get();
-		var result = (char)((v == null ? 0 : v) - 1);
-		set(result);
-		return result;
-	}
-
-	/**
 	 * Adds the specified value to the current value.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -201,6 +127,80 @@ public class CharValue extends Value<Character> {
 	public Character addAndGet(Character x) {
 		var v = get();
 		var result = (char)((v == null ? 0 : v) + (x == null ? 0 : x));
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Decrements the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	<jv>value</jv>.decrement();
+	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public CharValue decrement() {
+		var v = get();
+		set((char)((v == null ? 0 : v) - 1));
+		return this;
+	}
+
+	/**
+	 * Decrements the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.decrementAndGet();  <jc>// Returns 'A'</jc>
+	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @return The decremented value.
+	 */
+	public Character decrementAndGet() {
+		var v = get();
+		var result = (char)((v == null ? 0 : v) - 1);
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Increments the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	<jv>value</jv>.increment();
+	 * 	<jsm>assertEquals</jsm>('B', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public CharValue increment() {
+		var v = get();
+		set((char)((v == null ? 0 : v) + 1));
+		return this;
+	}
+
+	/**
+	 * Increments the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.incrementAndGet();  <jc>// Returns 'B'</jc>
+	 * 	<jsm>assertEquals</jsm>('B', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @return The incremented value.
+	 */
+	public Character incrementAndGet() {
+		var v = get();
+		var result = (char)((v == null ? 0 : v) + 1);
 		set(result);
 		return result;
 	}

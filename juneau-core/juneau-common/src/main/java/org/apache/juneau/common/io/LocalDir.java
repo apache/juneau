@@ -87,9 +87,28 @@ import org.apache.juneau.common.utils.*;
  */
 public class LocalDir {
 
+	/**
+	 * Validates that the specified classpath resource exists and is a file.
+	 * Note that the behavior of Class.getResource(path) is different when pointing to directories on the classpath.
+	 * When packaged as a jar, calling Class.getResource(path) on a directory returns null.
+	 * When unpackaged, calling Class.getResource(path) on a directory returns a URL starting with "file:".
+	 * We perform a test to make the behavior the same regardless of whether we're packaged or not.
+	 */
+	private static boolean isClasspathFile(URL url) {
+		return safeSupplier(() -> {
+			if (url == null)
+				return false;
+			var uri = url.toURI();
+			if (uri.toString().startsWith("file:"))
+				if (Files.isDirectory(Paths.get(uri)))
+					return false;
+			return true;
+		});
+	}
 	private final Class<?> clazz;
 	private final String clazzPath;
 	private final Path path;
+
 	private final int hashCode;
 
 	/**
@@ -240,24 +259,5 @@ public class LocalDir {
 		if (clazz == null)
 			return path.toString();
 		return cn(clazz) + ":" + clazzPath;
-	}
-
-	/**
-	 * Validates that the specified classpath resource exists and is a file.
-	 * Note that the behavior of Class.getResource(path) is different when pointing to directories on the classpath.
-	 * When packaged as a jar, calling Class.getResource(path) on a directory returns null.
-	 * When unpackaged, calling Class.getResource(path) on a directory returns a URL starting with "file:".
-	 * We perform a test to make the behavior the same regardless of whether we're packaged or not.
-	 */
-	private static boolean isClasspathFile(URL url) {
-		return safeSupplier(() -> {
-			if (url == null)
-				return false;
-			var uri = url.toURI();
-			if (uri.toString().startsWith("file:"))
-				if (Files.isDirectory(Paths.get(uri)))
-					return false;
-			return true;
-		});
 	}
 }

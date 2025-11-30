@@ -706,72 +706,6 @@ public class IOUtils {
 	}
 
 	/**
-	 * Reads the contents of an input stream into a string, reading up to the specified maximum number of bytes.
-	 *
-	 * <p>
-	 * Assumes UTF-8 encoding.
-	 *
-	 * @param in
-	 * 	The input stream.
-	 * 	<br>Can be <jk>null</jk>.
-	 * 	<br>Stream is automatically closed.
-	 * @param maxBytes
-	 * 	The maximum number of bytes to read, or <c>-1</c> to read all bytes.
-	 * @return
-	 * 	The contents of the input stream as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
-	 * @throws IOException If a problem occurred trying to read from the input stream.
-	 */
-	public static String read(InputStream in, int maxBytes) throws IOException {
-		return read(in, maxBytes, UTF8);
-	}
-
-	/**
-	 * Reads the contents of an input stream into a string, reading up to the specified maximum number of bytes.
-	 *
-	 * <p>
-	 * Assumes UTF-8 encoding.
-	 *
-	 * @param in
-	 * 	The input stream.
-	 * 	<br>Can be <jk>null</jk>.
-	 * 	<br>Stream is automatically closed.
-	 * @param maxBytes
-	 * 	The maximum number of bytes to read, or <c>-1</c> to read all bytes.
-	 * @return
-	 * 	The contents of the input stream as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
-	 * @throws IOException If a problem occurred trying to read from the input stream.
-	 */
-	public static String read(InputStream in, long maxBytes) throws IOException {
-		if (maxBytes > Integer.MAX_VALUE)
-			maxBytes = Integer.MAX_VALUE;
-		return read(in, (int)maxBytes, UTF8);
-	}
-
-	/**
-	 * Reads the contents of an input stream into a string using the specified charset, reading up to the specified maximum number of bytes.
-	 *
-	 * @param in
-	 * 	The input stream.
-	 * 	<br>Can be <jk>null</jk>.
-	 * 	<br>Stream is automatically closed.
-	 * @param maxBytes
-	 * 	The maximum number of bytes to read, or <c>-1</c> to read all bytes.
-	 * @param cs
-	 * 	The charset of the contents of the input stream.
-	 * @return
-	 * 	The contents of the input stream as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
-	 * @throws IOException If a problem occurred trying to read from the input stream.
-	 */
-	public static String read(InputStream in, int maxBytes, Charset cs) throws IOException {
-		if (in == null)
-			return null;
-		try (var in2 = in) {
-			var bytes = readBytes(in2, maxBytes);
-			return new String(bytes, cs);
-		}
-	}
-
-	/**
 	 * Reads the contents of an input stream into a string using the specified charset.
 	 *
 	 * @param in
@@ -811,6 +745,72 @@ public class IOUtils {
 	 */
 	public static String read(InputStream in, Consumer<IOException> onException) {
 		return read(in, UTF8, onException);
+	}
+
+	/**
+	 * Reads the contents of an input stream into a string, reading up to the specified maximum number of bytes.
+	 *
+	 * <p>
+	 * Assumes UTF-8 encoding.
+	 *
+	 * @param in
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param maxBytes
+	 * 	The maximum number of bytes to read, or <c>-1</c> to read all bytes.
+	 * @return
+	 * 	The contents of the input stream as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
+	 * @throws IOException If a problem occurred trying to read from the input stream.
+	 */
+	public static String read(InputStream in, int maxBytes) throws IOException {
+		return read(in, maxBytes, UTF8);
+	}
+
+	/**
+	 * Reads the contents of an input stream into a string using the specified charset, reading up to the specified maximum number of bytes.
+	 *
+	 * @param in
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param maxBytes
+	 * 	The maximum number of bytes to read, or <c>-1</c> to read all bytes.
+	 * @param cs
+	 * 	The charset of the contents of the input stream.
+	 * @return
+	 * 	The contents of the input stream as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
+	 * @throws IOException If a problem occurred trying to read from the input stream.
+	 */
+	public static String read(InputStream in, int maxBytes, Charset cs) throws IOException {
+		if (in == null)
+			return null;
+		try (var in2 = in) {
+			var bytes = readBytes(in2, maxBytes);
+			return new String(bytes, cs);
+		}
+	}
+
+	/**
+	 * Reads the contents of an input stream into a string, reading up to the specified maximum number of bytes.
+	 *
+	 * <p>
+	 * Assumes UTF-8 encoding.
+	 *
+	 * @param in
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param maxBytes
+	 * 	The maximum number of bytes to read, or <c>-1</c> to read all bytes.
+	 * @return
+	 * 	The contents of the input stream as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
+	 * @throws IOException If a problem occurred trying to read from the input stream.
+	 */
+	public static String read(InputStream in, long maxBytes) throws IOException {
+		if (maxBytes > Integer.MAX_VALUE)
+			maxBytes = Integer.MAX_VALUE;
+		return read(in, (int)maxBytes, UTF8);
 	}
 
 	/**

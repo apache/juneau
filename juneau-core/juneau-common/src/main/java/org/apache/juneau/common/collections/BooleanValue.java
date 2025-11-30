@@ -102,36 +102,6 @@ public class BooleanValue extends Value<Boolean> {
 	}
 
 	/**
-	 * Returns <c>true</c> if the value is set to <c>true</c>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>true</jk>);
-	 * 	<jk>if</jk> (<jv>value</jv>.isTrue()) {
-	 * 		<jsm>log</jsm>(<js>"Value is true"</js>);
-	 * 	}
-	 * </p>
-	 *
-	 * @return <c>true</c> if the value is set to <c>true</c>, <c>false</c> otherwise (including when <c>null</c>).
-	 */
-	public boolean isTrue() { return Boolean.TRUE.equals(get()); }
-
-	/**
-	 * Returns <c>true</c> if the value is not set to <c>true</c> (i.e., it's <c>false</c> or <c>null</c>).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>false</jk>);
-	 * 	<jk>if</jk> (<jv>value</jv>.isNotTrue()) {
-	 * 		<jsm>log</jsm>(<js>"Value is not true"</js>);
-	 * 	}
-	 * </p>
-	 *
-	 * @return <c>true</c> if the value is not set to <c>true</c>, <c>false</c> otherwise.
-	 */
-	public boolean isNotTrue() { return ! isTrue(); }
-
-	/**
 	 * Checks if the current value is equal to the specified value.
 	 *
 	 * <p>
@@ -179,4 +149,34 @@ public class BooleanValue extends Value<Boolean> {
 				return true;
 		return false;
 	}
+
+	/**
+	 * Returns <c>true</c> if the value is not set to <c>true</c> (i.e., it's <c>false</c> or <c>null</c>).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>false</jk>);
+	 * 	<jk>if</jk> (<jv>value</jv>.isNotTrue()) {
+	 * 		<jsm>log</jsm>(<js>"Value is not true"</js>);
+	 * 	}
+	 * </p>
+	 *
+	 * @return <c>true</c> if the value is not set to <c>true</c>, <c>false</c> otherwise.
+	 */
+	public boolean isNotTrue() { return ! isTrue(); }
+
+	/**
+	 * Returns <c>true</c> if the value is set to <c>true</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	<jk>if</jk> (<jv>value</jv>.isTrue()) {
+	 * 		<jsm>log</jsm>(<js>"Value is true"</js>);
+	 * 	}
+	 * </p>
+	 *
+	 * @return <c>true</c> if the value is set to <c>true</c>, <c>false</c> otherwise (including when <c>null</c>).
+	 */
+	public boolean isTrue() { return Boolean.TRUE.equals(get()); }
 }

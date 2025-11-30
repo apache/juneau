@@ -112,6 +112,32 @@ public class DateUtils {
 	}
 
 	/**
+	 * Adds to a field of a calendar.
+	 *
+	 * @param c The calendar to modify.
+	 * @param field The calendar field to modify (e.g., {@link Calendar#DATE}, {@link Calendar#MONTH}).
+	 * @param amount The amount to add.
+	 * @return The same calendar with the field modified.
+	 */
+	public static Calendar add(Calendar c, int field, int amount) {
+		c.add(field, amount);
+		return c;
+	}
+
+	/**
+	 * Adds or subtracts a number of days from the specified calendar.
+	 *
+	 * <p>Creates a clone of the calendar before modifying it.
+	 *
+	 * @param c The calendar to modify.
+	 * @param days The number of days to add (positive) or subtract (negative).
+	 * @return A cloned calendar with the updated date, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static Calendar addSubtractDays(Calendar c, int days) {
+		return opt(c).map(x -> (Calendar)x.clone()).map(x -> add(x, Calendar.DATE, days)).orElse(null);
+	}
+
+	/**
 	 * Clears thread-local variable containing {@link java.text.DateFormat} cache.
 	 */
 	public static void clearThreadLocal() {
@@ -132,96 +158,6 @@ public class DateUtils {
 	 */
 	public static String formatDate(Date date, String pattern) {
 		return DateFormatHolder.formatFor(pattern).format(date);
-	}
-
-	/**
-	 * Returns a {@link DateTimeFormatter} using either a pattern or predefined pattern name.
-	 *
-	 * @param pattern The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).
-	 * @return The formatter.
-	 */
-	public static DateTimeFormatter getDateTimeFormatter(String pattern) {
-		if (isEmpty(pattern))
-			return DateTimeFormatter.ISO_INSTANT;
-		try {
-			for (var f : DateTimeFormatter.class.getFields()) {
-				if (f.getName().equals(pattern)) {
-					return (DateTimeFormatter)f.get(null);
-				}
-			}
-			return DateTimeFormatter.ofPattern(pattern);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw toRex(e);
-		}
-	}
-
-	/**
-	 * Parses an ISO8601 date string into a Calendar object.
-	 *
-	 * <p>
-	 * This method converts an ISO8601 formatted date/time string into a Calendar object,
-	 * preserving timezone information and handling various ISO8601 formats. The method
-	 * automatically normalizes the input string to ensure it can be parsed correctly.
-	 *
-	 * <p>
-	 * The method supports the following ISO8601 formats:
-	 * <ul>
-	 * 	<li><js>"2024-01-15T14:30:45Z"</js> - UTC timezone
-	 * 	<li><js>"2024-01-15T14:30:45-05:00"</js> - Offset timezone
-	 * 	<li><js>"2024-01-15T14:30:45+09:00"</js> - Positive offset timezone
-	 * 	<li><js>"2024-01-15"</js> - Date only (time defaults to 00:00:00)
-	 * 	<li><js>"2024-01-15T14:30"</js> - Date and time (seconds default to 00)
-	 * 	<li><js>"2024-01-15T14:30:45.123"</js> - With milliseconds
-	 * </ul>
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Parse UTC timezone</jc>
-	 * 	Calendar <jv>utcCal</jv> = DateUtils.<jsm>fromIso8601Calendar</jsm>(<js>"2024-01-15T14:30:45Z"</js>);
-	 * 	<jc>// Result: Calendar with UTC timezone</jc>
-	 *
-	 * 	<jc>// Parse offset timezone</jc>
-	 * 	Calendar <jv>estCal</jv> = DateUtils.<jsm>fromIso8601Calendar</jsm>(<js>"2024-01-15T14:30:45-05:00"</js>);
-	 * 	<jc>// Result: Calendar with EST timezone (-05:00)</jc>
-	 *
-	 * 	<jc>// Parse date only</jc>
-	 * 	Calendar <jv>dateCal</jv> = DateUtils.<jsm>fromIso8601Calendar</jsm>(<js>"2024-01-15"</js>);
-	 * 	<jc>// Result: Calendar with time set to 00:00:00 in system timezone</jc>
-	 *
-	 * 	<jc>// Parse with milliseconds</jc>
-	 * 	Calendar <jv>msCal</jv> = DateUtils.<jsm>fromIso8601Calendar</jsm>(<js>"2024-01-15T14:30:45.123Z"</js>);
-	 * 	<jc>// Result: Calendar with 123 milliseconds</jc>
-	 * </p>
-	 *
-	 * <h5 class='section'>Timezone Handling:</h5>
-	 * <p>
-	 * The method preserves the original timezone information from the ISO8601 string.
-	 * If no timezone is specified, the system's default timezone is used. The resulting
-	 * Calendar object will have the appropriate timezone set.
-	 * </p>
-	 *
-	 * <h5 class='section'>Input Normalization:</h5>
-	 * <p>
-	 * The method automatically normalizes incomplete ISO8601 strings by:
-	 * <ul>
-	 * 	<li>Adding missing time components (defaults to 00:00:00)
-	 * 	<li>Adding timezone information if missing (uses system default)
-	 * 	<li>Ensuring proper format compliance
-	 * </ul>
-	 * </p>
-	 *
-	 * See Also:  <a class="doclink" href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601 - Wikipedia</a>
-	 *
-	 * @param s The ISO8601 formatted string to parse (can be null or empty)
-	 * @return Calendar object representing the parsed date/time, or null if input is null/empty
-	 * @throws DateTimeParseException if the string cannot be parsed as a valid ISO8601 date
-	 * @see #fromIso8601(String)
-	 * @see #toIso8601(Calendar)
-	 */
-	public static Calendar fromIso8601Calendar(String s) {
-		if (isBlank(s))
-			return null;
-		return GregorianCalendar.from(fromIso8601(s));
 	}
 
 	/**
@@ -294,183 +230,93 @@ public class DateUtils {
 	}
 
 	/**
-	 * Converts a Calendar object to an ISO8601 formatted string.
+	 * Parses an ISO8601 date string into a Calendar object.
 	 *
 	 * <p>
-	 * This method formats a Calendar object into a standard ISO8601 date/time string
-	 * with timezone information. The output format follows the pattern:
-	 * <code>yyyy-MM-dd'T'HH:mm:ssXXX</code>
+	 * This method converts an ISO8601 formatted date/time string into a Calendar object,
+	 * preserving timezone information and handling various ISO8601 formats. The method
+	 * automatically normalizes the input string to ensure it can be parsed correctly.
 	 *
 	 * <p>
-	 * The method preserves the timezone information from the Calendar object and
-	 * formats it according to ISO8601 standards, including the timezone offset.
+	 * The method supports the following ISO8601 formats:
+	 * <ul>
+	 * 	<li><js>"2024-01-15T14:30:45Z"</js> - UTC timezone
+	 * 	<li><js>"2024-01-15T14:30:45-05:00"</js> - Offset timezone
+	 * 	<li><js>"2024-01-15T14:30:45+09:00"</js> - Positive offset timezone
+	 * 	<li><js>"2024-01-15"</js> - Date only (time defaults to 00:00:00)
+	 * 	<li><js>"2024-01-15T14:30"</js> - Date and time (seconds default to 00)
+	 * 	<li><js>"2024-01-15T14:30:45.123"</js> - With milliseconds
+	 * </ul>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Create a Calendar with a specific timezone</jc>
-	 * 	Calendar <jv>cal</jv> = Calendar.getInstance(TimeZone.getTimeZone(<js>"America/New_York"</js>));
-	 * 	<jv>cal</jv>.set(2024, Calendar.JANUARY, 15, 14, 30, 45);
-	 * 	<jv>cal</jv>.set(Calendar.MILLISECOND, 123);
+	 * 	<jc>// Parse UTC timezone</jc>
+	 * 	Calendar <jv>utcCal</jv> = DateUtils.<jsm>fromIso8601Calendar</jsm>(<js>"2024-01-15T14:30:45Z"</js>);
+	 * 	<jc>// Result: Calendar with UTC timezone</jc>
 	 *
-	 * 	<jc>// Convert to ISO8601 string</jc>
-	 * 	String <jv>iso8601</jv> = DateUtils.<jsm>toIso8601</jsm>(<jv>cal</jv>);
-	 * 	<jc>// Result: "2024-01-15T14:30:45-05:00" (or -04:00 during DST)</jc>
+	 * 	<jc>// Parse offset timezone</jc>
+	 * 	Calendar <jv>estCal</jv> = DateUtils.<jsm>fromIso8601Calendar</jsm>(<js>"2024-01-15T14:30:45-05:00"</js>);
+	 * 	<jc>// Result: Calendar with EST timezone (-05:00)</jc>
 	 *
-	 * 	<jc>// UTC timezone example</jc>
-	 * 	Calendar <jv>utcCal</jv> = Calendar.getInstance(TimeZone.getTimeZone(<js>"UTC"</js>));
-	 * 	<jv>utcCal</jv>.set(2024, Calendar.JANUARY, 15, 19, 30, 45);
-	 * 	String <jv>utcIso</jv> = DateUtils.<jsm>toIso8601</jsm>(<jv>utcCal</jv>);
-	 * 	<jc>// Result: "2024-01-15T19:30:45Z"</jc>
+	 * 	<jc>// Parse date only</jc>
+	 * 	Calendar <jv>dateCal</jv> = DateUtils.<jsm>fromIso8601Calendar</jsm>(<js>"2024-01-15"</js>);
+	 * 	<jc>// Result: Calendar with time set to 00:00:00 in system timezone</jc>
+	 *
+	 * 	<jc>// Parse with milliseconds</jc>
+	 * 	Calendar <jv>msCal</jv> = DateUtils.<jsm>fromIso8601Calendar</jsm>(<js>"2024-01-15T14:30:45.123Z"</js>);
+	 * 	<jc>// Result: Calendar with 123 milliseconds</jc>
 	 * </p>
-	 *
-	 * <h5 class='section'>Format Details:</h5>
-	 * <ul>
-	 * 	<li><c>yyyy</c> - 4-digit year
-	 * 	<li><c>MM</c> - 2-digit month (01-12)
-	 * 	<li><c>dd</c> - 2-digit day of month (01-31)
-	 * 	<li><c>T</c> - Literal 'T' separator between date and time
-	 * 	<li><c>HH</c> - 2-digit hour in 24-hour format (00-23)
-	 * 	<li><c>mm</c> - 2-digit minute (00-59)
-	 * 	<li><c>ss</c> - 2-digit second (00-59)
-	 * 	<li><c>XXX</c> - Timezone offset (+HH:mm, -HH:mm, or Z for UTC)
-	 * </ul>
 	 *
 	 * <h5 class='section'>Timezone Handling:</h5>
 	 * <p>
-	 * The method uses the Calendar's timezone to determine the appropriate offset.
-	 * UTC timezones are represented as 'Z', while other timezones show their
-	 * offset from UTC (e.g., -05:00 for EST, -04:00 for EDT).
+	 * The method preserves the original timezone information from the ISO8601 string.
+	 * If no timezone is specified, the system's default timezone is used. The resulting
+	 * Calendar object will have the appropriate timezone set.
+	 * </p>
+	 *
+	 * <h5 class='section'>Input Normalization:</h5>
+	 * <p>
+	 * The method automatically normalizes incomplete ISO8601 strings by:
+	 * <ul>
+	 * 	<li>Adding missing time components (defaults to 00:00:00)
+	 * 	<li>Adding timezone information if missing (uses system default)
+	 * 	<li>Ensuring proper format compliance
+	 * </ul>
 	 * </p>
 	 *
 	 * See Also:  <a class="doclink" href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601 - Wikipedia</a>
 	 *
-	 * @param c The Calendar object to convert (cannot be null)
-	 * @return ISO8601 formatted string representation of the Calendar
-	 * @throws NullPointerException if the Calendar parameter is null
-	 * @see SimpleDateFormat
-	 * @see Calendar#getTimeZone()
+	 * @param s The ISO8601 formatted string to parse (can be null or empty)
+	 * @return Calendar object representing the parsed date/time, or null if input is null/empty
+	 * @throws DateTimeParseException if the string cannot be parsed as a valid ISO8601 date
+	 * @see #fromIso8601(String)
+	 * @see #toIso8601(Calendar)
 	 */
-	public static String toIso8601(Calendar c) {
-		var sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-		sdf.setTimeZone(c.getTimeZone());
-		return sdf.format(c.getTime());
+	public static Calendar fromIso8601Calendar(String s) {
+		if (isBlank(s))
+			return null;
+		return GregorianCalendar.from(fromIso8601(s));
 	}
 
 	/**
-	 * Pads out an ISO8601 string so that it can be parsed using {@link DatatypeConverter#parseDateTime(String)}.
+	 * Returns a {@link DateTimeFormatter} using either a pattern or predefined pattern name.
 	 *
-	 * <ul>
-	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js> -&gt; <js>"2001-07-04T15:30:45-05:00"</js>
-	 * 	<li><js>"2001-07-04T15:30:45Z"</js> -&gt; <js>"2001-07-04T15:30:45Z"</js>
-	 * 	<li><js>"2001-07-04T15:30:45.1Z"</js> -&gt; <js>"2001-07-04T15:30:45.1Z"</js>
-	 * 	<li><js>"2001-07-04T15:30Z"</js> -&gt; <js>"2001-07-04T15:30:00Z"</js>
-	 * 	<li><js>"2001-07-04T15:30"</js> -&gt; <js>"2001-07-04T15:30:00"</js>
-	 * 	<li><js>"2001-07-04"</js> -&gt; <li><js>"2001-07-04T00:00:00"</js>
-	 * 	<li><js>"2001-07"</js> -&gt; <js>"2001-07-01T00:00:00"</js>
-	 * 	<li><js>"2001"</js> -&gt; <js>"2001-01-01T00:00:00"</js>
-	 * </ul>
-	 *
-	 * @param in The string to pad.
-	 * @return The padded string.
+	 * @param pattern The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).
+	 * @return The formatter.
 	 */
-	public static String toValidIso8601DT(String in) {
-		assertArgNotNull("in", in);
-
-		in = in.trim();
-
-		// "2001-07-04T15:30:45Z"
-		// S1: Looking for -
-		// S2: Found -, looking for -
-		// S3: Found -, looking for T
-		// S4: Found T, looking for :
-		// S5: Found :, looking for :
-		// S6: Found :, looking for Z or - or +
-		// S7: Found time zone
-
-		var state = S1;
-		var needsT = false;
-		var timezoneAfterHour = false;  // Track if timezone found after hour (S4)
-		var timezoneAfterMinute = false;  // Track if timezone found after minute (S5)
-		for (var i = 0; i < in.length(); i++) {
-			var c = in.charAt(i);
-			if (state == S1) {
-				if (c == '-')
-					state = S2;
-			} else if (state == S2) {
-				if (c == '-')
-					state = S3;
-			} else if (state == S3) {
-				if (c == 'T')
-					state = S4;
-				if (c == ' ') {
-					state = S4;
-					needsT = true;
+	public static DateTimeFormatter getDateTimeFormatter(String pattern) {
+		if (isEmpty(pattern))
+			return DateTimeFormatter.ISO_INSTANT;
+		try {
+			for (var f : DateTimeFormatter.class.getFields()) {
+				if (f.getName().equals(pattern)) {
+					return (DateTimeFormatter)f.get(null);
 				}
-			} else if (state == S4) {
-				if (c == ':')
-					state = S5;
-				else if (c == 'Z' || c == '+' || c == '-') {
-					state = S7;  // Timezone immediately after hour (e.g., "2011-01-15T12Z")
-					timezoneAfterHour = true;
-				}
-			} else if (state == S5) {
-				if (c == ':')
-					state = S6;
-				else if (c == 'Z' || c == '+' || c == '-') {
-					state = S7;  // Timezone immediately after minute (e.g., "2011-01-15T12:30Z")
-					timezoneAfterMinute = true;
-				}
-			} else if (state == S6) {
-				if (c == 'Z' || c == '+' || c == '-')
-					state = S7;
 			}
+			return DateTimeFormatter.ofPattern(pattern);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw toRex(e);
 		}
-
-		if (needsT)
-			in = in.replace(' ', 'T');
-
-		var result = switch (state) {
-			case S1 -> in + "-01-01T00:00:00";
-			case S2 -> in + "-01T00:00:00";
-			case S3 -> in + "T00:00:00";
-			case S4 -> in + ":00:00";
-			case S5 -> in + ":00";
-			case S6 -> in;  // Complete time, no timezone
-			case S7 -> {
-				// Complete time with timezone, but may need to add missing components
-				if (timezoneAfterHour) {
-					// Timezone found after hour, need to add :00:00 before timezone
-					var tzIndex = in.length();
-					for (var i = in.length() - 1; i >= 0; i--) {
-						var ch = in.charAt(i);
-						if (ch == 'Z' || ch == '+' || ch == '-') {
-							tzIndex = i;
-							break;
-						}
-					}
-					yield in.substring(0, tzIndex) + ":00:00" + in.substring(tzIndex);
-				} else if (timezoneAfterMinute) {
-					// Timezone found after minute, need to add :00 before timezone
-					var tzIndex = in.length();
-					for (var i = in.length() - 1; i >= 0; i--) {
-						var ch = in.charAt(i);
-						if (ch == 'Z' || ch == '+' || ch == '-') {
-							tzIndex = i;
-							break;
-						}
-					}
-					yield in.substring(0, tzIndex) + ":00" + in.substring(tzIndex);
-				} else {
-					yield in;  // Complete time with timezone (already has seconds)
-				}
-			}
-			default -> in;
-		};
-
-		if (state != S7)
-			result += ZonedDateTime.now(ZoneId.systemDefault()).getOffset().toString();
-
-		return result;
 	}
 
 	/**
@@ -706,6 +552,31 @@ public class DateUtils {
 	// ================================================================================================================
 
 	/**
+	 * Converts a ChronoField to its corresponding Calendar field constant.
+	 *
+	 * <p>
+	 * This method provides a mapping from modern ChronoField values to legacy
+	 * Calendar field constants for use with Calendar.add() and similar methods.
+	 *
+	 * @param field The ChronoField to convert
+	 * @return The corresponding Calendar field constant
+	 * @see ChronoField
+	 * @see Calendar
+	 */
+	public static int toCalendarField(ChronoField field) {
+		return switch (field) {
+			case YEAR -> Calendar.YEAR;
+			case MONTH_OF_YEAR -> Calendar.MONTH;
+			case DAY_OF_MONTH -> Calendar.DAY_OF_MONTH;
+			case HOUR_OF_DAY -> Calendar.HOUR_OF_DAY;
+			case MINUTE_OF_HOUR -> Calendar.MINUTE;
+			case SECOND_OF_MINUTE -> Calendar.SECOND;
+			case MILLI_OF_SECOND -> Calendar.MILLISECOND;
+			default -> Calendar.MILLISECOND;
+		};
+	}
+
+	/**
 	 * Converts a ChronoUnit to its corresponding ChronoField.
 	 *
 	 * <p>
@@ -756,54 +627,183 @@ public class DateUtils {
 	}
 
 	/**
-	 * Converts a ChronoField to its corresponding Calendar field constant.
+	 * Converts a Calendar object to an ISO8601 formatted string.
 	 *
 	 * <p>
-	 * This method provides a mapping from modern ChronoField values to legacy
-	 * Calendar field constants for use with Calendar.add() and similar methods.
+	 * This method formats a Calendar object into a standard ISO8601 date/time string
+	 * with timezone information. The output format follows the pattern:
+	 * <code>yyyy-MM-dd'T'HH:mm:ssXXX</code>
 	 *
-	 * @param field The ChronoField to convert
-	 * @return The corresponding Calendar field constant
-	 * @see ChronoField
-	 * @see Calendar
+	 * <p>
+	 * The method preserves the timezone information from the Calendar object and
+	 * formats it according to ISO8601 standards, including the timezone offset.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create a Calendar with a specific timezone</jc>
+	 * 	Calendar <jv>cal</jv> = Calendar.getInstance(TimeZone.getTimeZone(<js>"America/New_York"</js>));
+	 * 	<jv>cal</jv>.set(2024, Calendar.JANUARY, 15, 14, 30, 45);
+	 * 	<jv>cal</jv>.set(Calendar.MILLISECOND, 123);
+	 *
+	 * 	<jc>// Convert to ISO8601 string</jc>
+	 * 	String <jv>iso8601</jv> = DateUtils.<jsm>toIso8601</jsm>(<jv>cal</jv>);
+	 * 	<jc>// Result: "2024-01-15T14:30:45-05:00" (or -04:00 during DST)</jc>
+	 *
+	 * 	<jc>// UTC timezone example</jc>
+	 * 	Calendar <jv>utcCal</jv> = Calendar.getInstance(TimeZone.getTimeZone(<js>"UTC"</js>));
+	 * 	<jv>utcCal</jv>.set(2024, Calendar.JANUARY, 15, 19, 30, 45);
+	 * 	String <jv>utcIso</jv> = DateUtils.<jsm>toIso8601</jsm>(<jv>utcCal</jv>);
+	 * 	<jc>// Result: "2024-01-15T19:30:45Z"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Format Details:</h5>
+	 * <ul>
+	 * 	<li><c>yyyy</c> - 4-digit year
+	 * 	<li><c>MM</c> - 2-digit month (01-12)
+	 * 	<li><c>dd</c> - 2-digit day of month (01-31)
+	 * 	<li><c>T</c> - Literal 'T' separator between date and time
+	 * 	<li><c>HH</c> - 2-digit hour in 24-hour format (00-23)
+	 * 	<li><c>mm</c> - 2-digit minute (00-59)
+	 * 	<li><c>ss</c> - 2-digit second (00-59)
+	 * 	<li><c>XXX</c> - Timezone offset (+HH:mm, -HH:mm, or Z for UTC)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Timezone Handling:</h5>
+	 * <p>
+	 * The method uses the Calendar's timezone to determine the appropriate offset.
+	 * UTC timezones are represented as 'Z', while other timezones show their
+	 * offset from UTC (e.g., -05:00 for EST, -04:00 for EDT).
+	 * </p>
+	 *
+	 * See Also:  <a class="doclink" href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601 - Wikipedia</a>
+	 *
+	 * @param c The Calendar object to convert (cannot be null)
+	 * @return ISO8601 formatted string representation of the Calendar
+	 * @throws NullPointerException if the Calendar parameter is null
+	 * @see SimpleDateFormat
+	 * @see Calendar#getTimeZone()
 	 */
-	public static int toCalendarField(ChronoField field) {
-		return switch (field) {
-			case YEAR -> Calendar.YEAR;
-			case MONTH_OF_YEAR -> Calendar.MONTH;
-			case DAY_OF_MONTH -> Calendar.DAY_OF_MONTH;
-			case HOUR_OF_DAY -> Calendar.HOUR_OF_DAY;
-			case MINUTE_OF_HOUR -> Calendar.MINUTE;
-			case SECOND_OF_MINUTE -> Calendar.SECOND;
-			case MILLI_OF_SECOND -> Calendar.MILLISECOND;
-			default -> Calendar.MILLISECOND;
+	public static String toIso8601(Calendar c) {
+		var sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+		sdf.setTimeZone(c.getTimeZone());
+		return sdf.format(c.getTime());
+	}
+
+	/**
+	 * Pads out an ISO8601 string so that it can be parsed using {@link DatatypeConverter#parseDateTime(String)}.
+	 *
+	 * <ul>
+	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js> -&gt; <js>"2001-07-04T15:30:45-05:00"</js>
+	 * 	<li><js>"2001-07-04T15:30:45Z"</js> -&gt; <js>"2001-07-04T15:30:45Z"</js>
+	 * 	<li><js>"2001-07-04T15:30:45.1Z"</js> -&gt; <js>"2001-07-04T15:30:45.1Z"</js>
+	 * 	<li><js>"2001-07-04T15:30Z"</js> -&gt; <js>"2001-07-04T15:30:00Z"</js>
+	 * 	<li><js>"2001-07-04T15:30"</js> -&gt; <js>"2001-07-04T15:30:00"</js>
+	 * 	<li><js>"2001-07-04"</js> -&gt; <li><js>"2001-07-04T00:00:00"</js>
+	 * 	<li><js>"2001-07"</js> -&gt; <js>"2001-07-01T00:00:00"</js>
+	 * 	<li><js>"2001"</js> -&gt; <js>"2001-01-01T00:00:00"</js>
+	 * </ul>
+	 *
+	 * @param in The string to pad.
+	 * @return The padded string.
+	 */
+	public static String toValidIso8601DT(String in) {
+		assertArgNotNull("in", in);
+
+		in = in.trim();
+
+		// "2001-07-04T15:30:45Z"
+		// S1: Looking for -
+		// S2: Found -, looking for -
+		// S3: Found -, looking for T
+		// S4: Found T, looking for :
+		// S5: Found :, looking for :
+		// S6: Found :, looking for Z or - or +
+		// S7: Found time zone
+
+		var state = S1;
+		var needsT = false;
+		var timezoneAfterHour = false;  // Track if timezone found after hour (S4)
+		var timezoneAfterMinute = false;  // Track if timezone found after minute (S5)
+		for (var i = 0; i < in.length(); i++) {
+			var c = in.charAt(i);
+			if (state == S1) {
+				if (c == '-')
+					state = S2;
+			} else if (state == S2) {
+				if (c == '-')
+					state = S3;
+			} else if (state == S3) {
+				if (c == 'T')
+					state = S4;
+				if (c == ' ') {
+					state = S4;
+					needsT = true;
+				}
+			} else if (state == S4) {
+				if (c == ':')
+					state = S5;
+				else if (c == 'Z' || c == '+' || c == '-') {
+					state = S7;  // Timezone immediately after hour (e.g., "2011-01-15T12Z")
+					timezoneAfterHour = true;
+				}
+			} else if (state == S5) {
+				if (c == ':')
+					state = S6;
+				else if (c == 'Z' || c == '+' || c == '-') {
+					state = S7;  // Timezone immediately after minute (e.g., "2011-01-15T12:30Z")
+					timezoneAfterMinute = true;
+				}
+			} else if (state == S6) {
+				if (c == 'Z' || c == '+' || c == '-')
+					state = S7;
+			}
+		}
+
+		if (needsT)
+			in = in.replace(' ', 'T');
+
+		var result = switch (state) {
+			case S1 -> in + "-01-01T00:00:00";
+			case S2 -> in + "-01T00:00:00";
+			case S3 -> in + "T00:00:00";
+			case S4 -> in + ":00:00";
+			case S5 -> in + ":00";
+			case S6 -> in;  // Complete time, no timezone
+			case S7 -> {
+				// Complete time with timezone, but may need to add missing components
+				if (timezoneAfterHour) {
+					// Timezone found after hour, need to add :00:00 before timezone
+					var tzIndex = in.length();
+					for (var i = in.length() - 1; i >= 0; i--) {
+						var ch = in.charAt(i);
+						if (ch == 'Z' || ch == '+' || ch == '-') {
+							tzIndex = i;
+							break;
+						}
+					}
+					yield in.substring(0, tzIndex) + ":00:00" + in.substring(tzIndex);
+				} else if (timezoneAfterMinute) {
+					// Timezone found after minute, need to add :00 before timezone
+					var tzIndex = in.length();
+					for (var i = in.length() - 1; i >= 0; i--) {
+						var ch = in.charAt(i);
+						if (ch == 'Z' || ch == '+' || ch == '-') {
+							tzIndex = i;
+							break;
+						}
+					}
+					yield in.substring(0, tzIndex) + ":00" + in.substring(tzIndex);
+				} else {
+					yield in;  // Complete time with timezone (already has seconds)
+				}
+			}
+			default -> in;
 		};
-	}
 
-	/**
-	 * Adds or subtracts a number of days from the specified calendar.
-	 *
-	 * <p>Creates a clone of the calendar before modifying it.
-	 *
-	 * @param c The calendar to modify.
-	 * @param days The number of days to add (positive) or subtract (negative).
-	 * @return A cloned calendar with the updated date, or <jk>null</jk> if the input was <jk>null</jk>.
-	 */
-	public static Calendar addSubtractDays(Calendar c, int days) {
-		return opt(c).map(x -> (Calendar)x.clone()).map(x -> add(x, Calendar.DATE, days)).orElse(null);
-	}
+		if (state != S7)
+			result += ZonedDateTime.now(ZoneId.systemDefault()).getOffset().toString();
 
-	/**
-	 * Adds to a field of a calendar.
-	 *
-	 * @param c The calendar to modify.
-	 * @param field The calendar field to modify (e.g., {@link Calendar#DATE}, {@link Calendar#MONTH}).
-	 * @param amount The amount to add.
-	 * @return The same calendar with the field modified.
-	 */
-	public static Calendar add(Calendar c, int field, int amount) {
-		c.add(field, amount);
-		return c;
+		return result;
 	}
 
 	/**

@@ -136,12 +136,6 @@ import org.apache.juneau.common.function.*;
  */
 public class Cache2<K1,K2,V> {
 
-	// Internal map with Tuple2 keys for content-based equality (especially for arrays)
-	// If threadLocal is true, this is null and threadLocalMap is used instead
-	private final java.util.Map<Tuple2<K1,K2>,V> map;
-	private final ThreadLocal<Map<Tuple2<K1,K2>,V>> threadLocalMap;
-	private final boolean isThreadLocal;
-
 	/**
 	 * Builder for creating configured {@link Cache2} instances.
 	 *
@@ -207,37 +201,19 @@ public class Cache2<K1,K2,V> {
 		}
 
 		/**
-		 * Sets the caching mode to {@link CacheMode#WEAK WEAK}.
+		 * Conditionally enables logging of cache statistics when the JVM exits.
 		 *
 		 * <p>
-		 * This is a shortcut for calling <c>cacheMode(CacheMode.WEAK)</c>.
+		 * When enabled, the cache will register a shutdown hook that logs the cache name,
+		 * total cache hits, and total cache misses (size of cache) to help analyze cache effectiveness.
 		 *
-		 * <p>
-		 * Weak caching uses {@link WeakHashMap} for storage, allowing cache entries to be
-		 * garbage collected when keys are no longer strongly referenced elsewhere.
-		 *
+		 * @param value Whether to enable logging on exit.
+		 * @param id The identifier to use in the log message.
 		 * @return This object for method chaining.
-		 * @see #cacheMode(CacheMode)
 		 */
-		public Builder<K1,K2,V> weak() {
-			return cacheMode(WEAK);
-		}
-
-		/**
-		 * Enables thread-local caching.
-		 *
-		 * <p>
-		 * When enabled, each thread gets its own separate cache instance. This is useful for
-		 * thread-unsafe objects that need to be cached per thread.
-		 *
-		 * <p>
-		 * This is a shortcut for wrapping a cache in a {@link ThreadLocal}, but provides a cleaner API.
-		 *
-		 * @return This object for method chaining.
-		 * @see Cache.Builder#threadLocal()
-		 */
-		public Builder<K1,K2,V> threadLocal() {
-			threadLocal = true;
+		public Builder<K1,K2,V> logOnExit(boolean value, String id) {
+			this.id = id;
+			this.logOnExit = value;
 			return this;
 		}
 
@@ -268,23 +244,6 @@ public class Cache2<K1,K2,V> {
 		public Builder<K1,K2,V> logOnExit(String id) {
 			this.id = id;
 			this.logOnExit = true;
-			return this;
-		}
-
-		/**
-		 * Conditionally enables logging of cache statistics when the JVM exits.
-		 *
-		 * <p>
-		 * When enabled, the cache will register a shutdown hook that logs the cache name,
-		 * total cache hits, and total cache misses (size of cache) to help analyze cache effectiveness.
-		 *
-		 * @param value Whether to enable logging on exit.
-		 * @param id The identifier to use in the log message.
-		 * @return This object for method chaining.
-		 */
-		public Builder<K1,K2,V> logOnExit(boolean value, String id) {
-			this.id = id;
-			this.logOnExit = value;
 			return this;
 		}
 
@@ -340,8 +299,42 @@ public class Cache2<K1,K2,V> {
 			return this;
 		}
 
-	}
+		/**
+		 * Enables thread-local caching.
+		 *
+		 * <p>
+		 * When enabled, each thread gets its own separate cache instance. This is useful for
+		 * thread-unsafe objects that need to be cached per thread.
+		 *
+		 * <p>
+		 * This is a shortcut for wrapping a cache in a {@link ThreadLocal}, but provides a cleaner API.
+		 *
+		 * @return This object for method chaining.
+		 * @see Cache.Builder#threadLocal()
+		 */
+		public Builder<K1,K2,V> threadLocal() {
+			threadLocal = true;
+			return this;
+		}
 
+		/**
+		 * Sets the caching mode to {@link CacheMode#WEAK WEAK}.
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>cacheMode(CacheMode.WEAK)</c>.
+		 *
+		 * <p>
+		 * Weak caching uses {@link WeakHashMap} for storage, allowing cache entries to be
+		 * garbage collected when keys are no longer strongly referenced elsewhere.
+		 *
+		 * @return This object for method chaining.
+		 * @see #cacheMode(CacheMode)
+		 */
+		public Builder<K1,K2,V> weak() {
+			return cacheMode(WEAK);
+		}
+
+	}
 	/**
 	 * Creates a new {@link Builder} for constructing a cache with explicit type parameters.
 	 *
@@ -366,7 +359,6 @@ public class Cache2<K1,K2,V> {
 	public static <K1,K2,V> Builder<K1,K2,V> create() {
 		return new Builder<>();
 	}
-
 	/**
 	 * Creates a new {@link Builder} for constructing a cache.
 	 *
@@ -389,6 +381,14 @@ public class Cache2<K1,K2,V> {
 	public static <K1,K2,V> Builder<K1,K2,V> of(Class<K1> key1, Class<K2> key2, Class<V> type) {
 		return new Builder<>();
 	}
+
+	// Internal map with Tuple2 keys for content-based equality (especially for arrays)
+	// If threadLocal is true, this is null and threadLocalMap is used instead
+	private final java.util.Map<Tuple2<K1,K2>,V> map;
+
+	private final ThreadLocal<Map<Tuple2<K1,K2>,V>> threadLocalMap;
+
+	private final boolean isThreadLocal;
 
 	private final int maxSize;
 	private final CacheMode cacheMode;
@@ -429,11 +429,35 @@ public class Cache2<K1,K2,V> {
 	}
 
 	/**
-	 * Gets the map for the current thread.
-	 *
-	 * @return The map for the current thread.
+	 * Removes all entries from the cache.
 	 */
-	private Map<Tuple2<K1,K2>,V> getMap() { return isThreadLocal ? threadLocalMap.get() : map; }
+	public void clear() {
+		getMap().clear();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key pair.
+	 *
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the cache contains the key pair.
+	 */
+	public boolean containsKey(K1 key1, K2 key2) {
+		return getMap().containsKey(Tuple2.of(key1, key2));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the cache contains the value.
+	 */
+	public boolean containsValue(V value) {
+		// ConcurrentHashMap doesn't allow null values, so null can never be in the cache
+		if (value == null)
+			return false;
+		return getMap().containsValue(value);
+	}
 
 	/**
 	 * Retrieves a cached value by key pair using the default supplier.
@@ -524,79 +548,6 @@ public class Cache2<K1,K2,V> {
 	}
 
 	/**
-	 * Associates the specified value with the specified key pair.
-	 *
-	 * @param key1 The first key. Can be <jk>null</jk>.
-	 * @param key2 The second key. Can be <jk>null</jk>.
-	 * @param value The value to associate with the key pair.
-	 * @return The previous value associated with the key pair, or <jk>null</jk> if there was no mapping.
-	 */
-	public V put(K1 key1, K2 key2, V value) {
-		var m = getMap();
-		if (value == null)
-			return m.remove(Tuple2.of(key1, key2));
-		return m.put(Tuple2.of(key1, key2), value);
-	}
-
-	/**
-	 * Removes the entry for the specified key pair from the cache.
-	 *
-	 * @param key1 The first key. Can be <jk>null</jk>.
-	 * @param key2 The second key. Can be <jk>null</jk>.
-	 * @return The previous value associated with the key pair, or <jk>null</jk> if there was no mapping.
-	 */
-	public V remove(K1 key1, K2 key2) {
-		return getMap().remove(Tuple2.of(key1, key2));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key pair.
-	 *
-	 * @param key1 The first key. Can be <jk>null</jk>.
-	 * @param key2 The second key. Can be <jk>null</jk>.
-	 * @return <jk>true</jk> if the cache contains the key pair.
-	 */
-	public boolean containsKey(K1 key1, K2 key2) {
-		return getMap().containsKey(Tuple2.of(key1, key2));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
-	 *
-	 * @param value The value to check.
-	 * @return <jk>true</jk> if the cache contains the value.
-	 */
-	public boolean containsValue(V value) {
-		// ConcurrentHashMap doesn't allow null values, so null can never be in the cache
-		if (value == null)
-			return false;
-		return getMap().containsValue(value);
-	}
-
-	/**
-	 * Returns the number of entries in the cache.
-	 *
-	 * @return The number of cached entries.
-	 */
-	public int size() {
-		return getMap().size();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the cache contains no entries.
-	 *
-	 * @return <jk>true</jk> if the cache is empty.
-	 */
-	public boolean isEmpty() { return getMap().isEmpty(); }
-
-	/**
-	 * Removes all entries from the cache.
-	 */
-	public void clear() {
-		getMap().clear();
-	}
-
-	/**
 	 * Returns the total number of cache hits since this cache was created.
 	 *
 	 * <p>
@@ -624,4 +575,53 @@ public class Cache2<K1,K2,V> {
 	 * @return The total number of cache hits since creation.
 	 */
 	public int getCacheHits() { return cacheHits.get(); }
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains no entries.
+	 *
+	 * @return <jk>true</jk> if the cache is empty.
+	 */
+	public boolean isEmpty() { return getMap().isEmpty(); }
+
+	/**
+	 * Associates the specified value with the specified key pair.
+	 *
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @param value The value to associate with the key pair.
+	 * @return The previous value associated with the key pair, or <jk>null</jk> if there was no mapping.
+	 */
+	public V put(K1 key1, K2 key2, V value) {
+		var m = getMap();
+		if (value == null)
+			return m.remove(Tuple2.of(key1, key2));
+		return m.put(Tuple2.of(key1, key2), value);
+	}
+
+	/**
+	 * Removes the entry for the specified key pair from the cache.
+	 *
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @return The previous value associated with the key pair, or <jk>null</jk> if there was no mapping.
+	 */
+	public V remove(K1 key1, K2 key2) {
+		return getMap().remove(Tuple2.of(key1, key2));
+	}
+
+	/**
+	 * Returns the number of entries in the cache.
+	 *
+	 * @return The number of cached entries.
+	 */
+	public int size() {
+		return getMap().size();
+	}
+
+	/**
+	 * Gets the map for the current thread.
+	 *
+	 * @return The map for the current thread.
+	 */
+	private Map<Tuple2<K1,K2>,V> getMap() { return isThreadLocal ? threadLocalMap.get() : map; }
 }

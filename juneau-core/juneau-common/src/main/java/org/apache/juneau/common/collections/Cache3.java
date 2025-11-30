@@ -80,12 +80,6 @@ import org.apache.juneau.common.function.*;
  */
 public class Cache3<K1,K2,K3,V> {
 
-	// Internal map with Tuple3 keys for content-based equality (especially for arrays)
-	// If threadLocal is true, this is null and threadLocalMap is used instead
-	private final java.util.Map<Tuple3<K1,K2,K3>,V> map;
-	private final ThreadLocal<Map<Tuple3<K1,K2,K3>,V>> threadLocalMap;
-	private final boolean isThreadLocal;
-
 	/**
 	 * Builder for creating configured {@link Cache3} instances.
 	 *
@@ -138,53 +132,6 @@ public class Cache3<K1,K2,K3,V> {
 		}
 
 		/**
-		 * Sets the caching mode to {@link CacheMode#WEAK WEAK}.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>cacheMode(CacheMode.WEAK)</c>.
-		 *
-		 * <p>
-		 * Weak caching uses {@link WeakHashMap} for storage, allowing cache entries to be
-		 * garbage collected when keys are no longer strongly referenced elsewhere.
-		 *
-		 * @return This object for method chaining.
-		 * @see #cacheMode(CacheMode)
-		 */
-		public Builder<K1,K2,K3,V> weak() {
-			return cacheMode(WEAK);
-		}
-
-		/**
-		 * Enables thread-local caching.
-		 *
-		 * <p>
-		 * When enabled, each thread gets its own separate cache instance. This is useful for
-		 * thread-unsafe objects that need to be cached per thread.
-		 *
-		 * <p>
-		 * This is a shortcut for wrapping a cache in a {@link ThreadLocal}, but provides a cleaner API.
-		 *
-		 * @return This object for method chaining.
-		 * @see Cache.Builder#threadLocal()
-		 */
-		public Builder<K1,K2,K3,V> threadLocal() {
-			threadLocal = true;
-			return this;
-		}
-
-		/**
-		 * Enables logging of cache statistics when the JVM exits.
-		 *
-		 * @param id The identifier to use in the log message.
-		 * @return This object for method chaining.
-		 */
-		public Builder<K1,K2,K3,V> logOnExit(String id) {
-			this.id = id;
-			this.logOnExit = true;
-			return this;
-		}
-
-		/**
 		 * Conditionally enables logging of cache statistics when the JVM exits.
 		 *
 		 * <p>
@@ -198,6 +145,18 @@ public class Cache3<K1,K2,K3,V> {
 		public Builder<K1,K2,K3,V> logOnExit(boolean value, String id) {
 			this.id = id;
 			this.logOnExit = value;
+			return this;
+		}
+
+		/**
+		 * Enables logging of cache statistics when the JVM exits.
+		 *
+		 * @param id The identifier to use in the log message.
+		 * @return This object for method chaining.
+		 */
+		public Builder<K1,K2,K3,V> logOnExit(String id) {
+			this.id = id;
+			this.logOnExit = true;
 			return this;
 		}
 
@@ -222,8 +181,42 @@ public class Cache3<K1,K2,K3,V> {
 			supplier = value;
 			return this;
 		}
-	}
 
+		/**
+		 * Enables thread-local caching.
+		 *
+		 * <p>
+		 * When enabled, each thread gets its own separate cache instance. This is useful for
+		 * thread-unsafe objects that need to be cached per thread.
+		 *
+		 * <p>
+		 * This is a shortcut for wrapping a cache in a {@link ThreadLocal}, but provides a cleaner API.
+		 *
+		 * @return This object for method chaining.
+		 * @see Cache.Builder#threadLocal()
+		 */
+		public Builder<K1,K2,K3,V> threadLocal() {
+			threadLocal = true;
+			return this;
+		}
+
+		/**
+		 * Sets the caching mode to {@link CacheMode#WEAK WEAK}.
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>cacheMode(CacheMode.WEAK)</c>.
+		 *
+		 * <p>
+		 * Weak caching uses {@link WeakHashMap} for storage, allowing cache entries to be
+		 * garbage collected when keys are no longer strongly referenced elsewhere.
+		 *
+		 * @return This object for method chaining.
+		 * @see #cacheMode(CacheMode)
+		 */
+		public Builder<K1,K2,K3,V> weak() {
+			return cacheMode(WEAK);
+		}
+	}
 	/**
 	 * Creates a new {@link Builder} for constructing a cache with explicit type parameters.
 	 *
@@ -240,7 +233,6 @@ public class Cache3<K1,K2,K3,V> {
 	public static <K1,K2,K3,V> Builder<K1,K2,K3,V> create() {
 		return new Builder<>();
 	}
-
 	/**
 	 * Creates a new {@link Builder} for constructing a cache.
 	 *
@@ -257,6 +249,14 @@ public class Cache3<K1,K2,K3,V> {
 	public static <K1,K2,K3,V> Builder<K1,K2,K3,V> of(Class<K1> key1, Class<K2> key2, Class<K3> key3, Class<V> type) {
 		return new Builder<>();
 	}
+
+	// Internal map with Tuple3 keys for content-based equality (especially for arrays)
+	// If threadLocal is true, this is null and threadLocalMap is used instead
+	private final java.util.Map<Tuple3<K1,K2,K3>,V> map;
+
+	private final ThreadLocal<Map<Tuple3<K1,K2,K3>,V>> threadLocalMap;
+
+	private final boolean isThreadLocal;
 
 	private final int maxSize;
 	private final CacheMode cacheMode;
@@ -297,11 +297,36 @@ public class Cache3<K1,K2,K3,V> {
 	}
 
 	/**
-	 * Gets the map for the current thread.
-	 *
-	 * @return The map for the current thread.
+	 * Removes all entries from the cache.
 	 */
-	private Map<Tuple3<K1,K2,K3>,V> getMap() { return isThreadLocal ? threadLocalMap.get() : map; }
+	public void clear() {
+		getMap().clear();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key triplet.
+	 *
+	 * @param key1 The first key. Can be <jk>null</jk>.
+	 * @param key2 The second key. Can be <jk>null</jk>.
+	 * @param key3 The third key. Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the cache contains the key triplet.
+	 */
+	public boolean containsKey(K1 key1, K2 key2, K3 key3) {
+		return getMap().containsKey(Tuple3.of(key1, key2, key3));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the cache contains the value.
+	 */
+	public boolean containsValue(V value) {
+		// ConcurrentHashMap doesn't allow null values, so null can never be in the cache
+		if (value == null)
+			return false;
+		return getMap().containsValue(value);
+	}
 
 	/**
 	 * Retrieves a cached value by key triplet using the default supplier.
@@ -347,6 +372,20 @@ public class Cache3<K1,K2,K3,V> {
 	}
 
 	/**
+	 * Returns the total number of cache hits since this cache was created.
+	 *
+	 * @return The total number of cache hits since creation.
+	 */
+	public int getCacheHits() { return cacheHits.get(); }
+
+	/**
+	 * Returns <jk>true</jk> if the cache contains no entries.
+	 *
+	 * @return <jk>true</jk> if the cache is empty.
+	 */
+	public boolean isEmpty() { return getMap().isEmpty(); }
+
+	/**
 	 * Associates the specified value with the specified key triplet.
 	 *
 	 * @param key1 The first key. Can be <jk>null</jk>.
@@ -375,31 +414,6 @@ public class Cache3<K1,K2,K3,V> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key triplet.
-	 *
-	 * @param key1 The first key. Can be <jk>null</jk>.
-	 * @param key2 The second key. Can be <jk>null</jk>.
-	 * @param key3 The third key. Can be <jk>null</jk>.
-	 * @return <jk>true</jk> if the cache contains the key triplet.
-	 */
-	public boolean containsKey(K1 key1, K2 key2, K3 key3) {
-		return getMap().containsKey(Tuple3.of(key1, key2, key3));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the cache contains one or more entries with the specified value.
-	 *
-	 * @param value The value to check.
-	 * @return <jk>true</jk> if the cache contains the value.
-	 */
-	public boolean containsValue(V value) {
-		// ConcurrentHashMap doesn't allow null values, so null can never be in the cache
-		if (value == null)
-			return false;
-		return getMap().containsValue(value);
-	}
-
-	/**
 	 * Returns the number of entries in the cache.
 	 *
 	 * @return The number of cached entries.
@@ -409,23 +423,9 @@ public class Cache3<K1,K2,K3,V> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the cache contains no entries.
+	 * Gets the map for the current thread.
 	 *
-	 * @return <jk>true</jk> if the cache is empty.
+	 * @return The map for the current thread.
 	 */
-	public boolean isEmpty() { return getMap().isEmpty(); }
-
-	/**
-	 * Removes all entries from the cache.
-	 */
-	public void clear() {
-		getMap().clear();
-	}
-
-	/**
-	 * Returns the total number of cache hits since this cache was created.
-	 *
-	 * @return The total number of cache hits since creation.
-	 */
-	public int getCacheHits() { return cacheHits.get(); }
+	private Map<Tuple3<K1,K2,K3>,V> getMap() { return isThreadLocal ? threadLocalMap.get() : map; }
 }

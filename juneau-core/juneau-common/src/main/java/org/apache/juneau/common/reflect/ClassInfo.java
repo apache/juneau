@@ -256,6 +256,154 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
+	 * Appends a formatted class name to a StringBuilder with configurable options.
+	 *
+	 * <p>
+	 * This is the core implementation method used by all other name formatting methods.
+	 * Using this method directly avoids String allocations when building complex strings.
+	 * The method is recursive to handle nested generic type parameters.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	StringBuilder sb = <jk>new</jk> StringBuilder();
+	 * 	sb.append(<js>"Class: "</js>);
+	 * 	ClassInfo.<jsm>of</jsm>(HashMap.<jk>class</jk>).appendFormattedName(sb, ClassNameFormat.<jsf>FULL</jsf>, <jk>true</jk>, '$', ClassArrayFormat.<jsf>BRACKETS</jsf>);
+	 * 	<jc>// sb now contains: "Class: java.util.HashMap"</jc>
+	 * </p>
+	 *
+	 * @param sb
+	 * 	The StringBuilder to append to.
+	 * @param nameFormat
+	 * 	Controls which parts of the class name to include (package, outer classes).
+	 * @param includeTypeParams
+	 * 	If <jk>true</jk>, include generic type parameters recursively.
+	 * @param separator
+	 * 	Character to use between outer and inner class names.
+	 * 	<br>Ignored when <c>nameFormat</c> is {@link ClassNameFormat#SIMPLE}.
+	 * @param arrayFormat
+	 * 	How to format array dimensions.
+	 * @return
+	 * 	The same StringBuilder for method chaining.
+	 */
+	@SuppressWarnings("null")
+	public StringBuilder appendNameFormatted(StringBuilder sb, ClassNameFormat nameFormat, boolean includeTypeParams, char separator, ClassArrayFormat arrayFormat) {
+		var dim = getDimensions();
+
+		// Handle arrays - format component type recursively, then add array notation
+		if (dim > 0) {
+			var componentType = getComponentType();
+			componentType.appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
+
+			if (arrayFormat == ClassArrayFormat.WORD) {
+				for (var i = 0; i < dim; i++)
+					sb.append("Array");
+			} else if (arrayFormat == ClassArrayFormat.BRACKETS) {
+				for (var i = 0; i < dim; i++)
+					sb.append("[]");
+			}
+			// JVM format is already in getName() - would need special handling
+
+			return sb;
+		}
+
+		// Get the raw class - for ParameterizedType, extract the raw type
+		var ct = inner;
+		if (ct == null && isParameterizedType) {
+			var pt = (ParameterizedType)innerType;
+			ct = (Class<?>)pt.getRawType();
+		}
+
+		// Append base class name based on format
+		switch (nameFormat) {
+			case FULL:
+				// Full package name + outer classes
+				if (nn(ct)) {
+					sb.append(ct.getName());
+					// Apply separator if not '$'
+					if (separator != '$' && sb.indexOf("$") != -1) {
+						for (var i = 0; i < sb.length(); i++) {
+							if (sb.charAt(i) == '$')
+								sb.setCharAt(i, separator);
+						}
+					}
+				} else {
+					sb.append(innerType.getTypeName());
+				}
+				break;
+
+			case SHORT:
+				// Outer classes but no package
+				if (nn(ct)) {
+					if (ct.isLocalClass()) {
+						// Local class: include enclosing class simple name
+						sb.append(of(ct.getEnclosingClass()).getNameSimple()).append(separator).append(ct.getSimpleName());
+					} else if (ct.isMemberClass()) {
+						// Member class: include declaring class simple name
+						sb.append(of(ct.getDeclaringClass()).getNameSimple()).append(separator).append(ct.getSimpleName());
+					} else {
+						// Regular class: just simple name
+						sb.append(ct.getSimpleName());
+					}
+				} else {
+					sb.append(innerType.getTypeName());
+				}
+				break;
+
+			default /* SIMPLE */:
+				// Simple name only - no package, no outer classes
+				if (nn(ct)) {
+					sb.append(ct.getSimpleName());
+				} else {
+					sb.append(innerType.getTypeName());
+				}
+				break;
+		}
+
+		// Append type parameters if requested
+		if (includeTypeParams && isParameterizedType) {
+			var pt = (ParameterizedType)innerType;
+			sb.append('<');
+			var first = true;
+			for (var t2 : pt.getActualTypeArguments()) {
+				if (! first)
+					sb.append(',');
+				first = false;
+				of(t2).appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
+			}
+			sb.append('>');
+		}
+
+		return sb;
+	}
+
+	/**
+	 * Returns a {@link ClassInfo} for an array type whose component type is this class.
+	 *
+	 * @return A {@link ClassInfo} representing an array type whose component type is this class.
+	 */
+	public ClassInfo arrayType() {
+		if (inner == null)
+			return null;
+		var at = inner.arrayType();
+		return at == null ? null : of(at);
+	}
+
+	/**
+	 * Casts this {@link ClassInfo} object to represent a subclass of the class represented by the specified class object.
+	 *
+	 * @param <U> The type to cast to.
+	 * @param clazz The class of the type to cast to.
+	 * @return This {@link ClassInfo} object, cast to represent a subclass of the specified class object.
+	 * @throws ClassCastException If this class is not assignable to the specified class.
+	 */
+	public <U> ClassInfo asSubclass(Class<U> clazz) {
+		if (inner == null)
+			return null;
+		inner.asSubclass(clazz);  // Throws ClassCastException if not assignable
+		return this;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this type can be used as a parameter for the specified object.
 	 *
 	 * <p>
@@ -287,6 +435,60 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		return false;
 	}
 
+	/**
+	 * Casts an object to the class represented by this {@link ClassInfo} object.
+	 *
+	 * @param <T> The type to cast to.
+	 * @param obj The object to be cast.
+	 * @return The object after casting, or <jk>null</jk> if obj is <jk>null</jk>.
+	 * @throws ClassCastException If the object is not <jk>null</jk> and is not assignable to this class.
+	 */
+	public <T> T cast(Object obj) {
+		return inner == null ? null : (T)inner.cast(obj);
+	}
+
+	/**
+	 * Finds the annotation of the specified type defined on this class or parent class/interface.
+	 *
+	 * <p>
+	 * If the annotation cannot be found on the immediate class, searches methods with the same signature on the parent classes or interfaces. <br>
+	 * The search is performed in child-to-parent order.
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
+	 * @return The annotation if found, or <jk>null</jk> if not.
+	 */
+
+		/**
+		 * Returns the component type of this class if it is an array type.
+		 *
+		 * <p>
+		 * This is equivalent to {@link Class#getComponentType()} but returns a {@link ClassInfo} instead.
+		 * Note that {@link #getComponentType()} also exists and returns the base component type for multi-dimensional arrays.
+		 *
+		 * @return The {@link ClassInfo} representing the component type, or <jk>null</jk> if this class does not represent an array type.
+		 */
+		public ClassInfo componentType() {
+			if (inner == null)
+				return null;
+			var ct = inner.componentType();
+			return ct == null ? null : of(ct);
+		}
+
+	/**
+	 * Returns the descriptor string of this class.
+	 *
+	 * <p>
+	 * The descriptor is a string representing the type of the class, as specified in JVMS 4.3.2.
+	 * For example, the descriptor for <c>String</c> is <js>"Ljava/lang/String;"</js>.
+	 *
+	 * @return The descriptor string of this class.
+	 */
+	public String descriptorString() {
+		return inner == null ? null : inner.descriptorString();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		return (o instanceof ClassInfo o2) && eq(this, o2, (x, y) -> eq(x.innerType, y.innerType));
@@ -303,6 +505,58 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getAllFields() { return allFields.get(); }
+
+	/**
+	 * Returns all declared methods on this class and all parent classes in <b>child-to-parent order</b>.
+	 *
+	 * <p>
+	 * This method returns methods of <b>all visibility levels</b> (public, protected, package-private, and private).
+	 *
+	 * <p>
+	 * Methods are returned in <b>child-to-parent order</b> - methods from the current class appear first,
+	 * followed by methods from the immediate parent, then grandparent, etc. Within each class, methods
+	 * are sorted alphabetically.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Given class hierarchy:</jc>
+	 * 	<jk>class</jk> Parent {
+	 * 		<jk>void</jk> method1() {}
+	 * 		<jk>void</jk> method2() {}
+	 * 	}
+	 * 	<jk>class</jk> Child <jk>extends</jk> Parent {
+	 * 		<jk>void</jk> method3() {}
+	 * 		<jk>void</jk> method4() {}
+	 * 	}
+	 *
+	 * 	<jc>// getAllMethods() returns in child-to-parent order:</jc>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>);
+	 * 	List&lt;MethodInfo&gt; <jv>methods</jv> = <jv>ci</jv>.getAllMethods();
+	 * 	<jc>// Returns: [method3, method4, method1, method2]</jc>
+	 * 	<jc>//          ^Child methods^   ^Parent methods^</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link #getDeclaredMethods()} - Returns methods declared on this class only (all visibility levels)
+	 * 	<li>{@link #getAllMethods()} - Returns all methods in <b>child-to-parent order</b> ← This method
+	 * 	<li>{@link #getAllMethodsTopDown()} - Returns all methods in <b>parent-to-child order</b>
+	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Unlike Java's {@link Class#getMethods()}, this returns methods of all visibility levels, not just public ones.
+	 * 	<li>Methods from {@link Object} class are excluded from the results.
+	 * 	<li>Use {@link #getAllMethodsTopDown()} if you need parent methods to appear before child methods.
+	 * </ul>
+	 *
+	 * @return
+	 * 	All declared methods on this class and all parent classes (all visibility levels).
+	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
+	 * 	<br>List is unmodifiable.
+	 */
+	public List<MethodInfo> getAllMethods() { return allMethods.get(); }
 
 	/**
 	 * Returns all declared methods on this class and all parent classes in <b>parent-to-child order</b>.
@@ -370,28 +624,91 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	public List<ClassInfo> getAllParents() { return allParents.get(); }
 
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.CLASS_TYPE; }
+
 	/**
-	 * Finds the annotation of the specified type defined on this class or parent class/interface.
+	 * Returns a list of {@link AnnotatedType} objects that represent the annotated interfaces
+	 * implemented by this class.
 	 *
 	 * <p>
-	 * If the annotation cannot be found on the immediate class, searches methods with the same signature on the parent classes or interfaces. <br>
-	 * The search is performed in child-to-parent order.
+	 * Returns a cached, unmodifiable list.
+	 * If this class represents a class or interface whose superinterfaces are annotated,
+	 * the returned objects reflect the annotations used in the source code to declare the superinterfaces.
 	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return The annotation if found, or <jk>null</jk> if not.
+	 * @return
+	 * 	An unmodifiable list of {@link AnnotatedType} objects representing the annotated superinterfaces.
+	 * 	<br>Returns an empty list if this class implements no interfaces.
 	 */
+	public List<AnnotatedType> getAnnotatedInterfaces() { return annotatedInterfaces.get(); }
 
-		/**
-		 * Returns the {@link ClassLoader} for this class.
-		 *
-		 * <p>
-		 * If this class represents a primitive type or void, <jk>null</jk> is returned.
-		 *
-		 * @return The class loader for this class, or <jk>null</jk> if it doesn't have one.
-		 */
-	public ClassLoader getClassLoader() { return inner == null ? null : inner.getClassLoader(); }
+	/**
+	 * Returns an {@link AnnotatedType} object that represents the annotated superclass of this class.
+	 *
+	 * <p>
+	 * If this class represents a class type whose superclass is annotated, the returned object reflects
+	 * the annotations used in the source code to declare the superclass.
+	 *
+	 * @return
+	 * 	An {@link AnnotatedType} object representing the annotated superclass,
+	 * 	or <jk>null</jk> if this class represents {@link Object}, an interface, a primitive type, or void.
+	 */
+	public AnnotatedType getAnnotatedSuperclass() { return inner == null ? null : inner.getAnnotatedSuperclass(); }
+
+	/**
+	 * Returns all annotations on this class and parent classes/interfaces in child-to-parent order.
+	 *
+	 * <p>
+	 * This returns all declared annotations from:
+	 * <ol>
+	 * 	<li>This class
+	 * 	<li>Parent classes in child-to-parent order
+	 * 	<li>For each class, interfaces declared on that class and their parent interfaces
+	 * 	<li>The package of this class
+	 * </ol>
+	 *
+	 * <p>
+	 * This does NOT include runtime annotations. For runtime annotation support, use
+	 * {@link org.apache.juneau.common.reflect.AnnotationProvider}.
+	 *
+	 * @return An unmodifiable list of all annotation infos.
+	 */
+	public List<AnnotationInfo<? extends Annotation>> getAnnotations() { return annotationInfos.get(); }
+
+	/**
+	 * Returns all annotations of the specified type on this class and parent classes/interfaces in child-to-parent order.
+	 *
+	 * <p>
+	 * This returns all declared annotations from:
+	 * <ol>
+	 * 	<li>This class
+	 * 	<li>Parent classes in child-to-parent order
+	 * 	<li>For each class, interfaces declared on that class and their parent interfaces
+	 * 	<li>The package of this class
+	 * </ol>
+	 *
+	 * <p>
+	 * This does NOT include runtime annotations. For runtime annotation support, use
+	 * {@link org.apache.juneau.common.reflect.AnnotationProvider}.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to filter by.
+	 * @return A stream of annotation infos of the specified type.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
+		assertArgNotNull("type", type);
+		return getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
+	}
+
+	/**
+	 * Returns the {@link ClassLoader} for this class.
+	 *
+	 * <p>
+	 * If this class represents a primitive type or void, <jk>null</jk> is returned.
+	 *
+	 * @return The class loader for this class, or <jk>null</jk> if it doesn't have one.
+	 */
+public ClassLoader getClassLoader() { return inner == null ? null : inner.getClassLoader(); }
 
 	/**
 	 * Returns the base component type of this class.
@@ -410,35 +727,26 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public ClassInfo getComponentType() { return componentType.get(); }
 
 	/**
-	 * Returns the {@link Class} object representing the class or interface that declares the member class
-	 * represented by this class.
+	 * Returns all annotations declared directly on this class, wrapped in {@link AnnotationInfo} objects.
 	 *
 	 * <p>
-	 * This method returns the class in which this class is explicitly declared as a member.
-	 * It only returns non-null for <b>member classes</b> (static and non-static nested classes).
+	 * This includes annotations explicitly applied to the class declaration, but excludes inherited annotations
+	 * from parent classes. Each annotation is wrapped for additional functionality such as annotation member
+	 * access and metadata inspection.
 	 *
 	 * <p>
-	 * <h5 class='section'>Examples:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><c>class Outer { class Inner {} }</c> - <c>Inner.getDeclaringClass()</c> returns <c>Outer</c>
-	 * 	<li><c>class Outer { static class Nested {} }</c> - <c>Nested.getDeclaringClass()</c> returns <c>Outer</c>
-	 * 	<li><c>class Outer { void method() { class Local {} } }</c> - <c>Local.getDeclaringClass()</c> returns <jk>null</jk>
-	 * 	<li>Top-level class - <c>getDeclaringClass()</c> returns <jk>null</jk>
-	 * 	<li>Anonymous class - <c>getDeclaringClass()</c> returns <jk>null</jk>
-	 * </ul>
+	 * <b>Note on Repeatable Annotations:</b>
+	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * expanded into their individual annotation instances. For example, if a class has multiple {@code @Bean} annotations,
+	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link #getEnclosingClass()} - Returns the immediately enclosing class (works for local and anonymous classes too)
-	 * </ul>
-	 *
-	 * @return The declaring class, or <jk>null</jk> if this class is not a member of another class.
+	 * @return
+	 * 	An unmodifiable list of {@link AnnotationInfo} wrappers for annotations declared directly on this class.
+	 * 	<br>List is empty if no annotations are declared.
+	 * 	<br>Results are in declaration order.
+	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
-	public ClassInfo getDeclaringClass() {
-		if (inner == null)
-			return null;
-		var dc = inner.getDeclaringClass();
-		return dc == null ? null : of(dc);
-	}
+	public List<AnnotationInfo> getDeclaredAnnotations() { return declaredAnnotations.get(); }
 
 	/**
 	 * Returns the first matching declared constructor on this class.
@@ -480,25 +788,19 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public List<FieldInfo> getDeclaredFields() { return declaredFields.get(); }
 
 	/**
-	 * Returns all public member classes and interfaces declared by this class and its superclasses.
+	 * Returns a list of interfaces declared on this class.
 	 *
 	 * <p>
-	 * This includes public class and interface members inherited from superclasses and
-	 * public class and interface members declared by the class.
+	 * Does not include interfaces declared on parent classes.
+	 *
+	 * <p>
+	 * Results are in the same order as Class.getInterfaces().
 	 *
 	 * @return
-	 * 	An unmodifiable list of all public member classes and interfaces declared by this class.
-	 * 	<br>Returns an empty list if this class has no public member classes or interfaces.
+	 * 	An unmodifiable list of interfaces declared on this class.
+	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
 	 */
-	public List<ClassInfo> getMemberClasses() {
-		if (inner == null)
-			return u(l());
-		Class<?>[] classes = inner.getClasses();
-		List<ClassInfo> l = listOfSize(classes.length);
-		for (Class<?> cc : classes)
-			l.add(of(cc));
-		return u(l);
-	}
+	public List<ClassInfo> getDeclaredInterfaces() { return declaredInterfaces.get(); }
 
 	/**
 	 * Returns all classes and interfaces declared as members of this class.
@@ -522,19 +824,78 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns a list of interfaces declared on this class.
+	 * Returns the first matching declared method on this class.
+	 *
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @return The first matching method, or <jk>null</jk> if no methods matched.
+	 */
+	public Optional<MethodInfo> getDeclaredMethod(Predicate<MethodInfo> filter) {
+		return declaredMethods.get().stream().filter(x -> test(filter, x)).findFirst();
+	}
+
+	/**
+	 * Returns all methods declared on this class.
 	 *
 	 * <p>
-	 * Does not include interfaces declared on parent classes.
+	 * This method returns methods of <b>all visibility levels</b> (public, protected, package-private, and private)
+	 * declared directly on this class only (does not include inherited methods).
 	 *
-	 * <p>
-	 * Results are in the same order as Class.getInterfaces().
+	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link #getDeclaredMethods()} - Returns all declared methods on this class only (all visibility levels) ← This method
+	 * 	<li>{@link #getAllMethods()} - Returns all declared methods on this class and parents (all visibility levels)
+	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Unlike Java's {@link Class#getDeclaredMethods()}, results are filtered to exclude synthetic methods like <c>$jacocoInit</c>.
+	 * </ul>
 	 *
 	 * @return
-	 * 	An unmodifiable list of interfaces declared on this class.
-	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
+	 * 	All methods declared on this class (all visibility levels).
+	 * 	<br>Results are ordered alphabetically.
+	 * 	<br>List is unmodifiable.
 	 */
-	public List<ClassInfo> getDeclaredInterfaces() { return declaredInterfaces.get(); }
+	public List<MethodInfo> getDeclaredMethods() { return declaredMethods.get(); }
+
+	/**
+	 * Returns the {@link Class} object representing the class or interface that declares the member class
+	 * represented by this class.
+	 *
+	 * <p>
+	 * This method returns the class in which this class is explicitly declared as a member.
+	 * It only returns non-null for <b>member classes</b> (static and non-static nested classes).
+	 *
+	 * <p>
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><c>class Outer { class Inner {} }</c> - <c>Inner.getDeclaringClass()</c> returns <c>Outer</c>
+	 * 	<li><c>class Outer { static class Nested {} }</c> - <c>Nested.getDeclaringClass()</c> returns <c>Outer</c>
+	 * 	<li><c>class Outer { void method() { class Local {} } }</c> - <c>Local.getDeclaringClass()</c> returns <jk>null</jk>
+	 * 	<li>Top-level class - <c>getDeclaringClass()</c> returns <jk>null</jk>
+	 * 	<li>Anonymous class - <c>getDeclaringClass()</c> returns <jk>null</jk>
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link #getEnclosingClass()} - Returns the immediately enclosing class (works for local and anonymous classes too)
+	 * </ul>
+	 *
+	 * @return The declaring class, or <jk>null</jk> if this class is not a member of another class.
+	 */
+	public ClassInfo getDeclaringClass() {
+		if (inner == null)
+			return null;
+		var dc = inner.getDeclaringClass();
+		return dc == null ? null : of(dc);
+	}
+
+	/**
+	 * Returns the number of dimensions if this is an array type.
+	 *
+	 * @return The number of dimensions if this is an array type, or <c>0</c> if it is not.
+	 */
+	public int getDimensions() { return dimensions.get(); }
 
 	/**
 	 * Returns the immediately enclosing class of this class.
@@ -607,67 +968,31 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns the first matching declared method on this class.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
-	 * @return The first matching method, or <jk>null</jk> if no methods matched.
-	 */
-	public Optional<MethodInfo> getDeclaredMethod(Predicate<MethodInfo> filter) {
-		return declaredMethods.get().stream().filter(x -> test(filter, x)).findFirst();
-	}
-
-	/**
-	 * Returns all methods declared on this class.
+	 * Returns the {@link Type}s representing the interfaces directly implemented by this class.
 	 *
 	 * <p>
-	 * This method returns methods of <b>all visibility levels</b> (public, protected, package-private, and private)
-	 * declared directly on this class only (does not include inherited methods).
-	 *
-	 * <h5 class='section'>Comparison with Similar Methods:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>{@link #getDeclaredMethods()} - Returns all declared methods on this class only (all visibility levels) ← This method
-	 * 	<li>{@link #getAllMethods()} - Returns all declared methods on this class and parents (all visibility levels)
-	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Unlike Java's {@link Class#getDeclaredMethods()}, results are filtered to exclude synthetic methods like <c>$jacocoInit</c>.
-	 * </ul>
+	 * Returns a cached, unmodifiable list.
+	 * If a superinterface is a parameterized type, the {@link Type} returned for it reflects the actual
+	 * type parameters used in the source code.
 	 *
 	 * @return
-	 * 	All methods declared on this class (all visibility levels).
-	 * 	<br>Results are ordered alphabetically.
-	 * 	<br>List is unmodifiable.
+	 * 	An unmodifiable list of {@link Type}s representing the interfaces directly implemented by this class.
+	 * 	<br>Returns an empty list if this class implements no interfaces.
 	 */
-	public List<MethodInfo> getDeclaredMethods() { return declaredMethods.get(); }
+	public List<Type> getGenericInterfaces() { return genericInterfaces.get(); }
 
 	/**
-	 * Returns the number of dimensions if this is an array type.
+	 * Returns the {@link Type} representing the direct superclass of this class.
 	 *
-	 * @return The number of dimensions if this is an array type, or <c>0</c> if it is not.
+	 * <p>
+	 * If the superclass is a parameterized type, the {@link Type} returned reflects the actual
+	 * type parameters used in the source code.
+	 *
+	 * @return
+	 * 	The superclass of this class as a {@link Type},
+	 * 	or <jk>null</jk> if this class represents {@link Object}, an interface, a primitive type, or void.
 	 */
-	public int getDimensions() { return dimensions.get(); }
-
-	/**
-	 * Returns the full name of this class.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <ul>
-	 * 	<li><js>"com.foo.MyClass"</js> - Normal class
-	 * 	<li><js>"com.foo.MyClass[][]"</js> - Array.
-	 * 	<li><js>"com.foo.MyClass$InnerClass"</js> - Inner class.
-	 * 	<li><js>"com.foo.MyClass$InnerClass[][]"</js> - Inner class array.
-	 * 	<li><js>"int"</js> - Primitive class.
-	 * 	<li><js>"int[][]"</js> - Primitive class class.
-	 * 	<li><js>"java.util.Map&lt;java.lang.String,java.lang.Object&gt;"</js> - Parameterized type.
-	 * 	<li><js>"java.util.AbstractMap&lt;K,V&gt;"</js> - Parameterized generic type.
-	 * 	<li><js>"V"</js> - Parameterized generic type argument.
-	 * </ul>
-	 *
-	 * @return The underlying class name.
-	 */
-	public String getNameFull() { return fullName.get(); }
+	public Type getGenericSuperclass() { return inner == null ? null : inner.getGenericSuperclass(); }
 
 	/**
 	 * Returns a list of interfaces defined on this class and superclasses.
@@ -681,98 +1006,28 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	public List<ClassInfo> getInterfaces() { return interfaces.get(); }
 
-	/**
-	 * Returns all parent classes and interfaces in proper traversal order.
-	 *
-	 * <p>
-	 * This method returns a unique list of all parent classes (including this class) and all interfaces
-	 * (including interface hierarchies) with proper handling of duplicates. The order is:
-	 * <ol>
-	 * 	<li>This class
-	 * 	<li>Parent classes in child-to-parent order
-	 * 	<li>For each class, interfaces declared on that class and their parent interfaces
-	 * </ol>
-	 *
-	 * <p>
-	 * This is useful for annotation processing where you need to traverse the complete type hierarchy
-	 * without duplicates.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Interface hierarchy:</jc>
-	 * 	<jk>interface</jk> ISuperGrandParent {}
-	 * 	<jk>interface</jk> IGrandParent <jk>extends</jk> ISuperGrandParent {}
-	 * 	<jk>interface</jk> ISuperParent {}
-	 * 	<jk>interface</jk> IParent <jk>extends</jk> ISuperParent {}
-	 * 	<jk>interface</jk> IChild {}
-	 *
-	 * 	<jc>// Class hierarchy:</jc>
-	 * 	<jk>class</jk> GrandParent <jk>implements</jk> IGrandParent {}
-	 * 	<jk>class</jk> Parent <jk>extends</jk> GrandParent <jk>implements</jk> IParent {}
-	 * 	<jk>class</jk> Child <jk>extends</jk> Parent <jk>implements</jk> IChild {}
-	 *
-	 * 	<jc>// For Child, returns (in this order):</jc>
-	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>);
-	 * 	List&lt;ClassInfo&gt; <jv>result</jv> = <jv>ci</jv>.getParentsAndInterfaces();
-	 * 	<jc>// Result: [</jc>
-	 * 	<jc>//   Child,                  // 1. This class</jc>
-	 * 	<jc>//   IChild,                 // 2. Interface on Child</jc>
-	 * 	<jc>//   Parent,                 // 3. Parent class</jc>
-	 * 	<jc>//   IParent,                // 4. Interface on Parent</jc>
-	 * 	<jc>//   ISuperParent,           // 5. Parent interface of IParent</jc>
-	 * 	<jc>//   GrandParent,            // 6. Grandparent class</jc>
-	 * 	<jc>//   IGrandParent,           // 7. Interface on GrandParent</jc>
-	 * 	<jc>//   ISuperGrandParent       // 8. Parent interface of IGrandParent</jc>
-	 * 	<jc>// ]</jc>
-	 * </p>
-	 *
-	 * @return An unmodifiable list of all parent classes and interfaces, properly ordered without duplicates.
-	 */
-	public List<ClassInfo> getParentsAndInterfaces() { return parentsAndInterfaces.get(); }
+	@Override /* Annotatable */
+	public String getLabel() { return getNameSimple(); }
 
 	/**
-	 * Returns all annotations on this class and parent classes/interfaces in child-to-parent order.
+	 * Returns all public member classes and interfaces declared by this class and its superclasses.
 	 *
 	 * <p>
-	 * This returns all declared annotations from:
-	 * <ol>
-	 * 	<li>This class
-	 * 	<li>Parent classes in child-to-parent order
-	 * 	<li>For each class, interfaces declared on that class and their parent interfaces
-	 * 	<li>The package of this class
-	 * </ol>
+	 * This includes public class and interface members inherited from superclasses and
+	 * public class and interface members declared by the class.
 	 *
-	 * <p>
-	 * This does NOT include runtime annotations. For runtime annotation support, use
-	 * {@link org.apache.juneau.common.reflect.AnnotationProvider}.
-	 *
-	 * @return An unmodifiable list of all annotation infos.
+	 * @return
+	 * 	An unmodifiable list of all public member classes and interfaces declared by this class.
+	 * 	<br>Returns an empty list if this class has no public member classes or interfaces.
 	 */
-	public List<AnnotationInfo<? extends Annotation>> getAnnotations() { return annotationInfos.get(); }
-
-	/**
-	 * Returns all annotations of the specified type on this class and parent classes/interfaces in child-to-parent order.
-	 *
-	 * <p>
-	 * This returns all declared annotations from:
-	 * <ol>
-	 * 	<li>This class
-	 * 	<li>Parent classes in child-to-parent order
-	 * 	<li>For each class, interfaces declared on that class and their parent interfaces
-	 * 	<li>The package of this class
-	 * </ol>
-	 *
-	 * <p>
-	 * This does NOT include runtime annotations. For runtime annotation support, use
-	 * {@link org.apache.juneau.common.reflect.AnnotationProvider}.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type to filter by.
-	 * @return A stream of annotation infos of the specified type.
-	 */
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
-		assertArgNotNull("type", type);
-		return getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
+	public List<ClassInfo> getMemberClasses() {
+		if (inner == null)
+			return u(l());
+		Class<?>[] classes = inner.getClasses();
+		List<ClassInfo> l = listOfSize(classes.length);
+		for (Class<?> cc : classes)
+			l.add(of(cc));
+		return u(l);
 	}
 
 	/**
@@ -786,56 +1041,14 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns all declared methods on this class and all parent classes in <b>child-to-parent order</b>.
+	 * Returns the module that this class is a member of.
 	 *
 	 * <p>
-	 * This method returns methods of <b>all visibility levels</b> (public, protected, package-private, and private).
+	 * If this class is not in a named module, returns the unnamed module of the class loader for this class.
 	 *
-	 * <p>
-	 * Methods are returned in <b>child-to-parent order</b> - methods from the current class appear first,
-	 * followed by methods from the immediate parent, then grandparent, etc. Within each class, methods
-	 * are sorted alphabetically.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Given class hierarchy:</jc>
-	 * 	<jk>class</jk> Parent {
-	 * 		<jk>void</jk> method1() {}
-	 * 		<jk>void</jk> method2() {}
-	 * 	}
-	 * 	<jk>class</jk> Child <jk>extends</jk> Parent {
-	 * 		<jk>void</jk> method3() {}
-	 * 		<jk>void</jk> method4() {}
-	 * 	}
-	 *
-	 * 	<jc>// getAllMethods() returns in child-to-parent order:</jc>
-	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>);
-	 * 	List&lt;MethodInfo&gt; <jv>methods</jv> = <jv>ci</jv>.getAllMethods();
-	 * 	<jc>// Returns: [method3, method4, method1, method2]</jc>
-	 * 	<jc>//          ^Child methods^   ^Parent methods^</jc>
-	 * </p>
-	 *
-	 * <h5 class='section'>Comparison with Similar Methods:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>{@link #getDeclaredMethods()} - Returns methods declared on this class only (all visibility levels)
-	 * 	<li>{@link #getAllMethods()} - Returns all methods in <b>child-to-parent order</b> ← This method
-	 * 	<li>{@link #getAllMethodsTopDown()} - Returns all methods in <b>parent-to-child order</b>
-	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Unlike Java's {@link Class#getMethods()}, this returns methods of all visibility levels, not just public ones.
-	 * 	<li>Methods from {@link Object} class are excluded from the results.
-	 * 	<li>Use {@link #getAllMethodsTopDown()} if you need parent methods to appear before child methods.
-	 * </ul>
-	 *
-	 * @return
-	 * 	All declared methods on this class and all parent classes (all visibility levels).
-	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
-	 * 	<br>List is unmodifiable.
+	 * @return The module that this class is a member of.
 	 */
-	public List<MethodInfo> getAllMethods() { return allMethods.get(); }
+	public Module getModule() { return inner == null ? null : inner.getModule(); }
 
 	/**
 	 * Returns the name of the underlying class.
@@ -904,6 +1117,95 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
+	 * Returns a formatted class name with configurable options.
+	 *
+	 * <p>
+	 * This is a unified method that can produce output equivalent to all other name methods
+	 * by varying the parameters.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Given: java.util.HashMap&lt;String,Integer&gt;[]</jc>
+	 *
+	 * 	<jc>// Full name with generics</jc>
+	 * 	getFormattedName(ClassNameFormat.<jsf>FULL</jsf>, <jk>true</jk>, '$', ClassArrayFormat.<jsf>BRACKETS</jsf>)
+	 * 	<jc>// → "java.util.HashMap&lt;java.lang.String,java.lang.Integer&gt;[]"</jc>
+	 *
+	 * 	<jc>// Short name with generics</jc>
+	 * 	getFormattedName(ClassNameFormat.<jsf>SHORT</jsf>, <jk>true</jk>, '$', ClassArrayFormat.<jsf>BRACKETS</jsf>)
+	 * 	<jc>// → "HashMap&lt;String,Integer&gt;[]"</jc>
+	 *
+	 * 	<jc>// Simple name</jc>
+	 * 	getFormattedName(ClassNameFormat.<jsf>SIMPLE</jsf>, <jk>false</jk>, '$', ClassArrayFormat.<jsf>BRACKETS</jsf>)
+	 * 	<jc>// → "HashMap[]"</jc>
+	 *
+	 * 	<jc>// With dot separator</jc>
+	 * 	getFormattedName(ClassNameFormat.<jsf>SHORT</jsf>, <jk>false</jk>, '.', ClassArrayFormat.<jsf>BRACKETS</jsf>)
+	 * 	<jc>// → "Map.Entry"</jc>
+	 *
+	 * 	<jc>// Word format for arrays</jc>
+	 * 	getFormattedName(ClassNameFormat.<jsf>SIMPLE</jsf>, <jk>false</jk>, '$', ClassArrayFormat.<jsf>WORD</jsf>)
+	 * 	<jc>// → "HashMapArray"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Equivalent Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><c>getName()</c> = <c>getFormattedName(FULL, <jk>false</jk>, '$', JVM)</c>
+	 * 	<li><c>getCanonicalName()</c> = <c>getFormattedName(FULL, <jk>false</jk>, '.', BRACKETS)</c>
+	 * 	<li><c>getSimpleName()</c> = <c>getFormattedName(SIMPLE, <jk>false</jk>, '$', BRACKETS)</c>
+	 * 	<li><c>getFullName()</c> = <c>getFormattedName(FULL, <jk>true</jk>, '$', BRACKETS)</c>
+	 * 	<li><c>getShortName()</c> = <c>getFormattedName(SHORT, <jk>true</jk>, '$', BRACKETS)</c>
+	 * 	<li><c>getReadableName()</c> = <c>getFormattedName(SIMPLE, <jk>false</jk>, '$', WORD)</c>
+	 * </ul>
+	 *
+	 * @param nameFormat
+	 * 	Controls which parts of the class name to include (package, outer classes).
+	 * @param includeTypeParams
+	 * 	If <jk>true</jk>, include generic type parameters recursively.
+	 * 	<br>For example: <js>"HashMap&lt;String,Integer&gt;"</js> instead of <js>"HashMap"</js>
+	 * @param separator
+	 * 	Character to use between outer and inner class names.
+	 * 	<br>Typically <js>'$'</js> (JVM format) or <js>'.'</js> (canonical format).
+	 * 	<br>Ignored when <c>nameFormat</c> is {@link ClassNameFormat#SIMPLE}.
+	 * @param arrayFormat
+	 * 	How to format array dimensions.
+	 * @return
+	 * 	The formatted class name.
+	 */
+	public String getNameFormatted(ClassNameFormat nameFormat, boolean includeTypeParams, char separator, ClassArrayFormat arrayFormat) {
+		var sb = new StringBuilder(128);
+		appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
+		return sb.toString();
+	}
+
+	/**
+	 * Returns the full name of this class.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul>
+	 * 	<li><js>"com.foo.MyClass"</js> - Normal class
+	 * 	<li><js>"com.foo.MyClass[][]"</js> - Array.
+	 * 	<li><js>"com.foo.MyClass$InnerClass"</js> - Inner class.
+	 * 	<li><js>"com.foo.MyClass$InnerClass[][]"</js> - Inner class array.
+	 * 	<li><js>"int"</js> - Primitive class.
+	 * 	<li><js>"int[][]"</js> - Primitive class class.
+	 * 	<li><js>"java.util.Map&lt;java.lang.String,java.lang.Object&gt;"</js> - Parameterized type.
+	 * 	<li><js>"java.util.AbstractMap&lt;K,V&gt;"</js> - Parameterized generic type.
+	 * 	<li><js>"V"</js> - Parameterized generic type argument.
+	 * </ul>
+	 *
+	 * @return The underlying class name.
+	 */
+	public String getNameFull() { return fullName.get(); }
+
+	/**
+	 * Same as {@link #getNameSimple()} but uses <js>"Array"</js> instead of <js>"[]"</js>.
+	 *
+	 * @return The readable name for this class.
+	 */
+	public String getNameReadable() { return readableName.get(); }
+
+	/**
 	 * Returns all possible names for this class.
 	 *
 	 * @return
@@ -918,14 +1220,59 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public String[] getNames() { return a(getNameFull(), inner.getName(), getNameShort(), getNameSimple()); }
 
 	/**
-	 * Returns the module that this class is a member of.
+	 * Returns the short name of the underlying class.
 	 *
 	 * <p>
-	 * If this class is not in a named module, returns the unnamed module of the class loader for this class.
+	 * Similar to {@link #getNameSimple()} but also renders local or member class name prefixes.
 	 *
-	 * @return The module that this class is a member of.
+	 * @return The short name of the underlying class.
 	 */
-	public Module getModule() { return inner == null ? null : inner.getModule(); }
+	public String getNameShort() { return shortName.get(); }
+
+	/**
+	 * Returns the simple name of the underlying class.
+	 *
+	 * <p>
+	 * Returns either {@link Class#getSimpleName()} or {@link Type#getTypeName()} depending on whether
+	 * this is a class or type.
+	 *
+	 * @return The simple name of the underlying class;
+	 */
+	public String getNameSimple() { return nn(inner) ? inner.getSimpleName() : innerType.getTypeName(); }
+
+	/**
+	 * Returns the nest host of this class.
+	 *
+	 * <p>
+	 * Every class belongs to exactly one nest. A class that is not a member of a nest
+	 * is its own nest host.
+	 *
+	 * @return The nest host of this class.
+	 */
+	public ClassInfo getNestHost() {
+		if (inner == null)
+			return null;
+		var nh = inner.getNestHost();
+		return nh == null ? null : of(nh);
+	}
+
+	/**
+	 * Returns an array containing all the classes and interfaces that are members of the nest
+	 * to which this class belongs.
+	 *
+	 * @return
+	 * 	An unmodifiable list of all classes and interfaces in the same nest as this class.
+	 * 	<br>Returns an empty list if this object does not represent a class.
+	 */
+	public List<ClassInfo> getNestMembers() {
+		if (inner == null)
+			return u(l());
+		var members = inner.getNestMembers();
+		List<ClassInfo> l = listOfSize(members.length);
+		for (Class<?> cc : members)
+			l.add(of(cc));
+		return u(l);
+	}
 
 	/**
 	 * Locates the no-arg constructor for this class.
@@ -1051,6 +1398,75 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public List<ClassInfo> getParents() { return parents.get(); }
 
 	/**
+	 * Returns all parent classes and interfaces in proper traversal order.
+	 *
+	 * <p>
+	 * This method returns a unique list of all parent classes (including this class) and all interfaces
+	 * (including interface hierarchies) with proper handling of duplicates. The order is:
+	 * <ol>
+	 * 	<li>This class
+	 * 	<li>Parent classes in child-to-parent order
+	 * 	<li>For each class, interfaces declared on that class and their parent interfaces
+	 * </ol>
+	 *
+	 * <p>
+	 * This is useful for annotation processing where you need to traverse the complete type hierarchy
+	 * without duplicates.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Interface hierarchy:</jc>
+	 * 	<jk>interface</jk> ISuperGrandParent {}
+	 * 	<jk>interface</jk> IGrandParent <jk>extends</jk> ISuperGrandParent {}
+	 * 	<jk>interface</jk> ISuperParent {}
+	 * 	<jk>interface</jk> IParent <jk>extends</jk> ISuperParent {}
+	 * 	<jk>interface</jk> IChild {}
+	 *
+	 * 	<jc>// Class hierarchy:</jc>
+	 * 	<jk>class</jk> GrandParent <jk>implements</jk> IGrandParent {}
+	 * 	<jk>class</jk> Parent <jk>extends</jk> GrandParent <jk>implements</jk> IParent {}
+	 * 	<jk>class</jk> Child <jk>extends</jk> Parent <jk>implements</jk> IChild {}
+	 *
+	 * 	<jc>// For Child, returns (in this order):</jc>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>);
+	 * 	List&lt;ClassInfo&gt; <jv>result</jv> = <jv>ci</jv>.getParentsAndInterfaces();
+	 * 	<jc>// Result: [</jc>
+	 * 	<jc>//   Child,                  // 1. This class</jc>
+	 * 	<jc>//   IChild,                 // 2. Interface on Child</jc>
+	 * 	<jc>//   Parent,                 // 3. Parent class</jc>
+	 * 	<jc>//   IParent,                // 4. Interface on Parent</jc>
+	 * 	<jc>//   ISuperParent,           // 5. Parent interface of IParent</jc>
+	 * 	<jc>//   GrandParent,            // 6. Grandparent class</jc>
+	 * 	<jc>//   IGrandParent,           // 7. Interface on GrandParent</jc>
+	 * 	<jc>//   ISuperGrandParent       // 8. Parent interface of IGrandParent</jc>
+	 * 	<jc>// ]</jc>
+	 * </p>
+	 *
+	 * @return An unmodifiable list of all parent classes and interfaces, properly ordered without duplicates.
+	 */
+	public List<ClassInfo> getParentsAndInterfaces() { return parentsAndInterfaces.get(); }
+
+	/**
+	 * Returns the permitted subclasses of this sealed class.
+	 *
+	 * <p>
+	 * If this class is not sealed, returns an empty list.
+	 *
+	 * @return
+	 * 	An unmodifiable list of permitted subclasses if this is a sealed class.
+	 * 	<br>Returns an empty list if this class is not sealed.
+	 */
+	public List<ClassInfo> getPermittedSubclasses() {
+		if (inner == null || ! inner.isSealed())
+			return u(l());
+		Class<?>[] permitted = inner.getPermittedSubclasses();
+		List<ClassInfo> l = listOfSize(permitted.length);
+		for (Class<?> cc : permitted)
+			l.add(of(cc));
+		return u(l);
+	}
+
+	/**
 	 * Returns the default value for this primitive class.
 	 *
 	 * @return The default value, or <jk>null</jk> if this is not a primitive class.
@@ -1072,6 +1488,16 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The wrapper class, or <jk>null</jk> if class is not a primitive.
 	 */
 	public Class<?> getPrimitiveWrapper() { return pmap1.get(inner); }
+
+	/**
+	 * Returns the {@link ProtectionDomain} of this class.
+	 *
+	 * <p>
+	 * If a security manager is installed, this method requires <c>RuntimePermission("getProtectionDomain")</c>.
+	 *
+	 * @return The {@link ProtectionDomain} of this class, or <jk>null</jk> if the class does not have a protection domain.
+	 */
+	public java.security.ProtectionDomain getProtectionDomain() { return inner == null ? null : inner.getProtectionDomain(); }
 
 	/**
 	 * Returns the first matching public constructor on this class.
@@ -1150,296 +1576,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public List<MethodInfo> getPublicMethods() { return publicMethods.get(); }
 
 	/**
-	 * Same as {@link #getNameSimple()} but uses <js>"Array"</js> instead of <js>"[]"</js>.
-	 *
-	 * @return The readable name for this class.
-	 */
-	public String getNameReadable() { return readableName.get(); }
-
-	/**
-	 * Returns the repeated annotation method on this class.
-	 *
-	 * <p>
-	 * The repeated annotation method is the <code>value()</code> method that returns an array
-	 * of annotations who themselves are marked with the {@link Repeatable @Repeatable} annotation
-	 * of this class.
-	 *
-	 * @return The repeated annotation method on this class, or <jk>null</jk> if it doesn't exist.
-	 */
-	public MethodInfo getRepeatedAnnotationMethod() { return repeatedAnnotationMethod.get(); }
-
-	/**
-	 * Returns the short name of the underlying class.
-	 *
-	 * <p>
-	 * Similar to {@link #getNameSimple()} but also renders local or member class name prefixes.
-	 *
-	 * @return The short name of the underlying class.
-	 */
-	public String getNameShort() { return shortName.get(); }
-
-	/**
-	 * Returns the simple name of the underlying class.
-	 *
-	 * <p>
-	 * Returns either {@link Class#getSimpleName()} or {@link Type#getTypeName()} depending on whether
-	 * this is a class or type.
-	 *
-	 * @return The simple name of the underlying class;
-	 */
-	public String getNameSimple() { return nn(inner) ? inner.getSimpleName() : innerType.getTypeName(); }
-
-	/**
-	 * Returns a formatted class name with configurable options.
-	 *
-	 * <p>
-	 * This is a unified method that can produce output equivalent to all other name methods
-	 * by varying the parameters.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Given: java.util.HashMap&lt;String,Integer&gt;[]</jc>
-	 *
-	 * 	<jc>// Full name with generics</jc>
-	 * 	getFormattedName(ClassNameFormat.<jsf>FULL</jsf>, <jk>true</jk>, '$', ClassArrayFormat.<jsf>BRACKETS</jsf>)
-	 * 	<jc>// → "java.util.HashMap&lt;java.lang.String,java.lang.Integer&gt;[]"</jc>
-	 *
-	 * 	<jc>// Short name with generics</jc>
-	 * 	getFormattedName(ClassNameFormat.<jsf>SHORT</jsf>, <jk>true</jk>, '$', ClassArrayFormat.<jsf>BRACKETS</jsf>)
-	 * 	<jc>// → "HashMap&lt;String,Integer&gt;[]"</jc>
-	 *
-	 * 	<jc>// Simple name</jc>
-	 * 	getFormattedName(ClassNameFormat.<jsf>SIMPLE</jsf>, <jk>false</jk>, '$', ClassArrayFormat.<jsf>BRACKETS</jsf>)
-	 * 	<jc>// → "HashMap[]"</jc>
-	 *
-	 * 	<jc>// With dot separator</jc>
-	 * 	getFormattedName(ClassNameFormat.<jsf>SHORT</jsf>, <jk>false</jk>, '.', ClassArrayFormat.<jsf>BRACKETS</jsf>)
-	 * 	<jc>// → "Map.Entry"</jc>
-	 *
-	 * 	<jc>// Word format for arrays</jc>
-	 * 	getFormattedName(ClassNameFormat.<jsf>SIMPLE</jsf>, <jk>false</jk>, '$', ClassArrayFormat.<jsf>WORD</jsf>)
-	 * 	<jc>// → "HashMapArray"</jc>
-	 * </p>
-	 *
-	 * <h5 class='section'>Equivalent Methods:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><c>getName()</c> = <c>getFormattedName(FULL, <jk>false</jk>, '$', JVM)</c>
-	 * 	<li><c>getCanonicalName()</c> = <c>getFormattedName(FULL, <jk>false</jk>, '.', BRACKETS)</c>
-	 * 	<li><c>getSimpleName()</c> = <c>getFormattedName(SIMPLE, <jk>false</jk>, '$', BRACKETS)</c>
-	 * 	<li><c>getFullName()</c> = <c>getFormattedName(FULL, <jk>true</jk>, '$', BRACKETS)</c>
-	 * 	<li><c>getShortName()</c> = <c>getFormattedName(SHORT, <jk>true</jk>, '$', BRACKETS)</c>
-	 * 	<li><c>getReadableName()</c> = <c>getFormattedName(SIMPLE, <jk>false</jk>, '$', WORD)</c>
-	 * </ul>
-	 *
-	 * @param nameFormat
-	 * 	Controls which parts of the class name to include (package, outer classes).
-	 * @param includeTypeParams
-	 * 	If <jk>true</jk>, include generic type parameters recursively.
-	 * 	<br>For example: <js>"HashMap&lt;String,Integer&gt;"</js> instead of <js>"HashMap"</js>
-	 * @param separator
-	 * 	Character to use between outer and inner class names.
-	 * 	<br>Typically <js>'$'</js> (JVM format) or <js>'.'</js> (canonical format).
-	 * 	<br>Ignored when <c>nameFormat</c> is {@link ClassNameFormat#SIMPLE}.
-	 * @param arrayFormat
-	 * 	How to format array dimensions.
-	 * @return
-	 * 	The formatted class name.
-	 */
-	public String getNameFormatted(ClassNameFormat nameFormat, boolean includeTypeParams, char separator, ClassArrayFormat arrayFormat) {
-		var sb = new StringBuilder(128);
-		appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
-		return sb.toString();
-	}
-
-	/**
-	 * Appends a formatted class name to a StringBuilder with configurable options.
-	 *
-	 * <p>
-	 * This is the core implementation method used by all other name formatting methods.
-	 * Using this method directly avoids String allocations when building complex strings.
-	 * The method is recursive to handle nested generic type parameters.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	StringBuilder sb = <jk>new</jk> StringBuilder();
-	 * 	sb.append(<js>"Class: "</js>);
-	 * 	ClassInfo.<jsm>of</jsm>(HashMap.<jk>class</jk>).appendFormattedName(sb, ClassNameFormat.<jsf>FULL</jsf>, <jk>true</jk>, '$', ClassArrayFormat.<jsf>BRACKETS</jsf>);
-	 * 	<jc>// sb now contains: "Class: java.util.HashMap"</jc>
-	 * </p>
-	 *
-	 * @param sb
-	 * 	The StringBuilder to append to.
-	 * @param nameFormat
-	 * 	Controls which parts of the class name to include (package, outer classes).
-	 * @param includeTypeParams
-	 * 	If <jk>true</jk>, include generic type parameters recursively.
-	 * @param separator
-	 * 	Character to use between outer and inner class names.
-	 * 	<br>Ignored when <c>nameFormat</c> is {@link ClassNameFormat#SIMPLE}.
-	 * @param arrayFormat
-	 * 	How to format array dimensions.
-	 * @return
-	 * 	The same StringBuilder for method chaining.
-	 */
-	@SuppressWarnings("null")
-	public StringBuilder appendNameFormatted(StringBuilder sb, ClassNameFormat nameFormat, boolean includeTypeParams, char separator, ClassArrayFormat arrayFormat) {
-		var dim = getDimensions();
-
-		// Handle arrays - format component type recursively, then add array notation
-		if (dim > 0) {
-			var componentType = getComponentType();
-			componentType.appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
-
-			if (arrayFormat == ClassArrayFormat.WORD) {
-				for (var i = 0; i < dim; i++)
-					sb.append("Array");
-			} else if (arrayFormat == ClassArrayFormat.BRACKETS) {
-				for (var i = 0; i < dim; i++)
-					sb.append("[]");
-			}
-			// JVM format is already in getName() - would need special handling
-
-			return sb;
-		}
-
-		// Get the raw class - for ParameterizedType, extract the raw type
-		var ct = inner;
-		if (ct == null && isParameterizedType) {
-			var pt = (ParameterizedType)innerType;
-			ct = (Class<?>)pt.getRawType();
-		}
-
-		// Append base class name based on format
-		switch (nameFormat) {
-			case FULL:
-				// Full package name + outer classes
-				if (nn(ct)) {
-					sb.append(ct.getName());
-					// Apply separator if not '$'
-					if (separator != '$' && sb.indexOf("$") != -1) {
-						for (var i = 0; i < sb.length(); i++) {
-							if (sb.charAt(i) == '$')
-								sb.setCharAt(i, separator);
-						}
-					}
-				} else {
-					sb.append(innerType.getTypeName());
-				}
-				break;
-
-			case SHORT:
-				// Outer classes but no package
-				if (nn(ct)) {
-					if (ct.isLocalClass()) {
-						// Local class: include enclosing class simple name
-						sb.append(of(ct.getEnclosingClass()).getNameSimple()).append(separator).append(ct.getSimpleName());
-					} else if (ct.isMemberClass()) {
-						// Member class: include declaring class simple name
-						sb.append(of(ct.getDeclaringClass()).getNameSimple()).append(separator).append(ct.getSimpleName());
-					} else {
-						// Regular class: just simple name
-						sb.append(ct.getSimpleName());
-					}
-				} else {
-					sb.append(innerType.getTypeName());
-				}
-				break;
-
-			default /* SIMPLE */:
-				// Simple name only - no package, no outer classes
-				if (nn(ct)) {
-					sb.append(ct.getSimpleName());
-				} else {
-					sb.append(innerType.getTypeName());
-				}
-				break;
-		}
-
-		// Append type parameters if requested
-		if (includeTypeParams && isParameterizedType) {
-			var pt = (ParameterizedType)innerType;
-			sb.append('<');
-			var first = true;
-			for (var t2 : pt.getActualTypeArguments()) {
-				if (! first)
-					sb.append(',');
-				first = false;
-				of(t2).appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
-			}
-			sb.append('>');
-		}
-
-		return sb;
-	}
-
-	/**
-	 * Returns the parent class.
-	 *
-	 * @return
-	 * 	The parent class, or <jk>null</jk> if the class has no parent.
-	 */
-	public ClassInfo getSuperclass() {
-		if (inner == null)
-			return null;
-		var sc = inner.getSuperclass();
-		return sc == null ? null : of(sc);
-	}
-
-	/**
-	 * Returns the nest host of this class.
-	 *
-	 * <p>
-	 * Every class belongs to exactly one nest. A class that is not a member of a nest
-	 * is its own nest host.
-	 *
-	 * @return The nest host of this class.
-	 */
-	public ClassInfo getNestHost() {
-		if (inner == null)
-			return null;
-		var nh = inner.getNestHost();
-		return nh == null ? null : of(nh);
-	}
-
-	/**
-	 * Returns an array containing all the classes and interfaces that are members of the nest
-	 * to which this class belongs.
-	 *
-	 * @return
-	 * 	An unmodifiable list of all classes and interfaces in the same nest as this class.
-	 * 	<br>Returns an empty list if this object does not represent a class.
-	 */
-	public List<ClassInfo> getNestMembers() {
-		if (inner == null)
-			return u(l());
-		var members = inner.getNestMembers();
-		List<ClassInfo> l = listOfSize(members.length);
-		for (Class<?> cc : members)
-			l.add(of(cc));
-		return u(l);
-	}
-
-	/**
-	 * Returns the permitted subclasses of this sealed class.
-	 *
-	 * <p>
-	 * If this class is not sealed, returns an empty list.
-	 *
-	 * @return
-	 * 	An unmodifiable list of permitted subclasses if this is a sealed class.
-	 * 	<br>Returns an empty list if this class is not sealed.
-	 */
-	public List<ClassInfo> getPermittedSubclasses() {
-		if (inner == null || ! inner.isSealed())
-			return u(l());
-		Class<?>[] permitted = inner.getPermittedSubclasses();
-		List<ClassInfo> l = listOfSize(permitted.length);
-		for (Class<?> cc : permitted)
-			l.add(of(cc));
-		return u(l);
-	}
-
-	/**
 	 * Returns the record components of this record class.
 	 *
 	 * <p>
@@ -1452,92 +1588,16 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public List<RecordComponent> getRecordComponents() { return recordComponents.get(); }
 
 	/**
-	 * Returns the {@link Type} representing the direct superclass of this class.
+	 * Returns the repeated annotation method on this class.
 	 *
 	 * <p>
-	 * If the superclass is a parameterized type, the {@link Type} returned reflects the actual
-	 * type parameters used in the source code.
+	 * The repeated annotation method is the <code>value()</code> method that returns an array
+	 * of annotations who themselves are marked with the {@link Repeatable @Repeatable} annotation
+	 * of this class.
 	 *
-	 * @return
-	 * 	The superclass of this class as a {@link Type},
-	 * 	or <jk>null</jk> if this class represents {@link Object}, an interface, a primitive type, or void.
+	 * @return The repeated annotation method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
-	public Type getGenericSuperclass() { return inner == null ? null : inner.getGenericSuperclass(); }
-
-	/**
-	 * Returns the {@link Type}s representing the interfaces directly implemented by this class.
-	 *
-	 * <p>
-	 * Returns a cached, unmodifiable list.
-	 * If a superinterface is a parameterized type, the {@link Type} returned for it reflects the actual
-	 * type parameters used in the source code.
-	 *
-	 * @return
-	 * 	An unmodifiable list of {@link Type}s representing the interfaces directly implemented by this class.
-	 * 	<br>Returns an empty list if this class implements no interfaces.
-	 */
-	public List<Type> getGenericInterfaces() { return genericInterfaces.get(); }
-
-	/**
-	 * Returns a list of {@link TypeVariable} objects that represent the type variables declared by this class.
-	 *
-	 * <p>
-	 * Returns a cached, unmodifiable list.
-	 * The type variables are returned in the same order as they appear in the class declaration.
-	 *
-	 * @return
-	 * 	An unmodifiable list of {@link TypeVariable} objects representing the type parameters of this class.
-	 * 	<br>Returns an empty list if this class declares no type parameters.
-	 */
-	public List<TypeVariable<?>> getTypeParameters() { return typeParameters.get(); }
-
-	/**
-	 * Returns an {@link AnnotatedType} object that represents the annotated superclass of this class.
-	 *
-	 * <p>
-	 * If this class represents a class type whose superclass is annotated, the returned object reflects
-	 * the annotations used in the source code to declare the superclass.
-	 *
-	 * @return
-	 * 	An {@link AnnotatedType} object representing the annotated superclass,
-	 * 	or <jk>null</jk> if this class represents {@link Object}, an interface, a primitive type, or void.
-	 */
-	public AnnotatedType getAnnotatedSuperclass() { return inner == null ? null : inner.getAnnotatedSuperclass(); }
-
-	/**
-	 * Returns a list of {@link AnnotatedType} objects that represent the annotated interfaces
-	 * implemented by this class.
-	 *
-	 * <p>
-	 * Returns a cached, unmodifiable list.
-	 * If this class represents a class or interface whose superinterfaces are annotated,
-	 * the returned objects reflect the annotations used in the source code to declare the superinterfaces.
-	 *
-	 * @return
-	 * 	An unmodifiable list of {@link AnnotatedType} objects representing the annotated superinterfaces.
-	 * 	<br>Returns an empty list if this class implements no interfaces.
-	 */
-	public List<AnnotatedType> getAnnotatedInterfaces() { return annotatedInterfaces.get(); }
-
-	/**
-	 * Returns the {@link ProtectionDomain} of this class.
-	 *
-	 * <p>
-	 * If a security manager is installed, this method requires <c>RuntimePermission("getProtectionDomain")</c>.
-	 *
-	 * @return The {@link ProtectionDomain} of this class, or <jk>null</jk> if the class does not have a protection domain.
-	 */
-	public java.security.ProtectionDomain getProtectionDomain() { return inner == null ? null : inner.getProtectionDomain(); }
-
-	/**
-	 * Returns the signers of this class.
-	 *
-	 * <p>
-	 * Returns a cached, unmodifiable list.
-	 *
-	 * @return An unmodifiable list of signers, or an empty list if there are no signers.
-	 */
-	public List<Object> getSigners() { return signers.get(); }
+	public MethodInfo getRepeatedAnnotationMethod() { return repeatedAnnotationMethod.get(); }
 
 	/**
 	 * Finds a resource with a given name.
@@ -1566,17 +1626,40 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns the descriptor string of this class.
+	 * Returns the signers of this class.
 	 *
 	 * <p>
-	 * The descriptor is a string representing the type of the class, as specified in JVMS 4.3.2.
-	 * For example, the descriptor for <c>String</c> is <js>"Ljava/lang/String;"</js>.
+	 * Returns a cached, unmodifiable list.
 	 *
-	 * @return The descriptor string of this class.
+	 * @return An unmodifiable list of signers, or an empty list if there are no signers.
 	 */
-	public String descriptorString() {
-		return inner == null ? null : inner.descriptorString();
+	public List<Object> getSigners() { return signers.get(); }
+
+	/**
+	 * Returns the parent class.
+	 *
+	 * @return
+	 * 	The parent class, or <jk>null</jk> if the class has no parent.
+	 */
+	public ClassInfo getSuperclass() {
+		if (inner == null)
+			return null;
+		var sc = inner.getSuperclass();
+		return sc == null ? null : of(sc);
 	}
+
+	/**
+	 * Returns a list of {@link TypeVariable} objects that represent the type variables declared by this class.
+	 *
+	 * <p>
+	 * Returns a cached, unmodifiable list.
+	 * The type variables are returned in the same order as they appear in the class declaration.
+	 *
+	 * @return
+	 * 	An unmodifiable list of {@link TypeVariable} objects representing the type parameters of this class.
+	 * 	<br>Returns an empty list if this class declares no type parameters.
+	 */
+	public List<TypeVariable<?>> getTypeParameters() { return typeParameters.get(); }
 
 	/**
 	 * Returns the wrapper class if this is a primitive, otherwise returns this class.
@@ -1738,11 +1821,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	public boolean isAnonymousClass() { return nn(inner) && inner.isAnonymousClass(); }
 
-	@Override
-	public boolean isAny(ElementFlag...flags) {
-		return stream(flags).anyMatch(this::is);
-	}
-
 	/**
 	 * Returns <jk>true</jk> if this class is any of the specified types.
 	 *
@@ -1754,6 +1832,11 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			if (is(cc))
 				return true;
 		return false;
+	}
+
+	@Override
+	public boolean isAny(ElementFlag...flags) {
+		return stream(flags).anyMatch(this::is);
 	}
 
 	/**
@@ -1930,18 +2013,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 *
-	 * @param child The child class.
-	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
-	 */
-	public boolean isParentOf(Type child) {
-		if (child instanceof Class<?> c)
-			return isParentOf(c);
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
-	 *
 	 * <p>
 	 * Same as {@link #isParentOf(Class)} but takes in a {@link ClassInfo}.
 	 *
@@ -1957,6 +2028,18 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	public boolean isParentOf(ClassInfo child) {
 		return nn(inner) && nn(child) && inner.isAssignableFrom(child.inner());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
+	 */
+	public boolean isParentOf(Type child) {
+		if (child instanceof Class<?> c)
+			return isParentOf(c);
+		return false;
 	}
 
 	/**
@@ -2028,6 +2111,16 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public boolean isPrimitive() { return nn(inner) && inner.isPrimitive(); }
 
 	/**
+	 * Returns <jk>true</jk> if this class is a record class.
+	 *
+	 * <p>
+	 * A record class is a final class that extends {@link java.lang.Record}.
+	 *
+	 * @return <jk>true</jk> if this class is a record class.
+	 */
+	public boolean isRecord() { return nn(inner) && inner.isRecord(); }
+
+	/**
 	 * Returns <jk>true</jk> if this is a repeated annotation class.
 	 *
 	 * <p>
@@ -2047,16 +2140,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public boolean isRuntimeException() { return isChildOf(RuntimeException.class); }
 
 	/**
-	 * Returns <jk>true</jk> if this class is a record class.
-	 *
-	 * <p>
-	 * A record class is a final class that extends {@link java.lang.Record}.
-	 *
-	 * @return <jk>true</jk> if this class is a record class.
-	 */
-	public boolean isRecord() { return nn(inner) && inner.isRecord(); }
-
-	/**
 	 * Returns <jk>true</jk> if this class is a sealed class.
 	 *
 	 * <p>
@@ -2067,16 +2150,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public boolean isSealed() { return nn(inner) && inner.isSealed(); }
 
 	/**
-	 * Returns <jk>true</jk> if this class is a synthetic class.
-	 *
-	 * <p>
-	 * A synthetic class is one that is generated by the compiler and does not appear in source code.
-	 *
-	 * @return <jk>true</jk> if this class is synthetic.
-	 */
-	public boolean isSynthetic() { return nn(inner) && inner.isSynthetic(); }
-
-	/**
 	 * Returns <jk>true</jk> if this class is a child of <c>parent</c>.
 	 *
 	 * @param parent The parent class.
@@ -2085,6 +2158,16 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public boolean isStrictChildOf(Class<?> parent) {
 		return nn(inner) && nn(parent) && parent.isAssignableFrom(inner) && ! inner.equals(parent);
 	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a synthetic class.
+	 *
+	 * <p>
+	 * A synthetic class is one that is generated by the compiler and does not appear in source code.
+	 *
+	 * @return <jk>true</jk> if this class is synthetic.
+	 */
+	public boolean isSynthetic() { return nn(inner) && inner.isSynthetic(); }
 
 	/**
 	 * Identifies if the specified visibility matches this constructor.
@@ -2132,264 +2215,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			}
 		}
 		return this;
-	}
-
-	/**
-	 * Casts an object to the class represented by this {@link ClassInfo} object.
-	 *
-	 * @param <T> The type to cast to.
-	 * @param obj The object to be cast.
-	 * @return The object after casting, or <jk>null</jk> if obj is <jk>null</jk>.
-	 * @throws ClassCastException If the object is not <jk>null</jk> and is not assignable to this class.
-	 */
-	public <T> T cast(Object obj) {
-		return inner == null ? null : (T)inner.cast(obj);
-	}
-
-	/**
-	 * Casts this {@link ClassInfo} object to represent a subclass of the class represented by the specified class object.
-	 *
-	 * @param <U> The type to cast to.
-	 * @param clazz The class of the type to cast to.
-	 * @return This {@link ClassInfo} object, cast to represent a subclass of the specified class object.
-	 * @throws ClassCastException If this class is not assignable to the specified class.
-	 */
-	public <U> ClassInfo asSubclass(Class<U> clazz) {
-		if (inner == null)
-			return null;
-		inner.asSubclass(clazz);  // Throws ClassCastException if not assignable
-		return this;
-	}
-
-	/**
-	 * Returns a {@link ClassInfo} for an array type whose component type is this class.
-	 *
-	 * @return A {@link ClassInfo} representing an array type whose component type is this class.
-	 */
-	public ClassInfo arrayType() {
-		if (inner == null)
-			return null;
-		var at = inner.arrayType();
-		return at == null ? null : of(at);
-	}
-
-	/**
-	 * Returns the component type of this class if it is an array type.
-	 *
-	 * <p>
-	 * This is equivalent to {@link Class#getComponentType()} but returns a {@link ClassInfo} instead.
-	 * Note that {@link #getComponentType()} also exists and returns the base component type for multi-dimensional arrays.
-	 *
-	 * @return The {@link ClassInfo} representing the component type, or <jk>null</jk> if this class does not represent an array type.
-	 */
-	public ClassInfo componentType() {
-		if (inner == null)
-			return null;
-		var ct = inner.componentType();
-		return ct == null ? null : of(ct);
-	}
-
-	/**
-	 * Returns the first type parameter of this type if it's parameterized (e.g., T in Optional&lt;T&gt;).
-	 *
-	 * @param parameterizedType The expected parameterized class (e.g., Optional.class).
-	 * @return The first type parameter, or <jk>null</jk> if not parameterized or no parameters exist.
-	 */
-	private Type getFirstParameterType(Class<?> parameterizedType) {
-		if (innerType instanceof ParameterizedType innerType2) {
-			var ta = innerType2.getActualTypeArguments();
-			if (ta.length > 0)
-				return ta[0];
-		} else if (innerType instanceof Class<?> innerType3) /* Class that extends Optional<T> */ {
-			if (innerType3 != parameterizedType && parameterizedType.isAssignableFrom(innerType3))
-				return ClassInfo.of(innerType3).getParameterType(0, parameterizedType);
-		}
-		return null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this type is a parameterized type of the specified class or a subclass of it.
-	 *
-	 * @param c The class to check against (e.g., Optional.class, List.class).
-	 * @return <jk>true</jk> if this is Optional&lt;T&gt; or a subclass like MyOptional extends Optional&lt;String&gt;.
-	 */
-	private boolean isParameterizedTypeOf(Class<?> c) {
-		return (innerType instanceof ParameterizedType t2 && t2.getRawType() == c) || (innerType instanceof Class innerType2 && c.isAssignableFrom(innerType2));
-	}
-
-	/**
-	 * Returns all annotations declared directly on this class, wrapped in {@link AnnotationInfo} objects.
-	 *
-	 * <p>
-	 * This includes annotations explicitly applied to the class declaration, but excludes inherited annotations
-	 * from parent classes. Each annotation is wrapped for additional functionality such as annotation member
-	 * access and metadata inspection.
-	 *
-	 * <p>
-	 * <b>Note on Repeatable Annotations:</b>
-	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
-	 * expanded into their individual annotation instances. For example, if a class has multiple {@code @Bean} annotations,
-	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
-	 *
-	 * @return
-	 * 	An unmodifiable list of {@link AnnotationInfo} wrappers for annotations declared directly on this class.
-	 * 	<br>List is empty if no annotations are declared.
-	 * 	<br>Results are in declaration order.
-	 * 	<br>Repeatable annotations are expanded into individual instances.
-	 */
-	public List<AnnotationInfo> getDeclaredAnnotations() { return declaredAnnotations.get(); }
-
-	/**
-	 * Returns a {@link ConstructorInfo} wrapper for the specified raw {@link Constructor} object.
-	 *
-	 * <p>
-	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.
-	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.
-	 *
-	 * <p>
-	 * This method is called internally when building the lists of constructors (public, declared, etc.)
-	 * and ensures that the same {@link Constructor} object always maps to the same {@link ConstructorInfo} instance.
-	 *
-	 * @param x The raw constructor to wrap.
-	 * @return The cached {@link ConstructorInfo} wrapper for this constructor.
-	 */
-	ConstructorInfo getConstructor(Constructor<?> x) {
-		return constructorCache.get(x, () -> new ConstructorInfo(this, x));
-	}
-
-	/**
-	 * Returns a {@link FieldInfo} wrapper for the specified raw {@link Field} object.
-	 *
-	 * <p>
-	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.
-	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.
-	 *
-	 * <p>
-	 * This method is called internally when building the lists of fields (public, declared, all, etc.)
-	 * and ensures that the same {@link Field} object always maps to the same {@link FieldInfo} instance.
-	 *
-	 * @param x The raw field to wrap.
-	 * @return The cached {@link FieldInfo} wrapper for this field.
-	 */
-	FieldInfo getField(Field x) {
-		return fieldCache.get(x, () -> new FieldInfo(this, x));
-	}
-
-	/**
-	 * Returns a {@link MethodInfo} wrapper for the specified raw {@link Method} object.
-	 *
-	 * <p>
-	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.
-	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.
-	 *
-	 * <p>
-	 * This method is called internally when building the lists of methods (public, declared, all, etc.)
-	 * and ensures that the same {@link Method} object always maps to the same {@link MethodInfo} instance.
-	 *
-	 * @param x The raw method to wrap.
-	 * @return The cached {@link MethodInfo} wrapper for this method.
-	 */
-	MethodInfo getMethod(Method x) {
-		return methodCache.get(x, () -> new MethodInfo(this, x));
-	}
-
-	private List<ClassInfo> findParents() {
-		List<ClassInfo> l = list();
-		var pc = inner;
-		while (nn(pc) && pc != Object.class) {
-			l.add(of(pc));
-			pc = pc.getSuperclass();
-		}
-		return u(l);
-	}
-
-	private MethodInfo findRepeatedAnnotationMethod() {
-		// @formatter:off
-		return getPublicMethods().stream()
-			.filter(m -> m.hasName("value"))
-			.filter(m -> m.getReturnType().isArray())
-			.filter(m -> {
-				var rct = m.getReturnType().getComponentType();
-				if (rct.hasAnnotation(Repeatable.class)) {
-					var r = rct.getAnnotations(Repeatable.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-					return r != null && r.value().equals(inner);
-				}
-				return false;
-			})
-			.findFirst()
-			.orElse(null);
-		// @formatter:on
-	}
-
-	private int findDimensions() {
-		int d = 0;
-		Type ct = innerType;
-
-		// Handle GenericArrayType (e.g., List<String>[])
-		while (ct instanceof GenericArrayType ct2) {
-			d++;
-			ct = ct2.getGenericComponentType();
-		}
-
-		// Handle regular arrays
-		var cc = inner;
-		while (nn(cc) && cc.isArray()) {
-			d++;
-			cc = cc.getComponentType();
-		}
-
-		return d;
-	}
-
-	private ClassInfo findComponentType() {
-		Type ct = innerType;
-		var cc = inner;
-
-		// Handle GenericArrayType (e.g., List<String>[])
-		while (ct instanceof GenericArrayType ct2) {
-			ct = ct2.getGenericComponentType();
-		}
-
-		// Handle regular arrays
-		while (nn(cc) && cc.isArray()) {
-			cc = cc.getComponentType();
-		}
-
-		// Return the deepest component type found
-		if (ct != innerType) {
-			return of(ct);
-		} else if (cc != inner) {
-			return of(cc);
-		} else {
-			return this;
-		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Find methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Finds all parent classes and interfaces with proper traversal of interface hierarchy.
-	 *
-	 * @return A list of all parent classes and interfaces without duplicates.
-	 */
-	private List<ClassInfo> findParentsAndInterfaces() {
-		var set = new LinkedHashSet<ClassInfo>();
-
-		// Process all parent classes (includes this class)
-		var parents = getParents();
-		for (var i = 0; i < parents.size(); i++) {
-			var parent = parents.get(i);
-			set.add(parent);
-
-			// Process interfaces declared on this parent (and their parent interfaces)
-			var declaredInterfaces = parent.getDeclaredInterfaces();
-			for (var j = 0; j < declaredInterfaces.size(); j++)
-				addInterfaceHierarchy(set, declaredInterfaces.get(j));
-		}
-
-		return u(toList(set));
 	}
 
 	/**
@@ -2448,13 +2273,188 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		return u(list);
 	}
 
+	private ClassInfo findComponentType() {
+		Type ct = innerType;
+		var cc = inner;
+
+		// Handle GenericArrayType (e.g., List<String>[])
+		while (ct instanceof GenericArrayType ct2) {
+			ct = ct2.getGenericComponentType();
+		}
+
+		// Handle regular arrays
+		while (nn(cc) && cc.isArray()) {
+			cc = cc.getComponentType();
+		}
+
+		// Return the deepest component type found
+		if (ct != innerType) {
+			return of(ct);
+		} else if (cc != inner) {
+			return of(cc);
+		} else {
+			return this;
+		}
+	}
+
+	private int findDimensions() {
+		int d = 0;
+		Type ct = innerType;
+
+		// Handle GenericArrayType (e.g., List<String>[])
+		while (ct instanceof GenericArrayType ct2) {
+			d++;
+			ct = ct2.getGenericComponentType();
+		}
+
+		// Handle regular arrays
+		var cc = inner;
+		while (nn(cc) && cc.isArray()) {
+			d++;
+			cc = cc.getComponentType();
+		}
+
+		return d;
+	}
+
+	private List<ClassInfo> findParents() {
+		List<ClassInfo> l = list();
+		var pc = inner;
+		while (nn(pc) && pc != Object.class) {
+			l.add(of(pc));
+			pc = pc.getSuperclass();
+		}
+		return u(l);
+	}
+
+	/**
+	 * Finds all parent classes and interfaces with proper traversal of interface hierarchy.
+	 *
+	 * @return A list of all parent classes and interfaces without duplicates.
+	 */
+	private List<ClassInfo> findParentsAndInterfaces() {
+		var set = new LinkedHashSet<ClassInfo>();
+
+		// Process all parent classes (includes this class)
+		var parents = getParents();
+		for (var i = 0; i < parents.size(); i++) {
+			var parent = parents.get(i);
+			set.add(parent);
+
+			// Process interfaces declared on this parent (and their parent interfaces)
+			var declaredInterfaces = parent.getDeclaredInterfaces();
+			for (var j = 0; j < declaredInterfaces.size(); j++)
+				addInterfaceHierarchy(set, declaredInterfaces.get(j));
+		}
+
+		return u(toList(set));
+	}
+
+	private MethodInfo findRepeatedAnnotationMethod() {
+		// @formatter:off
+		return getPublicMethods().stream()
+			.filter(m -> m.hasName("value"))
+			.filter(m -> m.getReturnType().isArray())
+			.filter(m -> {
+				var rct = m.getReturnType().getComponentType();
+				if (rct.hasAnnotation(Repeatable.class)) {
+					var r = rct.getAnnotations(Repeatable.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+					return r != null && r.value().equals(inner);
+				}
+				return false;
+			})
+			.findFirst()
+			.orElse(null);
+		// @formatter:on
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Find methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the first type parameter of this type if it's parameterized (e.g., T in Optional&lt;T&gt;).
+	 *
+	 * @param parameterizedType The expected parameterized class (e.g., Optional.class).
+	 * @return The first type parameter, or <jk>null</jk> if not parameterized or no parameters exist.
+	 */
+	private Type getFirstParameterType(Class<?> parameterizedType) {
+		if (innerType instanceof ParameterizedType innerType2) {
+			var ta = innerType2.getActualTypeArguments();
+			if (ta.length > 0)
+				return ta[0];
+		} else if (innerType instanceof Class<?> innerType3) /* Class that extends Optional<T> */ {
+			if (innerType3 != parameterizedType && parameterizedType.isAssignableFrom(innerType3))
+				return ClassInfo.of(innerType3).getParameterType(0, parameterizedType);
+		}
+		return null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this type is a parameterized type of the specified class or a subclass of it.
+	 *
+	 * @param c The class to check against (e.g., Optional.class, List.class).
+	 * @return <jk>true</jk> if this is Optional&lt;T&gt; or a subclass like MyOptional extends Optional&lt;String&gt;.
+	 */
+	private boolean isParameterizedTypeOf(Class<?> c) {
+		return (innerType instanceof ParameterizedType t2 && t2.getRawType() == c) || (innerType instanceof Class innerType2 && c.isAssignableFrom(innerType2));
+	}
+
+	/**
+	 * Returns a {@link ConstructorInfo} wrapper for the specified raw {@link Constructor} object.
+	 *
+	 * <p>
+	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.
+	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.
+	 *
+	 * <p>
+	 * This method is called internally when building the lists of constructors (public, declared, etc.)
+	 * and ensures that the same {@link Constructor} object always maps to the same {@link ConstructorInfo} instance.
+	 *
+	 * @param x The raw constructor to wrap.
+	 * @return The cached {@link ConstructorInfo} wrapper for this constructor.
+	 */
+	ConstructorInfo getConstructor(Constructor<?> x) {
+		return constructorCache.get(x, () -> new ConstructorInfo(this, x));
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotatable interface methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() { return AnnotatableType.CLASS_TYPE; }
+	/**
+	 * Returns a {@link FieldInfo} wrapper for the specified raw {@link Field} object.
+	 *
+	 * <p>
+	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.
+	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.
+	 *
+	 * <p>
+	 * This method is called internally when building the lists of fields (public, declared, all, etc.)
+	 * and ensures that the same {@link Field} object always maps to the same {@link FieldInfo} instance.
+	 *
+	 * @param x The raw field to wrap.
+	 * @return The cached {@link FieldInfo} wrapper for this field.
+	 */
+	FieldInfo getField(Field x) {
+		return fieldCache.get(x, () -> new FieldInfo(this, x));
+	}
 
-	@Override /* Annotatable */
-	public String getLabel() { return getNameSimple(); }
+	/**
+	 * Returns a {@link MethodInfo} wrapper for the specified raw {@link Method} object.
+	 *
+	 * <p>
+	 * This is an internal method used to wrap raw reflection objects into their cached Info wrappers.
+	 * The wrappers provide additional functionality and are cached to avoid creating duplicate objects.
+	 *
+	 * <p>
+	 * This method is called internally when building the lists of methods (public, declared, all, etc.)
+	 * and ensures that the same {@link Method} object always maps to the same {@link MethodInfo} instance.
+	 *
+	 * @param x The raw method to wrap.
+	 * @return The cached {@link MethodInfo} wrapper for this method.
+	 */
+	MethodInfo getMethod(Method x) {
+		return methodCache.get(x, () -> new MethodInfo(this, x));
+	}
 }

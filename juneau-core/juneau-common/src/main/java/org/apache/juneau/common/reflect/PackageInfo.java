@@ -78,16 +78,6 @@ public class PackageInfo implements Annotatable {
 	private static final Cache<Package,PackageInfo> CACHE = Cache.of(Package.class, PackageInfo.class).build();
 
 	/**
-	 * Returns a package info wrapper around the specified package object.
-	 *
-	 * @param inner The package object.
-	 * @return A package info wrapper.
-	 */
-	public static PackageInfo of(Package inner) {
-		return CACHE.get(inner, () -> new PackageInfo(inner));
-	}
-
-	/**
 	 * Returns a package info wrapper around the package of the specified class.
 	 *
 	 * @param childClass The class whose package to retrieve.
@@ -105,6 +95,16 @@ public class PackageInfo implements Annotatable {
 	 */
 	public static PackageInfo of(ClassInfo childClass) {
 		return childClass.getPackage();
+	}
+
+	/**
+	 * Returns a package info wrapper around the specified package object.
+	 *
+	 * @param inner The package object.
+	 * @return A package info wrapper.
+	 */
+	public static PackageInfo of(Package inner) {
+		return CACHE.get(inner, () -> new PackageInfo(inner));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -127,17 +127,89 @@ public class PackageInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns the wrapped {@link Package} object.
+	 * Returns <jk>true</jk> if the specified object is equal to this package.
 	 *
-	 * @return The wrapped {@link Package} object.
+	 * <p>
+	 * Two packages are equal if they have the same name.
+	 *
+	 * @param obj The object to compare to.
+	 * @return <jk>true</jk> if the specified object is equal to this package.
 	 */
-	public Package inner() {
-		return inner;
+	@Override /* Object */
+	public boolean equals(Object obj) {
+		if (obj instanceof PackageInfo obj2)
+			return inner.equals(obj2.inner);
+		return inner.equals(obj);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Package methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.PACKAGE_TYPE; }
+
+	/**
+	 * Returns all annotations on this package, wrapped in {@link AnnotationInfo} objects.
+	 *
+	 * <p>
+	 * Cached and unmodifiable.
+	 * Repeated annotations (from {@code @Repeatable} containers) have been automatically unwrapped and are present as individual instances in the list.
+	 *
+	 * @return All annotations present on this package, or an empty list if there are none.
+	 */
+	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotations.get(); }
+
+	/**
+	 * Returns this package's annotations of the specified type (including repeated annotations), wrapped in {@link AnnotationInfo}.
+	 *
+	 * <p>
+	 * Filters the cached annotations list by type.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type.
+	 * @return A stream of annotation infos of the specified type, never <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
+		return getAnnotations().stream().filter(ai -> type.isInstance(ai.inner())).map(ai -> (AnnotationInfo<A>)ai);
+	}
+
+	/**
+	 * Returns the title of this package's implementation.
+	 *
+	 * <p>
+	 * Same as calling {@link Package#getImplementationTitle()}.
+	 *
+	 * @return The implementation title, or <jk>null</jk> if it is not known.
+	 * @see Package#getImplementationTitle()
+	 */
+	public String getImplementationTitle() { return inner.getImplementationTitle(); }
+
+	/**
+	 * Returns the name of the organization that provided this package's implementation.
+	 *
+	 * <p>
+	 * Same as calling {@link Package#getImplementationVendor()}.
+	 *
+	 * @return The implementation vendor, or <jk>null</jk> if it is not known.
+	 * @see Package#getImplementationVendor()
+	 */
+	public String getImplementationVendor() { return inner.getImplementationVendor(); }
+
+	/**
+	 * Returns the version of this package's implementation.
+	 *
+	 * <p>
+	 * Same as calling {@link Package#getImplementationVersion()}.
+	 *
+	 * @return The implementation version, or <jk>null</jk> if it is not known.
+	 * @see Package#getImplementationVersion()
+	 */
+	public String getImplementationVersion() { return inner.getImplementationVersion(); }
+
+	@Override /* Annotatable */
+	public String getLabel() { return getName(); }
 
 	/**
 	 * Returns the name of this package.
@@ -168,6 +240,17 @@ public class PackageInfo implements Annotatable {
 	public String getSpecificationTitle() { return inner.getSpecificationTitle(); }
 
 	/**
+	 * Returns the name of the organization that maintains the specification implemented by this package.
+	 *
+	 * <p>
+	 * Same as calling {@link Package#getSpecificationVendor()}.
+	 *
+	 * @return The specification vendor, or <jk>null</jk> if it is not known.
+	 * @see Package#getSpecificationVendor()
+	 */
+	public String getSpecificationVendor() { return inner.getSpecificationVendor(); }
+
+	/**
 	 * Returns the version number of the specification that this package implements.
 	 *
 	 * <p>
@@ -183,72 +266,29 @@ public class PackageInfo implements Annotatable {
 	public String getSpecificationVersion() { return inner.getSpecificationVersion(); }
 
 	/**
-	 * Returns the name of the organization that maintains the specification implemented by this package.
+	 * Returns the hash code of this package.
 	 *
 	 * <p>
-	 * Same as calling {@link Package#getSpecificationVendor()}.
+	 * Same as calling {@link Package#hashCode()}.
 	 *
-	 * @return The specification vendor, or <jk>null</jk> if it is not known.
-	 * @see Package#getSpecificationVendor()
+	 * @return The hash code of this package.
 	 */
-	public String getSpecificationVendor() { return inner.getSpecificationVendor(); }
+	@Override /* Object */
+	public int hashCode() {
+		return inner.hashCode();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Object methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the title of this package's implementation.
+	 * Returns the wrapped {@link Package} object.
 	 *
-	 * <p>
-	 * Same as calling {@link Package#getImplementationTitle()}.
-	 *
-	 * @return The implementation title, or <jk>null</jk> if it is not known.
-	 * @see Package#getImplementationTitle()
+	 * @return The wrapped {@link Package} object.
 	 */
-	public String getImplementationTitle() { return inner.getImplementationTitle(); }
-
-	/**
-	 * Returns the version of this package's implementation.
-	 *
-	 * <p>
-	 * Same as calling {@link Package#getImplementationVersion()}.
-	 *
-	 * @return The implementation version, or <jk>null</jk> if it is not known.
-	 * @see Package#getImplementationVersion()
-	 */
-	public String getImplementationVersion() { return inner.getImplementationVersion(); }
-
-	/**
-	 * Returns the name of the organization that provided this package's implementation.
-	 *
-	 * <p>
-	 * Same as calling {@link Package#getImplementationVendor()}.
-	 *
-	 * @return The implementation vendor, or <jk>null</jk> if it is not known.
-	 * @see Package#getImplementationVendor()
-	 */
-	public String getImplementationVendor() { return inner.getImplementationVendor(); }
-
-	/**
-	 * Returns <jk>true</jk> if this package is sealed.
-	 *
-	 * <p>
-	 * Same as calling {@link Package#isSealed()}.
-	 *
-	 * @return <jk>true</jk> if this package is sealed.
-	 * @see Package#isSealed()
-	 */
-	public boolean isSealed() { return inner.isSealed(); }
-
-	/**
-	 * Returns <jk>true</jk> if this package is sealed with respect to the specified code source URL.
-	 *
-	 * <p>
-	 * Same as calling {@link Package#isSealed(URL)}.
-	 *
-	 * @param url The code source URL.
-	 * @return <jk>true</jk> if this package is sealed with respect to the specified URL.
-	 * @see Package#isSealed(URL)
-	 */
-	public boolean isSealed(URL url) {
-		return inner.isSealed(url);
+	public Package inner() {
+		return inner;
 	}
 
 	/**
@@ -270,62 +310,32 @@ public class PackageInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns all annotations on this package, wrapped in {@link AnnotationInfo} objects.
+	 * Returns <jk>true</jk> if this package is sealed.
 	 *
 	 * <p>
-	 * Cached and unmodifiable.
-	 * Repeated annotations (from {@code @Repeatable} containers) have been automatically unwrapped and are present as individual instances in the list.
+	 * Same as calling {@link Package#isSealed()}.
 	 *
-	 * @return All annotations present on this package, or an empty list if there are none.
+	 * @return <jk>true</jk> if this package is sealed.
+	 * @see Package#isSealed()
 	 */
-	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotations.get(); }
-
-	/**
-	 * Returns this package's annotations of the specified type (including repeated annotations), wrapped in {@link AnnotationInfo}.
-	 *
-	 * <p>
-	 * Filters the cached annotations list by type.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type.
-	 * @return A stream of annotation infos of the specified type, never <jk>null</jk>.
-	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
-		return getAnnotations().stream().filter(ai -> type.isInstance(ai.inner())).map(ai -> (AnnotationInfo<A>)ai);
-	}
+	public boolean isSealed() { return inner.isSealed(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Object methods
+	// Annotatable interface methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the hash code of this package.
+	 * Returns <jk>true</jk> if this package is sealed with respect to the specified code source URL.
 	 *
 	 * <p>
-	 * Same as calling {@link Package#hashCode()}.
+	 * Same as calling {@link Package#isSealed(URL)}.
 	 *
-	 * @return The hash code of this package.
+	 * @param url The code source URL.
+	 * @return <jk>true</jk> if this package is sealed with respect to the specified URL.
+	 * @see Package#isSealed(URL)
 	 */
-	@Override /* Object */
-	public int hashCode() {
-		return inner.hashCode();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is equal to this package.
-	 *
-	 * <p>
-	 * Two packages are equal if they have the same name.
-	 *
-	 * @param obj The object to compare to.
-	 * @return <jk>true</jk> if the specified object is equal to this package.
-	 */
-	@Override /* Object */
-	public boolean equals(Object obj) {
-		if (obj instanceof PackageInfo obj2)
-			return inner.equals(obj2.inner);
-		return inner.equals(obj);
+	public boolean isSealed(URL url) {
+		return inner.isSealed(url);
 	}
 
 	/**
@@ -347,14 +357,4 @@ public class PackageInfo implements Annotatable {
 	public String toString() {
 		return inner.toString();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotatable interface methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() { return AnnotatableType.PACKAGE_TYPE; }
-
-	@Override /* Annotatable */
-	public String getLabel() { return getName(); }
 }

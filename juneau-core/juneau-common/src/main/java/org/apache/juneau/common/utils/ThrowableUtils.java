@@ -46,6 +46,64 @@ public class ThrowableUtils {
 	}
 
 	/**
+	 * Shortcut for creating a {@link BeanRuntimeException} with a message and associated class.
+	 *
+	 * @param c The class associated with the exception.
+	 * @param msg The message.
+	 * @param args Optional {@link String#format(String, Object...)} arguments.
+	 * @return A new {@link BeanRuntimeException}.
+	 */
+	public static BeanRuntimeException bex(Class<?> c, String msg, Object...args) {
+		return new BeanRuntimeException(c, msg, args);
+	}
+
+	/**
+	 * Creates a {@link RuntimeException}.
+	 *
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new RuntimeException with the formatted message.
+	 */
+	public static BeanRuntimeException bex(String msg, Object...args) {
+		return new BeanRuntimeException(msg, args);
+	}
+
+	/**
+	 * Creates a {@link RuntimeException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new RuntimeException wrapping the given cause.
+	 */
+	public static BeanRuntimeException bex(Throwable cause) {
+		return new BeanRuntimeException(cause);
+	}
+
+	/**
+	 * Shortcut for creating a {@link BeanRuntimeException} with a cause, message, and associated class.
+	 *
+	 * @param e The cause of the exception.
+	 * @param c The class associated with the exception.
+	 * @param msg The message.
+	 * @param args Optional {@link String#format(String, Object...)} arguments.
+	 * @return A new {@link BeanRuntimeException}.
+	 */
+	public static BeanRuntimeException bex(Throwable e, Class<?> c, String msg, Object...args) {
+		return new BeanRuntimeException(e, c, msg, args);
+	}
+
+	/**
+	 * Creates a {@link RuntimeException} with a cause.
+	 *
+	 * @param cause The cause of the exception.
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new RuntimeException with the formatted message and cause.
+	 */
+	public static BeanRuntimeException bex(Throwable cause, String msg, Object...args) {
+		return new BeanRuntimeException(f(msg, args), cause);
+	}
+
+	/**
 	 * Casts or wraps the specified throwable to the specified type.
 	 *
 	 * @param <T> The class to cast to.
@@ -237,64 +295,6 @@ public class ThrowableUtils {
 	 */
 	public static RuntimeException rex(Throwable cause, String msg, Object...args) {
 		return new RuntimeException(f(msg, args), cause);
-	}
-
-	/**
-	 * Creates a {@link RuntimeException}.
-	 *
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new RuntimeException with the formatted message.
-	 */
-	public static BeanRuntimeException bex(String msg, Object...args) {
-		return new BeanRuntimeException(msg, args);
-	}
-
-	/**
-	 * Shortcut for creating a {@link BeanRuntimeException} with a message and associated class.
-	 *
-	 * @param c The class associated with the exception.
-	 * @param msg The message.
-	 * @param args Optional {@link String#format(String, Object...)} arguments.
-	 * @return A new {@link BeanRuntimeException}.
-	 */
-	public static BeanRuntimeException bex(Class<?> c, String msg, Object...args) {
-		return new BeanRuntimeException(c, msg, args);
-	}
-
-	/**
-	 * Shortcut for creating a {@link BeanRuntimeException} with a cause, message, and associated class.
-	 *
-	 * @param e The cause of the exception.
-	 * @param c The class associated with the exception.
-	 * @param msg The message.
-	 * @param args Optional {@link String#format(String, Object...)} arguments.
-	 * @return A new {@link BeanRuntimeException}.
-	 */
-	public static BeanRuntimeException bex(Throwable e, Class<?> c, String msg, Object...args) {
-		return new BeanRuntimeException(e, c, msg, args);
-	}
-
-	/**
-	 * Creates a {@link RuntimeException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new RuntimeException wrapping the given cause.
-	 */
-	public static BeanRuntimeException bex(Throwable cause) {
-		return new BeanRuntimeException(cause);
-	}
-
-	/**
-	 * Creates a {@link RuntimeException} with a cause.
-	 *
-	 * @param cause The cause of the exception.
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new RuntimeException with the formatted message and cause.
-	 */
-	public static BeanRuntimeException bex(Throwable cause, String msg, Object...args) {
-		return new BeanRuntimeException(f(msg, args), cause);
 	}
 
 	/**

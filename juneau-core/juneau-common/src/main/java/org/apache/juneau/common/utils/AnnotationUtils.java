@@ -68,6 +68,42 @@ public class AnnotationUtils {
 		return getAnnotationMethods(a.annotationType()).mapToInt(x -> hashMember(x.getName(), safeSupplier(() -> x.invoke(a)))).sum();
 	}
 
+	/**
+	 * Returns a stream of nested annotations in a repeated annotation if the specified annotation is a repeated annotation,
+	 * or a singleton stream with the same annotation if not.
+	 *
+	 * <p>
+	 * This method is a stream-based alternative to {@link #splitRepeated(Annotation)} that avoids creating intermediate arrays.
+	 *
+	 * <p>
+	 * <b>Example:</b>
+	 * <p class='bjava'>
+	 * 	<jc>// Given an annotation that may be repeatable</jc>
+	 * 	Annotation <jv>annotation</jv> = ...;
+	 *
+	 * 	<jc>// Stream individual annotations (expanded if repeatable)</jc>
+	 * 	streamRepeated(<jv>annotation</jv>)
+	 * 		.forEach(<jv>a</jv> -&gt; System.<jsf>out</jsf>.println(<jv>a</jv>));
+	 * </p>
+	 *
+	 * @param a The annotation to split.
+	 * @return A stream of nested annotations, or a singleton stream with the same annotation if it's not repeated.
+	 * 	Never <jk>null</jk>.
+	 */
+	public static Stream<Annotation> streamRepeated(Annotation a) {
+		try {
+			var ci = info(a.annotationType());
+			var mi = ci.getRepeatedAnnotationMethod();
+			if (nn(mi)) {
+				Annotation[] annotations = mi.invoke(a);
+				return Arrays.stream(annotations);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Stream.of(a);
+	}
+
 	private static boolean annotationArrayMemberEquals(Annotation[] a1, Annotation[] a2) {
 		if (a1.length != a2.length)
 			return false;
@@ -144,41 +180,5 @@ public class AnnotationUtils {
 		if (type.isAnnotation())
 			return eq((Annotation)o1, (Annotation)o2);
 		return o1.equals(o2);
-	}
-
-	/**
-	 * Returns a stream of nested annotations in a repeated annotation if the specified annotation is a repeated annotation,
-	 * or a singleton stream with the same annotation if not.
-	 *
-	 * <p>
-	 * This method is a stream-based alternative to {@link #splitRepeated(Annotation)} that avoids creating intermediate arrays.
-	 *
-	 * <p>
-	 * <b>Example:</b>
-	 * <p class='bjava'>
-	 * 	<jc>// Given an annotation that may be repeatable</jc>
-	 * 	Annotation <jv>annotation</jv> = ...;
-	 *
-	 * 	<jc>// Stream individual annotations (expanded if repeatable)</jc>
-	 * 	streamRepeated(<jv>annotation</jv>)
-	 * 		.forEach(<jv>a</jv> -&gt; System.<jsf>out</jsf>.println(<jv>a</jv>));
-	 * </p>
-	 *
-	 * @param a The annotation to split.
-	 * @return A stream of nested annotations, or a singleton stream with the same annotation if it's not repeated.
-	 * 	Never <jk>null</jk>.
-	 */
-	public static Stream<Annotation> streamRepeated(Annotation a) {
-		try {
-			var ci = info(a.annotationType());
-			var mi = ci.getRepeatedAnnotationMethod();
-			if (nn(mi)) {
-				Annotation[] annotations = mi.invoke(a);
-				return Arrays.stream(annotations);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return Stream.of(a);
 	}
 }

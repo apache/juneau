@@ -95,72 +95,6 @@ import org.apache.juneau.common.collections.*;
  */
 public final class StringFormat {
 
-	private static final CacheMode CACHE_MODE = CacheMode.parse(System.getProperty("juneau.StringFormat.caching", "FULL"));
-
-	private static final Cache<String,StringFormat> CACHE = Cache.of(String.class, StringFormat.class).maxSize(1000).cacheMode(CACHE_MODE).build();
-
-	private static final Cache2<Locale,String,MessageFormat> MESSAGE_FORMAT_CACHE = Cache2.of(Locale.class, String.class, MessageFormat.class).maxSize(100).threadLocal().cacheMode(CACHE_MODE)
-		.supplier((locale, content) -> new MessageFormat(content, locale)).build();
-
-	private static final Cache<Locale,NumberFormat> NUMBER_FORMAT_CACHE = Cache.of(Locale.class, NumberFormat.class).maxSize(50).threadLocal().cacheMode(CACHE_MODE).supplier(NumberFormat::getInstance).build();
-
-	private static final Cache<Locale,DateFormat> DATE_FORMAT_CACHE = Cache.of(Locale.class, DateFormat.class).maxSize(50).threadLocal().cacheMode(CACHE_MODE)
-		.supplier(locale -> DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale)).build();
-
-	private static final AsciiSet PRINTF_CONVERSION_CHARS = AsciiSet.of("bBhHsScCdoxXeEfgGaAtTn%");
-	private static final AsciiSet PRINTF_FORMAT_CHARS = AsciiSet.of("-+ 0(#.*$");
-
-	/**
-	 * Formats a pattern string with the given arguments using the default locale.
-	 *
-	 * <p>
-	 * This is a convenience method that creates a StringFormat instance and formats it.
-	 * If no arguments are passed in, the pattern is simply returned as-is.
-	 *
-	 * @param pattern The format pattern.
-	 * @param args The arguments to format.
-	 * @return The formatted string.
-	 * @throws IllegalArgumentException If the pattern is <jk>null</jk> or format specifiers are invalid.
-	 */
-	public static String format(String pattern, Object...args) {
-		if (args.length == 0)
-			return pattern;
-		return of(pattern).format(args);
-	}
-
-	/**
-	 * Formats a pattern string with the given arguments using the specified locale.
-	 *
-	 * <p>
-	 * This is a convenience method that creates a StringFormat instance and formats it.
-	 * If no arguments are passed in, the pattern is returned as-is.
-	 *
-	 * @param pattern The format pattern.
-	 * @param locale The locale to use for formatting. If <jk>null</jk>, uses the default locale.
-	 * @param args The arguments to format.
-	 * @return The formatted string.
-	 * @throws IllegalArgumentException If the pattern is <jk>null</jk> or format specifiers are invalid.
-	 */
-	public static String format(String pattern, Locale locale, Object...args) {
-		if (args.length == 0)
-			return pattern;
-		return of(pattern).format(locale, args);
-	}
-
-	/**
-	 * Base class for format tokens.
-	 */
-	private abstract static class Token {
-		/**
-		 * Appends the formatted content to the StringBuilder.
-		 *
-		 * @param sb The StringBuilder to append to.
-		 * @param args The arguments array.
-		 * @param locale The locale for formatting (can be null for default).
-		 */
-		abstract void append(StringBuilder sb, Object[] args, Locale locale);
-	}
-
 	/**
 	 * Literal text token.
 	 */
@@ -172,13 +106,13 @@ public final class StringFormat {
 		}
 
 		@Override
-		void append(StringBuilder sb, Object[] args, Locale locale) {
-			sb.append(text);
+		public String toString() {
+			return "[L:" + text + "]";
 		}
 
 		@Override
-		public String toString() {
-			return "[L:" + text + "]";
+		void append(StringBuilder sb, Object[] args, Locale locale) {
+			sb.append(text);
 		}
 	}
 
@@ -217,6 +151,11 @@ public final class StringFormat {
 		}
 
 		@Override
+		public String toString() {
+			return "[M:" + format + index + (content == null ? "" : (':' + content)) + "]";
+		}
+
+		@Override
 		void append(StringBuilder sb, Object[] args, Locale locale) {
 			// MessageFormat inserts the placeholder text if argument is missing
 			if (args == null || index >= args.length || index < 0) {
@@ -244,11 +183,6 @@ public final class StringFormat {
 					break;
 			}
 		}
-
-		@Override
-		public String toString() {
-			return "[M:" + format + index + (content == null ? "" : (':' + content)) + "]";
-		}
 	}
 
 	/**
@@ -269,6 +203,11 @@ public final class StringFormat {
 			this.format = content.length() == 1 ? content.charAt(content.length() - 1) : 'z';
 			this.index = index;
 			this.content = "%" + content;
+		}
+
+		@Override
+		public String toString() {
+			return "[S:" + format + index + ":" + content + "]";
 		}
 
 		@Override
@@ -430,29 +369,72 @@ public final class StringFormat {
 			// Fallback to String.format for any other simple format
 			sb.append(sf(l, content, o));
 		}
-
-		@Override
-		public String toString() {
-			return "[S:" + format + index + ":" + content + "]";
-		}
 	}
-
-	private static String sf(Locale l, String s, Object o) {
-		return String.format(l, s, a(o));
-	}
-
-	private final String pattern;
-	private final Token[] tokens;
 
 	/**
-	 * Creates a new StringFormat instance.
-	 *
-	 * @param pattern The format pattern. Can contain both MessageFormat and printf-style placeholders.
-	 * @throws IllegalArgumentException If the pattern is <jk>null</jk>.
+	 * Base class for format tokens.
 	 */
-	public StringFormat(String pattern) {
-		this.pattern = assertArgNotNull("pattern", pattern);
-		this.tokens = parseTokens(pattern).toArray(Token[]::new);
+	private abstract static class Token {
+		/**
+		 * Appends the formatted content to the StringBuilder.
+		 *
+		 * @param sb The StringBuilder to append to.
+		 * @param args The arguments array.
+		 * @param locale The locale for formatting (can be null for default).
+		 */
+		abstract void append(StringBuilder sb, Object[] args, Locale locale);
+	}
+
+	private static final CacheMode CACHE_MODE = CacheMode.parse(System.getProperty("juneau.StringFormat.caching", "FULL"));
+
+	private static final Cache<String,StringFormat> CACHE = Cache.of(String.class, StringFormat.class).maxSize(1000).cacheMode(CACHE_MODE).build();
+	private static final Cache2<Locale,String,MessageFormat> MESSAGE_FORMAT_CACHE = Cache2.of(Locale.class, String.class, MessageFormat.class).maxSize(100).threadLocal().cacheMode(CACHE_MODE)
+		.supplier((locale, content) -> new MessageFormat(content, locale)).build();
+
+	private static final Cache<Locale,NumberFormat> NUMBER_FORMAT_CACHE = Cache.of(Locale.class, NumberFormat.class).maxSize(50).threadLocal().cacheMode(CACHE_MODE).supplier(NumberFormat::getInstance).build();
+
+	private static final Cache<Locale,DateFormat> DATE_FORMAT_CACHE = Cache.of(Locale.class, DateFormat.class).maxSize(50).threadLocal().cacheMode(CACHE_MODE)
+		.supplier(locale -> DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale)).build();
+
+	private static final AsciiSet PRINTF_CONVERSION_CHARS = AsciiSet.of("bBhHsScCdoxXeEfgGaAtTn%");
+
+	private static final AsciiSet PRINTF_FORMAT_CHARS = AsciiSet.of("-+ 0(#.*$");
+
+	/**
+	 * Formats a pattern string with the given arguments using the specified locale.
+	 *
+	 * <p>
+	 * This is a convenience method that creates a StringFormat instance and formats it.
+	 * If no arguments are passed in, the pattern is returned as-is.
+	 *
+	 * @param pattern The format pattern.
+	 * @param locale The locale to use for formatting. If <jk>null</jk>, uses the default locale.
+	 * @param args The arguments to format.
+	 * @return The formatted string.
+	 * @throws IllegalArgumentException If the pattern is <jk>null</jk> or format specifiers are invalid.
+	 */
+	public static String format(String pattern, Locale locale, Object...args) {
+		if (args.length == 0)
+			return pattern;
+		return of(pattern).format(locale, args);
+	}
+
+	/**
+	 * Formats a pattern string with the given arguments using the default locale.
+	 *
+	 * <p>
+	 * This is a convenience method that creates a StringFormat instance and formats it.
+	 * If no arguments are passed in, the pattern is simply returned as-is.
+	 *
+	 * @param pattern The format pattern.
+	 * @param args The arguments to format.
+	 * @return The formatted string.
+	 * @throws IllegalArgumentException If the pattern is <jk>null</jk> or format specifiers are invalid.
+	 */
+	public static String format(String pattern, Object...args) {
+		if (args.length == 0)
+			return pattern;
+		return of(pattern).format(args);
 	}
 
 	/**
@@ -471,38 +453,31 @@ public final class StringFormat {
 		return CACHE.get(pattern, () -> new StringFormat(pattern));
 	}
 
-	/**
-	 * Formats the pattern with the given arguments using the default locale.
-	 *
-	 * @param args The arguments to format.
-	 * @return The formatted string.
-	 * @throws IllegalArgumentException If format specifiers are invalid or arguments don't match.
-	 */
-	public String format(Object...args) {
-		return format(Locale.getDefault(), args);
+	private static void lit(List<Token> tokens, String pattern, int start) {
+		if (start == pattern.length())
+			return;
+		tokens.add(new LiteralToken(pattern.substring(start)));
+	}
+	private static void lit(List<Token> tokens, String pattern, int start, int end) {
+		if (start == end)
+			return;
+		tokens.add(new LiteralToken(pattern.substring(start, end)));
 	}
 
-	/**
-	 * Formats the pattern with the given arguments using the specified locale.
-	 *
-	 * <p>
-	 * The locale affects both MessageFormat and printf-style formatting:
-	 * <ul>
-	 *   <li><b>MessageFormat:</b> Locale-specific number, date, and time formatting</li>
-	 *   <li><b>Printf:</b> Locale-specific number formatting (decimal separators, etc.)</li>
-	 * </ul>
-	 *
-	 * @param locale The locale to use for formatting. If <jk>null</jk>, uses the default locale.
-	 * @param args The arguments to format.
-	 * @return The formatted string.
-	 * @throws IllegalArgumentException If format specifiers are invalid or arguments don't match.
-	 */
-	public String format(Locale locale, Object...args) {
-		var sb = new StringBuilder(pattern.length() + 64);
-		for (var token : tokens) {
-			token.append(sb, args, locale);
+	private static void mf(List<Token> tokens, String pattern, int start, int end, int index) {
+		tokens.add(new MessageFormatToken(pattern.substring(start, end), index));
+	}
+
+	private static int parseIndexMF(String s) {
+		try {
+			return Integer.parseInt(s.trim());
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
+			throw new IllegalArgumentException("can't parse argument number: " + s);
 		}
-		return sb.toString();
+	}
+
+	private static int parseIndexSF(String s) {
+		return Integer.parseInt(s.trim());
 	}
 
 	/**
@@ -618,41 +593,71 @@ public final class StringFormat {
 		return tokens;
 	}
 
-	private static void lit(List<Token> tokens, String pattern, int start, int end) {
-		if (start == end)
-			return;
-		tokens.add(new LiteralToken(pattern.substring(start, end)));
-	}
-
-	private static void lit(List<Token> tokens, String pattern, int start) {
-		if (start == pattern.length())
-			return;
-		tokens.add(new LiteralToken(pattern.substring(start)));
-	}
-
 	private static void sf(List<Token> tokens, String pattern, int start, int end, int index) {
 		tokens.add(new StringFormatToken(pattern.substring(start, end), index));
 	}
 
-	private static void mf(List<Token> tokens, String pattern, int start, int end, int index) {
-		tokens.add(new MessageFormatToken(pattern.substring(start, end), index));
+	private static String sf(Locale l, String s, Object o) {
+		return String.format(l, s, a(o));
 	}
 
-	private static int parseIndexMF(String s) {
-		try {
-			return Integer.parseInt(s.trim());
-		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw new IllegalArgumentException("can't parse argument number: " + s);
-		}
-	}
+	private final String pattern;
 
-	private static int parseIndexSF(String s) {
-		return Integer.parseInt(s.trim());
+	private final Token[] tokens;
+
+	/**
+	 * Creates a new StringFormat instance.
+	 *
+	 * @param pattern The format pattern. Can contain both MessageFormat and printf-style placeholders.
+	 * @throws IllegalArgumentException If the pattern is <jk>null</jk>.
+	 */
+	public StringFormat(String pattern) {
+		this.pattern = assertArgNotNull("pattern", pattern);
+		this.tokens = parseTokens(pattern).toArray(Token[]::new);
 	}
 
 	@Override
-	public String toString() {
-		return pattern;
+	public boolean equals(Object o) {
+		return o instanceof StringFormat o2 && eq(this, o2, (x, y) -> eq(x.pattern, y.pattern));
+	}
+
+	/**
+	 * Formats the pattern with the given arguments using the specified locale.
+	 *
+	 * <p>
+	 * The locale affects both MessageFormat and printf-style formatting:
+	 * <ul>
+	 *   <li><b>MessageFormat:</b> Locale-specific number, date, and time formatting</li>
+	 *   <li><b>Printf:</b> Locale-specific number formatting (decimal separators, etc.)</li>
+	 * </ul>
+	 *
+	 * @param locale The locale to use for formatting. If <jk>null</jk>, uses the default locale.
+	 * @param args The arguments to format.
+	 * @return The formatted string.
+	 * @throws IllegalArgumentException If format specifiers are invalid or arguments don't match.
+	 */
+	public String format(Locale locale, Object...args) {
+		var sb = new StringBuilder(pattern.length() + 64);
+		for (var token : tokens) {
+			token.append(sb, args, locale);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Formats the pattern with the given arguments using the default locale.
+	 *
+	 * @param args The arguments to format.
+	 * @return The formatted string.
+	 * @throws IllegalArgumentException If format specifiers are invalid or arguments don't match.
+	 */
+	public String format(Object...args) {
+		return format(Locale.getDefault(), args);
+	}
+
+	@Override
+	public int hashCode() {
+		return pattern.hashCode();
 	}
 
 	/**
@@ -693,12 +698,7 @@ public final class StringFormat {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		return o instanceof StringFormat o2 && eq(this, o2, (x, y) -> eq(x.pattern, y.pattern));
-	}
-
-	@Override
-	public int hashCode() {
-		return pattern.hashCode();
+	public String toString() {
+		return pattern;
 	}
 }

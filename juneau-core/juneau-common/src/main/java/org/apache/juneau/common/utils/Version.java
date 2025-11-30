@@ -148,6 +148,11 @@ public class Version implements Comparable<Version> {
 		return opt(parts[index]);
 	}
 
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return Arrays.hashCode(parts);
+	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified version is at least this version.
 	 *
@@ -241,11 +246,6 @@ public class Version implements Comparable<Version> {
 			if (v.parts[i] > 0)
 				return true;
 		return ! exclusive;
-	}
-
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return Arrays.hashCode(parts);
 	}
 
 	@Override /* Overridden from Object */

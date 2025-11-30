@@ -151,44 +151,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		this.fullName = memoize(this::findFullName);
 	}
 
-	private String findFullName() {
-		var sb = new StringBuilder(128);
-		var dc = declaringClass;
-		var pi = dc.getPackage();
-		if (nn(pi))
-			sb.append(pi.getName()).append('.');
-		dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
-		sb.append('.').append(getName());
-		return sb.toString();
-	}
-
-	/**
-	 * Returns all annotations declared on this field.
-	 *
-	 * <p>
-	 * <b>Note on Repeatable Annotations:</b>
-	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
-	 * expanded into their individual annotation instances. For example, if a field has multiple {@code @Bean} annotations,
-	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
-	 *
-	 * @return
-	 * 	An unmodifiable list of all annotations declared on this field.
-	 * 	<br>Repeatable annotations are expanded into individual instances.
-	 */
-	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotations.get(); }
-
-	/**
-	 * Returns all annotations of the specified type declared on this field.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation type.
-	 * @return A stream of all matching annotations.
-	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
-		return annotations.get().stream().filter(x -> type.isInstance(x.inner())).map(x -> (AnnotationInfo<A>)x);
-	}
-
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
@@ -222,12 +184,68 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		}
 	}
 
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() { return AnnotatableType.FIELD_TYPE; }
+
+	/**
+	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the declared type of the field.
+	 *
+	 * <p>
+	 * Same as calling {@link Field#getAnnotatedType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get annotated type: @NotNull String name</jc>
+	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"name"</js>);
+	 * 	AnnotatedType <jv>aType</jv> = <jv>fi</jv>.getAnnotatedType();
+	 * 	<jc>// Check for @NotNull on the type</jc>
+	 * </p>
+	 *
+	 * @return An {@link AnnotatedType} object representing the declared type.
+	 * @see Field#getAnnotatedType()
+	 */
+	public AnnotatedType getAnnotatedType() { return inner.getAnnotatedType(); }
+
+	/**
+	 * Returns all annotations declared on this field.
+	 *
+	 * <p>
+	 * <b>Note on Repeatable Annotations:</b>
+	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * expanded into their individual annotation instances. For example, if a field has multiple {@code @Bean} annotations,
+	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
+	 *
+	 * @return
+	 * 	An unmodifiable list of all annotations declared on this field.
+	 * 	<br>Repeatable annotations are expanded into individual instances.
+	 */
+	public List<AnnotationInfo<Annotation>> getAnnotations() { return annotations.get(); }
+
+	/**
+	 * Returns all annotations of the specified type declared on this field.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type.
+	 * @return A stream of all matching annotations.
+	 */
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
+		return annotations.get().stream().filter(x -> type.isInstance(x.inner())).map(x -> (AnnotationInfo<A>)x);
+	}
+
 	/**
 	 * Returns metadata about the declaring class.
 	 *
 	 * @return Metadata about the declaring class.
 	 */
 	public ClassInfo getDeclaringClass() { return declaringClass; }
+
+	/**
+	 * Returns the type of this field.
+	 *
+	 * @return The type of this field.
+	 */
+	public ClassInfo getFieldType() { return type.get(); }
 
 	/**
 	 * Returns the full name of this field.
@@ -241,19 +259,15 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	public String getFullName() { return fullName.get(); }
 
+	@Override /* Annotatable */
+	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getName(); }
+
 	/**
 	 * Returns the name of this field.
 	 *
 	 * @return The name of this field.
 	 */
 	public String getName() { return inner.getName(); }
-
-	/**
-	 * Returns the type of this field.
-	 *
-	 * @return The type of this field.
-	 */
-	public ClassInfo getFieldType() { return type.get(); }
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present.
@@ -322,11 +336,51 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	public boolean isDeprecated() { return inner.isAnnotationPresent(Deprecated.class); }
 
 	/**
+	 * Returns <jk>true</jk> if this field represents an element of an enumerated type.
+	 *
+	 * <p>
+	 * Same as calling {@link Field#isEnumConstant()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if field is an enum constant</jc>
+	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyEnum.<jk>class</jk>).getField(<js>"VALUE1"</js>);
+	 * 	<jk>if</jk> (<jv>fi</jv>.isEnumConstant()) {
+	 * 		<jc>// Handle enum constant</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this field represents an enum constant.
+	 * @see Field#isEnumConstant()
+	 */
+	public boolean isEnumConstant() { return inner.isEnumConstant(); }
+
+	/**
 	 * Returns <jk>true</jk> if this field doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this field doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 */
 	public boolean isNotDeprecated() { return ! inner.isAnnotationPresent(Deprecated.class); }
+
+	/**
+	 * Returns <jk>true</jk> if this field is a synthetic field as defined by the Java Language Specification.
+	 *
+	 * <p>
+	 * Same as calling {@link Field#isSynthetic()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Filter out compiler-generated fields</jc>
+	 * 	FieldInfo <jv>fi</jv> = ...;
+	 * 	<jk>if</jk> (! <jv>fi</jv>.isSynthetic()) {
+	 * 		<jc>// Process real field</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this field is a synthetic field.
+	 * @see Field#isSynthetic()
+	 */
+	public boolean isSynthetic() { return inner.isSynthetic(); }
 
 	/**
 	 * Identifies if the specified visibility matches this field.
@@ -354,6 +408,10 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Field-Specific Methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Sets the field value on the specified object if the value is <jk>null</jk>.
 	 *
@@ -366,69 +424,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		if (v == null)
 			set(o, value);
 	}
-
-	/**
-	 * Returns <jk>true</jk> if this field is a synthetic field as defined by the Java Language Specification.
-	 *
-	 * <p>
-	 * Same as calling {@link Field#isSynthetic()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Filter out compiler-generated fields</jc>
-	 * 	FieldInfo <jv>fi</jv> = ...;
-	 * 	<jk>if</jk> (! <jv>fi</jv>.isSynthetic()) {
-	 * 		<jc>// Process real field</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @return <jk>true</jk> if this field is a synthetic field.
-	 * @see Field#isSynthetic()
-	 */
-	public boolean isSynthetic() { return inner.isSynthetic(); }
-
-	/**
-	 * Returns <jk>true</jk> if this field represents an element of an enumerated type.
-	 *
-	 * <p>
-	 * Same as calling {@link Field#isEnumConstant()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if field is an enum constant</jc>
-	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyEnum.<jk>class</jk>).getField(<js>"VALUE1"</js>);
-	 * 	<jk>if</jk> (<jv>fi</jv>.isEnumConstant()) {
-	 * 		<jc>// Handle enum constant</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @return <jk>true</jk> if this field represents an enum constant.
-	 * @see Field#isEnumConstant()
-	 */
-	public boolean isEnumConstant() { return inner.isEnumConstant(); }
-
-	/**
-	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the declared type of the field.
-	 *
-	 * <p>
-	 * Same as calling {@link Field#getAnnotatedType()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get annotated type: @NotNull String name</jc>
-	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"name"</js>);
-	 * 	AnnotatedType <jv>aType</jv> = <jv>fi</jv>.getAnnotatedType();
-	 * 	<jc>// Check for @NotNull on the type</jc>
-	 * </p>
-	 *
-	 * @return An {@link AnnotatedType} object representing the declared type.
-	 * @see Field#getAnnotatedType()
-	 */
-	public AnnotatedType getAnnotatedType() { return inner.getAnnotatedType(); }
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Field-Specific Methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns a string describing this field, including its generic type.
@@ -451,18 +446,23 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		return inner.toGenericString();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotatable interface methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override
 	public String toString() {
 		return cn(inner.getDeclaringClass()) + "." + inner.getName();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotatable interface methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Annotatable */
-	public AnnotatableType getAnnotatableType() { return AnnotatableType.FIELD_TYPE; }
-
-	@Override /* Annotatable */
-	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getName(); }
+	private String findFullName() {
+		var sb = new StringBuilder(128);
+		var dc = declaringClass;
+		var pi = dc.getPackage();
+		if (nn(pi))
+			sb.append(pi.getName()).append('.');
+		dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
+		sb.append('.').append(getName());
+		return sb.toString();
+	}
 }

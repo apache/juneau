@@ -53,6 +53,29 @@ import java.util.*;
  */
 public class GranularZonedDateTime {
 
+	/**
+	 * Parses a timestamp string and returns a GranularZonedDateTime.
+	 *
+	 * <p>
+	 * This method uses {@link DateUtils#fromIso8601(String)} for parsing and
+	 * {@link DateUtils#getPrecisionFromString(String)} for determining precision.
+	 *
+	 * @param seg The string segment to parse.
+	 * @return A GranularZonedDateTime representing the parsed timestamp.
+	 * @throws BasicRuntimeException If the string cannot be parsed as a valid timestamp.
+	 */
+	public static GranularZonedDateTime parse(String seg) {
+		// Try DateUtils.fromIso8601 first for consistency
+		ZonedDateTime zdt = fromIso8601(seg);
+		if (nn(zdt)) {
+			// Determine precision based on the input string
+			var precision = getPrecisionFromString(seg);
+			return new GranularZonedDateTime(zdt, precision);
+		}
+
+		throw rex("Invalid date encountered: ''{0}''", seg);
+	}
+
 	/** The ZonedDateTime value */
 	public final ZonedDateTime zdt;
 
@@ -98,16 +121,6 @@ public class GranularZonedDateTime {
 	public ZonedDateTime getZonedDateTime() { return zdt; }
 
 	/**
-	 * Rolls this time value by the specified amount using the current precision.
-	 *
-	 * @param amount The amount to roll by.
-	 * @return A new GranularZonedDateTime with the rolled value.
-	 */
-	public GranularZonedDateTime roll(int amount) {
-		return roll(precision, amount);
-	}
-
-	/**
 	 * Rolls this time value by the specified amount using the specified field.
 	 *
 	 * @param field The field to roll by.
@@ -125,25 +138,12 @@ public class GranularZonedDateTime {
 	}
 
 	/**
-	 * Parses a timestamp string and returns a GranularZonedDateTime.
+	 * Rolls this time value by the specified amount using the current precision.
 	 *
-	 * <p>
-	 * This method uses {@link DateUtils#fromIso8601(String)} for parsing and
-	 * {@link DateUtils#getPrecisionFromString(String)} for determining precision.
-	 *
-	 * @param seg The string segment to parse.
-	 * @return A GranularZonedDateTime representing the parsed timestamp.
-	 * @throws BasicRuntimeException If the string cannot be parsed as a valid timestamp.
+	 * @param amount The amount to roll by.
+	 * @return A new GranularZonedDateTime with the rolled value.
 	 */
-	public static GranularZonedDateTime parse(String seg) {
-		// Try DateUtils.fromIso8601 first for consistency
-		ZonedDateTime zdt = fromIso8601(seg);
-		if (nn(zdt)) {
-			// Determine precision based on the input string
-			var precision = getPrecisionFromString(seg);
-			return new GranularZonedDateTime(zdt, precision);
-		}
-
-		throw rex("Invalid date encountered: ''{0}''", seg);
+	public GranularZonedDateTime roll(int amount) {
+		return roll(precision, amount);
 	}
 }

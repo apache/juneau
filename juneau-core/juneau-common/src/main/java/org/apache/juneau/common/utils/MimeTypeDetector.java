@@ -64,11 +64,6 @@ import org.apache.juneau.common.collections.*;
  */
 public class MimeTypeDetector {
 	/**
-	 * Default MIME type detector instance.
-	 */
-	public static final MimeTypeDetector DEFAULT = builder().addDefaultMappings().build();
-
-	/**
 	 * Builder class for creating MimeTypeDetector instances.
 	 */
 	public static class Builder {
@@ -81,18 +76,20 @@ public class MimeTypeDetector {
 		private String defaultType = "application/octet-stream";
 
 		/**
-		 * Adds a file type mapping.
+		 * Adds the default MIME type mappings.
 		 *
-		 * @param name The file name or path pattern.
-		 * @param type The MIME type.
 		 * @return This builder.
-		 * @throws IllegalArgumentException If name or type is null or blank.
 		 */
-		public Builder addFileType(String name, String type) {
-			assertArgNotNullOrBlank("name", name);
-			assertArgNotNullOrBlank("type", type);
-			fileMap.put(name, type);
-			return this;
+		public Builder addDefaultMappings() {
+			return addTypes("application/epub+zip epub", "application/java-archive jar", "application/javascript js", "application/json json", "application/msword doc", "application/ogg ogx",
+				"application/pdf pdf", "application/rtf rtf", "application/vnd.amazon.ebook azw", "application/vnd.apple.installer+xml mpkg", "application/vnd.mozilla.xul+xml xul",
+				"application/vnd.ms-excel xls", "application/vnd.ms-powerpoint ppt", "application/vnd.oasis.opendocument.presentation odp", "application/vnd.oasis.opendocument.spreadsheet ods",
+				"application/vnd.oasis.opendocument.text odt", "application/vnd.visio vsd", "application/x-7z-compressed 7z", "application/x-abiword abw", "application/x-bzip bz",
+				"application/x-bzip2 bz2", "application/x-csh csh", "application/x-rar-compressed rar", "application/x-sh sh", "application/x-shockwave-flash swf", "application/x-tar tar",
+				"application/xhtml+xml xhtml", "application/xml xml", "application/zip zip", "audio/aac aac", "audio/midi mid midi", "audio/ogg oga", "audio/webm weba", "audio/x-wav wav",
+				"font/ttf ttf", "font/woff woff", "font/woff2 woff2", "image/gif gif", "image/jpeg jpeg jpg", "image/png png", "image/svg+xml svg", "image/tiff tif tiff", "image/webp webp",
+				"image/x-icon ico", "text/calendar ics", "text/css css", "text/csv csv", "text/html htm html", "text/plain txt", "video/3gpp 3gp", "video/3gpp2 3g2", "video/mpeg mpeg",
+				"video/ogg ogv", "video/webm webm", "video/x-msvideo avi");
 		}
 
 		/**
@@ -111,6 +108,21 @@ public class MimeTypeDetector {
 		}
 
 		/**
+		 * Adds a file type mapping.
+		 *
+		 * @param name The file name or path pattern.
+		 * @param type The MIME type.
+		 * @return This builder.
+		 * @throws IllegalArgumentException If name or type is null or blank.
+		 */
+		public Builder addFileType(String name, String type) {
+			assertArgNotNullOrBlank("name", name);
+			assertArgNotNullOrBlank("type", type);
+			fileMap.put(name, type);
+			return this;
+		}
+
+		/**
 		 * Enables or disables NIO content-based detection.
 		 *
 		 * @param value Whether to enable NIO content-based detection.
@@ -118,58 +130,6 @@ public class MimeTypeDetector {
 		 */
 		public Builder addNioContentBasedDetection(boolean value) {
 			nioContentBasedDetection = value;
-			return this;
-		}
-
-		/**
-		 * Sets the cache size.
-		 *
-		 * @param value The maximum cache size.
-		 * @return This builder.
-		 */
-		public Builder setCacheSize(int value) {
-			cacheSize = value;
-			return this;
-		}
-
-		/**
-		 * Sets the caching mode for MIME type lookups.
-		 *
-		 * <p>
-		 * Available modes:
-		 * <ul>
-		 * 	<li>{@link CacheMode#NONE NONE} - No caching (always recompute)
-		 * 	<li>{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link java.util.WeakHashMap})
-		 * 	<li>{@link CacheMode#FULL FULL} - Full caching (uses {@link java.util.concurrent.ConcurrentHashMap}, default)
-		 * </ul>
-		 *
-		 * @param value The caching mode.
-		 * @return This builder.
-		 */
-		public Builder setCacheMode(CacheMode value) {
-			cacheMode = value;
-			return this;
-		}
-
-		/**
-		 * Enables or disables cache logging on exit.
-		 *
-		 * @param value Whether to log cache statistics on exit.
-		 * @return This builder.
-		 */
-		public Builder setCacheLogOnExit(boolean value) {
-			cacheLogOnExit = value;
-			return this;
-		}
-
-		/**
-		 * Sets the default MIME type for unknown files.
-		 *
-		 * @param value The default MIME type.
-		 * @return This builder.
-		 */
-		public Builder setDefaultType(String value) {
-			defaultType = value;
 			return this;
 		}
 
@@ -213,23 +173,6 @@ public class MimeTypeDetector {
 		}
 
 		/**
-		 * Adds the default MIME type mappings.
-		 *
-		 * @return This builder.
-		 */
-		public Builder addDefaultMappings() {
-			return addTypes("application/epub+zip epub", "application/java-archive jar", "application/javascript js", "application/json json", "application/msword doc", "application/ogg ogx",
-				"application/pdf pdf", "application/rtf rtf", "application/vnd.amazon.ebook azw", "application/vnd.apple.installer+xml mpkg", "application/vnd.mozilla.xul+xml xul",
-				"application/vnd.ms-excel xls", "application/vnd.ms-powerpoint ppt", "application/vnd.oasis.opendocument.presentation odp", "application/vnd.oasis.opendocument.spreadsheet ods",
-				"application/vnd.oasis.opendocument.text odt", "application/vnd.visio vsd", "application/x-7z-compressed 7z", "application/x-abiword abw", "application/x-bzip bz",
-				"application/x-bzip2 bz2", "application/x-csh csh", "application/x-rar-compressed rar", "application/x-sh sh", "application/x-shockwave-flash swf", "application/x-tar tar",
-				"application/xhtml+xml xhtml", "application/xml xml", "application/zip zip", "audio/aac aac", "audio/midi mid midi", "audio/ogg oga", "audio/webm weba", "audio/x-wav wav",
-				"font/ttf ttf", "font/woff woff", "font/woff2 woff2", "image/gif gif", "image/jpeg jpeg jpg", "image/png png", "image/svg+xml svg", "image/tiff tif tiff", "image/webp webp",
-				"image/x-icon ico", "text/calendar ics", "text/css css", "text/csv csv", "text/html htm html", "text/plain txt", "video/3gpp 3gp", "video/3gpp2 3g2", "video/mpeg mpeg",
-				"video/ogg ogv", "video/webm webm", "video/x-msvideo avi");
-		}
-
-		/**
 		 * Builds the MimeTypeDetector instance.
 		 *
 		 * @return A new MimeTypeDetector instance.
@@ -237,7 +180,64 @@ public class MimeTypeDetector {
 		public MimeTypeDetector build() {
 			return new MimeTypeDetector(this);
 		}
+
+		/**
+		 * Enables or disables cache logging on exit.
+		 *
+		 * @param value Whether to log cache statistics on exit.
+		 * @return This builder.
+		 */
+		public Builder setCacheLogOnExit(boolean value) {
+			cacheLogOnExit = value;
+			return this;
+		}
+
+		/**
+		 * Sets the caching mode for MIME type lookups.
+		 *
+		 * <p>
+		 * Available modes:
+		 * <ul>
+		 * 	<li>{@link CacheMode#NONE NONE} - No caching (always recompute)
+		 * 	<li>{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link java.util.WeakHashMap})
+		 * 	<li>{@link CacheMode#FULL FULL} - Full caching (uses {@link java.util.concurrent.ConcurrentHashMap}, default)
+		 * </ul>
+		 *
+		 * @param value The caching mode.
+		 * @return This builder.
+		 */
+		public Builder setCacheMode(CacheMode value) {
+			cacheMode = value;
+			return this;
+		}
+
+		/**
+		 * Sets the cache size.
+		 *
+		 * @param value The maximum cache size.
+		 * @return This builder.
+		 */
+		public Builder setCacheSize(int value) {
+			cacheSize = value;
+			return this;
+		}
+
+		/**
+		 * Sets the default MIME type for unknown files.
+		 *
+		 * @param value The default MIME type.
+		 * @return This builder.
+		 */
+		public Builder setDefaultType(String value) {
+			defaultType = value;
+			return this;
+		}
 	}
+
+	/**
+	 * Default MIME type detector instance.
+	 */
+	public static final MimeTypeDetector DEFAULT = builder().addDefaultMappings().build();
 
 	/**
 	 * Creates a new builder for MimeTypeDetector.
@@ -274,6 +274,31 @@ public class MimeTypeDetector {
 
 		this.cache = cacheBuilder.build();
 	}
+
+	/**
+	 * Clears the MIME type cache.
+	 *
+	 * <p>
+	 * This method can be called to free memory or when you want to ensure
+	 * fresh MIME type detection (e.g., after files have been modified).
+	 */
+	public void clearCache() {
+		cache.clear();
+	}
+
+	/**
+	 * Returns the number of cache hits since the cache was created.
+	 *
+	 * @return The number of cache hits.
+	 */
+	public int getCacheHits() { return cache.getCacheHits(); }
+
+	/**
+	 * Returns the current cache size.
+	 *
+	 * @return The number of cached MIME type entries.
+	 */
+	public int getCacheSize() { return cache.size(); }
 
 	/**
 	 * Determines the MIME type of a file based on its name or path.
@@ -342,29 +367,4 @@ public class MimeTypeDetector {
 		// Default fallback
 		return defaultType;
 	}
-
-	/**
-	 * Clears the MIME type cache.
-	 *
-	 * <p>
-	 * This method can be called to free memory or when you want to ensure
-	 * fresh MIME type detection (e.g., after files have been modified).
-	 */
-	public void clearCache() {
-		cache.clear();
-	}
-
-	/**
-	 * Returns the current cache size.
-	 *
-	 * @return The number of cached MIME type entries.
-	 */
-	public int getCacheSize() { return cache.size(); }
-
-	/**
-	 * Returns the number of cache hits since the cache was created.
-	 *
-	 * @return The number of cache hits.
-	 */
-	public int getCacheHits() { return cache.getCacheHits(); }
 }

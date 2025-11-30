@@ -81,6 +81,26 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 	}
 
 	/**
+	 * Not supported - this is a read-only view.
+	 *
+	 * @throws UnsupportedOperationException always
+	 */
+	@Override
+	public void add(int index, E element) {
+		throw new UnsupportedOperationException("ReversedList is read-only");
+	}
+
+	/**
+	 * Not supported - this is a read-only view.
+	 *
+	 * @throws UnsupportedOperationException always
+	 */
+	@Override
+	public void clear() {
+		throw new UnsupportedOperationException("ReversedList is read-only");
+	}
+
+	/**
 	 * Returns the element at the specified position in this reversed view.
 	 *
 	 * <p>
@@ -94,19 +114,6 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 	@Override
 	public E get(int index) {
 		return list.get(list.size() - 1 - index);
-	}
-
-	/**
-	 * Returns the number of elements in this reversed view.
-	 *
-	 * <p>
-	 * This is always equal to the size of the underlying list.
-	 *
-	 * @return The number of elements in this reversed view.
-	 */
-	@Override
-	public int size() {
-		return list.size();
 	}
 
 	/**
@@ -171,13 +178,13 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 			private final ListIterator<E> it = list.listIterator(list.size() - index);
 
 			@Override
-			public boolean hasNext() {
-				return it.hasPrevious();
+			public void add(E e) {
+				throw new UnsupportedOperationException("ReversedList is read-only");
 			}
 
 			@Override
-			public E next() {
-				return it.previous();
+			public boolean hasNext() {
+				return it.hasPrevious();
 			}
 
 			@Override
@@ -186,13 +193,18 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 			}
 
 			@Override
-			public E previous() {
-				return it.next();
+			public E next() {
+				return it.previous();
 			}
 
 			@Override
 			public int nextIndex() {
 				return list.size() - it.previousIndex() - 1;
+			}
+
+			@Override
+			public E previous() {
+				return it.next();
 			}
 
 			@Override
@@ -209,45 +221,7 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 			public void set(E e) {
 				throw new UnsupportedOperationException("ReversedList is read-only");
 			}
-
-			@Override
-			public void add(E e) {
-				throw new UnsupportedOperationException("ReversedList is read-only");
-			}
 		};
-	}
-
-	/**
-	 * Returns a view of the portion of this reversed list between the specified indices.
-	 *
-	 * <p>
-	 * The returned sublist is also a reversed view and reflects changes in the underlying list.
-	 *
-	 * @param fromIndex Low endpoint (inclusive) of the subList.
-	 * @param toIndex High endpoint (exclusive) of the subList.
-	 * @return A view of the specified range within this reversed list.
-	 * @throws IndexOutOfBoundsException if the indices are out of range.
-	 */
-	@Override
-	public List<E> subList(int fromIndex, int toIndex) {
-		if (fromIndex < 0 || toIndex > size() || fromIndex > toIndex)
-			throw new IndexOutOfBoundsException("fromIndex: " + fromIndex + ", toIndex: " + toIndex + ", size: " + size());
-
-		// Translate indices to the underlying list
-		int translatedFrom = list.size() - toIndex;
-		int translatedTo = list.size() - fromIndex;
-
-		return new ReversedList<>(list.subList(translatedFrom, translatedTo));
-	}
-
-	/**
-	 * Not supported - this is a read-only view.
-	 *
-	 * @throws UnsupportedOperationException always
-	 */
-	@Override
-	public void add(int index, E element) {
-		throw new UnsupportedOperationException("ReversedList is read-only");
 	}
 
 	/**
@@ -271,12 +245,38 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 	}
 
 	/**
-	 * Not supported - this is a read-only view.
+	 * Returns the number of elements in this reversed view.
 	 *
-	 * @throws UnsupportedOperationException always
+	 * <p>
+	 * This is always equal to the size of the underlying list.
+	 *
+	 * @return The number of elements in this reversed view.
 	 */
 	@Override
-	public void clear() {
-		throw new UnsupportedOperationException("ReversedList is read-only");
+	public int size() {
+		return list.size();
+	}
+
+	/**
+	 * Returns a view of the portion of this reversed list between the specified indices.
+	 *
+	 * <p>
+	 * The returned sublist is also a reversed view and reflects changes in the underlying list.
+	 *
+	 * @param fromIndex Low endpoint (inclusive) of the subList.
+	 * @param toIndex High endpoint (exclusive) of the subList.
+	 * @return A view of the specified range within this reversed list.
+	 * @throws IndexOutOfBoundsException if the indices are out of range.
+	 */
+	@Override
+	public List<E> subList(int fromIndex, int toIndex) {
+		if (fromIndex < 0 || toIndex > size() || fromIndex > toIndex)
+			throw new IndexOutOfBoundsException("fromIndex: " + fromIndex + ", toIndex: " + toIndex + ", size: " + size());
+
+		// Translate indices to the underlying list
+		int translatedFrom = list.size() - toIndex;
+		int translatedTo = list.size() - fromIndex;
+
+		return new ReversedList<>(list.subList(translatedFrom, translatedTo));
 	}
 }
