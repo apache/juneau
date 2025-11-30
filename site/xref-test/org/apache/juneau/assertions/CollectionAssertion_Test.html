@@ -151,16 +151,16 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		test(x1).is(x1);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		test(x1).is(x1a);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		test(nil).is(nil);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertThrown(()-&gt;test(x1).is(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value.  Expect='[3, 4]'.  Actual='[1, 2]'."</span>);
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertThrown(()-&gt;test(x1).is(nil)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value.  Expect='null'.  Actual='[1, 2]'."</span>);
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertThrown(()-&gt;test(nil).is(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value.  Expect='[3, 4]'.  Actual='null'."</span>);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertThrown(()-&gt;test(x1).is(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value.  Expect='[3,4]'.  Actual='[1,2]'."</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertThrown(()-&gt;test(x1).is(nil)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value.  Expect='null'.  Actual='[1,2]'."</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertThrown(()-&gt;test(nil).is(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value.  Expect='[3,4]'.  Actual='null'."</span>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@Test <strong class="jxr_keyword">void</strong> ca04b_is_predicate() {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> x1 = l(1,2);
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		test(x1).is(x-&gt;x.size()==2);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertThrown(()-&gt;test(x1).is(x-&gt;x.size()==3)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value: '[1,2]'."</span>);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertThrown(()-&gt;test(x1).is(ne(x1))).asMessage().asOneLine().is(<span class="jxr_string">"Value unexpectedly matched.  Value='[1, 2]'."</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertThrown(()-&gt;test(x1).is(ne(x1))).asMessage().asOneLine().is(<span class="jxr_string">"Value unexpectedly matched.  Value='[1,2]'."</span>);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 	@Test <strong class="jxr_keyword">void</strong> ca05_isNot() {
@@ -171,7 +171,7 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		test(x1).isNot(x2);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		test(x1).isNot(nil);
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		test(nil).isNot(x1);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertThrown(()-&gt;test(x1).isNot(x1a)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value.  Did not expect='[1, 2]'.  Actual='[1, 2]'."</span>);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertThrown(()-&gt;test(x1).isNot(x1a)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value.  Did not expect='[1,2]'.  Actual='[1,2]'."</span>);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertThrown(()-&gt;test(nil).isNot(nil)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value.  Did not expect='null'.  Actual='null'."</span>);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
@@ -181,9 +181,9 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> x2 = l(3,4);
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> nil = listn(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		test(x1).isAny(x1a, x2);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertThrown(()-&gt;test(x1).isAny(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[[3, 4]]'.  Actual='[1, 2]'."</span>);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertThrown(()-&gt;test(x1).isAny()).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[]'.  Actual='[1, 2]'."</span>);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertThrown(()-&gt;test(nil).isAny(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[[3, 4]]'.  Actual='null'."</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertThrown(()-&gt;test(x1).isAny(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[[3,4]]'.  Actual='[1,2]'."</span>);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertThrown(()-&gt;test(x1).isAny()).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[]'.  Actual='[1,2]'."</span>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertThrown(()-&gt;test(nil).isAny(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[[3,4]]'.  Actual='null'."</span>);
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 	@Test <strong class="jxr_keyword">void</strong> ca07_isNotAny() {
@@ -194,7 +194,7 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		test(x1).isNotAny(x2);
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		test(x1).isNotAny();
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		test(nil).isNotAny(x2);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertThrown(()-&gt;test(x1).isNotAny(x1a)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value found.  Unexpected='[1, 2]'.  Actual='[1, 2]'."</span>);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertThrown(()-&gt;test(x1).isNotAny(x1a)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value found.  Unexpected='[1,2]'.  Actual='[1,2]'."</span>);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertThrown(()-&gt;test(nil).isNotAny(nil)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected value found.  Unexpected='null'.  Actual='null'."</span>);
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
@@ -204,9 +204,9 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> nil = listn(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		test(x1).isSame(x1);
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		test(nil).isSame(nil);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertThrown(()-&gt;test(x1).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='[1, 2](*)'.  Actual='[1, 2](*)'."</span>);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertThrown(()-&gt;test(nil).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='[1, 2](*)'.  Actual='null(null)'."</span>);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertThrown(()-&gt;test(x1).isSame(nil)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='null(null)'.  Actual='[1, 2](*)'."</span>);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertThrown(()-&gt;test(x1).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='[1,2](*)'.  Actual='[1,2](*)'."</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertThrown(()-&gt;test(nil).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='[1,2](*)'.  Actual='null(null)'."</span>);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertThrown(()-&gt;test(x1).isSame(nil)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='null(null)'.  Actual='[1,2](*)'."</span>);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 	@Test <strong class="jxr_keyword">void</strong> ca09_isSameJsonAs() {
@@ -268,10 +268,10 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 	@Test <strong class="jxr_keyword">void</strong> ca14_isString() {
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">var</strong> x = l(1,2);
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">var</strong> nil = listn(Integer.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		test(x).isString(<span class="jxr_string">"[1, 2]"</span>);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		test(x).isString(<span class="jxr_string">"[1,2]"</span>);
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 		test(nil).isString(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertThrown(()-&gt;test(x).isString(<span class="jxr_string">"bad"</span>)).asMessage().asOneLine().is(<span class="jxr_string">"String differed at position 0.  Expect='bad'.  Actual='[1, 2]'."</span>);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertThrown(()-&gt;test(x).isString(<strong class="jxr_keyword">null</strong>)).asMessage().asOneLine().is(<span class="jxr_string">"String differed at position 0.  Expect='null'.  Actual='[1, 2]'."</span>);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertThrown(()-&gt;test(x).isString(<span class="jxr_string">"bad"</span>)).asMessage().asOneLine().is(<span class="jxr_string">"String differed at position 0.  Expect='bad'.  Actual='[1,2]'."</span>);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertThrown(()-&gt;test(x).isString(<strong class="jxr_keyword">null</strong>)).asMessage().asOneLine().is(<span class="jxr_string">"String differed at position 0.  Expect='null'.  Actual='[1,2]'."</span>);
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertThrown(()-&gt;test(nil).isString(<span class="jxr_string">"bad"</span>)).asMessage().asOneLine().is(<span class="jxr_string">"String differed at position 0.  Expect='bad'.  Actual='null'."</span>);
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	}
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 
@@ -307,7 +307,7 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> x = l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> nil = listn(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		test(x).isContains(<span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertThrown(()-&gt;test(x).isContains(<span class="jxr_string">"z"</span>)).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain expected value.  Expect='z'.  Value='[a, b]'."</span>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertThrown(()-&gt;test(x).isContains(<span class="jxr_string">"z"</span>)).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain expected value.  Expect='z'.  Value='[a,b]'."</span>);
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;test(nil).isContains(<span class="jxr_string">"z"</span>), <span class="jxr_string">"Value was null."</span>);
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
@@ -315,7 +315,7 @@
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">var</strong> x = l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> nil = listn(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		test(x).isNotContains(<span class="jxr_string">"z"</span>);
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertThrown(()-&gt;test(x).isNotContains(<span class="jxr_string">"a"</span>)).asMessage().asOneLine().is(<span class="jxr_string">"Collection contained unexpected value.  Unexpected='a'.  Value='[a, b]'."</span>);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertThrown(()-&gt;test(x).isNotContains(<span class="jxr_string">"a"</span>)).asMessage().asOneLine().is(<span class="jxr_string">"Collection contained unexpected value.  Unexpected='a'.  Value='[a,b]'."</span>);
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;test(nil).isNotContains(<span class="jxr_string">"z"</span>), <span class="jxr_string">"Value was null."</span>);
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 	}
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 
@@ -324,7 +324,7 @@
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> nil = listn(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		test(x1).isAny(x-&gt;x.equals(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		test(x1).isAny((Predicate&lt;String&gt;)<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		assertThrown(()-&gt;test(x1).isAny(x-&gt;x.equals(<span class="jxr_string">"z"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain tested value.  Value='[a, b]'."</span>);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		assertThrown(()-&gt;test(x1).isAny(x-&gt;x.equals(<span class="jxr_string">"z"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain tested value.  Value='[a,b]'."</span>);
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;test(nil).isAny(x-&gt;x.equals(<span class="jxr_string">"z"</span>)), <span class="jxr_string">"Value was null."</span>);
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 	}
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 
@@ -333,7 +333,7 @@
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> nil = listn(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		test(x1).isAll(x-&gt;x!=<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 		test(x1).isAll(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertThrown(()-&gt;test(x1).isAll(x-&gt;x.equals(<span class="jxr_string">"z"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain tested value.  Value='[a, b]'."</span>);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertThrown(()-&gt;test(x1).isAll(x-&gt;x.equals(<span class="jxr_string">"z"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain tested value.  Value='[a,b]'."</span>);
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;test(nil).isAll(x-&gt;x.equals(<span class="jxr_string">"z"</span>)), <span class="jxr_string">"Value was null."</span>);
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 

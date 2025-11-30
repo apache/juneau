@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> t = map(Throwable::getCause).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> || type.isInstance(t))
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentThrowableAssertion&lt;&gt;(<strong class="jxr_keyword">this</strong>, type.<strong class="jxr_keyword">cast</strong>(t), returns());
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">throw</strong> error(MSG_causedByExceptionNotExpectedType, type, t.getClass());
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">throw</strong> error(MSG_causedByExceptionNotExpectedType, cn(type), cn(t.getClass()));
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<em class="jxr_javadoccomment">/**</em>

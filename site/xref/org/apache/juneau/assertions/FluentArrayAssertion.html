@@ -246,7 +246,7 @@
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	@Override <em class="jxr_comment">/* Overridden from FluentBaseAssertion */</em>
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> FluentStringAssertion&lt;R&gt; asString() {
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentStringAssertion&lt;&gt;(<strong class="jxr_keyword">this</strong>, toString(), returns());
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentStringAssertion&lt;&gt;(<strong class="jxr_keyword">this</strong>, valueIsNull() ? <strong class="jxr_keyword">null</strong> : r(value()), returns());
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -319,7 +319,7 @@
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : value())
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">if</strong> (test.test(v))
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 				<strong class="jxr_keyword">return</strong> returns();
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">throw</strong> error(MSG_arrayDidntContainAnyMatchingValue, (Object)value());
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">throw</strong> error(MSG_arrayDidntContainAnyMatchingValue, r(value()));
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 	}
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -333,7 +333,7 @@
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = length(); i &lt; j; i++)
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">if</strong> (eq(at(i), entry))
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 				<strong class="jxr_keyword">return</strong> returns();
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">throw</strong> error(MSG_arrayDidNotContainExpectedValue, entry, toString());
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">throw</strong> error(MSG_arrayDidNotContainExpectedValue, r(entry), r(value()));
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -372,7 +372,7 @@
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">public</strong> R isNotContains(E entry) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = length(); i &lt; j; i++)
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">if</strong> (eq(at(i), entry))
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">throw</strong> error(MSG_arrayContainedUnexpectedValue, entry, toString());
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">throw</strong> error(MSG_arrayContainedUnexpectedValue, r(entry), r(value()));
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 	}
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 

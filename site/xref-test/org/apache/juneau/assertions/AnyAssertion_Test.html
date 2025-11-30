@@ -186,7 +186,7 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	@Test <strong class="jxr_keyword">void</strong> bb08_asByteArray() {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		byte[] x1 = {1}, nil = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> x2 = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		test(x1).asByteArray().isString(<span class="jxr_string">"[1]"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		test(x1).asByteArray().isString(<span class="jxr_string">"01"</span>);
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		test(nil).asByteArray().isNull();
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertThrown(()-&gt;test(x2).asByteArray()).asMessage().asOneLine().is(<span class="jxr_string">"Object was not type 'byte[]'.  Actual='java.lang.String'."</span>);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
@@ -248,7 +248,7 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">var</strong> x1 = date(<span class="jxr_string">"2000-06-01T12:34:56Z"</span>);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> nil = n(Date.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> x2 = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		test(x1).asDate().asString().isMatches(<span class="jxr_string">"*2000"</span>);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		test(x1).asDate().asString().isMatches(<span class="jxr_string">"*2000*"</span>);
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 		test(nil).asDate().isNull();
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertThrown(()-&gt;test(x2).asDate()).asMessage().asOneLine().is(<span class="jxr_string">"Object was not type 'java.util.Date'.  Actual='java.lang.String'."</span>);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}

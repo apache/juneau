@@ -135,14 +135,14 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> bc03a_sorted() {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> x = l(<span class="jxr_string">"2"</span>,<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> nil = listn(String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		test(x).asSorted().isString(<span class="jxr_string">"[1, 2]"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		test(x).asSorted().isString(<span class="jxr_string">"[1,2]"</span>);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		test(nil).asSorted().isNull();
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	@Test <strong class="jxr_keyword">void</strong> bc03b_sorted_wComparator() {
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> x = l(<span class="jxr_string">"2"</span>,<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> nil = listn(String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		test(x).asSorted(<strong class="jxr_keyword">null</strong>).isString(<span class="jxr_string">"[1, 2]"</span>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		test(x).asSorted(<strong class="jxr_keyword">null</strong>).isString(<span class="jxr_string">"[1,2]"</span>);
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		test(nil).asSorted(<strong class="jxr_keyword">null</strong>).isNull();
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
