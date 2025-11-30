@@ -563,7 +563,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		if (o1.equals(o2))
 			return true;
 		if (isArray(o1))
-			return stringifyDeep(o1).equals(stringifyDeep(o2));
+			return readable(o1).equals(readable(o2));
 		return false;
 	}
 

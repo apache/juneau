@@ -227,10 +227,12 @@ The `StringUtils` class currently has 225+ public static methods covering:
 
 ## Methods to Review/Deprecate
 
-- ⚠️ `stringifyDeep(Object o)` - Determine if this method is still required or if it can be replaced with `readable()`. Currently used in:
-  - `FluentObjectAssertion.equals()` for array comparison (line 566)
-  - Previously used in `AssertionPredicate.VALUE` but has been replaced with `readable()`
-  - Review differences in behavior between `stringifyDeep()` and `readable()`:
-    - `stringifyDeep()` uses `toString()` for Collections (adds spaces: `[a, b, c]`)
-    - `readable()` uses `Collectors.joining(",")` for Collections (no spaces: `[a,b,c]`)
-  - If `stringifyDeep()` can be replaced, update all usages and consider deprecating/removing the method
+- ✅ `stringifyDeep(Object o)` - **COMPLETED**: Replaced with `readable()` and deprecated.
+  - ✅ Replaced usage in `FluentObjectAssertion.equals()` (line 566) with `readable()`
+  - ✅ Previously used in `AssertionPredicate.VALUE` but has been replaced with `readable()`
+  - ✅ Method has been deprecated with `@Deprecated` annotation and Javadoc updated to recommend using `readable()` instead
+  - ✅ Differences in behavior:
+    - `stringifyDeep()` uses `Arrays.toString()`/`Arrays.deepToString()` for arrays (adds spaces: `[a, b, c]`)
+    - `readable()` uses `Collectors.joining(",")` for collections/arrays (no spaces: `[a,b,c]`)
+    - `readable()` also handles byte arrays as hex (`0102`) vs `stringifyDeep()` which uses `[1, 2]`
+  - ✅ All usages have been updated and the method is now deprecated

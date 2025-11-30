@@ -4928,22 +4928,6 @@ public class StringUtils {
 	}
 
 	/**
-	 * Converts the specified array to a string.
-	 *
-	 * @param o The array to convert to a string.
-	 * @return The array converted to a string, or <jk>null</jk> if the object was null.
-	 */
-	public static String stringifyDeep(Object o) {
-		if (o == null)
-			return null;
-		if (! isArray(o))
-			return o.toString();
-		if (o.getClass().getComponentType().isPrimitive())
-			return PRIMITIVE_ARRAY_STRINGIFIERS.get(o.getClass()).apply(o);
-		return Arrays.deepToString((Object[])o);
-	}
-
-	/**
 	 * Strips the first and last character from a string.
 	 *
 	 * @param s The string to strip.
