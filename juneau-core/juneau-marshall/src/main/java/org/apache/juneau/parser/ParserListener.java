@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 

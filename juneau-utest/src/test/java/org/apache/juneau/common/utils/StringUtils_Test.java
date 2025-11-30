@@ -3234,22 +3234,22 @@ class StringUtils_Test extends TestBase {
 		assertTrue(contains("test", "te"));
 		assertTrue(contains("test", "st"));
 		assertTrue(contains("test", "test"));
-		assertTrue(contains("test", "te", "xx"));
+		assertTrue(containsAny("test", "te", "xx"));
 		assertFalse(contains("test", "xx"));
-		assertFalse(contains("test", "xx", "yy"));
+		assertFalse(containsAny("test", "xx", "yy"));
 		assertFalse(contains(null, "test"));
-		assertFalse(contains("test", (String[])null));
+		assertFalse(containsAny("test", (String[])null));
 	}
 
 	@Test
 	void a91_contains_chars() {
 		assertTrue(contains("test", 't'));
 		assertTrue(contains("test", 'e'));
-		assertTrue(contains("test", 't', 'x'));
+		assertTrue(containsAny("test", 't', 'x'));
 		assertFalse(contains("test", 'x'));
-		assertFalse(contains("test", 'x', 'y'));
+		assertFalse(containsAny("test", 'x', 'y'));
 		assertFalse(contains(null, 't'));
-		assertFalse(contains("test", (char[])null));
+		assertFalse(containsAny("test", (char[])null));
 	}
 
 	@Test

@@ -158,11 +158,27 @@ public class StringUtils {
 	private static final AsciiSet URI_CHARS = AsciiSet.create().chars("?#+%;/:@&=+$,-_.!~*'()").range('0', '9').range('A', 'Z').range('a', 'z').build();
 
 	/**
-	 * Abbreviates a String using ellipses.
+	 * Abbreviates a string using ellipses if it exceeds the specified length.
 	 *
-	 * @param in The input string.
-	 * @param length The max length of the resulting string.
-	 * @return The abbreviated string.
+	 * <p>
+	 * If the string is longer than the specified length, it is truncated and <js>"..."</js> is appended.
+	 * The total length of the result will be exactly <c>length</c> characters (including the ellipses).
+	 *
+	 * <p>
+	 * If the string is <jk>null</jk>, shorter than or equal to <c>length</c>, or has length 3 or less,
+	 * the original string is returned unchanged.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	abbreviate(<js>"Hello World"</js>, 8);        <jc>// "Hello..."</jc>
+	 * 	abbreviate(<js>"Hello World"</js>, 20);       <jc>// "Hello World" (no change)</jc>
+	 * 	abbreviate(<js>"Hi"</js>, 5);                 <jc>// "Hi" (too short to abbreviate)</jc>
+	 * 	abbreviate(<jk>null</jk>, 10);                <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param in The input string. Can be <jk>null</jk>.
+	 * @param length The maximum length of the resulting string (must be at least 4 for abbreviation to occur).
+	 * @return The abbreviated string with ellipses, or the original string if no abbreviation is needed.
 	 */
 	public static String abbreviate(String in, int length) {
 		if (in == null || in.length() <= length || in.length() <= 3)
@@ -412,6 +428,30 @@ public class StringUtils {
 	}
 
 	/**
+	 * Checks if a string contains the specified character.
+	 *
+	 * <p>
+	 * This is a null-safe operation. Returns <jk>false</jk> if the string is <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	contains(<js>"Hello World"</js>, <js>'o'</js>);   <jc>// true</jc>
+	 * 	contains(<js>"Hello World"</js>, <js>'x'</js>);   <jc>// false</jc>
+	 * 	contains(<jk>null</jk>, <js>'a'</js>);            <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param c The character to check for.
+	 * @return <jk>true</jk> if the string contains the specified character.
+	 * @see #contains(String, CharSequence)
+	 * @see #contains(String, String)
+	 * @see #containsAny(String, char...)
+	 */
+	public static boolean contains(String s, char c) {
+		return s != null && s.indexOf(c) >= 0;
+	}
+
+	/**
 	 * Checks if a string contains any of the specified characters.
 	 *
 	 * <p>
@@ -424,18 +464,18 @@ public class StringUtils {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	contains(<js>"Hello World"</js>, <js>'o'</js>, <js>'x'</js>);   <jc>// true (contains 'o')</jc>
-	 * 	contains(<js>"Hello World"</js>, <js>'x'</js>, <js>'y'</js>);   <jc>// false</jc>
-	 * 	contains(<jk>null</jk>, <js>'a'</js>);                          <jc>// false</jc>
+	 * 	containsAny(<js>"Hello World"</js>, <js>'o'</js>, <js>'x'</js>);   <jc>// true (contains 'o')</jc>
+	 * 	containsAny(<js>"Hello World"</js>, <js>'x'</js>, <js>'y'</js>);   <jc>// false</jc>
+	 * 	containsAny(<jk>null</jk>, <js>'a'</js>);                          <jc>// false</jc>
 	 * </p>
 	 *
 	 * @param s The string to check.
 	 * @param values The characters to check for.
 	 * @return <jk>true</jk> if the string contains any of the specified characters.
-	 * @see #contains(String, CharSequence)
-	 * @see #contains(String, String...)
+	 * @see #contains(String, char)
+	 * @see #containsAll(String, char...)
 	 */
-	public static boolean contains(String s, char...values) {
+	public static boolean containsAny(String s, char...values) {
 		if (s == null || values == null || values.length == 0)
 			return false;
 		for (var v : values) {
@@ -462,11 +502,36 @@ public class StringUtils {
 	 * @param value The string to check.
 	 * @param substring The substring to check for.
 	 * @return <jk>true</jk> if the value contains the specified substring, <jk>false</jk> if the string is <jk>null</jk>.
-	 * @see #contains(String, char...)
-	 * @see #contains(String, String...)
+	 * @see #contains(String, char)
+	 * @see #contains(String, String)
+	 * @see #containsAny(String, CharSequence...)
 	 */
 	public static boolean contains(String value, CharSequence substring) {
 		return nn(value) && value.contains(substring);
+	}
+
+	/**
+	 * Null-safe check if a string contains another string.
+	 *
+	 * <p>
+	 * Returns <jk>false</jk> if the string is <jk>null</jk>, otherwise behaves the same as
+	 * {@link String#contains(CharSequence)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	contains(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// true</jc>
+	 * 	contains(<js>"Hello World"</js>, <js>"Foo"</js>);     <jc>// false</jc>
+	 * 	contains(<jk>null</jk>, <js>"Hello"</js>);            <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param substring The substring to check for.
+	 * @return <jk>true</jk> if the string contains the specified substring, <jk>false</jk> if the string is <jk>null</jk>.
+	 * @see #contains(String, CharSequence)
+	 * @see #containsAny(String, String...)
+	 */
+	public static boolean contains(String s, String substring) {
+		return nn(s) && s.contains(substring);
 	}
 
 	/**
@@ -482,20 +547,19 @@ public class StringUtils {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	contains(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// true (contains "Hello")</jc>
-	 * 	contains(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// false</jc>
-	 * 	contains(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// false</jc>
-	 * 	contains(<js>"Hello"</js>);                                          <jc>// false (no values to check)</jc>
+	 * 	containsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// true (contains "Hello")</jc>
+	 * 	containsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// false</jc>
+	 * 	containsAny(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// false</jc>
+	 * 	containsAny(<js>"Hello"</js>);                                          <jc>// false (no values to check)</jc>
 	 * </p>
 	 *
 	 * @param s The string to check.
 	 * @param values The substrings to check for.
 	 * @return <jk>true</jk> if the string contains any of the specified substrings.
-	 * @see #contains(String, CharSequence)
-	 * @see #contains(String, char...)
-	 * @see #notContains(String, String...)
+	 * @see #contains(String, String)
+	 * @see #containsAll(String, String...)
 	 */
-	public static boolean contains(String s, String...values) {
+	public static boolean containsAny(String s, String...values) {
 		if (s == null || values == null || values.length == 0)
 			return false;
 		for (var v : values) {
@@ -503,6 +567,139 @@ public class StringUtils {
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Checks if a string contains any of the specified substrings.
+	 *
+	 * <p>
+	 * This is a null-safe operation that returns <jk>false</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>None of the specified substrings are found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	containsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// true (contains "Hello")</jc>
+	 * 	containsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// false</jc>
+	 * 	containsAny(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param values The substrings to check for.
+	 * @return <jk>true</jk> if the string contains any of the specified substrings.
+	 * @see #contains(String, CharSequence)
+	 * @see #containsAll(String, CharSequence...)
+	 */
+	public static boolean containsAny(String s, CharSequence...values) {
+		if (s == null || values == null || values.length == 0)
+			return false;
+		for (var v : values) {
+			if (s.contains(v))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if a string contains all of the specified characters.
+	 *
+	 * <p>
+	 * This is a null-safe operation that returns <jk>false</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>Any of the specified characters are not found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	containsAll(<js>"Hello World"</js>, <js>'H'</js>, <js>'e'</js>, <js>'l'</js>);   <jc>// true (contains all)</jc>
+	 * 	containsAll(<js>"Hello World"</js>, <js>'H'</js>, <js>'x'</js>);                <jc>// false (missing 'x')</jc>
+	 * 	containsAll(<jk>null</jk>, <js>'a'</js>);                                      <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param values The characters to check for.
+	 * @return <jk>true</jk> if the string contains all of the specified characters.
+	 * @see #containsAny(String, char...)
+	 */
+	public static boolean containsAll(String s, char...values) {
+		if (s == null || values == null || values.length == 0)
+			return false;
+		for (var v : values) {
+			if (s.indexOf(v) < 0)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if a string contains all of the specified substrings.
+	 *
+	 * <p>
+	 * This is a null-safe operation that returns <jk>false</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>Any of the specified substrings are not found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	containsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// true (contains all)</jc>
+	 * 	containsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);    <jc>// false (missing "Foo")</jc>
+	 * 	containsAll(<jk>null</jk>, <js>"Hello"</js>);                              <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param values The substrings to check for.
+	 * @return <jk>true</jk> if the string contains all of the specified substrings.
+	 * @see #containsAny(String, CharSequence...)
+	 */
+	public static boolean containsAll(String s, CharSequence...values) {
+		if (s == null || values == null || values.length == 0)
+			return false;
+		for (var v : values) {
+			if (! s.contains(v))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if a string contains all of the specified substrings.
+	 *
+	 * <p>
+	 * This is a null-safe operation that returns <jk>false</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>Any of the specified substrings are not found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	containsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// true (contains all)</jc>
+	 * 	containsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);    <jc>// false (missing "Foo")</jc>
+	 * 	containsAll(<jk>null</jk>, <js>"Hello"</js>);                              <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param values The substrings to check for.
+	 * @return <jk>true</jk> if the string contains all of the specified substrings.
+	 * @see #containsAny(String, String...)
+	 */
+	public static boolean containsAll(String s, String...values) {
+		if (s == null || values == null || values.length == 0)
+			return false;
+		for (var v : values) {
+			if (! s.contains(v))
+				return false;
+		}
+		return true;
 	}
 
 	/**
@@ -679,7 +876,8 @@ public class StringUtils {
 	 * @param s The string to check. Can be <jk>null</jk>.
 	 * @param c The character to check for.
 	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with the specified character.
-	 * @see #endsWith(String, char...)
+	 * @see #endsWith(String, String)
+	 * @see #endsWithAny(String, char...)
 	 * @see String#endsWith(String)
 	 */
 	public static boolean endsWith(String s, char c) {
@@ -692,26 +890,55 @@ public class StringUtils {
 	}
 
 	/**
-	 * Checks if a string ends with any of the specified characters.
+	 * Checks if a string ends with the specified string.
 	 *
 	 * <p>
-	 * This is a null-safe operation. Returns <jk>false</jk> if the string is <jk>null</jk>, empty,
-	 * or the characters array is <jk>null</jk> or empty.
+	 * This is a null-safe operation. Returns <jk>false</jk> if the string is <jk>null</jk>.
+	 * Otherwise behaves the same as {@link String#endsWith(String)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	endsWith(<js>"Hello"</js>, <js>'o'</js>, <js>'x'</js>);     <jc>// true (ends with 'o')</jc>
-	 * 	endsWith(<js>"Hello"</js>, <js>'x'</js>, <js>'y'</js>);     <jc>// false</jc>
-	 * 	endsWith(<jk>null</jk>, <js>'o'</js>);                      <jc>// false</jc>
+	 * 	endsWith(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// true</jc>
+	 * 	endsWith(<js>"Hello World"</js>, <js>"Hello"</js>);   <jc>// false</jc>
+	 * 	endsWith(<jk>null</jk>, <js>"World"</js>);            <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check. Can be <jk>null</jk>.
+	 * @param suffix The suffix to check for.
+	 * @return <jk>true</jk> if the string ends with the specified suffix.
+	 * @see #endsWith(String, char)
+	 * @see #endsWithAny(String, String...)
+	 * @see String#endsWith(String)
+	 */
+	public static boolean endsWith(String s, String suffix) {
+		return s != null && s.endsWith(suffix);
+	}
+
+	/**
+	 * Checks if a string ends with any of the specified characters.
+	 *
+	 * <p>
+	 * This is a null-safe operation. Returns <jk>false</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk> or empty</li>
+	 *   <li>The characters array is <jk>null</jk> or empty</li>
+	 *   <li>The string does not end with any of the specified characters</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	endsWithAny(<js>"Hello"</js>, <js>'o'</js>, <js>'x'</js>);     <jc>// true (ends with 'o')</jc>
+	 * 	endsWithAny(<js>"Hello"</js>, <js>'x'</js>, <js>'y'</js>);     <jc>// false</jc>
+	 * 	endsWithAny(<jk>null</jk>, <js>'o'</js>);                      <jc>// false</jc>
 	 * </p>
 	 *
 	 * @param s The string to check. Can be <jk>null</jk>.
 	 * @param c The characters to check for.
-	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with any of the specified characters.
+	 * @return <jk>true</jk> if the string ends with any of the specified characters.
 	 * @see #endsWith(String, char)
-	 * @see String#endsWith(String)
+	 * @see #endsWithAny(String, String...)
 	 */
-	public static boolean endsWith(String s, char...c) {
+	public static boolean endsWithAny(String s, char...c) {
 		if (nn(s)) {
 			var i = s.length();
 			if (i > 0) {
@@ -720,6 +947,41 @@ public class StringUtils {
 					if (c2 == cc)
 						return true;
 			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if a string ends with any of the specified strings.
+	 *
+	 * <p>
+	 * This is a null-safe operation. Returns <jk>false</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The suffixes array is <jk>null</jk> or empty</li>
+	 *   <li>The string does not end with any of the specified suffixes</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	endsWithAny(<js>"Hello World"</js>, <js>"World"</js>, <js>"Foo"</js>);   <jc>// true (ends with "World")</jc>
+	 * 	endsWithAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// false</jc>
+	 * 	endsWithAny(<jk>null</jk>, <js>"World"</js>);                            <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The string to check. Can be <jk>null</jk>.
+	 * @param suffixes The suffixes to check for.
+	 * @return <jk>true</jk> if the string ends with any of the specified suffixes.
+	 * @see #endsWith(String, String)
+	 * @see #endsWithAny(String, char...)
+	 * @see String#endsWith(String)
+	 */
+	public static boolean endsWithAny(String s, String...suffixes) {
+		if (s == null || suffixes == null || suffixes.length == 0)
+			return false;
+		for (var suffix : suffixes) {
+			if (s.endsWith(suffix))
+				return true;
 		}
 		return false;
 	}
@@ -805,8 +1067,25 @@ public class StringUtils {
 	/**
 	 * Returns the first character in the specified string.
 	 *
+	 * <p>
+	 * This is a null-safe and bounds-safe operation. Returns <c>0</c> (null character) if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The string is empty</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	firstChar(<js>"Hello"</js>);     <jc>// 'H'</jc>
+	 * 	firstChar(<js>"World"</js>);     <jc>// 'W'</jc>
+	 * 	firstChar(<js>""</js>);          <jc>// 0 (empty string)</jc>
+	 * 	firstChar(<jk>null</jk>);        <jc>// 0 (null string)</jc>
+	 * </p>
+	 *
 	 * @param s The string to check.
 	 * @return The first character in the string, or <c>0</c> if the string is <jk>null</jk> or empty.
+	 * @see #charAt(String, int)
+	 * @see #firstNonWhitespaceChar(String)
 	 */
 	public static char firstChar(String s) {
 		if (s == null || s.isEmpty())
@@ -817,8 +1096,22 @@ public class StringUtils {
 	/**
 	 * Returns the first non-null, non-empty string in the list.
 	 *
+	 * <p>
+	 * This method iterates through the provided strings and returns the first one that is not <jk>null</jk>
+	 * and not empty (as determined by {@link #isNotEmpty(String)}).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	firstNonEmpty(<jk>null</jk>, <js>""</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// "Hello"</jc>
+	 * 	firstNonEmpty(<js>"Hello"</js>, <js>"World"</js>);                              <jc>// "Hello"</jc>
+	 * 	firstNonEmpty(<jk>null</jk>, <js>""</js>);                                      <jc>// null</jc>
+	 * 	firstNonEmpty();                                                                <jc>// null</jc>
+	 * </p>
+	 *
 	 * @param s The strings to test.
 	 * @return The first non-empty string in the list, or <jk>null</jk> if they were all <jk>null</jk> or empty.
+	 * @see #firstNonBlank(String...)
+	 * @see #isNotEmpty(String)
 	 */
 	public static String firstNonEmpty(String...s) {
 		for (var ss : s)
@@ -830,10 +1123,23 @@ public class StringUtils {
 	/**
 	 * Returns the first non-whitespace character in the string.
 	 *
+	 * <p>
+	 * This method scans the string from the beginning and returns the first character that is not
+	 * a whitespace character (as determined by {@link Character#isWhitespace(char)}).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	firstNonWhitespaceChar(<js>"Hello"</js>);          <jc>// 'H'</jc>
+	 * 	firstNonWhitespaceChar(<js>"  Hello"</js>);        <jc>// 'H'</jc>
+	 * 	firstNonWhitespaceChar(<js>"\t\nWorld"</js>);      <jc>// 'W'</jc>
+	 * 	firstNonWhitespaceChar(<js>"   "</js>);            <jc>// 0 (only whitespace)</jc>
+	 * 	firstNonWhitespaceChar(<jk>null</jk>);            <jc>// 0 (null string)</jc>
+	 * </p>
+	 *
 	 * @param s The string to check.
-	 * @return
-	 * 	The first non-whitespace character, or <c>0</c> if the string is <jk>null</jk>, empty, or composed
-	 * 	of only whitespace.
+	 * @return The first non-whitespace character, or <c>0</c> if the string is <jk>null</jk>, empty, or composed of only whitespace.
+	 * @see #firstChar(String)
+	 * @see Character#isWhitespace(char)
 	 */
 	public static char firstNonWhitespaceChar(String s) {
 		if (nn(s))
@@ -844,10 +1150,28 @@ public class StringUtils {
 	}
 
 	/**
-	 * Attempts to escape any invalid characters found in a URI.
+	 * URL-encodes invalid characters in a URI string.
 	 *
-	 * @param in The URI to fix.
-	 * @return The fixed URI.
+	 * <p>
+	 * This method escapes characters that are not valid in URIs by converting them to percent-encoded
+	 * format. Spaces are converted to <js>"+"</js> characters, and other invalid characters are
+	 * percent-encoded (e.g., <js>"hello world"</js> becomes <js>"hello+world"</js>).
+	 *
+	 * <p>
+	 * Only ASCII characters (0-127) that are not in the valid URI character set are encoded.
+	 * If the string contains no invalid characters, the original string is returned.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	fixUrl(<js>"hello world"</js>);              <jc>// "hello+world"</jc>
+	 * 	fixUrl(<js>"file://path/to file.txt"</js>);  <jc>// "file://path/to+file.txt"</jc>
+	 * 	fixUrl(<js>"valid-url"</js>);                <jc>// "valid-url" (no change)</jc>
+	 * 	fixUrl(<jk>null</jk>);                       <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param in The URI string to encode. Can be <jk>null</jk>.
+	 * @return The URI with invalid characters encoded, or <jk>null</jk> if input is <jk>null</jk>.
+	 * @see #urlEncode(String)
 	 */
 	@SuppressWarnings("null")
 	public static String fixUrl(String in) {
@@ -3638,14 +3962,56 @@ public class StringUtils {
 	}
 
 	/**
-	 * Null-safe string not-contains operation.
+	 * Checks if a string does not contain the specified character.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #contains(String, char)}.
+	 * Returns <jk>true</jk> if the string is <jk>null</jk> or does not contain the character.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	notContains(<js>"Hello World"</js>, <js>'x'</js>);   <jc>// true</jc>
+	 * 	notContains(<js>"Hello World"</js>, <js>'o'</js>);   <jc>// false</jc>
+	 * 	notContains(<jk>null</jk>, <js>'a'</js>);            <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param c The character to check for.
+	 * @return <jk>true</jk> if the string does not contain the specified character.
+	 * @see #contains(String, char)
+	 * @see #notContainsAny(String, char...)
+	 */
+	public static boolean notContains(String s, char c) {
+		return ! contains(s, c);
+	}
+
+	/**
+	 * Checks if a string does not contain any of the specified characters.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #containsAny(String, char...)}.
+	 * Returns <jk>true</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>None of the specified characters are found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	notContainsAny(<js>"Hello World"</js>, <js>'x'</js>, <js>'y'</js>);   <jc>// true</jc>
+	 * 	notContainsAny(<js>"Hello World"</js>, <js>'o'</js>, <js>'x'</js>);   <jc>// false (contains 'o')</jc>
+	 * 	notContainsAny(<jk>null</jk>, <js>'a'</js>);                          <jc>// true</jc>
+	 * </p>
 	 *
 	 * @param s The string to check.
 	 * @param values The characters to check for.
 	 * @return <jk>true</jk> if the string does not contain any of the specified characters.
+	 * @see #containsAny(String, char...)
+	 * @see #notContainsAll(String, char...)
 	 */
-	public static boolean notContains(String s, char...values) {
-		return ! contains(s, values);
+	public static boolean notContainsAny(String s, char...values) {
+		return ! containsAny(s, values);
 	}
 
 	/**
@@ -5142,7 +5508,7 @@ public class StringUtils {
 		if (isEmpty(s))
 			return a();
 
-		if (! contains(s, ' ', '\t', '\'', '"'))
+		if (! containsAny(s, ' ', '\t', '\'', '"'))
 			return a(s);
 
 		// S1: Looking for start of token.
@@ -7027,10 +7393,58 @@ public class StringUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the string does not contain any of the specified substrings.
+	 * Checks if a string does not contain the specified substring.
 	 *
 	 * <p>
-	 * This is the inverse of {@link #contains(String, String...)}.
+	 * This is the inverse of {@link #contains(String, CharSequence)}.
+	 * Returns <jk>true</jk> if the string is <jk>null</jk> or does not contain the substring.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	notContains(<js>"Hello World"</js>, <js>"Foo"</js>);     <jc>// true</jc>
+	 * 	notContains(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// false</jc>
+	 * 	notContains(<jk>null</jk>, <js>"Hello"</js>);            <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param substring The substring to check for.
+	 * @return <jk>true</jk> if the string does not contain the specified substring.
+	 * @see #contains(String, CharSequence)
+	 * @see #notContainsAny(String, CharSequence...)
+	 */
+	public static boolean notContains(String s, CharSequence substring) {
+		return ! contains(s, substring);
+	}
+
+	/**
+	 * Checks if a string does not contain the specified substring.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #contains(String, String)}.
+	 * Returns <jk>true</jk> if the string is <jk>null</jk> or does not contain the substring.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	notContains(<js>"Hello World"</js>, <js>"Foo"</js>);     <jc>// true</jc>
+	 * 	notContains(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// false</jc>
+	 * 	notContains(<jk>null</jk>, <js>"Hello"</js>);            <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param substring The substring to check for.
+	 * @return <jk>true</jk> if the string does not contain the specified substring.
+	 * @see #contains(String, String)
+	 * @see #notContainsAny(String, String...)
+	 */
+	public static boolean notContains(String s, String substring) {
+		return ! contains(s, substring);
+	}
+
+	/**
+	 * Checks if a string does not contain any of the specified substrings.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #containsAny(String, CharSequence...)}.
 	 * Returns <jk>true</jk> if:
 	 * <ul>
 	 *   <li>The string is <jk>null</jk></li>
@@ -7040,19 +7454,132 @@ public class StringUtils {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	notContains(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// true</jc>
-	 * 	notContains(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);  <jc>// false (contains "Hello")</jc>
-	 * 	notContains(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// true</jc>
+	 * 	notContainsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// true</jc>
+	 * 	notContainsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);  <jc>// false (contains "Hello")</jc>
+	 * 	notContainsAny(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// true</jc>
 	 * </p>
 	 *
-	 * @param s The string to search.
-	 * @param values The values to search for.
-	 * @return <jk>true</jk> if the string does not contain any of the values.
-	 * @see #contains(String, String...)
-	 * @see #notContains(String, char...)
+	 * @param s The string to check.
+	 * @param values The substrings to check for.
+	 * @return <jk>true</jk> if the string does not contain any of the specified substrings.
+	 * @see #containsAny(String, CharSequence...)
+	 * @see #notContainsAll(String, CharSequence...)
 	 */
-	public static boolean notContains(String s, String...values) {
-		return ! contains(s, values);
+	public static boolean notContainsAny(String s, CharSequence...values) {
+		return ! containsAny(s, values);
+	}
+
+	/**
+	 * Checks if a string does not contain any of the specified substrings.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #containsAny(String, String...)}.
+	 * Returns <jk>true</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>None of the specified substrings are found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	notContainsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// true</jc>
+	 * 	notContainsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);  <jc>// false (contains "Hello")</jc>
+	 * 	notContainsAny(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param values The substrings to check for.
+	 * @return <jk>true</jk> if the string does not contain any of the specified substrings.
+	 * @see #containsAny(String, String...)
+	 * @see #notContainsAll(String, String...)
+	 */
+	public static boolean notContainsAny(String s, String...values) {
+		return ! containsAny(s, values);
+	}
+
+	/**
+	 * Checks if a string does not contain all of the specified characters.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #containsAll(String, char...)}.
+	 * Returns <jk>true</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>Any of the specified characters are not found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	notContainsAll(<js>"Hello World"</js>, <js>'H'</js>, <js>'x'</js>);                <jc>// true (missing 'x')</jc>
+	 * 	notContainsAll(<js>"Hello World"</js>, <js>'H'</js>, <js>'e'</js>, <js>'l'</js>);   <jc>// false (contains all)</jc>
+	 * 	notContainsAll(<jk>null</jk>, <js>'a'</js>);                                      <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param values The characters to check for.
+	 * @return <jk>true</jk> if the string does not contain all of the specified characters.
+	 * @see #containsAll(String, char...)
+	 */
+	public static boolean notContainsAll(String s, char...values) {
+		return ! containsAll(s, values);
+	}
+
+	/**
+	 * Checks if a string does not contain all of the specified substrings.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #containsAll(String, CharSequence...)}.
+	 * Returns <jk>true</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>Any of the specified substrings are not found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	notContainsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);    <jc>// true (missing "Foo")</jc>
+	 * 	notContainsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// false (contains all)</jc>
+	 * 	notContainsAll(<jk>null</jk>, <js>"Hello"</js>);                              <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param values The substrings to check for.
+	 * @return <jk>true</jk> if the string does not contain all of the specified substrings.
+	 * @see #containsAll(String, CharSequence...)
+	 */
+	public static boolean notContainsAll(String s, CharSequence...values) {
+		return ! containsAll(s, values);
+	}
+
+	/**
+	 * Checks if a string does not contain all of the specified substrings.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #containsAll(String, String...)}.
+	 * Returns <jk>true</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>Any of the specified substrings are not found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	notContainsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);    <jc>// true (missing "Foo")</jc>
+	 * 	notContainsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// false (contains all)</jc>
+	 * 	notContainsAll(<jk>null</jk>, <js>"Hello"</js>);                              <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The string to check.
+	 * @param values The substrings to check for.
+	 * @return <jk>true</jk> if the string does not contain all of the specified substrings.
+	 * @see #containsAll(String, String...)
+	 */
+	public static boolean notContainsAll(String s, String...values) {
+		return ! containsAll(s, values);
 	}
 
 	/**
@@ -7800,6 +8327,34 @@ public class StringUtils {
 		return java.util.regex.Pattern.compile(sb.toString(), flags);
 	}
 
+	/**
+	 * Removes all underscore characters from a string.
+	 *
+	 * <p>
+	 * This method is commonly used to process numeric literals that may contain underscores for readability
+	 * (e.g., <js>"1_000_000"</js> becomes <js>"1000000"</js>), as Java allows underscores in numeric literals
+	 * but some parsing methods do not support them.
+	 *
+	 * <p>
+	 * If the string does not contain any underscores, the original string is returned (no new object created).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	removeUnderscores(<js>"1_000_000"</js>);        <jc>// "1000000"</jc>
+	 * 	removeUnderscores(<js>"1_000.5"</js>);          <jc>// "1000.5"</jc>
+	 * 	removeUnderscores(<js>"hello_world"</js>);      <jc>// "helloworld"</jc>
+	 * 	removeUnderscores(<js>"no_underscores"</js>);   <jc>// "nounderscores"</jc>
+	 * 	removeUnderscores(<js>"Hello"</js>);            <jc>// "Hello" (no change, same object returned)</jc>
+	 * </p>
+	 *
+	 * @param value The string from which to remove underscores. Must not be <jk>null</jk>.
+	 * @return A new string with all underscores removed, or the original string if it contains no underscores.
+	 * @throws IllegalArgumentException If <c>value</c> is <jk>null</jk>.
+	 * @see #parseInt(String)
+	 * @see #parseLong(String)
+	 * @see #parseFloat(String)
+	 * @see #parseNumber(String, Class)
+	 */
 	public static String removeUnderscores(String value) {
 		assertArgNotNull("value", value);
 		return notContains(value, '_') ? value : value.replace("_", "");

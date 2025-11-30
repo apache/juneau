@@ -27,8 +27,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
-import java.util.stream.*;
-
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.function.ResettableSupplier;

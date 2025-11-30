@@ -20,7 +20,6 @@ import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static java.util.stream.Collectors.*;
 

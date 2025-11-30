@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.swagger;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.parser.*;
