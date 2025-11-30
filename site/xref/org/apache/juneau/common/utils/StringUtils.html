@@ -402,7 +402,7 @@
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 * @param values The substrings to check for.</em>
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the string contains any of the specified substrings.</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> contains(String s, String...values) {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> containsAny(String s, String...values) {
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> || values == <strong class="jxr_keyword">null</strong> || values.length == 0)
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values) {
@@ -6877,7 +6877,7 @@
 <a class="jxr_linenumber" name="L6869" href="#L6869">6869</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the string does not contain any of the values.</em>
 <a class="jxr_linenumber" name="L6870" href="#L6870">6870</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L6871" href="#L6871">6871</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> notContains(String s, String...values) {
-<a class="jxr_linenumber" name="L6872" href="#L6872">6872</a> 		<strong class="jxr_keyword">return</strong> ! contains(s, values);
+<a class="jxr_linenumber" name="L6872" href="#L6872">6872</a> 		<strong class="jxr_keyword">return</strong> ! containsAny(s, values);
 <a class="jxr_linenumber" name="L6873" href="#L6873">6873</a> 	}
 <a class="jxr_linenumber" name="L6874" href="#L6874">6874</a> 
 <a class="jxr_linenumber" name="L6875" href="#L6875">6875</a> 	<em class="jxr_javadoccomment">/**</em>
