@@ -3100,18 +3100,18 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a77_lc() {
-		assertNull(lc(null));
-		assertEquals("", lc(""));
-		assertEquals("hello", lc("HELLO"));
-		assertEquals("hello world", lc("Hello World"));
+		assertNull(lowerCase(null));
+		assertEquals("", lowerCase(""));
+		assertEquals("hello", lowerCase("HELLO"));
+		assertEquals("hello world", lowerCase("Hello World"));
 	}
 
 	@Test
 	void a78_uc() {
-		assertNull(uc(null));
-		assertEquals("", uc(""));
-		assertEquals("HELLO", uc("hello"));
-		assertEquals("HELLO WORLD", uc("Hello World"));
+		assertNull(upperCase(null));
+		assertEquals("", upperCase(""));
+		assertEquals("HELLO", upperCase("hello"));
+		assertEquals("HELLO WORLD", upperCase("Hello World"));
 	}
 
 	//====================================================================================================
@@ -3574,7 +3574,14 @@ class StringUtils_Test extends TestBase {
 		appendIfNotEmpty(sb2, "suffix");
 		assertEquals("prefixsuffix", sb2.toString());
 
-		assertThrows(IllegalArgumentException.class, () -> appendIfNotEmpty(null, "test"));
+		// Auto-create StringBuilder if null and append occurs
+		var sb3 = appendIfNotEmpty(null, "test");
+		assertNotNull(sb3);
+		assertEquals("test", sb3.toString());
+
+		// Return null if null and no append occurs
+		assertNull(appendIfNotEmpty(null, null));
+		assertNull(appendIfNotEmpty(null, ""));
 	}
 
 	//====================================================================================================
@@ -3605,7 +3612,16 @@ class StringUtils_Test extends TestBase {
 		appendIfNotBlank(sb2, "suffix");
 		assertEquals("prefixsuffix", sb2.toString());
 
-		assertThrows(IllegalArgumentException.class, () -> appendIfNotBlank(null, "test"));
+		// Auto-create StringBuilder if null and append occurs
+		var sb3 = appendIfNotBlank(null, "test");
+		assertNotNull(sb3);
+		assertEquals("test", sb3.toString());
+
+		// Return null if null and no append occurs
+		assertNull(appendIfNotBlank(null, null));
+		assertNull(appendIfNotBlank(null, ""));
+		assertNull(appendIfNotBlank(null, "   "));
+		assertNull(appendIfNotBlank(null, "\t\n"));
 	}
 
 	//====================================================================================================
@@ -3641,7 +3657,17 @@ class StringUtils_Test extends TestBase {
 		appendWithSeparator(sb4, "test", ", ");
 		assertEquals("test", sb4.toString());
 
-		assertThrows(IllegalArgumentException.class, () -> appendWithSeparator(null, "test", ", "));
+		// Auto-create StringBuilder if null and append occurs
+		var sb5 = appendWithSeparator(null, "test", ", ");
+		assertNotNull(sb5);
+		assertEquals("test", sb5.toString());
+
+		var sb6 = appendWithSeparator(null, "first", ", ");
+		appendWithSeparator(sb6, "second", ", ");
+		assertEquals("first, second", sb6.toString());
+
+		// Return null if null and no append occurs
+		assertNull(appendWithSeparator(null, null, ", "));
 	}
 
 	//====================================================================================================

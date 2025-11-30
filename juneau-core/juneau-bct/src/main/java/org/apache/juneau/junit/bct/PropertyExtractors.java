@@ -21,6 +21,8 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.common.utils.*;
+
 /**
  * Collection of standard property extractor implementations for the Bean-Centric Testing framework.
  *
@@ -105,7 +107,7 @@ public class PropertyExtractors {
 		public Object extract(BeanConverter converter, Object o, String name) {
 			var l = converter.listify(o);
 			if (name.matches("-?\\d+")) {
-				var index = parseInt(name);
+				var index = StringUtils.parseInt(name);
 				if (index < 0) {
 					index = l.size() + index; // Convert negative index to positive
 				}

@@ -38,6 +38,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
@@ -1195,7 +1196,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var x = inner.getProtocol();
 		var i = x.indexOf('/');
 		var j = x.indexOf('.', i);
-		var pv = new ProtocolVersion(x.substring(0, i), parseInt(x.substring(i + 1, j)), parseInt(x.substring(j + 1)));
+		var pv = new ProtocolVersion(x.substring(0, i), StringUtils.parseInt(x.substring(i + 1, j)), StringUtils.parseInt(x.substring(j + 1)));
 		return new BasicRequestLine(inner.getMethod(), inner.getRequestURI(), pv);
 	}
 

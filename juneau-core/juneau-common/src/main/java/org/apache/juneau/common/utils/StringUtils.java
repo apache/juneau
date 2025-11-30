@@ -2044,12 +2044,12 @@ public class StringUtils {
 	public static boolean isValidMacAddress(String mac) {
 		if (isEmpty(mac))
 			return false;
-		
+
 		// Remove separators and check if it's 12 hex digits
 		var cleaned = mac.replaceAll("[:-]", "").toUpperCase();
 		if (cleaned.length() != 12)
 			return false;
-		
+
 		// Check if all characters are valid hex digits
 		return cleaned.matches("^[0-9A-F]{12}$");
 	}
@@ -2081,41 +2081,41 @@ public class StringUtils {
 	public static boolean isValidHostname(String hostname) {
 		if (isEmpty(hostname))
 			return false;
-		
+
 		// Cannot start or end with a dot
 		if (hostname.startsWith(".") || hostname.endsWith("."))
 			return false;
-		
+
 		// Total length cannot exceed 253 characters
 		if (hostname.length() > 253)
 			return false;
-		
+
 		// Split by dots (use -1 to preserve trailing empty strings)
 		var labels = hostname.split("\\.", -1);
-		
+
 		// Must have at least one label
 		if (labels.length == 0)
 			return false;
-		
+
 		// Check each label
 		for (var label : labels) {
 			// Label cannot be empty
 			if (label.isEmpty())
 				return false;
-			
+
 			// Label cannot exceed 63 characters
 			if (label.length() > 63)
 				return false;
-			
+
 			// Label cannot start or end with hyphen
 			if (label.startsWith("-") || label.endsWith("-"))
 				return false;
-			
+
 			// Label can only contain letters, digits, and hyphens
 			if (! label.matches("^[a-zA-Z0-9-]+$"))
 				return false;
 		}
-		
+
 		return true;
 	}
 
@@ -2139,10 +2139,10 @@ public class StringUtils {
 	public static int wordCount(String str) {
 		if (isEmpty(str))
 			return 0;
-		
+
 		var count = 0;
 		var inWord = false;
-		
+
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
 			if (Character.isLetterOrDigit(c) || c == '_') {
@@ -2154,7 +2154,7 @@ public class StringUtils {
 				inWord = false;
 			}
 		}
-		
+
 		return count;
 	}
 
@@ -2177,7 +2177,7 @@ public class StringUtils {
 	public static int lineCount(String str) {
 		if (isEmpty(str))
 			return 0;
-		
+
 		var count = 1; // At least one line
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
@@ -2191,7 +2191,7 @@ public class StringUtils {
 				count++;
 			}
 		}
-		
+
 		return count;
 	}
 
@@ -2214,11 +2214,11 @@ public class StringUtils {
 	public static char mostFrequentChar(String str) {
 		if (isEmpty(str))
 			return '\0';
-		
+
 		var charCounts = new int[Character.MAX_VALUE + 1];
 		var maxCount = 0;
 		var maxChar = '\0';
-		
+
 		// Count occurrences of each character
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
@@ -2228,7 +2228,7 @@ public class StringUtils {
 				maxChar = c;
 			}
 		}
-		
+
 		return maxChar;
 	}
 
@@ -2254,17 +2254,17 @@ public class StringUtils {
 	public static double entropy(String str) {
 		if (isEmpty(str))
 			return 0.0;
-		
+
 		var length = str.length();
 		if (length == 0)
 			return 0.0;
-		
+
 		// Count character frequencies
 		var charCounts = new int[Character.MAX_VALUE + 1];
 		for (var i = 0; i < length; i++) {
 			charCounts[str.charAt(i)]++;
 		}
-		
+
 		// Calculate entropy
 		var entropy = 0.0;
 		for (var count : charCounts) {
@@ -2273,7 +2273,7 @@ public class StringUtils {
 				entropy -= probability * (Math.log(probability) / Math.log(2.0));
 			}
 		}
-		
+
 		return entropy;
 	}
 
@@ -2300,11 +2300,11 @@ public class StringUtils {
 	public static double readabilityScore(String str) {
 		if (isEmpty(str))
 			return 0.0;
-		
+
 		var words = extractWords(str);
 		if (words.isEmpty())
 			return 0.0;
-		
+
 		// Count sentences (ending with . ! ?)
 		var sentenceCount = 0;
 		for (var i = 0; i < str.length(); i++) {
@@ -2315,22 +2315,22 @@ public class StringUtils {
 		}
 		if (sentenceCount == 0)
 			sentenceCount = 1; // At least one sentence
-		
+
 		// Calculate average words per sentence
 		var avgWordsPerSentence = (double)words.size() / sentenceCount;
-		
+
 		// Estimate average syllables per word (simplified: count vowel groups)
 		var totalSyllables = 0;
 		for (var word : words) {
 			totalSyllables += estimateSyllables(word);
 		}
 		var avgSyllablesPerWord = (double)totalSyllables / words.size();
-		
+
 		// Simplified Flesch Reading Ease formula
 		// Score = 206.835 - (1.015 * ASL) - (84.6 * ASW)
 		// Where ASL = average sentence length (words), ASW = average syllables per word
 		var score = 206.835 - (1.015 * avgWordsPerSentence) - (84.6 * avgSyllablesPerWord);
-		
+
 		// Clamp to 0-100 range
 		return Math.max(0.0, Math.min(100.0, score));
 	}
@@ -2341,26 +2341,26 @@ public class StringUtils {
 	private static int estimateSyllables(String word) {
 		if (word == null || word.isEmpty())
 			return 1;
-		
+
 		var lower = word.toLowerCase();
 		var count = 0;
 		var prevWasVowel = false;
-		
+
 		for (var i = 0; i < lower.length(); i++) {
 			var c = lower.charAt(i);
 			var isVowel = (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'y');
-			
+
 			if (isVowel && ! prevWasVowel) {
 				count++;
 			}
 			prevWasVowel = isVowel;
 		}
-		
+
 		// Handle silent 'e' at the end
 		if (lower.endsWith("e") && count > 1) {
 			count--;
 		}
-		
+
 		// At least one syllable
 		return Math.max(1, count);
 	}
@@ -2575,11 +2575,11 @@ public class StringUtils {
 			return null;
 		if (variables == null || variables.isEmpty())
 			return template;
-		
+
 		var result = new StringBuilder();
 		var i = 0;
 		var length = template.length();
-		
+
 		while (i < length) {
 			var dollarIndex = template.indexOf("${", i);
 			if (dollarIndex == -1) {
@@ -2587,10 +2587,10 @@ public class StringUtils {
 				result.append(template.substring(i));
 				break;
 			}
-			
+
 			// Append text before the variable
 			result.append(template.substring(i, dollarIndex));
-			
+
 			// Find the closing brace
 			var braceIndex = template.indexOf('}', dollarIndex + 2);
 			if (braceIndex == -1) {
@@ -2598,11 +2598,11 @@ public class StringUtils {
 				result.append(template.substring(dollarIndex));
 				break;
 			}
-			
+
 			// Extract variable name
 			var varName = template.substring(dollarIndex + 2, braceIndex);
 			var value = variables.get(varName);
-			
+
 			if (variables.containsKey(varName)) {
 				// Variable exists in map (even if null)
 				result.append(value != null ? value.toString() : "null");
@@ -2610,10 +2610,10 @@ public class StringUtils {
 				// Variable not found, keep the original placeholder
 				result.append("${").append(varName).append("}");
 			}
-			
+
 			i = braceIndex + 1;
 		}
-		
+
 		return result.toString();
 	}
 
@@ -2641,15 +2641,15 @@ public class StringUtils {
 			return word;
 		if (count == 1)
 			return word;
-		
+
 		var lower = word.toLowerCase();
 		var length = word.length();
-		
+
 		// Words ending in s, x, z, ch, sh -> add "es"
 		if (lower.endsWith("s") || lower.endsWith("x") || lower.endsWith("z") || lower.endsWith("ch") || lower.endsWith("sh")) {
 			return word + "es";
 		}
-		
+
 		// Words ending in "y" preceded by a consonant -> replace "y" with "ies"
 		if (length > 1 && lower.endsWith("y")) {
 			var secondLast = lower.charAt(length - 2);
@@ -2657,7 +2657,7 @@ public class StringUtils {
 				return word.substring(0, length - 1) + "ies";
 			}
 		}
-		
+
 		// Words ending in "f" or "fe" -> replace with "ves" (basic rule)
 		if (lower.endsWith("f")) {
 			return word.substring(0, length - 1) + "ves";
@@ -2665,7 +2665,7 @@ public class StringUtils {
 		if (lower.endsWith("fe")) {
 			return word.substring(0, length - 2) + "ves";
 		}
-		
+
 		// Default: add "s"
 		return word + "s";
 	}
@@ -2689,7 +2689,7 @@ public class StringUtils {
 	public static String ordinal(int number) {
 		var abs = Math.abs(number);
 		var suffix = "th";
-		
+
 		// Special cases for 11, 12, 13 (all use "th")
 		if (abs % 100 != 11 && abs % 100 != 12 && abs % 100 != 13) {
 			var lastDigit = abs % 10;
@@ -2700,7 +2700,7 @@ public class StringUtils {
 			else if (lastDigit == 3)
 				suffix = "rd";
 		}
-		
+
 		return number + suffix;
 	}
 
@@ -2982,16 +2982,16 @@ public class StringUtils {
 			return -1;
 		if (str2 == null)
 			return 1;
-		
+
 		var len1 = str1.length();
 		var len2 = str2.length();
 		var i1 = 0;
 		var i2 = 0;
-		
+
 		while (i1 < len1 && i2 < len2) {
 			var c1 = str1.charAt(i1);
 			var c2 = str2.charAt(i2);
-			
+
 			// If both are digits, compare numerically
 			if (Character.isDigit(c1) && Character.isDigit(c2)) {
 				// Skip leading zeros
@@ -2999,7 +2999,7 @@ public class StringUtils {
 					i1++;
 				while (i2 < len2 && str2.charAt(i2) == '0')
 					i2++;
-				
+
 				// Find end of number sequences
 				var end1 = i1;
 				var end2 = i2;
@@ -3007,13 +3007,13 @@ public class StringUtils {
 					end1++;
 				while (end2 < len2 && Character.isDigit(str2.charAt(end2)))
 					end2++;
-				
+
 				// Compare lengths first (longer number is larger)
 				var lenNum1 = end1 - i1;
 				var lenNum2 = end2 - i2;
 				if (lenNum1 != lenNum2)
 					return lenNum1 - lenNum2;
-				
+
 				// Same length, compare digit by digit
 				for (var j = 0; j < lenNum1; j++) {
 					var d1 = str1.charAt(i1 + j);
@@ -3021,7 +3021,7 @@ public class StringUtils {
 					if (d1 != d2)
 						return d1 - d2;
 				}
-				
+
 				i1 = end1;
 				i2 = end2;
 			} else {
@@ -3033,7 +3033,7 @@ public class StringUtils {
 				i2++;
 			}
 		}
-		
+
 		return len1 - len2;
 	}
 
@@ -3059,18 +3059,18 @@ public class StringUtils {
 			str1 = "";
 		if (str2 == null)
 			str2 = "";
-		
+
 		var len1 = str1.length();
 		var len2 = str2.length();
-		
+
 		// Use dynamic programming with optimized space (only need previous row)
 		var prev = new int[len2 + 1];
 		var curr = new int[len2 + 1];
-		
+
 		// Initialize first row
 		for (var j = 0; j <= len2; j++)
 			prev[j] = j;
-		
+
 		for (var i = 1; i <= len1; i++) {
 			curr[0] = i;
 			for (var j = 1; j <= len2; j++) {
@@ -3085,7 +3085,7 @@ public class StringUtils {
 			prev = curr;
 			curr = temp;
 		}
-		
+
 		return prev[len2];
 	}
 
@@ -3111,14 +3111,14 @@ public class StringUtils {
 			str1 = "";
 		if (str2 == null)
 			str2 = "";
-		
+
 		if (str1.equals(str2))
 			return 1.0;
-		
+
 		var maxLen = Math.max(str1.length(), str2.length());
 		if (maxLen == 0)
 			return 1.0;
-		
+
 		var distance = levenshteinDistance(str1, str2);
 		return 1.0 - ((double)distance / maxLen);
 	}
@@ -3659,7 +3659,7 @@ public class StringUtils {
 	 */
 	public static int parseIntWithSuffix(String s) {
 		assertArgNotNull("s", s);
-		var m = multiplier(s);
+		var m = multiplierInt(s);
 		if (m == 1)
 			return Integer.decode(s);
 		return Integer.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR - NPE not possible here.
@@ -3741,7 +3741,7 @@ public class StringUtils {
 	 */
 	public static long parseLongWithSuffix(String s) {
 		assertArgNotNull("s", s);
-		var m = multiplier2(s);
+		var m = multiplierLong(s);
 		if (m == 1)
 			return Long.decode(s);
 		return Long.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR - NPE not possible here.
@@ -4249,14 +4249,14 @@ public class StringUtils {
 			// Split into words first, then combine words that fit
 			var words = line.split(" +");  // Split on one or more spaces
 			var currentLine = new StringBuilder();
-			
+
 			for (var word : words) {
 				if (word.isEmpty())
 					continue;
-					
+
 				var wordLength = word.length();
 				var currentLength = currentLine.length();
-				
+
 				if (currentLength == 0) {
 					// First word on line
 					// Only break single words if there are multiple words in the input
@@ -4314,7 +4314,7 @@ public class StringUtils {
 					}
 				}
 			}
-			
+
 			// Append any remaining line
 			if (currentLine.length() > 0) {
 				if (result.length() > 0)
@@ -4360,6 +4360,10 @@ public class StringUtils {
 	 * <p>
 	 * Supports named MessageFormat-style variables: <js>"{key}"</js> where <c>key</c> is a map key.
 	 * For un-numbered sequential placeholders <js>"{}"</js>, use {@link #format(String, Object...)} instead.
+	 *
+	 * <p>
+	 * Variable values are converted to strings using {@link #readable(Object)} to ensure consistent,
+	 * readable formatting (e.g., byte arrays are converted to hex, collections are formatted without spaces).
 	 *
 	 * <p>
 	 * Nested variables are supported in both the input string and map values.
@@ -4424,7 +4428,7 @@ public class StringUtils {
 						else {
 							if (val == null)
 								val = "";
-							var v = val.toString();
+							var v = r(val);
 							// If the replacement also contains variables, replace them now.
 							if (v.indexOf('{') != -1)
 								v = formatNamed(v, m);
@@ -5182,7 +5186,7 @@ public class StringUtils {
 		var result = new LinkedHashMap<String,String>();
 		if (isEmpty(str))
 			return result;
-		
+
 		var entries = split(str, entryDelimiter);
 		for (var entry : entries) {
 			if (isEmpty(entry))
@@ -5225,7 +5229,7 @@ public class StringUtils {
 	public static List<String> extractNumbers(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		var pattern = Pattern.compile("\\d+(?:\\.\\d+)?");
 		var matcher = pattern.matcher(str);
@@ -5253,7 +5257,7 @@ public class StringUtils {
 	public static List<String> extractEmails(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		// Email regex pattern (same as isEmail but without ^ and $ anchors)
 		var pattern = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
@@ -5282,7 +5286,7 @@ public class StringUtils {
 	public static List<String> extractUrls(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		// Basic URL pattern: protocol://domain/path
 		var pattern = Pattern.compile("(?:https?|ftp)://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+", Pattern.CASE_INSENSITIVE);
@@ -5311,7 +5315,7 @@ public class StringUtils {
 	public static List<String> extractWords(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		// Word pattern: sequence of word characters (letters, digits, underscore)
 		var pattern = Pattern.compile("\\w+");
@@ -5344,7 +5348,7 @@ public class StringUtils {
 	public static List<String> extractBetween(String str, String start, String end) {
 		if (isEmpty(str) || isEmpty(start) || isEmpty(end))
 			return Collections.emptyList();
-		
+
 		var result = new ArrayList<String>();
 		var startIndex = 0;
 		while (true) {
@@ -5389,7 +5393,7 @@ public class StringUtils {
 			return str;
 		if (fromChars.length() != toChars.length())
 			throw new IllegalArgumentException("fromChars and toChars must have the same length");
-		
+
 		var sb = new StringBuilder(str.length());
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
@@ -5422,16 +5426,16 @@ public class StringUtils {
 	public static String soundex(String str) {
 		if (isEmpty(str))
 			return null;
-		
+
 		var upper = str.toUpperCase();
 		var result = new StringBuilder(4);
 		result.append(upper.charAt(0));
-		
+
 		// Soundex mapping: 0 = AEIOUHWY, 1 = BFPV, 2 = CGJKQSXZ, 3 = DT, 4 = L, 5 = MN, 6 = R
 		// H/W/Y don't get codes but don't break sequences either
 		// Initialize lastCode to a value that won't match any real code
 		var lastCode = '\0';
-		
+
 		for (var i = 1; i < upper.length() && result.length() < 4; i++) {
 			var c = upper.charAt(i);
 			var code = getSoundexCode(c);
@@ -5446,12 +5450,12 @@ public class StringUtils {
 			}
 			// If code == lastCode, skip it (consecutive same codes)
 		}
-		
+
 		// Pad with zeros if needed
 		while (result.length() < 4) {
 			result.append('0');
 		}
-		
+
 		return result.toString();
 	}
 
@@ -5496,15 +5500,15 @@ public class StringUtils {
 	public static String metaphone(String str) {
 		if (isEmpty(str))
 			return null;
-		
+
 		var upper = str.toUpperCase().replaceAll("[^A-Z]", "");
 		if (upper.isEmpty())
 			return "";
-		
+
 		var result = new StringBuilder();
 		var i = 0;
 		var len = upper.length();
-		
+
 		// Handle initial characters
 		if (upper.startsWith("KN") || upper.startsWith("GN") || upper.startsWith("PN") || upper.startsWith("AE") || upper.startsWith("WR")) {
 			i = 1;
@@ -5515,20 +5519,20 @@ public class StringUtils {
 			result.append('W');
 			i = 2;
 		}
-		
+
 		// Process remaining characters
 		while (i < len && result.length() < 4) {
 			var c = upper.charAt(i);
 			var prev = i > 0 ? upper.charAt(i - 1) : '\0';
 			var next = i < len - 1 ? upper.charAt(i + 1) : '\0';
 			var next2 = i < len - 2 ? upper.charAt(i + 2) : '\0';
-			
+
 			// Skip duplicates (except C)
 			if (c == prev && c != 'C') {
 				i++;
 				continue;
 			}
-			
+
 			switch (c) {
 				case 'B':
 					if (prev != 'M' || next != '\0')
@@ -5636,7 +5640,7 @@ public class StringUtils {
 			}
 			i++;
 		}
-		
+
 		return result.length() > 0 ? result.toString() : upper.substring(0, Math.min(1, upper.length()));
 	}
 
@@ -5666,16 +5670,16 @@ public class StringUtils {
 	public static String[] doubleMetaphone(String str) {
 		if (isEmpty(str))
 			return null;
-		
+
 		// For simplicity, return the same code for both primary and alternate
 		// A full Double Metaphone implementation would be much more complex
 		var primary = metaphone(str);
 		if (primary == null)
 			return null;
-		
+
 		// Generate alternate code (simplified - full implementation would have different rules)
 		var alternate = primary;
-		
+
 		return new String[] { primary, alternate };
 	}
 
@@ -5719,10 +5723,10 @@ public class StringUtils {
 	public static String removeAccents(String str) {
 		if (str == null)
 			return null;
-		
+
 		// Normalize to NFD (decomposed form)
 		var normalized = Normalizer.normalize(str, Normalizer.Form.NFD);
-		
+
 		// Remove combining diacritical marks (Unicode category Mn)
 		var sb = new StringBuilder(normalized.length());
 		for (var i = 0; i < normalized.length(); i++) {
@@ -5733,7 +5737,7 @@ public class StringUtils {
 				sb.append(c);
 			}
 		}
-		
+
 		return sb.toString();
 	}
 
@@ -6640,7 +6644,7 @@ public class StringUtils {
 	 * @param in The string to append.
 	 * @return The StringBuilder with the string appended.
 	 */
-	private static StringBuilder append(StringBuilder sb, String in) {
+	public static StringBuilder append(StringBuilder sb, String in) {
 		if (sb == null)
 			return new StringBuilder(in);
 		sb.append(in);
@@ -6677,7 +6681,7 @@ public class StringUtils {
 	 * @param s The string to analyze for multiplier suffix.
 	 * @return The multiplier value (1 if no valid suffix found).
 	 */
-	private static int multiplier(String s) {
+	private static int multiplierInt(String s) {
 		var c = isEmpty(s) ? 'z' : s.charAt(s.length() - 1);
 		if (c == 'G')
 			return 1024 * 1024 * 1024;
@@ -6700,7 +6704,7 @@ public class StringUtils {
 	 * @param s The string to analyze for multiplier suffix.
 	 * @return The multiplier value (1 if no valid suffix found).
 	 */
-	private static long multiplier2(String s) {
+	private static long multiplierLong(String s) {
 		var c = isEmpty(s) ? 'z' : s.charAt(s.length() - 1);
 		if (c == 'P')
 			return 1024 * 1024 * 1024 * 1024 * 1024l;
@@ -6769,7 +6773,7 @@ public class StringUtils {
 	 * @param s The string to convert.
 	 * @return The lowercase string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	public static String lc(String s) {
+	public static String lowerCase(String s) {
 		return s == null ? null : s.toLowerCase();
 	}
 
@@ -6779,7 +6783,7 @@ public class StringUtils {
 	 * @param s The string to convert.
 	 * @return The uppercase string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	public static String uc(String s) {
+	public static String upperCase(String s) {
 		return s == null ? null : s.toUpperCase();
 	}
 
@@ -7169,6 +7173,7 @@ public class StringUtils {
 	 * <p>
 	 * Returns the same StringBuilder instance for method chaining.
 	 * If the string is <jk>null</jk> or empty, nothing is appended.
+	 * If <c>sb</c> is <jk>null</jk> and an append is going to occur, a new StringBuilder is automatically created.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -7178,17 +7183,22 @@ public class StringUtils {
 	 * 	appendIfNotEmpty(<jv>sb</jv>, <jk>null</jk>);     <jc>// Does nothing</jc>
 	 * 	appendIfNotEmpty(<jv>sb</jv>, <js>"world"</js>);  <jc>// Appends "world"</jc>
 	 * 	<jc>// Result: "helloworld"</jc>
+	 *
+	 * 	<jc>// Auto-create StringBuilder if null and append occurs</jc>
+	 * 	StringBuilder <jv>sb2</jv> = appendIfNotEmpty(<jk>null</jk>, <js>"test"</js>);  <jc>// Creates new StringBuilder with "test"</jc>
+	 * 	StringBuilder <jv>sb3</jv> = appendIfNotEmpty(<jk>null</jk>, <jk>null</jk>);   <jc>// Returns null (no append occurred)</jc>
 	 * </p>
 	 *
-	 * @param sb The StringBuilder to append to. Must not be <jk>null</jk>.
+	 * @param sb The StringBuilder to append to. Can be <jk>null</jk>.
 	 * @param str The string to append if not empty. Can be <jk>null</jk>.
-	 * @return The same StringBuilder instance for method chaining.
-	 * @throws IllegalArgumentException If <c>sb</c> is <jk>null</jk>.
+	 * @return The same StringBuilder instance for method chaining, or a new StringBuilder if <c>sb</c> was <jk>null</jk> and an append occurred, or <jk>null</jk> if <c>sb</c> was <jk>null</jk> and no append occurred.
 	 */
 	public static StringBuilder appendIfNotEmpty(StringBuilder sb, String str) {
-		assertArgNotNull("sb", sb);
-		if (isNotEmpty(str))
+		if (isNotEmpty(str)) {
+			if (sb == null)
+				sb = new StringBuilder();
 			sb.append(str);
+		}
 		return sb;
 	}
 
@@ -7198,6 +7208,7 @@ public class StringUtils {
 	 * <p>
 	 * Returns the same StringBuilder instance for method chaining.
 	 * If the string is <jk>null</jk>, empty, or contains only whitespace, nothing is appended.
+	 * If <c>sb</c> is <jk>null</jk> and an append is going to occur, a new StringBuilder is automatically created.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -7207,17 +7218,22 @@ public class StringUtils {
 	 * 	appendIfNotBlank(<jv>sb</jv>, <jk>null</jk>);     <jc>// Does nothing</jc>
 	 * 	appendIfNotBlank(<jv>sb</jv>, <js>"world"</js>);  <jc>// Appends "world"</jc>
 	 * 	<jc>// Result: "helloworld"</jc>
+	 *
+	 * 	<jc>// Auto-create StringBuilder if null and append occurs</jc>
+	 * 	StringBuilder <jv>sb2</jv> = appendIfNotBlank(<jk>null</jk>, <js>"test"</js>);  <jc>// Creates new StringBuilder with "test"</jc>
+	 * 	StringBuilder <jv>sb3</jv> = appendIfNotBlank(<jk>null</jk>, <js>"   "</js>);   <jc>// Returns null (no append occurred)</jc>
 	 * </p>
 	 *
-	 * @param sb The StringBuilder to append to. Must not be <jk>null</jk>.
+	 * @param sb The StringBuilder to append to. Can be <jk>null</jk>.
 	 * @param str The string to append if not blank. Can be <jk>null</jk>.
-	 * @return The same StringBuilder instance for method chaining.
-	 * @throws IllegalArgumentException If <c>sb</c> is <jk>null</jk>.
+	 * @return The same StringBuilder instance for method chaining, or a new StringBuilder if <c>sb</c> was <jk>null</jk> and an append occurred, or <jk>null</jk> if <c>sb</c> was <jk>null</jk> and no append occurred.
 	 */
 	public static StringBuilder appendIfNotBlank(StringBuilder sb, String str) {
-		assertArgNotNull("sb", sb);
-		if (isNotBlank(str))
+		if (isNotBlank(str)) {
+			if (sb == null)
+				sb = new StringBuilder();
 			sb.append(str);
+		}
 		return sb;
 	}
 
@@ -7228,6 +7244,7 @@ public class StringUtils {
 	 * Returns the same StringBuilder instance for method chaining.
 	 * If the StringBuilder is empty, only the string is appended (no separator).
 	 * If the StringBuilder is not empty, the separator is appended first, then the string.
+	 * If <c>sb</c> is <jk>null</jk> and an append is going to occur, a new StringBuilder is automatically created.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -7236,18 +7253,22 @@ public class StringUtils {
 	 * 	appendWithSeparator(<jv>sb</jv>, <js>"second"</js>, <js>", "</js>);  <jc>// Appends ", second"</jc>
 	 * 	appendWithSeparator(<jv>sb</jv>, <js>"third"</js>, <js>", "</js>);   <jc>// Appends ", third"</jc>
 	 * 	<jc>// Result: "first, second, third"</jc>
+	 *
+	 * 	<jc>// Auto-create StringBuilder if null and append occurs</jc>
+	 * 	StringBuilder <jv>sb2</jv> = appendWithSeparator(<jk>null</jk>, <js>"test"</js>, <js>", "</js>);  <jc>// Creates new StringBuilder with "test"</jc>
+	 * 	StringBuilder <jv>sb3</jv> = appendWithSeparator(<jk>null</jk>, <jk>null</jk>, <js>", "</js>);   <jc>// Returns null (no append occurred)</jc>
 	 * </p>
 	 *
-	 * @param sb The StringBuilder to append to. Must not be <jk>null</jk>.
+	 * @param sb The StringBuilder to append to. Can be <jk>null</jk>.
 	 * @param str The string to append. Can be <jk>null</jk>.
 	 * @param separator The separator to add before the string if the StringBuilder is not empty. Can be <jk>null</jk>.
-	 * @return The same StringBuilder instance for method chaining.
-	 * @throws IllegalArgumentException If <c>sb</c> is <jk>null</jk>.
+	 * @return The same StringBuilder instance for method chaining, or a new StringBuilder if <c>sb</c> was <jk>null</jk> and an append occurred, or <jk>null</jk> if <c>sb</c> was <jk>null</jk> and no append occurred.
 	 */
 	public static StringBuilder appendWithSeparator(StringBuilder sb, String str, String separator) {
-		assertArgNotNull("sb", sb);
 		if (str != null) {
-			if (sb.length() > 0 && separator != null)
+			if (sb == null)
+				sb = new StringBuilder();
+			else if (sb.length() > 0 && separator != null)
 				sb.append(separator);
 			sb.append(str);
 		}
@@ -7445,4 +7466,115 @@ public class StringUtils {
 	 * Constructor.
 	 */
 	protected StringUtils() {}
+
+	/**
+	 * Same as {@link Float#parseFloat(String)} but removes any underscore characters first.
+	 *
+	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000.5"</js>).
+	 *
+	 * @param value The string to parse.
+	 * @return The parsed float value.
+	 * @throws NumberFormatException If the string cannot be parsed.
+	 * @throws NullPointerException If the string is <jk>null</jk>.
+	 */
+	public static float parseFloat(String value) {
+		return Float.parseFloat(StringUtils.removeUnderscores(value));
+	}
+
+	/**
+	 * Same as {@link Integer#parseInt(String)} but removes any underscore characters first.
+	 *
+	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000_000"</js>).
+	 *
+	 * @param value The string to parse.
+	 * @return The parsed integer value.
+	 * @throws NumberFormatException If the string cannot be parsed.
+	 * @throws NullPointerException If the string is <jk>null</jk>.
+	 */
+	public static int parseInt(String value) {
+		return Integer.parseInt(StringUtils.removeUnderscores(value));
+	}
+
+	/**
+	 * Same as {@link Long#parseLong(String)} but removes any underscore characters first.
+	 *
+	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000_000"</js>).
+	 *
+	 * @param value The string to parse.
+	 * @return The parsed long value.
+	 * @throws NumberFormatException If the string cannot be parsed.
+	 * @throws NullPointerException If the string is <jk>null</jk>.
+	 */
+	public static long parseLong(String value) {
+		return Long.parseLong(StringUtils.removeUnderscores(value));
+	}
+
+	/**
+	 * Converts a string containing glob-style wildcard characters to a regular expression {@link java.util.regex.Pattern}.
+	 *
+	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
+	 * <ul>
+	 *   <li>{@code *} matches any sequence of characters (including none)</li>
+	 *   <li>{@code ?} matches exactly one character</li>
+	 *   <li>All other characters are treated literally</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"user_*_temp"</js>);
+	 *   <jk>boolean</jk> <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_alice_temp"</js>).matches();  <jc>// true</jc>
+	 *   <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_bob_temp"</js>).matches();    <jc>// true</jc>
+	 *   <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"admin_alice_temp"</js>).matches(); <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The glob-style wildcard pattern string.
+	 * @return A compiled {@link java.util.regex.Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
+	 */
+	public static java.util.regex.Pattern getGlobMatchPattern(String s) {
+		return getGlobMatchPattern(s, 0);
+	}
+
+	/**
+	 * Converts a string containing glob-style wildcard characters to a regular expression {@link java.util.regex.Pattern} with flags.
+	 *
+	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
+	 * <ul>
+	 *   <li>{@code *} matches any sequence of characters (including none)</li>
+	 *   <li>{@code ?} matches exactly one character</li>
+	 *   <li>All other characters are treated literally</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <jc>// Case-insensitive matching</jc>
+	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"USER_*"</js>, Pattern.<jsf>CASE_INSENSITIVE</jsf>);
+	 *   <jk>boolean</jk> <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_alice"</js>).matches();  <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The glob-style wildcard pattern string.
+	 * @param flags Regular expression flags (see {@link java.util.regex.Pattern} constants).
+	 * @return A compiled {@link java.util.regex.Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
+	 */
+	public static java.util.regex.Pattern getGlobMatchPattern(String s, int flags) {
+		if (s == null)
+			return null;
+		var sb = new StringBuilder();
+		sb.append("\\Q");
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '*')
+				sb.append("\\E").append(".*").append("\\Q");
+			else if (c == '?')
+				sb.append("\\E").append(".").append("\\Q");
+			else
+				sb.append(c);
+		}
+		sb.append("\\E");
+		return java.util.regex.Pattern.compile(sb.toString(), flags);
+	}
+
+	public static String removeUnderscores(String value) {
+		assertArgNotNull("value", value);
+		return notContains(value, '_') ? value : value.replace("_", "");
+	}
 }

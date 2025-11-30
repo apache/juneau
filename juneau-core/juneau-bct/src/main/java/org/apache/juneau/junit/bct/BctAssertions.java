@@ -912,7 +912,7 @@ public class BctAssertions {
 		assertNotNull(value, "Value was null.");
 
 		var v = args.getBeanConverter().orElse(DEFAULT_CONVERTER).stringify(value);
-		var m = getGlobMatchPattern(pattern).matcher(v);
+		var m = StringUtils.getGlobMatchPattern(pattern).matcher(v);
 		assertTrue(m.matches(), args.getMessage("Pattern didn''t match. ==> pattern: <{0}> but was: <{1}>", pattern, v));
 	}
 

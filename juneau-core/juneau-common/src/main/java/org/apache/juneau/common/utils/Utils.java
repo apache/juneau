@@ -190,12 +190,21 @@ public class Utils {
 	/**
 	 * Tests two objects for equality, gracefully handling nulls and arrays.
 	 *
+	 * <p>
+	 * This method handles annotations specially by delegating to {@link AnnotationUtils#equals(Annotation, Annotation)}
+	 * to ensure proper annotation comparison according to the annotation equality contract.
+	 *
 	 * @param <T> The value types.
 	 * @param o1 Object 1.
 	 * @param o2 Object 2.
 	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
+	 * @see AnnotationUtils#equals(Annotation, Annotation)
 	 */
 	public static <T> boolean eq(T o1, T o2) {
+		// Handle annotations specially
+		if (o1 instanceof java.lang.annotation.Annotation o1a && o2 instanceof java.lang.annotation.Annotation o2a)
+			return AnnotationUtils.equals(o1a, o2a);
+
 		if (isArray(o1) && isArray(o2)) {
 			int l1 = Array.getLength(o1), l2 = Array.getLength(o2);
 			if (l1 != l2)
@@ -241,39 +250,6 @@ public class Utils {
 	}
 
 	/**
-	 * Tests two annotations for equality using the criteria presented in the {@link java.lang.annotation.Annotation#equals(Object)} API docs.
-	 *
-	 * <p>
-	 * This method delegates to {@link AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)}
-	 * to ensure proper annotation comparison according to the annotation equality contract.
-	 *
-	 * @param a1 Annotation 1.
-	 * @param a2 Annotation 2.
-	 * @return <jk>true</jk> if the two annotations are equal or both are <jk>null</jk>.
-	 * @see AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
-	 */
-	public static boolean eq(java.lang.annotation.Annotation a1, java.lang.annotation.Annotation a2) {
-		return AnnotationUtils.equals(a1, a2);
-	}
-
-	/**
-	 * Tests two annotations for inequality using the criteria presented in the {@link java.lang.annotation.Annotation#equals(Object)} API docs.
-	 *
-	 * <p>
-	 * This method is the negation of {@link #eq(java.lang.annotation.Annotation, java.lang.annotation.Annotation)},
-	 * which delegates to {@link AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)}.
-	 *
-	 * @param a1 Annotation 1.
-	 * @param a2 Annotation 2.
-	 * @return <jk>true</jk> if the two annotations are not equal.
-	 * @see #eq(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
-	 * @see AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
-	 */
-	public static boolean ne(java.lang.annotation.Annotation a1, java.lang.annotation.Annotation a2) {
-		return ! eq(a1, a2);
-	}
-
-	/**
 	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
 	 *
 	 * @param s1 String 1.
@@ -302,70 +278,6 @@ public class Utils {
 				if (nn(tt))
 					return tt;
 		return null;
-	}
-
-	/**
-	 * Converts a string containing glob-style wildcard characters to a regular expression {@link java.util.regex.Pattern}.
-	 *
-	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
-	 * <ul>
-	 *   <li>{@code *} matches any sequence of characters (including none)</li>
-	 *   <li>{@code ?} matches exactly one character</li>
-	 *   <li>All other characters are treated literally</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"user_*_temp"</js>);
-	 *   <jk>boolean</jk> <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_alice_temp"</js>).matches();  <jc>// true</jc>
-	 *   <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_bob_temp"</js>).matches();    <jc>// true</jc>
-	 *   <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"admin_alice_temp"</js>).matches(); <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param s The glob-style wildcard pattern string.
-	 * @return A compiled {@link java.util.regex.Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
-	 */
-	public static java.util.regex.Pattern getGlobMatchPattern(String s) {
-		return getGlobMatchPattern(s, 0);
-	}
-
-	/**
-	 * Converts a string containing glob-style wildcard characters to a regular expression {@link java.util.regex.Pattern} with flags.
-	 *
-	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
-	 * <ul>
-	 *   <li>{@code *} matches any sequence of characters (including none)</li>
-	 *   <li>{@code ?} matches exactly one character</li>
-	 *   <li>All other characters are treated literally</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 *   <jc>// Case-insensitive matching</jc>
-	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"USER_*"</js>, Pattern.<jsf>CASE_INSENSITIVE</jsf>);
-	 *   <jk>boolean</jk> <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_alice"</js>).matches();  <jc>// true</jc>
-	 * </p>
-	 *
-	 * @param s The glob-style wildcard pattern string.
-	 * @param flags Regular expression flags (see {@link java.util.regex.Pattern} constants).
-	 * @return A compiled {@link java.util.regex.Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
-	 */
-	public static java.util.regex.Pattern getGlobMatchPattern(String s, int flags) {
-		if (s == null)
-			return null;
-		var sb = new StringBuilder();
-		sb.append("\\Q");
-		for (var i = 0; i < s.length(); i++) {
-			var c = s.charAt(i);
-			if (c == '*')
-				sb.append("\\E").append(".*").append("\\Q");
-			else if (c == '?')
-				sb.append("\\E").append(".").append("\\Q");
-			else
-				sb.append(c);
-		}
-		sb.append("\\E");
-		return java.util.regex.Pattern.compile(sb.toString(), flags);
 	}
 
 	/**
@@ -486,30 +398,6 @@ public class Utils {
 	 */
 	public static boolean isArray(Object o) {
 		return nn(o) && o.getClass().isArray();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object can be converted to a list.
-	 *
-	 * <p>
-	 * The following types are considered convertible:
-	 * <ul>
-	 * 	<li>Collections
-	 * 	<li>Iterables
-	 * 	<li>Iterators
-	 * 	<li>Enumerations
-	 * 	<li>Streams
-	 * 	<li>Maps
-	 * 	<li>Optional
-	 * 	<li>Arrays
-	 * </ul>
-	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the object can be converted to a list.
-	 */
-	public static boolean isConvertibleToList(Object o) {
-		return nn(o) && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || o instanceof Stream || o instanceof Map || o instanceof Optional
-			|| isArray(o));
 	}
 
 	/**
@@ -851,54 +739,6 @@ public class Utils {
 	}
 
 	/**
-	 * Safely converts an object to its string representation, handling any exceptions that may occur.
-	 *
-	 * <p>This method provides a fail-safe way to call {@code toString()} on any object, ensuring that
-	 * exceptions thrown by problematic {@code toString()} implementations don't propagate up the call stack.
-	 * Instead, it returns a descriptive error message containing the exception type and message.</p>
-	 *
-	 * <h5 class='section'>Exception Handling:</h5>
-	 * <p>If the object's {@code toString()} method throws any {@code Throwable}, this method catches it
-	 * and returns a formatted string in the form: {@code "<ExceptionType>: <exception message>"}.</p>
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Normal case - returns object's toString() result</jc>
-	 *    String <jv>result</jv> = <jsm>safeToString</jsm>(<js>"Hello"</js>);
-	 *    <jc>// result = "Hello"</jc>
-	 *
-	 *    <jc>// Exception case - returns formatted error message</jc>
-	 *    Object <jv>problematic</jv> = <jk>new</jk> Object() {
-	 *       <ja>@Override</ja>
-	 *       <jk>public</jk> String toString() {
-	 *          <jk>throw new</jk> RuntimeException(<js>"Cannot convert"</js>);
-	 *       }
-	 *    };
-	 *    String <jv>result</jv> = <jsm>safeToString</jsm>(<jv>problematic</jv>);
-	 *    <jc>// result = "RuntimeException: Cannot convert"</jc>
-	 * </p>
-	 *
-	 * <h5 class='section'>Use Cases:</h5>
-	 * <ul>
-	 *    <li><b>Object stringification in converters:</b> Safe conversion of arbitrary objects to strings</li>
-	 *    <li><b>Debugging and logging:</b> Ensures log statements never fail due to toString() exceptions</li>
-	 *    <li><b>Error handling:</b> Graceful degradation when objects have problematic string representations</li>
-	 *    <li><b>Third-party object integration:</b> Safe handling of objects from external libraries</li>
-	 * </ul>
-	 *
-	 * @param o The object to convert to a string. May be any object including <jk>null</jk>.
-	 * @return The string representation of the object, or a formatted error message if toString() throws an exception.
-	 *    Returns <js>"null"</js> if the object is <jk>null</jk>.
-	 */
-	public static String safeToString(Object o) {
-		try {
-			return o.toString();
-		} catch (Throwable t) { // NOSONAR
-			return cns(t) + ": " + t.getMessage();
-		}
-	}
-
-	/**
 	 * Helper method for creating StringBuilder objects.
 	 *
 	 * @param value The string value to wrap in a StringBuilder.
@@ -1105,54 +945,6 @@ public class Utils {
 	}
 
 	/**
-	 * Same as {@link Integer#parseInt(String)} but removes any underscore characters first.
-	 *
-	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000_000"</js>).
-	 *
-	 * @param value The string to parse.
-	 * @return The parsed integer value.
-	 * @throws NumberFormatException If the string cannot be parsed.
-	 * @throws NullPointerException If the string is <jk>null</jk>.
-	 */
-	public static int parseInt(String value) {
-		return Integer.parseInt(removeUnderscores(value));
-	}
-
-	/**
-	 * Same as {@link Long#parseLong(String)} but removes any underscore characters first.
-	 *
-	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000_000"</js>).
-	 *
-	 * @param value The string to parse.
-	 * @return The parsed long value.
-	 * @throws NumberFormatException If the string cannot be parsed.
-	 * @throws NullPointerException If the string is <jk>null</jk>.
-	 */
-	public static long parseLong(String value) {
-		return Long.parseLong(removeUnderscores(value));
-	}
-
-	/**
-	 * Same as {@link Float#parseFloat(String)} but removes any underscore characters first.
-	 *
-	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000.5"</js>).
-	 *
-	 * @param value The string to parse.
-	 * @return The parsed float value.
-	 * @throws NumberFormatException If the string cannot be parsed.
-	 * @throws NullPointerException If the string is <jk>null</jk>.
-	 */
-	public static float parseFloat(String value) {
-		return Float.parseFloat(removeUnderscores(value));
-	}
-
-	private static String removeUnderscores(String value) {
-		if (value == null)
-			throw new NullPointerException("Trying to parse null string.");
-		return notContains(value, '_') ? value : value.replace("_", "");
-	}
-
-	/**
 	 * Shortcut for calling {@link StringUtils#stringSupplier(Supplier)}.
 	 *
 	 * @param s The supplier.
@@ -1276,5 +1068,31 @@ public class Utils {
 		if (o == null)
 			return null;
 		return cnsq(o) + "@" + System.identityHashCode(o);
+	}
+
+	/**
+	 * Convenience method for calling {@link StringUtils#upperCase(String)}.
+	 *
+	 * <p>
+	 * Converts the string to uppercase if not null.
+	 *
+	 * @param value The string to convert.
+	 * @return The uppercase string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static String uc(String value) {
+		return StringUtils.upperCase(value);
+	}
+
+	/**
+	 * Convenience method for calling {@link StringUtils#lowerCase(String)}.
+	 *
+	 * <p>
+	 * Converts the string to lowercase if not null.
+	 *
+	 * @param value The string to convert.
+	 * @return The lowercase string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static String lc(String value) {
+		return StringUtils.lowerCase(value);
 	}
 }

@@ -899,11 +899,31 @@ public class BasicBeanConverter implements BeanConverter {
 		var c = o.getClass();
 		var stringifier = stringifierMap.computeIfAbsent(c, this::findStringifier);
 		if (stringifier.isEmpty()) {
-			stringifier = of(canListify(o) ? (bc, o2) -> bc.stringify(bc.listify(o2)) : (bc, o2) -> safeToString(o2));
+			stringifier = of(canListify(o) ? (bc, o2) -> bc.stringify(bc.listify(o2)) : (bc, o2) -> this.safeToString(o2));
 			stringifierMap.putIfAbsent(c, stringifier);
 		}
 		var o2 = o;
-		return stringifier.map(x -> (Stringifier)x).map(x -> x.apply(this, o2)).map(Utils::safeToString).orElse(null);
+		return stringifier.map(x -> (Stringifier)x).map(x -> x.apply(this, o2)).map(this::safeToString).orElse(null);
+	}
+
+	/**
+	 * Safely converts an object to a string, catching any exceptions thrown by toString().
+	 *
+	 * <p>
+	 * This helper method ensures that exceptions thrown by problematic {@code toString()} implementations
+	 * don't propagate up the call stack. Instead, it returns a descriptive error message containing
+	 * the exception type and message.
+	 *
+	 * @param o The object to convert to a string. May be any object including <jk>null</jk>.
+	 * @return The string representation of the object, or a formatted error message if toString() throws an exception.
+	 *    Returns <js>"null"</js> if the object is <jk>null</jk>.
+	 */
+	private String safeToString(Object o) {
+		try {
+			return o.toString();
+		} catch (Throwable t) { // NOSONAR
+			return cns(t) + ": " + t.getMessage();
+		}
 	}
 
 	/**
