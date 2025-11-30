@@ -67,22 +67,53 @@ public class Utils {
 	/**
 	 * Casts an object to a specific type if it's an instance of that type.
 	 *
+	 * <p>
+	 * This is a null-safe and type-safe casting operation. Returns <jk>null</jk> if:
+	 * <ul>
+	 *   <li>The object is <jk>null</jk></li>
+	 *   <li>The object is not an instance of the specified type</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Object <jv>obj</jv> = <js>"Hello"</js>;
+	 * 	String <jv>str</jv> = cast(String.<jk>class</jk>, <jv>obj</jv>);     <jc>// "Hello"</jc>
+	 * 	Integer <jv>num</jv> = cast(Integer.<jk>class</jk>, <jv>obj</jv>);   <jc>// null (not an Integer)</jc>
+	 * 	String <jv>str2</jv> = cast(String.<jk>class</jk>, <jk>null</jk>);   <jc>// null</jc>
+	 * </p>
+	 *
 	 * @param <T> The type to cast to.
 	 * @param c The type to cast to.
-	 * @param o The object to cast to.
-	 * @return The cast object, or <jk>null</jk> if the object wasn't the specified type.
+	 * @param o The object to cast.
+	 * @return The cast object, or <jk>null</jk> if the object wasn't the specified type or was <jk>null</jk>.
+	 * @see #castOrNull(Object, Class)
 	 */
 	public static <T> T cast(Class<T> c, Object o) {
 		return nn(o) && c.isInstance(o) ? c.cast(o) : null;
 	}
 
 	/**
-	 * If the specified object is an instance of the specified class, casts it to that type.
+	 * Casts an object to a specific type if it's an instance of that type.
+	 *
+	 * <p>
+	 * This method is similar to {@link #cast(Class, Object)} but with a different parameter order.
+	 * Returns <jk>null</jk> if the object is not an instance of the specified class.
+	 * Note: Unlike {@link #cast(Class, Object)}, this method does not check for <jk>null</jk> objects
+	 * before checking the type, so a <jk>null</jk> object will return <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Object <jv>obj</jv> = <js>"Hello"</js>;
+	 * 	String <jv>str</jv> = castOrNull(<jv>obj</jv>, String.<jk>class</jk>);     <jc>// "Hello"</jc>
+	 * 	Integer <jv>num</jv> = castOrNull(<jv>obj</jv>, Integer.<jk>class</jk>);   <jc>// null (not an Integer)</jc>
+	 * 	String <jv>str2</jv> = castOrNull(<jk>null</jk>, String.<jk>class</jk>);   <jc>// null</jc>
+	 * </p>
 	 *
 	 * @param <T> The class to cast to.
 	 * @param o The object to cast.
 	 * @param c The class to cast to.
 	 * @return The cast object, or <jk>null</jk> if the object wasn't an instance of the specified class.
+	 * @see #cast(Class, Object)
 	 */
 	public static <T> T castOrNull(Object o, Class<T> c) {
 		if (c.isInstance(o))
@@ -91,16 +122,32 @@ public class Utils {
 	}
 
 	/**
-	 * Compares two objects for equality.
+	 * Compares two objects for ordering.
 	 *
 	 * <p>
-	 * Nulls are always considered less-than unless both are null.
+	 * This method attempts to compare two objects using their natural ordering if they implement
+	 * {@link Comparable} and are of the same type. Null handling:
+	 * <ul>
+	 *   <li>Both <jk>null</jk> → returns <c>0</c> (equal)</li>
+	 *   <li>First <jk>null</jk> → returns <c>-1</c> (null is less-than)</li>
+	 *   <li>Second <jk>null</jk> → returns <c>1</c> (null is less-than)</li>
+	 *   <li>Different types or not Comparable → returns <c>0</c> (cannot compare)</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	compare(<js>"apple"</js>, <js>"banana"</js>);   <jc>// negative (apple &lt; banana)</jc>
+	 * 	compare(5, 10);                                 <jc>// negative (5 &lt; 10)</jc>
+	 * 	compare(<js>"apple"</js>, <js>"apple"</js>);    <jc>// 0 (equal)</jc>
+	 * 	compare(<jk>null</jk>, <jk>null</jk>);          <jc>// 0 (equal)</jc>
+	 * 	compare(<jk>null</jk>, <js>"apple"</js>);       <jc>// -1 (null &lt; non-null)</jc>
+	 * 	compare(<js>"apple"</js>, 5);                   <jc>// 0 (different types, cannot compare)</jc>
+	 * </p>
 	 *
 	 * @param o1 Object 1.
 	 * @param o2 Object 2.
-	 * @return
-	 * 	<c>-1</c>, <c>0</c>, or <c>1</c> if <c>o1</c> is less-than, equal, or greater-than <c>o2</c>.
-	 *	<br><c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
+	 * @return <c>-1</c>, <c>0</c>, or <c>1</c> if <c>o1</c> is less-than, equal, or greater-than <c>o2</c>.
+	 *         Returns <c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
 	 */
 	@SuppressWarnings("unchecked")
 	public static int compare(Object o1, Object o2) {
@@ -121,6 +168,17 @@ public class Utils {
 	/**
 	 * Creates an empty array of the specified type.
 	 *
+	 * <p>
+	 * This is a convenience method for creating empty arrays using reflection. Useful when you need
+	 * an empty array of a specific type but don't have an instance to call <c>new T[0]</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	String[] <jv>empty</jv> = ea(String.<jk>class</jk>);        <jc>// new String[0]</jc>
+	 * 	Integer[] <jv>empty2</jv> = ea(Integer.<jk>class</jk>);      <jc>// new Integer[0]</jc>
+	 * 	List&lt;String&gt;[] <jv>empty3</jv> = ea(List.<jk>class</jk>);  <jc>// new List[0]</jc>
+	 * </p>
+	 *
 	 * @param <T> The component type of the array.
 	 * @param type The component type class.
 	 * @return An empty array of the specified type.
@@ -131,10 +189,22 @@ public class Utils {
 	}
 
 	/**
-	 * Returns the specified string, or blank if that string is null.
+	 * Returns the string representation of an object, or an empty string if the object is <jk>null</jk>.
 	 *
-	 * @param value The value to convert to a string.
+	 * <p>
+	 * This is a null-safe string conversion method. If the object is <jk>null</jk>, returns an empty string.
+	 * Otherwise, returns the result of calling {@link Object#toString()} on the object.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	emptyIfNull(<js>"Hello"</js>);     <jc>// "Hello"</jc>
+	 * 	emptyIfNull(123);                  <jc>// "123"</jc>
+	 * 	emptyIfNull(<jk>null</jk>);        <jc>// ""</jc>
+	 * </p>
+	 *
+	 * @param value The value to convert to a string. Can be <jk>null</jk>.
 	 * @return The string representation of the value, or an empty string if <jk>null</jk>.
+	 * @see Object#toString()
 	 */
 	public static String emptyIfNull(Object value) {
 		return value == null ? "" : value.toString();
@@ -144,11 +214,31 @@ public class Utils {
 	 * Looks up a system property or environment variable.
 	 *
 	 * <p>
-	 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
-	 * Then returns the default if it can't be found.
+	 * This method searches for a value in the following order:
+	 * <ol>
+	 *   <li>System properties (via {@link System#getProperty(String)})</li>
+	 *   <li>Environment variables (via {@link System#getenv(String)}) - the name is converted to env-safe format</li>
+	 * </ol>
 	 *
-	 * @param name The property name.
-	 * @return The value if found.
+	 * <p>
+	 * Returns an empty {@link Optional} if the value is not found in either location.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// System property: -Dmy.property=value</jc>
+	 * 	Optional&lt;String&gt; <jv>prop</jv> = env(<js>"my.property"</js>);  <jc>// Optional.of("value")</jc>
+	 *
+	 * 	<jc>// Environment variable: MY_PROPERTY=value</jc>
+	 * 	Optional&lt;String&gt; <jv>env</jv> = env(<js>"my.property"</js>);   <jc>// Optional.of("value") (converts to MY_PROPERTY)</jc>
+	 *
+	 * 	Optional&lt;String&gt; <jv>missing</jv> = env(<js>"nonexistent"</js>);  <jc>// Optional.empty()</jc>
+	 * </p>
+	 *
+	 * @param name The property name (will be converted to env-safe format for environment variable lookup).
+	 * @return An {@link Optional} containing the value if found, or empty if not found.
+	 * @see #env(String, Object)
+	 * @see System#getProperty(String)
+	 * @see System#getenv(String)
 	 */
 	public static Optional<String> env(String name) {
 		var s = System.getProperty(name);
@@ -158,28 +248,65 @@ public class Utils {
 	}
 
 	/**
-	 * Looks up a system property or environment variable.
+	 * Looks up a system property or environment variable, returning a default value if not found.
 	 *
 	 * <p>
-	 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
-	 * Then returns the default if it can't be found.
+	 * This method searches for a value in the following order:
+	 * <ol>
+	 *   <li>System properties (via {@link System#getProperty(String)})</li>
+	 *   <li>Environment variables (via {@link System#getenv(String)}) - the name is converted to env-safe format</li>
+	 *   <li>Returns the default value if not found</li>
+	 * </ol>
+	 *
+	 * <p>
+	 * If a value is found, it is converted to the type of the default value using {@link #toType(String, Object)}.
+	 * Supported types include {@link Boolean}, {@link Charset}, and other common types.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// System property: -Dmy.property=true</jc>
+	 * 	Boolean <jv>flag</jv> = env(<js>"my.property"</js>, <jk>false</jk>);  <jc>// true</jc>
+	 *
+	 * 	<jc>// Environment variable: MY_PROPERTY=UTF-8</jc>
+	 * 	Charset <jv>charset</jv> = env(<js>"my.property"</js>, Charset.defaultCharset());  <jc>// UTF-8</jc>
+	 *
+	 * 	<jc>// Not found, returns default</jc>
+	 * 	String <jv>value</jv> = env(<js>"nonexistent"</js>, <js>"default"</js>);  <jc>// "default"</jc>
+	 * </p>
 	 *
 	 * @param <T> The type to convert the value to.
-	 * @param name The property name.
-	 * @param def The default value if not found.
-	 * @return The default value.
+	 * @param name The property name (will be converted to env-safe format for environment variable lookup).
+	 * @param def The default value to return if not found.
+	 * @return The found value (converted to type T), or the default value if not found.
+	 * @see #env(String)
+	 * @see #toType(String, Object)
 	 */
 	public static <T> T env(String name, T def) {
 		return env(name).map(x -> toType(x, def)).orElse(def);
 	}
 
 	/**
-	 * Tests two strings for equality, but gracefully handles nulls.
+	 * Tests two strings for equality, with optional case-insensitive matching.
+	 *
+	 * <p>
+	 * This method provides a unified way to compare strings with or without case sensitivity.
+	 * Both strings are handled gracefully for <jk>null</jk> values.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	eq(<jk>false</jk>, <js>"Hello"</js>, <js>"Hello"</js>);     <jc>// true (case-sensitive)</jc>
+	 * 	eq(<jk>false</jk>, <js>"Hello"</js>, <js>"hello"</js>);     <jc>// false (case-sensitive)</jc>
+	 * 	eq(<jk>true</jk>, <js>"Hello"</js>, <js>"hello"</js>);      <jc>// true (case-insensitive)</jc>
+	 * 	eq(<jk>false</jk>, <jk>null</jk>, <jk>null</jk>);          <jc>// true (both null)</jc>
+	 * 	eq(<jk>false</jk>, <js>"Hello"</js>, <jk>null</jk>);       <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param caseInsensitive Use case-insensitive matching.
 	 * @param s1 String 1.
 	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are equal.
+	 * @return <jk>true</jk> if the strings are equal (according to the case sensitivity setting).
+	 * @see #eq(String, String)
+	 * @see #eqic(String, String)
 	 */
 	public static boolean eq(boolean caseInsensitive, String s1, String s2) {
 		return caseInsensitive ? eqic(s1, s2) : eq(s1, s2);
@@ -216,23 +343,37 @@ public class Utils {
 	}
 
 	/**
-	 * Tests two objects for equality, gracefully handling nulls.
+	 * Tests two objects for equality using a custom predicate, gracefully handling nulls.
 	 *
-	 * Allows you to simplify object comparison without sacrificing efficiency.
+	 * <p>
+	 * This method provides a convenient way to implement custom equality logic while handling null values
+	 * safely. The predicate is only called if both objects are non-null and not the same reference.
 	 *
-	 * Example:
-	 * <code>
-	 * 	public boolean equals(Object o)
-	 * 		return eq(this, (Role)o, (x,y)-&gt;eq(x.id,y.id) &amp;&amp; eq(x.name,y.name) &amp;&amp; eq(x.created,y.created) &amp;&amp; eq(x.createdBy,y.createdBy));
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Custom equality for a Role class</jc>
+	 * 	<jk>public</jk> <jk>boolean</jk> equals(Object o) {
+	 * 		<jk>return</jk> eq(<jk>this</jk>, (Role)o, (x,y) -&gt;
+	 * 			eq(x.id, y.id) &amp;&amp;
+	 * 			eq(x.name, y.name) &amp;&amp;
+	 * 			eq(x.created, y.created) &amp;&amp;
+	 * 			eq(x.createdBy, y.createdBy)
+	 * 		);
 	 * 	}
-	 * </code>
+	 *
+	 * 	<jc>// Usage</jc>
+	 * 	Role <jv>r1</jv> = <jk>new</jk> Role(1, <js>"admin"</js>);
+	 * 	Role <jv>r2</jv> = <jk>new</jk> Role(1, <js>"admin"</js>);
+	 * 	eq(<jv>r1</jv>, <jv>r2</jv>, (x,y) -&gt; x.id == y.id &amp;&amp; x.name.equals(y.name));  <jc>// true</jc>
+	 * </p>
 	 *
 	 * @param <T> Object 1 type.
 	 * @param <U> Object 2 type.
 	 * @param o1 Object 1.
 	 * @param o2 Object 2.
-	 * @param test The test to use for equality.
-	 * @return <jk>true</jk> if both objects are equal based on the test.
+	 * @param test The predicate to use for equality testing (only called if both objects are non-null and different references).
+	 * @return <jk>true</jk> if both objects are equal based on the test, or if both are <jk>null</jk>, or if they are the same reference.
+	 * @see #eq(Object, Object)
 	 */
 	public static <T,U> boolean eq(T o1, U o2, BiPredicate<T,U> test) {
 		if (o1 == null) {
@@ -276,11 +417,25 @@ public class Utils {
 	}
 
 	/**
-	 * Returns the first non-null value in the specified array
+	 * Returns the first non-null value in the specified array.
+	 *
+	 * <p>
+	 * This method iterates through the provided values and returns the first one that is not <jk>null</jk>.
+	 * Useful for providing default values or selecting the first available option.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	firstNonNull(<jk>null</jk>, <jk>null</jk>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// "Hello"</jc>
+	 * 	firstNonNull(<js>"Hello"</js>, <js>"World"</js>);                                <jc>// "Hello"</jc>
+	 * 	firstNonNull(<jk>null</jk>, <jk>null</jk>);                                      <jc>// null</jc>
+	 * 	firstNonNull();                                                                  <jc>// null</jc>
+	 * </p>
 	 *
 	 * @param <T> The value types.
 	 * @param t The values to check.
 	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
+	 * @see StringUtils#firstNonEmpty(String...)
+	 * @see StringUtils#firstNonBlank(String...)
 	 */
 	@SafeVarargs
 	public static <T> T firstNonNull(T...t) {
@@ -384,13 +539,29 @@ public class Utils {
 	 * Calculates a hash code for the specified values.
 	 *
 	 * <p>
-	 * This method handles annotations specially by delegating to {@link AnnotationUtils#hash(Annotation)}
-	 * to ensure consistent hashing according to the {@link java.lang.annotation.Annotation#hashCode()} contract.
-	 * For non-annotation values, it uses {@link Objects#hashCode(Object)}.
+	 * This method combines multiple values into a single hash code using the same algorithm as
+	 * {@link Objects#hash(Object...)}. It handles annotations specially by delegating to
+	 * {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing according to the
+	 * {@link java.lang.annotation.Annotation#hashCode()} contract.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Hash multiple values</jc>
+	 * 	<jk>int</jk> <jv>hash1</jv> = hash(<js>"Hello"</js>, 123, <jk>true</jk>);
+	 *
+	 * 	<jc>// Hash with annotations</jc>
+	 * 	<jk>int</jk> <jv>hash2</jv> = hash(<jv>myAnnotation</jv>, <js>"value"</js>);
+	 *
+	 * 	<jc>// Use in hashCode() implementation</jc>
+	 * 	<jk>public</jk> <jk>int</jk> hashCode() {
+	 * 		<jk>return</jk> hash(id, name, created);
+	 * 	}
+	 * </p>
 	 *
 	 * @param values The values to hash.
 	 * @return A hash code value for the given values.
 	 * @see AnnotationUtils#hash(Annotation)
+	 * @see Objects#hash(Object...)
 	 */
 	public static final int hash(Object...values) {
 		assertArgNotNull("values", values);
@@ -404,8 +575,21 @@ public class Utils {
 	/**
 	 * Checks if the specified object is an array.
 	 *
+	 * <p>
+	 * This method checks if the object is not <jk>null</jk> and its class represents an array type
+	 * (primitive arrays or object arrays).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isArray(<jk>new</jk> <jk>int</jk>[]{1, 2, 3});        <jc>// true</jc>
+	 * 	isArray(<jk>new</jk> String[]{"a", "b"});            <jc>// true</jc>
+	 * 	isArray(<js>"Hello"</js>);                           <jc>// false</jc>
+	 * 	isArray(<jk>null</jk>);                              <jc>// false</jc>
+	 * </p>
+	 *
 	 * @param o The object to check.
 	 * @return <jk>true</jk> if the object is not <jk>null</jk> and is an array.
+	 * @see Class#isArray()
 	 */
 	public static boolean isArray(Object o) {
 		return nn(o) && o.getClass().isArray();
@@ -441,10 +625,23 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified collection is <jk>null</jk> or empty.
+	 * Checks if the specified collection is <jk>null</jk> or empty.
+	 *
+	 * <p>
+	 * This is a null-safe operation. Returns <jk>true</jk> if the collection is <jk>null</jk> or
+	 * has no elements.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isEmpty(<jk>null</jk>);                    <jc>// true</jc>
+	 * 	isEmpty(Collections.emptyList());         <jc>// true</jc>
+	 * 	isEmpty(Arrays.asList(1, 2, 3));          <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param o The collection to check.
 	 * @return <jk>true</jk> if the specified collection is <jk>null</jk> or empty.
+	 * @see #isNotEmpty(Collection)
+	 * @see Collection#isEmpty()
 	 */
 	public static boolean isEmpty(Collection<?> o) {
 		if (o == null)
@@ -453,10 +650,23 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified map is <jk>null</jk> or empty.
+	 * Checks if the specified map is <jk>null</jk> or empty.
+	 *
+	 * <p>
+	 * This is a null-safe operation. Returns <jk>true</jk> if the map is <jk>null</jk> or
+	 * has no key-value mappings.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isEmpty(<jk>null</jk>);                    <jc>// true</jc>
+	 * 	isEmpty(Collections.emptyMap());          <jc>// true</jc>
+	 * 	isEmpty(Map.of(<js>"key"</js>, <js>"value"</js>));  <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param o The map to check.
 	 * @return <jk>true</jk> if the specified map is <jk>null</jk> or empty.
+	 * @see #isNotEmpty(Map)
+	 * @see Map#isEmpty()
 	 */
 	public static boolean isEmpty(Map<?,?> o) {
 		if (o == null)
@@ -483,13 +693,31 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
+	 * Checks if the specified object is not <jk>null</jk> and not empty.
 	 *
-	 * Works on any of the following data types:  String, CharSequence, Collection, Map, array.
-	 * All other types are stringified and then checked as a String.
+	 * <p>
+	 * This method works on any of the following data types:
+	 * <ul>
+	 *   <li>String, CharSequence - checks if length > 0</li>
+	 *   <li>Collection - checks if not empty</li>
+	 *   <li>Map - checks if not empty</li>
+	 *   <li>Array - checks if length > 0</li>
+	 *   <li>All other types - converts to string and checks if not empty</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isNotEmpty(<js>"Hello"</js>);                    <jc>// true</jc>
+	 * 	isNotEmpty(Arrays.asList(1, 2));                <jc>// true</jc>
+	 * 	isNotEmpty(Map.of(<js>"key"</js>, <js>"value"</js>));  <jc>// true</jc>
+	 * 	isNotEmpty(<jk>null</jk>);                       <jc>// false</jc>
+	 * 	isNotEmpty(<js>""</js>);                         <jc>// false</jc>
+	 * 	isNotEmpty(Collections.emptyList());            <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
+	 * @see #isEmpty(Object)
 	 */
 	public static boolean isNotEmpty(Object value) {
 		if (value == null)
@@ -506,37 +734,85 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 * Checks if the specified collection is not <jk>null</jk> and not empty.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #isEmpty(Collection)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isNotEmpty(Arrays.asList(1, 2, 3));          <jc>// true</jc>
+	 * 	isNotEmpty(<jk>null</jk>);                    <jc>// false</jc>
+	 * 	isNotEmpty(Collections.emptyList());         <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param value The collection to check.
 	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 * @see #isEmpty(Collection)
 	 */
 	public static boolean isNotEmpty(Collection<?> value) {
 		return ! isEmpty(value);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 * Checks if the specified map is not <jk>null</jk> and not empty.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #isEmpty(Map)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isNotEmpty(Map.of(<js>"key"</js>, <js>"value"</js>));  <jc>// true</jc>
+	 * 	isNotEmpty(<jk>null</jk>);                             <jc>// false</jc>
+	 * 	isNotEmpty(Collections.emptyMap());                    <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param value The map to check.
 	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 * @see #isEmpty(Map)
 	 */
 	public static boolean isNotEmpty(Map<?,?> value) {
 		return ! isEmpty(value);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if string is not <jk>null</jk> and not empty.
+	 * Checks if the specified string is not <jk>null</jk> and not empty.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #isEmpty(CharSequence)}.
+	 * Note: This method does not check for blank strings (whitespace-only strings).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isNotEmpty(<js>"Hello"</js>);     <jc>// true</jc>
+	 * 	isNotEmpty(<js>"   "</js>);       <jc>// true (whitespace is not empty)</jc>
+	 * 	isNotEmpty(<jk>null</jk>);        <jc>// false</jc>
+	 * 	isNotEmpty(<js>""</js>);          <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param o The string to check.
 	 * @return <jk>true</jk> if string is not <jk>null</jk> and not empty.
+	 * @see #isEmpty(CharSequence)
+	 * @see StringUtils#isNotBlank(String)
 	 */
 	public static boolean isNotEmpty(CharSequence o) {
 		return ! isEmpty(o);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
+	 * Checks if the specified number is not <jk>null</jk> and not <c>-1</c>.
+	 *
+	 * <p>
+	 * This method is commonly used to check if a numeric value represents a valid index or ID,
+	 * where <c>-1</c> is often used as a sentinel value to indicate "not found" or "invalid".
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isNotMinusOne(5);        <jc>// true</jc>
+	 * 	isNotMinusOne(0);        <jc>// true</jc>
+	 * 	isNotMinusOne(-1);       <jc>// false</jc>
+	 * 	isNotMinusOne(<jk>null</jk>);  <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param <T> The value types.
 	 * @param value The value being checked.
@@ -547,18 +823,41 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 * Checks if the specified object is not <jk>null</jk>.
+	 *
+	 * <p>
+	 * This is equivalent to <c><jv>value</jv> != <jk>null</jk></c>, but provides a more readable
+	 * method name for null checks.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isNotNull(<js>"Hello"</js>);     <jc>// true</jc>
+	 * 	isNotNull(123);                 <jc>// true</jc>
+	 * 	isNotNull(<jk>null</jk>);        <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param <T> The value type.
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 * @see #nn(Object)
 	 */
 	public static <T> boolean isNotNull(T value) {
 		return value != null;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
+	 * Checks if the specified Boolean is not <jk>null</jk> and is <jk>true</jk>.
+	 *
+	 * <p>
+	 * This is a null-safe way to check if a Boolean wrapper is true. Returns <jk>false</jk> if
+	 * the value is <jk>null</jk> or <jk>false</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isTrue(<jk>true</jk>);        <jc>// true</jc>
+	 * 	isTrue(<jk>false</jk>);       <jc>// false</jc>
+	 * 	isTrue(<jk>null</jk>);        <jc>// false</jc>
+	 * </p>
 	 *
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
@@ -570,8 +869,18 @@ public class Utils {
 	/**
 	 * Returns <jk>null</jk> for the specified type.
 	 *
+	 * <p>
+	 * This is a convenience method that allows you to explicitly return <jk>null</jk> with a type
+	 * parameter, which can help with type inference in some contexts.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	String <jv>result</jv> = n(String.<jk>class</jk>);     <jc>// null</jc>
+	 * 	List&lt;String&gt; <jv>list</jv> = n(List.<jk>class</jk>);  <jc>// null</jc>
+	 * </p>
+	 *
 	 * @param <T> The type.
-	 * @param type The type class.
+	 * @param type The type class (unused, but helps with type inference).
 	 * @return <jk>null</jk>.
 	 */
 	public static <T> T n(Class<T> type) {
@@ -581,24 +890,49 @@ public class Utils {
 	/**
 	 * Null-safe not-equals check.
 	 *
+	 * <p>
+	 * This is the inverse of {@link #eq(Object, Object)}. Returns <jk>true</jk> if the objects
+	 * are not equal, handling <jk>null</jk> values gracefully.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ne(<js>"Hello"</js>, <js>"World"</js>);     <jc>// true</jc>
+	 * 	ne(<js>"Hello"</js>, <js>"Hello"</js>);     <jc>// false</jc>
+	 * 	ne(<jk>null</jk>, <jk>null</jk>);          <jc>// false</jc>
+	 * 	ne(<js>"Hello"</js>, <jk>null</jk>);       <jc>// true</jc>
+	 * </p>
+	 *
 	 * @param <T> The object type.
 	 * @param s1 Object 1.
 	 * @param s2 Object 2.
 	 * @return <jk>true</jk> if the objects are not equal.
+	 * @see #eq(Object, Object)
 	 */
 	public static <T> boolean ne(T s1, T s2) {
 		return ! eq(s1, s2);
 	}
 
 	/**
-	 * Tests two objects for inequality, gracefully handling nulls.
+	 * Tests two objects for inequality using a custom predicate, gracefully handling nulls.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #eq(Object, Object, BiPredicate)}. The predicate is only called
+	 * if both objects are non-null and not the same reference.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Role <jv>r1</jv> = <jk>new</jk> Role(1, <js>"admin"</js>);
+	 * 	Role <jv>r2</jv> = <jk>new</jk> Role(2, <js>"user"</js>);
+	 * 	ne(<jv>r1</jv>, <jv>r2</jv>, (x,y) -&gt; x.id == y.id);  <jc>// true (different IDs)</jc>
+	 * </p>
 	 *
 	 * @param <T> Object 1 type.
 	 * @param <U> Object 2 type.
 	 * @param o1 Object 1.
 	 * @param o2 Object 2.
-	 * @param test The test to use for equality.
-	 * @return <jk>false</jk> if both objects are equal based on the test.
+	 * @param test The predicate to use for equality testing (only called if both objects are non-null and different references).
+	 * @return <jk>true</jk> if the objects are not equal based on the test, or if one is <jk>null</jk> and the other is not.
+	 * @see #eq(Object, Object, BiPredicate)
 	 */
 	public static <T,U> boolean ne(T o1, U o2, BiPredicate<T,U> test) {
 		if (o1 == null)
@@ -635,9 +969,21 @@ public class Utils {
 	/**
 	 * Tests two strings for non-equality ignoring case, but gracefully handles nulls.
 	 *
+	 * <p>
+	 * This is the inverse of {@link #eqic(String, String)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	neic(<js>"Hello"</js>, <js>"World"</js>);     <jc>// true</jc>
+	 * 	neic(<js>"Hello"</js>, <js>"hello"</js>);     <jc>// false (equal ignoring case)</jc>
+	 * 	neic(<jk>null</jk>, <jk>null</jk>);          <jc>// false (both null)</jc>
+	 * 	neic(<js>"Hello"</js>, <jk>null</jk>);       <jc>// true</jc>
+	 * </p>
+	 *
 	 * @param s1 String 1.
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are not equal ignoring case.
+	 * @see #eqic(String, String)
 	 */
 	public static boolean neic(String s1, String s2) {
 		return ! eqic(s1, s2);
@@ -646,9 +992,20 @@ public class Utils {
 	/**
 	 * Shortcut for calling {@link Optional#ofNullable(Object)}.
 	 *
+	 * <p>
+	 * This is a convenience method that provides a shorter name for wrapping objects in an Optional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Optional&lt;String&gt; <jv>opt1</jv> = opt(<js>"Hello"</js>);     <jc>// Optional.of("Hello")</jc>
+	 * 	Optional&lt;String&gt; <jv>opt2</jv> = opt(<jk>null</jk>);        <jc>// Optional.empty()</jc>
+	 * </p>
+	 *
 	 * @param <T> The object type.
 	 * @param t The object to wrap in an Optional.
 	 * @return An Optional containing the specified object, or empty if <jk>null</jk>.
+	 * @see Optional#ofNullable(Object)
+	 * @see #opte()
 	 */
 	public static final <T> Optional<T> opt(T t) {
 		return Optional.ofNullable(t);
@@ -657,15 +1014,37 @@ public class Utils {
 	/**
 	 * Returns an empty Optional.
 	 *
+	 * <p>
+	 * This is a convenience method that provides a shorter name for creating an empty Optional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Optional&lt;String&gt; <jv>empty</jv> = opte();  <jc>// Optional.empty()</jc>
+	 * </p>
+	 *
 	 * @param <T> The object type.
 	 * @return An empty Optional.
+	 * @see Optional#empty()
+	 * @see #opt(Object)
 	 */
 	public static final <T> Optional<T> opte() {
 		return Optional.empty();
 	}
 
 	/**
-	 * Prints all the specified lines to System.out.
+	 * Prints all the specified lines to System.out with line numbers.
+	 *
+	 * <p>
+	 * Each line is printed with a 4-digit line number prefix (e.g., "   1:", "   2:", etc.).
+	 * This is useful for debugging or displaying formatted output.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	printLines(<jk>new</jk> String[]{<js>"First line"</js>, <js>"Second line"</js>});
+	 * 	<jc>// Output:</jc>
+	 * 	<jc>//    1:First line</jc>
+	 * 	<jc>//    2:Second line</jc>
+	 * </p>
 	 *
 	 * @param lines The lines to print.
 	 */
@@ -690,8 +1069,21 @@ public class Utils {
 	/**
 	 * Shortcut for converting an object to a string.
 	 *
+	 * <p>
+	 * This is a null-safe string conversion. Returns <jk>null</jk> if the object is <jk>null</jk>,
+	 * otherwise returns the result of calling {@link Object#toString()} on the object.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	s(<js>"Hello"</js>);     <jc>// "Hello"</jc>
+	 * 	s(123);                 <jc>// "123"</jc>
+	 * 	s(<jk>null</jk>);        <jc>// null</jc>
+	 * </p>
+	 *
 	 * @param val The object to convert.
 	 * @return The string representation of the object, or <jk>null</jk> if the object is <jk>null</jk>.
+	 * @see Object#toString()
+	 * @see #emptyIfNull(Object)
 	 */
 	public static String s(Object val) {
 		return val == null ? null : val.toString();
