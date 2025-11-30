@@ -321,107 +321,108 @@
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		assertMixedFormat(<span class="jxr_string">"Number: 42"</span>, <span class="jxr_string">"Number: %d"</span>, <strong class="jxr_keyword">new</strong> BigDecimal(<span class="jxr_string">"42"</span>));
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<em class="jxr_comment">// MessageFormat throws NullPointerException when locale is null, but StringFormat handles it</em>
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<em class="jxr_comment">// So we test StringFormat's behavior directly instead of comparing with MessageFormat</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertMixedFormat(<span class="jxr_string">"Price: $19.99"</span>, <span class="jxr_string">"Price: {0,number,currency}"</span>, (Locale)<strong class="jxr_keyword">null</strong>, 19.99);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<em class="jxr_comment">// Error handling</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	@Test <strong class="jxr_keyword">void</strong> a05_errors() {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; <strong class="jxr_keyword">new</strong> StringFormat(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	}
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Test <strong class="jxr_keyword">void</strong> a06_caching() {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<em class="jxr_comment">// Should return the same instance due to caching</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertSame(fs(<span class="jxr_string">"Hello {0}"</span>), fs(<span class="jxr_string">"Hello {0}"</span>));
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<em class="jxr_comment">// Different patterns should return different instances</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		assertNotSame(fs(<span class="jxr_string">"Hello {0}"</span>), fs(<span class="jxr_string">"Hello %s"</span>));
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<em class="jxr_comment">// Constructor doesn't use cache, so instances should be different</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> fmt1 = <strong class="jxr_keyword">new</strong> StringFormat(<span class="jxr_string">"Hello {0}"</span>);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">var</strong> fmt2 = <strong class="jxr_keyword">new</strong> StringFormat(<span class="jxr_string">"Hello {0}"</span>);
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertNotSame(fmt1, fmt2);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertEquals(fmt1, fmt2); <em class="jxr_comment">// But they should be equal</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	@Test <strong class="jxr_keyword">void</strong> a07_equalsAndHashCode() {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">var</strong> fmt1 = StringFormat.of(<span class="jxr_string">"Hello {0}"</span>);
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">var</strong> fmt2 = StringFormat.of(<span class="jxr_string">"Hello {0}"</span>);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> fmt3 = StringFormat.of(<span class="jxr_string">"Hello %s"</span>);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertEquals(fmt1, fmt2);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertNotEquals(fmt1, fmt3);
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertEquals(fmt1.hashCode(), fmt2.hashCode());
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	}
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@Test <strong class="jxr_keyword">void</strong> a08_toString() {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertEquals(<span class="jxr_string">"Hello {0}"</span>, fs(<span class="jxr_string">"Hello {0}"</span>).toString());
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	}
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	@Test <strong class="jxr_keyword">void</strong> a09_toPattern() {
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<em class="jxr_comment">// Literal tokens</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertEquals(<span class="jxr_string">"[L:Hello ]"</span>, fs(<span class="jxr_string">"Hello "</span>).toPattern());
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertEquals(<span class="jxr_string">"[L:a ][L:{0}][L: b]"</span>, fs(<span class="jxr_string">"a '{0}' b"</span>).toPattern());  <em class="jxr_comment">// Single quotes don't escape MessageFormat</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<em class="jxr_comment">// MessageFormat tokens - simple (content == null) - Line 228: content == null branch</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertEquals(<span class="jxr_string">"[L:Hello ][M:s0]"</span>, fs(<span class="jxr_string">"Hello {0}"</span>).toPattern());
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertEquals(<span class="jxr_string">"[L:Hello ][M:s0][L: ][M:s1]"</span>, fs(<span class="jxr_string">"Hello {0} {1}"</span>).toPattern());
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<em class="jxr_comment">// MessageFormat tokens - complex (content != null) - Line 228: content != null branch</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertEquals(<span class="jxr_string">"[L:Price: ][M:o0:{0,number,currency}]"</span>, fs(<span class="jxr_string">"Price: {0,number,currency}"</span>).toPattern());
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertEquals(<span class="jxr_string">"[L:Count: ][M:o0:{0,number,integer}]"</span>, fs(<span class="jxr_string">"Count: {0,number,integer}"</span>).toPattern());
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertEquals(<span class="jxr_string">"[L:Date: ][M:o0:{0,date,short}]"</span>, fs(<span class="jxr_string">"Date: {0,date,short}"</span>).toPattern());
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<em class="jxr_comment">// StringFormat tokens - Line 406: StringFormatToken.toString()</em>
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		assertEquals(<span class="jxr_string">"[L:Hello ][S:s0:%s]"</span>, fs(<span class="jxr_string">"Hello %s"</span>).toPattern());  <em class="jxr_comment">// Simple format: 's'</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertEquals(<span class="jxr_string">"[L:Number: ][S:d0:%d]"</span>, fs(<span class="jxr_string">"Number: %d"</span>).toPattern());  <em class="jxr_comment">// Simple format: 'd'</em>
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertEquals(<span class="jxr_string">"[L:Hex: ][S:x0:%x]"</span>, fs(<span class="jxr_string">"Hex: %x"</span>).toPattern());  <em class="jxr_comment">// Simple format: 'x'</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertEquals(<span class="jxr_string">"[L:Float: ][S:z0:%.2f]"</span>, fs(<span class="jxr_string">"Float: %.2f"</span>).toPattern());  <em class="jxr_comment">// Complex format: 'z' (other)</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertEquals(<span class="jxr_string">"[L:ID: ][S:z0:%05d]"</span>, fs(<span class="jxr_string">"ID: %05d"</span>).toPattern());  <em class="jxr_comment">// Complex format: 'z' (other)</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<em class="jxr_comment">// Mixed formats</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertEquals(<span class="jxr_string">"[L:Hello ][M:s0][L:, you have ][S:d1:%d][L: items]"</span>, fs(<span class="jxr_string">"Hello {0}, you have %d items"</span>).toPattern());
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertEquals(<span class="jxr_string">"[L:Price: ][M:o0:{0,number,currency}][L: and ][S:s1:%s]"</span>, fs(<span class="jxr_string">"Price: {0,number,currency} and %s"</span>).toPattern());
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<em class="jxr_comment">// Time conversions (2-character) - Line 529: 't' or 'T' handling</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertEquals(<span class="jxr_string">"[L:Month: ][S:z0:%tm]"</span>, fs(<span class="jxr_string">"Month: %tm"</span>).toPattern());  <em class="jxr_comment">// %tm is 2-character time conversion</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		assertEquals(<span class="jxr_string">"[L:Year: ][S:z0:%tY]"</span>, fs(<span class="jxr_string">"Year: %tY"</span>).toPattern());  <em class="jxr_comment">// %tY is 2-character time conversion</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertEquals(<span class="jxr_string">"[L:Date: ][S:z0:%TD]"</span>, fs(<span class="jxr_string">"Date: %TD"</span>).toPattern());  <em class="jxr_comment">// %TD is 2-character time conversion</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	@Test <strong class="jxr_keyword">void</strong> a10_veryLongPattern() {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> pattern = <span class="jxr_string">"Start: "</span> + IntStream.range(0, 10).mapToObj(i -&gt; <span class="jxr_string">"{"</span> + i + <span class="jxr_string">"}"</span>).collect(joining(<span class="jxr_string">" "</span>)) + <span class="jxr_string">" "</span>;
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> args = IntStream.range(0, 10).boxed().toArray();
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertMessageFormat(pattern, args);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	@Test <strong class="jxr_keyword">void</strong> a11_parseIndexErrors() {
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs(<span class="jxr_string">"Hello {abc}"</span>));
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	@Test <strong class="jxr_keyword">void</strong> a12_localeHandling() {
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<em class="jxr_comment">// Lines 259-260: Test locale null checks and default locale detection in StringFormatToken</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<em class="jxr_comment">// Line 259: var l = locale == null ? Locale.getDefault() : locale;</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<em class="jxr_comment">// Line 260: var dl = locale == null || locale.equals(Locale.getDefault());</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<em class="jxr_comment">// Test with null locale (covers locale == null on both lines)</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertStringFormat(<span class="jxr_string">"Hello %s"</span>, (Locale)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"John"</span>);
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertStringFormat(<span class="jxr_string">"Number: %d"</span>, (Locale)<strong class="jxr_keyword">null</strong>, 42);
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		assertStringFormat(<span class="jxr_string">"Float: %.2f"</span>, (Locale)<strong class="jxr_keyword">null</strong>, 3.14);  <em class="jxr_comment">// Use .2f for consistent formatting</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<em class="jxr_comment">// Test with default locale (covers locale.equals(Locale.getDefault()) on line 260)</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		assertStringFormat(<span class="jxr_string">"Hello %s"</span>, Locale.getDefault(), <span class="jxr_string">"John"</span>);
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertStringFormat(<span class="jxr_string">"Number: %d"</span>, Locale.getDefault(), 42);
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		assertStringFormat(<span class="jxr_string">"Float: %.2f"</span>, Locale.getDefault(), 3.14);  <em class="jxr_comment">// Use .2f for consistent formatting</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<em class="jxr_comment">// Test with non-default locale (covers else branch on line 259 and false case on line 260)</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertStringFormat(<span class="jxr_string">"Hello %s"</span>, Locale.FRANCE, <span class="jxr_string">"John"</span>);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertStringFormat(<span class="jxr_string">"Number: %d"</span>, Locale.GERMANY, 42);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertStringFormat(<span class="jxr_string">"Float: %.2f"</span>, Locale.JAPAN, 3.14);  <em class="jxr_comment">// Use .2f for consistent formatting</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	}
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> }
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<em class="jxr_comment">// Use Locale.US to get dollar sign for currency formatting</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertMixedFormat(<span class="jxr_string">"Price: $19.99"</span>, <span class="jxr_string">"Price: {0,number,currency}"</span>, Locale.US, 19.99);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_comment">// Error handling</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	@Test <strong class="jxr_keyword">void</strong> a05_errors() {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; <strong class="jxr_keyword">new</strong> StringFormat(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	}
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	@Test <strong class="jxr_keyword">void</strong> a06_caching() {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<em class="jxr_comment">// Should return the same instance due to caching</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		assertSame(fs(<span class="jxr_string">"Hello {0}"</span>), fs(<span class="jxr_string">"Hello {0}"</span>));
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<em class="jxr_comment">// Different patterns should return different instances</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertNotSame(fs(<span class="jxr_string">"Hello {0}"</span>), fs(<span class="jxr_string">"Hello %s"</span>));
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<em class="jxr_comment">// Constructor doesn't use cache, so instances should be different</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">var</strong> fmt1 = <strong class="jxr_keyword">new</strong> StringFormat(<span class="jxr_string">"Hello {0}"</span>);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">var</strong> fmt2 = <strong class="jxr_keyword">new</strong> StringFormat(<span class="jxr_string">"Hello {0}"</span>);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertNotSame(fmt1, fmt2);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertEquals(fmt1, fmt2); <em class="jxr_comment">// But they should be equal</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	}
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@Test <strong class="jxr_keyword">void</strong> a07_equalsAndHashCode() {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">var</strong> fmt1 = StringFormat.of(<span class="jxr_string">"Hello {0}"</span>);
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> fmt2 = StringFormat.of(<span class="jxr_string">"Hello {0}"</span>);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> fmt3 = StringFormat.of(<span class="jxr_string">"Hello %s"</span>);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertEquals(fmt1, fmt2);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertNotEquals(fmt1, fmt3);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		assertEquals(fmt1.hashCode(), fmt2.hashCode());
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	@Test <strong class="jxr_keyword">void</strong> a08_toString() {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		assertEquals(<span class="jxr_string">"Hello {0}"</span>, fs(<span class="jxr_string">"Hello {0}"</span>).toString());
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@Test <strong class="jxr_keyword">void</strong> a09_toPattern() {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<em class="jxr_comment">// Literal tokens</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertEquals(<span class="jxr_string">"[L:Hello ]"</span>, fs(<span class="jxr_string">"Hello "</span>).toPattern());
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertEquals(<span class="jxr_string">"[L:a ][L:{0}][L: b]"</span>, fs(<span class="jxr_string">"a '{0}' b"</span>).toPattern());  <em class="jxr_comment">// Single quotes don't escape MessageFormat</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<em class="jxr_comment">// MessageFormat tokens - simple (content == null) - Line 228: content == null branch</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertEquals(<span class="jxr_string">"[L:Hello ][M:s0]"</span>, fs(<span class="jxr_string">"Hello {0}"</span>).toPattern());
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		assertEquals(<span class="jxr_string">"[L:Hello ][M:s0][L: ][M:s1]"</span>, fs(<span class="jxr_string">"Hello {0} {1}"</span>).toPattern());
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<em class="jxr_comment">// MessageFormat tokens - complex (content != null) - Line 228: content != null branch</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertEquals(<span class="jxr_string">"[L:Price: ][M:o0:{0,number,currency}]"</span>, fs(<span class="jxr_string">"Price: {0,number,currency}"</span>).toPattern());
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertEquals(<span class="jxr_string">"[L:Count: ][M:o0:{0,number,integer}]"</span>, fs(<span class="jxr_string">"Count: {0,number,integer}"</span>).toPattern());
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		assertEquals(<span class="jxr_string">"[L:Date: ][M:o0:{0,date,short}]"</span>, fs(<span class="jxr_string">"Date: {0,date,short}"</span>).toPattern());
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<em class="jxr_comment">// StringFormat tokens - Line 406: StringFormatToken.toString()</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertEquals(<span class="jxr_string">"[L:Hello ][S:s0:%s]"</span>, fs(<span class="jxr_string">"Hello %s"</span>).toPattern());  <em class="jxr_comment">// Simple format: 's'</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertEquals(<span class="jxr_string">"[L:Number: ][S:d0:%d]"</span>, fs(<span class="jxr_string">"Number: %d"</span>).toPattern());  <em class="jxr_comment">// Simple format: 'd'</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertEquals(<span class="jxr_string">"[L:Hex: ][S:x0:%x]"</span>, fs(<span class="jxr_string">"Hex: %x"</span>).toPattern());  <em class="jxr_comment">// Simple format: 'x'</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertEquals(<span class="jxr_string">"[L:Float: ][S:z0:%.2f]"</span>, fs(<span class="jxr_string">"Float: %.2f"</span>).toPattern());  <em class="jxr_comment">// Complex format: 'z' (other)</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		assertEquals(<span class="jxr_string">"[L:ID: ][S:z0:%05d]"</span>, fs(<span class="jxr_string">"ID: %05d"</span>).toPattern());  <em class="jxr_comment">// Complex format: 'z' (other)</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<em class="jxr_comment">// Mixed formats</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertEquals(<span class="jxr_string">"[L:Hello ][M:s0][L:, you have ][S:d1:%d][L: items]"</span>, fs(<span class="jxr_string">"Hello {0}, you have %d items"</span>).toPattern());
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(<span class="jxr_string">"[L:Price: ][M:o0:{0,number,currency}][L: and ][S:s1:%s]"</span>, fs(<span class="jxr_string">"Price: {0,number,currency} and %s"</span>).toPattern());
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<em class="jxr_comment">// Time conversions (2-character) - Line 529: 't' or 'T' handling</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		assertEquals(<span class="jxr_string">"[L:Month: ][S:z0:%tm]"</span>, fs(<span class="jxr_string">"Month: %tm"</span>).toPattern());  <em class="jxr_comment">// %tm is 2-character time conversion</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertEquals(<span class="jxr_string">"[L:Year: ][S:z0:%tY]"</span>, fs(<span class="jxr_string">"Year: %tY"</span>).toPattern());  <em class="jxr_comment">// %tY is 2-character time conversion</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertEquals(<span class="jxr_string">"[L:Date: ][S:z0:%TD]"</span>, fs(<span class="jxr_string">"Date: %TD"</span>).toPattern());  <em class="jxr_comment">// %TD is 2-character time conversion</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	@Test <strong class="jxr_keyword">void</strong> a10_veryLongPattern() {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> pattern = <span class="jxr_string">"Start: "</span> + IntStream.range(0, 10).mapToObj(i -&gt; <span class="jxr_string">"{"</span> + i + <span class="jxr_string">"}"</span>).collect(joining(<span class="jxr_string">" "</span>)) + <span class="jxr_string">" "</span>;
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> args = IntStream.range(0, 10).boxed().toArray();
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertMessageFormat(pattern, args);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	@Test <strong class="jxr_keyword">void</strong> a11_parseIndexErrors() {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs(<span class="jxr_string">"Hello {abc}"</span>));
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	@Test <strong class="jxr_keyword">void</strong> a12_localeHandling() {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<em class="jxr_comment">// Lines 259-260: Test locale null checks and default locale detection in StringFormatToken</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<em class="jxr_comment">// Line 259: var l = locale == null ? Locale.getDefault() : locale;</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<em class="jxr_comment">// Line 260: var dl = locale == null || locale.equals(Locale.getDefault());</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<em class="jxr_comment">// Test with null locale (covers locale == null on both lines)</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertStringFormat(<span class="jxr_string">"Hello %s"</span>, (Locale)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"John"</span>);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		assertStringFormat(<span class="jxr_string">"Number: %d"</span>, (Locale)<strong class="jxr_keyword">null</strong>, 42);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertStringFormat(<span class="jxr_string">"Float: %.2f"</span>, (Locale)<strong class="jxr_keyword">null</strong>, 3.14);  <em class="jxr_comment">// Use .2f for consistent formatting</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<em class="jxr_comment">// Test with default locale (covers locale.equals(Locale.getDefault()) on line 260)</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertStringFormat(<span class="jxr_string">"Hello %s"</span>, Locale.getDefault(), <span class="jxr_string">"John"</span>);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		assertStringFormat(<span class="jxr_string">"Number: %d"</span>, Locale.getDefault(), 42);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertStringFormat(<span class="jxr_string">"Float: %.2f"</span>, Locale.getDefault(), 3.14);  <em class="jxr_comment">// Use .2f for consistent formatting</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<em class="jxr_comment">// Test with non-default locale (covers else branch on line 259 and false case on line 260)</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertStringFormat(<span class="jxr_string">"Hello %s"</span>, Locale.FRANCE, <span class="jxr_string">"John"</span>);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertStringFormat(<span class="jxr_string">"Number: %d"</span>, Locale.GERMANY, 42);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertStringFormat(<span class="jxr_string">"Float: %.2f"</span>, Locale.JAPAN, 3.14);  <em class="jxr_comment">// Use .2f for consistent formatting</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	}
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
