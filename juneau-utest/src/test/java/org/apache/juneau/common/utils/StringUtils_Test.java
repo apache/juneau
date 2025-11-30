@@ -27,6 +27,8 @@ import static org.apache.juneau.common.utils.Utils.eqic;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.*;
+import java.util.concurrent.atomic.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -253,6 +255,111 @@ class StringUtils_Test extends TestBase {
 		s = String.valueOf("2147483640x");
 		assertFalse(isNumeric(s));
 		assertThrows(NumberFormatException.class, () -> parseNumber("2147483640x", Long.class));
+	}
+
+	//====================================================================================================
+	// parseNumber - AtomicInteger and AtomicLong
+	//====================================================================================================
+	@Test
+	void a02a_parseNumber_atomicTypes() {
+		// AtomicInteger
+		var ai1 = parseNumber("123", AtomicInteger.class);
+		assertTrue(ai1 instanceof AtomicInteger);
+		assertEquals(123, ((AtomicInteger)ai1).get());
+
+		var ai2 = parseNumber("-456", AtomicInteger.class);
+		assertTrue(ai2 instanceof AtomicInteger);
+		assertEquals(-456, ((AtomicInteger)ai2).get());
+
+		var ai3 = parseNumber("0x10", AtomicInteger.class);
+		assertTrue(ai3 instanceof AtomicInteger);
+		assertEquals(16, ((AtomicInteger)ai3).get());
+
+		// AtomicLong
+		var al1 = parseNumber("123", AtomicLong.class);
+		assertTrue(al1 instanceof AtomicLong);
+		assertEquals(123L, ((AtomicLong)al1).get());
+
+		var al2 = parseNumber("-456", AtomicLong.class);
+		assertTrue(al2 instanceof AtomicLong);
+		assertEquals(-456L, ((AtomicLong)al2).get());
+
+		var al3 = parseNumber("9223372036854775807", AtomicLong.class);
+		assertTrue(al3 instanceof AtomicLong);
+		assertEquals(9223372036854775807L, ((AtomicLong)al3).get());
+
+		var al4 = parseNumber("0x10", AtomicLong.class);
+		assertTrue(al4 instanceof AtomicLong);
+		assertEquals(16L, ((AtomicLong)al4).get());
+	}
+
+	//====================================================================================================
+	// parseNumber - Numbers with underscores (Java 7+ numeric literals)
+	//====================================================================================================
+	@Test
+	void a02b_parseNumber_withUnderscores() {
+		// Integer with underscores
+		assertEquals(1000000, parseNumber("1_000_000", Integer.class));
+		assertEquals(1234567, parseNumber("1_234_567", Integer.class));
+		assertEquals(-1000000, parseNumber("-1_000_000", Integer.class));
+
+		// Long with underscores
+		assertEquals(1000000L, parseNumber("1_000_000", Long.class));
+		assertEquals(9223372036854775807L, parseNumber("9_223_372_036_854_775_807", Long.class));
+		assertEquals(-9223372036854775808L, parseNumber("-9_223_372_036_854_775_808", Long.class));
+
+		// Short with underscores
+		assertEquals((short)32767, parseNumber("32_767", Short.class));
+		assertEquals((short)-32768, parseNumber("-32_768", Short.class));
+
+		// Byte with underscores
+		assertEquals((byte)127, parseNumber("1_27", Byte.class));
+		assertEquals((byte)-128, parseNumber("-1_28", Byte.class));
+
+		// Float with underscores
+		assertEquals(1000.5f, parseNumber("1_000.5", Float.class));
+		assertEquals(1234567.89f, parseNumber("1_234_567.89", Float.class));
+
+		// Double with underscores
+		assertEquals(1000.5, parseNumber("1_000.5", Double.class));
+		assertEquals(1234567.89, parseNumber("1_234_567.89", Double.class));
+
+		// BigInteger with underscores
+		var bi1 = parseNumber("1_000_000_000_000_000_000_000", BigInteger.class);
+		assertTrue(bi1 instanceof BigInteger);
+		assertEquals(new BigInteger("1000000000000000000000"), bi1);
+
+		var bi2 = parseNumber("-9_223_372_036_854_775_809", BigInteger.class);
+		assertTrue(bi2 instanceof BigInteger);
+		assertEquals(new BigInteger("-9223372036854775809"), bi2);
+
+		// BigDecimal with underscores
+		var bd1 = parseNumber("1_234_567.89", BigDecimal.class);
+		assertTrue(bd1 instanceof BigDecimal);
+		assertEquals(new BigDecimal("1234567.89"), bd1);
+
+		var bd2 = parseNumber("-1_000_000.123_456", BigDecimal.class);
+		assertTrue(bd2 instanceof BigDecimal);
+		assertEquals(new BigDecimal("-1000000.123456"), bd2);
+
+		// AtomicInteger with underscores
+		var ai1 = parseNumber("1_000_000", AtomicInteger.class);
+		assertTrue(ai1 instanceof AtomicInteger);
+		assertEquals(1000000, ((AtomicInteger)ai1).get());
+
+		// AtomicLong with underscores
+		var al1 = parseNumber("9_223_372_036_854_775_807", AtomicLong.class);
+		assertTrue(al1 instanceof AtomicLong);
+		assertEquals(9223372036854775807L, ((AtomicLong)al1).get());
+
+		// Hexadecimal with underscores (should work with decode methods)
+		assertEquals(0x12345678, parseNumber("0x12_34_56_78", Integer.class));
+		assertEquals(0x1234567890ABCDEFL, parseNumber("0x12_34_56_78_90_AB_CD_EF", Long.class));
+
+		// Auto-detect with underscores
+		assertEquals(1000000, parseNumber("1_000_000", null));
+		assertEquals(1000000000, parseNumber("1_000_000_000", null));  // 1 billion (fits in Integer, so returns Integer)
+		assertEquals(1000.5f, parseNumber("1_000.5", null));  // Fits in Float, so returns Float
 	}
 
 	//====================================================================================================
@@ -916,6 +1023,80 @@ class StringUtils_Test extends TestBase {
 		assertEquals(10 * w, getDuration("10 W"));
 		assertEquals(10 * w, getDuration("  10  W  "));
 	}
+
+	//====================================================================================================
+	// getDuration(String) - Enhanced formats
+	//====================================================================================================
+	@Test
+	void a30a_getDuration_enhanced() {
+		long s = 1000, m = s * 60, h = m * 60, d = h * 24, w = d * 7, mo = d * 30, y = d * 365;
+
+		// Milliseconds
+		assertEquals(100, getDuration("100ms"));
+		assertEquals(100, getDuration("100 millis"));
+		assertEquals(100, getDuration("100 milliseconds"));
+
+		// Decimal values
+		assertEquals((long)(1.5 * h), getDuration("1.5h"));
+		assertEquals((long)(0.5 * m), getDuration("0.5m"));
+		assertEquals((long)(2.5 * s), getDuration("2.5s"));
+		assertEquals((long)(1.25 * d), getDuration("1.25d"));
+
+		// Combined formats
+		assertEquals(1 * h + 30 * m, getDuration("1h30m"));
+		assertEquals(1 * h + 30 * m, getDuration("1h 30m"));
+		assertEquals(2 * d + 3 * h + 15 * m, getDuration("2d3h15m"));
+		assertEquals(1 * w + 2 * d + 3 * h, getDuration("1w2d3h"));
+
+		// Months
+		assertEquals(1 * mo, getDuration("1mo"));
+		assertEquals(1 * mo, getDuration("1 month"));
+		assertEquals(2 * mo, getDuration("2 months"));
+		assertEquals(6 * mo, getDuration("6mo"));
+
+		// Years
+		assertEquals(1 * y, getDuration("1y"));
+		assertEquals(1 * y, getDuration("1yr"));
+		assertEquals(1 * y, getDuration("1 year"));
+		assertEquals(2 * y, getDuration("2 years"));
+		assertEquals(10 * y, getDuration("10y"));
+
+		// Combined with months and years
+		assertEquals(1 * y + 6 * mo, getDuration("1y6mo"));
+		assertEquals(2 * y + 3 * mo + 5 * d, getDuration("2y3mo5d"));
+	}
+
+	//====================================================================================================
+	// getDuration(String) - ISO 8601 format (disabled - feature reverted)
+	//====================================================================================================
+	// @Test
+	// void a30b_getDuration_iso8601() {
+	// 	long s = 1000, m = s * 60, h = m * 60, d = h * 24, w = d * 7, mo = d * 30, y = d * 365;
+	//
+	// 	// ISO 8601 time components
+	// 	assertEquals(1 * h, getDuration("PT1H"));
+	// 	assertEquals(30 * m, getDuration("PT30M"));
+	// 	assertEquals(45 * s, getDuration("PT45S"));
+	// 	assertEquals(1 * h + 30 * m, getDuration("PT1H30M"));
+	// 	assertEquals(1 * h + 30 * m + 45 * s, getDuration("PT1H30M45S"));
+	// 	assertEquals(2 * h + 15 * m + 30 * s, getDuration("PT2H15M30S"));
+	//
+	// 	// ISO 8601 date components
+	// 	assertEquals(1 * d, getDuration("P1D"));
+	// 	assertEquals(7 * d, getDuration("P7D"));
+	// 	assertEquals(1 * w, getDuration("P1W"));
+	// 	assertEquals(1 * mo, getDuration("P1M"));
+	// 	assertEquals(1 * y, getDuration("P1Y"));
+	//
+	// 	// ISO 8601 combined date and time
+	// 	assertEquals(1 * d + 2 * h + 30 * m, getDuration("P1DT2H30M"));
+	// 	assertEquals(1 * y + 2 * mo + 3 * d + 4 * h + 5 * m + 6 * s, getDuration("P1Y2M3DT4H5M6S"));
+	// 	assertEquals(2 * w + 1 * h, getDuration("P2WT1H"));
+	//
+	// 	// Case insensitive
+	// 	assertEquals(1 * h, getDuration("pt1h"));
+	// 	assertEquals(1 * d, getDuration("p1d"));
+	// }
 
 	//====================================================================================================
 	// getDuration(String)
