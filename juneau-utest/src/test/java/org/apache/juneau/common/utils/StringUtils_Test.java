@@ -20,7 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.compare;
-import static org.apache.juneau.common.utils.StringUtils.contains;
+import static org.apache.juneau.common.utils.StringUtils.containsAny;
 import static org.apache.juneau.common.utils.StringUtils.eqic;
 import static org.apache.juneau.common.utils.StringUtils.reverse;
 import static org.apache.juneau.common.utils.Utils.eqic;
@@ -3235,11 +3235,11 @@ class StringUtils_Test extends TestBase {
 		assertTrue(contains("test", "te"));
 		assertTrue(contains("test", "st"));
 		assertTrue(contains("test", "test"));
-		assertTrue(contains("test", "te", "xx"));
+		assertTrue(containsAny("test", "te", "xx"));
 		assertFalse(contains("test", "xx"));
-		assertFalse(contains("test", "xx", "yy"));
+		assertFalse(containsAny("test", "xx", "yy"));
 		assertFalse(contains(null, "test"));
-		assertFalse(contains("test", (String[])null));
+		assertFalse(containsAny("test", (String[])null));
 	}
 
 	@Test

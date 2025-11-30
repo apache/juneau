@@ -394,7 +394,7 @@ public class StringUtils {
 	 * @param values The substrings to check for.
 	 * @return <jk>true</jk> if the string contains any of the specified substrings.
 	 */
-	public static boolean contains(String s, String...values) {
+	public static boolean containsAny(String s, String...values) {
 		if (s == null || values == null || values.length == 0)
 			return false;
 		for (var v : values) {
@@ -6869,7 +6869,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the string does not contain any of the values.
 	 */
 	public static boolean notContains(String s, String...values) {
-		return ! contains(s, values);
+		return ! containsAny(s, values);
 	}
 
 	/**
