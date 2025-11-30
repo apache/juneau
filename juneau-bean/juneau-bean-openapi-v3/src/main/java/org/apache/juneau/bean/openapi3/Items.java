@@ -19,7 +19,7 @@ package org.apache.juneau.bean.openapi3;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.containsAny;
+import static org.apache.juneau.common.utils.StringUtils.contains;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
@@ -434,7 +434,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setCollectionFormat(String value) {
-		if (isStrict() && ! containsAny(value, VALID_COLLECTION_FORMATS))
+		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
 			throw rex("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values=[{1}]", value, toCdl(VALID_COLLECTION_FORMATS));
 		collectionFormat = value;
 		return this;
@@ -706,7 +706,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setType(String value) {
-		if (isStrict() && ! containsAny(value, VALID_TYPES))
+		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw illegalArg("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5Serializer.DEFAULT.toString(VALID_TYPES));
 		type = value;
 		return this;

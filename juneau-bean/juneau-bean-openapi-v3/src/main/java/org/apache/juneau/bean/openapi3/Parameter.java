@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.containsAny;
+import static org.apache.juneau.common.utils.StringUtils.contains;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
@@ -357,7 +357,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setIn(String value) {
-		if (isStrict() && ! containsAny(value, VALID_IN))
+		if (isStrict() && ! contains(value, VALID_IN))
 			throw rex("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_IN));
 		this.in = value;
 		return this;
@@ -403,7 +403,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setStyle(String value) {
-		if (isStrict() && ! containsAny(value, VALID_STYLES))
+		if (isStrict() && ! contains(value, VALID_STYLES))
 			throw rex("Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_STYLES));
 		this.style = value;
 		return this;

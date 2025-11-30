@@ -388,39 +388,37 @@ public class StringUtils {
 	}
 
 	/**
-	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 * Checks if a string contains any of the specified substrings.
+	 *
+	 * <p>
+	 * This is a null-safe operation that returns <jk>false</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>None of the specified substrings are found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	containsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// true (contains "Hello")</jc>
+	 * 	containsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// false</jc>
+	 * 	containsAny(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// false</jc>
+	 * 	containsAny(<js>"Hello"</js>);                                          <jc>// false (no values to check)</jc>
+	 * </p>
 	 *
 	 * @param s The string to check.
 	 * @param values The substrings to check for.
 	 * @return <jk>true</jk> if the string contains any of the specified substrings.
+	 * @see #contains(String, CharSequence)
+	 * @see #contains(String, char...)
+	 * @see #notContains(String, String...)
 	 */
-	public static boolean containsAny(String s, String...values) {
+	public static boolean contains(String s, String...values) {
 		if (s == null || values == null || values.length == 0)
 			return false;
 		for (var v : values) {
 			if (s.contains(v))
 				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified string contains any of the specified characters.
-	 *
-	 * @param s The string to test.
-	 * @param chars The characters to look for.
-	 * @return
-	 * 	<jk>true</jk> if the specified string contains any of the specified characters.
-	 * 	<br><jk>false</jk> if the string is <jk>null</jk>.
-	 */
-	public static boolean containsAny(String s, char...chars) {
-		if (s == null)
-			return false;
-		for (int i = 0, j = s.length(); i < j; i++) {
-			var c = s.charAt(i);
-			for (var c2 : chars)
-				if (c == c2)
-					return true;
 		}
 		return false;
 	}
@@ -2909,18 +2907,29 @@ public class StringUtils {
 	}
 
 	/**
-	 * Compares two strings for equality, ignoring case.
+	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
+	 *
+	 * <p>
+	 * This method handles <jk>null</jk> values gracefully:
+	 * <ul>
+	 *   <li>Both <jk>null</jk> → returns <jk>true</jk> (same reference check)</li>
+	 *   <li>One <jk>null</jk> → returns <jk>false</jk></li>
+	 *   <li>Neither <jk>null</jk> → compares strings ignoring case</li>
+	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"hello"</js>);     <jc>// true</jc>
 	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"WORLD"</js>);     <jc>// false</jc>
 	 * 	equalsIgnoreCase(<jk>null</jk>, <jk>null</jk>);           <jc>// true</jc>
+	 * 	equalsIgnoreCase(<js>"Hello"</js>, <jk>null</jk>);        <jc>// false</jc>
 	 * </p>
 	 *
 	 * @param str1 The first string.
 	 * @param str2 The second string.
 	 * @return <jk>true</jk> if the strings are equal ignoring case, <jk>false</jk> otherwise.
+	 * @see #equalsIgnoreCase(Object, Object)
+	 * @see Utils#eqic(String, String)
 	 */
 	public static boolean equalsIgnoreCase(String str1, String str2) {
 		if (str1 == str2)
@@ -4961,7 +4970,7 @@ public class StringUtils {
 		if (isEmpty(s))
 			return a();
 
-		if (! containsAny(s, ' ', '\t', '\'', '"'))
+		if (! contains(s, ' ', '\t', '\'', '"'))
 			return a(s);
 
 		// S1: Looking for start of token.
@@ -6768,20 +6777,30 @@ public class StringUtils {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Null-safe convenience method for {@link String#toLowerCase()}.
+	 *
+	 * <p>
 	 * Converts the string to lowercase if not null.
 	 *
 	 * @param s The string to convert.
 	 * @return The lowercase string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @see #upperCase(String)
+	 * @see Utils#lc(String)
 	 */
 	public static String lowerCase(String s) {
 		return s == null ? null : s.toLowerCase();
 	}
 
 	/**
+	 * Null-safe convenience method for {@link String#toUpperCase()}.
+	 *
+	 * <p>
 	 * Converts the string to uppercase if not null.
 	 *
 	 * @param s The string to convert.
 	 * @return The uppercase string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @see #lowerCase(String)
+	 * @see Utils#uc(String)
 	 */
 	public static String upperCase(String s) {
 		return s == null ? null : s.toUpperCase();
@@ -6790,11 +6809,29 @@ public class StringUtils {
 	/**
 	 * Tests two objects for case-insensitive string equality.
 	 *
-	 * <p>Converts both objects to strings using {@link Object#toString()} before comparison.
+	 * <p>
+	 * Converts both objects to strings using {@link Object#toString()} before comparison.
+	 * This method handles <jk>null</jk> values gracefully:
+	 * <ul>
+	 *   <li>Both <jk>null</jk> → returns <jk>true</jk></li>
+	 *   <li>One <jk>null</jk> → returns <jk>false</jk></li>
+	 *   <li>Neither <jk>null</jk> → compares string representations ignoring case</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"HELLO"</js>);     <jc>// true</jc>
+	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"World"</js>);     <jc>// false</jc>
+	 * 	equalsIgnoreCase(<jk>null</jk>, <jk>null</jk>);            <jc>// true</jc>
+	 * 	equalsIgnoreCase(<js>"Hello"</js>, <jk>null</jk>);         <jc>// false</jc>
+	 * 	equalsIgnoreCase(123, <js>"123"</js>);                    <jc>// true (converts 123 to "123")</jc>
+	 * </p>
 	 *
 	 * @param a Object 1.
 	 * @param b Object 2.
 	 * @return <jk>true</jk> if both objects are equal ignoring case.
+	 * @see #equalsIgnoreCase(String, String)
+	 * @see Utils#eqic(Object, Object)
 	 */
 	public static boolean equalsIgnoreCase(Object a, Object b) {
 		if (a == null && b == null)
@@ -6815,6 +6852,35 @@ public class StringUtils {
 	public static String articlized(String subject) {
 		var vowels = AsciiSet.of("AEIOUaeiou");
 		return (vowels.contains(subject.charAt(0)) ? "an " : "a ") + subject;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the string does not contain any of the specified substrings.
+	 *
+	 * <p>
+	 * This is the inverse of {@link #contains(String, String...)}.
+	 * Returns <jk>true</jk> if:
+	 * <ul>
+	 *   <li>The string is <jk>null</jk></li>
+	 *   <li>The values array is <jk>null</jk> or empty</li>
+	 *   <li>None of the specified substrings are found in the string</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	notContains(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// true</jc>
+	 * 	notContains(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);  <jc>// false (contains "Hello")</jc>
+	 * 	notContains(<jk>null</jk>, <js>"Hello"</js>);                            <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The string to search.
+	 * @param values The values to search for.
+	 * @return <jk>true</jk> if the string does not contain any of the values.
+	 * @see #contains(String, String...)
+	 * @see #notContains(String, char...)
+	 */
+	public static boolean notContains(String s, String...values) {
+		return ! contains(s, values);
 	}
 
 	/**
@@ -6859,17 +6925,6 @@ public class StringUtils {
 	 */
 	public static String join(Collection<?> values) {
 		return joine(toList(values), ',');
-	}
-
-	/**
-	 * Null-safe not-contains check for multiple string values.
-	 *
-	 * @param s The string to search.
-	 * @param values The values to search for.
-	 * @return <jk>true</jk> if the string does not contain any of the values.
-	 */
-	public static boolean notContains(String s, String...values) {
-		return ! containsAny(s, values);
 	}
 
 	/**
