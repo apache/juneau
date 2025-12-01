@@ -40,7 +40,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 
 - [ ] TODO-19 ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).
 - [ ] TODO-21 Thrown NotFound causes - javax.servlet.ServletException: Invalid method response: 200
-- [ ] TODO-88 Eliminate need for AssertionArgs in BctAssertions by allowing DEFAULT_CONVERTER to be overridden and resettable.
+- [x] TODO-88 Eliminate need for AssertionArgs in BctAssertions by allowing DEFAULT_CONVERTER to be overridden and resettable. ✅ COMPLETED - Implemented thread-local converter with setConverter()/resetConverter() methods, removed AssertionArgs class entirely, replaced with Supplier<String> for messages. All tests updated and passing.
 - [ ] TODO-89 Add ClassInfoTyped
 
 ## HTTP Response/Exception Improvements

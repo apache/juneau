@@ -33,15 +33,14 @@
  *
  * <h5 class='section'>Core Classes:</h5>
  * <ul>
- *    <li><b>{@link org.apache.juneau.junit.BctAssertions}:</b> Main assertion methods for BCT</li>
- *    <li><b>{@link org.apache.juneau.junit.BeanConverter}:</b> Interface for object conversion and property access</li>
- *    <li><b>{@link org.apache.juneau.junit.BasicBeanConverter}:</b> Default implementation with extensible type handlers</li>
- *    <li><b>{@link org.apache.juneau.junit.AssertionArgs}:</b> Configuration for assertions with custom messages and converters</li>
+ *    <li><b>{@link org.apache.juneau.junit.bct.BctAssertions}:</b> Main assertion methods for BCT</li>
+ *    <li><b>{@link org.apache.juneau.junit.bct.BeanConverter}:</b> Interface for object conversion and property access</li>
+ *    <li><b>{@link org.apache.juneau.junit.bct.BasicBeanConverter}:</b> Default implementation with extensible type handlers</li>
  * </ul>
  *
  * <h5 class='section'>Quick Start:</h5>
  * <p class='bjava'>
- *    <jk>import static</jk> com.sfdc.junit.bct.BctAssertions.*;
+ *    <jk>import static</jk> org.apache.juneau.junit.bct.BctAssertions.*;
  *
  *    <ja>@Test</ja>
  *    <jk>void</jk> testUser() {
@@ -57,7 +56,7 @@
  *
  * <h5 class='section'>Assertion Method Examples:</h5>
  *
- * <h6 class='figure'>1. {@link org.apache.juneau.junit.BctAssertions#assertBean(Object,String,String) assertBean()}</h6>
+ * <h6 class='figure'>1. {@link org.apache.juneau.junit.bct.BctAssertions#assertBean(Object,String,String) assertBean()}</h6>
  * <p>Tests object properties with support for nested syntax and collection iteration.</p>
  * <p class='bjava'>
  *    User <jv>user</jv> = <jk>new</jk> User(<js>"Bob"</js>, 30);
@@ -72,7 +71,7 @@
  *    <jsm>assertBean</jsm>(<jv>user</jv>, <js>"address{street,city}"</js>, <js>"{456 Oak Ave,Denver}"</js>);
  * </p>
  *
- * <h6 class='figure'>2. {@link org.apache.juneau.junit.BctAssertions#assertBeans(Object,String,String...) assertBeans()}</h6>
+ * <h6 class='figure'>2. {@link org.apache.juneau.junit.bct.BctAssertions#assertBeans(Object,String,String...) assertBeans()}</h6>
  * <p>Tests collections of objects by extracting and comparing specific fields.</p>
  * <p class='bjava'>
  *    List&lt;User&gt; <jv>users</jv> = Arrays.<jsm>asList</jsm>(
@@ -88,7 +87,7 @@
  *    <jsm>assertBeans</jsm>(<jv>users</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>, <js>"Bob,30"</js>, <js>"Carol,35"</js>);
  * </p>
  *
- * <h6 class='figure'>3. {@link org.apache.juneau.junit.BctAssertions#assertMapped(Object,java.util.function.BiFunction,String,String) assertMapped()}</h6>
+ * <h6 class='figure'>3. {@link org.apache.juneau.junit.bct.BctAssertions#assertMapped(Object,java.util.function.BiFunction,String,String) assertMapped()}</h6>
  * <p>Tests custom property access using BiFunction for non-standard objects.</p>
  * <p class='bjava'>
  *    Map&lt;String,Object&gt; <jv>data</jv> = <jk>new</jk> HashMap&lt;&gt;();
@@ -99,7 +98,7 @@
  *    <jsm>assertMapped</jsm>(<jv>data</jv>, (obj, key) -&gt; obj.get(key), <js>"name,score"</js>, <js>"Alice,95"</js>);
  * </p>
  *
- * <h6 class='figure'>4. {@link org.apache.juneau.junit.BctAssertions#assertList(Object,Object...) assertList()}</h6>
+ * <h6 class='figure'>4. {@link org.apache.juneau.junit.bct.BctAssertions#assertList(Object,Object...) assertList()}</h6>
  * <p>Tests list/collection elements with varargs for expected values.</p>
  * <p class='bjava'>
  *    List&lt;String&gt; <jv>names</jv> = Arrays.<jsm>asList</jsm>(<js>"Alice"</js>, <js>"Bob"</js>, <js>"Carol"</js>);
@@ -110,7 +109,7 @@
  *    <jsm>assertList</jsm>(<jv>colors</jv>, <js>"red"</js>, <js>"green"</js>, <js>"blue"</js>);
  * </p>
  *
- * <h6 class='figure'>5. {@link org.apache.juneau.junit.BctAssertions#assertContains(String,Object) assertContains()}</h6>
+ * <h6 class='figure'>5. {@link org.apache.juneau.junit.bct.BctAssertions#assertContains(String,Object) assertContains()}</h6>
  * <p>Tests that a string appears somewhere within the stringified object.</p>
  * <p class='bjava'>
  *    User <jv>user</jv> = <jk>new</jk> User(<js>"Alice Smith"</js>, 25);
@@ -121,7 +120,7 @@
  *    <jsm>assertContains</jsm>(<js>"banana"</js>, <jv>items</jv>);
  * </p>
  *
- * <h6 class='figure'>6. {@link org.apache.juneau.junit.BctAssertions#assertContainsAll(Object,String...) assertContainsAll()}</h6>
+ * <h6 class='figure'>6. {@link org.apache.juneau.junit.bct.BctAssertions#assertContainsAll(Object,String...) assertContainsAll()}</h6>
  * <p>Tests that all specified strings appear within the stringified object.</p>
  * <p class='bjava'>
  *    User <jv>user</jv> = <jk>new</jk> User(<js>"Alice Smith"</js>, 25);
@@ -132,7 +131,7 @@
  *    <jsm>assertContainsAll</jsm>(<jv>user</jv>, <js>"alice"</js>, <js>"example.com"</js>);
  * </p>
  *
- * <h6 class='figure'>7. {@link org.apache.juneau.junit.BctAssertions#assertEmpty(Object) assertEmpty()}</h6>
+ * <h6 class='figure'>7. {@link org.apache.juneau.junit.bct.BctAssertions#assertEmpty(Object) assertEmpty()}</h6>
  * <p>Tests that collections, arrays, maps, or strings are empty.</p>
  * <p class='bjava'>
  *    List&lt;String&gt; <jv>emptyList</jv> = <jk>new</jk> ArrayList&lt;&gt;();
@@ -147,7 +146,7 @@
  *    <jsm>assertEmpty</jsm>(<jv>emptyString</jv>);
  * </p>
  *
- * <h6 class='figure'>8. {@link org.apache.juneau.junit.BctAssertions#assertNotEmpty(Object) assertNotEmpty()}</h6>
+ * <h6 class='figure'>8. {@link org.apache.juneau.junit.bct.BctAssertions#assertNotEmpty(Object) assertNotEmpty()}</h6>
  * <p>Tests that collections, arrays, maps, or strings are not empty.</p>
  * <p class='bjava'>
  *    List&lt;String&gt; <jv>names</jv> = Arrays.<jsm>asList</jsm>(<js>"Alice"</js>);
@@ -162,7 +161,7 @@
  *    <jsm>assertNotEmpty</jsm>(<jv>message</jv>);
  * </p>
  *
- * <h6 class='figure'>9. {@link org.apache.juneau.junit.BctAssertions#assertSize(int,Object) assertSize()}</h6>
+ * <h6 class='figure'>9. {@link org.apache.juneau.junit.bct.BctAssertions#assertSize(int,Object) assertSize()}</h6>
  * <p>Tests the size/length of collections, arrays, maps, or strings.</p>
  * <p class='bjava'>
  *    List&lt;String&gt; <jv>names</jv> = Arrays.<jsm>asList</jsm>(<js>"Alice"</js>, <js>"Bob"</js>, <js>"Carol"</js>);
@@ -177,7 +176,7 @@
  *    <jsm>assertSize</jsm>(5, <jv>message</jv>);
  * </p>
  *
- * <h6 class='figure'>10. {@link org.apache.juneau.junit.BctAssertions#assertString(String,Object) assertString()}</h6>
+ * <h6 class='figure'>10. {@link org.apache.juneau.junit.bct.BctAssertions#assertString(String,Object) assertString()}</h6>
  * <p>Tests the string representation of an object using the configured converter.</p>
  * <p class='bjava'>
  *    User <jv>user</jv> = <jk>new</jk> User(<js>"Alice"</js>, 25);
@@ -190,7 +189,7 @@
  *    <jsm>assertString</jsm>(<js>"2021-01-01"</js>, <jv>date</jv>);
  * </p>
  *
- * <h6 class='figure'>11. {@link org.apache.juneau.junit.BctAssertions#assertMatchesGlob(String,Object) assertMatchesGlob()}</h6>
+ * <h6 class='figure'>11. {@link org.apache.juneau.junit.bct.BctAssertions#assertMatchesGlob(String,Object) assertMatchesGlob()}</h6>
  * <p>Tests that the stringified object matches a glob-style pattern (* and ? wildcards).</p>
  * <p class='bjava'>
  *    User <jv>user</jv> = <jk>new</jk> User(<js>"Alice Smith"</js>, 25);
@@ -204,22 +203,42 @@
  *    <jsm>assertMatchesGlob</jsm>(<js>"User(name=Alice*, age=25)"</js>, <jv>user</jv>);
  * </p>
  *
- * <h5 class='section'>Custom Configuration with {@link org.apache.juneau.junit.AssertionArgs}:</h5>
- * <p>All assertion methods support custom configuration through {@link org.apache.juneau.junit.AssertionArgs}:</p>
+ * <h5 class='section'>Custom Error Messages:</h5>
+ * <p>All assertion methods support custom error messages via a <code>Supplier&lt;String&gt;</code> parameter:</p>
  * <p class='bjava'>
- *    <jc>// Custom error message</jc>
- *    <jsm>assertBean</jsm>(<jsm>args</jsm>(<js>"User validation failed"</js>), <jv>user</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>);
+ *    <jc>// Simple custom message</jc>
+ *    <jsm>assertBean</jsm>(() -> <js>"User validation failed"</js>, <jv>user</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>);
  *
- *    <jc>// Custom converter configuration</jc>
- *    AssertionArgs <jv>args</jv> = <jsm>args</jsm>()
- *       .setConverter(BasicBeanConverter.<jsm>builder</jsm>().<jsm>defaultSettings</jsm>()
- *          .setSetting(<js>"nullValue"</js>, <js>"&lt;empty&gt;"</js>)
- *          .build());
- *    <jsm>assertBean</jsm>(<jv>args</jv>, <jv>user</jv>, <js>"name,nickname"</js>, <js>"Alice,&lt;empty&gt;"</js>);
+ *    <jc>// Formatted message using Utils.fs() for convenient message suppliers with arguments</jc>
+ *    <jsm>assertBean</jsm>(<jsm>fs</jsm>(<js>"User {0} validation failed"</js>, <js>"Alice"</js>), <jv>user</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>);
  * </p>
  *
- * @see org.apache.juneau.junit.BctAssertions
- * @see org.apache.juneau.junit.BeanConverter
- * @see org.apache.juneau.junit.BasicBeanConverter
+ * <h5 class='section'>Customizing the Default Converter:</h5>
+ * <p>The default bean converter can be customized on a per-thread basis:</p>
+ * <p class='bjava'>
+ *    <jc>// Set custom converter in @BeforeEach method</jc>
+ *    <ja>@BeforeEach</ja>
+ *    <jk>void</jk> <jsm>setUp</jsm>() {
+ *       <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+ *          .defaultSettings()
+ *          .addStringifier(LocalDate.<jk>class</jk>, <jp>date</jp> -> <jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>))
+ *          .build();
+ *       BctAssertions.<jsm>setConverter</jsm>(<jv>converter</jv>);
+ *    }
+ *
+ *    <jc>// All assertions now use the custom converter</jc>
+ *    <jsm>assertBean</jsm>(<jv>user</jv>, <js>"birthDate"</js>, <js>"2023-12-01"</js>);
+ *
+ *    <jc>// Reset in @AfterEach method</jc>
+ *    <ja>@AfterEach</ja>
+ *    <jk>void</jk> <jsm>tearDown</jsm>() {
+ *       BctAssertions.<jsm>resetConverter</jsm>();
+ *    }
+ * </p>
+ *
+ * @see org.apache.juneau.junit.bct.BctAssertions
+ * @see org.apache.juneau.junit.bct.BeanConverter
+ * @see org.apache.juneau.junit.bct.BasicBeanConverter
+ * @see org.apache.juneau.common.utils.Utils#fs(String, Object...)
  */
 package org.apache.juneau.junit.bct;

@@ -39,22 +39,6 @@ import org.opentest4j.*;
 class BctAssertions_Test extends TestBase {
 
 	// ====================================================================================================
-	// AssertionArgs Tests
-	// ====================================================================================================
-
-	@Nested
-	class A_assertionArgs extends TestBase {
-
-		@Test
-		void a01_args() {
-			var args = args();
-			assertNotNull(args);
-			assertEmpty(args.getBeanConverter());
-			assertNull(args.getMessage());
-		}
-	}
-
-	// ====================================================================================================
 	// Bean Property Tests
 	// ====================================================================================================
 
@@ -70,11 +54,10 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void b02_withCustomArgs() {
+		void b02_withCustomMessage() {
 			var person = new TestPerson("Bob", 30);
-			var args = args().setMessage("Custom message");
 
-			assertDoesNotThrow(() -> assertBean(args, person, "name", "Bob"));
+			assertDoesNotThrow(() -> assertBean(() -> "Custom message", person, "name", "Bob"));
 		}
 
 		@Test
@@ -95,9 +78,8 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void b05_customMessage() {
 			var person = new TestPerson("Charlie", 35);
-			var args = args().setMessage("Custom error message");
 
-			var e = assertThrows(AssertionFailedError.class, () -> assertBean(args, person, "name", "Wrong"));
+			var e = assertThrows(AssertionFailedError.class, () -> assertBean(() -> "Custom error message", person, "name", "Wrong"));
 			assertContains("Custom error message", e.getMessage());
 		}
 	}
@@ -117,11 +99,10 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void c02_withCustomArgs() {
+		void c02_withCustomMessage() {
 			var people = l(new TestPerson("Charlie", 35));
-			var args = args().setMessage("Custom beans message");
 
-			assertDoesNotThrow(() -> assertBeans(args, people, "name", "Charlie"));
+			assertDoesNotThrow(() -> assertBeans(() -> "Custom beans message", people, "name", "Charlie"));
 		}
 
 		@Test
@@ -168,12 +149,11 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void d02_withCustomArgs() {
+		void d02_withCustomMessage() {
 			var person = new TestPerson("Henry", 45);
-			var args = args().setMessage("Custom mapped message");
 			BiFunction<TestPerson,String,Object> mapper = (p, prop) -> p.getName();
 
-			assertDoesNotThrow(() -> assertMapped(args, person, mapper, "name", "Henry"));
+			assertDoesNotThrow(() -> assertMapped(() -> "Custom mapped message", person, mapper, "name", "Henry"));
 		}
 
 		@Test
@@ -200,10 +180,8 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void e02_withCustomArgs() {
-			var args = args().setMessage("Custom contains message");
-
-			assertDoesNotThrow(() -> assertContains(args, "Test", "Test String"));
+		void e02_withCustomMessage() {
+			assertDoesNotThrow(() -> assertContains(() -> "Custom contains message", "Test", "Test String"));
 		}
 
 		@Test
@@ -232,10 +210,8 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void f02_withCustomArgs() {
-			var args = args().setMessage("Custom contains all message");
-
-			assertDoesNotThrow(() -> assertContainsAll(args, (Object)"Testing", "Test"));
+		void f02_withCustomMessage() {
+			assertDoesNotThrow(() -> assertContainsAll(() -> "Custom contains all message", (Object)"Testing", "Test"));
 		}
 
 		@Test
@@ -302,10 +278,8 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void g02_withCustomArgs() {
-			var args = args().setMessage("Custom empty message");
-
-			assertDoesNotThrow(() -> assertEmpty(args, l()));
+		void g02_withCustomMessage() {
+			assertDoesNotThrow(() -> assertEmpty(() -> "Custom empty message", l()));
 		}
 
 		@Test
@@ -334,10 +308,8 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void h02_withCustomArgs() {
-			var args = args().setMessage("Custom list message");
-
-			assertDoesNotThrow(() -> assertList(args, l(1, 2), 1, 2));
+		void h02_withCustomMessage() {
+			assertDoesNotThrow(() -> assertList(() -> "Custom list message", l(1, 2), 1, 2));
 		}
 
 		@Test
@@ -354,18 +326,18 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void h05_nullValue() {
-			var e = assertThrows(IllegalArgumentException.class, () -> assertList(null, "test"));
+			Object nullList = null;
+			var e = assertThrows(IllegalArgumentException.class, () -> assertList(nullList, "test"));
 			assertContains("cannot be null", e.getMessage());
 		}
 
 		@Test
 		void h06_predicateValidation() {
 			// Test lines 765-766: Predicate-based element validation
-			var args = args().setMessage("Custom predicate message");
 			var numbers = l(1, 2, 3, 4, 5);
 
 			// Test successful predicate validation
-			assertDoesNotThrow(() -> assertList(args, numbers, (Predicate<Integer>)x -> x == 1,   // First element should equal 1
+			assertDoesNotThrow(() -> assertList(() -> "Custom predicate message", numbers, (Predicate<Integer>)x -> x == 1,   // First element should equal 1
 				(Predicate<Integer>)x -> x > 1,    // Second element should be > 1
 				"3",                                // Third element as string
 				(Predicate<Integer>)x -> x % 2 == 0, // Fourth element should be even
@@ -374,7 +346,7 @@ class BctAssertions_Test extends TestBase {
 
 			// Test failed predicate validation - use single element list to avoid length mismatch
 			var singleNumber = l(1);
-			var e = assertThrows(AssertionFailedError.class, () -> assertList(args, singleNumber, (Predicate<Integer>)x -> x == 99)); // Should fail
+			var e = assertThrows(AssertionFailedError.class, () -> assertList(() -> "Custom predicate message", singleNumber, (Predicate<Integer>)x -> x == 99)); // Should fail
 			assertContains("Element at index 0 did not pass predicate", e.getMessage());
 			assertContains("actual: <1>", e.getMessage());
 		}
@@ -428,9 +400,8 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void h02_withCustomArgs() {
-			var args = args().setMessage("Custom map message");
-			assertDoesNotThrow(() -> assertMap(args, m("key", "value"), "key=value"));
+		void h02_withCustomMessage() {
+			assertDoesNotThrow(() -> assertMap(() -> "Custom map message", m("key", "value"), "key=value"));
 		}
 
 		@Test
@@ -447,23 +418,23 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void h05_nullValue() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertMap(null, "test"));
-			assertContains("Value was null", e.getMessage());
+			Map<?,?> nullMap = null;
+			var e = assertThrows(IllegalArgumentException.class, () -> assertMap(nullMap, "test"));
+			assertContains("cannot be null", e.getMessage());
 		}
 
 		@Test
 		void h06_predicateValidation() {
 			// Test predicate-based map entry validation
-			var args = args().setMessage("Custom predicate message");
 			var map = m("count", 42, "enabled", true);
 
 			// Test successful predicate validation
-			assertDoesNotThrow(() -> assertMap(args, map, (Predicate<Map.Entry<String,Object>>)entry -> entry.getKey().equals("count") && entry.getValue().equals(42),
+			assertDoesNotThrow(() -> assertMap(() -> "Custom predicate message", map, (Predicate<Map.Entry<String,Object>>)entry -> entry.getKey().equals("count") && entry.getValue().equals(42),
 				(Predicate<Map.Entry<String,Object>>)entry -> entry.getKey().equals("enabled") && entry.getValue().equals(true)));
 
 			// Test failed predicate validation
 			var singleEntryMap = m("count", 1);
-			var e = assertThrows(AssertionFailedError.class, () -> assertMap(args, singleEntryMap, (Predicate<Map.Entry<String,Object>>)entry -> entry.getValue().equals(99))); // Should fail
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(() -> "Custom predicate message", singleEntryMap, (Predicate<Map.Entry<String,Object>>)entry -> entry.getValue().equals(99))); // Should fail
 			assertContains("Element at index 0 did not pass predicate", e.getMessage());
 			assertContains("actual: <count=1>", e.getMessage());
 		}
@@ -566,10 +537,8 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void i02_withCustomArgs() {
-			var args = args().setMessage("Custom not empty message");
-
-			assertDoesNotThrow(() -> assertNotEmpty(args, l("content")));
+		void i02_withCustomMessage() {
+			assertDoesNotThrow(() -> assertNotEmpty(() -> "Custom not empty message", l("content")));
 		}
 
 		@Test
@@ -599,10 +568,8 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void j02_withCustomArgs() {
-			var args = args().setMessage("Custom size message");
-
-			assertDoesNotThrow(() -> assertSize(args, 2, l("a", "b")));
+		void j02_withCustomMessage() {
+			assertDoesNotThrow(() -> assertSize(() -> "Custom size message", 2, l("a", "b")));
 		}
 
 		@Test
@@ -631,10 +598,8 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void k02_withCustomArgs() {
-			var args = args().setMessage("Custom string message");
-
-			assertDoesNotThrow(() -> assertString(args, "test", "test"));
+		void k02_withCustomMessage() {
+			assertDoesNotThrow(() -> assertString(() -> "Custom string message", "test", "test"));
 		}
 
 		@Test
@@ -665,10 +630,8 @@ class BctAssertions_Test extends TestBase {
 		}
 
 		@Test
-		void l02_withCustomArgs() {
-			var args = args().setMessage("Custom glob message");
-
-			assertDoesNotThrow(() -> assertMatchesGlob(args, "test*", "testing"));
+		void l02_withCustomMessage() {
+			assertDoesNotThrow(() -> assertMatchesGlob(() -> "Custom glob message", "test*", "testing"));
 		}
 
 		@Test
