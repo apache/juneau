@@ -1510,12 +1510,11 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Progress: 50%", format("Progress: %d%%", 50));
 		assertEquals("Discount: 25% off", format("Discount: %d%% off", 25));
 
-		// Line separator - %n is supported by printf-style formatting
-		var result = format("Line 1%nLine 2");
-		assertTrue(result.contains("Line 1"));
-		assertTrue(result.contains("Line 2"));
-		// %n may or may not be replaced depending on StringFormat implementation
-		// Just verify the result contains both lines
+		// Line separator - %n is supported by printf-style formatting and replaced with line separator
+		// Note: format() returns pattern as-is when args.length == 0, so we need to pass at least one arg
+		// to trigger token processing. However, %n doesn't consume arguments, so we can pass any arg.
+		var lineSep = System.lineSeparator();
+		assertEquals("Line 1" + lineSep + "Line 2", format("Line 1%nLine 2", "dummy"));
 
 		// MessageFormat style
 		assertEquals("Hello John, you are 30 years old", format("Hello {0}, you are {1} years old", "John", 30));
@@ -3188,7 +3187,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(30, cal4.get(Calendar.MINUTE));
 		assertEquals(0, cal4.get(Calendar.SECOND));
 
-		// Should throw for invalid dates
+		// Should throw for invalid dates (DateTimeParseException is thrown by DateUtils, not IllegalArgumentException)
 		assertThrows(Exception.class, () -> parseIsoCalendar("invalid"));
 		assertThrows(Exception.class, () -> parseIsoCalendar("2023-13-25")); // Invalid month
 	}
@@ -3205,7 +3204,7 @@ class StringUtils_Test extends TestBase {
 		var date2 = parseIsoDate("2023-12-25T14:30:00");
 		assertNotNull(date2);
 
-		// Should throw for invalid dates
+		// Should throw for invalid dates (DateTimeParseException is thrown by DateUtils, not IllegalArgumentException)
 		assertThrows(Exception.class, () -> parseIsoDate("invalid"));
 	}
 
@@ -3233,14 +3232,26 @@ class StringUtils_Test extends TestBase {
 		assertEquals(1024L * 1024, parseLongWithSuffix("1M"));
 		assertEquals(1024L * 1024 * 1024, parseLongWithSuffix("1G"));
 		assertEquals(1024L * 1024 * 1024 * 1024, parseLongWithSuffix("1T"));
-		// Note: "P" (petabyte) multiplier may overflow, so we skip testing it
+		// Petabyte multiplier (1024^5 = 1,125,899,906,842,624)
+		// Test small values that fit in long
+		assertEquals(1125899906842624L, parseLongWithSuffix("1P"));  // 1024^5
+		assertEquals(2251799813685248L, parseLongWithSuffix("2P"));  // 2 * 1024^5
+		// Test overflow - values that would exceed Long.MAX_VALUE
+		// Long.MAX_VALUE / (1024^5) = 8191, so "8192P" and above should overflow
+		assertThrows(NumberFormatException.class, () -> parseLongWithSuffix("8192P"));
 
 		// Decimal multipliers (1000-based)
 		assertEquals(1000L, parseLongWithSuffix("1k"));
 		assertEquals(1000L * 1000, parseLongWithSuffix("1m"));
 		assertEquals(1000L * 1000 * 1000, parseLongWithSuffix("1g"));
 		assertEquals(1000L * 1000 * 1000 * 1000, parseLongWithSuffix("1t"));
-		// Note: "1p" (petabyte) multiplier may overflow, so we skip testing it
+		// Petabyte multiplier (1000^5 = 1,000,000,000,000,000)
+		// Test small values that fit in long
+		assertEquals(1000000000000000L, parseLongWithSuffix("1p"));  // 1000^5
+		assertEquals(2000000000000000L, parseLongWithSuffix("2p"));  // 2 * 1000^5
+		// Test overflow - values that would exceed Long.MAX_VALUE
+		// Long.MAX_VALUE / (1000^5) = 9223, so "9224p" and above should overflow
+		assertThrows(NumberFormatException.class, () -> parseLongWithSuffix("9224p"));
 
 		// No suffix
 		assertEquals(123L, parseLongWithSuffix("123"));

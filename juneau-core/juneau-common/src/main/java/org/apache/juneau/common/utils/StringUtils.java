@@ -5279,9 +5279,18 @@ public class StringUtils {
 	public static long parseLongWithSuffix(String s) {
 		assertArgNotNull("s", s);
 		var m = multiplierLong(s);
-		if (m == 1)
+		if (m == 1) {
+			// If multiplier is 1, try to decode the whole string
+			// This will throw NumberFormatException if it contains a suffix character
 			return Long.decode(s);
-		return Long.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR - NPE not possible here.
+		}
+		var baseStr = s.substring(0, s.length() - 1).trim();
+		var base = Long.decode(baseStr);  // NOSONAR - NPE not possible here.
+		try {
+			return Math.multiplyExact(base, m);
+		} catch (ArithmeticException e) {
+			throw new NumberFormatException("Value " + s + " exceeds Long.MAX_VALUE");
+		}
 	}
 
 	/**
@@ -8150,27 +8159,29 @@ public class StringUtils {
 	 * @return The multiplier value (1 if no valid suffix found).
 	 */
 	private static long multiplierLong(String s) {
-		var c = isEmpty(s) ? 'z' : s.charAt(s.length() - 1);
+		if (isEmpty(s))
+			return 1;
+		var c = s.charAt(s.length() - 1);
 		if (c == 'P')
-			return 1024 * 1024 * 1024 * 1024 * 1024l;
+			return 1125899906842624L;  // 1024^5
 		if (c == 'T')
-			return 1024 * 1024 * 1024 * 1024l;
+			return 1099511627776L;  // 1024^4
 		if (c == 'G')
-			return 1024 * 1024 * 1024l;
+			return 1073741824L;  // 1024^3
 		if (c == 'M')
-			return 1024 * 1024l;
+			return 1048576L;  // 1024^2
 		if (c == 'K')
-			return 1024l;
+			return 1024L;
 		if (c == 'p')
-			return 1000 * 1000 * 1000 * 1000 * 1000l;
+			return 1000000000000000L;  // 1000^5
 		if (c == 't')
-			return 1000 * 1000 * 1000 * 1000l;
+			return 1000000000000L;  // 1000^4
 		if (c == 'g')
-			return 1000 * 1000 * 1000l;
+			return 1000000000L;  // 1000^3
 		if (c == 'm')
-			return 1000 * 1000l;
+			return 1000000L;  // 1000^2
 		if (c == 'k')
-			return 1000l;
+			return 1000L;
 		return 1;
 	}
 
