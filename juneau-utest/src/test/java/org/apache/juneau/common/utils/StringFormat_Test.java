@@ -273,6 +273,10 @@ class StringFormat_Test extends TestBase {
 		assertStringFormat("Value: %B", true);
 		assertStringFormat("Char: %C", 'a');
 		assertStringFormat("Float: %F", 3.14);
+		// %n doesn't consume an argument - test sequential index behavior
+		assertStringFormat("Line 1%nLine 2");
+		assertStringFormat("First: %s%nSecond: %s", "one", "two");
+		assertStringFormat("%s %n %s", "first", "second");
 
 		// Errors
 		assertStringFormat("Hello %s");
@@ -382,6 +386,11 @@ class StringFormat_Test extends TestBase {
 		assertEquals("[L:Month: ][S:z0:%tm]", fs("Month: %tm").toPattern());  // %tm is 2-character time conversion
 		assertEquals("[L:Year: ][S:z0:%tY]", fs("Year: %tY").toPattern());  // %tY is 2-character time conversion
 		assertEquals("[L:Date: ][S:z0:%TD]", fs("Date: %TD").toPattern());  // %TD is 2-character time conversion
+
+		// %n doesn't consume an argument - it's handled as a LiteralToken
+		var lineSep = System.lineSeparator();
+		assertEquals("[L:Line 1][L:" + lineSep + "][L:Line 2]", fs("Line 1%nLine 2").toPattern());
+		assertEquals("[S:s0:%s][L: ][L:" + lineSep + "][L: ][S:s1:%s]", fs("%s %n %s").toPattern());  // %n is a literal, so second %s gets index 1
 	}
 
 	@Test void a10_veryLongPattern() {

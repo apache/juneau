@@ -212,12 +212,6 @@ public final class StringFormat {
 
 		@Override
 		void append(StringBuilder sb, Object[] args, Locale locale) {
-			// %n is special - it doesn't consume an argument, just outputs a line separator
-			if (format == 'n') {
-				sb.append(System.lineSeparator());
-				return;
-			}
-
 			// String.format() throws MissingFormatArgumentException when argument is missing
 			if (args == null || index >= args.length || index < 0) {
 				throw new MissingFormatArgumentException(content);
@@ -528,6 +522,11 @@ public final class StringFormat {
 			} else if (state == S2) {
 				if (ch == '%') {
 					tokens.add(new LiteralToken("%"));
+					state = S1;
+					mark = i;
+				} else if (ch == 'n') {
+					// %n is special - it doesn't consume an argument, so handle it as a literal token
+					tokens.add(new LiteralToken(System.lineSeparator()));
 					state = S1;
 					mark = i;
 				} else if (ch == 't' || ch == 'T') {
