@@ -27,6 +27,7 @@ import static org.apache.juneau.common.utils.Utils.eqic;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.math.*;
 import java.util.concurrent.atomic.*;
 import java.util.*;
@@ -4791,5 +4792,431 @@ class StringUtils_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", 0, "\n"));
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", -1, "\n"));
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", 10, null));
+	}
+
+	//====================================================================================================
+	// abbreviate(String, int)
+	//====================================================================================================
+	@Test
+	void a225_abbreviate() {
+		// Null input
+		assertNull(abbreviate(null, 10));
+
+		// String shorter than or equal to length - no abbreviation
+		assertEquals("", abbreviate("", 10));
+		assertEquals("Hi", abbreviate("Hi", 10));
+		assertEquals("Hello", abbreviate("Hello", 10));
+		assertEquals("Hello World", abbreviate("Hello World", 20));
+
+		// String length <= 3 - no abbreviation
+		assertEquals("Hi", abbreviate("Hi", 5));
+		assertEquals("ABC", abbreviate("ABC", 5));
+
+		// String longer than length - should abbreviate
+		assertEquals("Hello...", abbreviate("Hello World", 8));
+		assertEquals("H...", abbreviate("Hello", 4));
+		// When length >= string length, no abbreviation occurs
+		assertEquals("Hello", abbreviate("Hello", 5)); // No abbreviation (5 <= 5)
+		assertEquals("Hello", abbreviate("Hello", 6)); // No abbreviation (5 <= 6)
+		assertEquals("Hello", abbreviate("Hello", 7)); // No abbreviation needed
+
+		// Edge case: length exactly 4
+		assertEquals("H...", abbreviate("Hello", 4));
+	}
+
+	//====================================================================================================
+	// contains(String, CharSequence) - ensure all branches covered
+	//====================================================================================================
+	@Test
+	void a226_containsCharSequence() {
+		// Test with String (which implements CharSequence)
+		assertTrue(contains("test", (CharSequence)"te"));
+		assertTrue(contains("test", (CharSequence)"st"));
+		assertFalse(contains("test", (CharSequence)"xx"));
+		assertFalse(contains(null, (CharSequence)"test"));
+
+		// Test with StringBuilder (CharSequence)
+		assertTrue(contains("test", new StringBuilder("te")));
+		assertTrue(contains("test", new StringBuilder("st")));
+		assertFalse(contains("test", new StringBuilder("xx")));
+		assertFalse(contains(null, new StringBuilder("test")));
+
+		// Test with StringBuffer (CharSequence)
+		assertTrue(contains("test", new StringBuffer("te")));
+		assertFalse(contains("test", new StringBuffer("xx")));
+	}
+
+	//====================================================================================================
+	// equalsIgnoreCase(Object, Object)
+	//====================================================================================================
+	@Test
+	void a227_equalsIgnoreCaseObject() {
+		// Both null
+		assertTrue(equalsIgnoreCase((Object)null, (Object)null));
+
+		// One null
+		assertFalse(equalsIgnoreCase((Object)null, "test"));
+		assertFalse(equalsIgnoreCase("test", (Object)null));
+
+		// Both strings
+		assertTrue(equalsIgnoreCase((Object)"Hello", (Object)"hello"));
+		assertTrue(equalsIgnoreCase((Object)"HELLO", (Object)"hello"));
+		assertFalse(equalsIgnoreCase((Object)"Hello", (Object)"World"));
+
+		// Non-string objects (toString() is called)
+		assertTrue(equalsIgnoreCase((Object)123, (Object)"123"));
+		assertTrue(equalsIgnoreCase((Object)"123", (Object)123));
+		assertFalse(equalsIgnoreCase((Object)123, (Object)"456"));
+
+		// Custom object with toString()
+		var obj1 = new Object() {
+			@Override
+			public String toString() { return "TEST"; }
+		};
+		var obj2 = new Object() {
+			@Override
+			public String toString() { return "test"; }
+		};
+		assertTrue(equalsIgnoreCase(obj1, obj2));
+		assertTrue(equalsIgnoreCase(obj1, (Object)"TEST"));
+	}
+
+	//====================================================================================================
+	// indexOf(String, char...)
+	//====================================================================================================
+	@Test
+	void a228_indexOfChars() {
+		// Null string
+		assertEquals(-1, indexOf(null, 'a'));
+		assertEquals(-1, indexOf(null, 'a', 'b'));
+
+		// Single char
+		assertEquals(0, indexOf("abc", 'a'));
+		assertEquals(1, indexOf("abc", 'b'));
+		assertEquals(2, indexOf("abc", 'c'));
+		assertEquals(-1, indexOf("abc", 'x'));
+
+		// Multiple chars - returns first match
+		assertEquals(0, indexOf("abc", 'a', 'b', 'c'));
+		assertEquals(1, indexOf("abc", 'x', 'b', 'y'));
+		assertEquals(0, indexOf("abc", 'b', 'a', 'c')); // 'a' found first at index 0
+
+		// No match
+		assertEquals(-1, indexOf("abc", 'x', 'y', 'z'));
+
+		// Empty string
+		assertEquals(-1, indexOf("", 'a'));
+
+		// Multiple occurrences - returns first
+		assertEquals(0, indexOf("abab", 'a', 'b'));
+	}
+
+	//====================================================================================================
+	// notContains(String, CharSequence) - ensure all branches covered
+	//====================================================================================================
+	@Test
+	void a229_notContainsCharSequence() {
+		// Test with String (which implements CharSequence)
+		assertFalse(notContains("test", (CharSequence)"te"));
+		assertFalse(notContains("test", (CharSequence)"st"));
+		assertTrue(notContains("test", (CharSequence)"xx"));
+		assertTrue(notContains(null, (CharSequence)"test"));
+
+		// Test with StringBuilder (CharSequence)
+		assertFalse(notContains("test", new StringBuilder("te")));
+		assertTrue(notContains("test", new StringBuilder("xx")));
+		assertTrue(notContains(null, new StringBuilder("test")));
+
+		// Test with StringBuffer (CharSequence)
+		assertFalse(notContains("test", new StringBuffer("te")));
+		assertTrue(notContains("test", new StringBuffer("xx")));
+	}
+
+	//====================================================================================================
+	// notContainsAll(String, CharSequence...) - ensure all branches covered
+	//====================================================================================================
+	@Test
+	void a230_notContainsAllCharSequence() {
+		// All found - returns false
+		assertFalse(notContainsAll("test", (CharSequence)"te", (CharSequence)"st"));
+		assertFalse(notContainsAll("hello world", (CharSequence)"hello", (CharSequence)"world"));
+
+		// Not all found - returns true
+		assertTrue(notContainsAll("test", (CharSequence)"te", (CharSequence)"xx"));
+		assertTrue(notContainsAll("test", (CharSequence)"xy", (CharSequence)"zz"));
+
+		// Null string - returns true
+		assertTrue(notContainsAll(null, (CharSequence)"te", (CharSequence)"st"));
+
+		// Test with StringBuilder
+		assertFalse(notContainsAll("test", new StringBuilder("te"), new StringBuilder("st")));
+		assertTrue(notContainsAll("test", new StringBuilder("te"), new StringBuilder("xx")));
+	}
+
+	//====================================================================================================
+	// notContainsAny(String, CharSequence...) - ensure all branches covered
+	//====================================================================================================
+	@Test
+	void a231_notContainsAnyCharSequence() {
+		// Any found - returns false
+		assertFalse(notContainsAny("test", (CharSequence)"te", (CharSequence)"xx"));
+		assertFalse(notContainsAny("test", (CharSequence)"xx", (CharSequence)"st"));
+
+		// None found - returns true
+		assertTrue(notContainsAny("test", (CharSequence)"xy", (CharSequence)"zz"));
+		assertTrue(notContainsAny("test", (CharSequence)"aa", (CharSequence)"bb"));
+
+		// Null string - returns true
+		assertTrue(notContainsAny(null, (CharSequence)"te", (CharSequence)"xx"));
+
+		// Test with StringBuilder
+		assertFalse(notContainsAny("test", new StringBuilder("te"), new StringBuilder("xx")));
+		assertTrue(notContainsAny("test", new StringBuilder("xy"), new StringBuilder("zz")));
+	}
+
+	//====================================================================================================
+	// join(int[], String)
+	//====================================================================================================
+	@Test
+	void a232_joinIntArrayString() {
+		// Null array
+		assertEquals("", join((int[])null, ","));
+
+		// Empty array
+		assertEquals("", join(new int[0], ","));
+
+		// Single element
+		assertEquals("1", join(new int[]{1}, ","));
+		assertEquals("1", join(new int[]{1}, "-"));
+
+		// Multiple elements
+		assertEquals("1,2,3", join(new int[]{1, 2, 3}, ","));
+		assertEquals("1-2-3", join(new int[]{1, 2, 3}, "-"));
+		assertEquals("1 2 3", join(new int[]{1, 2, 3}, " "));
+
+		// Null delimiter
+		assertEquals("123", join(new int[]{1, 2, 3}, null));
+
+		// Empty delimiter
+		assertEquals("123", join(new int[]{1, 2, 3}, ""));
+
+		// Large numbers
+		assertEquals("100,200,300", join(new int[]{100, 200, 300}, ","));
+		assertEquals("-1,0,1", join(new int[]{-1, 0, 1}, ","));
+	}
+
+	//====================================================================================================
+	// getGlobMatchPattern(String) and getGlobMatchPattern(String, int)
+	//====================================================================================================
+	@Test
+	void a233_getGlobMatchPattern() {
+		// Null input
+		assertNull(getGlobMatchPattern(null));
+		assertNull(getGlobMatchPattern(null, 0));
+
+		// Simple pattern - no wildcards
+		var pattern1 = getGlobMatchPattern("test");
+		assertNotNull(pattern1);
+		assertTrue(pattern1.matcher("test").matches());
+		assertFalse(pattern1.matcher("Test").matches());
+
+		// Pattern with * wildcard
+		var pattern2 = getGlobMatchPattern("test*");
+		assertNotNull(pattern2);
+		assertTrue(pattern2.matcher("test").matches());
+		assertTrue(pattern2.matcher("test123").matches());
+		assertTrue(pattern2.matcher("testing").matches());
+		assertFalse(pattern2.matcher("Test").matches());
+
+		// Pattern with ? wildcard
+		var pattern3 = getGlobMatchPattern("te?t");
+		assertNotNull(pattern3);
+		assertTrue(pattern3.matcher("test").matches());
+		assertTrue(pattern3.matcher("teat").matches());
+		assertFalse(pattern3.matcher("test123").matches());
+		assertFalse(pattern3.matcher("tet").matches());
+
+		// Pattern with both * and ?
+		var pattern4 = getGlobMatchPattern("te?t*");
+		assertNotNull(pattern4);
+		assertTrue(pattern4.matcher("test").matches());
+		assertTrue(pattern4.matcher("test123").matches());
+		assertTrue(pattern4.matcher("teat456").matches());
+		assertFalse(pattern4.matcher("tet").matches());
+
+		// Pattern with special regex characters (should be escaped)
+		var pattern5 = getGlobMatchPattern("test.*");
+		assertNotNull(pattern5);
+		assertTrue(pattern5.matcher("test.*").matches()); // Literal match, not regex
+		assertFalse(pattern5.matcher("test123").matches());
+
+		// With flags - case insensitive
+		var pattern6 = getGlobMatchPattern("test*", java.util.regex.Pattern.CASE_INSENSITIVE);
+		assertNotNull(pattern6);
+		assertTrue(pattern6.matcher("test").matches());
+		assertTrue(pattern6.matcher("Test").matches());
+		assertTrue(pattern6.matcher("TEST123").matches());
+
+		// Multiple wildcards
+		var pattern7 = getGlobMatchPattern("*test*");
+		assertNotNull(pattern7);
+		assertTrue(pattern7.matcher("test").matches());
+		assertTrue(pattern7.matcher("pretest").matches());
+		assertTrue(pattern7.matcher("testpost").matches());
+		assertTrue(pattern7.matcher("pretestpost").matches());
+	}
+
+	//====================================================================================================
+	// isValidHostname(String)
+	//====================================================================================================
+	@Test
+	void a234_isValidHostname() {
+		// Null or empty
+		assertFalse(isValidHostname(null));
+		assertFalse(isValidHostname(""));
+		assertFalse(isValidHostname("   "));
+
+		// Valid hostnames
+		assertTrue(isValidHostname("example.com"));
+		assertTrue(isValidHostname("www.example.com"));
+		assertTrue(isValidHostname("subdomain.example.com"));
+		assertTrue(isValidHostname("localhost"));
+		assertTrue(isValidHostname("a"));
+		assertTrue(isValidHostname("a-b"));
+		assertTrue(isValidHostname("a1"));
+		assertTrue(isValidHostname("example123.com"));
+
+		// Invalid: starts with dot
+		assertFalse(isValidHostname(".example.com"));
+		assertFalse(isValidHostname("."));
+
+		// Invalid: ends with dot
+		assertFalse(isValidHostname("example.com."));
+		assertFalse(isValidHostname("example."));
+
+		// Invalid: label too long (>63 chars)
+		var longLabel = "a".repeat(64) + ".com";
+		assertFalse(isValidHostname(longLabel));
+
+		// Invalid: total length > 253 chars
+		var longHostname = "a".repeat(63) + "." + "b".repeat(63) + "." + "c".repeat(63) + "." + "d".repeat(64) + ".com";
+		assertFalse(isValidHostname(longHostname));
+
+		// Invalid: empty label
+		assertFalse(isValidHostname("example..com"));
+		assertFalse(isValidHostname(".."));
+
+		// Invalid: label starts with hyphen
+		assertFalse(isValidHostname("-example.com"));
+		assertFalse(isValidHostname("example.-com"));
+
+		// Invalid: label ends with hyphen
+		assertFalse(isValidHostname("example-.com"));
+		assertFalse(isValidHostname("example.com-"));
+
+		// Invalid: invalid characters
+		assertFalse(isValidHostname("example_com"));
+		assertFalse(isValidHostname("example.com:80"));
+		assertFalse(isValidHostname("example com"));
+		assertFalse(isValidHostname("example@com"));
+		assertFalse(isValidHostname("example.com/"));
+		assertFalse(isValidHostname("example.com?"));
+
+		// Valid: hyphens in middle of label
+		assertTrue(isValidHostname("ex-ample.com"));
+		assertTrue(isValidHostname("my-example-site.com"));
+
+		// Valid: numbers
+		assertTrue(isValidHostname("example123.com"));
+		assertTrue(isValidHostname("123example.com"));
+
+		// Edge case: single character
+		assertTrue(isValidHostname("a"));
+		assertTrue(isValidHostname("1"));
+
+		// Edge case: maximum valid label length (63 chars)
+		var maxLabel = "a".repeat(63) + ".com";
+		assertTrue(isValidHostname(maxLabel));
+	}
+
+	//====================================================================================================
+	// splita(String[], char)
+	//====================================================================================================
+	@Test
+	void a235_splitaStringArray() {
+		// Null array - explicitly cast to String[] to disambiguate
+		String[] nullArray = null;
+		assertNull(splita(nullArray, ','));
+
+		// Empty array
+		assertArrayEquals(new String[0], splita(new String[0], ','));
+
+		// Array with no delimiters
+		String[] array1 = new String[]{"a", "b", "c"};
+		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array1, ','));
+
+		// Array with delimiters
+		String[] array2 = new String[]{"a,b", "c"};
+		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array2, ','));
+		String[] array3 = new String[]{"a,b", "c,d"};
+		assertArrayEquals(new String[]{"a", "b", "c", "d"}, splita(array3, ','));
+
+		// Array with null elements
+		String[] array4 = new String[]{"a", null, "c"};
+		assertArrayEquals(new String[]{"a", null, "c"}, splita(array4, ','));
+
+		// Array with elements containing delimiter
+		String[] array5 = new String[]{"a,b,c"};
+		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array5, ','));
+		String[] array6 = new String[]{"a,b", "c,d,e"};
+		assertArrayEquals(new String[]{"a", "b", "c", "d", "e"}, splita(array6, ','));
+
+		// Different delimiter
+		String[] array7 = new String[]{"a|b|c"};
+		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array7, '|'));
+		String[] array8 = new String[]{"a;b;c"};
+		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array8, ';'));
+
+		// Mixed: some with delimiter, some without
+		String[] array9 = new String[]{"a,b", "c", "d"};
+		assertArrayEquals(new String[]{"a", "b", "c", "d"}, splita(array9, ','));
+
+		// Nested splitting (recursive)
+		String[] array10 = new String[]{"a,b", "c,d"};
+		assertArrayEquals(new String[]{"a", "b", "c", "d"}, splita(array10, ','));
+	}
+
+	//====================================================================================================
+	// toHex(InputStream)
+	//====================================================================================================
+	@Test
+	void a236_toHexInputStream() throws Exception {
+		// Null input
+		assertNull(toHex((java.io.InputStream)null));
+
+		// Empty stream
+		var emptyStream = new java.io.ByteArrayInputStream(new byte[0]);
+		assertEquals("", toHex(emptyStream));
+
+		// Single byte
+		var singleByte = new java.io.ByteArrayInputStream(new byte[]{0x41});
+		assertEquals("41", toHex(singleByte));
+
+		// Multiple bytes
+		var multiByte = new java.io.ByteArrayInputStream(new byte[]{0x41, 0x42, 0x43});
+		assertEquals("414243", toHex(multiByte));
+
+		// Bytes with various values (toHex returns uppercase)
+		var variousBytes = new java.io.ByteArrayInputStream(new byte[]{(byte)0xFF, (byte)0x00, (byte)0x0A});
+		assertEquals("FF000A", toHex(variousBytes));
+
+		// Large stream
+		var largeBytes = new byte[100];
+		java.util.Arrays.fill(largeBytes, (byte)0x42);
+		var largeStream = new java.io.ByteArrayInputStream(largeBytes);
+		var result = toHex(largeStream);
+		assertNotNull(result);
+		assertEquals(200, result.length()); // 100 bytes * 2 hex chars
+		assertTrue(result.matches("^(42)+$")); // All '42' pairs repeated (100 times)
 	}
 }
