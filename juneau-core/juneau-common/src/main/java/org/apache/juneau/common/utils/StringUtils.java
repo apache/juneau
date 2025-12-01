@@ -24,6 +24,7 @@ import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static java.util.stream.Collectors.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -40,6 +41,10 @@ import java.util.function.*;
 import java.util.regex.*;
 import java.util.stream.*;
 import java.util.zip.*;
+
+import org.apache.juneau.common.collections.*;
+import org.apache.juneau.common.function.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Reusable string utility methods.
@@ -139,18 +144,8 @@ public class StringUtils {
 
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-	private static final Map<Class<?>,Function<Object,String>> PRIMITIVE_ARRAY_STRINGIFIERS = new HashMap<>();
-
-	static {
-		PRIMITIVE_ARRAY_STRINGIFIERS.put(boolean[].class, x -> Arrays.toString((boolean[])x));
-		PRIMITIVE_ARRAY_STRINGIFIERS.put(byte[].class, x -> Arrays.toString((byte[])x));
-		PRIMITIVE_ARRAY_STRINGIFIERS.put(char[].class, x -> Arrays.toString((char[])x));
-		PRIMITIVE_ARRAY_STRINGIFIERS.put(double[].class, x -> Arrays.toString((double[])x));
-		PRIMITIVE_ARRAY_STRINGIFIERS.put(float[].class, x -> Arrays.toString((float[])x));
-		PRIMITIVE_ARRAY_STRINGIFIERS.put(int[].class, x -> Arrays.toString((int[])x));
-		PRIMITIVE_ARRAY_STRINGIFIERS.put(long[].class, x -> Arrays.toString((long[])x));
-		PRIMITIVE_ARRAY_STRINGIFIERS.put(short[].class, x -> Arrays.toString((short[])x));
-	}
+	private static final List<Tuple2<Class<?>,Function<Object,String>>> READIFIERS = loadReadifiers();
+	private static final Cache<Class<?>,Function<Object,String>> READIFIER_CACHE = Cache.<Class<?>,Function<Object,String>>create().build();
 
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
@@ -184,6 +179,166 @@ public class StringUtils {
 		if (in == null || in.length() <= length || in.length() <= 3)
 			return in;
 		return in.substring(0, length - 3) + "...";
+	}
+
+	private static List<Tuple2<Class<?>,Function<Object,String>>> loadReadifiers() {
+		var list = new ArrayList<Tuple2<Class<?>,Function<Object,String>>>();
+
+		// More specific types first - order matters!
+
+		// Map.Entry before Map
+		list.add(Tuple2.of(Map.Entry.class, o -> {
+			var e = (Map.Entry<?,?>)o;
+			return readable(e.getKey()) + '=' + readable(e.getValue());
+		}));
+
+		// Collection before Iterable
+		list.add(Tuple2.of(Collection.class, o -> {
+			var c = (Collection<?>)o;
+			return c.stream().map(StringUtils::readable).collect(joining(",", "[", "]"));
+		}));
+
+		// Map
+		list.add(Tuple2.of(Map.class, o -> {
+			var m = (Map<?,?>)o;
+			return m.entrySet().stream().map(StringUtils::readable).collect(joining(",", "{", "}"));
+		}));
+
+		// Iterable (but not Collection, which is handled above)
+		list.add(Tuple2.of(Iterable.class, o -> {
+			var i = (Iterable<?>)o;
+			return readable(toList(i));
+		}));
+
+		// Iterator
+		list.add(Tuple2.of(Iterator.class, o -> {
+			var i = (Iterator<?>)o;
+			return readable(toList(i));
+		}));
+
+		// Enumeration
+		list.add(Tuple2.of(Enumeration.class, o -> {
+			var e = (Enumeration<?>)o;
+			return readable(toList(e));
+		}));
+
+		// Optional
+		list.add(Tuple2.of(Optional.class, o -> {
+			var opt = (Optional<?>)o;
+			return readable(opt.orElse(null));
+		}));
+
+		// GregorianCalendar
+		list.add(Tuple2.of(GregorianCalendar.class, o -> {
+			var cal = (GregorianCalendar)o;
+			return cal.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
+		}));
+
+		// Date
+		list.add(Tuple2.of(Date.class, o -> {
+			var date = (Date)o;
+			return date.toInstant().toString();
+		}));
+
+		// InputStream
+		list.add(Tuple2.of(InputStream.class, o -> {
+			var is = (InputStream)o;
+			return toHex(is);
+		}));
+
+		// Reader
+		list.add(Tuple2.of(Reader.class, o -> {
+			var r = (Reader)o;
+			return safe(() -> read(r));
+		}));
+
+		// File
+		list.add(Tuple2.of(File.class, o -> {
+			var f = (File)o;
+			return safe(() -> read(f));
+		}));
+
+		// byte[]
+		list.add(Tuple2.of(byte[].class, o -> {
+			var bytes = (byte[])o;
+			return toHex(bytes);
+		}));
+
+		// Enum
+		list.add(Tuple2.of(Enum.class, o -> {
+			var e = (Enum<?>)o;
+			return e.name();
+		}));
+
+		// Class
+		list.add(Tuple2.of(Class.class, o -> {
+			var c = (Class<?>)o;
+			return cns(c);
+		}));
+
+		// Executable (Method or Constructor)
+		list.add(Tuple2.of(Executable.class, o -> {
+			var exec = (Executable)o;
+			var sb = new StringBuilder(64);
+			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('(');
+			var pt = exec.getParameterTypes();
+			for (var i = 0; i < pt.length; i++) {
+				if (i > 0)
+					sb.append(',');
+				sb.append(cns(pt[i]));
+			}
+			sb.append(')');
+			return sb.toString();
+		}));
+
+		// ClassInfo
+		list.add(Tuple2.of(ClassInfo.class, o -> {
+			var ci = (ClassInfo)o;
+			return ci.toString();
+		}));
+
+		// ExecutableInfo
+		list.add(Tuple2.of(ExecutableInfo.class, o -> {
+			var ei = (ExecutableInfo)o;
+			return ei.toString();
+		}));
+
+		// FieldInfo
+		list.add(Tuple2.of(FieldInfo.class, o -> {
+			var fi = (FieldInfo)o;
+			return fi.toString();
+		}));
+
+		// ParameterInfo
+		list.add(Tuple2.of(ParameterInfo.class, o -> {
+			var pi = (ParameterInfo)o;
+			return pi.toString();
+		}));
+
+		// Field
+		list.add(Tuple2.of(Field.class, o -> {
+			var f = (Field)o;
+			return cns(f.getDeclaringClass()) + "." + f.getName();
+		}));
+
+		// Parameter
+		list.add(Tuple2.of(Parameter.class, o -> {
+			var p = (Parameter)o;
+			var exec = p.getDeclaringExecutable();
+			var sb = new StringBuilder(64);
+			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('[');
+			var params = exec.getParameters();
+			for (var i = 0; i < params.length; i++) {
+				if (params[i] == p) {
+					sb.append(i);
+					break;
+				}
+			}
+			sb.append(']');
+			return sb.toString();
+		}));
+
+		return Collections.unmodifiableList(list);
 	}
 
 	/**
@@ -486,8 +641,6 @@ public class StringUtils {
 	 * @return The camelCase string, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
 	public static String camelCase(String str) {
-		if (str == null)
-			return null;
 		if (isEmpty(str))
 			return str;
 
@@ -4075,8 +4228,6 @@ public class StringUtils {
 	 * @return The kebab-case string, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
 	public static String kebabCase(String str) {
-		if (str == null)
-			return null;
 		if (isEmpty(str))
 			return str;
 
@@ -5468,8 +5619,6 @@ public class StringUtils {
 	 * @return The PascalCase string, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
 	public static String pascalCase(String str) {
-		if (str == null)
-			return null;
 		if (isEmpty(str))
 			return str;
 
@@ -5837,56 +5986,43 @@ public class StringUtils {
 	public static String readable(Object o) {
 		if (o == null)
 			return null;
-		if (o instanceof Optional<?> o2)
-			return readable(o2.orElse(null));
-		if (o instanceof Collection<?> o2)
-			return o2.stream().map(StringUtils::readable).collect(Collectors.joining(",", "[", "]"));
-		if (o instanceof Map<?,?> o2)
-			return o2.entrySet().stream().map(StringUtils::readable).collect(Collectors.joining(",", "{", "}"));
-		if (o instanceof Map.Entry<?,?> o2)
-			return readable(o2.getKey()) + '=' + readable(o2.getValue());
-		if (o instanceof Iterable<?> o2)
-			return readable(toList(o2));
-		if (o instanceof Iterator<?> o2)
-			return readable(toList(o2));
-		if (o instanceof Enumeration<?> o2)
-			return readable(toList(o2));
-		if (o instanceof GregorianCalendar o2)
-			return o2.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
-		if (o instanceof Date o2)
-			return o2.toInstant().toString();
-		if (o instanceof InputStream o2)
-			return toHex(o2);
-		if (o instanceof Reader o2)
-			return safe(() -> read(o2));
-		if (o instanceof File o2)
-			return safe(() -> read(o2));
-		if (o instanceof byte[] o2)
-			return toHex(o2);
-		if (o instanceof Enum o2)
-			return o2.name();
-		if (o instanceof Class o2)
-			return cns(o2);
-		if (o instanceof Executable o2) {
-			var sb = new StringBuilder(64);
-			sb.append(o2 instanceof Constructor ? cns(o2.getDeclaringClass()) : o2.getName()).append('(');
-			var pt = o2.getParameterTypes();
-			for (var i = 0; i < pt.length; i++) {
-				if (i > 0)
-					sb.append(',');
-				sb.append(cns(pt[i]));
-			}
-			sb.append(')');
-			return sb.toString();
+		var c = o.getClass();
+
+		// Special case for byte[] - must be handled before general array check
+		if (c == byte[].class) {
+			return toHex((byte[])o);
 		}
-		if (isArray(o)) {
-			var l = list();
-			for (var i = 0; i < Array.getLength(o); i++) {
-				l.add(Array.get(o, i));
+
+		// Check cache first
+		var f = READIFIER_CACHE.get(c, () -> {
+			// Find readifier from READIFIERS list
+			// First try exact match, then isAssignableFrom
+			var readifier = READIFIERS.stream()
+				.filter(x -> x.getA() == c || x.getA().isAssignableFrom(c))
+				.map(x -> x.getB())
+				.findFirst()
+				.orElse(null);
+
+			// If readifier found, use it
+			if (readifier != null)
+				return readifier;
+
+			// If no readifier found, check if it's an array
+			if (c.isArray()) {
+				return x -> {
+					var l = list();
+					for (var i = 0; i < Array.getLength(x); i++) {
+						l.add(Array.get(x, i));
+					}
+					return readable(l);
+				};
 			}
-			return readable(l);
-		}
-		return o.toString();
+
+			// If no readifier found, use toString() as fallback
+			return x -> x.toString();
+		});
+
+		return f.apply(o);
 	}
 
 	/**
