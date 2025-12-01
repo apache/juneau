@@ -1,6 +1,6 @@
 # TODO List
 
-**Last generated TODO number: TODO-87**
+**Last generated TODO number: TODO-89**
 
 This file tracks pending tasks for the Apache Juneau project. For completed items, see [TODO-completed.md](TODO-completed.md).
 
@@ -40,6 +40,8 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 
 - [ ] TODO-19 ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).
 - [ ] TODO-21 Thrown NotFound causes - javax.servlet.ServletException: Invalid method response: 200
+- [ ] TODO-88 Eliminate need for AssertionArgs in BctAssertions by allowing DEFAULT_CONVERTER to be overridden and resettable.
+- [ ] TODO-89 Add ClassInfoTyped
 
 ## HTTP Response/Exception Improvements
 
