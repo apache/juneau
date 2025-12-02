@@ -2,8 +2,8 @@ org.apache.juneau
 org.apache.juneau.annotation
 org.apache.juneau.assertions
 org.apache.juneau.collections
-org.apache.juneau.common.internal
-org.apache.juneau.common.utils
+org.apache.juneau.commons.internal
+org.apache.juneau.commons.utils
 org.apache.juneau.config
 org.apache.juneau.config.event
 org.apache.juneau.config.internal
