@@ -933,10 +933,6 @@ public class AnnotationProvider {
 		return ! find(type, m, traversals).isEmpty();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Checks if a parameter has the specified annotation.
 	 *
@@ -998,10 +994,10 @@ public class AnnotationProvider {
 			t = l(a(SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE));
 		else if (element instanceof FieldInfo || element instanceof ConstructorInfo)
 			t = l(a(SELF));
-		else if (element instanceof ParameterInfo)
+		else {
+			assertType(ParameterInfo.class, element, () -> unsupportedOp());
 			t = l(a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE));
-		else
-			t = l();  // Never happens.
+		}
 
 		if (element instanceof ClassInfo element2) {
 			if (t.contains(SELF)) {

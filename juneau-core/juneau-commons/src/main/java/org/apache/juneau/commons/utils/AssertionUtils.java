@@ -213,6 +213,65 @@ public class AssertionUtils {
 	}
 
 	/**
+	 * Throws an {@link IllegalArgumentException} if the specified object is not an instance of the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
+	 *
+	 *	<jk>public</jk> <jk>void</jk> setValue(Object <jv>value</jv>) {
+	 *		<jc>// Validate that value is a String</jc>
+	 *		<jsm>assertType</jsm>(String.<jk>class</jk>, <jv>value</jv>);
+	 *		...
+	 *	}
+	 * </p>
+	 *
+	 * @param <T> The expected type.
+	 * @param type The expected class type.
+	 * @param o The object to check.
+	 * @return The object cast to the specified type.
+	 * @throws IllegalArgumentException Thrown if the object is not an instance of the specified type.
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T assertType(Class<T> type, Object o) throws IllegalArgumentException {
+		assertArg(type != null, "Type cannot be null.");
+		assertArg(o != null, "Object cannot be null.");
+		if (! type.isInstance(o))
+			throw illegalArg("Object is not an instance of {0}: {1}", cn(type), cn(o));
+		return (T)o;
+	}
+
+	/**
+	 * Throws the exception provided by the supplier if the specified object is not an instance of the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
+	 *
+	 *	<jk>public</jk> <jk>void</jk> setValue(Object <jv>value</jv>) {
+	 *		<jc>// Validate that value is a String, throw custom exception</jc>
+	 *		<jsm>assertType</jsm>(String.<jk>class</jk>, <jv>value</jv>, () -&gt; <jk>new</jk> IllegalStateException(<js>"Invalid value type"</js>));
+	 *		...
+	 *	}
+	 * </p>
+	 *
+	 * @param <T> The expected type.
+	 * @param type The expected class type.
+	 * @param o The object to check.
+	 * @param exceptionSupplier The supplier that provides the exception to throw if validation fails.
+	 * @return The object cast to the specified type.
+	 * @throws RuntimeException Thrown if the object is not an instance of the specified type (the exception is provided by the supplier).
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T assertType(Class<T> type, Object o, java.util.function.Supplier<? extends RuntimeException> exceptionSupplier) throws RuntimeException {
+		assertArg(type != null, "Type cannot be null.");
+		assertArg(o != null, "Object cannot be null.");
+		if (! type.isInstance(o))
+			throw exceptionSupplier.get();
+		return (T)o;
+	}
+
+	/**
 	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
 	 *
 	 * @param <E> The element type.

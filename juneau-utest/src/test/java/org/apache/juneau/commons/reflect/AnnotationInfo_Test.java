@@ -75,6 +75,12 @@ class AnnotationInfo_Test extends TestBase {
 
 	@Target(TYPE)
 	@Retention(RUNTIME)
+	public static @interface RankWithWrongReturnTypeAnnotation {
+		String rank() default "";  // Returns String, not int, should not match
+	}
+
+	@Target(TYPE)
+	@Retention(RUNTIME)
 	public static @interface ClassArrayAnnotation {
 		Class<?>[] classes() default {};
 	}
@@ -121,6 +127,9 @@ class AnnotationInfo_Test extends TestBase {
 
 	@UnrankedAnnotation
 	public static class UnrankedClass {}
+
+	@RankWithWrongReturnTypeAnnotation
+	public static class RankWithWrongReturnTypeClass {}
 
 	@ClassArrayAnnotation(classes = { String.class, Integer.class })
 	public static class ClassArrayClass {}
@@ -273,6 +282,15 @@ class AnnotationInfo_Test extends TestBase {
 	void f02_getRank_withoutRankMethod_returnsZero() {
 		var ci = ClassInfo.of(UnrankedClass.class);
 		var ai = ci.getAnnotations(UnrankedAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+		assertEquals(0, ai.getRank());
+	}
+
+	@Test
+	void f03_getRank_withRankMethodWrongReturnType_returnsZero() {
+		// rank() method returns String, not int, so it doesn't match the filter
+		var ci = ClassInfo.of(RankWithWrongReturnTypeClass.class);
+		var ai = ci.getAnnotations(RankWithWrongReturnTypeAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
 		assertEquals(0, ai.getRank());
 	}
@@ -656,6 +674,18 @@ class AnnotationInfo_Test extends TestBase {
 	// toMap()
 	//====================================================================================================
 
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	public static @interface ToMapTestAnnotation {
+		String value() default "default";
+		String[] arrayValue() default {};
+		String[] nonEmptyArray() default {"a", "b"};
+		String[] emptyArrayWithNonEmptyDefault() default {"default"};
+	}
+
+	@ToMapTestAnnotation(value = "custom", arrayValue = {}, nonEmptyArray = {"x"}, emptyArrayWithNonEmptyDefault = {})
+	public static class ToMapTestClass {}
+
 	@Test
 	void s01_toMap_returnsMapRepresentation() {
 		var ci = ClassInfo.of(TestClass.class);
@@ -670,6 +700,78 @@ class AnnotationInfo_Test extends TestBase {
 		var annotationMap = (java.util.Map<String,Object>)map.get("@TestAnnotation");
 		assertNotNull(annotationMap);
 		assertEquals("test", annotationMap.get("value"));
+	}
+
+	@Test
+	void s02_toMap_withNonDefaultValues_includesOnlyNonDefaults() {
+		var ci = ClassInfo.of(ToMapTestClass.class);
+		var ai = ci.getAnnotations(ToMapTestAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		var map = ai.toMap();
+		assertNotNull(map);
+		var annotationMap = (java.util.Map<String,Object>)map.get("@ToMapTestAnnotation");
+		assertNotNull(annotationMap);
+		
+		// value differs from default (non-array), should be included - covers branch: isArray(v) = false
+		assertEquals("custom", annotationMap.get("value"));
+		
+		// nonEmptyArray differs from default (non-empty array), should be included - covers branch: isArray(v) = true, length(v) != 0
+		assertTrue(annotationMap.containsKey("nonEmptyArray"));
+		
+		// emptyArrayWithNonEmptyDefault is empty array but default is non-empty, should be included - covers branch: isArray(v) = true, length(v) == 0, length(d) != 0
+		assertTrue(annotationMap.containsKey("emptyArrayWithNonEmptyDefault"));
+		
+		// arrayValue is empty array matching default empty array, should NOT be included - covers branch: isArray(v) = true, length(v) == 0, length(d) == 0
+		assertFalse(annotationMap.containsKey("arrayValue"));
+	}
+
+	@Test
+	void s03_toMap_withExceptionHandling_handlesException() {
+		// Create a runtime annotation proxy that throws an exception when a method is invoked
+		var annotationType = ToMapTestAnnotation.class;
+		var handler = new java.lang.reflect.InvocationHandler() {
+			@Override
+			public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) throws Throwable {
+				if (method.getName().equals("value")) {
+					throw new RuntimeException("Test exception");
+				}
+				if (method.getName().equals("annotationType")) {
+					return annotationType;
+				}
+				if (method.getName().equals("toString")) {
+					return "@ToMapTestAnnotation";
+				}
+				if (method.getName().equals("hashCode")) {
+					return 0;
+				}
+				if (method.getName().equals("equals")) {
+					return false;
+				}
+				return method.getDefaultValue();
+			}
+		};
+		
+		var proxyAnnotation = (ToMapTestAnnotation)java.lang.reflect.Proxy.newProxyInstance(
+			annotationType.getClassLoader(),
+			new Class[]{annotationType},
+			handler
+		);
+		
+		var ci = ClassInfo.of(ToMapTestClass.class);
+		var ai = AnnotationInfo.of(ci, proxyAnnotation);
+		
+		var map = ai.toMap();
+		assertNotNull(map);
+		var annotationMap = (java.util.Map<String,Object>)map.get("@ToMapTestAnnotation");
+		assertNotNull(annotationMap);
+		
+		// The exception should be caught and stored as a localized message
+		assertTrue(annotationMap.containsKey("value"));
+		var value = annotationMap.get("value");
+		assertNotNull(value);
+		// The value should be a string representation of the exception
+		assertTrue(value instanceof String);
 	}
 
 	//====================================================================================================
