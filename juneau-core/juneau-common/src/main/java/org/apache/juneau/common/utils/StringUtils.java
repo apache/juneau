@@ -3812,19 +3812,120 @@ public class StringUtils {
 				}
 				return true;
 			}
-			// Try IPv6 - use InetAddress for reliable validation
+			// Try IPv6 - validate format without network operations
 			if (ip.contains(":")) {
-				try {
-					InetAddress.getByName(ip);
-					return true;
-				} catch (UnknownHostException e) {
-					return false;
-				}
+				return isValidIPv6Address(ip);
 			}
 			return false;
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+
+	/**
+	 * Validates if a string is a valid IPv6 address format (without network operations).
+	 *
+	 * <p>
+	 * This method performs pure string-based validation and does not perform any DNS lookups
+	 * or network operations, making it fast and suitable for validation purposes.
+	 *
+	 * @param ip The IPv6 address string to validate.
+	 * @return <jk>true</jk> if the string is a valid IPv6 address format, <jk>false</jk> otherwise.
+	 */
+	private static boolean isValidIPv6Address(String ip) {
+		// IPv6 addresses can be:
+		// 1. Full format: 2001:0db8:85a3:0000:0000:8a2e:0370:7334 (8 groups of 4 hex digits)
+		// 2. Compressed format: 2001:db8::1 (uses :: to represent consecutive zeros)
+		// 3. IPv4-mapped: ::ffff:192.168.1.1 (last 32 bits as IPv4)
+		// 4. Loopback: ::1
+		// 5. Unspecified: ::
+
+		// Cannot start or end with a single colon (except ::)
+		if (ip.startsWith(":") && !ip.startsWith("::"))
+			return false;
+		if (ip.endsWith(":") && !ip.endsWith("::"))
+			return false;
+
+		// Check for IPv4-mapped format (contains both : and .)
+		if (ip.contains(".")) {
+			// Must be in format ::ffff:x.x.x.x or similar
+			var lastColon = ip.lastIndexOf(":");
+			if (lastColon < 0)
+				return false;
+			var ipv4Part = ip.substring(lastColon + 1);
+			// Validate IPv4 part
+			var ipv4Parts = ipv4Part.split("\\.");
+			if (ipv4Parts.length != 4)
+				return false;
+			for (var part : ipv4Parts) {
+				try {
+					var num = Integer.parseInt(part);
+					if (num < 0 || num > 255)
+						return false;
+				} catch (NumberFormatException e) {
+					return false;
+				}
+			}
+			// Validate IPv6 part before the IPv4
+			var ipv6Part = ip.substring(0, lastColon);
+			if (ipv6Part.isEmpty() || ipv6Part.equals("::ffff") || ipv6Part.equals("::FFFF"))
+				return true;
+			// More complex validation would be needed for other IPv4-mapped formats
+			// For now, accept common formats
+		}
+
+		// Check for :: (compression) - only one allowed
+		var doubleColonCount = 0;
+		for (var i = 1; i < ip.length(); i++) {
+			if (ip.charAt(i) == ':' && ip.charAt(i - 1) == ':') {
+				doubleColonCount++;
+				if (doubleColonCount > 1)
+					return false; // Only one :: allowed
+			}
+		}
+
+		// Split by ::
+		var parts = ip.split("::", -1);
+		if (parts.length > 2)
+			return false; // Only one :: allowed
+
+		if (parts.length == 2) {
+			// Compressed format
+			var leftParts = parts[0].isEmpty() ? new String[0] : parts[0].split(":");
+			var rightParts = parts[1].isEmpty() ? new String[0] : parts[1].split(":");
+			var totalParts = leftParts.length + rightParts.length;
+			if (totalParts > 7)
+				return false; // Too many groups (max 8, but :: counts as one or more)
+			if (totalParts == 0 && !ip.equals("::"))
+				return false; // Empty on both sides of :: is invalid (except :: itself)
+		} else {
+			// Full format (no compression)
+			var groups = ip.split(":");
+			if (groups.length != 8)
+				return false;
+		}
+
+		// Validate each hex group
+		var groups = ip.split("::");
+		for (var groupSection : groups) {
+			if (groupSection.isEmpty())
+				continue; // Skip empty section from ::
+			var groupParts = groupSection.split(":");
+			for (var group : groupParts) {
+				if (group.isEmpty())
+					return false;
+				if (group.length() > 4)
+					return false; // Each group is max 4 hex digits
+				// Validate hex digits
+				for (var i = 0; i < group.length(); i++) {
+					var c = group.charAt(i);
+					if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
+						return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -5564,12 +5665,12 @@ public class StringUtils {
 			return new BigDecimal(s);
 		if (type == Long.class || type == Long.TYPE || type == AtomicLong.class) {
 			try {
-				var l = Long.decode(s);
+				var l = parseLongWithSuffix(s);
 				if (type == AtomicLong.class)
 					return new AtomicLong(l);
 				if (isAutoDetect && l >= Integer.MIN_VALUE && l <= Integer.MAX_VALUE) {
 					// This occurs if the string is 10 characters long but is still a valid integer value.
-					return l.intValue();
+					return (int)l;
 				}
 				return l;
 			} catch (NumberFormatException e) {
