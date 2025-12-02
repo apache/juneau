@@ -3716,7 +3716,7 @@
 <a class="jxr_linenumber" name="L3708" href="#L3708">3708</a> 			sdf.setLenient(false); <em class="jxr_comment">// Strict parsing</em>
 <a class="jxr_linenumber" name="L3709" href="#L3709">3709</a> 			sdf.parse(dateStr);
 <a class="jxr_linenumber" name="L3710" href="#L3710">3710</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L3711" href="#L3711">3711</a> 		} <strong class="jxr_keyword">catch</strong> (ParseException | IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L3711" href="#L3711">3711</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) ParseException | IllegalArgumentException e) {
 <a class="jxr_linenumber" name="L3712" href="#L3712">3712</a> 			<em class="jxr_comment">// IllegalArgumentException thrown for invalid format patterns</em>
 <a class="jxr_linenumber" name="L3713" href="#L3713">3713</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L3714" href="#L3714">3714</a> 		}
@@ -3825,7 +3825,7 @@
 <a class="jxr_linenumber" name="L3817" href="#L3817">3817</a> 				<strong class="jxr_keyword">return</strong> isValidIPv6Address(ip);
 <a class="jxr_linenumber" name="L3818" href="#L3818">3818</a> 			}
 <a class="jxr_linenumber" name="L3819" href="#L3819">3819</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L3820" href="#L3820">3820</a> 		} <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
+<a class="jxr_linenumber" name="L3820" href="#L3820">3820</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
 <a class="jxr_linenumber" name="L3821" href="#L3821">3821</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L3822" href="#L3822">3822</a> 		}
 <a class="jxr_linenumber" name="L3823" href="#L3823">3823</a> 	}
@@ -3870,7 +3870,7 @@
 <a class="jxr_linenumber" name="L3862" href="#L3862">3862</a> 					<strong class="jxr_keyword">var</strong> num = Integer.parseInt(part);
 <a class="jxr_linenumber" name="L3863" href="#L3863">3863</a> 					<strong class="jxr_keyword">if</strong> (num &lt; 0 || num &gt; 255)
 <a class="jxr_linenumber" name="L3864" href="#L3864">3864</a> 						<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L3865" href="#L3865">3865</a> 				} <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
+<a class="jxr_linenumber" name="L3865" href="#L3865">3865</a> 				} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
 <a class="jxr_linenumber" name="L3866" href="#L3866">3866</a> 					<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L3867" href="#L3867">3867</a> 				}
 <a class="jxr_linenumber" name="L3868" href="#L3868">3868</a> 			}
@@ -3993,7 +3993,7 @@
 <a class="jxr_linenumber" name="L3985" href="#L3985">3985</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3986" href="#L3986">3986</a> 			Pattern.compile(regex);
 <a class="jxr_linenumber" name="L3987" href="#L3987">3987</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L3988" href="#L3988">3988</a> 		} <strong class="jxr_keyword">catch</strong> (PatternSyntaxException e) {
+<a class="jxr_linenumber" name="L3988" href="#L3988">3988</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) PatternSyntaxException e) {
 <a class="jxr_linenumber" name="L3989" href="#L3989">3989</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L3990" href="#L3990">3990</a> 		}
 <a class="jxr_linenumber" name="L3991" href="#L3991">3991</a> 	}
@@ -4023,7 +4023,7 @@
 <a class="jxr_linenumber" name="L4015" href="#L4015">4015</a> 			sdf.setLenient(false); <em class="jxr_comment">// Strict parsing</em>
 <a class="jxr_linenumber" name="L4016" href="#L4016">4016</a> 			sdf.parse(timeStr);
 <a class="jxr_linenumber" name="L4017" href="#L4017">4017</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L4018" href="#L4018">4018</a> 		} <strong class="jxr_keyword">catch</strong> (ParseException | IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L4018" href="#L4018">4018</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) ParseException | IllegalArgumentException e) {
 <a class="jxr_linenumber" name="L4019" href="#L4019">4019</a> 			<em class="jxr_comment">// IllegalArgumentException thrown for invalid format patterns</em>
 <a class="jxr_linenumber" name="L4020" href="#L4020">4020</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L4021" href="#L4021">4021</a> 		}
@@ -5548,7 +5548,7 @@
 <a class="jxr_linenumber" name="L5540" href="#L5540">5540</a> 		<strong class="jxr_keyword">var</strong> base = Long.decode(baseStr);  <em class="jxr_comment">// NOSONAR - NPE not possible here.</em>
 <a class="jxr_linenumber" name="L5541" href="#L5541">5541</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5542" href="#L5542">5542</a> 			<strong class="jxr_keyword">return</strong> Math.multiplyExact(base, m);
-<a class="jxr_linenumber" name="L5543" href="#L5543">5543</a> 		} <strong class="jxr_keyword">catch</strong> (ArithmeticException e) {
+<a class="jxr_linenumber" name="L5543" href="#L5543">5543</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) ArithmeticException e) {
 <a class="jxr_linenumber" name="L5544" href="#L5544">5544</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NumberFormatException(<span class="jxr_string">"Value "</span> + s + <span class="jxr_string">" exceeds Long.MAX_VALUE"</span>);
 <a class="jxr_linenumber" name="L5545" href="#L5545">5545</a> 		}
 <a class="jxr_linenumber" name="L5546" href="#L5546">5546</a> 	}
