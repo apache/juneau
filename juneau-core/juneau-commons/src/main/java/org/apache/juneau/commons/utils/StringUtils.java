@@ -43,7 +43,6 @@ import java.util.stream.*;
 import java.util.zip.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 
 /**
@@ -125,6 +124,13 @@ public class StringUtils {
 	}
 	private static final Random RANDOM = new Random();
 
+	/**
+	 * Floating-point literal validation pattern used by {@link Double#valueOf(String)}.
+	 *
+	 * <p>
+	 * Matches decimal, hexadecimal, and scientific-notation literals, as well as {@code NaN} and {@code Infinity},
+	 * with optional sign, exponent, and type suffixes. Copied from the JDK source to keep parsing logic consistent.
+	 */
 	public static final Pattern FP_REGEX = Pattern.compile(
 		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"  // NOSONAR
 	);
@@ -134,7 +140,7 @@ public class StringUtils {
 	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
 	private static final List<Readifier> READIFIERS = loadReadifiers();
-	private static final Cache<Class,Function<Object,String>> READIFIER_CACHE = Cache.<Class,Function<Object,String>>create().build();
+	private static final Cache<Class<?>,Function<Object,String>> READIFIER_CACHE = Cache.<Class<?>,Function<Object,String>>create().weak().build();
 
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
@@ -8217,52 +8223,53 @@ public class StringUtils {
 		var list = new ArrayList<Readifier>();
 
 		// More specific types first - order matters!
-		list.add(readifier(Map.Entry.class, e -> readable(e.getKey()) + '=' + readable(e.getValue())));
-		list.add(readifier(Collection.class, c -> ((Collection<?>)c).stream().map(StringUtils::readable).collect(joining(",", "[", "]"))));
-		list.add(readifier(Map.class, m -> ((Map<?,?>)m).entrySet().stream().map(StringUtils::readable).collect(joining(",", "{", "}"))));
-		list.add(readifier(Iterable.class, i -> readable(toList(i))));
-		list.add(readifier(Iterator.class, it -> readable(toList(it))));
-		list.add(readifier(Enumeration.class, e -> readable(toList(e))));
-		list.add(readifier(Optional.class, o -> readable(((Optional<?>)o).orElse(null))));
-		list.add(readifier(GregorianCalendar.class, (GregorianCalendar cal) -> cal.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT)));
-		list.add(readifier(Date.class, (Date date) -> date.toInstant().toString()));
-		list.add(readifier(InputStream.class, (InputStream is) -> toHex(is)));
-		list.add(readifier(Reader.class, (Reader reader) -> safe(() -> read(reader))));
-		list.add(readifier(File.class, (File file) -> safe(() -> read(file))));
-		list.add(readifier(byte[].class, (byte[] bytes) -> toHex(bytes)));
-		list.add(readifier(Enum.class, e -> ((Enum<?>)e).name()));
-		list.add(readifier(Class.class, c -> cns(c)));
-		list.add(readifier(Executable.class, (Executable exec) -> {
-			var sb = new StringBuilder(64);
-			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('(');
-			var pt = exec.getParameterTypes();
-			for (var i = 0; i < pt.length; i++) {
-				if (i > 0)
-					sb.append(',');
-				sb.append(cns(pt[i]));
+		list.add(readifier(Map.Entry.class, x -> readable(x.getKey()) + '=' + readable(x.getValue())));
+		list.add(readifier(Collection.class, x -> ((Collection<?>)x).stream().map(StringUtils::readable).collect(joining(",", "[", "]"))));
+		list.add(readifier(Map.class, x -> ((Map<?,?>)x).entrySet().stream().map(StringUtils::readable).collect(joining(",", "{", "}"))));
+		list.add(readifier(Iterable.class, x -> readable(toList(x))));
+		list.add(readifier(Iterator.class, x -> readable(toList(x))));
+		list.add(readifier(Enumeration.class, x -> readable(toList(x))));
+		list.add(readifier(Optional.class, x -> readable(((Optional<?>)x).orElse(null))));
+		list.add(readifier(GregorianCalendar.class, x -> x.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT)));
+		list.add(readifier(Date.class, x -> x.toInstant().toString()));
+		list.add(readifier(InputStream.class, x -> toHex(x)));
+		list.add(readifier(Reader.class, (Reader x) -> safe(() -> read(x))));
+		list.add(readifier(File.class, (File x) -> safe(() -> read(x))));
+		list.add(readifier(byte[].class, x -> toHex(x)));
+		list.add(readifier(Enum.class, x -> ((Enum<?>)x).name()));
+		list.add(readifier(Class.class, x -> cns(x)));
+		list.add(readifier(Constructor.class, x -> ConstructorInfo.of(x).getFullName()));
+		list.add(readifier(Method.class, x -> MethodInfo.of(x).getFullName()));
+		list.add(readifier(Field.class, x -> FieldInfo.of(x).toString()));
+		list.add(readifier(Parameter.class, x -> {
+			try {
+				return ParameterInfo.of(x).toString();
+			} catch (IllegalArgumentException ex) {
+				var exec = x.getDeclaringExecutable();
+				String execName;
+				if (exec instanceof Constructor<?> c)
+					execName = ConstructorInfo.of(c).getFullName();
+				else if (exec instanceof Method m)
+					execName = MethodInfo.of(m).getFullName();
+				else
+					execName = exec.toString();
+
+				var idx = -1;
+				var params = exec.getParameters();
+				for (var i = 0; i < params.length; i++) {
+					if (params[i] == x) {
+						idx = i;
+						break;
+					}
+				}
+				return idx >= 0 ? execName + "[" + idx + "]" : execName;
 			}
-			sb.append(')');
-			return sb.toString();
 		}));
 		list.add(readifier(ClassInfo.class, ClassInfo::toString));
-		list.add(readifier(ExecutableInfo.class, ExecutableInfo::toString));
+		list.add(readifier(MethodInfo.class, MethodInfo::toString));
+		list.add(readifier(ConstructorInfo.class, ConstructorInfo::toString));
 		list.add(readifier(FieldInfo.class, FieldInfo::toString));
 		list.add(readifier(ParameterInfo.class, ParameterInfo::toString));
-		list.add(readifier(Field.class, (Field f) -> cns(f.getDeclaringClass()) + "." + f.getName()));
-		list.add(readifier(Parameter.class, (Parameter p) -> {
-			var exec = p.getDeclaringExecutable();
-			var sb = new StringBuilder(64);
-			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('[');
-			var params = exec.getParameters();
-			for (var i = 0; i < params.length; i++) {
-				if (params[i] == p) {
-					sb.append(i);
-					break;
-				}
-			}
-			sb.append(']');
-			return sb.toString();
-		}));
 
 		return Collections.unmodifiableList(list);
 	}
