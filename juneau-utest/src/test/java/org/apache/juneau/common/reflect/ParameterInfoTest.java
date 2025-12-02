@@ -33,9 +33,9 @@ import org.junit.jupiter.api.*;
 import org.apache.juneau.annotation.Name;
 
 /**
- * ParamInfo tests.
+ * ParameterInfo tests.
  */
-class ParamInfoTest extends TestBase {
+class ParameterInfoTest extends TestBase {
 
 	private static String originalDisableParamNameDetection;
 

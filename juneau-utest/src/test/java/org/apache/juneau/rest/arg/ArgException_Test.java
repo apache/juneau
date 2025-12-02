@@ -30,34 +30,34 @@ import org.junit.jupiter.api.*;
 
 class ArgException_Test extends TestBase {
 
-	private static ParameterInfo testParamInfo;
+	private static ParameterInfo testParameterInfo;
 
 	@BeforeAll
 	public static void setup() throws Exception {
-		// Create a test ParamInfo for a sample method parameter
+		// Create a test ParameterInfo for a sample method parameter
 		var mi = MethodInfo.of(ArgException_Test.class.getMethod("sampleMethod", String.class));
-		testParamInfo = mi.getParameter(0);
+		testParameterInfo = mi.getParameter(0);
 	}
 
 	public static void sampleMethod(String param) {
-		// Sample method for creating ParamInfo
+		// Sample method for creating ParameterInfo
 	}
 
 	@Test void a01_basic() {
-		var x = new ArgException(testParamInfo, "Test message");
+		var x = new ArgException(testParameterInfo, "Test message");
 		assertNotNull(x);
 		assertTrue(x.getMessage().contains("Test message"));
 		assertTrue(x.getMessage().contains("parameter 0"));
 	}
 
 	@Test void a02_withArgs() {
-		var x = new ArgException(testParamInfo, "Test {0} {1}", "foo", "bar");
+		var x = new ArgException(testParameterInfo, "Test {0} {1}", "foo", "bar");
 		assertTrue(x.getMessage().contains("Test foo bar"));
 		assertTrue(x.getMessage().contains("parameter 0"));
 	}
 
 	@Test void a03_fluentSetters() {
-		var x = new ArgException(testParamInfo, "Test");
+		var x = new ArgException(testParameterInfo, "Test");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -106,7 +106,7 @@ class ArgException_Test extends TestBase {
 
 	@Test void a04_fluentChaining() {
 		// Test multiple fluent calls can be chained
-		var x = new ArgException(testParamInfo, "Initial")
+		var x = new ArgException(testParameterInfo, "Initial")
 			.setHeaders(l(BasicHeader.of("X-Chain", "chained")))
 			.setContent("Chained content");
 
@@ -115,7 +115,7 @@ class ArgException_Test extends TestBase {
 
 	@Test void a05_copy() {
 		// Test that copy() returns correct type
-		var x = new ArgException(testParamInfo, "Original message");
+		var x = new ArgException(testParameterInfo, "Original message");
 
 		ArgException copy = x.copy();
 

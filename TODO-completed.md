@@ -9,6 +9,14 @@ This file contains TODO items that have been completed and moved from TODO.md.
   - **Completed**: October 31, 2025
   - **Total changes**: 276 files modified, 915 insertions(+), 859 deletions(-)
   
+- **TODO-87** ✅ Replace remaining `ParamInfo` references with `ParameterInfo`.
+  - **Status**: COMPLETED
+  - **Details**: Removed the legacy `ParamInfoTest`, replacing it with `ParameterInfoTest`, updated all test references (including variable names/comments) to use `ParameterInfo`, and ensured the active codebase no longer mentions `ParamInfo` outside of archived static Javadocs from prior releases.
+  
+- **TODO-88** ✅ Eliminate need for AssertionArgs in BctAssertions by allowing DEFAULT_CONVERTER to be overridden and resettable.
+  - **Status**: COMPLETED
+  - **Details**: Introduced a thread-local resettable converter supplier (defaulting to `BasicBeanConverter.DEFAULT`), added `setConverter()`/`resetConverter()` APIs, removed the `AssertionArgs` class, updated all assertion signatures to take a leading `Supplier<String>` for custom messages, refreshed docs/javadocs, and migrated the BCT tests to the new API.
+  
   ### Phase 1: Break up compound declarations (26 instances)
   - **Pattern**: `Type var1 = ..., var2 = ...;` → `var var1 = ...; var var2 = ...;`
   - **Files**: 15+ files including HtmlSerializerSession.java, BeanSession.java, RemoteOperationMeta.java, etc.
