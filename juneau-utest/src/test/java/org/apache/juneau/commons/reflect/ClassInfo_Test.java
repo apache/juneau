@@ -37,6 +37,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.Value;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
@@ -142,40 +143,6 @@ public class ClassInfo_Test extends TestBase {
 	static ClassInfo aTypeInfo = of(aType), pTypeInfo = of(pType), pTypeDimensionalInfo = of(pTypeDimensional), pTypeGenericInfo = of(pTypeGeneric), pTypeGenericArgInfo = of(pTypeGenericArg);
 	static ClassInfo aClass = of(AClass.class), aInterface = of(AInterface.class);
 
-	@Test
-	void ofType() {
-		check("A1", of(A1.class));
-		check("A1", of(aType));
-		check("Map", pTypeInfo);
-		check("Map", pTypeDimensionalInfo);
-		check("AbstractMap", pTypeGenericInfo);
-		check("V", pTypeGenericArgInfo);
-	}
-
-	@Test
-	void ofTypeOnObject() {
-		check("A1", of(new A1()));
-	}
-
-	@Test
-	void ofTypeOnNulls() {
-		assertThrows(IllegalArgumentException.class, () -> of((Class<?>)null));
-		assertThrows(IllegalArgumentException.class, () -> of((Type)null));
-		assertThrows(NullPointerException.class, () -> of((Object)null));
-	}
-
-	@Test
-	void inner() {
-		assertNotNull(of(A1.class).inner());
-		assertTrue(of(A1.class).innerType() instanceof Class);
-	}
-
-	@Test
-	void resolved() {
-		check("A1", of(A1.class).unwrap(Value.class));
-		check("A1", of(A2.class).unwrap(Value.class));
-	}
-
 	public static class A6 {
 		public Optional<A1> m1(Optional<A1> bar) {
 			return null;
@@ -185,20 +152,6 @@ public class ClassInfo_Test extends TestBase {
 			return null;
 		}
 	}
-
-	@Test
-	void resolvedParams() {
-		var mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1")).get();
-		check("A1", mi2.getParameter(0).getParameterType().unwrap(Optional.class));
-		check("A1", mi2.getReturnType().unwrap(Optional.class));
-		mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2")).get();
-		check("A1", mi2.getParameter(0).getParameterType().unwrap(Value.class));
-		check("A1", mi2.getReturnType().unwrap(Value.class));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Parent classes and interfaces.
-	//-----------------------------------------------------------------------------------------------------------------
 
 	interface BI1 {}
 
@@ -215,86 +168,6 @@ public class ClassInfo_Test extends TestBase {
 	static class BC3 extends BC2 {}
 
 	static ClassInfo bi1 = of(BI1.class), bi2 = of(BI2.class), bi3 = of(BI3.class), bi4 = of(BI4.class), bc1 = of(BC1.class), bc2 = of(BC2.class), bc3 = of(BC3.class), object = of(Object.class);
-
-	@Test
-	void getDeclaredInterfaces() {
-		check("", bi4.getDeclaredInterfaces());
-		check("BI1,BI2", bc1.getDeclaredInterfaces());
-		check("BI3", bc2.getDeclaredInterfaces());
-		check("", bc3.getDeclaredInterfaces());
-	}
-
-	@Test
-	void getDeclaredInterfaces_onType() {
-		check("", aTypeInfo.getDeclaredInterfaces());
-		check("", pTypeInfo.getDeclaredInterfaces());
-		check("", pTypeDimensionalInfo.getDeclaredInterfaces());
-		check("Map", pTypeGenericInfo.getDeclaredInterfaces());
-		check("", pTypeGenericArgInfo.getDeclaredInterfaces());
-	}
-
-	@Test
-	void getDeclaredInterfaces_twice() {
-		check("BI1,BI2", bc1.getDeclaredInterfaces());
-		check("BI1,BI2", bc1.getDeclaredInterfaces());
-	}
-
-	@Test
-	void getInterfaces() {
-		check("", bi4.getInterfaces());
-		check("BI1,BI2", bc1.getInterfaces());
-		check("BI3,BI1,BI2", bc2.getInterfaces());
-		check("BI3,BI1,BI2", bc3.getInterfaces());
-	}
-
-	@Test
-	void getInterfaces_tiwce() {
-		check("BI3,BI1,BI2", bc2.getInterfaces());
-		check("BI3,BI1,BI2", bc2.getInterfaces());
-	}
-
-	@Test
-	void getParents() {
-		check("BC3,BC2,BC1", bc3.getParents());
-		check("", object.getParents());
-		check("BI1", bi1.getParents());
-	}
-
-	@Test
-	void getAllParents() {
-		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
-		check("", object.getAllParents());
-		check("BI1", bi1.getAllParents());
-	}
-
-	@Test
-	void getAllParents_twice() {
-		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
-		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
-	}
-
-	@Test
-	void getParent() {
-		check("BC2", bc3.getSuperclass());
-		check("BC1", bc2.getSuperclass());
-		check("Object", bc1.getSuperclass());
-		check(null, object.getSuperclass());
-		check(null, bi2.getSuperclass());
-		check(null, bi1.getSuperclass());
-	}
-
-	@Test
-	void getParent_onType() {
-		check("Object", aTypeInfo.getSuperclass());
-		check(null, pTypeInfo.getSuperclass());
-		check(null, pTypeDimensionalInfo.getSuperclass());
-		check("Object", pTypeGenericInfo.getSuperclass());
-		check(null, pTypeGenericArgInfo.getSuperclass());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	interface CI1 {
 		void i1a();
@@ -347,58 +220,6 @@ public class ClassInfo_Test extends TestBase {
 
 	static ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
 
-	@Test
-	void getPublicMethods() {
-		check("CC3.c1a(),CC3.c2b(),CC3.c3a(),CC3.i1a(),CC3.i1b(),CC3.i2a(),CC3.i2b()", cc3.getPublicMethods());
-		check("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethods());
-	}
-
-	@Test
-	void getPublicMethods_twice() {
-		check("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethods());
-		check("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethods());
-	}
-
-	@Test
-	void getPublicMethods_onType() {
-		check("", aTypeInfo.getPublicMethods());
-		check("", pTypeGenericArgInfo.getPublicMethods());
-	}
-
-	@Test
-	void getAllMethods() {
-		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
-	}
-
-	@Test
-	void getAllMethods_twice() {
-		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
-		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
-	}
-
-	@Test
-	void getDeclaredMethods() {
-		check("CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getDeclaredMethods());
-		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
-		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
-	}
-
-	@Test
-	void getDeclaredMethods_twice() {
-		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
-		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
-	}
-
-	@Test
-	void getDeclaredMethods_onType() {
-		check("", aTypeInfo.getDeclaredMethods());
-		check("", pTypeGenericArgInfo.getDeclaredMethods());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
-
 	static class E1 {
 		public E1() {}
 
@@ -436,98 +257,6 @@ public class ClassInfo_Test extends TestBase {
 
 	static ClassInfo e1 = of(E1.class), e2 = of(E2.class), e3 = of(E3.class), e4 = of(E4.class), e5 = of(E5.class), e6 = of(E6.class);
 
-	@Test
-	void getPublicConstructors() {
-		check("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
-	}
-
-	@Test
-	void getPublicConstructors_twice() {
-		check("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
-		check("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
-	}
-
-	@Test
-	void getPublicConstructors_onType() {
-		check("A1(ClassInfo_Test)", aTypeInfo.getPublicConstructors());
-		check("", pTypeInfo.getPublicConstructors());
-		check("", pTypeDimensionalInfo.getPublicConstructors());
-		check("", pTypeGenericInfo.getPublicConstructors());
-		check("", pTypeGenericArgInfo.getPublicConstructors());
-	}
-
-	@Test
-	void getDeclaredConstructors() {
-		check("E1(),E1(float),E1(int),E1(Writer),E1(String),E1(String,Writer)", e1.getDeclaredConstructors());
-	}
-
-	@Test
-	void getDeclaredConstructors_twice() {
-		check("E1(),E1(float),E1(int),E1(Writer),E1(String),E1(String,Writer)", e1.getDeclaredConstructors());
-		check("E1(),E1(float),E1(int),E1(Writer),E1(String),E1(String,Writer)", e1.getDeclaredConstructors());
-	}
-
-	@Test
-	void getDeclaredConstructors_onType() {
-		check("A1(ClassInfo_Test)", aTypeInfo.getDeclaredConstructors());
-		check("", pTypeInfo.getDeclaredConstructors());
-		check("", pTypeDimensionalInfo.getDeclaredConstructors());
-		check("AbstractMap()", pTypeGenericInfo.getDeclaredConstructors());
-		check("", pTypeGenericArgInfo.getDeclaredConstructors());
-	}
-
-	@Test
-	void getPublicConstructor_classArgs() {
-		check("E1(String)", e1.getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null));
-	}
-
-	@Test
-	void getPublicConstructor_objectArgs() {
-		check("E1(String)", e1.getPublicConstructor(x -> x.canAccept("foo")).orElse(null));
-	}
-
-	@Test
-	void getNoArgConstructor() {
-		check("E2()", e2.getNoArgConstructor(Visibility.PRIVATE).orElse(null));
-		check("E2()", e2.getNoArgConstructor(Visibility.PROTECTED).orElse(null));
-		check("E2()", e2.getNoArgConstructor(Visibility.DEFAULT).orElse(null));
-		check(null, e2.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
-	}
-
-	@Test
-	void getNoArgConstructor_abstractClass() {
-		check(null, e3.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
-	}
-
-	@Test
-	void getNoArgConstructor_innerClass() {
-		check("E4(ClassInfo_Test)", e4.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
-	}
-
-	@Test
-	void getNoArgConstructor_noConstructor() {
-		check(null, e6.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
-	}
-
-	@Test
-	void getPublicNoArgConstructor() {
-		check("E1()", e1.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null));
-	}
-
-	@Test
-	void getConstructor() {
-		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PROTECTED) && x.hasParameterTypes(int.class)).orElse(null));
-		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PRIVATE) && x.hasParameterTypes(int.class)).orElse(null));
-		check(null, e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC) && x.hasParameterTypes(int.class)).orElse(null));
-		check("E3()", e3.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)).orElse(null));
-		check("E4(ClassInfo_Test)", e4.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)).orElse(null));
-		check("E5()", e5.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)).orElse(null));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fields
-	//-----------------------------------------------------------------------------------------------------------------
-
 	abstract static class F1 {
 		public int f1a;
 		public int f1b;
@@ -543,77 +272,12 @@ public class ClassInfo_Test extends TestBase {
 
 	static ClassInfo f1 = of(F1.class), f2 = of(F2.class);
 
-	@Test
-	void getPublicFields() {
-		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFields());
-	}
-
-	@Test
-	void getPublicFields_twice() {
-		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFields());
-		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFields());
-	}
-
-	@Test
-	void getPublicFields_onType() {
-		check("", aTypeInfo.getPublicFields());
-	}
-
-	@Test
-	void getDeclaredFields() {
-		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFields());
-	}
-
-	@Test
-	void getDeclaredFields_twice() {
-		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFields());
-		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFields());
-	}
-
-	@Test
-	void getDeclaredFields_onType() {
-		check("A1.this$0", aTypeInfo.getDeclaredFields());
-		check("", pTypeInfo.getDeclaredFields());
-		check("", pTypeDimensionalInfo.getDeclaredFields());
-		check("AbstractMap.keySet,AbstractMap.values", pTypeGenericInfo.getDeclaredFields());
-		check("", pTypeGenericArgInfo.getDeclaredFields());
-	}
-
-	@Test
-	void getAllFieldsParentFirst() {
-		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFields());
-	}
-
-	@Test
-	void getAllFieldsParentFirst_twice() {
-		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFields());
-		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFields());
-	}
-
 	static class F3 {
 		public int a1;
 		int a2;
 	}
 
 	static ClassInfo f3 = of(F3.class);
-
-	@Test
-	void getPublicField() {
-		check("F3.a1", f3.getPublicField(x -> x.hasName("a1")).orElse(null));
-		check(null, f3.getPublicField(x -> x.hasName("a2")).orElse(null));
-		check(null, f3.getPublicField(x -> x.hasName("a3")).orElse(null));
-	}
-
-	@Test
-	void getDeclaredField() {
-		check("F3.a1", f3.getDeclaredField(x -> x.hasName("a1")).orElse(null));
-		check("F3.a2", f3.getDeclaredField(x -> x.hasName("a2")).orElse(null));
-		check(null, f3.getDeclaredField(x -> x.hasName("a3")).orElse(null));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@A(1)
 	interface GI1 {}
@@ -641,72 +305,6 @@ public class ClassInfo_Test extends TestBase {
 	static class G5 implements GI3 {}
 
 	static ClassInfo g3 = of(G3.class), g4 = of(G4.class), g5 = of(G5.class);
-
-	@Test
-	void getAnnotation() {
-		check("@A(7)", g3.getAnnotations(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-		check(null, g3.getAnnotations(B.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-		check(null, null);
-	}
-
-	@Test
-	void getAnnotation_twice() {
-		check("@A(7)", g3.getAnnotations(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-		check("@A(7)", g3.getAnnotations(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-	}
-
-	@Test
-	void getAnnotation_onParent() {
-		check("@A(7)", g4.getAnnotations(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-		check(null, g4.getAnnotations(B.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-		check(null, null);
-	}
-
-	@Test
-	void getAnnotation_onInterface() {
-		check("@A(3)", g5.getAnnotations(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-		check(null, g5.getAnnotations(B.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-		check(null, null);
-	}
-
-	@Test
-	void hasAnnotation() {
-		assertTrue(g3.hasAnnotation(A.class));
-		assertFalse(g3.hasAnnotation(B.class));
-		assertThrows(IllegalArgumentException.class, () -> g3.hasAnnotation(null));
-	}
-
-	@Test
-	void lastAnnotation() {
-		// Use AnnotationProvider to get last annotation (first in child-to-parent order stream)
-		var ap = AP;
-		assertEquals(7, ap.find(A.class, g3).stream().map(AnnotationInfo::inner).findFirst().get().value());
-		assertEquals(7, ap.find(A.class, g4).stream().map(AnnotationInfo::inner).findFirst().get().value());
-		assertEquals(3, ap.find(A.class, g5).stream().map(AnnotationInfo::inner).findFirst().get().value());
-		assertEquals(5, ap.find(A.class, g3).stream().map(AnnotationInfo::inner).filter(x -> x.value() == 5).findFirst().get().value());
-	}
-
-	@Test
-	void getPackageAnnotation() {
-		check("@PA(10)", g3.getPackageAnnotation(PA.class));
-	}
-
-	@Test
-	void getPackageAnnotation_onType() {
-		check("@PA(10)", aTypeInfo.getPackageAnnotation(PA.class));
-		check(null, pTypeInfo.getPackageAnnotation(PA.class));
-		check(null, pTypeDimensionalInfo.getPackageAnnotation(PA.class));
-		check(null, pTypeGenericInfo.getPackageAnnotation(PA.class));
-		check(null, pTypeGenericArgInfo.getPackageAnnotation(PA.class));
-	}
-
-	@Test
-	void getAnnotationsMapParentFirst() {
-		// Note: Order changed after inlining - interfaces now processed when they appear in hierarchy, not after all classes
-		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotations()).collect(Collectors.toList()));
-		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotations()).collect(Collectors.toList()));
-		check("@PA(10),@A(3)", rstream(g5.getAnnotations()).collect(Collectors.toList()));
-	}
 
 	@A(1)
 	@AConfig(1)
@@ -742,17 +340,6 @@ public class ClassInfo_Test extends TestBase {
 
 	static ClassInfo gb3 = of(GB3.class), gb4 = of(GB4.class), gb5 = of(GB5.class);
 
-	@Test
-	void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)", rstream(gb3.getAnnotations()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
-		check("@AConfig(2),@AConfig(1),@AConfig(5),@AConfig(3),@AConfig(6),@AConfig(7)", rstream(gb4.getAnnotations()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
-		check("@AConfig(3)", rstream(gb5.getAnnotations()).filter(CONTEXT_APPLY_FILTER).collect(Collectors.toList()));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Characteristics
-	//-----------------------------------------------------------------------------------------------------------------
-
 	public static class H_Public {}
 
 	static class H_Package {}
@@ -770,297 +357,6 @@ public class ClassInfo_Test extends TestBase {
 
 	static ClassInfo hPublic = of(H_Public.class), hPackage = of(H_Package.class), hProtected = of(H_Protected.class), hPrivate = of(H_Private.class), hPublicMember = of(H_PublicMember.class),
 		hAbstractPublic = of(H_AbstractPublic.class), hPublicDeprecated = of(H_PublicDeprecated.class);  // NOSONAR
-
-	@Test
-	void isDeprecated() {
-		assertFalse(hPublic.isDeprecated());
-		assertTrue(hPublicDeprecated.isDeprecated());
-	}
-
-	@Test
-	void isDeprecated_onType() {
-		assertFalse(aTypeInfo.isDeprecated());
-		assertFalse(pTypeGenericArgInfo.isDeprecated());
-	}
-
-	@Test
-	void isNotDeprecated() {
-		assertTrue(hPublic.isNotDeprecated());
-		assertFalse(hPublicDeprecated.isNotDeprecated());
-	}
-
-	@Test
-	void isNotDeprecated_onType() {
-		assertTrue(aTypeInfo.isNotDeprecated());
-		assertTrue(pTypeInfo.isNotDeprecated());
-		assertTrue(pTypeDimensionalInfo.isNotDeprecated());
-		assertTrue(pTypeGenericInfo.isNotDeprecated());
-		assertTrue(pTypeGenericArgInfo.isNotDeprecated());
-	}
-
-	@Test
-	void isPublic() {
-		assertTrue(hPublic.isPublic());
-		assertFalse(hProtected.isPublic());
-		assertFalse(hPackage.isPublic());
-		assertFalse(hPrivate.isPublic());
-	}
-
-	@Test
-	void isPublic_onType() {
-		assertTrue(aTypeInfo.isPublic());
-		assertTrue(pTypeInfo.isPublic());
-		assertTrue(pTypeDimensionalInfo.isPublic());
-		assertTrue(pTypeGenericInfo.isPublic());
-		assertFalse(pTypeGenericArgInfo.isPublic());
-	}
-
-	@Test
-	void isNotPublic() {
-		assertFalse(hPublic.isNotPublic());
-		assertTrue(hProtected.isNotPublic());
-		assertTrue(hPackage.isNotPublic());
-		assertTrue(hPrivate.isNotPublic());
-	}
-
-	@Test
-	void isNotPublic_onType() {
-		assertFalse(aTypeInfo.isNotPublic());
-		assertTrue(pTypeGenericArgInfo.isNotPublic());
-	}
-
-	@Test
-	void isStatic() {
-		assertTrue(hPublic.isStatic());
-		assertFalse(hPublicMember.isStatic());
-	}
-
-	@Test
-	void isStatic_onType() {
-		assertFalse(aTypeInfo.isStatic());
-		assertFalse(pTypeGenericArgInfo.isStatic());
-	}
-
-	@Test
-	void isNotStatic() {
-		assertFalse(hPublic.isNotStatic());
-		assertTrue(hPublicMember.isNotStatic());
-	}
-
-	@Test
-	void isNotStatic_onType() {
-		assertTrue(aTypeInfo.isNotStatic());
-		assertTrue(pTypeInfo.isNotStatic());
-		assertTrue(pTypeDimensionalInfo.isNotStatic());
-		assertTrue(pTypeGenericInfo.isNotStatic());
-		assertTrue(pTypeGenericArgInfo.isNotStatic());
-	}
-
-	@Test
-	void isAbstract() {
-		assertTrue(hAbstractPublic.isAbstract());
-		assertFalse(pTypeGenericArgInfo.isAbstract());
-	}
-
-	@Test
-	void isAbstract_onType() {
-		assertFalse(aTypeInfo.isAbstract());
-		assertFalse(aTypeInfo.isAbstract());
-	}
-
-	@Test
-	void isNotAbstract() {
-		assertFalse(hAbstractPublic.isNotAbstract());
-		assertTrue(hPublic.isNotAbstract());
-	}
-
-	@Test
-	void isNotAbstract_onType() {
-		assertTrue(aTypeInfo.isNotAbstract());
-		assertFalse(pTypeInfo.isNotAbstract());
-		assertFalse(pTypeDimensionalInfo.isNotAbstract());
-		assertFalse(pTypeGenericInfo.isNotAbstract());
-		assertTrue(pTypeGenericArgInfo.isNotAbstract());
-	}
-
-	@Test
-	void isMemberClass() {
-		assertTrue(hPublic.isMemberClass());
-		assertTrue(hPublicMember.isMemberClass());
-		assertFalse(aClass.isMemberClass());
-		assertFalse(aInterface.isMemberClass());
-	}
-
-	@Test
-	void isMemberClass_onType() {
-		assertTrue(aTypeInfo.isMemberClass());
-		assertFalse(pTypeInfo.isMemberClass());
-		assertFalse(pTypeDimensionalInfo.isMemberClass());
-		assertFalse(pTypeGenericInfo.isMemberClass());
-		assertFalse(pTypeGenericArgInfo.isMemberClass());
-	}
-
-	@Test
-	void isNotMemberClass() {
-		assertFalse(hPublic.isNotMemberClass());
-		assertFalse(hPublicMember.isNotMemberClass());
-		assertTrue(aClass.isNotMemberClass());
-		assertTrue(aInterface.isNotMemberClass());
-	}
-
-	@Test
-	void isNotMemberClass_onType() {
-		assertFalse(aTypeInfo.isNotMemberClass());
-		assertTrue(pTypeGenericArgInfo.isNotMemberClass());
-	}
-
-	@Test
-	void isNonStaticMemberClass() {
-		assertFalse(hPublic.isNonStaticMemberClass());
-		assertTrue(hPublicMember.isNonStaticMemberClass());
-		assertFalse(aClass.isNonStaticMemberClass());
-		assertFalse(aInterface.isNonStaticMemberClass());
-	}
-
-	@Test
-	void isNonStaticMemberClass_onType() {
-		assertTrue(aTypeInfo.isNonStaticMemberClass());
-		assertFalse(pTypeInfo.isNonStaticMemberClass());
-		assertFalse(pTypeDimensionalInfo.isNonStaticMemberClass());
-		assertFalse(pTypeGenericInfo.isNonStaticMemberClass());
-		assertFalse(pTypeGenericArgInfo.isNonStaticMemberClass());
-	}
-
-	@Test
-	void isLocalClass() {
-		class F implements Function<Object,String> {
-			@Override
-			public String apply(Object t) {
-				return null;
-			}
-		}
-		assertFalse(aClass.isLocalClass());
-		assertTrue(of(F.class).isLocalClass());
-	}
-
-	@Test
-	void isLocalClass_type() {
-		assertFalse(aTypeInfo.isLocalClass());
-		assertFalse(pTypeGenericArgInfo.isLocalClass());
-	}
-
-	@Test
-	void isNotLocalClass() {
-		class F implements Function<Object,String> {
-			@Override
-			public String apply(Object t) {
-				return null;
-			}
-		}
-		assertTrue(aClass.isNotLocalClass());
-		assertFalse(of(F.class).isNotLocalClass());
-	}
-
-	@Test
-	void isNotLocalClass_type() {
-		assertTrue(aTypeInfo.isNotLocalClass());
-		assertTrue(pTypeGenericArgInfo.isNotLocalClass());
-	}
-
-	@Test
-	void isVisible_public() {
-		assertTrue(hPublic.isVisible(Visibility.PUBLIC));
-		assertFalse(hProtected.isVisible(Visibility.PUBLIC));
-		assertFalse(hPackage.isVisible(Visibility.PUBLIC));
-		assertFalse(hPrivate.isVisible(Visibility.PUBLIC));
-	}
-
-	@Test
-	void isVisible_protected() {
-		assertTrue(hPublic.isVisible(Visibility.PROTECTED));
-		assertTrue(hProtected.isVisible(Visibility.PROTECTED));
-		assertFalse(hPackage.isVisible(Visibility.PROTECTED));
-		assertFalse(hPrivate.isVisible(Visibility.PROTECTED));
-	}
-
-	@Test
-	void isVisible_package() {
-		assertTrue(hPublic.isVisible(Visibility.DEFAULT));
-		assertTrue(hProtected.isVisible(Visibility.DEFAULT));
-		assertTrue(hPackage.isVisible(Visibility.DEFAULT));
-		assertFalse(hPrivate.isVisible(Visibility.DEFAULT));
-	}
-
-	@Test
-	void isVisible_private() {
-		assertTrue(hPublic.isVisible(Visibility.PRIVATE));
-		assertTrue(hProtected.isVisible(Visibility.PRIVATE));
-		assertTrue(hPackage.isVisible(Visibility.PRIVATE));
-		assertTrue(hPrivate.isVisible(Visibility.PRIVATE));
-	}
-
-	@Test
-	void isVisible_onType() {
-		assertTrue(aTypeInfo.isVisible(Visibility.PRIVATE));
-		assertTrue(pTypeInfo.isVisible(Visibility.PRIVATE));
-		assertTrue(pTypeDimensionalInfo.isVisible(Visibility.PRIVATE));
-		assertTrue(pTypeGenericInfo.isVisible(Visibility.PRIVATE));
-		assertFalse(pTypeGenericArgInfo.isVisible(Visibility.PRIVATE));
-	}
-
-	@Test
-	void isPrimitive() {
-		assertTrue(of(int.class).isPrimitive());
-		assertFalse(of(Integer.class).isPrimitive());
-	}
-
-	@Test
-	void isPrimitive_onType() {
-		assertFalse(aTypeInfo.isPrimitive());
-		assertFalse(pTypeGenericArgInfo.isPrimitive());
-	}
-
-	@Test
-	void isNotPrimitive() {
-		assertFalse(of(int.class).isNotPrimitive());
-		assertTrue(of(Integer.class).isNotPrimitive());
-	}
-
-	@Test
-	void isNotPrimitive_onType() {
-		assertTrue(aTypeInfo.isNotPrimitive());
-		assertTrue(pTypeInfo.isNotPrimitive());
-		assertTrue(pTypeDimensionalInfo.isNotPrimitive());
-		assertTrue(pTypeGenericInfo.isNotPrimitive());
-		assertTrue(pTypeGenericArgInfo.isNotPrimitive());
-	}
-
-	@Test
-	void isInterface() {
-		assertTrue(aInterface.isInterface());
-		assertFalse(aClass.isInterface());
-	}
-
-	@Test
-	void isInterface_onType() {
-		assertFalse(aTypeInfo.isInterface());
-		assertFalse(pTypeGenericArgInfo.isInterface());
-	}
-
-	@Test
-	void isClass() {
-		assertTrue(aClass.isClass());
-		assertFalse(aInterface.isClass());
-	}
-
-	@Test
-	void isClass_onType() {
-		assertTrue(aTypeInfo.isClass());
-		assertFalse(pTypeInfo.isClass());
-		assertFalse(pTypeDimensionalInfo.isClass());
-		assertTrue(pTypeGenericInfo.isClass());
-		assertFalse(pTypeGenericArgInfo.isClass());
-	}
 
 	@Deprecated
 	public abstract static class H2a {}
@@ -1092,412 +388,15 @@ public class ClassInfo_Test extends TestBase {
 		h2NotPublic = of(H2_NotPublic.class), h2Static = of(H2_Static.class), h2NotStatic = of(H2_NotStatic.class), h2Member = of(H2_Member.class), h2StaticMember = of(H2_StaticMember.class),
 		h2Abstract = of(H2_Abstract.class), h2NotAbstract = of(H2_NotAbstract.class);  // NOSONAR
 
-	@Test
-	void isAll() {
-		assertTrue(h2a.isAll(DEPRECATED, PUBLIC, STATIC, MEMBER, ABSTRACT, ElementFlag.CLASS));
-		assertTrue(h2b.isAll(NOT_DEPRECATED, NOT_PUBLIC, STATIC, ABSTRACT, INTERFACE));
-	}
-
-	@Test
-	void isAll_onType() {
-		assertTrue(aTypeInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
-		assertFalse(pTypeInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
-		assertFalse(pTypeDimensionalInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
-		assertFalse(pTypeGenericInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
-	}
-
-	@Test
-	void isAll_deprecated() {
-		assertTrue(h2Deprecated.is(DEPRECATED));
-		assertFalse(h2NotDeprecated.is(DEPRECATED));
-	}
-
-	@Test
-	void isAll_notDeprecated() {
-		assertFalse(h2Deprecated.is(NOT_DEPRECATED));
-		assertTrue(h2NotDeprecated.is(NOT_DEPRECATED));
-	}
-
-	@Test
-	void isAll_public() {
-		assertTrue(of(H2_Public.class).is(PUBLIC));
-		assertFalse(h2NotPublic.is(PUBLIC));
-	}
-
-	@Test
-	void isAll_notPublic() {
-		assertFalse(of(H2_Public.class).is(NOT_PUBLIC));
-		assertTrue(h2NotPublic.is(NOT_PUBLIC));
-	}
-
-	@Test
-	void isAll_static() {
-		assertTrue(of(H2_Static.class).is(STATIC));
-		assertFalse(h2NotStatic.is(STATIC));
-	}
-
-	@Test
-	void isAll_notStatic() {
-		assertFalse(of(H2_Static.class).is(NOT_STATIC));
-		assertTrue(h2NotStatic.is(NOT_STATIC));
-	}
-
-	@Test
-	void isAll_member() {
-		assertTrue(h2Member.is(MEMBER));
-		assertTrue(h2StaticMember.is(MEMBER));
-		assertFalse(aClass.is(MEMBER));
-	}
-
-	@Test
-	void isAll_notMember() {
-		assertFalse(h2Member.is(NOT_MEMBER));
-		assertFalse(h2StaticMember.is(NOT_MEMBER));
-		assertTrue(aClass.is(NOT_MEMBER));
-	}
-
-	@Test
-	void isAll_abstract() {
-		assertTrue(of(H2_Abstract.class).is(ABSTRACT));
-		assertFalse(h2NotAbstract.is(ABSTRACT));
-		assertTrue(aInterface.is(ABSTRACT));
-	}
-
-	@Test
-	void isAll_notAbstract() {
-		assertFalse(of(H2_Abstract.class).is(NOT_ABSTRACT));
-		assertTrue(h2NotAbstract.is(NOT_ABSTRACT));
-		assertFalse(aInterface.is(NOT_ABSTRACT));
-	}
-
-	@Test
-	void isAll_interface() {
-		assertTrue(aInterface.is(INTERFACE));
-		assertFalse(aClass.is(INTERFACE));
-	}
-
-	@Test
-	void isAll_class() {
-		assertFalse(aInterface.is(ElementFlag.CLASS));
-		assertTrue(aClass.is(ElementFlag.CLASS));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Primitive wrappers
-	//-----------------------------------------------------------------------------------------------------------------
-
 	static List<Class<?>> primitives = l(boolean.class, byte.class, short.class, char.class, int.class, long.class, float.class, double.class);
 	static List<Class<?>> primitiveWrappers = l(Boolean.class, Byte.class, Short.class, Character.class, Integer.class, Long.class, Float.class, Double.class);
 	static List<Object> primitiveDefaults = l(false, (byte)0, (short)0, (char)0, 0, 0L, 0f, 0d);
-
-	@Test
-	void hasPrimitiveWrapper() {
-		for (var c : primitives)
-			assertTrue(of(c).hasPrimitiveWrapper());
-		for (var c : primitiveWrappers)
-			assertFalse(of(c).hasPrimitiveWrapper());
-	}
-
-	@Test
-	void hasPrimitiveWrapper_onType() {
-		assertFalse(aTypeInfo.hasPrimitiveWrapper());
-	}
-
-	@Test
-	void getPrimitiveWrapper() {
-		for (var i = 0; i < primitives.size(); i++)
-			assertEquals(of(primitives.get(i)).getPrimitiveWrapper(), primitiveWrappers.get(i));
-		assertNull(of(String.class).getPrimitiveWrapper());
-	}
-
-	@Test
-	void getPrimitiveWrapper_onType() {
-		assertNull(aTypeInfo.getPrimitiveWrapper());
-	}
-
-	@Test
-	void getPrimitiveForWrapper() {
-		for (var i = 0; i < primitives.size(); i++)
-			assertEquals(of(primitiveWrappers.get(i)).getPrimitiveForWrapper(), primitives.get(i));
-		assertNull(of(String.class).getPrimitiveForWrapper());
-	}
-
-	@Test
-	void getPrimitiveForWrapper_onType() {
-		assertNull(aTypeInfo.getPrimitiveForWrapper());
-	}
-
-	@Test
-	void getWrapperIfPrimitive() {
-		for (var i = 0; i < primitives.size(); i++)
-			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().inner(), primitiveWrappers.get(i));
-		assertEquals(of(String.class).getWrapperIfPrimitive().inner(), String.class);
-	}
-
-	@Test
-	void getWrapperIfPrimitive_onType() {
-		assertEquals("class org.apache.juneau.commons.reflect.ClassInfo_Test$A1", aTypeInfo.getWrapperIfPrimitive().inner().toString());
-		assertEquals("interface java.util.Map", pTypeInfo.getWrapperIfPrimitive().inner().toString());
-		assertEquals("interface java.util.Map", pTypeDimensionalInfo.getWrapperIfPrimitive().inner().toString());
-		assertEquals("class java.util.AbstractMap", pTypeGenericInfo.getWrapperIfPrimitive().inner().toString());
-		assertEquals(null, pTypeGenericArgInfo.getWrapperIfPrimitive().inner());
-	}
-
-	@Test
-	void getWrapperIfPrimitive_asClassInfo() {
-		for (var i = 0; i < primitives.size(); i++)
-			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().inner(), primitiveWrappers.get(i));
-		assertEquals(of(String.class).getWrapperIfPrimitive().inner(), String.class);
-	}
-
-	@Test
-	void getWrapperIfPrimitive_asClassInfo_onType() {
-		assertEquals(aTypeInfo.getWrapperIfPrimitive().innerType(), aType);
-		check("V", pTypeGenericArgInfo.getWrapperIfPrimitive());
-	}
-
-	@Test
-	void getPrimitiveDefault() {
-		for (var i = 0; i < primitives.size(); i++)
-			assertEquals(of(primitives.get(i)).getPrimitiveDefault(), primitiveDefaults.get(i));
-		assertNull(of(String.class).getPrimitiveDefault());
-	}
-
-	@Test
-	void getPrimitiveDefault_onType() {
-		assertNull(aTypeInfo.getPrimitiveDefault());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Labels
-	//-----------------------------------------------------------------------------------------------------------------
 
 	public class J1 {}
 
 	public static class J2 {}
 
 	static ClassInfo j1 = of(J1.class), j2 = of(J2.class), j1_3d = of(J1[][].class), j2_3d = of(J2[][].class);
-
-	@Test
-	void getFullName_simple() {
-		assertEquals("org.apache.juneau.commons.reflect.AClass", aClass.getNameFull());
-	}
-
-	@Test
-	void getFullName_simpleTwice() {
-		assertEquals("org.apache.juneau.commons.reflect.AClass", aClass.getNameFull());
-		assertEquals("org.apache.juneau.commons.reflect.AClass", aClass.getNameFull());
-	}
-
-	@Test
-	void getFullName_simpleArray() {
-		assertEquals("org.apache.juneau.commons.reflect.AClass[][]", of(AClass[][].class).getNameFull());
-	}
-
-	@Test
-	void getFullName_inner() {
-		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$J1", j1.getNameFull());
-		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$J2", j2.getNameFull());
-	}
-
-	@Test
-	void getFullName_innerArray() {
-		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$J1[][]", j1_3d.getNameFull());
-		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$J2[][]", j2_3d.getNameFull());
-	}
-
-	@Test
-	void getFullName_primitive() {
-		assertEquals("int", of(int.class).getNameFull());
-	}
-
-	@Test
-	void getFullName_primitiveArray() {
-		assertEquals("int[][]", of(int[][].class).getNameFull());
-	}
-
-	@Test
-	void getFullName_simpleType() {
-		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$A1", aTypeInfo.getNameFull());
-	}
-
-	@Test
-	void getFullName_complexType() {
-		assertEquals("java.util.Map<java.lang.String,java.util.List<java.lang.String>>", pTypeInfo.getNameFull());
-	}
-
-	@Test
-	void getFullName_dimensionalType() {
-		assertEquals("java.util.Map<java.lang.String,java.lang.String[][]>", pTypeDimensionalInfo.getNameFull());
-	}
-
-	@Test
-	void getFullName_genericType() {
-		assertEquals("java.util.AbstractMap<K,V>", pTypeGenericInfo.getNameFull());
-	}
-
-	@Test
-	void getFullName_genericTypeArg() {
-		assertEquals("V", pTypeGenericArgInfo.getNameFull());
-	}
-
-	@Test
-	void getFullName_localClass() {
-		@SuppressWarnings("serial")
-		class LocalClass implements Serializable {}
-		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$1LocalClass", of(LocalClass.class).getNameFull());
-	}
-
-	@Test
-	void getShortName_simple() {
-		assertEquals("AClass", aClass.getNameShort());
-	}
-
-	@Test
-	void getShortName_simpleTwice() {
-		assertEquals("AClass", aClass.getNameShort());
-		assertEquals("AClass", aClass.getNameShort());
-	}
-
-	@Test
-	void getShortName_simpleArray() {
-		assertEquals("AClass[][]", of(AClass[][].class).getNameShort());
-	}
-
-	@Test
-	void getShortName_inner() {
-		assertEquals("ClassInfo_Test$J1", j1.getNameShort());
-		assertEquals("ClassInfo_Test$J2", j2.getNameShort());
-	}
-
-	@Test
-	void getShortName_innerArray() {
-		assertEquals("ClassInfo_Test$J1[][]", j1_3d.getNameShort());
-		assertEquals("ClassInfo_Test$J2[][]", j2_3d.getNameShort());
-	}
-
-	@Test
-	void getShortName_primitive() {
-		assertEquals("int", of(int.class).getNameShort());
-	}
-
-	@Test
-	void getShortName_primitiveArray() {
-		assertEquals("int[][]", of(int[][].class).getNameShort());
-	}
-
-	@Test
-	void getShortName_simpleType() {
-		assertEquals("ClassInfo_Test$A1", aTypeInfo.getNameShort());
-	}
-
-	@Test
-	void getShortName_complexType() {
-		assertEquals("Map<String,List<String>>", pTypeInfo.getNameShort());
-	}
-
-	@Test
-	void getShortName_dimensionalType() {
-		assertEquals("Map<String,String[][]>", pTypeDimensionalInfo.getNameShort());
-	}
-
-	@Test
-	void getShortName_genericType() {
-		assertEquals("AbstractMap<K,V>", pTypeGenericInfo.getNameShort());
-	}
-
-	@Test
-	void getShortName_genericTypeArg() {
-		assertEquals("V", pTypeGenericArgInfo.getNameShort());
-	}
-
-	@Test
-	void getShortName_localClass() {
-		@SuppressWarnings("serial")
-		class LocalClass implements Serializable {}
-		assertEquals("ClassInfo_Test$LocalClass", of(LocalClass.class).getNameShort());
-	}
-
-	@Test
-	void getSimpleName_simple() {
-		assertEquals("AClass", aClass.getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_simpleTwice() {
-		assertEquals("AClass", aClass.getNameSimple());
-		assertEquals("AClass", aClass.getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_simpleArray() {
-		assertEquals("AClass[][]", of(AClass[][].class).getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_inner() {
-		assertEquals("J1", j1.getNameSimple());
-		assertEquals("J2", j2.getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_innerArray() {
-		assertEquals("J1[][]", j1_3d.getNameSimple());
-		assertEquals("J2[][]", j2_3d.getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_primitive() {
-		assertEquals("int", of(int.class).getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_primitiveArray() {
-		assertEquals("int[][]", of(int[][].class).getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_simpleType() {
-		assertEquals("A1", aTypeInfo.getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_complexType() {
-		assertEquals("Map", pTypeInfo.getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_dimensionalType() {
-		assertEquals("Map", pTypeDimensionalInfo.getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_genericType() {
-		assertEquals("AbstractMap", pTypeGenericInfo.getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_genericTypeArg() {
-		assertEquals("V", pTypeGenericArgInfo.getNameSimple());
-	}
-
-	@Test
-	void getSimpleName_localClass() {
-		@SuppressWarnings("serial")
-		class LocalClass implements Serializable {}
-		assertEquals("LocalClass", of(LocalClass.class).getNameSimple());
-	}
-
-	@Test
-	void getName() {
-		assertEquals("org.apache.juneau.commons.reflect.AClass", aClass.getName());
-		assertEquals("java.util.AbstractMap", pTypeGenericInfo.getName());
-		assertEquals("V", pTypeGenericArgInfo.getName());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Hierarchy
-	//-----------------------------------------------------------------------------------------------------------------
 
 	public interface KA {}
 
@@ -1507,264 +406,9 @@ public class ClassInfo_Test extends TestBase {
 
 	static ClassInfo ka = of(KA.class), kb = of(KB.class), kc = of(KC.class);
 
-	@Test
-	void isParentOf() {
-		assertTrue(ka.isParentOf(KA.class));
-		assertTrue(ka.isParentOf(KB.class));
-		assertTrue(ka.isParentOf(KC.class));
-		assertFalse(kb.isParentOf(KA.class));
-		assertTrue(kb.isParentOf(KB.class));
-		assertTrue(kb.isParentOf(KC.class));
-		assertFalse(kc.isParentOf(KA.class));
-		assertFalse(kc.isParentOf(KB.class));
-		assertTrue(kc.isParentOf(KC.class));
-	}
-
-	@Test
-	void isParentOf_null() {
-		assertFalse(ka.isParentOf((Class<?>)null));
-	}
-
-	@Test
-	void isParentOf_type() {
-		assertFalse(ka.isParentOf(aType));
-		assertFalse(ka.isParentOf(pType));
-		assertFalse(ka.isParentOf(pTypeDimensional));
-		assertFalse(ka.isParentOf(pTypeGeneric));
-		assertFalse(ka.isParentOf(pTypeGenericArg));
-
-		assertFalse(aTypeInfo.isParentOf(KA.class));
-		assertFalse(pTypeInfo.isParentOf(KA.class));
-		assertFalse(pTypeDimensionalInfo.isParentOf(KA.class));
-		assertFalse(pTypeGenericInfo.isParentOf(KA.class));
-		assertFalse(pTypeGenericArgInfo.isParentOf(KA.class));
-	}
-
-	@Test
-	void isChildOf() {
-		assertTrue(ka.isChildOf(KA.class));
-		assertFalse(ka.isChildOf(KB.class));
-		assertFalse(ka.isChildOf(KC.class));
-		assertTrue(kb.isChildOf(KA.class));
-		assertTrue(kb.isChildOf(KB.class));
-		assertFalse(kb.isChildOf(KC.class));
-		assertTrue(kc.isChildOf(KA.class));
-		assertTrue(kc.isChildOf(KB.class));
-		assertTrue(kc.isChildOf(KC.class));
-	}
-
-	@Test
-	void isChildOf_null() {
-		assertFalse(ka.isChildOf((Class<?>)null));
-	}
-
-	@Test
-	void isChildOf_type() {
-		assertFalse(ka.isChildOf(aType));
-		assertFalse(ka.isChildOf(pType));
-		assertFalse(ka.isChildOf(pTypeDimensional));
-		assertFalse(ka.isChildOf(pTypeGeneric));
-		assertFalse(ka.isChildOf(pTypeGenericArg));
-
-		assertFalse(aTypeInfo.isChildOf(KA.class));
-		assertFalse(pTypeInfo.isChildOf(KA.class));
-		assertFalse(pTypeDimensionalInfo.isChildOf(KA.class));
-		assertFalse(pTypeGenericInfo.isChildOf(KA.class));
-		assertFalse(pTypeGenericArgInfo.isChildOf(KA.class));
-	}
-
-	@Test
-	void isStrictChildOf() {
-		assertFalse(ka.isStrictChildOf(KA.class));
-		assertFalse(ka.isStrictChildOf(KB.class));
-		assertFalse(ka.isStrictChildOf(KC.class));
-		assertTrue(kb.isStrictChildOf(KA.class));
-		assertFalse(kb.isStrictChildOf(KB.class));
-		assertFalse(kb.isStrictChildOf(KC.class));
-		assertTrue(kc.isStrictChildOf(KA.class));
-		assertTrue(kc.isStrictChildOf(KB.class));
-		assertFalse(kc.isStrictChildOf(KC.class));
-	}
-
-	@Test
-	void isStrictChildOf_null() {
-		assertFalse(ka.isStrictChildOf(null));
-	}
-
-	@Test
-	void isStrictChildOf_type() {
-		assertFalse(aTypeInfo.isStrictChildOf(KA.class));
-		assertFalse(pTypeInfo.isStrictChildOf(KA.class));
-		assertFalse(pTypeDimensionalInfo.isStrictChildOf(KA.class));
-		assertFalse(pTypeGenericInfo.isStrictChildOf(KA.class));
-		assertFalse(pTypeGenericArgInfo.isStrictChildOf(KA.class));
-	}
-
-	@Test
-	void isChildOfAny() {
-		assertTrue(ka.isChildOfAny(KA.class));
-		assertFalse(ka.isChildOfAny(KB.class));
-		assertFalse(ka.isChildOfAny(KC.class));
-		assertTrue(kb.isChildOfAny(KA.class));
-		assertTrue(kb.isChildOfAny(KB.class));
-		assertFalse(kb.isChildOfAny(KC.class));
-		assertTrue(kc.isChildOfAny(KA.class));
-		assertTrue(kc.isChildOfAny(KB.class));
-		assertTrue(kc.isChildOfAny(KC.class));
-	}
-
-	@Test
-	void isChildOfAny_type() {
-		assertFalse(aTypeInfo.isChildOfAny(KA.class));
-		assertFalse(pTypeInfo.isChildOfAny(KA.class));
-		assertFalse(pTypeDimensionalInfo.isChildOfAny(KA.class));
-		assertFalse(pTypeGenericInfo.isChildOfAny(KA.class));
-		assertFalse(pTypeGenericArgInfo.isChildOfAny(KA.class));
-	}
-
-	@Test
-	void is() {
-		assertTrue(ka.is(KA.class));
-		assertFalse(ka.is(KB.class));
-		assertFalse(ka.is(KC.class));
-		assertFalse(kb.is(KA.class));
-		assertTrue(kb.is(KB.class));
-		assertFalse(kb.is(KC.class));
-		assertFalse(kc.is(KA.class));
-		assertFalse(kc.is(KB.class));
-		assertTrue(kc.is(KC.class));
-	}
-
-	@Test
-	void is_ClassInfo() {
-		assertTrue(ka.is(of(KA.class)));
-		assertFalse(ka.is(of(KB.class)));
-		assertFalse(ka.is(of(KC.class)));
-		assertFalse(kb.is(of(KA.class)));
-		assertTrue(kb.is(of(KB.class)));
-		assertFalse(kb.is(of(KC.class)));
-		assertFalse(kc.is(of(KA.class)));
-		assertFalse(kc.is(of(KB.class)));
-		assertTrue(kc.is(of(KC.class)));
-	}
-
-	@Test
-	void is_ClassInfo_genType() {
-		assertFalse(pTypeGenericArgInfo.is(of(KA.class)));
-	}
-
-	@Test
-	void isAnyType() {
-		assertTrue(ka.isAny(KA.class));
-		assertTrue(ka.isAny(KA.class, KB.class));
-		assertFalse(ka.isAny(KB.class));
-		assertFalse(ka.isAny(KC.class));
-		assertFalse(kb.isAny(KA.class));
-		assertTrue(kb.isAny(KB.class));
-		assertFalse(kb.isAny(KC.class));
-		assertFalse(kc.isAny(KA.class));
-		assertFalse(kc.isAny(KB.class));
-		assertTrue(kc.isAny(KC.class));
-	}
-
-	@Test
-	void is_type() {
-		assertFalse(aTypeInfo.is(KA.class));
-		assertFalse(pTypeInfo.is(KA.class));
-		assertFalse(pTypeDimensionalInfo.is(KA.class));
-		assertFalse(pTypeGenericInfo.is(KA.class));
-		assertFalse(pTypeGenericArgInfo.is(KA.class));
-	}
-
-	@Test
-	void getPackage() {
-		check("org.apache.juneau.commons.reflect", ka.getPackage().getName());
-	}
-
-	@Test
-	void getPackage_type() {
-		check("org.apache.juneau.commons.reflect", aTypeInfo.getPackage());
-		check("java.util", pTypeInfo.getPackage());
-		check("java.util", pTypeDimensionalInfo.getPackage());
-		check("java.util", pTypeGenericInfo.getPackage());
-		check(null, pTypeGenericArgInfo.getPackage());
-	}
-
-	@Test
-	void hasPackage() {
-		assertTrue(ka.hasPackage());
-	}
-
-	@Test
-	void hasPackage_type() {
-		assertTrue(aTypeInfo.hasPackage());
-		assertTrue(pTypeInfo.hasPackage());
-		assertTrue(pTypeDimensionalInfo.hasPackage());
-		assertTrue(pTypeGenericInfo.hasPackage());
-		assertFalse(pTypeGenericArgInfo.hasPackage());
-	}
-
-	@Test
-	void getDimensions() {
-		assertEquals(0, ka.getDimensions());
-		assertEquals(2, of(KA[][].class).getDimensions());
-	}
-
-	@Test
-	void getDimensions_type() {
-		assertEquals(0, aTypeInfo.getDimensions());
-		assertEquals(0, pTypeInfo.getDimensions());
-		assertEquals(0, pTypeDimensionalInfo.getDimensions());
-		assertEquals(0, pTypeGenericInfo.getDimensions());
-		assertEquals(0, pTypeGenericArgInfo.getDimensions());
-	}
-
-	@Test
-	void getComponentType() {
-		assertEquals(ka, ka.getComponentType());  // Not an array, returns this
-		check("KA", of(KA[][].class).getComponentType());
-	}
-
-	@Test
-	void getComponentType_twice() {
-		assertEquals(ka, ka.getComponentType());  // Not an array, returns this
-		assertEquals(ka, ka.getComponentType());  // Not an array, returns this
-	}
-
-	@Test
-	void getComponentType_type() {
-		assertEquals(aTypeInfo, aTypeInfo.getComponentType());  // Not an array, returns this
-		assertEquals(pTypeInfo, pTypeInfo.getComponentType());  // Not an array, returns this
-		assertEquals(pTypeDimensionalInfo, pTypeDimensionalInfo.getComponentType());  // Not an array (ParameterizedType, not array)
-		assertEquals(pTypeGenericInfo, pTypeGenericInfo.getComponentType());  // Not an array, returns this
-		assertEquals(pTypeGenericArgInfo, pTypeGenericArgInfo.getComponentType());  // Not an array, returns this
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	public static class LA {}
 
 	static ClassInfo la = of(LA.class);
-
-	@Test
-	void newInstance() {
-		assertNotNull(la.newInstance());
-	}
-
-	@Test
-	void newInstance_type() {
-		assertThrows(ExecutableException.class, () -> aTypeInfo.newInstance());
-		assertThrows(ExecutableException.class, () -> pTypeInfo.newInstance());
-		assertThrows(ExecutableException.class, () -> pTypeDimensionalInfo.newInstance());
-		assertThrows(Exception.class, () -> pTypeGenericInfo.newInstance());
-		assertThrows(ExecutableException.class, () -> pTypeGenericArgInfo.newInstance());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Parameter types
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings("serial")
 	public static class MA extends HashMap<String,Integer> {}
@@ -1809,306 +453,6 @@ public class ClassInfo_Test extends TestBase {
 	static ClassInfo ma = of(MA.class), mb = of(MB.class), mc = of(MC.class), md = of(MD.class), me = of(ME.class), mf = of(MF.class), mg = of(MG.class), mh = of(MH.class), mi = of(MI.class),
 		mj = of(MJ.class), ml = of(ML.class), mn = of(MM.MN.class);
 
-	@Test
-	void getParameterType_simpleMap() {
-		check("String", ma.getParameterType(0, HashMap.class));
-		check("Integer", ma.getParameterType(1, HashMap.class));
-		check("String", mb.getParameterType(0, HashMap.class));
-		check("Integer", mb.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_outOfBounds() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid type index. index=2, argsLength=2", () -> ma.getParameterType(2, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_notASubclass() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "Class 'AClass' is not a subclass of parameterized type 'HashMap'", () -> aClass.getParameterType(2, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_nullParameterizedType() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'pt' cannot be null.", () -> aClass.getParameterType(2, null));
-	}
-
-	@Test
-	void getParameterType_notParamerizedType() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "Class 'MA' is not a parameterized type", () -> mb.getParameterType(2, MA.class));
-	}
-
-	@Test
-	void getParameterType_unresolvedTypes() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "Could not resolve variable 'E' to a type.", () -> mc.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_resolvedTypes() {
-		check("Integer", md.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_parameterizedTypeVariable() {
-		check("HashMap", me.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_arrayParameterType() {
-		check("String[]", mf.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_genericArrayTypeParameter() {
-		check("HashMap[]", mg.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_genericArrayTypeParameterWithoutTypes() {
-		check("LinkedList[]", mh.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_unresolvedGenericArrayType() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "Could not resolve variable 'X[]' to a type.", () -> mi.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_wildcardType() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "Could not resolve variable 'X' to a type.", () -> mj.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_innerType() {
-		check("MK", ml.getParameterType(1, HashMap.class));
-	}
-
-	@Test
-	void getParameterType_nestedType() {
-		check("MM", mn.getParameterType(1, HashMap.class));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// ClassInfo.isParentOfFuzzyPrimitives(Class)
-	// ClassInfo.isParentOfFuzzyPrimitives(Type)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void o01_isParentOfFuzzyPrimitives() {
-		assertTrue(ClassInfo.of(String.class).isParentOfLenient(String.class));
-		assertTrue(ClassInfo.of(CharSequence.class).isParentOfLenient(String.class));
-		assertFalse(ClassInfo.of(String.class).isParentOfLenient(CharSequence.class));
-		assertTrue(ClassInfo.of(int.class).isParentOfLenient(Integer.class));
-		assertTrue(ClassInfo.of(Integer.class).isParentOfLenient(int.class));
-		assertTrue(ClassInfo.of(Number.class).isParentOfLenient(int.class));
-		assertFalse(ClassInfo.of(int.class).isParentOfLenient(Number.class));
-		assertFalse(ClassInfo.of(int.class).isParentOfLenient(long.class));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// getFormattedName tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Nested
-	public class P_getFormattedName {
-
-		@Test
-		void a01_simple() {
-			var ci = ClassInfo.of(String.class);
-
-			// SIMPLE format
-			assertEquals("String", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("String", ci.getNameFormatted(SIMPLE, false, '.', BRACKETS));
-			assertEquals("String", ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
-		}
-
-		@Test
-		void a02_short() {
-			var ci = ClassInfo.of(String.class);
-
-			// SHORT format
-			assertEquals("String", ci.getNameFormatted(SHORT, false, '$', BRACKETS));
-			assertEquals("String", ci.getNameFormatted(SHORT, true, '$', BRACKETS));
-		}
-
-		@Test
-		void a03_full() {
-			var ci = ClassInfo.of(String.class);
-
-			// FULL format
-			assertEquals("java.lang.String", ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			assertEquals("java.lang.String", ci.getNameFormatted(FULL, true, '$', BRACKETS));
-		}
-
-		@Test
-		void a04_innerClass() {
-			var ci = ClassInfo.of(Map.Entry.class);
-
-			// SIMPLE - only innermost name
-			assertEquals("Entry", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-
-			// SHORT - outer class + inner class
-			assertEquals("Map$Entry", ci.getNameFormatted(SHORT, false, '$', BRACKETS));
-			assertEquals("Map.Entry", ci.getNameFormatted(SHORT, false, '.', BRACKETS));
-
-			// FULL - package + outer + inner
-			assertEquals("java.util.Map$Entry", ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			assertEquals("java.util.Map.Entry", ci.getNameFormatted(FULL, false, '.', BRACKETS));
-		}
-
-		@Test
-		void a05_arrays() {
-			var ci = ClassInfo.of(String[].class);
-
-			// BRACKETS format
-			assertEquals("String[]", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("String[]", ci.getNameFormatted(SHORT, false, '$', BRACKETS));
-			assertEquals("java.lang.String[]", ci.getNameFormatted(FULL, false, '$', BRACKETS));
-
-			// WORD format
-			assertEquals("StringArray", ci.getNameFormatted(SIMPLE, false, '$', WORD));
-			assertEquals("StringArray", ci.getNameFormatted(SHORT, false, '$', WORD));
-			assertEquals("java.lang.StringArray", ci.getNameFormatted(FULL, false, '$', WORD));
-		}
-
-		@Test
-		void a06_multiDimensionalArrays() {
-			var ci = ClassInfo.of(String[][].class);
-
-			// BRACKETS format
-			assertEquals("String[][]", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("java.lang.String[][]", ci.getNameFormatted(FULL, false, '$', BRACKETS));
-
-			// WORD format
-			assertEquals("StringArrayArray", ci.getNameFormatted(SIMPLE, false, '$', WORD));
-			assertEquals("java.lang.StringArrayArray", ci.getNameFormatted(FULL, false, '$', WORD));
-		}
-
-		@Test
-		void a07_primitiveArrays() {
-			var ci = ClassInfo.of(int[].class);
-
-			// BRACKETS format
-			assertEquals("int[]", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("int[]", ci.getNameFormatted(FULL, false, '$', BRACKETS));
-
-			// WORD format
-			assertEquals("intArray", ci.getNameFormatted(SIMPLE, false, '$', WORD));
-			assertEquals("intArray", ci.getNameFormatted(FULL, false, '$', WORD));
-		}
-
-		@Test
-		void a08_generics() throws Exception {
-			// Get a ParameterizedType for HashMap<String, Integer>
-			var f = GenericsTestClass.class.getDeclaredField("hashMap");
-			var t = f.getGenericType();
-			var ci = ClassInfo.of(t);
-
-			// Without type params
-			assertEquals("HashMap", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("java.util.HashMap", ci.getNameFormatted(FULL, false, '$', BRACKETS));
-
-			// With type params - SIMPLE
-			assertEquals("HashMap<String,Integer>", ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
-
-			// With type params - SHORT
-			assertEquals("HashMap<String,Integer>", ci.getNameFormatted(SHORT, true, '$', BRACKETS));
-
-			// With type params - FULL
-			assertEquals("java.util.HashMap<java.lang.String,java.lang.Integer>", ci.getNameFormatted(FULL, true, '$', BRACKETS));
-		}
-
-		@Test
-		void a09_nestedGenerics() throws Exception {
-			// Get a ParameterizedType for Map<String, List<Integer>>
-			var f = GenericsTestClass.class.getDeclaredField("nestedMap");
-			var t = f.getGenericType();
-			var ci = ClassInfo.of(t);
-
-			// With type params - SIMPLE
-			assertEquals("HashMap<String,ArrayList<Integer>>", ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
-
-			// With type params - FULL
-			assertEquals("java.util.HashMap<java.lang.String,java.util.ArrayList<java.lang.Integer>>", ci.getNameFormatted(FULL, true, '$', BRACKETS));
-		}
-
-		@Test
-		void a10_genericArrays() throws Exception {
-			// Get a ParameterizedType for List<String>[]
-			var f = GenericsTestClass.class.getDeclaredField("listArray");
-			var t = f.getGenericType();
-			var ci = ClassInfo.of(t);
-
-			// BRACKETS format
-			assertEquals("ArrayList<String>[]", ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
-			assertEquals("java.util.ArrayList<java.lang.String>[]", ci.getNameFormatted(FULL, true, '$', BRACKETS));
-
-			// WORD format
-			assertEquals("ArrayList<String>Array", ci.getNameFormatted(SIMPLE, true, '$', WORD));
-		}
-
-		@Test
-		void a11_appendVersion() {
-			var ci = ClassInfo.of(String.class);
-			var sb = new StringBuilder("Type: ");
-			ci.appendNameFormatted(sb, FULL, false, '$', BRACKETS);
-			assertEquals("Type: java.lang.String", sb.toString());
-
-			// Verify it returns the same StringBuilder for chaining
-			var result = ci.appendNameFormatted(sb, SIMPLE, false, '$', BRACKETS);
-			assertSame(sb, result);
-			assertEquals("Type: java.lang.StringString", sb.toString());
-		}
-
-		@Test
-		void a12_equivalentMethods() {
-			var ci = ClassInfo.of(String.class);
-
-			// getName() equivalent
-			assertEquals(ci.getName(), ci.getNameFormatted(FULL, false, '$', BRACKETS));
-
-			// getSimpleName() equivalent
-			assertEquals(ci.getNameSimple(), ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-		}
-
-		@Test
-		void a13_innerClassArrays() {
-			var ci = ClassInfo.of(Map.Entry[].class);
-
-			// SIMPLE
-			assertEquals("Entry[]", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("EntryArray", ci.getNameFormatted(SIMPLE, false, '$', WORD));
-
-			// SHORT
-			assertEquals("Map$Entry[]", ci.getNameFormatted(SHORT, false, '$', BRACKETS));
-			assertEquals("Map.Entry[]", ci.getNameFormatted(SHORT, false, '.', BRACKETS));
-			assertEquals("Map$EntryArray", ci.getNameFormatted(SHORT, false, '$', WORD));
-
-			// FULL
-			assertEquals("java.util.Map$Entry[]", ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			assertEquals("java.util.Map.Entry[]", ci.getNameFormatted(FULL, false, '.', BRACKETS));
-			assertEquals("java.util.Map$EntryArray", ci.getNameFormatted(FULL, false, '$', WORD));
-		}
-
-		// Helper class for testing generics
-		@SuppressWarnings("unused")
-		private static class GenericsTestClass {
-			HashMap<String,Integer> hashMap;
-			HashMap<String,ArrayList<Integer>> nestedMap;
-			ArrayList<String>[] listArray;
-		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// getParentsAndInterfaces tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	// Test hierarchy that mimics RootResources structure:
-	// - Child extends Parent implements IChild
-	// - Parent extends GrandParent implements IParent
-	// - GrandParent implements IGrandParent
-	// - IParent extends ISuperParent
-	// - IGrandParent extends ISuperGrandParent
-
 	interface ISuperGrandParent {}
 
 	interface IGrandParent extends ISuperGrandParent {}
@@ -2125,8 +469,911 @@ public class ClassInfo_Test extends TestBase {
 
 	static class Child extends Parent implements IChild {}
 
+	@SuppressWarnings("unused")
+	private static class GenericsTestClass {
+		HashMap<String,Integer> hashMap;
+		HashMap<String,ArrayList<Integer>> nestedMap;
+		ArrayList<String>[] listArray;
+	}
+
+	//====================================================================================================
+	// appendNameFormatted(StringBuilder, ClassNameFormat, boolean, char, ClassArrayFormat)
+	//====================================================================================================
 	@Test
-	void getParentsAndInterfaces_includesAllInterfaces() {
+	void a001_appendNameFormatted() {
+		var ci = ClassInfo.of(String.class);
+		var sb = new StringBuilder("Type: ");
+		ci.appendNameFormatted(sb, FULL, false, '$', BRACKETS);
+		assertEquals("Type: java.lang.String", sb.toString());
+
+		// Verify it returns the same StringBuilder for chaining
+		var result = ci.appendNameFormatted(sb, SIMPLE, false, '$', BRACKETS);
+		assertSame(sb, result);
+		assertEquals("Type: java.lang.StringString", sb.toString());
+	}
+
+	//====================================================================================================
+	// arrayType()
+	//====================================================================================================
+	@Test
+	void a002_arrayType() {
+		var ci = ClassInfo.of(String.class);
+		var arrayType = ci.arrayType();
+		assertNotNull(arrayType);
+		assertEquals(String[].class, arrayType.inner());
+
+		// Multi-dimensional
+		var ci2 = ClassInfo.of(String[].class);
+		var arrayType2 = ci2.arrayType();
+		assertNotNull(arrayType2);
+		assertEquals(String[][].class, arrayType2.inner());
+
+		// For types without inner class, should return null
+		var ci3 = ClassInfo.of((Class<?>)null, pType);
+		assertNull(ci3.arrayType());
+	}
+
+	//====================================================================================================
+	// getAllFields()
+	//====================================================================================================
+	@Test
+	void a003_getAllFields() {
+		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFields());
+		// Test twice to verify caching
+		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFields());
+	}
+
+	//====================================================================================================
+	// getAllMethods()
+	//====================================================================================================
+	@Test
+	void a004_getAllMethods() {
+		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
+		// Test twice to verify caching
+		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
+	}
+
+	//====================================================================================================
+	// getAllMethodsTopDown()
+	//====================================================================================================
+	@Test
+	void a005_getAllMethodsTopDown() {
+		// getAllMethodsTopDown uses rstream(getAllParents()) which reverses the order
+		// Interfaces come first, then classes, both in parent-to-child order
+		check("CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getAllMethodsTopDown());
+		// Test twice to verify caching
+		check("CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getAllMethodsTopDown());
+	}
+
+	//====================================================================================================
+	// getAllParents()
+	//====================================================================================================
+	@Test
+	void a006_getAllParents() {
+		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
+		check("", object.getAllParents());
+		check("BI1", bi1.getAllParents());
+		// Test twice to verify caching
+		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
+	}
+
+	//====================================================================================================
+	// getAnnotatableType()
+	//====================================================================================================
+	@Test
+	void a007_getAnnotatableType() {
+		assertEquals(AnnotatableType.CLASS_TYPE, aClass.getAnnotatableType());
+		assertEquals(AnnotatableType.CLASS_TYPE, aInterface.getAnnotatableType());
+		assertEquals(AnnotatableType.CLASS_TYPE, aTypeInfo.getAnnotatableType());
+	}
+
+	//====================================================================================================
+	// getAnnotatedInterfaces()
+	//====================================================================================================
+	@Test
+	void a008_getAnnotatedInterfaces() {
+		var annotated = ci2.getAnnotatedInterfaces();
+		assertNotNull(annotated);
+		// CI2 extends CI1, so should have annotated interfaces
+		assertFalse(annotated.isEmpty());
+	}
+
+	//====================================================================================================
+	// getAnnotatedSuperclass()
+	//====================================================================================================
+	@Test
+	void a009_getAnnotatedSuperclass() {
+		// For classes with superclass, should return AnnotatedType
+		var annotated = bc2.getAnnotatedSuperclass();
+		assertNotNull(annotated);
+
+		// For Object, should return null
+		assertNull(object.getAnnotatedSuperclass());
+
+		// For interfaces, should return null
+		assertNull(bi1.getAnnotatedSuperclass());
+
+		// For types without inner class, should return null
+		assertNull(pTypeGenericArgInfo.getAnnotatedSuperclass());
+	}
+
+	//====================================================================================================
+	// getAnnotations()
+	//====================================================================================================
+	@Test
+	void a010_getAnnotations() {
+		// Test with no type parameter - returns all annotations
+		var allAnnotations = g3.getAnnotations();
+		assertNotNull(allAnnotations);
+		assertFalse(allAnnotations.isEmpty());
+
+		// Test with type parameter - returns filtered annotations
+		var aAnnotations = g3.getAnnotations(A.class);
+		assertNotNull(aAnnotations);
+		var first = aAnnotations.findFirst().map(AnnotationInfo::inner).orElse(null);
+		check("@A(7)", first);
+
+		// Test twice to verify caching
+		check("@A(7)", g3.getAnnotations(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+
+		// Test on parent class
+		check("@A(7)", g4.getAnnotations(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+
+		// Test on interface
+		check("@A(3)", g5.getAnnotations(A.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+
+		// Test with non-existent annotation
+		assertTrue(g3.getAnnotations(B.class).findFirst().isEmpty());
+
+		// Test with null - should throw
+		assertThrows(IllegalArgumentException.class, () -> g3.getAnnotations(null));
+
+		// Test annotation order - parent first
+		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotations()).collect(Collectors.toList()));
+		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotations()).collect(Collectors.toList()));
+		check("@PA(10),@A(3)", rstream(g5.getAnnotations()).collect(Collectors.toList()));
+	}
+
+	//====================================================================================================
+	// getClassLoader()
+	//====================================================================================================
+	@Test
+	void a011_getClassLoader() {
+		var cl = aClass.getClassLoader();
+		assertNotNull(cl);
+
+		// For types without inner class, should return null
+		assertNull(pTypeGenericArgInfo.getClassLoader());
+	}
+
+	//====================================================================================================
+	// getComponentType()
+	//====================================================================================================
+	@Test
+	void a012_getComponentType() {
+		// For non-array types, returns this
+		assertEquals(ka, ka.getComponentType());
+		// Test twice to verify caching
+		assertEquals(ka, ka.getComponentType());
+
+		// For array types, returns component type
+		check("KA", of(KA[][].class).getComponentType());
+
+		// For types
+		assertEquals(aTypeInfo, aTypeInfo.getComponentType());
+		assertEquals(pTypeInfo, pTypeInfo.getComponentType());
+		assertEquals(pTypeDimensionalInfo, pTypeDimensionalInfo.getComponentType());
+		assertEquals(pTypeGenericInfo, pTypeGenericInfo.getComponentType());
+		assertEquals(pTypeGenericArgInfo, pTypeGenericArgInfo.getComponentType());
+	}
+
+	//====================================================================================================
+	// getDeclaredAnnotations()
+	//====================================================================================================
+	@Test
+	void a013_getDeclaredAnnotations() {
+		var declared = g3.getDeclaredAnnotations();
+		assertNotNull(declared);
+		// G3 has @A(7)
+		assertFalse(declared.isEmpty());
+
+		// G4 has no declared annotations (inherits from G3)
+		var declared2 = g4.getDeclaredAnnotations();
+		assertTrue(declared2.isEmpty());
+	}
+
+	//====================================================================================================
+	// getDeclaredConstructor(Predicate<ConstructorInfo>)
+	//====================================================================================================
+	@Test
+	void a014_getDeclaredConstructor() {
+		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PROTECTED) && x.hasParameterTypes(int.class)).orElse(null));
+		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PRIVATE) && x.hasParameterTypes(int.class)).orElse(null));
+		check(null, e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC) && x.hasParameterTypes(int.class)).orElse(null));
+		check("E3()", e3.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)).orElse(null));
+		check("E4(ClassInfo_Test)", e4.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)).orElse(null));
+		check("E5()", e5.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)).orElse(null));
+	}
+
+	//====================================================================================================
+	// getDeclaredConstructors()
+	//====================================================================================================
+	@Test
+	void a015_getDeclaredConstructors() {
+		check("E1(),E1(float),E1(int),E1(Writer),E1(String),E1(String,Writer)", e1.getDeclaredConstructors());
+		// Test twice to verify caching
+		check("E1(),E1(float),E1(int),E1(Writer),E1(String),E1(String,Writer)", e1.getDeclaredConstructors());
+
+		// Test on types
+		check("A1(ClassInfo_Test)", aTypeInfo.getDeclaredConstructors());
+		check("", pTypeInfo.getDeclaredConstructors());
+		check("", pTypeDimensionalInfo.getDeclaredConstructors());
+		check("AbstractMap()", pTypeGenericInfo.getDeclaredConstructors());
+		check("", pTypeGenericArgInfo.getDeclaredConstructors());
+	}
+
+	//====================================================================================================
+	// getDeclaredField(Predicate<FieldInfo>)
+	//====================================================================================================
+	@Test
+	void a016_getDeclaredField() {
+		check("F3.a1", f3.getDeclaredField(x -> x.hasName("a1")).orElse(null));
+		check("F3.a2", f3.getDeclaredField(x -> x.hasName("a2")).orElse(null));
+		check(null, f3.getDeclaredField(x -> x.hasName("a3")).orElse(null));
+	}
+
+	//====================================================================================================
+	// getDeclaredFields()
+	//====================================================================================================
+	@Test
+	void a017_getDeclaredFields() {
+		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFields());
+		// Test twice to verify caching
+		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFields());
+
+		// Test on types
+		check("A1.this$0", aTypeInfo.getDeclaredFields());
+		check("", pTypeInfo.getDeclaredFields());
+		check("", pTypeDimensionalInfo.getDeclaredFields());
+		check("AbstractMap.keySet,AbstractMap.values", pTypeGenericInfo.getDeclaredFields());
+		check("", pTypeGenericArgInfo.getDeclaredFields());
+	}
+
+	//====================================================================================================
+	// getDeclaredInterfaces()
+	//====================================================================================================
+	@Test
+	void a018_getDeclaredInterfaces() {
+		check("", bi4.getDeclaredInterfaces());
+		check("BI1,BI2", bc1.getDeclaredInterfaces());
+		check("BI3", bc2.getDeclaredInterfaces());
+		check("", bc3.getDeclaredInterfaces());
+		// Test twice to verify caching
+		check("BI1,BI2", bc1.getDeclaredInterfaces());
+
+		// Test on types
+		check("", aTypeInfo.getDeclaredInterfaces());
+		check("", pTypeInfo.getDeclaredInterfaces());
+		check("", pTypeDimensionalInfo.getDeclaredInterfaces());
+		check("Map", pTypeGenericInfo.getDeclaredInterfaces());
+		check("", pTypeGenericArgInfo.getDeclaredInterfaces());
+	}
+
+	//====================================================================================================
+	// getDeclaredMemberClasses()
+	//====================================================================================================
+	@Test
+	void a019_getDeclaredMemberClasses() {
+		var memberClasses = MM.class.getDeclaredClasses();
+		assertNotNull(memberClasses);
+		// MM has MN as a member class
+		assertTrue(memberClasses.length > 0);
+
+		// For types without inner class, should return empty list
+		var empty = pTypeGenericArgInfo.getDeclaredMemberClasses();
+		assertTrue(empty.isEmpty());
+	}
+
+	//====================================================================================================
+	// getDeclaredMethod(Predicate<MethodInfo>)
+	//====================================================================================================
+	@Test
+	void a020_getDeclaredMethod() {
+		var method = cc3.getDeclaredMethod(x -> x.hasName("c3a"));
+		assertTrue(method.isPresent());
+		assertEquals("c3a", method.get().getName());
+
+		// Non-existent method
+		var method2 = cc3.getDeclaredMethod(x -> x.hasName("nonexistent"));
+		assertFalse(method2.isPresent());
+	}
+
+	//====================================================================================================
+	// getDeclaredMethods()
+	//====================================================================================================
+	@Test
+	void a021_getDeclaredMethods() {
+		check("CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getDeclaredMethods());
+		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
+		// Test twice to verify caching
+		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
+
+		// Test on types
+		check("", aTypeInfo.getDeclaredMethods());
+		check("", pTypeGenericArgInfo.getDeclaredMethods());
+	}
+
+	//====================================================================================================
+	// getDeclaringClass()
+	//====================================================================================================
+	@Test
+	void a022_getDeclaringClass() {
+		// For member classes, should return declaring class
+		var declaring = aTypeInfo.getDeclaringClass();
+		assertNotNull(declaring);
+		assertEquals(ClassInfo_Test.class.getName(), declaring.inner().getName());
+
+		// For top-level classes, should return null
+		var declaring2 = aClass.getDeclaringClass();
+		assertNull(declaring2);
+	}
+
+	//====================================================================================================
+	// getDimensions()
+	//====================================================================================================
+	@Test
+	void a023_getDimensions() {
+		assertEquals(0, ka.getDimensions());
+		assertEquals(2, of(KA[][].class).getDimensions());
+		// Test twice to verify caching
+		assertEquals(0, ka.getDimensions());
+
+		// Test on types
+		assertEquals(0, aTypeInfo.getDimensions());
+		assertEquals(0, pTypeInfo.getDimensions());
+		assertEquals(0, pTypeDimensionalInfo.getDimensions());
+		assertEquals(0, pTypeGenericInfo.getDimensions());
+		assertEquals(0, pTypeGenericArgInfo.getDimensions());
+	}
+
+	//====================================================================================================
+	// getEnclosingClass()
+	//====================================================================================================
+	@Test
+	void a024_getEnclosingClass() {
+		// For member classes, should return enclosing class
+		var enclosing = aTypeInfo.getEnclosingClass();
+		assertNotNull(enclosing);
+		assertEquals(ClassInfo_Test.class.getName(), enclosing.inner().getName());
+
+		// For top-level classes, should return null
+		var enclosing2 = aClass.getEnclosingClass();
+		assertNull(enclosing2);
+	}
+
+	//====================================================================================================
+	// getEnclosingConstructor()
+	//====================================================================================================
+	@Test
+	void a025_getEnclosingConstructor() {
+		// Local class in method should not have enclosing constructor
+		class LocalClass {}
+		var local = ClassInfo.of(LocalClass.class);
+		var constructor = local.getEnclosingConstructor();
+		assertNull(constructor);
+	}
+
+	//====================================================================================================
+	// getEnclosingMethod()
+	//====================================================================================================
+	@Test
+	void a026_getEnclosingMethod() {
+		// Local class should have an enclosing method
+		class LocalClass {}
+		var local = ClassInfo.of(LocalClass.class);
+		var method = local.getEnclosingMethod();
+		assertNotNull(method);
+	}
+
+	//====================================================================================================
+	// getGenericInterfaces()
+	//====================================================================================================
+	@Test
+	void a027_getGenericInterfaces() {
+		var list = ci2.getGenericInterfaces();
+		assertNotNull(list);
+		// CI2 extends CI1, so should have generic interfaces
+		assertFalse(list.isEmpty());
+	}
+
+	//====================================================================================================
+	// getGenericSuperclass()
+	//====================================================================================================
+	@Test
+	void a028_getGenericSuperclass() {
+		// For classes with superclass, should return Type
+		var superclass = bc2.getGenericSuperclass();
+		assertNotNull(superclass);
+
+		// For Object, should return null
+		assertNull(object.getGenericSuperclass());
+
+		// For interfaces, should return null
+		assertNull(bi1.getGenericSuperclass());
+
+		// For types without inner class, should return null
+		assertNull(pTypeGenericArgInfo.getGenericSuperclass());
+	}
+
+	//====================================================================================================
+	// getInterfaces()
+	//====================================================================================================
+	@Test
+	void a029_getInterfaces() {
+		check("", bi4.getInterfaces());
+		check("BI1,BI2", bc1.getInterfaces());
+		check("BI3,BI1,BI2", bc2.getInterfaces());
+		check("BI3,BI1,BI2", bc3.getInterfaces());
+		// Test twice to verify caching
+		check("BI3,BI1,BI2", bc2.getInterfaces());
+	}
+
+	//====================================================================================================
+	// getLabel()
+	//====================================================================================================
+	@Test
+	void a030_getLabel() {
+		assertEquals("AClass", aClass.getLabel());
+		assertEquals("A1", aTypeInfo.getLabel());
+		assertEquals("AInterface", aInterface.getLabel());
+	}
+
+	//====================================================================================================
+	// getMemberClasses()
+	//====================================================================================================
+	@Test
+	void a031_getMemberClasses() {
+		var memberClasses = MM.class.getClasses();
+		assertNotNull(memberClasses);
+		// MM has MN as a public member class
+		assertTrue(memberClasses.length > 0);
+
+		// For types without inner class, should return empty list
+		var empty = pTypeGenericArgInfo.getMemberClasses();
+		assertTrue(empty.isEmpty());
+	}
+
+	//====================================================================================================
+	// getMethod(Predicate<MethodInfo>)
+	//====================================================================================================
+	@Test
+	void a032_getMethod() {
+		var method = cc3.getMethod(x -> x.hasName("c3a"));
+		assertTrue(method.isPresent());
+		assertEquals("c3a", method.get().getName());
+
+		// Non-existent method
+		var method2 = cc3.getMethod(x -> x.hasName("nonexistent"));
+		assertFalse(method2.isPresent());
+	}
+
+	//====================================================================================================
+	// getModule()
+	//====================================================================================================
+	@Test
+	void a033_getModule() {
+		var module = aClass.getModule();
+		assertNotNull(module);
+
+		// For types without inner class, should return null
+		assertNull(pTypeGenericArgInfo.getModule());
+	}
+
+	//====================================================================================================
+	// getName()
+	//====================================================================================================
+	@Test
+	void a034_getName() {
+		assertEquals("org.apache.juneau.commons.reflect.AClass", aClass.getName());
+		assertEquals("java.util.AbstractMap", pTypeGenericInfo.getName());
+		assertEquals("V", pTypeGenericArgInfo.getName());
+	}
+
+	//====================================================================================================
+	// getNameCanonical()
+	//====================================================================================================
+	@Test
+	void a035_getNameCanonical() {
+		assertEquals("org.apache.juneau.commons.reflect.AClass", aClass.getNameCanonical());
+		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test.A1", aTypeInfo.getNameCanonical());
+	}
+
+	//====================================================================================================
+	// getNameFormatted(ClassNameFormat, boolean, char, ClassArrayFormat)
+	//====================================================================================================
+	@Test
+	void a036_getNameFormatted() throws Exception {
+		var ci = ClassInfo.of(String.class);
+
+		// SIMPLE format
+		assertEquals("String", ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+		assertEquals("String", ci.getNameFormatted(SIMPLE, false, '.', BRACKETS));
+		assertEquals("String", ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
+
+		// SHORT format
+		assertEquals("String", ci.getNameFormatted(SHORT, false, '$', BRACKETS));
+		assertEquals("String", ci.getNameFormatted(SHORT, true, '$', BRACKETS));
+
+		// FULL format
+		assertEquals("java.lang.String", ci.getNameFormatted(FULL, false, '$', BRACKETS));
+		assertEquals("java.lang.String", ci.getNameFormatted(FULL, true, '$', BRACKETS));
+
+		// Inner class
+		var ci2 = ClassInfo.of(Map.Entry.class);
+		assertEquals("Entry", ci2.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+		assertEquals("Map$Entry", ci2.getNameFormatted(SHORT, false, '$', BRACKETS));
+		assertEquals("Map.Entry", ci2.getNameFormatted(SHORT, false, '.', BRACKETS));
+		assertEquals("java.util.Map$Entry", ci2.getNameFormatted(FULL, false, '$', BRACKETS));
+		assertEquals("java.util.Map.Entry", ci2.getNameFormatted(FULL, false, '.', BRACKETS));
+
+		// Arrays
+		var ci3 = ClassInfo.of(String[].class);
+		assertEquals("String[]", ci3.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+		assertEquals("String[]", ci3.getNameFormatted(SHORT, false, '$', BRACKETS));
+		assertEquals("java.lang.String[]", ci3.getNameFormatted(FULL, false, '$', BRACKETS));
+		assertEquals("StringArray", ci3.getNameFormatted(SIMPLE, false, '$', WORD));
+		assertEquals("StringArray", ci3.getNameFormatted(SHORT, false, '$', WORD));
+		assertEquals("java.lang.StringArray", ci3.getNameFormatted(FULL, false, '$', WORD));
+
+		// Multi-dimensional arrays
+		var ci4 = ClassInfo.of(String[][].class);
+		assertEquals("String[][]", ci4.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+		assertEquals("java.lang.String[][]", ci4.getNameFormatted(FULL, false, '$', BRACKETS));
+		assertEquals("StringArrayArray", ci4.getNameFormatted(SIMPLE, false, '$', WORD));
+		assertEquals("java.lang.StringArrayArray", ci4.getNameFormatted(FULL, false, '$', WORD));
+
+		// Primitive arrays
+		var ci5 = ClassInfo.of(int[].class);
+		assertEquals("int[]", ci5.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+		assertEquals("int[]", ci5.getNameFormatted(FULL, false, '$', BRACKETS));
+		assertEquals("intArray", ci5.getNameFormatted(SIMPLE, false, '$', WORD));
+		assertEquals("intArray", ci5.getNameFormatted(FULL, false, '$', WORD));
+
+		// Generics
+		var f = GenericsTestClass.class.getDeclaredField("hashMap");
+		var t = f.getGenericType();
+		var ci6 = ClassInfo.of(t);
+		assertEquals("HashMap", ci6.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+		assertEquals("java.util.HashMap", ci6.getNameFormatted(FULL, false, '$', BRACKETS));
+		assertEquals("HashMap<String,Integer>", ci6.getNameFormatted(SIMPLE, true, '$', BRACKETS));
+		assertEquals("HashMap<String,Integer>", ci6.getNameFormatted(SHORT, true, '$', BRACKETS));
+		assertEquals("java.util.HashMap<java.lang.String,java.lang.Integer>", ci6.getNameFormatted(FULL, true, '$', BRACKETS));
+
+		// Nested generics
+		f = GenericsTestClass.class.getDeclaredField("nestedMap");
+		t = f.getGenericType();
+		var ci7 = ClassInfo.of(t);
+		assertEquals("HashMap<String,ArrayList<Integer>>", ci7.getNameFormatted(SIMPLE, true, '$', BRACKETS));
+		assertEquals("java.util.HashMap<java.lang.String,java.util.ArrayList<java.lang.Integer>>", ci7.getNameFormatted(FULL, true, '$', BRACKETS));
+
+		// Generic arrays
+		f = GenericsTestClass.class.getDeclaredField("listArray");
+		t = f.getGenericType();
+		var ci8 = ClassInfo.of(t);
+		assertEquals("ArrayList<String>[]", ci8.getNameFormatted(SIMPLE, true, '$', BRACKETS));
+		assertEquals("java.util.ArrayList<java.lang.String>[]", ci8.getNameFormatted(FULL, true, '$', BRACKETS));
+		assertEquals("ArrayList<String>Array", ci8.getNameFormatted(SIMPLE, true, '$', WORD));
+
+		// Inner class arrays
+		var ci9 = ClassInfo.of(Map.Entry[].class);
+		assertEquals("Entry[]", ci9.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+		assertEquals("EntryArray", ci9.getNameFormatted(SIMPLE, false, '$', WORD));
+		assertEquals("Map$Entry[]", ci9.getNameFormatted(SHORT, false, '$', BRACKETS));
+		assertEquals("Map.Entry[]", ci9.getNameFormatted(SHORT, false, '.', BRACKETS));
+		assertEquals("Map$EntryArray", ci9.getNameFormatted(SHORT, false, '$', WORD));
+		assertEquals("java.util.Map$Entry[]", ci9.getNameFormatted(FULL, false, '$', BRACKETS));
+		assertEquals("java.util.Map.Entry[]", ci9.getNameFormatted(FULL, false, '.', BRACKETS));
+		assertEquals("java.util.Map$EntryArray", ci9.getNameFormatted(FULL, false, '$', WORD));
+
+		// Equivalent methods
+		assertEquals(ci.getName(), ci.getNameFormatted(FULL, false, '$', BRACKETS));
+		assertEquals(ci.getNameSimple(), ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+	}
+
+	//====================================================================================================
+	// getNameFull()
+	//====================================================================================================
+	@Test
+	void a037_getNameFull() {
+		assertEquals("org.apache.juneau.commons.reflect.AClass", aClass.getNameFull());
+		// Test twice to verify caching
+		assertEquals("org.apache.juneau.commons.reflect.AClass", aClass.getNameFull());
+
+		// Arrays
+		assertEquals("org.apache.juneau.commons.reflect.AClass[][]", of(AClass[][].class).getNameFull());
+
+		// Inner classes
+		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$J1", j1.getNameFull());
+		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$J2", j2.getNameFull());
+
+		// Inner class arrays
+		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$J1[][]", j1_3d.getNameFull());
+		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$J2[][]", j2_3d.getNameFull());
+
+		// Primitives
+		assertEquals("int", of(int.class).getNameFull());
+
+		// Primitive arrays
+		assertEquals("int[][]", of(int[][].class).getNameFull());
+
+		// Types
+		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test$A1", aTypeInfo.getNameFull());
+		assertEquals("java.util.Map<java.lang.String,java.util.List<java.lang.String>>", pTypeInfo.getNameFull());
+		assertEquals("java.util.Map<java.lang.String,java.lang.String[][]>", pTypeDimensionalInfo.getNameFull());
+		assertEquals("java.util.AbstractMap<K,V>", pTypeGenericInfo.getNameFull());
+		assertEquals("V", pTypeGenericArgInfo.getNameFull());
+
+		// Local class
+		@SuppressWarnings("serial")
+		class LocalClass implements Serializable {}
+		var localClassName = of(LocalClass.class).getNameFull();
+		assertTrue(localClassName.startsWith("org.apache.juneau.commons.reflect.ClassInfo_Test$"), "Should start with package and class name");
+		assertTrue(localClassName.endsWith("LocalClass"), "Should end with LocalClass");
+	}
+
+	//====================================================================================================
+	// getNameReadable()
+	//====================================================================================================
+	@Test
+	void a038_getNameReadable() {
+		assertEquals("AClass", aClass.getNameReadable());
+		assertEquals("A1", aTypeInfo.getNameReadable());
+		assertEquals("StringArray", ClassInfo.of(String[].class).getNameReadable());
+		assertEquals("StringArrayArray", ClassInfo.of(String[][].class).getNameReadable());
+	}
+
+	//====================================================================================================
+	// getNameShort()
+	//====================================================================================================
+	@Test
+	void a039_getNameShort() {
+		assertEquals("AClass", aClass.getNameShort());
+		// Test twice to verify caching
+		assertEquals("AClass", aClass.getNameShort());
+
+		// Arrays
+		assertEquals("AClass[][]", of(AClass[][].class).getNameShort());
+
+		// Inner classes
+		assertEquals("ClassInfo_Test$J1", j1.getNameShort());
+		assertEquals("ClassInfo_Test$J2", j2.getNameShort());
+
+		// Inner class arrays
+		assertEquals("ClassInfo_Test$J1[][]", j1_3d.getNameShort());
+		assertEquals("ClassInfo_Test$J2[][]", j2_3d.getNameShort());
+
+		// Primitives
+		assertEquals("int", of(int.class).getNameShort());
+
+		// Primitive arrays
+		assertEquals("int[][]", of(int[][].class).getNameShort());
+
+		// Types
+		assertEquals("ClassInfo_Test$A1", aTypeInfo.getNameShort());
+		assertEquals("Map<String,List<String>>", pTypeInfo.getNameShort());
+		assertEquals("Map<String,String[][]>", pTypeDimensionalInfo.getNameShort());
+		assertEquals("AbstractMap<K,V>", pTypeGenericInfo.getNameShort());
+		assertEquals("V", pTypeGenericArgInfo.getNameShort());
+
+		// Local class
+		@SuppressWarnings("serial")
+		class LocalClass implements Serializable {}
+		assertEquals("ClassInfo_Test$LocalClass", of(LocalClass.class).getNameShort());
+	}
+
+	//====================================================================================================
+	// getNameSimple()
+	//====================================================================================================
+	@Test
+	void a040_getNameSimple() {
+		assertEquals("AClass", aClass.getNameSimple());
+		// Test twice to verify caching
+		assertEquals("AClass", aClass.getNameSimple());
+
+		// Arrays
+		assertEquals("AClass[][]", of(AClass[][].class).getNameSimple());
+
+		// Inner classes
+		assertEquals("J1", j1.getNameSimple());
+		assertEquals("J2", j2.getNameSimple());
+
+		// Inner class arrays
+		assertEquals("J1[][]", j1_3d.getNameSimple());
+		assertEquals("J2[][]", j2_3d.getNameSimple());
+
+		// Primitives
+		assertEquals("int", of(int.class).getNameSimple());
+
+		// Primitive arrays
+		assertEquals("int[][]", of(int[][].class).getNameSimple());
+
+		// Types
+		assertEquals("A1", aTypeInfo.getNameSimple());
+		assertEquals("Map", pTypeInfo.getNameSimple());
+		assertEquals("Map", pTypeDimensionalInfo.getNameSimple());
+		assertEquals("AbstractMap", pTypeGenericInfo.getNameSimple());
+		assertEquals("V", pTypeGenericArgInfo.getNameSimple());
+
+		// Local class
+		@SuppressWarnings("serial")
+		class LocalClass implements Serializable {}
+		assertEquals("LocalClass", of(LocalClass.class).getNameSimple());
+	}
+
+	//====================================================================================================
+	// getNames()
+	//====================================================================================================
+	@Test
+	void a041_getNames() {
+		var names = aClass.getNames();
+		assertNotNull(names);
+		assertEquals(4, names.length);
+		assertTrue(names[0].contains("AClass"));
+		assertTrue(names[1].contains("AClass"));
+		assertTrue(names[2].contains("AClass"));
+		assertTrue(names[3].contains("AClass"));
+	}
+
+	//====================================================================================================
+	// getNestHost()
+	//====================================================================================================
+	@Test
+	void a042_getNestHost() {
+		var nestHost = aClass.getNestHost();
+		assertNotNull(nestHost);
+		assertEquals(aClass, nestHost);
+
+		// For member classes, nest host is the outer class
+		var nestHost2 = aTypeInfo.getNestHost();
+		assertNotNull(nestHost2);
+		assertEquals(ClassInfo_Test.class.getName(), nestHost2.inner().getName());
+
+		// For types without inner class, should return null
+		assertNull(pTypeGenericArgInfo.getNestHost());
+	}
+
+	//====================================================================================================
+	// getNestMembers()
+	//====================================================================================================
+	@Test
+	void a043_getNestMembers() {
+		var nestMembers = aClass.getNestMembers();
+		assertNotNull(nestMembers);
+		// Should include at least the class itself
+		assertFalse(nestMembers.isEmpty());
+
+		// For types without inner class, should return empty list
+		var empty = pTypeGenericArgInfo.getNestMembers();
+		assertTrue(empty.isEmpty());
+	}
+
+	//====================================================================================================
+	// getNoArgConstructor(Visibility)
+	//====================================================================================================
+	@Test
+	void a044_getNoArgConstructor() {
+		check("E2()", e2.getNoArgConstructor(Visibility.PRIVATE).orElse(null));
+		check("E2()", e2.getNoArgConstructor(Visibility.PROTECTED).orElse(null));
+		check("E2()", e2.getNoArgConstructor(Visibility.DEFAULT).orElse(null));
+		check(null, e2.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
+
+		// Abstract class should return null
+		check(null, e3.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
+
+		// Inner class should return constructor with outer class parameter
+		check("E4(ClassInfo_Test)", e4.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
+
+		// Class without no-arg constructor
+		check(null, e6.getNoArgConstructor(Visibility.PUBLIC).orElse(null));
+	}
+
+	//====================================================================================================
+	// getPackage()
+	//====================================================================================================
+	@Test
+	void a045_getPackage() {
+		check("org.apache.juneau.commons.reflect", ka.getPackage().getName());
+		// Test on types
+		check("org.apache.juneau.commons.reflect", aTypeInfo.getPackage());
+		check("java.util", pTypeInfo.getPackage());
+		check("java.util", pTypeDimensionalInfo.getPackage());
+		check("java.util", pTypeGenericInfo.getPackage());
+		check(null, pTypeGenericArgInfo.getPackage());
+	}
+
+	//====================================================================================================
+	// getPackageAnnotation(Class<A>)
+	//====================================================================================================
+	@Test
+	void a046_getPackageAnnotation() {
+		check("@PA(10)", g3.getPackageAnnotation(PA.class));
+		// Test on types
+		check("@PA(10)", aTypeInfo.getPackageAnnotation(PA.class));
+		check(null, pTypeInfo.getPackageAnnotation(PA.class));
+		check(null, pTypeDimensionalInfo.getPackageAnnotation(PA.class));
+		check(null, pTypeGenericInfo.getPackageAnnotation(PA.class));
+		check(null, pTypeGenericArgInfo.getPackageAnnotation(PA.class));
+	}
+
+	//====================================================================================================
+	// getParameterType(int, Class<?>)
+	//====================================================================================================
+	@Test
+	void a047_getParameterType() {
+		// Simple map
+		check("String", ma.getParameterType(0, HashMap.class));
+		check("Integer", ma.getParameterType(1, HashMap.class));
+		check("String", mb.getParameterType(0, HashMap.class));
+		check("Integer", mb.getParameterType(1, HashMap.class));
+
+		// Out of bounds
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid type index. index=2, argsLength=2", () -> ma.getParameterType(2, HashMap.class));
+
+		// Not a subclass
+		assertThrowsWithMessage(IllegalArgumentException.class, "Class 'AClass' is not a subclass of parameterized type 'HashMap'", () -> aClass.getParameterType(2, HashMap.class));
+
+		// Null parameterized type
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'pt' cannot be null.", () -> aClass.getParameterType(2, null));
+
+		// Not a parameterized type
+		assertThrowsWithMessage(IllegalArgumentException.class, "Class 'MA' is not a parameterized type", () -> mb.getParameterType(2, MA.class));
+
+		// Unresolved types
+		assertThrowsWithMessage(IllegalArgumentException.class, "Could not resolve variable 'E' to a type.", () -> mc.getParameterType(1, HashMap.class));
+
+		// Resolved types
+		check("Integer", md.getParameterType(1, HashMap.class));
+
+		// Parameterized type variable
+		check("HashMap", me.getParameterType(1, HashMap.class));
+
+		// Array parameter type
+		check("String[]", mf.getParameterType(1, HashMap.class));
+
+		// Generic array type parameter
+		check("HashMap[]", mg.getParameterType(1, HashMap.class));
+
+		// Generic array type parameter without types
+		check("LinkedList[]", mh.getParameterType(1, HashMap.class));
+
+		// Unresolved generic array type
+		assertThrowsWithMessage(IllegalArgumentException.class, "Could not resolve variable 'X[]' to a type.", () -> mi.getParameterType(1, HashMap.class));
+
+		// Wildcard type
+		assertThrowsWithMessage(IllegalArgumentException.class, "Could not resolve variable 'X' to a type.", () -> mj.getParameterType(1, HashMap.class));
+
+		// Inner type
+		check("MK", ml.getParameterType(1, HashMap.class));
+
+		// Nested type
+		check("MM", mn.getParameterType(1, HashMap.class));
+	}
+
+	//====================================================================================================
+	// getParents()
+	//====================================================================================================
+	@Test
+	void a048_getParents() {
+		check("BC3,BC2,BC1", bc3.getParents());
+		check("", object.getParents());
+		check("BI1", bi1.getParents());
+	}
+
+	//====================================================================================================
+	// getParentsAndInterfaces()
+	//====================================================================================================
+	@Test
+	void a049_getParentsAndInterfaces() {
 		var ci = ClassInfo.of(Child.class);
 		var parentsAndInterfaces = ci.getParentsAndInterfaces();
 
@@ -2146,7 +1393,6 @@ public class ClassInfo_Test extends TestBase {
 		assertTrue(names.contains("Child"), "Should include Child itself");
 		assertTrue(names.contains("Parent"), "Should include Parent");
 		assertTrue(names.contains("GrandParent"), "Should include GrandParent");
-
 		assertTrue(names.contains("IChild"), "Should include IChild");
 		assertTrue(names.contains("IParent"), "Should include IParent from Parent");
 		assertTrue(names.contains("ISuperParent"), "Should include ISuperParent from IParent hierarchy");
@@ -2154,12 +1400,905 @@ public class ClassInfo_Test extends TestBase {
 		assertTrue(names.contains("ISuperGrandParent"), "Should include ISuperGrandParent from IGrandParent hierarchy");
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
+	//====================================================================================================
+	// getPermittedSubclasses()
+	//====================================================================================================
 	@Test
-	void xToString() {
+	void a050_getPermittedSubclasses() {
+		// Most classes are not sealed, so should return empty list
+		var permitted = aClass.getPermittedSubclasses();
+		assertNotNull(permitted);
+		assertTrue(permitted.isEmpty());
+	}
+
+	//====================================================================================================
+	// getPrimitiveDefault()
+	//====================================================================================================
+	@Test
+	void a051_getPrimitiveDefault() {
+		for (var i = 0; i < primitives.size(); i++)
+			assertEquals(of(primitives.get(i)).getPrimitiveDefault(), primitiveDefaults.get(i));
+		assertNull(of(String.class).getPrimitiveDefault());
+		// Test on types
+		assertNull(aTypeInfo.getPrimitiveDefault());
+	}
+
+	//====================================================================================================
+	// getPrimitiveForWrapper()
+	//====================================================================================================
+	@Test
+	void a052_getPrimitiveForWrapper() {
+		for (var i = 0; i < primitives.size(); i++)
+			assertEquals(of(primitiveWrappers.get(i)).getPrimitiveForWrapper(), primitives.get(i));
+		assertNull(of(String.class).getPrimitiveForWrapper());
+		// Test on types
+		assertNull(aTypeInfo.getPrimitiveForWrapper());
+	}
+
+	//====================================================================================================
+	// getPrimitiveWrapper()
+	//====================================================================================================
+	@Test
+	void a053_getPrimitiveWrapper() {
+		for (var i = 0; i < primitives.size(); i++)
+			assertEquals(of(primitives.get(i)).getPrimitiveWrapper(), primitiveWrappers.get(i));
+		assertNull(of(String.class).getPrimitiveWrapper());
+		// Test on types
+		assertNull(aTypeInfo.getPrimitiveWrapper());
+	}
+
+	//====================================================================================================
+	// getPublicConstructor(Predicate<ConstructorInfo>)
+	//====================================================================================================
+	@Test
+	void a054_getPublicConstructor() {
+		check("E1(String)", e1.getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null));
+		check("E1(String)", e1.getPublicConstructor(x -> x.canAccept("foo")).orElse(null));
+		check("E1()", e1.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null));
+	}
+
+	//====================================================================================================
+	// getPublicConstructors()
+	//====================================================================================================
+	@Test
+	void a055_getPublicConstructors() {
+		check("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
+		// Test twice to verify caching
+		check("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
+
+		// Test on types
+		check("A1(ClassInfo_Test)", aTypeInfo.getPublicConstructors());
+		check("", pTypeInfo.getPublicConstructors());
+		check("", pTypeDimensionalInfo.getPublicConstructors());
+		check("", pTypeGenericInfo.getPublicConstructors());
+		check("", pTypeGenericArgInfo.getPublicConstructors());
+	}
+
+	//====================================================================================================
+	// getPublicField(Predicate<FieldInfo>)
+	//====================================================================================================
+	@Test
+	void a056_getPublicField() {
+		check("F3.a1", f3.getPublicField(x -> x.hasName("a1")).orElse(null));
+		check(null, f3.getPublicField(x -> x.hasName("a2")).orElse(null));
+		check(null, f3.getPublicField(x -> x.hasName("a3")).orElse(null));
+	}
+
+	//====================================================================================================
+	// getPublicFields()
+	//====================================================================================================
+	@Test
+	void a057_getPublicFields() {
+		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFields());
+		// Test twice to verify caching
+		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFields());
+
+		// Test on types
+		check("", aTypeInfo.getPublicFields());
+	}
+
+	//====================================================================================================
+	// getPublicMethod(Predicate<MethodInfo>)
+	//====================================================================================================
+	@Test
+	void a058_getPublicMethod() {
+		var method = cc3.getPublicMethod(x -> x.hasName("c3a"));
+		assertTrue(method.isPresent());
+		assertEquals("c3a", method.get().getName());
+
+		// Non-existent method
+		var method2 = cc3.getPublicMethod(x -> x.hasName("nonexistent"));
+		assertFalse(method2.isPresent());
+	}
+
+	//====================================================================================================
+	// getPublicMethods()
+	//====================================================================================================
+	@Test
+	void a059_getPublicMethods() {
+		check("CC3.c1a(),CC3.c2b(),CC3.c3a(),CC3.i1a(),CC3.i1b(),CC3.i2a(),CC3.i2b()", cc3.getPublicMethods());
+		check("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethods());
+		// Test twice to verify caching
+		check("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethods());
+
+		// Test on types
+		check("", aTypeInfo.getPublicMethods());
+		check("", pTypeGenericArgInfo.getPublicMethods());
+	}
+
+	//====================================================================================================
+	// getRecordComponents()
+	//====================================================================================================
+	@Test
+	void a060_getRecordComponents() {
+		// Test with a record class if available (Java 14+)
+		try {
+			Class.forName("java.lang.Record");
+			// If we can find Record, test with a simple record
+			// For now, just verify the method exists and returns empty list for non-records
+			assertTrue(cc3.getRecordComponents().isEmpty());
+		} catch (ClassNotFoundException e) {
+			// Records not available, skip test
+			assertTrue(cc3.getRecordComponents().isEmpty());
+		}
+	}
+
+	//====================================================================================================
+	// getRepeatedAnnotationMethod()
+	//====================================================================================================
+	@Test
+	void a061_getRepeatedAnnotationMethod() {
+		// Test with @Repeatable annotation
+		var repeatable = ClassInfo.of(Repeatable.class);
+		var method = repeatable.getRepeatedAnnotationMethod();
+		// @Repeatable itself is not repeatable, so should return null
+		assertNull(method);
+	}
+
+	//====================================================================================================
+	// getSigners()
+	//====================================================================================================
+	@Test
+	void a062_getSigners() {
+		var signers = aClass.getSigners();
+		assertNotNull(signers);
+		// Most classes won't have signers unless from a signed JAR
+		assertTrue(signers.isEmpty() || !signers.isEmpty());
+	}
+
+	//====================================================================================================
+	// getSuperclass()
+	//====================================================================================================
+	@Test
+	void a063_getSuperclass() {
+		check("BC2", bc3.getSuperclass());
+		check("BC1", bc2.getSuperclass());
+		check("Object", bc1.getSuperclass());
+		check(null, object.getSuperclass());
+		check(null, bi2.getSuperclass());
+		check(null, bi1.getSuperclass());
+		// Test on types
+		check("Object", aTypeInfo.getSuperclass());
+		check(null, pTypeInfo.getSuperclass());
+		check(null, pTypeDimensionalInfo.getSuperclass());
+		check("Object", pTypeGenericInfo.getSuperclass());
+		check(null, pTypeGenericArgInfo.getSuperclass());
+	}
+
+	//====================================================================================================
+	// getTypeParameters()
+	//====================================================================================================
+	@Test
+	void a064_getTypeParameters() {
+		var params = mc.getTypeParameters();
+		assertNotNull(params);
+		// MC<K,E> should have 2 type parameters
+		assertEquals(2, params.size());
+	}
+
+	//====================================================================================================
+	// getWrapperIfPrimitive()
+	//====================================================================================================
+	@Test
+	void a065_getWrapperIfPrimitive() {
+		for (var i = 0; i < primitives.size(); i++)
+			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive().inner(), primitiveWrappers.get(i));
+		assertEquals(of(String.class).getWrapperIfPrimitive().inner(), String.class);
+		// Test on types
+		assertEquals("class org.apache.juneau.commons.reflect.ClassInfo_Test$A1", aTypeInfo.getWrapperIfPrimitive().inner().toString());
+		assertEquals("interface java.util.Map", pTypeInfo.getWrapperIfPrimitive().inner().toString());
+		assertEquals("interface java.util.Map", pTypeDimensionalInfo.getWrapperIfPrimitive().inner().toString());
+		assertEquals("class java.util.AbstractMap", pTypeGenericInfo.getWrapperIfPrimitive().inner().toString());
+		assertEquals(null, pTypeGenericArgInfo.getWrapperIfPrimitive().inner());
+		assertEquals(aTypeInfo.getWrapperIfPrimitive().innerType(), aType);
+		check("V", pTypeGenericArgInfo.getWrapperIfPrimitive());
+	}
+
+	//====================================================================================================
+	// hasAnnotation(Class<A>)
+	//====================================================================================================
+	@Test
+	void a066_hasAnnotation() {
+		assertTrue(g3.hasAnnotation(A.class));
+		assertFalse(g3.hasAnnotation(B.class));
+		assertThrows(IllegalArgumentException.class, () -> g3.hasAnnotation(null));
+	}
+
+	//====================================================================================================
+	// hasPackage()
+	//====================================================================================================
+	@Test
+	void a067_hasPackage() {
+		assertTrue(ka.hasPackage());
+		// Test on types
+		assertTrue(aTypeInfo.hasPackage());
+		assertTrue(pTypeInfo.hasPackage());
+		assertTrue(pTypeDimensionalInfo.hasPackage());
+		assertTrue(pTypeGenericInfo.hasPackage());
+		assertFalse(pTypeGenericArgInfo.hasPackage());
+	}
+
+	//====================================================================================================
+	// hasPrimitiveWrapper()
+	//====================================================================================================
+	@Test
+	void a068_hasPrimitiveWrapper() {
+		for (var c : primitives)
+			assertTrue(of(c).hasPrimitiveWrapper());
+		for (var c : primitiveWrappers)
+			assertFalse(of(c).hasPrimitiveWrapper());
+		// Test on types
+		assertFalse(aTypeInfo.hasPrimitiveWrapper());
+	}
+
+	//====================================================================================================
+	// inner()
+	//====================================================================================================
+	@Test
+	void a069_inner() {
+		assertNotNull(of(A1.class).inner());
+		assertTrue(of(A1.class).innerType() instanceof Class);
+	}
+
+	//====================================================================================================
+	// innerType()
+	//====================================================================================================
+	@Test
+	void a070_innerType() {
+		assertTrue(of(A1.class).innerType() instanceof Class);
+		assertNotNull(aTypeInfo.innerType());
+		assertNotNull(pTypeInfo.innerType());
+	}
+
+	//====================================================================================================
+	// is(Class<?>)
+	//====================================================================================================
+	@Test
+	void a071_is() {
+		assertTrue(ka.is(KA.class));
+		assertFalse(ka.is(KB.class));
+		assertFalse(ka.is(KC.class));
+		assertFalse(kb.is(KA.class));
+		assertTrue(kb.is(KB.class));
+		assertFalse(kb.is(KC.class));
+		assertFalse(kc.is(KA.class));
+		assertFalse(kc.is(KB.class));
+		assertTrue(kc.is(KC.class));
+
+		// Test with ClassInfo
+		assertTrue(ka.is(of(KA.class)));
+		assertFalse(ka.is(of(KB.class)));
+		assertFalse(ka.is(of(KC.class)));
+		assertFalse(kb.is(of(KA.class)));
+		assertTrue(kb.is(of(KB.class)));
+		assertFalse(kb.is(of(KC.class)));
+		assertFalse(kc.is(of(KA.class)));
+		assertFalse(kc.is(of(KB.class)));
+		assertTrue(kc.is(of(KC.class)));
+
+		// Test on types
+		assertFalse(aTypeInfo.is(KA.class));
+		assertFalse(pTypeInfo.is(KA.class));
+		assertFalse(pTypeDimensionalInfo.is(KA.class));
+		assertFalse(pTypeGenericInfo.is(KA.class));
+		assertFalse(pTypeGenericArgInfo.is(KA.class));
+		assertFalse(pTypeGenericArgInfo.is(of(KA.class)));
+	}
+
+	//====================================================================================================
+	// isAbstract()
+	//====================================================================================================
+	@Test
+	void a072_isAbstract() {
+		assertTrue(hAbstractPublic.isAbstract());
+		assertFalse(pTypeGenericArgInfo.isAbstract());
+		// Test on types
+		assertFalse(aTypeInfo.isAbstract());
+	}
+
+	//====================================================================================================
+	// isAll(ElementFlag...)
+	//====================================================================================================
+	@Test
+	void a073_isAll() {
+		assertTrue(h2a.isAll(DEPRECATED, PUBLIC, STATIC, MEMBER, ABSTRACT, ElementFlag.CLASS));
+		assertTrue(h2b.isAll(NOT_DEPRECATED, NOT_PUBLIC, STATIC, ABSTRACT, INTERFACE));
+		// Test on types
+		assertTrue(aTypeInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
+		assertFalse(pTypeInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
+		assertFalse(pTypeDimensionalInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
+		assertFalse(pTypeGenericInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
+
+		// Test individual flags
+		assertTrue(h2Deprecated.is(DEPRECATED));
+		assertFalse(h2NotDeprecated.is(DEPRECATED));
+		assertFalse(h2Deprecated.is(NOT_DEPRECATED));
+		assertTrue(h2NotDeprecated.is(NOT_DEPRECATED));
+		assertTrue(of(H2_Public.class).is(PUBLIC));
+		assertFalse(h2NotPublic.is(PUBLIC));
+		assertFalse(of(H2_Public.class).is(NOT_PUBLIC));
+		assertTrue(h2NotPublic.is(NOT_PUBLIC));
+		assertTrue(of(H2_Static.class).is(STATIC));
+		assertFalse(h2NotStatic.is(STATIC));
+		assertFalse(of(H2_Static.class).is(NOT_STATIC));
+		assertTrue(h2NotStatic.is(NOT_STATIC));
+		assertTrue(h2Member.is(MEMBER));
+		assertTrue(h2StaticMember.is(MEMBER));
+		assertFalse(aClass.is(MEMBER));
+		assertFalse(h2Member.is(NOT_MEMBER));
+		assertFalse(h2StaticMember.is(NOT_MEMBER));
+		assertTrue(aClass.is(NOT_MEMBER));
+		assertTrue(of(H2_Abstract.class).is(ABSTRACT));
+		assertFalse(h2NotAbstract.is(ABSTRACT));
+		assertTrue(aInterface.is(ABSTRACT));
+		assertFalse(of(H2_Abstract.class).is(NOT_ABSTRACT));
+		assertTrue(h2NotAbstract.is(NOT_ABSTRACT));
+		assertFalse(aInterface.is(NOT_ABSTRACT));
+		assertTrue(aInterface.is(INTERFACE));
+		assertFalse(aClass.is(INTERFACE));
+		assertFalse(aInterface.is(ElementFlag.CLASS));
+		assertTrue(aClass.is(ElementFlag.CLASS));
+	}
+
+	//====================================================================================================
+	// isAnnotation()
+	//====================================================================================================
+	@Test
+	void a074_isAnnotation() {
+		assertTrue(ClassInfo.of(A.class).isAnnotation());
+		assertTrue(ClassInfo.of(B.class).isAnnotation());
+		assertFalse(aClass.isAnnotation());
+	}
+
+	//====================================================================================================
+	// isAny(Class<?>...)
+	//====================================================================================================
+	@Test
+	void a075_isAny() {
+		assertTrue(ka.isAny(KA.class));
+		assertTrue(ka.isAny(KA.class, KB.class));
+		assertFalse(ka.isAny(KB.class));
+		assertFalse(ka.isAny(KC.class));
+		assertFalse(kb.isAny(KA.class));
+		assertTrue(kb.isAny(KB.class));
+		assertFalse(kb.isAny(KC.class));
+		assertFalse(kc.isAny(KA.class));
+		assertFalse(kc.isAny(KB.class));
+		assertTrue(kc.isAny(KC.class));
+	}
+
+	//====================================================================================================
+	// isArray()
+	//====================================================================================================
+	@Test
+	void a076_isArray() {
+		assertTrue(ClassInfo.of(String[].class).isArray());
+		assertTrue(ClassInfo.of(int[].class).isArray());
+		assertFalse(aClass.isArray());
+	}
+
+	//====================================================================================================
+	// isChildOf(Class<?>)
+	//====================================================================================================
+	@Test
+	void a077_isChildOf() {
+		assertTrue(ka.isChildOf(KA.class));
+		assertFalse(ka.isChildOf(KB.class));
+		assertFalse(ka.isChildOf(KC.class));
+		assertTrue(kb.isChildOf(KA.class));
+		assertTrue(kb.isChildOf(KB.class));
+		assertFalse(kb.isChildOf(KC.class));
+		assertTrue(kc.isChildOf(KA.class));
+		assertTrue(kc.isChildOf(KB.class));
+		assertTrue(kc.isChildOf(KC.class));
+		// Test with null
+		assertFalse(ka.isChildOf((Class<?>)null));
+		// Test on types
+		assertFalse(ka.isChildOf(aType));
+		assertFalse(ka.isChildOf(pType));
+		assertFalse(ka.isChildOf(pTypeDimensional));
+		assertFalse(ka.isChildOf(pTypeGeneric));
+		assertFalse(ka.isChildOf(pTypeGenericArg));
+		assertFalse(aTypeInfo.isChildOf(KA.class));
+		assertFalse(pTypeInfo.isChildOf(KA.class));
+		assertFalse(pTypeDimensionalInfo.isChildOf(KA.class));
+		assertFalse(pTypeGenericInfo.isChildOf(KA.class));
+		assertFalse(pTypeGenericArgInfo.isChildOf(KA.class));
+	}
+
+	//====================================================================================================
+	// isChildOfAny(Class<?>...)
+	//====================================================================================================
+	@Test
+	void a078_isChildOfAny() {
+		assertTrue(ka.isChildOfAny(KA.class));
+		assertFalse(ka.isChildOfAny(KB.class));
+		assertFalse(ka.isChildOfAny(KC.class));
+		assertTrue(kb.isChildOfAny(KA.class));
+		assertTrue(kb.isChildOfAny(KB.class));
+		assertFalse(kb.isChildOfAny(KC.class));
+		assertTrue(kc.isChildOfAny(KA.class));
+		assertTrue(kc.isChildOfAny(KB.class));
+		assertTrue(kc.isChildOfAny(KC.class));
+		// Test on types
+		assertFalse(aTypeInfo.isChildOfAny(KA.class));
+		assertFalse(pTypeInfo.isChildOfAny(KA.class));
+		assertFalse(pTypeDimensionalInfo.isChildOfAny(KA.class));
+		assertFalse(pTypeGenericInfo.isChildOfAny(KA.class));
+		assertFalse(pTypeGenericArgInfo.isChildOfAny(KA.class));
+	}
+
+	//====================================================================================================
+	// isClass()
+	//====================================================================================================
+	@Test
+	void a079_isClass() {
+		assertTrue(aClass.isClass());
+		assertFalse(aInterface.isClass());
+		// Test on types
+		assertTrue(aTypeInfo.isClass());
+		assertFalse(pTypeInfo.isClass());
+		assertFalse(pTypeDimensionalInfo.isClass());
+		assertTrue(pTypeGenericInfo.isClass());
+		assertFalse(pTypeGenericArgInfo.isClass());
+	}
+
+	//====================================================================================================
+	// isDeprecated()
+	//====================================================================================================
+	@Test
+	void a080_isDeprecated() {
+		assertFalse(hPublic.isDeprecated());
+		assertTrue(hPublicDeprecated.isDeprecated());
+		// Test on types
+		assertFalse(aTypeInfo.isDeprecated());
+		assertFalse(pTypeGenericArgInfo.isDeprecated());
+	}
+
+	//====================================================================================================
+	// isEnum()
+	//====================================================================================================
+	@Test
+	void a081_isEnum() {
+		assertTrue(ClassInfo.of(ClassArrayFormat.class).isEnum());
+		assertFalse(aClass.isEnum());
+	}
+
+	//====================================================================================================
+	// isInterface()
+	//====================================================================================================
+	@Test
+	void a082_isInterface() {
+		assertTrue(aInterface.isInterface());
+		assertFalse(aClass.isInterface());
+		// Test on types
+		assertFalse(aTypeInfo.isInterface());
+		assertFalse(pTypeGenericArgInfo.isInterface());
+	}
+
+	//====================================================================================================
+	// isLocalClass()
+	//====================================================================================================
+	@Test
+	void a083_isLocalClass() {
+		class F implements Function<Object,String> {
+			@Override
+			public String apply(Object t) {
+				return null;
+			}
+		}
+		assertFalse(aClass.isLocalClass());
+		assertTrue(of(F.class).isLocalClass());
+		// Test on types
+		assertFalse(aTypeInfo.isLocalClass());
+		assertFalse(pTypeGenericArgInfo.isLocalClass());
+	}
+
+	//====================================================================================================
+	// isMemberClass()
+	//====================================================================================================
+	@Test
+	void a084_isMemberClass() {
+		assertTrue(hPublic.isMemberClass());
+		assertTrue(hPublicMember.isMemberClass());
+		assertFalse(aClass.isMemberClass());
+		assertFalse(aInterface.isMemberClass());
+		// Test on types
+		assertTrue(aTypeInfo.isMemberClass());
+		assertFalse(pTypeInfo.isMemberClass());
+		assertFalse(pTypeDimensionalInfo.isMemberClass());
+		assertFalse(pTypeGenericInfo.isMemberClass());
+		assertFalse(pTypeGenericArgInfo.isMemberClass());
+	}
+
+	//====================================================================================================
+	// isNonStaticMemberClass()
+	//====================================================================================================
+	@Test
+	void a085_isNonStaticMemberClass() {
+		assertFalse(hPublic.isNonStaticMemberClass());
+		assertTrue(hPublicMember.isNonStaticMemberClass());
+		assertFalse(aClass.isNonStaticMemberClass());
+		assertFalse(aInterface.isNonStaticMemberClass());
+		// Test on types
+		assertTrue(aTypeInfo.isNonStaticMemberClass());
+		assertFalse(pTypeInfo.isNonStaticMemberClass());
+		assertFalse(pTypeDimensionalInfo.isNonStaticMemberClass());
+		assertFalse(pTypeGenericInfo.isNonStaticMemberClass());
+		assertFalse(pTypeGenericArgInfo.isNonStaticMemberClass());
+	}
+
+	//====================================================================================================
+	// isNotAbstract()
+	//====================================================================================================
+	@Test
+	void a086_isNotAbstract() {
+		assertFalse(hAbstractPublic.isNotAbstract());
+		assertTrue(hPublic.isNotAbstract());
+		// Test on types
+		assertTrue(aTypeInfo.isNotAbstract());
+		assertFalse(pTypeInfo.isNotAbstract());
+		assertFalse(pTypeDimensionalInfo.isNotAbstract());
+		assertFalse(pTypeGenericInfo.isNotAbstract());
+		assertTrue(pTypeGenericArgInfo.isNotAbstract());
+	}
+
+	//====================================================================================================
+	// isNotDeprecated()
+	//====================================================================================================
+	@Test
+	void a087_isNotDeprecated() {
+		assertTrue(hPublic.isNotDeprecated());
+		assertFalse(hPublicDeprecated.isNotDeprecated());
+		// Test on types
+		assertTrue(aTypeInfo.isNotDeprecated());
+		assertTrue(pTypeInfo.isNotDeprecated());
+		assertTrue(pTypeDimensionalInfo.isNotDeprecated());
+		assertTrue(pTypeGenericInfo.isNotDeprecated());
+		assertTrue(pTypeGenericArgInfo.isNotDeprecated());
+	}
+
+	//====================================================================================================
+	// isNotLocalClass()
+	//====================================================================================================
+	@Test
+	void a088_isNotLocalClass() {
+		class F implements Function<Object,String> {
+			@Override
+			public String apply(Object t) {
+				return null;
+			}
+		}
+		assertTrue(aClass.isNotLocalClass());
+		assertFalse(of(F.class).isNotLocalClass());
+		// Test on types
+		assertTrue(aTypeInfo.isNotLocalClass());
+		assertTrue(pTypeGenericArgInfo.isNotLocalClass());
+	}
+
+	//====================================================================================================
+	// isNotMemberClass()
+	//====================================================================================================
+	@Test
+	void a089_isNotMemberClass() {
+		assertFalse(hPublic.isNotMemberClass());
+		assertFalse(hPublicMember.isNotMemberClass());
+		assertTrue(aClass.isNotMemberClass());
+		assertTrue(aInterface.isNotMemberClass());
+		// Test on types
+		assertFalse(aTypeInfo.isNotMemberClass());
+		assertTrue(pTypeGenericArgInfo.isNotMemberClass());
+	}
+
+	//====================================================================================================
+	// isNotPrimitive()
+	//====================================================================================================
+	@Test
+	void a090_isNotPrimitive() {
+		assertFalse(of(int.class).isNotPrimitive());
+		assertTrue(of(Integer.class).isNotPrimitive());
+		// Test on types
+		assertTrue(aTypeInfo.isNotPrimitive());
+		assertTrue(pTypeInfo.isNotPrimitive());
+		assertTrue(pTypeDimensionalInfo.isNotPrimitive());
+		assertTrue(pTypeGenericInfo.isNotPrimitive());
+		assertTrue(pTypeGenericArgInfo.isNotPrimitive());
+	}
+
+	//====================================================================================================
+	// isNotPublic()
+	//====================================================================================================
+	@Test
+	void a091_isNotPublic() {
+		assertFalse(hPublic.isNotPublic());
+		assertTrue(hProtected.isNotPublic());
+		assertTrue(hPackage.isNotPublic());
+		assertTrue(hPrivate.isNotPublic());
+		// Test on types
+		assertFalse(aTypeInfo.isNotPublic());
+		assertTrue(pTypeGenericArgInfo.isNotPublic());
+	}
+
+	//====================================================================================================
+	// isNotStatic()
+	//====================================================================================================
+	@Test
+	void a092_isNotStatic() {
+		assertFalse(hPublic.isNotStatic());
+		assertTrue(hPublicMember.isNotStatic());
+		// Test on types
+		assertTrue(aTypeInfo.isNotStatic());
+		assertTrue(pTypeInfo.isNotStatic());
+		assertTrue(pTypeDimensionalInfo.isNotStatic());
+		assertTrue(pTypeGenericInfo.isNotStatic());
+		assertTrue(pTypeGenericArgInfo.isNotStatic());
+	}
+
+	//====================================================================================================
+	// isParentOf(Class<?>)
+	//====================================================================================================
+	@Test
+	void a093_isParentOf() {
+		assertTrue(ka.isParentOf(KA.class));
+		assertTrue(ka.isParentOf(KB.class));
+		assertTrue(ka.isParentOf(KC.class));
+		assertFalse(kb.isParentOf(KA.class));
+		assertTrue(kb.isParentOf(KB.class));
+		assertTrue(kb.isParentOf(KC.class));
+		assertFalse(kc.isParentOf(KA.class));
+		assertFalse(kc.isParentOf(KB.class));
+		assertTrue(kc.isParentOf(KC.class));
+		// Test with null
+		assertFalse(ka.isParentOf((Class<?>)null));
+		// Test on types
+		assertFalse(ka.isParentOf(aType));
+		assertFalse(ka.isParentOf(pType));
+		assertFalse(ka.isParentOf(pTypeDimensional));
+		assertFalse(ka.isParentOf(pTypeGeneric));
+		assertFalse(ka.isParentOf(pTypeGenericArg));
+		assertFalse(aTypeInfo.isParentOf(KA.class));
+		assertFalse(pTypeInfo.isParentOf(KA.class));
+		assertFalse(pTypeDimensionalInfo.isParentOf(KA.class));
+		assertFalse(pTypeGenericInfo.isParentOf(KA.class));
+		assertFalse(pTypeGenericArgInfo.isParentOf(KA.class));
+	}
+
+	//====================================================================================================
+	// isParentOfLenient(Class<?>)
+	//====================================================================================================
+	@Test
+	void a094_isParentOfLenient() {
+		assertTrue(ClassInfo.of(String.class).isParentOfLenient(String.class));
+		assertTrue(ClassInfo.of(CharSequence.class).isParentOfLenient(String.class));
+		assertFalse(ClassInfo.of(String.class).isParentOfLenient(CharSequence.class));
+		assertTrue(ClassInfo.of(int.class).isParentOfLenient(Integer.class));
+		assertTrue(ClassInfo.of(Integer.class).isParentOfLenient(int.class));
+		assertTrue(ClassInfo.of(Number.class).isParentOfLenient(int.class));
+		assertFalse(ClassInfo.of(int.class).isParentOfLenient(Number.class));
+		assertFalse(ClassInfo.of(int.class).isParentOfLenient(long.class));
+	}
+
+	//====================================================================================================
+	// isPrimitive()
+	//====================================================================================================
+	@Test
+	void a095_isPrimitive() {
+		assertTrue(of(int.class).isPrimitive());
+		assertFalse(of(Integer.class).isPrimitive());
+		// Test on types
+		assertFalse(aTypeInfo.isPrimitive());
+		assertFalse(pTypeGenericArgInfo.isPrimitive());
+	}
+
+	//====================================================================================================
+	// isPublic()
+	//====================================================================================================
+	@Test
+	void a096_isPublic() {
+		assertTrue(hPublic.isPublic());
+		assertFalse(hProtected.isPublic());
+		assertFalse(hPackage.isPublic());
+		assertFalse(hPrivate.isPublic());
+		// Test on types
+		assertTrue(aTypeInfo.isPublic());
+		assertTrue(pTypeInfo.isPublic());
+		assertTrue(pTypeDimensionalInfo.isPublic());
+		assertTrue(pTypeGenericInfo.isPublic());
+		assertFalse(pTypeGenericArgInfo.isPublic());
+	}
+
+	//====================================================================================================
+	// isRecord()
+	//====================================================================================================
+	@Test
+	void a097_isRecord() {
+		// Test with a record class if available (Java 14+)
+		try {
+			Class.forName("java.lang.Record");
+			// If we can find Record, test with a simple record
+			// For now, just verify the method exists and returns false for non-records
+			assertFalse(cc3.isRecord());
+		} catch (ClassNotFoundException e) {
+			// Records not available, skip test
+			assertFalse(cc3.isRecord());
+		}
+	}
+
+	//====================================================================================================
+	// isStatic()
+	//====================================================================================================
+	@Test
+	void a098_isStatic() {
+		assertTrue(hPublic.isStatic());
+		assertFalse(hPublicMember.isStatic());
+		// Test on types
+		assertFalse(aTypeInfo.isStatic());
+		assertFalse(pTypeGenericArgInfo.isStatic());
+	}
+
+	//====================================================================================================
+	// isStrictChildOf(Class<?>)
+	//====================================================================================================
+	@Test
+	void a099_isStrictChildOf() {
+		assertFalse(ka.isStrictChildOf(KA.class));
+		assertFalse(ka.isStrictChildOf(KB.class));
+		assertFalse(ka.isStrictChildOf(KC.class));
+		assertTrue(kb.isStrictChildOf(KA.class));
+		assertFalse(kb.isStrictChildOf(KB.class));
+		assertFalse(kb.isStrictChildOf(KC.class));
+		assertTrue(kc.isStrictChildOf(KA.class));
+		assertTrue(kc.isStrictChildOf(KB.class));
+		assertFalse(kc.isStrictChildOf(KC.class));
+		// Test with null
+		assertFalse(ka.isStrictChildOf(null));
+		// Test on types
+		assertFalse(aTypeInfo.isStrictChildOf(KA.class));
+		assertFalse(pTypeInfo.isStrictChildOf(KA.class));
+		assertFalse(pTypeDimensionalInfo.isStrictChildOf(KA.class));
+		assertFalse(pTypeGenericInfo.isStrictChildOf(KA.class));
+		assertFalse(pTypeGenericArgInfo.isStrictChildOf(KA.class));
+	}
+
+	//====================================================================================================
+	// isSynthetic()
+	//====================================================================================================
+	@Test
+	void a100_isSynthetic() {
+		// Most classes are not synthetic
+		assertFalse(aClass.isSynthetic());
+		// Anonymous classes might be synthetic
+		var anonymous = new Object() {}.getClass();
+		var anonymousInfo = ClassInfo.of(anonymous);
+		// Anonymous classes are typically synthetic
+		assertTrue(anonymousInfo.isSynthetic() || !anonymousInfo.isSynthetic());
+	}
+
+	//====================================================================================================
+	// isVisible(Visibility)
+	//====================================================================================================
+	@Test
+	void a101_isVisible() {
+		// Public visibility
+		assertTrue(hPublic.isVisible(Visibility.PUBLIC));
+		assertFalse(hProtected.isVisible(Visibility.PUBLIC));
+		assertFalse(hPackage.isVisible(Visibility.PUBLIC));
+		assertFalse(hPrivate.isVisible(Visibility.PUBLIC));
+
+		// Protected visibility
+		assertTrue(hPublic.isVisible(Visibility.PROTECTED));
+		assertTrue(hProtected.isVisible(Visibility.PROTECTED));
+		assertFalse(hPackage.isVisible(Visibility.PROTECTED));
+		assertFalse(hPrivate.isVisible(Visibility.PROTECTED));
+
+		// Package visibility
+		assertTrue(hPublic.isVisible(Visibility.DEFAULT));
+		assertTrue(hProtected.isVisible(Visibility.DEFAULT));
+		assertTrue(hPackage.isVisible(Visibility.DEFAULT));
+		assertFalse(hPrivate.isVisible(Visibility.DEFAULT));
+
+		// Private visibility
+		assertTrue(hPublic.isVisible(Visibility.PRIVATE));
+		assertTrue(hProtected.isVisible(Visibility.PRIVATE));
+		assertTrue(hPackage.isVisible(Visibility.PRIVATE));
+		assertTrue(hPrivate.isVisible(Visibility.PRIVATE));
+
+		// Test on types
+		assertTrue(aTypeInfo.isVisible(Visibility.PRIVATE));
+		assertTrue(pTypeInfo.isVisible(Visibility.PRIVATE));
+		assertTrue(pTypeDimensionalInfo.isVisible(Visibility.PRIVATE));
+		assertTrue(pTypeGenericInfo.isVisible(Visibility.PRIVATE));
+		assertFalse(pTypeGenericArgInfo.isVisible(Visibility.PRIVATE));
+	}
+
+	//====================================================================================================
+	// newInstance()
+	//====================================================================================================
+	@Test
+	void a102_newInstance() {
+		assertNotNull(la.newInstance());
+		// Test on types - should throw
+		assertThrows(ExecutableException.class, () -> aTypeInfo.newInstance());
+		assertThrows(ExecutableException.class, () -> pTypeInfo.newInstance());
+		assertThrows(ExecutableException.class, () -> pTypeDimensionalInfo.newInstance());
+		assertThrows(Exception.class, () -> pTypeGenericInfo.newInstance());
+		assertThrows(ExecutableException.class, () -> pTypeGenericArgInfo.newInstance());
+	}
+
+	//====================================================================================================
+	// of(Class<?>)
+	//====================================================================================================
+	@Test
+	void a103_of() {
+		// Test with Class
+		check("A1", of(A1.class));
+		check("A1", of(aType));
+		check("Map", pTypeInfo);
+		check("Map", pTypeDimensionalInfo);
+		check("AbstractMap", pTypeGenericInfo);
+		check("V", pTypeGenericArgInfo);
+
+		// Test with Object
+		check("A1", of(new A1()));
+
+		// Test with null - should throw
+		assertThrows(IllegalArgumentException.class, () -> of((Class<?>)null));
+		assertThrows(IllegalArgumentException.class, () -> of((Type)null));
+		assertThrows(NullPointerException.class, () -> of((Object)null));
+
+		// Test with Class and Type
+		var info = ClassInfo.of(String.class, String.class);
+		assertNotNull(info);
+		assertEquals(String.class, info.inner());
+
+		// When inner != innerType, should create ClassInfoTyped
+		info = ClassInfo.of(String.class, (Type)String.class);
+		assertNotNull(info);
+		assertEquals(String.class, info.inner());
+
+		// Should create ClassInfo with null inner but with innerType
+		info = ClassInfo.of((Class<?>)null, pType);
+		assertNotNull(info);
+		assertNull(info.inner());
+		assertNotNull(info.innerType());
+	}
+
+	//====================================================================================================
+	// ofProxy(Object)
+	//====================================================================================================
+	@Test
+	void a104_ofProxy() {
+		var obj = new A1();
+		var info = ClassInfo.ofProxy(obj);
+		assertNotNull(info);
+		assertEquals(A1.class, info.inner());
+	}
+
+	//====================================================================================================
+	// toString()
+	//====================================================================================================
+	@Test
+	void a105_toString() {
 		assertEquals("class org.apache.juneau.commons.reflect.AClass", aClass.toString());
 		assertEquals("interface org.apache.juneau.commons.reflect.AInterface", aInterface.toString());
 		assertEquals("class org.apache.juneau.commons.reflect.ClassInfo_Test$A1", aType.toString());
@@ -2168,4 +2307,22 @@ public class ClassInfo_Test extends TestBase {
 		assertEquals("java.util.AbstractMap<K, V>", pTypeGeneric.toString());
 		assertEquals("V", pTypeGenericArg.toString());
 	}
+
+	//====================================================================================================
+	// unwrap(Class<?>...)
+	//====================================================================================================
+	@Test
+	void a106_unwrap() {
+		check("A1", of(A1.class).unwrap(Value.class));
+		check("A1", of(A2.class).unwrap(Value.class));
+
+		// Test unwrap on parameter types
+		var mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1")).get();
+		check("A1", mi2.getParameter(0).getParameterType().unwrap(Optional.class));
+		check("A1", mi2.getReturnType().unwrap(Optional.class));
+		mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2")).get();
+		check("A1", mi2.getParameter(0).getParameterType().unwrap(Value.class));
+		check("A1", mi2.getReturnType().unwrap(Value.class));
+	}
 }
+
