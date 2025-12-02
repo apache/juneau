@@ -16,15 +16,15 @@
  */
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
 
 import java.io.*;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Main class for creation of assertions for stand-alone testing.

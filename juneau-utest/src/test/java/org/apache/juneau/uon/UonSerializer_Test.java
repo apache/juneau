@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.collections.*;

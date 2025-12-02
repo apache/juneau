@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.microservice.jetty;
 
-import static org.apache.juneau.common.utils.FileUtils.*;
-import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
 
 import java.io.*;
 import java.util.*;

@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -26,9 +26,9 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;

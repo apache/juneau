@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.collections.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Tag;

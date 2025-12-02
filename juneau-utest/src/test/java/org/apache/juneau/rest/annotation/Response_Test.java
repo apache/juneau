@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;

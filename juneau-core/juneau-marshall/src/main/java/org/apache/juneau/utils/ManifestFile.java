@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 import java.net.*;

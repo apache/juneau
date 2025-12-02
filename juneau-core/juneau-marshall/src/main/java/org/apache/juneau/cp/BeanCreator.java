@@ -17,16 +17,16 @@
 package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
-import static org.apache.juneau.common.reflect.Visibility.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.reflect.Visibility.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Utility class for creating beans through constructors, creator methods, and builders.

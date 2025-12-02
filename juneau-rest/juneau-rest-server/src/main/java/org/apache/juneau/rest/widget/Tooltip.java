@@ -17,8 +17,7 @@
 package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.u;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 

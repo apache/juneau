@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.swaps;
 
-import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
 
 import java.io.*;
 

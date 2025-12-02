@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 

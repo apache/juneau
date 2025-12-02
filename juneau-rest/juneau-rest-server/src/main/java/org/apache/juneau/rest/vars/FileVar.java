@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.vars;
 
-import static org.apache.juneau.common.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.FileUtils.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;

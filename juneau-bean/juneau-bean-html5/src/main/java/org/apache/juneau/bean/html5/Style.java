@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.html5;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import org.apache.juneau.annotation.*;
 

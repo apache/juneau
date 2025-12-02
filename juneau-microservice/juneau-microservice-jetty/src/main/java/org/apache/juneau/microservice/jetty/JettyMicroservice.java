@@ -17,12 +17,12 @@
 package org.apache.juneau.microservice.jetty;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
@@ -31,7 +31,7 @@ import java.util.*;
 import java.util.logging.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.cp.*;

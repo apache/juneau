@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.common.io.*;
+import org.apache.juneau.commons.io.*;
 
 /**
  * Similar to a {@link java.io.PushbackReader} with a pushback buffer of 1 character.

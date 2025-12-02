@@ -16,17 +16,17 @@
  */
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
 
 import javax.xml.stream.*;
 
-import org.apache.juneau.common.io.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.io.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**

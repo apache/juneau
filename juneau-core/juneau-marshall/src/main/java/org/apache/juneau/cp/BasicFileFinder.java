@@ -17,11 +17,11 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.FileUtils.*;
-import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -29,8 +29,8 @@ import java.util.ResourceBundle.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
-import org.apache.juneau.common.io.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.io.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Basic implementation of a {@link FileFinder}.

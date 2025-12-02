@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.converter;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;

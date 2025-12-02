@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.net.*;
 import java.text.*;

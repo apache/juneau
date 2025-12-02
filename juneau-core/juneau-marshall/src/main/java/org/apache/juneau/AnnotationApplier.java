@@ -16,9 +16,9 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.common.utils.ClassUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -26,8 +26,8 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.svl.*;
 
 /**

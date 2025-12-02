@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.encoders;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.io.*;
 

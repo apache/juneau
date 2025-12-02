@@ -16,13 +16,13 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.common.reflect.ClassInfo_Test.*;
+import org.apache.juneau.commons.reflect.ClassInfo_Test.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 

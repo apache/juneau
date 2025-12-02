@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -27,7 +27,7 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Superclass of all headers defined in this package.

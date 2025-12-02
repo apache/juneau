@@ -17,12 +17,12 @@
 package org.apache.juneau.rest.mock;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.io.*;
 import java.security.*;

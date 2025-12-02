@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Defines an invalid usage of an annotation.

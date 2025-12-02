@@ -17,14 +17,12 @@
 package org.apache.juneau.httppart;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.list;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.common.utils.Utils.isEmpty;
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.Constants.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
@@ -40,11 +38,11 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents an OpenAPI schema definition.

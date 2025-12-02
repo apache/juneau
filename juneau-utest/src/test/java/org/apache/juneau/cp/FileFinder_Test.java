@@ -17,8 +17,8 @@
 package org.apache.juneau.cp;
 
 import static java.util.Locale.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +26,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.io.*;
+import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.sub.*;
 import org.junit.jupiter.api.*;
 

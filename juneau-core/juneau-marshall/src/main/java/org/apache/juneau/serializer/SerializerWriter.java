@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;

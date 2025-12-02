@@ -18,16 +18,16 @@ package org.apache.juneau;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.internal.*;
 
 /**

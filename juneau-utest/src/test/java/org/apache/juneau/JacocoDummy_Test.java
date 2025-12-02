@@ -16,11 +16,11 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;

@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.soap;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;

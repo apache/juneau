@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.csv.annotation;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.csv.*;
-import org.apache.juneau.common.reflect.*;
 import org.junit.jupiter.api.*;
 
 /**

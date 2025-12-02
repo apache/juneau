@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 /**
  * Interface for the resolution of vars that can have one or more keys where the first non-null resolution is returned.

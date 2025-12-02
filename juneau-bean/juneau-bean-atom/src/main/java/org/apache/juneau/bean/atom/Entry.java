@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.atom;
 
-import static org.apache.juneau.common.utils.DateUtils.*;
+import static org.apache.juneau.commons.utils.DateUtils.*;
 
 import java.util.*;
 

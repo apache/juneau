@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Basic implementation of a {@link HeaderIterator}.

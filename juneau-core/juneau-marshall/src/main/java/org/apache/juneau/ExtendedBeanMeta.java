@@ -16,7 +16,7 @@
  */
 package org.apache.juneau;
 
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Defines extended language-specific metadata associated with a bean.

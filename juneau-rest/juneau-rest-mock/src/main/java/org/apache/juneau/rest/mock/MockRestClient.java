@@ -18,8 +18,8 @@ package org.apache.juneau.rest.mock;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.io.*;
@@ -51,9 +51,9 @@ import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;

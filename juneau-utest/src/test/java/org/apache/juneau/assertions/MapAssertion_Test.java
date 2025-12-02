@@ -18,13 +18,13 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 

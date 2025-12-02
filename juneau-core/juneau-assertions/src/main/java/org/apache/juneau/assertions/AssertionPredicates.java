@@ -17,16 +17,16 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicate.*;
-import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 
 /**

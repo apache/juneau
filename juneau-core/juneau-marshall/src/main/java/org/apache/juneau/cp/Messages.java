@@ -16,12 +16,11 @@
  */
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.ResourceBundleUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.common.utils.Utils.isEmpty;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ResourceBundleUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
@@ -29,8 +28,8 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.ParseException;
 

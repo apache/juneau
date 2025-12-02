@@ -16,16 +16,16 @@
  */
 package org.apache.juneau.rest.guard;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.StateEnum.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StateEnum.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Utility class for matching JEE user roles against string expressions.

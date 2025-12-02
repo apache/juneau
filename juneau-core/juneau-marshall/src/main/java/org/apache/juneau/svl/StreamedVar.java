@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 /**
  * Abstract superclass of all Simple Var Language variables that write their values directly to a writer.

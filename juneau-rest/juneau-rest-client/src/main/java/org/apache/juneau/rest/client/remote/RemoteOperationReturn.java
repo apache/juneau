@@ -16,17 +16,17 @@
  */
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
 
 import java.lang.reflect.*;
 import java.util.concurrent.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Represents the metadata about the returned object of a method on a remote proxy interface.

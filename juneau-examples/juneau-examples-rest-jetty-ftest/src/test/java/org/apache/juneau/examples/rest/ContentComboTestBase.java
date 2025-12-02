@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.examples.rest.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 

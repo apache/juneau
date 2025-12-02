@@ -239,6 +239,6 @@
  * @see org.apache.juneau.junit.bct.BctAssertions
  * @see org.apache.juneau.junit.bct.BeanConverter
  * @see org.apache.juneau.junit.bct.BasicBeanConverter
- * @see org.apache.juneau.common.utils.Utils#fs(String, Object...)
+ * @see org.apache.juneau.commons.utils.Utils#fs(String, Object...)
  */
 package org.apache.juneau.junit.bct;

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**

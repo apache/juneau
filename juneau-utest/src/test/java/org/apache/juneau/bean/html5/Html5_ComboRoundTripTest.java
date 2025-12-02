@@ -20,8 +20,8 @@ import static org.apache.juneau.assertions.Verify.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.map;
 import static org.apache.juneau.bean.html5.HtmlBuilder.u;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.a;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.a;
 
 import java.lang.reflect.*;
 import java.util.*;

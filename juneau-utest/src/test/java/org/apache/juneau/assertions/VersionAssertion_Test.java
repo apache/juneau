@@ -18,12 +18,12 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.ne;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.common.utils.Version.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Version.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -260,7 +260,7 @@ class VersionAssertion_Test extends TestBase {
 		var nil = n(Version.class);
 		test(x).isType(Version.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.common.utils.Version'.");
+		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.commons.utils.Version'.");
 		assertThrown(()->test(nil).isType(String.class)).asMessage().asOneLine().is("Value was null.");
 		assertThrown(()->test(x).isType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -269,8 +269,8 @@ class VersionAssertion_Test extends TestBase {
 		var x = of("1");
 		var nil = n(Version.class);
 		test(x).isExactType(Version.class);
-		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='org.apache.juneau.common.utils.Version'.");
-		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.common.utils.Version'.");
+		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='org.apache.juneau.commons.utils.Version'.");
+		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.commons.utils.Version'.");
 		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}

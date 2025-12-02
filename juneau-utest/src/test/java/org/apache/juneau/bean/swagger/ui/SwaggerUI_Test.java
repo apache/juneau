@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.swagger.ui;
 
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 

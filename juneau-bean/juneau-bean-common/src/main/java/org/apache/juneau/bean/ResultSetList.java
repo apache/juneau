@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.bean;
 
-import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.sql.*;
 import java.util.*;
 
-import org.apache.juneau.common.collections.*;
+import org.apache.juneau.commons.collections.*;
 
 /**
  * Transforms an SQL {@link ResultSet ResultSet} into a list of maps.

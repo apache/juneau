@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.util.*;

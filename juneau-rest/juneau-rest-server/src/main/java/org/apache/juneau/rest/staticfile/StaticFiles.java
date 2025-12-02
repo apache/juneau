@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.rest.staticfile;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.nio.file.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
 

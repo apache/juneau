@@ -16,7 +16,7 @@
  */
 package org.apache.juneau;
 
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * A unit of work for applying an annotation to a context builder.

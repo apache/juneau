@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.http.annotation;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.common.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes and methods for the {@link License @License} annotation.

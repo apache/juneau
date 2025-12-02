@@ -17,12 +17,12 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
-import static org.apache.juneau.common.reflect.Visibility.*;
-import static org.apache.juneau.common.utils.ClassUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.reflect.Visibility.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -34,13 +34,13 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.reflect.Visibility;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
@@ -2329,7 +2329,7 @@ public class BeanContext extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-		
+
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -2367,7 +2367,7 @@ public class BeanContext extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-		
+
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()

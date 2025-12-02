@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.stats.*;
 

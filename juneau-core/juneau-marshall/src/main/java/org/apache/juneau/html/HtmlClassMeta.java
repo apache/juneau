@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.html;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.html.annotation.*;
 
 /**

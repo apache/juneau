@@ -17,13 +17,13 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.BeanMeta.MethodType.*;
-import static org.apache.juneau.common.reflect.AnnotationTraversal.*;
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.PredicateUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.PredicateUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -32,10 +32,10 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.reflect.Visibility;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.reflect.Visibility;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).

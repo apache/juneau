@@ -25,9 +25,9 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 

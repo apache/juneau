@@ -17,7 +17,7 @@
 package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.io.*;

@@ -18,7 +18,7 @@ package org.apache.juneau.http.remote;
 
 import java.util.function.*;
 
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Utilities.

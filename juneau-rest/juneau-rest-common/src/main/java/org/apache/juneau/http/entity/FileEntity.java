@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 

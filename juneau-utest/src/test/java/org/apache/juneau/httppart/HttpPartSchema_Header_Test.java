@@ -17,8 +17,8 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,8 +26,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.common.reflect.*;
 import org.junit.jupiter.api.*;
 
 class HttpPartSchema_Header_Test extends TestBase {

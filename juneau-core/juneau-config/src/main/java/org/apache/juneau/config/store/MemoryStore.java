@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.config.store;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.utils.*;
 
 /**

@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Arguments passed to {@link ObjectSorter}.

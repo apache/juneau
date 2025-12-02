@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.common.collections.*;
+import org.apache.juneau.commons.collections.*;
 
 /**
  * A map of possible out-of-band callbacks related to the parent operation.

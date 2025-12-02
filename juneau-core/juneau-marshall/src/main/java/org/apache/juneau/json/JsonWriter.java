@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.json;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.serializer.*;
 
 /**

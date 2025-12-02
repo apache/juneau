@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.swap;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils2.*;
 
 import java.lang.reflect.*;
@@ -25,8 +25,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.serializer.*;
 
 /**

@@ -22,7 +22,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.serializer.*;
 
 /**

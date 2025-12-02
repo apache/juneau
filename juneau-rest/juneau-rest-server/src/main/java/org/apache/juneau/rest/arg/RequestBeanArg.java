@@ -17,9 +17,9 @@
 package org.apache.juneau.rest.arg;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 

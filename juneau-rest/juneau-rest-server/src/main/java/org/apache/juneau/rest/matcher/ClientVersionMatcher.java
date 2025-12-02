@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.matcher;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
-import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 
 import jakarta.servlet.http.*;
 

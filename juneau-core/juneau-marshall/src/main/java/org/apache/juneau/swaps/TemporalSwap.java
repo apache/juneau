@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.swaps;
 
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
-import static org.apache.juneau.common.utils.DateUtils.*;
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.DateUtils.*;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swap.*;
 
 /**

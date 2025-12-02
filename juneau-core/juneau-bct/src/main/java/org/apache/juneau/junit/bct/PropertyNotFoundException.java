@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 /**
  * Exception thrown when a requested property cannot be found on an object.

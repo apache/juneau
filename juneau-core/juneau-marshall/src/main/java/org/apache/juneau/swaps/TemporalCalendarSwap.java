@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.swaps;
 
-import static org.apache.juneau.common.utils.DateUtils.*;
+import static org.apache.juneau.commons.utils.DateUtils.*;
 
 import java.time.*;
 import java.time.format.*;

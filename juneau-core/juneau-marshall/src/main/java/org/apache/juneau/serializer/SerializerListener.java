@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
 

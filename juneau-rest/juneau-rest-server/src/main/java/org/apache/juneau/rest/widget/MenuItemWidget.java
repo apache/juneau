@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.rest.widget;
 
-import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 
-import org.apache.juneau.common.io.*;
+import org.apache.juneau.commons.io.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.rest.*;
 

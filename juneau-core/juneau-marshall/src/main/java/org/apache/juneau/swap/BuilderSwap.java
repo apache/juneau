@@ -16,15 +16,15 @@
  */
 package org.apache.juneau.swap;
 
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Specialized transform for builder classes.

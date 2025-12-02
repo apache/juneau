@@ -17,7 +17,7 @@
 package org.apache.juneau.microservice.jetty;
 
 import static java.util.logging.Level.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.logging.*;
 import java.util.logging.Logger;

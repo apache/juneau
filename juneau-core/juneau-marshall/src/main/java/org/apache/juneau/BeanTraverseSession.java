@@ -17,14 +17,14 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * ContextSession that lives for the duration of a single use of {@link BeanTraverseContext}.

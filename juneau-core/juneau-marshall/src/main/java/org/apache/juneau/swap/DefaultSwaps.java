@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.swap;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.net.*;
 import java.time.*;
@@ -27,7 +27,7 @@ import java.util.regex.*;
 
 import javax.xml.datatype.*;
 
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swaps.*;
 
 /**

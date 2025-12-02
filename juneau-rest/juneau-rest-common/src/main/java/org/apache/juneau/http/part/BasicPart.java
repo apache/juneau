@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -26,8 +26,8 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Implementation of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.

@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Various generic object utility methods.

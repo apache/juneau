@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.staticfile;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.utils.FileUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 
@@ -26,7 +26,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;

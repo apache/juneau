@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.junit.bct;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Collection of standard property extractor implementations for the Bean-Centric Testing framework.

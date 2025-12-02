@@ -16,15 +16,15 @@
  */
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.annotation.PathRemainderAnnotation.*;
 
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;

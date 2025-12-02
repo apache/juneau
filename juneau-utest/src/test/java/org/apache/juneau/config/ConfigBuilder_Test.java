@@ -17,8 +17,8 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.FileUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;

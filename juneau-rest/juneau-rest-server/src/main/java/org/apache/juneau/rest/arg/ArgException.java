@@ -16,15 +16,15 @@
  */
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
 import org.apache.http.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * General exception due to a malformed Java parameter.

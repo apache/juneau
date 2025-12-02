@@ -16,16 +16,15 @@
  */
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.annotation.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.parser.*;
 
 /**

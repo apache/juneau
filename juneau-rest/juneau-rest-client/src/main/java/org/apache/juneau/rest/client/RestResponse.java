@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;

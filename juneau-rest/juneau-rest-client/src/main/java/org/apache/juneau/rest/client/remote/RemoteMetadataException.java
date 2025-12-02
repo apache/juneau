@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.text.*;

@@ -16,17 +16,17 @@
  */
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.annotation.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 

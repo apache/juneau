@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.io.*;
+import org.apache.juneau.commons.io.*;
 
 /**
  * Utility class for finding regular or localized files on the classpath and file system.

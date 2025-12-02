@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.jena.annotation.*;

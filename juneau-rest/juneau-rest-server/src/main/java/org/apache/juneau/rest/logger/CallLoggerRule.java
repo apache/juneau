@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.logger;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.function.*;
 import java.util.logging.*;

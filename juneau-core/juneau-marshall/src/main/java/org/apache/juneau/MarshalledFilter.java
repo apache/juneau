@@ -16,8 +16,8 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.common.utils.ClassUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 

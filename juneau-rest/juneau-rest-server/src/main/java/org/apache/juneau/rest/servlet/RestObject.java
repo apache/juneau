@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.servlet;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.concurrent.atomic.*;

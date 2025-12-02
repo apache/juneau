@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Contains the meta-data about a Java method on a remote class.

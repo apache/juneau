@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.matcher;
 
 import static java.util.stream.Collectors.toList;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 

@@ -17,7 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Verify.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 

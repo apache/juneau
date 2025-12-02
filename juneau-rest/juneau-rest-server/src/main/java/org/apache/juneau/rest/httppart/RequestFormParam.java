@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.httppart;
 
-import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
@@ -28,7 +28,7 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 

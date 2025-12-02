@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Holds metadata about header beans (POJOs that get serialized as HTTP headers).

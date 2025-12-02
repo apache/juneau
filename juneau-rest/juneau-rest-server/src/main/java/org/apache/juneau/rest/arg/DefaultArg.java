@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 

@@ -19,7 +19,7 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.assertions.Assertions.assertThrowable;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -27,7 +27,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.*;

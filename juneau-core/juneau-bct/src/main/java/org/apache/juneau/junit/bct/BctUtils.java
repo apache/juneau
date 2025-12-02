@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -28,13 +28,13 @@ import org.opentest4j.*;
  *
  * <p>
  * This class contains static utility methods specific to the Bean-Centric Testing framework.
- * For general-purpose utility methods, use the classes in {@code org.apache.juneau.common.utils} package.
+ * For general-purpose utility methods, use the classes in {@code org.apache.juneau.commons.utils} package.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- *   <li class='jc'>{@link org.apache.juneau.common.utils.Utils} - General utility methods
- *   <li class='jc'>{@link org.apache.juneau.common.utils.AssertionUtils} - Argument validation methods
- *   <li class='jc'>{@link org.apache.juneau.common.utils.StringUtils} - String manipulation methods
+ *   <li class='jc'>{@link org.apache.juneau.commons.utils.Utils} - General utility methods
+ *   <li class='jc'>{@link org.apache.juneau.commons.utils.AssertionUtils} - Argument validation methods
+ *   <li class='jc'>{@link org.apache.juneau.commons.utils.StringUtils} - String manipulation methods
  * </ul>
  */
 public class BctUtils {

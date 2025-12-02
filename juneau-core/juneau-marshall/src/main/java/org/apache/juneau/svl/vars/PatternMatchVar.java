@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.svl.vars;
 
-import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.regex.*;
 

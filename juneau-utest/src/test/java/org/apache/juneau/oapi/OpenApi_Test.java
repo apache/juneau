@@ -17,8 +17,8 @@
 package org.apache.juneau.oapi;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.DateUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.DateUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;

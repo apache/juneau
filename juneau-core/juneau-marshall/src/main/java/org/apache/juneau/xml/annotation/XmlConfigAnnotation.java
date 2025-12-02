@@ -17,7 +17,7 @@
 package org.apache.juneau.xml.annotation;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 

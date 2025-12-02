@@ -20,7 +20,7 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 import org.junit.jupiter.api.*;
 
 class A_Test extends TestBase {

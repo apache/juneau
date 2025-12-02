@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.config.event;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.util.*;

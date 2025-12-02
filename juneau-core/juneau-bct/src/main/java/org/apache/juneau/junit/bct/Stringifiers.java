@@ -18,7 +18,7 @@ package org.apache.juneau.junit.bct;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

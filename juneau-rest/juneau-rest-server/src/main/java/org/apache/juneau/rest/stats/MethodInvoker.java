@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.stats;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * A wrapper around a {@link Method#invoke(Object, Object...)} method that allows for basic instrumentation.

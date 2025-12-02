@@ -17,9 +17,9 @@
 package org.apache.juneau.junit.bct;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,8 +27,8 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.common.function.ResettableSupplier;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.utils.*;
 import org.opentest4j.*;
 
 /**
@@ -375,7 +375,7 @@ public class BctAssertions {
 	 * </ol>
 	 *
 	 * @param message Optional custom error message supplier. If provided, will be composed with the default assertion message.
-	 *                Use {@link org.apache.juneau.common.utils.Utils#fs(String, Object...) Utils.fs()} to conveniently
+	 *                Use {@link org.apache.juneau.commons.utils.Utils#fs(String, Object...) Utils.fs()} to conveniently
 	 *                create message suppliers with format arguments (e.g., <code>fs("User {0} validation failed", userName)</code>).
 	 * @param actual The bean object to test. Must not be null.
 	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
@@ -385,7 +385,7 @@ public class BctAssertions {
 	 * @see BeanConverter
 	 * @see BasicBeanConverter
 	 * @see #setConverter(BeanConverter)
-	 * @see org.apache.juneau.common.utils.Utils#fs(String, Object...)
+	 * @see org.apache.juneau.commons.utils.Utils#fs(String, Object...)
 	 */
 	public static void assertBean(Supplier<String> message, Object actual, String fields, String expected) {
 		assertNotNull(actual, "Actual was null.");

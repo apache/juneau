@@ -17,8 +17,8 @@
 package org.apache.juneau;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;

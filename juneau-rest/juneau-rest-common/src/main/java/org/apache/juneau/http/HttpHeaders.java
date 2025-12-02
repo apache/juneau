@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.http;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.net.*;
 import java.time.*;
@@ -26,13 +26,13 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Standard predefined HTTP headers.

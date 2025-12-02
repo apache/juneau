@@ -16,15 +16,15 @@
  */
 package org.apache.juneau.html;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.html.AsideFloat.*;
 
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * A basic template for the HTML doc serializer.

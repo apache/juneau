@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 /**
  * Arguments passed to {@link ObjectPaginator}.

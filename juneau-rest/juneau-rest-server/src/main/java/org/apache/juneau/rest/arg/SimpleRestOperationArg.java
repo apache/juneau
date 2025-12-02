@@ -18,7 +18,7 @@ package org.apache.juneau.rest.arg;
 
 import java.util.function.*;
 
-import org.apache.juneau.common.function.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.rest.*;
 
 /**

@@ -17,7 +17,7 @@
 package org.apache.juneau.utils;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Generic object converter implementation.

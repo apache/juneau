@@ -16,14 +16,13 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.common.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes and methods for the {@link RestPostCall @RestPostCall} annotation.
@@ -101,7 +100,7 @@ public class RestPostCallAnnotation {
 
 	
 		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
-		public Builder on(org.apache.juneau.common.reflect.MethodInfo...value) {
+		public Builder on(org.apache.juneau.commons.reflect.MethodInfo...value) {
 			super.on(value);
 			return this;
 		}

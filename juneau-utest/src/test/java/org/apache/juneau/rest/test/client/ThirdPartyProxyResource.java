@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 

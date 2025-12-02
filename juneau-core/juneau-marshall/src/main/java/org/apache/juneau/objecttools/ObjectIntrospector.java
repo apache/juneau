@@ -19,9 +19,9 @@ package org.apache.juneau.objecttools;
 import java.io.*;
 import java.lang.reflect.*;
 
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * POJO method introspector.

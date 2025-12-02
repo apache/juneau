@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -27,8 +27,8 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.common.annotation.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.converter.*;

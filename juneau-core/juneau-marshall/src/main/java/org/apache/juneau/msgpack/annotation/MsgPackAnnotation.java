@@ -18,14 +18,14 @@ package org.apache.juneau.msgpack.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.annotation.*;
-import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
