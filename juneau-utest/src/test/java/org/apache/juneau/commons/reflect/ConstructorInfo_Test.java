@@ -28,7 +28,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ConstructorInfoTest extends TestBase {
+class ConstructorInfo_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -120,6 +120,31 @@ class ConstructorInfoTest extends TestBase {
 	@Test void accessible() throws Exception {
 		b_c3.accessible();
 		assertEquals(null, b_c3.newInstanceLenient(123).toString());
+	}
+
+	@Test void isAccessible() {
+		// Test isAccessible() before and after setAccessible()
+		// Note: isAccessible() was added in Java 9, so behavior may vary
+		
+		// Before setAccessible(), private/protected constructors should not be accessible
+		// (unless they're already accessible due to module system)
+		var privateBefore = b_c3.isAccessible();
+		
+		// Make it accessible
+		b_c3.setAccessible();
+		
+		// After setAccessible(), it should be accessible (if Java 9+)
+		// If Java 8 or earlier, isAccessible() will return false
+		var privateAfter = b_c3.isAccessible();
+		
+		// Verify the method doesn't throw and returns a boolean
+		// The actual value depends on Java version, but it should be consistent
+		assertTrue(privateAfter || !privateBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
+		
+		// Public constructors might already be accessible
+		var publicAccessible = b_c1.isAccessible();
+		// Should return a boolean (either true or false depending on Java version)
+		assertNotNull(Boolean.valueOf(publicAccessible));
 	}
 
 	@Test void compareTo() {

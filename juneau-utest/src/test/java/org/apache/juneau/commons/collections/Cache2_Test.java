@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.commons.collections.CacheMode.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
@@ -301,6 +302,46 @@ class Cache2_Test extends TestBase {
 		assertSize(1, x);
 	}
 
+	@Test
+	void d06_weakMethod_basicCaching() {
+		// Test the weak() convenience method
+		var callCount = new AtomicInteger();
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.weak()
+			.supplier((k1, k2) -> {
+				callCount.incrementAndGet();
+				return k1 + ":" + k2;
+			})
+			.build();
+
+		// First call - cache miss
+		var result1 = x.get("user", 123);
+
+		// Second call - cache hit
+		var result2 = x.get("user", 123);
+
+		assertEquals("user:123", result1);
+		assertEquals("user:123", result2);
+		assertSame(result1, result2);
+		assertEquals(1, callCount.get()); // Supplier only called once
+		assertSize(1, x);
+		assertEquals(1, x.getCacheHits());
+	}
+
+	@Test
+	void d07_weakMethod_chaining() {
+		// Test that weak() can be chained with other builder methods
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.weak()
+			.maxSize(100)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		var result = x.get("user", 123);
+		assertEquals("user:123", result);
+		assertSize(1, x);
+	}
+
 	//====================================================================================================
 	// e - Max size and eviction
 	//====================================================================================================
@@ -523,6 +564,17 @@ class Cache2_Test extends TestBase {
 		assertFalse(x.containsValue("value1"));
 	}
 
+	@Test
+	void m04_containsValue_nullValue() {
+		var x = Cache2.of(String.class, Integer.class, String.class).build();
+		// Null values can't be cached, so containsValue(null) should return false
+		x.get("user", 123, () -> null);
+		assertFalse(x.containsValue(null));
+		// Also test with empty cache
+		var x2 = Cache2.of(String.class, Integer.class, String.class).build();
+		assertFalse(x2.containsValue(null));
+	}
+
 	//====================================================================================================
 	// n - logOnExit() builder methods
 	//====================================================================================================
@@ -615,6 +667,243 @@ class Cache2_Test extends TestBase {
 		assertNull(result2);
 		assertEquals(2, callCount.get());
 		assertTrue(x.isEmpty());
+	}
+
+	//====================================================================================================
+	// o - Thread-local cache mode
+	//====================================================================================================
+
+	@Test
+	void o01_threadLocal_basicCaching() {
+		var callCount = new AtomicInteger();
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.supplier((k1, k2) -> {
+				callCount.incrementAndGet();
+				return k1 + ":" + k2;
+			})
+			.build();
+
+		// First call - cache miss
+		var result1 = x.get("user", 123);
+
+		// Second call - cache hit
+		var result2 = x.get("user", 123);
+
+		assertEquals("user:123", result1);
+		assertEquals("user:123", result2);
+		assertSame(result1, result2);
+		assertEquals(1, callCount.get()); // Supplier only called once
+		assertSize(1, x);
+		assertEquals(1, x.getCacheHits());
+	}
+
+	@Test
+	void o02_threadLocal_eachThreadHasOwnCache() throws Exception {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.build();
+		var executor = java.util.concurrent.Executors.newFixedThreadPool(2);
+		var threadValues = new ConcurrentHashMap<Thread, String>();
+
+		// Each thread caches ("user", 123) with its own value
+		var future1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+			var value = x.get("user", 123, () -> "thread1-value");
+			threadValues.put(Thread.currentThread(), value);
+		}, executor);
+
+		var future2 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+			var value = x.get("user", 123, () -> "thread2-value");
+			threadValues.put(Thread.currentThread(), value);
+		}, executor);
+
+		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
+
+		// Verify both threads cached their own values
+		assertEquals(2, threadValues.size());
+		assertTrue(threadValues.containsValue("thread1-value"));
+		assertTrue(threadValues.containsValue("thread2-value"));
+
+		// Verify each thread's cache is independent - same thread should get same cached value
+		var threadValues2 = new ConcurrentHashMap<Thread, String>();
+		var threads = new java.util.ArrayList<Thread>(threadValues.keySet());
+
+		future1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+			var value = x.get("user", 123, () -> "should-not-be-called");
+			threadValues2.put(Thread.currentThread(), value);
+		}, executor);
+
+		future2 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+			var value = x.get("user", 123, () -> "should-not-be-called");
+			threadValues2.put(Thread.currentThread(), value);
+		}, executor);
+
+		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
+
+		// Each thread should get its own cached value (same as what it cached before)
+		for (var thread : threads) {
+			if (threadValues2.containsKey(thread)) {
+				assertEquals(threadValues.get(thread), threadValues2.get(thread),
+					"Thread " + thread + " should get its own cached value");
+			}
+		}
+
+		executor.shutdown();
+	}
+
+	@Test
+	void o03_threadLocal_multipleKeys() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		x.get("user", 123);
+		x.get("admin", 456);
+		x.get("guest", 789);
+
+		assertSize(3, x);
+		assertEquals(0, x.getCacheHits());
+
+		// Verify all cached
+		assertEquals("user:123", x.get("user", 123));
+		assertEquals("admin:456", x.get("admin", 456));
+		assertEquals("guest:789", x.get("guest", 789));
+		assertEquals(3, x.getCacheHits());
+	}
+
+	@Test
+	void o04_threadLocal_clear() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		x.get("user", 123);
+		x.get("admin", 456);
+		assertSize(2, x);
+
+		x.clear();
+		assertEmpty(x);
+	}
+
+	@Test
+	void o05_threadLocal_maxSize() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.maxSize(2)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		x.get("k1", 1);
+		x.get("k2", 2);
+		assertSize(2, x);
+
+		// 3rd item doesn't trigger eviction yet
+		x.get("k3", 3);
+		assertSize(3, x);
+
+		// 4th item triggers eviction
+		x.get("k4", 4);
+		assertSize(1, x);
+	}
+
+	//====================================================================================================
+	// p - Thread-local + weak mode combination
+	//====================================================================================================
+
+	@Test
+	void p01_threadLocal_weakMode_basicCaching() {
+		var callCount = new AtomicInteger();
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.cacheMode(WEAK)
+			.supplier((k1, k2) -> {
+				callCount.incrementAndGet();
+				return k1 + ":" + k2;
+			})
+			.build();
+
+		// First call - cache miss
+		var result1 = x.get("user", 123);
+
+		// Second call - cache hit
+		var result2 = x.get("user", 123);
+
+		assertEquals("user:123", result1);
+		assertEquals("user:123", result2);
+		assertSame(result1, result2);
+		assertEquals(1, callCount.get()); // Supplier only called once
+		assertSize(1, x);
+		assertEquals(1, x.getCacheHits());
+	}
+
+	@Test
+	void p02_threadLocal_weakMode_eachThreadHasOwnCache() throws Exception {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.cacheMode(WEAK)
+			.build();
+		var executor = java.util.concurrent.Executors.newFixedThreadPool(2);
+		var threadValues = new ConcurrentHashMap<Thread, String>();
+
+		// Each thread caches ("user", 123) with its own value
+		var future1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+			var value = x.get("user", 123, () -> "thread1-value");
+			threadValues.put(Thread.currentThread(), value);
+		}, executor);
+
+		var future2 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+			var value = x.get("user", 123, () -> "thread2-value");
+			threadValues.put(Thread.currentThread(), value);
+		}, executor);
+
+		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
+
+		// Verify both threads cached their own values
+		assertEquals(2, threadValues.size());
+		assertTrue(threadValues.containsValue("thread1-value"));
+		assertTrue(threadValues.containsValue("thread2-value"));
+
+		executor.shutdown();
+	}
+
+	@Test
+	void p03_threadLocal_weakMode_clear() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.cacheMode(WEAK)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		x.get("user", 123);
+		x.get("admin", 456);
+		assertSize(2, x);
+
+		x.clear();
+		assertEmpty(x);
+	}
+
+	@Test
+	void p04_threadLocal_weakMode_maxSize() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.cacheMode(WEAK)
+			.maxSize(2)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		x.get("k1", 1);
+		x.get("k2", 2);
+		assertSize(2, x);
+
+		// 3rd item doesn't trigger eviction yet
+		x.get("k3", 3);
+		assertSize(3, x);
+
+		// 4th item triggers eviction
+		x.get("k4", 4);
+		assertSize(1, x);
 	}
 }
 

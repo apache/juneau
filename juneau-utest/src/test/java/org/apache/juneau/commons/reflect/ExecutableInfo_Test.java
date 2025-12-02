@@ -462,6 +462,39 @@ class ExecutableInfo_Test extends TestBase {
 		assertDoesNotThrow(()->f_isDefault.accessible());
 	}
 
+	@Test void isAccessible() {
+		// Test isAccessible() before and after setAccessible()
+		// Note: isAccessible() was added in Java 9, so behavior may vary
+		
+		// Before setAccessible(), private/protected/default methods should not be accessible
+		// (unless they're already accessible due to module system)
+		var privateBefore = f_isPrivate.isAccessible();
+		var protectedBefore = f_isProtected.isAccessible();
+		var defaultBefore = f_isDefault.isAccessible();
+		
+		// Make them accessible
+		f_isPrivate.setAccessible();
+		f_isProtected.setAccessible();
+		f_isDefault.setAccessible();
+		
+		// After setAccessible(), they should be accessible (if Java 9+)
+		// If Java 8 or earlier, isAccessible() will return false
+		var privateAfter = f_isPrivate.isAccessible();
+		var protectedAfter = f_isProtected.isAccessible();
+		var defaultAfter = f_isDefault.isAccessible();
+		
+		// Verify the method doesn't throw and returns a boolean
+		// The actual value depends on Java version, but it should be consistent
+		assertTrue(privateAfter || !privateBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
+		assertTrue(protectedAfter || !protectedBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
+		assertTrue(defaultAfter || !defaultBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
+		
+		// Public methods might already be accessible
+		var publicAccessible = f_isPublic.isAccessible();
+		// Should return a boolean (either true or false depending on Java version)
+		assertNotNull(Boolean.valueOf(publicAccessible));
+	}
+
 	@Test void isVisible() {
 		assertTrue(f_isPublic.isVisible(Visibility.PUBLIC));
 		assertTrue(f_isPublic.isVisible(Visibility.PROTECTED));

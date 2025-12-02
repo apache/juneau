@@ -1396,6 +1396,39 @@ public class Utils {
 	}
 
 	/**
+	 * Executes a supplier that may throw an exception and returns an Optional.
+	 *
+	 * <p>
+	 * If the supplier executes successfully, returns {@link Optional#of(Object)} with the result.
+	 * If the supplier throws any exception, returns {@link Optional#empty()}.
+	 *
+	 * <p>
+	 * This is useful for operations that may fail but you want to handle the failure
+	 * gracefully by returning an empty Optional instead of throwing an exception.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if AccessibleObject.isAccessible() method exists (Java 9+)</jc>
+	 * 	<jk>boolean</jk> <jv>isAccessible</jv> = <jsm>safeOpt</jsm>(() -&gt;
+	 * 		(<jk>boolean</jk>)AccessibleObject.<jk>class</jk>.getMethod(<js>"isAccessible"</js>).invoke(<jv>obj</jv>)
+	 * 	).orElse(<jk>false</jk>);
+	 * </p>
+	 *
+	 * @param <T> The return type.
+	 * @param s The supplier that may throw an exception.
+	 * @return An Optional containing the result if successful, or empty if an exception was thrown.
+	 * @see #safe(ThrowingSupplier)
+	 * @see #opt(Object)
+	 */
+	public static <T> Optional<T> safeOpt(ThrowingSupplier<T> s) {
+		try {
+			return Optional.of(s.get());
+		} catch (@SuppressWarnings("unused") Exception e) {
+			return Optional.empty();
+		}
+	}
+
+	/**
 	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
 	 *
 	 * @param <T> The supplier type.

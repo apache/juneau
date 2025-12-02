@@ -35,7 +35,7 @@ import org.apache.juneau.annotation.Name;
 /**
  * ParameterInfo tests.
  */
-class ParameterInfoTest extends TestBase {
+class ParameterInfo_Test extends TestBase {
 
 	private static String originalDisableParamNameDetection;
 

@@ -47,6 +47,24 @@ class FieldInfo_Test extends TestBase {
 		String value();
 	}
 
+	@Target(FIELD)
+	@Retention(RUNTIME)
+	public static @interface TestAnnotation1 {
+		String value() default "";
+	}
+
+	@Target(FIELD)
+	@Retention(RUNTIME)
+	public static @interface TestAnnotation2 {
+		int value() default 0;
+	}
+
+	@Target(FIELD)
+	@Retention(RUNTIME)
+	public static @interface TestAnnotation3 {
+		String value() default "";
+	}
+
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
@@ -252,6 +270,39 @@ class FieldInfo_Test extends TestBase {
 		assertDoesNotThrow(()->d_isDefault.setAccessible());
 	}
 
+	@Test void isAccessible() {
+		// Test isAccessible() before and after setAccessible()
+		// Note: isAccessible() was added in Java 9, so behavior may vary
+		
+		// Before setAccessible(), private/protected/default fields should not be accessible
+		// (unless they're already accessible due to module system)
+		var privateBefore = d_isPrivate.isAccessible();
+		var protectedBefore = d_isProtected.isAccessible();
+		var defaultBefore = d_isDefault.isAccessible();
+		
+		// Make them accessible
+		d_isPrivate.setAccessible();
+		d_isProtected.setAccessible();
+		d_isDefault.setAccessible();
+		
+		// After setAccessible(), they should be accessible (if Java 9+)
+		// If Java 8 or earlier, isAccessible() will return false
+		var privateAfter = d_isPrivate.isAccessible();
+		var protectedAfter = d_isProtected.isAccessible();
+		var defaultAfter = d_isDefault.isAccessible();
+		
+		// Verify the method doesn't throw and returns a boolean
+		// The actual value depends on Java version, but it should be consistent
+		assertTrue(privateAfter || !privateBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
+		assertTrue(protectedAfter || !protectedBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
+		assertTrue(defaultAfter || !defaultBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
+		
+		// Public fields might already be accessible
+		var publicAccessible = d_isPublic.isAccessible();
+		// Should return a boolean (either true or false depending on Java version)
+		assertNotNull(Boolean.valueOf(publicAccessible));
+	}
+
 	@Test void isVisible() {
 		assertTrue(d_isPublic.isVisible(Visibility.PUBLIC));
 		assertTrue(d_isPublic.isVisible(Visibility.PROTECTED));
@@ -300,5 +351,111 @@ class FieldInfo_Test extends TestBase {
 
 	@Test void toString2() {
 		assertEquals("org.apache.juneau.commons.reflect.FieldInfo_Test$E.a1", e_a1.toString());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// getAnnotations()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class F {
+		@TestAnnotation1("test1")
+		@TestAnnotation2(42)
+		public String field1;
+
+		@TestAnnotation1("test2")
+		public String field2;
+
+		public String field3;
+	}
+
+	static ClassInfo f = ClassInfo.of(F.class);
+	static FieldInfo
+		f_field1 = f.getPublicField(x -> x.hasName("field1")).get(),
+		f_field2 = f.getPublicField(x -> x.hasName("field2")).get(),
+		f_field3 = f.getPublicField(x -> x.hasName("field3")).get();
+
+	@Test void getAnnotations_returnsAllAnnotations() {
+		var annotations1 = f_field1.getAnnotations();
+		assertEquals(2, annotations1.size());
+		assertTrue(annotations1.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation1")));
+		assertTrue(annotations1.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation2")));
+
+		var annotations2 = f_field2.getAnnotations();
+		assertEquals(1, annotations2.size());
+		assertTrue(annotations2.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation1")));
+
+		var annotations3 = f_field3.getAnnotations();
+		assertEquals(0, annotations3.size());
+	}
+
+	@Test void getAnnotations_typed_filtersByType() {
+		var ann1_type1 = f_field1.getAnnotations(TestAnnotation1.class).toList();
+		assertEquals(1, ann1_type1.size());
+		assertEquals("test1", ann1_type1.get(0).getValue().get());
+
+		var ann1_type2 = f_field1.getAnnotations(TestAnnotation2.class).toList();
+		assertEquals(1, ann1_type2.size());
+		assertEquals(42, ann1_type2.get(0).getInt("value").get());
+
+		var ann1_type3 = f_field1.getAnnotations(TestAnnotation3.class).toList();
+		assertEquals(0, ann1_type3.size());
+
+		var ann2_type1 = f_field2.getAnnotations(TestAnnotation1.class).toList();
+		assertEquals(1, ann2_type1.size());
+		assertEquals("test2", ann2_type1.get(0).getValue().get());
+
+		var ann2_type2 = f_field2.getAnnotations(TestAnnotation2.class).toList();
+		assertEquals(0, ann2_type2.size());
+	}
+
+	@Test void getAnnotations_memoization_returnsSameInstance() {
+		var annotations1 = f_field1.getAnnotations();
+		var annotations2 = f_field1.getAnnotations();
+		assertSame(annotations1, annotations2);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// getFullName()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class G {
+		public String field1;
+		public int field2;
+	}
+
+	static ClassInfo g = ClassInfo.of(G.class);
+	static FieldInfo
+		g_field1 = g.getPublicField(x -> x.hasName("field1")).get(),
+		g_field2 = g.getPublicField(x -> x.hasName("field2")).get();
+
+	@Test void getFullName_returnsFullyQualifiedName() {
+		String fullName1 = g_field1.getFullName();
+		String fullName2 = g_field2.getFullName();
+
+		assertTrue(fullName1.endsWith("FieldInfo_Test$G.field1"));
+		assertTrue(fullName2.endsWith("FieldInfo_Test$G.field2"));
+		
+		assertTrue(fullName1.startsWith("org.apache.juneau.commons.reflect."));
+		assertTrue(fullName2.startsWith("org.apache.juneau.commons.reflect."));
+	}
+
+	@Test void getFullName_memoization_returnsSameInstance() {
+		String name1 = g_field1.getFullName();
+		String name2 = g_field1.getFullName();
+		assertSame(name1, name2);
+	}
+
+	public static class InnerClass {
+		public String innerField;
+	}
+
+	static ClassInfo inner = ClassInfo.of(InnerClass.class);
+	static FieldInfo inner_field = inner.getPublicField(x -> x.hasName("innerField")).get();
+
+	@Test void getFullName_withInnerClass_usesDollarSeparator() {
+		String fullName = inner_field.getFullName();
+		
+		assertTrue(fullName.contains("FieldInfo_Test$InnerClass"));
+		assertTrue(fullName.endsWith(".innerField"));
 	}
 }

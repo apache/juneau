@@ -711,13 +711,12 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	@Override
 	public final boolean setAccessible() {
-		try {
-			if (nn(inner))
-				inner.setAccessible(true);
-			return true;
-		} catch (@SuppressWarnings("unused") SecurityException e) {
+		if (!nn(inner))
 			return false;
-		}
+		return safeOpt(() -> {
+			inner.setAccessible(true);
+			return true;
+		}).orElse(false);
 	}
 
 	/**

@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.reflect;
 
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.lang.reflect.*;
 
@@ -83,7 +84,7 @@ public abstract class AccessibleInfo extends ElementInfo {
 	 */
 	protected AccessibleInfo(AccessibleObject inner, int modifiers) {
 		super(modifiers);
-		this.inner = inner;
+		this.inner = assertArgNotNull("inner", inner);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -107,11 +108,7 @@ public abstract class AccessibleInfo extends ElementInfo {
 	 * @return <jk>true</jk> if this object is accessible, <jk>false</jk> otherwise or if not supported.
 	 */
 	public boolean isAccessible() {
-		try {
-			return (boolean)AccessibleObject.class.getMethod("isAccessible").invoke(inner);
-		} catch (@SuppressWarnings("unused") Exception ex) {
-			return false;
-		}
+		return safeOpt(() -> (boolean)AccessibleObject.class.getMethod("isAccessible").invoke(inner)).orElse(false);
 	}
 
 	/**
@@ -120,12 +117,6 @@ public abstract class AccessibleInfo extends ElementInfo {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public boolean setAccessible() {
-		try {
-			if (nn(inner))
-				inner.setAccessible(true);
-			return true;
-		} catch (@SuppressWarnings("unused") SecurityException e) {
-			return false;
-		}
+		return safeOpt(() -> { inner.setAccessible(true); return true;}).orElse(false);
 	}
 }

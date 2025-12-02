@@ -332,6 +332,46 @@ class Cache_Test extends TestBase {
 		assertSize(1, cache);
 	}
 
+	@Test void a16b_weakMethod_basicCaching() {
+		// Test the weak() convenience method
+		var cache = Cache.of(String.class, String.class)
+			.weak()
+			.build();
+		var callCount = new AtomicInteger();
+
+		// First call - cache miss
+		var result1 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "value1";
+		});
+
+		// Second call - cache hit
+		var result2 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "should not be called";
+		});
+
+		assertEquals("value1", result1);
+		assertEquals("value1", result2);
+		assertSame(result1, result2);
+		assertEquals(1, callCount.get()); // Supplier only called once
+		assertSize(1, cache);
+		assertEquals(1, cache.getCacheHits());
+	}
+
+	@Test void a16c_weakMethod_chaining() {
+		// Test that weak() can be chained with other builder methods
+		var cache = Cache.of(String.class, Integer.class)
+			.weak()
+			.maxSize(100)
+			.supplier(k -> k.length())
+			.build();
+
+		var result = cache.get("hello");
+		assertEquals(5, result);
+		assertSize(1, cache);
+	}
+
 	//====================================================================================================
 	// Builder configuration
 	//====================================================================================================
@@ -924,6 +964,256 @@ class Cache_Test extends TestBase {
 		assertEquals(2, callCount.get(), "Supplier should be called every time when disabled");
 		assertTrue(cache.isEmpty());
 		assertEquals(0, cache.getCacheHits());
+	}
+
+	//====================================================================================================
+	// Thread-local cache mode
+	//====================================================================================================
+
+	@Test void a54_threadLocal_basicCaching() throws Exception {
+		var cache = Cache.of(String.class, String.class)
+			.threadLocal()
+			.build();
+		var callCount = new AtomicInteger();
+
+		// First call - cache miss
+		var result1 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "value1";
+		});
+
+		// Second call - cache hit
+		var result2 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "should not be called";
+		});
+
+		assertEquals("value1", result1);
+		assertEquals("value1", result2);
+		assertSame(result1, result2);
+		assertEquals(1, callCount.get()); // Supplier only called once
+		assertSize(1, cache);
+		assertEquals(1, cache.getCacheHits());
+	}
+
+	@Test void a55_threadLocal_eachThreadHasOwnCache() throws Exception {
+		var cache = Cache.of(String.class, String.class)
+			.threadLocal()
+			.build();
+		var executor = Executors.newFixedThreadPool(2);
+		var threadValues = new ConcurrentHashMap<Thread, String>();
+
+		// Each thread caches "key1" with its own value
+		var future1 = CompletableFuture.runAsync(() -> {
+			var value = cache.get("key1", () -> "thread1-value");
+			threadValues.put(Thread.currentThread(), value);
+		}, executor);
+
+		var future2 = CompletableFuture.runAsync(() -> {
+			var value = cache.get("key1", () -> "thread2-value");
+			threadValues.put(Thread.currentThread(), value);
+		}, executor);
+
+		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
+
+		// Verify both threads cached their own values
+		assertEquals(2, threadValues.size());
+		assertTrue(threadValues.containsValue("thread1-value"));
+		assertTrue(threadValues.containsValue("thread2-value"));
+
+		// Verify each thread's cache is independent - same thread should get same cached value
+		var threadValues2 = new ConcurrentHashMap<Thread, String>();
+		var threads = new java.util.ArrayList<Thread>(threadValues.keySet());
+
+		future1 = CompletableFuture.runAsync(() -> {
+			var value = cache.get("key1", () -> "should-not-be-called");
+			threadValues2.put(Thread.currentThread(), value);
+		}, executor);
+
+		future2 = CompletableFuture.runAsync(() -> {
+			var value = cache.get("key1", () -> "should-not-be-called");
+			threadValues2.put(Thread.currentThread(), value);
+		}, executor);
+
+		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
+
+		// Each thread should get its own cached value (same as what it cached before)
+		for (var thread : threads) {
+			if (threadValues2.containsKey(thread)) {
+				assertEquals(threadValues.get(thread), threadValues2.get(thread),
+					"Thread " + thread + " should get its own cached value");
+			}
+		}
+
+		executor.shutdown();
+	}
+
+	@Test void a56_threadLocal_multipleKeys() {
+		var cache = Cache.of(String.class, Integer.class)
+			.threadLocal()
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("two", () -> 2);
+		cache.get("three", () -> 3);
+
+		assertSize(3, cache);
+		assertEquals(0, cache.getCacheHits());
+
+		// Verify all cached
+		assertEquals(1, cache.get("one", () -> 999));
+		assertEquals(2, cache.get("two", () -> 999));
+		assertEquals(3, cache.get("three", () -> 999));
+		assertEquals(3, cache.getCacheHits());
+	}
+
+	@Test void a57_threadLocal_clear() {
+		var cache = Cache.of(String.class, Integer.class)
+			.threadLocal()
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("two", () -> 2);
+		assertSize(2, cache);
+
+		cache.clear();
+		assertEmpty(cache);
+	}
+
+	@Test void a58_threadLocal_maxSize() {
+		var cache = Cache.of(String.class, Integer.class)
+			.threadLocal()
+			.maxSize(3)
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("two", () -> 2);
+		cache.get("three", () -> 3);
+		assertSize(3, cache);
+
+		// 4th item doesn't trigger eviction yet
+		cache.get("four", () -> 4);
+		assertSize(4, cache);
+
+		// 5th item triggers eviction
+		cache.get("five", () -> 5);
+		assertSize(1, cache);
+	}
+
+	@Test void a59_threadLocal_cacheHits() {
+		var cache = Cache.of(String.class, Integer.class)
+			.threadLocal()
+			.build();
+
+		assertEquals(0, cache.getCacheHits());
+
+		cache.get("one", () -> 1); // Miss
+		assertEquals(0, cache.getCacheHits());
+
+		cache.get("one", () -> 999); // Hit
+		assertEquals(1, cache.getCacheHits());
+
+		cache.get("two", () -> 2); // Miss
+		assertEquals(1, cache.getCacheHits());
+
+		cache.get("one", () -> 999); // Hit
+		cache.get("two", () -> 999); // Hit
+		assertEquals(3, cache.getCacheHits());
+	}
+
+	//====================================================================================================
+	// Thread-local + weak mode combination
+	//====================================================================================================
+
+	@Test void a60_threadLocal_weakMode_basicCaching() {
+		var cache = Cache.of(String.class, String.class)
+			.threadLocal()
+			.cacheMode(WEAK)
+			.build();
+		var callCount = new AtomicInteger();
+
+		// First call - cache miss
+		var result1 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "value1";
+		});
+
+		// Second call - cache hit
+		var result2 = cache.get("key1", () -> {
+			callCount.incrementAndGet();
+			return "should not be called";
+		});
+
+		assertEquals("value1", result1);
+		assertEquals("value1", result2);
+		assertSame(result1, result2);
+		assertEquals(1, callCount.get()); // Supplier only called once
+		assertSize(1, cache);
+		assertEquals(1, cache.getCacheHits());
+	}
+
+	@Test void a61_threadLocal_weakMode_eachThreadHasOwnCache() throws Exception {
+		var cache = Cache.of(String.class, String.class)
+			.threadLocal()
+			.cacheMode(WEAK)
+			.build();
+		var executor = Executors.newFixedThreadPool(2);
+		var threadValues = new ConcurrentHashMap<Thread, String>();
+
+		// Each thread caches "key1" with its own value
+		var future1 = CompletableFuture.runAsync(() -> {
+			var value = cache.get("key1", () -> "thread1-value");
+			threadValues.put(Thread.currentThread(), value);
+		}, executor);
+
+		var future2 = CompletableFuture.runAsync(() -> {
+			var value = cache.get("key1", () -> "thread2-value");
+			threadValues.put(Thread.currentThread(), value);
+		}, executor);
+
+		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
+
+		// Verify both threads cached their own values
+		assertEquals(2, threadValues.size());
+		assertTrue(threadValues.containsValue("thread1-value"));
+		assertTrue(threadValues.containsValue("thread2-value"));
+
+		executor.shutdown();
+	}
+
+	@Test void a62_threadLocal_weakMode_clear() {
+		var cache = Cache.of(String.class, Integer.class)
+			.threadLocal()
+			.cacheMode(WEAK)
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("two", () -> 2);
+		assertSize(2, cache);
+
+		cache.clear();
+		assertEmpty(cache);
+	}
+
+	@Test void a63_threadLocal_weakMode_maxSize() {
+		var cache = Cache.of(String.class, Integer.class)
+			.threadLocal()
+			.cacheMode(WEAK)
+			.maxSize(3)
+			.build();
+
+		cache.get("one", () -> 1);
+		cache.get("two", () -> 2);
+		cache.get("three", () -> 3);
+		assertSize(3, cache);
+
+		// 4th item doesn't trigger eviction yet
+		cache.get("four", () -> 4);
+		assertSize(4, cache);
+
+		// 5th item triggers eviction
+		cache.get("five", () -> 5);
+		assertSize(1, cache);
 	}
 }
 
