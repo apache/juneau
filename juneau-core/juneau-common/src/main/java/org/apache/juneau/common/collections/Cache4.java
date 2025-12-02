@@ -204,6 +204,7 @@ public class Cache4<K1,K2,K3,K4,V> {
 			return cacheMode(WEAK);
 		}
 	}
+
 	/**
 	 * Creates a new {@link Builder} for constructing a cache with explicit type parameters.
 	 *
@@ -221,6 +222,7 @@ public class Cache4<K1,K2,K3,K4,V> {
 	public static <K1,K2,K3,K4,V> Builder<K1,K2,K3,K4,V> create() {
 		return new Builder<>();
 	}
+
 	/**
 	 * Creates a new {@link Builder} for constructing a cache.
 	 *

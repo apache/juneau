@@ -45,4 +45,3 @@ public class ClassInfoTyped<T> extends ClassInfo {
 	}
 
 }
-

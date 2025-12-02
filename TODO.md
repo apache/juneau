@@ -1,6 +1,6 @@
 # TODO List
 
-**Last generated TODO number: TODO-89**
+**Last generated TODO number: TODO-90**
 
 This file tracks pending tasks for the Apache Juneau project. For completed items, see [TODO-completed.md](TODO-completed.md).
 
@@ -18,6 +18,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
 - [ ] TODO-29 Finish setting up SonarQube analysis in git workflow.
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
+- [ ] TODO-90 Investigate replacing `StringUtils.parseIsoCalendar()` with java.time APIs and removing the helper if possible.
 
 ## Framework Improvements
 

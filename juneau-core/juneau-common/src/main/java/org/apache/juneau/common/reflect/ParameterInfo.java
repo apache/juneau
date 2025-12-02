@@ -135,9 +135,11 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		}
 		throw new IllegalArgumentException("Parameter not found in declaring executable: " + inner);
 	}
+
 	static void reset() {
 		DISABLE_PARAM_NAME_DETECTION.reset();
 	}
+
 	private final ExecutableInfo executable;
 	private final Parameter inner;
 

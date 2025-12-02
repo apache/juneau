@@ -385,7 +385,8 @@ public final class StringFormat {
 	private static final Cache2<Locale,String,MessageFormat> MESSAGE_FORMAT_CACHE = Cache2.of(Locale.class, String.class, MessageFormat.class).maxSize(100).threadLocal().cacheMode(CACHE_MODE)
 		.supplier((locale, content) -> new MessageFormat(content, locale)).build();
 
-	private static final Cache<Locale,NumberFormat> NUMBER_FORMAT_CACHE = Cache.of(Locale.class, NumberFormat.class).maxSize(50).threadLocal().cacheMode(CACHE_MODE).supplier(NumberFormat::getInstance).build();
+	private static final Cache<Locale,NumberFormat> NUMBER_FORMAT_CACHE = Cache.of(Locale.class, NumberFormat.class).maxSize(50).threadLocal().cacheMode(CACHE_MODE).supplier(NumberFormat::getInstance)
+		.build();
 
 	private static final Cache<Locale,DateFormat> DATE_FORMAT_CACHE = Cache.of(Locale.class, DateFormat.class).maxSize(50).threadLocal().cacheMode(CACHE_MODE)
 		.supplier(locale -> DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale)).build();
@@ -452,6 +453,7 @@ public final class StringFormat {
 			return;
 		tokens.add(new LiteralToken(pattern.substring(start)));
 	}
+
 	private static void lit(List<Token> tokens, String pattern, int start, int end) {
 		if (start == end)
 			return;

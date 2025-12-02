@@ -119,17 +119,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Returns a class info wrapper around the specified class type.
 	 *
-	 * @param <T> The class type.
-	 * @param inner The class type.
-	 * @return The constructed class info.
-	 */
-	public static <T> ClassInfoTyped<T> of(Class<T> inner) {
-		return (ClassInfoTyped<T>)CACHE.get(inner, () -> new ClassInfoTyped<>(inner));
-	}
-
-	/**
-	 * Returns a class info wrapper around the specified class type.
-	 *
 	 * @param inner The class type.
 	 * @param innerType The generic type (if parameterized type).
 	 * @return The constructed class info.
@@ -140,6 +129,17 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		if (inner != null)
 			return new ClassInfoTyped<>(inner, innerType);
 		return new ClassInfo(null, innerType);
+	}
+
+	/**
+	 * Returns a class info wrapper around the specified class type.
+	 *
+	 * @param <T> The class type.
+	 * @param inner The class type.
+	 * @return The constructed class info.
+	 */
+	public static <T> ClassInfoTyped<T> of(Class<T> inner) {
+		return (ClassInfoTyped<T>)CACHE.get(inner, () -> new ClassInfoTyped<>(inner));
 	}
 
 	/**
@@ -463,21 +463,21 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
 
-		/**
-		 * Returns the component type of this class if it is an array type.
-		 *
-		 * <p>
-		 * This is equivalent to {@link Class#getComponentType()} but returns a {@link ClassInfo} instead.
-		 * Note that {@link #getComponentType()} also exists and returns the base component type for multi-dimensional arrays.
-		 *
-		 * @return The {@link ClassInfo} representing the component type, or <jk>null</jk> if this class does not represent an array type.
-		 */
-		public ClassInfo componentType() {
-			if (inner == null)
-				return null;
-			var ct = inner.componentType();
-			return ct == null ? null : of(ct);
-		}
+	/**
+	 * Returns the component type of this class if it is an array type.
+	 *
+	 * <p>
+	 * This is equivalent to {@link Class#getComponentType()} but returns a {@link ClassInfo} instead.
+	 * Note that {@link #getComponentType()} also exists and returns the base component type for multi-dimensional arrays.
+	 *
+	 * @return The {@link ClassInfo} representing the component type, or <jk>null</jk> if this class does not represent an array type.
+	 */
+	public ClassInfo componentType() {
+		if (inner == null)
+			return null;
+		var ct = inner.componentType();
+		return ct == null ? null : of(ct);
+	}
 
 	/**
 	 * Returns the descriptor string of this class.
@@ -711,7 +711,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The class loader for this class, or <jk>null</jk> if it doesn't have one.
 	 */
-public ClassLoader getClassLoader() { return inner == null ? null : inner.getClassLoader(); }
+	public ClassLoader getClassLoader() { return inner == null ? null : inner.getClassLoader(); }
 
 	/**
 	 * Returns the base component type of this class.

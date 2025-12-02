@@ -123,6 +123,7 @@ public class MapBuilder<K,V> {
 	public static <K,V> MapBuilder<K,V> create(Class<K> keyType, Class<V> valueType) {
 		return new MapBuilder<>(assertArgNotNull("keyType", keyType), assertArgNotNull("valueType", valueType));
 	}
+
 	private Map<K,V> map;
 	private boolean unmodifiable = false, sparse = false;
 	private Comparator<K> comparator;

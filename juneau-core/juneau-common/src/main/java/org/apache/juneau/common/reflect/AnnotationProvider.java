@@ -451,6 +451,7 @@ public class AnnotationProvider {
 	private static <A extends Annotation> AnnotationInfo<A> ai(Annotatable on, A value) {
 		return AnnotationInfo.of(on, value);
 	}
+
 	private final Cache<Object,List<AnnotationInfo<Annotation>>> runtimeCache;
 	private final Cache3<Class<?>,ElementInfo,AnnotationTraversal[],List> cache;
 

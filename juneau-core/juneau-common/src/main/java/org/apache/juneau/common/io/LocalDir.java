@@ -105,6 +105,7 @@ public class LocalDir {
 			return true;
 		});
 	}
+
 	private final Class<?> clazz;
 	private final String clazzPath;
 	private final Path path;

@@ -96,6 +96,7 @@ public class AnnotationInfo<T extends Annotation> {
 			.orElse(0);
 		// @formatter:on
 	}
+
 	private final Annotatable annotatable;
 	final int rank;
 

@@ -401,6 +401,7 @@ public class Cache<K,V> {
 			return cacheMode(WEAK);
 		}
 	}
+
 	/**
 	 * Creates a new {@link Builder} for constructing a cache with explicit type parameters.
 	 *
@@ -424,6 +425,7 @@ public class Cache<K,V> {
 	public static <K,V> Builder<K,V> create() {
 		return new Builder<>();
 	}
+
 	/**
 	 * Creates a new {@link Builder} for constructing a cache.
 	 *
@@ -471,6 +473,7 @@ public class Cache<K,V> {
 	private final Function<K,V> supplier;
 
 	private final AtomicInteger cacheHits = new AtomicInteger();
+
 	/**
 	 * Constructor.
 	 *
@@ -509,6 +512,7 @@ public class Cache<K,V> {
 			shutdownMessage(() -> builder.id + ":  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
+
 	/**
 	 * Removes all entries from the cache.
 	 */
@@ -516,6 +520,7 @@ public class Cache<K,V> {
 		getMap().clear();
 		getWrapperCache().clear(); // Clean up wrapper cache
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the cache contains a mapping for the specified key.
 	 *

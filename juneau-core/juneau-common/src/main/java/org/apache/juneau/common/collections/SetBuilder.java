@@ -119,6 +119,7 @@ public class SetBuilder<E> {
 	public static <E> SetBuilder<E> create(Class<E> elementType) {
 		return new SetBuilder<>(assertArgNotNull("elementType", elementType));
 	}
+
 	private Set<E> set;
 	private boolean unmodifiable, sparse;
 

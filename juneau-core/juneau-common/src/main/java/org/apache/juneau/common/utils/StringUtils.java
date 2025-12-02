@@ -181,166 +181,6 @@ public class StringUtils {
 		return in.substring(0, length - 3) + "...";
 	}
 
-	private static List<Tuple2<Class<?>,Function<Object,String>>> loadReadifiers() {
-		var list = new ArrayList<Tuple2<Class<?>,Function<Object,String>>>();
-
-		// More specific types first - order matters!
-
-		// Map.Entry before Map
-		list.add(Tuple2.of(Map.Entry.class, o -> {
-			var e = (Map.Entry<?,?>)o;
-			return readable(e.getKey()) + '=' + readable(e.getValue());
-		}));
-
-		// Collection before Iterable
-		list.add(Tuple2.of(Collection.class, o -> {
-			var c = (Collection<?>)o;
-			return c.stream().map(StringUtils::readable).collect(joining(",", "[", "]"));
-		}));
-
-		// Map
-		list.add(Tuple2.of(Map.class, o -> {
-			var m = (Map<?,?>)o;
-			return m.entrySet().stream().map(StringUtils::readable).collect(joining(",", "{", "}"));
-		}));
-
-		// Iterable (but not Collection, which is handled above)
-		list.add(Tuple2.of(Iterable.class, o -> {
-			var i = (Iterable<?>)o;
-			return readable(toList(i));
-		}));
-
-		// Iterator
-		list.add(Tuple2.of(Iterator.class, o -> {
-			var i = (Iterator<?>)o;
-			return readable(toList(i));
-		}));
-
-		// Enumeration
-		list.add(Tuple2.of(Enumeration.class, o -> {
-			var e = (Enumeration<?>)o;
-			return readable(toList(e));
-		}));
-
-		// Optional
-		list.add(Tuple2.of(Optional.class, o -> {
-			var opt = (Optional<?>)o;
-			return readable(opt.orElse(null));
-		}));
-
-		// GregorianCalendar
-		list.add(Tuple2.of(GregorianCalendar.class, o -> {
-			var cal = (GregorianCalendar)o;
-			return cal.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
-		}));
-
-		// Date
-		list.add(Tuple2.of(Date.class, o -> {
-			var date = (Date)o;
-			return date.toInstant().toString();
-		}));
-
-		// InputStream
-		list.add(Tuple2.of(InputStream.class, o -> {
-			var is = (InputStream)o;
-			return toHex(is);
-		}));
-
-		// Reader
-		list.add(Tuple2.of(Reader.class, o -> {
-			var r = (Reader)o;
-			return safe(() -> read(r));
-		}));
-
-		// File
-		list.add(Tuple2.of(File.class, o -> {
-			var f = (File)o;
-			return safe(() -> read(f));
-		}));
-
-		// byte[]
-		list.add(Tuple2.of(byte[].class, o -> {
-			var bytes = (byte[])o;
-			return toHex(bytes);
-		}));
-
-		// Enum
-		list.add(Tuple2.of(Enum.class, o -> {
-			var e = (Enum<?>)o;
-			return e.name();
-		}));
-
-		// Class
-		list.add(Tuple2.of(Class.class, o -> {
-			var c = (Class<?>)o;
-			return cns(c);
-		}));
-
-		// Executable (Method or Constructor)
-		list.add(Tuple2.of(Executable.class, o -> {
-			var exec = (Executable)o;
-			var sb = new StringBuilder(64);
-			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('(');
-			var pt = exec.getParameterTypes();
-			for (var i = 0; i < pt.length; i++) {
-				if (i > 0)
-					sb.append(',');
-				sb.append(cns(pt[i]));
-			}
-			sb.append(')');
-			return sb.toString();
-		}));
-
-		// ClassInfo
-		list.add(Tuple2.of(ClassInfo.class, o -> {
-			var ci = (ClassInfo)o;
-			return ci.toString();
-		}));
-
-		// ExecutableInfo
-		list.add(Tuple2.of(ExecutableInfo.class, o -> {
-			var ei = (ExecutableInfo)o;
-			return ei.toString();
-		}));
-
-		// FieldInfo
-		list.add(Tuple2.of(FieldInfo.class, o -> {
-			var fi = (FieldInfo)o;
-			return fi.toString();
-		}));
-
-		// ParameterInfo
-		list.add(Tuple2.of(ParameterInfo.class, o -> {
-			var pi = (ParameterInfo)o;
-			return pi.toString();
-		}));
-
-		// Field
-		list.add(Tuple2.of(Field.class, o -> {
-			var f = (Field)o;
-			return cns(f.getDeclaringClass()) + "." + f.getName();
-		}));
-
-		// Parameter
-		list.add(Tuple2.of(Parameter.class, o -> {
-			var p = (Parameter)o;
-			var exec = p.getDeclaringExecutable();
-			var sb = new StringBuilder(64);
-			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('[');
-			var params = exec.getParameters();
-			for (var i = 0; i < params.length; i++) {
-				if (params[i] == p) {
-					sb.append(i);
-					break;
-				}
-			}
-			sb.append(']');
-			return sb.toString();
-		}));
-
-		return Collections.unmodifiableList(list);
-	}
-
 	/**
 	 * Appends a string to a StringBuilder, creating a new one if null.
 	 *
@@ -3823,112 +3663,6 @@ public class StringUtils {
 	}
 
 	/**
-	 * Validates if a string is a valid IPv6 address format (without network operations).
-	 *
-	 * <p>
-	 * This method performs pure string-based validation and does not perform any DNS lookups
-	 * or network operations, making it fast and suitable for validation purposes.
-	 *
-	 * @param ip The IPv6 address string to validate.
-	 * @return <jk>true</jk> if the string is a valid IPv6 address format, <jk>false</jk> otherwise.
-	 */
-	private static boolean isValidIPv6Address(String ip) {
-		// IPv6 addresses can be:
-		// 1. Full format: 2001:0db8:85a3:0000:0000:8a2e:0370:7334 (8 groups of 4 hex digits)
-		// 2. Compressed format: 2001:db8::1 (uses :: to represent consecutive zeros)
-		// 3. IPv4-mapped: ::ffff:192.168.1.1 (last 32 bits as IPv4)
-		// 4. Loopback: ::1
-		// 5. Unspecified: ::
-
-		// Cannot start or end with a single colon (except ::)
-		if (ip.startsWith(":") && !ip.startsWith("::"))
-			return false;
-		if (ip.endsWith(":") && !ip.endsWith("::"))
-			return false;
-
-		// Check for IPv4-mapped format (contains both : and .)
-		if (ip.contains(".")) {
-			// Must be in format ::ffff:x.x.x.x or similar
-			var lastColon = ip.lastIndexOf(":");
-			if (lastColon < 0)
-				return false;
-			var ipv4Part = ip.substring(lastColon + 1);
-			// Validate IPv4 part
-			var ipv4Parts = ipv4Part.split("\\.");
-			if (ipv4Parts.length != 4)
-				return false;
-			for (var part : ipv4Parts) {
-				try {
-					var num = Integer.parseInt(part);
-					if (num < 0 || num > 255)
-						return false;
-				} catch (@SuppressWarnings("unused") NumberFormatException e) {
-					return false;
-				}
-			}
-			// Validate IPv6 part before the IPv4
-			var ipv6Part = ip.substring(0, lastColon);
-			if (ipv6Part.isEmpty() || ipv6Part.equals("::ffff") || ipv6Part.equals("::FFFF"))
-				return true;
-			// More complex validation would be needed for other IPv4-mapped formats
-			// For now, accept common formats
-		}
-
-		// Check for :: (compression) - only one allowed
-		var doubleColonCount = 0;
-		for (var i = 1; i < ip.length(); i++) {
-			if (ip.charAt(i) == ':' && ip.charAt(i - 1) == ':') {
-				doubleColonCount++;
-				if (doubleColonCount > 1)
-					return false; // Only one :: allowed
-			}
-		}
-
-		// Split by ::
-		var parts = ip.split("::", -1);
-		if (parts.length > 2)
-			return false; // Only one :: allowed
-
-		if (parts.length == 2) {
-			// Compressed format
-			var leftParts = parts[0].isEmpty() ? new String[0] : parts[0].split(":");
-			var rightParts = parts[1].isEmpty() ? new String[0] : parts[1].split(":");
-			var totalParts = leftParts.length + rightParts.length;
-			if (totalParts > 7)
-				return false; // Too many groups (max 8, but :: counts as one or more)
-			if (totalParts == 0 && !ip.equals("::"))
-				return false; // Empty on both sides of :: is invalid (except :: itself)
-		} else {
-			// Full format (no compression)
-			var groups = ip.split(":");
-			if (groups.length != 8)
-				return false;
-		}
-
-		// Validate each hex group
-		var groups = ip.split("::");
-		for (var groupSection : groups) {
-			if (groupSection.isEmpty())
-				continue; // Skip empty section from ::
-			var groupParts = groupSection.split(":");
-			for (var group : groupParts) {
-				if (group.isEmpty())
-					return false;
-				if (group.length() > 4)
-					return false; // Each group is max 4 hex digits
-				// Validate hex digits
-				for (var i = 0; i < group.length(); i++) {
-					var c = group.charAt(i);
-					if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
-						return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * Validates if a string is a valid MAC address.
 	 *
 	 * <p>
@@ -4427,12 +4161,6 @@ public class StringUtils {
 		return str.substring(0, len);
 	}
 
-	// TODO: See if we can remove StringUtils.parseIsoCalendar.
-	// Currently used by:
-	//   - OpenApiParserSession.java for DATE/DATE_TIME format parsing
-	//   - StringUtils.parseIsoDate() (which wraps this method)
-	// Investigation needed: Can we replace this with java.time APIs or other standard date parsing?
-
 	/**
 	 * Calculates the Levenshtein distance (edit distance) between two strings.
 	 *
@@ -4521,6 +4249,12 @@ public class StringUtils {
 
 		return count;
 	}
+
+	// TODO: See if we can remove StringUtils.parseIsoCalendar.
+	// Currently used by:
+	//   - OpenApiParserSession.java for DATE/DATE_TIME format parsing
+	//   - StringUtils.parseIsoDate() (which wraps this method)
+	// Investigation needed: Can we replace this with java.time APIs or other standard date parsing?
 
 	/**
 	 * Null-safe convenience method for {@link String#toLowerCase()}.
@@ -5177,10 +4911,6 @@ public class StringUtils {
 		return ! containsAny(s, values);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// String validation methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Returns the specified string, or <jk>null</jk> if that string is <jk>null</jk> or empty.
 	 *
@@ -5202,6 +4932,10 @@ public class StringUtils {
 			return "*";
 		return s.substring(0, 1) + s.substring(1).replaceAll(".", "*");  // NOSONAR
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String validation methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Provides optimization suggestions for a string based on its characteristics.
@@ -5403,10 +5137,6 @@ public class StringUtils {
 		return Float.parseFloat(StringUtils.removeUnderscores(value));
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// String manipulation methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Same as {@link Integer#parseInt(String)} but removes any underscore characters first.
 	 *
@@ -5446,8 +5176,15 @@ public class StringUtils {
 		return Integer.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR - NPE not possible here.
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// String manipulation methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Parses an ISO8601 string into a calendar.
+	 *
+	 * <p>
+	 * TODO-90: Investigate whether this helper can be removed in favor of java.time parsing (see TODO.md).
 	 *
 	 * <p>
 	 * Supports any of the following formats:
@@ -5903,10 +5640,6 @@ public class StringUtils {
 		return sb.toString();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// String joining and splitting methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Generates a random numeric string of the specified length.
 	 *
@@ -5930,10 +5663,6 @@ public class StringUtils {
 		}
 		return sb.toString();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// String cleaning and sanitization methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Generates a random string of the specified length using characters from the given character set.
@@ -5963,6 +5692,10 @@ public class StringUtils {
 		}
 		return sb.toString();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String joining and splitting methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Calculates a simple readability score for a string.
@@ -6021,6 +5754,10 @@ public class StringUtils {
 		// Clamp to 0-100 range
 		return Math.max(0.0, Math.min(100.0, score));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String cleaning and sanitization methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts an arbitrary object to a readable string format suitable for debugging and testing.
@@ -7558,10 +7295,6 @@ public class StringUtils {
 		return sb.toString();
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Additional utility methods
-	//------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Same as {@link #toHex(byte[])} but puts spaces between the byte strings.
 	 *
@@ -7588,6 +7321,10 @@ public class StringUtils {
 	public static String toString(Object obj) {
 		return obj == null ? null : obj.toString();
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Additional utility methods
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Safely converts an object to a string, returning the default string if the object is <jk>null</jk>.
@@ -7879,10 +7616,6 @@ public class StringUtils {
 		return str.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"").replace("&#39;", "'").replace("&apos;", "'").replace("&amp;", "&");
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// String Array and Collection Utilities
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Unescapes XML entities in a string.
 	 *
@@ -8025,10 +7758,6 @@ public class StringUtils {
 		return s;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// String Builder Utilities
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Similar to {@link URLEncoder#encode(String, String)} but doesn't encode <js>"/"</js> characters.
 	 *
@@ -8137,6 +7866,10 @@ public class StringUtils {
 
 		return count;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String Builder Utilities
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Wraps text to a specified line length.
@@ -8280,10 +8013,6 @@ public class StringUtils {
 		return result.toString();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Performance and Memory Utilities
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Helper method to estimate the number of syllables in a word.
 	 */
@@ -8338,6 +8067,10 @@ public class StringUtils {
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Performance and Memory Utilities
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Helper method to get Soundex code for a character.
 	 */
@@ -8360,10 +8093,276 @@ public class StringUtils {
 	}
 
 	/**
+	 * Validates if a string is a valid IPv6 address format (without network operations).
+	 *
+	 * <p>
+	 * This method performs pure string-based validation and does not perform any DNS lookups
+	 * or network operations, making it fast and suitable for validation purposes.
+	 *
+	 * @param ip The IPv6 address string to validate.
+	 * @return <jk>true</jk> if the string is a valid IPv6 address format, <jk>false</jk> otherwise.
+	 */
+	private static boolean isValidIPv6Address(String ip) {
+		// IPv6 addresses can be:
+		// 1. Full format: 2001:0db8:85a3:0000:0000:8a2e:0370:7334 (8 groups of 4 hex digits)
+		// 2. Compressed format: 2001:db8::1 (uses :: to represent consecutive zeros)
+		// 3. IPv4-mapped: ::ffff:192.168.1.1 (last 32 bits as IPv4)
+		// 4. Loopback: ::1
+		// 5. Unspecified: ::
+
+		// Cannot start or end with a single colon (except ::)
+		if (ip.startsWith(":") && !ip.startsWith("::"))
+			return false;
+		if (ip.endsWith(":") && !ip.endsWith("::"))
+			return false;
+
+		// Check for IPv4-mapped format (contains both : and .)
+		if (ip.contains(".")) {
+			// Must be in format ::ffff:x.x.x.x or similar
+			var lastColon = ip.lastIndexOf(":");
+			if (lastColon < 0)
+				return false;
+			var ipv4Part = ip.substring(lastColon + 1);
+			// Validate IPv4 part
+			var ipv4Parts = ipv4Part.split("\\.");
+			if (ipv4Parts.length != 4)
+				return false;
+			for (var part : ipv4Parts) {
+				try {
+					var num = Integer.parseInt(part);
+					if (num < 0 || num > 255)
+						return false;
+				} catch (@SuppressWarnings("unused") NumberFormatException e) {
+					return false;
+				}
+			}
+			// Validate IPv6 part before the IPv4
+			var ipv6Part = ip.substring(0, lastColon);
+			if (ipv6Part.isEmpty() || ipv6Part.equals("::ffff") || ipv6Part.equals("::FFFF"))
+				return true;
+			// More complex validation would be needed for other IPv4-mapped formats
+			// For now, accept common formats
+		}
+
+		// Check for :: (compression) - only one allowed
+		var doubleColonCount = 0;
+		for (var i = 1; i < ip.length(); i++) {
+			if (ip.charAt(i) == ':' && ip.charAt(i - 1) == ':') {
+				doubleColonCount++;
+				if (doubleColonCount > 1)
+					return false; // Only one :: allowed
+			}
+		}
+
+		// Split by ::
+		var parts = ip.split("::", -1);
+		if (parts.length > 2)
+			return false; // Only one :: allowed
+
+		if (parts.length == 2) {
+			// Compressed format
+			var leftParts = parts[0].isEmpty() ? new String[0] : parts[0].split(":");
+			var rightParts = parts[1].isEmpty() ? new String[0] : parts[1].split(":");
+			var totalParts = leftParts.length + rightParts.length;
+			if (totalParts > 7)
+				return false; // Too many groups (max 8, but :: counts as one or more)
+			if (totalParts == 0 && !ip.equals("::"))
+				return false; // Empty on both sides of :: is invalid (except :: itself)
+		} else {
+			// Full format (no compression)
+			var groups = ip.split(":");
+			if (groups.length != 8)
+				return false;
+		}
+
+		// Validate each hex group
+		var groups = ip.split("::");
+		for (var groupSection : groups) {
+			if (groupSection.isEmpty())
+				continue; // Skip empty section from ::
+			var groupParts = groupSection.split(":");
+			for (var group : groupParts) {
+				if (group.isEmpty())
+					return false;
+				if (group.length() > 4)
+					return false; // Each group is max 4 hex digits
+				// Validate hex digits
+				for (var i = 0; i < group.length(); i++) {
+					var c = group.charAt(i);
+					if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
+						return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Helper method to check if a character is a vowel.
 	 */
 	private static boolean isVowel(char c) {
 		return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+	}
+
+	private static List<Tuple2<Class<?>,Function<Object,String>>> loadReadifiers() {
+		var list = new ArrayList<Tuple2<Class<?>,Function<Object,String>>>();
+
+		// More specific types first - order matters!
+
+		// Map.Entry before Map
+		list.add(Tuple2.of(Map.Entry.class, o -> {
+			var e = (Map.Entry<?,?>)o;
+			return readable(e.getKey()) + '=' + readable(e.getValue());
+		}));
+
+		// Collection before Iterable
+		list.add(Tuple2.of(Collection.class, o -> {
+			var c = (Collection<?>)o;
+			return c.stream().map(StringUtils::readable).collect(joining(",", "[", "]"));
+		}));
+
+		// Map
+		list.add(Tuple2.of(Map.class, o -> {
+			var m = (Map<?,?>)o;
+			return m.entrySet().stream().map(StringUtils::readable).collect(joining(",", "{", "}"));
+		}));
+
+		// Iterable (but not Collection, which is handled above)
+		list.add(Tuple2.of(Iterable.class, o -> {
+			var i = (Iterable<?>)o;
+			return readable(toList(i));
+		}));
+
+		// Iterator
+		list.add(Tuple2.of(Iterator.class, o -> {
+			var i = (Iterator<?>)o;
+			return readable(toList(i));
+		}));
+
+		// Enumeration
+		list.add(Tuple2.of(Enumeration.class, o -> {
+			var e = (Enumeration<?>)o;
+			return readable(toList(e));
+		}));
+
+		// Optional
+		list.add(Tuple2.of(Optional.class, o -> {
+			var opt = (Optional<?>)o;
+			return readable(opt.orElse(null));
+		}));
+
+		// GregorianCalendar
+		list.add(Tuple2.of(GregorianCalendar.class, o -> {
+			var cal = (GregorianCalendar)o;
+			return cal.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
+		}));
+
+		// Date
+		list.add(Tuple2.of(Date.class, o -> {
+			var date = (Date)o;
+			return date.toInstant().toString();
+		}));
+
+		// InputStream
+		list.add(Tuple2.of(InputStream.class, o -> {
+			var is = (InputStream)o;
+			return toHex(is);
+		}));
+
+		// Reader
+		list.add(Tuple2.of(Reader.class, o -> {
+			var r = (Reader)o;
+			return safe(() -> read(r));
+		}));
+
+		// File
+		list.add(Tuple2.of(File.class, o -> {
+			var f = (File)o;
+			return safe(() -> read(f));
+		}));
+
+		// byte[]
+		list.add(Tuple2.of(byte[].class, o -> {
+			var bytes = (byte[])o;
+			return toHex(bytes);
+		}));
+
+		// Enum
+		list.add(Tuple2.of(Enum.class, o -> {
+			var e = (Enum<?>)o;
+			return e.name();
+		}));
+
+		// Class
+		list.add(Tuple2.of(Class.class, o -> {
+			var c = (Class<?>)o;
+			return cns(c);
+		}));
+
+		// Executable (Method or Constructor)
+		list.add(Tuple2.of(Executable.class, o -> {
+			var exec = (Executable)o;
+			var sb = new StringBuilder(64);
+			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('(');
+			var pt = exec.getParameterTypes();
+			for (var i = 0; i < pt.length; i++) {
+				if (i > 0)
+					sb.append(',');
+				sb.append(cns(pt[i]));
+			}
+			sb.append(')');
+			return sb.toString();
+		}));
+
+		// ClassInfo
+		list.add(Tuple2.of(ClassInfo.class, o -> {
+			var ci = (ClassInfo)o;
+			return ci.toString();
+		}));
+
+		// ExecutableInfo
+		list.add(Tuple2.of(ExecutableInfo.class, o -> {
+			var ei = (ExecutableInfo)o;
+			return ei.toString();
+		}));
+
+		// FieldInfo
+		list.add(Tuple2.of(FieldInfo.class, o -> {
+			var fi = (FieldInfo)o;
+			return fi.toString();
+		}));
+
+		// ParameterInfo
+		list.add(Tuple2.of(ParameterInfo.class, o -> {
+			var pi = (ParameterInfo)o;
+			return pi.toString();
+		}));
+
+		// Field
+		list.add(Tuple2.of(Field.class, o -> {
+			var f = (Field)o;
+			return cns(f.getDeclaringClass()) + "." + f.getName();
+		}));
+
+		// Parameter
+		list.add(Tuple2.of(Parameter.class, o -> {
+			var p = (Parameter)o;
+			var exec = p.getDeclaringExecutable();
+			var sb = new StringBuilder(64);
+			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('[');
+			var params = exec.getParameters();
+			for (var i = 0; i < params.length; i++) {
+				if (params[i] == p) {
+					sb.append(i);
+					break;
+				}
+			}
+			sb.append(']');
+			return sb.toString();
+		}));
+
+		return Collections.unmodifiableList(list);
 	}
 
 	/**
