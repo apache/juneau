@@ -1446,7 +1446,7 @@
 <a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (from.isString()) {
 <a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 						<strong class="jxr_keyword">var</strong> s = value.toString();
-<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 						<strong class="jxr_keyword">if</strong> (isJsonArray(s, false)) {
+<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 						<strong class="jxr_keyword">if</strong> (isProbablyJsonArray(s, false)) {
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 							<strong class="jxr_keyword">var</strong> l2 = JsonList.ofJson(s);
 <a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 							l2.setBeanSession(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 							l2.forEach(x -&gt; l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));

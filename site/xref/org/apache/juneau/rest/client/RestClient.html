@@ -7833,7 +7833,7 @@
 <a class="jxr_linenumber" name="L7825" href="#L7825">7825</a> 				<span class="jxr_string">"RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true."</span>);
 <a class="jxr_linenumber" name="L7826" href="#L7826">7826</a> 		}
 <a class="jxr_linenumber" name="L7827" href="#L7827">7827</a> 
-<a class="jxr_linenumber" name="L7828" href="#L7828">7828</a> 		<strong class="jxr_keyword">var</strong> req = createRequest(toURI(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
+<a class="jxr_linenumber" name="L7828" href="#L7828">7828</a> 		<strong class="jxr_keyword">var</strong> req = createRequest(toUri(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
 <a class="jxr_linenumber" name="L7829" href="#L7829">7829</a> 
 <a class="jxr_linenumber" name="L7830" href="#L7830">7830</a> 		onCallInit(req);
 <a class="jxr_linenumber" name="L7831" href="#L7831">7831</a> 
@@ -7983,12 +7983,12 @@
 <a class="jxr_linenumber" name="L7975" href="#L7975">7975</a> 		<strong class="jxr_keyword">return</strong> ! serializers.getSerializers().isEmpty();
 <a class="jxr_linenumber" name="L7976" href="#L7976">7976</a> 	}
 <a class="jxr_linenumber" name="L7977" href="#L7977">7977</a> 
-<a class="jxr_linenumber" name="L7978" href="#L7978">7978</a> 	URI toURI(Object x, String rootUrl) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
+<a class="jxr_linenumber" name="L7978" href="#L7978">7978</a> 	URI toUri(Object x, String rootUrl) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L7979" href="#L7979">7979</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L7980" href="#L7980">7980</a> 			<strong class="jxr_keyword">if</strong> (x instanceof URI x2)
 <a class="jxr_linenumber" name="L7981" href="#L7981">7981</a> 				<strong class="jxr_keyword">return</strong> x2;
 <a class="jxr_linenumber" name="L7982" href="#L7982">7982</a> 			<strong class="jxr_keyword">if</strong> (x instanceof URL x3)
-<a class="jxr_linenumber" name="L7983" href="#L7983">7983</a> 				x3.toURI();
+<a class="jxr_linenumber" name="L7983" href="#L7983">7983</a> 				<strong class="jxr_keyword">return</strong> x3.toURI();
 <a class="jxr_linenumber" name="L7984" href="#L7984">7984</a> 			<strong class="jxr_keyword">if</strong> (x instanceof URIBuilder x4)
 <a class="jxr_linenumber" name="L7985" href="#L7985">7985</a> 				<strong class="jxr_keyword">return</strong> x4.build();
 <a class="jxr_linenumber" name="L7986" href="#L7986">7986</a> 			<strong class="jxr_keyword">var</strong> s = x == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : x.toString();

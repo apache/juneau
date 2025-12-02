@@ -374,7 +374,7 @@
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 					state = S3;
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c &lt; 'A' || c &gt; 'z' || (c &gt; 'Z' &amp;&amp; c &lt; 'a')) {  <em class="jxr_comment">// False trigger "$X "</em>
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 					<strong class="jxr_keyword">if</strong> (hasInnerEscapes)
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 						out.append(unEscapeChars(s.substring(x, i + 1), AS1));
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 						out.append(unescapeChars(s.substring(x, i + 1), AS1));
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 					<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 						out.append(s, x, i + 1);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 					x = i + 1;
@@ -398,7 +398,7 @@
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 						Var r = getVar(varType);
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 						<strong class="jxr_keyword">if</strong> (r == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 							<strong class="jxr_keyword">if</strong> (hasInnerEscapes)
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 								out.append(unEscapeChars(s.substring(x2, i + 1), AS2));
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 								out.append(unescapeChars(s.substring(x2, i + 1), AS2));
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 							<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 								out.append(s, x2, i + 1);
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 							x = i + 1;
@@ -432,9 +432,9 @@
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">if</strong> (isInEscape)
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			out.append('&#92;&#92;');
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (state == S2)
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			out.append('$').append(unEscapeChars(s.substring(x + 1), AS1));
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			out.append('$').append(unescapeChars(s.substring(x + 1), AS1));
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (state == S3)
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			out.append('$').append(varType).append('{').append(unEscapeChars(s.substring(x + 1), AS2));
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			out.append('$').append(varType).append('{').append(unescapeChars(s.substring(x + 1), AS2));
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">return</strong> out;
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 	}
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 

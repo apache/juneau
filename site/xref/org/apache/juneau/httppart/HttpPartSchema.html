@@ -3548,7 +3548,7 @@
 <a class="jxr_linenumber" name="L3540" href="#L3540">3540</a> 		String s = StringUtils.joinnl(ss);
 <a class="jxr_linenumber" name="L3541" href="#L3541">3541</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty())
 <a class="jxr_linenumber" name="L3542" href="#L3542">3542</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L3543" href="#L3543">3543</a> 		<strong class="jxr_keyword">if</strong> (! isJsonObject(s, <strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L3543" href="#L3543">3543</a> 		<strong class="jxr_keyword">if</strong> (! isProbablyJsonObject(s, <strong class="jxr_keyword">true</strong>))
 <a class="jxr_linenumber" name="L3544" href="#L3544">3544</a> 			s = <span class="jxr_string">"{"</span> + s + <span class="jxr_string">"}"</span>;
 <a class="jxr_linenumber" name="L3545" href="#L3545">3545</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3546" href="#L3546">3546</a> 			<strong class="jxr_keyword">return</strong> JsonMap.ofJson(s);

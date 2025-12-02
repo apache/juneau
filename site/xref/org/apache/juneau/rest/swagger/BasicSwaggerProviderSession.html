@@ -621,7 +621,7 @@
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">var</strong> example = (Object)<strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">if</strong> (isJson(sex)) {
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">if</strong> (isProbablyJson(sex)) {
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 			example = jp.parse(sex, type);
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 			<strong class="jxr_keyword">var</strong> cm = js.getClassMeta(type);
@@ -945,7 +945,7 @@
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 			<strong class="jxr_keyword">if</strong> (s.isEmpty())
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L939" href="#L939">939</a> 			s = resolve(s);
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 			<strong class="jxr_keyword">if</strong> (! isJsonArray(s, <strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 			<strong class="jxr_keyword">if</strong> (! isProbablyJsonArray(s, <strong class="jxr_keyword">true</strong>))
 <a class="jxr_linenumber" name="L941" href="#L941">941</a> 				s = <span class="jxr_string">"["</span> + s + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 			<strong class="jxr_keyword">return</strong> JsonList.ofJson(s);
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
@@ -978,7 +978,7 @@
 <a class="jxr_linenumber" name="L970" href="#L970">970</a> 			o2 = resolve(o2);
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"IGNORE"</span>.equalsIgnoreCase(o2))
 <a class="jxr_linenumber" name="L972" href="#L972">972</a> 				<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"ignore"</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 			<strong class="jxr_keyword">if</strong> (! isJsonObject(o2, <strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 			<strong class="jxr_keyword">if</strong> (! isProbablyJsonObject(o2, <strong class="jxr_keyword">true</strong>))
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 				o2 = <span class="jxr_string">"{"</span> + o2 + <span class="jxr_string">"}"</span>;
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 			<strong class="jxr_keyword">return</strong> JsonMap.ofJson(o2);
 <a class="jxr_linenumber" name="L976" href="#L976">976</a> 		}
@@ -1112,7 +1112,7 @@
 <a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 		<strong class="jxr_keyword">var</strong> s = joinnl(ss);
 <a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty())
 <a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 		<strong class="jxr_keyword">if</strong> (! isJsonObject(s, <strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 		<strong class="jxr_keyword">if</strong> (! isProbablyJsonObject(s, <strong class="jxr_keyword">true</strong>))
 <a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 			s = <span class="jxr_string">"{"</span> + s + <span class="jxr_string">"}"</span>;
 <a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 		s = resolve(s);
 <a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 		<strong class="jxr_keyword">return</strong> JsonMap.ofJson(s);

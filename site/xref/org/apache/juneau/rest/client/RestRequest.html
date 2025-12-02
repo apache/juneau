@@ -2193,7 +2193,7 @@
 <a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> <em class="jxr_javadoccomment">	 * @throws RestCallException Invalid URI syntax detected.</em>
 <a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 	<strong class="jxr_keyword">public</strong> <a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> uri(Object uri) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 		<strong class="jxr_keyword">var</strong> x = client.toURI(uri, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 		<strong class="jxr_keyword">var</strong> x = client.toUri(uri, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> 		<strong class="jxr_keyword">if</strong> (nn(x.getScheme()))
 <a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> 			uriBuilder.setScheme(x.getScheme());
 <a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 		<strong class="jxr_keyword">if</strong> (nn(x.getHost()))
