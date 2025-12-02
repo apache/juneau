@@ -24,13 +24,13 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.processor;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<strong class="jxr_keyword">return</strong> o2;
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">return</strong> bs.createBean(ResponseProcessor.<strong class="jxr_keyword">class</strong>).type((Class&lt;?&gt;)o).run();
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Could not instantiate class {0}"</span>, o);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		}
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}

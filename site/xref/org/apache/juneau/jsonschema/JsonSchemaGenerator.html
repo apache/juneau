@@ -25,10 +25,10 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.jsonschema;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
@@ -38,9 +38,9 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.function.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.json.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.utils.*;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
@@ -268,13 +268,13 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 		}
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">public</strong> Builder beanClassVisibility(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> value) {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">public</strong> Builder beanClassVisibility(<a name="Visibility" href="../../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> value) {
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">super</strong>.beanClassVisibility(value);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		}
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">public</strong> Builder beanConstructorVisibility(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> value) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">public</strong> Builder beanConstructorVisibility(<a name="Visibility" href="../../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> value) {
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">super</strong>.beanConstructorVisibility(value);
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		}
@@ -318,7 +318,7 @@
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		}
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> Builder beanFieldVisibility(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> value) {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> Builder beanFieldVisibility(<a name="Visibility" href="../../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> value) {
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">super</strong>.beanFieldVisibility(value);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		}
@@ -336,7 +336,7 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		}
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">public</strong> Builder beanMethodVisibility(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> value) {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">public</strong> Builder beanMethodVisibility(<a name="Visibility" href="../../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> value) {
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">super</strong>.beanMethodVisibility(value);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		}

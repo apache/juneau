@@ -25,8 +25,8 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.xml;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
@@ -38,9 +38,9 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.function.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.utils.*;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
@@ -154,13 +154,13 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		}
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">public</strong> Builder beanClassVisibility(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> value) {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">public</strong> Builder beanClassVisibility(<a name="Visibility" href="../../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> value) {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">super</strong>.beanClassVisibility(value);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		}
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">public</strong> Builder beanConstructorVisibility(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> value) {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">public</strong> Builder beanConstructorVisibility(<a name="Visibility" href="../../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> value) {
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">super</strong>.beanConstructorVisibility(value);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		}
@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">public</strong> Builder beanFieldVisibility(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> value) {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">public</strong> Builder beanFieldVisibility(<a name="Visibility" href="../../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> value) {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">super</strong>.beanFieldVisibility(value);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		}
@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		}
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">public</strong> Builder beanMethodVisibility(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> value) {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">public</strong> Builder beanMethodVisibility(<a name="Visibility" href="../../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> value) {
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">super</strong>.beanMethodVisibility(value);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		}

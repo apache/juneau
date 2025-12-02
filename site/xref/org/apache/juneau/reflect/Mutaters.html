@@ -24,15 +24,15 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.reflect;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.reflect.ReflectionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.ReflectionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Cache of object that convert POJOs to and from common types such as strings, readers, and input streams.</em>
@@ -310,7 +310,7 @@
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">return</strong> NULL;
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> findToXMethod(ClassInfo ic, ClassInfo oc) {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/commons/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> findToXMethod(ClassInfo ic, ClassInfo oc) {
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> tn = oc.getNameReadable();
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">return</strong> ic.getPublicMethod(
@@ -322,7 +322,7 @@
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 	}
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isStaticCreateMethodName(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Class&lt;?&gt; ic) {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isStaticCreateMethodName(<a name="MethodInfo" href="../../../../org/apache/juneau/commons/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Class&lt;?&gt; ic) {
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> n = mi.getSimpleName();
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> cn = ic.getSimpleName();
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<em class="jxr_comment">// @formatter:off</em>

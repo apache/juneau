@@ -26,9 +26,9 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.lang.annotation.ElementType.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.lang.annotation.RetentionPolicy.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
@@ -37,8 +37,8 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.annotation.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.annotation.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.svl.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">/**</em>
@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Object <strong class="jxr_keyword">extends</strong> <a name="AppliedOnClassAnnotationObject" href="../../../../../org/apache/juneau/common/annotation/AppliedOnClassAnnotationObject.html#AppliedOnClassAnnotationObject">AppliedOnClassAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Query {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Object <strong class="jxr_keyword">extends</strong> <a name="AppliedOnClassAnnotationObject" href="../../../../../org/apache/juneau/commons/annotation/AppliedOnClassAnnotationObject.html#AppliedOnClassAnnotationObject">AppliedOnClassAnnotationObject</a> <strong class="jxr_keyword">implements</strong> Query {
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] description;
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartParser&gt; parser;
@@ -356,7 +356,7 @@
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * @param pi The parameter.</em>
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * @return The last matching default value, or empty if not found.</em>
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;String&gt; findDef(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;String&gt; findDef(<a name="ParameterInfo" href="../../../../../org/apache/juneau/commons/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">return</strong> AP.find(Query.<strong class="jxr_keyword">class</strong>, pi)
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 			.stream()
@@ -373,7 +373,7 @@
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * @param pi The parameter.</em>
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * @return The last matching name, or empty if not found.</em>
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;String&gt; findName(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;String&gt; findName(<a name="ParameterInfo" href="../../../../../org/apache/juneau/commons/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">return</strong> AP.find(Query.<strong class="jxr_keyword">class</strong>, pi)
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 			.stream()

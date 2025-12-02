@@ -25,9 +25,9 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.parser;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.objecttools.*;
@@ -225,7 +225,7 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * @param name The name to set.</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setName(ClassMeta&lt;?&gt; cm, Object o, Object name) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setName(ClassMeta&lt;?&gt; cm, Object o, Object name) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">if</strong> (nn(cm)) {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			Setter m = cm.getNameProperty();
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">if</strong> (nn(m))
@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * @param parent The parent to set.</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setParent(ClassMeta&lt;?&gt; cm, Object o, Object parent) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setParent(ClassMeta&lt;?&gt; cm, Object o, Object parent) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		Setter m = cm.getParentProperty();
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">if</strong> (nn(m))
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			m.set(o, parent);
@@ -878,7 +878,7 @@
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L872" href="#L872">872</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L873" href="#L873">873</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T doParse(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T doParse(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> 		<strong class="jxr_keyword">return</strong> ctx.doParse(<strong class="jxr_keyword">this</strong>, pipe, type);
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> 	}
 <a class="jxr_linenumber" name="L876" href="#L876">876</a> 

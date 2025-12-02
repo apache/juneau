@@ -24,8 +24,8 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.oapi;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartDataType.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartFormat.*;
@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.utils.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.svl.*;
@@ -204,11 +204,11 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> OapiStringBuilder {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/common/utils/AsciiSet.html#AsciiSet">AsciiSet</a> EQ = AsciiSet.of(<span class="jxr_string">"=&#92;&#92;"</span>);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/common/utils/AsciiSet.html#AsciiSet">AsciiSet</a> PIPE = AsciiSet.of(<span class="jxr_string">"|&#92;&#92;"</span>);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/common/utils/AsciiSet.html#AsciiSet">AsciiSet</a> PIPE_OR_EQ = AsciiSet.of(<span class="jxr_string">"|=&#92;&#92;"</span>);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/common/utils/AsciiSet.html#AsciiSet">AsciiSet</a> COMMA = AsciiSet.of(<span class="jxr_string">",&#92;&#92;"</span>);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/common/utils/AsciiSet.html#AsciiSet">AsciiSet</a> COMMA_OR_EQ = AsciiSet.of(<span class="jxr_string">",=&#92;&#92;"</span>);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/commons/utils/AsciiSet.html#AsciiSet">AsciiSet</a> EQ = AsciiSet.of(<span class="jxr_string">"=&#92;&#92;"</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/commons/utils/AsciiSet.html#AsciiSet">AsciiSet</a> PIPE = AsciiSet.of(<span class="jxr_string">"|&#92;&#92;"</span>);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/commons/utils/AsciiSet.html#AsciiSet">AsciiSet</a> PIPE_OR_EQ = AsciiSet.of(<span class="jxr_string">"|=&#92;&#92;"</span>);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/commons/utils/AsciiSet.html#AsciiSet">AsciiSet</a> COMMA = AsciiSet.of(<span class="jxr_string">",&#92;&#92;"</span>);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/commons/utils/AsciiSet.html#AsciiSet">AsciiSet</a> COMMA_OR_EQ = AsciiSet.of(<span class="jxr_string">",=&#92;&#92;"</span>);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartCollectionFormat" href="../../../../org/apache/juneau/httppart/HttpPartCollectionFormat.html#HttpPartCollectionFormat">HttpPartCollectionFormat</a> cf;

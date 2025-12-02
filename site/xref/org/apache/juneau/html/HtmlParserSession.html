@@ -25,9 +25,9 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.html;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.html.HtmlTag.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.io.*;
@@ -40,8 +40,8 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.html.annotation.*;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.*;
@@ -502,7 +502,7 @@
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 					setName(cm, value, key);
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 						pMeta.set(m, key, value);
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 					} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 					} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../../org/apache/juneau/commons/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 						onBeanSetterException(pMeta, e);
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 						<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 					}
@@ -736,7 +736,7 @@
 <a class="jxr_linenumber" name="L728" href="#L728">728</a> 	}
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> 
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 	@Override <em class="jxr_comment">/* Overridden from ParserSession */</em>
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T doParse(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T doParse(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 			<strong class="jxr_keyword">return</strong> parseAnything(type, getXmlReader(pipe), getOuter(), <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 		} <strong class="jxr_keyword">catch</strong> (XMLStreamException e) {

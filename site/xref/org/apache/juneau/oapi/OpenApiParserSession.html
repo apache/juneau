@@ -24,9 +24,9 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.oapi;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartDataType.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartFormat.*;
@@ -39,8 +39,8 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.utils.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.*;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.swap.*;
@@ -481,7 +481,7 @@
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 						m.put(key, parse(partType, schema.getProperty(key), value, eType));
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 					}
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 					<strong class="jxr_keyword">return</strong> (T)m;
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 				} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 				} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(e);
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 				}
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 
@@ -506,7 +506,7 @@
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 	}
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 	@Override <em class="jxr_comment">/* Overridden from ParserSession */</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T doParse(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T doParse(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">return</strong> parseInner(<strong class="jxr_keyword">null</strong>, HttpPartSchema.DEFAULT, pipe.asString(), type);
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 	}
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> }

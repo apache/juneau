@@ -25,9 +25,9 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.arg;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.bean.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.bean.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * @return A new {@link RequestBeanArg}, or &lt;jk&gt;null&lt;/jk&gt; if the parameter is not annotated with {@link Request}.</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="RequestBeanArg" href="../../../../../org/apache/juneau/rest/arg/RequestBeanArg.html#RequestBeanArg">RequestBeanArg</a> create(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="RequestBeanArg" href="../../../../../org/apache/juneau/rest/arg/RequestBeanArg.html#RequestBeanArg">RequestBeanArg</a> create(<a name="ParameterInfo" href="../../../../../org/apache/juneau/commons/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">if</strong> (AP.has(Request.<strong class="jxr_keyword">class</strong>, paramInfo))
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="RequestBeanArg" href="../../../../../org/apache/juneau/rest/arg/RequestBeanArg.html#RequestBeanArg">RequestBeanArg</a>(paramInfo, annotations);
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * @param paramInfo The Java method parameter being resolved.</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">protected</strong> <a name="RequestBeanArg" href="../../../../../org/apache/juneau/rest/arg/RequestBeanArg.html#RequestBeanArg">RequestBeanArg</a>(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">protected</strong> <a name="RequestBeanArg" href="../../../../../org/apache/juneau/rest/arg/RequestBeanArg.html#RequestBeanArg">RequestBeanArg</a>(<a name="ParameterInfo" href="../../../../../org/apache/juneau/commons/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">this</strong>.meta = RequestBeanMeta.create(paramInfo, annotations);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  

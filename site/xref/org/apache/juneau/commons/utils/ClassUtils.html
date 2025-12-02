@@ -1,0 +1,709 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ClassUtils xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/commons/utils/ClassUtils.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.utils;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.ReflectionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Utility methods for working with classes.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ClassUtils" href="../../../../../org/apache/juneau/commons/utils/ClassUtils.html#ClassUtils">ClassUtils</a> {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 * Predicate check to filter out void classes.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Predicate&lt;Class&lt;?&gt;&gt; NOT_VOID = ClassUtils::isNotVoid;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@SuppressWarnings(<span class="jxr_string">"rawtypes"</span>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Cache&lt;Class,Boolean&gt; MODIFIABLE_COLLECTION_TYPES = Cache.of(Class.<strong class="jxr_keyword">class</strong>, Boolean.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 * Determines whether the specified collection supports modification operations (e.g., {@code add()}, {@code remove()}).</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 * This method performs a heuristic check based on the collection's class name to determine if it's likely modifiable.</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 * It checks whether the class name contains indicators of immutability such as "Immutable", "Unmodifiable",</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 * or "Arrays$ArrayList" (which represents the unmodifiable list returned by {@link Arrays#asList(Object...)}).</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * Results are cached for performance, so repeated calls for the same collection type are very fast.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Modifiable collections&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * 	canAddTo(&lt;jk&gt;new&lt;/jk&gt; ArrayList&amp;lt;&amp;gt;());        &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * 	canAddTo(&lt;jk&gt;new&lt;/jk&gt; LinkedList&amp;lt;&amp;gt;());       &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * 	canAddTo(&lt;jk&gt;new&lt;/jk&gt; HashSet&amp;lt;&amp;gt;());          &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Unmodifiable collections&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * 	canAddTo(Collections.unmodifiableList(...));    &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * 	canAddTo(Collections.unmodifiableSet(...));     &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * 	canAddTo(Arrays.asList(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;));               &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * 	canAddTo(List.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;));                     &lt;jc&gt;// false (ImmutableCollections)&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * &lt;b&gt;Note:&lt;/b&gt; This is a heuristic check based on naming conventions. It does not attempt to actually</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * modify the collection, so it never throws exceptions. However, it may produce false positives for</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * custom collection implementations with misleading names.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * @param value The collection to check. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the collection is likely modifiable, &lt;jk&gt;false&lt;/jk&gt; if it's likely unmodifiable.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If value is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> canAddTo(Collection&lt;?&gt; value) {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertArgNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">return</strong> canAddTo(value.getClass());
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * Determines whether the specified map supports modification operations (e.g., {@code put()}, {@code remove()}).</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * This method performs a heuristic check based on the map's class name to determine if it's likely modifiable.</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * It checks whether the class name contains indicators of immutability such as "Immutable", "Unmodifiable",</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * or "Arrays$ArrayList" (which represents unmodifiable collections).</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * Results are cached for performance, so repeated calls for the same map type are very fast.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Modifiable maps&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * 	canPutTo(&lt;jk&gt;new&lt;/jk&gt; HashMap&amp;lt;&amp;gt;());          &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * 	canPutTo(&lt;jk&gt;new&lt;/jk&gt; LinkedHashMap&amp;lt;&amp;gt;());    &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * 	canPutTo(&lt;jk&gt;new&lt;/jk&gt; TreeMap&amp;lt;&amp;gt;());          &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Unmodifiable maps&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * 	canPutTo(Collections.unmodifiableMap(...));     &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * 	canPutTo(Map.of(&lt;js&gt;"key"&lt;/js&gt;, &lt;js&gt;"value"&lt;/js&gt;));              &lt;jc&gt;// false (ImmutableCollections)&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Note:&lt;/b&gt; This is a heuristic check based on naming conventions. It does not attempt to actually</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * modify the map, so it never throws exceptions. However, it may produce false positives for</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * custom map implementations with misleading names.</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * @param value The map to check. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the map is likely modifiable, &lt;jk&gt;false&lt;/jk&gt; if it's likely unmodifiable.</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If value is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> canPutTo(Map&lt;?,?&gt; value) {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertArgNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">return</strong> canAddTo(value.getClass());
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * Returns the fully-qualified class name for the specified object.</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * This method returns the canonical JVM class name including the full package path.</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Regular classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * 	className(String.&lt;jk&gt;class&lt;/jk&gt;);                  &lt;jc&gt;// "java.lang.String"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * 	className(&lt;jk&gt;new&lt;/jk&gt; HashMap&amp;lt;&amp;gt;());                &lt;jc&gt;// "java.util.HashMap"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Inner classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * 	className(Map.Entry.&lt;jk&gt;class&lt;/jk&gt;);               &lt;jc&gt;// "java.util.Map$Entry"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Primitives&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * 	className(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                      &lt;jc&gt;// "int"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * 	className(&lt;jk&gt;boolean&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                  &lt;jc&gt;// "boolean"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Arrays&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * 	className(String[].&lt;jk&gt;class&lt;/jk&gt;);                &lt;jc&gt;// "[Ljava.lang.String;"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * 	className(&lt;jk&gt;int&lt;/jk&gt;[].&lt;jk&gt;class&lt;/jk&gt;);                    &lt;jc&gt;// "[I"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * 	className(String[][].&lt;jk&gt;class&lt;/jk&gt;);              &lt;jc&gt;// "[[Ljava.lang.String;"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * 	className(&lt;jk&gt;null&lt;/jk&gt;);                          &lt;jc&gt;// null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * @param value The object to get the class name for.</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 * @return The name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String className(Object value) {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : value instanceof Class&lt;?&gt; ? ((Class&lt;?&gt;)value).getName() : value.getClass().getName();
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * Returns the simple (non-qualified) class name for the specified object.</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * This method returns only the simple class name without any package or outer class information.</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 * For inner classes, only the innermost class name is returned.</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Regular classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * 	simpleClassName(String.&lt;jk&gt;class&lt;/jk&gt;);            &lt;jc&gt;// "String"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * 	simpleClassName(&lt;jk&gt;new&lt;/jk&gt; HashMap&amp;lt;&amp;gt;());          &lt;jc&gt;// "HashMap"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Inner classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * 	simpleClassName(Map.Entry.&lt;jk&gt;class&lt;/jk&gt;);         &lt;jc&gt;// "Entry"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Primitives&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * 	simpleClassName(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                &lt;jc&gt;// "int"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * 	simpleClassName(&lt;jk&gt;boolean&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);            &lt;jc&gt;// "boolean"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Arrays&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * 	simpleClassName(String[].&lt;jk&gt;class&lt;/jk&gt;);          &lt;jc&gt;// "String[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * 	simpleClassName(&lt;jk&gt;int&lt;/jk&gt;[].&lt;jk&gt;class&lt;/jk&gt;);              &lt;jc&gt;// "int[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 * 	simpleClassName(String[][].&lt;jk&gt;class&lt;/jk&gt;);        &lt;jc&gt;// "String[][]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * 	simpleClassName(&lt;jk&gt;null&lt;/jk&gt;);                    &lt;jc&gt;// null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * @param value The object to get the simple class name for.</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * @return The simple name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String classNameSimple(Object value) {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">if</strong> (value instanceof ClassInfo value2)
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">return</strong> value2.getNameSimple();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : value instanceof Class&lt;?&gt; c ? c.getSimpleName() : value.getClass().getSimpleName();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * Returns the simple qualified class name for the specified object.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * This returns the simple class name including outer class names, but without the package.</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * Inner class separators ($) are replaced with dots (.).</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * Array types are properly formatted with brackets.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Regular classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(String.&lt;jk&gt;class&lt;/jk&gt;);                     &lt;jc&gt;// "String"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(&lt;jk&gt;new&lt;/jk&gt; HashMap&amp;lt;&amp;gt;());                   &lt;jc&gt;// "HashMap"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Inner classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(Map.Entry.&lt;jk&gt;class&lt;/jk&gt;);                  &lt;jc&gt;// "Map.Entry"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(Outer.Inner.Deep.&lt;jk&gt;class&lt;/jk&gt;);           &lt;jc&gt;// "Outer.Inner.Deep"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Primitives&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                         &lt;jc&gt;// "int"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(&lt;jk&gt;boolean&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                     &lt;jc&gt;// "boolean"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Object arrays&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(String[].&lt;jk&gt;class&lt;/jk&gt;);                   &lt;jc&gt;// "String[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(Map.Entry[].&lt;jk&gt;class&lt;/jk&gt;);                &lt;jc&gt;// "Map.Entry[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(String[][].&lt;jk&gt;class&lt;/jk&gt;);                 &lt;jc&gt;// "String[][]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Primitive arrays&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(&lt;jk&gt;int&lt;/jk&gt;[].&lt;jk&gt;class&lt;/jk&gt;);                       &lt;jc&gt;// "int[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(&lt;jk&gt;boolean&lt;/jk&gt;[][].&lt;jk&gt;class&lt;/jk&gt;);                 &lt;jc&gt;// "boolean[][]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 * 	simpleQualifiedClassName(&lt;jk&gt;null&lt;/jk&gt;);                             &lt;jc&gt;// null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 * @param value The object to get the simple qualified class name for.</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 * @return The simple qualified name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String classNameSimpleQualified(Object value) {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">var</strong> clazz = value instanceof Class&lt;?&gt; ? (Class&lt;?&gt;)value : value.getClass();
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<em class="jxr_comment">// Handle array types by recursively getting component type</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">if</strong> (clazz.isArray()) {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">return</strong> classNameSimpleQualified(clazz.getComponentType()) + <span class="jxr_string">"[]"</span>;
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<em class="jxr_comment">// Handle non-array types</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> className = clazz.getName();
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">var</strong> lastDot = className.lastIndexOf('.');
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> simpleName = lastDot == -1 ? className : className.substring(lastDot + 1);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">return</strong> simpleName.replace('$', '.');
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 * Extracts generic type parameter mappings from a class's superclass declaration and adds them to a type map.</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * This method builds a mapping between type variables (e.g., &lt;c&gt;T&lt;/c&gt;, &lt;c&gt;K&lt;/c&gt;, &lt;c&gt;V&lt;/c&gt;) and their actual</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * type arguments in the inheritance hierarchy. It's used to resolve generic type parameters when navigating</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * through class hierarchies.</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Given these classes:&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;class&lt;/jk&gt; MyList&amp;lt;T&amp;gt; &lt;jk&gt;extends&lt;/jk&gt; ArrayList&amp;lt;T&amp;gt; {}</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;class&lt;/jk&gt; StringList &lt;jk&gt;extends&lt;/jk&gt; MyList&amp;lt;String&amp;gt; {}</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// When called on StringList, this would extract:&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;//   T (from MyList) -&amp;gt; String&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * The method handles transitive type mappings by checking if an actual type argument is itself a type variable</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * that's already been mapped, and resolving it to its final type.</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * @param typeMap</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * 	The map to populate with type variable to actual type mappings.</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Existing entries are used to resolve transitive mappings.</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * @param c</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * 	The class whose generic superclass should be examined for type parameters.</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> extractTypes(Map&lt;Type,Type&gt; typeMap, Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">var</strong> gs = c.getGenericSuperclass();
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">if</strong> (gs instanceof ParameterizedType gs2) {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">var</strong> typeParameters = ((Class&lt;?&gt;)gs2.getRawType()).getTypeParameters();
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">var</strong> actualTypeArguments = gs2.getActualTypeArguments();
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; typeParameters.length; i++) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 				<strong class="jxr_keyword">if</strong> (typeMap.containsKey(actualTypeArguments[i]))
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 					actualTypeArguments[i] = typeMap.get(actualTypeArguments[i]);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				typeMap.put(typeParameters[i], actualTypeArguments[i]);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * Returns the class types for the specified arguments.</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * @param args The objects we're getting the classes of.</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * @return The classes of the arguments.</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Class&lt;?&gt;[] getClasses(Object...args) {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> pt = <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[args.length];
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; args.length; i++)
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			pt[i] = args[i] == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : args[i].getClass();
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">return</strong> pt;
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	}
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 * Matches arguments to a list of parameter types.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * This method intelligently matches a variable number of arguments to a fixed set of parameter types,</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * handling cases where arguments may be provided in a different order, or where some arguments are</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * missing or extra arguments are provided. This is particularly useful for reflective method/constructor</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * invocation where parameter order flexibility is desired.</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Matching Rules:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If arguments already match parameter types in order and count, they are returned as-is (fast path)</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Otherwise, each parameter type is matched with the first compatible argument</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Extra arguments are ignored</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Missing parameters are left as &lt;jk&gt;null&lt;/jk&gt;</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Primitive types are automatically matched with their wrapper equivalents</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Type hierarchy is respected (subclasses match parent parameters)</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Already in correct order - fast path returns original array&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * 	Class&amp;lt;?&amp;gt;[] types = {String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;};</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 * 	Object[] args = {&lt;js&gt;"hello"&lt;/js&gt;, 42};</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 * 	Object[] result = getMatchingArgs(types, args);</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Returns: ["hello", 42]&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Arguments in wrong order - method reorders them&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * 	Class&amp;lt;?&amp;gt;[] types = {Integer.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;};</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * 	Object[] args = {&lt;js&gt;"hello"&lt;/js&gt;, 42};</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 * 	Object[] result = getMatchingArgs(types, args);</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Returns: [42, "hello"]&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Extra arguments are ignored&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 * 	Class&amp;lt;?&amp;gt;[] types = {String.&lt;jk&gt;class&lt;/jk&gt;};</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * 	Object[] args = {&lt;js&gt;"hello"&lt;/js&gt;, 42, &lt;jk&gt;true&lt;/jk&gt;};</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * 	Object[] result = getMatchingArgs(types, args);</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Returns: ["hello"]&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Missing arguments become null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 * 	Class&amp;lt;?&amp;gt;[] types = {String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;, Boolean.&lt;jk&gt;class&lt;/jk&gt;};</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 * 	Object[] args = {&lt;js&gt;"hello"&lt;/js&gt;};</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 * 	Object[] result = getMatchingArgs(types, args);</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Returns: ["hello", null, null]&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Handles primitive types and their wrappers&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * 	Class&amp;lt;?&amp;gt;[] types = {&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;};</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * 	Object[] args = {&lt;js&gt;"hello"&lt;/js&gt;, 42};  &lt;jc&gt;// Integer object matches int.class&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * 	Object[] result = getMatchingArgs(types, args);</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Returns: [42, "hello"]&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Respects type hierarchy - subclasses match parent types&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * 	Class&amp;lt;?&amp;gt;[] types = {Number.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;};</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * 	Object[] args = {&lt;js&gt;"hello"&lt;/js&gt;, 42};  &lt;jc&gt;// Integer extends Number&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * 	Object[] result = getMatchingArgs(types, args);</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Returns: [42, "hello"]&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * This method is used internally by {@link ClassInfo}, {@link MethodInfo}, and {@link ConstructorInfo}</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * to provide flexible parameter matching during reflective invocation.</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * @param paramTypes The parameter types to match against. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * @param args The arguments to match to the parameter types. Can be empty or contain &lt;jk&gt;null&lt;/jk&gt; values.</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * 	An array of arguments matched to the parameter types. The returned array will always have</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 * 	the same length as {@code paramTypes}. Returns the original {@code args} array if it already</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * 	matches (fast path optimization).</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Object[] getMatchingArgs(Class&lt;?&gt;[] paramTypes, Object...args) {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertArgNotNull(<span class="jxr_string">"args"</span>, args);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">var</strong> needsShuffle = paramTypes.length != args.length;
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">if</strong> (! needsShuffle) {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; paramTypes.length; i++) {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 				<strong class="jxr_keyword">if</strong> (! paramTypes[i].isInstance(args[i]))
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 					needsShuffle = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			}
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		}
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">if</strong> (! needsShuffle)
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">return</strong> args;
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">var</strong> params = <strong class="jxr_keyword">new</strong> Object[paramTypes.length];
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; paramTypes.length; i++) {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">var</strong> pt = info(paramTypes[i]).getWrapperIfPrimitive();
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> arg : args) {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 				<strong class="jxr_keyword">if</strong> (nn(arg) &amp;&amp; pt.isParentOf(arg.getClass())) {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 					params[i] = arg;
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 				}
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">return</strong> params;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 * Returns the generic parameter type at the specified index for a class that extends a parameterized type.</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * @param c The class to examine.</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * @param index The zero-based index of the parameter to retrieve.</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * @param pt The parameterized superclass or interface.</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * @return The parameter type at the specified index.</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the class is not a subclass of the parameterized type or if the index is invalid.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Class&lt;?&gt; getParameterType(Class&lt;?&gt; c, <strong class="jxr_keyword">int</strong> index, Class&lt;?&gt; pt) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertArgsNotNull(<span class="jxr_string">"pt"</span>, pt, <span class="jxr_string">"c"</span>, c);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<em class="jxr_comment">// We need to make up a mapping of type names.</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">var</strong> typeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;Type,Type&gt;();
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> cc = c;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">while</strong> (pt != cc.getSuperclass()) {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			extractTypes(typeMap, cc);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			cc = cc.getSuperclass();
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			assertArg(nn(cc), <span class="jxr_string">"Class ''{0}'' is not a subclass of parameterized type ''{1}''"</span>, cns(c), cns(pt));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		}
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> gsc = cc.getGenericSuperclass();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertArg(gsc instanceof ParameterizedType, <span class="jxr_string">"Class ''{0}'' is not a parameterized type"</span>, cns(pt));
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> cpt = (ParameterizedType)gsc;
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">var</strong> atArgs = cpt.getActualTypeArguments();
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertArg(index &lt; atArgs.length, <span class="jxr_string">"Invalid type index. index={0}, argsLength={1}"</span>, index, atArgs.length);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> actualType = cpt.getActualTypeArguments()[index];
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">if</strong> (typeMap.containsKey(actualType))
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			actualType = typeMap.get(actualType);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">if</strong> (actualType instanceof Class actualType2) {
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">return</strong> actualType2;
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">if</strong> (actualType instanceof GenericArrayType actualType2) {
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">var</strong> gct = actualType2.getGenericComponentType();
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			<strong class="jxr_keyword">if</strong> (gct instanceof ParameterizedType gct2)
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 				<strong class="jxr_keyword">return</strong> Array.newInstance((Class&lt;?&gt;)gct2.getRawType(), 0).getClass();
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (actualType instanceof TypeVariable&lt;?&gt; actualType3) {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">var</strong> nestedOuterTypes = <strong class="jxr_keyword">new</strong> LinkedList&lt;Class&lt;?&gt;&gt;();
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 				<strong class="jxr_keyword">var</strong> outerClass = cc.getClass();
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 				nestedOuterTypes.add(outerClass);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 				<strong class="jxr_keyword">var</strong> outerTypeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;Type,Type&gt;();
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 				extractTypes(outerTypeMap, outerClass);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> entry : outerTypeMap.entrySet()) {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					<strong class="jxr_keyword">var</strong> key = entry.getKey();
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 					<strong class="jxr_keyword">var</strong> value = entry.getValue();
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 					<strong class="jxr_keyword">if</strong> ((key instanceof TypeVariable&lt;?&gt; key2) &amp;&amp; (key2.getName().equals(actualType3.getName()) &amp;&amp; isInnerClass(key2.getGenericDeclaration(), actualType3.getGenericDeclaration()))) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 						<strong class="jxr_keyword">if</strong> (value instanceof Class&lt;?&gt; value2)
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 							<strong class="jxr_keyword">return</strong> value2;
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 						actualType3 = (TypeVariable&lt;?&gt;)entry.getValue();
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 					}
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 				}
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			}
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (actualType instanceof ParameterizedType actualType2) {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">return</strong> (Class&lt;?&gt;)actualType2.getRawType();
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		}
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Could not resolve variable ''{0}'' to a type."</span>, actualType.getTypeName());
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	}
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * Attempts to unwrap a proxy object and return the underlying "real" class.</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * This method handles several common proxy types used in Java applications:</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;JDK Dynamic Proxies&lt;/b&gt; - Created via {@link Proxy#newProxyInstance}</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;CGLIB Proxies&lt;/b&gt; - Created by Spring's CGLIB enhancer (class name contains &lt;js&gt;"$$EnhancerBySpringCGLIB$$"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Javassist Proxies&lt;/b&gt; - Created by Javassist proxy factory (class name contains &lt;js&gt;"_$$_javassist"&lt;/js&gt; or &lt;js&gt;"_$$_jvst"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;ByteBuddy Proxies&lt;/b&gt; - Created by ByteBuddy (class name contains &lt;js&gt;"$ByteBuddy$"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Get the real class behind a Spring proxy&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Service&lt;/ja&gt;</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;class&lt;/jk&gt; MyService {}</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * 	MyService proxy = applicationContext.getBean(MyService.&lt;jk&gt;class&lt;/jk&gt;);</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * 	Class&amp;lt;?&amp;gt; realClass = ClassUtils.&lt;jsm&gt;getProxyFor&lt;/jsm&gt;(proxy);</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Returns MyService.class instead of the CGLIB proxy class&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * &lt;ul class='spaced-list'&gt;</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For JDK dynamic proxies, returns the first interface implemented by the proxy</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For CGLIB/Javassist/ByteBuddy proxies, returns the superclass</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For Spring CGLIB proxies with a &lt;c&gt;getTargetClass()&lt;/c&gt; method, invokes that method for more accurate results</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Returns &lt;jk&gt;null&lt;/jk&gt; if the object is not a recognized proxy type</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * @param o The object to unwrap. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * 	The underlying class, or &lt;jk&gt;null&lt;/jk&gt; if:</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;The object is &lt;jk&gt;null&lt;/jk&gt;</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;The object is not a recognized proxy type</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;The proxy cannot be unwrapped</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Class&lt;?&gt; getProxyFor(Object o) {
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">var</strong> c = o.getClass();
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">var</strong> s = c.getName();
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<em class="jxr_comment">// Quick exit: Most classes aren't proxies, and proxies typically have '$' in their name</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">if</strong> (s.indexOf('$') == -1)
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<em class="jxr_comment">// JDK Dynamic Proxy: Created via Proxy.newProxyInstance()</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<em class="jxr_comment">// These implement interfaces and are instances of java.lang.reflect.Proxy</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">if</strong> (Proxy.isProxyClass(c)) {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">var</strong> interfaces = c.getInterfaces();
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">return</strong> interfaces.length &gt; 0 ? interfaces[0] : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		}
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		<em class="jxr_comment">// CGLIB Proxy: Spring's CGLIB enhancer creates subclasses</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		<em class="jxr_comment">// Pattern: com.example.MyClass$$EnhancerBySpringCGLIB$$abc123</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<strong class="jxr_keyword">if</strong> (s.contains(<span class="jxr_string">"$$EnhancerBySpringCGLIB$$"</span>)) {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 			<em class="jxr_comment">// Try to invoke getTargetClass() if available (Spring specific)</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 			<strong class="jxr_keyword">var</strong> v = Value.&lt;Class&lt;?&gt;&gt;empty();
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 			info(c).getPublicMethods().stream().filter(m -&gt; m.hasName(<span class="jxr_string">"getTargetClass"</span>) &amp;&amp; m.getParameterCount() == 0 &amp;&amp; m.hasReturnType(Class.<strong class="jxr_keyword">class</strong>)).forEach(m -&gt; safe(() -&gt; v.set(m.invoke(o))));
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 			<strong class="jxr_keyword">return</strong> v.isPresent() ? v.get() : c.getSuperclass();
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		}
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<em class="jxr_comment">// Javassist Proxy: Created by Javassist ProxyFactory</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<em class="jxr_comment">// Pattern: com.example.MyClass_$$_javassist_123 or com.example.MyClass_$$_jvst123</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<em class="jxr_comment">// ByteBuddy Proxy: Created by ByteBuddy framework</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<em class="jxr_comment">// Pattern: com.example.MyClass$ByteBuddy$abc123</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">if</strong> (s.contains(<span class="jxr_string">"_$$_javassist"</span>) || s.contains(<span class="jxr_string">"_$$_jvst"</span>) || s.contains(<span class="jxr_string">"$ByteBuddy$"</span>)) {
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			<strong class="jxr_keyword">return</strong> c.getSuperclass();
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		}
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<em class="jxr_comment">// Not a recognized proxy type</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 	}
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * Returns the generic parameter type of the Value type.</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * @param t The type to find the parameter type of.</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 * @return The parameter type of the value, or &lt;jk&gt;null&lt;/jk&gt; if the type is not a subclass of &lt;c&gt;Value&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Type getValueParameterType(Type t) {
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">if</strong> (t instanceof ParameterizedType t2) {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">if</strong> (t2.getRawType() == Value.<strong class="jxr_keyword">class</strong>) {
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 				<strong class="jxr_keyword">var</strong> ta = t2.getActualTypeArguments();
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 				<strong class="jxr_keyword">if</strong> (ta.length &gt; 0)
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 					<strong class="jxr_keyword">return</strong> ta[0];
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 			}
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> ((t instanceof Class&lt;?&gt; t3) &amp;&amp; Value.<strong class="jxr_keyword">class</strong>.isAssignableFrom(t3)) {
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 			<strong class="jxr_keyword">return</strong> getParameterType(t3, 0, Value.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		}
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	}
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 * Checks if one generic declaration (typically a class) is an inner class of another.</em>
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">	 * This method walks up the enclosing class hierarchy of the potential inner class to determine if it's</em>
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 * nested within the outer class at any level. It's used during generic type resolution to determine if</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 * type variables from different scopes refer to the same logical type parameter.</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Given these classes:&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;class&lt;/jk&gt; Outer&amp;lt;T&amp;gt; {</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;class&lt;/jk&gt; Inner&amp;lt;T&amp;gt; {</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">	 * 			&lt;jc&gt;// The T here could refer to either Outer.T or Inner.T&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">	 * 		}</em>
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">	 * 	}</em>
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// This method helps determine the relationship:&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 * 	isInnerClass(Outer.&lt;jk&gt;class&lt;/jk&gt;, Inner.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// Returns true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 * 	isInnerClass(Inner.&lt;jk&gt;class&lt;/jk&gt;, Outer.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// Returns false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">	 * @param od</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">	 * 	The potential outer declaration (typically an outer class).</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">	 * @param id</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * 	The potential inner declaration (typically an inner class).</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;id&lt;/c&gt; is nested within &lt;c&gt;od&lt;/c&gt; at any level, &lt;jk&gt;false&lt;/jk&gt; otherwise.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Returns &lt;jk&gt;false&lt;/jk&gt; if either parameter is not a &lt;c&gt;Class&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isInnerClass(GenericDeclaration od, GenericDeclaration id) {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">if</strong> (od instanceof Class&lt;?&gt; oc &amp;&amp; id instanceof Class&lt;?&gt; ic) {
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 			<strong class="jxr_keyword">while</strong> (nn(ic = ic.getEnclosingClass()))
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 				<strong class="jxr_keyword">if</strong> (ic == oc)
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		}
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	}
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;false&lt;/jk&gt; if the specific class is &lt;jk&gt;null&lt;/jk&gt; or &lt;c&gt;&lt;jk&gt;void&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;&lt;/c&gt; or {@link Void} or has the simple name &lt;js&gt;"Void&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">	 * @param c The class to check.</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;false&lt;/jk&gt; if the specific class is &lt;jk&gt;null&lt;/jk&gt; or &lt;c&gt;&lt;jk&gt;void&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;&lt;/c&gt; or {@link Void} or has the simple name &lt;js&gt;"Void&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 	@SuppressWarnings(<span class="jxr_string">"rawtypes"</span>)
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isNotVoid(Class c) {
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		<strong class="jxr_keyword">return</strong> ! isVoid(c);
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	}
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specific class is &lt;jk&gt;null&lt;/jk&gt; or &lt;c&gt;&lt;jk&gt;void&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;&lt;/c&gt; or {@link Void} or has the simple name &lt;js&gt;"Void&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 * @param c The class to check.</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specific class is &lt;jk&gt;null&lt;/jk&gt; or &lt;c&gt;&lt;jk&gt;void&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;&lt;/c&gt; or {@link Void} or has the simple name &lt;js&gt;"Void&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	@SuppressWarnings(<span class="jxr_string">"rawtypes"</span>)
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isVoid(Class c) {
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">return</strong> c == <strong class="jxr_keyword">null</strong> || c == <strong class="jxr_keyword">void</strong>.<strong class="jxr_keyword">class</strong> || c == Void.<strong class="jxr_keyword">class</strong> || cns(c).equalsIgnoreCase(<span class="jxr_string">"void"</span>);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	}
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 * Attempts to call &lt;code&gt;x.setAccessible(&lt;jk&gt;true&lt;/jk&gt;)&lt;/code&gt; and quietly ignores security exceptions.</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * @param x The constructor.</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if call was successful.</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> setAccessible(Constructor&lt;?&gt; x) {
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			<strong class="jxr_keyword">if</strong> (nn(x))
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 				x.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) SecurityException e) {
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		}
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	}
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * Attempts to call &lt;code&gt;x.setAccessible(&lt;jk&gt;true&lt;/jk&gt;)&lt;/code&gt; and quietly ignores security exceptions.</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">	 * @param x The field.</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if call was successful.</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> setAccessible(Field x) {
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 			<strong class="jxr_keyword">if</strong> (nn(x))
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 				x.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) SecurityException e) {
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		}
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	}
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 * Attempts to call &lt;code&gt;x.setAccessible(&lt;jk&gt;true&lt;/jk&gt;)&lt;/code&gt; and quietly ignores security exceptions.</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 * @param x The method.</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if call was successful.</em>
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> setAccessible(Method x) {
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			<strong class="jxr_keyword">if</strong> (nn(x))
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 				x.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) SecurityException e) {
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		}
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	}
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 * Returns the specified type as a &lt;c&gt;Class&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> <em class="jxr_javadoccomment">	 * If it's already a &lt;c&gt;Class&lt;/c&gt;, it just does a cast.</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;If it's a &lt;c&gt;ParameterizedType&lt;/c&gt;, it returns the raw type.</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * @param t The type to convert.</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * @return The type converted to a &lt;c&gt;Class&lt;/c&gt;, or &lt;jk&gt;null&lt;/jk&gt; if it could not be converted.</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Class&lt;?&gt; toClass(Type t) {
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<strong class="jxr_keyword">if</strong> (t instanceof Class&lt;?&gt; c)
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 			<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">if</strong> (t instanceof ParameterizedType t2) {
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			<em class="jxr_comment">// The raw type should always be a class (right?)</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 			<strong class="jxr_keyword">return</strong> (Class&lt;?&gt;)t2.getRawType();
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		}
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	}
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> canAddTo(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">var</strong> b = MODIFIABLE_COLLECTION_TYPES.get(c);
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">if</strong> (b == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			<strong class="jxr_keyword">var</strong> name = c.getName();
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 			b = (! name.contains(<span class="jxr_string">"Immutable"</span>) &amp;&amp; ! name.contains(<span class="jxr_string">"Unmodifiable"</span>) &amp;&amp; ! name.contains(<span class="jxr_string">"Arrays$ArrayList"</span>));
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			MODIFIABLE_COLLECTION_TYPES.put(c, b);
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		}
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		<strong class="jxr_keyword">return</strong> b;
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 	}
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

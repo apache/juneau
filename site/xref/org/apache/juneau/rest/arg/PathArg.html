@@ -25,8 +25,8 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.arg;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.Constants.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.annotation.PathAnnotation.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
@@ -34,9 +34,9 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.httppart.*;
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * @param pathMatcher Path matcher for the specified method.</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * @return A new {@link PathArg}, or &lt;jk&gt;null&lt;/jk&gt; if the parameter is not annotated with {@link Path}.</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="PathArg" href="../../../../../org/apache/juneau/rest/arg/PathArg.html#PathArg">PathArg</a> create(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations, <a name="UrlPathMatcher" href="../../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a> pathMatcher) {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="PathArg" href="../../../../../org/apache/juneau/rest/arg/PathArg.html#PathArg">PathArg</a> create(<a name="ParameterInfo" href="../../../../../org/apache/juneau/commons/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations, <a name="UrlPathMatcher" href="../../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a> pathMatcher) {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">if</strong> (AP.has(Path.<strong class="jxr_keyword">class</strong>, paramInfo))
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="PathArg" href="../../../../../org/apache/juneau/rest/arg/PathArg.html#PathArg">PathArg</a>(paramInfo, annotations, pathMatcher);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * @param paramName The path parameter name.</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * @return Merged annotation, or null if no class-level defaults exist.</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Path getMergedPath(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi, String paramName) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Path getMergedPath(<a name="ParameterInfo" href="../../../../../org/apache/juneau/commons/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi, String paramName) {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<em class="jxr_comment">// Get the declaring class</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> declaringClass = pi.getMethod().getDeclaringClass();
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">if</strong> (declaringClass == <strong class="jxr_keyword">null</strong>)
@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * @param pathMatcher Path matcher for the specified method.</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">protected</strong> <a name="PathArg" href="../../../../../org/apache/juneau/rest/arg/PathArg.html#PathArg">PathArg</a>(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations, <a name="UrlPathMatcher" href="../../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a> pathMatcher) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">protected</strong> <a name="PathArg" href="../../../../../org/apache/juneau/rest/arg/PathArg.html#PathArg">PathArg</a>(<a name="ParameterInfo" href="../../../../../org/apache/juneau/commons/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations, <a name="UrlPathMatcher" href="../../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a> pathMatcher) {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<em class="jxr_comment">// Get the path parameter name</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">this</strong>.name = getName(paramInfo, pathMatcher);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 
@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">return</strong> req.getPathParams().get(name).parser(ps).schema(schema).def(def).as(type).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getName(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi, <a name="UrlPathMatcher" href="../../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a> pathMatcher) {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getName(<a name="ParameterInfo" href="../../../../../org/apache/juneau/commons/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi, <a name="UrlPathMatcher" href="../../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a> pathMatcher) {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> p = findName(pi).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (nn(p))
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">return</strong> p;

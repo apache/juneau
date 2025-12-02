@@ -25,11 +25,11 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.ClassMeta.ClassCategory.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.reflect.ReflectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.PredicateUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.ReflectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.PredicateUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
@@ -42,9 +42,9 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.utils.*;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.json.*;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
@@ -529,7 +529,7 @@
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * @return The constructor, or &lt;jk&gt;null&lt;/jk&gt; if no no-arg constructor exists with the required visibility.</em>
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Constructor&lt;? <strong class="jxr_keyword">extends</strong> T&gt; findNoArgConstructor(Class&lt;?&gt; c, <a name="Visibility" href="../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> v) {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Constructor&lt;? <strong class="jxr_keyword">extends</strong> T&gt; findNoArgConstructor(Class&lt;?&gt; c, <a name="Visibility" href="../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> v) {
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 		<strong class="jxr_keyword">var</strong> ci = info(c);
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">if</strong> (ci.isAbstract())
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -550,11 +550,11 @@
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> T&gt; implClass;             <em class="jxr_comment">// The implementation class to use if this is an interface.</em>
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ClassCategory cc;                         <em class="jxr_comment">// The class category.</em>
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method fromStringMethod;                  <em class="jxr_comment">// The static valueOf(String) or fromString(String) or forString(String) method (if it has one).</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> noArgConstructor,                                    <em class="jxr_comment">// The no-arg constructor for this class (if it has one).</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> noArgConstructor,                                    <em class="jxr_comment">// The no-arg constructor for this class (if it has one).</em>
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 		stringConstructor;                                   <em class="jxr_comment">// The X(String) constructor (if it has one).</em>
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method exampleMethod;                                       <em class="jxr_comment">// The example() or @Example-annotated method (if it has one).</em>
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Field exampleField;                                        <em class="jxr_comment">// The @Example-annotated field (if it has one).</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Setter" href="../../../org/apache/juneau/common/reflect/Setter.html#Setter">Setter</a> namePropertyMethod,                                  <em class="jxr_comment">// The method to set the name on an object (if it has one).</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Setter" href="../../../org/apache/juneau/commons/reflect/Setter.html#Setter">Setter</a> namePropertyMethod,                                  <em class="jxr_comment">// The method to set the name on an object (if it has one).</em>
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 		parentPropertyMethod;                                <em class="jxr_comment">// The method to set the parent on an object (if it has one).</em>
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isDelegate,                                          <em class="jxr_comment">// True if this class extends Delegate.</em>
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		isAbstract,                                          <em class="jxr_comment">// True if this class is abstract.</em>
@@ -590,7 +590,7 @@
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BidiMap&lt;Object,String&gt; enumValues;
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="SimpleReadWriteLock" href="../../../org/apache/juneau/common/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> lock = <strong class="jxr_keyword">new</strong> <a name="SimpleReadWriteLock" href="../../../org/apache/juneau/common/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>(false);
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="SimpleReadWriteLock" href="../../../org/apache/juneau/commons/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> lock = <strong class="jxr_keyword">new</strong> <a name="SimpleReadWriteLock" href="../../../org/apache/juneau/commons/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>(false);
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.</em>
@@ -933,7 +933,7 @@
 <a class="jxr_linenumber" name="L925" href="#L925">925</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> <em class="jxr_javadoccomment">	 * @return The no-arg constructor for this class, or &lt;jk&gt;null&lt;/jk&gt; if it does not exist.</em>
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getConstructor() { <strong class="jxr_keyword">return</strong> noArgConstructor; }
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getConstructor() { <strong class="jxr_keyword">return</strong> noArgConstructor; }
 <a class="jxr_linenumber" name="L929" href="#L929">929</a> 
 <a class="jxr_linenumber" name="L930" href="#L930">930</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 * Returns the bean dictionary name associated with this class.</em>
@@ -1044,7 +1044,7 @@
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">	 * @param conVis The constructor visibility.</em>
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 * @return The no-arg constructor for this class, or &lt;jk&gt;null&lt;/jk&gt; if it does not exist.</em>
 <a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getImplClassConstructor(<a name="Visibility" href="../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> conVis) {
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getImplClassConstructor(<a name="Visibility" href="../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> conVis) {
 <a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		<strong class="jxr_keyword">if</strong> (nn(implClass))
 <a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 			<strong class="jxr_keyword">return</strong> info(implClass).getNoArgConstructor(conVis).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -1118,7 +1118,7 @@
 <a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> <em class="jxr_javadoccomment">	 * 	The method or field  annotated with {@link NameProperty @NameProperty} or &lt;jk&gt;null&lt;/jk&gt; if method does not</em>
 <a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> <em class="jxr_javadoccomment">	 * 	exist.</em>
 <a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 	<strong class="jxr_keyword">public</strong> <a name="Setter" href="../../../org/apache/juneau/common/reflect/Setter.html#Setter">Setter</a> getNameProperty() { <strong class="jxr_keyword">return</strong> namePropertyMethod; }
+<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 	<strong class="jxr_keyword">public</strong> <a name="Setter" href="../../../org/apache/juneau/commons/reflect/Setter.html#Setter">Setter</a> getNameProperty() { <strong class="jxr_keyword">return</strong> namePropertyMethod; }
 <a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 
 <a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> <em class="jxr_javadoccomment">	 * Returns the reason why this class is not a bean, or &lt;jk&gt;null&lt;/jk&gt; if it is a bean.</em>
@@ -1148,7 +1148,7 @@
 <a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> <em class="jxr_javadoccomment">	 * 	The method or field annotated with {@link ParentProperty @ParentProperty} or &lt;jk&gt;null&lt;/jk&gt; if method does not</em>
 <a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> <em class="jxr_javadoccomment">	 * 	exist.</em>
 <a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 	<strong class="jxr_keyword">public</strong> <a name="Setter" href="../../../org/apache/juneau/common/reflect/Setter.html#Setter">Setter</a> getParentProperty() { <strong class="jxr_keyword">return</strong> parentPropertyMethod; }
+<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 	<strong class="jxr_keyword">public</strong> <a name="Setter" href="../../../org/apache/juneau/commons/reflect/Setter.html#Setter">Setter</a> getParentProperty() { <strong class="jxr_keyword">return</strong> parentPropertyMethod; }
 <a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 
 <a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> <em class="jxr_javadoccomment">	 * Returns the default value for primitives such as &lt;jk&gt;int&lt;/jk&gt; or &lt;jk&gt;Integer&lt;/jk&gt;.</em>
@@ -1798,7 +1798,7 @@
 <a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1793" href="#L1793">1793</a> 	<strong class="jxr_keyword">public</strong> T newInstance() <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L1793" href="#L1793">1793</a> 	<strong class="jxr_keyword">public</strong> T newInstance() <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L1794" href="#L1794">1794</a> 		<strong class="jxr_keyword">if</strong> (isArray())
 <a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(getInnerClass().getComponentType(), 0);
 <a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 		<strong class="jxr_keyword">var</strong> c = getConstructor();
@@ -1821,7 +1821,7 @@
 <a class="jxr_linenumber" name="L1813" href="#L1813">1813</a> <em class="jxr_javadoccomment">	 * @return A new instance of the object, or &lt;jk&gt;null&lt;/jk&gt; if there is no no-arg constructor on the object.</em>
 <a class="jxr_linenumber" name="L1814" href="#L1814">1814</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L1815" href="#L1815">1815</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1816" href="#L1816">1816</a> 	<strong class="jxr_keyword">public</strong> T newInstance(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L1816" href="#L1816">1816</a> 	<strong class="jxr_keyword">public</strong> T newInstance(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L1817" href="#L1817">1817</a> 		<strong class="jxr_keyword">if</strong> (isMemberClass)
 <a class="jxr_linenumber" name="L1818" href="#L1818">1818</a> 			<strong class="jxr_keyword">return</strong> noArgConstructor.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L1819" href="#L1819">1819</a> 		<strong class="jxr_keyword">return</strong> newInstance();
@@ -1845,12 +1845,12 @@
 <a class="jxr_linenumber" name="L1837" href="#L1837">1837</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L1838" href="#L1838">1838</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1839" href="#L1839">1839</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L1840" href="#L1840">1840</a> 	<strong class="jxr_keyword">public</strong> T newInstanceFromString(Object <strong class="jxr_keyword">outer</strong>, String arg) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L1840" href="#L1840">1840</a> 	<strong class="jxr_keyword">public</strong> T newInstanceFromString(Object <strong class="jxr_keyword">outer</strong>, String arg) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L1841" href="#L1841">1841</a> 
 <a class="jxr_linenumber" name="L1842" href="#L1842">1842</a> 		<strong class="jxr_keyword">if</strong> (isEnum()) {
 <a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 			<strong class="jxr_keyword">var</strong> t = (T)enumValues.getKey(arg);
 <a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 			<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> &amp;&amp; ! beanContext.isIgnoreUnknownEnumValues())
-<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve enum value ''{0}'' on class ''{1}''"</span>, arg, getInnerClass().getName());
+<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve enum value ''{0}'' on class ''{1}''"</span>, arg, getInnerClass().getName());
 <a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 			<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 		}
 <a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 
@@ -1859,7 +1859,7 @@
 <a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 				<strong class="jxr_keyword">return</strong> (T)m.invoke(<strong class="jxr_keyword">null</strong>, arg);
 <a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-<a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
+<a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
 <a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> 			}
 <a class="jxr_linenumber" name="L1856" href="#L1856">1856</a> 		}
 <a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> 		<strong class="jxr_keyword">var</strong> c = stringConstructor;
@@ -1868,7 +1868,7 @@
 <a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> 				<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>, arg);
 <a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance(arg);
 <a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> 		}
-<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"No string constructor or valueOf(String) method found for class '"</span> + getInnerClass().getName() + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"No string constructor or valueOf(String) method found for class '"</span> + getInnerClass().getName() + <span class="jxr_string">"'"</span>);
 <a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> 	}
 <a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> 
 <a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> 	<em class="jxr_javadoccomment">/**</em>

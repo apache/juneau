@@ -25,13 +25,13 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.BeanMeta.MethodType.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.reflect.AnnotationTraversal.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.reflect.ReflectionUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.PredicateUtils.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.AnnotationTraversal.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.ReflectionUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.PredicateUtils.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.beans.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.io.*;
@@ -40,10 +40,10 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.Visibility;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.Visibility;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.utils.*;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).</em>
@@ -155,7 +155,7 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		String dictionaryName, typePropertyName;
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">boolean</strong> sortProperties, fluentSetters;
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		Builder(ClassMeta&lt;T&gt; classMeta, BeanContext ctx, <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> beanFilter, String[] pNames, <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> implClassConstructor) {
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		Builder(ClassMeta&lt;T&gt; classMeta, BeanContext ctx, <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> beanFilter, String[] pNames, <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> implClassConstructor) {
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">this</strong>.classMeta = classMeta;
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">this</strong>.ctx = ctx;
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">this</strong>.ap = ctx.getAnnotationProvider();
@@ -189,7 +189,7 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_comment">		 * Returns the property name of the specified field if it's a valid property.</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_comment">		 * Returns null if the field isn't a valid property.</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_comment">		 */</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">private</strong> String findPropertyName(<a name="FieldInfo" href="../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> f) {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">private</strong> String findPropertyName(<a name="FieldInfo" href="../../../org/apache/juneau/commons/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> f) {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			List&lt;Beanp&gt; lp = list();
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			List&lt;Name&gt; ln = list();
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			ap.find(Beanp.<strong class="jxr_keyword">class</strong>, f).forEach(x -&gt; lp.add(x.<strong class="jxr_keyword">inner</strong>()));
@@ -524,7 +524,7 @@
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 					properties = properties2;
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 				}
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../org/apache/juneau/commons/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 				<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Exception:  "</span> + getStackTrace(e);
@@ -568,7 +568,7 @@
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">return</strong> name.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 	}
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;Field&gt; findBeanFields(BeanContext ctx, Class&lt;?&gt; c, Class&lt;?&gt; stopClass, <a name="Visibility" href="../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> v) {
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;Field&gt; findBeanFields(BeanContext ctx, Class&lt;?&gt; c, Class&lt;?&gt; stopClass, <a name="Visibility" href="../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> v) {
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> LinkedList&lt;Field&gt;();
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">var</strong> noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 		forEachClass(info(c), stopClass, c2 -&gt; {
@@ -595,7 +595,7 @@
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_comment">	 * @param fixedBeanProps Only include methods whose properties are in this list.</em>
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_comment">	 * @param pn Use this property namer to determine property names from the method names.</em>
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_comment">	 */</em>
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;BeanMethod&gt; findBeanMethods(BeanContext ctx, Class&lt;?&gt; c, Class&lt;?&gt; stopClass, <a name="Visibility" href="../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> v, <a name="PropertyNamer" href="../../../org/apache/juneau/PropertyNamer.html#PropertyNamer">PropertyNamer</a> pn, <strong class="jxr_keyword">boolean</strong> fluentSetters) {
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;BeanMethod&gt; findBeanMethods(BeanContext ctx, Class&lt;?&gt; c, Class&lt;?&gt; stopClass, <a name="Visibility" href="../../../org/apache/juneau/commons/reflect/Visibility.html#Visibility">Visibility</a> v, <a name="PropertyNamer" href="../../../org/apache/juneau/PropertyNamer.html#PropertyNamer">PropertyNamer</a> pn, <strong class="jxr_keyword">boolean</strong> fluentSetters) {
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> LinkedList&lt;BeanMethod&gt;();
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<strong class="jxr_keyword">var</strong> ap = ctx.getAnnotationProvider();
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 
@@ -794,7 +794,7 @@
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">	 * @param lp List to populate with @Beanp annotations (input/output parameter).</em>
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">	 * @param ln List to populate with @Name annotations (input/output parameter).</em>
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> inheritParentAnnotations(BeanContext ctx, <a name="MethodInfo" href="../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method, Class&lt;?&gt; c, Class&lt;?&gt; stopClass, List&lt;Beanp&gt; lp, List&lt;Name&gt; ln) {
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> inheritParentAnnotations(BeanContext ctx, <a name="MethodInfo" href="../../../org/apache/juneau/commons/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method, Class&lt;?&gt; c, Class&lt;?&gt; stopClass, List&lt;Beanp&gt; lp, List&lt;Name&gt; ln) {
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 		<em class="jxr_comment">// If this method already has @Beanp or @Name annotations, don't look for parent annotations</em>
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">if</strong> (! lp.isEmpty() || ! ln.isEmpty())
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">return</strong>;
@@ -863,7 +863,7 @@
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,Class&lt;?&gt;[]&gt; typeVarImpls;
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> 	<em class="jxr_javadoccomment">/** The constructor for this bean. */</em>
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor;
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> constructor;
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> 
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> 	<em class="jxr_javadoccomment">/** For beans with constructors with Beanc annotation, this is the list of constructor arg properties. */</em>
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String[] constructorArgs;
@@ -894,7 +894,7 @@
 <a class="jxr_linenumber" name="L886" href="#L886">886</a> <em class="jxr_javadoccomment">	 * @param pNames Explicit list of property names and order of properties.  If &lt;jk&gt;null&lt;/jk&gt;, determine automatically.</em>
 <a class="jxr_linenumber" name="L887" href="#L887">887</a> <em class="jxr_javadoccomment">	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L888" href="#L888">888</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 	<strong class="jxr_keyword">protected</strong> <a name="BeanMeta" href="../../../org/apache/juneau/BeanMeta.html#BeanMeta">BeanMeta</a>(ClassMeta&lt;T&gt; classMeta, BeanContext ctx, <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> beanFilter, String[] pNames, <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> implClassConstructor) {
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 	<strong class="jxr_keyword">protected</strong> <a name="BeanMeta" href="../../../org/apache/juneau/BeanMeta.html#BeanMeta">BeanMeta</a>(ClassMeta&lt;T&gt; classMeta, BeanContext ctx, <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> beanFilter, String[] pNames, <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> implClassConstructor) {
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> 		<strong class="jxr_keyword">this</strong>.classMeta = classMeta;
 <a class="jxr_linenumber" name="L891" href="#L891">891</a> 		<strong class="jxr_keyword">this</strong>.ctx = ctx;
 <a class="jxr_linenumber" name="L892" href="#L892">892</a> 		<strong class="jxr_keyword">this</strong>.c = classMeta.getInnerClass();
@@ -1052,7 +1052,7 @@
 <a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 	<strong class="jxr_keyword">protected</strong> T newBean(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 	<strong class="jxr_keyword">protected</strong> T newBean(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		<strong class="jxr_keyword">if</strong> (classMeta.isMemberClass()) {
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 			<strong class="jxr_keyword">if</strong> (nn(constructor))
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 				<strong class="jxr_keyword">return</strong> constructor.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>);

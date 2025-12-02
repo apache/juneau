@@ -24,12 +24,12 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.parser;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.io.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.io.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Similar to a {@link java.io.PushbackReader} with a pushback buffer of 1 character.</em>
@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">this</strong>.unbuffered = pipe.unbuffered;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">if</strong> (pipe.isString()) {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			String in = pipe.getInputAsString();
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">this</strong>.r = <strong class="jxr_keyword">new</strong> <a name="CharSequenceReader" href="../../../../org/apache/juneau/common/io/CharSequenceReader.html#CharSequenceReader">CharSequenceReader</a>(in);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">this</strong>.r = <strong class="jxr_keyword">new</strong> <a name="CharSequenceReader" href="../../../../org/apache/juneau/commons/io/CharSequenceReader.html#CharSequenceReader">CharSequenceReader</a>(in);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">this</strong>.buff = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[in.length() &lt; 1024 ? in.length() : 1024];
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			Reader _r = pipe.getReader();

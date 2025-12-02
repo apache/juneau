@@ -25,12 +25,12 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.microservice.jetty;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.reflect.ReflectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.IOUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.ReflectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.IOUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.io.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.net.*;
@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.config.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.config.store.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
@@ -292,12 +292,12 @@
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">public</strong> Builder servlet(Class&lt;? <strong class="jxr_keyword">extends</strong> RestServlet&gt; c) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">public</strong> Builder servlet(Class&lt;? <strong class="jxr_keyword">extends</strong> RestServlet&gt; c) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 			RestServlet rs;
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 				rs = c.getDeclaredConstructor().newInstance();
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 			}
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">return</strong> servlet(rs, '/' + rs.getPath());
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 		}
@@ -313,11 +313,11 @@
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">public</strong> Builder servlet(Class&lt;? <strong class="jxr_keyword">extends</strong> Servlet&gt; c, String path) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">public</strong> Builder servlet(Class&lt;? <strong class="jxr_keyword">extends</strong> Servlet&gt; c, String path) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 				<strong class="jxr_keyword">return</strong> servlet(c.getDeclaredConstructor().newInstance(), path);
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 		}
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 
@@ -545,7 +545,7 @@
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * @throws IOException File could not be read.</em>
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<strong class="jxr_keyword">public</strong> Server createServer() <strong class="jxr_keyword">throws</strong> ParseException, IOException, <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<strong class="jxr_keyword">public</strong> Server createServer() <strong class="jxr_keyword">throws</strong> ParseException, IOException, <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		listener.onCreateServer(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">var</strong> cf = getConfig();
@@ -575,7 +575,7 @@
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 			server = factory.create(jettyXml);
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e2) {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e2);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e2);
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 		}
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : cf.get(<span class="jxr_string">"Jetty/servlets"</span>).asStringArray().orElse(<strong class="jxr_keyword">new</strong> String[0])) {
@@ -588,7 +588,7 @@
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: {0}"</span>, s);
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 				}
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 			} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e1) {
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e1);
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e1);
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 			}
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 		}
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 
@@ -602,7 +602,7 @@
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: {0}"</span>, cn(v));
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 				}
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 			} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e1) {
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e1);
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e1);
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 			}
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 		});
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 

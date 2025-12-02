@@ -24,9 +24,9 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.http.entity;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.IOUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.IOUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.*;
@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.io.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.io.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.*;
@@ -249,7 +249,7 @@
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(OutputStream os) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			os = <strong class="jxr_keyword">new</strong> <a name="NoCloseOutputStream" href="../../../../../org/apache/juneau/common/io/NoCloseOutputStream.html#NoCloseOutputStream">NoCloseOutputStream</a>(os);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			os = <strong class="jxr_keyword">new</strong> <a name="NoCloseOutputStream" href="../../../../../org/apache/juneau/commons/io/NoCloseOutputStream.html#NoCloseOutputStream">NoCloseOutputStream</a>(os);
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 			Object o = contentOrElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">if</strong> (serializer == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 				<strong class="jxr_keyword">try</strong> (Writer w = <strong class="jxr_keyword">new</strong> OutputStreamWriter(os, UTF8)) {

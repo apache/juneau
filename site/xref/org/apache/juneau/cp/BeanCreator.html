@@ -25,16 +25,16 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.cp;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.util.stream.Collectors.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.reflect.ReflectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.reflect.Visibility.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.ReflectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.reflect.Visibility.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Utility class for creating beans through constructors, creator methods, and builders.</em>
@@ -307,13 +307,13 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">if</strong> (type.isInterface()) {
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">if</strong> (silent)
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not instantiate class {0}: {1}."</span>, type.getName(), <span class="jxr_string">"Class is an interface"</span>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not instantiate class {0}: {1}."</span>, type.getName(), <span class="jxr_string">"Class is an interface"</span>);
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		}
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">if</strong> (type.isAbstract()) {
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">if</strong> (silent)
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not instantiate class {0}: {1}."</span>, type.getName(), <span class="jxr_string">"Class is abstract"</span>);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not instantiate class {0}: {1}."</span>, type.getName(), <span class="jxr_string">"Class is abstract"</span>);
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		}
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<em class="jxr_comment">// Look for public constructor.</em>
@@ -366,7 +366,7 @@
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 			msg = <span class="jxr_string">"Protected constructor found but could not find prerequisites: "</span>
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 				+ type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).map(x -&gt; getMissingParams(x)).sorted().collect(joining(<span class="jxr_string">" or "</span>));
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		}
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not instantiate class {0}: {1}."</span>, type.getName(), msg);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not instantiate class {0}: {1}."</span>, type.getName(), msg);
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -410,23 +410,23 @@
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">return</strong> type(value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : value.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">private</strong> String getMissingParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> ei) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">private</strong> String getMissingParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/commons/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> ei) {
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">return</strong> store.getMissingParams(ei);
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 	}
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<strong class="jxr_keyword">private</strong> Object[] getParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> ei) {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<strong class="jxr_keyword">private</strong> Object[] getParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/commons/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> ei) {
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">return</strong> store.getParams(ei);
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> hasAllParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> ei) {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> hasAllParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/commons/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> ei) {
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">return</strong> store.hasAllParams(ei);
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 	}
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isStaticCreateMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m) {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isStaticCreateMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/commons/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m) {
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">return</strong> isStaticCreateMethod(m, type.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 	}
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isStaticCreateMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m, Class&lt;?&gt; type) {
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isStaticCreateMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/commons/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m, Class&lt;?&gt; type) {
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">return</strong> m.isStatic()
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			&amp;&amp; m.isNotDeprecated()
