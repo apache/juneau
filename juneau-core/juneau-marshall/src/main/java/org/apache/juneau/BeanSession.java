@@ -1438,7 +1438,7 @@ public class BeanSession extends ContextSession {
 						return null;
 					else if (from.isString()) {
 						var s = value.toString();
-						if (isJsonArray(s, false)) {
+						if (isProbablyJsonArray(s, false)) {
 							var l2 = JsonList.ofJson(s);
 							l2.setBeanSession(this);
 							l2.forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));

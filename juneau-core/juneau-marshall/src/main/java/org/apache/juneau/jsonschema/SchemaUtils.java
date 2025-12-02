@@ -67,7 +67,7 @@ public class SchemaUtils {
 				return null;
 			if ("IGNORE".equalsIgnoreCase(s))
 				return JsonMap.of("ignore", true);
-			if (! isJsonObject(s, true))
+			if (! isProbablyJsonObject(s, true))
 				s = "{" + s + "}";
 			return JsonMap.ofJson(s);
 		}
@@ -89,7 +89,7 @@ public class SchemaUtils {
 		String s = joinnl(ss);
 		if (s.isEmpty())
 			return null;
-		if (! isJsonObject(s, true))
+		if (! isProbablyJsonObject(s, true))
 			s = "{" + s + "}";
 		return JsonMap.ofJson(s);
 	}

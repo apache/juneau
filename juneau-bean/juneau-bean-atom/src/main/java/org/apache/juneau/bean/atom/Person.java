@@ -195,7 +195,7 @@ public class Person extends Common {
 	 * @return This object.
 	 */
 	public Person setUri(Object value) {
-		this.uri = toURI(value);
+		this.uri = toUri(value);
 		return this;
 	}
 }

@@ -165,7 +165,7 @@ public class Generator extends Common {
 	 * @return This object
 	 */
 	public Generator setUri(Object value) {
-		this.uri = toURI(value);
+		this.uri = toUri(value);
 		return this;
 	}
 

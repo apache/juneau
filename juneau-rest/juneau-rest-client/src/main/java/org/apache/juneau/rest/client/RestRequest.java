@@ -2185,7 +2185,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid URI syntax detected.
 	 */
 	public RestRequest uri(Object uri) throws RestCallException {
-		var x = client.toURI(uri, null);
+		var x = client.toUri(uri, null);
 		if (nn(x.getScheme()))
 			uriBuilder.setScheme(x.getScheme());
 		if (nn(x.getHost()))

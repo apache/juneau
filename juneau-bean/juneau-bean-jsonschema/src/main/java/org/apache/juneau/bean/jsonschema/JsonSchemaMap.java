@@ -84,7 +84,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 */
 	@Override /* Overridden from Map */
 	public JsonSchema get(Object uri) {
-		var u = toURI(uri);
+		var u = toUri(uri);
 		var s = super.get(u);
 		if (nn(s))
 			return s;

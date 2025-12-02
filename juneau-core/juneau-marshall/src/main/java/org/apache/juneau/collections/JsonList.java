@@ -270,7 +270,7 @@ public class JsonList extends LinkedList<Object> {
 	public static JsonList ofJsonOrCdl(String s) throws ParseException {
 		if (Utils.isEmpty(s))  // NOAI
 			return null;
-		if (! isJsonArray(s, true))
+		if (! isProbablyJsonArray(s, true))
 			return new JsonList((Object[])splita(s.trim(), ','));
 		return new JsonList(s);
 	}

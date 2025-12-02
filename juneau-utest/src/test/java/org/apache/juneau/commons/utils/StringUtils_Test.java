@@ -756,12 +756,15 @@ class StringUtils_Test extends TestBase {
 	void a030_diffPosition() {
 		assertEquals(-1, diffPosition("a", "a"));
 		assertEquals(-1, diffPosition(null, null));
+		assertEquals(-1, diffPosition("identical", "identical"));  // Equal length returns -1 (line 1143 true branch)
 		assertEquals(0, diffPosition("a", "b"));
 		assertEquals(1, diffPosition("aa", "ab"));
 		assertEquals(1, diffPosition("aaa", "ab"));
 		assertEquals(1, diffPosition("aa", "abb"));
 		assertEquals(0, diffPosition("a", null));
 		assertEquals(0, diffPosition(null, "b"));
+		assertEquals(3, diffPosition("abc", "abcdef"));  // Equal prefix but different lengths (line 1143 false branch)
+		assertEquals(2, diffPosition("abcd", "ab"));  // Opposite direction length difference
 		// Equal strings of same length - triggers line 1158
 		assertEquals(-1, diffPosition("hello", "hello"));
 		assertEquals(-1, diffPosition("test", "test"));
@@ -1396,6 +1399,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("++x++x++", fixUrl("  x  x  "));
 		assertEquals("foo%7Bbar%7Dbaz", fixUrl("foo{bar}baz"));
 		assertEquals("%7Dfoo%7Bbar%7Dbaz%7B", fixUrl("}foo{bar}baz{"));
+		assertEquals("%E9", fixUrl("é"));  // Non-ASCII character should be percent-encoded
 	}
 
 	//====================================================================================================
@@ -1752,6 +1756,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(1 * h + 30 * m, getDuration("1h 30m"));
 		assertEquals(2 * d + 3 * h + 15 * m, getDuration("2d3h15m"));
 		assertEquals(1 * w + 2 * d + 3 * h, getDuration("1w2d3h"));
+		assertEquals(-1, getDuration("d10"));  // Non-number before unit - covers invalid number branch (line 2438)
 
 		// Months
 		assertEquals(1 * mo, getDuration("1mo"));
@@ -1886,6 +1891,10 @@ class StringUtils_Test extends TestBase {
 		var pattern = getMatchPattern("TEST*", java.util.regex.Pattern.CASE_INSENSITIVE);
 		assertTrue(pattern.matcher("test123").matches());
 		assertTrue(pattern.matcher("TEST123").matches());
+
+		// Null input should return null (line 2549)
+		assertNull(getMatchPattern(null));
+		assertNull(getMatchPattern(null, java.util.regex.Pattern.CASE_INSENSITIVE));
 	}
 
 	//====================================================================================================
@@ -2090,6 +2099,7 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isAbsoluteUri("http1://foo")); // Number after 'http' (not a letter, not ':')
 		assertFalse(isAbsoluteUri("http@://foo")); // '@' after 'http' (not a letter, not ':')
 		assertFalse(isAbsoluteUri("http /://foo")); // Space after 'http' (not a letter, not ':')
+		assertFalse(isAbsoluteUri("http{://foo")); // '{' after 'http' (greater than 'z')
 
 		// State S3: non-slash - triggers line 2863 (else branch)
 		assertFalse(isAbsoluteUri("http:x://foo")); // 'x' instead of '/'
@@ -2395,98 +2405,135 @@ class StringUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// isJson(String)
+	// isProbablyJson(String)
 	//====================================================================================================
 	@Test
-	void a093_isJson() {
+	void a093_isProbablyJson() {
 		// Valid JSON
-		assertTrue(isJson("{}"));
-		assertTrue(isJson("[]"));
-		assertTrue(isJson("'test'"));
-		assertTrue(isJson("true"));
-		assertTrue(isJson("false"));
-		assertTrue(isJson("null"));
-		assertTrue(isJson("123"));
-		assertTrue(isJson("123.45"));
-		assertTrue(isJson("  {}  ")); // With whitespace
-		assertTrue(isJson("  []  ")); // With whitespace
+		assertTrue(isProbablyJson("{}"));
+		assertTrue(isProbablyJson("[]"));
+		assertTrue(isProbablyJson("'test'"));
+		assertTrue(isProbablyJson("true"));
+		assertTrue(isProbablyJson("false"));
+		assertTrue(isProbablyJson("null"));
+		assertTrue(isProbablyJson("123"));
+		assertTrue(isProbablyJson("123.45"));
+		assertTrue(isProbablyJson("  {}  ")); // With whitespace
+		assertTrue(isProbablyJson("  []  ")); // With whitespace
+		// Note: isProbablyJson doesn't support comments (uses firstNonWhitespaceChar, not firstRealCharacter)
+		// Comments are only supported in isProbablyJsonArray and isProbablyJsonObject when ignoreWhitespaceAndComments=true
 
 		// Invalid JSON
-		assertFalse(isJson(null));
-		assertFalse(isJson(""));
-		assertFalse(isJson("abc"));
-		assertFalse(isJson("{"));
-		assertFalse(isJson("}"));
-		assertFalse(isJson("["));
-		assertFalse(isJson("]"));
+		assertFalse(isProbablyJson(null));
+		assertFalse(isProbablyJson(""));
+		assertFalse(isProbablyJson("abc"));
+		assertFalse(isProbablyJson("{"));
+		assertFalse(isProbablyJson("}"));
+		assertFalse(isProbablyJson("["));
+		assertFalse(isProbablyJson("]"));
+		assertFalse(isProbablyJson("'abc"));   // Starts with quote, missing closing quote
+		assertFalse(isProbablyJson("abc'"));   // Ends with quote, missing opening quote
 	}
 
 	//====================================================================================================
-	// isJsonArray(Object,boolean)
+	// isProbablyJsonArray(Object,boolean)
 	//====================================================================================================
 	@Test
-	void a094_isJsonArray() {
+	void a094_isProbablyJsonArray() {
 		// Valid JSON arrays
-		assertTrue(isJsonArray("[]", false));
-		assertTrue(isJsonArray("[1,2,3]", false));
-		assertTrue(isJsonArray("  [1,2,3]  ", true)); // With whitespace
-		assertTrue(isJsonArray("/*comment*/ [1,2,3] /*comment*/", true)); // With comments
+		assertTrue(isProbablyJsonArray("[]", false));
+		assertTrue(isProbablyJsonArray("[1,2,3]", false));
+		assertTrue(isProbablyJsonArray("  [1,2,3]  ", true)); // With whitespace
+		assertTrue(isProbablyJsonArray("/*comment*/ [1,2,3] /*comment*/", true)); // With /* */ comments
+		// Test lines 8282-8287 - // style comments in skipComments
+		// Note: // comments extend to newline or EOF. If no newline, they consume everything to EOF.
+		assertTrue(isProbablyJsonArray("//comment\n [1,2,3]", true)); // With // comment ending in newline
+		// When // comment has no newline, it consumes to EOF, so nothing remains - this is invalid
+		assertFalse(isProbablyJsonArray("//comment [1,2,3]", true)); // With // comment, no newline - consumes everything
+		assertTrue(isProbablyJsonArray("  //comment\n [1,2,3]  ", true)); // With // comment and whitespace
 
 		// Invalid JSON arrays
-		assertFalse(isJsonArray(null, false));
-		assertFalse(isJsonArray("", false));
-		assertFalse(isJsonArray("{}", false));
-		assertFalse(isJsonArray("123", false));
-		assertFalse(isJsonArray("[", false));
-		assertFalse(isJsonArray("]", false));
+		assertFalse(isProbablyJsonArray(null, false));
+		assertFalse(isProbablyJsonArray("", false));
+		assertFalse(isProbablyJsonArray("{}", false));
+		assertFalse(isProbablyJsonArray("123", false));
+		assertFalse(isProbablyJsonArray("[", false));
+		assertFalse(isProbablyJsonArray("]", false));
 
 		// Test with ignoreWhitespaceAndComments=true - triggers lines 3333, 3336, 3338
 		// Line 3333: firstRealCharacter(s) != '['
-		assertFalse(isJsonArray("  {1,2,3}  ", true)); // Starts with '{', not '['
-		assertFalse(isJsonArray("  /*comment*/ {1,2,3}  ", true)); // Starts with '{', not '['
+		assertFalse(isProbablyJsonArray("  {1,2,3}  ", true)); // Starts with '{', not '['
+		assertFalse(isProbablyJsonArray("  /*comment*/ {1,2,3}  ", true)); // Starts with '{', not '['
 
 		// Line 3336: lastIndexOf(']') == -1
-		assertFalse(isJsonArray("  [1,2,3  ", true)); // No closing ']'
-		assertFalse(isJsonArray("  /*comment*/ [1,2,3  ", true)); // No closing ']'
+		assertFalse(isProbablyJsonArray("  [1,2,3  ", true)); // No closing ']'
+		assertFalse(isProbablyJsonArray("  /*comment*/ [1,2,3  ", true)); // No closing ']'
 
 		// Line 3338: firstRealCharacter(s) == -1 (after closing bracket)
-		assertTrue(isJsonArray("  [1,2,3]  ", true)); // Valid, no characters after ']'
-		assertTrue(isJsonArray("  /*comment*/ [1,2,3] /*comment*/  ", true)); // Valid, only comments/whitespace after ']'
-		assertFalse(isJsonArray("  [1,2,3] extra  ", true)); // Invalid, has characters after ']'
-		assertFalse(isJsonArray("  /*comment*/ [1,2,3] extra /*comment*/  ", true)); // Invalid, has characters after ']'
+		assertTrue(isProbablyJsonArray("  [1,2,3]  ", true)); // Valid, no characters after ']'
+		assertTrue(isProbablyJsonArray("  /*comment*/ [1,2,3] /*comment*/  ", true)); // Valid, only comments/whitespace after ']'
+		// Test lines 8282-8287 - // style comments after JSON structure
+		// Test with newline to ensure the code path is covered (lines 8283-8287)
+		// Line 8285: c == '\n' branch
+		assertTrue(isProbablyJsonArray("  [1,2,3] //comment\n  ", true)); // Valid, // comment with newline
+		// Line 8285: c == -1 branch (EOF)
+		// When // comment ends at EOF, it consumes everything, firstRealCharacter returns -1 (no more content)
+		assertTrue(isProbablyJsonArray("  [1,2,3] //comment", true)); // Valid, // comment ending at EOF
+		assertFalse(isProbablyJsonArray("  [1,2,3] extra  ", true)); // Invalid, has characters after ']'
+		assertFalse(isProbablyJsonArray("  /*comment*/ [1,2,3] extra /*comment*/  ", true)); // Invalid, has characters after ']'
 	}
 
 	//====================================================================================================
-	// isJsonObject(Object,boolean)
+	// isProbablyJsonObject(Object,boolean)
 	//====================================================================================================
 	@Test
-	void a095_isJsonObject() {
+	void a095_isProbablyJsonObject() {
 		// Valid JSON objects
-		assertTrue(isJsonObject("{foo:'bar'}", true));
-		assertTrue(isJsonObject(" { foo:'bar' } ", true));
-		assertTrue(isJsonObject("/*foo*/ { foo:'bar' } /*foo*/", true));
-		assertTrue(isJsonObject("{}", false));
-		assertTrue(isJsonObject("{'key':'value'}", false));
+		assertTrue(isProbablyJsonObject("{foo:'bar'}", true));
+		assertTrue(isProbablyJsonObject(" { foo:'bar' } ", true));
+		assertTrue(isProbablyJsonObject("/*foo*/ { foo:'bar' } /*foo*/", true));
+		// Test lines 8282-8287 - // style comments in skipComments (via firstRealCharacter)
+		// Note: // comments extend to newline or EOF. If no newline, they consume everything to EOF.
+		assertTrue(isProbablyJsonObject("//comment\n { foo:'bar' }", true)); // With // comment ending in newline
+		// When // comment has no newline, it consumes to EOF, so nothing remains - this is invalid
+		assertFalse(isProbablyJsonObject("//comment { foo:'bar' }", true)); // With // comment, no newline - consumes everything
+		assertTrue(isProbablyJsonObject("  //comment\n { foo:'bar' }  ", true)); // With // comment and whitespace
+		assertTrue(isProbablyJsonObject("{}", false));
+		assertTrue(isProbablyJsonObject("{'key':'value'}", false));
 
 		// Invalid JSON objects
-		assertFalse(isJsonObject(null, false));
-		assertFalse(isJsonObject("", false));
-		assertFalse(isJsonObject(" { foo:'bar'  ", true));
-		assertFalse(isJsonObject("  foo:'bar' } ", true));
-		assertFalse(isJsonObject("[]", false));
-		assertFalse(isJsonObject("123", false));
+		assertFalse(isProbablyJsonObject(null, false));
+		assertFalse(isProbablyJsonObject("", false));
+		assertFalse(isProbablyJsonObject(" { foo:'bar'  ", true));
+		assertFalse(isProbablyJsonObject("  foo:'bar' } ", true));
+		assertFalse(isProbablyJsonObject("[]", false));
+		assertFalse(isProbablyJsonObject("123", false));
 
-		// Test with ignoreWhitespaceAndComments=false - triggers line 3354
-		assertTrue(isJsonObject("{}", false)); // Simple case
-		assertTrue(isJsonObject("{key:value}", false)); // With content
-		assertFalse(isJsonObject("  {}  ", false)); // Whitespace not ignored
-		assertFalse(isJsonObject("[]", false)); // Not an object
+		// Test with ignoreWhitespaceAndComments=false - triggers line 3333 straight check
+		assertTrue(isProbablyJsonObject("{}", false)); // Simple case
+		assertTrue(isProbablyJsonObject("{key:value}", false)); // With content
+		assertFalse(isProbablyJsonObject("  {}  ", false)); // Whitespace not ignored
+		assertFalse(isProbablyJsonObject("[]", false)); // Not an object
+		assertFalse(isProbablyJsonObject("{", false)); // Missing closing brace
+		assertFalse(isProbablyJsonObject("}", false)); // Missing opening brace
+		assertFalse(isProbablyJsonObject("x", false)); // Does not start/end with braces
 
 		// Test with ignoreWhitespaceAndComments=true - triggers line 3361
-		assertTrue(isJsonObject("  {}  ", true)); // Valid, no characters after '}'
-		assertTrue(isJsonObject("  /*comment*/ {key:value} /*comment*/  ", true)); // Valid, only comments/whitespace after '}'
-		assertFalse(isJsonObject("  {key:value} extra  ", true)); // Invalid, has characters after '}'
-		assertFalse(isJsonObject("  /*comment*/ {key:value} extra /*comment*/  ", true)); // Invalid, has characters after '}'
+		assertTrue(isProbablyJsonObject("  {}  ", true)); // Valid, no characters after '}'
+		assertTrue(isProbablyJsonObject("  /*comment*/ {key:value} /*comment*/  ", true)); // Valid, only comments/whitespace after '}'
+		// Test lines 8282-8287 - // style comments after JSON structure
+		// Test with newline to ensure the code path is covered (lines 8283-8287)
+		// Line 8285: c == '\n' branch
+		assertTrue(isProbablyJsonObject("  {key:value} //comment\n  ", true)); // Valid, // comment with newline
+		// Line 8285: c == -1 branch (EOF)
+		// When // comment ends at EOF, it consumes everything, firstRealCharacter returns -1 (no more content)
+		assertTrue(isProbablyJsonObject("  {key:value} //comment", true)); // Valid, // comment ending at EOF
+		assertFalse(isProbablyJsonObject("  {key:value} extra  ", true)); // Invalid, has characters after '}'
+		assertFalse(isProbablyJsonObject("  /*comment*/ {key:value} extra /*comment*/  ", true)); // Invalid, has characters after '}'
+
+		// Non-CharSequence input should return false (covers final branch)
+		assertFalse(isProbablyJsonObject(123, true));
+		assertFalse(isProbablyJsonObject(new Object(), false));
 	}
 
 	//====================================================================================================
@@ -3018,6 +3065,7 @@ class StringUtils_Test extends TestBase {
 		// Invalid: empty label
 		assertFalse(isValidHostname("example..com"));
 		assertFalse(isValidHostname(".."));
+		assertFalse(isValidHostname(".")); // Single dot splits into labels but should be invalid (labels array with empty strings)
 
 		// Invalid: label starts with hyphen
 		assertFalse(isValidHostname("-example.com"));
@@ -3100,6 +3148,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidIpAddress("192.168.1")); // Invalid IPv4 (too few parts)
 		assertFalse(isValidIpAddress("192.168.1.1.1")); // Invalid IPv4 (too many parts)
 		assertFalse(isValidIpAddress("256.1.1.1")); // Invalid IPv4 (out of range)
+		assertFalse(isValidIpAddress("abc."));
+		assertFalse(isValidIpAddress("192.168.1.1::invalid")); // Contains both '.' and ':' -> skipped IPv4 branch, goes to IPv6 which fails
 
 		// Line 3663: IPv6 check (contains ":")
 		assertTrue(isValidIpAddress("2001:0db8:85a3::8a2e:0370:7334")); // Valid IPv6
@@ -3112,6 +3162,127 @@ class StringUtils_Test extends TestBase {
 		// Line 3673: NumberFormatException catch
 		assertFalse(isValidIpAddress("192.168.abc.1")); // Invalid number format
 		assertFalse(isValidIpAddress("192.168.1.abc")); // Invalid number format
+	}
+
+	//====================================================================================================
+	// isValidIPv6Address(String)
+	//====================================================================================================
+	@Test
+	void a107_isValidIPv6Address() {
+		// Null/empty input
+		assertFalse(isValidIPv6Address(null));
+		assertFalse(isValidIPv6Address(""));
+
+		// Valid IPv6 addresses - full format
+		assertTrue(isValidIPv6Address("2001:0db8:85a3:0000:0000:8a2e:0370:7334"));
+		assertTrue(isValidIPv6Address("2001:0DB8:85A3:0000:0000:8A2E:0370:7334")); // Uppercase
+		assertTrue(isValidIPv6Address("2001:db8:85a3:0:0:8a2e:370:7334")); // Leading zeros omitted
+
+		// Valid IPv6 addresses - compressed format
+		assertTrue(isValidIPv6Address("2001:db8::1")); // Compressed zeros
+		assertTrue(isValidIPv6Address("::1")); // Loopback
+		assertTrue(isValidIPv6Address("::")); // Unspecified
+		assertTrue(isValidIPv6Address("2001:db8:85a3::8a2e:0370:7334")); // Compressed in middle
+		assertTrue(isValidIPv6Address("2001:db8::8a2e:0370:7334")); // Compressed at start
+		assertTrue(isValidIPv6Address("2001:db8:85a3:0000:0000:8a2e::")); // Compressed at end
+
+		// Valid IPv6 addresses - IPv4-mapped
+		assertTrue(isValidIPv6Address("::ffff:192.168.1.1"));
+		assertTrue(isValidIPv6Address("::FFFF:192.168.1.1")); // Uppercase
+		assertTrue(isValidIPv6Address("::192.168.1.1")); // Empty IPv6 part
+
+		// Test line 8008 - starts with single colon (not ::)
+		assertFalse(isValidIPv6Address(":2001:db8::1")); // Starts with single colon
+		assertFalse(isValidIPv6Address(":1")); // Starts with single colon
+
+		// Test line 8010 - ends with single colon (not ::)
+		assertFalse(isValidIPv6Address("2001:db8::1:")); // Ends with single colon
+		assertFalse(isValidIPv6Address("1:")); // Ends with single colon
+
+		// Test line 8014-8039 - IPv4-mapped format
+		// Test line 8017 - lastColon < 0 (no colon before IPv4)
+		assertFalse(isValidIPv6Address("192.168.1.1")); // No colon, just IPv4
+
+		// Test line 8022 - ipv4Parts.length != 4
+		assertFalse(isValidIPv6Address("::ffff:192.168.1")); // Too few IPv4 parts
+		assertFalse(isValidIPv6Address("::ffff:192.168.1.1.1")); // Too many IPv4 parts
+
+		// Test line 8027 - num < 0 or num > 255
+		assertFalse(isValidIPv6Address("::ffff:256.168.1.1")); // IPv4 part > 255
+		assertFalse(isValidIPv6Address("::ffff:192.256.1.1")); // IPv4 part > 255
+		assertFalse(isValidIPv6Address("::ffff:-1.168.1.1")); // IPv4 part < 0 (will fail parse)
+
+		// Test line 8029 - NumberFormatException
+		assertFalse(isValidIPv6Address("::ffff:abc.168.1.1")); // Invalid number format
+		assertFalse(isValidIPv6Address("::ffff:192.abc.1.1")); // Invalid number format
+
+		// Test line 8035 - ipv6Part validation (empty or ::ffff/::FFFF)
+		assertTrue(isValidIPv6Address("::ffff:192.168.1.1")); // Valid ::ffff
+		assertTrue(isValidIPv6Address("::FFFF:192.168.1.1")); // Valid ::FFFF
+		assertTrue(isValidIPv6Address("::192.168.1.1")); // Valid empty IPv6 part
+
+		// Test line 8044-8048 - double colon count > 1
+		assertFalse(isValidIPv6Address("2001::db8::1")); // Multiple ::
+		assertFalse(isValidIPv6Address("::1::")); // Multiple ::
+
+		// Test line 8058 - parts.length > 2 (multiple ::)
+		// Note: This might be caught earlier by doubleColonCount check, but we test it anyway
+		assertFalse(isValidIPv6Address("2001::db8::1")); // Multiple ::
+
+		// Test line 8056-8064 - compressed format validation
+		// Test line 8066 - totalParts > 7 in compressed format
+		// Need a compressed format (with ::) that has more than 7 total parts
+		// Example: 1:2:3:4:5:6:7:8::9 has 8 parts before :: and 1 after = 9 total > 7
+		assertFalse(isValidIPv6Address("1:2:3:4:5:6:7:8::9")); // Too many parts in compressed format (8+1=9 > 7)
+		// Another case: 1:2:3:4:5:6:7::8:9 has 7 parts before :: and 2 after = 9 total > 7
+		assertFalse(isValidIPv6Address("1:2:3:4:5:6:7::8:9")); // Too many parts in compressed format (7+2=9 > 7)
+		// Test line 8068 - totalParts == 0 && !ip.equals("::")
+		// Need both sides of :: to be empty but not exactly "::"
+		// This is tricky - ":::" would have parts = ["", "", ""] which is length 3, not 2
+		// Actually, if we have ":::" and split by "::", we get ["", ":", ""] which is 3 parts, caught at 8058
+		// Let me think... if we have something like "::" with something that makes it not equal "::"
+		// Actually, the check is for when parts.length == 2, so we need exactly 2 parts from split("::")
+		// If both parts are empty, that means the string is "::" which is valid
+		// So this line might be unreachable, but let's test edge cases
+		// Actually wait - if we have ":::" and split by "::", we get ["", ":", ""] = 3 parts
+		// But what if we have something that creates 2 empty parts? That would be "::" itself
+		// So line 8068 might be defensive code that's hard to trigger
+		// Let's test with a case that might trigger it - but it's likely unreachable
+
+		// Test line 8068 - groups.length != 8 (full format, no compression)
+		assertFalse(isValidIPv6Address("2001:db8:85a3:0000:0000:8a2e:0370")); // Too few groups (7)
+		assertFalse(isValidIPv6Address("2001:db8:85a3:0000:0000:8a2e:0370:7334:9999")); // Too many groups (9)
+
+		// Test line 8084 - group.isEmpty() in validation loop
+		// This occurs when a group is empty after splitting by ":" within a section
+		// Note: "2001::db8:85a3" is valid (compressed format) - the empty section from :: is skipped
+		// Empty groups can occur with malformed syntax, but many cases are caught earlier
+		// The validation loop splits by "::" first, then splits each section by ":"
+		// An empty group would occur if we have consecutive single colons within a section
+		// However, such cases are often caught by earlier checks
+		// This line is defensive code that's hard to trigger, but we test edge cases
+		// Note: Triple colons are caught by doubleColonCount check, so they won't reach here
+
+		// Test line 8081 - group.length() > 4
+		assertFalse(isValidIPv6Address("2001:12345:db8::1")); // Group too long (5 hex digits)
+		assertFalse(isValidIPv6Address("2001:abcdef:db8::1")); // Group too long (6 hex digits)
+
+		// Test line 8086 - invalid hex characters
+		assertFalse(isValidIPv6Address("2001:db8g:85a3::1")); // Invalid hex 'g'
+		assertFalse(isValidIPv6Address("2001:db8h:85a3::1")); // Invalid hex 'h'
+		assertFalse(isValidIPv6Address("2001:db8z:85a3::1")); // Invalid hex 'z'
+		assertFalse(isValidIPv6Address("2001:db8G:85a3::1")); // Invalid hex 'G' (should be lowercase or valid)
+		// Actually, uppercase A-F is valid, so G-Z are invalid
+		assertFalse(isValidIPv6Address("2001:db8G:85a3::1")); // Invalid hex 'G'
+		assertFalse(isValidIPv6Address("2001:db8@:85a3::1")); // Invalid character '@'
+		assertFalse(isValidIPv6Address("2001:db8#:85a3::1")); // Invalid character '#'
+
+		// Edge cases
+		assertTrue(isValidIPv6Address("1:2:3:4:5:6:7:8")); // Minimal valid
+		assertTrue(isValidIPv6Address("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff")); // Max values
+		assertTrue(isValidIPv6Address("0:0:0:0:0:0:0:0")); // All zeros
+		assertTrue(isValidIPv6Address("::ffff:0.0.0.0")); // IPv4-mapped with zeros
+		assertTrue(isValidIPv6Address("::ffff:255.255.255.255")); // IPv4-mapped with max values
 	}
 
 	//====================================================================================================
@@ -3242,9 +3413,10 @@ class StringUtils_Test extends TestBase {
 		collection.add("a");
 		collection.add("b");
 		collection.add("c");
-		assertNull(join((Collection<?>)null, ',')); // Line 3825: null check
-		assertEquals("a,b,c", join(collection, ',')); // Lines 3827-3833: iteration
-		assertEquals("a", join(Collections.singletonList("a"), ',')); // Single element
+		assertNull(join((Collection<?>)null, ',')); // Line 3803: null check
+		assertEquals("", join(Collections.emptyList(), ',')); // Empty collection - loop never executes
+		assertEquals("a", join(Collections.singletonList("a"), ',')); // Single element - iter.hasNext() false after first iteration
+		assertEquals("a,b,c", join(collection, ',')); // Lines 3806-3809: iteration with multiple elements
 
 		// join(Collection<?>, String, StringBuilder) - triggers line 3859
 		var sb1 = new StringBuilder("prefix-");
@@ -3780,6 +3952,33 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeGGE);
 		// Second G should become K, not J
 
+		// Line 4402: GH followed by vowels (A, E, I, O, U) - silent GH
+		var codeGHA = metaphone("GHAST"); // GH followed by A
+		assertNotNull(codeGHA);
+		var codeGHE = metaphone("GHETTO"); // GH followed by E
+		assertNotNull(codeGHE);
+		var codeGHI = metaphone("GHILLIE"); // GH followed by I
+		assertNotNull(codeGHI);
+		var codeGHO = metaphone("GHOST"); // GH followed by O
+		assertNotNull(codeGHO);
+		var codeGHU = metaphone("GHOUL"); // GH followed by U
+		assertNotNull(codeGHU);
+
+		// Line 4404: GN followed by E or D - silent GN
+		var codeGNE = metaphone("SIGNE"); // GN followed by E
+		assertNotNull(codeGNE);
+		var codeGND = metaphone("SIGND"); // GN followed by D (test case)
+		assertNotNull(codeGND);
+
+		// Line 4406: G followed by E/I/Y with prev != 'G' - becomes J
+		// Already tested: GE (AGE), GI (GIRAFFE)
+		var codeGY = metaphone("GYM"); // GY with prev != 'G'
+		assertNotNull(codeGY);
+		assertTrue(codeGY.contains("J")); // GY becomes J
+		var codeGY2 = metaphone("AGY"); // GY with prev != 'G' (prev is A)
+		assertNotNull(codeGY2);
+		assertTrue(codeGY2.contains("J")); // GY becomes J
+
 		// Test H handling - triggers line 4437
 		// H between vowels (silent) - both prev and next are vowels (!isVowel(prev) || !isVowel(next) is false)
 		var codeH3 = metaphone("AHOY"); // A-H-O, H between vowels
@@ -3870,6 +4069,12 @@ class StringUtils_Test extends TestBase {
 		assertTrue(naturalCompare("file13.txt", "file12.txt") > 0); // 13 > 12 (same length, digit by digit)
 		assertEquals(0, naturalCompare("file12.txt", "file12.txt")); // 12 == 12 (same length, all digits equal)
 		assertTrue(naturalCompare("file19.txt", "file20.txt") < 0); // 19 < 20 (same length, digit by digit)
+
+		// Test equal numbers followed by more content - triggers lines 4605-4606
+		// When numbers are equal, i1 and i2 are set to end1 and end2, then loop continues
+		assertTrue(naturalCompare("file12abc", "file12def") < 0); // 12 == 12, then compare "abc" < "def"
+		assertTrue(naturalCompare("file12def", "file12abc") > 0); // 12 == 12, then compare "def" > "abc"
+		assertEquals(0, naturalCompare("file12abc", "file12abc")); // 12 == 12, then "abc" == "abc"
 
 		// Test when one string is longer - triggers line 4643
 		assertTrue(naturalCompare("file1", "file10.txt") < 0); // "file1" is shorter
@@ -4056,63 +4261,6 @@ class StringUtils_Test extends TestBase {
 		assertEquals("p*", obfuscate("pa"));
 		assertEquals("p*******", obfuscate("password"));
 		assertEquals("1*****", obfuscate("123456"));
-	}
-
-	//====================================================================================================
-	// optimizeString(String)
-	//====================================================================================================
-	@Test
-	void a139_optimizeString() {
-		// Null/empty input
-		assertNull(optimizeString(null));
-		assertNull(optimizeString("short")); // No suggestions for short strings
-
-		// Large strings should suggest StringBuilder
-		var largeString = "x".repeat(1001);
-		var suggestions = optimizeString(largeString);
-		assertNotNull(suggestions);
-		assertTrue(suggestions.contains("StringBuilder"));
-
-		// Very large strings should suggest compression
-		var veryLargeString = "x".repeat(10001);
-		var suggestions2 = optimizeString(veryLargeString);
-		assertNotNull(suggestions2);
-		assertTrue(suggestions2.contains("compression"));
-
-		// Medium-length strings (10 < length < 100) that are not interned - triggers line 4992
-		// Create a string that is not interned and meets the criteria
-		// Use a unique string that won't be in the string pool
-		var mediumString = new String(new char[50]).replace('\0', 'x'); // Length 50, explicitly not interned
-		var suggestions3 = optimizeString(mediumString);
-		// optimizeString returns null if no suggestions, or a string with suggestions
-		// For medium-length strings that are not interned, it should suggest interning
-		// Note: The string might be interned by the JVM, so we check if suggestions exist
-		if (suggestions3 != null) {
-			assertTrue(suggestions3.contains("interning"));
-		}
-		// If null, the string was already interned, which is fine - the line is still covered by the check
-
-		// Medium-length string that IS interned (should not suggest interning)
-		var internedString = "x".repeat(50).intern();
-		var suggestions4 = optimizeString(internedString);
-		// Should not contain interning suggestion if already interned
-		if (suggestions4 != null) {
-			assertFalse(suggestions4.contains("interning"));
-		}
-
-		// String exactly 10 chars (should not suggest interning)
-		var exactly10 = "x".repeat(10);
-		var suggestions5 = optimizeString(exactly10);
-		if (suggestions5 != null) {
-			assertFalse(suggestions5.contains("interning"));
-		}
-
-		// String exactly 100 chars (should not suggest interning)
-		var exactly100 = "x".repeat(100);
-		var suggestions6 = optimizeString(exactly100);
-		if (suggestions6 != null) {
-			assertFalse(suggestions6.contains("interning"));
-		}
 	}
 
 	//====================================================================================================
@@ -4734,10 +4882,16 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0.0, readabilityScore("..."), 0.0001); // No words extracted
 		assertEquals(0.0, readabilityScore("   "), 0.0001); // Only whitespace
 
-		// Test line 8191 - estimateSyllables with null or empty word (returns 1)
-		// This is tested indirectly through readabilityScore with single-letter words
+		// Test line 7921 - estimateSyllables with null or empty word (returns 1)
+		// Note: This is defensive code. extractWords uses pattern \\w+ which requires at least
+		// one character, so it won't return null or empty strings. However, estimateSyllables
+		// has this check as defensive programming. We test it indirectly by ensuring
+		// readabilityScore handles various inputs without crashing.
 		var scoreSingle = readabilityScore("a");
 		assertTrue(scoreSingle >= 0); // Should handle single letter word
+		// Test with various word patterns to ensure estimateSyllables handles edge cases
+		var scoreMixed = readabilityScore("a b c d e");
+		assertTrue(scoreMixed >= 0 && scoreMixed <= 100);
 
 		// Test sentence endings - triggers line 5743
 		var score1 = readabilityScore("First sentence. Second sentence!");
@@ -5155,10 +5309,56 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 
 	//====================================================================================================
+	// skipComments(StringReader)
+	//====================================================================================================
+	@Test
+	void a178_skipCommentsStringReader() throws IOException {
+		// Test /* */ style comments
+		var r1 = new StringReader("/*comment*/rest");
+		r1.read(); // Read the '/'
+		skipComments(r1);
+		var sb1 = new StringBuilder();
+		int c;
+		while ((c = r1.read()) != -1)
+			sb1.append((char)c);
+		assertEquals("rest", sb1.toString());
+
+		// Test // style comment with newline
+		var r2 = new StringReader("//comment\nrest");
+		r2.read(); // Read the '/'
+		skipComments(r2);
+		var sb2 = new StringBuilder();
+		while ((c = r2.read()) != -1)
+			sb2.append((char)c);
+		assertEquals("rest", sb2.toString());
+
+		// Test // style comment ending at EOF
+		var r3 = new StringReader("//comment");
+		r3.read(); // Read the '/'
+		skipComments(r3);
+		assertEquals(-1, r3.read()); // Should be at EOF
+
+		// Test /* */ comment with no closing (should consume to EOF)
+		var r5 = new StringReader("/*unclosed");
+		r5.read(); // Read the '/'
+		skipComments(r5);
+		assertEquals(-1, r5.read()); // Should be at EOF
+
+		// Test // comment with content after newline
+		var r6 = new StringReader("//comment\nmore//another");
+		r6.read(); // Read the '/'
+		skipComments(r6);
+		var sb6 = new StringBuilder();
+		while ((c = r6.read()) != -1)
+			sb6.append((char)c);
+		assertEquals("more//another", sb6.toString());
+	}
+
+	//====================================================================================================
 	// snakeCase(String)
 	//====================================================================================================
 	@Test
-	void a178_snakeCase() {
+	void a180_snakeCase() {
 		assertNull(snakeCase(null));
 		assertEquals("", snakeCase(""));
 		assertEquals("hello_world", snakeCase("hello world"));
@@ -5184,7 +5384,7 @@ class StringUtils_Test extends TestBase {
 	// sort(String[])
 	//====================================================================================================
 	@Test
-	void a179_sort() {
+	void a181_sort() {
 		assertNull(sort(null));
 		assertList(sort(a()));
 		assertList(sort(a("c", "a", "b")), "a", "b", "c");
@@ -5199,7 +5399,7 @@ class StringUtils_Test extends TestBase {
 	// sortIgnoreCase(String[])
 	//====================================================================================================
 	@Test
-	void a180_sortIgnoreCase() {
+	void a182_sortIgnoreCase() {
 		assertNull(sortIgnoreCase(null));
 		assertList(sortIgnoreCase(a()));
 		assertList(sortIgnoreCase(a("c", "a", "b")), "a", "b", "c");
@@ -5214,7 +5414,7 @@ class StringUtils_Test extends TestBase {
 	// soundex(String)
 	//====================================================================================================
 	@Test
-	void a181_soundex() {
+	void a183_soundex() {
 		// Basic soundex examples
 		var code1 = soundex("Smith");
 		assertNotNull(code1);
@@ -5305,13 +5505,28 @@ class StringUtils_Test extends TestBase {
 		// String with same consecutive codes (code == lastCode, should skip)
 		var code16 = soundex("ABBC"); // A + B(1) + B(1, same) + C(2) = A12 (B skipped)
 		assertEquals("A120", code16);
+
+		// Test line 6253 - loop exits early when result.length() >= 4 (before reaching end of string)
+		// Long string that produces 4 codes early, loop should exit due to result.length() >= 4
+		var code17 = soundex("ABCDEFGHIJKLMNOP"); // A + B(1) + C(2) + D(3) = A123, loop exits early
+		assertEquals("A123", code17);
+		assertEquals(4, code17.length()); // Should be exactly 4, not longer
+
+		// Test line 6253 - loop exits when i >= upper.length() (reached end of string)
+		// Short string that doesn't produce 4 codes, loop exits when reaching end
+		// Test line 6269 - padding loop when result.length() < 4
+		// String that produces 2 codes (needs 2 zeros)
+		var code18 = soundex("AB"); // A + B(1) = A1, needs 2 zeros, loop exits at end of string
+		assertEquals("A100", code18);
+		// String that produces 1 code (needs 3 zeros) - already covered by code12
+		// String that produces 0 codes (needs 4 zeros) - already covered by code13
 	}
 
 	//====================================================================================================
 	// split(...) - All variants
 	//====================================================================================================
 	@Test
-	void a182_split() {
+	void a184_split() {
 		// split(String) - splits on comma
 		assertEquals(Collections.emptyList(), split(null));
 		assertTrue(split("").isEmpty());
@@ -5394,7 +5609,7 @@ class StringUtils_Test extends TestBase {
 	// splita(String[], char)
 	//====================================================================================================
 	@Test
-	void a183_splitaStringArray() {
+	void a185_splitaStringArray() {
 		// Null array - explicitly cast to String[] to disambiguate
 		String[] nullArray = null;
 		assertNull(splita(nullArray, ','));
@@ -5441,7 +5656,7 @@ class StringUtils_Test extends TestBase {
 	// splitMap(String,boolean)
 	//====================================================================================================
 	@Test
-	void a184_splitMap() {
+	void a186_splitMap() {
 		assertString("{a=1}", splitMap("a=1", true));
 		assertString("{a=1,b=2}", splitMap("a=1,b=2", true));
 		assertString("{a=1,b=2}", splitMap(" a = 1 , b = 2 ", true));
@@ -5472,7 +5687,7 @@ class StringUtils_Test extends TestBase {
 	// splitMethodArgs(String)
 	//====================================================================================================
 	@Test
-	void a185_splitMethodArgs() {
+	void a187_splitMethodArgs() {
 		// Basic method argument splitting
 		var args1 = splitMethodArgs("a,b,c");
 		assertEquals(3, args1.length);
@@ -5508,7 +5723,7 @@ class StringUtils_Test extends TestBase {
 	// splitNested(String)
 	//====================================================================================================
 	@Test
-	void a186_splitNested() {
+	void a188_splitNested() {
 		// Basic nested splitting (uses curly braces)
 		var result1 = splitNested("a,b,c");
 		assertEquals(3, result1.size());
@@ -5562,7 +5777,7 @@ class StringUtils_Test extends TestBase {
 	// splitNestedInner(String)
 	//====================================================================================================
 	@Test
-	void a187_splitNestedInner() {
+	void a189_splitNestedInner() {
 		// Basic nested inner splitting (extracts inner content)
 		var result1 = splitNestedInner("a{b}");
 		assertEquals(1, result1.size());
@@ -5625,7 +5840,7 @@ class StringUtils_Test extends TestBase {
 	// splitQuoted(String)
 	//====================================================================================================
 	@Test
-	void a188_splitQuoted() {
+	void a190_splitQuoted() {
 		assertNull(splitQuoted(null));
 		assertEmpty(splitQuoted(""));
 		assertEmpty(splitQuoted(" \t "));
@@ -5669,11 +5884,29 @@ class StringUtils_Test extends TestBase {
 		assertEquals(1, result4.length);
 		assertEquals("'foo\\'bar'", result4[0]); // Quotes kept, escape preserved
 
-		// Test line 7039 - state S4 (non-whitespace token ending with whitespace)
+		// Test line 6772 - state S1: character that is not space, tab, single quote, or double quote
+		// This transitions to state S4
+		// Test starting from whitespace to ensure we're in state S1
+		var result5a = splitQuoted(" abc");
+		assertEquals(1, result5a.length);
+		assertEquals("abc", result5a[0]);
+		// Also test without leading whitespace
+		var result5a2 = splitQuoted("abc");
+		assertEquals(1, result5a2.length);
+		assertEquals("abc", result5a2[0]);
+
+		// Test line 6793 - state S4: encountering space or tab
+		// This adds the token and returns to state S1
 		var result5 = splitQuoted("foo bar");
 		assertEquals(2, result5.length);
 		assertEquals("foo", result5[0]);
 		assertEquals("bar", result5[1]);
+
+		// Test line 6793 - state S4: encountering tab character
+		var result5b = splitQuoted("foo\tbar");
+		assertEquals(2, result5b.length);
+		assertEquals("foo", result5b[0]);
+		assertEquals("bar", result5b[1]);
 
 		// Test line 7048 - unmatched quotes error
 		assertThrows(IllegalArgumentException.class, () -> splitQuoted("'unmatched quote"));
@@ -5686,7 +5919,7 @@ class StringUtils_Test extends TestBase {
 	// startsWith(String,char)
 	//====================================================================================================
 	@Test
-	void a189_startsWith() {
+	void a191_startsWith() {
 		assertFalse(startsWith(null, 'a'));
 		assertFalse(startsWith("", 'a'));
 		assertTrue(startsWith("a", 'a'));
@@ -5700,7 +5933,7 @@ class StringUtils_Test extends TestBase {
 	// startsWithIgnoreCase(String,String)
 	//====================================================================================================
 	@Test
-	void a190_startsWithIgnoreCase() {
+	void a192_startsWithIgnoreCase() {
 		assertTrue(startsWithIgnoreCase("Hello World", "hello"));
 		assertTrue(startsWithIgnoreCase("Hello World", "HELLO"));
 		assertTrue(startsWithIgnoreCase("Hello World", "Hello"));
@@ -5717,7 +5950,7 @@ class StringUtils_Test extends TestBase {
 	// stringSupplier(Supplier<?>)
 	//====================================================================================================
 	@Test
-	void a191_stringSupplier() {
+	void a193_stringSupplier() {
 		var supplier1 = stringSupplier(() -> "test");
 		assertEquals("test", supplier1.get());
 
@@ -5736,7 +5969,7 @@ class StringUtils_Test extends TestBase {
 	// strip(String)
 	//====================================================================================================
 	@Test
-	void a192_strip() {
+	void a194_strip() {
 		assertNull(strip(null));
 		assertEquals("", strip(""));
 		// strip returns the same string if length <= 1
@@ -5753,7 +5986,7 @@ class StringUtils_Test extends TestBase {
 	// stripInvalidHttpHeaderChars(String)
 	//====================================================================================================
 	@Test
-	void a193_stripInvalidHttpHeaderChars() {
+	void a195_stripInvalidHttpHeaderChars() {
 		assertNull(stripInvalidHttpHeaderChars(null));
 		assertEquals("", stripInvalidHttpHeaderChars(""));
 		// Test actual behavior - spaces appear to be removed
@@ -5771,7 +6004,7 @@ class StringUtils_Test extends TestBase {
 	// substringAfter(String,String)
 	//====================================================================================================
 	@Test
-	void a194_substringAfter() {
+	void a196_substringAfter() {
 		assertNull(substringAfter(null, "."));
 		assertEquals("", substringAfter("hello.world", null));
 		assertEquals("world", substringAfter("hello.world", "."));
@@ -5784,7 +6017,7 @@ class StringUtils_Test extends TestBase {
 	// substringBefore(String,String)
 	//====================================================================================================
 	@Test
-	void a195_substringBefore() {
+	void a197_substringBefore() {
 		assertNull(substringBefore(null, "."));
 		assertEquals("hello.world", substringBefore("hello.world", null));
 		assertEquals("hello", substringBefore("hello.world", "."));
@@ -5797,7 +6030,7 @@ class StringUtils_Test extends TestBase {
 	// substringBetween(String,String,String)
 	//====================================================================================================
 	@Test
-	void a196_substringBetween() {
+	void a198_substringBetween() {
 		assertNull(substringBetween(null, "<", ">"));
 		assertNull(substringBetween("<hello>", null, ">"));
 		assertNull(substringBetween("<hello>", "<", null));
@@ -5817,7 +6050,7 @@ class StringUtils_Test extends TestBase {
 	// swapCase(String)
 	//====================================================================================================
 	@Test
-	void a197_swapCase() {
+	void a199_swapCase() {
 		assertNull(swapCase(null));
 		assertEquals("", swapCase(""));
 		assertEquals("hELLO wORLD", swapCase("Hello World"));
@@ -5830,7 +6063,7 @@ class StringUtils_Test extends TestBase {
 	// titleCase(String)
 	//====================================================================================================
 	@Test
-	void a198_titleCase() {
+	void a200_titleCase() {
 		assertNull(titleCase(null));
 		assertEquals("", titleCase(""));
 		assertEquals("Hello World", titleCase("hello world"));
@@ -5843,13 +6076,25 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Test", titleCase("test"));
 		assertEquals("Test", titleCase("TEST"));
 		assertEquals("Hello 123 World", titleCase("hello 123 world"));
+
+		// Test line 7033 - splitWords returns empty list (only separators, no actual words)
+		// Note: digits and punctuation are treated as part of words by splitWords
+		assertEquals("", titleCase("   ")); // Only spaces
+		assertEquals("", titleCase("___")); // Only underscores
+		assertEquals("", titleCase("---")); // Only hyphens
+		assertEquals("", titleCase("\t\t")); // Only tabs
+		assertEquals("", titleCase("   _-  ")); // Only separators
+		// Digits are treated as words, so "123" becomes a word
+		assertEquals("123", titleCase("123")); // Only digits - treated as a word
+		// Punctuation is treated as part of words
+		assertEquals("!@#", titleCase("!@#")); // Only punctuation - treated as a word
 	}
 
 	//====================================================================================================
 	// toCdl(Object)
 	//====================================================================================================
 	@Test
-	void a199_toCdl() {
+	void a201_toCdl() {
 		// Null input
 		assertNull(toCdl(null));
 
@@ -5872,7 +6117,7 @@ class StringUtils_Test extends TestBase {
 	// toHex(byte) and toHex(byte[])
 	//====================================================================================================
 	@Test
-	void a200_toHex() {
+	void a202_toHex() {
 		// toHex(byte)
 		assertEquals("00", toHex((byte)0));
 		assertEquals("FF", toHex((byte)-1));
@@ -5891,7 +6136,7 @@ class StringUtils_Test extends TestBase {
 	// toHex2(int)
 	//====================================================================================================
 	@Test
-	void a201_toHex2() {
+	void a203_toHex2() {
 		// Test zero
 		assertString("00", toHex2(0));
 
@@ -5916,7 +6161,7 @@ class StringUtils_Test extends TestBase {
 	// toHex4(int)
 	//====================================================================================================
 	@Test
-	void a202_toHex4() {
+	void a204_toHex4() {
 		// Test zero
 		assertString("0000", toHex4(0));
 
@@ -5942,7 +6187,7 @@ class StringUtils_Test extends TestBase {
 	// toHex8(long)
 	//====================================================================================================
 	@Test
-	void a203_toHex8() {
+	void a205_toHex8() {
 		// Test zero
 		assertString("00000000", toHex8(0));
 
@@ -5963,7 +6208,7 @@ class StringUtils_Test extends TestBase {
 	// toHex(InputStream)
 	//====================================================================================================
 	@Test
-	void a204_toHexInputStream() throws Exception {
+	void a206_toHexInputStream() throws Exception {
 		// Null input
 		assertNull(toHex((java.io.InputStream)null));
 
@@ -5997,7 +6242,7 @@ class StringUtils_Test extends TestBase {
 	// toIsoDate(Calendar)
 	//====================================================================================================
 	@Test
-	void a205_toIsoDate() {
+	void a207_toIsoDate() {
 		assertNull(toIsoDate(null));
 
 		// Create a calendar for a specific date
@@ -6014,7 +6259,7 @@ class StringUtils_Test extends TestBase {
 	// toIsoDateTime(Calendar)
 	//====================================================================================================
 	@Test
-	void a206_toIsoDateTime() {
+	void a208_toIsoDateTime() {
 		assertNull(toIsoDateTime(null));
 
 		// Create a calendar for a specific date-time
@@ -6032,7 +6277,7 @@ class StringUtils_Test extends TestBase {
 	// toReadableBytes(byte[])
 	//====================================================================================================
 	@Test
-	void a207_toReadableBytes() {
+	void a209_toReadableBytes() {
 		// Test with printable characters
 		var bytes1 = "Hello".getBytes();
 		var result1 = toReadableBytes(bytes1);
@@ -6111,24 +6356,24 @@ class StringUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// toURI(Object)
+	// toUri(Object)
 	//====================================================================================================
 	@Test
-	void a211_toURI() {
+	void a211_toUri() {
 		// Null input
-		assertNull(toURI(null));
+		assertNull(toUri(null));
 
 		// URI input - returns same object
 		var uri1 = java.net.URI.create("http://example.com");
-		assertSame(uri1, toURI(uri1));
+		assertSame(uri1, toUri(uri1));
 
 		// String input
-		var uri2 = toURI("http://example.com");
+		var uri2 = toUri("http://example.com");
 		assertNotNull(uri2);
 		assertEquals("http://example.com", uri2.toString());
 
 		// Invalid URI - should throw exception
-		assertThrows(RuntimeException.class, () -> toURI("not a valid uri"));
+		assertThrows(RuntimeException.class, () -> toUri("not a valid uri"));
 	}
 
 	//====================================================================================================
@@ -6291,28 +6536,36 @@ class StringUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// unEscapeChars(String,AsciiSet)
+	// unescapeChars(String,AsciiSet)
 	//====================================================================================================
 	@Test
-	void a222_unEscapeChars() {
+	void a222_unescapeChars() {
 		var escape = AsciiSet.of("\\,|");
 
-		assertNull(unEscapeChars(null, escape));
-		assertEquals("xxx", unEscapeChars("xxx", escape));
-		assertEquals("x,xx", unEscapeChars("x\\,xx", escape));
-		assertEquals("x\\xx", unEscapeChars("x\\xx", escape));
-		assertEquals("x\\,xx", unEscapeChars("x\\\\,xx", escape));
-		assertEquals("x\\,xx", unEscapeChars("x\\\\\\,xx", escape));
-		assertEquals("\\", unEscapeChars("\\", escape));
-		assertEquals(",", unEscapeChars("\\,", escape));
+		assertNull(unescapeChars(null, escape));
+		assertEquals("xxx", unescapeChars("xxx", escape));
+		assertEquals("x,xx", unescapeChars("x\\,xx", escape));
+		assertEquals("x\\xx", unescapeChars("x\\xx", escape));
+		assertEquals("x\\,xx", unescapeChars("x\\\\,xx", escape));
+		assertEquals("x\\,xx", unescapeChars("x\\\\\\,xx", escape));
+		assertEquals("\\", unescapeChars("\\", escape));
+		assertEquals(",", unescapeChars("\\,", escape));
 
 		// Test line 7743 - double backslash (c2 == '\\')
-		assertEquals("x\\y", unEscapeChars("x\\\\y", escape)); // Double backslash becomes single
-		assertEquals("x\\", unEscapeChars("x\\\\", escape)); // Double backslash at end
-		assertEquals("|", unEscapeChars("\\|", escape));
+		assertEquals("x\\y", unescapeChars("x\\\\y", escape)); // Double backslash becomes single
+		assertEquals("x\\", unescapeChars("x\\\\", escape)); // Double backslash at end
+		assertEquals("|", unescapeChars("\\|", escape));
 
-		escape = AsciiSet.of(",|");
-		assertEquals("x\\\\xx", unEscapeChars("x\\\\xx", escape));
+		// Test line 7493 - double backslash where second backslash is NOT in escaped set
+		// When escape set doesn't include '\', double backslash handling
+		escape = AsciiSet.of(",|"); // Backslash not in escaped set
+		assertEquals("x\\\\xx", unescapeChars("x\\\\xx", escape));
+		// More explicit test: double backslash with a character that's not escaped
+		// When we have "a\\\\b" and '\' is not in escaped set:
+		// - First '\' sees second '\', appends '\' and skips second '\', then appends the second '\' at line 7498
+		// - Second '\' sees 'b', doesn't match, appends the second '\' at line 7498
+		// Result: "a\\\\b" (both backslashes preserved)
+		assertEquals("a\\\\b", unescapeChars("a\\\\b", AsciiSet.of(","))); // '\\' not in escaped set, so line 7493 executes
 	}
 
 	//====================================================================================================
@@ -6432,6 +6685,30 @@ class StringUtils_Test extends TestBase {
 		// No encoding needed - returns as-is
 		assertEquals("Hello", urlEncodeLax("Hello"));
 		assertEquals("test123", urlEncodeLax("test123"));
+
+		// Test line 7656 - ASCII characters (c <= 127) that need encoding
+		// Characters not in URL_UNENCODED_LAX_CHARS and not space
+		var result2 = urlEncodeLax("test#value");
+		assertNotNull(result2);
+		assertTrue(result2.contains("%23")); // # is encoded as %23
+		var result3 = urlEncodeLax("test%value");
+		assertNotNull(result3);
+		assertTrue(result3.contains("%25")); // % is encoded as %25
+		var result4 = urlEncodeLax("test&value");
+		assertNotNull(result4);
+		assertTrue(result4.contains("%26")); // & is encoded as %26
+
+		// Test line 7659 - Non-ASCII characters (c > 127) that need encoding
+		// Unicode characters are encoded using URLEncoder.encode
+		var result5 = urlEncodeLax("testévalue");
+		assertNotNull(result5);
+		assertTrue(result5.contains("%")); // é should be encoded
+		var result6 = urlEncodeLax("test中文");
+		assertNotNull(result6);
+		assertTrue(result6.contains("%")); // Chinese characters should be encoded
+		var result7 = urlEncodeLax("test🎉");
+		assertNotNull(result7);
+		assertTrue(result7.contains("%")); // Emoji should be encoded
 	}
 
 	//====================================================================================================
@@ -6461,19 +6738,28 @@ class StringUtils_Test extends TestBase {
 		var result4 = urlEncodePath("simplepath");
 		assertEquals("simplepath", result4); // No encoding needed, returns as-is
 
-		// Test lines 7967-7971 - UTF-8 surrogate pairs (high surrogate 0xD800-0xDBFF, low surrogate 0xDC00-0xDFFF)
-		// Create a string with surrogate pairs (emoji or other high Unicode characters)
-		// Note: The emoji might be in the valid character set, so let's use a character that definitely needs encoding
-		var highSurrogate = (char)0xD800;
-		var lowSurrogate = (char)0xDC00;
-		var surrogatePair = new String(new char[]{highSurrogate, lowSurrogate});
-		var result5 = urlEncodePath(surrogatePair);
+		// Test lines 7701-7705 - UTF-8 surrogate pairs (high surrogate 0xD800-0xDBFF, low surrogate 0xDC00-0xDFFF)
+		// The surrogate pair handling code is executed when encoding characters that contain surrogate pairs
+		// Use a string that contains a character needing encoding along with surrogate pairs
+		// to ensure the encoding path is taken and surrogate pair handling is executed
+		var emoji = "🎉"; // This contains surrogate pairs
+		var result5 = urlEncodePath(emoji);
 		assertNotNull(result5);
-		// If the surrogate pair is not in the valid character set, it should be encoded
-		// Otherwise, it might be returned as-is
+		// The surrogate pair code (lines 7701-7705) is executed during encoding
+		// Check that the result is different from input (encoding occurred) or contains encoded characters
 		assertTrue(result5.length() > 0);
+		// Also test with a string that combines regular characters with surrogate pairs
+		var result5b = urlEncodePath("test🎉file");
+		assertNotNull(result5b);
+		assertTrue(result5b.length() > 0);
 
-		// Test lines 7985, 7990 - uppercase hex digits (caseDiff applied)
+		// Test lines 7719, 7724 - uppercase hex digits (caseDiff applied)
+		// forDigit returns lowercase 'a'-'f' for hex digits 10-15, which need to be converted to uppercase
+		// We need characters that produce bytes with hex values containing a-f
+		// For example, byte 0x0A produces hex "a", byte 0x0B produces "b", etc.
+		// Use characters that when UTF-8 encoded produce bytes with values 0x0A-0x0F
+		// Actually, any non-ASCII character will produce multi-byte UTF-8 encoding
+		// Let's use a character that produces bytes with hex digits a-f
 		var result6 = urlEncodePath("test@file");
 		assertNotNull(result6);
 		// Check that hex digits are uppercase (A-F, not a-f)
@@ -6487,6 +6773,20 @@ class StringUtils_Test extends TestBase {
 			foundHex = true;
 			var hex = matcher.group(1);
 			// Verify it's uppercase (caseDiff converts lowercase to uppercase)
+			assertEquals(hex.toUpperCase(), hex);
+		}
+		// Test with a character that produces bytes with hex digits a-f
+		// Use a character that when UTF-8 encoded produces bytes with values that result in lowercase hex
+		// For example, characters that produce bytes 0x0A-0x0F, 0x1A-0x1F, etc.
+		// Chinese character or other multi-byte UTF-8 character should work
+		var result7 = urlEncodePath("test中文");
+		assertNotNull(result7);
+		assertTrue(result7.contains("%"));
+		// Verify hex digits are uppercase
+		var matcher2 = hexPattern.matcher(result7);
+		while (matcher2.find()) {
+			var hex = matcher2.group(1);
+			// Verify it's uppercase (lines 7719 and 7724 convert lowercase to uppercase)
 			assertEquals(hex.toUpperCase(), hex);
 		}
 		// If we found hex sequences, verify they're uppercase
@@ -6552,18 +6852,48 @@ class StringUtils_Test extends TestBase {
 		var result1 = wrap("line1\n\nline2", 10, "\n");
 		assertTrue(result1.contains("\n\n")); // Empty line preserved
 
-		// Test line 8108 - empty word skipping (word.isEmpty())
-		var result2 = wrap("word1  word2", 10, "\n"); // Multiple spaces create empty words
+		// Test line 7842 - empty word skipping (word.isEmpty())
+		// Multiple spaces create empty words that should be skipped
+		var result2 = wrap("word1  word2", 10, "\n");
 		assertTrue(result2.contains("word1"));
 		assertTrue(result2.contains("word2"));
+		// Test with multiple consecutive spaces
+		var result2b = wrap("a   b   c", 10, "\n");
+		assertTrue(result2b.contains("a"));
+		assertTrue(result2b.contains("b"));
+		assertTrue(result2b.contains("c"));
 
-		// Test lines 8117-8131 - word breaking when wordLength > wrapLength && words.length > 1
+		// Test lines 7853-7865 - word breaking when wordLength > wrapLength && words.length > 1
+		// This tests breaking a long word when it's the first word on a line
+		// Line 7853: result.length() > 0 (result already has content)
+		// Lines 7856-7865: while loop that breaks word into chunks
+		//   Line 7857: wordPos > 0 (not first iteration)
+		//   Line 7860: remaining <= wrapLength (remaining fits)
+		//   Line 7861: append remaining
+		//   Line 7862: break
+		//   Line 7864: append chunk
+		//   Line 7865: advance position
 		var result3 = wrap("short verylongword here", 5, "\n");
 		assertFalse(result3.contains("verylongword")); // Word should be split into chunks
 		for (var line : result3.split("\n")) {
 			if (! line.isEmpty())
 				assertTrue(line.length() <= 5);
 		}
+		// Test with result already having content (line 7853: result.length() > 0)
+		// After a previous line, a long word that needs breaking as first word on new line
+		// This happens when a previous line was completed and we start a new line
+		var result3b = wrap("first\nverylongword here", 5, "\n");
+		// After "first\n", "verylongword" is the first word on the new line and needs breaking
+		assertTrue(result3b.contains("first"));
+		assertFalse(result3b.contains("verylongword")); // Long word should be broken
+		// Test word that breaks into multiple chunks (covers lines 7857, 7864, 7865)
+		// Word length 15, wrapLength 5 -> 3 chunks of 5, 5, 5
+		// This tests: wordPos > 0 (line 7857), append chunk (line 7864), advance position (line 7865)
+		// And: remaining <= wrapLength (line 7860), append remaining (line 7861), break (line 7862)
+		var result3c = wrap("abcdefghijklmno here", 5, "\n");
+		assertTrue(result3c.contains("abcde")); // First chunk (wordPos == 0, no newline before)
+		assertTrue(result3c.contains("fghij")); // Second chunk (wordPos > 0, newline before, line 7857)
+		assertTrue(result3c.contains("klmno")); // Third chunk (remaining <= wrapLength, line 7860-7862)
 
 		// Test lines 8149-8162 - word breaking in else branch (when current line doesn't fit)
 		var result4 = wrap("short word verylongword here", 10, "\n");

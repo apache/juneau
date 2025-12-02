@@ -130,7 +130,7 @@ public class Icon extends Common {
 	 * @return This object
 	 */
 	public Icon setUri(Object value) {
-		this.uri = toURI(value);
+		this.uri = toUri(value);
 		return this;
 	}
 }

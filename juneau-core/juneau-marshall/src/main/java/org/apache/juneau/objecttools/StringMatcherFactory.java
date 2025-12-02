@@ -84,10 +84,10 @@ public class StringMatcherFactory extends MatcherFactory {
 					}
 
 					if (c0 == '\'') {
-						s = unEscapeChars(strip(s), SQ_CHAR);
+						s = unescapeChars(strip(s), SQ_CHAR);
 						ignoreCase = true;
 					} else if (c0 == '"') {
-						s = unEscapeChars(strip(s), DQ_CHAR);
+						s = unescapeChars(strip(s), DQ_CHAR);
 					}
 
 					if (REGEX_CHARS.contains(s) || META_CHARS.contains(s)) {

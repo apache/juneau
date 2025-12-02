@@ -145,7 +145,7 @@ public class License extends OpenApiElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "name" -> setName(s(value));
-			case "url" -> setUrl(toURI(value));
+			case "url" -> setUrl(toUri(value));
 			default -> {
 				super.set(property, value);
 				yield this;

@@ -613,7 +613,7 @@ public class BasicSwaggerProviderSession {
 			return;
 
 		var example = (Object)null;
-		if (isJson(sex)) {
+		if (isProbablyJson(sex)) {
 			example = jp.parse(sex, type);
 		} else {
 			var cm = js.getClassMeta(type);
@@ -937,7 +937,7 @@ public class BasicSwaggerProviderSession {
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
-			if (! isJsonArray(s, true))
+			if (! isProbablyJsonArray(s, true))
 				s = "[" + s + "]";
 			return JsonList.ofJson(s);
 		} catch (ParseException e) {
@@ -970,7 +970,7 @@ public class BasicSwaggerProviderSession {
 			o2 = resolve(o2);
 			if ("IGNORE".equalsIgnoreCase(o2))
 				return JsonMap.of("ignore", true);
-			if (! isJsonObject(o2, true))
+			if (! isProbablyJsonObject(o2, true))
 				o2 = "{" + o2 + "}";
 			return JsonMap.ofJson(o2);
 		}
@@ -1104,7 +1104,7 @@ public class BasicSwaggerProviderSession {
 		var s = joinnl(ss);
 		if (s.isEmpty())
 			return null;
-		if (! isJsonObject(s, true))
+		if (! isProbablyJsonObject(s, true))
 			s = "{" + s + "}";
 		s = resolve(s);
 		return JsonMap.ofJson(s);

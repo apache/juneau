@@ -59,6 +59,9 @@ public class StringUtils {
 	/** Digits 0-9 represented as an {@link AsciiSet}. */
 	public static final AsciiSet DECIMAL_CHARS = AsciiSet.of("0123456789");
 
+	/** Digits 0-9 represented as an {@link AsciiSet}. */
+	public static final AsciiSet DIGIT = AsciiSet.of("0123456789");
+
 	/** Zero-length string constant. */
 	public static final String EMPTY = "";
 
@@ -70,6 +73,15 @@ public class StringUtils {
 
 	/** Characters allowed in HTTP headers (including quoted strings and comments). */
 	public static final AsciiSet HTTP_HEADER_CHARS = AsciiSet.create().chars("\t -").ranges("!-[","]-}").build();
+
+	/** Letters a-z and A-Z represented as an {@link AsciiSet}. */
+	public static final AsciiSet LETTER = AsciiSet.create().ranges("a-z", "A-Z").build();
+
+	/** Lowercase letters a-z represented as an {@link AsciiSet}. */
+	public static final AsciiSet LETTER_LC = AsciiSet.create().range('a', 'z').build();
+
+	/** Uppercase letters A-Z represented as an {@link AsciiSet}. */
+	public static final AsciiSet LETTER_UC = AsciiSet.create().range('A', 'Z').build();
 
 	/** Characters escaped when parsing key/value pairs. */
 	public static final AsciiSet MAP_ESCAPE_SET = AsciiSet.of(",=\\");
@@ -107,6 +119,9 @@ public class StringUtils {
 	/** Extended set of characters that are typically safe to leave unencoded. */
 	public static final AsciiSet URL_UNENCODED_LAX_CHARS = URL_UNENCODED_CHARS.copy().chars(":@$,").chars("{}|\\^[]`").build();
 
+	/** Vowel characters a, e, i, o, u (both uppercase and lowercase) represented as an {@link AsciiSet}. */
+	public static final AsciiSet VOWEL = AsciiSet.of("aeiouAEIOU");
+
 	/**
 	 * All standard whitespace characters (space, tab, newline, carriage return, form feed, vertical tab).
 	 */
@@ -136,8 +151,6 @@ public class StringUtils {
 	);
 
 	static final Map<Character,AsciiSet> ESCAPE_SETS = new ConcurrentHashMap<>();
-
-	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
 	private static final List<Readifier> READIFIERS = loadReadifiers();
 	private static final Cache<Class<?>,Function<Object,String>> READIFIER_CACHE = Cache.<Class<?>,Function<Object,String>>create().weak().build();
@@ -304,8 +317,7 @@ public class StringUtils {
 	 * @return The word with 'a' or 'an' prepended.
 	 */
 	public static String articlized(String subject) {
-		var vowels = AsciiSet.of("AEIOUaeiou");
-		return (vowels.contains(subject.charAt(0)) ? "an " : "a ") + subject;
+		return (VOWEL.contains(subject.charAt(0)) ? "an " : "a ") + subject;
 	}
 
 	/**
@@ -1140,7 +1152,7 @@ public class StringUtils {
 				return i;
 			i++;
 		}
-		if (i == len && s1.length() == s2.length())
+		if (eq(s1.length(), s2.length()))
 			return -1;
 		return i;
 	}
@@ -1176,7 +1188,7 @@ public class StringUtils {
 				return i;
 			i++;
 		}
-		if (i == len && s1.length() == s2.length())
+		if (eq(s1.length(), s2.length()))
 			return -1;
 		return i;
 	}
@@ -1227,13 +1239,11 @@ public class StringUtils {
 		// For simplicity, return the same code for both primary and alternate
 		// A full Double Metaphone implementation would be much more complex
 		var primary = metaphone(str);
-		if (primary == null)
-			return null;
 
 		// Generate alternate code (simplified - full implementation would have different rules)
 		var alternate = primary;
 
-		return new String[] { primary, alternate };
+		return a(primary, alternate);
 	}
 
 	/**
@@ -1417,8 +1427,6 @@ public class StringUtils {
 			return 0.0;
 
 		var length = str.length();
-		if (length == 0)
-			return 0.0;
 
 		// Count character frequencies
 		var charCounts = new int[Character.MAX_VALUE + 1];
@@ -2028,7 +2036,7 @@ public class StringUtils {
 
 		for (var i = 0; i < in.length(); i++) {
 			var c = in.charAt(i);
-			if (c <= 127 && ! URI_CHARS.contains(c)) {
+			if (! URI_CHARS.contains(c)) {
 				sb = append(sb, in.substring(m, i));
 				if (c == ' ')
 					sb.append("+");
@@ -2337,14 +2345,14 @@ public class StringUtils {
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			if (state == S1) {
-				if (c >= 'a' && c <= 'z')
+				if (isLowerCaseLetter(c))
 					state = S2;
 				else
 					return s;
 			} else if (state == S2) {
 				if (c == ':')
 					state = S3;
-				else if (c < 'a' || c > 'z')
+				else if (! isLowerCaseLetter(c))
 					return s;
 			} else if (state == S3) {  // NOSONAR - False positive.
 				if (c == '/')
@@ -2361,7 +2369,7 @@ public class StringUtils {
 					state = S6;
 				else
 					return s;
-			} else if (state == S6) {
+			} else /* state == S6 */ {
 				if (c == '/')  // NOSONAR - Intentional.
 					return s.substring(0, i);
 			}
@@ -2423,8 +2431,6 @@ public class StringUtils {
 			// Skip whitespace
 			while (i < len && Character.isWhitespace(s.charAt(i)))
 				i++;
-			if (i >= len)
-				break;
 
 			// Parse number (including decimal)
 			var numStart = i;
@@ -2455,7 +2461,7 @@ public class StringUtils {
 
 		// Parse unit (read all letters until we hit a digit or whitespace)
 		var unitStart = i;
-		while (i < len && Character.isLetter(s.charAt(i)))
+		while (i < len && LETTER.contains(s.charAt(i)))
 			i++;
 		var unit = s.substring(unitStart, i).trim().toLowerCase();
 
@@ -2838,14 +2844,14 @@ public class StringUtils {
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			if (state == S1) {
-				if (c >= 'a' && c <= 'z')
+				if (isLowerCaseLetter(c))
 					state = S2;
 				else
 					return false;
 			} else if (state == S2) {
 				if (c == ':')
 					state = S3;
-				else if (c < 'a' || c > 'z')
+				else if (! isLowerCaseLetter(c))
 					return false;
 			} else if (state == S3) {  // NOSONAR - False positive.
 				if (c == '/')
@@ -2857,7 +2863,7 @@ public class StringUtils {
 					state = S5;
 				else
 					return false;
-			} else if (state == S5) {
+			} else /* state == S5 */ {
 				return true;
 			}
 		}
@@ -2948,7 +2954,7 @@ public class StringUtils {
 		if (isEmpty(str))
 			return false;
 		for (var i = 0; i < str.length(); i++) {
-			if (! Character.isLetter(str.charAt(i)))
+			if (! LETTER.contains(str.charAt(i)))
 				return false;
 		}
 		return true;
@@ -2974,7 +2980,7 @@ public class StringUtils {
 		if (isEmpty(str))
 			return false;
 		for (var i = 0; i < str.length(); i++) {
-			if (! Character.isLetterOrDigit(str.charAt(i)))
+			if (! (LETTER.contains(str.charAt(i)) || DIGIT.contains(str.charAt(i))))
 				return false;
 		}
 		return true;
@@ -3169,7 +3175,7 @@ public class StringUtils {
 		if (isEmpty(str))
 			return false;
 		for (var i = 0; i < str.length(); i++) {
-			if (! Character.isDigit(str.charAt(i)))
+			if (! DIGIT.contains(str.charAt(i)))
 				return false;
 		}
 		return true;
@@ -3283,16 +3289,17 @@ public class StringUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified string is valid JSON.
+	 * Returns <jk>true</jk> if the specified string appears to be valid JSON.
 	 *
 	 * <p>
+	 * This method performs a simple heuristic check and does not strictly validate JSON syntax.
 	 * Leading and trailing spaces are ignored.
 	 * <br>Leading and trailing comments are not allowed.
 	 *
 	 * @param s The string to test.
-	 * @return <jk>true</jk> if the specified string is valid JSON.
+	 * @return <jk>true</jk> if the specified string appears to be valid JSON.
 	 */
-	public static boolean isJson(String s) {
+	public static boolean isProbablyJson(String s) {
 		if (s == null)
 			return false;
 		var c1 = firstNonWhitespaceChar(s);
@@ -3303,13 +3310,16 @@ public class StringUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified string appears to be an JSON array.
+	 * Returns <jk>true</jk> if the specified string appears to be a JSON array.
+	 *
+	 * <p>
+	 * This method performs a simple heuristic check and does not strictly validate JSON syntax.
 	 *
 	 * @param o The object to test.
 	 * @param ignoreWhitespaceAndComments If <jk>true</jk>, leading and trailing whitespace and comments will be ignored.
 	 * @return <jk>true</jk> if the specified string appears to be a JSON array.
 	 */
-	public static boolean isJsonArray(Object o, boolean ignoreWhitespaceAndComments) {
+	public static boolean isProbablyJsonArray(Object o, boolean ignoreWhitespaceAndComments) {
 		if (o instanceof CharSequence o2) {
 			var s = o2.toString();
 			if (! ignoreWhitespaceAndComments)
@@ -3328,11 +3338,14 @@ public class StringUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified string appears to be a JSON object.
 	 *
+	 * <p>
+	 * This method performs a simple heuristic check and does not strictly validate JSON syntax.
+	 *
 	 * @param o The object to test.
 	 * @param ignoreWhitespaceAndComments If <jk>true</jk>, leading and trailing whitespace and comments will be ignored.
 	 * @return <jk>true</jk> if the specified string appears to be a JSON object.
 	 */
-	public static boolean isJsonObject(Object o, boolean ignoreWhitespaceAndComments) {
+	public static boolean isProbablyJsonObject(Object o, boolean ignoreWhitespaceAndComments) {
 		if (o instanceof CharSequence o2) {
 			var s = o2.toString();
 			if (! ignoreWhitespaceAndComments)
@@ -3494,25 +3507,33 @@ public class StringUtils {
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			if (state == S1) {
-				if (c >= 'a' && c <= 'z')
+				if (isLowerCaseLetter(c))
 					state = S2;
 				else
 					return false;
 			} else if (state == S2) {
-				if (c >= 'a' && c <= 'z')
+				if (isLowerCaseLetter(c))
 					state = S3;
 				else
 					return false;
 			} else if (state == S3) {  // NOSONAR - False positive.
 				if (c == ':')
 					state = S4;
-				else if (c < 'a' || c > 'z')
+				else if (! isLowerCaseLetter(c))
 					return false;
-			} else if (state == S4) {
+			} else /* state == S4 */ {
 				return c == '/';
 			}
 		}
 		return false;
+	}
+
+	private static boolean isLowerCaseLetter(char c) {
+		if (c < 'a')
+			return false;
+		if (c > 'z')
+			return false;
+		return true;
 	}
 
 	/**
@@ -3584,10 +3605,6 @@ public class StringUtils {
 
 		// Split by dots (use -1 to preserve trailing empty strings)
 		var labels = hostname.split("\\.", -1);
-
-		// Must have at least one label
-		if (labels.length == 0)
-			return false;
 
 		// Check each label
 		for (var label : labels) {
@@ -4460,10 +4477,8 @@ public class StringUtils {
 						result.append(c);
 					break;
 				case 'X':
-					if (i == 0)
-						result.append('S');
-					else
-						result.append("KS");
+					// X at start is handled in initial section (line 4346-4348), so i is never 0 here
+					result.append("KS");
 					break;
 				case 'Z':
 					result.append('S');
@@ -4577,7 +4592,7 @@ public class StringUtils {
 			var c2 = str2.charAt(i2);
 
 			// If both are digits, compare numerically
-			if (Character.isDigit(c1) && Character.isDigit(c2)) {
+			if (DIGIT.contains(c1) && DIGIT.contains(c2)) {
 				// Skip leading zeros
 				while (i1 < len1 && str1.charAt(i1) == '0')
 					i1++;
@@ -4587,9 +4602,9 @@ public class StringUtils {
 				// Find end of number sequences
 				var end1 = i1;
 				var end2 = i2;
-				while (end1 < len1 && Character.isDigit(str1.charAt(end1)))
+				while (end1 < len1 && DIGIT.contains(str1.charAt(end1)))
 					end1++;
-				while (end2 < len2 && Character.isDigit(str2.charAt(end2)))
+				while (end2 < len2 && DIGIT.contains(str2.charAt(end2)))
 					end2++;
 
 				// Compare lengths first (longer number is larger)
@@ -4925,64 +4940,6 @@ public class StringUtils {
 		return s.substring(0, 1) + s.substring(1).replaceAll(".", "*");  // NOSONAR
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// String validation methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Provides optimization suggestions for a string based on its characteristics.
-	 *
-	 * <p>
-	 * Returns <jk>null</jk> if the input string is <jk>null</jk> or if no optimizations are suggested.
-	 * Returns a string containing optimization suggestions separated by newlines.
-	 *
-	 * <h5 class='section'>Optimization Suggestions:</h5>
-	 * <ul>
-	 *   <li><b>Large strings:</b> Suggests using StringBuilder for concatenation</li>
-	 *   <li><b>Frequently used strings:</b> Suggests interning</li>
-	 *   <li><b>Character manipulation:</b> Suggests using char[] for intensive operations</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	optimizeString(<jk>null</jk>);                    <jc>// Returns: null</jc>
-	 * 	optimizeString(<js>"short"</js>);                 <jc>// Returns: null (no suggestions)</jc>
-	 * 	optimizeString(<js>"very long string..."</js>);   <jc>// Returns: suggestions for large strings</jc>
-	 * </p>
-	 *
-	 * @param str The string to analyze. Can be <jk>null</jk>.
-	 * @return A string with optimization suggestions, or <jk>null</jk> if no suggestions or input was <jk>null</jk>.
-	 */
-	public static String optimizeString(String str) {
-		if (str == null)
-			return null;
-
-		var suggestions = new ArrayList<String>();
-		var length = str.length();
-
-		// Suggest StringBuilder for large strings or frequent concatenation scenarios
-		if (length > 1000) {
-			suggestions.add("Consider using StringBuilder for concatenation operations");
-		}
-
-		// Suggest interning for medium-length strings that might be repeated
-		if (length > 10 && length < 100 && ! isInterned(str)) {
-			suggestions.add("Consider interning if this string is used frequently");
-		}
-
-		// Suggest char[] for intensive character manipulation
-		if (length > 100) {
-			suggestions.add("For intensive character manipulation, consider using char[]");
-		}
-
-		// Suggest compression for very large strings
-		if (length > 10000) {
-			suggestions.add("For very large strings, consider compression if storage is a concern");
-		}
-
-		return suggestions.isEmpty() ? null : String.join(NEWLINE, suggestions);
-	}
-
 	/**
 	 * Converts a number to its ordinal form (1st, 2nd, 3rd, 4th, etc.).
 	 *
@@ -5167,10 +5124,6 @@ public class StringUtils {
 			return Integer.decode(s);
 		return Integer.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR - NPE not possible here.
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// String manipulation methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Parses an ISO8601 string into a calendar.
@@ -5685,10 +5638,6 @@ public class StringUtils {
 		return sb.toString();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// String joining and splitting methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Calculates a simple readability score for a string.
 	 *
@@ -5746,10 +5695,6 @@ public class StringUtils {
 		// Clamp to 0-100 range
 		return Math.max(0.0, Math.min(100.0, score));
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// String cleaning and sanitization methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts an arbitrary object to a readable string format suitable for debugging and testing.
@@ -6193,8 +6138,6 @@ public class StringUtils {
 			return 1.0;
 
 		var maxLen = Math.max(str1.length(), str2.length());
-		if (maxLen == 0)
-			return 1.0;
 
 		var distance = levenshteinDistance(str1, str2);
 		return 1.0 - ((double)distance / maxLen);
@@ -6411,7 +6354,7 @@ public class StringUtils {
 				escapeCount++;
 			else if (s.charAt(i) == c && escapeCount % 2 == 0) {
 				var s2 = s.substring(x1, i);
-				var s3 = unEscapeChars(s2, escapeChars);
+				var s3 = unescapeChars(s2, escapeChars);
 				consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
 				x1 = i + 1;
 			}
@@ -6419,7 +6362,7 @@ public class StringUtils {
 				escapeCount = 0;
 		}
 		var s2 = s.substring(x1);
-		var s3 = unEscapeChars(s2, escapeChars);
+		var s3 = unescapeChars(s2, escapeChars);
 		consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
 	}
 
@@ -6452,7 +6395,7 @@ public class StringUtils {
 				escapeCount++;
 			else if (sArray[i] == c && escapeCount % 2 == 0) {
 				var s2 = new String(sArray, x1, i - x1);
-				var s3 = unEscapeChars(s2, escapeChars);
+				var s3 = unescapeChars(s2, escapeChars);
 				l.add(s3.trim());
 				limit--;
 				x1 = i + 1;
@@ -6461,7 +6404,7 @@ public class StringUtils {
 				escapeCount = 0;
 		}
 		var s2 = new String(sArray, x1, sArray.length - x1);
-		var s3 = unEscapeChars(s2, escapeChars);
+		var s3 = unescapeChars(s2, escapeChars);
 		l.add(s3.trim());
 
 		return l;
@@ -6589,24 +6532,24 @@ public class StringUtils {
 						key = s.substring(x1, i);
 						if (trim)
 							key = trim(key);
-						key = unEscapeChars(key, MAP_ESCAPE_SET);
+						key = unescapeChars(key, MAP_ESCAPE_SET);
 						state = S2;
 						x1 = i + 1;
 					} else if (c == ',') {
 						key = s.substring(x1, i);
 						if (trim)
 							key = trim(key);
-						key = unEscapeChars(key, MAP_ESCAPE_SET);
+						key = unescapeChars(key, MAP_ESCAPE_SET);
 						m.put(key, "");
 						state = S1;
 						x1 = i + 1;
 					}
-				} else if (state == S2) {
+				} else /* state == S2 */ {
 					if (c == ',') {  // NOSONAR - Intentional.
 						var val = s.substring(x1, i);
 						if (trim)
 							val = trim(val);
-						val = unEscapeChars(val, MAP_ESCAPE_SET);
+						val = unescapeChars(val, MAP_ESCAPE_SET);
 						m.put(key, val);
 						key = null;
 						x1 = i + 1;
@@ -6705,12 +6648,12 @@ public class StringUtils {
 				} else if (c == '}') {
 					depthCount--;
 				} else if (c == ',' && depthCount == 0) {
-					l.add(trim(unEscapeChars(s.substring(x1, i), escapeChars)));
+					l.add(trim(unescapeChars(s.substring(x1, i), escapeChars)));
 					x1 = i + 1;
 				}
 			}
 		}
-		l.add(trim(unEscapeChars(s.substring(x1, s.length()), escapeChars)));
+		l.add(trim(unescapeChars(s.substring(x1, s.length()), escapeChars)));
 
 		return l;
 	}
@@ -6857,7 +6800,7 @@ public class StringUtils {
 					if (c == (state == S2 ? '\'' : '"')) {
 						var s2 = s.substring(mark, keepQuotes ? i + 1 : i);
 						if (needsUnescape)  // NOSONAR - False positive check.
-							s2 = unEscapeChars(s2, QUOTE_ESCAPE_SET);
+							s2 = unescapeChars(s2, QUOTE_ESCAPE_SET);
 						l.add(s2);
 						state = S1;
 						isInEscape = needsUnescape = false;
@@ -7063,9 +7006,9 @@ public class StringUtils {
 		var sb = new StringBuilder(str.length());
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
-			if (Character.isUpperCase(c))
+			if (LETTER_UC.contains(c))
 				sb.append(Character.toLowerCase(c));
-			else if (Character.isLowerCase(c))
+			else if (LETTER_LC.contains(c))
 				sb.append(Character.toUpperCase(c));
 			else
 				sb.append(c);
@@ -7150,8 +7093,8 @@ public class StringUtils {
 	public static String toHex(byte b) {
 		var c = new char[2];
 		var v = b & 0xFF;
-		c[0] = HEX_ARRAY[v >>> 4];
-		c[1] = HEX_ARRAY[v & 0x0F];
+		c[0] = HEX[v >>> 4];
+		c[1] = HEX[v & 0x0F];
 		return new String(c);
 	}
 
@@ -7314,10 +7257,6 @@ public class StringUtils {
 		return obj == null ? null : obj.toString();
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Additional utility methods
-	//------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Safely converts an object to a string, returning the default string if the object is <jk>null</jk>.
 	 *
@@ -7351,7 +7290,7 @@ public class StringUtils {
 	 * @param o The object to convert to a URI.
 	 * @return A new URI, or the same object if the object was already a URI, or
 	 */
-	public static URI toURI(Object o) {
+	public static URI toUri(Object o) {
 		if (o == null || o instanceof URI)
 			return (URI)o;
 		try {
@@ -7551,7 +7490,7 @@ public class StringUtils {
 	 * @param escaped The characters escaped.
 	 * @return A new string if characters were removed, or the same string if not or if the input was <jk>null</jk>.
 	 */
-	public static String unEscapeChars(String s, AsciiSet escaped) {
+	public static String unescapeChars(String s, AsciiSet escaped) {
 		if (s == null || s.isEmpty())
 			return s;
 		var count = 0;
@@ -7684,9 +7623,7 @@ public class StringUtils {
 		}
 
 		if (needsDecode) {
-			try {
-				return URLDecoder.decode(s, "UTF-8");
-			} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {/* Won't happen */}
+			return safe(()->URLDecoder.decode(s, "UTF-8"));
 		}
 		return s;
 	}
@@ -7708,9 +7645,7 @@ public class StringUtils {
 			needsEncode |= (! URL_UNENCODED_CHARS.contains(s.charAt(i)));
 
 		if (needsEncode) {
-			try {
-				return URLEncoder.encode(s, "UTF-8");
-			} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {/* Won't happen */}
+			return safe(()->URLEncoder.encode(s, "UTF-8"));
 		}
 
 		return s;
@@ -7739,11 +7674,7 @@ public class StringUtils {
 				else if (c <= 127)
 					sb.append('%').append(toHex2(c));
 				else
-					try {
-						sb.append(URLEncoder.encode("" + c, "UTF-8"));  // Yuck.
-					} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {
-						// Not possible.
-					}
+					safe(()->sb.append(URLEncoder.encode("" + c, "UTF-8")));  // Yuck.
 			}
 			s = sb.toString();
 		}
@@ -7846,7 +7777,7 @@ public class StringUtils {
 
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
-			if (Character.isLetterOrDigit(c) || c == '_') {
+			if ((LETTER.contains(c) || DIGIT.contains(c)) || c == '_') {
 				if (! inWord) {
 					count++;
 					inWord = true;
@@ -7858,10 +7789,6 @@ public class StringUtils {
 
 		return count;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// String Builder Utilities
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Wraps text to a specified line length.
@@ -8009,8 +7936,6 @@ public class StringUtils {
 	 * Helper method to estimate the number of syllables in a word.
 	 */
 	private static int estimateSyllables(String word) {
-		if (word == null || word.isEmpty())
-			return 1;
 
 		var lower = word.toLowerCase();
 		var count = 0;
@@ -8018,7 +7943,7 @@ public class StringUtils {
 
 		for (var i = 0; i < lower.length(); i++) {
 			var c = lower.charAt(i);
-			var isVowel = (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'y');
+			var isVowel = (VOWEL.contains(c) || c == 'y');
 
 			if (isVowel && ! prevWasVowel) {
 				count++;
@@ -8059,10 +7984,6 @@ public class StringUtils {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Performance and Memory Utilities
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Helper method to get Soundex code for a character.
 	 */
@@ -8094,7 +8015,10 @@ public class StringUtils {
 	 * @param ip The IPv6 address string to validate.
 	 * @return <jk>true</jk> if the string is a valid IPv6 address format, <jk>false</jk> otherwise.
 	 */
-	private static boolean isValidIPv6Address(String ip) {
+	public static boolean isValidIPv6Address(String ip) {
+		if (ip == null || ip.isEmpty())
+			return false;
+
 		// IPv6 addresses can be:
 		// 1. Full format: 2001:0db8:85a3:0000:0000:8a2e:0370:7334 (8 groups of 4 hex digits)
 		// 2. Compressed format: 2001:db8::1 (uses :: to represent consecutive zeros)
@@ -8130,7 +8054,8 @@ public class StringUtils {
 			}
 			// Validate IPv6 part before the IPv4
 			var ipv6Part = ip.substring(0, lastColon);
-			if (ipv6Part.isEmpty() || ipv6Part.equals("::ffff") || ipv6Part.equals("::FFFF"))
+			// Accept empty, ::, ::ffff, ::FFFF, or : (when string starts with ::)
+			if (ipv6Part.isEmpty() || ipv6Part.equals("::") || ipv6Part.equals("::ffff") || ipv6Part.equals("::FFFF") || (ipv6Part.equals(":") && ip.startsWith("::")))
 				return true;
 			// More complex validation would be needed for other IPv4-mapped formats
 			// For now, accept common formats
@@ -8148,8 +8073,6 @@ public class StringUtils {
 
 		// Split by ::
 		var parts = ip.split("::", -1);
-		if (parts.length > 2)
-			return false; // Only one :: allowed
 
 		if (parts.length == 2) {
 			// Compressed format
@@ -8158,8 +8081,6 @@ public class StringUtils {
 			var totalParts = leftParts.length + rightParts.length;
 			if (totalParts > 7)
 				return false; // Too many groups (max 8, but :: counts as one or more)
-			if (totalParts == 0 && !ip.equals("::"))
-				return false; // Empty on both sides of :: is invalid (except :: itself)
 		} else {
 			// Full format (no compression)
 			var groups = ip.split(":");
@@ -8174,14 +8095,12 @@ public class StringUtils {
 				continue; // Skip empty section from ::
 			var groupParts = groupSection.split(":");
 			for (var group : groupParts) {
-				if (group.isEmpty())
-					return false;
 				if (group.length() > 4)
 					return false; // Each group is max 4 hex digits
 				// Validate hex digits
 				for (var i = 0; i < group.length(); i++) {
 					var c = group.charAt(i);
-					if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
+					if (! HEXADECIMAL_CHARS.contains(c))
 						return false;
 				}
 			}
@@ -8194,7 +8113,7 @@ public class StringUtils {
 	 * Helper method to check if a character is a vowel.
 	 */
 	private static boolean isVowel(char c) {
-		return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+		return VOWEL.contains(c);
 	}
 
 	private static class Readifier {
@@ -8241,30 +8160,7 @@ public class StringUtils {
 		list.add(readifier(Constructor.class, x -> ConstructorInfo.of(x).getFullName()));
 		list.add(readifier(Method.class, x -> MethodInfo.of(x).getFullName()));
 		list.add(readifier(Field.class, x -> FieldInfo.of(x).toString()));
-		list.add(readifier(Parameter.class, x -> {
-			try {
-				return ParameterInfo.of(x).toString();
-			} catch (IllegalArgumentException ex) {
-				var exec = x.getDeclaringExecutable();
-				String execName;
-				if (exec instanceof Constructor<?> c)
-					execName = ConstructorInfo.of(c).getFullName();
-				else if (exec instanceof Method m)
-					execName = MethodInfo.of(m).getFullName();
-				else
-					execName = exec.toString();
-
-				var idx = -1;
-				var params = exec.getParameters();
-				for (var i = 0; i < params.length; i++) {
-					if (params[i] == x) {
-						idx = i;
-						break;
-					}
-				}
-				return idx >= 0 ? execName + "[" + idx + "]" : execName;
-			}
-		}));
+		list.add(readifier(Parameter.class, x -> ParameterInfo.of(x).toString()));
 		list.add(readifier(ClassInfo.class, ClassInfo::toString));
 		list.add(readifier(MethodInfo.class, MethodInfo::toString));
 		list.add(readifier(ConstructorInfo.class, ConstructorInfo::toString));
@@ -8388,24 +8284,38 @@ public class StringUtils {
 	}
 
 	/**
-	 * Skips over comment sequences in a StringReader.
+	 * Skips over a single comment sequence in a StringReader.
 	 *
-	 * @param r The StringReader positioned at the start of a comment.
+	 * <p>
+	 * The reader must be positioned at the first <js>'/'</js> character of a comment.
+	 * This method will skip only the comment it's currently positioned on, not all comments in the reader.
+	 *
+	 * <p>
+	 * Supports both <js>"/* * /"</js> style block comments and <js>"//"</js> style line comments.
+	 *
+	 * @param r The StringReader positioned at the start of a comment (at the first <js>'/'</js>).
 	 * @throws IOException If an I/O error occurs.
 	 */
-	private static void skipComments(StringReader r) throws IOException {
+	public static void skipComments(StringReader r) throws IOException {
 		var c = r.read();
 		//  "/* */" style comments
 		if (c == '*') {
-			while (c != -1)
-				if ((c = r.read()) == '*')
-					if ((c = r.read()) == '/')  // NOSONAR - Intentional.
+			c = r.read();
+			while (c != -1) {
+				if (c == '*') {
+					c = r.read();
+					if (c == '/')
 						return;
+					// If not '/', continue checking from this character
+					// Don't read again, just continue the loop
+				} else {
+					c = r.read();
+				}
+			}
 			//  "//" style comments
 		} else if (c == '/') {
-			while (c != -1) {
-				c = r.read();
-				if (c == -1 || c == '\n')
+			while ((c = r.read()) != -1) {
+				if (c == '\n')
 					return;
 			}
 		}
@@ -8417,7 +8327,7 @@ public class StringUtils {
 	 * @param c The character to create an escape set for.
 	 * @return An AsciiSet containing the character and backslash.
 	 */
-	static AsciiSet getEscapeSet(char c) {
+	private static AsciiSet getEscapeSet(char c) {
 		return ESCAPE_SETS.computeIfAbsent(c, key -> AsciiSet.create().chars(key, '\\').build());
 	}
 
@@ -8428,7 +8338,7 @@ public class StringUtils {
 	 * @param str The string to split.
 	 * @return A list of words, or empty list if input is null or empty.
 	 */
-	static List<String> splitWords(String str) {
+	private static List<String> splitWords(String str) {
 		if (str == null || isEmpty(str))
 			return Collections.emptyList();
 
@@ -8441,9 +8351,9 @@ public class StringUtils {
 		for (var i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
 			var isSeparator = (c == ' ' || c == '_' || c == '-' || c == '\t');
-			var isUpperCase = Character.isUpperCase(c);
-			var isLowerCase = Character.isLowerCase(c);
-			var isLetter = Character.isLetter(c);
+			var isUpperCase = LETTER_UC.contains(c);
+			var isLowerCase = LETTER_LC.contains(c);
+			var isLetter = LETTER.contains(c);
 
 			if (isSeparator) {
 				if (sb.length() > 0) {
@@ -8471,7 +8381,7 @@ public class StringUtils {
 						// We need at least 2 consecutive uppercase letters before this one to split
 						if (i + 1 < str.length()) {
 							var nextChar = str.charAt(i + 1);
-							if (Character.isLowerCase(nextChar)) {
+							if (LETTER_LC.contains(nextChar)) {
 								// This uppercase starts a new word, split before it
 								words.add(sb.toString());
 								sb.setLength(0);

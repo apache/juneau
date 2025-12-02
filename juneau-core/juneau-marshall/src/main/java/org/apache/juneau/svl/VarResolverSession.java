@@ -366,7 +366,7 @@ public class VarResolverSession {
 					state = S3;
 				} else if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a')) {  // False trigger "$X "
 					if (hasInnerEscapes)
-						out.append(unEscapeChars(s.substring(x, i + 1), AS1));
+						out.append(unescapeChars(s.substring(x, i + 1), AS1));
 					else
 						out.append(s, x, i + 1);
 					x = i + 1;
@@ -390,7 +390,7 @@ public class VarResolverSession {
 						Var r = getVar(varType);
 						if (r == null) {
 							if (hasInnerEscapes)
-								out.append(unEscapeChars(s.substring(x2, i + 1), AS2));
+								out.append(unescapeChars(s.substring(x2, i + 1), AS2));
 							else
 								out.append(s, x2, i + 1);
 							x = i + 1;
@@ -424,9 +424,9 @@ public class VarResolverSession {
 		if (isInEscape)
 			out.append('\\');
 		else if (state == S2)
-			out.append('$').append(unEscapeChars(s.substring(x + 1), AS1));
+			out.append('$').append(unescapeChars(s.substring(x + 1), AS1));
 		else if (state == S3)
-			out.append('$').append(varType).append('{').append(unEscapeChars(s.substring(x + 1), AS2));
+			out.append('$').append(varType).append('{').append(unescapeChars(s.substring(x + 1), AS2));
 		return out;
 	}
 

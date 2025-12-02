@@ -132,7 +132,7 @@ public abstract class Common {
 	 * @return This object.
 	 */
 	public Common setBase(Object value) {
-		this.base = toURI(value);
+		this.base = toUri(value);
 		return this;
 	}
 

@@ -1569,7 +1569,7 @@ public class JsonSchema {
 	 */
 	@Deprecated
 	public JsonSchema setId(Object id) {
-		this.id = toURI(id);
+		this.id = toUri(id);
 		return this;
 	}
 
@@ -1591,7 +1591,7 @@ public class JsonSchema {
 	 */
 	@Beanp("$id")
 	public JsonSchema setIdUri(Object idUri) {
-		this.idUri = toURI(idUri);
+		this.idUri = toUri(idUri);
 		return this;
 	}
 
@@ -1866,7 +1866,7 @@ public class JsonSchema {
 	 */
 	@Beanp("$ref")
 	public JsonSchema setRef(Object ref) {
-		this.ref = toURI(ref);
+		this.ref = toUri(ref);
 		return this;
 	}
 
@@ -1909,7 +1909,7 @@ public class JsonSchema {
 	 */
 	@Beanp("$schema")
 	public JsonSchema setSchemaVersionUri(Object schemaVersion) {
-		this.schemaVersion = toURI(schemaVersion);
+		this.schemaVersion = toUri(schemaVersion);
 		return this;
 	}
 

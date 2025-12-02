@@ -182,7 +182,7 @@ public class Content extends Text {
 	 * @return This object.
 	 */
 	public Content setSrc(Object value) {
-		this.src = toURI(value);
+		this.src = toUri(value);
 		return this;
 	}
 

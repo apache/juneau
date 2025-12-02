@@ -3540,7 +3540,7 @@ public class HttpPartSchema {
 		String s = StringUtils.joinnl(ss);
 		if (s.isEmpty())
 			return null;
-		if (! isJsonObject(s, true))
+		if (! isProbablyJsonObject(s, true))
 			s = "{" + s + "}";
 		try {
 			return JsonMap.ofJson(s);

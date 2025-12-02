@@ -126,12 +126,18 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	public static ParameterInfo of(Parameter inner) {
 		assertArgNotNull("inner", inner);
 		var exec = inner.getDeclaringExecutable();
-		ExecutableInfo execInfo = exec instanceof Constructor ? ConstructorInfo.of((Constructor<?>)exec) : MethodInfo.of((Method)exec);
-		var params = execInfo.getParameters();
-		for (var param : params) {
-			if (param.inner() == inner) {
+		ExecutableInfo execInfo;
+		if (exec instanceof Constructor<?> c)
+			execInfo = ConstructorInfo.of(c);
+		else if (exec instanceof Method m)
+			execInfo = MethodInfo.of(m);
+		else
+			throw new IllegalArgumentException("Unsupported executable type: " + exec.getClass());
+
+		for (var param : execInfo.getParameters()) {
+			var wrapped = param.inner();
+			if (wrapped == inner || wrapped.equals(inner))
 				return param;
-			}
 		}
 		throw new IllegalArgumentException("Parameter not found in declaring executable: " + inner);
 	}

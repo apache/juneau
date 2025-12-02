@@ -82,7 +82,7 @@ public class OpenApiBuilder {
 	 * @return The new element.
 	 */
 	public static final Contact contact(String name, Object url, String email) {
-		return contact().setName(name).setUrl(toURI(url)).setEmail(email);
+		return contact().setName(name).setUrl(toUri(url)).setEmail(email);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class OpenApiBuilder {
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url) {
-		return externalDocumentation().setUrl(toURI(url));
+		return externalDocumentation().setUrl(toUri(url));
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class OpenApiBuilder {
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url, String description) {
-		return externalDocumentation().setUrl(toURI(url)).setDescription(description);
+		return externalDocumentation().setUrl(toUri(url)).setDescription(description);
 	}
 
 	/**

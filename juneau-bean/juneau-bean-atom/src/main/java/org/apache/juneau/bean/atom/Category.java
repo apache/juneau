@@ -173,7 +173,7 @@ public class Category extends Common {
 	 * @return This object
 	 */
 	public Category setScheme(Object value) {
-		this.scheme = toURI(value);
+		this.scheme = toUri(value);
 		return this;
 	}
 

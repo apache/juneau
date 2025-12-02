@@ -146,7 +146,7 @@ public class ExternalDocumentation extends SwaggerElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(s(value));
-			case "url" -> setUrl(toURI(value));
+			case "url" -> setUrl(toUri(value));
 			default -> {
 				super.set(property, value);
 				yield this;

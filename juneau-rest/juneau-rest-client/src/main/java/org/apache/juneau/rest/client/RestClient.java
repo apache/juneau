@@ -7825,7 +7825,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				"RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		var req = createRequest(toURI(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
+		var req = createRequest(toUri(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
 
 		onCallInit(req);
 
@@ -7975,12 +7975,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		return ! serializers.getSerializers().isEmpty();
 	}
 
-	URI toURI(Object x, String rootUrl) throws RestCallException {
+	URI toUri(Object x, String rootUrl) throws RestCallException {
 		try {
 			if (x instanceof URI x2)
 				return x2;
 			if (x instanceof URL x3)
-				x3.toURI();
+				return x3.toURI();
 			if (x instanceof URIBuilder x4)
 				return x4.build();
 			var s = x == null ? "" : x.toString();

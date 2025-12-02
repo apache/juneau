@@ -133,7 +133,7 @@ public class Logo extends Common {
 	 * @return This object
 	 */
 	public Logo setUri(Object value) {
-		this.uri = toURI(value);
+		this.uri = toUri(value);
 		return this;
 	}
 }

@@ -172,7 +172,7 @@ public class Server extends OpenApiElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(s(value));
-			case "url" -> setUrl(toURI(value));
+			case "url" -> setUrl(toUri(value));
 			case "variables" -> setVariables(toMapBuilder(value, String.class, ServerVariable.class).sparse().build());
 			default -> {
 				super.set(property, value);

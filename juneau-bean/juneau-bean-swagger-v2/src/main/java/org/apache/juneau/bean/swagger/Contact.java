@@ -161,7 +161,7 @@ public class Contact extends SwaggerElement {
 		return switch (property) {
 			case "email" -> setEmail(s(value));
 			case "name" -> setName(s(value));
-			case "url" -> setUrl(toURI(value));
+			case "url" -> setUrl(toUri(value));
 			default -> {
 				super.set(property, value);
 				yield this;

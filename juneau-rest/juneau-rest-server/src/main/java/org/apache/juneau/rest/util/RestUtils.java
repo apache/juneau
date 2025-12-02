@@ -194,7 +194,7 @@ public class RestUtils {
 	 * @throws ParseException Invalid JSON in string.
 	 */
 	public static Object parseAnything(String s) throws ParseException {
-		if (isJson(s))
+		if (isProbablyJson(s))
 			return JsonParser.DEFAULT.parse(s, Object.class);
 		return s;
 	}

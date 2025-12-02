@@ -92,7 +92,7 @@ public abstract class HtmlElement {
 			attrs.remove(key);
 		else {
 			if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
-				val = toURI(val);
+				val = toUri(val);
 			attrs.put(key, val);
 		}
 		return this;
@@ -119,7 +119,7 @@ public abstract class HtmlElement {
 	public HtmlElement attrUri(String key, Object val) {
 		if (attrs == null)
 			attrs = map();
-		attrs.put(key, toURI(val));
+		attrs.put(key, toUri(val));
 		return this;
 	}
 
@@ -1048,7 +1048,7 @@ public abstract class HtmlElement {
 			value.entrySet().forEach(x -> {
 				var key = x.getKey();
 				if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
-					x.setValue(toURI(x.getValue()));
+					x.setValue(toUri(x.getValue()));
 			});
 		}
 		this.attrs = value;
