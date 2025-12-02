@@ -46,6 +46,27 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Convenience method for pre-populating this map with the specified schemas.
+	 *
+	 * <p>
+	 * The schemas passed in through this method MUST have their ID properties set.
+	 *
+	 * @param schemas The set of schemas to add to this map.
+	 * @return This object.
+	 * @throws RuntimeException If one or more schema objects did not have their ID property set.
+	 */
+	@SuppressWarnings("deprecation")
+	public JsonSchemaMap add(JsonSchema...schemas) {
+		for (var schema : schemas) {
+			if (schema.getId() == null)
+				throw illegalArg("Schema with no ID passed to JsonSchemaMap.add(Schema...)");
+			put(schema.getId(), schema);
+			schema.setSchemaMap(this);
+		}
+		return this;
+	}
+
+	/**
 	 * Return the {@link JsonSchema} object at the specified URI.
 	 *
 	 * <p>
@@ -79,24 +100,19 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	}
 
 	/**
-	 * Convenience method for pre-populating this map with the specified schemas.
+	 * Subclasses must implement either this method or {@link #load(URI)} to load the schema with the specified URI.
 	 *
 	 * <p>
-	 * The schemas passed in through this method MUST have their ID properties set.
+	 * It's up to the implementer to decide where these come from.
 	 *
-	 * @param schemas The set of schemas to add to this map.
-	 * @return This object.
-	 * @throws RuntimeException If one or more schema objects did not have their ID property set.
+	 * <p>
+	 * The default implementation returns <jk>null</jk>.
+	 *
+	 * @param uri The URI to connect to and retrieve the contents.
+	 * @return The reader from reading the specified URI.
 	 */
-	@SuppressWarnings("deprecation")
-	public JsonSchemaMap add(JsonSchema...schemas) {
-		for (var schema : schemas) {
-			if (schema.getId() == null)
-				throw illegalArg("Schema with no ID passed to JsonSchemaMap.add(Schema...)");
-			put(schema.getId(), schema);
-			schema.setSchemaMap(this);
-		}
-		return this;
+	public Reader getReader(URI uri) {
+		return null;
 	}
 
 	/**
@@ -121,21 +137,5 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 		} catch (Exception e) {
 			throw toRex(e);
 		}
-	}
-
-	/**
-	 * Subclasses must implement either this method or {@link #load(URI)} to load the schema with the specified URI.
-	 *
-	 * <p>
-	 * It's up to the implementer to decide where these come from.
-	 *
-	 * <p>
-	 * The default implementation returns <jk>null</jk>.
-	 *
-	 * @param uri The URI to connect to and retrieve the contents.
-	 * @return The reader from reading the specified URI.
-	 */
-	public Reader getReader(URI uri) {
-		return null;
 	}
 }

@@ -56,20 +56,6 @@ public enum JsonType {
 	/** JSON type {@code any}. */
 	ANY("any");
 
-	private final String value; // The serialized format of the enum.
-
-	JsonType(String value) {
-		this.value = value;
-	}
-
-	/**
-	 * Returns the lowercase form of this enum that's compatible with the JSON-Schema specification.
-	 */
-	@Override /* Overridden from Object */
-	public String toString() {
-		return value;
-	}
-
 	/**
 	 * Converts the specified lowercase form of the enum back into an <c>Enum</c>.
 	 *
@@ -103,5 +89,19 @@ public enum JsonType {
 		if (c == 's' && value.equals("string"))
 			return STRING;
 		return null;
+	}
+
+	private final String value; // The serialized format of the enum.
+
+	JsonType(String value) {
+		this.value = value;
+	}
+
+	/**
+	 * Returns the lowercase form of this enum that's compatible with the JSON-Schema specification.
+	 */
+	@Override /* Overridden from Object */
+	public String toString() {
+		return value;
 	}
 }

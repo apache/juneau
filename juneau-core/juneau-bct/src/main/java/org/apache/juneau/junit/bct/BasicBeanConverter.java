@@ -293,23 +293,6 @@ public class BasicBeanConverter implements BeanConverter {
 		}
 
 		/**
-		 * Registers a custom sizer for a specific type.
-		 *
-		 * <p>Sizers compute the size of collection-like objects for test assertions.
-		 * The function receives the object to size and the converter instance for accessing
-		 * additional utilities if needed.</p>
-		 *
-		 * @param <T> The type to handle
-		 * @param c The class to register the sizer for
-		 * @param s The sizing function
-		 * @return This builder for method chaining
-		 */
-		public <T> Builder addSizer(Class<T> c, Sizer<T> s) {
-			sizers.add(new SizerEntry<>(c, s));
-			return this;
-		}
-
-		/**
 		 * Registers a custom property extractor for specialized property access logic.
 		 *
 		 * <p>Property extractors enable custom property access patterns beyond standard JavaBean
@@ -364,6 +347,23 @@ public class BasicBeanConverter implements BeanConverter {
 		 */
 		public Builder addSetting(String key, Object value) {
 			settings.put(key, value);
+			return this;
+		}
+
+		/**
+		 * Registers a custom sizer for a specific type.
+		 *
+		 * <p>Sizers compute the size of collection-like objects for test assertions.
+		 * The function receives the object to size and the converter instance for accessing
+		 * additional utilities if needed.</p>
+		 *
+		 * @param <T> The type to handle
+		 * @param c The class to register the sizer for
+		 * @param s The sizing function
+		 * @return This builder for method chaining
+		 */
+		public <T> Builder addSizer(Class<T> c, Sizer<T> s) {
+			sizers.add(new SizerEntry<>(c, s));
 			return this;
 		}
 
@@ -505,6 +505,16 @@ public class BasicBeanConverter implements BeanConverter {
 		}
 	}
 
+	static class SizerEntry<T> {
+		private Class<T> forClass;
+		private Sizer<T> function;
+
+		private SizerEntry(Class<T> forClass, Sizer<T> function) {
+			this.forClass = forClass;
+			this.function = function;
+		}
+	}
+
 	static class StringifierEntry<T> {
 		private Class<T> forClass;
 		private Stringifier<T> function;
@@ -521,16 +531,6 @@ public class BasicBeanConverter implements BeanConverter {
 		private Swapper<T> function;
 
 		private SwapperEntry(Class<T> forClass, Swapper<T> function) {
-			this.forClass = forClass;
-			this.function = function;
-		}
-	}
-
-	static class SizerEntry<T> {
-		private Class<T> forClass;
-		private Sizer<T> function;
-
-		private SizerEntry(Class<T> forClass, Sizer<T> function) {
 			this.forClass = forClass;
 			this.function = function;
 		}
@@ -865,7 +865,8 @@ public class BasicBeanConverter implements BeanConverter {
 			.map(m -> safe(() -> (int) m.invoke(o2)))
 			.filter(Objects::nonNull);
 		// @formatter:on
-		if (sizeResult.isPresent()) return sizeResult.get();
+		if (sizeResult.isPresent())
+			return sizeResult.get();
 
 		// Fall back to listify
 		if (canListify(o))
@@ -880,7 +881,8 @@ public class BasicBeanConverter implements BeanConverter {
 			.map(m -> safe(() -> (Boolean)m.invoke(o2)))
 			.findFirst();
 		// @formatter:on
-		if (isEmpty.isPresent()) return isEmpty.get() ? 0 : 1;
+		if (isEmpty.isPresent())
+			return isEmpty.get() ? 0 : 1;
 
 		throw illegalArg("Object of type {0} does not have a determinable size.", cns(o));
 	}
@@ -902,26 +904,6 @@ public class BasicBeanConverter implements BeanConverter {
 		}
 		var o2 = o;
 		return stringifier.map(x -> (Stringifier)x).map(x -> x.apply(this, o2)).map(this::safeToString).orElse(null);
-	}
-
-	/**
-	 * Safely converts an object to a string, catching any exceptions thrown by toString().
-	 *
-	 * <p>
-	 * This helper method ensures that exceptions thrown by problematic {@code toString()} implementations
-	 * don't propagate up the call stack. Instead, it returns a descriptive error message containing
-	 * the exception type and message.
-	 *
-	 * @param o The object to convert to a string. May be any object including <jk>null</jk>.
-	 * @return The string representation of the object, or a formatted error message if toString() throws an exception.
-	 *    Returns <js>"null"</js> if the object is <jk>null</jk>.
-	 */
-	private String safeToString(Object o) {
-		try {
-			return o.toString();
-		} catch (Throwable t) { // NOSONAR
-			return cns(t) + ": " + t.getMessage();
-		}
 	}
 
 	/**
@@ -1023,5 +1005,25 @@ public class BasicBeanConverter implements BeanConverter {
 		if (nn(s))
 			return of(s.function);
 		return findSwapper(c.getSuperclass());
+	}
+
+	/**
+	 * Safely converts an object to a string, catching any exceptions thrown by toString().
+	 *
+	 * <p>
+	 * This helper method ensures that exceptions thrown by problematic {@code toString()} implementations
+	 * don't propagate up the call stack. Instead, it returns a descriptive error message containing
+	 * the exception type and message.
+	 *
+	 * @param o The object to convert to a string. May be any object including <jk>null</jk>.
+	 * @return The string representation of the object, or a formatted error message if toString() throws an exception.
+	 *    Returns <js>"null"</js> if the object is <jk>null</jk>.
+	 */
+	private String safeToString(Object o) {
+		try {
+			return o.toString();
+		} catch (Throwable t) { // NOSONAR
+			return cns(t) + ": " + t.getMessage();
+		}
 	}
 }

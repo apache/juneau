@@ -65,61 +65,6 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options", "head", "patch", "trace");
 
-	/**
-	 * Replaces newlines with <br> elements.
-	 */
-	private static List<Object> toBRL(String s) {
-		if (s == null)
-			return null;  // NOSONAR - Intentionally returning null.
-		if (s.indexOf(',') == -1)
-			return singletonList(s);
-		var l = list();
-		var sa = s.split("\n");
-		for (var i = 0; i < sa.length; i++) {
-			if (i > 0)
-				l.add(br());
-			l.add(sa[i]);
-		}
-		return l;
-	}
-
-	/**
-	 * This UI applies to HTML requests only.
-	 */
-	@Override
-	public org.apache.juneau.MediaType[] forMediaTypes() {
-		return CollectionUtils.a(HTML);
-	}
-
-	@Override
-	public Div swap(BeanSession beanSession, OpenApi openApi) throws Exception {
-
-		var s = new Session(openApi);
-
-		var css = RESOURCES.getString("files/htdocs/styles/OpenApiUI.css", null).orElse(null);
-		if (css == null)
-			css = RESOURCES.getString("OpenApiUI.css", null).orElse(null);
-
-		var outer = div(style(css), script("text/javascript", RESOURCES.getString("OpenApiUI.js", null).orElse(null)), header(s))._class("openapi-ui");
-
-		// Operations without tags are rendered first.
-		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
-
-		if (nn(s.openApi.getTags())) {
-			s.openApi.getTags().forEach(x -> {
-				var tagBlock = div()._class("tag-block tag-block-open").children(tagBlockSummary(x), tagBlockContents(s, x));
-				outer.child(tagBlock);
-			});
-		}
-
-		if (nn(s.openApi.getComponents()) && nn(s.openApi.getComponents().getSchemas())) {
-			var modelBlock = div()._class("tag-block").children(modelsBlockSummary(), modelsBlockContents(s));
-			outer.child(modelBlock);
-		}
-
-		return outer;
-	}
-
 	@SuppressWarnings("null")
 	private static void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {
 		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) || (nn(t) && nn(op.getTags()) && op.getTags().contains(t.getName()))) {
@@ -380,5 +325,60 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		var content = nn(ed) && nn(ed.getDescription()) ? ed.getDescription() : (nn(ed) ? ed.getUrl() : null);
 		return div()._class("tag-block-summary").onclick("toggleTagBlock(this)").children(span(t.getName())._class("name"), span(toBRL(t.getDescription()))._class("description"),
 			nn(ed) && nn(ed.getUrl()) ? span(a(ed.getUrl(), content))._class("extdocs") : null);
+	}
+
+	/**
+	 * Replaces newlines with <br> elements.
+	 */
+	private static List<Object> toBRL(String s) {
+		if (s == null)
+			return null;  // NOSONAR - Intentionally returning null.
+		if (s.indexOf(',') == -1)
+			return singletonList(s);
+		var l = list();
+		var sa = s.split("\n");
+		for (var i = 0; i < sa.length; i++) {
+			if (i > 0)
+				l.add(br());
+			l.add(sa[i]);
+		}
+		return l;
+	}
+
+	/**
+	 * This UI applies to HTML requests only.
+	 */
+	@Override
+	public org.apache.juneau.MediaType[] forMediaTypes() {
+		return CollectionUtils.a(HTML);
+	}
+
+	@Override
+	public Div swap(BeanSession beanSession, OpenApi openApi) throws Exception {
+
+		var s = new Session(openApi);
+
+		var css = RESOURCES.getString("files/htdocs/styles/OpenApiUI.css", null).orElse(null);
+		if (css == null)
+			css = RESOURCES.getString("OpenApiUI.css", null).orElse(null);
+
+		var outer = div(style(css), script("text/javascript", RESOURCES.getString("OpenApiUI.js", null).orElse(null)), header(s))._class("openapi-ui");
+
+		// Operations without tags are rendered first.
+		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
+
+		if (nn(s.openApi.getTags())) {
+			s.openApi.getTags().forEach(x -> {
+				var tagBlock = div()._class("tag-block tag-block-open").children(tagBlockSummary(x), tagBlockContents(s, x));
+				outer.child(tagBlock);
+			});
+		}
+
+		if (nn(s.openApi.getComponents()) && nn(s.openApi.getComponents().getSchemas())) {
+			var modelBlock = div()._class("tag-block").children(modelsBlockSummary(), modelsBlockContents(s));
+			outer.child(modelBlock);
+		}
+
+		return outer;
 	}
 }

@@ -64,6 +64,16 @@ public class LinkString implements Comparable<LinkString> {
 		setUri(uri, uriArgs);
 	}
 
+	@Override /* Overridden from Comparable */
+	public int compareTo(LinkString o) {
+		return name.compareTo(o.name);
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return (o instanceof LinkString o2) && eq(this, o2, (x, y) -> x.name.equals(y.name));
+	}
+
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 *
@@ -73,6 +83,21 @@ public class LinkString implements Comparable<LinkString> {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() { return name; }
+
+	/**
+	 * Bean property getter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public java.net.URI getUri() { return uri; }
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return super.hashCode();
+	}
 
 	/**
 	 * Bean property setter:  <property>name</property>.
@@ -89,16 +114,6 @@ public class LinkString implements Comparable<LinkString> {
 		this.name = value;
 		return this;
 	}
-
-	/**
-	 * Bean property getter:  <property>uri</property>.
-	 *
-	 * <p>
-	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public java.net.URI getUri() { return uri; }
 
 	/**
 	 * Bean property setter:  <property>uri</property>.
@@ -161,20 +176,5 @@ public class LinkString implements Comparable<LinkString> {
 	@Override /* Overridden from Object */
 	public String toString() {
 		return name;
-	}
-
-	@Override /* Overridden from Comparable */
-	public int compareTo(LinkString o) {
-		return name.compareTo(o.name);
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return (o instanceof LinkString o2) && eq(this, o2, (x, y) -> x.name.equals(y.name));
-	}
-
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return super.hashCode();
 	}
 }

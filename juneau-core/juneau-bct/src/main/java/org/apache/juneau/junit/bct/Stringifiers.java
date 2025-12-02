@@ -130,38 +130,6 @@ public class Stringifiers {
 	}
 
 	/**
-	 * Returns a stringifier for char arrays that converts them to strings.
-	 *
-	 * <p>This stringifier provides a simple way to convert char arrays to readable strings,
-	 * useful for testing character-based operations and string utilities.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Direct conversion:</b> Each char is appended directly to the result string</li>
-	 *    <li><b>No formatting:</b> Characters are concatenated without any separators or encoding</li>
-	 *    <li><b>Empty arrays:</b> Returns empty string for zero-length arrays</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test char array stringification</jc>
-	 *    <jk>char</jk>[] <jv>chars</jv> = {<js>'H'</js>, <js>'e'</js>, <js>'l'</js>, <js>'l'</js>, <js>'o'</js>};
-	 *    <jsm>assertString</jsm>(<js>"Hello"</js>, <jv>chars</jv>);
-	 *
-	 *    <jc>// Test with hex characters</jc>
-	 *    <jk>char</jk>[] <jv>hex</jv> = {<js>'0'</js>, <js>'0'</js>, <js>'0'</js>, <js>'0'</js>};
-	 *    <jsm>assertString</jsm>(<js>"0000"</js>, <jv>hex</jv>);
-	 * </p>
-	 *
-	 * @return A {@link Stringifier} for char arrays
-	 */
-	public static Stringifier<char[]> charArrayStringifier() {
-		return (bc, chars) -> {
-			return new String(chars);
-		};
-	}
-
-	/**
 	 * Returns a stringifier for {@link GregorianCalendar} objects that formats them as ISO-8601 strings.
 	 *
 	 * <p>This stringifier converts calendar objects to standardized ISO-8601 timestamp format,
@@ -193,6 +161,38 @@ public class Stringifiers {
 	 */
 	public static Stringifier<GregorianCalendar> calendarStringifier() {
 		return (bc, calendar) -> calendar.toZonedDateTime().format(bc.getSetting("calendarFormat", ISO_INSTANT));
+	}
+
+	/**
+	 * Returns a stringifier for char arrays that converts them to strings.
+	 *
+	 * <p>This stringifier provides a simple way to convert char arrays to readable strings,
+	 * useful for testing character-based operations and string utilities.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Direct conversion:</b> Each char is appended directly to the result string</li>
+	 *    <li><b>No formatting:</b> Characters are concatenated without any separators or encoding</li>
+	 *    <li><b>Empty arrays:</b> Returns empty string for zero-length arrays</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test char array stringification</jc>
+	 *    <jk>char</jk>[] <jv>chars</jv> = {<js>'H'</js>, <js>'e'</js>, <js>'l'</js>, <js>'l'</js>, <js>'o'</js>};
+	 *    <jsm>assertString</jsm>(<js>"Hello"</js>, <jv>chars</jv>);
+	 *
+	 *    <jc>// Test with hex characters</jc>
+	 *    <jk>char</jk>[] <jv>hex</jv> = {<js>'0'</js>, <js>'0'</js>, <js>'0'</js>, <js>'0'</js>};
+	 *    <jsm>assertString</jsm>(<js>"0000"</js>, <jv>hex</jv>);
+	 * </p>
+	 *
+	 * @return A {@link Stringifier} for char arrays
+	 */
+	public static Stringifier<char[]> charArrayStringifier() {
+		return (bc, chars) -> {
+			return new String(chars);
+		};
 	}
 
 	/**

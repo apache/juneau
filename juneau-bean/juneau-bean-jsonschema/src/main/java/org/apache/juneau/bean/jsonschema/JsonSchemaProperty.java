@@ -49,45 +49,26 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setName(String name) {
-		super.setName(name);
-		return this;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setId(Object id) {
-		super.setId(id);
+	public JsonSchemaProperty addAdditionalItems(JsonSchema...additionalItems) {
+		super.addAdditionalItems(additionalItems);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setTitle(String title) {
-		super.setTitle(title);
+	public JsonSchemaProperty addAllOf(JsonSchema...allOf) {
+		super.addAllOf(allOf);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setDescription(String description) {
-		super.setDescription(description);
+	public JsonSchemaProperty addAnyOf(JsonSchema...anyOf) {
+		super.addAnyOf(anyOf);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setType(Object type) {
-		super.setType(type);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addTypes(JsonType...types) {
-		super.addTypes(types);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setDefinitions(Map<String,JsonSchema> definitions) {
-		super.setDefinitions(definitions);
+	public JsonSchemaProperty addDef(String name, JsonSchema def) {
+		super.addDef(name, def);
 		return this;
 	}
 
@@ -98,38 +79,32 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setProperties(Map<String,JsonSchema> properties) {
-		super.setProperties(properties);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addProperties(JsonSchema...properties) {
-		super.addProperties(properties);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setPatternProperties(Map<String,JsonSchema> patternProperties) {
-		super.setPatternProperties(patternProperties);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addPatternProperties(JsonSchemaProperty...properties) {
-		super.addPatternProperties(properties);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setDependencies(Map<String,JsonSchema> dependencies) {
-		super.setDependencies(dependencies);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty addDependency(String name, JsonSchema dependency) {
 		super.addDependency(name, dependency);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty addDependentRequired(String name, List<String> required) {
+		super.addDependentRequired(name, required);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty addDependentSchema(String name, JsonSchema schema) {
+		super.addDependentSchema(name, schema);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty addEnum(Object..._enum) {
+		super.addEnum(_enum);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty addExamples(Object...examples) {
+		super.addExamples(examples);
 		return this;
 	}
 
@@ -140,92 +115,32 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setMultipleOf(Number multipleOf) {
-		super.setMultipleOf(multipleOf);
+	public JsonSchemaProperty addOneOf(JsonSchema...oneOf) {
+		super.addOneOf(oneOf);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setMaximum(Number maximum) {
-		super.setMaximum(maximum);
+	public JsonSchemaProperty addPatternProperties(JsonSchemaProperty...properties) {
+		super.addPatternProperties(properties);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setExclusiveMaximum(Number exclusiveMaximum) {
-		super.setExclusiveMaximum(exclusiveMaximum);
+	public JsonSchemaProperty addPrefixItems(JsonSchema...prefixItems) {
+		super.addPrefixItems(prefixItems);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setMinimum(Number minimum) {
-		super.setMinimum(minimum);
+	public JsonSchemaProperty addProperties(JsonSchema...properties) {
+		super.addProperties(properties);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setExclusiveMinimum(Number exclusiveMinimum) {
-		super.setExclusiveMinimum(exclusiveMinimum);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setMaxLength(Integer maxLength) {
-		super.setMaxLength(maxLength);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setMinLength(Integer minLength) {
-		super.setMinLength(minLength);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setPattern(String pattern) {
-		super.setPattern(pattern);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addAdditionalItems(JsonSchema...additionalItems) {
-		super.addAdditionalItems(additionalItems);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setMaxItems(Integer maxItems) {
-		super.setMaxItems(maxItems);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setMinItems(Integer minItems) {
-		super.setMinItems(minItems);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setUniqueItems(Boolean uniqueItems) {
-		super.setUniqueItems(uniqueItems);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setMaxProperties(Integer maxProperties) {
-		super.setMaxProperties(maxProperties);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setMinProperties(Integer minProperties) {
-		super.setMinProperties(minProperties);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setRequired(List<String> required) {
-		super.setRequired(required);
+	public JsonSchemaProperty addRequired(JsonSchemaProperty...properties) {
+		super.addRequired(properties);
 		return this;
 	}
 
@@ -242,32 +157,25 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addRequired(JsonSchemaProperty...properties) {
-		super.addRequired(properties);
+	public JsonSchemaProperty addTypes(JsonType...types) {
+		super.addTypes(types);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setEnum(List<Object> _enum) {
-		super.setEnum(_enum);
-		return this;
-	}
+	public JsonSchema getNot() { return super.getNot(); }
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addEnum(Object..._enum) {
-		super.addEnum(_enum);
-		return this;
+	public JsonSchema getUnevaluatedItems() { return super.getUnevaluatedItems(); }
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchema resolve() {
+		return super.resolve();
 	}
 
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setAllOf(List<JsonSchema> allOf) {
 		super.setAllOf(allOf);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addAllOf(JsonSchema...allOf) {
-		super.addAllOf(allOf);
 		return this;
 	}
 
@@ -278,65 +186,8 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addAnyOf(JsonSchema...anyOf) {
-		super.addAnyOf(anyOf);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setOneOf(List<JsonSchema> oneOf) {
-		super.setOneOf(oneOf);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addOneOf(JsonSchema...oneOf) {
-		super.addOneOf(oneOf);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchema getNot() { return super.getNot(); }
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setNot(JsonSchema not) {
-		super.setNot(not);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setConst(Object _const) {
 		super.setConst(_const);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setExamples(List<Object> examples) {
-		super.setExamples(examples);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addExamples(Object...examples) {
-		super.addExamples(examples);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setReadOnly(Boolean readOnly) {
-		super.setReadOnly(readOnly);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setWriteOnly(Boolean writeOnly) {
-		super.setWriteOnly(writeOnly);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setContentMediaType(String contentMediaType) {
-		super.setContentMediaType(contentMediaType);
 		return this;
 	}
 
@@ -347,8 +198,153 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addDef(String name, JsonSchema def) {
-		super.addDef(name, def);
+	public JsonSchemaProperty setContentMediaType(String contentMediaType) {
+		super.setContentMediaType(contentMediaType);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setDefinitions(Map<String,JsonSchema> definitions) {
+		super.setDefinitions(definitions);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setDependencies(Map<String,JsonSchema> dependencies) {
+		super.setDependencies(dependencies);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setDependentRequired(Map<String,List<String>> dependentRequired) {
+		super.setDependentRequired(dependentRequired);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setDependentSchemas(Map<String,JsonSchema> dependentSchemas) {
+		super.setDependentSchemas(dependentSchemas);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setDescription(String description) {
+		super.setDescription(description);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setEnum(List<Object> _enum) {
+		super.setEnum(_enum);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setExamples(List<Object> examples) {
+		super.setExamples(examples);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setExclusiveMaximum(Number exclusiveMaximum) {
+		super.setExclusiveMaximum(exclusiveMaximum);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setExclusiveMinimum(Number exclusiveMinimum) {
+		super.setExclusiveMinimum(exclusiveMinimum);
+		return this;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setId(Object id) {
+		super.setId(id);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setMaximum(Number maximum) {
+		super.setMaximum(maximum);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setMaxItems(Integer maxItems) {
+		super.setMaxItems(maxItems);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setMaxLength(Integer maxLength) {
+		super.setMaxLength(maxLength);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setMaxProperties(Integer maxProperties) {
+		super.setMaxProperties(maxProperties);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setMinimum(Number minimum) {
+		super.setMinimum(minimum);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setMinItems(Integer minItems) {
+		super.setMinItems(minItems);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setMinLength(Integer minLength) {
+		super.setMinLength(minLength);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setMinProperties(Integer minProperties) {
+		super.setMinProperties(minProperties);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setMultipleOf(Number multipleOf) {
+		super.setMultipleOf(multipleOf);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setName(String name) {
+		super.setName(name);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setNot(JsonSchema not) {
+		super.setNot(not);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setOneOf(List<JsonSchema> oneOf) {
+		super.setOneOf(oneOf);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setPattern(String pattern) {
+		super.setPattern(pattern);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setPatternProperties(Map<String,JsonSchema> patternProperties) {
+		super.setPatternProperties(patternProperties);
 		return this;
 	}
 
@@ -359,13 +355,40 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addPrefixItems(JsonSchema...prefixItems) {
-		super.addPrefixItems(prefixItems);
+	public JsonSchemaProperty setProperties(Map<String,JsonSchema> properties) {
+		super.setProperties(properties);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchema getUnevaluatedItems() { return super.getUnevaluatedItems(); }
+	public JsonSchemaProperty setReadOnly(Boolean readOnly) {
+		super.setReadOnly(readOnly);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setRequired(List<String> required) {
+		super.setRequired(required);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setSchemaMap(JsonSchemaMap schemaMap) {
+		super.setSchemaMap(schemaMap);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setTitle(String title) {
+		super.setTitle(title);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setType(Object type) {
+		super.setType(type);
+		return this;
+	}
 
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setUnevaluatedItems(JsonSchema unevaluatedItems) {
@@ -380,37 +403,14 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setDependentSchemas(Map<String,JsonSchema> dependentSchemas) {
-		super.setDependentSchemas(dependentSchemas);
+	public JsonSchemaProperty setUniqueItems(Boolean uniqueItems) {
+		super.setUniqueItems(uniqueItems);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addDependentSchema(String name, JsonSchema schema) {
-		super.addDependentSchema(name, schema);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setDependentRequired(Map<String,List<String>> dependentRequired) {
-		super.setDependentRequired(dependentRequired);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addDependentRequired(String name, List<String> required) {
-		super.addDependentRequired(name, required);
-		return this;
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchema resolve() {
-		return super.resolve();
-	}
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setSchemaMap(JsonSchemaMap schemaMap) {
-		super.setSchemaMap(schemaMap);
+	public JsonSchemaProperty setWriteOnly(Boolean writeOnly) {
+		super.setWriteOnly(writeOnly);
 		return this;
 	}
 }

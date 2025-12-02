@@ -158,6 +158,8 @@ import org.apache.juneau.common.collections.*;
  */
 public class Operation extends SwaggerElement {
 
+	private interface MapStringList extends Map<String,List<String>> {}
+
 	private String summary, description, operationId;
 	private Boolean deprecated;
 	private ExternalDocumentation externalDocs;
@@ -165,6 +167,7 @@ public class Operation extends SwaggerElement {
 	private Set<MediaType> consumes, produces;
 	private List<ParameterInfo> parameters;
 	private List<Map<String,List<String>>> security;
+
 	private Map<String,ResponseInfo> responses;
 
 	/**
@@ -682,8 +685,6 @@ public class Operation extends SwaggerElement {
 			}
 		};
 	}
-
-	private interface MapStringList extends Map<String,List<String>> {}
 
 	/**
 	 * Bean property setter:  <property>consumes</property>.

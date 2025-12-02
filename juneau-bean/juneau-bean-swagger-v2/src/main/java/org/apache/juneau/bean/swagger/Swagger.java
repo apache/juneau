@@ -87,11 +87,12 @@ import org.apache.juneau.objecttools.*;
  */
 public class Swagger extends SwaggerElement {
 
+	private static interface MapOfStringLists extends Map<String,List<String>> {}
+
 	/** Represents a null swagger */
 	public static final Swagger NULL = new Swagger();
 
 	private static final Comparator<String> PATH_COMPARATOR = (o1, o2) -> o1.replace('{', '@').compareTo(o2.replace('{', '@'));
-
 	private String swagger = "2.0",  // NOSONAR - Intentional naming.
 		host, basePath;
 	private Info info;
@@ -104,6 +105,7 @@ public class Swagger extends SwaggerElement {
 	private Map<String,ParameterInfo> parameters;
 	private Map<String,ResponseInfo> responses;
 	private Map<String,SecurityScheme> securityDefinitions;
+
 	private Map<String,OperationMap> paths;
 
 	/**
@@ -756,8 +758,6 @@ public class Swagger extends SwaggerElement {
 			}
 		};
 	}
-
-	private static interface MapOfStringLists extends Map<String,List<String>> {}
 
 	/**
 	 * Bean property setter:  <property>basePath</property>.

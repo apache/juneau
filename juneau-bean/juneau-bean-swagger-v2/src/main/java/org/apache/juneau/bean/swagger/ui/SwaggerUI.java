@@ -64,72 +64,6 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options");
 
-	/**
-	 * Replaces newlines with <br> elements.
-	 */
-	private static List<Object> toBRL(String s) {
-		if (s == null)
-			return null;  // NOSONAR - Intentionally returning null.
-		if (s.indexOf(',') == -1)
-			return singletonList(s);
-		var l = list();
-		var sa = s.split("\n");
-		for (var i = 0; i < sa.length; i++) {
-			if (i > 0)
-				l.add(br());
-			l.add(sa[i]);
-		}
-		return l;
-	}
-
-	/**
-	 * This UI applies to HTML requests only.
-	 */
-	@Override
-	public MediaType[] forMediaTypes() {
-		return CollectionUtils.a(MediaType.HTML);
-	}
-
-	@Override
-	public Div swap(BeanSession beanSession, Swagger swagger) throws Exception {
-		// @formatter:off
-		var s = new Session(swagger);
-
-		var css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css", null).orElse(null);
-		if (css == null)
-			css = RESOURCES.getString("SwaggerUI.css", null).orElse(null);
-
-		var outer = div(
-			style(css),
-			script("text/javascript", RESOURCES.getString("SwaggerUI.js", null).orElse(null)),
-			header(s)
-		)._class("swagger-ui");
-
-		// Operations without tags are rendered first.
-		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
-
-		if (nn(s.swagger.getTags())) {
-			s.swagger.getTags().forEach(x -> {
-				var tagBlock = div()._class("tag-block tag-block-open").children(
-					tagBlockSummary(x),
-					tagBlockContents(s, x)
-				);
-				outer.child(tagBlock);
-			});
-		}
-
-		if (nn(s.swagger.getDefinitions())) {
-			var modelBlock = div()._class("tag-block").children(
-				modelsBlockSummary(),
-				modelsBlockContents(s)
-			);
-			outer.child(modelBlock);
-		}
-
-		return outer;
-		// @formatter:on
-	}
-
 	private static Div examples(Session s, ParameterInfo pi) {
 		// @formatter:off
 		var isBody = "body".equals(pi.getIn());
@@ -431,5 +365,71 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		}
 
 		return div()._class("tag-block-summary").onclick("toggleTagBlock(this)").children(children);
+	}
+
+	/**
+	 * Replaces newlines with <br> elements.
+	 */
+	private static List<Object> toBRL(String s) {
+		if (s == null)
+			return null;  // NOSONAR - Intentionally returning null.
+		if (s.indexOf(',') == -1)
+			return singletonList(s);
+		var l = list();
+		var sa = s.split("\n");
+		for (var i = 0; i < sa.length; i++) {
+			if (i > 0)
+				l.add(br());
+			l.add(sa[i]);
+		}
+		return l;
+	}
+
+	/**
+	 * This UI applies to HTML requests only.
+	 */
+	@Override
+	public MediaType[] forMediaTypes() {
+		return CollectionUtils.a(MediaType.HTML);
+	}
+
+	@Override
+	public Div swap(BeanSession beanSession, Swagger swagger) throws Exception {
+		// @formatter:off
+		var s = new Session(swagger);
+
+		var css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css", null).orElse(null);
+		if (css == null)
+			css = RESOURCES.getString("SwaggerUI.css", null).orElse(null);
+
+		var outer = div(
+			style(css),
+			script("text/javascript", RESOURCES.getString("SwaggerUI.js", null).orElse(null)),
+			header(s)
+		)._class("swagger-ui");
+
+		// Operations without tags are rendered first.
+		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
+
+		if (nn(s.swagger.getTags())) {
+			s.swagger.getTags().forEach(x -> {
+				var tagBlock = div()._class("tag-block tag-block-open").children(
+					tagBlockSummary(x),
+					tagBlockContents(s, x)
+				);
+				outer.child(tagBlock);
+			});
+		}
+
+		if (nn(s.swagger.getDefinitions())) {
+			var modelBlock = div()._class("tag-block").children(
+				modelsBlockSummary(),
+				modelsBlockContents(s)
+			);
+			outer.child(modelBlock);
+		}
+
+		return outer;
+		// @formatter:on
 	}
 }

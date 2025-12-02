@@ -37,6 +37,39 @@ public class ResultSetList extends LinkedList<Map<String,Object>> {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Reads the specified column from the current row in the result set.
+	 *
+	 * <p>
+	 * Subclasses can override this method to handle specific data types in special ways.
+	 *
+	 * @param rs The result set to read from.
+	 * @param col The column number (indexed by 1).
+	 * @param dataType The {@link Types type} of the entry.
+	 * @return The entry as an Object.
+	 */
+	static Object readEntry(ResultSet rs, int col, int dataType) {
+		try {
+			return switch (dataType) {
+				case Types.BLOB -> {
+					var b = rs.getBlob(col);
+					yield "blob[" + b.length() + "]";
+				}
+				case Types.CLOB -> {
+					var c = rs.getClob(col);
+					yield "clob[" + c.length() + "]";
+				}
+				case Types.LONGVARBINARY -> "longvarbinary[" + count(rs.getBinaryStream(col)) + "]";
+				case Types.LONGVARCHAR -> "longvarchar[" + count(rs.getAsciiStream(col)) + "]";
+				case Types.LONGNVARCHAR -> "longnvarchar[" + count(rs.getCharacterStream(col)) + "]";
+				case Types.TIMESTAMP -> rs.getTimestamp(col); // Oracle returns com.oracle.TIMESTAMP objects from getObject()
+				default -> rs.getObject(col);
+			};
+		} catch (Exception e) {
+			return lm(e);
+		}
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param rs The result set to load into this DTO.
@@ -78,39 +111,6 @@ public class ResultSetList extends LinkedList<Map<String,Object>> {
 			}
 		} finally {
 			rs.close();
-		}
-	}
-
-	/**
-	 * Reads the specified column from the current row in the result set.
-	 *
-	 * <p>
-	 * Subclasses can override this method to handle specific data types in special ways.
-	 *
-	 * @param rs The result set to read from.
-	 * @param col The column number (indexed by 1).
-	 * @param dataType The {@link Types type} of the entry.
-	 * @return The entry as an Object.
-	 */
-	static Object readEntry(ResultSet rs, int col, int dataType) {
-		try {
-			return switch (dataType) {
-				case Types.BLOB -> {
-					var b = rs.getBlob(col);
-					yield "blob[" + b.length() + "]";
-				}
-				case Types.CLOB -> {
-					var c = rs.getClob(col);
-					yield "clob[" + c.length() + "]";
-				}
-				case Types.LONGVARBINARY -> "longvarbinary[" + count(rs.getBinaryStream(col)) + "]";
-				case Types.LONGVARCHAR -> "longvarchar[" + count(rs.getAsciiStream(col)) + "]";
-				case Types.LONGNVARCHAR -> "longnvarchar[" + count(rs.getCharacterStream(col)) + "]";
-				case Types.TIMESTAMP -> rs.getTimestamp(col); // Oracle returns com.oracle.TIMESTAMP objects from getObject()
-				default -> rs.getObject(col);
-			};
-		} catch (Exception e) {
-			return lm(e);
 		}
 	}
 }

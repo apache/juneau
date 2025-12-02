@@ -184,104 +184,25 @@ import org.opentest4j.*;
 public class BctAssertions {
 
 	// Thread-local memoized supplier for default converter (defaults to BasicBeanConverter.DEFAULT)
-	private static final ThreadLocal<ResettableSupplier<BeanConverter>> CONVERTER_SUPPLIER = 
-		ThreadLocal.withInitial(() -> memoizeResettable(() -> BasicBeanConverter.DEFAULT));
-	
+	private static final ThreadLocal<ResettableSupplier<BeanConverter>> CONVERTER_SUPPLIER = ThreadLocal.withInitial(() -> memoizeResettable(() -> BasicBeanConverter.DEFAULT));
+
 	// Thread-local override for method-level converter customization
 	private static final ThreadLocal<BeanConverter> CONVERTER_OVERRIDE = new ThreadLocal<>();
 
 	/**
-	 * Gets the bean converter for the current thread.
+	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to strings.
 	 *
-	 * <p>Returns the thread-local converter override if set, otherwise returns the memoized default converter.
-	 * This method is used internally by all assertion methods to get the current thread-local converter.</p>
+	 * <p>Same as {@link #assertBean(Supplier, Object, String, String)} but without a custom message.</p>
 	 *
-	 * @return The bean converter to use for the current thread.
+	 * @param actual The bean object to test. Must not be null.
+	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
+	 * @param expected Comma-delimited list of expected values. Must match the order of fields.
+	 * @throws NullPointerException if the bean is null
+	 * @throws AssertionError if any property values don't match expected values
+	 * @see #assertBean(Supplier, Object, String, String)
 	 */
-	private static BeanConverter getConverter() {
-		var override = CONVERTER_OVERRIDE.get();
-		if (override != null) {
-			return override;
-		}
-		return CONVERTER_SUPPLIER.get().get();
-	}
-
-	/**
-	 * Sets a custom bean converter for the current thread.
-	 *
-	 * <p>This method allows you to override the default converter for all assertions in the current test method.
-	 * The converter will be used by all assertion methods in the current thread.</p>
-	 *
-	 * <p>This is particularly useful in test setup methods (e.g., {@code @BeforeEach}) to configure a custom converter
-	 * for all tests in a test class or method.</p>
-	 *
-	 * <h5 class='section'>Usage Example:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// In @BeforeEach method</jc>
-	 *    <jk>var</jk> <jv>customConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
-	 *       .defaultSettings()
-	 *       .addStringifier(LocalDate.<jk>class</jk>, <jp>date</jp> -> <jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>))
-	 *       .build();
-	 *    BctAssertions.<jsm>setConverter</jsm>(<jv>customConverter</jv>);
-	 *
-	 *    <jc>// All subsequent assertions in this test method will use the custom converter</jc>
-	 *    <jsm>assertBean</jsm>(<jv>event</jv>, <js>"date"</js>, <js>"2023-12-01"</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Thread Safety:</h5>
-	 * <p>This method is thread-safe and uses thread-local storage. Each test method running in parallel
-	 * will have its own converter instance, preventing cross-thread interference.</p>
-	 *
-	 * @param converter The bean converter to use for the current thread. Must not be <jk>null</jk>.
-	 * @throws IllegalArgumentException If converter is <jk>null</jk>.
-	 * @see #resetConverter()
-	 */
-	public static void setConverter(BeanConverter converter) {
-		assertArgNotNull("converter", converter);
-		CONVERTER_OVERRIDE.set(converter);
-	}
-
-	/**
-	 * Resets the bean converter for the current thread to the system default.
-	 *
-	 * <p>This method clears any thread-local converter override set via {@link #setConverter(BeanConverter)},
-	 * restoring the default converter ({@link BasicBeanConverter#DEFAULT}) for subsequent assertions.</p>
-	 *
-	 * <p>This is typically called in test teardown methods (e.g., {@code @AfterEach}) to clean up after tests
-	 * that set a custom converter.</p>
-	 *
-	 * <h5 class='section'>Usage Example:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// In @AfterEach method</jc>
-	 *    BctAssertions.<jsm>resetConverter</jsm>();
-	 * </p>
-	 *
-	 * <h5 class='section'>Thread Safety:</h5>
-	 * <p>This method is thread-safe and only affects the current thread's converter.</p>
-	 *
-	 * @see #setConverter(BeanConverter)
-	 */
-	public static void resetConverter() {
-		CONVERTER_OVERRIDE.remove();
-		CONVERTER_SUPPLIER.get().reset();
-	}
-
-	/**
-	 * Composes an error message from an optional custom message and a default message.
-	 *
-	 * <p>If a custom message is provided, it is composed with the default message in the format:
-	 * <js>"{custom}, Caused by: {default}"</js>. Otherwise, the default message is returned.</p>
-	 *
-	 * @param customMessage Optional custom message supplier. Can be <jk>null</jk>.
-	 * @param defaultMessage Default message template.
-	 * @param defaultArgs Arguments for the default message template.
-	 * @return A supplier that produces the composed error message.
-	 */
-	private static Supplier<String> composeMessage(Supplier<String> customMessage, String defaultMessage, Object...defaultArgs) {
-		if (customMessage == null) {
-			return fs(defaultMessage, defaultArgs);
-		}
-		return fs("{0}, Caused by: {1}", customMessage.get(), f(defaultMessage, defaultArgs));
+	public static void assertBean(Object actual, String fields, String expected) {
+		assertBean(null, actual, fields, expected);
 	}
 
 	/**
@@ -471,26 +392,8 @@ public class BctAssertions {
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
 		var converter = getConverter();
-		assertEquals(expected, tokenize(fields).stream().map(x -> converter.getNested(actual, x)).collect(joining(",")),
-			composeMessage(message, "Bean assertion failed."));
+		assertEquals(expected, tokenize(fields).stream().map(x -> converter.getNested(actual, x)).collect(joining(",")), composeMessage(message, "Bean assertion failed."));
 	}
-
-	/**
-	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to strings.
-	 *
-	 * <p>Same as {@link #assertBean(Supplier, Object, String, String)} but without a custom message.</p>
-	 *
-	 * @param actual The bean object to test. Must not be null.
-	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
-	 * @param expected Comma-delimited list of expected values. Must match the order of fields.
-	 * @throws NullPointerException if the bean is null
-	 * @throws AssertionError if any property values don't match expected values
-	 * @see #assertBean(Supplier, Object, String, String)
-	 */
-	public static void assertBean(Object actual, String fields, String expected) {
-		assertBean(null, actual, fields, expected);
-	}
-
 
 	/**
 	 * Asserts that multiple beans in a collection have the expected property values.
@@ -601,6 +504,19 @@ public class BctAssertions {
 			composeMessage(message, "{0} bean assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
+	/**
+	 * Asserts that the string representation of an object contains the expected substring.
+	 *
+	 * <p>Same as {@link #assertContains(Supplier, String, Object)} but without a custom message.</p>
+	 *
+	 * @param expected The substring that must be present in the actual object's string representation
+	 * @param actual The object to test. Must not be null.
+	 * @throws AssertionError if the actual object is null or its string representation doesn't contain the expected substring
+	 * @see #assertContains(Supplier, String, Object)
+	 */
+	public static void assertContains(String expected, Object actual) {
+		assertContains(null, expected, actual);
+	}
 
 	/**
 	 * Asserts that the string representation of an object contains the expected substring.
@@ -638,19 +554,18 @@ public class BctAssertions {
 	}
 
 	/**
-	 * Asserts that the string representation of an object contains the expected substring.
+	 * Asserts that the string representation of an object contains all specified substrings.
 	 *
-	 * <p>Same as {@link #assertContains(Supplier, String, Object)} but without a custom message.</p>
+	 * <p>Same as {@link #assertContainsAll(Supplier, Object, String...)} but without a custom message.</p>
 	 *
-	 * @param expected The substring that must be present in the actual object's string representation
 	 * @param actual The object to test. Must not be null.
-	 * @throws AssertionError if the actual object is null or its string representation doesn't contain the expected substring
-	 * @see #assertContains(Supplier, String, Object)
+	 * @param expected Multiple substrings that must all be present in the actual object's string representation
+	 * @throws AssertionError if the actual object is null or its string representation doesn't contain all expected substrings
+	 * @see #assertContainsAll(Supplier, Object, String...)
 	 */
-	public static void assertContains(String expected, Object actual) {
-		assertContains(null, expected, actual);
+	public static void assertContainsAll(Object actual, String...expected) {
+		assertContainsAll(null, actual, expected);
 	}
-
 
 	/**
 	 * Asserts that the string representation of an object contains all specified substrings.
@@ -708,19 +623,17 @@ public class BctAssertions {
 	}
 
 	/**
-	 * Asserts that the string representation of an object contains all specified substrings.
+	 * Asserts that a collection-like object, Optional, Value, String, or array is not null and empty.
 	 *
-	 * <p>Same as {@link #assertContainsAll(Supplier, Object, String...)} but without a custom message.</p>
+	 * <p>Same as {@link #assertEmpty(Supplier, Object)} but without a custom message.</p>
 	 *
-	 * @param actual The object to test. Must not be null.
-	 * @param expected Multiple substrings that must all be present in the actual object's string representation
-	 * @throws AssertionError if the actual object is null or its string representation doesn't contain all expected substrings
-	 * @see #assertContainsAll(Supplier, Object, String...)
+	 * @param value The object to test. Must not be null.
+	 * @throws AssertionError if the object is null or not empty
+	 * @see #assertEmpty(Supplier, Object)
 	 */
-	public static void assertContainsAll(Object actual, String...expected) {
-		assertContainsAll(null, actual, expected);
+	public static void assertEmpty(Object value) {
+		assertEmpty(null, value);
 	}
-
 
 	/**
 	 * Asserts that a collection-like object, Optional, Value, String, or array is not null and empty.
@@ -775,18 +688,21 @@ public class BctAssertions {
 	}
 
 	/**
-	 * Asserts that a collection-like object, Optional, Value, String, or array is not null and empty.
+	 * Asserts that a List or List-like object contains the expected values using flexible comparison logic.
 	 *
-	 * <p>Same as {@link #assertEmpty(Supplier, Object)} but without a custom message.</p>
+	 * <p>Same as {@link #assertList(Supplier, Object, Object...)} but without a custom message.</p>
 	 *
-	 * @param value The object to test. Must not be null.
-	 * @throws AssertionError if the object is null or not empty
-	 * @see #assertEmpty(Supplier, Object)
+	 * @param actual The List to test. Must not be null.
+	 * @param expected Multiple arguments of expected values.
+	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
+	 * @throws IllegalArgumentException if actual is null
+	 * @throws AssertionError if the List size or contents don't match expected values
+	 * @see #assertList(Supplier, Object, Object...)
 	 */
-	public static void assertEmpty(Object value) {
-		assertEmpty(null, value);
+	public static void assertList(Object actual, Object...expected) {
+		assertArgNotNull("actual", actual);
+		assertList(null, actual, expected);
 	}
-
 
 	/**
 	 * Asserts that a List or List-like object contains the expected values using flexible comparison logic.
@@ -888,22 +804,19 @@ public class BctAssertions {
 	}
 
 	/**
-	 * Asserts that a List or List-like object contains the expected values using flexible comparison logic.
+	 * Asserts that a Map contains the expected key/value pairs using flexible comparison logic.
 	 *
-	 * <p>Same as {@link #assertList(Supplier, Object, Object...)} but without a custom message.</p>
+	 * <p>Same as {@link #assertMap(Supplier, Map, Object...)} but without a custom message.</p>
 	 *
-	 * @param actual The List to test. Must not be null.
-	 * @param expected Multiple arguments of expected values.
+	 * @param actual The Map to test. Must not be null.
+	 * @param expected Multiple arguments of expected map entries.
 	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
-	 * @throws IllegalArgumentException if actual is null
-	 * @throws AssertionError if the List size or contents don't match expected values
-	 * @see #assertList(Supplier, Object, Object...)
+	 * @throws AssertionError if the Map size or contents don't match expected values
+	 * @see #assertMap(Supplier, Map, Object...)
 	 */
-	public static void assertList(Object actual, Object...expected) {
-		assertArgNotNull("actual", actual);
-		assertList(null, actual, expected);
+	public static void assertMap(Map<?,?> actual, Object...expected) {
+		assertMap(null, actual, expected);
 	}
-
 
 	/**
 	 * Asserts that a Map contains the expected key/value pairs using flexible comparison logic.
@@ -971,22 +884,6 @@ public class BctAssertions {
 	}
 
 	/**
-	 * Asserts that a Map contains the expected key/value pairs using flexible comparison logic.
-	 *
-	 * <p>Same as {@link #assertMap(Supplier, Map, Object...)} but without a custom message.</p>
-	 *
-	 * @param actual The Map to test. Must not be null.
-	 * @param expected Multiple arguments of expected map entries.
-	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
-	 * @throws AssertionError if the Map size or contents don't match expected values
-	 * @see #assertMap(Supplier, Map, Object...)
-	 */
-	public static void assertMap(Map<?,?> actual, Object...expected) {
-		assertMap(null, actual, expected);
-	}
-
-
-	/**
 	 * Asserts that mapped property access on an object returns expected values using a custom BiFunction.
 	 *
 	 * <p>This is designed for testing objects that don't follow
@@ -1041,6 +938,19 @@ public class BctAssertions {
 		assertMapped(null, actual, function, properties, expected);
 	}
 
+	/**
+	 * Asserts that an object's string representation matches the specified glob-style pattern.
+	 *
+	 * <p>Same as {@link #assertMatchesGlob(Supplier, String, Object)} but without a custom message.</p>
+	 *
+	 * @param pattern The glob-style pattern to match against.
+	 * @param value The object to test. Must not be null.
+	 * @throws AssertionError if the value is null or its string representation doesn't match the pattern
+	 * @see #assertMatchesGlob(Supplier, String, Object)
+	 */
+	public static void assertMatchesGlob(String pattern, Object value) {
+		assertMatchesGlob(null, pattern, value);
+	}
 
 	/**
 	 * Asserts that an object's string representation matches the specified glob-style pattern.
@@ -1086,19 +996,17 @@ public class BctAssertions {
 	}
 
 	/**
-	 * Asserts that an object's string representation matches the specified glob-style pattern.
+	 * Asserts that a collection-like object, Optional, Value, String, or array is not null and not empty.
 	 *
-	 * <p>Same as {@link #assertMatchesGlob(Supplier, String, Object)} but without a custom message.</p>
+	 * <p>Same as {@link #assertNotEmpty(Supplier, Object)} but without a custom message.</p>
 	 *
-	 * @param pattern The glob-style pattern to match against.
 	 * @param value The object to test. Must not be null.
-	 * @throws AssertionError if the value is null or its string representation doesn't match the pattern
-	 * @see #assertMatchesGlob(Supplier, String, Object)
+	 * @throws AssertionError if the object is null or empty
+	 * @see #assertNotEmpty(Supplier, Object)
 	 */
-	public static void assertMatchesGlob(String pattern, Object value) {
-		assertMatchesGlob(null, pattern, value);
+	public static void assertNotEmpty(Object value) {
+		assertNotEmpty(null, value);
 	}
-
 
 	/**
 	 * Asserts that a collection-like object, Optional, Value, String, or array is not null and not empty.
@@ -1153,18 +1061,18 @@ public class BctAssertions {
 	}
 
 	/**
-	 * Asserts that a collection-like object, Optional, Value, String, or array is not null and not empty.
+	 * Asserts that a collection-like object or string is not null and of the specified size.
 	 *
-	 * <p>Same as {@link #assertNotEmpty(Supplier, Object)} but without a custom message.</p>
+	 * <p>Same as {@link #assertSize(Supplier, int, Object)} but without a custom message.</p>
 	 *
-	 * @param value The object to test. Must not be null.
-	 * @throws AssertionError if the object is null or empty
-	 * @see #assertNotEmpty(Supplier, Object)
+	 * @param expected The expected size/length.
+	 * @param actual The object to test. Must not be null.
+	 * @throws AssertionError if the object is null or not the expected size.
+	 * @see #assertSize(Supplier, int, Object)
 	 */
-	public static void assertNotEmpty(Object value) {
-		assertNotEmpty(null, value);
+	public static void assertSize(int expected, Object actual) {
+		assertSize(null, expected, actual);
 	}
-
 
 	/**
 	 * Asserts that a collection-like object or string is not null and of the specified size.
@@ -1199,19 +1107,18 @@ public class BctAssertions {
 	}
 
 	/**
-	 * Asserts that a collection-like object or string is not null and of the specified size.
+	 * Asserts that an object's string representation exactly matches the expected value.
 	 *
-	 * <p>Same as {@link #assertSize(Supplier, int, Object)} but without a custom message.</p>
+	 * <p>Same as {@link #assertString(Supplier, String, Object)} but without a custom message.</p>
 	 *
-	 * @param expected The expected size/length.
+	 * @param expected The exact string that the actual object should convert to
 	 * @param actual The object to test. Must not be null.
-	 * @throws AssertionError if the object is null or not the expected size.
-	 * @see #assertSize(Supplier, int, Object)
+	 * @throws AssertionError if the actual object is null or its string representation doesn't exactly match expected
+	 * @see #assertString(Supplier, String, Object)
 	 */
-	public static void assertSize(int expected, Object actual) {
-		assertSize(null, expected, actual);
+	public static void assertString(String expected, Object actual) {
+		assertString(null, expected, actual);
 	}
-
 
 	/**
 	 * Asserts that an object's string representation exactly matches the expected value.
@@ -1250,17 +1157,97 @@ public class BctAssertions {
 	}
 
 	/**
-	 * Asserts that an object's string representation exactly matches the expected value.
+	 * Resets the bean converter for the current thread to the system default.
 	 *
-	 * <p>Same as {@link #assertString(Supplier, String, Object)} but without a custom message.</p>
+	 * <p>This method clears any thread-local converter override set via {@link #setConverter(BeanConverter)},
+	 * restoring the default converter ({@link BasicBeanConverter#DEFAULT}) for subsequent assertions.</p>
 	 *
-	 * @param expected The exact string that the actual object should convert to
-	 * @param actual The object to test. Must not be null.
-	 * @throws AssertionError if the actual object is null or its string representation doesn't exactly match expected
-	 * @see #assertString(Supplier, String, Object)
+	 * <p>This is typically called in test teardown methods (e.g., {@code @AfterEach}) to clean up after tests
+	 * that set a custom converter.</p>
+	 *
+	 * <h5 class='section'>Usage Example:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// In @AfterEach method</jc>
+	 *    BctAssertions.<jsm>resetConverter</jsm>();
+	 * </p>
+	 *
+	 * <h5 class='section'>Thread Safety:</h5>
+	 * <p>This method is thread-safe and only affects the current thread's converter.</p>
+	 *
+	 * @see #setConverter(BeanConverter)
 	 */
-	public static void assertString(String expected, Object actual) {
-		assertString(null, expected, actual);
+	public static void resetConverter() {
+		CONVERTER_OVERRIDE.remove();
+		CONVERTER_SUPPLIER.get().reset();
+	}
+
+	/**
+	 * Sets a custom bean converter for the current thread.
+	 *
+	 * <p>This method allows you to override the default converter for all assertions in the current test method.
+	 * The converter will be used by all assertion methods in the current thread.</p>
+	 *
+	 * <p>This is particularly useful in test setup methods (e.g., {@code @BeforeEach}) to configure a custom converter
+	 * for all tests in a test class or method.</p>
+	 *
+	 * <h5 class='section'>Usage Example:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// In @BeforeEach method</jc>
+	 *    <jk>var</jk> <jv>customConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+	 *       .defaultSettings()
+	 *       .addStringifier(LocalDate.<jk>class</jk>, <jp>date</jp> -> <jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>))
+	 *       .build();
+	 *    BctAssertions.<jsm>setConverter</jsm>(<jv>customConverter</jv>);
+	 *
+	 *    <jc>// All subsequent assertions in this test method will use the custom converter</jc>
+	 *    <jsm>assertBean</jsm>(<jv>event</jv>, <js>"date"</js>, <js>"2023-12-01"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Thread Safety:</h5>
+	 * <p>This method is thread-safe and uses thread-local storage. Each test method running in parallel
+	 * will have its own converter instance, preventing cross-thread interference.</p>
+	 *
+	 * @param converter The bean converter to use for the current thread. Must not be <jk>null</jk>.
+	 * @throws IllegalArgumentException If converter is <jk>null</jk>.
+	 * @see #resetConverter()
+	 */
+	public static void setConverter(BeanConverter converter) {
+		assertArgNotNull("converter", converter);
+		CONVERTER_OVERRIDE.set(converter);
+	}
+
+	/**
+	 * Composes an error message from an optional custom message and a default message.
+	 *
+	 * <p>If a custom message is provided, it is composed with the default message in the format:
+	 * <js>"{custom}, Caused by: {default}"</js>. Otherwise, the default message is returned.</p>
+	 *
+	 * @param customMessage Optional custom message supplier. Can be <jk>null</jk>.
+	 * @param defaultMessage Default message template.
+	 * @param defaultArgs Arguments for the default message template.
+	 * @return A supplier that produces the composed error message.
+	 */
+	private static Supplier<String> composeMessage(Supplier<String> customMessage, String defaultMessage, Object...defaultArgs) {
+		if (customMessage == null) {
+			return fs(defaultMessage, defaultArgs);
+		}
+		return fs("{0}, Caused by: {1}", customMessage.get(), f(defaultMessage, defaultArgs));
+	}
+
+	/**
+	 * Gets the bean converter for the current thread.
+	 *
+	 * <p>Returns the thread-local converter override if set, otherwise returns the memoized default converter.
+	 * This method is used internally by all assertion methods to get the current thread-local converter.</p>
+	 *
+	 * @return The bean converter to use for the current thread.
+	 */
+	private static BeanConverter getConverter() {
+		var override = CONVERTER_OVERRIDE.get();
+		if (override != null) {
+			return override;
+		}
+		return CONVERTER_SUPPLIER.get().get();
 	}
 
 	private BctAssertions() {}
