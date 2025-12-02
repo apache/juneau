@@ -6571,360 +6571,363 @@
 <a class="jxr_linenumber" name="L6563" href="#L6563">6563</a> 		<em class="jxr_comment">// - First '\' sees second '\', appends '\' and skips second '\'</em>
 <a class="jxr_linenumber" name="L6564" href="#L6564">6564</a> 		<em class="jxr_comment">// - Then appends the second '\' from the string, then 'b'</em>
 <a class="jxr_linenumber" name="L6565" href="#L6565">6565</a> 		<em class="jxr_comment">// Result: "a&#92;&#92;&#92;&#92;b" (both backslashes preserved)</em>
-<a class="jxr_linenumber" name="L6566" href="#L6566">6566</a> 		assertEquals(<span class="jxr_string">"a&#92;&#92;&#92;&#92;b"</span>, unescapeChars(<span class="jxr_string">"a&#92;&#92;&#92;&#92;b"</span>, AsciiSet.of(<span class="jxr_string">","</span>))); <em class="jxr_comment">// '\' not in escaped set</em>
-<a class="jxr_linenumber" name="L6567" href="#L6567">6567</a> 	}
-<a class="jxr_linenumber" name="L6568" href="#L6568">6568</a> 
-<a class="jxr_linenumber" name="L6569" href="#L6569">6569</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6570" href="#L6570">6570</a> 	<em class="jxr_comment">// unescapeHtml(String)</em>
-<a class="jxr_linenumber" name="L6571" href="#L6571">6571</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6572" href="#L6572">6572</a> 	@Test
-<a class="jxr_linenumber" name="L6573" href="#L6573">6573</a> 	<strong class="jxr_keyword">void</strong> a223_unescapeHtml() {
-<a class="jxr_linenumber" name="L6574" href="#L6574">6574</a> 		assertNull(unescapeHtml(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L6575" href="#L6575">6575</a> 		assertEquals(<span class="jxr_string">""</span>, unescapeHtml(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L6576" href="#L6576">6576</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, unescapeHtml(<span class="jxr_string">"Hello World"</span>));
-<a class="jxr_linenumber" name="L6577" href="#L6577">6577</a> 		assertEquals(<span class="jxr_string">"&lt;script&gt;"</span>, unescapeHtml(<span class="jxr_string">"&amp;lt;script&amp;gt;"</span>));
-<a class="jxr_linenumber" name="L6578" href="#L6578">6578</a> 		assertEquals(<span class="jxr_string">"\&quot;Hello\&quot;"</span>, unescapeHtml(<span class="jxr_string">"&amp;quot;Hello&amp;quot;"</span>));
-<a class="jxr_linenumber" name="L6579" href="#L6579">6579</a> 		assertEquals(<span class="jxr_string">"It's a test"</span>, unescapeHtml(<span class="jxr_string">"It&amp;#39;s a test"</span>));
-<a class="jxr_linenumber" name="L6580" href="#L6580">6580</a> 		assertEquals(<span class="jxr_string">"It's a test"</span>, unescapeHtml(<span class="jxr_string">"It&amp;apos;s a test"</span>));
-<a class="jxr_linenumber" name="L6581" href="#L6581">6581</a> 		assertEquals(<span class="jxr_string">"&amp;"</span>, unescapeHtml(<span class="jxr_string">"&amp;amp;"</span>));
-<a class="jxr_linenumber" name="L6582" href="#L6582">6582</a> 		assertEquals(<span class="jxr_string">"&lt;tag&gt;text&lt;/tag&gt;"</span>, unescapeHtml(<span class="jxr_string">"&amp;lt;tag&amp;gt;text&amp;lt;/tag&amp;gt;"</span>));
-<a class="jxr_linenumber" name="L6583" href="#L6583">6583</a> 		<em class="jxr_comment">// Test round-trip</em>
-<a class="jxr_linenumber" name="L6584" href="#L6584">6584</a> 		assertEquals(<span class="jxr_string">"Hello &amp; World"</span>, unescapeHtml(escapeHtml(<span class="jxr_string">"Hello &amp; World"</span>)));
-<a class="jxr_linenumber" name="L6585" href="#L6585">6585</a> 	}
-<a class="jxr_linenumber" name="L6586" href="#L6586">6586</a> 
-<a class="jxr_linenumber" name="L6587" href="#L6587">6587</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6588" href="#L6588">6588</a> 	<em class="jxr_comment">// unescapeXml(String)</em>
-<a class="jxr_linenumber" name="L6589" href="#L6589">6589</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6590" href="#L6590">6590</a> 	@Test
-<a class="jxr_linenumber" name="L6591" href="#L6591">6591</a> 	<strong class="jxr_keyword">void</strong> a224_unescapeXml() {
-<a class="jxr_linenumber" name="L6592" href="#L6592">6592</a> 		assertNull(unescapeXml(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L6593" href="#L6593">6593</a> 		assertEquals(<span class="jxr_string">""</span>, unescapeXml(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L6594" href="#L6594">6594</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, unescapeXml(<span class="jxr_string">"Hello World"</span>));
-<a class="jxr_linenumber" name="L6595" href="#L6595">6595</a> 		assertEquals(<span class="jxr_string">"&lt;tag&gt;"</span>, unescapeXml(<span class="jxr_string">"&amp;lt;tag&amp;gt;"</span>));
-<a class="jxr_linenumber" name="L6596" href="#L6596">6596</a> 		assertEquals(<span class="jxr_string">"\&quot;Hello\&quot;"</span>, unescapeXml(<span class="jxr_string">"&amp;quot;Hello&amp;quot;"</span>));
-<a class="jxr_linenumber" name="L6597" href="#L6597">6597</a> 		assertEquals(<span class="jxr_string">"'test'"</span>, unescapeXml(<span class="jxr_string">"&amp;apos;test&amp;apos;"</span>));
-<a class="jxr_linenumber" name="L6598" href="#L6598">6598</a> 		assertEquals(<span class="jxr_string">"&amp;"</span>, unescapeXml(<span class="jxr_string">"&amp;amp;"</span>));
-<a class="jxr_linenumber" name="L6599" href="#L6599">6599</a> 		assertEquals(<span class="jxr_string">"&lt;tag&gt;text&lt;/tag&gt;"</span>, unescapeXml(<span class="jxr_string">"&amp;lt;tag&amp;gt;text&amp;lt;/tag&amp;gt;"</span>));
-<a class="jxr_linenumber" name="L6600" href="#L6600">6600</a> 	}
-<a class="jxr_linenumber" name="L6601" href="#L6601">6601</a> 
-<a class="jxr_linenumber" name="L6602" href="#L6602">6602</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6603" href="#L6603">6603</a> 	<em class="jxr_comment">// unicodeSequence(char)</em>
-<a class="jxr_linenumber" name="L6604" href="#L6604">6604</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6605" href="#L6605">6605</a> 	@Test
-<a class="jxr_linenumber" name="L6606" href="#L6606">6606</a> 	<strong class="jxr_keyword">void</strong> a225_unicodeSequence() {
-<a class="jxr_linenumber" name="L6607" href="#L6607">6607</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0041"</span>, unicodeSequence('A'));
-<a class="jxr_linenumber" name="L6608" href="#L6608">6608</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0061"</span>, unicodeSequence('a'));
-<a class="jxr_linenumber" name="L6609" href="#L6609">6609</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0030"</span>, unicodeSequence('0'));
-<a class="jxr_linenumber" name="L6610" href="#L6610">6610</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0000"</span>, unicodeSequence('\u0000'));
-<a class="jxr_linenumber" name="L6611" href="#L6611">6611</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u00FF"</span>, unicodeSequence('\u00FF'));
-<a class="jxr_linenumber" name="L6612" href="#L6612">6612</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;uFFFF"</span>, unicodeSequence('\uFFFF'));
-<a class="jxr_linenumber" name="L6613" href="#L6613">6613</a> 	}
-<a class="jxr_linenumber" name="L6614" href="#L6614">6614</a> 
-<a class="jxr_linenumber" name="L6615" href="#L6615">6615</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6616" href="#L6616">6616</a> 	<em class="jxr_comment">// upperCase(String)</em>
-<a class="jxr_linenumber" name="L6617" href="#L6617">6617</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6618" href="#L6618">6618</a> 	@Test
-<a class="jxr_linenumber" name="L6619" href="#L6619">6619</a> 	<strong class="jxr_keyword">void</strong> a226_upperCase() {
-<a class="jxr_linenumber" name="L6620" href="#L6620">6620</a> 		assertNull(upperCase(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L6621" href="#L6621">6621</a> 		assertEquals(<span class="jxr_string">""</span>, upperCase(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L6622" href="#L6622">6622</a> 		assertEquals(<span class="jxr_string">"HELLO"</span>, upperCase(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L6623" href="#L6623">6623</a> 		assertEquals(<span class="jxr_string">"HELLO WORLD"</span>, upperCase(<span class="jxr_string">"Hello World"</span>));
-<a class="jxr_linenumber" name="L6624" href="#L6624">6624</a> 		assertEquals(<span class="jxr_string">"123"</span>, upperCase(<span class="jxr_string">"123"</span>));
-<a class="jxr_linenumber" name="L6625" href="#L6625">6625</a> 		assertEquals(<span class="jxr_string">"ABC"</span>, upperCase(<span class="jxr_string">"abc"</span>));
-<a class="jxr_linenumber" name="L6626" href="#L6626">6626</a> 	}
-<a class="jxr_linenumber" name="L6627" href="#L6627">6627</a> 
-<a class="jxr_linenumber" name="L6628" href="#L6628">6628</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6629" href="#L6629">6629</a> 	<em class="jxr_comment">// urlDecode(String)</em>
-<a class="jxr_linenumber" name="L6630" href="#L6630">6630</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6631" href="#L6631">6631</a> 	@Test
-<a class="jxr_linenumber" name="L6632" href="#L6632">6632</a> 	<strong class="jxr_keyword">void</strong> a227_urlDecode() {
-<a class="jxr_linenumber" name="L6633" href="#L6633">6633</a> 		assertNull(urlDecode(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L6634" href="#L6634">6634</a> 		assertEquals(<span class="jxr_string">""</span>, urlDecode(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L6635" href="#L6635">6635</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, urlDecode(<span class="jxr_string">"Hello+World"</span>));
-<a class="jxr_linenumber" name="L6636" href="#L6636">6636</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, urlDecode(<span class="jxr_string">"Hello%20World"</span>));
-<a class="jxr_linenumber" name="L6637" href="#L6637">6637</a> 		assertEquals(<span class="jxr_string">"test@example.com"</span>, urlDecode(<span class="jxr_string">"test%40example.com"</span>));
-<a class="jxr_linenumber" name="L6638" href="#L6638">6638</a> 		assertEquals(<span class="jxr_string">"a=b&amp;c=d"</span>, urlDecode(<span class="jxr_string">"a%3Db%26c%3Dd"</span>));
-<a class="jxr_linenumber" name="L6639" href="#L6639">6639</a> 		<em class="jxr_comment">// No encoding needed - returns as-is</em>
-<a class="jxr_linenumber" name="L6640" href="#L6640">6640</a> 		assertEquals(<span class="jxr_string">"Hello"</span>, urlDecode(<span class="jxr_string">"Hello"</span>));
-<a class="jxr_linenumber" name="L6641" href="#L6641">6641</a> 	}
-<a class="jxr_linenumber" name="L6642" href="#L6642">6642</a> 
-<a class="jxr_linenumber" name="L6643" href="#L6643">6643</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6644" href="#L6644">6644</a> 	<em class="jxr_comment">// urlEncode(String)</em>
-<a class="jxr_linenumber" name="L6645" href="#L6645">6645</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6646" href="#L6646">6646</a> 	@Test
-<a class="jxr_linenumber" name="L6647" href="#L6647">6647</a> 	<strong class="jxr_keyword">void</strong> a228_urlEncode() {
-<a class="jxr_linenumber" name="L6648" href="#L6648">6648</a> 		assertNull(urlEncode(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L6649" href="#L6649">6649</a> 		assertEquals(<span class="jxr_string">""</span>, urlEncode(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L6650" href="#L6650">6650</a> 		assertEquals(<span class="jxr_string">"Hello+World"</span>, urlEncode(<span class="jxr_string">"Hello World"</span>));
-<a class="jxr_linenumber" name="L6651" href="#L6651">6651</a> 		assertEquals(<span class="jxr_string">"test%40example.com"</span>, urlEncode(<span class="jxr_string">"test@example.com"</span>));
-<a class="jxr_linenumber" name="L6652" href="#L6652">6652</a> 		assertEquals(<span class="jxr_string">"a%3Db%26c%3Dd"</span>, urlEncode(<span class="jxr_string">"a=b&amp;c=d"</span>));
-<a class="jxr_linenumber" name="L6653" href="#L6653">6653</a> 		<em class="jxr_comment">// No encoding needed - returns as-is</em>
-<a class="jxr_linenumber" name="L6654" href="#L6654">6654</a> 		assertEquals(<span class="jxr_string">"Hello"</span>, urlEncode(<span class="jxr_string">"Hello"</span>));
-<a class="jxr_linenumber" name="L6655" href="#L6655">6655</a> 		assertEquals(<span class="jxr_string">"test123"</span>, urlEncode(<span class="jxr_string">"test123"</span>));
-<a class="jxr_linenumber" name="L6656" href="#L6656">6656</a> 
-<a class="jxr_linenumber" name="L6657" href="#L6657">6657</a> 		<em class="jxr_comment">// Test</em>
-<a class="jxr_linenumber" name="L6658" href="#L6658">6658</a> 		<strong class="jxr_keyword">var</strong> result1 = urlEncode(<span class="jxr_string">"test@example.com"</span>);
-<a class="jxr_linenumber" name="L6659" href="#L6659">6659</a> 		assertTrue(result1.contains(<span class="jxr_string">"%40"</span>)); <em class="jxr_comment">// @ is encoded</em>
-<a class="jxr_linenumber" name="L6660" href="#L6660">6660</a> 
-<a class="jxr_linenumber" name="L6661" href="#L6661">6661</a> 		<em class="jxr_comment">// Test</em>
-<a class="jxr_linenumber" name="L6662" href="#L6662">6662</a> 		<strong class="jxr_keyword">var</strong> result2 = urlEncode(<span class="jxr_string">"café"</span>);
-<a class="jxr_linenumber" name="L6663" href="#L6663">6663</a> 		assertNotNull(result2);
-<a class="jxr_linenumber" name="L6664" href="#L6664">6664</a> 		assertTrue(result2.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// Contains encoded characters</em>
-<a class="jxr_linenumber" name="L6665" href="#L6665">6665</a> 
-<a class="jxr_linenumber" name="L6666" href="#L6666">6666</a> 		<strong class="jxr_keyword">var</strong> result3 = urlEncode(<span class="jxr_string">"测试"</span>);
-<a class="jxr_linenumber" name="L6667" href="#L6667">6667</a> 		assertNotNull(result3);
-<a class="jxr_linenumber" name="L6668" href="#L6668">6668</a> 		assertTrue(result3.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// Contains UTF-8 encoded characters</em>
-<a class="jxr_linenumber" name="L6669" href="#L6669">6669</a> 	}
-<a class="jxr_linenumber" name="L6670" href="#L6670">6670</a> 
-<a class="jxr_linenumber" name="L6671" href="#L6671">6671</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6672" href="#L6672">6672</a> 	<em class="jxr_comment">// urlEncodeLax(String)</em>
-<a class="jxr_linenumber" name="L6673" href="#L6673">6673</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6674" href="#L6674">6674</a> 	@Test
-<a class="jxr_linenumber" name="L6675" href="#L6675">6675</a> 	<strong class="jxr_keyword">void</strong> a229_urlEncodeLax() {
-<a class="jxr_linenumber" name="L6676" href="#L6676">6676</a> 		assertNull(urlEncodeLax(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L6677" href="#L6677">6677</a> 		assertEquals(<span class="jxr_string">""</span>, urlEncodeLax(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L6678" href="#L6678">6678</a> 		<em class="jxr_comment">// Lax encoding - fewer characters are encoded</em>
-<a class="jxr_linenumber" name="L6679" href="#L6679">6679</a> 		assertEquals(<span class="jxr_string">"Hello+World"</span>, urlEncodeLax(<span class="jxr_string">"Hello World"</span>));
-<a class="jxr_linenumber" name="L6680" href="#L6680">6680</a> 		<em class="jxr_comment">// @ might not be encoded in lax mode</em>
-<a class="jxr_linenumber" name="L6681" href="#L6681">6681</a> 		<strong class="jxr_keyword">var</strong> result1 = urlEncodeLax(<span class="jxr_string">"test@example.com"</span>);
-<a class="jxr_linenumber" name="L6682" href="#L6682">6682</a> 		assertNotNull(result1);
-<a class="jxr_linenumber" name="L6683" href="#L6683">6683</a> 		<em class="jxr_comment">// No encoding needed - returns as-is</em>
-<a class="jxr_linenumber" name="L6684" href="#L6684">6684</a> 		assertEquals(<span class="jxr_string">"Hello"</span>, urlEncodeLax(<span class="jxr_string">"Hello"</span>));
-<a class="jxr_linenumber" name="L6685" href="#L6685">6685</a> 		assertEquals(<span class="jxr_string">"test123"</span>, urlEncodeLax(<span class="jxr_string">"test123"</span>));
-<a class="jxr_linenumber" name="L6686" href="#L6686">6686</a> 
-<a class="jxr_linenumber" name="L6687" href="#L6687">6687</a> 		<em class="jxr_comment">// Test that need encoding</em>
-<a class="jxr_linenumber" name="L6688" href="#L6688">6688</a> 		<em class="jxr_comment">// Characters not in URL_UNENCODED_LAX_CHARS and not space</em>
-<a class="jxr_linenumber" name="L6689" href="#L6689">6689</a> 		<strong class="jxr_keyword">var</strong> result2 = urlEncodeLax(<span class="jxr_string">"test#value"</span>);
-<a class="jxr_linenumber" name="L6690" href="#L6690">6690</a> 		assertNotNull(result2);
-<a class="jxr_linenumber" name="L6691" href="#L6691">6691</a> 		assertTrue(result2.contains(<span class="jxr_string">"%23"</span>)); <em class="jxr_comment">// # is encoded as %23</em>
-<a class="jxr_linenumber" name="L6692" href="#L6692">6692</a> 		<strong class="jxr_keyword">var</strong> result3 = urlEncodeLax(<span class="jxr_string">"test%value"</span>);
-<a class="jxr_linenumber" name="L6693" href="#L6693">6693</a> 		assertNotNull(result3);
-<a class="jxr_linenumber" name="L6694" href="#L6694">6694</a> 		assertTrue(result3.contains(<span class="jxr_string">"%25"</span>)); <em class="jxr_comment">// % is encoded as %25</em>
-<a class="jxr_linenumber" name="L6695" href="#L6695">6695</a> 		<strong class="jxr_keyword">var</strong> result4 = urlEncodeLax(<span class="jxr_string">"test&amp;value"</span>);
-<a class="jxr_linenumber" name="L6696" href="#L6696">6696</a> 		assertNotNull(result4);
-<a class="jxr_linenumber" name="L6697" href="#L6697">6697</a> 		assertTrue(result4.contains(<span class="jxr_string">"%26"</span>)); <em class="jxr_comment">// &amp; is encoded as %26</em>
-<a class="jxr_linenumber" name="L6698" href="#L6698">6698</a> 
-<a class="jxr_linenumber" name="L6699" href="#L6699">6699</a> 		<em class="jxr_comment">// Test that need encoding</em>
-<a class="jxr_linenumber" name="L6700" href="#L6700">6700</a> 		<em class="jxr_comment">// Unicode characters are encoded using URLEncoder.encode</em>
-<a class="jxr_linenumber" name="L6701" href="#L6701">6701</a> 		<strong class="jxr_keyword">var</strong> result5 = urlEncodeLax(<span class="jxr_string">"testévalue"</span>);
-<a class="jxr_linenumber" name="L6702" href="#L6702">6702</a> 		assertNotNull(result5);
-<a class="jxr_linenumber" name="L6703" href="#L6703">6703</a> 		assertTrue(result5.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// é should be encoded</em>
-<a class="jxr_linenumber" name="L6704" href="#L6704">6704</a> 		<strong class="jxr_keyword">var</strong> result6 = urlEncodeLax(<span class="jxr_string">"test中文"</span>);
-<a class="jxr_linenumber" name="L6705" href="#L6705">6705</a> 		assertNotNull(result6);
-<a class="jxr_linenumber" name="L6706" href="#L6706">6706</a> 		assertTrue(result6.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// Chinese characters should be encoded</em>
-<a class="jxr_linenumber" name="L6707" href="#L6707">6707</a> 		<strong class="jxr_keyword">var</strong> result7 = urlEncodeLax(<span class="jxr_string">"test🎉"</span>);
-<a class="jxr_linenumber" name="L6708" href="#L6708">6708</a> 		assertNotNull(result7);
-<a class="jxr_linenumber" name="L6709" href="#L6709">6709</a> 		assertTrue(result7.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// Emoji should be encoded</em>
-<a class="jxr_linenumber" name="L6710" href="#L6710">6710</a> 	}
-<a class="jxr_linenumber" name="L6711" href="#L6711">6711</a> 
-<a class="jxr_linenumber" name="L6712" href="#L6712">6712</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6713" href="#L6713">6713</a> 	<em class="jxr_comment">// urlEncodePath(Object)</em>
-<a class="jxr_linenumber" name="L6714" href="#L6714">6714</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6715" href="#L6715">6715</a> 	@Test
-<a class="jxr_linenumber" name="L6716" href="#L6716">6716</a> 	<strong class="jxr_keyword">void</strong> a230_urlEncodePath() {
-<a class="jxr_linenumber" name="L6717" href="#L6717">6717</a> 		<em class="jxr_comment">// Null input</em>
-<a class="jxr_linenumber" name="L6718" href="#L6718">6718</a> 		assertNull(urlEncodePath(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L6719" href="#L6719">6719</a> 
-<a class="jxr_linenumber" name="L6720" href="#L6720">6720</a> 		<em class="jxr_comment">// Path encoding - doesn't encode slashes</em>
-<a class="jxr_linenumber" name="L6721" href="#L6721">6721</a> 		<strong class="jxr_keyword">var</strong> result1 = urlEncodePath(<span class="jxr_string">"/path/to/file"</span>);
-<a class="jxr_linenumber" name="L6722" href="#L6722">6722</a> 		assertNotNull(result1);
-<a class="jxr_linenumber" name="L6723" href="#L6723">6723</a> 		assertTrue(result1.contains(<span class="jxr_string">"/"</span>));
-<a class="jxr_linenumber" name="L6724" href="#L6724">6724</a> 
-<a class="jxr_linenumber" name="L6725" href="#L6725">6725</a> 		<em class="jxr_comment">// Spaces are encoded</em>
-<a class="jxr_linenumber" name="L6726" href="#L6726">6726</a> 		<strong class="jxr_keyword">var</strong> result2 = urlEncodePath(<span class="jxr_string">"path with spaces"</span>);
-<a class="jxr_linenumber" name="L6727" href="#L6727">6727</a> 		assertNotNull(result2);
-<a class="jxr_linenumber" name="L6728" href="#L6728">6728</a> 		assertTrue(result2.contains(<span class="jxr_string">"+"</span>) || result2.contains(<span class="jxr_string">"%20"</span>));
-<a class="jxr_linenumber" name="L6729" href="#L6729">6729</a> 
-<a class="jxr_linenumber" name="L6730" href="#L6730">6730</a> 		<em class="jxr_comment">// Special characters are encoded</em>
-<a class="jxr_linenumber" name="L6731" href="#L6731">6731</a> 		<strong class="jxr_keyword">var</strong> result3 = urlEncodePath(<span class="jxr_string">"file@name"</span>);
-<a class="jxr_linenumber" name="L6732" href="#L6732">6732</a> 		assertNotNull(result3);
-<a class="jxr_linenumber" name="L6733" href="#L6733">6733</a> 
-<a class="jxr_linenumber" name="L6734" href="#L6734">6734</a> 		<em class="jxr_comment">// Test code path</em>
-<a class="jxr_linenumber" name="L6735" href="#L6735">6735</a> 		<strong class="jxr_keyword">var</strong> result4 = urlEncodePath(<span class="jxr_string">"simplepath"</span>);
-<a class="jxr_linenumber" name="L6736" href="#L6736">6736</a> 		assertEquals(<span class="jxr_string">"simplepath"</span>, result4); <em class="jxr_comment">// No encoding needed, returns as-is</em>
-<a class="jxr_linenumber" name="L6737" href="#L6737">6737</a> 
-<a class="jxr_linenumber" name="L6738" href="#L6738">6738</a> 		<em class="jxr_comment">// Test</em>
-<a class="jxr_linenumber" name="L6739" href="#L6739">6739</a> 		<em class="jxr_comment">// The surrogate pair handling code is executed when encoding characters that contain surrogate pairs</em>
-<a class="jxr_linenumber" name="L6740" href="#L6740">6740</a> 		<em class="jxr_comment">// Use a string that contains a character needing encoding along with surrogate pairs</em>
-<a class="jxr_linenumber" name="L6741" href="#L6741">6741</a> 		<em class="jxr_comment">// to ensure the encoding path is taken and surrogate pair handling is executed</em>
-<a class="jxr_linenumber" name="L6742" href="#L6742">6742</a> 		<strong class="jxr_keyword">var</strong> emoji = <span class="jxr_string">"🎉"</span>; <em class="jxr_comment">// This contains surrogate pairs</em>
-<a class="jxr_linenumber" name="L6743" href="#L6743">6743</a> 		<strong class="jxr_keyword">var</strong> result5 = urlEncodePath(emoji);
-<a class="jxr_linenumber" name="L6744" href="#L6744">6744</a> 		assertNotNull(result5);
-<a class="jxr_linenumber" name="L6745" href="#L6745">6745</a> 		<em class="jxr_comment">// The surrogate pair code  is executed during encoding</em>
-<a class="jxr_linenumber" name="L6746" href="#L6746">6746</a> 		<em class="jxr_comment">// Check that the result is different from input (encoding occurred) or contains encoded characters</em>
-<a class="jxr_linenumber" name="L6747" href="#L6747">6747</a> 		assertTrue(result5.length() &gt; 0);
-<a class="jxr_linenumber" name="L6748" href="#L6748">6748</a> 		<em class="jxr_comment">// Also test with a string that combines regular characters with surrogate pairs</em>
-<a class="jxr_linenumber" name="L6749" href="#L6749">6749</a> 		<strong class="jxr_keyword">var</strong> result5b = urlEncodePath(<span class="jxr_string">"test🎉file"</span>);
-<a class="jxr_linenumber" name="L6750" href="#L6750">6750</a> 		assertNotNull(result5b);
-<a class="jxr_linenumber" name="L6751" href="#L6751">6751</a> 		assertTrue(result5b.length() &gt; 0);
-<a class="jxr_linenumber" name="L6752" href="#L6752">6752</a> 
-<a class="jxr_linenumber" name="L6753" href="#L6753">6753</a> 		<em class="jxr_comment">// Test - uppercase hex digits (caseDiff applied)</em>
-<a class="jxr_linenumber" name="L6754" href="#L6754">6754</a> 		<em class="jxr_comment">// forDigit returns lowercase 'a'-'f' for hex digits 10-15, which need to be converted to uppercase</em>
-<a class="jxr_linenumber" name="L6755" href="#L6755">6755</a> 		<em class="jxr_comment">// We need characters that produce bytes with hex values containing a-f</em>
-<a class="jxr_linenumber" name="L6756" href="#L6756">6756</a> 		<em class="jxr_comment">// For example, byte 0x0A produces hex "a", byte 0x0B produces "b", etc.</em>
-<a class="jxr_linenumber" name="L6757" href="#L6757">6757</a> 		<em class="jxr_comment">// Use characters that when UTF-8 encoded produce bytes with values 0x0A-0x0F</em>
-<a class="jxr_linenumber" name="L6758" href="#L6758">6758</a> 		<em class="jxr_comment">// Actually, any non-ASCII character will produce multi-byte UTF-8 encoding</em>
-<a class="jxr_linenumber" name="L6759" href="#L6759">6759</a> 		<em class="jxr_comment">// Let's use a character that produces bytes with hex digits a-f</em>
-<a class="jxr_linenumber" name="L6760" href="#L6760">6760</a> 		<strong class="jxr_keyword">var</strong> result6 = urlEncodePath(<span class="jxr_string">"test@file"</span>);
-<a class="jxr_linenumber" name="L6761" href="#L6761">6761</a> 		assertNotNull(result6);
-<a class="jxr_linenumber" name="L6762" href="#L6762">6762</a> 		<em class="jxr_comment">// Check that hex digits are uppercase (A-F, not a-f)</em>
-<a class="jxr_linenumber" name="L6763" href="#L6763">6763</a> 		<em class="jxr_comment">// The encoding should contain %40 for @</em>
-<a class="jxr_linenumber" name="L6764" href="#L6764">6764</a> 		assertTrue(result6.contains(<span class="jxr_string">"%40"</span>) || result6.contains(<span class="jxr_string">"%"</span>));
-<a class="jxr_linenumber" name="L6765" href="#L6765">6765</a> 		<em class="jxr_comment">// Verify all hex sequences are uppercase</em>
-<a class="jxr_linenumber" name="L6766" href="#L6766">6766</a> 		<strong class="jxr_keyword">var</strong> hexPattern = java.util.regex.Pattern.compile(<span class="jxr_string">"%([0-9A-Fa-f]{2})"</span>);
-<a class="jxr_linenumber" name="L6767" href="#L6767">6767</a> 		<strong class="jxr_keyword">var</strong> matcher = hexPattern.matcher(result6);
-<a class="jxr_linenumber" name="L6768" href="#L6768">6768</a> 		<strong class="jxr_keyword">boolean</strong> foundHex = false;
-<a class="jxr_linenumber" name="L6769" href="#L6769">6769</a> 		<strong class="jxr_keyword">while</strong> (matcher.find()) {
-<a class="jxr_linenumber" name="L6770" href="#L6770">6770</a> 			foundHex = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L6771" href="#L6771">6771</a> 			<strong class="jxr_keyword">var</strong> hex = matcher.group(1);
-<a class="jxr_linenumber" name="L6772" href="#L6772">6772</a> 			<em class="jxr_comment">// Verify it's uppercase (caseDiff converts lowercase to uppercase)</em>
-<a class="jxr_linenumber" name="L6773" href="#L6773">6773</a> 			assertEquals(hex.toUpperCase(), hex);
-<a class="jxr_linenumber" name="L6774" href="#L6774">6774</a> 		}
-<a class="jxr_linenumber" name="L6775" href="#L6775">6775</a> 		<em class="jxr_comment">// Test with a character that produces bytes with hex digits a-f</em>
-<a class="jxr_linenumber" name="L6776" href="#L6776">6776</a> 		<em class="jxr_comment">// Use a character that when UTF-8 encoded produces bytes with values that result in lowercase hex</em>
-<a class="jxr_linenumber" name="L6777" href="#L6777">6777</a> 		<em class="jxr_comment">// For example, characters that produce bytes 0x0A-0x0F, 0x1A-0x1F, etc.</em>
-<a class="jxr_linenumber" name="L6778" href="#L6778">6778</a> 		<em class="jxr_comment">// Chinese character or other multi-byte UTF-8 character should work</em>
-<a class="jxr_linenumber" name="L6779" href="#L6779">6779</a> 		<strong class="jxr_keyword">var</strong> result7 = urlEncodePath(<span class="jxr_string">"test中文"</span>);
-<a class="jxr_linenumber" name="L6780" href="#L6780">6780</a> 		assertNotNull(result7);
-<a class="jxr_linenumber" name="L6781" href="#L6781">6781</a> 		assertTrue(result7.contains(<span class="jxr_string">"%"</span>));
-<a class="jxr_linenumber" name="L6782" href="#L6782">6782</a> 		<em class="jxr_comment">// Verify hex digits are uppercase</em>
-<a class="jxr_linenumber" name="L6783" href="#L6783">6783</a> 		<strong class="jxr_keyword">var</strong> matcher2 = hexPattern.matcher(result7);
-<a class="jxr_linenumber" name="L6784" href="#L6784">6784</a> 		<strong class="jxr_keyword">while</strong> (matcher2.find()) {
-<a class="jxr_linenumber" name="L6785" href="#L6785">6785</a> 			<strong class="jxr_keyword">var</strong> hex = matcher2.group(1);
-<a class="jxr_linenumber" name="L6786" href="#L6786">6786</a> 			<em class="jxr_comment">// Verify it's uppercase (code path and 7724 convert lowercase to uppercase)</em>
-<a class="jxr_linenumber" name="L6787" href="#L6787">6787</a> 			assertEquals(hex.toUpperCase(), hex);
-<a class="jxr_linenumber" name="L6788" href="#L6788">6788</a> 		}
-<a class="jxr_linenumber" name="L6789" href="#L6789">6789</a> 		<em class="jxr_comment">// If we found hex sequences, verify they're uppercase</em>
-<a class="jxr_linenumber" name="L6790" href="#L6790">6790</a> 		<strong class="jxr_keyword">if</strong> (foundHex) {
-<a class="jxr_linenumber" name="L6791" href="#L6791">6791</a> 			<em class="jxr_comment">// All hex should be uppercase</em>
-<a class="jxr_linenumber" name="L6792" href="#L6792">6792</a> 			assertTrue(result6.equals(result6.toUpperCase()) || result6.matches(<span class="jxr_string">".*%[0-9A-F]{2}.*"</span>));
-<a class="jxr_linenumber" name="L6793" href="#L6793">6793</a> 		}
-<a class="jxr_linenumber" name="L6794" href="#L6794">6794</a> 	}
-<a class="jxr_linenumber" name="L6795" href="#L6795">6795</a> 
-<a class="jxr_linenumber" name="L6796" href="#L6796">6796</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6797" href="#L6797">6797</a> 	<em class="jxr_comment">// wordCount(String)</em>
-<a class="jxr_linenumber" name="L6798" href="#L6798">6798</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6799" href="#L6799">6799</a> 	@Test
-<a class="jxr_linenumber" name="L6800" href="#L6800">6800</a> 	<strong class="jxr_keyword">void</strong> a231_wordCount() {
-<a class="jxr_linenumber" name="L6801" href="#L6801">6801</a> 		assertEquals(0, wordCount(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L6802" href="#L6802">6802</a> 		assertEquals(0, wordCount(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L6803" href="#L6803">6803</a> 		assertEquals(0, wordCount(<span class="jxr_string">"   "</span>));
-<a class="jxr_linenumber" name="L6804" href="#L6804">6804</a> 		assertEquals(1, wordCount(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L6805" href="#L6805">6805</a> 		assertEquals(2, wordCount(<span class="jxr_string">"Hello world"</span>));
-<a class="jxr_linenumber" name="L6806" href="#L6806">6806</a> 		assertEquals(4, wordCount(<span class="jxr_string">"The quick brown fox"</span>));
-<a class="jxr_linenumber" name="L6807" href="#L6807">6807</a> 		assertEquals(5, wordCount(<span class="jxr_string">"Hello, world! How are you?"</span>));
-<a class="jxr_linenumber" name="L6808" href="#L6808">6808</a> 		assertEquals(3, wordCount(<span class="jxr_string">"one\ttwo\nthree"</span>));
-<a class="jxr_linenumber" name="L6809" href="#L6809">6809</a> 		assertEquals(1, wordCount(<span class="jxr_string">"hello123"</span>));
-<a class="jxr_linenumber" name="L6810" href="#L6810">6810</a> 		<em class="jxr_comment">// Underscores are part of word characters, so "hello_world" is one word</em>
-<a class="jxr_linenumber" name="L6811" href="#L6811">6811</a> 		assertEquals(1, wordCount(<span class="jxr_string">"hello_world"</span>));
-<a class="jxr_linenumber" name="L6812" href="#L6812">6812</a> 		assertEquals(2, wordCount(<span class="jxr_string">"hello world"</span>));
-<a class="jxr_linenumber" name="L6813" href="#L6813">6813</a> 	}
-<a class="jxr_linenumber" name="L6814" href="#L6814">6814</a> 
-<a class="jxr_linenumber" name="L6815" href="#L6815">6815</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6816" href="#L6816">6816</a> 	<em class="jxr_comment">// wrap(String,int) and wrap(String,int,String)</em>
-<a class="jxr_linenumber" name="L6817" href="#L6817">6817</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L6818" href="#L6818">6818</a> 	@Test
-<a class="jxr_linenumber" name="L6819" href="#L6819">6819</a> 	<strong class="jxr_keyword">void</strong> a232_wrap() {
-<a class="jxr_linenumber" name="L6820" href="#L6820">6820</a> 		<em class="jxr_comment">// wrap(String,int) - uses default newline "\n"</em>
-<a class="jxr_linenumber" name="L6821" href="#L6821">6821</a> 		assertNull(wrap(<strong class="jxr_keyword">null</strong>, 10));
-<a class="jxr_linenumber" name="L6822" href="#L6822">6822</a> 		assertEquals(<span class="jxr_string">""</span>, wrap(<span class="jxr_string">""</span>, 10));
-<a class="jxr_linenumber" name="L6823" href="#L6823">6823</a> 		assertEquals(<span class="jxr_string">"hello\nworld"</span>, wrap(<span class="jxr_string">"hello world"</span>, 10));
-<a class="jxr_linenumber" name="L6824" href="#L6824">6824</a> 		assertEquals(<span class="jxr_string">"hello\nworld\ntest"</span>, wrap(<span class="jxr_string">"hello world test"</span>, 10));
-<a class="jxr_linenumber" name="L6825" href="#L6825">6825</a> 		assertEquals(<span class="jxr_string">"hello world"</span>, wrap(<span class="jxr_string">"hello world"</span>, 20));
-<a class="jxr_linenumber" name="L6826" href="#L6826">6826</a> 		assertEquals(<span class="jxr_string">"hello\nworld"</span>, wrap(<span class="jxr_string">"hello world"</span>, 5));
-<a class="jxr_linenumber" name="L6827" href="#L6827">6827</a> 		assertEquals(<span class="jxr_string">"supercalifragilisticexpialidocious"</span>, wrap(<span class="jxr_string">"supercalifragilisticexpialidocious"</span>, 10));
-<a class="jxr_linenumber" name="L6828" href="#L6828">6828</a> 		assertEquals(<span class="jxr_string">"hello\nworld"</span>, wrap(<span class="jxr_string">"hello  world"</span>, 10));
-<a class="jxr_linenumber" name="L6829" href="#L6829">6829</a> 		assertEquals(<span class="jxr_string">"line1\nline2"</span>, wrap(<span class="jxr_string">"line1\nline2"</span>, 10));
-<a class="jxr_linenumber" name="L6830" href="#L6830">6830</a> 		assertEquals(<span class="jxr_string">"a\nb\nc"</span>, wrap(<span class="jxr_string">"a b c"</span>, 1));
-<a class="jxr_linenumber" name="L6831" href="#L6831">6831</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, 0));
-<a class="jxr_linenumber" name="L6832" href="#L6832">6832</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, -1));
-<a class="jxr_linenumber" name="L6833" href="#L6833">6833</a> 
-<a class="jxr_linenumber" name="L6834" href="#L6834">6834</a> 		<em class="jxr_comment">// wrap(String,int,String) - with custom newline</em>
-<a class="jxr_linenumber" name="L6835" href="#L6835">6835</a> 		assertNull(wrap(<strong class="jxr_keyword">null</strong>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
-<a class="jxr_linenumber" name="L6836" href="#L6836">6836</a> 		assertEquals(<span class="jxr_string">""</span>, wrap(<span class="jxr_string">""</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
-<a class="jxr_linenumber" name="L6837" href="#L6837">6837</a> 		assertEquals(<span class="jxr_string">"hello&lt;br&gt;world"</span>, wrap(<span class="jxr_string">"hello world"</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
-<a class="jxr_linenumber" name="L6838" href="#L6838">6838</a> 		assertEquals(<span class="jxr_string">"hello&lt;br&gt;world&lt;br&gt;test"</span>, wrap(<span class="jxr_string">"hello world test"</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
-<a class="jxr_linenumber" name="L6839" href="#L6839">6839</a> 		assertEquals(<span class="jxr_string">"hello world"</span>, wrap(<span class="jxr_string">"hello world"</span>, 20, <span class="jxr_string">"&lt;br&gt;"</span>));
-<a class="jxr_linenumber" name="L6840" href="#L6840">6840</a> 		assertEquals(<span class="jxr_string">"hello&lt;br&gt;world"</span>, wrap(<span class="jxr_string">"hello world"</span>, 5, <span class="jxr_string">"&lt;br&gt;"</span>));
-<a class="jxr_linenumber" name="L6841" href="#L6841">6841</a> 		assertEquals(<span class="jxr_string">"supercalifragilisticexpialidocious"</span>, wrap(<span class="jxr_string">"supercalifragilisticexpialidocious"</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
-<a class="jxr_linenumber" name="L6842" href="#L6842">6842</a> 		assertEquals(<span class="jxr_string">"line1&lt;br&gt;line2"</span>, wrap(<span class="jxr_string">"line1\nline2"</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
-<a class="jxr_linenumber" name="L6843" href="#L6843">6843</a> 		assertEquals(<span class="jxr_string">"a&lt;br&gt;b&lt;br&gt;c"</span>, wrap(<span class="jxr_string">"a b c"</span>, 1, <span class="jxr_string">"&lt;br&gt;"</span>));
-<a class="jxr_linenumber" name="L6844" href="#L6844">6844</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, 0, <span class="jxr_string">"\n"</span>));
-<a class="jxr_linenumber" name="L6845" href="#L6845">6845</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, -1, <span class="jxr_string">"\n"</span>));
-<a class="jxr_linenumber" name="L6846" href="#L6846">6846</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, 10, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L6847" href="#L6847">6847</a> 
-<a class="jxr_linenumber" name="L6848" href="#L6848">6848</a> 		<em class="jxr_comment">// Test</em>
-<a class="jxr_linenumber" name="L6849" href="#L6849">6849</a> 		<strong class="jxr_keyword">var</strong> result1 = wrap(<span class="jxr_string">"line1\n\nline2"</span>, 10, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6850" href="#L6850">6850</a> 		assertTrue(result1.contains(<span class="jxr_string">"\n\n"</span>)); <em class="jxr_comment">// Empty line preserved</em>
-<a class="jxr_linenumber" name="L6851" href="#L6851">6851</a> 
-<a class="jxr_linenumber" name="L6852" href="#L6852">6852</a> 		<em class="jxr_comment">// Test)</em>
-<a class="jxr_linenumber" name="L6853" href="#L6853">6853</a> 		<em class="jxr_comment">// Multiple spaces create empty words that should be skipped</em>
-<a class="jxr_linenumber" name="L6854" href="#L6854">6854</a> 		<strong class="jxr_keyword">var</strong> result2 = wrap(<span class="jxr_string">"word1  word2"</span>, 10, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6855" href="#L6855">6855</a> 		assertTrue(result2.contains(<span class="jxr_string">"word1"</span>));
-<a class="jxr_linenumber" name="L6856" href="#L6856">6856</a> 		assertTrue(result2.contains(<span class="jxr_string">"word2"</span>));
-<a class="jxr_linenumber" name="L6857" href="#L6857">6857</a> 		<em class="jxr_comment">// Test with multiple consecutive spaces</em>
-<a class="jxr_linenumber" name="L6858" href="#L6858">6858</a> 		<strong class="jxr_keyword">var</strong> result2b = wrap(<span class="jxr_string">"a   b   c"</span>, 10, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6859" href="#L6859">6859</a> 		assertTrue(result2b.contains(<span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L6860" href="#L6860">6860</a> 		assertTrue(result2b.contains(<span class="jxr_string">"b"</span>));
-<a class="jxr_linenumber" name="L6861" href="#L6861">6861</a> 		assertTrue(result2b.contains(<span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L6862" href="#L6862">6862</a> 		<em class="jxr_comment">// Test with leading spaces - split(" +") creates empty string at start</em>
-<a class="jxr_linenumber" name="L6863" href="#L6863">6863</a> 		<strong class="jxr_keyword">var</strong> result2c = wrap(<span class="jxr_string">"  hello world"</span>, 10, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6864" href="#L6864">6864</a> 		assertTrue(result2c.contains(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L6865" href="#L6865">6865</a> 		assertTrue(result2c.contains(<span class="jxr_string">"world"</span>));
-<a class="jxr_linenumber" name="L6866" href="#L6866">6866</a> 		<em class="jxr_comment">// Test with trailing spaces - split(" +") creates empty string at end</em>
-<a class="jxr_linenumber" name="L6867" href="#L6867">6867</a> 		<strong class="jxr_keyword">var</strong> result2d = wrap(<span class="jxr_string">"hello world  "</span>, 10, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6868" href="#L6868">6868</a> 		assertTrue(result2d.contains(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L6869" href="#L6869">6869</a> 		assertTrue(result2d.contains(<span class="jxr_string">"world"</span>));
-<a class="jxr_linenumber" name="L6870" href="#L6870">6870</a> 		<em class="jxr_comment">// Test with both leading and trailing spaces</em>
-<a class="jxr_linenumber" name="L6871" href="#L6871">6871</a> 		<strong class="jxr_keyword">var</strong> result2e = wrap(<span class="jxr_string">"  hello world  "</span>, 10, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6872" href="#L6872">6872</a> 		assertTrue(result2e.contains(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L6873" href="#L6873">6873</a> 		assertTrue(result2e.contains(<span class="jxr_string">"world"</span>));
-<a class="jxr_linenumber" name="L6874" href="#L6874">6874</a> 
-<a class="jxr_linenumber" name="L6875" href="#L6875">6875</a> 		<em class="jxr_comment">// Test</em>
-<a class="jxr_linenumber" name="L6876" href="#L6876">6876</a> 		<em class="jxr_comment">// This tests breaking a long word when it's the first word on a line</em>
-<a class="jxr_linenumber" name="L6877" href="#L6877">6877</a> 		<em class="jxr_comment">// Code path: result.length() &gt; 0 (result already has content)</em>
-<a class="jxr_linenumber" name="L6878" href="#L6878">6878</a> 		<em class="jxr_comment">// Code path: while loop that breaks word into chunks</em>
-<a class="jxr_linenumber" name="L6879" href="#L6879">6879</a> 		<em class="jxr_comment">//   Code path: wordPos &gt; 0 (not first iteration)</em>
-<a class="jxr_linenumber" name="L6880" href="#L6880">6880</a> 		<em class="jxr_comment">//   Code path: remaining &lt;= wrapLength (remaining fits)</em>
-<a class="jxr_linenumber" name="L6881" href="#L6881">6881</a> 		<em class="jxr_comment">//   Code path: append remaining</em>
-<a class="jxr_linenumber" name="L6882" href="#L6882">6882</a> 		<em class="jxr_comment">//   Code path: break</em>
-<a class="jxr_linenumber" name="L6883" href="#L6883">6883</a> 		<em class="jxr_comment">//   Code path: append chunk</em>
-<a class="jxr_linenumber" name="L6884" href="#L6884">6884</a> 		<em class="jxr_comment">//   Code path: advance position</em>
-<a class="jxr_linenumber" name="L6885" href="#L6885">6885</a> 		<strong class="jxr_keyword">var</strong> result3 = wrap(<span class="jxr_string">"short verylongword here"</span>, 5, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6886" href="#L6886">6886</a> 		assertFalse(result3.contains(<span class="jxr_string">"verylongword"</span>)); <em class="jxr_comment">// Word should be split into chunks</em>
-<a class="jxr_linenumber" name="L6887" href="#L6887">6887</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> line : result3.split(<span class="jxr_string">"\n"</span>)) {
-<a class="jxr_linenumber" name="L6888" href="#L6888">6888</a> 			<strong class="jxr_keyword">if</strong> (! line.isEmpty())
-<a class="jxr_linenumber" name="L6889" href="#L6889">6889</a> 				assertTrue(line.length() &lt;= 5);
-<a class="jxr_linenumber" name="L6890" href="#L6890">6890</a> 		}
-<a class="jxr_linenumber" name="L6891" href="#L6891">6891</a> 		<em class="jxr_comment">// Test with result already having content  &gt; 0)</em>
-<a class="jxr_linenumber" name="L6892" href="#L6892">6892</a> 		<em class="jxr_comment">// After a previous line, a long word that needs breaking as first word on new line</em>
-<a class="jxr_linenumber" name="L6893" href="#L6893">6893</a> 		<em class="jxr_comment">// This happens when a previous line was completed and we start a new line</em>
-<a class="jxr_linenumber" name="L6894" href="#L6894">6894</a> 		<strong class="jxr_keyword">var</strong> result3b = wrap(<span class="jxr_string">"first\nverylongword here"</span>, 5, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6895" href="#L6895">6895</a> 		<em class="jxr_comment">// After "first\n", "verylongword" is the first word on the new line and needs breaking</em>
-<a class="jxr_linenumber" name="L6896" href="#L6896">6896</a> 		assertTrue(result3b.contains(<span class="jxr_string">"first"</span>));
-<a class="jxr_linenumber" name="L6897" href="#L6897">6897</a> 		assertFalse(result3b.contains(<span class="jxr_string">"verylongword"</span>)); <em class="jxr_comment">// Long word should be broken</em>
-<a class="jxr_linenumber" name="L6898" href="#L6898">6898</a> 		<em class="jxr_comment">// Test word that breaks into multiple chunks (covers code path)</em>
-<a class="jxr_linenumber" name="L6899" href="#L6899">6899</a> 		<em class="jxr_comment">// Word length 15, wrapLength 5 -&gt; 3 chunks of 5, 5, 5</em>
-<a class="jxr_linenumber" name="L6900" href="#L6900">6900</a> 		<em class="jxr_comment">// This tests: wordPos &gt; 0 , append chunk , advance position </em>
-<a class="jxr_linenumber" name="L6901" href="#L6901">6901</a> 		<em class="jxr_comment">// And: remaining &lt;= wrapLength , append remaining , break </em>
-<a class="jxr_linenumber" name="L6902" href="#L6902">6902</a> 		<strong class="jxr_keyword">var</strong> result3c = wrap(<span class="jxr_string">"abcdefghijklmno here"</span>, 5, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6903" href="#L6903">6903</a> 		assertTrue(result3c.contains(<span class="jxr_string">"abcde"</span>)); <em class="jxr_comment">// First chunk (wordPos == 0, no newline before)</em>
-<a class="jxr_linenumber" name="L6904" href="#L6904">6904</a> 		assertTrue(result3c.contains(<span class="jxr_string">"fghij"</span>)); <em class="jxr_comment">// Second chunk (wordPos &gt; 0, newline before, code path)</em>
-<a class="jxr_linenumber" name="L6905" href="#L6905">6905</a> 		assertTrue(result3c.contains(<span class="jxr_string">"klmno"</span>)); <em class="jxr_comment">// Third chunk (remaining &lt;= wrapLength, code path)</em>
-<a class="jxr_linenumber" name="L6906" href="#L6906">6906</a> 
-<a class="jxr_linenumber" name="L6907" href="#L6907">6907</a> 		<em class="jxr_comment">// Test</em>
-<a class="jxr_linenumber" name="L6908" href="#L6908">6908</a> 		<strong class="jxr_keyword">var</strong> result4 = wrap(<span class="jxr_string">"short word verylongword here"</span>, 10, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6909" href="#L6909">6909</a> 		assertFalse(result4.contains(<span class="jxr_string">"verylongword"</span>)); <em class="jxr_comment">// Word should be split into chunks</em>
-<a class="jxr_linenumber" name="L6910" href="#L6910">6910</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> line : result4.split(<span class="jxr_string">"\n"</span>)) {
-<a class="jxr_linenumber" name="L6911" href="#L6911">6911</a> 			<strong class="jxr_keyword">if</strong> (! line.isEmpty())
-<a class="jxr_linenumber" name="L6912" href="#L6912">6912</a> 				assertTrue(line.length() &lt;= 10);
-<a class="jxr_linenumber" name="L6913" href="#L6913">6913</a> 		}
-<a class="jxr_linenumber" name="L6914" href="#L6914">6914</a> 
-<a class="jxr_linenumber" name="L6915" href="#L6915">6915</a> 		<em class="jxr_comment">// Test &gt; 0)</em>
-<a class="jxr_linenumber" name="L6916" href="#L6916">6916</a> 		<strong class="jxr_keyword">var</strong> result5 = wrap(<span class="jxr_string">"short word"</span>, 20, <span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L6917" href="#L6917">6917</a> 		assertEquals(<span class="jxr_string">"short word"</span>, result5); <em class="jxr_comment">// Remaining line appended</em>
-<a class="jxr_linenumber" name="L6918" href="#L6918">6918</a> 	}
-<a class="jxr_linenumber" name="L6919" href="#L6919">6919</a> }
+<a class="jxr_linenumber" name="L6566" href="#L6566">6566</a> 		System.out.println(<span class="jxr_string">"=== Testing unescapeChars with a&#92;&#92;&#92;&#92;b, backslash NOT in escaped set ==="</span>);
+<a class="jxr_linenumber" name="L6567" href="#L6567">6567</a> 		<strong class="jxr_keyword">var</strong> result2 = unescapeChars(<span class="jxr_string">"a&#92;&#92;&#92;&#92;b"</span>, AsciiSet.of(<span class="jxr_string">","</span>));
+<a class="jxr_linenumber" name="L6568" href="#L6568">6568</a> 		System.out.println(<span class="jxr_string">"Result: "</span> + java.util.Arrays.toString(result2.toCharArray()));
+<a class="jxr_linenumber" name="L6569" href="#L6569">6569</a> 		assertEquals(<span class="jxr_string">"a&#92;&#92;&#92;&#92;b"</span>, result2); <em class="jxr_comment">// '\' not in escaped set</em>
+<a class="jxr_linenumber" name="L6570" href="#L6570">6570</a> 	}
+<a class="jxr_linenumber" name="L6571" href="#L6571">6571</a> 
+<a class="jxr_linenumber" name="L6572" href="#L6572">6572</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6573" href="#L6573">6573</a> 	<em class="jxr_comment">// unescapeHtml(String)</em>
+<a class="jxr_linenumber" name="L6574" href="#L6574">6574</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6575" href="#L6575">6575</a> 	@Test
+<a class="jxr_linenumber" name="L6576" href="#L6576">6576</a> 	<strong class="jxr_keyword">void</strong> a223_unescapeHtml() {
+<a class="jxr_linenumber" name="L6577" href="#L6577">6577</a> 		assertNull(unescapeHtml(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L6578" href="#L6578">6578</a> 		assertEquals(<span class="jxr_string">""</span>, unescapeHtml(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L6579" href="#L6579">6579</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, unescapeHtml(<span class="jxr_string">"Hello World"</span>));
+<a class="jxr_linenumber" name="L6580" href="#L6580">6580</a> 		assertEquals(<span class="jxr_string">"&lt;script&gt;"</span>, unescapeHtml(<span class="jxr_string">"&amp;lt;script&amp;gt;"</span>));
+<a class="jxr_linenumber" name="L6581" href="#L6581">6581</a> 		assertEquals(<span class="jxr_string">"\&quot;Hello\&quot;"</span>, unescapeHtml(<span class="jxr_string">"&amp;quot;Hello&amp;quot;"</span>));
+<a class="jxr_linenumber" name="L6582" href="#L6582">6582</a> 		assertEquals(<span class="jxr_string">"It's a test"</span>, unescapeHtml(<span class="jxr_string">"It&amp;#39;s a test"</span>));
+<a class="jxr_linenumber" name="L6583" href="#L6583">6583</a> 		assertEquals(<span class="jxr_string">"It's a test"</span>, unescapeHtml(<span class="jxr_string">"It&amp;apos;s a test"</span>));
+<a class="jxr_linenumber" name="L6584" href="#L6584">6584</a> 		assertEquals(<span class="jxr_string">"&amp;"</span>, unescapeHtml(<span class="jxr_string">"&amp;amp;"</span>));
+<a class="jxr_linenumber" name="L6585" href="#L6585">6585</a> 		assertEquals(<span class="jxr_string">"&lt;tag&gt;text&lt;/tag&gt;"</span>, unescapeHtml(<span class="jxr_string">"&amp;lt;tag&amp;gt;text&amp;lt;/tag&amp;gt;"</span>));
+<a class="jxr_linenumber" name="L6586" href="#L6586">6586</a> 		<em class="jxr_comment">// Test round-trip</em>
+<a class="jxr_linenumber" name="L6587" href="#L6587">6587</a> 		assertEquals(<span class="jxr_string">"Hello &amp; World"</span>, unescapeHtml(escapeHtml(<span class="jxr_string">"Hello &amp; World"</span>)));
+<a class="jxr_linenumber" name="L6588" href="#L6588">6588</a> 	}
+<a class="jxr_linenumber" name="L6589" href="#L6589">6589</a> 
+<a class="jxr_linenumber" name="L6590" href="#L6590">6590</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6591" href="#L6591">6591</a> 	<em class="jxr_comment">// unescapeXml(String)</em>
+<a class="jxr_linenumber" name="L6592" href="#L6592">6592</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6593" href="#L6593">6593</a> 	@Test
+<a class="jxr_linenumber" name="L6594" href="#L6594">6594</a> 	<strong class="jxr_keyword">void</strong> a224_unescapeXml() {
+<a class="jxr_linenumber" name="L6595" href="#L6595">6595</a> 		assertNull(unescapeXml(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L6596" href="#L6596">6596</a> 		assertEquals(<span class="jxr_string">""</span>, unescapeXml(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L6597" href="#L6597">6597</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, unescapeXml(<span class="jxr_string">"Hello World"</span>));
+<a class="jxr_linenumber" name="L6598" href="#L6598">6598</a> 		assertEquals(<span class="jxr_string">"&lt;tag&gt;"</span>, unescapeXml(<span class="jxr_string">"&amp;lt;tag&amp;gt;"</span>));
+<a class="jxr_linenumber" name="L6599" href="#L6599">6599</a> 		assertEquals(<span class="jxr_string">"\&quot;Hello\&quot;"</span>, unescapeXml(<span class="jxr_string">"&amp;quot;Hello&amp;quot;"</span>));
+<a class="jxr_linenumber" name="L6600" href="#L6600">6600</a> 		assertEquals(<span class="jxr_string">"'test'"</span>, unescapeXml(<span class="jxr_string">"&amp;apos;test&amp;apos;"</span>));
+<a class="jxr_linenumber" name="L6601" href="#L6601">6601</a> 		assertEquals(<span class="jxr_string">"&amp;"</span>, unescapeXml(<span class="jxr_string">"&amp;amp;"</span>));
+<a class="jxr_linenumber" name="L6602" href="#L6602">6602</a> 		assertEquals(<span class="jxr_string">"&lt;tag&gt;text&lt;/tag&gt;"</span>, unescapeXml(<span class="jxr_string">"&amp;lt;tag&amp;gt;text&amp;lt;/tag&amp;gt;"</span>));
+<a class="jxr_linenumber" name="L6603" href="#L6603">6603</a> 	}
+<a class="jxr_linenumber" name="L6604" href="#L6604">6604</a> 
+<a class="jxr_linenumber" name="L6605" href="#L6605">6605</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6606" href="#L6606">6606</a> 	<em class="jxr_comment">// unicodeSequence(char)</em>
+<a class="jxr_linenumber" name="L6607" href="#L6607">6607</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6608" href="#L6608">6608</a> 	@Test
+<a class="jxr_linenumber" name="L6609" href="#L6609">6609</a> 	<strong class="jxr_keyword">void</strong> a225_unicodeSequence() {
+<a class="jxr_linenumber" name="L6610" href="#L6610">6610</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0041"</span>, unicodeSequence('A'));
+<a class="jxr_linenumber" name="L6611" href="#L6611">6611</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0061"</span>, unicodeSequence('a'));
+<a class="jxr_linenumber" name="L6612" href="#L6612">6612</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0030"</span>, unicodeSequence('0'));
+<a class="jxr_linenumber" name="L6613" href="#L6613">6613</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0000"</span>, unicodeSequence('\u0000'));
+<a class="jxr_linenumber" name="L6614" href="#L6614">6614</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u00FF"</span>, unicodeSequence('\u00FF'));
+<a class="jxr_linenumber" name="L6615" href="#L6615">6615</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;uFFFF"</span>, unicodeSequence('\uFFFF'));
+<a class="jxr_linenumber" name="L6616" href="#L6616">6616</a> 	}
+<a class="jxr_linenumber" name="L6617" href="#L6617">6617</a> 
+<a class="jxr_linenumber" name="L6618" href="#L6618">6618</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6619" href="#L6619">6619</a> 	<em class="jxr_comment">// upperCase(String)</em>
+<a class="jxr_linenumber" name="L6620" href="#L6620">6620</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6621" href="#L6621">6621</a> 	@Test
+<a class="jxr_linenumber" name="L6622" href="#L6622">6622</a> 	<strong class="jxr_keyword">void</strong> a226_upperCase() {
+<a class="jxr_linenumber" name="L6623" href="#L6623">6623</a> 		assertNull(upperCase(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L6624" href="#L6624">6624</a> 		assertEquals(<span class="jxr_string">""</span>, upperCase(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L6625" href="#L6625">6625</a> 		assertEquals(<span class="jxr_string">"HELLO"</span>, upperCase(<span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L6626" href="#L6626">6626</a> 		assertEquals(<span class="jxr_string">"HELLO WORLD"</span>, upperCase(<span class="jxr_string">"Hello World"</span>));
+<a class="jxr_linenumber" name="L6627" href="#L6627">6627</a> 		assertEquals(<span class="jxr_string">"123"</span>, upperCase(<span class="jxr_string">"123"</span>));
+<a class="jxr_linenumber" name="L6628" href="#L6628">6628</a> 		assertEquals(<span class="jxr_string">"ABC"</span>, upperCase(<span class="jxr_string">"abc"</span>));
+<a class="jxr_linenumber" name="L6629" href="#L6629">6629</a> 	}
+<a class="jxr_linenumber" name="L6630" href="#L6630">6630</a> 
+<a class="jxr_linenumber" name="L6631" href="#L6631">6631</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6632" href="#L6632">6632</a> 	<em class="jxr_comment">// urlDecode(String)</em>
+<a class="jxr_linenumber" name="L6633" href="#L6633">6633</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6634" href="#L6634">6634</a> 	@Test
+<a class="jxr_linenumber" name="L6635" href="#L6635">6635</a> 	<strong class="jxr_keyword">void</strong> a227_urlDecode() {
+<a class="jxr_linenumber" name="L6636" href="#L6636">6636</a> 		assertNull(urlDecode(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L6637" href="#L6637">6637</a> 		assertEquals(<span class="jxr_string">""</span>, urlDecode(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L6638" href="#L6638">6638</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, urlDecode(<span class="jxr_string">"Hello+World"</span>));
+<a class="jxr_linenumber" name="L6639" href="#L6639">6639</a> 		assertEquals(<span class="jxr_string">"Hello World"</span>, urlDecode(<span class="jxr_string">"Hello%20World"</span>));
+<a class="jxr_linenumber" name="L6640" href="#L6640">6640</a> 		assertEquals(<span class="jxr_string">"test@example.com"</span>, urlDecode(<span class="jxr_string">"test%40example.com"</span>));
+<a class="jxr_linenumber" name="L6641" href="#L6641">6641</a> 		assertEquals(<span class="jxr_string">"a=b&amp;c=d"</span>, urlDecode(<span class="jxr_string">"a%3Db%26c%3Dd"</span>));
+<a class="jxr_linenumber" name="L6642" href="#L6642">6642</a> 		<em class="jxr_comment">// No encoding needed - returns as-is</em>
+<a class="jxr_linenumber" name="L6643" href="#L6643">6643</a> 		assertEquals(<span class="jxr_string">"Hello"</span>, urlDecode(<span class="jxr_string">"Hello"</span>));
+<a class="jxr_linenumber" name="L6644" href="#L6644">6644</a> 	}
+<a class="jxr_linenumber" name="L6645" href="#L6645">6645</a> 
+<a class="jxr_linenumber" name="L6646" href="#L6646">6646</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6647" href="#L6647">6647</a> 	<em class="jxr_comment">// urlEncode(String)</em>
+<a class="jxr_linenumber" name="L6648" href="#L6648">6648</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6649" href="#L6649">6649</a> 	@Test
+<a class="jxr_linenumber" name="L6650" href="#L6650">6650</a> 	<strong class="jxr_keyword">void</strong> a228_urlEncode() {
+<a class="jxr_linenumber" name="L6651" href="#L6651">6651</a> 		assertNull(urlEncode(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L6652" href="#L6652">6652</a> 		assertEquals(<span class="jxr_string">""</span>, urlEncode(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L6653" href="#L6653">6653</a> 		assertEquals(<span class="jxr_string">"Hello+World"</span>, urlEncode(<span class="jxr_string">"Hello World"</span>));
+<a class="jxr_linenumber" name="L6654" href="#L6654">6654</a> 		assertEquals(<span class="jxr_string">"test%40example.com"</span>, urlEncode(<span class="jxr_string">"test@example.com"</span>));
+<a class="jxr_linenumber" name="L6655" href="#L6655">6655</a> 		assertEquals(<span class="jxr_string">"a%3Db%26c%3Dd"</span>, urlEncode(<span class="jxr_string">"a=b&amp;c=d"</span>));
+<a class="jxr_linenumber" name="L6656" href="#L6656">6656</a> 		<em class="jxr_comment">// No encoding needed - returns as-is</em>
+<a class="jxr_linenumber" name="L6657" href="#L6657">6657</a> 		assertEquals(<span class="jxr_string">"Hello"</span>, urlEncode(<span class="jxr_string">"Hello"</span>));
+<a class="jxr_linenumber" name="L6658" href="#L6658">6658</a> 		assertEquals(<span class="jxr_string">"test123"</span>, urlEncode(<span class="jxr_string">"test123"</span>));
+<a class="jxr_linenumber" name="L6659" href="#L6659">6659</a> 
+<a class="jxr_linenumber" name="L6660" href="#L6660">6660</a> 		<em class="jxr_comment">// Test</em>
+<a class="jxr_linenumber" name="L6661" href="#L6661">6661</a> 		<strong class="jxr_keyword">var</strong> result1 = urlEncode(<span class="jxr_string">"test@example.com"</span>);
+<a class="jxr_linenumber" name="L6662" href="#L6662">6662</a> 		assertTrue(result1.contains(<span class="jxr_string">"%40"</span>)); <em class="jxr_comment">// @ is encoded</em>
+<a class="jxr_linenumber" name="L6663" href="#L6663">6663</a> 
+<a class="jxr_linenumber" name="L6664" href="#L6664">6664</a> 		<em class="jxr_comment">// Test</em>
+<a class="jxr_linenumber" name="L6665" href="#L6665">6665</a> 		<strong class="jxr_keyword">var</strong> result2 = urlEncode(<span class="jxr_string">"café"</span>);
+<a class="jxr_linenumber" name="L6666" href="#L6666">6666</a> 		assertNotNull(result2);
+<a class="jxr_linenumber" name="L6667" href="#L6667">6667</a> 		assertTrue(result2.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// Contains encoded characters</em>
+<a class="jxr_linenumber" name="L6668" href="#L6668">6668</a> 
+<a class="jxr_linenumber" name="L6669" href="#L6669">6669</a> 		<strong class="jxr_keyword">var</strong> result3 = urlEncode(<span class="jxr_string">"测试"</span>);
+<a class="jxr_linenumber" name="L6670" href="#L6670">6670</a> 		assertNotNull(result3);
+<a class="jxr_linenumber" name="L6671" href="#L6671">6671</a> 		assertTrue(result3.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// Contains UTF-8 encoded characters</em>
+<a class="jxr_linenumber" name="L6672" href="#L6672">6672</a> 	}
+<a class="jxr_linenumber" name="L6673" href="#L6673">6673</a> 
+<a class="jxr_linenumber" name="L6674" href="#L6674">6674</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6675" href="#L6675">6675</a> 	<em class="jxr_comment">// urlEncodeLax(String)</em>
+<a class="jxr_linenumber" name="L6676" href="#L6676">6676</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6677" href="#L6677">6677</a> 	@Test
+<a class="jxr_linenumber" name="L6678" href="#L6678">6678</a> 	<strong class="jxr_keyword">void</strong> a229_urlEncodeLax() {
+<a class="jxr_linenumber" name="L6679" href="#L6679">6679</a> 		assertNull(urlEncodeLax(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L6680" href="#L6680">6680</a> 		assertEquals(<span class="jxr_string">""</span>, urlEncodeLax(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L6681" href="#L6681">6681</a> 		<em class="jxr_comment">// Lax encoding - fewer characters are encoded</em>
+<a class="jxr_linenumber" name="L6682" href="#L6682">6682</a> 		assertEquals(<span class="jxr_string">"Hello+World"</span>, urlEncodeLax(<span class="jxr_string">"Hello World"</span>));
+<a class="jxr_linenumber" name="L6683" href="#L6683">6683</a> 		<em class="jxr_comment">// @ might not be encoded in lax mode</em>
+<a class="jxr_linenumber" name="L6684" href="#L6684">6684</a> 		<strong class="jxr_keyword">var</strong> result1 = urlEncodeLax(<span class="jxr_string">"test@example.com"</span>);
+<a class="jxr_linenumber" name="L6685" href="#L6685">6685</a> 		assertNotNull(result1);
+<a class="jxr_linenumber" name="L6686" href="#L6686">6686</a> 		<em class="jxr_comment">// No encoding needed - returns as-is</em>
+<a class="jxr_linenumber" name="L6687" href="#L6687">6687</a> 		assertEquals(<span class="jxr_string">"Hello"</span>, urlEncodeLax(<span class="jxr_string">"Hello"</span>));
+<a class="jxr_linenumber" name="L6688" href="#L6688">6688</a> 		assertEquals(<span class="jxr_string">"test123"</span>, urlEncodeLax(<span class="jxr_string">"test123"</span>));
+<a class="jxr_linenumber" name="L6689" href="#L6689">6689</a> 
+<a class="jxr_linenumber" name="L6690" href="#L6690">6690</a> 		<em class="jxr_comment">// Test that need encoding</em>
+<a class="jxr_linenumber" name="L6691" href="#L6691">6691</a> 		<em class="jxr_comment">// Characters not in URL_UNENCODED_LAX_CHARS and not space</em>
+<a class="jxr_linenumber" name="L6692" href="#L6692">6692</a> 		<strong class="jxr_keyword">var</strong> result2 = urlEncodeLax(<span class="jxr_string">"test#value"</span>);
+<a class="jxr_linenumber" name="L6693" href="#L6693">6693</a> 		assertNotNull(result2);
+<a class="jxr_linenumber" name="L6694" href="#L6694">6694</a> 		assertTrue(result2.contains(<span class="jxr_string">"%23"</span>)); <em class="jxr_comment">// # is encoded as %23</em>
+<a class="jxr_linenumber" name="L6695" href="#L6695">6695</a> 		<strong class="jxr_keyword">var</strong> result3 = urlEncodeLax(<span class="jxr_string">"test%value"</span>);
+<a class="jxr_linenumber" name="L6696" href="#L6696">6696</a> 		assertNotNull(result3);
+<a class="jxr_linenumber" name="L6697" href="#L6697">6697</a> 		assertTrue(result3.contains(<span class="jxr_string">"%25"</span>)); <em class="jxr_comment">// % is encoded as %25</em>
+<a class="jxr_linenumber" name="L6698" href="#L6698">6698</a> 		<strong class="jxr_keyword">var</strong> result4 = urlEncodeLax(<span class="jxr_string">"test&amp;value"</span>);
+<a class="jxr_linenumber" name="L6699" href="#L6699">6699</a> 		assertNotNull(result4);
+<a class="jxr_linenumber" name="L6700" href="#L6700">6700</a> 		assertTrue(result4.contains(<span class="jxr_string">"%26"</span>)); <em class="jxr_comment">// &amp; is encoded as %26</em>
+<a class="jxr_linenumber" name="L6701" href="#L6701">6701</a> 
+<a class="jxr_linenumber" name="L6702" href="#L6702">6702</a> 		<em class="jxr_comment">// Test that need encoding</em>
+<a class="jxr_linenumber" name="L6703" href="#L6703">6703</a> 		<em class="jxr_comment">// Unicode characters are encoded using URLEncoder.encode</em>
+<a class="jxr_linenumber" name="L6704" href="#L6704">6704</a> 		<strong class="jxr_keyword">var</strong> result5 = urlEncodeLax(<span class="jxr_string">"testévalue"</span>);
+<a class="jxr_linenumber" name="L6705" href="#L6705">6705</a> 		assertNotNull(result5);
+<a class="jxr_linenumber" name="L6706" href="#L6706">6706</a> 		assertTrue(result5.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// é should be encoded</em>
+<a class="jxr_linenumber" name="L6707" href="#L6707">6707</a> 		<strong class="jxr_keyword">var</strong> result6 = urlEncodeLax(<span class="jxr_string">"test中文"</span>);
+<a class="jxr_linenumber" name="L6708" href="#L6708">6708</a> 		assertNotNull(result6);
+<a class="jxr_linenumber" name="L6709" href="#L6709">6709</a> 		assertTrue(result6.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// Chinese characters should be encoded</em>
+<a class="jxr_linenumber" name="L6710" href="#L6710">6710</a> 		<strong class="jxr_keyword">var</strong> result7 = urlEncodeLax(<span class="jxr_string">"test🎉"</span>);
+<a class="jxr_linenumber" name="L6711" href="#L6711">6711</a> 		assertNotNull(result7);
+<a class="jxr_linenumber" name="L6712" href="#L6712">6712</a> 		assertTrue(result7.contains(<span class="jxr_string">"%"</span>)); <em class="jxr_comment">// Emoji should be encoded</em>
+<a class="jxr_linenumber" name="L6713" href="#L6713">6713</a> 	}
+<a class="jxr_linenumber" name="L6714" href="#L6714">6714</a> 
+<a class="jxr_linenumber" name="L6715" href="#L6715">6715</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6716" href="#L6716">6716</a> 	<em class="jxr_comment">// urlEncodePath(Object)</em>
+<a class="jxr_linenumber" name="L6717" href="#L6717">6717</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6718" href="#L6718">6718</a> 	@Test
+<a class="jxr_linenumber" name="L6719" href="#L6719">6719</a> 	<strong class="jxr_keyword">void</strong> a230_urlEncodePath() {
+<a class="jxr_linenumber" name="L6720" href="#L6720">6720</a> 		<em class="jxr_comment">// Null input</em>
+<a class="jxr_linenumber" name="L6721" href="#L6721">6721</a> 		assertNull(urlEncodePath(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L6722" href="#L6722">6722</a> 
+<a class="jxr_linenumber" name="L6723" href="#L6723">6723</a> 		<em class="jxr_comment">// Path encoding - doesn't encode slashes</em>
+<a class="jxr_linenumber" name="L6724" href="#L6724">6724</a> 		<strong class="jxr_keyword">var</strong> result1 = urlEncodePath(<span class="jxr_string">"/path/to/file"</span>);
+<a class="jxr_linenumber" name="L6725" href="#L6725">6725</a> 		assertNotNull(result1);
+<a class="jxr_linenumber" name="L6726" href="#L6726">6726</a> 		assertTrue(result1.contains(<span class="jxr_string">"/"</span>));
+<a class="jxr_linenumber" name="L6727" href="#L6727">6727</a> 
+<a class="jxr_linenumber" name="L6728" href="#L6728">6728</a> 		<em class="jxr_comment">// Spaces are encoded</em>
+<a class="jxr_linenumber" name="L6729" href="#L6729">6729</a> 		<strong class="jxr_keyword">var</strong> result2 = urlEncodePath(<span class="jxr_string">"path with spaces"</span>);
+<a class="jxr_linenumber" name="L6730" href="#L6730">6730</a> 		assertNotNull(result2);
+<a class="jxr_linenumber" name="L6731" href="#L6731">6731</a> 		assertTrue(result2.contains(<span class="jxr_string">"+"</span>) || result2.contains(<span class="jxr_string">"%20"</span>));
+<a class="jxr_linenumber" name="L6732" href="#L6732">6732</a> 
+<a class="jxr_linenumber" name="L6733" href="#L6733">6733</a> 		<em class="jxr_comment">// Special characters are encoded</em>
+<a class="jxr_linenumber" name="L6734" href="#L6734">6734</a> 		<strong class="jxr_keyword">var</strong> result3 = urlEncodePath(<span class="jxr_string">"file@name"</span>);
+<a class="jxr_linenumber" name="L6735" href="#L6735">6735</a> 		assertNotNull(result3);
+<a class="jxr_linenumber" name="L6736" href="#L6736">6736</a> 
+<a class="jxr_linenumber" name="L6737" href="#L6737">6737</a> 		<em class="jxr_comment">// Test code path</em>
+<a class="jxr_linenumber" name="L6738" href="#L6738">6738</a> 		<strong class="jxr_keyword">var</strong> result4 = urlEncodePath(<span class="jxr_string">"simplepath"</span>);
+<a class="jxr_linenumber" name="L6739" href="#L6739">6739</a> 		assertEquals(<span class="jxr_string">"simplepath"</span>, result4); <em class="jxr_comment">// No encoding needed, returns as-is</em>
+<a class="jxr_linenumber" name="L6740" href="#L6740">6740</a> 
+<a class="jxr_linenumber" name="L6741" href="#L6741">6741</a> 		<em class="jxr_comment">// Test</em>
+<a class="jxr_linenumber" name="L6742" href="#L6742">6742</a> 		<em class="jxr_comment">// The surrogate pair handling code is executed when encoding characters that contain surrogate pairs</em>
+<a class="jxr_linenumber" name="L6743" href="#L6743">6743</a> 		<em class="jxr_comment">// Use a string that contains a character needing encoding along with surrogate pairs</em>
+<a class="jxr_linenumber" name="L6744" href="#L6744">6744</a> 		<em class="jxr_comment">// to ensure the encoding path is taken and surrogate pair handling is executed</em>
+<a class="jxr_linenumber" name="L6745" href="#L6745">6745</a> 		<strong class="jxr_keyword">var</strong> emoji = <span class="jxr_string">"🎉"</span>; <em class="jxr_comment">// This contains surrogate pairs</em>
+<a class="jxr_linenumber" name="L6746" href="#L6746">6746</a> 		<strong class="jxr_keyword">var</strong> result5 = urlEncodePath(emoji);
+<a class="jxr_linenumber" name="L6747" href="#L6747">6747</a> 		assertNotNull(result5);
+<a class="jxr_linenumber" name="L6748" href="#L6748">6748</a> 		<em class="jxr_comment">// The surrogate pair code  is executed during encoding</em>
+<a class="jxr_linenumber" name="L6749" href="#L6749">6749</a> 		<em class="jxr_comment">// Check that the result is different from input (encoding occurred) or contains encoded characters</em>
+<a class="jxr_linenumber" name="L6750" href="#L6750">6750</a> 		assertTrue(result5.length() &gt; 0);
+<a class="jxr_linenumber" name="L6751" href="#L6751">6751</a> 		<em class="jxr_comment">// Also test with a string that combines regular characters with surrogate pairs</em>
+<a class="jxr_linenumber" name="L6752" href="#L6752">6752</a> 		<strong class="jxr_keyword">var</strong> result5b = urlEncodePath(<span class="jxr_string">"test🎉file"</span>);
+<a class="jxr_linenumber" name="L6753" href="#L6753">6753</a> 		assertNotNull(result5b);
+<a class="jxr_linenumber" name="L6754" href="#L6754">6754</a> 		assertTrue(result5b.length() &gt; 0);
+<a class="jxr_linenumber" name="L6755" href="#L6755">6755</a> 
+<a class="jxr_linenumber" name="L6756" href="#L6756">6756</a> 		<em class="jxr_comment">// Test - uppercase hex digits (caseDiff applied)</em>
+<a class="jxr_linenumber" name="L6757" href="#L6757">6757</a> 		<em class="jxr_comment">// forDigit returns lowercase 'a'-'f' for hex digits 10-15, which need to be converted to uppercase</em>
+<a class="jxr_linenumber" name="L6758" href="#L6758">6758</a> 		<em class="jxr_comment">// We need characters that produce bytes with hex values containing a-f</em>
+<a class="jxr_linenumber" name="L6759" href="#L6759">6759</a> 		<em class="jxr_comment">// For example, byte 0x0A produces hex "a", byte 0x0B produces "b", etc.</em>
+<a class="jxr_linenumber" name="L6760" href="#L6760">6760</a> 		<em class="jxr_comment">// Use characters that when UTF-8 encoded produce bytes with values 0x0A-0x0F</em>
+<a class="jxr_linenumber" name="L6761" href="#L6761">6761</a> 		<em class="jxr_comment">// Actually, any non-ASCII character will produce multi-byte UTF-8 encoding</em>
+<a class="jxr_linenumber" name="L6762" href="#L6762">6762</a> 		<em class="jxr_comment">// Let's use a character that produces bytes with hex digits a-f</em>
+<a class="jxr_linenumber" name="L6763" href="#L6763">6763</a> 		<strong class="jxr_keyword">var</strong> result6 = urlEncodePath(<span class="jxr_string">"test@file"</span>);
+<a class="jxr_linenumber" name="L6764" href="#L6764">6764</a> 		assertNotNull(result6);
+<a class="jxr_linenumber" name="L6765" href="#L6765">6765</a> 		<em class="jxr_comment">// Check that hex digits are uppercase (A-F, not a-f)</em>
+<a class="jxr_linenumber" name="L6766" href="#L6766">6766</a> 		<em class="jxr_comment">// The encoding should contain %40 for @</em>
+<a class="jxr_linenumber" name="L6767" href="#L6767">6767</a> 		assertTrue(result6.contains(<span class="jxr_string">"%40"</span>) || result6.contains(<span class="jxr_string">"%"</span>));
+<a class="jxr_linenumber" name="L6768" href="#L6768">6768</a> 		<em class="jxr_comment">// Verify all hex sequences are uppercase</em>
+<a class="jxr_linenumber" name="L6769" href="#L6769">6769</a> 		<strong class="jxr_keyword">var</strong> hexPattern = java.util.regex.Pattern.compile(<span class="jxr_string">"%([0-9A-Fa-f]{2})"</span>);
+<a class="jxr_linenumber" name="L6770" href="#L6770">6770</a> 		<strong class="jxr_keyword">var</strong> matcher = hexPattern.matcher(result6);
+<a class="jxr_linenumber" name="L6771" href="#L6771">6771</a> 		<strong class="jxr_keyword">boolean</strong> foundHex = false;
+<a class="jxr_linenumber" name="L6772" href="#L6772">6772</a> 		<strong class="jxr_keyword">while</strong> (matcher.find()) {
+<a class="jxr_linenumber" name="L6773" href="#L6773">6773</a> 			foundHex = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L6774" href="#L6774">6774</a> 			<strong class="jxr_keyword">var</strong> hex = matcher.group(1);
+<a class="jxr_linenumber" name="L6775" href="#L6775">6775</a> 			<em class="jxr_comment">// Verify it's uppercase (caseDiff converts lowercase to uppercase)</em>
+<a class="jxr_linenumber" name="L6776" href="#L6776">6776</a> 			assertEquals(hex.toUpperCase(), hex);
+<a class="jxr_linenumber" name="L6777" href="#L6777">6777</a> 		}
+<a class="jxr_linenumber" name="L6778" href="#L6778">6778</a> 		<em class="jxr_comment">// Test with a character that produces bytes with hex digits a-f</em>
+<a class="jxr_linenumber" name="L6779" href="#L6779">6779</a> 		<em class="jxr_comment">// Use a character that when UTF-8 encoded produces bytes with values that result in lowercase hex</em>
+<a class="jxr_linenumber" name="L6780" href="#L6780">6780</a> 		<em class="jxr_comment">// For example, characters that produce bytes 0x0A-0x0F, 0x1A-0x1F, etc.</em>
+<a class="jxr_linenumber" name="L6781" href="#L6781">6781</a> 		<em class="jxr_comment">// Chinese character or other multi-byte UTF-8 character should work</em>
+<a class="jxr_linenumber" name="L6782" href="#L6782">6782</a> 		<strong class="jxr_keyword">var</strong> result7 = urlEncodePath(<span class="jxr_string">"test中文"</span>);
+<a class="jxr_linenumber" name="L6783" href="#L6783">6783</a> 		assertNotNull(result7);
+<a class="jxr_linenumber" name="L6784" href="#L6784">6784</a> 		assertTrue(result7.contains(<span class="jxr_string">"%"</span>));
+<a class="jxr_linenumber" name="L6785" href="#L6785">6785</a> 		<em class="jxr_comment">// Verify hex digits are uppercase</em>
+<a class="jxr_linenumber" name="L6786" href="#L6786">6786</a> 		<strong class="jxr_keyword">var</strong> matcher2 = hexPattern.matcher(result7);
+<a class="jxr_linenumber" name="L6787" href="#L6787">6787</a> 		<strong class="jxr_keyword">while</strong> (matcher2.find()) {
+<a class="jxr_linenumber" name="L6788" href="#L6788">6788</a> 			<strong class="jxr_keyword">var</strong> hex = matcher2.group(1);
+<a class="jxr_linenumber" name="L6789" href="#L6789">6789</a> 			<em class="jxr_comment">// Verify it's uppercase (code path and 7724 convert lowercase to uppercase)</em>
+<a class="jxr_linenumber" name="L6790" href="#L6790">6790</a> 			assertEquals(hex.toUpperCase(), hex);
+<a class="jxr_linenumber" name="L6791" href="#L6791">6791</a> 		}
+<a class="jxr_linenumber" name="L6792" href="#L6792">6792</a> 		<em class="jxr_comment">// If we found hex sequences, verify they're uppercase</em>
+<a class="jxr_linenumber" name="L6793" href="#L6793">6793</a> 		<strong class="jxr_keyword">if</strong> (foundHex) {
+<a class="jxr_linenumber" name="L6794" href="#L6794">6794</a> 			<em class="jxr_comment">// All hex should be uppercase</em>
+<a class="jxr_linenumber" name="L6795" href="#L6795">6795</a> 			assertTrue(result6.equals(result6.toUpperCase()) || result6.matches(<span class="jxr_string">".*%[0-9A-F]{2}.*"</span>));
+<a class="jxr_linenumber" name="L6796" href="#L6796">6796</a> 		}
+<a class="jxr_linenumber" name="L6797" href="#L6797">6797</a> 	}
+<a class="jxr_linenumber" name="L6798" href="#L6798">6798</a> 
+<a class="jxr_linenumber" name="L6799" href="#L6799">6799</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6800" href="#L6800">6800</a> 	<em class="jxr_comment">// wordCount(String)</em>
+<a class="jxr_linenumber" name="L6801" href="#L6801">6801</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6802" href="#L6802">6802</a> 	@Test
+<a class="jxr_linenumber" name="L6803" href="#L6803">6803</a> 	<strong class="jxr_keyword">void</strong> a231_wordCount() {
+<a class="jxr_linenumber" name="L6804" href="#L6804">6804</a> 		assertEquals(0, wordCount(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L6805" href="#L6805">6805</a> 		assertEquals(0, wordCount(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L6806" href="#L6806">6806</a> 		assertEquals(0, wordCount(<span class="jxr_string">"   "</span>));
+<a class="jxr_linenumber" name="L6807" href="#L6807">6807</a> 		assertEquals(1, wordCount(<span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L6808" href="#L6808">6808</a> 		assertEquals(2, wordCount(<span class="jxr_string">"Hello world"</span>));
+<a class="jxr_linenumber" name="L6809" href="#L6809">6809</a> 		assertEquals(4, wordCount(<span class="jxr_string">"The quick brown fox"</span>));
+<a class="jxr_linenumber" name="L6810" href="#L6810">6810</a> 		assertEquals(5, wordCount(<span class="jxr_string">"Hello, world! How are you?"</span>));
+<a class="jxr_linenumber" name="L6811" href="#L6811">6811</a> 		assertEquals(3, wordCount(<span class="jxr_string">"one\ttwo\nthree"</span>));
+<a class="jxr_linenumber" name="L6812" href="#L6812">6812</a> 		assertEquals(1, wordCount(<span class="jxr_string">"hello123"</span>));
+<a class="jxr_linenumber" name="L6813" href="#L6813">6813</a> 		<em class="jxr_comment">// Underscores are part of word characters, so "hello_world" is one word</em>
+<a class="jxr_linenumber" name="L6814" href="#L6814">6814</a> 		assertEquals(1, wordCount(<span class="jxr_string">"hello_world"</span>));
+<a class="jxr_linenumber" name="L6815" href="#L6815">6815</a> 		assertEquals(2, wordCount(<span class="jxr_string">"hello world"</span>));
+<a class="jxr_linenumber" name="L6816" href="#L6816">6816</a> 	}
+<a class="jxr_linenumber" name="L6817" href="#L6817">6817</a> 
+<a class="jxr_linenumber" name="L6818" href="#L6818">6818</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6819" href="#L6819">6819</a> 	<em class="jxr_comment">// wrap(String,int) and wrap(String,int,String)</em>
+<a class="jxr_linenumber" name="L6820" href="#L6820">6820</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L6821" href="#L6821">6821</a> 	@Test
+<a class="jxr_linenumber" name="L6822" href="#L6822">6822</a> 	<strong class="jxr_keyword">void</strong> a232_wrap() {
+<a class="jxr_linenumber" name="L6823" href="#L6823">6823</a> 		<em class="jxr_comment">// wrap(String,int) - uses default newline "\n"</em>
+<a class="jxr_linenumber" name="L6824" href="#L6824">6824</a> 		assertNull(wrap(<strong class="jxr_keyword">null</strong>, 10));
+<a class="jxr_linenumber" name="L6825" href="#L6825">6825</a> 		assertEquals(<span class="jxr_string">""</span>, wrap(<span class="jxr_string">""</span>, 10));
+<a class="jxr_linenumber" name="L6826" href="#L6826">6826</a> 		assertEquals(<span class="jxr_string">"hello\nworld"</span>, wrap(<span class="jxr_string">"hello world"</span>, 10));
+<a class="jxr_linenumber" name="L6827" href="#L6827">6827</a> 		assertEquals(<span class="jxr_string">"hello\nworld\ntest"</span>, wrap(<span class="jxr_string">"hello world test"</span>, 10));
+<a class="jxr_linenumber" name="L6828" href="#L6828">6828</a> 		assertEquals(<span class="jxr_string">"hello world"</span>, wrap(<span class="jxr_string">"hello world"</span>, 20));
+<a class="jxr_linenumber" name="L6829" href="#L6829">6829</a> 		assertEquals(<span class="jxr_string">"hello\nworld"</span>, wrap(<span class="jxr_string">"hello world"</span>, 5));
+<a class="jxr_linenumber" name="L6830" href="#L6830">6830</a> 		assertEquals(<span class="jxr_string">"supercalifragilisticexpialidocious"</span>, wrap(<span class="jxr_string">"supercalifragilisticexpialidocious"</span>, 10));
+<a class="jxr_linenumber" name="L6831" href="#L6831">6831</a> 		assertEquals(<span class="jxr_string">"hello\nworld"</span>, wrap(<span class="jxr_string">"hello  world"</span>, 10));
+<a class="jxr_linenumber" name="L6832" href="#L6832">6832</a> 		assertEquals(<span class="jxr_string">"line1\nline2"</span>, wrap(<span class="jxr_string">"line1\nline2"</span>, 10));
+<a class="jxr_linenumber" name="L6833" href="#L6833">6833</a> 		assertEquals(<span class="jxr_string">"a\nb\nc"</span>, wrap(<span class="jxr_string">"a b c"</span>, 1));
+<a class="jxr_linenumber" name="L6834" href="#L6834">6834</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, 0));
+<a class="jxr_linenumber" name="L6835" href="#L6835">6835</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, -1));
+<a class="jxr_linenumber" name="L6836" href="#L6836">6836</a> 
+<a class="jxr_linenumber" name="L6837" href="#L6837">6837</a> 		<em class="jxr_comment">// wrap(String,int,String) - with custom newline</em>
+<a class="jxr_linenumber" name="L6838" href="#L6838">6838</a> 		assertNull(wrap(<strong class="jxr_keyword">null</strong>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
+<a class="jxr_linenumber" name="L6839" href="#L6839">6839</a> 		assertEquals(<span class="jxr_string">""</span>, wrap(<span class="jxr_string">""</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
+<a class="jxr_linenumber" name="L6840" href="#L6840">6840</a> 		assertEquals(<span class="jxr_string">"hello&lt;br&gt;world"</span>, wrap(<span class="jxr_string">"hello world"</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
+<a class="jxr_linenumber" name="L6841" href="#L6841">6841</a> 		assertEquals(<span class="jxr_string">"hello&lt;br&gt;world&lt;br&gt;test"</span>, wrap(<span class="jxr_string">"hello world test"</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
+<a class="jxr_linenumber" name="L6842" href="#L6842">6842</a> 		assertEquals(<span class="jxr_string">"hello world"</span>, wrap(<span class="jxr_string">"hello world"</span>, 20, <span class="jxr_string">"&lt;br&gt;"</span>));
+<a class="jxr_linenumber" name="L6843" href="#L6843">6843</a> 		assertEquals(<span class="jxr_string">"hello&lt;br&gt;world"</span>, wrap(<span class="jxr_string">"hello world"</span>, 5, <span class="jxr_string">"&lt;br&gt;"</span>));
+<a class="jxr_linenumber" name="L6844" href="#L6844">6844</a> 		assertEquals(<span class="jxr_string">"supercalifragilisticexpialidocious"</span>, wrap(<span class="jxr_string">"supercalifragilisticexpialidocious"</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
+<a class="jxr_linenumber" name="L6845" href="#L6845">6845</a> 		assertEquals(<span class="jxr_string">"line1&lt;br&gt;line2"</span>, wrap(<span class="jxr_string">"line1\nline2"</span>, 10, <span class="jxr_string">"&lt;br&gt;"</span>));
+<a class="jxr_linenumber" name="L6846" href="#L6846">6846</a> 		assertEquals(<span class="jxr_string">"a&lt;br&gt;b&lt;br&gt;c"</span>, wrap(<span class="jxr_string">"a b c"</span>, 1, <span class="jxr_string">"&lt;br&gt;"</span>));
+<a class="jxr_linenumber" name="L6847" href="#L6847">6847</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, 0, <span class="jxr_string">"\n"</span>));
+<a class="jxr_linenumber" name="L6848" href="#L6848">6848</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, -1, <span class="jxr_string">"\n"</span>));
+<a class="jxr_linenumber" name="L6849" href="#L6849">6849</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; wrap(<span class="jxr_string">"test"</span>, 10, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L6850" href="#L6850">6850</a> 
+<a class="jxr_linenumber" name="L6851" href="#L6851">6851</a> 		<em class="jxr_comment">// Test</em>
+<a class="jxr_linenumber" name="L6852" href="#L6852">6852</a> 		<strong class="jxr_keyword">var</strong> result1 = wrap(<span class="jxr_string">"line1\n\nline2"</span>, 10, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6853" href="#L6853">6853</a> 		assertTrue(result1.contains(<span class="jxr_string">"\n\n"</span>)); <em class="jxr_comment">// Empty line preserved</em>
+<a class="jxr_linenumber" name="L6854" href="#L6854">6854</a> 
+<a class="jxr_linenumber" name="L6855" href="#L6855">6855</a> 		<em class="jxr_comment">// Test)</em>
+<a class="jxr_linenumber" name="L6856" href="#L6856">6856</a> 		<em class="jxr_comment">// Multiple spaces create empty words that should be skipped</em>
+<a class="jxr_linenumber" name="L6857" href="#L6857">6857</a> 		<strong class="jxr_keyword">var</strong> result2 = wrap(<span class="jxr_string">"word1  word2"</span>, 10, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6858" href="#L6858">6858</a> 		assertTrue(result2.contains(<span class="jxr_string">"word1"</span>));
+<a class="jxr_linenumber" name="L6859" href="#L6859">6859</a> 		assertTrue(result2.contains(<span class="jxr_string">"word2"</span>));
+<a class="jxr_linenumber" name="L6860" href="#L6860">6860</a> 		<em class="jxr_comment">// Test with multiple consecutive spaces</em>
+<a class="jxr_linenumber" name="L6861" href="#L6861">6861</a> 		<strong class="jxr_keyword">var</strong> result2b = wrap(<span class="jxr_string">"a   b   c"</span>, 10, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6862" href="#L6862">6862</a> 		assertTrue(result2b.contains(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L6863" href="#L6863">6863</a> 		assertTrue(result2b.contains(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L6864" href="#L6864">6864</a> 		assertTrue(result2b.contains(<span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L6865" href="#L6865">6865</a> 		<em class="jxr_comment">// Test with leading spaces - split(" +") creates empty string at start</em>
+<a class="jxr_linenumber" name="L6866" href="#L6866">6866</a> 		<strong class="jxr_keyword">var</strong> result2c = wrap(<span class="jxr_string">"  hello world"</span>, 10, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6867" href="#L6867">6867</a> 		assertTrue(result2c.contains(<span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L6868" href="#L6868">6868</a> 		assertTrue(result2c.contains(<span class="jxr_string">"world"</span>));
+<a class="jxr_linenumber" name="L6869" href="#L6869">6869</a> 		<em class="jxr_comment">// Test with trailing spaces - split(" +") creates empty string at end</em>
+<a class="jxr_linenumber" name="L6870" href="#L6870">6870</a> 		<strong class="jxr_keyword">var</strong> result2d = wrap(<span class="jxr_string">"hello world  "</span>, 10, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6871" href="#L6871">6871</a> 		assertTrue(result2d.contains(<span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L6872" href="#L6872">6872</a> 		assertTrue(result2d.contains(<span class="jxr_string">"world"</span>));
+<a class="jxr_linenumber" name="L6873" href="#L6873">6873</a> 		<em class="jxr_comment">// Test with both leading and trailing spaces</em>
+<a class="jxr_linenumber" name="L6874" href="#L6874">6874</a> 		<strong class="jxr_keyword">var</strong> result2e = wrap(<span class="jxr_string">"  hello world  "</span>, 10, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6875" href="#L6875">6875</a> 		assertTrue(result2e.contains(<span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L6876" href="#L6876">6876</a> 		assertTrue(result2e.contains(<span class="jxr_string">"world"</span>));
+<a class="jxr_linenumber" name="L6877" href="#L6877">6877</a> 
+<a class="jxr_linenumber" name="L6878" href="#L6878">6878</a> 		<em class="jxr_comment">// Test</em>
+<a class="jxr_linenumber" name="L6879" href="#L6879">6879</a> 		<em class="jxr_comment">// This tests breaking a long word when it's the first word on a line</em>
+<a class="jxr_linenumber" name="L6880" href="#L6880">6880</a> 		<em class="jxr_comment">// Code path: result.length() &gt; 0 (result already has content)</em>
+<a class="jxr_linenumber" name="L6881" href="#L6881">6881</a> 		<em class="jxr_comment">// Code path: while loop that breaks word into chunks</em>
+<a class="jxr_linenumber" name="L6882" href="#L6882">6882</a> 		<em class="jxr_comment">//   Code path: wordPos &gt; 0 (not first iteration)</em>
+<a class="jxr_linenumber" name="L6883" href="#L6883">6883</a> 		<em class="jxr_comment">//   Code path: remaining &lt;= wrapLength (remaining fits)</em>
+<a class="jxr_linenumber" name="L6884" href="#L6884">6884</a> 		<em class="jxr_comment">//   Code path: append remaining</em>
+<a class="jxr_linenumber" name="L6885" href="#L6885">6885</a> 		<em class="jxr_comment">//   Code path: break</em>
+<a class="jxr_linenumber" name="L6886" href="#L6886">6886</a> 		<em class="jxr_comment">//   Code path: append chunk</em>
+<a class="jxr_linenumber" name="L6887" href="#L6887">6887</a> 		<em class="jxr_comment">//   Code path: advance position</em>
+<a class="jxr_linenumber" name="L6888" href="#L6888">6888</a> 		<strong class="jxr_keyword">var</strong> result3 = wrap(<span class="jxr_string">"short verylongword here"</span>, 5, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6889" href="#L6889">6889</a> 		assertFalse(result3.contains(<span class="jxr_string">"verylongword"</span>)); <em class="jxr_comment">// Word should be split into chunks</em>
+<a class="jxr_linenumber" name="L6890" href="#L6890">6890</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> line : result3.split(<span class="jxr_string">"\n"</span>)) {
+<a class="jxr_linenumber" name="L6891" href="#L6891">6891</a> 			<strong class="jxr_keyword">if</strong> (! line.isEmpty())
+<a class="jxr_linenumber" name="L6892" href="#L6892">6892</a> 				assertTrue(line.length() &lt;= 5);
+<a class="jxr_linenumber" name="L6893" href="#L6893">6893</a> 		}
+<a class="jxr_linenumber" name="L6894" href="#L6894">6894</a> 		<em class="jxr_comment">// Test with result already having content  &gt; 0)</em>
+<a class="jxr_linenumber" name="L6895" href="#L6895">6895</a> 		<em class="jxr_comment">// After a previous line, a long word that needs breaking as first word on new line</em>
+<a class="jxr_linenumber" name="L6896" href="#L6896">6896</a> 		<em class="jxr_comment">// This happens when a previous line was completed and we start a new line</em>
+<a class="jxr_linenumber" name="L6897" href="#L6897">6897</a> 		<strong class="jxr_keyword">var</strong> result3b = wrap(<span class="jxr_string">"first\nverylongword here"</span>, 5, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6898" href="#L6898">6898</a> 		<em class="jxr_comment">// After "first\n", "verylongword" is the first word on the new line and needs breaking</em>
+<a class="jxr_linenumber" name="L6899" href="#L6899">6899</a> 		assertTrue(result3b.contains(<span class="jxr_string">"first"</span>));
+<a class="jxr_linenumber" name="L6900" href="#L6900">6900</a> 		assertFalse(result3b.contains(<span class="jxr_string">"verylongword"</span>)); <em class="jxr_comment">// Long word should be broken</em>
+<a class="jxr_linenumber" name="L6901" href="#L6901">6901</a> 		<em class="jxr_comment">// Test word that breaks into multiple chunks (covers code path)</em>
+<a class="jxr_linenumber" name="L6902" href="#L6902">6902</a> 		<em class="jxr_comment">// Word length 15, wrapLength 5 -&gt; 3 chunks of 5, 5, 5</em>
+<a class="jxr_linenumber" name="L6903" href="#L6903">6903</a> 		<em class="jxr_comment">// This tests: wordPos &gt; 0 , append chunk , advance position </em>
+<a class="jxr_linenumber" name="L6904" href="#L6904">6904</a> 		<em class="jxr_comment">// And: remaining &lt;= wrapLength , append remaining , break </em>
+<a class="jxr_linenumber" name="L6905" href="#L6905">6905</a> 		<strong class="jxr_keyword">var</strong> result3c = wrap(<span class="jxr_string">"abcdefghijklmno here"</span>, 5, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6906" href="#L6906">6906</a> 		assertTrue(result3c.contains(<span class="jxr_string">"abcde"</span>)); <em class="jxr_comment">// First chunk (wordPos == 0, no newline before)</em>
+<a class="jxr_linenumber" name="L6907" href="#L6907">6907</a> 		assertTrue(result3c.contains(<span class="jxr_string">"fghij"</span>)); <em class="jxr_comment">// Second chunk (wordPos &gt; 0, newline before, code path)</em>
+<a class="jxr_linenumber" name="L6908" href="#L6908">6908</a> 		assertTrue(result3c.contains(<span class="jxr_string">"klmno"</span>)); <em class="jxr_comment">// Third chunk (remaining &lt;= wrapLength, code path)</em>
+<a class="jxr_linenumber" name="L6909" href="#L6909">6909</a> 
+<a class="jxr_linenumber" name="L6910" href="#L6910">6910</a> 		<em class="jxr_comment">// Test</em>
+<a class="jxr_linenumber" name="L6911" href="#L6911">6911</a> 		<strong class="jxr_keyword">var</strong> result4 = wrap(<span class="jxr_string">"short word verylongword here"</span>, 10, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6912" href="#L6912">6912</a> 		assertFalse(result4.contains(<span class="jxr_string">"verylongword"</span>)); <em class="jxr_comment">// Word should be split into chunks</em>
+<a class="jxr_linenumber" name="L6913" href="#L6913">6913</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> line : result4.split(<span class="jxr_string">"\n"</span>)) {
+<a class="jxr_linenumber" name="L6914" href="#L6914">6914</a> 			<strong class="jxr_keyword">if</strong> (! line.isEmpty())
+<a class="jxr_linenumber" name="L6915" href="#L6915">6915</a> 				assertTrue(line.length() &lt;= 10);
+<a class="jxr_linenumber" name="L6916" href="#L6916">6916</a> 		}
+<a class="jxr_linenumber" name="L6917" href="#L6917">6917</a> 
+<a class="jxr_linenumber" name="L6918" href="#L6918">6918</a> 		<em class="jxr_comment">// Test &gt; 0)</em>
+<a class="jxr_linenumber" name="L6919" href="#L6919">6919</a> 		<strong class="jxr_keyword">var</strong> result5 = wrap(<span class="jxr_string">"short word"</span>, 20, <span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L6920" href="#L6920">6920</a> 		assertEquals(<span class="jxr_string">"short word"</span>, result5); <em class="jxr_comment">// Remaining line appended</em>
+<a class="jxr_linenumber" name="L6921" href="#L6921">6921</a> 	}
+<a class="jxr_linenumber" name="L6922" href="#L6922">6922</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
