@@ -13,6 +13,10 @@ This file contains TODO items that have been completed and moved from TODO.md.
   - **Status**: COMPLETED
   - **Details**: Removed the legacy `ParamInfoTest`, replacing it with `ParameterInfoTest`, updated all test references (including variable names/comments) to use `ParameterInfo`, and ensured the active codebase no longer mentions `ParamInfo` outside of archived static Javadocs from prior releases.
   
+- **TODO-89** ✅ Add `ClassInfoTyped`.
+  - **Status**: COMPLETED
+  - **Details**: Introduced `ClassInfoTyped<T>` as a generic subclass of `ClassInfo` and updated `ClassInfo.of(Class)` to return this typed variant (while still caching instances). This keeps the API identical but allows callers to benefit from compile-time typing without changing existing code.
+  
 - **TODO-88** ✅ Eliminate need for AssertionArgs in BctAssertions by allowing DEFAULT_CONVERTER to be overridden and resettable.
   - **Status**: COMPLETED
   - **Details**: Introduced a thread-local resettable converter supplier (defaulting to `BasicBeanConverter.DEFAULT`), added `setConverter()`/`resetConverter()` APIs, removed the `AssertionArgs` class, updated all assertion signatures to take a leading `Supplier<String>` for custom messages, refreshed docs/javadocs, and migrated the BCT tests to the new API.

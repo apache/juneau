@@ -109,7 +109,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		this.inner = inner;
 		this.isConstructor = inner instanceof Constructor;
 		this.parameters = memoize(this::findParameters);
-		this.exceptions = memoize(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).toList());
+		this.exceptions = memoize(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).map(ClassInfo.class::cast).toList());
 		this.declaredAnnotations = memoize(() -> stream(inner.getDeclaredAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai((Annotatable)this, a)).toList());
 		this.shortName = memoize(() -> f("{0}({1})", getSimpleName(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
 		this.fullName = memoize(this::findFullName);

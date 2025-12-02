@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.compare;
 import static org.apache.juneau.common.utils.StringUtils.contains;
 import static org.apache.juneau.common.utils.StringUtils.reverse;
-import static org.apache.juneau.common.utils.Utils.eqic;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +32,6 @@ import java.util.concurrent.atomic.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
 class StringUtils_Test extends TestBase {
@@ -384,10 +382,10 @@ class StringUtils_Test extends TestBase {
 		assertEquals("!!!", camelCase("!!!"));
 		assertEquals("@#$", camelCase("@#$"));
 		assertEquals(".,;:", camelCase(".,;:"));
-		
+
 		// Test line 8424 - splitWords with null or empty string
 		// This is already covered by the null/empty tests above
-		
+
 		// Test line 8458 - splitWords Case 2: uppercase after uppercase when next is lowercase
 		// This handles cases where we have 2+ consecutive uppercase, then an uppercase
 		// followed by lowercase (which starts a new word)
@@ -397,7 +395,7 @@ class StringUtils_Test extends TestBase {
 		// The consecutiveUpperCount is checked AFTER appending, so the logic is complex
 		var result1 = camelCase("ABCDe");
 		assertEquals("aBCDe", result1); // A + BCDe (actual behavior)
-		
+
 		// Test lines 8475-8478 - splitWords Case 3: lowercase after 2+ consecutive uppercase
 		// Split all but the last uppercase (e.g., "XMLH" → "XML" + "H")
 		// "XMLHt" - X, M, L are consecutive uppercase (count=3), then H (uppercase), then t (lowercase)
@@ -405,7 +403,7 @@ class StringUtils_Test extends TestBase {
 		// The actual behavior is "xMLHt" because the split logic works differently
 		// The consecutiveUpperCount is checked AFTER appending, so the logic is complex
 		assertEquals("xMLHt", camelCase("XMLHt")); // X + MLHt (actual behavior)
-		
+
 		// Test with "XMLHttp" - actual behavior is "xMLHttp"
 		// The split logic for "XMLHttp" results in "X" + "MLHttp" = "xMLHttp"
 		assertEquals("xMLHttp", camelCase("XMLHttp")); // X + MLHttp (actual behavior)
@@ -974,9 +972,9 @@ class StringUtils_Test extends TestBase {
 		assertFalse(equalsIgnoreCase((Object)"Hello", (Object)"World"));
 
 		// Non-string objects (toString() is called)
-		assertTrue(equalsIgnoreCase((Object)123, (Object)"123"));
-		assertTrue(equalsIgnoreCase((Object)"123", (Object)123));
-		assertFalse(equalsIgnoreCase((Object)123, (Object)"456"));
+		assertTrue(equalsIgnoreCase(123, "123"));
+		assertTrue(equalsIgnoreCase("123", 123));
+		assertFalse(equalsIgnoreCase(123, "456"));
 
 		// Custom object with toString()
 		var obj1 = new Object() {
@@ -988,7 +986,7 @@ class StringUtils_Test extends TestBase {
 			public String toString() { return "test"; }
 		};
 		assertTrue(equalsIgnoreCase(obj1, obj2));
-		assertTrue(equalsIgnoreCase(obj1, (Object)"TEST"));
+		assertTrue(equalsIgnoreCase(obj1, "TEST"));
 	}
 
 	//====================================================================================================
@@ -1707,35 +1705,35 @@ class StringUtils_Test extends TestBase {
 		assertEquals(10 * w, getDuration("10week"));
 		assertEquals(10 * w, getDuration("10 weeks"));
 		assertEquals(10 * w, getDuration("10W"));
-		
+
 		// Test lines 8344, 8348, 8351, 8354, 8364, 8368, 8374 - parseUnit method
 		// Line 8344 - seconds (startsWith("sec") || startsWith("second"))
 		assertEquals(5 * s, getDuration("5sec"));
 		assertEquals(5 * s, getDuration("5second"));
 		assertEquals(5 * s, getDuration("5seconds"));
-		
+
 		// Line 8348 - minutes (startsWith("m") && !startsWith("mo") && !startsWith("mill") && !startsWith("ms"))
 		// Line 8351 - minutes (startsWith("min") || startsWith("minute"))
 		assertEquals(5 * m, getDuration("5m"));
 		assertEquals(5 * m, getDuration("5min"));
 		assertEquals(5 * m, getDuration("5minute"));
 		assertEquals(5 * m, getDuration("5minutes"));
-		
+
 		// Line 8354 - hours (startsWith("h") || startsWith("hour"))
 		assertEquals(5 * h, getDuration("5h"));
 		assertEquals(5 * h, getDuration("5hour"));
 		assertEquals(5 * h, getDuration("5hours"));
-		
+
 		// Line 8364 - weeks (startsWith("w") || startsWith("week"))
 		assertEquals(2 * w, getDuration("2w"));
 		assertEquals(2 * w, getDuration("2week"));
 		assertEquals(2 * w, getDuration("2weeks"));
-		
+
 		// Line 8368 - months (startsWith("mo") || startsWith("month"))
 		assertEquals(3 * mo, getDuration("3mo"));
 		assertEquals(3 * mo, getDuration("3month"));
 		assertEquals(3 * mo, getDuration("3months"));
-		
+
 		// Line 8374 - years (startsWith("y") || startsWith("year"))
 		assertEquals(2 * y, getDuration("2y"));
 		assertEquals(2 * y, getDuration("2year"));
@@ -4490,7 +4488,7 @@ class StringUtils_Test extends TestBase {
 		// Test Byte type - triggers line 5436
 		assertEquals((byte)123, parseNumber("123", Byte.class));
 		assertEquals((byte)123, parseNumber("123", Byte.TYPE));
-		
+
 		// Test line 8275 - multiplierInt (empty string returns 'z' which is not G/M/K/g/m/k)
 		// Test line 8299 - multiplierLong (empty string returns 1)
 		// These are tested indirectly through parseNumber with multiplier suffixes
@@ -4738,7 +4736,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0.0, readabilityScore("!!!"), 0.0001); // No words extracted
 		assertEquals(0.0, readabilityScore("..."), 0.0001); // No words extracted
 		assertEquals(0.0, readabilityScore("   "), 0.0001); // Only whitespace
-		
+
 		// Test line 8191 - estimateSyllables with null or empty word (returns 1)
 		// This is tested indirectly through readabilityScore with single-letter words
 		var scoreSingle = readabilityScore("a");
@@ -4819,9 +4817,8 @@ class StringUtils_Test extends TestBase {
 
 		// Test File - triggers line 5856
 		var file = new File("test.txt");
-		var fileStr = readable(file);
-		// May throw exception or return content, depends on file existence
-		// Just verify it doesn't crash
+		assertDoesNotThrow(() -> readable(file));
+		// May throw exception or return content depending on file existence; just verify it doesn't crash.
 
 		// Test byte[] - triggers line 5858
 		var bytes = new byte[]{0x48, 0x65, 0x6C, 0x6C, 0x6F}; // "Hello" in hex
@@ -4998,7 +4995,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("hello", removeAll("hello", "x", "y", "z"));
 		assertEquals("", removeAll("abc", "a", "b", "c"));
 		assertEquals("hello", removeAll("hello", null, "x"));
-		
+
 		// Test with empty string - triggers line 6102
 		assertEquals("", removeAll("", "x", "y"));
 		assertEquals("", removeAll("", new String[0])); // empty remove array
@@ -5149,7 +5146,7 @@ class StringUtils_Test extends TestBase {
 		// Similar strings
 		// "hello" vs "hallo": distance = 1, maxLen = 5, similarity = 1 - 1/5 = 0.8
 		assertEquals(0.8, similarity("hello", "hallo"), 0.01);
-		
+
 		// Test line 6367 - maxLen == 0 (both empty after null handling)
 		// Note: This line appears unreachable since empty strings are equal and return at line 6363
 		// But testing anyway to confirm behavior
@@ -5177,7 +5174,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("test", snakeCase("test"));
 		assertEquals("test", snakeCase("TEST"));
 		assertEquals("hello_123_world", snakeCase("hello 123 world"));
-		
+
 		// Test with empty words list - triggers line 6406
 		// splitWords returns empty list for strings with only separators (spaces, tabs, underscores, hyphens)
 		assertEquals("", snakeCase("   ")); // Only spaces
@@ -5241,73 +5238,73 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(code3);
 		assertEquals(4, code3.length());
 		assertTrue(code3.startsWith("A"));
-		
+
 		// Test lines 8244-8258 - getSoundexCode for all character types
 		// Test all soundex code mappings
 		var code4 = soundex("BFPV"); // Code 1
 		assertNotNull(code4);
 		assertTrue(code4.contains("1"));
-		
+
 		var code5 = soundex("CGJKQSXZ"); // Code 2
 		assertNotNull(code5);
 		assertTrue(code5.contains("2"));
-		
+
 		var code6 = soundex("DT"); // Code 3
 		assertNotNull(code6);
 		assertTrue(code6.contains("3"));
-		
+
 		var code7 = soundex("L"); // Code 4
 		assertNotNull(code7);
 		// Single character "L" will be "L000" (padded), code 4 is only for subsequent L's
 		assertEquals("L000", code7);
-		
+
 		// Test with a string that has L after the first character to get code 4
 		var code7b = soundex("AL"); // A + L(4) = A400
 		assertNotNull(code7b);
 		assertTrue(code7b.contains("4"));
-		
+
 		var code8 = soundex("MN"); // Code 5
 		assertNotNull(code8);
 		assertTrue(code8.contains("5"));
-		
+
 		var code9 = soundex("R"); // Code 6
 		assertNotNull(code9);
 		// Single character "R" will be "R000" (padded), code 6 is only for subsequent R's
 		assertEquals("R000", code9);
-		
+
 		// Test with a string that has R after the first character to get code 6
 		var code9b = soundex("AR"); // A + R(6) = A600
 		assertNotNull(code9b);
 		assertTrue(code9b.contains("6"));
-		
+
 		var code10 = soundex("AEIOUHWY"); // Code 0 (vowels/H/W/Y)
 		assertNotNull(code10);
 		// Vowels/H/W/Y don't add codes but don't break sequences
-		
+
 		// Test line 8258 - non-letter characters return '0'
 		var code11 = soundex("A123");
 		assertNotNull(code11);
 		assertTrue(code11.startsWith("A"));
-		
+
 		// Test line 6499 - loop continues (i < upper.length() && result.length() < 4)
 		// Test line 6507 - code != lastCode (different codes)
 		// Test line 6515 - result.length() < 4 (need to pad with zeros)
 		// String that produces less than 4 codes (needs padding)
 		var code12 = soundex("A"); // Only one character, needs 3 zeros
 		assertEquals("A000", code12);
-		
+
 		// String with H/W/Y/vowels that don't produce codes but don't break sequences
 		var code13 = soundex("AH"); // A + H (H is 0, doesn't add code but doesn't break)
 		assertEquals("A000", code13); // Still needs padding
-		
+
 		// String that produces exactly 3 codes (needs 1 zero)
 		var code14 = soundex("ABC"); // A + B(1) + C(2) = A12, needs one zero
 		assertEquals("A120", code14);
-		
+
 		// String with different codes (code != lastCode) - triggers line 6507
 		var code15 = soundex("ABCD"); // A + B(1) + C(2) + D(3) = A123 (all different)
 		assertEquals("A123", code15);
-		
+
 		// String with same consecutive codes (code == lastCode, should skip)
 		var code16 = soundex("ABBC"); // A + B(1) + B(1, same) + C(2) = A12 (B skipped)
 		assertEquals("A120", code16);
@@ -5358,22 +5355,22 @@ class StringUtils_Test extends TestBase {
 		var list3 = new ArrayList<String>();
 		split("1,2", list3::add);
 		assertEquals(List.of("1", "2"), list3);
-		
+
 		// Test line 6572 - s.indexOf(c) == -1 (no split character found)
 		var list4 = new ArrayList<String>();
 		split("no-commas-here", ',', list4::add);
 		assertEquals(List.of("no-commas-here"), list4);
-		
+
 		// Test line 6581 - s.charAt(i) == '\\' (escape character)
 		// Test line 6588 - s.charAt(i) != '\\' (reset escapeCount)
 		var list5 = new ArrayList<String>();
 		split("a\\,b,c", ',', list5::add);
 		assertEquals(List.of("a,b", "c"), list5); // Escaped comma doesn't split
-		
+
 		var list6 = new ArrayList<String>();
 		split("a\\\\,b", ',', list6::add);
 		assertEquals(List.of("a\\", "b"), list6); // Double backslash, second one escapes comma
-		
+
 		var list7 = new ArrayList<String>();
 		split("a\\b,c", ',', list7::add);
 		assertEquals(List.of("a\\b", "c"), list7); // Backslash not before comma, escapeCount resets
@@ -5458,17 +5455,17 @@ class StringUtils_Test extends TestBase {
 		assertString("{a=,b=1}", splitMap("a,b=1", true));
 		assertString("{a==1}", splitMap("a\\==1", true));
 		assertString("{a\\=1}", splitMap("a\\\\=1", true));
-		
+
 		// Test line 6737 - null input returns null
 		assertNull(splitMap(null, true));
-		
+
 		// Test line 6739 - empty string returns empty map
 		assertTrue(splitMap("", true).isEmpty());
-		
+
 		// Test line 6767 - trim when key has no value (comma found in state S1)
 		assertString("{key=}", splitMap(" key ", true)); // " key " should be trimmed, no value
 		assertString("{ key =}", splitMap(" key ", false)); // No trim, no value
-		
+
 		// Test line 6774 - state S2 handling (equals found, looking for delimiter)
 		assertString("{a=1,b=2}", splitMap("a=1,b=2", true)); // Comma in state S2
 		assertString("{a=1}", splitMap("a=1", true)); // End of string in state S2
@@ -5498,7 +5495,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(3, args3.length);
 		assertEquals("x", args3[0]);
 		assertEquals("y<a<b,c>,d<e,f>>", args3[1]);
-		
+
 		// Test line 6807 - no comma found, return array with single element
 		var args4 = splitMethodArgs("singleArg");
 		assertEquals(1, args4.length);
@@ -5537,7 +5534,7 @@ class StringUtils_Test extends TestBase {
 		// Null/empty input
 		assertNull(splitNested(null));
 		assertTrue(splitNested("").isEmpty());
-		
+
 		// Test lines 6866-6873 - escape handling
 		// Line 6867: c == '\\' when inEscape is true (double backslash)
 		// When inEscape is true and we see '\', we set inEscape = false (double backslash = literal backslash)
@@ -5545,7 +5542,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, result4.size());
 		assertEquals("a\\", result4.get(0)); // Double backslash becomes single literal backslash
 		assertEquals("b", result4.get(1));
-		
+
 		// Line 6871: c == '\\' when inEscape is false (start escape)
 		// When inEscape is false and we see '\', we set inEscape = true
 		// For "a\\,b,c": a, \ (inEscape=true), , (escaped, skipped, inEscape stays true), b (inEscape still true), , (escaped, skipped), c
@@ -5554,7 +5551,7 @@ class StringUtils_Test extends TestBase {
 		var result5 = splitNested("a\\,b,c");
 		assertEquals(1, result5.size()); // Escaped comma doesn't split, entire string is one token
 		assertEquals("a,b,c", result5.get(0));
-		
+
 		// Test escape sequence with nested braces - escaped brace doesn't affect depth
 		// When inEscape is true, the '{' is skipped (escaped), so depth doesn't increase
 		// For "a\\{b},c": a, \ (inEscape=true), { (escaped, skipped, depth stays 0), b, } (normal, depth becomes -1), , (depth=-1, doesn't split), c
@@ -5589,14 +5586,14 @@ class StringUtils_Test extends TestBase {
 		// Null/empty input - throws exception
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner(null));
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner(""));
-		
+
 		// Test line 6945 - Start character '{' not found
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner("no braces here"));
-		
+
 		// Test line 6947 - End character '}' not found
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner("a{b"));
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner("a{b{c}"));
-		
+
 		// Test lines 6917-6926 - escape handling
 		// Line 6920: c == '\\' when inEscape is true (double backslash)
 		// When inEscape is true and we see '\', we set inEscape = false (double backslash = literal backslash)
@@ -5604,7 +5601,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, result4.size());
 		assertEquals("b\\", result4.get(0)); // Double backslash becomes single literal backslash
 		assertEquals("c", result4.get(1));
-		
+
 		// Line 6924: c == '\\' when inEscape is false (start escape)
 		// When inEscape is false and we see '\', we set inEscape = true
 		// Note: For splitNestedInner, we need valid braces, so escaped comma inside braces is fine
@@ -5615,7 +5612,7 @@ class StringUtils_Test extends TestBase {
 		var result5 = splitNestedInner("a{b\\,c\\}");
 		assertEquals(1, result5.size());
 		assertEquals("b,c\\", result5.get(0)); // Escaped comma and closing brace (brace becomes backslash)
-		
+
 		// Test escape sequence with opening brace - escaped opening brace doesn't affect depth
 		// When inEscape is true, the '{' is skipped (escaped), so depth doesn't increase
 		// For "a{b{c\\{d},e}}": The escaped brace causes issues with finding the matching closing brace
@@ -5651,18 +5648,18 @@ class StringUtils_Test extends TestBase {
 		assertList(splitQuoted("\"\\\"foo\\\"\""), "\"foo\"");
 		assertList(splitQuoted("'\"foo\"'"), "\"foo\"");
 		assertList(splitQuoted("\"'foo'\""), "'foo'");
-		
+
 		// Test lines 7014, 7017 - keepQuotes=true
 		// Line 7014: Single quote with keepQuotes
 		var result1 = splitQuoted("'foo'", true);
 		assertEquals(1, result1.length);
 		assertEquals("'foo'", result1[0]); // Quotes are kept
-		
+
 		// Line 7017: Double quote with keepQuotes
 		var result2 = splitQuoted("\"bar\"", true);
 		assertEquals(1, result2.length);
 		assertEquals("\"bar\"", result2[0]); // Quotes are kept
-		
+
 		// Test lines 7024, 7025, 7028 - escape handling in quotes
 		// Line 7024: Escape character in quoted string
 		// Line 7025: needsUnescape when keepQuotes=false
@@ -5670,17 +5667,17 @@ class StringUtils_Test extends TestBase {
 		var result3 = splitQuoted("'foo\\'bar'", false);
 		assertEquals(1, result3.length);
 		assertEquals("foo'bar", result3[0]); // Escaped quote is unescaped
-		
+
 		var result4 = splitQuoted("'foo\\'bar'", true);
 		assertEquals(1, result4.length);
 		assertEquals("'foo\\'bar'", result4[0]); // Quotes kept, escape preserved
-		
+
 		// Test line 7039 - state S4 (non-whitespace token ending with whitespace)
 		var result5 = splitQuoted("foo bar");
 		assertEquals(2, result5.length);
 		assertEquals("foo", result5[0]);
 		assertEquals("bar", result5[1]);
-		
+
 		// Test line 7048 - unmatched quotes error
 		assertThrows(IllegalArgumentException.class, () -> splitQuoted("'unmatched quote"));
 		assertThrows(IllegalArgumentException.class, () -> splitQuoted("\"unmatched quote"));
@@ -5813,7 +5810,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", substringBetween("<>", "<", ">"));
 		assertEquals("test", substringBetween("<test>", "<", ">"));
 		assertEquals("foo", substringBetween("a<foo>b", "<", ">"));
-		
+
 		// Test line 7214 - end marker not found after start marker
 		assertNull(substringBetween("<hello", "<", ">"));
 		assertNull(substringBetween("start<content", "<", ">"));
@@ -6049,7 +6046,7 @@ class StringUtils_Test extends TestBase {
 		// Test with non-printable characters
 		var bytes2 = new byte[] { 0, 1, 2, (byte)255 };
 		var result2 = toReadableBytes(bytes2);
-		
+
 		// Test line 7453 - bytes outside printable range (b2 < ' ' || b2 > 'z')
 		var bytes3 = new byte[]{0x00, 0x1F, 0x20, 0x7A, 0x7B, (byte)0xFF}; // null, control char, space, 'z', '{', non-printable
 		var result3 = toReadableBytes(bytes3);
@@ -6311,7 +6308,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("x\\,xx", unEscapeChars("x\\\\\\,xx", escape));
 		assertEquals("\\", unEscapeChars("\\", escape));
 		assertEquals(",", unEscapeChars("\\,", escape));
-		
+
 		// Test line 7743 - double backslash (c2 == '\\')
 		assertEquals("x\\y", unEscapeChars("x\\\\y", escape)); // Double backslash becomes single
 		assertEquals("x\\", unEscapeChars("x\\\\", escape)); // Double backslash at end
@@ -6408,16 +6405,16 @@ class StringUtils_Test extends TestBase {
 		// No encoding needed - returns as-is
 		assertEquals("Hello", urlEncode("Hello"));
 		assertEquals("test123", urlEncode("test123"));
-		
+
 		// Test line 7914 - characters <= 127 (ASCII)
 		var result1 = urlEncode("test@example.com");
 		assertTrue(result1.contains("%40")); // @ is encoded
-		
+
 		// Test line 7917 - characters > 127 (UTF-8 encoding)
 		var result2 = urlEncode("café");
 		assertNotNull(result2);
 		assertTrue(result2.contains("%")); // Contains encoded characters
-		
+
 		var result3 = urlEncode("测试");
 		assertNotNull(result3);
 		assertTrue(result3.contains("%")); // Contains UTF-8 encoded characters
@@ -6461,12 +6458,12 @@ class StringUtils_Test extends TestBase {
 		// Special characters are encoded
 		var result3 = urlEncodePath("file@name");
 		assertNotNull(result3);
-		
+
 		// Test line 7945 - check if encoding is needed (needsEncode loop)
 		// Test line 7948 - return early if no encoding needed
 		var result4 = urlEncodePath("simplepath");
 		assertEquals("simplepath", result4); // No encoding needed, returns as-is
-		
+
 		// Test lines 7967-7971 - UTF-8 surrogate pairs (high surrogate 0xD800-0xDBFF, low surrogate 0xDC00-0xDFFF)
 		// Create a string with surrogate pairs (emoji or other high Unicode characters)
 		// Note: The emoji might be in the valid character set, so let's use a character that definitely needs encoding
@@ -6478,7 +6475,7 @@ class StringUtils_Test extends TestBase {
 		// If the surrogate pair is not in the valid character set, it should be encoded
 		// Otherwise, it might be returned as-is
 		assertTrue(result5.length() > 0);
-		
+
 		// Test lines 7985, 7990 - uppercase hex digits (caseDiff applied)
 		var result6 = urlEncodePath("test@file");
 		assertNotNull(result6);
@@ -6553,16 +6550,16 @@ class StringUtils_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", 0, "\n"));
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", -1, "\n"));
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", 10, null));
-		
+
 		// Test lines 8097-8099 - empty line handling (lineIdx < lines.length - 1)
 		var result1 = wrap("line1\n\nline2", 10, "\n");
 		assertTrue(result1.contains("\n\n")); // Empty line preserved
-		
+
 		// Test line 8108 - empty word skipping (word.isEmpty())
 		var result2 = wrap("word1  word2", 10, "\n"); // Multiple spaces create empty words
 		assertTrue(result2.contains("word1"));
 		assertTrue(result2.contains("word2"));
-		
+
 		// Test lines 8117-8131 - word breaking when wordLength > wrapLength && words.length > 1
 		var result3 = wrap("short verylongword here", 5, "\n");
 		assertFalse(result3.contains("verylongword")); // Word should be split into chunks
@@ -6570,7 +6567,7 @@ class StringUtils_Test extends TestBase {
 			if (! line.isEmpty())
 				assertTrue(line.length() <= 5);
 		}
-		
+
 		// Test lines 8149-8162 - word breaking in else branch (when current line doesn't fit)
 		var result4 = wrap("short word verylongword here", 10, "\n");
 		assertFalse(result4.contains("verylongword")); // Word should be split into chunks
@@ -6578,7 +6575,7 @@ class StringUtils_Test extends TestBase {
 			if (! line.isEmpty())
 				assertTrue(line.length() <= 10);
 		}
-		
+
 		// Test line 8172 - append remaining line (currentLine.length() > 0)
 		var result5 = wrap("short word", 20, "\n");
 		assertEquals("short word", result5); // Remaining line appended

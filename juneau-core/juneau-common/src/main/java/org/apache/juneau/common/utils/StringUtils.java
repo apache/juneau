@@ -3708,7 +3708,7 @@ public class StringUtils {
 			sdf.setLenient(false); // Strict parsing
 			sdf.parse(dateStr);
 			return true;
-		} catch (ParseException | IllegalArgumentException e) {
+		} catch (@SuppressWarnings("unused") ParseException | IllegalArgumentException e) {
 			// IllegalArgumentException thrown for invalid format patterns
 			return false;
 		}
@@ -3817,7 +3817,7 @@ public class StringUtils {
 				return isValidIPv6Address(ip);
 			}
 			return false;
-		} catch (NumberFormatException e) {
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
 			return false;
 		}
 	}
@@ -3862,7 +3862,7 @@ public class StringUtils {
 					var num = Integer.parseInt(part);
 					if (num < 0 || num > 255)
 						return false;
-				} catch (NumberFormatException e) {
+				} catch (@SuppressWarnings("unused") NumberFormatException e) {
 					return false;
 				}
 			}
@@ -3985,7 +3985,7 @@ public class StringUtils {
 		try {
 			Pattern.compile(regex);
 			return true;
-		} catch (PatternSyntaxException e) {
+		} catch (@SuppressWarnings("unused") PatternSyntaxException e) {
 			return false;
 		}
 	}
@@ -4015,7 +4015,7 @@ public class StringUtils {
 			sdf.setLenient(false); // Strict parsing
 			sdf.parse(timeStr);
 			return true;
-		} catch (ParseException | IllegalArgumentException e) {
+		} catch (@SuppressWarnings("unused") ParseException | IllegalArgumentException e) {
 			// IllegalArgumentException thrown for invalid format patterns
 			return false;
 		}
@@ -5540,7 +5540,7 @@ public class StringUtils {
 		var base = Long.decode(baseStr);  // NOSONAR - NPE not possible here.
 		try {
 			return Math.multiplyExact(base, m);
-		} catch (ArithmeticException e) {
+		} catch (@SuppressWarnings("unused") ArithmeticException e) {
 			throw new NumberFormatException("Value " + s + " exceeds Long.MAX_VALUE");
 		}
 	}

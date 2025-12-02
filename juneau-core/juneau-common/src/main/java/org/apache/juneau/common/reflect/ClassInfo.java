@@ -119,11 +119,12 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Returns a class info wrapper around the specified class type.
 	 *
+	 * @param <T> The class type.
 	 * @param inner The class type.
 	 * @return The constructed class info.
 	 */
-	public static ClassInfo of(Class<?> inner) {
-		return CACHE.get(inner, () -> new ClassInfo(inner, inner));
+	public static <T> ClassInfoTyped<T> of(Class<T> inner) {
+		return (ClassInfoTyped<T>)CACHE.get(inner, () -> new ClassInfoTyped<>(inner));
 	}
 
 	/**
@@ -136,7 +137,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public static ClassInfo of(Class<?> inner, Type innerType) {
 		if (inner == innerType)
 			return of(inner);
-		return new ClassInfo(inner, innerType);
+		if (inner != null)
+			return new ClassInfoTyped<>(inner, innerType);
+		return new ClassInfo(null, innerType);
 	}
 
 	/**
@@ -229,7 +232,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		this.fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
 		this.shortName = memoize(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
 		this.readableName = memoize(() -> getNameFormatted(SIMPLE, false, '$', WORD));
-		this.declaredInterfaces = memoize(() -> opt(inner).map(x -> stream(x.getInterfaces()).map(ClassInfo::of).toList()).orElse(liste()));
+		this.declaredInterfaces = memoize(() -> opt(inner).map(x -> stream(x.getInterfaces()).map(ClassInfo::of).map(ClassInfo.class::cast).toList()).orElse(liste()));
 		this.interfaces = memoize(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
 		this.allParents = memoize(() -> concat(getParents().stream(), getInterfaces().stream()).toList());
 		this.parentsAndInterfaces = memoize(this::findParentsAndInterfaces);

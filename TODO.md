@@ -23,7 +23,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 
 - [x] TODO-19 ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).
 - [ ] TODO-21 Thrown NotFound causes - javax.servlet.ServletException: Invalid method response: 200
-- [ ] TODO-89 Add ClassInfoTyped
+- [x] TODO-89 Add ClassInfoTyped
 
 ## HTTP Response/Exception Improvements
 

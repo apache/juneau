@@ -149,6 +149,7 @@ class Version_Test extends TestBase {
 		}
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	void b05_equalsObject_differentType() {
 		var v1 = of("1.2.3");
