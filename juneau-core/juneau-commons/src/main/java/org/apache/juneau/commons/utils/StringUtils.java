@@ -51,106 +51,92 @@ import org.apache.juneau.commons.reflect.*;
  */
 public class StringUtils {
 
-	/**
-	 * Predicate check to filter out null and empty strings.
-	 */
-	public static final Predicate<String> NOT_EMPTY = Utils::isNotEmpty;
+	/** Characters considered common separators (comma/semicolon/colon/pipe/tab). */
+	public static final AsciiSet COMMON_SEPARATORS = AsciiSet.of(",;:|\t");
 
-	/**
-	 * Empty string constant.
-	 */
-	public static final String EMPTY = "";
-
-	/**
-	 * Single space constant.
-	 */
-	public static final String SPACE = " ";
-
-	/**
-	 * Newline constant (line feed character).
-	 */
-	public static final String NEWLINE = "\n";
-
-	/**
-	 * Tab constant.
-	 */
-	public static final String TAB = "\t";
-
-	/**
-	 * Carriage return + line feed constant (Windows line ending).
-	 */
+	/** Windows-style carriage-return/line-feed sequence. */
 	public static final String CRLF = "\r\n";
 
-	/**
-	 * Common separator characters constant.
-	 *
-	 * <p>
-	 * Contains commonly used separator characters: comma, semicolon, colon, pipe, and tab.
-	 */
-	public static final String COMMON_SEPARATORS = ",;:|" + TAB;
+	/** Digits 0-9 represented as an {@link AsciiSet}. */
+	public static final AsciiSet DECIMAL_CHARS = AsciiSet.of("0123456789");
+
+	/** Zero-length string constant. */
+	public static final String EMPTY = "";
+
+	/** Characters allowed at the beginning of a numeric literal. */
+	public static final AsciiSet FIRST_NUMBER_CHARS = AsciiSet.of("+-.#0123456789");
+
+	/** Hexadecimal digit characters. */
+	public static final AsciiSet HEXADECIMAL_CHARS = AsciiSet.of("0123456789abcdefABCDEF");
+
+	/** Characters allowed in HTTP headers (including quoted strings and comments). */
+	public static final AsciiSet HTTP_HEADER_CHARS = AsciiSet.create().chars("\t -").ranges("!-[","]-}").build();
+
+	/** Characters escaped when parsing key/value pairs. */
+	public static final AsciiSet MAP_ESCAPE_SET = AsciiSet.of(",=\\");
+
+	/** Unix-style newline character. */
+	public static final String NEWLINE = "\n";
+
+	/** Predicate that filters out {@code null} and empty strings. */
+	public static final Predicate<String> NOT_EMPTY = Utils::isNotEmpty;
+
+	/** Characters that can appear anywhere in a numeric literal. */
+	public static final AsciiSet NUMBER_CHARS = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
+
+	/** Octal digit characters. */
+	public static final AsciiSet OCTAL_CHARS = AsciiSet.of("01234567");
+
+	/** Characters escaped when parsing quoted strings. */
+	public static final AsciiSet QUOTE_ESCAPE_SET = AsciiSet.of("\"'\\");
+
+	/** Single-space character constant. */
+	public static final String SPACE = " ";
+
+	/** Horizontal tab character constant. */
+	public static final String TAB = "\t";
+
+	/** Characters considered part of a URI when encoding paths. */
+	public static final AsciiSet URI_CHARS = AsciiSet.create().chars("?#+%;/:@&=+$,-_.!~*'()").range('0', '9').range('A', 'Z').range('a', 'z').build();
+
+	/** Characters that may appear unescaped in path segments when URL-encoding. */
+	public static final AsciiSet URL_ENCODE_PATHINFO_VALIDCHARS = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars("-_.*/()").build();
+
+	/** Characters that never require URL encoding per RFC 3986. */
+	public static final AsciiSet URL_UNENCODED_CHARS = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars("-_.!~*'()\\").build();
+
+	/** Extended set of characters that are typically safe to leave unencoded. */
+	public static final AsciiSet URL_UNENCODED_LAX_CHARS = URL_UNENCODED_CHARS.copy().chars(":@$,").chars("{}|\\^[]`").build();
 
 	/**
-	 * All whitespace characters constant.
-	 *
-	 * <p>
-	 * Contains all standard whitespace characters: space, tab, newline, carriage return, form feed, and vertical tab.
+	 * All standard whitespace characters (space, tab, newline, carriage return, form feed, vertical tab).
 	 */
-	public static final String WHITESPACE_CHARS = " \t\n\r\f\u000B";
+	public static final AsciiSet WHITESPACE_CHARS = AsciiSet.of(" \t\n\r\f\u000B");
 
-	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
-
-	private static final AsciiSet firstNumberChars = AsciiSet.of("+-.#0123456789");
-	private static final AsciiSet octChars = AsciiSet.of("01234567");
-	private static final AsciiSet decChars = AsciiSet.of("0123456789");
-	private static final AsciiSet hexChars = AsciiSet.of("0123456789abcdefABCDEF");
 	// Maps 6-bit nibbles to BASE64 characters.
-	private static final char[] base64m1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
-
-	// Characters that do not need to be URL-encoded
-	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars("-_.!~*'()\\").build();
-
-	// Characters that really do not need to be URL-encoded
-	private static final AsciiSet unencodedCharsLax = unencodedChars.copy().chars(":@$,")  // reserved, but can't be confused in a query parameter.
-		.chars("{}|\\^[]`")  // unwise characters.
-		.build();
-
-	// Valid HTTP header characters (including quoted strings and comments).
-	// @formatter:off
-	private static final AsciiSet httpHeaderChars = AsciiSet
-		.create()
-		.chars("\t -")
-		.ranges("!-[","]-}")
-		.build();
-	// @formatter:on
+	private static final char[] BASE64M1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 
 	// Maps BASE64 characters to 6-bit nibbles.
-	private static final byte[] base64m2 = new byte[128];
+	private static final byte[] BASE64M2 = new byte[128];
 
 	static {
 		for (var i = 0; i < 64; i++)
-			base64m2[base64m1[i]] = (byte)i;
+			BASE64M2[BASE64M1[i]] = (byte)i;
 	}
 	private static final Random RANDOM = new Random();
 
-	private static final Pattern fpRegex = Pattern.compile(
+	private static final Pattern FP_REGEX = Pattern.compile(
 		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"  // NOSONAR
 	);
 
 	static final Map<Character,AsciiSet> ESCAPE_SETS = new ConcurrentHashMap<>();
 
-	static final AsciiSet MAP_ESCAPE_SET = AsciiSet.of(",=\\");
-
-	static final AsciiSet QUOTE_ESCAPE_SET = AsciiSet.of("\"'\\");
-
-	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
 	private static final List<Tuple2<Class<?>,Function<Object,String>>> READIFIERS = loadReadifiers();
 	private static final Cache<Class<?>,Function<Object,String>> READIFIER_CACHE = Cache.<Class<?>,Function<Object,String>>create().build();
 
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
-
-	private static final AsciiSet URL_ENCODE_PATHINFO_VALIDCHARS = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars("-_.*/()").build();
-	private static final AsciiSet URI_CHARS = AsciiSet.create().chars("?#+%;/:@&=+$,-_.!~*'()").range('0', '9').range('A', 'Z').range('a', 'z').build();
 
 	/**
 	 * Abbreviates a string using ellipses if it exceeds the specified length.
@@ -344,10 +330,10 @@ public class StringUtils {
 			var i1 = bIn[iIn++];
 			var i2 = iIn < inLength ? bIn[iIn++] : 'A';
 			var i3 = iIn < inLength ? bIn[iIn++] : 'A';
-			var b0 = base64m2[i0];
-			var b1 = base64m2[i1];
-			var b2 = base64m2[i2];
-			var b3 = base64m2[i3];
+			var b0 = BASE64M2[i0];
+			var b1 = BASE64M2[i1];
+			var b2 = BASE64M2[i2];
+			var b3 = BASE64M2[i3];
 			var o0 = (b0 << 2) | (b1 >>> 4);
 			var o1 = ((b1 & 0xf) << 4) | (b2 >>> 2);
 			var o2 = ((b2 & 3) << 6) | b3;
@@ -394,11 +380,11 @@ public class StringUtils {
 			var o1 = ((i0 & 3) << 4) | (i1 >>> 4);
 			var o2 = ((i1 & 0xf) << 2) | (i2 >>> 6);
 			var o3 = i2 & 0x3F;
-			out[iOut++] = base64m1[o0];
-			out[iOut++] = base64m1[o1];
-			out[iOut] = iOut < outLength ? base64m1[o2] : '=';
+			out[iOut++] = BASE64M1[o0];
+			out[iOut++] = BASE64M1[o1];
+			out[iOut] = iOut < outLength ? BASE64M1[o2] : '=';
 			iOut++;
-			out[iOut] = iOut < outLength ? base64m1[o3] : '=';
+			out[iOut] = iOut < outLength ? BASE64M1[o3] : '=';
 			iOut++;
 		}
 		return new String(out);
@@ -3116,7 +3102,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string is numeric.
 	 */
 	public static boolean isDecimal(String s) {
-		if (s == null || s.isEmpty() || ! firstNumberChars.contains(s.charAt(0)))
+		if (s == null || s.isEmpty() || ! FIRST_NUMBER_CHARS.contains(s.charAt(0)))
 			return false;
 		var i = 0;
 		var length = s.length();
@@ -3133,24 +3119,24 @@ public class StringUtils {
 			c = s.charAt(i++);
 			if (c == 'x' || c == 'X') {
 				for (var j = i; j < length; j++) {
-					if (! hexChars.contains(s.charAt(j)))
+					if (! HEXADECIMAL_CHARS.contains(s.charAt(j)))
 						return false;
 				}
-			} else if (octChars.contains(c)) {
+			} else if (OCTAL_CHARS.contains(c)) {
 				for (var j = i; j < length; j++)
-					if (! octChars.contains(s.charAt(j)))
+					if (! OCTAL_CHARS.contains(s.charAt(j)))
 						return false;
 			} else {
 				return false;
 			}
 		} else if (c == '#') {
 			for (var j = i; j < length; j++) {
-				if (! hexChars.contains(s.charAt(j)))
+				if (! HEXADECIMAL_CHARS.contains(s.charAt(j)))
 					return false;
 			}
-		} else if (decChars.contains(c)) {
+		} else if (DECIMAL_CHARS.contains(c)) {
 			for (var j = i; j < length; j++)
-				if (! decChars.contains(s.charAt(j)))
+				if (! DECIMAL_CHARS.contains(s.charAt(j)))
 					return false;
 		} else {
 			return false;
@@ -3234,7 +3220,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified character is a valid first character for a number.
 	 */
 	public static boolean isFirstNumberChar(char c) {
-		return firstNumberChars.contains(c);
+		return FIRST_NUMBER_CHARS.contains(c);
 	}
 
 	/**
@@ -3246,7 +3232,7 @@ public class StringUtils {
 	public static boolean isFloat(String s) {
 		if (s == null || s.isEmpty())
 			return false;
-		if (! firstNumberChars.contains(s.charAt(0)))
+		if (! FIRST_NUMBER_CHARS.contains(s.charAt(0)))
 			return (s.equals("NaN") || s.equals("Infinity"));
 		var i = 0;
 		var length = s.length();
@@ -3256,8 +3242,8 @@ public class StringUtils {
 		if (i == length)
 			return false;
 		c = s.charAt(i);
-		if (c == '.' || decChars.contains(c)) {
-			return fpRegex.matcher(s).matches();
+		if (c == '.' || DECIMAL_CHARS.contains(c)) {
+			return FP_REGEX.matcher(s).matches();
 		}
 		return false;
 	}
@@ -3381,7 +3367,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified character is a valid number character.
 	 */
 	public static boolean isNumberChar(char c) {
-		return numberChars.contains(c);
+		return NUMBER_CHARS.contains(c);
 	}
 
 	/**
@@ -6961,7 +6947,7 @@ public class StringUtils {
 
 		var needsReplace = false;
 		for (var i = 0; i < s.length() && ! needsReplace; i++)
-			needsReplace |= httpHeaderChars.contains(s.charAt(i));
+			needsReplace |= HTTP_HEADER_CHARS.contains(s.charAt(i));
 
 		if (! needsReplace)
 			return s;
@@ -6969,7 +6955,7 @@ public class StringUtils {
 		var sb = new StringBuilder(s.length());
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
-			if (httpHeaderChars.contains(c))
+			if (HTTP_HEADER_CHARS.contains(c))
 				sb.append(c);
 		}
 
@@ -7158,8 +7144,8 @@ public class StringUtils {
 	public static String toHex(byte b) {
 		var c = new char[2];
 		var v = b & 0xFF;
-		c[0] = hexArray[v >>> 4];
-		c[1] = hexArray[v & 0x0F];
+		c[0] = HEX_ARRAY[v >>> 4];
+		c[1] = HEX_ARRAY[v & 0x0F];
 		return new String(c);
 	}
 
@@ -7713,7 +7699,7 @@ public class StringUtils {
 		var needsEncode = false;
 
 		for (var i = 0; i < s.length() && ! needsEncode; i++)
-			needsEncode |= (! unencodedChars.contains(s.charAt(i)));
+			needsEncode |= (! URL_UNENCODED_CHARS.contains(s.charAt(i)));
 
 		if (needsEncode) {
 			try {
@@ -7735,12 +7721,12 @@ public class StringUtils {
 			return null;
 		var needsEncode = false;
 		for (var i = 0; i < s.length() && ! needsEncode; i++)
-			needsEncode |= (! unencodedCharsLax.contains(s.charAt(i)));
+			needsEncode |= (! URL_UNENCODED_LAX_CHARS.contains(s.charAt(i)));
 		if (needsEncode) {
 			var sb = new StringBuilder(s.length() * 2);
 			for (var i = 0; i < s.length(); i++) {
 				var c = s.charAt(i);
-				if (unencodedCharsLax.contains(c))
+				if (URL_UNENCODED_LAX_CHARS.contains(c))
 					sb.append(c);
 				else if (c == ' ')
 					sb.append("+");
