@@ -125,7 +125,7 @@ public class StringUtils {
 	}
 	private static final Random RANDOM = new Random();
 
-	private static final Pattern FP_REGEX = Pattern.compile(
+	public static final Pattern FP_REGEX = Pattern.compile(
 		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"  // NOSONAR
 	);
 
@@ -133,8 +133,8 @@ public class StringUtils {
 
 	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
-	private static final List<Tuple2<Class<?>,Function<Object,String>>> READIFIERS = loadReadifiers();
-	private static final Cache<Class<?>,Function<Object,String>> READIFIER_CACHE = Cache.<Class<?>,Function<Object,String>>create().build();
+	private static final List<Readifier> READIFIERS = loadReadifiers();
+	private static final Cache<Class,Function<Object,String>> READIFIER_CACHE = Cache.<Class,Function<Object,String>>create().build();
 
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
@@ -5822,8 +5822,8 @@ public class StringUtils {
 			// Find readifier from READIFIERS list
 			// First try exact match, then isAssignableFrom
 			var readifier = READIFIERS.stream()
-				.filter(x -> x.getA() == c || x.getA().isAssignableFrom(c))
-				.map(x -> x.getB())
+				.filter(r -> r.forClass() == c || r.forClass().isAssignableFrom(c))
+				.map(Readifier::toFunction)
 				.findFirst()
 				.orElse(null);
 
@@ -8191,104 +8191,48 @@ public class StringUtils {
 		return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
 	}
 
-	private static List<Tuple2<Class<?>,Function<Object,String>>> loadReadifiers() {
-		var list = new ArrayList<Tuple2<Class<?>,Function<Object,String>>>();
+	private static class Readifier {
+		private final Class<?> type;
+		private final Function<Object,String> bridge;
+
+		private <T> Readifier(Class<T> type, Function<? super T,String> converter) {
+			this.type = type;
+			this.bridge = o -> converter.apply(type.cast(o));
+		}
+
+		Class<?> forClass() {
+			return type;
+		}
+
+		Function<Object,String> toFunction() {
+			return bridge;
+		}
+	}
+
+	private static <T> Readifier readifier(Class<T> type, Function<? super T,String> converter) {
+		return new Readifier(type, converter);
+	}
+
+	private static List<Readifier> loadReadifiers() {
+		var list = new ArrayList<Readifier>();
 
 		// More specific types first - order matters!
-
-		// Map.Entry before Map
-		list.add(Tuple2.of(Map.Entry.class, o -> {
-			var e = (Map.Entry<?,?>)o;
-			return readable(e.getKey()) + '=' + readable(e.getValue());
-		}));
-
-		// Collection before Iterable
-		list.add(Tuple2.of(Collection.class, o -> {
-			var c = (Collection<?>)o;
-			return c.stream().map(StringUtils::readable).collect(joining(",", "[", "]"));
-		}));
-
-		// Map
-		list.add(Tuple2.of(Map.class, o -> {
-			var m = (Map<?,?>)o;
-			return m.entrySet().stream().map(StringUtils::readable).collect(joining(",", "{", "}"));
-		}));
-
-		// Iterable (but not Collection, which is handled above)
-		list.add(Tuple2.of(Iterable.class, o -> {
-			var i = (Iterable<?>)o;
-			return readable(toList(i));
-		}));
-
-		// Iterator
-		list.add(Tuple2.of(Iterator.class, o -> {
-			var i = (Iterator<?>)o;
-			return readable(toList(i));
-		}));
-
-		// Enumeration
-		list.add(Tuple2.of(Enumeration.class, o -> {
-			var e = (Enumeration<?>)o;
-			return readable(toList(e));
-		}));
-
-		// Optional
-		list.add(Tuple2.of(Optional.class, o -> {
-			var opt = (Optional<?>)o;
-			return readable(opt.orElse(null));
-		}));
-
-		// GregorianCalendar
-		list.add(Tuple2.of(GregorianCalendar.class, o -> {
-			var cal = (GregorianCalendar)o;
-			return cal.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
-		}));
-
-		// Date
-		list.add(Tuple2.of(Date.class, o -> {
-			var date = (Date)o;
-			return date.toInstant().toString();
-		}));
-
-		// InputStream
-		list.add(Tuple2.of(InputStream.class, o -> {
-			var is = (InputStream)o;
-			return toHex(is);
-		}));
-
-		// Reader
-		list.add(Tuple2.of(Reader.class, o -> {
-			var r = (Reader)o;
-			return safe(() -> read(r));
-		}));
-
-		// File
-		list.add(Tuple2.of(File.class, o -> {
-			var f = (File)o;
-			return safe(() -> read(f));
-		}));
-
-		// byte[]
-		list.add(Tuple2.of(byte[].class, o -> {
-			var bytes = (byte[])o;
-			return toHex(bytes);
-		}));
-
-		// Enum
-		list.add(Tuple2.of(Enum.class, o -> {
-			var e = (Enum<?>)o;
-			return e.name();
-		}));
-
-		// Class
-		list.add(Tuple2.of(Class.class, o -> {
-			var c = (Class<?>)o;
-			return cns(c);
-		}));
-
-		// Executable (Method or Constructor)
-		list.add(Tuple2.of(Executable.class, o -> {
-			var exec = (Executable)o;
+		list.add(readifier(Map.Entry.class, e -> readable(e.getKey()) + '=' + readable(e.getValue())));
+		list.add(readifier(Collection.class, c -> ((Collection<?>)c).stream().map(StringUtils::readable).collect(joining(",", "[", "]"))));
+		list.add(readifier(Map.class, m -> ((Map<?,?>)m).entrySet().stream().map(StringUtils::readable).collect(joining(",", "{", "}"))));
+		list.add(readifier(Iterable.class, i -> readable(toList(i))));
+		list.add(readifier(Iterator.class, it -> readable(toList(it))));
+		list.add(readifier(Enumeration.class, e -> readable(toList(e))));
+		list.add(readifier(Optional.class, o -> readable(((Optional<?>)o).orElse(null))));
+		list.add(readifier(GregorianCalendar.class, (GregorianCalendar cal) -> cal.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT)));
+		list.add(readifier(Date.class, (Date date) -> date.toInstant().toString()));
+		list.add(readifier(InputStream.class, (InputStream is) -> toHex(is)));
+		list.add(readifier(Reader.class, (Reader reader) -> safe(() -> read(reader))));
+		list.add(readifier(File.class, (File file) -> safe(() -> read(file))));
+		list.add(readifier(byte[].class, (byte[] bytes) -> toHex(bytes)));
+		list.add(readifier(Enum.class, e -> ((Enum<?>)e).name()));
+		list.add(readifier(Class.class, c -> cns(c)));
+		list.add(readifier(Executable.class, (Executable exec) -> {
 			var sb = new StringBuilder(64);
 			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('(');
 			var pt = exec.getParameterTypes();
@@ -8300,40 +8244,12 @@ public class StringUtils {
 			sb.append(')');
 			return sb.toString();
 		}));
-
-		// ClassInfo
-		list.add(Tuple2.of(ClassInfo.class, o -> {
-			var ci = (ClassInfo)o;
-			return ci.toString();
-		}));
-
-		// ExecutableInfo
-		list.add(Tuple2.of(ExecutableInfo.class, o -> {
-			var ei = (ExecutableInfo)o;
-			return ei.toString();
-		}));
-
-		// FieldInfo
-		list.add(Tuple2.of(FieldInfo.class, o -> {
-			var fi = (FieldInfo)o;
-			return fi.toString();
-		}));
-
-		// ParameterInfo
-		list.add(Tuple2.of(ParameterInfo.class, o -> {
-			var pi = (ParameterInfo)o;
-			return pi.toString();
-		}));
-
-		// Field
-		list.add(Tuple2.of(Field.class, o -> {
-			var f = (Field)o;
-			return cns(f.getDeclaringClass()) + "." + f.getName();
-		}));
-
-		// Parameter
-		list.add(Tuple2.of(Parameter.class, o -> {
-			var p = (Parameter)o;
+		list.add(readifier(ClassInfo.class, ClassInfo::toString));
+		list.add(readifier(ExecutableInfo.class, ExecutableInfo::toString));
+		list.add(readifier(FieldInfo.class, FieldInfo::toString));
+		list.add(readifier(ParameterInfo.class, ParameterInfo::toString));
+		list.add(readifier(Field.class, (Field f) -> cns(f.getDeclaringClass()) + "." + f.getName()));
+		list.add(readifier(Parameter.class, (Parameter p) -> {
 			var exec = p.getDeclaringExecutable();
 			var sb = new StringBuilder(64);
 			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('[');
