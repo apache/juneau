@@ -6563,7 +6563,10 @@ class StringUtils_Test extends TestBase {
 		// - First '\' sees second '\', appends '\' and skips second '\'
 		// - Then appends the second '\' from the string, then 'b'
 		// Result: "a\\\\b" (both backslashes preserved)
-		assertEquals("a\\\\b", unescapeChars("a\\\\b", AsciiSet.of(","))); // '\' not in escaped set
+		System.out.println("=== Testing unescapeChars with a\\\\b, backslash NOT in escaped set ===");
+		var result2 = unescapeChars("a\\\\b", AsciiSet.of(","));
+		System.out.println("Result: " + java.util.Arrays.toString(result2.toCharArray()));
+		assertEquals("a\\\\b", result2); // '\' not in escaped set
 	}
 
 	//====================================================================================================

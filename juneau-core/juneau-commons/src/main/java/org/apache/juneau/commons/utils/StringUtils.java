@@ -7458,9 +7458,6 @@ public class StringUtils {
 					var c2 = s.charAt(i + 1);
 					if (escaped.contains(c2)) {
 						i++;  // NOSONAR - Intentional.
-					} else if (c2 == '\\') {
-						sb.append('\\');
-						i++;  // NOSONAR - Intentional.
 					}
 				}
 			}
