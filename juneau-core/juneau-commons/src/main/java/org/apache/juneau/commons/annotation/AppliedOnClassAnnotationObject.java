@@ -79,7 +79,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link AppliedAnnotationObject} - Parent class documentation
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-common.Annotations">Overview &gt; juneau-common &gt; Annotations</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  * </ul>
  */
 public class AppliedOnClassAnnotationObject extends AppliedAnnotationObject {

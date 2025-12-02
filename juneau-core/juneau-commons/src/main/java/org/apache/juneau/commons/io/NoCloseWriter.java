@@ -67,7 +67,7 @@ import java.io.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link NoCloseOutputStream} - OutputStream counterpart
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonIO">juneau-common-io</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">juneau-commons-io</a>
  * </ul>
  */
 public class NoCloseWriter extends Writer {

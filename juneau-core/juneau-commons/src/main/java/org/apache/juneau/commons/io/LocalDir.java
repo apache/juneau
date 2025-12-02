@@ -82,7 +82,7 @@ import org.apache.juneau.commons.utils.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link LocalFile} - File counterpart for individual file access
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonIO">juneau-common-io</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">juneau-commons-io</a>
  * </ul>
  */
 public class LocalDir {

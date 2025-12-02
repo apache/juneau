@@ -36,7 +36,7 @@ package org.apache.juneau.commons.utils;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommon">juneau-common</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommons">juneau-commons</a>
  * </ul>
  */
 public enum StateEnum {

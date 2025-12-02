@@ -77,7 +77,7 @@ import java.util.function.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ThrowingSupplier} - Supplier that throws exceptions
  * 	<li class='jc'>{@link ThrowingConsumer} - Consumer that throws exceptions
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonFunction">juneau-common-function</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsFunction">juneau-commons-function</a>
  * </ul>
  *
  * @param <T> The type of the input to the function.

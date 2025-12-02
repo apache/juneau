@@ -639,8 +639,8 @@ This file contains TODO items that have been completed and moved from TODO.md.
       - `ResolvingJsonMapTest.java` (2 instances: `Map<String,Object>` → `var ... HashMap<String,Object>`)
       - `ManifestFile_Test.java` (2 instances: `Map<String,Object>` → `var ... HashMap<String,Object>`)
     - **Source files modified** (10 instances):
-      - `ClassUtils.java` (juneau-common) - 2 instances: `Map<Type,Type>` → `var ... HashMap<Type,Type>`
-      - `DateUtils.java` (juneau-common) - 1 instance: `Map<String,SimpleDateFormat>` → `var ... HashMap<String,SimpleDateFormat>`
+      - `ClassUtils.java` (juneau-commons) - 2 instances: `Map<Type,Type>` → `var ... HashMap<Type,Type>`
+      - `DateUtils.java` (juneau-commons) - 1 instance: `Map<String,SimpleDateFormat>` → `var ... HashMap<String,SimpleDateFormat>`
       - `ClassInfo.java` (juneau-marshall) - 2 instances: `Map<Type,Type>` → `var ... HashMap<Type,Type>`
       - `Utils2.java` (juneau-marshall) - 1 instance: `Map<String,MethodInfo>` → `var ... LinkedHashMap<String,MethodInfo>`
       - `HttpPartSchema.java` (juneau-marshall) - 2 instances: `Set<Object>` → `var ... HashSet<Object>`

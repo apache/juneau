@@ -68,7 +68,7 @@ import java.lang.reflect.*;
  * 	<li class='jc'>{@link MethodInfo} - Method introspection wrapper
  * 	<li class='jc'>{@link FieldInfo} - Field introspection wrapper
  * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection wrapper
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflect">juneau-commons-reflect</a>
  * </ul>
  */
 public class ReflectionUtils {

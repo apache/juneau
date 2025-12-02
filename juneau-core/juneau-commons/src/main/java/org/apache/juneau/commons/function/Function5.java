@@ -60,7 +60,7 @@ import java.util.function.*;
  * 	<li class='jc'>{@link Function2} - Two-argument function
  * 	<li class='jc'>{@link Function3} - Three-argument function
  * 	<li class='jc'>{@link Function4} - Four-argument function
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonFunction">juneau-common-function</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsFunction">juneau-commons-function</a>
  * </ul>
  *
  * @param <A> The type of the first argument to the function.

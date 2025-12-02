@@ -120,7 +120,7 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">juneau-common</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">juneau-commons</a>
  * </ul>
  */
 public class CollectionUtils {

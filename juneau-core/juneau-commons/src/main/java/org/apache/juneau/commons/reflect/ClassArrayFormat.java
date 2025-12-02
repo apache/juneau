@@ -32,7 +32,7 @@ package org.apache.juneau.commons.reflect;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">Common</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Common</a>
  * </ul>
  */
 public enum ClassArrayFormat {

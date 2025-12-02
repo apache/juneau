@@ -75,7 +75,7 @@ import java.nio.charset.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link FileWriterBuilder} - Builder for file writers
  * 	<li class='jc'>{@link PathReaderBuilder} - Builder for Path-based readers
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonIO">juneau-common-io</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">juneau-commons-io</a>
  * </ul>
  */
 public class FileReaderBuilder {

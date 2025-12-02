@@ -79,7 +79,7 @@ import java.nio.file.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link LocalDir} - Directory counterpart for resolving files within directories
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonIO">juneau-common-io</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">juneau-commons-io</a>
  * </ul>
  */
 @SuppressWarnings("resource")

@@ -71,7 +71,7 @@ package org.apache.juneau.commons.reflect;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ElementInfo} - Base class that uses these flags
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflect">juneau-commons-reflect</a>
  * </ul>
  */
 public enum ElementFlag {

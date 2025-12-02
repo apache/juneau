@@ -75,7 +75,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='jc'>{@link Tuple3} - Three-value tuple
  * 	<li class='jc'>{@link Tuple4} - Four-value tuple
  * 	<li class='jc'>{@link Tuple5} - Five-value tuple
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonFunction">juneau-common-function</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsFunction">juneau-commons-function</a>
  * </ul>
  *
  * @param <A> The type of the first value in this tuple.

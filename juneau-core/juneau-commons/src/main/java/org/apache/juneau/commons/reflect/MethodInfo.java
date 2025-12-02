@@ -77,7 +77,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='jc'>{@link FieldInfo} - Field introspection
  * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
  * 	<li class='jc'>{@link ParameterInfo} - Parameter introspection
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflect">juneau-commons-reflect</a>
  * </ul>
  */
 public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {

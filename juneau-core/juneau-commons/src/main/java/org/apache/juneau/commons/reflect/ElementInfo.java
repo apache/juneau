@@ -62,7 +62,7 @@ import java.lang.reflect.Modifier;
  * 	<li class='jc'>{@link ClassInfo} - Class introspection
  * 	<li class='jc'>{@link MethodInfo} - Method introspection
  * 	<li class='jc'>{@link FieldInfo} - Field introspection
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonReflect">juneau-common-reflect</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflect">juneau-commons-reflect</a>
  * </ul>
  */
 public abstract class ElementInfo {

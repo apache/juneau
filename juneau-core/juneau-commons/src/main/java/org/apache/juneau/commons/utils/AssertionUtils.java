@@ -50,7 +50,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-common.utils'>Overview &gt; juneau-common.utils</a>
+ *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-commons.utils'>Overview &gt; juneau-commons.utils</a>
  * </ul>
  */
 public class AssertionUtils {

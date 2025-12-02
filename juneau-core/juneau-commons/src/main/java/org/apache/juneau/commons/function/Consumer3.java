@@ -61,7 +61,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * 	<li class='jc'>{@link Consumer2} - Two-argument consumer
  * 	<li class='jc'>{@link Consumer4} - Four-argument consumer
  * 	<li class='jc'>{@link Consumer5} - Five-argument consumer
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonFunction">juneau-common-function</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsFunction">juneau-commons-function</a>
  * </ul>
  *
  * @param <A> The type of the first argument to the operation.

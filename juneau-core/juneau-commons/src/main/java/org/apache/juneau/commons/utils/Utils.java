@@ -50,7 +50,7 @@ import org.apache.juneau.commons.function.*;
  * <ul>
  *   <li class='jc'>{@link AssertionUtils} - For argument validation and assertion methods
  *   <li class='jc'>{@link StringUtils} - For additional string manipulation utilities
- *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-common.utils'>Overview &gt; juneau-common.utils</a>
+ *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-commons.utils'>Overview &gt; juneau-commons.utils</a>
  * </ul>
  */
 public class Utils {

@@ -5,7 +5,7 @@
 <title>ThrowableUtils (Apache Juneau 9.0.0)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: org.apache.juneau.common.internal, class: ThrowableUtils">
+<meta name="description" content="declaration: package: org.apache.juneau.commons.internal, class: ThrowableUtils">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -87,11 +87,11 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.apache.juneau.common.internal</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.apache.juneau.commons.internal</a></div>
 <h1 title="Class ThrowableUtils" class="title">Class ThrowableUtils</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">org.apache.juneau.common.internal.ThrowableUtils</div>
+<div class="inheritance">org.apache.juneau.commons.internal.ThrowableUtils</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
@@ -111,9 +111,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="ThrowableUtils.SupplierWithThrowable.html" class="type-name-link" title="interface in org.apache.juneau.common.internal">ThrowableUtils.SupplierWithThrowable</a>&lt;<a href="ThrowableUtils.SupplierWithThrowable.html" title="type parameter in ThrowableUtils.SupplierWithThrowable">T</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="ThrowableUtils.SupplierWithThrowable.html" class="type-name-link" title="interface in org.apache.juneau.commons.internal">ThrowableUtils.SupplierWithThrowable</a>&lt;<a href="ThrowableUtils.SupplierWithThrowable.html" title="type parameter in ThrowableUtils.SupplierWithThrowable">T</a>&gt;</code></div>
 <div class="col-last even-row-color">
-<div class="block">Interface used with <a href="#safeSupplier(org.apache.juneau.common.internal.ThrowableUtils.SupplierWithThrowable)"><code>safeSupplier(SupplierWithThrowable)</code></a>.</div>
+<div class="block">Interface used with <a href="#safeSupplier(org.apache.juneau.commons.internal.ThrowableUtils.SupplierWithThrowable)"><code>safeSupplier(SupplierWithThrowable)</code></a>.</div>
 </div>
 </div>
 </section>
@@ -171,12 +171,12 @@ loadScripts(document, 'script');</script>
 <div class="block">Calculates a 16-bit hash for the specified throwable based on it's stack trace.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeRun(org.apache.juneau.common.utils.Snippet)" class="member-name-link">safeRun</a><wbr>(<a href="../utils/Snippet.html" title="interface in org.apache.juneau.common.utils">Snippet</a>&nbsp;snippet)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeRun(org.apache.juneau.commons.utils.Snippet)" class="member-name-link">safeRun</a><wbr>(<a href="../utils/Snippet.html" title="interface in org.apache.juneau.commons.utils">Snippet</a>&nbsp;snippet)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Runs a snippet of code and encapsulates any throwable inside a <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeSupplier(org.apache.juneau.common.internal.ThrowableUtils.SupplierWithThrowable)" class="member-name-link">safeSupplier</a><wbr>(<a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.common.internal">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeSupplier(org.apache.juneau.commons.internal.ThrowableUtils.SupplierWithThrowable)" class="member-name-link">safeSupplier</a><wbr>(<a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.internal">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.</div>
 </div>
@@ -259,9 +259,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="safeSupplier(org.apache.juneau.common.internal.ThrowableUtils.SupplierWithThrowable)">
+<section class="detail" id="safeSupplier(org.apache.juneau.commons.internal.ThrowableUtils.SupplierWithThrowable)">
 <h3>safeSupplier</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/internal/ThrowableUtils.html#line-75">safeSupplier</a></span><wbr><span class="parameters">(<a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.common.internal">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/internal/ThrowableUtils.html#line-75">safeSupplier</a></span><wbr><span class="parameters">(<a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.internal">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier)</span></div>
 <div class="block">Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -276,9 +276,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="safeRun(org.apache.juneau.common.utils.Snippet)">
+<section class="detail" id="safeRun(org.apache.juneau.commons.utils.Snippet)">
 <h3>safeRun</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/internal/ThrowableUtils.html#line-99">safeRun</a></span><wbr><span class="parameters">(<a href="../utils/Snippet.html" title="interface in org.apache.juneau.common.utils">Snippet</a>&nbsp;snippet)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/internal/ThrowableUtils.html#line-99">safeRun</a></span><wbr><span class="parameters">(<a href="../utils/Snippet.html" title="interface in org.apache.juneau.commons.utils">Snippet</a>&nbsp;snippet)</span></div>
 <div class="block">Runs a snippet of code and encapsulates any throwable inside a <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

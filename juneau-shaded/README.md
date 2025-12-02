@@ -13,7 +13,7 @@ This module contains shaded (uber) JAR artifacts that bundle multiple Juneau mod
 **Description**: All core Juneau modules for general marshalling and configuration work.
 
 **Includes**:
-- juneau-common
+- juneau-commons
 - juneau-assertions
 - juneau-bct (Bean-Centric Testing)
 - juneau-config

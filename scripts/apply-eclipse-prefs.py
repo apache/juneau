@@ -43,7 +43,7 @@ SOURCE_PROJECTS = [
     "juneau-bean/juneau-bean-swagger-v2",
     "juneau-core/juneau-assertions",
     "juneau-core/juneau-bct",
-    "juneau-core/juneau-common",
+    "juneau-core/juneau-commons",
     "juneau-core/juneau-config",
     "juneau-core/juneau-marshall",
     "juneau-core/juneau-marshall-rdf",
