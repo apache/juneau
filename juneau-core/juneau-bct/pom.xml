@@ -37,7 +37,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-common</artifactId>
+			<artifactId>juneau-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

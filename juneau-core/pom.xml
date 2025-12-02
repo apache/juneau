@@ -31,7 +31,7 @@
 	<description>Apache Juneau Core APIs</description>
 
 	<modules>
-		<module>juneau-common</module>
+		<module>juneau-commons</module>
 		<module>juneau-marshall</module>
 		<module>juneau-config</module>
 		<module>juneau-assertions</module>

@@ -25,9 +25,9 @@
 		<version>9.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-common</artifactId>
-	<name>Apache Juneau Common</name>
-	<description>Apache Juneau Core Common APIs</description>
+	<artifactId>juneau-commons</artifactId>
+	<name>Apache Juneau Commons</name>
+	<description>Apache Juneau Core Commons APIs</description>
 	<packaging>bundle</packaging>
 
 	<properties>
