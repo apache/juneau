@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Random RANDOM = <strong class="jxr_keyword">new</strong> Random();
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern FP_REGEX = Pattern.compile(
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern FP_REGEX = Pattern.compile(
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<span class="jxr_string">"[+-]?(NaN|Infinity|((((&#92;&#92;p{Digit}+)(&#92;&#92;.)?((&#92;&#92;p{Digit}+)?)([eE][+-]?(&#92;&#92;p{Digit}+))?)|(&#92;&#92;.((&#92;&#92;p{Digit}+))([eE][+-]?(&#92;&#92;p{Digit}+))?)|(((0[xX](&#92;&#92;p{XDigit}+)(&#92;&#92;.)?)|(0[xX](&#92;&#92;p{XDigit}+)?(&#92;&#92;.)(&#92;&#92;p{XDigit}+)))[pP][+-]?(&#92;&#92;p{Digit}+)))[fFdD]?))[&#92;&#92;x00-&#92;&#92;x20]*"</span>  <em class="jxr_comment">// NOSONAR</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
@@ -141,8 +141,8 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">char</strong>[] HEX_ARRAY = <span class="jxr_string">"0123456789ABCDEF"</span>.toCharArray();
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;Tuple2&lt;Class&lt;?&gt;,Function&lt;Object,String&gt;&gt;&gt; READIFIERS = loadReadifiers();
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Class&lt;?&gt;,Function&lt;Object,String&gt;&gt; READIFIER_CACHE = Cache.&lt;Class&lt;?&gt;,Function&lt;Object,String&gt;&gt;create().build();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;Readifier&gt; READIFIERS = loadReadifiers();
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Class,Function&lt;Object,String&gt;&gt; READIFIER_CACHE = Cache.&lt;Class,Function&lt;Object,String&gt;&gt;create().build();
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">char</strong>[] HEX = <span class="jxr_string">"0123456789ABCDEF"</span>.toCharArray();
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
@@ -5830,8 +5830,8 @@
 <a class="jxr_linenumber" name="L5822" href="#L5822">5822</a> 			<em class="jxr_comment">// Find readifier from READIFIERS list</em>
 <a class="jxr_linenumber" name="L5823" href="#L5823">5823</a> 			<em class="jxr_comment">// First try exact match, then isAssignableFrom</em>
 <a class="jxr_linenumber" name="L5824" href="#L5824">5824</a> 			<strong class="jxr_keyword">var</strong> readifier = READIFIERS.stream()
-<a class="jxr_linenumber" name="L5825" href="#L5825">5825</a> 				.filter(x -&gt; x.getA() == c || x.getA().isAssignableFrom(c))
-<a class="jxr_linenumber" name="L5826" href="#L5826">5826</a> 				.map(x -&gt; x.getB())
+<a class="jxr_linenumber" name="L5825" href="#L5825">5825</a> 				.filter(r -&gt; r.forClass() == c || r.forClass().isAssignableFrom(c))
+<a class="jxr_linenumber" name="L5826" href="#L5826">5826</a> 				.map(Readifier::toFunction)
 <a class="jxr_linenumber" name="L5827" href="#L5827">5827</a> 				.findFirst()
 <a class="jxr_linenumber" name="L5828" href="#L5828">5828</a> 				.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L5829" href="#L5829">5829</a> 
@@ -8199,408 +8199,324 @@
 <a class="jxr_linenumber" name="L8191" href="#L8191">8191</a> 		<strong class="jxr_keyword">return</strong> c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
 <a class="jxr_linenumber" name="L8192" href="#L8192">8192</a> 	}
 <a class="jxr_linenumber" name="L8193" href="#L8193">8193</a> 
-<a class="jxr_linenumber" name="L8194" href="#L8194">8194</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Tuple2&lt;Class&lt;?&gt;,Function&lt;Object,String&gt;&gt;&gt; loadReadifiers() {
-<a class="jxr_linenumber" name="L8195" href="#L8195">8195</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;Tuple2&lt;Class&lt;?&gt;,Function&lt;Object,String&gt;&gt;&gt;();
-<a class="jxr_linenumber" name="L8196" href="#L8196">8196</a> 
-<a class="jxr_linenumber" name="L8197" href="#L8197">8197</a> 		<em class="jxr_comment">// More specific types first - order matters!</em>
-<a class="jxr_linenumber" name="L8198" href="#L8198">8198</a> 
-<a class="jxr_linenumber" name="L8199" href="#L8199">8199</a> 		<em class="jxr_comment">// Map.Entry before Map</em>
-<a class="jxr_linenumber" name="L8200" href="#L8200">8200</a> 		list.add(Tuple2.of(Map.Entry.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8201" href="#L8201">8201</a> 			<strong class="jxr_keyword">var</strong> e = (Map.Entry&lt;?,?&gt;)o;
-<a class="jxr_linenumber" name="L8202" href="#L8202">8202</a> 			<strong class="jxr_keyword">return</strong> readable(e.getKey()) + '=' + readable(e.getValue());
-<a class="jxr_linenumber" name="L8203" href="#L8203">8203</a> 		}));
-<a class="jxr_linenumber" name="L8204" href="#L8204">8204</a> 
-<a class="jxr_linenumber" name="L8205" href="#L8205">8205</a> 		<em class="jxr_comment">// Collection before Iterable</em>
-<a class="jxr_linenumber" name="L8206" href="#L8206">8206</a> 		list.add(Tuple2.of(Collection.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8207" href="#L8207">8207</a> 			<strong class="jxr_keyword">var</strong> c = (Collection&lt;?&gt;)o;
-<a class="jxr_linenumber" name="L8208" href="#L8208">8208</a> 			<strong class="jxr_keyword">return</strong> c.stream().map(StringUtils::readable).collect(joining(<span class="jxr_string">","</span>, <span class="jxr_string">"["</span>, <span class="jxr_string">"]"</span>));
-<a class="jxr_linenumber" name="L8209" href="#L8209">8209</a> 		}));
-<a class="jxr_linenumber" name="L8210" href="#L8210">8210</a> 
-<a class="jxr_linenumber" name="L8211" href="#L8211">8211</a> 		<em class="jxr_comment">// Map</em>
-<a class="jxr_linenumber" name="L8212" href="#L8212">8212</a> 		list.add(Tuple2.of(Map.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8213" href="#L8213">8213</a> 			<strong class="jxr_keyword">var</strong> m = (Map&lt;?,?&gt;)o;
-<a class="jxr_linenumber" name="L8214" href="#L8214">8214</a> 			<strong class="jxr_keyword">return</strong> m.entrySet().stream().map(StringUtils::readable).collect(joining(<span class="jxr_string">","</span>, <span class="jxr_string">"{"</span>, <span class="jxr_string">"}"</span>));
-<a class="jxr_linenumber" name="L8215" href="#L8215">8215</a> 		}));
-<a class="jxr_linenumber" name="L8216" href="#L8216">8216</a> 
-<a class="jxr_linenumber" name="L8217" href="#L8217">8217</a> 		<em class="jxr_comment">// Iterable (but not Collection, which is handled above)</em>
-<a class="jxr_linenumber" name="L8218" href="#L8218">8218</a> 		list.add(Tuple2.of(Iterable.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8219" href="#L8219">8219</a> 			<strong class="jxr_keyword">var</strong> i = (Iterable&lt;?&gt;)o;
-<a class="jxr_linenumber" name="L8220" href="#L8220">8220</a> 			<strong class="jxr_keyword">return</strong> readable(toList(i));
-<a class="jxr_linenumber" name="L8221" href="#L8221">8221</a> 		}));
-<a class="jxr_linenumber" name="L8222" href="#L8222">8222</a> 
-<a class="jxr_linenumber" name="L8223" href="#L8223">8223</a> 		<em class="jxr_comment">// Iterator</em>
-<a class="jxr_linenumber" name="L8224" href="#L8224">8224</a> 		list.add(Tuple2.of(Iterator.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8225" href="#L8225">8225</a> 			<strong class="jxr_keyword">var</strong> i = (Iterator&lt;?&gt;)o;
-<a class="jxr_linenumber" name="L8226" href="#L8226">8226</a> 			<strong class="jxr_keyword">return</strong> readable(toList(i));
-<a class="jxr_linenumber" name="L8227" href="#L8227">8227</a> 		}));
-<a class="jxr_linenumber" name="L8228" href="#L8228">8228</a> 
-<a class="jxr_linenumber" name="L8229" href="#L8229">8229</a> 		<em class="jxr_comment">// Enumeration</em>
-<a class="jxr_linenumber" name="L8230" href="#L8230">8230</a> 		list.add(Tuple2.of(Enumeration.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8231" href="#L8231">8231</a> 			<strong class="jxr_keyword">var</strong> e = (Enumeration&lt;?&gt;)o;
-<a class="jxr_linenumber" name="L8232" href="#L8232">8232</a> 			<strong class="jxr_keyword">return</strong> readable(toList(e));
-<a class="jxr_linenumber" name="L8233" href="#L8233">8233</a> 		}));
-<a class="jxr_linenumber" name="L8234" href="#L8234">8234</a> 
-<a class="jxr_linenumber" name="L8235" href="#L8235">8235</a> 		<em class="jxr_comment">// Optional</em>
-<a class="jxr_linenumber" name="L8236" href="#L8236">8236</a> 		list.add(Tuple2.of(Optional.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8237" href="#L8237">8237</a> 			<strong class="jxr_keyword">var</strong> opt = (Optional&lt;?&gt;)o;
-<a class="jxr_linenumber" name="L8238" href="#L8238">8238</a> 			<strong class="jxr_keyword">return</strong> readable(opt.orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L8239" href="#L8239">8239</a> 		}));
-<a class="jxr_linenumber" name="L8240" href="#L8240">8240</a> 
-<a class="jxr_linenumber" name="L8241" href="#L8241">8241</a> 		<em class="jxr_comment">// GregorianCalendar</em>
-<a class="jxr_linenumber" name="L8242" href="#L8242">8242</a> 		list.add(Tuple2.of(GregorianCalendar.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8243" href="#L8243">8243</a> 			<strong class="jxr_keyword">var</strong> cal = (GregorianCalendar)o;
-<a class="jxr_linenumber" name="L8244" href="#L8244">8244</a> 			<strong class="jxr_keyword">return</strong> cal.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
-<a class="jxr_linenumber" name="L8245" href="#L8245">8245</a> 		}));
-<a class="jxr_linenumber" name="L8246" href="#L8246">8246</a> 
-<a class="jxr_linenumber" name="L8247" href="#L8247">8247</a> 		<em class="jxr_comment">// Date</em>
-<a class="jxr_linenumber" name="L8248" href="#L8248">8248</a> 		list.add(Tuple2.of(Date.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8249" href="#L8249">8249</a> 			<strong class="jxr_keyword">var</strong> date = (Date)o;
-<a class="jxr_linenumber" name="L8250" href="#L8250">8250</a> 			<strong class="jxr_keyword">return</strong> date.toInstant().toString();
-<a class="jxr_linenumber" name="L8251" href="#L8251">8251</a> 		}));
-<a class="jxr_linenumber" name="L8252" href="#L8252">8252</a> 
-<a class="jxr_linenumber" name="L8253" href="#L8253">8253</a> 		<em class="jxr_comment">// InputStream</em>
-<a class="jxr_linenumber" name="L8254" href="#L8254">8254</a> 		list.add(Tuple2.of(InputStream.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8255" href="#L8255">8255</a> 			<strong class="jxr_keyword">var</strong> is = (InputStream)o;
-<a class="jxr_linenumber" name="L8256" href="#L8256">8256</a> 			<strong class="jxr_keyword">return</strong> toHex(is);
-<a class="jxr_linenumber" name="L8257" href="#L8257">8257</a> 		}));
-<a class="jxr_linenumber" name="L8258" href="#L8258">8258</a> 
-<a class="jxr_linenumber" name="L8259" href="#L8259">8259</a> 		<em class="jxr_comment">// Reader</em>
-<a class="jxr_linenumber" name="L8260" href="#L8260">8260</a> 		list.add(Tuple2.of(Reader.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8261" href="#L8261">8261</a> 			<strong class="jxr_keyword">var</strong> r = (Reader)o;
-<a class="jxr_linenumber" name="L8262" href="#L8262">8262</a> 			<strong class="jxr_keyword">return</strong> safe(() -&gt; read(r));
-<a class="jxr_linenumber" name="L8263" href="#L8263">8263</a> 		}));
-<a class="jxr_linenumber" name="L8264" href="#L8264">8264</a> 
-<a class="jxr_linenumber" name="L8265" href="#L8265">8265</a> 		<em class="jxr_comment">// File</em>
-<a class="jxr_linenumber" name="L8266" href="#L8266">8266</a> 		list.add(Tuple2.of(File.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8267" href="#L8267">8267</a> 			<strong class="jxr_keyword">var</strong> f = (File)o;
-<a class="jxr_linenumber" name="L8268" href="#L8268">8268</a> 			<strong class="jxr_keyword">return</strong> safe(() -&gt; read(f));
-<a class="jxr_linenumber" name="L8269" href="#L8269">8269</a> 		}));
-<a class="jxr_linenumber" name="L8270" href="#L8270">8270</a> 
-<a class="jxr_linenumber" name="L8271" href="#L8271">8271</a> 		<em class="jxr_comment">// byte[]</em>
-<a class="jxr_linenumber" name="L8272" href="#L8272">8272</a> 		list.add(Tuple2.of(byte[].<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8273" href="#L8273">8273</a> 			<strong class="jxr_keyword">var</strong> bytes = (byte[])o;
-<a class="jxr_linenumber" name="L8274" href="#L8274">8274</a> 			<strong class="jxr_keyword">return</strong> toHex(bytes);
-<a class="jxr_linenumber" name="L8275" href="#L8275">8275</a> 		}));
-<a class="jxr_linenumber" name="L8276" href="#L8276">8276</a> 
-<a class="jxr_linenumber" name="L8277" href="#L8277">8277</a> 		<em class="jxr_comment">// Enum</em>
-<a class="jxr_linenumber" name="L8278" href="#L8278">8278</a> 		list.add(Tuple2.of(Enum.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8279" href="#L8279">8279</a> 			<strong class="jxr_keyword">var</strong> e = (Enum&lt;?&gt;)o;
-<a class="jxr_linenumber" name="L8280" href="#L8280">8280</a> 			<strong class="jxr_keyword">return</strong> e.name();
-<a class="jxr_linenumber" name="L8281" href="#L8281">8281</a> 		}));
-<a class="jxr_linenumber" name="L8282" href="#L8282">8282</a> 
-<a class="jxr_linenumber" name="L8283" href="#L8283">8283</a> 		<em class="jxr_comment">// Class</em>
-<a class="jxr_linenumber" name="L8284" href="#L8284">8284</a> 		list.add(Tuple2.of(Class.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8285" href="#L8285">8285</a> 			<strong class="jxr_keyword">var</strong> c = (Class&lt;?&gt;)o;
-<a class="jxr_linenumber" name="L8286" href="#L8286">8286</a> 			<strong class="jxr_keyword">return</strong> cns(c);
-<a class="jxr_linenumber" name="L8287" href="#L8287">8287</a> 		}));
-<a class="jxr_linenumber" name="L8288" href="#L8288">8288</a> 
-<a class="jxr_linenumber" name="L8289" href="#L8289">8289</a> 		<em class="jxr_comment">// Executable (Method or Constructor)</em>
-<a class="jxr_linenumber" name="L8290" href="#L8290">8290</a> 		list.add(Tuple2.of(Executable.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8291" href="#L8291">8291</a> 			<strong class="jxr_keyword">var</strong> exec = (Executable)o;
-<a class="jxr_linenumber" name="L8292" href="#L8292">8292</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(64);
-<a class="jxr_linenumber" name="L8293" href="#L8293">8293</a> 			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('(');
-<a class="jxr_linenumber" name="L8294" href="#L8294">8294</a> 			<strong class="jxr_keyword">var</strong> pt = exec.getParameterTypes();
-<a class="jxr_linenumber" name="L8295" href="#L8295">8295</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; pt.length; i++) {
-<a class="jxr_linenumber" name="L8296" href="#L8296">8296</a> 				<strong class="jxr_keyword">if</strong> (i &gt; 0)
-<a class="jxr_linenumber" name="L8297" href="#L8297">8297</a> 					sb.append(',');
-<a class="jxr_linenumber" name="L8298" href="#L8298">8298</a> 				sb.append(cns(pt[i]));
-<a class="jxr_linenumber" name="L8299" href="#L8299">8299</a> 			}
-<a class="jxr_linenumber" name="L8300" href="#L8300">8300</a> 			sb.append(')');
-<a class="jxr_linenumber" name="L8301" href="#L8301">8301</a> 			<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L8302" href="#L8302">8302</a> 		}));
-<a class="jxr_linenumber" name="L8303" href="#L8303">8303</a> 
-<a class="jxr_linenumber" name="L8304" href="#L8304">8304</a> 		<em class="jxr_comment">// ClassInfo</em>
-<a class="jxr_linenumber" name="L8305" href="#L8305">8305</a> 		list.add(Tuple2.of(ClassInfo.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8306" href="#L8306">8306</a> 			<strong class="jxr_keyword">var</strong> ci = (ClassInfo)o;
-<a class="jxr_linenumber" name="L8307" href="#L8307">8307</a> 			<strong class="jxr_keyword">return</strong> ci.toString();
-<a class="jxr_linenumber" name="L8308" href="#L8308">8308</a> 		}));
-<a class="jxr_linenumber" name="L8309" href="#L8309">8309</a> 
-<a class="jxr_linenumber" name="L8310" href="#L8310">8310</a> 		<em class="jxr_comment">// ExecutableInfo</em>
-<a class="jxr_linenumber" name="L8311" href="#L8311">8311</a> 		list.add(Tuple2.of(ExecutableInfo.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8312" href="#L8312">8312</a> 			<strong class="jxr_keyword">var</strong> ei = (<a name="ExecutableInfo" href="../../../../../org/apache/juneau/commons/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a>)o;
-<a class="jxr_linenumber" name="L8313" href="#L8313">8313</a> 			<strong class="jxr_keyword">return</strong> ei.toString();
-<a class="jxr_linenumber" name="L8314" href="#L8314">8314</a> 		}));
-<a class="jxr_linenumber" name="L8315" href="#L8315">8315</a> 
-<a class="jxr_linenumber" name="L8316" href="#L8316">8316</a> 		<em class="jxr_comment">// FieldInfo</em>
-<a class="jxr_linenumber" name="L8317" href="#L8317">8317</a> 		list.add(Tuple2.of(FieldInfo.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8318" href="#L8318">8318</a> 			<strong class="jxr_keyword">var</strong> fi = (<a name="FieldInfo" href="../../../../../org/apache/juneau/commons/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>)o;
-<a class="jxr_linenumber" name="L8319" href="#L8319">8319</a> 			<strong class="jxr_keyword">return</strong> fi.toString();
-<a class="jxr_linenumber" name="L8320" href="#L8320">8320</a> 		}));
-<a class="jxr_linenumber" name="L8321" href="#L8321">8321</a> 
-<a class="jxr_linenumber" name="L8322" href="#L8322">8322</a> 		<em class="jxr_comment">// ParameterInfo</em>
-<a class="jxr_linenumber" name="L8323" href="#L8323">8323</a> 		list.add(Tuple2.of(ParameterInfo.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8324" href="#L8324">8324</a> 			<strong class="jxr_keyword">var</strong> pi = (<a name="ParameterInfo" href="../../../../../org/apache/juneau/commons/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a>)o;
-<a class="jxr_linenumber" name="L8325" href="#L8325">8325</a> 			<strong class="jxr_keyword">return</strong> pi.toString();
-<a class="jxr_linenumber" name="L8326" href="#L8326">8326</a> 		}));
-<a class="jxr_linenumber" name="L8327" href="#L8327">8327</a> 
-<a class="jxr_linenumber" name="L8328" href="#L8328">8328</a> 		<em class="jxr_comment">// Field</em>
-<a class="jxr_linenumber" name="L8329" href="#L8329">8329</a> 		list.add(Tuple2.of(Field.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8330" href="#L8330">8330</a> 			<strong class="jxr_keyword">var</strong> f = (Field)o;
-<a class="jxr_linenumber" name="L8331" href="#L8331">8331</a> 			<strong class="jxr_keyword">return</strong> cns(f.getDeclaringClass()) + <span class="jxr_string">"."</span> + f.getName();
-<a class="jxr_linenumber" name="L8332" href="#L8332">8332</a> 		}));
-<a class="jxr_linenumber" name="L8333" href="#L8333">8333</a> 
-<a class="jxr_linenumber" name="L8334" href="#L8334">8334</a> 		<em class="jxr_comment">// Parameter</em>
-<a class="jxr_linenumber" name="L8335" href="#L8335">8335</a> 		list.add(Tuple2.of(Parameter.<strong class="jxr_keyword">class</strong>, o -&gt; {
-<a class="jxr_linenumber" name="L8336" href="#L8336">8336</a> 			<strong class="jxr_keyword">var</strong> p = (Parameter)o;
-<a class="jxr_linenumber" name="L8337" href="#L8337">8337</a> 			<strong class="jxr_keyword">var</strong> exec = p.getDeclaringExecutable();
-<a class="jxr_linenumber" name="L8338" href="#L8338">8338</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(64);
-<a class="jxr_linenumber" name="L8339" href="#L8339">8339</a> 			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('[');
-<a class="jxr_linenumber" name="L8340" href="#L8340">8340</a> 			<strong class="jxr_keyword">var</strong> params = exec.getParameters();
-<a class="jxr_linenumber" name="L8341" href="#L8341">8341</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; params.length; i++) {
-<a class="jxr_linenumber" name="L8342" href="#L8342">8342</a> 				<strong class="jxr_keyword">if</strong> (params[i] == p) {
-<a class="jxr_linenumber" name="L8343" href="#L8343">8343</a> 					sb.append(i);
-<a class="jxr_linenumber" name="L8344" href="#L8344">8344</a> 					<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L8345" href="#L8345">8345</a> 				}
-<a class="jxr_linenumber" name="L8346" href="#L8346">8346</a> 			}
-<a class="jxr_linenumber" name="L8347" href="#L8347">8347</a> 			sb.append(']');
-<a class="jxr_linenumber" name="L8348" href="#L8348">8348</a> 			<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L8349" href="#L8349">8349</a> 		}));
-<a class="jxr_linenumber" name="L8350" href="#L8350">8350</a> 
-<a class="jxr_linenumber" name="L8351" href="#L8351">8351</a> 		<strong class="jxr_keyword">return</strong> Collections.unmodifiableList(list);
-<a class="jxr_linenumber" name="L8352" href="#L8352">8352</a> 	}
-<a class="jxr_linenumber" name="L8353" href="#L8353">8353</a> 
-<a class="jxr_linenumber" name="L8354" href="#L8354">8354</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L8355" href="#L8355">8355</a> <em class="jxr_javadoccomment">	 * Determines the multiplier value based on the suffix character in a string.</em>
-<a class="jxr_linenumber" name="L8356" href="#L8356">8356</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L8357" href="#L8357">8357</a> <em class="jxr_javadoccomment">	 * @param s The string to analyze for multiplier suffix.</em>
-<a class="jxr_linenumber" name="L8358" href="#L8358">8358</a> <em class="jxr_javadoccomment">	 * @return The multiplier value (1 if no valid suffix found).</em>
-<a class="jxr_linenumber" name="L8359" href="#L8359">8359</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L8360" href="#L8360">8360</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> multiplierInt(String s) {
-<a class="jxr_linenumber" name="L8361" href="#L8361">8361</a> 		<strong class="jxr_keyword">var</strong> c = isEmpty(s) ? 'z' : s.charAt(s.length() - 1);
-<a class="jxr_linenumber" name="L8362" href="#L8362">8362</a> 		<strong class="jxr_keyword">if</strong> (c == 'G')
-<a class="jxr_linenumber" name="L8363" href="#L8363">8363</a> 			<strong class="jxr_keyword">return</strong> 1024 * 1024 * 1024;
-<a class="jxr_linenumber" name="L8364" href="#L8364">8364</a> 		<strong class="jxr_keyword">if</strong> (c == 'M')
-<a class="jxr_linenumber" name="L8365" href="#L8365">8365</a> 			<strong class="jxr_keyword">return</strong> 1024 * 1024;
-<a class="jxr_linenumber" name="L8366" href="#L8366">8366</a> 		<strong class="jxr_keyword">if</strong> (c == 'K')
-<a class="jxr_linenumber" name="L8367" href="#L8367">8367</a> 			<strong class="jxr_keyword">return</strong> 1024;
-<a class="jxr_linenumber" name="L8368" href="#L8368">8368</a> 		<strong class="jxr_keyword">if</strong> (c == 'g')
-<a class="jxr_linenumber" name="L8369" href="#L8369">8369</a> 			<strong class="jxr_keyword">return</strong> 1000 * 1000 * 1000;
-<a class="jxr_linenumber" name="L8370" href="#L8370">8370</a> 		<strong class="jxr_keyword">if</strong> (c == 'm')
-<a class="jxr_linenumber" name="L8371" href="#L8371">8371</a> 			<strong class="jxr_keyword">return</strong> 1000 * 1000;
-<a class="jxr_linenumber" name="L8372" href="#L8372">8372</a> 		<strong class="jxr_keyword">if</strong> (c == 'k')
-<a class="jxr_linenumber" name="L8373" href="#L8373">8373</a> 			<strong class="jxr_keyword">return</strong> 1000;
-<a class="jxr_linenumber" name="L8374" href="#L8374">8374</a> 		<strong class="jxr_keyword">return</strong> 1;
-<a class="jxr_linenumber" name="L8375" href="#L8375">8375</a> 	}
-<a class="jxr_linenumber" name="L8376" href="#L8376">8376</a> 
-<a class="jxr_linenumber" name="L8377" href="#L8377">8377</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L8378" href="#L8378">8378</a> <em class="jxr_javadoccomment">	 * Determines the long multiplier value based on the suffix character in a string.</em>
-<a class="jxr_linenumber" name="L8379" href="#L8379">8379</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L8380" href="#L8380">8380</a> <em class="jxr_javadoccomment">	 * @param s The string to analyze for multiplier suffix.</em>
-<a class="jxr_linenumber" name="L8381" href="#L8381">8381</a> <em class="jxr_javadoccomment">	 * @return The multiplier value (1 if no valid suffix found).</em>
-<a class="jxr_linenumber" name="L8382" href="#L8382">8382</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L8383" href="#L8383">8383</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> multiplierLong(String s) {
-<a class="jxr_linenumber" name="L8384" href="#L8384">8384</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(s))
-<a class="jxr_linenumber" name="L8385" href="#L8385">8385</a> 			<strong class="jxr_keyword">return</strong> 1;
-<a class="jxr_linenumber" name="L8386" href="#L8386">8386</a> 		<strong class="jxr_keyword">var</strong> c = s.charAt(s.length() - 1);
-<a class="jxr_linenumber" name="L8387" href="#L8387">8387</a> 		<strong class="jxr_keyword">if</strong> (c == 'P')
-<a class="jxr_linenumber" name="L8388" href="#L8388">8388</a> 			<strong class="jxr_keyword">return</strong> 1125899906842624L;  <em class="jxr_comment">// 1024^5</em>
-<a class="jxr_linenumber" name="L8389" href="#L8389">8389</a> 		<strong class="jxr_keyword">if</strong> (c == 'T')
-<a class="jxr_linenumber" name="L8390" href="#L8390">8390</a> 			<strong class="jxr_keyword">return</strong> 1099511627776L;  <em class="jxr_comment">// 1024^4</em>
-<a class="jxr_linenumber" name="L8391" href="#L8391">8391</a> 		<strong class="jxr_keyword">if</strong> (c == 'G')
-<a class="jxr_linenumber" name="L8392" href="#L8392">8392</a> 			<strong class="jxr_keyword">return</strong> 1073741824L;  <em class="jxr_comment">// 1024^3</em>
-<a class="jxr_linenumber" name="L8393" href="#L8393">8393</a> 		<strong class="jxr_keyword">if</strong> (c == 'M')
-<a class="jxr_linenumber" name="L8394" href="#L8394">8394</a> 			<strong class="jxr_keyword">return</strong> 1048576L;  <em class="jxr_comment">// 1024^2</em>
-<a class="jxr_linenumber" name="L8395" href="#L8395">8395</a> 		<strong class="jxr_keyword">if</strong> (c == 'K')
-<a class="jxr_linenumber" name="L8396" href="#L8396">8396</a> 			<strong class="jxr_keyword">return</strong> 1024L;
-<a class="jxr_linenumber" name="L8397" href="#L8397">8397</a> 		<strong class="jxr_keyword">if</strong> (c == 'p')
-<a class="jxr_linenumber" name="L8398" href="#L8398">8398</a> 			<strong class="jxr_keyword">return</strong> 1000000000000000L;  <em class="jxr_comment">// 1000^5</em>
-<a class="jxr_linenumber" name="L8399" href="#L8399">8399</a> 		<strong class="jxr_keyword">if</strong> (c == 't')
-<a class="jxr_linenumber" name="L8400" href="#L8400">8400</a> 			<strong class="jxr_keyword">return</strong> 1000000000000L;  <em class="jxr_comment">// 1000^4</em>
-<a class="jxr_linenumber" name="L8401" href="#L8401">8401</a> 		<strong class="jxr_keyword">if</strong> (c == 'g')
-<a class="jxr_linenumber" name="L8402" href="#L8402">8402</a> 			<strong class="jxr_keyword">return</strong> 1000000000L;  <em class="jxr_comment">// 1000^3</em>
-<a class="jxr_linenumber" name="L8403" href="#L8403">8403</a> 		<strong class="jxr_keyword">if</strong> (c == 'm')
-<a class="jxr_linenumber" name="L8404" href="#L8404">8404</a> 			<strong class="jxr_keyword">return</strong> 1000000L;  <em class="jxr_comment">// 1000^2</em>
-<a class="jxr_linenumber" name="L8405" href="#L8405">8405</a> 		<strong class="jxr_keyword">if</strong> (c == 'k')
-<a class="jxr_linenumber" name="L8406" href="#L8406">8406</a> 			<strong class="jxr_keyword">return</strong> 1000L;
-<a class="jxr_linenumber" name="L8407" href="#L8407">8407</a> 		<strong class="jxr_keyword">return</strong> 1;
-<a class="jxr_linenumber" name="L8408" href="#L8408">8408</a> 	}
-<a class="jxr_linenumber" name="L8409" href="#L8409">8409</a> 
-<a class="jxr_linenumber" name="L8410" href="#L8410">8410</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L8411" href="#L8411">8411</a> <em class="jxr_javadoccomment">	 * Parses a unit string and converts the value to milliseconds.</em>
-<a class="jxr_linenumber" name="L8412" href="#L8412">8412</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L8413" href="#L8413">8413</a> <em class="jxr_javadoccomment">	 * @param unit The unit string (case-insensitive, already lowercased).</em>
-<a class="jxr_linenumber" name="L8414" href="#L8414">8414</a> <em class="jxr_javadoccomment">	 * @param value The numeric value.</em>
-<a class="jxr_linenumber" name="L8415" href="#L8415">8415</a> <em class="jxr_javadoccomment">	 * @return The value in milliseconds, or &lt;c&gt;-1&lt;/c&gt; if the unit is invalid.</em>
-<a class="jxr_linenumber" name="L8416" href="#L8416">8416</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L8417" href="#L8417">8417</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> parseUnit(String unit, <strong class="jxr_keyword">double</strong> value) {
-<a class="jxr_linenumber" name="L8418" href="#L8418">8418</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(unit)) {
-<a class="jxr_linenumber" name="L8419" href="#L8419">8419</a> 			<em class="jxr_comment">// No unit means milliseconds</em>
-<a class="jxr_linenumber" name="L8420" href="#L8420">8420</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)value;
-<a class="jxr_linenumber" name="L8421" href="#L8421">8421</a> 		}
-<a class="jxr_linenumber" name="L8422" href="#L8422">8422</a> 
-<a class="jxr_linenumber" name="L8423" href="#L8423">8423</a> 		<em class="jxr_comment">// Check milliseconds first (before minutes) - must check exact "ms" before checking "m"</em>
-<a class="jxr_linenumber" name="L8424" href="#L8424">8424</a> 		<strong class="jxr_keyword">if</strong> (unit.equals(<span class="jxr_string">"ms"</span>) || unit.equals(<span class="jxr_string">"millis"</span>) || unit.equals(<span class="jxr_string">"milliseconds"</span>))
-<a class="jxr_linenumber" name="L8425" href="#L8425">8425</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)value;
-<a class="jxr_linenumber" name="L8426" href="#L8426">8426</a> 
-<a class="jxr_linenumber" name="L8427" href="#L8427">8427</a> 		<em class="jxr_comment">// Seconds</em>
-<a class="jxr_linenumber" name="L8428" href="#L8428">8428</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"s"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"sec"</span>))
-<a class="jxr_linenumber" name="L8429" href="#L8429">8429</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000);
-<a class="jxr_linenumber" name="L8430" href="#L8430">8430</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"sec"</span>) || unit.startsWith(<span class="jxr_string">"second"</span>))
-<a class="jxr_linenumber" name="L8431" href="#L8431">8431</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000);
-<a class="jxr_linenumber" name="L8432" href="#L8432">8432</a> 
-<a class="jxr_linenumber" name="L8433" href="#L8433">8433</a> 		<em class="jxr_comment">// Minutes (must check after milliseconds and months)</em>
-<a class="jxr_linenumber" name="L8434" href="#L8434">8434</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"m"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"mo"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"mill"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"ms"</span>))
-<a class="jxr_linenumber" name="L8435" href="#L8435">8435</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60);
-<a class="jxr_linenumber" name="L8436" href="#L8436">8436</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"min"</span>) || unit.startsWith(<span class="jxr_string">"minute"</span>))
-<a class="jxr_linenumber" name="L8437" href="#L8437">8437</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60);
-<a class="jxr_linenumber" name="L8438" href="#L8438">8438</a> 
-<a class="jxr_linenumber" name="L8439" href="#L8439">8439</a> 		<em class="jxr_comment">// Hours</em>
-<a class="jxr_linenumber" name="L8440" href="#L8440">8440</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"h"</span>) || unit.startsWith(<span class="jxr_string">"hour"</span>))
-<a class="jxr_linenumber" name="L8441" href="#L8441">8441</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60);
-<a class="jxr_linenumber" name="L8442" href="#L8442">8442</a> 
-<a class="jxr_linenumber" name="L8443" href="#L8443">8443</a> 		<em class="jxr_comment">// Days</em>
-<a class="jxr_linenumber" name="L8444" href="#L8444">8444</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"d"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"da"</span>))
-<a class="jxr_linenumber" name="L8445" href="#L8445">8445</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24);
-<a class="jxr_linenumber" name="L8446" href="#L8446">8446</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"day"</span>))
-<a class="jxr_linenumber" name="L8447" href="#L8447">8447</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24);
-<a class="jxr_linenumber" name="L8448" href="#L8448">8448</a> 
-<a class="jxr_linenumber" name="L8449" href="#L8449">8449</a> 		<em class="jxr_comment">// Weeks</em>
-<a class="jxr_linenumber" name="L8450" href="#L8450">8450</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"w"</span>) || unit.startsWith(<span class="jxr_string">"week"</span>))
-<a class="jxr_linenumber" name="L8451" href="#L8451">8451</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24 * 7);
-<a class="jxr_linenumber" name="L8452" href="#L8452">8452</a> 
-<a class="jxr_linenumber" name="L8453" href="#L8453">8453</a> 		<em class="jxr_comment">// Months (30 days)</em>
-<a class="jxr_linenumber" name="L8454" href="#L8454">8454</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"mo"</span>) || unit.startsWith(<span class="jxr_string">"month"</span>))
-<a class="jxr_linenumber" name="L8455" href="#L8455">8455</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24 * 30);
-<a class="jxr_linenumber" name="L8456" href="#L8456">8456</a> 
-<a class="jxr_linenumber" name="L8457" href="#L8457">8457</a> 		<em class="jxr_comment">// Years (365 days)</em>
-<a class="jxr_linenumber" name="L8458" href="#L8458">8458</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"y"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"yr"</span>))
-<a class="jxr_linenumber" name="L8459" href="#L8459">8459</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24 * 365);
-<a class="jxr_linenumber" name="L8460" href="#L8460">8460</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"yr"</span>) || unit.startsWith(<span class="jxr_string">"year"</span>))
-<a class="jxr_linenumber" name="L8461" href="#L8461">8461</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24 * 365);
-<a class="jxr_linenumber" name="L8462" href="#L8462">8462</a> 
-<a class="jxr_linenumber" name="L8463" href="#L8463">8463</a> 		<em class="jxr_comment">// Unknown unit</em>
-<a class="jxr_linenumber" name="L8464" href="#L8464">8464</a> 		<strong class="jxr_keyword">return</strong> -1;
-<a class="jxr_linenumber" name="L8465" href="#L8465">8465</a> 	}
-<a class="jxr_linenumber" name="L8466" href="#L8466">8466</a> 
-<a class="jxr_linenumber" name="L8467" href="#L8467">8467</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L8468" href="#L8468">8468</a> <em class="jxr_javadoccomment">	 * Skips over comment sequences in a StringReader.</em>
-<a class="jxr_linenumber" name="L8469" href="#L8469">8469</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L8470" href="#L8470">8470</a> <em class="jxr_javadoccomment">	 * @param r The StringReader positioned at the start of a comment.</em>
-<a class="jxr_linenumber" name="L8471" href="#L8471">8471</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
-<a class="jxr_linenumber" name="L8472" href="#L8472">8472</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L8473" href="#L8473">8473</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> skipComments(StringReader r) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L8474" href="#L8474">8474</a> 		<strong class="jxr_keyword">var</strong> c = r.read();
-<a class="jxr_linenumber" name="L8475" href="#L8475">8475</a> 		<em class="jxr_comment">//  "/* */" style comments</em>
-<a class="jxr_linenumber" name="L8476" href="#L8476">8476</a> 		<strong class="jxr_keyword">if</strong> (c == '*') {
-<a class="jxr_linenumber" name="L8477" href="#L8477">8477</a> 			<strong class="jxr_keyword">while</strong> (c != -1)
-<a class="jxr_linenumber" name="L8478" href="#L8478">8478</a> 				<strong class="jxr_keyword">if</strong> ((c = r.read()) == '*')
-<a class="jxr_linenumber" name="L8479" href="#L8479">8479</a> 					<strong class="jxr_keyword">if</strong> ((c = r.read()) == '/')  <em class="jxr_comment">// NOSONAR - Intentional.</em>
-<a class="jxr_linenumber" name="L8480" href="#L8480">8480</a> 						<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L8481" href="#L8481">8481</a> 			<em class="jxr_comment">//  "//" style comments</em>
-<a class="jxr_linenumber" name="L8482" href="#L8482">8482</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '/') {
-<a class="jxr_linenumber" name="L8483" href="#L8483">8483</a> 			<strong class="jxr_keyword">while</strong> (c != -1) {
-<a class="jxr_linenumber" name="L8484" href="#L8484">8484</a> 				c = r.read();
-<a class="jxr_linenumber" name="L8485" href="#L8485">8485</a> 				<strong class="jxr_keyword">if</strong> (c == -1 || c == '\n')
-<a class="jxr_linenumber" name="L8486" href="#L8486">8486</a> 					<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L8487" href="#L8487">8487</a> 			}
-<a class="jxr_linenumber" name="L8488" href="#L8488">8488</a> 		}
-<a class="jxr_linenumber" name="L8489" href="#L8489">8489</a> 	}
-<a class="jxr_linenumber" name="L8490" href="#L8490">8490</a> 
-<a class="jxr_linenumber" name="L8491" href="#L8491">8491</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L8492" href="#L8492">8492</a> <em class="jxr_javadoccomment">	 * Gets or creates an AsciiSet for escaping the specified character.</em>
-<a class="jxr_linenumber" name="L8493" href="#L8493">8493</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L8494" href="#L8494">8494</a> <em class="jxr_javadoccomment">	 * @param c The character to create an escape set for.</em>
-<a class="jxr_linenumber" name="L8495" href="#L8495">8495</a> <em class="jxr_javadoccomment">	 * @return An AsciiSet containing the character and backslash.</em>
-<a class="jxr_linenumber" name="L8496" href="#L8496">8496</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L8497" href="#L8497">8497</a> 	<strong class="jxr_keyword">static</strong> <a name="AsciiSet" href="../../../../../org/apache/juneau/commons/utils/AsciiSet.html#AsciiSet">AsciiSet</a> getEscapeSet(<strong class="jxr_keyword">char</strong> c) {
-<a class="jxr_linenumber" name="L8498" href="#L8498">8498</a> 		<strong class="jxr_keyword">return</strong> ESCAPE_SETS.computeIfAbsent(c, key -&gt; AsciiSet.create().chars(key, '&#92;&#92;').build());
-<a class="jxr_linenumber" name="L8499" href="#L8499">8499</a> 	}
+<a class="jxr_linenumber" name="L8194" href="#L8194">8194</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Readifier {
+<a class="jxr_linenumber" name="L8195" href="#L8195">8195</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; type;
+<a class="jxr_linenumber" name="L8196" href="#L8196">8196</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Function&lt;Object,String&gt; bridge;
+<a class="jxr_linenumber" name="L8197" href="#L8197">8197</a> 
+<a class="jxr_linenumber" name="L8198" href="#L8198">8198</a> 		<strong class="jxr_keyword">private</strong> &lt;T&gt; Readifier(Class&lt;T&gt; type, Function&lt;? <strong class="jxr_keyword">super</strong> T,String&gt; converter) {
+<a class="jxr_linenumber" name="L8199" href="#L8199">8199</a> 			<strong class="jxr_keyword">this</strong>.type = type;
+<a class="jxr_linenumber" name="L8200" href="#L8200">8200</a> 			<strong class="jxr_keyword">this</strong>.bridge = o -&gt; converter.apply(type.<strong class="jxr_keyword">cast</strong>(o));
+<a class="jxr_linenumber" name="L8201" href="#L8201">8201</a> 		}
+<a class="jxr_linenumber" name="L8202" href="#L8202">8202</a> 
+<a class="jxr_linenumber" name="L8203" href="#L8203">8203</a> 		Class&lt;?&gt; forClass() {
+<a class="jxr_linenumber" name="L8204" href="#L8204">8204</a> 			<strong class="jxr_keyword">return</strong> type;
+<a class="jxr_linenumber" name="L8205" href="#L8205">8205</a> 		}
+<a class="jxr_linenumber" name="L8206" href="#L8206">8206</a> 
+<a class="jxr_linenumber" name="L8207" href="#L8207">8207</a> 		Function&lt;Object,String&gt; toFunction() {
+<a class="jxr_linenumber" name="L8208" href="#L8208">8208</a> 			<strong class="jxr_keyword">return</strong> bridge;
+<a class="jxr_linenumber" name="L8209" href="#L8209">8209</a> 		}
+<a class="jxr_linenumber" name="L8210" href="#L8210">8210</a> 	}
+<a class="jxr_linenumber" name="L8211" href="#L8211">8211</a> 
+<a class="jxr_linenumber" name="L8212" href="#L8212">8212</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Readifier readifier(Class&lt;T&gt; type, Function&lt;? <strong class="jxr_keyword">super</strong> T,String&gt; converter) {
+<a class="jxr_linenumber" name="L8213" href="#L8213">8213</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Readifier(type, converter);
+<a class="jxr_linenumber" name="L8214" href="#L8214">8214</a> 	}
+<a class="jxr_linenumber" name="L8215" href="#L8215">8215</a> 
+<a class="jxr_linenumber" name="L8216" href="#L8216">8216</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Readifier&gt; loadReadifiers() {
+<a class="jxr_linenumber" name="L8217" href="#L8217">8217</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;Readifier&gt;();
+<a class="jxr_linenumber" name="L8218" href="#L8218">8218</a> 
+<a class="jxr_linenumber" name="L8219" href="#L8219">8219</a> 		<em class="jxr_comment">// More specific types first - order matters!</em>
+<a class="jxr_linenumber" name="L8220" href="#L8220">8220</a> 		list.add(readifier(Map.Entry.<strong class="jxr_keyword">class</strong>, e -&gt; readable(e.getKey()) + '=' + readable(e.getValue())));
+<a class="jxr_linenumber" name="L8221" href="#L8221">8221</a> 		list.add(readifier(Collection.<strong class="jxr_keyword">class</strong>, c -&gt; ((Collection&lt;?&gt;)c).stream().map(StringUtils::readable).collect(joining(<span class="jxr_string">","</span>, <span class="jxr_string">"["</span>, <span class="jxr_string">"]"</span>))));
+<a class="jxr_linenumber" name="L8222" href="#L8222">8222</a> 		list.add(readifier(Map.<strong class="jxr_keyword">class</strong>, m -&gt; ((Map&lt;?,?&gt;)m).entrySet().stream().map(StringUtils::readable).collect(joining(<span class="jxr_string">","</span>, <span class="jxr_string">"{"</span>, <span class="jxr_string">"}"</span>))));
+<a class="jxr_linenumber" name="L8223" href="#L8223">8223</a> 		list.add(readifier(Iterable.<strong class="jxr_keyword">class</strong>, i -&gt; readable(toList(i))));
+<a class="jxr_linenumber" name="L8224" href="#L8224">8224</a> 		list.add(readifier(Iterator.<strong class="jxr_keyword">class</strong>, it -&gt; readable(toList(it))));
+<a class="jxr_linenumber" name="L8225" href="#L8225">8225</a> 		list.add(readifier(Enumeration.<strong class="jxr_keyword">class</strong>, e -&gt; readable(toList(e))));
+<a class="jxr_linenumber" name="L8226" href="#L8226">8226</a> 		list.add(readifier(Optional.<strong class="jxr_keyword">class</strong>, o -&gt; readable(((Optional&lt;?&gt;)o).orElse(<strong class="jxr_keyword">null</strong>))));
+<a class="jxr_linenumber" name="L8227" href="#L8227">8227</a> 		list.add(readifier(GregorianCalendar.<strong class="jxr_keyword">class</strong>, (GregorianCalendar cal) -&gt; cal.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT)));
+<a class="jxr_linenumber" name="L8228" href="#L8228">8228</a> 		list.add(readifier(Date.<strong class="jxr_keyword">class</strong>, (Date date) -&gt; date.toInstant().toString()));
+<a class="jxr_linenumber" name="L8229" href="#L8229">8229</a> 		list.add(readifier(InputStream.<strong class="jxr_keyword">class</strong>, (InputStream is) -&gt; toHex(is)));
+<a class="jxr_linenumber" name="L8230" href="#L8230">8230</a> 		list.add(readifier(Reader.<strong class="jxr_keyword">class</strong>, (Reader reader) -&gt; safe(() -&gt; read(reader))));
+<a class="jxr_linenumber" name="L8231" href="#L8231">8231</a> 		list.add(readifier(File.<strong class="jxr_keyword">class</strong>, (File file) -&gt; safe(() -&gt; read(file))));
+<a class="jxr_linenumber" name="L8232" href="#L8232">8232</a> 		list.add(readifier(byte[].<strong class="jxr_keyword">class</strong>, (byte[] bytes) -&gt; toHex(bytes)));
+<a class="jxr_linenumber" name="L8233" href="#L8233">8233</a> 		list.add(readifier(Enum.<strong class="jxr_keyword">class</strong>, e -&gt; ((Enum&lt;?&gt;)e).name()));
+<a class="jxr_linenumber" name="L8234" href="#L8234">8234</a> 		list.add(readifier(Class.<strong class="jxr_keyword">class</strong>, c -&gt; cns(c)));
+<a class="jxr_linenumber" name="L8235" href="#L8235">8235</a> 		list.add(readifier(Executable.<strong class="jxr_keyword">class</strong>, (Executable exec) -&gt; {
+<a class="jxr_linenumber" name="L8236" href="#L8236">8236</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(64);
+<a class="jxr_linenumber" name="L8237" href="#L8237">8237</a> 			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('(');
+<a class="jxr_linenumber" name="L8238" href="#L8238">8238</a> 			<strong class="jxr_keyword">var</strong> pt = exec.getParameterTypes();
+<a class="jxr_linenumber" name="L8239" href="#L8239">8239</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; pt.length; i++) {
+<a class="jxr_linenumber" name="L8240" href="#L8240">8240</a> 				<strong class="jxr_keyword">if</strong> (i &gt; 0)
+<a class="jxr_linenumber" name="L8241" href="#L8241">8241</a> 					sb.append(',');
+<a class="jxr_linenumber" name="L8242" href="#L8242">8242</a> 				sb.append(cns(pt[i]));
+<a class="jxr_linenumber" name="L8243" href="#L8243">8243</a> 			}
+<a class="jxr_linenumber" name="L8244" href="#L8244">8244</a> 			sb.append(')');
+<a class="jxr_linenumber" name="L8245" href="#L8245">8245</a> 			<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L8246" href="#L8246">8246</a> 		}));
+<a class="jxr_linenumber" name="L8247" href="#L8247">8247</a> 		list.add(readifier(ClassInfo.<strong class="jxr_keyword">class</strong>, ClassInfo::toString));
+<a class="jxr_linenumber" name="L8248" href="#L8248">8248</a> 		list.add(readifier(ExecutableInfo.<strong class="jxr_keyword">class</strong>, ExecutableInfo::toString));
+<a class="jxr_linenumber" name="L8249" href="#L8249">8249</a> 		list.add(readifier(FieldInfo.<strong class="jxr_keyword">class</strong>, FieldInfo::toString));
+<a class="jxr_linenumber" name="L8250" href="#L8250">8250</a> 		list.add(readifier(ParameterInfo.<strong class="jxr_keyword">class</strong>, ParameterInfo::toString));
+<a class="jxr_linenumber" name="L8251" href="#L8251">8251</a> 		list.add(readifier(Field.<strong class="jxr_keyword">class</strong>, (Field f) -&gt; cns(f.getDeclaringClass()) + <span class="jxr_string">"."</span> + f.getName()));
+<a class="jxr_linenumber" name="L8252" href="#L8252">8252</a> 		list.add(readifier(Parameter.<strong class="jxr_keyword">class</strong>, (Parameter p) -&gt; {
+<a class="jxr_linenumber" name="L8253" href="#L8253">8253</a> 			<strong class="jxr_keyword">var</strong> exec = p.getDeclaringExecutable();
+<a class="jxr_linenumber" name="L8254" href="#L8254">8254</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(64);
+<a class="jxr_linenumber" name="L8255" href="#L8255">8255</a> 			sb.append(exec instanceof Constructor ? cns(exec.getDeclaringClass()) : exec.getName()).append('[');
+<a class="jxr_linenumber" name="L8256" href="#L8256">8256</a> 			<strong class="jxr_keyword">var</strong> params = exec.getParameters();
+<a class="jxr_linenumber" name="L8257" href="#L8257">8257</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; params.length; i++) {
+<a class="jxr_linenumber" name="L8258" href="#L8258">8258</a> 				<strong class="jxr_keyword">if</strong> (params[i] == p) {
+<a class="jxr_linenumber" name="L8259" href="#L8259">8259</a> 					sb.append(i);
+<a class="jxr_linenumber" name="L8260" href="#L8260">8260</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L8261" href="#L8261">8261</a> 				}
+<a class="jxr_linenumber" name="L8262" href="#L8262">8262</a> 			}
+<a class="jxr_linenumber" name="L8263" href="#L8263">8263</a> 			sb.append(']');
+<a class="jxr_linenumber" name="L8264" href="#L8264">8264</a> 			<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L8265" href="#L8265">8265</a> 		}));
+<a class="jxr_linenumber" name="L8266" href="#L8266">8266</a> 
+<a class="jxr_linenumber" name="L8267" href="#L8267">8267</a> 		<strong class="jxr_keyword">return</strong> Collections.unmodifiableList(list);
+<a class="jxr_linenumber" name="L8268" href="#L8268">8268</a> 	}
+<a class="jxr_linenumber" name="L8269" href="#L8269">8269</a> 
+<a class="jxr_linenumber" name="L8270" href="#L8270">8270</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L8271" href="#L8271">8271</a> <em class="jxr_javadoccomment">	 * Determines the multiplier value based on the suffix character in a string.</em>
+<a class="jxr_linenumber" name="L8272" href="#L8272">8272</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L8273" href="#L8273">8273</a> <em class="jxr_javadoccomment">	 * @param s The string to analyze for multiplier suffix.</em>
+<a class="jxr_linenumber" name="L8274" href="#L8274">8274</a> <em class="jxr_javadoccomment">	 * @return The multiplier value (1 if no valid suffix found).</em>
+<a class="jxr_linenumber" name="L8275" href="#L8275">8275</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L8276" href="#L8276">8276</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> multiplierInt(String s) {
+<a class="jxr_linenumber" name="L8277" href="#L8277">8277</a> 		<strong class="jxr_keyword">var</strong> c = isEmpty(s) ? 'z' : s.charAt(s.length() - 1);
+<a class="jxr_linenumber" name="L8278" href="#L8278">8278</a> 		<strong class="jxr_keyword">if</strong> (c == 'G')
+<a class="jxr_linenumber" name="L8279" href="#L8279">8279</a> 			<strong class="jxr_keyword">return</strong> 1024 * 1024 * 1024;
+<a class="jxr_linenumber" name="L8280" href="#L8280">8280</a> 		<strong class="jxr_keyword">if</strong> (c == 'M')
+<a class="jxr_linenumber" name="L8281" href="#L8281">8281</a> 			<strong class="jxr_keyword">return</strong> 1024 * 1024;
+<a class="jxr_linenumber" name="L8282" href="#L8282">8282</a> 		<strong class="jxr_keyword">if</strong> (c == 'K')
+<a class="jxr_linenumber" name="L8283" href="#L8283">8283</a> 			<strong class="jxr_keyword">return</strong> 1024;
+<a class="jxr_linenumber" name="L8284" href="#L8284">8284</a> 		<strong class="jxr_keyword">if</strong> (c == 'g')
+<a class="jxr_linenumber" name="L8285" href="#L8285">8285</a> 			<strong class="jxr_keyword">return</strong> 1000 * 1000 * 1000;
+<a class="jxr_linenumber" name="L8286" href="#L8286">8286</a> 		<strong class="jxr_keyword">if</strong> (c == 'm')
+<a class="jxr_linenumber" name="L8287" href="#L8287">8287</a> 			<strong class="jxr_keyword">return</strong> 1000 * 1000;
+<a class="jxr_linenumber" name="L8288" href="#L8288">8288</a> 		<strong class="jxr_keyword">if</strong> (c == 'k')
+<a class="jxr_linenumber" name="L8289" href="#L8289">8289</a> 			<strong class="jxr_keyword">return</strong> 1000;
+<a class="jxr_linenumber" name="L8290" href="#L8290">8290</a> 		<strong class="jxr_keyword">return</strong> 1;
+<a class="jxr_linenumber" name="L8291" href="#L8291">8291</a> 	}
+<a class="jxr_linenumber" name="L8292" href="#L8292">8292</a> 
+<a class="jxr_linenumber" name="L8293" href="#L8293">8293</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L8294" href="#L8294">8294</a> <em class="jxr_javadoccomment">	 * Determines the long multiplier value based on the suffix character in a string.</em>
+<a class="jxr_linenumber" name="L8295" href="#L8295">8295</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L8296" href="#L8296">8296</a> <em class="jxr_javadoccomment">	 * @param s The string to analyze for multiplier suffix.</em>
+<a class="jxr_linenumber" name="L8297" href="#L8297">8297</a> <em class="jxr_javadoccomment">	 * @return The multiplier value (1 if no valid suffix found).</em>
+<a class="jxr_linenumber" name="L8298" href="#L8298">8298</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L8299" href="#L8299">8299</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> multiplierLong(String s) {
+<a class="jxr_linenumber" name="L8300" href="#L8300">8300</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(s))
+<a class="jxr_linenumber" name="L8301" href="#L8301">8301</a> 			<strong class="jxr_keyword">return</strong> 1;
+<a class="jxr_linenumber" name="L8302" href="#L8302">8302</a> 		<strong class="jxr_keyword">var</strong> c = s.charAt(s.length() - 1);
+<a class="jxr_linenumber" name="L8303" href="#L8303">8303</a> 		<strong class="jxr_keyword">if</strong> (c == 'P')
+<a class="jxr_linenumber" name="L8304" href="#L8304">8304</a> 			<strong class="jxr_keyword">return</strong> 1125899906842624L;  <em class="jxr_comment">// 1024^5</em>
+<a class="jxr_linenumber" name="L8305" href="#L8305">8305</a> 		<strong class="jxr_keyword">if</strong> (c == 'T')
+<a class="jxr_linenumber" name="L8306" href="#L8306">8306</a> 			<strong class="jxr_keyword">return</strong> 1099511627776L;  <em class="jxr_comment">// 1024^4</em>
+<a class="jxr_linenumber" name="L8307" href="#L8307">8307</a> 		<strong class="jxr_keyword">if</strong> (c == 'G')
+<a class="jxr_linenumber" name="L8308" href="#L8308">8308</a> 			<strong class="jxr_keyword">return</strong> 1073741824L;  <em class="jxr_comment">// 1024^3</em>
+<a class="jxr_linenumber" name="L8309" href="#L8309">8309</a> 		<strong class="jxr_keyword">if</strong> (c == 'M')
+<a class="jxr_linenumber" name="L8310" href="#L8310">8310</a> 			<strong class="jxr_keyword">return</strong> 1048576L;  <em class="jxr_comment">// 1024^2</em>
+<a class="jxr_linenumber" name="L8311" href="#L8311">8311</a> 		<strong class="jxr_keyword">if</strong> (c == 'K')
+<a class="jxr_linenumber" name="L8312" href="#L8312">8312</a> 			<strong class="jxr_keyword">return</strong> 1024L;
+<a class="jxr_linenumber" name="L8313" href="#L8313">8313</a> 		<strong class="jxr_keyword">if</strong> (c == 'p')
+<a class="jxr_linenumber" name="L8314" href="#L8314">8314</a> 			<strong class="jxr_keyword">return</strong> 1000000000000000L;  <em class="jxr_comment">// 1000^5</em>
+<a class="jxr_linenumber" name="L8315" href="#L8315">8315</a> 		<strong class="jxr_keyword">if</strong> (c == 't')
+<a class="jxr_linenumber" name="L8316" href="#L8316">8316</a> 			<strong class="jxr_keyword">return</strong> 1000000000000L;  <em class="jxr_comment">// 1000^4</em>
+<a class="jxr_linenumber" name="L8317" href="#L8317">8317</a> 		<strong class="jxr_keyword">if</strong> (c == 'g')
+<a class="jxr_linenumber" name="L8318" href="#L8318">8318</a> 			<strong class="jxr_keyword">return</strong> 1000000000L;  <em class="jxr_comment">// 1000^3</em>
+<a class="jxr_linenumber" name="L8319" href="#L8319">8319</a> 		<strong class="jxr_keyword">if</strong> (c == 'm')
+<a class="jxr_linenumber" name="L8320" href="#L8320">8320</a> 			<strong class="jxr_keyword">return</strong> 1000000L;  <em class="jxr_comment">// 1000^2</em>
+<a class="jxr_linenumber" name="L8321" href="#L8321">8321</a> 		<strong class="jxr_keyword">if</strong> (c == 'k')
+<a class="jxr_linenumber" name="L8322" href="#L8322">8322</a> 			<strong class="jxr_keyword">return</strong> 1000L;
+<a class="jxr_linenumber" name="L8323" href="#L8323">8323</a> 		<strong class="jxr_keyword">return</strong> 1;
+<a class="jxr_linenumber" name="L8324" href="#L8324">8324</a> 	}
+<a class="jxr_linenumber" name="L8325" href="#L8325">8325</a> 
+<a class="jxr_linenumber" name="L8326" href="#L8326">8326</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L8327" href="#L8327">8327</a> <em class="jxr_javadoccomment">	 * Parses a unit string and converts the value to milliseconds.</em>
+<a class="jxr_linenumber" name="L8328" href="#L8328">8328</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L8329" href="#L8329">8329</a> <em class="jxr_javadoccomment">	 * @param unit The unit string (case-insensitive, already lowercased).</em>
+<a class="jxr_linenumber" name="L8330" href="#L8330">8330</a> <em class="jxr_javadoccomment">	 * @param value The numeric value.</em>
+<a class="jxr_linenumber" name="L8331" href="#L8331">8331</a> <em class="jxr_javadoccomment">	 * @return The value in milliseconds, or &lt;c&gt;-1&lt;/c&gt; if the unit is invalid.</em>
+<a class="jxr_linenumber" name="L8332" href="#L8332">8332</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L8333" href="#L8333">8333</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> parseUnit(String unit, <strong class="jxr_keyword">double</strong> value) {
+<a class="jxr_linenumber" name="L8334" href="#L8334">8334</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(unit)) {
+<a class="jxr_linenumber" name="L8335" href="#L8335">8335</a> 			<em class="jxr_comment">// No unit means milliseconds</em>
+<a class="jxr_linenumber" name="L8336" href="#L8336">8336</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)value;
+<a class="jxr_linenumber" name="L8337" href="#L8337">8337</a> 		}
+<a class="jxr_linenumber" name="L8338" href="#L8338">8338</a> 
+<a class="jxr_linenumber" name="L8339" href="#L8339">8339</a> 		<em class="jxr_comment">// Check milliseconds first (before minutes) - must check exact "ms" before checking "m"</em>
+<a class="jxr_linenumber" name="L8340" href="#L8340">8340</a> 		<strong class="jxr_keyword">if</strong> (unit.equals(<span class="jxr_string">"ms"</span>) || unit.equals(<span class="jxr_string">"millis"</span>) || unit.equals(<span class="jxr_string">"milliseconds"</span>))
+<a class="jxr_linenumber" name="L8341" href="#L8341">8341</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)value;
+<a class="jxr_linenumber" name="L8342" href="#L8342">8342</a> 
+<a class="jxr_linenumber" name="L8343" href="#L8343">8343</a> 		<em class="jxr_comment">// Seconds</em>
+<a class="jxr_linenumber" name="L8344" href="#L8344">8344</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"s"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"sec"</span>))
+<a class="jxr_linenumber" name="L8345" href="#L8345">8345</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000);
+<a class="jxr_linenumber" name="L8346" href="#L8346">8346</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"sec"</span>) || unit.startsWith(<span class="jxr_string">"second"</span>))
+<a class="jxr_linenumber" name="L8347" href="#L8347">8347</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000);
+<a class="jxr_linenumber" name="L8348" href="#L8348">8348</a> 
+<a class="jxr_linenumber" name="L8349" href="#L8349">8349</a> 		<em class="jxr_comment">// Minutes (must check after milliseconds and months)</em>
+<a class="jxr_linenumber" name="L8350" href="#L8350">8350</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"m"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"mo"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"mill"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"ms"</span>))
+<a class="jxr_linenumber" name="L8351" href="#L8351">8351</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60);
+<a class="jxr_linenumber" name="L8352" href="#L8352">8352</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"min"</span>) || unit.startsWith(<span class="jxr_string">"minute"</span>))
+<a class="jxr_linenumber" name="L8353" href="#L8353">8353</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60);
+<a class="jxr_linenumber" name="L8354" href="#L8354">8354</a> 
+<a class="jxr_linenumber" name="L8355" href="#L8355">8355</a> 		<em class="jxr_comment">// Hours</em>
+<a class="jxr_linenumber" name="L8356" href="#L8356">8356</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"h"</span>) || unit.startsWith(<span class="jxr_string">"hour"</span>))
+<a class="jxr_linenumber" name="L8357" href="#L8357">8357</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60);
+<a class="jxr_linenumber" name="L8358" href="#L8358">8358</a> 
+<a class="jxr_linenumber" name="L8359" href="#L8359">8359</a> 		<em class="jxr_comment">// Days</em>
+<a class="jxr_linenumber" name="L8360" href="#L8360">8360</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"d"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"da"</span>))
+<a class="jxr_linenumber" name="L8361" href="#L8361">8361</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24);
+<a class="jxr_linenumber" name="L8362" href="#L8362">8362</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"day"</span>))
+<a class="jxr_linenumber" name="L8363" href="#L8363">8363</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24);
+<a class="jxr_linenumber" name="L8364" href="#L8364">8364</a> 
+<a class="jxr_linenumber" name="L8365" href="#L8365">8365</a> 		<em class="jxr_comment">// Weeks</em>
+<a class="jxr_linenumber" name="L8366" href="#L8366">8366</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"w"</span>) || unit.startsWith(<span class="jxr_string">"week"</span>))
+<a class="jxr_linenumber" name="L8367" href="#L8367">8367</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24 * 7);
+<a class="jxr_linenumber" name="L8368" href="#L8368">8368</a> 
+<a class="jxr_linenumber" name="L8369" href="#L8369">8369</a> 		<em class="jxr_comment">// Months (30 days)</em>
+<a class="jxr_linenumber" name="L8370" href="#L8370">8370</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"mo"</span>) || unit.startsWith(<span class="jxr_string">"month"</span>))
+<a class="jxr_linenumber" name="L8371" href="#L8371">8371</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24 * 30);
+<a class="jxr_linenumber" name="L8372" href="#L8372">8372</a> 
+<a class="jxr_linenumber" name="L8373" href="#L8373">8373</a> 		<em class="jxr_comment">// Years (365 days)</em>
+<a class="jxr_linenumber" name="L8374" href="#L8374">8374</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"y"</span>) &amp;&amp; !unit.startsWith(<span class="jxr_string">"yr"</span>))
+<a class="jxr_linenumber" name="L8375" href="#L8375">8375</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24 * 365);
+<a class="jxr_linenumber" name="L8376" href="#L8376">8376</a> 		<strong class="jxr_keyword">if</strong> (unit.startsWith(<span class="jxr_string">"yr"</span>) || unit.startsWith(<span class="jxr_string">"year"</span>))
+<a class="jxr_linenumber" name="L8377" href="#L8377">8377</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)(value * 1000 * 60 * 60 * 24 * 365);
+<a class="jxr_linenumber" name="L8378" href="#L8378">8378</a> 
+<a class="jxr_linenumber" name="L8379" href="#L8379">8379</a> 		<em class="jxr_comment">// Unknown unit</em>
+<a class="jxr_linenumber" name="L8380" href="#L8380">8380</a> 		<strong class="jxr_keyword">return</strong> -1;
+<a class="jxr_linenumber" name="L8381" href="#L8381">8381</a> 	}
+<a class="jxr_linenumber" name="L8382" href="#L8382">8382</a> 
+<a class="jxr_linenumber" name="L8383" href="#L8383">8383</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L8384" href="#L8384">8384</a> <em class="jxr_javadoccomment">	 * Skips over comment sequences in a StringReader.</em>
+<a class="jxr_linenumber" name="L8385" href="#L8385">8385</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L8386" href="#L8386">8386</a> <em class="jxr_javadoccomment">	 * @param r The StringReader positioned at the start of a comment.</em>
+<a class="jxr_linenumber" name="L8387" href="#L8387">8387</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
+<a class="jxr_linenumber" name="L8388" href="#L8388">8388</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L8389" href="#L8389">8389</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> skipComments(StringReader r) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L8390" href="#L8390">8390</a> 		<strong class="jxr_keyword">var</strong> c = r.read();
+<a class="jxr_linenumber" name="L8391" href="#L8391">8391</a> 		<em class="jxr_comment">//  "/* */" style comments</em>
+<a class="jxr_linenumber" name="L8392" href="#L8392">8392</a> 		<strong class="jxr_keyword">if</strong> (c == '*') {
+<a class="jxr_linenumber" name="L8393" href="#L8393">8393</a> 			<strong class="jxr_keyword">while</strong> (c != -1)
+<a class="jxr_linenumber" name="L8394" href="#L8394">8394</a> 				<strong class="jxr_keyword">if</strong> ((c = r.read()) == '*')
+<a class="jxr_linenumber" name="L8395" href="#L8395">8395</a> 					<strong class="jxr_keyword">if</strong> ((c = r.read()) == '/')  <em class="jxr_comment">// NOSONAR - Intentional.</em>
+<a class="jxr_linenumber" name="L8396" href="#L8396">8396</a> 						<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L8397" href="#L8397">8397</a> 			<em class="jxr_comment">//  "//" style comments</em>
+<a class="jxr_linenumber" name="L8398" href="#L8398">8398</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '/') {
+<a class="jxr_linenumber" name="L8399" href="#L8399">8399</a> 			<strong class="jxr_keyword">while</strong> (c != -1) {
+<a class="jxr_linenumber" name="L8400" href="#L8400">8400</a> 				c = r.read();
+<a class="jxr_linenumber" name="L8401" href="#L8401">8401</a> 				<strong class="jxr_keyword">if</strong> (c == -1 || c == '\n')
+<a class="jxr_linenumber" name="L8402" href="#L8402">8402</a> 					<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L8403" href="#L8403">8403</a> 			}
+<a class="jxr_linenumber" name="L8404" href="#L8404">8404</a> 		}
+<a class="jxr_linenumber" name="L8405" href="#L8405">8405</a> 	}
+<a class="jxr_linenumber" name="L8406" href="#L8406">8406</a> 
+<a class="jxr_linenumber" name="L8407" href="#L8407">8407</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L8408" href="#L8408">8408</a> <em class="jxr_javadoccomment">	 * Gets or creates an AsciiSet for escaping the specified character.</em>
+<a class="jxr_linenumber" name="L8409" href="#L8409">8409</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L8410" href="#L8410">8410</a> <em class="jxr_javadoccomment">	 * @param c The character to create an escape set for.</em>
+<a class="jxr_linenumber" name="L8411" href="#L8411">8411</a> <em class="jxr_javadoccomment">	 * @return An AsciiSet containing the character and backslash.</em>
+<a class="jxr_linenumber" name="L8412" href="#L8412">8412</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L8413" href="#L8413">8413</a> 	<strong class="jxr_keyword">static</strong> <a name="AsciiSet" href="../../../../../org/apache/juneau/commons/utils/AsciiSet.html#AsciiSet">AsciiSet</a> getEscapeSet(<strong class="jxr_keyword">char</strong> c) {
+<a class="jxr_linenumber" name="L8414" href="#L8414">8414</a> 		<strong class="jxr_keyword">return</strong> ESCAPE_SETS.computeIfAbsent(c, key -&gt; AsciiSet.create().chars(key, '&#92;&#92;').build());
+<a class="jxr_linenumber" name="L8415" href="#L8415">8415</a> 	}
+<a class="jxr_linenumber" name="L8416" href="#L8416">8416</a> 
+<a class="jxr_linenumber" name="L8417" href="#L8417">8417</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L8418" href="#L8418">8418</a> <em class="jxr_javadoccomment">	 * Helper method to split a string into words.</em>
+<a class="jxr_linenumber" name="L8419" href="#L8419">8419</a> <em class="jxr_javadoccomment">	 * Detects word boundaries from separators (spaces, underscores, hyphens) and case changes.</em>
+<a class="jxr_linenumber" name="L8420" href="#L8420">8420</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L8421" href="#L8421">8421</a> <em class="jxr_javadoccomment">	 * @param str The string to split.</em>
+<a class="jxr_linenumber" name="L8422" href="#L8422">8422</a> <em class="jxr_javadoccomment">	 * @return A list of words, or empty list if input is null or empty.</em>
+<a class="jxr_linenumber" name="L8423" href="#L8423">8423</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L8424" href="#L8424">8424</a> 	<strong class="jxr_keyword">static</strong> List&lt;String&gt; splitWords(String str) {
+<a class="jxr_linenumber" name="L8425" href="#L8425">8425</a> 		<strong class="jxr_keyword">if</strong> (str == <strong class="jxr_keyword">null</strong> || isEmpty(str))
+<a class="jxr_linenumber" name="L8426" href="#L8426">8426</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
+<a class="jxr_linenumber" name="L8427" href="#L8427">8427</a> 
+<a class="jxr_linenumber" name="L8428" href="#L8428">8428</a> 		<strong class="jxr_keyword">var</strong> words = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L8429" href="#L8429">8429</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L8430" href="#L8430">8430</a> 		<strong class="jxr_keyword">var</strong> wasLowerCase = false;
+<a class="jxr_linenumber" name="L8431" href="#L8431">8431</a> 		<strong class="jxr_keyword">var</strong> wasUpperCase = false;
+<a class="jxr_linenumber" name="L8432" href="#L8432">8432</a> 		<strong class="jxr_keyword">var</strong> consecutiveUpperCount = 0;
+<a class="jxr_linenumber" name="L8433" href="#L8433">8433</a> 
+<a class="jxr_linenumber" name="L8434" href="#L8434">8434</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; str.length(); i++) {
+<a class="jxr_linenumber" name="L8435" href="#L8435">8435</a> 			<strong class="jxr_keyword">var</strong> c = str.charAt(i);
+<a class="jxr_linenumber" name="L8436" href="#L8436">8436</a> 			<strong class="jxr_keyword">var</strong> isSeparator = (c == ' ' || c == '_' || c == '-' || c == '\t');
+<a class="jxr_linenumber" name="L8437" href="#L8437">8437</a> 			<strong class="jxr_keyword">var</strong> isUpperCase = Character.isUpperCase(c);
+<a class="jxr_linenumber" name="L8438" href="#L8438">8438</a> 			<strong class="jxr_keyword">var</strong> isLowerCase = Character.isLowerCase(c);
+<a class="jxr_linenumber" name="L8439" href="#L8439">8439</a> 			<strong class="jxr_keyword">var</strong> isLetter = Character.isLetter(c);
+<a class="jxr_linenumber" name="L8440" href="#L8440">8440</a> 
+<a class="jxr_linenumber" name="L8441" href="#L8441">8441</a> 			<strong class="jxr_keyword">if</strong> (isSeparator) {
+<a class="jxr_linenumber" name="L8442" href="#L8442">8442</a> 				<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0) {
+<a class="jxr_linenumber" name="L8443" href="#L8443">8443</a> 					words.add(sb.toString());
+<a class="jxr_linenumber" name="L8444" href="#L8444">8444</a> 					sb.setLength(0);
+<a class="jxr_linenumber" name="L8445" href="#L8445">8445</a> 				}
+<a class="jxr_linenumber" name="L8446" href="#L8446">8446</a> 				wasLowerCase = false;
+<a class="jxr_linenumber" name="L8447" href="#L8447">8447</a> 				wasUpperCase = false;
+<a class="jxr_linenumber" name="L8448" href="#L8448">8448</a> 				consecutiveUpperCount = 0;
+<a class="jxr_linenumber" name="L8449" href="#L8449">8449</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isLetter) {
+<a class="jxr_linenumber" name="L8450" href="#L8450">8450</a> 				<em class="jxr_comment">// Detect word boundary:</em>
+<a class="jxr_linenumber" name="L8451" href="#L8451">8451</a> 				<em class="jxr_comment">// 1. Uppercase after lowercase (e.g., "helloWorld" → "hello", "World")</em>
+<a class="jxr_linenumber" name="L8452" href="#L8452">8452</a> 				<em class="jxr_comment">// 2. Uppercase after consecutive uppercase when next is lowercase (e.g., "XMLHttp" → "XML", "Http")</em>
+<a class="jxr_linenumber" name="L8453" href="#L8453">8453</a> 				<em class="jxr_comment">// 3. Lowercase after 2+ consecutive uppercase (e.g., "XMLHttp" → "XML", "Http")</em>
+<a class="jxr_linenumber" name="L8454" href="#L8454">8454</a> 				<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0) {
+<a class="jxr_linenumber" name="L8455" href="#L8455">8455</a> 					<strong class="jxr_keyword">if</strong> (isUpperCase &amp;&amp; wasLowerCase) {
+<a class="jxr_linenumber" name="L8456" href="#L8456">8456</a> 						<em class="jxr_comment">// Case 1: uppercase after lowercase (e.g., "helloWorld" → "hello", "World")</em>
+<a class="jxr_linenumber" name="L8457" href="#L8457">8457</a> 						words.add(sb.toString());
+<a class="jxr_linenumber" name="L8458" href="#L8458">8458</a> 						sb.setLength(0);
+<a class="jxr_linenumber" name="L8459" href="#L8459">8459</a> 						consecutiveUpperCount = 0;
+<a class="jxr_linenumber" name="L8460" href="#L8460">8460</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isUpperCase &amp;&amp; wasUpperCase &amp;&amp; consecutiveUpperCount &gt;= 2) {
+<a class="jxr_linenumber" name="L8461" href="#L8461">8461</a> 						<em class="jxr_comment">// Case 2: uppercase after uppercase - check if this starts a new word</em>
+<a class="jxr_linenumber" name="L8462" href="#L8462">8462</a> 						<em class="jxr_comment">// Look ahead to see if next character is lowercase</em>
+<a class="jxr_linenumber" name="L8463" href="#L8463">8463</a> 						<em class="jxr_comment">// This handles "XMLHttp" where 'H' starts "Http"</em>
+<a class="jxr_linenumber" name="L8464" href="#L8464">8464</a> 						<em class="jxr_comment">// We need at least 2 consecutive uppercase letters before this one to split</em>
+<a class="jxr_linenumber" name="L8465" href="#L8465">8465</a> 						<strong class="jxr_keyword">if</strong> (i + 1 &lt; str.length()) {
+<a class="jxr_linenumber" name="L8466" href="#L8466">8466</a> 							<strong class="jxr_keyword">var</strong> nextChar = str.charAt(i + 1);
+<a class="jxr_linenumber" name="L8467" href="#L8467">8467</a> 							<strong class="jxr_keyword">if</strong> (Character.isLowerCase(nextChar)) {
+<a class="jxr_linenumber" name="L8468" href="#L8468">8468</a> 								<em class="jxr_comment">// This uppercase starts a new word, split before it</em>
+<a class="jxr_linenumber" name="L8469" href="#L8469">8469</a> 								words.add(sb.toString());
+<a class="jxr_linenumber" name="L8470" href="#L8470">8470</a> 								sb.setLength(0);
+<a class="jxr_linenumber" name="L8471" href="#L8471">8471</a> 								consecutiveUpperCount = 0;
+<a class="jxr_linenumber" name="L8472" href="#L8472">8472</a> 							}
+<a class="jxr_linenumber" name="L8473" href="#L8473">8473</a> 						}
+<a class="jxr_linenumber" name="L8474" href="#L8474">8474</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isLowerCase &amp;&amp; wasUpperCase &amp;&amp; consecutiveUpperCount &gt;= 2) {
+<a class="jxr_linenumber" name="L8475" href="#L8475">8475</a> 						<em class="jxr_comment">// Case 3: lowercase after 2+ consecutive uppercase</em>
+<a class="jxr_linenumber" name="L8476" href="#L8476">8476</a> 						<em class="jxr_comment">// Split all but the last uppercase (e.g., "XMLH" → "XML" + "H")</em>
+<a class="jxr_linenumber" name="L8477" href="#L8477">8477</a> 						<strong class="jxr_keyword">var</strong> splitPoint = sb.length() - 1;
+<a class="jxr_linenumber" name="L8478" href="#L8478">8478</a> 						words.add(sb.substring(0, splitPoint));
+<a class="jxr_linenumber" name="L8479" href="#L8479">8479</a> 						sb.delete(0, splitPoint);
+<a class="jxr_linenumber" name="L8480" href="#L8480">8480</a> 						consecutiveUpperCount = 0;
+<a class="jxr_linenumber" name="L8481" href="#L8481">8481</a> 					}
+<a class="jxr_linenumber" name="L8482" href="#L8482">8482</a> 				}
+<a class="jxr_linenumber" name="L8483" href="#L8483">8483</a> 				sb.append(c);
+<a class="jxr_linenumber" name="L8484" href="#L8484">8484</a> 				<em class="jxr_comment">// Update state AFTER appending</em>
+<a class="jxr_linenumber" name="L8485" href="#L8485">8485</a> 				wasLowerCase = isLowerCase;
+<a class="jxr_linenumber" name="L8486" href="#L8486">8486</a> 				wasUpperCase = isUpperCase;
+<a class="jxr_linenumber" name="L8487" href="#L8487">8487</a> 				<strong class="jxr_keyword">if</strong> (isUpperCase) {
+<a class="jxr_linenumber" name="L8488" href="#L8488">8488</a> 					consecutiveUpperCount++;
+<a class="jxr_linenumber" name="L8489" href="#L8489">8489</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L8490" href="#L8490">8490</a> 					consecutiveUpperCount = 0;
+<a class="jxr_linenumber" name="L8491" href="#L8491">8491</a> 				}
+<a class="jxr_linenumber" name="L8492" href="#L8492">8492</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L8493" href="#L8493">8493</a> 				<em class="jxr_comment">// Non-letter characters (digits, etc.) - treat as part of current word</em>
+<a class="jxr_linenumber" name="L8494" href="#L8494">8494</a> 				sb.append(c);
+<a class="jxr_linenumber" name="L8495" href="#L8495">8495</a> 				wasLowerCase = false;
+<a class="jxr_linenumber" name="L8496" href="#L8496">8496</a> 				wasUpperCase = false;
+<a class="jxr_linenumber" name="L8497" href="#L8497">8497</a> 				consecutiveUpperCount = 0;
+<a class="jxr_linenumber" name="L8498" href="#L8498">8498</a> 			}
+<a class="jxr_linenumber" name="L8499" href="#L8499">8499</a> 		}
 <a class="jxr_linenumber" name="L8500" href="#L8500">8500</a> 
-<a class="jxr_linenumber" name="L8501" href="#L8501">8501</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L8502" href="#L8502">8502</a> <em class="jxr_javadoccomment">	 * Helper method to split a string into words.</em>
-<a class="jxr_linenumber" name="L8503" href="#L8503">8503</a> <em class="jxr_javadoccomment">	 * Detects word boundaries from separators (spaces, underscores, hyphens) and case changes.</em>
-<a class="jxr_linenumber" name="L8504" href="#L8504">8504</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L8505" href="#L8505">8505</a> <em class="jxr_javadoccomment">	 * @param str The string to split.</em>
-<a class="jxr_linenumber" name="L8506" href="#L8506">8506</a> <em class="jxr_javadoccomment">	 * @return A list of words, or empty list if input is null or empty.</em>
-<a class="jxr_linenumber" name="L8507" href="#L8507">8507</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L8508" href="#L8508">8508</a> 	<strong class="jxr_keyword">static</strong> List&lt;String&gt; splitWords(String str) {
-<a class="jxr_linenumber" name="L8509" href="#L8509">8509</a> 		<strong class="jxr_keyword">if</strong> (str == <strong class="jxr_keyword">null</strong> || isEmpty(str))
-<a class="jxr_linenumber" name="L8510" href="#L8510">8510</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
-<a class="jxr_linenumber" name="L8511" href="#L8511">8511</a> 
-<a class="jxr_linenumber" name="L8512" href="#L8512">8512</a> 		<strong class="jxr_keyword">var</strong> words = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L8513" href="#L8513">8513</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L8514" href="#L8514">8514</a> 		<strong class="jxr_keyword">var</strong> wasLowerCase = false;
-<a class="jxr_linenumber" name="L8515" href="#L8515">8515</a> 		<strong class="jxr_keyword">var</strong> wasUpperCase = false;
-<a class="jxr_linenumber" name="L8516" href="#L8516">8516</a> 		<strong class="jxr_keyword">var</strong> consecutiveUpperCount = 0;
-<a class="jxr_linenumber" name="L8517" href="#L8517">8517</a> 
-<a class="jxr_linenumber" name="L8518" href="#L8518">8518</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; str.length(); i++) {
-<a class="jxr_linenumber" name="L8519" href="#L8519">8519</a> 			<strong class="jxr_keyword">var</strong> c = str.charAt(i);
-<a class="jxr_linenumber" name="L8520" href="#L8520">8520</a> 			<strong class="jxr_keyword">var</strong> isSeparator = (c == ' ' || c == '_' || c == '-' || c == '\t');
-<a class="jxr_linenumber" name="L8521" href="#L8521">8521</a> 			<strong class="jxr_keyword">var</strong> isUpperCase = Character.isUpperCase(c);
-<a class="jxr_linenumber" name="L8522" href="#L8522">8522</a> 			<strong class="jxr_keyword">var</strong> isLowerCase = Character.isLowerCase(c);
-<a class="jxr_linenumber" name="L8523" href="#L8523">8523</a> 			<strong class="jxr_keyword">var</strong> isLetter = Character.isLetter(c);
-<a class="jxr_linenumber" name="L8524" href="#L8524">8524</a> 
-<a class="jxr_linenumber" name="L8525" href="#L8525">8525</a> 			<strong class="jxr_keyword">if</strong> (isSeparator) {
-<a class="jxr_linenumber" name="L8526" href="#L8526">8526</a> 				<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0) {
-<a class="jxr_linenumber" name="L8527" href="#L8527">8527</a> 					words.add(sb.toString());
-<a class="jxr_linenumber" name="L8528" href="#L8528">8528</a> 					sb.setLength(0);
-<a class="jxr_linenumber" name="L8529" href="#L8529">8529</a> 				}
-<a class="jxr_linenumber" name="L8530" href="#L8530">8530</a> 				wasLowerCase = false;
-<a class="jxr_linenumber" name="L8531" href="#L8531">8531</a> 				wasUpperCase = false;
-<a class="jxr_linenumber" name="L8532" href="#L8532">8532</a> 				consecutiveUpperCount = 0;
-<a class="jxr_linenumber" name="L8533" href="#L8533">8533</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isLetter) {
-<a class="jxr_linenumber" name="L8534" href="#L8534">8534</a> 				<em class="jxr_comment">// Detect word boundary:</em>
-<a class="jxr_linenumber" name="L8535" href="#L8535">8535</a> 				<em class="jxr_comment">// 1. Uppercase after lowercase (e.g., "helloWorld" → "hello", "World")</em>
-<a class="jxr_linenumber" name="L8536" href="#L8536">8536</a> 				<em class="jxr_comment">// 2. Uppercase after consecutive uppercase when next is lowercase (e.g., "XMLHttp" → "XML", "Http")</em>
-<a class="jxr_linenumber" name="L8537" href="#L8537">8537</a> 				<em class="jxr_comment">// 3. Lowercase after 2+ consecutive uppercase (e.g., "XMLHttp" → "XML", "Http")</em>
-<a class="jxr_linenumber" name="L8538" href="#L8538">8538</a> 				<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0) {
-<a class="jxr_linenumber" name="L8539" href="#L8539">8539</a> 					<strong class="jxr_keyword">if</strong> (isUpperCase &amp;&amp; wasLowerCase) {
-<a class="jxr_linenumber" name="L8540" href="#L8540">8540</a> 						<em class="jxr_comment">// Case 1: uppercase after lowercase (e.g., "helloWorld" → "hello", "World")</em>
-<a class="jxr_linenumber" name="L8541" href="#L8541">8541</a> 						words.add(sb.toString());
-<a class="jxr_linenumber" name="L8542" href="#L8542">8542</a> 						sb.setLength(0);
-<a class="jxr_linenumber" name="L8543" href="#L8543">8543</a> 						consecutiveUpperCount = 0;
-<a class="jxr_linenumber" name="L8544" href="#L8544">8544</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isUpperCase &amp;&amp; wasUpperCase &amp;&amp; consecutiveUpperCount &gt;= 2) {
-<a class="jxr_linenumber" name="L8545" href="#L8545">8545</a> 						<em class="jxr_comment">// Case 2: uppercase after uppercase - check if this starts a new word</em>
-<a class="jxr_linenumber" name="L8546" href="#L8546">8546</a> 						<em class="jxr_comment">// Look ahead to see if next character is lowercase</em>
-<a class="jxr_linenumber" name="L8547" href="#L8547">8547</a> 						<em class="jxr_comment">// This handles "XMLHttp" where 'H' starts "Http"</em>
-<a class="jxr_linenumber" name="L8548" href="#L8548">8548</a> 						<em class="jxr_comment">// We need at least 2 consecutive uppercase letters before this one to split</em>
-<a class="jxr_linenumber" name="L8549" href="#L8549">8549</a> 						<strong class="jxr_keyword">if</strong> (i + 1 &lt; str.length()) {
-<a class="jxr_linenumber" name="L8550" href="#L8550">8550</a> 							<strong class="jxr_keyword">var</strong> nextChar = str.charAt(i + 1);
-<a class="jxr_linenumber" name="L8551" href="#L8551">8551</a> 							<strong class="jxr_keyword">if</strong> (Character.isLowerCase(nextChar)) {
-<a class="jxr_linenumber" name="L8552" href="#L8552">8552</a> 								<em class="jxr_comment">// This uppercase starts a new word, split before it</em>
-<a class="jxr_linenumber" name="L8553" href="#L8553">8553</a> 								words.add(sb.toString());
-<a class="jxr_linenumber" name="L8554" href="#L8554">8554</a> 								sb.setLength(0);
-<a class="jxr_linenumber" name="L8555" href="#L8555">8555</a> 								consecutiveUpperCount = 0;
-<a class="jxr_linenumber" name="L8556" href="#L8556">8556</a> 							}
-<a class="jxr_linenumber" name="L8557" href="#L8557">8557</a> 						}
-<a class="jxr_linenumber" name="L8558" href="#L8558">8558</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isLowerCase &amp;&amp; wasUpperCase &amp;&amp; consecutiveUpperCount &gt;= 2) {
-<a class="jxr_linenumber" name="L8559" href="#L8559">8559</a> 						<em class="jxr_comment">// Case 3: lowercase after 2+ consecutive uppercase</em>
-<a class="jxr_linenumber" name="L8560" href="#L8560">8560</a> 						<em class="jxr_comment">// Split all but the last uppercase (e.g., "XMLH" → "XML" + "H")</em>
-<a class="jxr_linenumber" name="L8561" href="#L8561">8561</a> 						<strong class="jxr_keyword">var</strong> splitPoint = sb.length() - 1;
-<a class="jxr_linenumber" name="L8562" href="#L8562">8562</a> 						words.add(sb.substring(0, splitPoint));
-<a class="jxr_linenumber" name="L8563" href="#L8563">8563</a> 						sb.delete(0, splitPoint);
-<a class="jxr_linenumber" name="L8564" href="#L8564">8564</a> 						consecutiveUpperCount = 0;
-<a class="jxr_linenumber" name="L8565" href="#L8565">8565</a> 					}
-<a class="jxr_linenumber" name="L8566" href="#L8566">8566</a> 				}
-<a class="jxr_linenumber" name="L8567" href="#L8567">8567</a> 				sb.append(c);
-<a class="jxr_linenumber" name="L8568" href="#L8568">8568</a> 				<em class="jxr_comment">// Update state AFTER appending</em>
-<a class="jxr_linenumber" name="L8569" href="#L8569">8569</a> 				wasLowerCase = isLowerCase;
-<a class="jxr_linenumber" name="L8570" href="#L8570">8570</a> 				wasUpperCase = isUpperCase;
-<a class="jxr_linenumber" name="L8571" href="#L8571">8571</a> 				<strong class="jxr_keyword">if</strong> (isUpperCase) {
-<a class="jxr_linenumber" name="L8572" href="#L8572">8572</a> 					consecutiveUpperCount++;
-<a class="jxr_linenumber" name="L8573" href="#L8573">8573</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L8574" href="#L8574">8574</a> 					consecutiveUpperCount = 0;
-<a class="jxr_linenumber" name="L8575" href="#L8575">8575</a> 				}
-<a class="jxr_linenumber" name="L8576" href="#L8576">8576</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L8577" href="#L8577">8577</a> 				<em class="jxr_comment">// Non-letter characters (digits, etc.) - treat as part of current word</em>
-<a class="jxr_linenumber" name="L8578" href="#L8578">8578</a> 				sb.append(c);
-<a class="jxr_linenumber" name="L8579" href="#L8579">8579</a> 				wasLowerCase = false;
-<a class="jxr_linenumber" name="L8580" href="#L8580">8580</a> 				wasUpperCase = false;
-<a class="jxr_linenumber" name="L8581" href="#L8581">8581</a> 				consecutiveUpperCount = 0;
-<a class="jxr_linenumber" name="L8582" href="#L8582">8582</a> 			}
-<a class="jxr_linenumber" name="L8583" href="#L8583">8583</a> 		}
-<a class="jxr_linenumber" name="L8584" href="#L8584">8584</a> 
-<a class="jxr_linenumber" name="L8585" href="#L8585">8585</a> 		<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0)
-<a class="jxr_linenumber" name="L8586" href="#L8586">8586</a> 			words.add(sb.toString());
-<a class="jxr_linenumber" name="L8587" href="#L8587">8587</a> 
-<a class="jxr_linenumber" name="L8588" href="#L8588">8588</a> 		<strong class="jxr_keyword">return</strong> words;
-<a class="jxr_linenumber" name="L8589" href="#L8589">8589</a> 	}
-<a class="jxr_linenumber" name="L8590" href="#L8590">8590</a> 
-<a class="jxr_linenumber" name="L8591" href="#L8591">8591</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L8592" href="#L8592">8592</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L8593" href="#L8593">8593</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L8594" href="#L8594">8594</a> 	<strong class="jxr_keyword">protected</strong> <a name="StringUtils" href="../../../../../org/apache/juneau/commons/utils/StringUtils.html#StringUtils">StringUtils</a>() {}
-<a class="jxr_linenumber" name="L8595" href="#L8595">8595</a> }
+<a class="jxr_linenumber" name="L8501" href="#L8501">8501</a> 		<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0)
+<a class="jxr_linenumber" name="L8502" href="#L8502">8502</a> 			words.add(sb.toString());
+<a class="jxr_linenumber" name="L8503" href="#L8503">8503</a> 
+<a class="jxr_linenumber" name="L8504" href="#L8504">8504</a> 		<strong class="jxr_keyword">return</strong> words;
+<a class="jxr_linenumber" name="L8505" href="#L8505">8505</a> 	}
+<a class="jxr_linenumber" name="L8506" href="#L8506">8506</a> 
+<a class="jxr_linenumber" name="L8507" href="#L8507">8507</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L8508" href="#L8508">8508</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L8509" href="#L8509">8509</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L8510" href="#L8510">8510</a> 	<strong class="jxr_keyword">protected</strong> <a name="StringUtils" href="../../../../../org/apache/juneau/commons/utils/StringUtils.html#StringUtils">StringUtils</a>() {}
+<a class="jxr_linenumber" name="L8511" href="#L8511">8511</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
