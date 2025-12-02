@@ -367,7 +367,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("test", camelCase("test"));
 		assertEquals("hello123World", camelCase("hello 123 world"));
 
-		// String with only separators (whitespace) - splitWords returns empty, triggers line 496
+		// String with only separators (whitespace) - splitWords returns empty
 		// Note: splitWords treats separators differently - if string is only separators,
 		// no words are added because separators trigger word boundaries but don't create words
 		assertEquals("", camelCase("   ")); // Only whitespace - splitWords returns empty list
@@ -380,10 +380,10 @@ class StringUtils_Test extends TestBase {
 		assertEquals("@#$", camelCase("@#$"));
 		assertEquals(".,;:", camelCase(".,;:"));
 
-		// Test line 8424 - splitWords with null or empty string
+		// Test splitWords with null or empty string
 		// This is already covered by the null/empty tests above
 
-		// Test line 8458 - splitWords Case 2: uppercase after uppercase when next is lowercase
+		// Test splitWords Case 2: uppercase after uppercase when next is lowercase
 		// This handles cases where we have 2+ consecutive uppercase, then an uppercase
 		// followed by lowercase (which starts a new word)
 		// To trigger Case 2, we need: uppercase sequence, then uppercase followed by lowercase
@@ -393,7 +393,7 @@ class StringUtils_Test extends TestBase {
 		var result1 = camelCase("ABCDe");
 		assertEquals("aBCDe", result1); // A + BCDe (actual behavior)
 
-		// Test lines 8475-8478 - splitWords Case 3: lowercase after 2+ consecutive uppercase
+		// Test splitWords Case 3: lowercase after 2+ consecutive uppercase
 		// Split all but the last uppercase (e.g., "XMLH" → "XML" + "H")
 		// "XMLHt" - X, M, L are consecutive uppercase (count=3), then H (uppercase), then t (lowercase)
 		// This triggers Case 3: lowercase after 2+ consecutive uppercase
@@ -756,16 +756,16 @@ class StringUtils_Test extends TestBase {
 	void a030_diffPosition() {
 		assertEquals(-1, diffPosition("a", "a"));
 		assertEquals(-1, diffPosition(null, null));
-		assertEquals(-1, diffPosition("identical", "identical"));  // Equal length returns -1 (line 1143 true branch)
+		assertEquals(-1, diffPosition("identical", "identical"));  // Equal length returns -1
 		assertEquals(0, diffPosition("a", "b"));
 		assertEquals(1, diffPosition("aa", "ab"));
 		assertEquals(1, diffPosition("aaa", "ab"));
 		assertEquals(1, diffPosition("aa", "abb"));
 		assertEquals(0, diffPosition("a", null));
 		assertEquals(0, diffPosition(null, "b"));
-		assertEquals(3, diffPosition("abc", "abcdef"));  // Equal prefix but different lengths (line 1143 false branch)
+		assertEquals(3, diffPosition("abc", "abcdef"));  // Equal prefix but different lengths
 		assertEquals(2, diffPosition("abcd", "ab"));  // Opposite direction length difference
-		// Equal strings of same length - triggers line 1158
+		// Equal strings of same length
 		assertEquals(-1, diffPosition("hello", "hello"));
 		assertEquals(-1, diffPosition("test", "test"));
 		assertEquals(-1, diffPosition("", ""));
@@ -780,7 +780,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(-1, diffPositionIc("a", "A"));
 		assertEquals(-1, diffPositionIc(null, null));
 		assertEquals(0, diffPositionIc("a", "b"));
-		// Equal strings of same length (case-insensitive) - triggers line 1194
+		// Equal strings of same length (case-insensitive)
 		assertEquals(-1, diffPositionIc("hello", "HELLO"));
 		assertEquals(-1, diffPositionIc("test", "TEST"));
 		assertEquals(-1, diffPositionIc("", ""));
@@ -888,7 +888,7 @@ class StringUtils_Test extends TestBase {
 		assertFalse(endsWithAny("Hello World", "Hello", "Foo"));
 		assertFalse(endsWithAny(null, "World"));
 		assertFalse(endsWithAny("test", (String[])null));
-		// Empty varargs array - triggers line 1382
+		// Empty varargs array
 		assertFalse(endsWithAny("test", new String[0])); // suffixes.length == 0
 		assertFalse(endsWithAny(null, new String[0])); // suffixes.length == 0
 	}
@@ -1025,13 +1025,13 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Hello\\u0000World", escapeForJava("Hello\u0000World"));
 		assertEquals("Test\\u0001Test", escapeForJava("Test\u0001Test"));
 
-		// Form feed character - triggers line 1590
+		// Form feed character
 		assertEquals("Test\\fTest", escapeForJava("Test\fTest"));
 
-		// Backspace character - triggers line 1591
+		// Backspace character
 		assertEquals("Test\\bTest", escapeForJava("Test\bTest"));
 
-		// Unicode characters outside ASCII printable range - triggers line 1593
+		// Unicode characters outside ASCII printable range
 		assertEquals("Test\\u0080Test", escapeForJava("Test\u0080Test")); // Above 0x7E
 		assertEquals("Test\\u001fTest", escapeForJava("Test\u001FTest")); // Below 0x20 (but not special chars)
 		assertEquals("Test\\u00a0Test", escapeForJava("Test\u00A0Test")); // Non-breaking space
@@ -1142,27 +1142,27 @@ class StringUtils_Test extends TestBase {
 		assertTrue(extractBetween(null, "<", ">").isEmpty());
 		assertTrue(extractBetween("", "<", ">").isEmpty());
 
-		// Empty start or end marker - triggers line 1747
+		// Empty start or end marker - triggers code path
 		assertTrue(extractBetween("test", "", ">").isEmpty()); // Empty start
 		assertTrue(extractBetween("test", "<", "").isEmpty()); // Empty end
 		assertTrue(extractBetween("test", "", "").isEmpty()); // Both empty
 
-		// Start marker found but end marker not found after start - triggers line 1758
+		// Start marker found but end marker not found after start - triggers code path
 		var results4 = extractBetween("start<content>end", "<", "X"); // End marker "X" doesn't exist after "<"
 		assertTrue(results4.isEmpty()); // Should return empty since end not found after start
 
 		var results5 = extractBetween("start<content1>middle<content2>end", "<", "X");
 		assertTrue(results5.isEmpty()); // End marker not found after any start
 
-		// Case where start is found but end is never found after it - triggers line 1758
+		// Case where start is found but end is never found after it - triggers code path
 		var results6 = extractBetween("text<unclosed", "<", ">");
-		assertTrue(results6.isEmpty()); // End marker ">" not found after "<", triggers line 1758
+		assertTrue(results6.isEmpty()); // End marker ">" not found after "<", triggers code path
 
 		// Case where start is found multiple times, but end is not found after the last start
 		var results7 = extractBetween("before<start1>middle<start2>end<start3", "<", ">");
 		// First "<" at position 6, ">" at position 13 - extracts "start1"
 		// Second "<" at position 20, ">" at position 27 - extracts "start2"
-		// Third "<" at position 31, but no ">" after it - triggers line 1758 and breaks
+		// Third "<" at position 31, but no ">" after it - triggers code path and breaks
 		assertEquals(2, results7.size());
 		assertEquals("start1", results7.get(0));
 		assertEquals("start2", results7.get(1));
@@ -1485,7 +1485,7 @@ class StringUtils_Test extends TestBase {
 		argsWithNull.put("value", null);
 		assertEquals("Hello John, value: ", formatNamed("Hello {name}, value: {value}", argsWithNull));
 
-		// Nested braces with depth tracking - triggers lines 2220-2225
+		// Nested braces with depth tracking - triggers code path
 		var argsNested = new HashMap<String,Object>();
 		argsNested.put("outer", "value");
 		argsNested.put("inner", "nested");
@@ -1494,20 +1494,20 @@ class StringUtils_Test extends TestBase {
 		// Since "value" doesn't exist in the map, it outputs {value}
 		assertEquals("{value}", formatNamed("{{outer}}", argsNested)); // Double braces, depth > 0
 
-		// Nested braces with internal variable - triggers line 2227
+		// Nested braces with internal variable - triggers code path
 		argsNested.put("key", "name");
 		argsNested.put("name", "John");
 		// {{key}} should recursively format the inner {key} first
 		assertEquals("John", formatNamed("{{key}}", argsNested)); // hasInternalVar = true, recursive call
 
-		// Key exists check with containsKey - triggers line 2235
+		// Key exists check with containsKey - triggers code path
 		var argsExists = new HashMap<String,Object>();
 		argsExists.put("key1", "value1");
 		argsExists.put("key2", null); // null value but key exists
 		assertEquals("value1", formatNamed("{key1}", argsExists));
 		assertEquals("", formatNamed("{key2}", argsExists)); // null value, key exists
 
-		// Recursive formatNamed when value contains '{' - triggers line 2244
+		// Recursive formatNamed when value contains '{' - triggers code path
 		var argsRecursive = new HashMap<String,Object>();
 		argsRecursive.put("outer", "{inner}");
 		argsRecursive.put("inner", "final");
@@ -1639,24 +1639,24 @@ class StringUtils_Test extends TestBase {
 		assertEquals("https://example.com", getAuthorityUri("https://example.com/path/to/resource"));
 		assertEquals("ftp://server.com:21", getAuthorityUri("ftp://server.com:21/files"));
 
-		// Invalid URIs - state machine returns original string - triggers lines 2353, 2358, 2363, 2368, 2373
-		// State S1: non-letter character - triggers line 2353
+		// Invalid URIs - state machine returns original string
+		// State S1: non-letter character - triggers code path
 		assertEquals("123http://foo", getAuthorityUri("123http://foo")); // Starts with number
 		assertEquals(" http://foo", getAuthorityUri(" http://foo")); // Starts with space
 
-		// State S2: non-letter, non-colon - triggers line 2358
+		// State S2: non-letter, non-colon - triggers code path
 		assertEquals("httpx://foo", getAuthorityUri("httpx://foo")); // 'x' after 'http' (invalid)
 		assertEquals("http1://foo", getAuthorityUri("http1://foo")); // Number after 'http'
 
-		// State S3: non-slash - triggers line 2363
+		// State S3: non-slash - triggers code path
 		assertEquals("http:x://foo", getAuthorityUri("http:x://foo")); // 'x' instead of '/'
 		assertEquals("http:://foo", getAuthorityUri("http:://foo")); // ':' instead of '/'
 
-		// State S4: non-slash - triggers line 2368
+		// State S4: non-slash - triggers code path
 		assertEquals("http:/x://foo", getAuthorityUri("http:/x://foo")); // 'x' instead of second '/'
 		assertEquals("http:/://foo", getAuthorityUri("http:/://foo")); // ':' instead of second '/'
 
-		// State S5: slash instead of non-slash - triggers line 2373
+		// State S5: slash instead of non-slash - triggers code path
 		assertEquals("http:///foo", getAuthorityUri("http:///foo")); // Third '/' instead of hostname
 	}
 
@@ -1707,35 +1707,35 @@ class StringUtils_Test extends TestBase {
 		assertEquals(10 * w, getDuration("10 weeks"));
 		assertEquals(10 * w, getDuration("10W"));
 
-		// Test lines 8344, 8348, 8351, 8354, 8364, 8368, 8374 - parseUnit method
-		// Line 8344 - seconds (startsWith("sec") || startsWith("second"))
+		// Test parseUnit method
+		// Seconds (startsWith("sec") || startsWith("second"))
 		assertEquals(5 * s, getDuration("5sec"));
 		assertEquals(5 * s, getDuration("5second"));
 		assertEquals(5 * s, getDuration("5seconds"));
 
-		// Line 8348 - minutes (startsWith("m") && !startsWith("mo") && !startsWith("mill") && !startsWith("ms"))
-		// Line 8351 - minutes (startsWith("min") || startsWith("minute"))
+		// Minutes (startsWith("m") && !startsWith("mo") && !startsWith("mill") && !startsWith("ms"))
+		// Minutes (startsWith("min") || startsWith("minute"))
 		assertEquals(5 * m, getDuration("5m"));
 		assertEquals(5 * m, getDuration("5min"));
 		assertEquals(5 * m, getDuration("5minute"));
 		assertEquals(5 * m, getDuration("5minutes"));
 
-		// Line 8354 - hours (startsWith("h") || startsWith("hour"))
+		// Hours (startsWith("h") || startsWith("hour"))
 		assertEquals(5 * h, getDuration("5h"));
 		assertEquals(5 * h, getDuration("5hour"));
 		assertEquals(5 * h, getDuration("5hours"));
 
-		// Line 8364 - weeks (startsWith("w") || startsWith("week"))
+		// Weeks (startsWith("w") || startsWith("week"))
 		assertEquals(2 * w, getDuration("2w"));
 		assertEquals(2 * w, getDuration("2week"));
 		assertEquals(2 * w, getDuration("2weeks"));
 
-		// Line 8368 - months (startsWith("mo") || startsWith("month"))
+		// Months (startsWith("mo") || startsWith("month"))
 		assertEquals(3 * mo, getDuration("3mo"));
 		assertEquals(3 * mo, getDuration("3month"));
 		assertEquals(3 * mo, getDuration("3months"));
 
-		// Line 8374 - years (startsWith("y") || startsWith("year"))
+		// Years (startsWith("y") || startsWith("year"))
 		assertEquals(2 * y, getDuration("2y"));
 		assertEquals(2 * y, getDuration("2year"));
 		assertEquals(2 * y, getDuration("2years"));
@@ -1756,7 +1756,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(1 * h + 30 * m, getDuration("1h 30m"));
 		assertEquals(2 * d + 3 * h + 15 * m, getDuration("2d3h15m"));
 		assertEquals(1 * w + 2 * d + 3 * h, getDuration("1w2d3h"));
-		assertEquals(-1, getDuration("d10"));  // Non-number before unit - covers invalid number branch (line 2438)
+		assertEquals(-1, getDuration("d10"));  // Non-number before unit - covers invalid number branch 
 
 		// Months
 		assertEquals(1 * mo, getDuration("1mo"));
@@ -1775,29 +1775,29 @@ class StringUtils_Test extends TestBase {
 		assertEquals(1 * y + 6 * mo, getDuration("1y6mo"));
 		assertEquals(2 * y + 3 * mo + 5 * d, getDuration("2y3mo5d"));
 
-		// Whitespace handling - triggers lines 2434, 2437
+		// Whitespace handling
 		// Multiple whitespace characters between values
 		assertEquals(1 * h + 30 * m, getDuration("1h   30m")); // Multiple spaces
 		assertEquals(1 * h + 30 * m, getDuration("1h\t30m")); // Tab character
 		assertEquals(1 * h + 30 * m, getDuration("1h\n30m")); // Newline
 		assertEquals(1 * h + 30 * m, getDuration("  1h  30m  ")); // Leading/trailing whitespace
-		// Whitespace only at end - triggers line 2437 (break when i >= len)
+		// Whitespace only at end - triggers code path (break when i >= len)
 		assertEquals(1 * h, getDuration("1h   ")); // Trailing whitespace only
 
-		// Decimal parsing - triggers line 2446
+		// Decimal parsing - triggers code path
 		assertEquals((long)(1.5 * h), getDuration("1.5h"));
 		assertEquals((long)(0.25 * m), getDuration("0.25m"));
 		assertEquals((long)(3.14159 * s), getDuration("3.14159s"));
 		// Multiple decimal points should fail (second '.' breaks parsing)
 		// But the first decimal is parsed, so "1.5.0h" would parse "1.5" then fail on unit
 
-		// Invalid format - no number found - triggers line 2456
+		// Invalid format - no number found - triggers code path
 		assertEquals(-1, getDuration("abc")); // No number, invalid
 		assertEquals(-1, getDuration("h")); // No number, just unit
 		assertEquals(-1, getDuration("ms")); // No number, just unit
 		assertEquals(-1, getDuration("  h")); // Whitespace then unit, no number
 
-		// Invalid unit - parseUnit returns -1 - triggers line 2475
+		// Invalid unit - parseUnit returns -1 - triggers code path
 		assertEquals(-1, getDuration("1xyz")); // Invalid unit
 		assertEquals(-1, getDuration("1invalid")); // Invalid unit
 		assertEquals(-1, getDuration("1.5bad")); // Invalid unit with decimal
@@ -1892,7 +1892,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(pattern.matcher("test123").matches());
 		assertTrue(pattern.matcher("TEST123").matches());
 
-		// Null input should return null (line 2549)
+		// Null input should return null 
 		assertNull(getMatchPattern(null));
 		assertNull(getMatchPattern(null, java.util.regex.Pattern.CASE_INSENSITIVE));
 	}
@@ -1911,11 +1911,11 @@ class StringUtils_Test extends TestBase {
 		// Test with different line endings
 		assertEquals("1: line1\n2: line2\n", getNumberedLines("line1\r\nline2"));
 
-		// Test with start < 1 - triggers line 2613
+		// Test with start < 1 - triggers code path
 		assertEquals("1: line1\n2: line2\n", getNumberedLines("line1\nline2", 0, 2)); // start < 1, should be set to 1
 		assertEquals("1: line1\n2: line2\n", getNumberedLines("line1\nline2", -5, 2)); // start < 1, should be set to 1
 
-		// Test with end < 0 - triggers line 2615
+		// Test with end < 0 - triggers code path
 		assertEquals("1: line1\n2: line2\n3: line3\n", getNumberedLines("line1\nline2\nline3", 1, -1)); // end < 0, should be set to MAX_VALUE
 	}
 
@@ -2066,7 +2066,7 @@ class StringUtils_Test extends TestBase {
 		// Test multiple variables
 		assertEquals("John is 30 and lives in New York", interpolate("${name} is ${age} and lives in ${city}", vars));
 
-		// Test with no closing brace - triggers line 2810
+		// Test with no closing brace - triggers code path
 		assertEquals("Hello ${name", interpolate("Hello ${name", vars)); // No closing brace, append rest as-is
 		assertEquals("Start ${var1 middle ${var2", interpolate("Start ${var1 middle ${var2", vars)); // Multiple unclosed variables
 	}
@@ -2089,28 +2089,28 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isAbsoluteUri("https://example.com"));
 		assertTrue(isAbsoluteUri("ftp://server.com"));
 
-		// State machine return false cases - triggers lines 2856, 2859, 2863, 2879
-		// State S1: non-letter character - triggers line 2859
+		// State machine return false cases - triggers code path
+		// State S1: non-letter character - triggers code path
 		assertFalse(isAbsoluteUri("1http://foo")); // Starts with number
 		assertFalse(isAbsoluteUri(" http://foo")); // Starts with space
 		assertFalse(isAbsoluteUri("Hhttp://foo")); // Starts with uppercase (not in 'a'-'z' range)
 
-		// State S2: non-letter, non-colon - triggers line 2863
+		// State S2: non-letter, non-colon - triggers code path
 		assertFalse(isAbsoluteUri("http1://foo")); // Number after 'http' (not a letter, not ':')
 		assertFalse(isAbsoluteUri("http@://foo")); // '@' after 'http' (not a letter, not ':')
 		assertFalse(isAbsoluteUri("http /://foo")); // Space after 'http' (not a letter, not ':')
 		assertFalse(isAbsoluteUri("http{://foo")); // '{' after 'http' (greater than 'z')
 
-		// State S3: non-slash - triggers line 2863 (else branch)
+		// State S3: non-slash - triggers code path (else branch)
 		assertFalse(isAbsoluteUri("http:x://foo")); // 'x' instead of '/'
 		assertFalse(isAbsoluteUri("http:://foo")); // ':' instead of '/'
 
-		// State S4: non-slash - triggers line 2863 (else branch)
+		// State S4: non-slash - triggers code path (else branch)
 		assertFalse(isAbsoluteUri("http:/x://foo")); // 'x' instead of second '/'
 		assertFalse(isAbsoluteUri("http:/://foo")); // ':' instead of second '/'
 
-		// State S5: end of string before reaching valid state - triggers line 2879
-		// Line 2879 is the final return false after the loop completes without returning true
+		// State S5: end of string before reaching valid state - triggers code path
+		// code path
 		// This happens when we never reach state S5 (which returns true immediately)
 		assertFalse(isAbsoluteUri("http")); // Too short, never reaches S5, loop ends, returns false
 		assertFalse(isAbsoluteUri("http:")); // Reaches S3 but not S5, loop ends, returns false
@@ -2134,7 +2134,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isAllNotBlank("hello", "world"));
 		assertTrue(isAllNotBlank("hello", "world", "test"));
 
-		// Test with null or empty values array - triggers line 2907
+		// Test with null or empty values array - triggers code path
 		assertFalse(isAllNotBlank((CharSequence[])null)); // null array
 		assertFalse(isAllNotBlank(new CharSequence[0])); // empty array
 	}
@@ -2155,7 +2155,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isAllNotEmpty("hello", "   ")); // Whitespace is not empty
 		assertTrue(isAllNotEmpty("hello", "world", "test"));
 
-		// Test with null or empty values array - triggers line 2939
+		// Test with null or empty values array - triggers code path
 		assertFalse(isAllNotEmpty((CharSequence[])null)); // null array
 		assertFalse(isAllNotEmpty(new CharSequence[0])); // empty array
 	}
@@ -2214,7 +2214,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isAnyNotBlank("hello", "world"));
 		assertTrue(isAnyNotBlank("hello", null, ""));
 
-		// Test with null values array - triggers line 3019
+		// Test with null values array - triggers code path
 		assertFalse(isAnyNotBlank((CharSequence[])null)); // null array
 	}
 
@@ -2234,7 +2234,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isAnyNotEmpty("hello", "world"));
 		assertTrue(isAnyNotEmpty("hello", null, ""));
 
-		// Test with null values array - triggers line 3046
+		// Test with null values array - triggers code path
 		assertFalse(isAnyNotEmpty((CharSequence[])null)); // null array
 	}
 
@@ -2445,7 +2445,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isProbablyJsonArray("[1,2,3]", false));
 		assertTrue(isProbablyJsonArray("  [1,2,3]  ", true)); // With whitespace
 		assertTrue(isProbablyJsonArray("/*comment*/ [1,2,3] /*comment*/", true)); // With /* */ comments
-		// Test lines 8282-8287 - // style comments in skipComments
+		// Test
 		// Note: // comments extend to newline or EOF. If no newline, they consume everything to EOF.
 		assertTrue(isProbablyJsonArray("//comment\n [1,2,3]", true)); // With // comment ending in newline
 		// When // comment has no newline, it consumes to EOF, so nothing remains - this is invalid
@@ -2460,23 +2460,22 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isProbablyJsonArray("[", false));
 		assertFalse(isProbablyJsonArray("]", false));
 
-		// Test with ignoreWhitespaceAndComments=true - triggers lines 3333, 3336, 3338
-		// Line 3333: firstRealCharacter(s) != '['
+		// Test with ignoreWhitespaceAndComments=true - triggers code path
+		// Code path: firstRealCharacter(s) != '['
 		assertFalse(isProbablyJsonArray("  {1,2,3}  ", true)); // Starts with '{', not '['
 		assertFalse(isProbablyJsonArray("  /*comment*/ {1,2,3}  ", true)); // Starts with '{', not '['
 
-		// Line 3336: lastIndexOf(']') == -1
+		// Code path: lastIndexOf(']') == -1
 		assertFalse(isProbablyJsonArray("  [1,2,3  ", true)); // No closing ']'
 		assertFalse(isProbablyJsonArray("  /*comment*/ [1,2,3  ", true)); // No closing ']'
 
-		// Line 3338: firstRealCharacter(s) == -1 (after closing bracket)
+		// Code path: firstRealCharacter(s) == -1 (after closing bracket)
 		assertTrue(isProbablyJsonArray("  [1,2,3]  ", true)); // Valid, no characters after ']'
 		assertTrue(isProbablyJsonArray("  /*comment*/ [1,2,3] /*comment*/  ", true)); // Valid, only comments/whitespace after ']'
-		// Test lines 8282-8287 - // style comments after JSON structure
-		// Test with newline to ensure the code path is covered (lines 8283-8287)
-		// Line 8285: c == '\n' branch
+		// Test with newline to ensure the code path is covered 
+		// Code path: c == '\n' branch
 		assertTrue(isProbablyJsonArray("  [1,2,3] //comment\n  ", true)); // Valid, // comment with newline
-		// Line 8285: c == -1 branch (EOF)
+		// Code path: c == -1 branch (EOF)
 		// When // comment ends at EOF, it consumes everything, firstRealCharacter returns -1 (no more content)
 		assertTrue(isProbablyJsonArray("  [1,2,3] //comment", true)); // Valid, // comment ending at EOF
 		assertFalse(isProbablyJsonArray("  [1,2,3] extra  ", true)); // Invalid, has characters after ']'
@@ -2492,7 +2491,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isProbablyJsonObject("{foo:'bar'}", true));
 		assertTrue(isProbablyJsonObject(" { foo:'bar' } ", true));
 		assertTrue(isProbablyJsonObject("/*foo*/ { foo:'bar' } /*foo*/", true));
-		// Test lines 8282-8287 - // style comments in skipComments (via firstRealCharacter)
+		// Test
 		// Note: // comments extend to newline or EOF. If no newline, they consume everything to EOF.
 		assertTrue(isProbablyJsonObject("//comment\n { foo:'bar' }", true)); // With // comment ending in newline
 		// When // comment has no newline, it consumes to EOF, so nothing remains - this is invalid
@@ -2509,7 +2508,7 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isProbablyJsonObject("[]", false));
 		assertFalse(isProbablyJsonObject("123", false));
 
-		// Test with ignoreWhitespaceAndComments=false - triggers line 3333 straight check
+		// Test with ignoreWhitespaceAndComments=false - triggers code path straight check
 		assertTrue(isProbablyJsonObject("{}", false)); // Simple case
 		assertTrue(isProbablyJsonObject("{key:value}", false)); // With content
 		assertFalse(isProbablyJsonObject("  {}  ", false)); // Whitespace not ignored
@@ -2518,14 +2517,13 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isProbablyJsonObject("}", false)); // Missing opening brace
 		assertFalse(isProbablyJsonObject("x", false)); // Does not start/end with braces
 
-		// Test with ignoreWhitespaceAndComments=true - triggers line 3361
+		// Test with ignoreWhitespaceAndComments=true - triggers code path
 		assertTrue(isProbablyJsonObject("  {}  ", true)); // Valid, no characters after '}'
 		assertTrue(isProbablyJsonObject("  /*comment*/ {key:value} /*comment*/  ", true)); // Valid, only comments/whitespace after '}'
-		// Test lines 8282-8287 - // style comments after JSON structure
-		// Test with newline to ensure the code path is covered (lines 8283-8287)
-		// Line 8285: c == '\n' branch
+		// Test with newline to ensure the code path is covered 
+		// Code path: c == '\n' branch
 		assertTrue(isProbablyJsonObject("  {key:value} //comment\n  ", true)); // Valid, // comment with newline
-		// Line 8285: c == -1 branch (EOF)
+		// Code path: c == -1 branch (EOF)
 		// When // comment ends at EOF, it consumes everything, firstRealCharacter returns -1 (no more content)
 		assertTrue(isProbablyJsonObject("  {key:value} //comment", true)); // Valid, // comment ending at EOF
 		assertFalse(isProbablyJsonObject("  {key:value} extra  ", true)); // Invalid, has characters after '}'
@@ -2769,7 +2767,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(9223372036854775807L, parseNumber(s, null).longValue());
 		assertEquals(9.223372036854776E18, parseNumber(s, null));
 
-		// String longer than 20 characters (different code path)
+		// String longer than 20 characters
 		s = "-123456789012345678901";
 		assertTrue(isNumeric(s));
 		assertTrue(parseNumber(s, null) instanceof Double);
@@ -2975,28 +2973,28 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isUri("x:/x/x")); // Only one slash
 		assertFalse(isUri("C:/temp")); // Filesystem path (excluded)
 
-		// State machine return false cases - triggers lines 3512, 3517, 3525, 3527, 3530
-		// State S1: non-letter character - triggers line 3512 (else branch)
+		// State machine return false cases - triggers code path
+		// State S1: non-letter character - triggers code path (else branch)
 		assertFalse(isUri("1http://foo")); // Starts with number
 		assertFalse(isUri(" http://foo")); // Starts with space
 		assertFalse(isUri("Hhttp://foo")); // Starts with uppercase (not in 'a'-'z' range)
 
-		// State S2: non-letter character - triggers line 3517 (else branch)
+		// State S2: non-letter character - triggers code path (else branch)
 		assertFalse(isUri("h1ttp://foo")); // Number in protocol
 		assertFalse(isUri("h ttp://foo")); // Space in protocol
 
-		// State S3: non-colon, non-letter - triggers line 3525 (else branch)
+		// State S3: non-colon, non-letter - triggers code path (else branch)
 		// Note: In state S3, we can have multiple letters before ':'
 		// So "httpx://foo" is actually valid (protocol can be longer than 2 chars)
 		assertFalse(isUri("http1://foo")); // Number after 'http' (not a letter, not ':')
 		assertFalse(isUri("http/://foo")); // '/' instead of ':' (not a letter, not ':')
 		assertFalse(isUri("http@://foo")); // '@' instead of ':' (not a letter, not ':')
 
-		// State S4: non-slash - triggers line 3527 (return false)
+		// State S4: non-slash - triggers code path (return false)
 		assertFalse(isUri("http:x://foo")); // 'x' instead of '/'
 		assertFalse(isUri("http:://foo")); // ':' instead of '/'
 
-		// State S4: end of string - triggers line 3530 (return false after loop)
+		// State S4: end of string - triggers code path (return false after loop)
 		assertFalse(isUri("http:")); // Ends after ':'
 		assertFalse(isUri("http")); // Too short, never reaches S4
 		assertFalse(isUri("ht")); // Too short, never reaches S4
@@ -3099,11 +3097,11 @@ class StringUtils_Test extends TestBase {
 		var maxLabel = "a".repeat(63) + ".com";
 		assertTrue(isValidHostname(maxLabel));
 
-		// Test with empty labels array - triggers line 3605
+		// Test with empty labels array - triggers code path
 		// This is hard to trigger directly since split() with -1 won't return empty array
 		// But we can test edge cases that might cause issues
 		// Actually, split("\\.", -1) on an empty string returns [""], not []
-		// So line 3605 might be unreachable, but let's test edge cases anyway
+		// So code path, but let's test edge cases anyway
 		// The only way to get labels.length == 0 would be if split() somehow returned empty array
 		// This is likely unreachable, but the code handles it defensively
 	}
@@ -3142,8 +3140,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidIpAddress(null));
 		assertFalse(isValidIpAddress(""));
 
-		// Test IPv4/IPv6 branches - triggers lines 3651, 3663, 3671, 3673
-		// Line 3651: IPv4 check (contains "." and not ":")
+		// Test IPv4/IPv6 branches - triggers code path
+		// Code path: IPv4 check (contains "." and not ":")
 		assertTrue(isValidIpAddress("192.168.1.1")); // Valid IPv4
 		assertFalse(isValidIpAddress("192.168.1")); // Invalid IPv4 (too few parts)
 		assertFalse(isValidIpAddress("192.168.1.1.1")); // Invalid IPv4 (too many parts)
@@ -3151,15 +3149,15 @@ class StringUtils_Test extends TestBase {
 		assertFalse(isValidIpAddress("abc."));
 		assertFalse(isValidIpAddress("192.168.1.1::invalid")); // Contains both '.' and ':' -> skipped IPv4 branch, goes to IPv6 which fails
 
-		// Line 3663: IPv6 check (contains ":")
+		// Code path: IPv6 check (contains ":")
 		assertTrue(isValidIpAddress("2001:0db8:85a3::8a2e:0370:7334")); // Valid IPv6
 		assertFalse(isValidIpAddress("gggg::1")); // Invalid IPv6 (invalid hex)
 
-		// Line 3671: Neither IPv4 nor IPv6 (no "." and no ":")
+		// Code path: Neither IPv4 nor IPv6 (no "." and no ":")
 		assertFalse(isValidIpAddress("notanip")); // No dots, no colons
 		assertFalse(isValidIpAddress("abc")); // No dots, no colons
 
-		// Line 3673: NumberFormatException catch
+		// Code path: NumberFormatException catch
 		assertFalse(isValidIpAddress("192.168.abc.1")); // Invalid number format
 		assertFalse(isValidIpAddress("192.168.1.abc")); // Invalid number format
 	}
@@ -3191,52 +3189,50 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isValidIPv6Address("::FFFF:192.168.1.1")); // Uppercase
 		assertTrue(isValidIPv6Address("::192.168.1.1")); // Empty IPv6 part
 
-		// Test line 8008 - starts with single colon (not ::)
+		// Test
 		assertFalse(isValidIPv6Address(":2001:db8::1")); // Starts with single colon
 		assertFalse(isValidIPv6Address(":1")); // Starts with single colon
 
-		// Test line 8010 - ends with single colon (not ::)
+		// Test
 		assertFalse(isValidIPv6Address("2001:db8::1:")); // Ends with single colon
 		assertFalse(isValidIPv6Address("1:")); // Ends with single colon
 
-		// Test line 8014-8039 - IPv4-mapped format
-		// Test line 8017 - lastColon < 0 (no colon before IPv4)
+		// Test
 		assertFalse(isValidIPv6Address("192.168.1.1")); // No colon, just IPv4
 
-		// Test line 8022 - ipv4Parts.length != 4
+		// Test code path
 		assertFalse(isValidIPv6Address("::ffff:192.168.1")); // Too few IPv4 parts
 		assertFalse(isValidIPv6Address("::ffff:192.168.1.1.1")); // Too many IPv4 parts
 
-		// Test line 8027 - num < 0 or num > 255
+		// Test code path
 		assertFalse(isValidIPv6Address("::ffff:256.168.1.1")); // IPv4 part > 255
 		assertFalse(isValidIPv6Address("::ffff:192.256.1.1")); // IPv4 part > 255
 		assertFalse(isValidIPv6Address("::ffff:-1.168.1.1")); // IPv4 part < 0 (will fail parse)
 
-		// Test line 8029 - NumberFormatException
+		// Test code path
 		assertFalse(isValidIPv6Address("::ffff:abc.168.1.1")); // Invalid number format
 		assertFalse(isValidIPv6Address("::ffff:192.abc.1.1")); // Invalid number format
 
-		// Test line 8035 - ipv6Part validation (empty or ::ffff/::FFFF)
+		// Test
 		assertTrue(isValidIPv6Address("::ffff:192.168.1.1")); // Valid ::ffff
 		assertTrue(isValidIPv6Address("::FFFF:192.168.1.1")); // Valid ::FFFF
 		assertTrue(isValidIPv6Address("::192.168.1.1")); // Valid empty IPv6 part
 
-		// Test line 8044-8048 - double colon count > 1
+		// Test
 		assertFalse(isValidIPv6Address("2001::db8::1")); // Multiple ::
 		assertFalse(isValidIPv6Address("::1::")); // Multiple ::
 
-		// Test line 8058 - parts.length > 2 (multiple ::)
+		// Test
 		// Note: This might be caught earlier by doubleColonCount check, but we test it anyway
 		assertFalse(isValidIPv6Address("2001::db8::1")); // Multiple ::
 
-		// Test line 8056-8064 - compressed format validation
-		// Test line 8066 - totalParts > 7 in compressed format
+		// Test code path
 		// Need a compressed format (with ::) that has more than 7 total parts
 		// Example: 1:2:3:4:5:6:7:8::9 has 8 parts before :: and 1 after = 9 total > 7
 		assertFalse(isValidIPv6Address("1:2:3:4:5:6:7:8::9")); // Too many parts in compressed format (8+1=9 > 7)
 		// Another case: 1:2:3:4:5:6:7::8:9 has 7 parts before :: and 2 after = 9 total > 7
 		assertFalse(isValidIPv6Address("1:2:3:4:5:6:7::8:9")); // Too many parts in compressed format (7+2=9 > 7)
-		// Test line 8068 - totalParts == 0 && !ip.equals("::")
+		// Test
 		// Need both sides of :: to be empty but not exactly "::"
 		// This is tricky - ":::" would have parts = ["", "", ""] which is length 3, not 2
 		// Actually, if we have ":::" and split by "::", we get ["", ":", ""] which is 3 parts, caught at 8058
@@ -3246,14 +3242,14 @@ class StringUtils_Test extends TestBase {
 		// So this line might be unreachable, but let's test edge cases
 		// Actually wait - if we have ":::" and split by "::", we get ["", ":", ""] = 3 parts
 		// But what if we have something that creates 2 empty parts? That would be "::" itself
-		// So line 8068 might be defensive code that's hard to trigger
+		// So code path
 		// Let's test with a case that might trigger it - but it's likely unreachable
 
-		// Test line 8068 - groups.length != 8 (full format, no compression)
+		// Test code path, no compression)
 		assertFalse(isValidIPv6Address("2001:db8:85a3:0000:0000:8a2e:0370")); // Too few groups (7)
 		assertFalse(isValidIPv6Address("2001:db8:85a3:0000:0000:8a2e:0370:7334:9999")); // Too many groups (9)
 
-		// Test line 8084 - group.isEmpty() in validation loop
+		// Test in validation loop
 		// This occurs when a group is empty after splitting by ":" within a section
 		// Note: "2001::db8:85a3" is valid (compressed format) - the empty section from :: is skipped
 		// Empty groups can occur with malformed syntax, but many cases are caught earlier
@@ -3263,11 +3259,11 @@ class StringUtils_Test extends TestBase {
 		// This line is defensive code that's hard to trigger, but we test edge cases
 		// Note: Triple colons are caught by doubleColonCount check, so they won't reach here
 
-		// Test line 8081 - group.length() > 4
+		// Test > 4
 		assertFalse(isValidIPv6Address("2001:12345:db8::1")); // Group too long (5 hex digits)
 		assertFalse(isValidIPv6Address("2001:abcdef:db8::1")); // Group too long (6 hex digits)
 
-		// Test line 8086 - invalid hex characters
+		// Test code path
 		assertFalse(isValidIPv6Address("2001:db8g:85a3::1")); // Invalid hex 'g'
 		assertFalse(isValidIPv6Address("2001:db8h:85a3::1")); // Invalid hex 'h'
 		assertFalse(isValidIPv6Address("2001:db8z:85a3::1")); // Invalid hex 'z'
@@ -3408,39 +3404,39 @@ class StringUtils_Test extends TestBase {
 		assertEquals("a", join("a"));
 		assertEquals("a,b", join("a", "b"));
 
-		// join(Collection<?>, char) - triggers lines 3825, 3827-3833
+		// join(Collection<?>, char)
 		var collection = new ArrayList<>();
 		collection.add("a");
 		collection.add("b");
 		collection.add("c");
-		assertNull(join((Collection<?>)null, ',')); // Line 3803: null check
+		assertNull(join((Collection<?>)null, ',')); // Code path: null check
 		assertEquals("", join(Collections.emptyList(), ',')); // Empty collection - loop never executes
 		assertEquals("a", join(Collections.singletonList("a"), ',')); // Single element - iter.hasNext() false after first iteration
-		assertEquals("a,b,c", join(collection, ',')); // Lines 3806-3809: iteration with multiple elements
+		assertEquals("a,b,c", join(collection, ',')); // Code path: iteration with multiple elements
 
-		// join(Collection<?>, String, StringBuilder) - triggers line 3859
+		// join(Collection<?>, String, StringBuilder) - triggers code path
 		var sb1 = new StringBuilder("prefix-");
-		assertSame(sb1, join((Collection<?>)null, ",", sb1)); // Line 3859: null check, returns sb
+		assertSame(sb1, join((Collection<?>)null, ",", sb1)); // Code path: null check, returns sb
 		assertEquals("prefix-a,b,c", join(collection, ",", new StringBuilder("prefix-")).toString());
 
-		// join(List<?>, char) - triggers line 3917
+		// join(Collection<?>, char) with List - List extends Collection, so Collection methods work
 		var list = Arrays.asList("x", "y", "z");
-		assertNull(join((List<?>)null, '|')); // Line 3917: null check
-		assertEquals("x|y|z", join(list, '|'));
+		assertNull(join((List<?>)null, '|')); // null check
+		assertEquals("x|y|z", join(list, '|')); // iteration with multiple elements
 
-		// join(List<?>, String) - triggers line 3936
-		assertNull(join((List<?>)null, "|")); // Line 3936: null check
-		assertEquals("x|y|z", join(list, "|"));
+		// join(Collection<?>, String) with List
+		assertNull(join((List<?>)null, "|")); // null check
+		assertEquals("x|y|z", join(list, "|")); // Calls join(Collection<?>, String, StringBuilder)
 
-		// join(List<?>, String, StringBuilder) - triggers line 3950
+		// join(Collection<?>, String, StringBuilder) with List
 		var sb2 = new StringBuilder("start-");
-		assertSame(sb2, join((List<?>)null, "|", sb2)); // Line 3950: null check, returns sb
-		assertEquals("start-x|y|z", join(list, "|", new StringBuilder("start-")).toString());
+		assertSame(sb2, join((List<?>)null, "|", sb2)); // null check, returns sb
+		assertEquals("start-x|y|z", join(list, "|", new StringBuilder("start-")).toString()); // iteration
 
-		// join(Object[], char, StringBuilder) - triggers line 3984
+		// join(Object[], char, StringBuilder) - triggers code path
 		var arr = new Object[]{"1", "2", "3"};
 		var sb3 = new StringBuilder("begin-");
-		assertSame(sb3, join((Object[])null, '-', sb3)); // Line 3984: null check, returns sb
+		assertSame(sb3, join((Object[])null, '-', sb3)); // Code path: null check, returns sb
 		assertEquals("begin-1-2-3", join(arr, '-', new StringBuilder("begin-")).toString());
 	}
 
@@ -3516,7 +3512,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("test", kebabCase("TEST"));
 		assertEquals("hello-123-world", kebabCase("hello 123 world"));
 
-		// Test with empty words list - triggers line 4085
+		// Test with empty words list - triggers code path
 		// splitWords returns empty list for strings with only separators (spaces, tabs, underscores, hyphens)
 		assertEquals("", kebabCase("   ")); // Only spaces
 		assertEquals("", kebabCase("\t\t")); // Only tabs
@@ -3630,7 +3626,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0, lineCount(null));
 		assertEquals(0, lineCount(""));
 
-		// Test with just \r (not \r\n) - triggers line 4262
+		// Test with just \r (not \r\n) - triggers code path
 		assertEquals(2, lineCount("line1\rline2")); // Just \r
 		assertEquals(3, lineCount("line1\rline2\rline3")); // Multiple \r
 		assertEquals(2, lineCount("\rline2")); // Starts with \r
@@ -3712,25 +3708,25 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(code4);
 		assertFalse(code4.isEmpty());
 
-		// Test initial character handling - triggers lines 4369, 4371, 4374
-		// Line 4369: KN, GN, PN, AE, WR
+		// Test initial character handling - triggers code path
+		// Code path: KN, GN, PN, AE, WR
 		assertNotNull(metaphone("KNIGHT")); // Starts with KN
 		assertNotNull(metaphone("GNOME")); // Starts with GN
 		assertNotNull(metaphone("PNUT")); // Starts with PN
 		assertNotNull(metaphone("AEROPLANE")); // Starts with AE
 		assertNotNull(metaphone("WRITE")); // Starts with WR
 
-		// Line 4371: X at start
+		// Code path: X at start
 		var codeX = metaphone("XRAY");
 		assertNotNull(codeX);
 		assertTrue(codeX.startsWith("S")); // X at start becomes S
 
-		// Line 4374: WH at start
+		// Code path: WH at start
 		var codeWH = metaphone("WHITE");
 		assertNotNull(codeWH);
 		assertTrue(codeWH.startsWith("W")); // WH at start becomes W
 
-		// Test duplicate skipping (except C) - triggers line 4387
+		// Test duplicate skipping (except C) - triggers code path
 		var codeDD = metaphone("ADD");
 		assertNotNull(codeDD);
 		// 'DD' should be treated as single 'D'
@@ -3743,17 +3739,17 @@ class StringUtils_Test extends TestBase {
 		var codeCC = metaphone("ACCENT");
 		assertNotNull(codeCC);
 
-		// Test C handling - triggers lines 4401, 4404, 4406
-		// Line 4401: CH with prev != 'S'
+		// Test C handling - triggers code path
+		// Code path: CH with prev != 'S'
 		var codeCH = metaphone("CHURCH");
 		assertNotNull(codeCH);
 		assertTrue(codeCH.contains("X")); // CH becomes X
 
-		// Line 4401: CH with prev == 'S' (should become K)
+		// Code path: CH with prev == 'S' (should become K)
 		var codeSCH = metaphone("SCHOOL");
 		assertNotNull(codeSCH);
 
-		// Line 4404: C followed by I, E, or Y
+		// Code path: C followed by I, E, or Y
 		var codeCI = metaphone("CITY");
 		assertNotNull(codeCI);
 		assertTrue(codeCI.contains("S")); // CI becomes S
@@ -3766,12 +3762,12 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeCY);
 		assertTrue(codeCY.contains("S")); // CY becomes S
 
-		// Line 4406: C default (becomes K)
+		// Code path: C default (becomes K)
 		var codeCA = metaphone("CAT");
 		assertNotNull(codeCA);
 		assertTrue(codeCA.contains("K")); // CA becomes K
 
-		// Test D handling - triggers line 4411
+		// Test D handling - triggers code path
 		// DG followed by E, I, or Y
 		var codeDGE = metaphone("EDGE");
 		assertNotNull(codeDGE);
@@ -3783,7 +3779,7 @@ class StringUtils_Test extends TestBase {
 		var codeDGY = metaphone("BUDGY");
 		assertNotNull(codeDGY);
 
-		// Test G handling - triggers lines 4426-4434
+		// Test G handling - triggers code path
 		// GH followed by vowel (silent)
 		var codeGH = metaphone("NIGHT");
 		assertNotNull(codeGH);
@@ -3805,7 +3801,7 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeGA);
 		assertTrue(codeGA.contains("K")); // GA becomes K
 
-		// Test H handling - triggers lines 4436-4439
+		// Test H handling - triggers code path
 		// H between vowels (silent)
 		var codeH = metaphone("AHOY");
 		assertNotNull(codeH);
@@ -3814,7 +3810,7 @@ class StringUtils_Test extends TestBase {
 		var codeH2 = metaphone("HELLO");
 		assertNotNull(codeH2);
 
-		// Test K handling - triggers lines 4440-4443
+		// Test K handling - triggers code path
 		// K after C (silent)
 		var codeCK = metaphone("BACK");
 		assertNotNull(codeCK);
@@ -3824,7 +3820,7 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeK);
 		assertTrue(codeK.contains("K")); // K is kept
 
-		// Test P handling - triggers lines 4444-4451
+		// Test P handling - triggers code path
 		// PH becomes F
 		var codePH = metaphone("PHONE");
 		assertNotNull(codePH);
@@ -3835,12 +3831,12 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeP);
 		assertTrue(codeP.contains("P")); // P is kept
 
-		// Test Q handling - triggers lines 4452-4454
+		// Test Q handling - triggers code path
 		var codeQ = metaphone("QUICK");
 		assertNotNull(codeQ);
 		assertTrue(codeQ.contains("K")); // Q becomes K
 
-		// Test S handling - triggers lines 4455-4465
+		// Test S handling - triggers code path
 		// SH becomes X
 		var codeSH = metaphone("SHIP");
 		assertNotNull(codeSH);
@@ -3858,7 +3854,7 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeS);
 		assertTrue(codeS.contains("S")); // S is kept
 
-		// Test T handling - triggers lines 4466-4476
+		// Test T handling - triggers code path
 		// TH becomes 0
 		var codeTH = metaphone("THINK");
 		assertNotNull(codeTH);
@@ -3876,12 +3872,12 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeT);
 		assertTrue(codeT.contains("T")); // T is kept
 
-		// Test V handling - triggers lines 4477-4479
+		// Test V handling - triggers code path
 		var codeV = metaphone("VASE");
 		assertNotNull(codeV);
 		assertTrue(codeV.contains("F")); // V becomes F
 
-		// Test W and Y handling - triggers lines 4480-4483
+		// Test W and Y handling - triggers code path
 		// W or Y followed by vowel
 		var codeW = metaphone("WATER");
 		assertNotNull(codeW);
@@ -3895,7 +3891,7 @@ class StringUtils_Test extends TestBase {
 		var codeW2 = metaphone("SWIM");
 		assertNotNull(codeW2);
 
-		// Test X handling - triggers lines 4484-4489
+		// Test X handling - triggers code path
 		// X at start becomes S
 		var codeX2 = metaphone("XYLOPHONE");
 		assertNotNull(codeX2);
@@ -3906,12 +3902,12 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeX3);
 		assertTrue(codeX3.contains("KS")); // X becomes KS
 
-		// Test Z handling - triggers lines 4490-4492
+		// Test Z handling - triggers code path
 		var codeZ = metaphone("ZOO");
 		assertNotNull(codeZ);
 		assertTrue(codeZ.contains("S")); // Z becomes S
 
-		// Test B handling - triggers line 4393
+		// Test B handling - triggers code path
 		// B after M at end of string (silent) - prev == 'M' && next == '\0'
 		var codeMB = metaphone("LAMB");
 		assertNotNull(codeMB);
@@ -3926,7 +3922,7 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeB);
 		assertTrue(codeB.contains("B")); // B is kept
 
-		// Test D handling - triggers line 4410 (else branch)
+		// Test D handling - triggers code path (else branch)
 		// D not followed by G, or DG not followed by E/I/Y (becomes T)
 		var codeD = metaphone("DOG"); // D not followed by G
 		assertNotNull(codeD);
@@ -3936,23 +3932,23 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeDGA);
 		assertTrue(codeDGA.contains("T")); // D becomes T, not J
 
-		// Test G handling - triggers lines 4426, 4428, 4430
-		// Line 4426: GH followed by non-vowel (not silent, becomes K)
+		// Test G handling - triggers code path
+		// Code path: GH followed by non-vowel (not silent, becomes K)
 		var codeGH2 = metaphone("AUGHT"); // GH followed by T (non-vowel)
 		assertNotNull(codeGH2);
 		assertTrue(codeGH2.contains("K")); // G becomes K
 
-		// Line 4428: GN followed by non-E/D (not silent, becomes K)
+		// Code path: GN followed by non-E/D (not silent, becomes K)
 		var codeGN2 = metaphone("SIGNAL"); // GN followed by A (not E/D)
 		assertNotNull(codeGN2);
 		assertTrue(codeGN2.contains("K")); // G becomes K
 
-		// Line 4430: G followed by E/I/Y but prev IS 'G' (doesn't become J, becomes K)
+		// Code path: G followed by E/I/Y but prev IS 'G' (doesn't become J, becomes K)
 		var codeGGE = metaphone("AGGIE"); // GG, second G followed by I, but prev is G
 		assertNotNull(codeGGE);
 		// Second G should become K, not J
 
-		// Line 4402: GH followed by vowels (A, E, I, O, U) - silent GH
+		// Code path: GH followed by vowels (A, E, I, O, U) - silent GH
 		var codeGHA = metaphone("GHAST"); // GH followed by A
 		assertNotNull(codeGHA);
 		var codeGHE = metaphone("GHETTO"); // GH followed by E
@@ -3964,13 +3960,13 @@ class StringUtils_Test extends TestBase {
 		var codeGHU = metaphone("GHOUL"); // GH followed by U
 		assertNotNull(codeGHU);
 
-		// Line 4404: GN followed by E or D - silent GN
+		// Code path: GN followed by E or D - silent GN
 		var codeGNE = metaphone("SIGNE"); // GN followed by E
 		assertNotNull(codeGNE);
 		var codeGND = metaphone("SIGND"); // GN followed by D (test case)
 		assertNotNull(codeGND);
 
-		// Line 4406: G followed by E/I/Y with prev != 'G' - becomes J
+		// Code path: G followed by E/I/Y with prev != 'G' - becomes J
 		// Already tested: GE (AGE), GI (GIRAFFE)
 		var codeGY = metaphone("GYM"); // GY with prev != 'G'
 		assertNotNull(codeGY);
@@ -3979,7 +3975,7 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeGY2);
 		assertTrue(codeGY2.contains("J")); // GY becomes J
 
-		// Test H handling - triggers line 4437
+		// Test H handling - triggers code path
 		// H between vowels (silent) - both prev and next are vowels (!isVowel(prev) || !isVowel(next) is false)
 		var codeH3 = metaphone("AHOY"); // A-H-O, H between vowels
 		assertNotNull(codeH3);
@@ -3990,7 +3986,7 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(codeH4);
 		assertTrue(codeH4.contains("H")); // H is kept
 
-		// Test T handling - triggers line 4470 (else branch)
+		// Test T handling - triggers code path (else branch)
 		// T followed by I but next2 is not O or A (becomes T, not X)
 		var codeTI = metaphone("TICK"); // T-I-C, I not followed by O or A
 		assertNotNull(codeTI);
@@ -3998,7 +3994,7 @@ class StringUtils_Test extends TestBase {
 
 		// TIO or TIA becomes X (already tested above)
 
-		// Test X handling - triggers line 4486
+		// Test X handling - triggers code path
 		// X at start (i == 0) becomes S (already tested above with "XRAY")
 		// X not at start (i != 0) becomes KS (already tested above with "AXE")
 	}
@@ -4053,30 +4049,30 @@ class StringUtils_Test extends TestBase {
 		assertTrue(naturalCompare("test", null) > 0);
 		assertEquals(0, naturalCompare(null, null));
 
-		// Test numeric comparison with leading zeros - triggers lines 4602, 4605, 4607
+		// Test numeric comparison with leading zeros - triggers code path
 		assertTrue(naturalCompare("file002.txt", "file10.txt") < 0); // 002 < 10 (leading zeros skipped)
 		assertTrue(naturalCompare("file010.txt", "file002.txt") > 0); // 010 > 002 (leading zeros skipped)
 		// Test leading zero skipping - both strings have leading zeros
 		assertTrue(naturalCompare("file0002.txt", "file0010.txt") < 0); // 0002 < 0010 (leading zeros skipped)
 		assertTrue(naturalCompare("file0010.txt", "file0002.txt") > 0); // 0010 > 0002 (leading zeros skipped)
 
-		// Test numeric comparison with different lengths - triggers line 4620
+		// Test numeric comparison with different lengths - triggers code path
 		assertTrue(naturalCompare("file2.txt", "file10.txt") < 0); // 2 < 10 (different lengths)
 		assertTrue(naturalCompare("file100.txt", "file9.txt") > 0); // 100 > 9 (different lengths)
 
-		// Test numeric comparison with same length - triggers lines 4624-4632
+		// Test numeric comparison with same length - triggers code path
 		assertTrue(naturalCompare("file12.txt", "file13.txt") < 0); // 12 < 13 (same length, digit by digit)
 		assertTrue(naturalCompare("file13.txt", "file12.txt") > 0); // 13 > 12 (same length, digit by digit)
 		assertEquals(0, naturalCompare("file12.txt", "file12.txt")); // 12 == 12 (same length, all digits equal)
 		assertTrue(naturalCompare("file19.txt", "file20.txt") < 0); // 19 < 20 (same length, digit by digit)
 
-		// Test equal numbers followed by more content - triggers lines 4605-4606
+		// Test equal numbers followed by more content - triggers code path
 		// When numbers are equal, i1 and i2 are set to end1 and end2, then loop continues
 		assertTrue(naturalCompare("file12abc", "file12def") < 0); // 12 == 12, then compare "abc" < "def"
 		assertTrue(naturalCompare("file12def", "file12abc") > 0); // 12 == 12, then compare "def" > "abc"
 		assertEquals(0, naturalCompare("file12abc", "file12abc")); // 12 == 12, then "abc" == "abc"
 
-		// Test when one string is longer - triggers line 4643
+		// Test when one string is longer - triggers code path
 		assertTrue(naturalCompare("file1", "file10.txt") < 0); // "file1" is shorter
 		assertTrue(naturalCompare("file10.txt", "file1") > 0); // "file10.txt" is longer
 		assertTrue(naturalCompare("abc", "abcd") < 0); // "abc" is shorter
@@ -4424,26 +4420,26 @@ class StringUtils_Test extends TestBase {
 		assertThrows(Exception.class, () -> parseIsoCalendar("invalid"));
 		assertThrows(Exception.class, () -> parseIsoCalendar("2023-13-25")); // Invalid month
 
-		// Test empty input - triggers line 5210
+		// Test empty input - triggers code path
 		assertNull(parseIsoCalendar(null));
 		assertNull(parseIsoCalendar(""));
 		assertNull(parseIsoCalendar("   "));
 
-		// Test with milliseconds (comma) - triggers line 5213
+		// Test with milliseconds (comma) - triggers code path
 		var cal5 = parseIsoCalendar("2023-12-25T14:30:00,123");
 		assertNotNull(cal5);
 		assertEquals(14, cal5.get(Calendar.HOUR_OF_DAY));
 		assertEquals(30, cal5.get(Calendar.MINUTE));
 		assertEquals(0, cal5.get(Calendar.SECOND)); // Milliseconds trimmed
 
-		// Test format yyyy-MM-ddThh - triggers line 5221
+		// Test format yyyy-MM-ddThh - triggers code path
 		var cal6 = parseIsoCalendar("2023-12-25T14");
 		assertNotNull(cal6);
 		assertEquals(14, cal6.get(Calendar.HOUR_OF_DAY));
 		assertEquals(0, cal6.get(Calendar.MINUTE));
 		assertEquals(0, cal6.get(Calendar.SECOND));
 
-		// Test format yyyy-MM-ddThh:mm - triggers line 5223
+		// Test format yyyy-MM-ddThh:mm - triggers code path
 		var cal7 = parseIsoCalendar("2023-12-25T14:30");
 		assertNotNull(cal7);
 		assertEquals(14, cal7.get(Calendar.HOUR_OF_DAY));
@@ -4463,7 +4459,7 @@ class StringUtils_Test extends TestBase {
 		var date2 = parseIsoDate("2023-12-25T14:30:00");
 		assertNotNull(date2);
 
-		// Test empty input - triggers line 5240
+		// Test empty input - triggers code path
 		// Note: parseIsoDate checks isEmpty before calling parseIsoCalendar, so it returns null
 		assertNull(parseIsoDate(null));
 		assertNull(parseIsoDate(""));
@@ -4559,13 +4555,13 @@ class StringUtils_Test extends TestBase {
 		assertTrue(parseMap(null, '=', ',', false).isEmpty());
 		assertTrue(parseMap("", '=', ',', false).isEmpty());
 
-		// Test empty entries - triggers line 5324
+		// Test empty entries - triggers code path
 		var map5 = parseMap("key1=value1,,key2=value2", '=', ',', false);
 		assertEquals(2, map5.size()); // Empty entry skipped
 		assertEquals("value1", map5.get("key1"));
 		assertEquals("value2", map5.get("key2"));
 
-		// Test entry without delimiter (no key-value delimiter) - triggers lines 5326, 5328
+		// Test entry without delimiter (no key-value delimiter) - triggers code path
 		var map6 = parseMap("key1=value1,keyonly,key2=value2", '=', ',', false);
 		assertEquals(3, map6.size());
 		assertEquals("value1", map6.get("key1"));
@@ -4605,37 +4601,36 @@ class StringUtils_Test extends TestBase {
 		// Null input
 		assertNull(parseNumber(null, null));
 
-		// Test empty string becomes "0" - triggers line 5373
+		// Test empty string becomes "0" - triggers code path
 		assertEquals(0, parseNumber("", null));
 		assertEquals(0, parseNumber("", Integer.class));
 
-		// Test Double type - triggers line 5403
+		// Test Double type - triggers code path
 		assertEquals(123.45, parseNumber("123.45", Double.class));
 		assertEquals(123.45, parseNumber("123.45", Double.TYPE));
 
-		// Test Float type - triggers line 5410
+		// Test Float type - triggers code path
 		assertEquals(123.45f, parseNumber("123.45", Float.class));
 		assertEquals(123.45f, parseNumber("123.45", Float.TYPE));
 
-		// Test Long type - triggers line 5414
+		// Test Long type - triggers code path
 		assertEquals(123L, parseNumber("123", Long.class));
 		assertEquals(123L, parseNumber("123", Long.TYPE));
 		assertEquals(123L, parseNumber("123", java.util.concurrent.atomic.AtomicLong.class).longValue());
 
-		// Test Integer type - triggers line 5432
+		// Test Integer type - triggers code path
 		assertEquals(123, parseNumber("123", Integer.class));
 		assertEquals(123, parseNumber("123", Integer.TYPE));
 
-		// Test Short type - triggers line 5434
+		// Test Short type - triggers code path
 		assertEquals((short)123, parseNumber("123", Short.class));
 		assertEquals((short)123, parseNumber("123", Short.TYPE));
 
-		// Test Byte type - triggers line 5436
+		// Test Byte type - triggers code path
 		assertEquals((byte)123, parseNumber("123", Byte.class));
 		assertEquals((byte)123, parseNumber("123", Byte.TYPE));
 
-		// Test line 8275 - multiplierInt (empty string returns 'z' which is not G/M/K/g/m/k)
-		// Test line 8299 - multiplierLong (empty string returns 1)
+		// Test
 		// These are tested indirectly through parseNumber with multiplier suffixes
 		assertEquals(1024L, parseNumber("1K", Long.class));
 		assertEquals(1024L * 1024L, parseNumber("1M", Long.class));
@@ -4663,7 +4658,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Test", pascalCase("TEST"));
 		assertEquals("Hello123World", pascalCase("hello 123 world"));
 
-		// Test with empty words list - triggers line 5478
+		// Test with empty words list - triggers code path
 		// splitWords returns empty list for strings with only separators
 		assertEquals("", pascalCase("   ")); // Only spaces
 		assertEquals("", pascalCase("\t\t")); // Only tabs
@@ -4707,14 +4702,14 @@ class StringUtils_Test extends TestBase {
 		assertEquals("lives", pluralize("life", 2));
 		assertEquals("knives", pluralize("knife", 2));
 
-		// Test null or empty word - triggers line 5503
+		// Test null or empty word - triggers code path
 		assertNull(pluralize(null, 2));
 		assertEquals("", pluralize("", 2));
 
-		// Test word with length 1 ending in 'y' - triggers line 5516 (length > 1 is false)
+		// Test word with length 1 ending in 'y' - triggers code path (length > 1 is false)
 		assertEquals("ys", pluralize("y", 2)); // Single character 'y', just adds 's'
 
-		// Test word ending in 'y' preceded by vowel - triggers line 5518 (condition is false)
+		// Test word ending in 'y' preceded by vowel - triggers code path (condition is false)
 		assertEquals("days", pluralize("day", 2)); // 'a' is vowel, so condition false, just adds 's'
 		assertEquals("boys", pluralize("boy", 2)); // 'o' is vowel
 		assertEquals("keys", pluralize("key", 2)); // 'e' is vowel
@@ -4876,13 +4871,13 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0.0, readabilityScore(null), 0.0001);
 		assertEquals(0.0, readabilityScore(""), 0.0001);
 
-		// Test with no words (only punctuation/whitespace) - triggers line 5737
+		// Test with no words (only punctuation/whitespace) - triggers code path
 		// Note: extractWords might extract numbers as words, so use only punctuation
 		assertEquals(0.0, readabilityScore("!!!"), 0.0001); // No words extracted
 		assertEquals(0.0, readabilityScore("..."), 0.0001); // No words extracted
 		assertEquals(0.0, readabilityScore("   "), 0.0001); // Only whitespace
 
-		// Test line 7921 - estimateSyllables with null or empty word (returns 1)
+		// Test
 		// Note: This is defensive code. extractWords uses pattern \\w+ which requires at least
 		// one character, so it won't return null or empty strings. However, estimateSyllables
 		// has this check as defensive programming. We test it indirectly by ensuring
@@ -4893,7 +4888,7 @@ class StringUtils_Test extends TestBase {
 		var scoreMixed = readabilityScore("a b c d e");
 		assertTrue(scoreMixed >= 0 && scoreMixed <= 100);
 
-		// Test sentence endings - triggers line 5743
+		// Test sentence endings - triggers code path
 		var score1 = readabilityScore("First sentence. Second sentence!");
 		assertTrue(score1 > 0);
 		assertTrue(score1 <= 100);
@@ -4902,7 +4897,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(score2 > 0);
 		assertTrue(score2 <= 100);
 
-		// Test with no sentence endings (sentenceCount == 0) - triggers line 5748
+		// Test with no sentence endings (sentenceCount == 0) - triggers code path
 		var score3 = readabilityScore("This is a test without sentence endings");
 		assertTrue(score3 > 0); // Should still calculate score (sentenceCount set to 1)
 		assertTrue(score3 <= 100);
@@ -4924,7 +4919,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("test", readable(opt("test")));
 		assertNull(readable(opte()));
 
-		// Test Iterable (not Collection) - triggers line 5842
+		// Test Iterable (not Collection) - triggers code path
 		var customIterable = new Iterable<String>() {
 			@Override
 			public Iterator<String> iterator() {
@@ -4933,62 +4928,62 @@ class StringUtils_Test extends TestBase {
 		};
 		assertEquals("[x,y,z]", readable(customIterable));
 
-		// Test Iterator - triggers line 5844
+		// Test Iterator - triggers code path
 		var iterator = Arrays.asList("a", "b").iterator();
 		assertEquals("[a,b]", readable(iterator));
 
-		// Test Enumeration - triggers line 5846
+		// Test Enumeration - triggers code path
 		var enumeration = Collections.enumeration(Arrays.asList("1", "2", "3"));
 		assertEquals("[1,2,3]", readable(enumeration));
 
-		// Test GregorianCalendar - triggers line 5848
+		// Test GregorianCalendar - triggers code path
 		var cal = new GregorianCalendar(2023, Calendar.DECEMBER, 25, 14, 30, 0);
 		cal.setTimeZone(TimeZone.getTimeZone("UTC"));
 		var calStr = readable(cal);
 		assertNotNull(calStr);
 		assertTrue(calStr.contains("2023"));
 
-		// Test Date - triggers line 5850
+		// Test Date - triggers code path
 		var date = new Date(1703520000000L); // 2023-12-25 00:00:00 UTC
 		var dateStr = readable(date);
 		assertNotNull(dateStr);
 		assertTrue(dateStr.contains("2023"));
 
-		// Test InputStream - triggers line 5852
+		// Test InputStream - triggers code path
 		var inputStream = new ByteArrayInputStream("Hello".getBytes(UTF8));
 		var isStr = readable(inputStream);
 		assertNotNull(isStr);
 		// Should be hex representation
 
-		// Test Reader - triggers line 5854
+		// Test Reader - triggers code path
 		var reader = new StringReader("Test content");
 		var readerStr = readable(reader);
 		assertNotNull(readerStr);
 		assertEquals("Test content", readerStr);
 
-		// Test File - triggers line 5856
+		// Test File - triggers code path
 		var file = new File("test.txt");
 		assertDoesNotThrow(() -> readable(file));
 		// May throw exception or return content depending on file existence; just verify it doesn't crash.
 
-		// Test byte[] - triggers line 5858
+		// Test byte[] - triggers code path
 		var bytes = new byte[]{0x48, 0x65, 0x6C, 0x6C, 0x6F}; // "Hello" in hex
 		var bytesStr = readable(bytes);
 		assertNotNull(bytesStr);
 		assertEquals("48656C6C6F", bytesStr);
 
-		// Test Enum - triggers line 5860
+		// Test Enum - triggers code path
 		enum TestEnum { VALUE1, VALUE2 }
 		var enumValue = TestEnum.VALUE1;
 		assertEquals("VALUE1", readable(enumValue));
 
-		// Test Class - triggers line 5862
+		// Test Class - triggers code path
 		var clazz = String.class;
 		var classStr = readable(clazz);
 		assertNotNull(classStr);
 		assertTrue(classStr.contains("String"));
 
-		// Test Executable (Method) - triggers lines 5864-5874
+		// Test Executable (Method) - triggers code path
 		try {
 			var method = String.class.getMethod("length");
 			var methodStr = readable(method);
@@ -4999,7 +4994,7 @@ class StringUtils_Test extends TestBase {
 			fail("Method not found");
 		}
 
-		// Test Executable (Constructor) - triggers lines 5864-5874
+		// Test Executable (Constructor) - triggers code path
 		try {
 			var constructor = String.class.getConstructor(String.class);
 			var constructorStr = readable(constructor);
@@ -5010,7 +5005,7 @@ class StringUtils_Test extends TestBase {
 			fail("Constructor not found");
 		}
 
-		// Test Executable with parameters - triggers line 5869
+		// Test Executable with parameters - triggers code path
 		try {
 			var method = String.class.getMethod("substring", int.class, int.class);
 			var methodStr = readable(method);
@@ -5147,7 +5142,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("", removeAll("abc", "a", "b", "c"));
 		assertEquals("hello", removeAll("hello", null, "x"));
 
-		// Test with empty string - triggers line 6102
+		// Test with empty string - triggers code path
 		assertEquals("", removeAll("", "x", "y"));
 		assertEquals("", removeAll("", new String[0])); // empty remove array
 	}
@@ -5298,8 +5293,8 @@ class StringUtils_Test extends TestBase {
 		// "hello" vs "hallo": distance = 1, maxLen = 5, similarity = 1 - 1/5 = 0.8
 		assertEquals(0.8, similarity("hello", "hallo"), 0.01);
 
-		// Test line 6367 - maxLen == 0 (both empty after null handling)
-		// Note: This line appears unreachable since empty strings are equal and return at line 6363
+		// Test
+		// Note: This line appears unreachable since empty strings are equal and return at code path
 		// But testing anyway to confirm behavior
 		assertEquals(1.0, similarity("", ""), 0.0001);
 	}
@@ -5372,7 +5367,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("test", snakeCase("TEST"));
 		assertEquals("hello_123_world", snakeCase("hello 123 world"));
 
-		// Test with empty words list - triggers line 6406
+		// Test with empty words list - triggers code path
 		// splitWords returns empty list for strings with only separators (spaces, tabs, underscores, hyphens)
 		assertEquals("", snakeCase("   ")); // Only spaces
 		assertEquals("", snakeCase("___")); // Only underscores
@@ -5436,7 +5431,6 @@ class StringUtils_Test extends TestBase {
 		assertEquals(4, code3.length());
 		assertTrue(code3.startsWith("A"));
 
-		// Test lines 8244-8258 - getSoundexCode for all character types
 		// Test all soundex code mappings
 		var code4 = soundex("BFPV"); // Code 1
 		assertNotNull(code4);
@@ -5478,14 +5472,13 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(code10);
 		// Vowels/H/W/Y don't add codes but don't break sequences
 
-		// Test line 8258 - non-letter characters return '0'
+		// Test code path
 		var code11 = soundex("A123");
 		assertNotNull(code11);
 		assertTrue(code11.startsWith("A"));
 
-		// Test line 6499 - loop continues (i < upper.length() && result.length() < 4)
-		// Test line 6507 - code != lastCode (different codes)
-		// Test line 6515 - result.length() < 4 (need to pad with zeros)
+		// Test && result.length() < 4)
+		// Test < 4 (need to pad with zeros)
 		// String that produces less than 4 codes (needs padding)
 		var code12 = soundex("A"); // Only one character, needs 3 zeros
 		assertEquals("A000", code12);
@@ -5498,7 +5491,7 @@ class StringUtils_Test extends TestBase {
 		var code14 = soundex("ABC"); // A + B(1) + C(2) = A12, needs one zero
 		assertEquals("A120", code14);
 
-		// String with different codes (code != lastCode) - triggers line 6507
+		// String with different codes (code != lastCode) - triggers code path
 		var code15 = soundex("ABCD"); // A + B(1) + C(2) + D(3) = A123 (all different)
 		assertEquals("A123", code15);
 
@@ -5506,15 +5499,15 @@ class StringUtils_Test extends TestBase {
 		var code16 = soundex("ABBC"); // A + B(1) + B(1, same) + C(2) = A12 (B skipped)
 		assertEquals("A120", code16);
 
-		// Test line 6253 - loop exits early when result.length() >= 4 (before reaching end of string)
+		// Test >= 4 (before reaching end of string)
 		// Long string that produces 4 codes early, loop should exit due to result.length() >= 4
 		var code17 = soundex("ABCDEFGHIJKLMNOP"); // A + B(1) + C(2) + D(3) = A123, loop exits early
 		assertEquals("A123", code17);
 		assertEquals(4, code17.length()); // Should be exactly 4, not longer
 
-		// Test line 6253 - loop exits when i >= upper.length() (reached end of string)
+		// Test (reached end of string)
 		// Short string that doesn't produce 4 codes, loop exits when reaching end
-		// Test line 6269 - padding loop when result.length() < 4
+		// Test < 4
 		// String that produces 2 codes (needs 2 zeros)
 		var code18 = soundex("AB"); // A + B(1) = A1, needs 2 zeros, loop exits at end of string
 		assertEquals("A100", code18);
@@ -5568,13 +5561,13 @@ class StringUtils_Test extends TestBase {
 		split("1,2", list3::add);
 		assertEquals(List.of("1", "2"), list3);
 
-		// Test line 6572 - s.indexOf(c) == -1 (no split character found)
+		// Test == -1 (no split character found)
 		var list4 = new ArrayList<String>();
 		split("no-commas-here", ',', list4::add);
 		assertEquals(List.of("no-commas-here"), list4);
 
-		// Test line 6581 - s.charAt(i) == '\\' (escape character)
-		// Test line 6588 - s.charAt(i) != '\\' (reset escapeCount)
+		// Test == '\\' (escape character)
+		// Test != '\\' (reset escapeCount)
 		var list5 = new ArrayList<String>();
 		split("a\\,b,c", ',', list5::add);
 		assertEquals(List.of("a,b", "c"), list5); // Escaped comma doesn't split
@@ -5668,17 +5661,17 @@ class StringUtils_Test extends TestBase {
 		assertString("{a==1}", splitMap("a\\==1", true));
 		assertString("{a\\=1}", splitMap("a\\\\=1", true));
 
-		// Test line 6737 - null input returns null
+		// Test code path
 		assertNull(splitMap(null, true));
 
-		// Test line 6739 - empty string returns empty map
+		// Test code path
 		assertTrue(splitMap("", true).isEmpty());
 
-		// Test line 6767 - trim when key has no value (comma found in state S1)
+		// Test
 		assertString("{key=}", splitMap(" key ", true)); // " key " should be trimmed, no value
 		assertString("{ key =}", splitMap(" key ", false)); // No trim, no value
 
-		// Test line 6774 - state S2 handling (equals found, looking for delimiter)
+		// Test code path, looking for delimiter)
 		assertString("{a=1,b=2}", splitMap("a=1,b=2", true)); // Comma in state S2
 		assertString("{a=1}", splitMap("a=1", true)); // End of string in state S2
 	}
@@ -5708,7 +5701,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("x", args3[0]);
 		assertEquals("y<a<b,c>,d<e,f>>", args3[1]);
 
-		// Test line 6807 - no comma found, return array with single element
+		// Test code path, return array with single element
 		var args4 = splitMethodArgs("singleArg");
 		assertEquals(1, args4.length);
 		assertEquals("singleArg", args4[0]);
@@ -5747,15 +5740,14 @@ class StringUtils_Test extends TestBase {
 		assertNull(splitNested(null));
 		assertTrue(splitNested("").isEmpty());
 
-		// Test lines 6866-6873 - escape handling
-		// Line 6867: c == '\\' when inEscape is true (double backslash)
+		// Code path: c == '\\' when inEscape is true (double backslash)
 		// When inEscape is true and we see '\', we set inEscape = false (double backslash = literal backslash)
 		var result4 = splitNested("a\\\\,b");
 		assertEquals(2, result4.size());
 		assertEquals("a\\", result4.get(0)); // Double backslash becomes single literal backslash
 		assertEquals("b", result4.get(1));
 
-		// Line 6871: c == '\\' when inEscape is false (start escape)
+		// Code path: c == '\\' when inEscape is false (start escape)
 		// When inEscape is false and we see '\', we set inEscape = true
 		// For "a\\,b,c": a, \ (inEscape=true), , (escaped, skipped, inEscape stays true), b (inEscape still true), , (escaped, skipped), c
 		// Actually, when inEscape is true, we only reset it when we see another '\'
@@ -5799,22 +5791,21 @@ class StringUtils_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner(null));
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner(""));
 
-		// Test line 6945 - Start character '{' not found
+		// Test code path
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner("no braces here"));
 
-		// Test line 6947 - End character '}' not found
+		// Test code path
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner("a{b"));
 		assertThrows(IllegalArgumentException.class, () -> splitNestedInner("a{b{c}"));
 
-		// Test lines 6917-6926 - escape handling
-		// Line 6920: c == '\\' when inEscape is true (double backslash)
+		// Code path: c == '\\' when inEscape is true (double backslash)
 		// When inEscape is true and we see '\', we set inEscape = false (double backslash = literal backslash)
 		var result4 = splitNestedInner("a{b\\\\,c}");
 		assertEquals(2, result4.size());
 		assertEquals("b\\", result4.get(0)); // Double backslash becomes single literal backslash
 		assertEquals("c", result4.get(1));
 
-		// Line 6924: c == '\\' when inEscape is false (start escape)
+		// Code path: c == '\\' when inEscape is false (start escape)
 		// When inEscape is false and we see '\', we set inEscape = true
 		// Note: For splitNestedInner, we need valid braces, so escaped comma inside braces is fine
 		// For "a{b\\,c\\}": b, \ (inEscape=true), , (escaped, skipped), c, \ (inEscape=false), } (matches outer)
@@ -5833,7 +5824,7 @@ class StringUtils_Test extends TestBase {
 		// b, { (depth=1), c, \, } (escaped, skipped, inEscape stays true), d, } (depth=0, but inEscape is true so it's skipped), } (depth=-1, matches outer)
 		// Actually, when inEscape is true and we see '}', it's skipped, so depth doesn't decrease
 		// This causes issues. Let's just test the basic escape cases that work
-		// The key is to test lines 6920 and 6924, which we've already done with result4 and result5
+		// The key is to test code path and 6924, which we've already done with result4 and result5
 	}
 
 	//====================================================================================================
@@ -5861,21 +5852,21 @@ class StringUtils_Test extends TestBase {
 		assertList(splitQuoted("'\"foo\"'"), "\"foo\"");
 		assertList(splitQuoted("\"'foo'\""), "'foo'");
 
-		// Test lines 7014, 7017 - keepQuotes=true
-		// Line 7014: Single quote with keepQuotes
+		// Test - keepQuotes=true
+		// Code path: Single quote with keepQuotes
 		var result1 = splitQuoted("'foo'", true);
 		assertEquals(1, result1.length);
 		assertEquals("'foo'", result1[0]); // Quotes are kept
 
-		// Line 7017: Double quote with keepQuotes
+		// Code path: Double quote with keepQuotes
 		var result2 = splitQuoted("\"bar\"", true);
 		assertEquals(1, result2.length);
 		assertEquals("\"bar\"", result2[0]); // Quotes are kept
 
-		// Test lines 7024, 7025, 7028 - escape handling in quotes
-		// Line 7024: Escape character in quoted string
-		// Line 7025: needsUnescape when keepQuotes=false
-		// Line 7028: Quote matching with keepQuotes
+		// Test - escape handling in quotes
+		// Code path: Escape character in quoted string
+		// Code path: needsUnescape when keepQuotes=false
+		// Code path: Quote matching with keepQuotes
 		var result3 = splitQuoted("'foo\\'bar'", false);
 		assertEquals(1, result3.length);
 		assertEquals("foo'bar", result3[0]); // Escaped quote is unescaped
@@ -5884,7 +5875,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(1, result4.length);
 		assertEquals("'foo\\'bar'", result4[0]); // Quotes kept, escape preserved
 
-		// Test line 6772 - state S1: character that is not space, tab, single quote, or double quote
+		// Test code path, tab, single quote, or double quote
 		// This transitions to state S4
 		// Test starting from whitespace to ensure we're in state S1
 		var result5a = splitQuoted(" abc");
@@ -5895,20 +5886,20 @@ class StringUtils_Test extends TestBase {
 		assertEquals(1, result5a2.length);
 		assertEquals("abc", result5a2[0]);
 
-		// Test line 6793 - state S4: encountering space or tab
+		// Test code path
 		// This adds the token and returns to state S1
 		var result5 = splitQuoted("foo bar");
 		assertEquals(2, result5.length);
 		assertEquals("foo", result5[0]);
 		assertEquals("bar", result5[1]);
 
-		// Test line 6793 - state S4: encountering tab character
+		// Test code path
 		var result5b = splitQuoted("foo\tbar");
 		assertEquals(2, result5b.length);
 		assertEquals("foo", result5b[0]);
 		assertEquals("bar", result5b[1]);
 
-		// Test line 7048 - unmatched quotes error
+		// Test code path
 		assertThrows(IllegalArgumentException.class, () -> splitQuoted("'unmatched quote"));
 		assertThrows(IllegalArgumentException.class, () -> splitQuoted("\"unmatched quote"));
 		assertThrows(IllegalArgumentException.class, () -> splitQuoted("'unmatched quote", false));
@@ -5973,7 +5964,7 @@ class StringUtils_Test extends TestBase {
 		assertNull(strip(null));
 		assertEquals("", strip(""));
 		// strip returns the same string if length <= 1
-		// Test line 7108 - early return for null or length <= 1
+		// Test code path
 		assertEquals("a", strip("a")); // length == 1
 		assertEquals("", strip("ab")); // length == 2, returns ""
 		// strip removes first and last character, so "abc" -> "b"
@@ -6041,7 +6032,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("test", substringBetween("<test>", "<", ">"));
 		assertEquals("foo", substringBetween("a<foo>b", "<", ">"));
 
-		// Test line 7214 - end marker not found after start marker
+		// Test code path
 		assertNull(substringBetween("<hello", "<", ">"));
 		assertNull(substringBetween("start<content", "<", ">"));
 	}
@@ -6077,7 +6068,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Test", titleCase("TEST"));
 		assertEquals("Hello 123 World", titleCase("hello 123 world"));
 
-		// Test line 7033 - splitWords returns empty list (only separators, no actual words)
+		// Test code path, no actual words)
 		// Note: digits and punctuation are treated as part of words by splitWords
 		assertEquals("", titleCase("   ")); // Only spaces
 		assertEquals("", titleCase("___")); // Only underscores
@@ -6289,7 +6280,7 @@ class StringUtils_Test extends TestBase {
 		var bytes2 = new byte[] { 0, 1, 2, (byte)255 };
 		var result2 = toReadableBytes(bytes2);
 
-		// Test line 7453 - bytes outside printable range (b2 < ' ' || b2 > 'z')
+		// Test
 		var bytes3 = new byte[]{0x00, 0x1F, 0x20, 0x7A, 0x7B, (byte)0xFF}; // null, control char, space, 'z', '{', non-printable
 		var result3 = toReadableBytes(bytes3);
 		assertTrue(result3.contains("[00]")); // null byte
@@ -6551,21 +6542,28 @@ class StringUtils_Test extends TestBase {
 		assertEquals("\\", unescapeChars("\\", escape));
 		assertEquals(",", unescapeChars("\\,", escape));
 
-		// Test line 7743 - double backslash (c2 == '\\')
+		// Test
 		assertEquals("x\\y", unescapeChars("x\\\\y", escape)); // Double backslash becomes single
 		assertEquals("x\\", unescapeChars("x\\\\", escape)); // Double backslash at end
 		assertEquals("|", unescapeChars("\\|", escape));
 
-		// Test line 7493 - double backslash where second backslash is NOT in escaped set
+		// Test code path
 		// When escape set doesn't include '\', double backslash handling
 		escape = AsciiSet.of(",|"); // Backslash not in escaped set
 		assertEquals("x\\\\xx", unescapeChars("x\\\\xx", escape));
+		// Test double backslash where '\' is NOT in escaped set
+		// Input: "\\\\" with escape set {','}
+		// - First '\' at i=0: sees second '\' at i=1, escaped.contains('\\')=false, c2=='\\'=true
+		// - Appends '\' and increments i to skip second '\'
+		// - Then appends the second '\' from the string
+		// Result: "\\\\" (both backslashes preserved)
+		assertEquals("\\\\", unescapeChars("\\\\", AsciiSet.of(","))); // Double backslash, '\' not in escaped set
 		// More explicit test: double backslash with a character that's not escaped
 		// When we have "a\\\\b" and '\' is not in escaped set:
-		// - First '\' sees second '\', appends '\' and skips second '\', then appends the second '\' at line 7498
-		// - Second '\' sees 'b', doesn't match, appends the second '\' at line 7498
+		// - First '\' sees second '\', appends '\' and skips second '\'
+		// - Then appends the second '\' from the string, then 'b'
 		// Result: "a\\\\b" (both backslashes preserved)
-		assertEquals("a\\\\b", unescapeChars("a\\\\b", AsciiSet.of(","))); // '\\' not in escaped set, so line 7493 executes
+		assertEquals("a\\\\b", unescapeChars("a\\\\b", AsciiSet.of(","))); // '\' not in escaped set
 	}
 
 	//====================================================================================================
@@ -6656,11 +6654,11 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Hello", urlEncode("Hello"));
 		assertEquals("test123", urlEncode("test123"));
 
-		// Test line 7914 - characters <= 127 (ASCII)
+		// Test
 		var result1 = urlEncode("test@example.com");
 		assertTrue(result1.contains("%40")); // @ is encoded
 
-		// Test line 7917 - characters > 127 (UTF-8 encoding)
+		// Test
 		var result2 = urlEncode("café");
 		assertNotNull(result2);
 		assertTrue(result2.contains("%")); // Contains encoded characters
@@ -6686,7 +6684,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Hello", urlEncodeLax("Hello"));
 		assertEquals("test123", urlEncodeLax("test123"));
 
-		// Test line 7656 - ASCII characters (c <= 127) that need encoding
+		// Test that need encoding
 		// Characters not in URL_UNENCODED_LAX_CHARS and not space
 		var result2 = urlEncodeLax("test#value");
 		assertNotNull(result2);
@@ -6698,7 +6696,7 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(result4);
 		assertTrue(result4.contains("%26")); // & is encoded as %26
 
-		// Test line 7659 - Non-ASCII characters (c > 127) that need encoding
+		// Test that need encoding
 		// Unicode characters are encoded using URLEncoder.encode
 		var result5 = urlEncodeLax("testévalue");
 		assertNotNull(result5);
@@ -6733,19 +6731,18 @@ class StringUtils_Test extends TestBase {
 		var result3 = urlEncodePath("file@name");
 		assertNotNull(result3);
 
-		// Test line 7945 - check if encoding is needed (needsEncode loop)
-		// Test line 7948 - return early if no encoding needed
+		// Test code path
 		var result4 = urlEncodePath("simplepath");
 		assertEquals("simplepath", result4); // No encoding needed, returns as-is
 
-		// Test lines 7701-7705 - UTF-8 surrogate pairs (high surrogate 0xD800-0xDBFF, low surrogate 0xDC00-0xDFFF)
+		// Test
 		// The surrogate pair handling code is executed when encoding characters that contain surrogate pairs
 		// Use a string that contains a character needing encoding along with surrogate pairs
 		// to ensure the encoding path is taken and surrogate pair handling is executed
 		var emoji = "🎉"; // This contains surrogate pairs
 		var result5 = urlEncodePath(emoji);
 		assertNotNull(result5);
-		// The surrogate pair code (lines 7701-7705) is executed during encoding
+		// The surrogate pair code  is executed during encoding
 		// Check that the result is different from input (encoding occurred) or contains encoded characters
 		assertTrue(result5.length() > 0);
 		// Also test with a string that combines regular characters with surrogate pairs
@@ -6753,7 +6750,7 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(result5b);
 		assertTrue(result5b.length() > 0);
 
-		// Test lines 7719, 7724 - uppercase hex digits (caseDiff applied)
+		// Test - uppercase hex digits (caseDiff applied)
 		// forDigit returns lowercase 'a'-'f' for hex digits 10-15, which need to be converted to uppercase
 		// We need characters that produce bytes with hex values containing a-f
 		// For example, byte 0x0A produces hex "a", byte 0x0B produces "b", etc.
@@ -6786,7 +6783,7 @@ class StringUtils_Test extends TestBase {
 		var matcher2 = hexPattern.matcher(result7);
 		while (matcher2.find()) {
 			var hex = matcher2.group(1);
-			// Verify it's uppercase (lines 7719 and 7724 convert lowercase to uppercase)
+			// Verify it's uppercase (code path and 7724 convert lowercase to uppercase)
 			assertEquals(hex.toUpperCase(), hex);
 		}
 		// If we found hex sequences, verify they're uppercase
@@ -6848,11 +6845,11 @@ class StringUtils_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", -1, "\n"));
 		assertThrows(IllegalArgumentException.class, () -> wrap("test", 10, null));
 
-		// Test lines 8097-8099 - empty line handling (lineIdx < lines.length - 1)
+		// Test
 		var result1 = wrap("line1\n\nline2", 10, "\n");
 		assertTrue(result1.contains("\n\n")); // Empty line preserved
 
-		// Test line 7842 - empty word skipping (word.isEmpty())
+		// Test)
 		// Multiple spaces create empty words that should be skipped
 		var result2 = wrap("word1  word2", 10, "\n");
 		assertTrue(result2.contains("word1"));
@@ -6862,40 +6859,52 @@ class StringUtils_Test extends TestBase {
 		assertTrue(result2b.contains("a"));
 		assertTrue(result2b.contains("b"));
 		assertTrue(result2b.contains("c"));
+		// Test with leading spaces - split(" +") creates empty string at start
+		var result2c = wrap("  hello world", 10, "\n");
+		assertTrue(result2c.contains("hello"));
+		assertTrue(result2c.contains("world"));
+		// Test with trailing spaces - split(" +") creates empty string at end
+		var result2d = wrap("hello world  ", 10, "\n");
+		assertTrue(result2d.contains("hello"));
+		assertTrue(result2d.contains("world"));
+		// Test with both leading and trailing spaces
+		var result2e = wrap("  hello world  ", 10, "\n");
+		assertTrue(result2e.contains("hello"));
+		assertTrue(result2e.contains("world"));
 
-		// Test lines 7853-7865 - word breaking when wordLength > wrapLength && words.length > 1
+		// Test
 		// This tests breaking a long word when it's the first word on a line
-		// Line 7853: result.length() > 0 (result already has content)
-		// Lines 7856-7865: while loop that breaks word into chunks
-		//   Line 7857: wordPos > 0 (not first iteration)
-		//   Line 7860: remaining <= wrapLength (remaining fits)
-		//   Line 7861: append remaining
-		//   Line 7862: break
-		//   Line 7864: append chunk
-		//   Line 7865: advance position
+		// Code path: result.length() > 0 (result already has content)
+		// Code path: while loop that breaks word into chunks
+		//   Code path: wordPos > 0 (not first iteration)
+		//   Code path: remaining <= wrapLength (remaining fits)
+		//   Code path: append remaining
+		//   Code path: break
+		//   Code path: append chunk
+		//   Code path: advance position
 		var result3 = wrap("short verylongword here", 5, "\n");
 		assertFalse(result3.contains("verylongword")); // Word should be split into chunks
 		for (var line : result3.split("\n")) {
 			if (! line.isEmpty())
 				assertTrue(line.length() <= 5);
 		}
-		// Test with result already having content (line 7853: result.length() > 0)
+		// Test with result already having content  > 0)
 		// After a previous line, a long word that needs breaking as first word on new line
 		// This happens when a previous line was completed and we start a new line
 		var result3b = wrap("first\nverylongword here", 5, "\n");
 		// After "first\n", "verylongword" is the first word on the new line and needs breaking
 		assertTrue(result3b.contains("first"));
 		assertFalse(result3b.contains("verylongword")); // Long word should be broken
-		// Test word that breaks into multiple chunks (covers lines 7857, 7864, 7865)
+		// Test word that breaks into multiple chunks (covers code path)
 		// Word length 15, wrapLength 5 -> 3 chunks of 5, 5, 5
-		// This tests: wordPos > 0 (line 7857), append chunk (line 7864), advance position (line 7865)
-		// And: remaining <= wrapLength (line 7860), append remaining (line 7861), break (line 7862)
+		// This tests: wordPos > 0 , append chunk , advance position 
+		// And: remaining <= wrapLength , append remaining , break 
 		var result3c = wrap("abcdefghijklmno here", 5, "\n");
 		assertTrue(result3c.contains("abcde")); // First chunk (wordPos == 0, no newline before)
-		assertTrue(result3c.contains("fghij")); // Second chunk (wordPos > 0, newline before, line 7857)
-		assertTrue(result3c.contains("klmno")); // Third chunk (remaining <= wrapLength, line 7860-7862)
+		assertTrue(result3c.contains("fghij")); // Second chunk (wordPos > 0, newline before, code path)
+		assertTrue(result3c.contains("klmno")); // Third chunk (remaining <= wrapLength, code path)
 
-		// Test lines 8149-8162 - word breaking in else branch (when current line doesn't fit)
+		// Test
 		var result4 = wrap("short word verylongword here", 10, "\n");
 		assertFalse(result4.contains("verylongword")); // Word should be split into chunks
 		for (var line : result4.split("\n")) {
@@ -6903,7 +6912,7 @@ class StringUtils_Test extends TestBase {
 				assertTrue(line.length() <= 10);
 		}
 
-		// Test line 8172 - append remaining line (currentLine.length() > 0)
+		// Test > 0)
 		var result5 = wrap("short word", 20, "\n");
 		assertEquals("short word", result5); // Remaining line appended
 	}

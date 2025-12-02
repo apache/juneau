@@ -3902,56 +3902,6 @@ public class StringUtils {
 		return Arrays.stream(array).mapToObj(String::valueOf).collect(Collectors.joining(delimiter));
 	}
 
-	/**
-	 * Join the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(List<?> tokens, char d) {
-		if (tokens == null)
-			return null;
-		var sb = new StringBuilder();
-		for (int i = 0, j = tokens.size(); i < j; i++) {
-			if (i > 0)
-				sb.append(d);
-			sb.append(tokens.get(i));
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Join the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(List<?> tokens, String d) {
-		if (tokens == null)
-			return null;
-		return StringUtils.join(tokens, d, new StringBuilder()).toString();
-	}
-
-	/**
-	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @param sb The string builder to append the response to.
-	 * @return The same string builder passed in as <c>sb</c>.
-	 */
-	public static StringBuilder join(List<?> tokens, String d, StringBuilder sb) {
-		if (tokens == null)
-			return sb;
-		for (int i = 0, j = tokens.size(); i < j; i++) {
-			if (i > 0)
-				sb.append(d);
-			sb.append(tokens.get(i));
-		}
-		return sb;
-	}
 
 	/**
 	 * Joins the specified tokens into a delimited string.
@@ -4429,7 +4379,7 @@ public class StringUtils {
 					}
 					break;
 				case 'H':
-					if (! isVowel(prev) || ! isVowel(next))
+					if (! VOWEL.contains(prev) || ! VOWEL.contains(next))
 						result.append('H');
 					break;
 				case 'K':
@@ -4473,7 +4423,7 @@ public class StringUtils {
 					result.append('F');
 					break;
 				case 'W', 'Y':
-					if (isVowel(next))
+					if (VOWEL.contains(next))
 						result.append(c);
 					break;
 				case 'X':
@@ -5453,7 +5403,7 @@ public class StringUtils {
 		// Words ending in "y" preceded by a consonant -> replace "y" with "ies"
 		if (length > 1 && lower.endsWith("y")) {
 			var secondLast = lower.charAt(length - 2);
-			if (secondLast != 'a' && secondLast != 'e' && secondLast != 'i' && secondLast != 'o' && secondLast != 'u') {
+			if (! VOWEL.contains(secondLast)) {
 				return word.substring(0, length - 1) + "ies";
 			}
 		}
@@ -7967,7 +7917,8 @@ public class StringUtils {
 	 * @return The first real character, or <c>-1</c> if none found.
 	 */
 	private static int firstRealCharacter(String s) {
-		try (var r = new StringReader(s)) {
+		return safe(()-> {
+			var r = new StringReader(s);
 			var c = 0;
 			while ((c = r.read()) != -1) {
 				if (! isWhitespace(c)) {
@@ -7979,9 +7930,7 @@ public class StringUtils {
 				}
 			}
 			return -1;
-		} catch (Exception e) {
-			throw toRex(e);
-		}
+		});
 	}
 
 	/**
@@ -8109,12 +8058,6 @@ public class StringUtils {
 		return true;
 	}
 
-	/**
-	 * Helper method to check if a character is a vowel.
-	 */
-	private static boolean isVowel(char c) {
-		return VOWEL.contains(c);
-	}
 
 	private static class Readifier {
 		private final Class<?> type;
