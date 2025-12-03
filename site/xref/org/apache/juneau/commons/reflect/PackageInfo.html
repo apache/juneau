@@ -314,7 +314,7 @@
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * @see Package#isCompatibleWith(String)</em>
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isCompatibleWith(String desired) <strong class="jxr_keyword">throws</strong> NumberFormatException {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isCompatibleWith(desired);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.isCompatibleWith(desired);  <em class="jxr_comment">// HTT - Hard to test normal return path: requires package with version set in JAR manifest (Specification-Version header), which is difficult to set in test environment</em>
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 	}
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<em class="jxr_javadoccomment">/**</em>
