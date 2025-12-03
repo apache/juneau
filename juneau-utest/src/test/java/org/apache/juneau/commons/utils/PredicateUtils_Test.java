@@ -16,229 +16,202 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
-import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
-public class PredicateUtils_Test {
+class PredicateUtils_Test {
 
 	//====================================================================================================
-	// Constructor (line 28)
+	// Constructor (line 24)
 	//====================================================================================================
-	// Note: PredicateUtils has a private constructor, so it cannot be instantiated.
-	// Line 28 (class declaration) is covered by using the class's static methods.
+	@Test
+	void a00_constructor() {
+		// Test line 24: class declaration
+		// PredicateUtils has a private constructor, so it cannot be instantiated.
+		// Line 24 (class declaration) is covered by using the class's static methods.
+	}
 
-    @Test
-    void and_allNull_returnsTrue() {
-        Predicate<String> p = and(null, null);
-        assertTrue(p.test("anything"));
-        assertTrue(p.test(null));
-    }
+	//====================================================================================================
+	// consumeIf(Predicate<T>, Consumer<T>, T)
+	//====================================================================================================
+	@Test
+	void a001_consumeIf() {
+		List<String> consumed = new ArrayList<>();
+		Consumer<String> consumer = consumed::add;
+		
+		// When predicate is null, should consume
+		consumeIf(null, consumer, "test");
+		assertEquals(1, consumed.size());
+		assertEquals("test", consumed.get(0));
+		
+		// When predicate matches, should consume
+		consumed.clear();
+		Predicate<String> matches = s -> s.equals("match");
+		consumeIf(matches, consumer, "match");
+		assertEquals(1, consumed.size());
+		assertEquals("match", consumed.get(0));
+		
+		// When predicate doesn't match, should not consume
+		consumed.clear();
+		Predicate<String> noMatch = s -> s.equals("match");
+		consumeIf(noMatch, consumer, "nomatch");
+		assertTrue(consumed.isEmpty());
+		
+		// Test with different types
+		List<Integer> intConsumed = new ArrayList<>();
+		Consumer<Integer> intConsumer = intConsumed::add;
+		Predicate<Integer> even = i -> i % 2 == 0;
+		consumeIf(even, intConsumer, 2);
+		assertEquals(1, intConsumed.size());
+		assertEquals(2, intConsumed.get(0));
+		
+		consumeIf(even, intConsumer, 3);
+		assertEquals(1, intConsumed.size()); // Should not add 3
+	}
 
-    @Test
-    void and_empty_returnsTrue() {
-        Predicate<String> p = and();
-        assertTrue(p.test("x"));
-    }
+	//====================================================================================================
+	// peek()
+	//====================================================================================================
+	@Test
+	void a002_peek() {
+		// Capture stderr output
+		PrintStream originalErr = System.err;
+		ByteArrayOutputStream errCapture = new ByteArrayOutputStream();
+		System.setErr(new PrintStream(errCapture));
+		
+		try {
+			// Test peek() function
+			Function<String, String> peekFunc = peek();
+			String result = peekFunc.apply("test value");
+			
+			// Should return the value unchanged
+			assertEquals("test value", result);
+			
+			// Should have printed to stderr
+			String output = errCapture.toString();
+			assertTrue(output.contains("test value"), "Output should contain 'test value', but was: " + output);
+			
+			// Test with null
+			errCapture.reset();
+			Function<Object, Object> peekFunc2 = peek();
+			Object result2 = peekFunc2.apply(null);
+			assertNull(result2);
+			String output2 = errCapture.toString();
+			assertTrue(output2.contains("null"), "Output should contain 'null', but was: " + output2);
+			
+			// Test with different types
+			errCapture.reset();
+			Function<Integer, Integer> peekInt = peek();
+			Integer result3 = peekInt.apply(123);
+			assertEquals(123, result3);
+			String output3 = errCapture.toString();
+			assertTrue(output3.contains("123"), "Output should contain '123', but was: " + output3);
+		} finally {
+			System.setErr(originalErr);
+		}
+	}
 
-    @Test
-    void and_single_predicate() {
-        Predicate<Integer> isEven = x -> x != null && x % 2 == 0;
-        Predicate<Integer> p = and(isEven);
-        assertTrue(p.test(2));
-        assertFalse(p.test(3));
-        assertFalse(p.test(null));
-    }
+	//====================================================================================================
+	// peek(String, Function<T,?>)
+	//====================================================================================================
+	@Test
+	void a003_peek_withMessage() {
+		// Capture stderr output
+		PrintStream originalErr = System.err;
+		ByteArrayOutputStream errCapture = new ByteArrayOutputStream();
+		System.setErr(new PrintStream(errCapture));
+		
+		try {
+			// Test peek() with message and formatter
+			Function<String, String> peekFunc = peek("Processing: {0}", s -> s.toUpperCase());
+			String result = peekFunc.apply("test");
+			
+			// Should return the value unchanged
+			assertEquals("test", result);
+			
+			// Should have printed formatted message to stderr
+			String output = errCapture.toString();
+			assertTrue(output.contains("Processing: TEST"), "Output should contain 'Processing: TEST', but was: " + output);
+			
+			// Test with different formatter
+			errCapture.reset();
+			Function<Integer, Integer> peekInt = peek("Value: {0}", i -> i * 2);
+			Integer result2 = peekInt.apply(5);
+			assertEquals(5, result2);
+			String output2 = errCapture.toString();
+			assertTrue(output2.contains("Value: 10"), "Output should contain 'Value: 10', but was: " + output2);
+			
+			// Test with null value
+			errCapture.reset();
+			Function<String, String> peekNull = peek("Null value: {0}", s -> s == null ? "null" : s);
+			String result3 = peekNull.apply(null);
+			assertNull(result3);
+			String output3 = errCapture.toString();
+			assertTrue(output3.contains("Null value: null"), "Output should contain 'Null value: null', but was: " + output3);
+			
+			// Test with complex formatter
+			errCapture.reset();
+			class Person {
+				String name;
+				Person(String name) { this.name = name; }
+			}
+			Function<Person, Person> peekPerson = peek("Person: {0}", p -> p.name);
+			Person person = new Person("John");
+			Person result4 = peekPerson.apply(person);
+			assertSame(person, result4);
+			String output4 = errCapture.toString();
+			assertTrue(output4.contains("Person: John"), "Output should contain 'Person: John', but was: " + output4);
+		} finally {
+			System.setErr(originalErr);
+		}
+	}
 
-    @Test
-    void and_multiple_predicates() {
-        Predicate<Integer> isEven = x -> x != null && x % 2 == 0;
-        Predicate<Integer> gt10 = x -> x != null && x > 10;
-        Predicate<Integer> p = and(isEven, gt10);
-        assertTrue(p.test(12));
-        assertFalse(p.test(11));
-        assertFalse(p.test(10));
-        assertFalse(p.test(9));
-        assertFalse(p.test(null));
-    }
-
-    @Test
-    void and_ignoresNullEntries() {
-        Predicate<String> startsA = s -> s != null && s.startsWith("A");
-        Predicate<String> p = and(null, startsA, null);
-        assertTrue(p.test("Alpha"));
-        assertFalse(p.test("Beta"));
-    }
-
-    @Test
-    void or_allNull_returnsFalse() {
-        Predicate<String> p = or(null, null);
-        assertFalse(p.test("anything"));
-        assertFalse(p.test(null));
-    }
-
-    @Test
-    void or_empty_returnsFalse() {
-        Predicate<String> p = or();
-        assertFalse(p.test("x"));
-    }
-
-    @Test
-    void or_single_predicate() {
-        Predicate<Integer> isEven = x -> x != null && x % 2 == 0;
-        Predicate<Integer> p = or(isEven);
-        assertTrue(p.test(2));
-        assertFalse(p.test(3));
-        assertFalse(p.test(null));
-    }
-
-    @Test
-    void or_multiple_predicates() {
-        Predicate<Integer> isEven = x -> x != null && x % 2 == 0;
-        Predicate<Integer> gt10 = x -> x != null && x > 10;
-        Predicate<Integer> p = or(isEven, gt10);
-        assertTrue(p.test(12));
-        assertTrue(p.test(11));
-        assertTrue(p.test(10));
-        assertFalse(p.test(9));
-        assertFalse(p.test(null));
-    }
-
-    @Test
-    void or_ignoresNullEntries() {
-        Predicate<String> startsA = s -> s != null && s.startsWith("A");
-        Predicate<String> p = or(null, startsA, null);
-        assertTrue(p.test("Alpha"));
-        assertFalse(p.test("Beta"));
-    }
-
-    // Test classes for ElementInfo filtering
-    public static class PublicClass {}
-    private static class PrivateClass {}
-    public static final class PublicFinalClass {}
-    @Deprecated
-    public static class DeprecatedPublicClass {}
-
-    @Test
-    void is_singleFlag_matches() {
-        List<ClassInfo> classes = Stream.of(PublicClass.class, PrivateClass.class)
-            .map(ClassInfo::of)
-            .collect(Collectors.toList());
-
-        ClassInfo result = classes.stream()
-            .filter(is(PUBLIC))
-            .findFirst()
-            .orElse(null);
-
-        assertNotNull(result);
-        assertEquals(PublicClass.class.getName(), result.getName());
-    }
-
-    @Test
-    void is_singleFlag_noMatch() {
-        List<ClassInfo> classes = Stream.of(PublicClass.class)
-            .map(ClassInfo::of)
-            .collect(Collectors.toList());
-
-        ClassInfo result = classes.stream()
-            .filter(is(PRIVATE))
-            .findFirst()
-            .orElse(null);
-
-        assertNull(result);
-    }
-
-    @Test
-    void isAll_multipleFlags_matches() {
-        List<ClassInfo> classes = Stream.of(PublicClass.class, PrivateClass.class, PublicFinalClass.class, DeprecatedPublicClass.class)
-            .map(ClassInfo::of)
-            .collect(Collectors.toList());
-
-        ClassInfo result = classes.stream()
-            .filter(isAll(PUBLIC, NOT_DEPRECATED))
-            .findFirst()
-            .orElse(null);
-
-        assertNotNull(result);
-        assertEquals(PublicClass.class.getName(), result.getName());
-    }
-
-    @Test
-    void isAll_multipleFlags_collectAll() {
-        List<ClassInfo> classes = Stream.of(PublicClass.class, PrivateClass.class, PublicFinalClass.class)
-            .map(ClassInfo::of)
-            .collect(Collectors.toList());
-
-        List<ClassInfo> results = classes.stream()
-            .filter(isAll(PUBLIC, NOT_DEPRECATED))
-            .collect(Collectors.toList());
-
-        assertEquals(2, results.size());
-        assertTrue(results.stream().anyMatch(c -> c.getName().equals(PublicClass.class.getName())));
-        assertTrue(results.stream().anyMatch(c -> c.getName().equals(PublicFinalClass.class.getName())));
-    }
-
-    @Test
-    void isAll_noMatch() {
-        List<ClassInfo> classes = Stream.of(PublicClass.class, PrivateClass.class)
-            .map(ClassInfo::of)
-            .collect(Collectors.toList());
-
-        ClassInfo result = classes.stream()
-            .filter(isAll(PUBLIC, FINAL))
-            .findFirst()
-            .orElse(null);
-
-        assertNull(result);
-    }
-
-    @Test
-    void isAny_multipleFlags_matchesFirst() {
-        List<ClassInfo> classes = Stream.of(PublicClass.class, PrivateClass.class)
-            .map(ClassInfo::of)
-            .collect(Collectors.toList());
-
-        List<ClassInfo> results = classes.stream()
-            .filter(isAny(PUBLIC, PROTECTED))
-            .collect(Collectors.toList());
-
-        assertEquals(1, results.size());
-        assertEquals(PublicClass.class.getName(), results.get(0).getName());
-    }
-
-    @Test
-    void isAny_multipleFlags_matchesMultiple() {
-        List<ClassInfo> classes = Stream.of(PublicClass.class, PrivateClass.class, PublicFinalClass.class)
-            .map(ClassInfo::of)
-            .collect(Collectors.toList());
-
-        List<ClassInfo> results = classes.stream()
-            .filter(isAny(PUBLIC, PRIVATE))
-            .collect(Collectors.toList());
-
-        assertEquals(3, results.size());
-    }
-
-    @Test
-    void isAny_noMatch() {
-        List<ClassInfo> classes = Stream.of(PublicClass.class)
-            .map(ClassInfo::of)
-            .collect(Collectors.toList());
-
-        ClassInfo result = classes.stream()
-            .filter(isAny(PRIVATE, PROTECTED))
-            .findFirst()
-            .orElse(null);
-
-        assertNull(result);
-    }
+	//====================================================================================================
+	// test(Predicate<T>, T)
+	//====================================================================================================
+	@Test
+	void a004_test() {
+		// When predicate is null, should return true
+		assertTrue(test(null, "any value"));
+		assertTrue(test(null, null));
+		assertTrue(test(null, 123));
+		
+		// When predicate matches, should return true
+		Predicate<String> matches = s -> s.equals("match");
+		assertTrue(test(matches, "match"));
+		
+		// When predicate doesn't match, should return false
+		assertFalse(test(matches, "nomatch"));
+		
+		// Test with different types
+		Predicate<Integer> even = i -> i % 2 == 0;
+		assertTrue(test(even, 2));
+		assertTrue(test(even, 4));
+		assertFalse(test(even, 3));
+		assertFalse(test(even, 5));
+		
+		// Test with null value
+		Predicate<String> notNull = s -> s != null;
+		assertTrue(test(notNull, "test"));
+		assertFalse(test(notNull, null));
+		
+		// Test with always true predicate
+		Predicate<Object> alwaysTrue = o -> true;
+		assertTrue(test(alwaysTrue, "anything"));
+		assertTrue(test(alwaysTrue, null));
+		assertTrue(test(alwaysTrue, 123));
+		
+		// Test with always false predicate
+		Predicate<Object> alwaysFalse = o -> false;
+		assertFalse(test(alwaysFalse, "anything"));
+		assertFalse(test(alwaysFalse, null));
+		assertFalse(test(alwaysFalse, 123));
+	}
 }
-
-

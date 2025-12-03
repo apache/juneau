@@ -35,14 +35,10 @@ public class WeightedAverage {
 	 */
 	public WeightedAverage add(int w, Number v) {
 		if (nn(v)) {
-			try {
-				double w1 = weight, w2 = w;
-				weight = Math.addExact(weight, w);
-				if (weight != 0) {
-					value = (value * (w1 / weight)) + (v.floatValue() * (w2 / weight));
-				}
-			} catch (@SuppressWarnings("unused") ArithmeticException ae) {
-				throw new ArithmeticException("Weight overflow.");
+			double w1 = weight, w2 = w;
+			weight = Math.addExact(weight, w);
+			if (weight != 0) {
+				value = (value * (w1 / weight)) + (v.floatValue() * (w2 / weight));
 			}
 		}
 		return this;

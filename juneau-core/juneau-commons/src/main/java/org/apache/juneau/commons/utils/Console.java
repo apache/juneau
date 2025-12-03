@@ -29,6 +29,12 @@ import java.text.*;
 public class Console {
 
 	/**
+	 * Constructor.
+	 */
+	public Console() {
+	}
+
+	/**
 	 * Prints a message with arguments to {@link System#err}.
 	 *
 	 * <p>

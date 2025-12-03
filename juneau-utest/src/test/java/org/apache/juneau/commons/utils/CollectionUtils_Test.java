@@ -1334,6 +1334,11 @@ class CollectionUtils_Test extends TestBase {
 		List<?> result7 = toList(Optional.of("test"));
 		assertEquals(1, result7.size());
 		assertEquals("test", result7.get(0));
+		
+		// Test line 2009: unsupported type throws exception
+		assertThrows(RuntimeException.class, () -> {
+			toList(new Object() {}); // Unsupported type
+		});
 	}
 
 	//====================================================================================================
@@ -1349,6 +1354,26 @@ class CollectionUtils_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, () -> result.add("d"));
 		
 		assertThrows(IllegalArgumentException.class, () -> toSet((String[])null));
+		
+		// Test lines 2085, 2093: Iterator behavior
+		Iterator<String> it = result.iterator();
+		assertTrue(it.hasNext());
+		assertEquals("a", it.next());
+		assertEquals("b", it.next());
+		assertEquals("c", it.next());
+		assertFalse(it.hasNext());
+		
+		// Test line 2085: NoSuchElementException when calling next() after exhausted
+		assertThrows(java.util.NoSuchElementException.class, () -> {
+			it.next();
+		});
+		
+		// Test line 2093: UnsupportedOperationException when calling remove()
+		Iterator<String> it2 = result.iterator();
+		it2.next(); // Move to first element
+		assertThrows(UnsupportedOperationException.class, () -> {
+			it2.remove();
+		});
 	}
 
 	//====================================================================================================
@@ -1380,6 +1405,19 @@ class CollectionUtils_Test extends TestBase {
 		assertTrue(result.contains("a"));
 		assertTrue(result.contains("b"));
 		assertTrue(result.contains("c"));
+		
+		// Test line 2189: null object returns early
+		List<Object> result2 = new ArrayList<>();
+		traverse(null, result2::add);
+		assertTrue(result2.isEmpty());
+		
+		// Test line 2194: Stream handling
+		List<Object> result3 = new ArrayList<>();
+		traverse(java.util.stream.Stream.of("x", "y", "z"), result3::add);
+		assertEquals(3, result3.size());
+		assertTrue(result3.contains("x"));
+		assertTrue(result3.contains("y"));
+		assertTrue(result3.contains("z"));
 	}
 
 	//====================================================================================================

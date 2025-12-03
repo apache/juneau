@@ -16,56 +16,12 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.Utils.*;
-
 import java.util.function.*;
-
-import org.apache.juneau.commons.reflect.*;
 
 /**
  * Utility methods for composing {@link Predicate} instances.
  */
 public final class PredicateUtils {
-
-	/**
-	 * Returns a predicate that is the short-circuiting AND of the provided predicates.
-	 *
-	 * <p>
-	 * {@code null} entries are ignored. If all entries are {@code null} or no predicates are provided,
-	 * the returned predicate always returns {@code true}.
-	 *
-	 * @param <T> The input type of the predicate.
-	 * @param predicates The predicates to combine.
-	 * @return A composed predicate representing the logical AND.
-	 */
-	@SafeVarargs
-	public static <T> Predicate<T> and(Predicate<T>...predicates) {
-		Predicate<T> result = t -> true;
-		if (nn(predicates)) {
-			for (var p : predicates) {
-				if (nn(p))
-					result = result.and(p);
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Returns a predicate that evaluates to true only when the value is an instance of the given type and the provided
-	 * predicate also returns true for the cast value.
-	 *
-	 * @param <T> The target type to test and cast to.
-	 * @param type The target class.
-	 * @param predicate The predicate to apply to the cast value. Can be null (treated as always-true after type check).
-	 * @return A predicate over Object that performs an instanceof check AND the provided predicate.
-	 */
-	public static <T> Predicate<Object> andType(Class<T> type, Predicate<? super T> predicate) {
-		Predicate<Object> p = type::isInstance;
-		if (nn(predicate)) {
-			p = p.and(o -> predicate.test(type.cast(o)));
-		}
-		return p;
-	}
 
 	/**
 	 * Consumes the specified value if the predicate is <jk>null</jk> or matches the specified value.
@@ -78,104 +34,6 @@ public final class PredicateUtils {
 	public static <T> void consumeIf(Predicate<T> predicate, Consumer<T> consumer, T value) {
 		if (test(predicate, value))
 			consumer.accept(value);
-	}
-
-	/**
-	 * Returns a predicate that tests whether an {@link ElementInfo} has the specified flag.
-	 *
-	 * <p>
-	 * Useful for filtering streams of reflection elements.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	List&lt;ClassInfo&gt; classes = ...;
-	 * 	ClassInfo publicClass = classes.stream()
-	 * 		.filter(is(PUBLIC))
-	 * 		.findFirst()
-	 * 		.orElse(<jk>null</jk>);
-	 * </p>
-	 *
-	 * @param flag The flag to test for.
-	 * @return A predicate that returns {@code true} if the element has the specified flag.
-	 */
-	public static Predicate<ElementInfo> is(ElementFlag flag) {
-		return ei -> ei.is(flag);
-	}
-
-	/**
-	 * Returns a predicate that tests whether an {@link ElementInfo} has all of the specified flags.
-	 *
-	 * <p>
-	 * Useful for filtering streams of reflection elements.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	List&lt;ClassInfo&gt; classes = ...;
-	 * 	ClassInfo publicNonDeprecated = classes.stream()
-	 * 		.filter(isAll(PUBLIC, NOT_DEPRECATED))
-	 * 		.findFirst()
-	 * 		.orElse(<jk>null</jk>);
-	 * </p>
-	 *
-	 * @param flags The flags to test for.
-	 * @return A predicate that returns {@code true} if the element has all of the specified flags.
-	 */
-	public static Predicate<ElementInfo> isAll(ElementFlag...flags) {
-		return ei -> ei.isAll(flags);
-	}
-
-	/**
-	 * Returns a predicate that tests whether an {@link ElementInfo} has any of the specified flags.
-	 *
-	 * <p>
-	 * Useful for filtering streams of reflection elements.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	List&lt;ClassInfo&gt; classes = ...;
-	 * 	List&lt;ClassInfo&gt; visibleClasses = classes.stream()
-	 * 		.filter(isAny(PUBLIC, PROTECTED))
-	 * 		.collect(Collectors.toList());
-	 * </p>
-	 *
-	 * @param flags The flags to test for.
-	 * @return A predicate that returns {@code true} if the element has any of the specified flags.
-	 */
-	public static Predicate<ElementInfo> isAny(ElementFlag...flags) {
-		return ei -> ei.isAny(flags);
-	}
-
-	/**
-	 * Returns a predicate that tests whether the input value is an instance of the specified type.
-	 *
-	 * @param type The class object representing the target type.
-	 * @return A predicate that returns {@code true} if the value is an instance of {@code type}.
-	 */
-	public static Predicate<?> isType(Class<?> type) {
-		return v -> nn(type) && type.isInstance(v);
-	}
-
-	/**
-	 * Returns a predicate that is the short-circuiting OR of the provided predicates.
-	 *
-	 * <p>
-	 * {@code null} entries are ignored. If all entries are {@code null} or no predicates are provided,
-	 * the returned predicate always returns {@code false}.
-	 *
-	 * @param <T> The input type of the predicate.
-	 * @param predicates The predicates to combine.
-	 * @return A composed predicate representing the logical OR.
-	 */
-	@SafeVarargs
-	public static <T> Predicate<T> or(Predicate<T>...predicates) {
-		Predicate<T> result = t -> false;
-		if (nn(predicates)) {
-			for (var p : predicates) {
-				if (nn(p))
-					result = result.or(p);
-			}
-		}
-		return result;
 	}
 
 	/**
@@ -230,7 +88,7 @@ public final class PredicateUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
-	
+
 	 * @param <T> The type being tested.
 	 * @param predicate The predicate.
 	 * @param value The value to test.

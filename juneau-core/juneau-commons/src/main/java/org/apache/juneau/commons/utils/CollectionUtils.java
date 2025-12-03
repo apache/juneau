@@ -432,7 +432,7 @@ public class CollectionUtils {
 				for (var value : arr) {
 					result.add(value);
 				}
-			} else if (componentType == short.class) {
+			} else /* (componentType == short.class) */ {
 				var arr = (short[])array;
 				for (var value : arr) {
 					result.add(value);
