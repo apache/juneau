@@ -566,63 +566,6 @@ class ClassUtils_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// isInnerClass(GenericDeclaration, GenericDeclaration) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void l01_isInnerClass_true() {
-		assertTrue(isInnerClass(Map.class, Map.Entry.class));
-	}
-
-	@Test
-	public void l02_isInnerClass_false() {
-		assertFalse(isInnerClass(Map.Entry.class, Map.class));
-		assertFalse(isInnerClass(String.class, Integer.class));
-	}
-
-	@Test
-	public void l03_isInnerClass_sameClass() {
-		assertFalse(isInnerClass(String.class, String.class));
-	}
-
-	@Test
-	public void l04_isInnerClass_nestedInner() {
-		class Outer {
-			class Inner {
-				class Deep {}
-			}
-		}
-		assertTrue(isInnerClass(Outer.class, Outer.Inner.class));
-		assertTrue(isInnerClass(Outer.class, Outer.Inner.Deep.class));
-		assertTrue(isInnerClass(Outer.Inner.class, Outer.Inner.Deep.class));
-	}
-
-	@Test
-	public void l05_isInnerClass_notClass() {
-		// Test line 590: false branch when od or id is not a Class
-		// When od or id is not a Class, the instanceof check fails and method returns false
-		Method method = null;
-		Constructor<?> constructor = null;
-		try {
-			method = String.class.getMethod("toString");
-			constructor = String.class.getConstructor();
-		} catch (NoSuchMethodException e) {
-			fail("Could not get method or constructor for testing");
-		}
-		
-		// Test with Method (not a Class)
-		assertFalse(isInnerClass(String.class, method));
-		assertFalse(isInnerClass(method, String.class));
-		
-		// Test with Constructor (not a Class)
-		assertFalse(isInnerClass(String.class, constructor));
-		assertFalse(isInnerClass(constructor, String.class));
-		
-		// Test with both non-Class
-		assertFalse(isInnerClass(method, constructor));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// getProxyFor(Object) tests
 	//-----------------------------------------------------------------------------------------------------------------
 

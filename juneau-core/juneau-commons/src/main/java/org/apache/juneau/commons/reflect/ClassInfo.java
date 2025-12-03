@@ -1429,6 +1429,31 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
+	 * Checks if one generic declaration (typically a class) is an inner class of another.
+	 *
+	 * <p>
+	 * This method walks up the enclosing class hierarchy of the potential inner class to determine if it's
+	 * nested within the outer class at any level. It's used during generic type resolution to determine if
+	 * a type variable belongs to an inner class that's nested within an outer class.
+	 *
+	 * @param od
+	 * 	The potential outer declaration (typically an outer class).
+	 * @param id
+	 * 	The potential inner declaration (typically an inner class).
+	 * @return
+	 * 	<jk>true</jk> if <c>id</c> is nested within <c>od</c> at any level, <jk>false</jk> otherwise.
+	 * 	<br>Returns <jk>false</jk> if either parameter is not a <c>Class</c>.
+	 */
+	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
+		if (od instanceof Class<?> oc && id instanceof Class<?> ic) {
+			while (nn(ic = ic.getEnclosingClass()))
+				if (ic == oc)
+					return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Returns a list including this class and all parent classes.
 	 *
 	 * <p>

@@ -431,45 +431,6 @@ public class ClassUtils {
 	}
 
 	/**
-	 * Checks if one generic declaration (typically a class) is an inner class of another.
-	 *
-	 * <p>
-	 * This method walks up the enclosing class hierarchy of the potential inner class to determine if it's
-	 * nested within the outer class at any level. It's used during generic type resolution to determine if
-	 * type variables from different scopes refer to the same logical type parameter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Given these classes:</jc>
-	 * 	<jk>class</jk> Outer&lt;T&gt; {
-	 * 		<jk>class</jk> Inner&lt;T&gt; {
-	 * 			<jc>// The T here could refer to either Outer.T or Inner.T</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// This method helps determine the relationship:</jc>
-	 * 	isInnerClass(Outer.<jk>class</jk>, Inner.<jk>class</jk>);  <jc>// Returns true</jc>
-	 * 	isInnerClass(Inner.<jk>class</jk>, Outer.<jk>class</jk>);  <jc>// Returns false</jc>
-	 * </p>
-	 *
-	 * @param od
-	 * 	The potential outer declaration (typically an outer class).
-	 * @param id
-	 * 	The potential inner declaration (typically an inner class).
-	 * @return
-	 * 	<jk>true</jk> if <c>id</c> is nested within <c>od</c> at any level, <jk>false</jk> otherwise.
-	 * 	<br>Returns <jk>false</jk> if either parameter is not a <c>Class</c>.
-	 */
-	public static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
-		if (od instanceof Class<?> oc && id instanceof Class<?> ic) {
-			while (nn(ic = ic.getEnclosingClass()))
-				if (ic == oc)
-					return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Returns <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
 	 *
 	 * @param c The class to check.
