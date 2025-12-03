@@ -466,15 +466,12 @@ public final class StringFormat {
 	}
 
 	private static int parseIndexMF(String s) {
-		try {
-			return Integer.parseInt(s.trim());
-		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw new IllegalArgumentException("can't parse argument number: " + s);
-		}
+		if (! s.matches("[0-9]+")) throw new IllegalArgumentException("can't parse argument number: " + s);
+		return Integer.parseInt(s);
 	}
 
 	private static int parseIndexSF(String s) {
-		return Integer.parseInt(s.trim());
+		return Integer.parseInt(s);
 	}
 
 	/**

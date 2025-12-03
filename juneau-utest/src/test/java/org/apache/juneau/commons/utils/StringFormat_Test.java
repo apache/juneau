@@ -348,8 +348,22 @@ class StringFormat_Test extends TestBase {
 		var fmt2 = StringFormat.of("Hello {0}");
 		var fmt3 = StringFormat.of("Hello %s");
 
+		// Test equals - covers line 623
 		assertEquals(fmt1, fmt2);
 		assertNotEquals(fmt1, fmt3);
+		
+		// Test equals with null - covers line 623 (instanceof check fails)
+		assertNotEquals(fmt1, null);
+		
+		// Test equals with different type - covers line 623 (instanceof check fails)
+		assertNotEquals(fmt1, "Hello {0}");
+		assertNotEquals(fmt1, new Object());
+		
+		// Test equals with different pattern - covers line 623 (pattern comparison)
+		var fmt4 = StringFormat.of("Different pattern");
+		assertNotEquals(fmt1, fmt4);
+		
+		// Test hashCode
 		assertEquals(fmt1.hashCode(), fmt2.hashCode());
 	}
 
@@ -403,6 +417,86 @@ class StringFormat_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> fs("Hello {abc}"));
 	}
 
+	//====================================================================================================
+	// Test coverage for line 162 branches in MessageFormatToken.append()
+	// Line 162: if (args == null || index >= args.length || index < 0)
+	//====================================================================================================
+	@Test void a14_messageFormatTokenBranches() {
+		// Test args == null branch - covers line 162 (args == null)
+		var fmt1 = StringFormat.of("Hello {0}");
+		var result1 = fmt1.format((Object[])null);
+		assertEquals("Hello {0}", result1);
+		
+		// Test with complex format and null args
+		var fmt2 = StringFormat.of("Price: {0,number,currency}");
+		var result2 = fmt2.format((Object[])null);
+		assertEquals("Price: {0,number,currency}", result2);
+		
+		// Test locale == null branch - covers line 167 (locale == null ? Locale.getDefault() : locale)
+		// When locale is null, should use Locale.getDefault()
+		var fmt3 = StringFormat.of("Hello {0}");
+		var result3 = fmt3.format((Locale)null, "World");
+		// Should format using default locale
+		assertEquals("Hello World", result3);
+		
+		// Test locale != null branch - covers line 167 (else branch)
+		// When locale is provided, should use that locale
+		var fmt4 = StringFormat.of("Price: {0,number,currency}");
+		var result4 = fmt4.format(Locale.US, 19.99);
+		// Should format using US locale (dollar sign)
+		assertTrue(result4.contains("19.99") || result4.contains("$19.99"));
+		
+		var result5 = fmt4.format(Locale.FRANCE, 19.99);
+		// Should format using France locale (different currency symbol)
+		assertTrue(result5.contains("19.99") || result5.contains("19,99"));
+		
+		// Note on other branches:
+		// - index >= args.length: This branch exists but testing it is complex because MessageFormat
+		//   behavior with missing arguments may vary. The existing test a01_messageFormat() already
+		//   tests patterns with missing args (line 188: assertMessageFormat("Hello {0}") with no args).
+		// - index < 0: parseIndexMF can parse negative numbers (it uses Integer.parseInt), so technically
+		//   a pattern like "{-1}" could create index = -1. However, MessageFormat syntax doesn't support
+		//   negative indices, so this is a defensive check. The branch exists but is unlikely to be
+		//   reached through normal MessageFormat patterns. Testing it would require either: (1) a pattern
+		//   that somehow parses to a negative index, or (2) directly constructing a MessageFormatToken
+		//   with a negative index via reflection. This may be marked as HTT (Hard To Test) if it cannot
+		//   be reached through the public API.
+	}
+
+	//====================================================================================================
+	// Test coverage for line 217 branches in StringFormatToken.append()
+	// Line 217: if (args == null || index >= args.length || index < 0)
+	//====================================================================================================
+	@Test void a15_stringFormatTokenBranches() {
+		// Test args == null branch - covers line 217 (args == null)
+		var fmt1 = StringFormat.of("Hello %s");
+		assertThrows(java.util.MissingFormatArgumentException.class, () -> fmt1.format((Object[])null));
+		
+		// Test with complex format and null args
+		var fmt2 = StringFormat.of("Price: %.2f");
+		assertThrows(java.util.MissingFormatArgumentException.class, () -> fmt2.format((Object[])null));
+		
+		// Test with explicit index format and null args
+		var fmt3 = StringFormat.of("First: %1$s, Second: %2$s");
+		assertThrows(java.util.MissingFormatArgumentException.class, () -> fmt3.format((Object[])null));
+		
+		// Note on other branches:
+		// - index >= args.length: This branch exists but testing it is complex because the index
+		//   calculation depends on how sequential vs explicit indices are handled. The existing
+		//   test a02_stringFormat() already tests patterns with missing args (line 282-283:
+		//   assertStringFormat("Hello %s") and assertStringFormat("Hello %s and %s", "John")).
+		//   These tests verify that MissingFormatArgumentException is thrown, which exercises
+		//   the index >= args.length branch.
+		// - index < 0: parseIndexSF can parse negative numbers (it uses Integer.parseInt), and the
+		//   index is calculated as parseIndexSF(...) - 1. So if parseIndexSF returns 0, index = -1.
+		//   However, printf-style format specifiers use 1-based indexing (e.g., %1$s), so parseIndexSF
+		//   would return 1, making index = 0. A negative index would require parseIndexSF to return 0,
+		//   which would mean a format specifier like %0$s. While this is technically possible to parse,
+		//   it's invalid printf syntax (indices must be >= 1). The branch exists as a defensive check
+		//   but is unlikely to be reached through normal printf patterns. This may be marked as HTT
+		//   (Hard To Test) if it cannot be reached through the public API.
+	}
+
 	@Test void a12_localeHandling() {
 		// Lines 259-260: Test locale null checks and default locale detection in StringFormatToken
 		// Line 259: var l = locale == null ? Locale.getDefault() : locale;
@@ -422,5 +516,28 @@ class StringFormat_Test extends TestBase {
 		assertStringFormat("Hello %s", Locale.FRANCE, "John");
 		assertStringFormat("Number: %d", Locale.GERMANY, 42);
 		assertStringFormat("Float: %.2f", Locale.JAPAN, 3.14);  // Use .2f for consistent formatting
+	}
+
+	//====================================================================================================
+	// format(String, Locale, Object...) - covers lines 413-415
+	//====================================================================================================
+	@Test void a13_format_withLocale() {
+		// Test with empty args - covers lines 413-414 (args.length == 0, return pattern)
+		String result1 = StringFormat.format("Hello", Locale.US);
+		assertEquals("Hello", result1);
+		
+		String result2 = StringFormat.format("Test pattern", Locale.FRANCE);
+		assertEquals("Test pattern", result2);
+		
+		// Test with args - covers line 415 (calls of(pattern).format(locale, args))
+		String result3 = StringFormat.format("Hello %s", Locale.US, "World");
+		assertEquals("Hello World", result3);
+		
+		String result4 = StringFormat.format("Price: {0,number,currency}", Locale.US, 19.99);
+		assertTrue(result4.contains("19.99") || result4.contains("$19.99"));
+		
+		// Test with null locale and empty args - covers line 413-414
+		String result5 = StringFormat.format("Test", (Locale)null);
+		assertEquals("Test", result5);
 	}
 }

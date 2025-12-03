@@ -489,10 +489,20 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a018_compare() {
+		// Both non-null - covers line 634
 		assertTrue(compare("a", "b") < 0);
 		assertTrue(compare("b", "a") > 0);
+		assertEquals(0, compare("a", "a"));
+		
+		// s1 null - covers line 630-631 (returns Integer.MIN_VALUE)
+		assertEquals(Integer.MIN_VALUE, compare(null, "b"));
 		assertTrue(compare(null, "b") < 0);
+		
+		// s2 null - covers line 632-633 (returns Integer.MAX_VALUE)
+		assertEquals(Integer.MAX_VALUE, compare("b", null));
 		assertTrue(compare("b", null) > 0);
+		
+		// Both null - covers line 628-629
 		assertEquals(0, compare(null, null));
 	}
 
