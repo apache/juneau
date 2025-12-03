@@ -574,103 +574,46 @@
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 	}
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	<em class="jxr_comment">// isInnerClass(GenericDeclaration, GenericDeclaration) tests</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	<em class="jxr_comment">// getProxyFor(Object) tests</em>
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 	@Test
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> l01_isInnerClass_<strong class="jxr_keyword">true</strong>() {
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		assertTrue(isInnerClass(Map.<strong class="jxr_keyword">class</strong>, Map.Entry.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m01_getProxyFor_<strong class="jxr_keyword">null</strong>() {
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		assertNull(getProxyFor(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 	}
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 	@Test
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> l02_isInnerClass_false() {
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		assertFalse(isInnerClass(Map.Entry.<strong class="jxr_keyword">class</strong>, Map.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		assertFalse(isInnerClass(String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m02_getProxyFor_regularObject() {
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">var</strong> obj = <span class="jxr_string">"test"</span>;
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		assertNull(getProxyFor(obj));
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 	}
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 	@Test
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> l03_isInnerClass_sameClass() {
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		assertFalse(isInnerClass(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	}
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	@Test
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> l04_isInnerClass_nestedInner() {
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">class</strong> Outer {
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			<strong class="jxr_keyword">class</strong> Inner {
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 				<strong class="jxr_keyword">class</strong> Deep {}
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			}
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		}
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		assertTrue(isInnerClass(Outer.<strong class="jxr_keyword">class</strong>, Outer.Inner.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		assertTrue(isInnerClass(Outer.<strong class="jxr_keyword">class</strong>, Outer.Inner.Deep.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		assertTrue(isInnerClass(Outer.Inner.<strong class="jxr_keyword">class</strong>, Outer.Inner.Deep.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	}
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	@Test
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> l05_isInnerClass_notClass() {
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<em class="jxr_comment">// Test line 590: false branch when od or id is not a Class</em>
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<em class="jxr_comment">// When od or id is not a Class, the instanceof check fails and method returns false</em>
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		Method method = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		Constructor&lt;?&gt; constructor = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 			method = String.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"toString"</span>);
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 			constructor = String.<strong class="jxr_keyword">class</strong>.getConstructor();
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		} <strong class="jxr_keyword">catch</strong> (NoSuchMethodException e) {
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 			fail(<span class="jxr_string">"Could not get method or constructor for testing"</span>);
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		}
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<em class="jxr_comment">// Test with Method (not a Class)</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		assertFalse(isInnerClass(String.<strong class="jxr_keyword">class</strong>, method));
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		assertFalse(isInnerClass(method, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		<em class="jxr_comment">// Test with Constructor (not a Class)</em>
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		assertFalse(isInnerClass(String.<strong class="jxr_keyword">class</strong>, constructor));
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		assertFalse(isInnerClass(constructor, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<em class="jxr_comment">// Test with both non-Class</em>
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		assertFalse(isInnerClass(method, constructor));
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	}
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 	<em class="jxr_comment">// getProxyFor(Object) tests</em>
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 	@Test
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m01_getProxyFor_<strong class="jxr_keyword">null</strong>() {
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		assertNull(getProxyFor(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	}
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	@Test
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m02_getProxyFor_regularObject() {
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">var</strong> obj = <span class="jxr_string">"test"</span>;
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		assertNull(getProxyFor(obj));
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	}
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	@Test
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m03_getProxyFor_jdkProxy() {
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<em class="jxr_comment">// Create a JDK dynamic proxy</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">var</strong> proxy = Proxy.newProxyInstance(
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			Thread.currentThread().getContextClassLoader(),
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			<strong class="jxr_keyword">new</strong> Class[]{List.<strong class="jxr_keyword">class</strong>},
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			(proxy1, method, args) -&gt; <strong class="jxr_keyword">null</strong>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		);
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">var</strong> result = getProxyFor(proxy);
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		assertEquals(List.<strong class="jxr_keyword">class</strong>, result);
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	}
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 	@Test
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m04_getProxyFor_jdkProxy_noInterfaces() {
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		<em class="jxr_comment">// Create a JDK dynamic proxy with no interfaces (edge case)</em>
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">var</strong> proxy = Proxy.newProxyInstance(
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			Thread.currentThread().getContextClassLoader(),
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			<strong class="jxr_keyword">new</strong> Class[0],
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			(proxy1, method, args) -&gt; <strong class="jxr_keyword">null</strong>
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		);
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">var</strong> result = getProxyFor(proxy);
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		assertNull(result);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	}
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> }
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m03_getProxyFor_jdkProxy() {
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<em class="jxr_comment">// Create a JDK dynamic proxy</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">var</strong> proxy = Proxy.newProxyInstance(
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 			Thread.currentThread().getContextClassLoader(),
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 			<strong class="jxr_keyword">new</strong> Class[]{List.<strong class="jxr_keyword">class</strong>},
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 			(proxy1, method, args) -&gt; <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		);
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">var</strong> result = getProxyFor(proxy);
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		assertEquals(List.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	@Test
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m04_getProxyFor_jdkProxy_noInterfaces() {
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<em class="jxr_comment">// Create a JDK dynamic proxy with no interfaces (edge case)</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		<strong class="jxr_keyword">var</strong> proxy = Proxy.newProxyInstance(
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 			Thread.currentThread().getContextClassLoader(),
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 			<strong class="jxr_keyword">new</strong> Class[0],
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 			(proxy1, method, args) -&gt; <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">var</strong> result = getProxyFor(proxy);
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		assertNull(result);
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 	}
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> }
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
