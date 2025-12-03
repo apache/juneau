@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.commons.collections.CacheMode.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
@@ -726,7 +727,7 @@ class Cache2_Test extends TestBase {
 
 		// Verify each thread's cache is independent - same thread should get same cached value
 		var threadValues2 = new ConcurrentHashMap<Thread, String>();
-		var threads = new java.util.ArrayList<Thread>(threadValues.keySet());
+		var threads = new ArrayList<>(threadValues.keySet());
 
 		future1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
 			var value = x.get("user", 123, () -> "should-not-be-called");

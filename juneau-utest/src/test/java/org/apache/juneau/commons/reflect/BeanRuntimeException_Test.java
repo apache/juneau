@@ -164,7 +164,7 @@ class BeanRuntimeException_Test extends TestBase {
 
 	@Test
 	void d06_constructor_withNullCauseNullClassAndNullMessage_handlesNulls() {
-		var ex = new BeanRuntimeException(null, null, null);
+		var ex = new BeanRuntimeException((Class<?>)null, null, (Object)null);
 		assertNotNull(ex);
 		assertNull(ex.getCause());
 		assertNull(ex.getMessage());

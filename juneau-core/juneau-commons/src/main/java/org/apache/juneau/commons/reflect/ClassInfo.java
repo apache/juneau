@@ -1462,11 +1462,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public List<ClassInfo> getPermittedSubclasses() {
 		if (inner == null || ! inner.isSealed())
 			return u(l());
-		Class<?>[] permitted = inner.getPermittedSubclasses();
-		List<ClassInfo> l = listOfSize(permitted.length);
-		for (Class<?> cc : permitted)
-			l.add(of(cc));
-		return u(l);
+		return u(stream(inner.getPermittedSubclasses()).map(ClassInfo::of).toList());
 	}
 
 	/**

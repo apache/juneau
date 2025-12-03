@@ -1,6 +1,6 @@
 # TODO List
 
-**Last generated TODO number: TODO-91**
+**Last generated TODO number: TODO-93**
 
 This file tracks pending tasks for the Apache Juneau project. For completed items, see [TODO-completed.md](TODO-completed.md).
 
@@ -19,6 +19,8 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-29 Finish setting up SonarQube analysis in git workflow.
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
 - [ ] TODO-90 Investigate replacing `StringUtils.parseIsoCalendar()` with java.time APIs and removing the helper if possible.
+- [ ] TODO-92 Investigate if `ClassInfo.asSubclass(Class<U>)` can return a `ClassInfoTyped<U>` object instead of `ClassInfo` for better type safety.
+- [ ] TODO-93 Investigate if `ReflectionUtils.info(Class<?>)` should return a `ClassInfoTyped` object instead of `ClassInfo` for better type safety.
 
 ## Framework Improvements
 

@@ -584,6 +584,30 @@ class ExecutableInfo_Test extends TestBase {
 		assertFalse(a.getPublicMethod(x -> x.hasName("foo")).get().is(ElementFlag.CONSTRUCTOR));
 		assertTrue(a.getPublicMethod(x -> x.hasName("foo")).get().is(NOT_CONSTRUCTOR));
 		
+		// SYNTHETIC and NOT_SYNTHETIC (lines 531, 532)
+		// Regular executables are not synthetic
+		assertFalse(b_c1.isSynthetic());
+		assertFalse(b_c1.is(SYNTHETIC));
+		assertTrue(b_c1.is(NOT_SYNTHETIC));
+		assertFalse(b_m1.isSynthetic());
+		assertFalse(b_m1.is(SYNTHETIC));
+		assertTrue(b_m1.is(NOT_SYNTHETIC));
+		
+		// VARARGS and NOT_VARARGS (lines 532, 533)
+		var varArgsCi = ClassInfo.of(VarArgsClass.class);
+		var varArgsCtor = varArgsCi.getPublicConstructor(cons -> cons.isVarArgs()).get();
+		assertTrue(varArgsCtor.isVarArgs());
+		assertTrue(varArgsCtor.is(VARARGS));
+		assertFalse(varArgsCtor.is(NOT_VARARGS));
+		
+		// Non-varargs executables
+		assertFalse(b_c1.isVarArgs());
+		assertFalse(b_c1.is(VARARGS));
+		assertTrue(b_c1.is(NOT_VARARGS));
+		assertFalse(b_m1.isVarArgs());
+		assertFalse(b_m1.is(VARARGS));
+		assertTrue(b_m1.is(NOT_VARARGS));
+		
 		// TRANSIENT is a valid modifier flag but doesn't apply to executables
 		assertFalse(e_deprecated.is(TRANSIENT));
 		

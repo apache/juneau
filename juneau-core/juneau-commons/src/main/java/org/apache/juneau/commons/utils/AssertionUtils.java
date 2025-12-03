@@ -110,9 +110,8 @@ public class AssertionUtils {
 	 * @return The same object.
 	 * @throws IllegalArgumentException Thrown if the specified string is <jk>null</jk> or blank.
 	 */
-	@SuppressWarnings("null")
 	public static final String assertArgNotNullOrBlank(String name, String o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		assertArgNotNull(name, o);
 		assertArg(! o.isBlank(), "Argument ''{0}'' cannot be blank.", name);
 		return o;
 	}
@@ -137,8 +136,8 @@ public class AssertionUtils {
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2) throws IllegalArgumentException {
-		assertArg(o1 != null, "Argument ''{0}'' cannot be null.", name1);
-		assertArg(o2 != null, "Argument ''{0}'' cannot be null.", name2);
+		assertArgNotNull(name1, o1);
+		assertArgNotNull(name2, o2);
 	}
 
 	/**
@@ -163,9 +162,9 @@ public class AssertionUtils {
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3) throws IllegalArgumentException {
-		assertArg(o1 != null, "Argument ''{0}'' cannot be null.", name1);
-		assertArg(o2 != null, "Argument ''{0}'' cannot be null.", name2);
-		assertArg(o3 != null, "Argument ''{0}'' cannot be null.", name3);
+		assertArgNotNull(name1, o1);
+		assertArgNotNull(name2, o2);
+		assertArgNotNull(name3, o3);
 	}
 
 	/**
@@ -182,10 +181,10 @@ public class AssertionUtils {
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4) throws IllegalArgumentException {
-		assertArg(o1 != null, "Argument ''{0}'' cannot be null.", name1);
-		assertArg(o2 != null, "Argument ''{0}'' cannot be null.", name2);
-		assertArg(o3 != null, "Argument ''{0}'' cannot be null.", name3);
-		assertArg(o4 != null, "Argument ''{0}'' cannot be null.", name4);
+		assertArgNotNull(name1, o1);
+		assertArgNotNull(name2, o2);
+		assertArgNotNull(name3, o3);
+		assertArgNotNull(name4, o4);
 	}
 
 	/**
@@ -205,11 +204,11 @@ public class AssertionUtils {
 	 */
 	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4, String name5, Object o5)
 		throws IllegalArgumentException {
-		assertArg(o1 != null, "Argument ''{0}'' cannot be null.", name1);
-		assertArg(o2 != null, "Argument ''{0}'' cannot be null.", name2);
-		assertArg(o3 != null, "Argument ''{0}'' cannot be null.", name3);
-		assertArg(o4 != null, "Argument ''{0}'' cannot be null.", name4);
-		assertArg(o5 != null, "Argument ''{0}'' cannot be null.", name5);
+		assertArgNotNull(name1, o1);
+		assertArgNotNull(name2, o2);
+		assertArgNotNull(name3, o3);
+		assertArgNotNull(name4, o4);
+		assertArgNotNull(name5, o5);
 	}
 
 	/**
@@ -232,10 +231,10 @@ public class AssertionUtils {
 	 * @return The object cast to the specified type.
 	 * @throws IllegalArgumentException Thrown if the object is not an instance of the specified type.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked" })
 	public static final <T> T assertType(Class<T> type, Object o) throws IllegalArgumentException {
-		assertArg(type != null, "Type cannot be null.");
-		assertArg(o != null, "Object cannot be null.");
+		assertArgNotNull("type", type);
+		assertArgNotNull("o", o);
 		if (! type.isInstance(o))
 			throw illegalArg("Object is not an instance of {0}: {1}", cn(type), cn(o));
 		return (T)o;
@@ -262,10 +261,10 @@ public class AssertionUtils {
 	 * @return The object cast to the specified type.
 	 * @throws RuntimeException Thrown if the object is not an instance of the specified type (the exception is provided by the supplier).
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked" })
 	public static final <T> T assertType(Class<T> type, Object o, java.util.function.Supplier<? extends RuntimeException> exceptionSupplier) throws RuntimeException {
-		assertArg(type != null, "Type cannot be null.");
-		assertArg(o != null, "Object cannot be null.");
+		assertArgNotNull("type", type);
+		assertArgNotNull("o", o);
 		if (! type.isInstance(o))
 			throw exceptionSupplier.get();
 		return (T)o;
@@ -316,9 +315,8 @@ public class AssertionUtils {
 	 * @return The same object.
 	 * @throws IllegalArgumentException Thrown if the specified varargs array or any of its elements are <jk>null</jk>.
 	 */
-	@SuppressWarnings("null")
 	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		assertArgNotNull(name, o);
 		for (var i = 0; i < o.length; i++)
 			assertArg(nn(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);
 		return o;

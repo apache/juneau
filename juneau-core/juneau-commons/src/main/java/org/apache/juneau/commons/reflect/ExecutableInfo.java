@@ -711,8 +711,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	@Override
 	public final boolean setAccessible() {
-		if (!nn(inner))
-			return false;
+		// inner can never be null - constructor asserts non-null via assertArgNotNull
 		return safeOpt(() -> {
 			inner.setAccessible(true);
 			return true;

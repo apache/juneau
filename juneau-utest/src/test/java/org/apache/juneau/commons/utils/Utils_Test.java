@@ -868,6 +868,53 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// safe(Snippet, Function<Throwable, RuntimeException>)
+	//====================================================================================================
+	@Test
+	void a48b_safe_Snippet_withExceptionMapper() {
+		// Test normal execution
+		AtomicInteger count = new AtomicInteger(0);
+		safe((Snippet)() -> {
+			count.incrementAndGet();
+		}, e -> new RuntimeException("mapped: " + e.getMessage()));
+		assertEquals(1, count.get());
+
+		// Test RuntimeException is rethrown (not mapped)
+		var re = assertThrows(RuntimeException.class, () -> safe((Snippet)() -> {
+			throw new RuntimeException("original");
+		}, e -> new RuntimeException("mapped: " + e.getMessage())));
+		assertEquals("original", re.getMessage());
+
+		// Test checked exception is mapped using the provided function
+		var mapped = assertThrows(RuntimeException.class, () -> safe((Snippet)() -> {
+			throw new Exception("test exception");
+		}, e -> new IllegalArgumentException("custom: " + e.getMessage())));
+		assertEquals("custom: test exception", mapped.getMessage());
+		assertTrue(mapped instanceof IllegalArgumentException);
+
+		// Test Error is mapped
+		var mappedError = assertThrows(RuntimeException.class, () -> safe((Snippet)() -> {
+			throw new Error("test error");
+		}, e -> new IllegalStateException("error: " + e.getMessage())));
+		assertEquals("error: test error", mappedError.getMessage());
+		assertTrue(mappedError instanceof IllegalStateException);
+
+		// Test with custom exception type
+		@SuppressWarnings("serial")
+		class CustomRuntimeException extends RuntimeException {
+			CustomRuntimeException(String message, Throwable cause) {
+				super(message, cause);
+			}
+		}
+		var custom = assertThrows(CustomRuntimeException.class, () -> safe((Snippet)() -> {
+			throw new Exception("test");
+		}, e -> new CustomRuntimeException("wrapped", e)));
+		assertEquals("wrapped", custom.getMessage());
+		assertNotNull(custom.getCause());
+		assertEquals(Exception.class, custom.getCause().getClass());
+	}
+
+	//====================================================================================================
 	// safe(ThrowingSupplier<T>)
 	//====================================================================================================
 	@Test
@@ -888,6 +935,49 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// safe(ThrowingSupplier<T>, Function<Exception, RuntimeException>)
+	//====================================================================================================
+	@Test
+	void a49b_safe_ThrowingSupplier_withExceptionMapper() {
+		// Test normal execution
+		ThrowingSupplier<String> supplier1 = () -> "result";
+		Function<Exception, RuntimeException> mapper1 = e -> new RuntimeException("mapped: " + e.getMessage());
+		String result = Utils.safe(supplier1, mapper1);
+		assertEquals("result", result);
+
+		// Test RuntimeException is rethrown (not mapped)
+		ThrowingSupplier<String> supplier2 = () -> {
+			throw new RuntimeException("original");
+		};
+		Function<Exception, RuntimeException> mapper2 = e -> new RuntimeException("mapped: " + e.getMessage());
+		var re = assertThrows(RuntimeException.class, () -> Utils.safe(supplier2, mapper2));
+		assertEquals("original", re.getMessage());
+
+		// Test checked exception is mapped using the provided function
+		ThrowingSupplier<String> supplier3 = () -> {
+			throw new Exception("test exception");
+		};
+		Function<Exception, RuntimeException> mapper3 = e -> new IllegalArgumentException("custom: " + e.getMessage());
+		var mapped = assertThrows(RuntimeException.class, () -> Utils.safe(supplier3, mapper3));
+		assertEquals("custom: test exception", mapped.getMessage());
+		assertTrue(mapped instanceof IllegalArgumentException);
+
+		// Test with custom exception type
+		@SuppressWarnings("serial")
+		class CustomRuntimeException extends RuntimeException {
+			CustomRuntimeException(String message, Throwable cause) {
+				super(message, cause);
+			}
+		}
+		var custom = assertThrows(CustomRuntimeException.class, () -> Utils.<String>safeSupplier(() -> {
+			throw new Exception("test");
+		}, e -> new CustomRuntimeException("wrapped", e)));
+		assertEquals("wrapped", custom.getMessage());
+		assertNotNull(custom.getCause());
+		assertEquals(Exception.class, custom.getCause().getClass());
+	}
+
+	//====================================================================================================
 	// safeSupplier(ThrowableUtils.SupplierWithThrowable<T>)
 	//====================================================================================================
 	@Test
@@ -905,6 +995,50 @@ class Utils_Test extends TestBase {
 		assertThrows(RuntimeException.class, () -> safeSupplier(() -> {
 			throw new Exception("test");
 		}));
+	}
+
+	//====================================================================================================
+	// safeSupplier(ThrowableUtils.SupplierWithThrowable<T>, Function<Throwable, RuntimeException>)
+	//====================================================================================================
+	@Test
+	void a50b_safeSupplier_withExceptionMapper() {
+		// Test normal execution
+		String result = Utils.<String>safeSupplier(() -> "result", e -> new RuntimeException("mapped: " + e.getMessage()));
+		assertEquals("result", result);
+
+		// Test RuntimeException is rethrown (not mapped)
+		var re = assertThrows(RuntimeException.class, () -> Utils.<String>safeSupplier(() -> {
+			throw new RuntimeException("original");
+		}, e -> new RuntimeException("mapped: " + e.getMessage())));
+		assertEquals("original", re.getMessage());
+
+		// Test checked exception is mapped using the provided function
+		var mapped = assertThrows(RuntimeException.class, () -> Utils.<String>safeSupplier(() -> {
+			throw new Exception("test exception");
+		}, e -> new IllegalArgumentException("custom: " + e.getMessage())));
+		assertEquals("custom: test exception", mapped.getMessage());
+		assertTrue(mapped instanceof IllegalArgumentException);
+
+		// Test Error is mapped
+		var mappedError = assertThrows(RuntimeException.class, () -> Utils.<String>safeSupplier(() -> {
+			throw new Error("test error");
+		}, e -> new IllegalStateException("error: " + e.getMessage())));
+		assertEquals("error: test error", mappedError.getMessage());
+		assertTrue(mappedError instanceof IllegalStateException);
+
+		// Test with custom exception type
+		@SuppressWarnings("serial")
+		class CustomRuntimeException extends RuntimeException {
+			CustomRuntimeException(String message, Throwable cause) {
+				super(message, cause);
+			}
+		}
+		var custom = assertThrows(CustomRuntimeException.class, () -> Utils.<String>safeSupplier(() -> {
+			throw new Exception("test");
+		}, e -> new CustomRuntimeException("wrapped", e)));
+		assertEquals("wrapped", custom.getMessage());
+		assertNotNull(custom.getCause());
+		assertEquals(Exception.class, custom.getCause().getClass());
 	}
 
 	//====================================================================================================

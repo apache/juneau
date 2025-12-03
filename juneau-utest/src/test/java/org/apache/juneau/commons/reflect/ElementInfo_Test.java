@@ -153,7 +153,6 @@ class ElementInfo_Test extends TestBase {
 		var interfaceClass = getClassInfo(InterfaceClass.class);
 		var synchronizedMethod = getMethod(SynchronizedClass.class, "synchronizedMethod");
 		var nativeMethod = getMethod(NativeClass.class, "nativeMethod");
-		var strictMethod = getMethod(StrictClass.class, "strictMethod");
 		var transientField = getField(TransientClass.class, "transientField");
 		var volatileField = getField(VolatileClass.class, "volatileField");
 
@@ -212,29 +211,6 @@ class ElementInfo_Test extends TestBase {
 		assertTrue(publicMethod.is(NOT_NATIVE));
 		assertFalse(nativeMethod.is(NOT_NATIVE));
 
-		// Strict
-		// Note: strictfp is deprecated in Java 17+, so Modifier.isStrict() may not work as expected
-		// In Java 17+, all floating-point expressions are evaluated strictly by default
-		// The strictfp modifier is ignored, so isStrict() may return false even for strictfp methods
-		boolean isStrictSupported;
-		try {
-			isStrictSupported = Modifier.isStrict(StrictClass.class.getMethod("strictMethod").getModifiers());
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		}
-		if (isStrictSupported) {
-			assertTrue(strictMethod.is(STRICT));
-			assertFalse(publicMethod.is(STRICT));
-			assertTrue(publicMethod.is(NOT_STRICT));
-			assertFalse(strictMethod.is(NOT_STRICT));
-		} else {
-			// Java 17+ - strictfp is deprecated and ignored
-			assertFalse(strictMethod.is(STRICT));
-			assertFalse(publicMethod.is(STRICT));
-			assertTrue(publicMethod.is(NOT_STRICT));
-			assertTrue(strictMethod.is(NOT_STRICT));
-		}
-
 		// Transient
 		assertTrue(transientField.is(TRANSIENT));
 		assertFalse(publicField.is(TRANSIENT));
@@ -281,6 +257,16 @@ class ElementInfo_Test extends TestBase {
 		assertFalse(publicClass.isAll(PUBLIC, PRIVATE));
 		assertFalse(staticMethod.isAll(PUBLIC, STATIC, FINAL));
 		assertFalse(finalMethod.isAll(PUBLIC, STATIC));
+
+		// Empty flags array - allMatch on empty stream returns true (vacuous truth) (line 143)
+		assertTrue(publicClass.isAll());
+		assertTrue(staticMethod.isAll());
+		
+		// Single flag - ensures stream(flags).allMatch(this::is) is executed (line 143)
+		assertTrue(publicClass.isAll(PUBLIC));
+		assertFalse(publicClass.isAll(PRIVATE));
+		assertTrue(staticMethod.isAll(STATIC));
+		assertFalse(staticMethod.isAll(FINAL));
 	}
 
 	//====================================================================================================
@@ -300,6 +286,16 @@ class ElementInfo_Test extends TestBase {
 		// No flags match
 		assertFalse(publicClass.isAny(PRIVATE, PROTECTED));
 		assertFalse(staticMethod.isAny(PRIVATE, FINAL));
+
+		// Empty flags array - anyMatch on empty stream returns false (line 157)
+		assertFalse(publicClass.isAny(new ElementFlag[0]));
+		assertFalse(staticMethod.isAny(new ElementFlag[0]));
+		
+		// Single flag - ensures stream(flags).anyMatch(this::is) is executed (line 157)
+		assertTrue(publicClass.isAny(PUBLIC));
+		assertFalse(publicClass.isAny(PRIVATE));
+		assertTrue(staticMethod.isAny(STATIC));
+		assertFalse(staticMethod.isAny(FINAL));
 	}
 
 	//====================================================================================================
@@ -459,31 +455,6 @@ class ElementInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// isNotStrict()
-	//====================================================================================================
-	@Test
-	void a017_isNotStrict() {
-		var strictMethod = getMethod(StrictClass.class, "strictMethod");
-		var publicMethod = getMethod(PublicClass.class, "publicMethod");
-
-		// Note: strictfp is deprecated in Java 17+, so Modifier.isStrict() may not work as expected
-		boolean isStrictSupported;
-		try {
-			isStrictSupported = Modifier.isStrict(StrictClass.class.getMethod("strictMethod").getModifiers());
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		}
-		if (isStrictSupported) {
-			assertFalse(strictMethod.isNotStrict());
-			assertTrue(publicMethod.isNotStrict());
-		} else {
-			// Java 17+ - strictfp is deprecated and ignored
-			assertTrue(strictMethod.isNotStrict());
-			assertTrue(publicMethod.isNotStrict());
-		}
-	}
-
-	//====================================================================================================
 	// isNotSynchronized()
 	//====================================================================================================
 	@Test
@@ -589,30 +560,6 @@ class ElementInfo_Test extends TestBase {
 		assertFalse(publicField.isStatic());
 	}
 
-	//====================================================================================================
-	// isStrict()
-	//====================================================================================================
-	@Test
-	void a025_isStrict() {
-		var strictMethod = getMethod(StrictClass.class, "strictMethod");
-		var publicMethod = getMethod(PublicClass.class, "publicMethod");
-
-		// Note: strictfp is deprecated in Java 17+, so Modifier.isStrict() may not work as expected
-		boolean isStrictSupported;
-		try {
-			isStrictSupported = Modifier.isStrict(StrictClass.class.getMethod("strictMethod").getModifiers());
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		}
-		if (isStrictSupported) {
-			assertTrue(strictMethod.isStrict());
-			assertFalse(publicMethod.isStrict());
-		} else {
-			// Java 17+ - strictfp is deprecated and ignored
-			assertFalse(strictMethod.isStrict());
-			assertFalse(publicMethod.isStrict());
-		}
-	}
 
 	//====================================================================================================
 	// isSynchronized()

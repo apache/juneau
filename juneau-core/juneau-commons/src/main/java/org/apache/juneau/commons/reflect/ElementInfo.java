@@ -118,8 +118,6 @@ public abstract class ElementInfo {
 			case INTERFACE -> isInterface();
 			case ABSTRACT -> isAbstract();
 			case NOT_ABSTRACT -> isNotAbstract();
-			case STRICT -> isStrict();
-			case NOT_STRICT -> isNotStrict();
 			default -> throw rex("Invalid flag for element: {0}", flag);
 		};
 	}
@@ -237,13 +235,6 @@ public abstract class ElementInfo {
 	public boolean isNotStatic() { return ! Modifier.isStatic(modifiers); }
 
 	/**
-	 * Returns <jk>true</jk> if this element is not strict.
-	 *
-	 * @return <jk>true</jk> if this element is not strict.
-	 */
-	public boolean isNotStrict() { return ! Modifier.isStrict(modifiers); }
-
-	/**
 	 * Returns <jk>true</jk> if this element is not synchronized.
 	 *
 	 * @return <jk>true</jk> if this element is not synchronized.
@@ -291,13 +282,6 @@ public abstract class ElementInfo {
 	 * @return <jk>true</jk> if this element is static.
 	 */
 	public boolean isStatic() { return Modifier.isStatic(modifiers); }
-
-	/**
-	 * Returns <jk>true</jk> if this element is strict.
-	 *
-	 * @return <jk>true</jk> if this element is strict.
-	 */
-	public boolean isStrict() { return Modifier.isStrict(modifiers); }
 
 	/**
 	 * Returns <jk>true</jk> if this element is synchronized.

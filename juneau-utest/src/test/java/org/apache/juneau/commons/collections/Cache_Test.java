@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.collections.CacheMode.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
@@ -106,11 +107,11 @@ class Cache_Test extends TestBase {
 
 		// Null keys are now allowed
 		assertEquals("value-null", cache.get(null, () -> "value-null"));
-		
+
 		// Verify caching works with null keys
 		assertEquals("value-null", cache.get(null)); // Cached (hit #1)
 		assertEquals(1, cache.getCacheHits());
-		
+
 		assertEquals("value-null", cache.get(null)); // Cached (hit #2)
 		assertEquals(2, cache.getCacheHits());
 	}
@@ -1023,7 +1024,7 @@ class Cache_Test extends TestBase {
 
 		// Verify each thread's cache is independent - same thread should get same cached value
 		var threadValues2 = new ConcurrentHashMap<Thread, String>();
-		var threads = new java.util.ArrayList<Thread>(threadValues.keySet());
+		var threads = new ArrayList<>(threadValues.keySet());
 
 		future1 = CompletableFuture.runAsync(() -> {
 			var value = cache.get("key1", () -> "should-not-be-called");

@@ -688,11 +688,4 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 		return result;
 	}
-
-	MethodInfo findMatchingOnClass(ClassInfo c) {
-		for (var m2 : c.getDeclaredMethods())
-			if (hasName(m2.getName()) && hasParameterTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
-				return m2;
-		return null;
-	}
 }

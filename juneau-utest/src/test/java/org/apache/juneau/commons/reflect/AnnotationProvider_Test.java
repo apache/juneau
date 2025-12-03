@@ -19,7 +19,6 @@ package org.apache.juneau.commons.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -128,7 +127,7 @@ class AnnotationProvider_Test extends TestBase {
 		var provider = AnnotationProvider.create().build();
 		var ci = ClassInfo.of(TestClass.class);
 		var annotations = provider.find(TestAnnotation.class, ci, SELF);
-		
+
 		assertNotNull(annotations);
 		assertEquals(1, annotations.size());
 		assertEquals("class", annotations.get(0).getValue().orElse(null));
@@ -139,7 +138,7 @@ class AnnotationProvider_Test extends TestBase {
 		var provider = AnnotationProvider.create().build();
 		var ci = ClassInfo.of(ChildClass.class);
 		var annotations = provider.find(TestAnnotation.class, ci, SELF, PARENTS);
-		
+
 		assertNotNull(annotations);
 		// Should find annotation on child class
 		assertTrue(annotations.size() >= 1);
@@ -154,7 +153,7 @@ class AnnotationProvider_Test extends TestBase {
 		var provider = AnnotationProvider.create().build();
 		var ci = ClassInfo.of(TestClass.class);
 		var annotations = provider.find(ParentAnnotation.class, ci, SELF);
-		
+
 		assertNotNull(annotations);
 		assertTrue(annotations.isEmpty());
 	}
@@ -182,7 +181,7 @@ class AnnotationProvider_Test extends TestBase {
 		var provider = AnnotationProvider.create().build();
 		var ci = ClassInfo.of(TestClass.class);
 		var annotations = provider.find(ci, SELF);
-		
+
 		assertNotNull(annotations);
 		assertTrue(annotations.size() >= 1);
 		assertTrue(annotations.stream().anyMatch(a -> a.isType(TestAnnotation.class)));
@@ -204,9 +203,9 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		var field = ci.getPublicField(x -> x.hasName("field1")).orElse(null);
 		assertNotNull(field);
-		
+
 		var annotations = provider.find(MultiTargetAnnotation.class, field, SELF);
-		
+
 		assertNotNull(annotations);
 		assertEquals(1, annotations.size());
 		assertEquals(1, annotations.get(0).getInt("value").orElse(0));
@@ -222,14 +221,14 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		var field = ci.getPublicField(x -> x.hasName("field1")).orElse(null);
 		assertNotNull(field);
-		
+
 		// Call with SELF traversal - should include both runtime annotations (line 1040) and declared annotations (line 1041)
 		var annotations = provider.find(TestAnnotation.class, field, SELF);
-		
+
 		assertNotNull(annotations);
 		// Should find both the runtime annotation and the declared annotation (if any)
 		assertTrue(annotations.size() >= 1, "Should find at least the runtime annotation");
-		
+
 		// Verify runtime annotation is found
 		var runtimeAnnotationFound = annotations.stream()
 			.filter(a -> a.getValue().orElse("").equals("runtimeField"))
@@ -243,9 +242,9 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		var field = ci.getPublicField(x -> x.hasName("field1")).orElse(null);
 		assertNotNull(field);
-		
+
 		var annotations = provider.find(TestAnnotation.class, field, SELF);
-		
+
 		assertNotNull(annotations);
 		assertTrue(annotations.isEmpty());
 	}
@@ -260,9 +259,9 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		var field = ci.getPublicField(x -> x.hasName("field1")).orElse(null);
 		assertNotNull(field);
-		
+
 		var annotations = provider.find(field, SELF);
-		
+
 		assertNotNull(annotations);
 		assertTrue(annotations.size() >= 1);
 		assertTrue(annotations.stream().anyMatch(a -> a.isType(MultiTargetAnnotation.class)));
@@ -278,9 +277,9 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		var constructor = ci.getPublicConstructor(x -> x.getParameterCount() == 0).orElse(null);
 		assertNotNull(constructor);
-		
+
 		var annotations = provider.find(MultiTargetAnnotation.class, constructor, SELF);
-		
+
 		assertNotNull(annotations);
 		assertEquals(1, annotations.size());
 		assertEquals(2, annotations.get(0).getInt("value").orElse(0));
@@ -296,9 +295,9 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		var constructor = ci.getPublicConstructor(x -> x.getParameterCount() == 0).orElse(null);
 		assertNotNull(constructor);
-		
+
 		var annotations = provider.find(constructor, SELF);
-		
+
 		assertNotNull(annotations);
 		assertTrue(annotations.size() >= 1);
 		assertTrue(annotations.stream().anyMatch(a -> a.isType(MultiTargetAnnotation.class)));
@@ -314,9 +313,9 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		MethodInfo method = ci.getPublicMethod(x -> x.hasName("method1")).orElse(null);
 		assertNotNull(method);
-		
+
 		var annotations = provider.find(MultiTargetAnnotation.class, method, SELF);
-		
+
 		assertNotNull(annotations);
 		assertEquals(1, annotations.size());
 		assertEquals(3, annotations.get(0).getInt("value").orElse(0));
@@ -332,9 +331,9 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		var method = ci.getPublicMethod(x -> x.hasName("method1")).orElse(null);
 		assertNotNull(method);
-		
+
 		var annotations = provider.find(method, SELF);
-		
+
 		assertNotNull(annotations);
 		assertTrue(annotations.size() >= 1);
 		assertTrue(annotations.stream().anyMatch(a -> a.isType(MultiTargetAnnotation.class)));
@@ -352,9 +351,9 @@ class AnnotationProvider_Test extends TestBase {
 		assertNotNull(method);
 		ParameterInfo param = method.getParameter(0);
 		assertNotNull(param);
-		
+
 		var annotations = provider.find(MultiTargetAnnotation.class, param, SELF);
-		
+
 		assertNotNull(annotations);
 		assertEquals(1, annotations.size());
 		assertEquals(4, annotations.get(0).getInt("value").orElse(0));
@@ -372,9 +371,9 @@ class AnnotationProvider_Test extends TestBase {
 		assertNotNull(method);
 		var param = method.getParameter(0);
 		assertNotNull(param);
-		
+
 		var annotations = provider.find(param, SELF);
-		
+
 		assertNotNull(annotations);
 		assertTrue(annotations.size() >= 1);
 		assertTrue(annotations.stream().anyMatch(a -> a.isType(MultiTargetAnnotation.class)));
@@ -388,7 +387,7 @@ class AnnotationProvider_Test extends TestBase {
 	void l01_has_typedClass_exists_returnsTrue() {
 		var provider = AnnotationProvider.create().build();
 		var ci = ClassInfo.of(TestClass.class);
-		
+
 		assertTrue(provider.has(TestAnnotation.class, ci, SELF));
 	}
 
@@ -396,7 +395,7 @@ class AnnotationProvider_Test extends TestBase {
 	void l02_has_typedClass_notExists_returnsFalse() {
 		var provider = AnnotationProvider.create().build();
 		var ci = ClassInfo.of(TestClass.class);
-		
+
 		assertFalse(provider.has(ParentAnnotation.class, ci, SELF));
 	}
 
@@ -410,7 +409,7 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		ConstructorInfo constructor = ci.getPublicConstructor(x -> x.getParameterCount() == 0).orElse(null);
 		assertNotNull(constructor);
-		
+
 		assertTrue(provider.has(MultiTargetAnnotation.class, constructor, SELF));
 	}
 
@@ -420,7 +419,7 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		ConstructorInfo constructor = ci.getPublicConstructor(x -> x.getParameterCount() == 0).orElse(null);
 		assertNotNull(constructor);
-		
+
 		assertFalse(provider.has(TestAnnotation.class, constructor, SELF));
 	}
 
@@ -434,7 +433,7 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		FieldInfo field = ci.getPublicField(x -> x.hasName("field1")).orElse(null);
 		assertNotNull(field);
-		
+
 		assertTrue(provider.has(MultiTargetAnnotation.class, field, SELF));
 	}
 
@@ -444,7 +443,7 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		FieldInfo field = ci.getPublicField(x -> x.hasName("field1")).orElse(null);
 		assertNotNull(field);
-		
+
 		assertFalse(provider.has(TestAnnotation.class, field, SELF));
 	}
 
@@ -458,7 +457,7 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		MethodInfo method = ci.getPublicMethod(x -> x.hasName("method1")).orElse(null);
 		assertNotNull(method);
-		
+
 		assertTrue(provider.has(MultiTargetAnnotation.class, method, SELF));
 	}
 
@@ -468,7 +467,7 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		MethodInfo method = ci.getPublicMethod(x -> x.hasName("method1")).orElse(null);
 		assertNotNull(method);
-		
+
 		assertFalse(provider.has(TestAnnotation.class, method, SELF));
 	}
 
@@ -484,7 +483,7 @@ class AnnotationProvider_Test extends TestBase {
 		assertNotNull(method);
 		ParameterInfo param = method.getParameter(0);
 		assertNotNull(param);
-		
+
 		assertTrue(provider.has(MultiTargetAnnotation.class, param, SELF));
 	}
 
@@ -496,7 +495,7 @@ class AnnotationProvider_Test extends TestBase {
 		assertNotNull(method);
 		ParameterInfo param = method.getParameter(0);
 		assertNotNull(param);
-		
+
 		assertFalse(provider.has(TestAnnotation.class, param, SELF));
 	}
 
@@ -509,10 +508,10 @@ class AnnotationProvider_Test extends TestBase {
 		// This test covers line 991-992 - default traversals for ClassInfo (PARENTS, PACKAGE)
 		var provider = AnnotationProvider.create().build();
 		var ci = ClassInfo.of(ChildClass.class);
-		
+
 		// Call with no traversals - should use default (PARENTS, PACKAGE)
 		var annotations = provider.find(TestAnnotation.class, ci);
-		
+
 		assertNotNull(annotations);
 		// Should find annotation from child class
 		assertTrue(annotations.size() >= 1);
@@ -525,10 +524,10 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		MethodInfo method = ci.getPublicMethod(x -> x.hasName("method1")).orElse(null);
 		assertNotNull(method);
-		
+
 		// Call with no traversals - should use default (SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE)
 		var annotations = provider.find(MultiTargetAnnotation.class, method);
-		
+
 		assertNotNull(annotations);
 		assertTrue(annotations.size() >= 1);
 	}
@@ -540,10 +539,10 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		FieldInfo field = ci.getPublicField(x -> x.hasName("field1")).orElse(null);
 		assertNotNull(field);
-		
+
 		// Call with no traversals - should use default (SELF)
 		var annotations = provider.find(MultiTargetAnnotation.class, field);
-		
+
 		assertNotNull(annotations);
 		assertEquals(1, annotations.size());
 	}
@@ -555,10 +554,10 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		ConstructorInfo constructor = ci.getPublicConstructor(x -> x.getParameterCount() == 0).orElse(null);
 		assertNotNull(constructor);
-		
+
 		// Call with no traversals - should use default (SELF)
 		var annotations = provider.find(MultiTargetAnnotation.class, constructor);
-		
+
 		assertNotNull(annotations);
 		assertEquals(1, annotations.size());
 	}
@@ -572,10 +571,10 @@ class AnnotationProvider_Test extends TestBase {
 		assertNotNull(method);
 		ParameterInfo param = method.getParameter(0);
 		assertNotNull(param);
-		
+
 		// Call with no traversals - should use default (SELF, MATCHING_PARAMETERS, PARAMETER_TYPE)
 		var annotations = provider.find(MultiTargetAnnotation.class, param);
-		
+
 		assertNotNull(annotations);
 		assertTrue(annotations.size() >= 1);
 	}
@@ -585,14 +584,14 @@ class AnnotationProvider_Test extends TestBase {
 		// This test covers line 1014 - when getPackage() returns null
 		// Primitive types and arrays of primitives have no package
 		var provider = AnnotationProvider.create().build();
-		
+
 		// int.class has no package (getPackage() returns null)
 		var ci = ClassInfo.of(int.class);
 		assertNull(ci.getPackage(), "int.class should have no package");
-		
+
 		// Call with PACKAGE traversal - should handle null package gracefully
 		var annotations = provider.find(TestAnnotation.class, ci, AnnotationTraversal.PACKAGE);
-		
+
 		// Should not throw exception, just return empty list
 		assertNotNull(annotations);
 		assertEquals(0, annotations.size());
@@ -605,17 +604,17 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(MatchingMethodChild.class);
 		MethodInfo method = ci.getPublicMethod(x -> x.hasName("matchingMethod")).orElse(null);
 		assertNotNull(method);
-		
+
 		// Verify the matching methods order: [child, interface, parent]
 		var matchingMethods = method.getMatchingMethods();
 		assertTrue(matchingMethods.size() >= 3, "Should have at least child, interface, and parent methods. Found: " + matchingMethods.size());
-		
+
 		// Verify we can find the parent method in the matching methods
 		var parentMethod = matchingMethods.stream()
 			.filter(m -> MatchingMethodParent.class.equals(m.getDeclaringClass().inner()))
 			.findFirst();
 		assertTrue(parentMethod.isPresent(), "Parent method should be in matching methods");
-		
+
 		// Verify the parent method has the annotation
 		var parentMethodAnnotations = parentMethod.get().getDeclaredAnnotations(MultiTargetAnnotation.class).toList();
 		assertTrue(parentMethodAnnotations.size() > 0, "Parent method should have annotation. Found " + parentMethodAnnotations.size() + " annotations");
@@ -626,22 +625,22 @@ class AnnotationProvider_Test extends TestBase {
 			parentAnnotationValue = parentMethodAnnotation.getValue(Integer.class, "value").orElse(null);
 		}
 		assertEquals(20, parentAnnotationValue, "Parent method annotation should have value 20. Annotation: " + parentMethodAnnotation);
-		
+
 		// Skip the first (child method) - should have interface and parent
 		var methodsAfterSkip = matchingMethods.stream().skip(1).toList();
 		assertTrue(methodsAfterSkip.size() >= 2, "Should have interface and parent methods after skipping child");
-		
+
 		// Call with MATCHING_METHODS traversal - should include annotations from parent and interface methods
 		// Note: skip(1) skips the child method itself, so we get interface and parent
 		var annotations = provider.find(MultiTargetAnnotation.class, method, MATCHING_METHODS);
-		
+
 		assertNotNull(annotations);
 		// Should find annotations from:
 		// 1. Interface method (value=10) - from declared interfaces of child class
 		// 2. Parent class method (value=20) - from parent class
 		// Note: The child method itself is skipped by .skip(1)
 		assertTrue(annotations.size() >= 2, "Should find annotations from parent and interface matching methods. Found: " + annotations.size());
-		
+
 		// Debug: print what we found
 		var foundValues = annotations.stream()
 			.map(a -> {
@@ -653,7 +652,7 @@ class AnnotationProvider_Test extends TestBase {
 			})
 			.filter(v -> v != null)
 			.toList();
-		
+
 		// Verify we have the interface annotation (value=10) - comes first after skip(1)
 		var interfaceAnnotation = annotations.stream()
 			.filter(a -> {
@@ -665,7 +664,7 @@ class AnnotationProvider_Test extends TestBase {
 			})
 			.findFirst();
 		assertTrue(interfaceAnnotation.isPresent(), "Should find annotation from interface method. Found values: " + foundValues);
-		
+
 		// Verify we have the parent annotation (value=20) - comes after interface
 		var parentAnnotation = annotations.stream()
 			.filter(a -> {
@@ -688,11 +687,11 @@ class AnnotationProvider_Test extends TestBase {
 		assertNotNull(method);
 		ParameterInfo param = method.getParameter(0);
 		assertNotNull(param);
-		
+
 		// Verify the matching parameters order: [child, interface, parent]
 		var matchingParameters = param.getMatchingParameters();
 		assertTrue(matchingParameters.size() >= 3, "Should have at least child, interface, and parent parameters. Found: " + matchingParameters.size());
-		
+
 		// Verify we can find the parent parameter in the matching parameters
 		var parentParameter = matchingParameters.stream()
 			.filter(p -> {
@@ -704,7 +703,7 @@ class AnnotationProvider_Test extends TestBase {
 			})
 			.findFirst();
 		assertTrue(parentParameter.isPresent(), "Parent parameter should be in matching parameters");
-		
+
 		// Verify the parent parameter has the annotation
 		var parentParameterAnnotations = parentParameter.get().getAnnotations(MultiTargetAnnotation.class).toList();
 		assertTrue(parentParameterAnnotations.size() > 0, "Parent parameter should have annotation. Found " + parentParameterAnnotations.size() + " annotations");
@@ -714,22 +713,22 @@ class AnnotationProvider_Test extends TestBase {
 			parentParameterValue = parentParameterAnnotation.getValue(Integer.class, "value").orElse(null);
 		}
 		assertEquals(200, parentParameterValue, "Parent parameter annotation should have value 200. Annotation: " + parentParameterAnnotation);
-		
+
 		// Skip the first (child parameter) - should have interface and parent
 		var parametersAfterSkip = matchingParameters.stream().skip(1).toList();
 		assertTrue(parametersAfterSkip.size() >= 2, "Should have interface and parent parameters after skipping child");
-		
+
 		// Call with MATCHING_PARAMETERS traversal - should include annotations from parent and interface parameters
 		// Note: skip(1) skips the child parameter itself, so we get interface and parent
 		var annotations = provider.find(MultiTargetAnnotation.class, param, MATCHING_PARAMETERS);
-		
+
 		assertNotNull(annotations);
 		// Should find annotations from:
 		// 1. Interface parameter (value=100) - from declared interfaces of child class
 		// 2. Parent class parameter (value=200) - from parent class
 		// Note: The child parameter itself is skipped by .skip(1)
 		assertTrue(annotations.size() >= 2, "Should find annotations from parent and interface matching parameters. Found: " + annotations.size());
-		
+
 		// Debug: print what we found
 		var foundValues = annotations.stream()
 			.map(a -> {
@@ -741,7 +740,7 @@ class AnnotationProvider_Test extends TestBase {
 			})
 			.filter(v -> v != null)
 			.toList();
-		
+
 		// Verify we have the interface parameter annotation (value=100) - comes first after skip(1)
 		var interfaceAnnotation = annotations.stream()
 			.filter(a -> {
@@ -753,7 +752,7 @@ class AnnotationProvider_Test extends TestBase {
 			})
 			.findFirst();
 		assertTrue(interfaceAnnotation.isPresent(), "Should find annotation from interface parameter. Found values: " + foundValues);
-		
+
 		// Verify we have the parent parameter annotation (value=200) - comes after interface
 		var parentAnnotation = annotations.stream()
 			.filter(a -> {
@@ -777,15 +776,15 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		MethodInfo method = ci.getPublicMethod(x -> x.hasName("method1")).orElse(null);
 		assertNotNull(method);
-		
+
 		// Call with SELF traversal - should trigger runtimeCache.get() which calls load() for Method
 		// This covers line 1072: annotationMap.find(mi.inner())
 		var annotations = provider.find(TestAnnotation.class, method, SELF);
-		
+
 		assertNotNull(annotations);
 		// Should find the runtime annotation
 		assertTrue(annotations.size() >= 1, "Should find at least the runtime annotation");
-		
+
 		// Verify runtime annotation is found
 		var runtimeAnnotationFound = annotations.stream()
 			.filter(a -> a.getValue().orElse("").equals("runtimeMethod"))
@@ -804,15 +803,15 @@ class AnnotationProvider_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		ConstructorInfo constructor = ci.getPublicConstructor(x -> x.getParameterCount() == 0).orElse(null);
 		assertNotNull(constructor);
-		
+
 		// Call with SELF traversal - should trigger runtimeCache.get() which calls load() for Constructor
 		// This covers line 1080: annotationMap.find(ci.inner())
 		var annotations = provider.find(TestAnnotation.class, constructor, SELF);
-		
+
 		assertNotNull(annotations);
 		// Should find the runtime annotation
 		assertTrue(annotations.size() >= 1, "Should find at least the runtime annotation");
-		
+
 		// Verify runtime annotation is found
 		var runtimeAnnotationFound = annotations.stream()
 			.filter(a -> a.getValue().orElse("").equals("runtimeConstructor"))
@@ -847,7 +846,7 @@ class AnnotationProvider_Test extends TestBase {
 			.logOnExit(true)
 			.build();
 		assertNotNull(provider1);
-		
+
 		var provider2 = AnnotationProvider.create()
 			.logOnExit(false)
 			.build();
@@ -887,6 +886,7 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
+		@SuppressWarnings("unused")
 		public Class<?>[] onClass() {
 			return onClass;
 		}
@@ -930,6 +930,7 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
+		@SuppressWarnings("unused")
 		public String[] on() {
 			return on;
 		}
@@ -958,17 +959,17 @@ class AnnotationProvider_Test extends TestBase {
 		// This test covers line 245 - the varargs version that converts to list
 		var runtimeAnnotation1 = new RuntimeTestAnnotation(new Class<?>[]{TestClass.class}, "runtime1");
 		var runtimeAnnotation2 = new RuntimeTestAnnotation(new Class<?>[]{ParentClass.class}, "runtime2");
-		
+
 		var provider = AnnotationProvider.create()
 			.addRuntimeAnnotations(runtimeAnnotation1, runtimeAnnotation2)  // Varargs - covers line 245
 			.build();
-		
+
 		assertNotNull(provider);
-		
+
 		// Verify the runtime annotations are applied
 		var ci = ClassInfo.of(TestClass.class);
 		var annotations = provider.find(TestAnnotation.class, ci, SELF);
-		
+
 		// Should find the runtime annotation
 		assertTrue(annotations.size() >= 1);
 		var runtimeAnnotation = annotations.stream()
@@ -982,17 +983,17 @@ class AnnotationProvider_Test extends TestBase {
 		// This test covers line 343 - the on() method returning String[] is processed
 		var className = TestClass.class.getName();
 		var runtimeAnnotation = new RuntimeOnAnnotation(new String[]{className}, "runtimeOn");
-		
+
 		var provider = AnnotationProvider.create()
 			.addRuntimeAnnotations(runtimeAnnotation)
 			.build();
-		
+
 		assertNotNull(provider);
-		
+
 		// Verify the runtime annotation is applied using on() method
 		var ci = ClassInfo.of(TestClass.class);
 		var annotations = provider.find(TestAnnotation.class, ci, SELF);
-		
+
 		// Should find the runtime annotation
 		assertTrue(annotations.size() >= 1);
 		var runtimeAnnotationFound = annotations.stream()
@@ -1013,6 +1014,7 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
+		@SuppressWarnings("unused")
 		public String onClass() {  // Wrong return type - should be Class[]
 			return "invalid";
 		}
@@ -1045,6 +1047,7 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
+		@SuppressWarnings("unused")
 		public String on() {  // Wrong return type - should be String[]
 			return "invalid";
 		}
@@ -1069,7 +1072,7 @@ class AnnotationProvider_Test extends TestBase {
 	void n02_addRuntimeAnnotations_invalidOnClassReturnType_throwsException() {
 		// This test covers line 334 - onClass() method with wrong return type
 		var invalidAnnotation = new InvalidOnClassAnnotation();
-		
+
 		assertThrows(BeanRuntimeException.class, () -> {
 			AnnotationProvider.create()
 				.addRuntimeAnnotations(invalidAnnotation)
@@ -1081,7 +1084,7 @@ class AnnotationProvider_Test extends TestBase {
 	void n03_addRuntimeAnnotations_invalidOnReturnType_throwsException() {
 		// This test covers line 341 - on() method with wrong return type
 		var invalidAnnotation = new InvalidOnAnnotation();
-		
+
 		assertThrows(BeanRuntimeException.class, () -> {
 			AnnotationProvider.create()
 				.addRuntimeAnnotations(invalidAnnotation)
@@ -1101,6 +1104,7 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
+		@SuppressWarnings("unused")
 		public Class<?>[] onClass() {
 			throw new RuntimeException("Test exception from onClass()");
 		}
@@ -1125,7 +1129,7 @@ class AnnotationProvider_Test extends TestBase {
 	void n05_addRuntimeAnnotations_throwingOnClass_coversLine349() {
 		// This test covers line 349 - exception during method invocation (not BeanRuntimeException)
 		var throwingAnnotation = new ThrowingOnClassAnnotation();
-		
+
 		// The exception from onClass() will be caught and wrapped in BeanRuntimeException
 		assertThrows(BeanRuntimeException.class, () -> {
 			AnnotationProvider.create()

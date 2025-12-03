@@ -1377,6 +1377,35 @@ public class Utils {
 	}
 
 	/**
+	 * Runs a snippet of code with a custom exception mapper.
+	 *
+	 * <p>
+	 * This method allows you to define a function that converts any thrown throwable into a runtime exception.
+	 * This is useful when you need to wrap exceptions in a specific runtime exception type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Wrap code execution with custom exception handling</jc>
+	 * 	Utils.<jsm>safe</jsm>(() -&gt; {
+	 * 		<jc>// some code that may throw</jc>
+	 * 	}, <jv>e</jv> -&gt; <jk>new</jk> CustomRuntimeException(<jv>e</jv>));
+	 * </p>
+	 *
+	 * @param snippet The snippet of code to run.
+	 * @param exceptionMapper A function that converts the thrown throwable into a runtime exception.
+	 * @throws RuntimeException The exception returned by the exception mapper if the snippet throws a throwable.
+	 */
+	public static void safe(Snippet snippet, Function<Throwable, RuntimeException> exceptionMapper) {
+		try {
+			snippet.run();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw exceptionMapper.apply(t);
+		}
+	}
+
+	/**
 	 * Used to wrap code that returns a value but throws an exception.
 	 * Useful in cases where you're trying to execute code in a fluent method call
 	 * or are trying to eliminate untestable catch blocks in code.
@@ -1392,6 +1421,41 @@ public class Utils {
 			throw e;
 		} catch (Exception e) {
 			throw rex(e);
+		}
+	}
+
+	/**
+	 * Used to wrap code that returns a value but throws an exception, with a custom exception mapper.
+	 *
+	 * <p>
+	 * This method allows you to define a function that converts any thrown exception into a runtime exception.
+	 * This is useful when you need to wrap exceptions in a specific runtime exception type (e.g., {@link ExecutableException}).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Wrap a constructor invocation with custom exception handling</jc>
+	 * 	<jk>return</jk> Utils.<jsm>safe</jsm>(() -&gt; {
+	 * 		<jk>try</jk> {
+	 * 			<jk>return</jk> (<jk>T</jk>)inner.newInstance(args);
+	 * 		} <jk>catch</jk> (InvocationTargetException <jv>e</jv>) {
+	 * 			<jk>throw new</jk> ExecutableException(<jv>e</jv>.getTargetException());
+	 * 		}
+	 * 	}, <jv>e</jv> -&gt; <jk>new</jk> ExecutableException(<jv>e</jv>));
+	 * </p>
+	 *
+	 * @param <T> The return type.
+	 * @param s The supplier that may throw an exception.
+	 * @param exceptionMapper A function that converts the thrown exception into a runtime exception.
+	 * @return The result of the supplier execution.
+	 * @throws RuntimeException The exception returned by the exception mapper if the supplier throws an exception.
+	 */
+	public static <T> T safe(ThrowingSupplier<T> s, Function<Exception, RuntimeException> exceptionMapper) {
+		try {
+			return s.get();
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw exceptionMapper.apply(e);
 		}
 	}
 
@@ -1443,6 +1507,38 @@ public class Utils {
 			throw t;
 		} catch (Throwable t) {
 			throw toRex(t);
+		}
+	}
+
+	/**
+	 * Allows you to wrap a supplier that throws an exception with a custom exception mapper.
+	 *
+	 * <p>
+	 * This method allows you to define a function that converts any thrown throwable into a runtime exception.
+	 * This is useful when you need to wrap exceptions in a specific runtime exception type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Wrap a supplier with custom exception handling</jc>
+	 * 	<jk>return</jk> Utils.<jsm>safeSupplier</jsm>(() -&gt; {
+	 * 		<jc>// some code that may throw</jc>
+	 * 		<jk>return</jk> <jv>result</jv>;
+	 * 	}, <jv>e</jv> -&gt; <jk>new</jk> CustomRuntimeException(<jv>e</jv>));
+	 * </p>
+	 *
+	 * @param <T> The supplier type.
+	 * @param supplier The supplier throwing an exception.
+	 * @param exceptionMapper A function that converts the thrown throwable into a runtime exception.
+	 * @return The supplied result.
+	 * @throws RuntimeException The exception returned by the exception mapper if the supplier threw a throwable.
+	 */
+	public static <T> T safeSupplier(ThrowableUtils.SupplierWithThrowable<T> supplier, Function<Throwable, RuntimeException> exceptionMapper) {
+		try {
+			return supplier.get();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw exceptionMapper.apply(t);
 		}
 	}
 

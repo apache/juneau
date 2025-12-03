@@ -436,6 +436,12 @@ class FieldInfo_Test extends TestBase {
 		assertFalse(a1_f1.is(ENUM_CONSTANT));
 		assertTrue(a1_f1.is(NOT_ENUM_CONSTANT));
 		
+		// Synthetic (lines 314-315)
+		assertFalse(a1_f1.is(SYNTHETIC));
+		assertTrue(a1_f1.is(NOT_SYNTHETIC));
+		assertFalse(b_a1.is(SYNTHETIC));
+		assertTrue(b_a1.is(NOT_SYNTHETIC));
+		
 		// HAS_PARAMS doesn't apply to fields, should throw exception
 		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for element: HAS_PARAMS", () -> c_deprecated.is(HAS_PARAMS));
 	}

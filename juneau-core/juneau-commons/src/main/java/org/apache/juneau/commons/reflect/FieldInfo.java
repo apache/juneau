@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -176,12 +177,10 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T get(Object o) throws BeanRuntimeException {
-		try {
+		return safe(() -> {
 			inner.setAccessible(true);
 			return (T)inner.get(o);
-		} catch (Exception e) {
-			throw bex(e);
-		}
+		}, e -> bex(e));
 	}
 
 	@Override /* Annotatable */
@@ -400,12 +399,10 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
 	public void set(Object o, Object value) throws BeanRuntimeException {
-		try {
+		safe((Snippet)() -> {
 			inner.setAccessible(true);
 			inner.set(o, value);
-		} catch (Exception e) {
-			throw bex(e);
-		}
+		}, e -> bex(e));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

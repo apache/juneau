@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.reflect;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 
@@ -184,13 +185,13 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T newInstance(Object...args) throws ExecutableException {
-		try {
-			return (T)inner.newInstance(args);
-		} catch (InvocationTargetException e) {
-			throw new ExecutableException(e.getTargetException());
-		} catch (Exception e) {
-			throw new ExecutableException(e);
-		}
+		return safe(() -> {
+			try {
+				return (T)inner.newInstance(args);
+			} catch (InvocationTargetException e) {
+				throw new ExecutableException(e.getTargetException());
+			}
+		}, e -> new ExecutableException(e));
 	}
 
 	/**

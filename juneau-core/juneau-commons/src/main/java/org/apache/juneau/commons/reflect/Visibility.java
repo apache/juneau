@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 
 import java.beans.beancontext.*;
@@ -115,14 +116,14 @@ public enum Visibility {
 	 * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.
 	 *
 	 * @param <T> The class type.
-	 * @param x The constructor.
+	 * @param x The constructor. Must not be <jk>null</jk>.
 	 * @return
 	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
 	 * 	met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.
+	 * @throws IllegalArgumentException If <c>x</c> is <jk>null</jk>.
 	 */
 	public <T> Constructor<T> transform(Constructor<T> x) {
-		if (x == null)
-			return null;
+		assertArgNotNull("x", x);
 		if (isVisible(x))
 			if (! setAccessible(x))
 				return null;
@@ -135,14 +136,14 @@ public enum Visibility {
 	 * <p>
 	 * Security exceptions thrown on the call to {@link Field#setAccessible(boolean)} are quietly ignored.
 	 *
-	 * @param x The field.
+	 * @param x The field. Must not be <jk>null</jk>.
 	 * @return
 	 * 	The same field if visibility requirements met, or <jk>null</jk> if visibility requirement not
 	 * 	met or call to {@link Field#setAccessible(boolean)} throws a security exception.
+	 * @throws IllegalArgumentException If <c>x</c> is <jk>null</jk>.
 	 */
 	public Field transform(Field x) {
-		if (x == null)
-			return null;
+		assertArgNotNull("x", x);
 		if (isVisible(x))
 			if (! setAccessible(x))
 				return null;
@@ -155,14 +156,14 @@ public enum Visibility {
 	 * <p>
 	 * Security exceptions thrown on the call to {@link Method#setAccessible(boolean)} are quietly ignored.
 	 *
-	 * @param x The method.
+	 * @param x The method. Must not be <jk>null</jk>.
 	 * @return
 	 * 	The same method if visibility requirements met, or <jk>null</jk> if visibility requirement not
 	 * 	met or call to {@link Method#setAccessible(boolean)} throws a security exception.
+	 * @throws IllegalArgumentException If <c>x</c> is <jk>null</jk>.
 	 */
 	public Method transform(Method x) {
-		if (x == null)
-			return null;
+		assertArgNotNull("x", x);
 		if (isVisible(x))
 			if (! setAccessible(x))
 				return null;

@@ -59,7 +59,7 @@ package org.apache.juneau.commons.reflect;
  * <h5 class='section'>Modifier Flags:</h5>
  * <p>
  * Standard Java modifiers: <c>PUBLIC</c>, <c>PRIVATE</c>, <c>PROTECTED</c>, <c>STATIC</c>, <c>FINAL</c>,
- * <c>SYNCHRONIZED</c>, <c>VOLATILE</c>, <c>TRANSIENT</c>, <c>NATIVE</c>, <c>ABSTRACT</c>, <c>STRICT</c>.
+ * <c>SYNCHRONIZED</c>, <c>VOLATILE</c>, <c>TRANSIENT</c>, <c>NATIVE</c>, <c>ABSTRACT</c>.
  * Each has a corresponding <c>NOT_*</c> flag.
  *
  * <h5 class='section'>Attribute Flags:</h5>
@@ -140,12 +140,6 @@ public enum ElementFlag {
 
 	/** NOT_ABSTRACT (negated) */
 	NOT_ABSTRACT,
-
-	/** STRICT modifier */
-	STRICT,
-
-	/** NOT_STRICT (negated) */
-	NOT_STRICT,
 
 	// Non-modifier attributes
 
