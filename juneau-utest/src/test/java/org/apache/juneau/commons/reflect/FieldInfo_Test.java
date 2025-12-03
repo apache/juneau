@@ -39,14 +39,6 @@ class FieldInfo_Test extends TestBase {
 		String value();
 	}
 
-	@Documented
-	@Target(FIELD)
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface AX {
-		String value();
-	}
-
 	@Target(FIELD)
 	@Retention(RUNTIME)
 	public static @interface TestAnnotation1 {
@@ -93,7 +85,7 @@ class FieldInfo_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation.
+	// Test classes
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class A1 {
@@ -101,52 +93,13 @@ class FieldInfo_Test extends TestBase {
 	}
 	FieldInfo a1_f1 = off(A1.class, "f1");
 
-	@Test void of_withClass() {
-		check("f1", FieldInfo.of(ClassInfo.of(A1.class), a1_f1.inner()));
-	}
-
-	@Test void of_withoutClass() {
-		check("f1", FieldInfo.of(a1_f1.inner()));
-	}
-
-	@Test void of_null() {
-		assertThrows(IllegalArgumentException.class, () -> FieldInfo.of(null));
-		assertThrows(IllegalArgumentException.class, () -> FieldInfo.of(null, null));
-	}
-
-	@Test void getDeclaringClass() {
-		check("A1", a1_f1.getDeclaringClass());
-		check("A1", a1_f1.getDeclaringClass());
-	}
-
-	@Test void inner() {
-		check("f1", a1_f1.inner());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
 	public static class B {
 		@A("a1") public int a1;
 		public int a2;
 	}
-
 	FieldInfo
 		b_a1 = off(B.class, "a1"),
 		b_a2 = off(B.class, "a2");
-
-	@Test void hasAnnotation_true() {
-		assertTrue(b_a1.hasAnnotation(A.class));
-	}
-
-	@Test void hasAnnotation_false() {
-		assertFalse(b_a2.hasAnnotation(A.class));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Characteristics
-	//-----------------------------------------------------------------------------------------------------------------
 
 	abstract static class C {
 		@Deprecated public int deprecated;
@@ -170,7 +123,296 @@ class FieldInfo_Test extends TestBase {
 		c_isNotTransient = c.getPublicField(x -> x.hasName("isNotTransient")).get()
 	;
 
-	@Test void isAll() {
+	abstract static class D {
+		public int isPublic;
+		protected int isProtected;
+		@SuppressWarnings("unused")
+		private int isPrivate;
+		int isDefault;
+	}
+	static ClassInfo d = ClassInfo.of(D.class);
+	static FieldInfo
+		d_isPublic = d.getPublicField(x -> x.hasName("isPublic")).get(),
+		d_isProtected = d.getDeclaredField(x -> x.hasName("isProtected")).get(),
+		d_isPrivate = d.getDeclaredField(x -> x.hasName("isPrivate")).get(),
+		d_isDefault = d.getDeclaredField(x -> x.hasName("isDefault")).get();
+
+	static class E {
+		public int a1;
+		int a2;
+	}
+	static ClassInfo e = ClassInfo.of(E.class);
+	static FieldInfo
+		e_a1 = e.getPublicField(x -> x.hasName("a1")).get(),
+		e_a2 = e.getDeclaredField(x -> x.hasName("a2")).get();
+
+	public static class F {
+		@TestAnnotation1("test1")
+		@TestAnnotation2(42)
+		public String field1;
+
+		@TestAnnotation1("test2")
+		public String field2;
+
+		public String field3;
+	}
+	static ClassInfo f = ClassInfo.of(F.class);
+	static FieldInfo
+		f_field1 = f.getPublicField(x -> x.hasName("field1")).get(),
+		f_field2 = f.getPublicField(x -> x.hasName("field2")).get(),
+		f_field3 = f.getPublicField(x -> x.hasName("field3")).get();
+
+	public static class G {
+		public String field1;
+		public int field2;
+	}
+	static ClassInfo g = ClassInfo.of(G.class);
+	static FieldInfo
+		g_field1 = g.getPublicField(x -> x.hasName("field1")).get(),
+		g_field2 = g.getPublicField(x -> x.hasName("field2")).get();
+
+	public static class InnerClass {
+		public String innerField;
+	}
+	static ClassInfo inner = ClassInfo.of(InnerClass.class);
+	static FieldInfo inner_field = inner.getPublicField(x -> x.hasName("innerField")).get();
+
+	public static class GetSetTest {
+		public String value;
+		public Integer number;
+	}
+	static ClassInfo getSetTest = ClassInfo.of(GetSetTest.class);
+	static FieldInfo
+		getSetTest_value = getSetTest.getPublicField(x -> x.hasName("value")).get(),
+		getSetTest_number = getSetTest.getPublicField(x -> x.hasName("number")).get();
+
+	public enum TestEnum {
+		VALUE1, VALUE2
+	}
+	static ClassInfo testEnum = ClassInfo.of(TestEnum.class);
+	static FieldInfo
+		testEnum_value1 = testEnum.getPublicField(x -> x.hasName("VALUE1")).get(),
+		testEnum_value2 = testEnum.getPublicField(x -> x.hasName("VALUE2")).get();
+
+	//====================================================================================================
+	// accessible()
+	//====================================================================================================
+	@Test
+	void a001_accessible() {
+		assertDoesNotThrow(()->d_isPublic.accessible());
+		assertDoesNotThrow(()->d_isProtected.accessible());
+		assertDoesNotThrow(()->d_isPrivate.accessible());
+		assertDoesNotThrow(()->d_isDefault.accessible());
+		
+		// Verify it returns this for chaining
+		var result = d_isPublic.accessible();
+		assertSame(d_isPublic, result);
+	}
+
+	//====================================================================================================
+	// compareTo(FieldInfo)
+	//====================================================================================================
+	@Test
+	void a002_compareTo() {
+		// Fields should be sorted by field name only
+		// "a2" comes before "f1" alphabetically, so b_a2 should come before a1_f1
+		var b_a2 = off(B.class, "a2");
+		
+		// "a2" < "f1" alphabetically, so b_a2 should come before a1_f1
+		assertTrue(b_a2.compareTo(a1_f1) < 0);
+		assertTrue(a1_f1.compareTo(b_a2) > 0);
+		assertEquals(0, a1_f1.compareTo(a1_f1));
+		
+		// Test fields from same class - should be sorted by field name
+		assertTrue(b_a1.compareTo(b_a2) < 0);
+		assertTrue(b_a2.compareTo(b_a1) > 0);
+	}
+
+	//====================================================================================================
+	// get(Object)
+	//====================================================================================================
+	@Test
+	void a003_get() {
+		var obj = new GetSetTest();
+		obj.value = "test";
+		obj.number = 42;
+		
+		assertEquals("test", getSetTest_value.get(obj));
+		assertEquals(Integer.valueOf(42), getSetTest_number.get(obj));
+		
+		// Null value
+		obj.value = null;
+		assertNull(getSetTest_value.get(obj));
+	}
+
+	//====================================================================================================
+	// getAnnotatableType()
+	//====================================================================================================
+	@Test
+	void a004_getAnnotatableType() {
+		assertEquals(AnnotatableType.FIELD_TYPE, a1_f1.getAnnotatableType());
+	}
+
+	//====================================================================================================
+	// getAnnotatedType()
+	//====================================================================================================
+	@Test
+	void a005_getAnnotatedType() {
+		var annotatedType = e_a1.getAnnotatedType();
+		assertNotNull(annotatedType);
+		assertEquals(int.class, annotatedType.getType());
+	}
+
+	//====================================================================================================
+	// getAnnotations()
+	//====================================================================================================
+	@Test
+	void a006_getAnnotations() {
+		var annotations1 = f_field1.getAnnotations();
+		assertEquals(2, annotations1.size());
+		assertTrue(annotations1.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation1")));
+		assertTrue(annotations1.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation2")));
+
+		var annotations2 = f_field2.getAnnotations();
+		assertEquals(1, annotations2.size());
+		assertTrue(annotations2.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation1")));
+
+		var annotations3 = f_field3.getAnnotations();
+		assertEquals(0, annotations3.size());
+		
+		// Test memoization - should return same instance
+		var annotations1_2 = f_field1.getAnnotations();
+		assertSame(annotations1, annotations1_2);
+	}
+
+	//====================================================================================================
+	// getAnnotations(Class<A>)
+	//====================================================================================================
+	@Test
+	void a007_getAnnotations_typed() {
+		var ann1_type1 = f_field1.getAnnotations(TestAnnotation1.class).toList();
+		assertEquals(1, ann1_type1.size());
+		assertEquals("test1", ann1_type1.get(0).getValue().get());
+
+		var ann1_type2 = f_field1.getAnnotations(TestAnnotation2.class).toList();
+		assertEquals(1, ann1_type2.size());
+		assertEquals(42, ann1_type2.get(0).getInt("value").get());
+
+		var ann1_type3 = f_field1.getAnnotations(TestAnnotation3.class).toList();
+		assertEquals(0, ann1_type3.size());
+
+		var ann2_type1 = f_field2.getAnnotations(TestAnnotation1.class).toList();
+		assertEquals(1, ann2_type1.size());
+		assertEquals("test2", ann2_type1.get(0).getValue().get());
+
+		var ann2_type2 = f_field2.getAnnotations(TestAnnotation2.class).toList();
+		assertEquals(0, ann2_type2.size());
+	}
+
+	//====================================================================================================
+	// getDeclaringClass()
+	//====================================================================================================
+	@Test
+	void a008_getDeclaringClass() {
+		check("A1", a1_f1.getDeclaringClass());
+		check("B", b_a1.getDeclaringClass());
+	}
+
+	//====================================================================================================
+	// getFieldType()
+	//====================================================================================================
+	@Test
+	void a009_getFieldType() {
+		check("int", e_a1.getFieldType());
+		check("int", e_a2.getFieldType());
+		
+		// Test memoization - should return same instance
+		var type1 = e_a1.getFieldType();
+		var type2 = e_a1.getFieldType();
+		assertSame(type1, type2);
+	}
+
+	//====================================================================================================
+	// getFullName()
+	//====================================================================================================
+	@Test
+	void a010_getFullName() {
+		String fullName1 = g_field1.getFullName();
+		String fullName2 = g_field2.getFullName();
+
+		assertTrue(fullName1.endsWith("FieldInfo_Test$G.field1"));
+		assertTrue(fullName2.endsWith("FieldInfo_Test$G.field2"));
+		
+		assertTrue(fullName1.startsWith("org.apache.juneau.commons.reflect."));
+		assertTrue(fullName2.startsWith("org.apache.juneau.commons.reflect."));
+		
+		// Test memoization - should return same instance
+		String name1 = g_field1.getFullName();
+		String name2 = g_field1.getFullName();
+		assertSame(name1, name2);
+		
+		// Test with inner class
+		String innerFullName = inner_field.getFullName();
+		assertTrue(innerFullName.contains("FieldInfo_Test$InnerClass"));
+		assertTrue(innerFullName.endsWith(".innerField"));
+	}
+
+	//====================================================================================================
+	// getLabel()
+	//====================================================================================================
+	@Test
+	void a011_getLabel() {
+		var label = a1_f1.getLabel();
+		assertNotNull(label);
+		assertTrue(label.contains("A1"));
+		assertTrue(label.contains("f1"));
+	}
+
+	//====================================================================================================
+	// getName()
+	//====================================================================================================
+	@Test
+	void a012_getName() {
+		assertEquals("f1", a1_f1.getName());
+		assertEquals("a1", b_a1.getName());
+		assertEquals("a2", b_a2.getName());
+	}
+
+	//====================================================================================================
+	// hasAnnotation(Class<A>)
+	//====================================================================================================
+	@Test
+	void a013_hasAnnotation() {
+		assertTrue(b_a1.hasAnnotation(A.class));
+		assertFalse(b_a2.hasAnnotation(A.class));
+	}
+
+	//====================================================================================================
+	// hasName(String)
+	//====================================================================================================
+	@Test
+	void a014_hasName() {
+		assertTrue(b_a1.hasName("a1"));
+		assertFalse(b_a1.hasName("a2"));
+		assertFalse(b_a1.hasName(null));
+	}
+
+	//====================================================================================================
+	// inner()
+	//====================================================================================================
+	@Test
+	void a015_inner() {
+		check("f1", a1_f1.inner());
+		var field = a1_f1.inner();
+		assertNotNull(field);
+		assertEquals("f1", field.getName());
+	}
+
+	//====================================================================================================
+	// is(ElementFlag)
+	//====================================================================================================
+	@Test
+	void a016_is() {
 		assertTrue(c_deprecated.is(DEPRECATED));
 		assertTrue(c_notDeprecated.is(NOT_DEPRECATED));
 		assertTrue(c_isPublic.is(PUBLIC));
@@ -188,94 +430,22 @@ class FieldInfo_Test extends TestBase {
 		assertFalse(c_isNotStatic.is(STATIC));
 		assertFalse(c_isTransient.is(NOT_TRANSIENT));
 		assertFalse(c_isNotTransient.is(TRANSIENT));
-	}
-
-	@Test void isAll_invalidFlag() {
+		
+		// Enum constant
+		assertTrue(testEnum_value1.is(ENUM_CONSTANT));
+		assertFalse(a1_f1.is(ENUM_CONSTANT));
+		assertTrue(a1_f1.is(NOT_ENUM_CONSTANT));
+		
 		// HAS_PARAMS doesn't apply to fields, should throw exception
 		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for element: HAS_PARAMS", () -> c_deprecated.is(HAS_PARAMS));
 	}
 
-
-	@Test void isDeprecated() {
-		assertTrue(c_deprecated.isDeprecated());
-		assertFalse(c_notDeprecated.isDeprecated());
-	}
-
-	@Test void isNotDeprecated() {
-		assertFalse(c_deprecated.isNotDeprecated());
-		assertTrue(c_notDeprecated.isNotDeprecated());
-	}
-
-	@Test void isTransient() {
-		assertTrue(c_isTransient.isTransient());
-		assertFalse(c_isNotTransient.isTransient());
-	}
-
-	@Test void isNotTransient() {
-		assertFalse(c_isTransient.isNotTransient());
-		assertTrue(c_isNotTransient.isNotTransient());
-	}
-
-	@Test void isPublic() {
-		assertTrue(c_isPublic.isPublic());
-		assertFalse(c_isNotPublic.isPublic());
-	}
-
-	@Test void isNotPublic() {
-		assertFalse(c_isPublic.isNotPublic());
-		assertTrue(c_isNotPublic.isNotPublic());
-	}
-
-	@Test void isStatic() {
-		assertTrue(c_isStatic.isStatic());
-		assertFalse(c_isNotStatic.isStatic());
-	}
-
-	@Test void isNotStatic() {
-		assertFalse(c_isStatic.isNotStatic());
-		assertTrue(c_isNotStatic.isNotStatic());
-	}
-
-	@Test void hasName() {
-		assertTrue(b_a1.hasName("a1"));
-		assertFalse(b_a1.hasName("a2"));
-	}
-
-	@Test void hasName_null() {
-		assertFalse(b_a1.hasName(null));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Visibility
-	//-----------------------------------------------------------------------------------------------------------------
-
-	abstract static class D {
-		public int isPublic;
-		protected int isProtected;
-		@SuppressWarnings("unused")
-		private int isPrivate;
-		int isDefault;
-	}
-	static ClassInfo d = ClassInfo.of(D.class);
-	static FieldInfo
-		d_isPublic = d.getPublicField(x -> x.hasName("isPublic")).get(),
-		d_isProtected = d.getDeclaredField(x -> x.hasName("isProtected")).get(),
-		d_isPrivate = d.getDeclaredField(x -> x.hasName("isPrivate")).get(),
-		d_isDefault = d.getDeclaredField(x -> x.hasName("isDefault")).get();
-
-	@Test void setAccessible() {
-		assertDoesNotThrow(()->d_isPublic.setAccessible());
-		assertDoesNotThrow(()->d_isProtected.setAccessible());
-		assertDoesNotThrow(()->d_isPrivate.setAccessible());
-		assertDoesNotThrow(()->d_isDefault.setAccessible());
-	}
-
-	@Test void isAccessible() {
+	//====================================================================================================
+	// isAccessible()
+	//====================================================================================================
+	@Test
+	void a017_isAccessible() {
 		// Test isAccessible() before and after setAccessible()
-		// Note: isAccessible() was added in Java 9, so behavior may vary
-		
-		// Before setAccessible(), private/protected/default fields should not be accessible
-		// (unless they're already accessible due to module system)
 		var privateBefore = d_isPrivate.isAccessible();
 		var protectedBefore = d_isProtected.isAccessible();
 		var defaultBefore = d_isDefault.isAccessible();
@@ -286,24 +456,82 @@ class FieldInfo_Test extends TestBase {
 		d_isDefault.setAccessible();
 		
 		// After setAccessible(), they should be accessible (if Java 9+)
-		// If Java 8 or earlier, isAccessible() will return false
 		var privateAfter = d_isPrivate.isAccessible();
 		var protectedAfter = d_isProtected.isAccessible();
 		var defaultAfter = d_isDefault.isAccessible();
 		
 		// Verify the method doesn't throw and returns a boolean
-		// The actual value depends on Java version, but it should be consistent
 		assertTrue(privateAfter || !privateBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 		assertTrue(protectedAfter || !protectedBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 		assertTrue(defaultAfter || !defaultBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 		
 		// Public fields might already be accessible
 		var publicAccessible = d_isPublic.isAccessible();
-		// Should return a boolean (either true or false depending on Java version)
 		assertNotNull(Boolean.valueOf(publicAccessible));
 	}
 
-	@Test void isVisible() {
+	//====================================================================================================
+	// isAll(ElementFlag...)
+	//====================================================================================================
+	@Test
+	void a018_isAll() {
+		assertTrue(c_deprecated.isAll(DEPRECATED));
+		assertTrue(c_isPublic.isAll(PUBLIC, NOT_PRIVATE));
+		assertFalse(c_deprecated.isAll(DEPRECATED, NOT_DEPRECATED));
+	}
+
+	//====================================================================================================
+	// isAny(ElementFlag...)
+	//====================================================================================================
+	@Test
+	void a019_isAny() {
+		assertTrue(c_deprecated.isAny(DEPRECATED, NOT_DEPRECATED));
+		assertTrue(c_isPublic.isAny(PUBLIC, PRIVATE));
+		assertFalse(c_deprecated.isAny(NOT_DEPRECATED));
+	}
+
+	//====================================================================================================
+	// isDeprecated()
+	//====================================================================================================
+	@Test
+	void a020_isDeprecated() {
+		assertTrue(c_deprecated.isDeprecated());
+		assertFalse(c_notDeprecated.isDeprecated());
+	}
+
+	//====================================================================================================
+	// isEnumConstant()
+	//====================================================================================================
+	@Test
+	void a021_isEnumConstant() {
+		assertTrue(testEnum_value1.isEnumConstant());
+		assertTrue(testEnum_value2.isEnumConstant());
+		assertFalse(a1_f1.isEnumConstant());
+	}
+
+	//====================================================================================================
+	// isNotDeprecated()
+	//====================================================================================================
+	@Test
+	void a022_isNotDeprecated() {
+		assertFalse(c_deprecated.isNotDeprecated());
+		assertTrue(c_notDeprecated.isNotDeprecated());
+	}
+
+	//====================================================================================================
+	// isSynthetic()
+	//====================================================================================================
+	@Test
+	void a023_isSynthetic() {
+		// Regular fields are not synthetic
+		assertFalse(a1_f1.isSynthetic());
+	}
+
+	//====================================================================================================
+	// isVisible(Visibility)
+	//====================================================================================================
+	@Test
+	void a024_isVisible() {
 		assertTrue(d_isPublic.isVisible(Visibility.PUBLIC));
 		assertTrue(d_isPublic.isVisible(Visibility.PROTECTED));
 		assertTrue(d_isPublic.isVisible(Visibility.PRIVATE));
@@ -325,137 +553,90 @@ class FieldInfo_Test extends TestBase {
 		assertTrue(d_isDefault.isVisible(Visibility.DEFAULT));
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	static class E {
-		public int a1;
-		int a2;
+	//====================================================================================================
+	// of(ClassInfo, Field)
+	//====================================================================================================
+	@Test
+	void a025_of_withClass() {
+		check("f1", FieldInfo.of(ClassInfo.of(A1.class), a1_f1.inner()));
 	}
 
-	static ClassInfo e = ClassInfo.of(E.class);
-	static FieldInfo
-		e_a1 = e.getPublicField(x -> x.hasName("a1")).get(),
-		e_a2 = e.getDeclaredField(x -> x.hasName("a2")).get();
-
-	@Test void getType() {
-		check("int", e_a1.getFieldType());
-		check("int", e_a2.getFieldType());
+	//====================================================================================================
+	// of(Field)
+	//====================================================================================================
+	@Test
+	void a026_of_withoutClass() {
+		check("f1", FieldInfo.of(a1_f1.inner()));
+		
+		// Null should throw
+		assertThrows(IllegalArgumentException.class, () -> FieldInfo.of((Field)null));
+		assertThrows(IllegalArgumentException.class, () -> FieldInfo.of((ClassInfo)null, null));
 	}
 
-	@Test void getType_twice() {
-		check("int", e_a1.getFieldType());
-		check("int", e_a1.getFieldType());
+	//====================================================================================================
+	// set(Object, Object)
+	//====================================================================================================
+	@Test
+	void a027_set() {
+		var obj = new GetSetTest();
+		
+		getSetTest_value.set(obj, "newValue");
+		assertEquals("newValue", obj.value);
+		
+		getSetTest_number.set(obj, 100);
+		assertEquals(100, obj.number);
+		
+		// Set to null
+		getSetTest_value.set(obj, null);
+		assertNull(obj.value);
 	}
 
-	@Test void toString2() {
+	//====================================================================================================
+	// setAccessible()
+	//====================================================================================================
+	@Test
+	void a028_setAccessible() {
+		assertDoesNotThrow(()->d_isPublic.setAccessible());
+		assertDoesNotThrow(()->d_isProtected.setAccessible());
+		assertDoesNotThrow(()->d_isPrivate.setAccessible());
+		assertDoesNotThrow(()->d_isDefault.setAccessible());
+	}
+
+	//====================================================================================================
+	// setIfNull(Object, Object)
+	//====================================================================================================
+	@Test
+	void a029_setIfNull() {
+		var obj = new GetSetTest();
+		
+		// Set when null
+		obj.value = null;
+		getSetTest_value.setIfNull(obj, "defaultValue");
+		assertEquals("defaultValue", obj.value);
+		
+		// Don't set when not null
+		obj.value = "existing";
+		getSetTest_value.setIfNull(obj, "shouldNotSet");
+		assertEquals("existing", obj.value);
+	}
+
+	//====================================================================================================
+	// toGenericString()
+	//====================================================================================================
+	@Test
+	void a030_toGenericString() {
+		var str = e_a1.toGenericString();
+		assertNotNull(str);
+		assertTrue(str.contains("int"));
+		assertTrue(str.contains("a1"));
+	}
+
+	//====================================================================================================
+	// toString()
+	//====================================================================================================
+	@Test
+	void a031_toString() {
 		assertEquals("org.apache.juneau.commons.reflect.FieldInfo_Test$E.a1", e_a1.toString());
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// getAnnotations()
-	//-----------------------------------------------------------------------------------------------------------------
-
-	public static class F {
-		@TestAnnotation1("test1")
-		@TestAnnotation2(42)
-		public String field1;
-
-		@TestAnnotation1("test2")
-		public String field2;
-
-		public String field3;
-	}
-
-	static ClassInfo f = ClassInfo.of(F.class);
-	static FieldInfo
-		f_field1 = f.getPublicField(x -> x.hasName("field1")).get(),
-		f_field2 = f.getPublicField(x -> x.hasName("field2")).get(),
-		f_field3 = f.getPublicField(x -> x.hasName("field3")).get();
-
-	@Test void getAnnotations_returnsAllAnnotations() {
-		var annotations1 = f_field1.getAnnotations();
-		assertEquals(2, annotations1.size());
-		assertTrue(annotations1.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation1")));
-		assertTrue(annotations1.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation2")));
-
-		var annotations2 = f_field2.getAnnotations();
-		assertEquals(1, annotations2.size());
-		assertTrue(annotations2.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation1")));
-
-		var annotations3 = f_field3.getAnnotations();
-		assertEquals(0, annotations3.size());
-	}
-
-	@Test void getAnnotations_typed_filtersByType() {
-		var ann1_type1 = f_field1.getAnnotations(TestAnnotation1.class).toList();
-		assertEquals(1, ann1_type1.size());
-		assertEquals("test1", ann1_type1.get(0).getValue().get());
-
-		var ann1_type2 = f_field1.getAnnotations(TestAnnotation2.class).toList();
-		assertEquals(1, ann1_type2.size());
-		assertEquals(42, ann1_type2.get(0).getInt("value").get());
-
-		var ann1_type3 = f_field1.getAnnotations(TestAnnotation3.class).toList();
-		assertEquals(0, ann1_type3.size());
-
-		var ann2_type1 = f_field2.getAnnotations(TestAnnotation1.class).toList();
-		assertEquals(1, ann2_type1.size());
-		assertEquals("test2", ann2_type1.get(0).getValue().get());
-
-		var ann2_type2 = f_field2.getAnnotations(TestAnnotation2.class).toList();
-		assertEquals(0, ann2_type2.size());
-	}
-
-	@Test void getAnnotations_memoization_returnsSameInstance() {
-		var annotations1 = f_field1.getAnnotations();
-		var annotations2 = f_field1.getAnnotations();
-		assertSame(annotations1, annotations2);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// getFullName()
-	//-----------------------------------------------------------------------------------------------------------------
-
-	public static class G {
-		public String field1;
-		public int field2;
-	}
-
-	static ClassInfo g = ClassInfo.of(G.class);
-	static FieldInfo
-		g_field1 = g.getPublicField(x -> x.hasName("field1")).get(),
-		g_field2 = g.getPublicField(x -> x.hasName("field2")).get();
-
-	@Test void getFullName_returnsFullyQualifiedName() {
-		String fullName1 = g_field1.getFullName();
-		String fullName2 = g_field2.getFullName();
-
-		assertTrue(fullName1.endsWith("FieldInfo_Test$G.field1"));
-		assertTrue(fullName2.endsWith("FieldInfo_Test$G.field2"));
-		
-		assertTrue(fullName1.startsWith("org.apache.juneau.commons.reflect."));
-		assertTrue(fullName2.startsWith("org.apache.juneau.commons.reflect."));
-	}
-
-	@Test void getFullName_memoization_returnsSameInstance() {
-		String name1 = g_field1.getFullName();
-		String name2 = g_field1.getFullName();
-		assertSame(name1, name2);
-	}
-
-	public static class InnerClass {
-		public String innerField;
-	}
-
-	static ClassInfo inner = ClassInfo.of(InnerClass.class);
-	static FieldInfo inner_field = inner.getPublicField(x -> x.hasName("innerField")).get();
-
-	@Test void getFullName_withInnerClass_usesDollarSeparator() {
-		String fullName = inner_field.getFullName();
-		
-		assertTrue(fullName.contains("FieldInfo_Test$InnerClass"));
-		assertTrue(fullName.endsWith(".innerField"));
-	}
 }
+

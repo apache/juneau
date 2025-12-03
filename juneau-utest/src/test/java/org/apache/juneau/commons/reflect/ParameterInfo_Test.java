@@ -28,13 +28,9 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.Name;
 import org.junit.jupiter.api.*;
 
-import org.apache.juneau.annotation.Name;
-
-/**
- * ParameterInfo tests.
- */
 class ParameterInfo_Test extends TestBase {
 
 	private static String originalDisableParamNameDetection;
@@ -75,6 +71,19 @@ class ParameterInfo_Test extends TestBase {
 		String value();
 	}
 
+	@Target({PARAMETER,TYPE})
+	@Retention(RUNTIME)
+	public static @interface CA {
+		public String value();
+	}
+
+	@Target({PARAMETER,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface DA {
+		public String value();
+	}
+
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
@@ -101,7 +110,7 @@ class ParameterInfo_Test extends TestBase {
 	};
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation.
+	// Test classes
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class B {
@@ -109,7 +118,6 @@ class ParameterInfo_Test extends TestBase {
 		public void a1(int a, String b) {}  // NOSONAR
 		void a2(int a, String b) {}  // NOSONAR
 	}
-
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ParameterInfo
 		b_b_a = b.getPublicConstructor(x -> x.hasParameterTypes(int.class, String.class)).get().getParameter(0),  // NOSONAR
@@ -119,58 +127,6 @@ class ParameterInfo_Test extends TestBase {
 		b_a2_a = b.getMethod(x -> x.hasName("a2")).get().getParameter(0),  // NOSONAR
 		b_a2_b = b.getMethod(x -> x.hasName("a2")).get().getParameter(1);  // NOSONAR
 
-	@Test void getIndex() {
-		assertEquals(0, b_b_a.getIndex());
-		assertEquals(1, b_b_b.getIndex());
-		assertEquals(0, b_a1_a.getIndex());
-		assertEquals(1, b_a1_b.getIndex());
-		assertEquals(0, b_a2_a.getIndex());
-		assertEquals(1, b_a2_b.getIndex());
-	}
-
-	@Test void getMethod() {
-		check("B.a1(int,String)", b_a1_a.getMethod());
-		check("B.a1(int,String)", b_a1_b.getMethod());
-		check("B.a2(int,String)", b_a2_a.getMethod());
-		check("B.a2(int,String)", b_a2_b.getMethod());
-	}
-
-	@Test void getMethod_onConstrutor() {
-		check(null, b_b_a.getMethod());
-		check(null, b_b_b.getMethod());
-	}
-
-	@Test void getConstructor() {
-		check("B(int,String)", b_b_a.getConstructor());
-		check("B(int,String)", b_b_b.getConstructor());
-	}
-
-	@Test void getConstructor_onMethod() {
-		check(null, b_a1_a.getConstructor());
-		check(null, b_a1_b.getConstructor());
-		check(null, b_a2_a.getConstructor());
-		check(null, b_a2_b.getConstructor());
-	}
-
-	@Test void getParameterType() {
-		check("int", b_b_a.getParameterType());
-		check("String", b_b_b.getParameterType());
-		check("int", b_a1_a.getParameterType());
-		check("String", b_a1_b.getParameterType());
-		check("int", b_a2_a.getParameterType());
-		check("String", b_a2_b.getParameterType());
-
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Target({PARAMETER,TYPE})
-	@Retention(RUNTIME)
-	public static @interface CA {
-		public String value();
-	}
 	@CA("1") public static class C1 extends C2 {}
 	@CA("2") public static class C2 implements C3, C4 {}
 	@CA("3") public interface C3 {}
@@ -197,46 +153,6 @@ class ParameterInfo_Test extends TestBase {
 		cc_a1 = cc.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR
 		cc_a2 = cc.getMethod(x -> x.hasName("a2")).get().getParameter(0);  // NOSONAR
 
-	@Test void getDeclaredAnnotations() {
-		check("@CA(5)", declaredAnnotations(cb_a1, CA.class));
-		check("@CA(5)", declaredAnnotations(cb_a2, CA.class));
-		check("", declaredAnnotations(cc_a1, CA.class));
-		check("@CA(6)", declaredAnnotations(cc_a2, CA.class));
-	}
-
-	@Test void getDeclaredAnnotations_constructor() {
-		check("@CA(9)", declaredAnnotations(cc_cc, CA.class));
-	}
-
-	private static <T extends Annotation> List<T> declaredAnnotations(ParameterInfo pi, Class<T> type) {
-		return pi.getAnnotations(type).map(x -> x.inner()).toList();
-	}
-
-//	@Test void getAnnotationsParentFirst() {
-//		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cb_a1, CA.class));
-//		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cb_a2, CA.class));
-//		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cc_a1, CA.class));
-//		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5),@CA(6)", annotations(cc_a2, CA.class));
-//	}
-//
-//	@Test void getAnnotationsParentFirst_notFound() {
-//		check("", annotations(cb_a1, DA.class));
-//	}
-//
-//	@Test void getAnnotationsParentFirst_constructor() {
-//		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(9)", annotations(cc_cc, CA.class));
-//	}
-//
-//	@Test void getAnnotationsParentFirst_notFound_constructor() {
-//		check("", annotations(cc_cc, DA.class));
-//	}
-//
-	@Target({PARAMETER,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface DA {
-		public String value();
-	}
 	@DA("1") public static class D1 extends D2 {}
 	@DA("2") public static class D2 implements D3, D4 {}
 	@DA("3") public interface D3 {}
@@ -257,35 +173,357 @@ class ParameterInfo_Test extends TestBase {
 		db_a1 = db.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR
 		dc_a1 = dc.getMethod(x -> x.hasName("a1")).get().getParameter(0);  // NOSONAR
 
-//	@Test void getAnnotationsParentFirst_inherited() {
-//		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0)", annotations(db_a1, DA.class));
-//		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0),@DA(5)", annotations(dc_a1, DA.class));
-//	}
-//
-//	@Test void getAnnotationsParentFirst_inherited_notFound() {
-//		check("", annotations(db_a1, CA.class));
-//	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//-----------------------------------------------------------------------------------------------------------------
-
 	static class E {
 		public void a1(int a, @Name("b") int b) {}  // NOSONAR
 	}
-
 	static ClassInfo e = ClassInfo.of(E.class);
 	static ParameterInfo
 		e_a1_a = e.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR
 		e_a1_b = e.getMethod(x -> x.hasName("a1")).get().getParameter(1);  // NOSONAR
 
-	@Test void hasName() {
-		// With DISABLE_PARAM_NAME_DETECTION=true, only parameters with @Name annotation have names
-		assertFalse(e_a1_a.hasName());  // No @Name annotation
-		assertTrue(e_a1_b.hasName());   // Has @Name("b")
+	// Method hierarchy tests
+	public interface PM1 {
+		void foo(String s);
+	}
+	public static class PM2 implements PM1 {
+		@Override public void foo(String s) {}  // NOSONAR
+	}
+	public static class PM3 extends PM2 {
+		@Override public void foo(String s) {}  // NOSONAR
 	}
 
-	@Test void getName() {
+	// Method with multiple interfaces
+	public interface PM4 {
+		void bar(int x, String s);
+	}
+	public interface PM5 {
+		void bar(int x, String s);
+	}
+	public static class PM6 implements PM4, PM5 {
+		@Override public void bar(int x, String s) {}  // NOSONAR
+	}
+
+	// Constructor hierarchy tests
+	public static class PC1 {
+		public PC1(String foo) {}  // NOSONAR
+	}
+	public static class PC2 extends PC1 {
+		public PC2(String foo) { super(foo); }  // NOSONAR
+	}
+	public static class PC3 extends PC2 {
+		public PC3(String foo) { super(foo); }  // NOSONAR
+	}
+
+	public static class PC4 {
+		public PC4(String foo, int bar) {}  // NOSONAR
+	}
+	public static class PC5 extends PC4 {
+		public PC5(String foo) { super(foo, 0); }  // NOSONAR
+	}
+
+	public static class PC6 {
+		public PC6(String foo) {}  // NOSONAR
+		public PC6(String foo, int bar) {}  // NOSONAR
+	}
+	public static class PC7 extends PC6 {
+		public PC7(String foo) { super(foo); }  // NOSONAR
+	}
+
+	public interface PM7 {
+		void baz(String differentName);
+	}
+	public static class PM8 implements PM7 {
+		@Override public void baz(String differentName) {}  // NOSONAR
+		public void foo(String s) {}  // NOSONAR
+	}
+
+	public interface PM9 {
+		void qux(int x);
+	}
+	public static class PM10 implements PM9 {
+		@Override public void qux(int x) {}  // NOSONAR
+	}
+	public static class PM11 extends PM10 {
+		public void qux(String x) {}  // NOSONAR - different overload
+	}
+
+	public static class PC8 {
+		public PC8(int foo) {}  // NOSONAR
+	}
+	public static class PC9 extends PC8 {
+		public PC9(String foo) { super(0); }  // NOSONAR
+	}
+
+	public static class PC10 {
+		public PC10(String bar) {}  // NOSONAR
+	}
+	public static class PC11 extends PC10 {
+		public PC11(String foo) { super(foo); }  // NOSONAR
+	}
+
+	public static class PC12 {
+		public PC12(@Name("foo") String x) {}  // NOSONAR
+		public PC12(@Name("bar") String x, int y) {}  // NOSONAR
+	}
+	public static class PC13 extends PC12 {
+		public PC13(@Name("foo") String x) { super(x); }  // NOSONAR
+	}
+
+	public static class PC14 {
+		public PC14(@Name("bar") String x) {}  // NOSONAR
+	}
+	public static class PC15 extends PC14 {
+		public PC15(@Name("foo") String x) { super(x); }  // NOSONAR
+	}
+
+	public interface PM12 {
+		void test(@Name("param1") String x);
+	}
+	public static class PM13 implements PM12 {
+		@Override public void test(@Name("param1") String x) {}  // NOSONAR
+	}
+
+	//====================================================================================================
+	// canAccept(Object)
+	//====================================================================================================
+	@Test
+	void a001_canAccept() {
+		assertTrue(b_a1_a.canAccept(42));
+		assertFalse(b_a1_a.canAccept("string"));
+		assertTrue(b_a1_b.canAccept("string"));
+		assertFalse(b_a1_b.canAccept(42));
+	}
+
+	//====================================================================================================
+	// getAnnotatedType()
+	//====================================================================================================
+	@Test
+	void a002_getAnnotatedType() {
+		var annotatedType = b_a1_a.getAnnotatedType();
+		assertNotNull(annotatedType);
+		assertEquals(int.class, annotatedType.getType());
+	}
+
+	//====================================================================================================
+	// getAnnotatableType()
+	//====================================================================================================
+	@Test
+	void a003_getAnnotatableType() {
+		assertEquals(AnnotatableType.PARAMETER_TYPE, b_a1_a.getAnnotatableType());
+	}
+
+	//====================================================================================================
+	// getAnnotations()
+	//====================================================================================================
+	@Test
+	void a004_getAnnotations() {
+		var annotations = cb_a1.getAnnotations();
+		assertNotNull(annotations);
+		assertTrue(annotations.size() > 0);
+	}
+
+	//====================================================================================================
+	// getAnnotations(Class<A>)
+	//====================================================================================================
+	@Test
+	void a005_getAnnotations_typed() {
+		check("@CA(5)", declaredAnnotations(cb_a1, CA.class));
+		check("@CA(5)", declaredAnnotations(cb_a2, CA.class));
+		check("", declaredAnnotations(cc_a1, CA.class));
+		check("@CA(6)", declaredAnnotations(cc_a2, CA.class));
+		check("@CA(9)", declaredAnnotations(cc_cc, CA.class));
+	}
+
+	private static <T extends Annotation> List<T> declaredAnnotations(ParameterInfo pi, Class<T> type) {
+		return pi.getAnnotations(type).map(x -> x.inner()).toList();
+	}
+
+	//====================================================================================================
+	// getConstructor()
+	//====================================================================================================
+	@Test
+	void a006_getConstructor() {
+		check("B(int,String)", b_b_a.getConstructor());
+		check("B(int,String)", b_b_b.getConstructor());
+		check(null, b_a1_a.getConstructor());
+		check(null, b_a1_b.getConstructor());
+	}
+
+	//====================================================================================================
+	// getDeclaringExecutable()
+	//====================================================================================================
+	@Test
+	void a007_getDeclaringExecutable() {
+		var exec1 = b_b_a.getDeclaringExecutable();
+		assertTrue(exec1.isConstructor());
+		
+		var exec2 = b_a1_a.getDeclaringExecutable();
+		assertFalse(exec2.isConstructor());
+		assertTrue(exec2 instanceof MethodInfo);
+	}
+
+	//====================================================================================================
+	// getIndex()
+	//====================================================================================================
+	@Test
+	void a008_getIndex() {
+		assertEquals(0, b_b_a.getIndex());
+		assertEquals(1, b_b_b.getIndex());
+		assertEquals(0, b_a1_a.getIndex());
+		assertEquals(1, b_a1_b.getIndex());
+		assertEquals(0, b_a2_a.getIndex());
+		assertEquals(1, b_a2_b.getIndex());
+	}
+
+	//====================================================================================================
+	// getLabel()
+	//====================================================================================================
+	@Test
+	void a009_getLabel() {
+		var label = b_a1_a.getLabel();
+		assertNotNull(label);
+		assertTrue(label.contains("B"));
+		assertTrue(label.contains("a1"));
+		assertTrue(label.contains("[0]"));
+	}
+
+	//====================================================================================================
+	// getMatchingParameters()
+	//====================================================================================================
+	@Test
+	void a010_getMatchingParameters() throws Exception {
+		// Method simple hierarchy
+		var mi = MethodInfo.of(PM3.class.getMethod("foo", String.class));
+		var pi = mi.getParameter(0);
+		var matching = pi.getMatchingParameters();
+		assertEquals(3, matching.size());
+		check("PM3", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PM2", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+		check("PM1", matching.get(2).getDeclaringExecutable().getDeclaringClass());
+		
+		// Method multiple interfaces
+		var mi2 = MethodInfo.of(PM6.class.getMethod("bar", int.class, String.class));
+		var pi0 = mi2.getParameter(0);
+		var matching0 = pi0.getMatchingParameters();
+		assertEquals(3, matching0.size());
+		check("PM6", matching0.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PM4", matching0.get(1).getDeclaringExecutable().getDeclaringClass());
+		check("PM5", matching0.get(2).getDeclaringExecutable().getDeclaringClass());
+		
+		// Constructor simple hierarchy
+		var ci = ConstructorInfo.of(PC3.class.getConstructor(String.class));
+		var pi2 = ci.getParameter(0);
+		var matching2 = pi2.getMatchingParameters();
+		assertEquals(3, matching2.size());
+		check("PC3", matching2.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PC2", matching2.get(1).getDeclaringExecutable().getDeclaringClass());
+		check("PC1", matching2.get(2).getDeclaringExecutable().getDeclaringClass());
+		
+		// Constructor different parameter counts
+		var ci2 = ConstructorInfo.of(PC5.class.getConstructor(String.class));
+		var pi3 = ci2.getParameter(0);
+		var matching3 = pi3.getMatchingParameters();
+		assertEquals(2, matching3.size());
+		check("PC5", matching3.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PC4", matching3.get(1).getDeclaringExecutable().getDeclaringClass());
+		
+		// Constructor multiple parent constructors
+		var ci3 = ConstructorInfo.of(PC7.class.getConstructor(String.class));
+		var pi4 = ci3.getParameter(0);
+		var matching4 = pi4.getMatchingParameters();
+		assertEquals(3, matching4.size());
+		check("PC7", matching4.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PC6", matching4.get(1).getDeclaringExecutable().getDeclaringClass());
+		check("PC6", matching4.get(2).getDeclaringExecutable().getDeclaringClass());
+		
+		// Method different parameter name
+		var mi3 = MethodInfo.of(PM8.class.getMethod("foo", String.class));
+		var pi5 = mi3.getParameter(0);
+		var matching5 = pi5.getMatchingParameters();
+		assertEquals(1, matching5.size());
+		check("PM8", matching5.get(0).getDeclaringExecutable().getDeclaringClass());
+		
+		// Method different parameter type
+		var mi4 = MethodInfo.of(PM11.class.getMethod("qux", String.class));
+		var pi6 = mi4.getParameter(0);
+		var matching6 = pi6.getMatchingParameters();
+		assertEquals(1, matching6.size());
+		check("PM11", matching6.get(0).getDeclaringExecutable().getDeclaringClass());
+		
+		// Constructor different parameter type
+		var ci4 = ConstructorInfo.of(PC9.class.getConstructor(String.class));
+		var pi7 = ci4.getParameter(0);
+		var matching7 = pi7.getMatchingParameters();
+		assertEquals(1, matching7.size());
+		check("PC9", matching7.get(0).getDeclaringExecutable().getDeclaringClass());
+		
+		// Constructor different parameter name
+		var ci5 = ConstructorInfo.of(PC11.class.getConstructor(String.class));
+		var pi8 = ci5.getParameter(0);
+		var matching8 = pi8.getMatchingParameters();
+		assertEquals(2, matching8.size());
+		check("PC11", matching8.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PC10", matching8.get(1).getDeclaringExecutable().getDeclaringClass());
+		
+		// Constructor with @Name annotation matching
+		var ci6 = ConstructorInfo.of(PC13.class.getConstructor(String.class));
+		var pi9 = ci6.getParameter(0);
+		var matching9 = pi9.getMatchingParameters();
+		assertEquals(3, matching9.size());
+		check("PC13", matching9.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PC12", matching9.get(1).getDeclaringExecutable().getDeclaringClass());
+		check("PC12", matching9.get(2).getDeclaringExecutable().getDeclaringClass());
+		assertEquals("foo", matching9.get(1).getName());
+		assertEquals("bar", matching9.get(2).getName());
+		
+		// Constructor with @Name annotation different names
+		var ci7 = ConstructorInfo.of(PC15.class.getConstructor(String.class));
+		var pi10 = ci7.getParameter(0);
+		var matching10 = pi10.getMatchingParameters();
+		assertEquals(2, matching10.size());
+		check("PC15", matching10.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PC14", matching10.get(1).getDeclaringExecutable().getDeclaringClass());
+		assertEquals("foo", matching10.get(0).getName());
+		assertEquals("bar", matching10.get(1).getName());
+		
+		// Method with @Name annotation matching
+		var mi5 = MethodInfo.of(PM13.class.getMethod("test", String.class));
+		var pi11 = mi5.getParameter(0);
+		var matching11 = pi11.getMatchingParameters();
+		assertEquals(2, matching11.size());
+		check("PM13", matching11.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PM12", matching11.get(1).getDeclaringExecutable().getDeclaringClass());
+		assertEquals("param1", matching11.get(0).getName());
+		assertEquals("param1", matching11.get(1).getName());
+	}
+
+	//====================================================================================================
+	// getMethod()
+	//====================================================================================================
+	@Test
+	void a011_getMethod() {
+		check("B.a1(int,String)", b_a1_a.getMethod());
+		check("B.a1(int,String)", b_a1_b.getMethod());
+		check("B.a2(int,String)", b_a2_a.getMethod());
+		check("B.a2(int,String)", b_a2_b.getMethod());
+		check(null, b_b_a.getMethod());
+		check(null, b_b_b.getMethod());
+	}
+
+	//====================================================================================================
+	// getModifiers()
+	//====================================================================================================
+	@Test
+	void a012_getModifiers() {
+		var modifiers = b_a1_a.getModifiers();
+		assertNotNull(Integer.valueOf(modifiers));
+	}
+
+	//====================================================================================================
+	// getName()
+	//====================================================================================================
+	@Test
+	void a013_getName() {
 		// With DISABLE_PARAM_NAME_DETECTION=true:
 		// - Parameters with @Name use the annotation value
 		// - Parameters without @Name fall back to parameter.getName() which may return
@@ -294,278 +532,169 @@ class ParameterInfo_Test extends TestBase {
 		assertEquals("b", e_a1_b.getName());  // Has @Name("b")
 	}
 
-	@Test void toString2() {
+	//====================================================================================================
+	// getParameterizedType()
+	//====================================================================================================
+	@Test
+	void a014_getParameterizedType() {
+		var paramType = b_a1_a.getParameterizedType();
+		assertNotNull(paramType);
+		assertEquals(int.class, paramType);
+	}
+
+	//====================================================================================================
+	// getParameterType()
+	//====================================================================================================
+	@Test
+	void a015_getParameterType() {
+		check("int", b_b_a.getParameterType());
+		check("String", b_b_b.getParameterType());
+		check("int", b_a1_a.getParameterType());
+		check("String", b_a1_b.getParameterType());
+		check("int", b_a2_a.getParameterType());
+		check("String", b_a2_b.getParameterType());
+	}
+
+	//====================================================================================================
+	// getResolvedName()
+	//====================================================================================================
+	@Test
+	void a016_getResolvedName() {
+		// With DISABLE_PARAM_NAME_DETECTION=true, only parameters with @Name annotation have resolved names
+		assertNull(e_a1_a.getResolvedName());  // No @Name annotation
+		assertEquals("b", e_a1_b.getResolvedName());   // Has @Name("b")
+	}
+
+	//====================================================================================================
+	// getResolvedQualifier()
+	//====================================================================================================
+	@Test
+	void a017_getResolvedQualifier() {
+		// Test with parameters that don't have @Named annotation
+		assertNull(b_a1_a.getResolvedQualifier());
+	}
+
+	//====================================================================================================
+	// hasName()
+	//====================================================================================================
+	@Test
+	void a018_hasName() {
+		// With DISABLE_PARAM_NAME_DETECTION=true, only parameters with @Name annotation have names
+		assertFalse(e_a1_a.hasName());  // No @Name annotation
+		assertTrue(e_a1_b.hasName());   // Has @Name("b")
+	}
+
+	//====================================================================================================
+	// inner()
+	//====================================================================================================
+	@Test
+	void a019_inner() {
+		var param = b_a1_a.inner();
+		assertNotNull(param);
+		assertEquals(int.class, param.getType());
+	}
+
+	//====================================================================================================
+	// is(ElementFlag)
+	//====================================================================================================
+	@Test
+	void a020_is() {
+		// Test synthetic
+		assertFalse(b_a1_a.is(ElementFlag.SYNTHETIC));
+		assertTrue(b_a1_a.is(ElementFlag.NOT_SYNTHETIC));
+		
+		// Test varargs - regular parameters are not varargs
+		assertFalse(b_a1_a.is(ElementFlag.VARARGS));
+		assertTrue(b_a1_a.is(ElementFlag.NOT_VARARGS));
+	}
+
+	//====================================================================================================
+	// isAll(ElementFlag...)
+	//====================================================================================================
+	@Test
+	void a021_isAll() {
+		assertTrue(b_a1_a.isAll(ElementFlag.NOT_SYNTHETIC, ElementFlag.NOT_VARARGS));
+		assertFalse(b_a1_a.isAll(ElementFlag.SYNTHETIC, ElementFlag.VARARGS));
+	}
+
+	//====================================================================================================
+	// isAny(ElementFlag...)
+	//====================================================================================================
+	@Test
+	void a022_isAny() {
+		assertTrue(b_a1_a.isAny(ElementFlag.NOT_SYNTHETIC, ElementFlag.VARARGS));
+		assertFalse(b_a1_a.isAny(ElementFlag.SYNTHETIC, ElementFlag.VARARGS));
+	}
+
+	//====================================================================================================
+	// isImplicit()
+	//====================================================================================================
+	@Test
+	void a023_isImplicit() {
+		// Regular parameters are not implicit
+		assertFalse(b_a1_a.isImplicit());
+	}
+
+	//====================================================================================================
+	// isNamePresent()
+	//====================================================================================================
+	@Test
+	void a024_isNamePresent() {
+		// This checks if name is present in bytecode, not if it has a resolved name
+		var namePresent = b_a1_a.isNamePresent();
+		assertNotNull(Boolean.valueOf(namePresent));
+	}
+
+	//====================================================================================================
+	// isSynthetic()
+	//====================================================================================================
+	@Test
+	void a025_isSynthetic() {
+		// Regular parameters are not synthetic
+		assertFalse(b_a1_a.isSynthetic());
+	}
+
+	//====================================================================================================
+	// isType(Class<?>)
+	//====================================================================================================
+	@Test
+	void a026_isType() {
+		assertTrue(b_a1_a.isType(int.class));
+		assertFalse(b_a1_a.isType(String.class));
+		assertTrue(b_a1_b.isType(String.class));
+		assertFalse(b_a1_b.isType(int.class));
+	}
+
+	//====================================================================================================
+	// isVarArgs()
+	//====================================================================================================
+	@Test
+	void a027_isVarArgs() {
+		// Regular parameters are not varargs
+		assertFalse(b_a1_a.isVarArgs());
+	}
+
+	//====================================================================================================
+	// of(Parameter)
+	//====================================================================================================
+	@Test
+	void a028_of() {
+		var param = b_a1_a.inner();
+		var pi = ParameterInfo.of(param);
+		assertNotNull(pi);
+		assertEquals(b_a1_a.getIndex(), pi.getIndex());
+		assertSame(b_a1_a.getParameterType(), pi.getParameterType());
+		
+		// Null should throw
+		assertThrows(IllegalArgumentException.class, () -> ParameterInfo.of(null));
+	}
+
+	//====================================================================================================
+	// toString()
+	//====================================================================================================
+	@Test
+	void a029_toString() {
 		assertEquals("a1[1]", e_a1_b.toString());
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// getMatchingParameters()
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Nested
-	class GetMatchingParametersTests {
-
-		// Method hierarchy tests
-		public interface PM1 {
-			void foo(String s);
-		}
-
-		public static class PM2 implements PM1 {
-			@Override public void foo(String s) {}  // NOSONAR
-		}
-
-		public static class PM3 extends PM2 {
-			@Override public void foo(String s) {}  // NOSONAR
-		}
-
-		@Test void method_simpleHierarchy() throws Exception {
-			var mi = MethodInfo.of(PM3.class.getMethod("foo", String.class));
-			var pi = mi.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			assertEquals(3, matching.size());
-			check("PM3", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-			check("PM2", matching.get(1).getDeclaringExecutable().getDeclaringClass());
-			check("PM1", matching.get(2).getDeclaringExecutable().getDeclaringClass());
-		}
-
-		// Method with multiple interfaces
-		public interface PM4 {
-			void bar(int x, String s);
-		}
-
-		public interface PM5 {
-			void bar(int x, String s);
-		}
-
-		public static class PM6 implements PM4, PM5 {
-			@Override public void bar(int x, String s) {}  // NOSONAR
-		}
-
-		@Test void method_multipleInterfaces() throws Exception {
-			var mi = MethodInfo.of(PM6.class.getMethod("bar", int.class, String.class));
-			var pi0 = mi.getParameter(0);
-			var matching0 = pi0.getMatchingParameters();
-			assertEquals(3, matching0.size());
-			check("PM6", matching0.get(0).getDeclaringExecutable().getDeclaringClass());
-			check("PM4", matching0.get(1).getDeclaringExecutable().getDeclaringClass());
-			check("PM5", matching0.get(2).getDeclaringExecutable().getDeclaringClass());
-
-			var pi1 = mi.getParameter(1);
-			var matching1 = pi1.getMatchingParameters();
-			assertEquals(3, matching1.size());
-			check("PM6", matching1.get(0).getDeclaringExecutable().getDeclaringClass());
-			check("PM4", matching1.get(1).getDeclaringExecutable().getDeclaringClass());
-			check("PM5", matching1.get(2).getDeclaringExecutable().getDeclaringClass());
-		}
-
-		// Constructor hierarchy with same parameter count
-		public static class PC1 {
-			public PC1(String foo) {}  // NOSONAR
-		}
-
-		public static class PC2 extends PC1 {
-			public PC2(String foo) { super(foo); }  // NOSONAR
-		}
-
-		public static class PC3 extends PC2 {
-			public PC3(String foo) { super(foo); }  // NOSONAR
-		}
-
-		@Test void constructor_simpleHierarchy() throws Exception {
-			var ci = ConstructorInfo.of(PC3.class.getConstructor(String.class));
-			var pi = ci.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			assertEquals(3, matching.size());
-			check("PC3", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-			check("PC2", matching.get(1).getDeclaringExecutable().getDeclaringClass());
-			check("PC1", matching.get(2).getDeclaringExecutable().getDeclaringClass());
-		}
-
-		// Constructor hierarchy with different parameter counts
-		public static class PC4 {
-			public PC4(String foo, int bar) {}  // NOSONAR
-		}
-
-		public static class PC5 extends PC4 {
-			public PC5(String foo) { super(foo, 0); }  // NOSONAR
-		}
-
-		@Test void constructor_differentParameterCounts() throws Exception {
-			var ci = ConstructorInfo.of(PC5.class.getConstructor(String.class));
-			var pi = ci.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			// Should find matching "foo" parameter in PC4 even though PC4 has more parameters
-			assertEquals(2, matching.size());
-			check("PC5", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-			check("PC4", matching.get(1).getDeclaringExecutable().getDeclaringClass());
-		}
-
-		// Constructor with multiple constructors in parent
-		public static class PC6 {
-			public PC6(String foo) {}  // NOSONAR
-			public PC6(String foo, int bar) {}  // NOSONAR
-		}
-
-		public static class PC7 extends PC6 {
-			public PC7(String foo) { super(foo); }  // NOSONAR
-		}
-
-		@Test void constructor_multipleParentConstructors() throws Exception {
-			var ci = ConstructorInfo.of(PC7.class.getConstructor(String.class));
-			var pi = ci.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			// Should find "foo" parameter in both PC6 constructors
-			assertEquals(3, matching.size());
-			check("PC7", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-			check("PC6", matching.get(1).getDeclaringExecutable().getDeclaringClass());
-			check("PC6", matching.get(2).getDeclaringExecutable().getDeclaringClass());
-		}
-
-		// False match tests - different parameter names
-		public interface PM7 {
-			void baz(String differentName);
-		}
-
-		public static class PM8 implements PM7 {
-			@Override public void baz(String differentName) {}  // NOSONAR
-			public void foo(String s) {}  // NOSONAR
-		}
-
-		@Test void method_differentParameterName() throws Exception {
-			var mi = MethodInfo.of(PM8.class.getMethod("foo", String.class));
-			var pi = mi.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			// Should only find this parameter
-			assertEquals(1, matching.size());
-			check("PM8", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-		}
-
-		// False match tests - different parameter types
-		public interface PM9 {
-			void qux(int x);
-		}
-
-		public static class PM10 implements PM9 {
-			@Override public void qux(int x) {}  // NOSONAR
-		}
-
-		public static class PM11 extends PM10 {
-			public void qux(String x) {}  // NOSONAR - different overload
-		}
-
-		@Test void method_differentParameterType() throws Exception {
-			var mi = MethodInfo.of(PM11.class.getMethod("qux", String.class));
-			var pi = mi.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			// Should only find this parameter (different type from parent)
-			assertEquals(1, matching.size());
-			check("PM11", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-		}
-
-		// Constructor false match - different parameter type
-		public static class PC8 {
-			public PC8(int foo) {}  // NOSONAR
-		}
-
-		public static class PC9 extends PC8 {
-			public PC9(String foo) { super(0); }  // NOSONAR
-		}
-
-		@Test void constructor_differentParameterType() throws Exception {
-			var ci = ConstructorInfo.of(PC9.class.getConstructor(String.class));
-			var pi = ci.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			// Should only find this parameter (different type from parent)
-			assertEquals(1, matching.size());
-			check("PC9", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-		}
-
-		// Constructor false match - different parameter name
-		public static class PC10 {
-			public PC10(String bar) {}  // NOSONAR
-		}
-
-		public static class PC11 extends PC10 {
-			public PC11(String foo) { super(foo); }  // NOSONAR
-		}
-
-		@Test void constructor_differentParameterName() throws Exception {
-			var ci = ConstructorInfo.of(PC11.class.getConstructor(String.class));
-			var pi = ci.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			// Note: Parameter names are not retained without -parameters flag,
-			// so this will match by type and synthetic name (e.g., "arg0")
-			assertEquals(2, matching.size());
-			check("PC11", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-			check("PC10", matching.get(1).getDeclaringExecutable().getDeclaringClass());
-		}
-
-		// Test with @Name annotation
-		public static class PC12 {
-			public PC12(@Name("foo") String x) {}  // NOSONAR
-			public PC12(@Name("bar") String x, int y) {}  // NOSONAR
-		}
-
-		public static class PC13 extends PC12 {
-			public PC13(@Name("foo") String x) { super(x); }  // NOSONAR
-		}
-
-	@Test void constructor_withNameAnnotation_matching() throws Exception {
-		var ci = ConstructorInfo.of(PC13.class.getConstructor(String.class));
-		var pi = ci.getParameter(0);
-		var matching = pi.getMatchingParameters();
-		// Constructors match by index+type only (not by name) to avoid circular dependency
-		// So this matches ALL PC12 constructors with parameter at index 0 with type String
-		// PC12 has TWO such constructors: PC12(String) and PC12(String, int)
-		assertEquals(3, matching.size());
-		check("PC13", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-		check("PC12", matching.get(1).getDeclaringExecutable().getDeclaringClass());
-		check("PC12", matching.get(2).getDeclaringExecutable().getDeclaringClass());
-		// Both PC12 parameters have their own @Name annotations
-		assertEquals("foo", matching.get(1).getName());
-		assertEquals("bar", matching.get(2).getName());
-	}
-
-		// Test with @Name annotation - different names
-		public static class PC14 {
-			public PC14(@Name("bar") String x) {}  // NOSONAR
-		}
-
-		public static class PC15 extends PC14 {
-			public PC15(@Name("foo") String x) { super(x); }  // NOSONAR
-		}
-
-	@Test void constructor_withNameAnnotation_differentNames() throws Exception {
-		var ci = ConstructorInfo.of(PC15.class.getConstructor(String.class));
-		var pi = ci.getParameter(0);
-		var matching = pi.getMatchingParameters();
-		// Constructors match by index+type only (not by name) to avoid circular dependency
-		// So this DOES match parent parameter even though names differ ("foo" vs "bar")
-		assertEquals(2, matching.size());
-		check("PC15", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-		check("PC14", matching.get(1).getDeclaringExecutable().getDeclaringClass());
-		assertEquals("foo", matching.get(0).getName());
-		assertEquals("bar", matching.get(1).getName());
-	}
-
-		// Test with @Name annotation on methods
-		public interface PM12 {
-			void test(@Name("param1") String x);
-		}
-
-		public static class PM13 implements PM12 {
-			@Override public void test(@Name("param1") String x) {}  // NOSONAR
-		}
-
-		@Test void method_withNameAnnotation_matching() throws Exception {
-			var mi = MethodInfo.of(PM13.class.getMethod("test", String.class));
-			var pi = mi.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			assertEquals(2, matching.size());
-			check("PM13", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-			check("PM12", matching.get(1).getDeclaringExecutable().getDeclaringClass());
-			assertEquals("param1", matching.get(0).getName());
-			assertEquals("param1", matching.get(1).getName());
-		}
-	}
 }
+

@@ -18,8 +18,6 @@ package org.apache.juneau.commons.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -145,33 +143,23 @@ class AnnotationInfo_Test extends TestBase {
 	@NotInGroup
 	public static class GroupTestClass {}
 
-	//====================================================================================================
-	// of() - Static factory method
-	//====================================================================================================
-
-	@Test
-	void a01_of_createsAnnotationInfo() {
-		var ci = ClassInfo.of(TestClass.class);
-		var annotation = ci.inner().getAnnotation(TestAnnotation.class);
-		var ai = AnnotationInfo.of(ci, annotation);
-
-		assertNotNull(ai);
-		assertEquals(TestAnnotation.class, ai.annotationType());
-		assertEquals("test", ai.getValue().orElse(null));
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	public static @interface ToMapTestAnnotation {
+		String value() default "default";
+		String[] arrayValue() default {};
+		String[] nonEmptyArray() default {"a", "b"};
+		String[] emptyArrayWithNonEmptyDefault() default {"default"};
 	}
 
-	@Test
-	void a02_of_withNullAnnotation_throwsException() {
-		var ci = ClassInfo.of(TestClass.class);
-		assertThrows(IllegalArgumentException.class, () -> AnnotationInfo.of(ci, null));
-	}
+	@ToMapTestAnnotation(value = "custom", arrayValue = {}, nonEmptyArray = {"x"}, emptyArrayWithNonEmptyDefault = {})
+	public static class ToMapTestClass {}
 
 	//====================================================================================================
 	// annotationType()
 	//====================================================================================================
-
 	@Test
-	void b01_annotationType_returnsCorrectType() {
+	void a001_annotationType() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -179,206 +167,61 @@ class AnnotationInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// cast()
+	// cast(Class<A>)
 	//====================================================================================================
-
 	@Test
-	void c01_cast_sameType_returnsThis() {
+	void a002_cast() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
 
+		// Same type returns this
 		var casted = ai.cast(TestAnnotation.class);
 		assertNotNull(casted);
 		assertSame(ai, casted);
-	}
 
-	@Test
-	void c02_cast_differentType_returnsNull() {
-		var ci = ClassInfo.of(TestClass.class);
-		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		var casted = ai.cast(Deprecated.class);
-		assertNull(casted);
+		// Different type returns null
+		var casted2 = ai.cast(Deprecated.class);
+		assertNull(casted2);
 	}
 
 	//====================================================================================================
-	// equals() and hashCode()
+	// equals(Object)
 	//====================================================================================================
-
 	@Test
-	void d01_equals_sameAnnotation_returnsTrue() {
+	void a003_equals() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai1 = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		var ai2 = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 
 		assertNotNull(ai1);
 		assertNotNull(ai2);
+		// Same annotation should be equal
 		assertEquals(ai1, ai2);
 		assertEquals(ai1.hashCode(), ai2.hashCode());
-	}
 
-	@Test
-	void d02_equals_differentAnnotation_returnsFalse() {
-		var ci = ClassInfo.of(TestClass.class);
-		var ai1 = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
-
+		// Different annotation should not be equal
 		@Deprecated
 		class DeprecatedClass {}
 		var ci2 = ClassInfo.of(DeprecatedClass.class);
-		var ai2 = ci2.getAnnotations(Deprecated.class).findFirst().orElse(null);
+		var ai3 = ci2.getAnnotations(Deprecated.class).findFirst().orElse(null);
+		assertNotNull(ai3);
+		assertNotEquals(ai1, ai3);
 
-		assertNotNull(ai1);
-		assertNotNull(ai2);
-		assertNotEquals(ai1, ai2);
-	}
+		// With AnnotationInfo
+		var ai4 = AnnotationInfo.of(ci, ci.inner().getAnnotation(TestAnnotation.class));
+		assertEquals(ai1, ai4);
 
-	@Test
-	void d03_equals_withAnnotationInfo_comparesAnnotations() {
-		var ci = ClassInfo.of(TestClass.class);
-		var ai1 = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
-		var ai2 = AnnotationInfo.of(ci, ci.inner().getAnnotation(TestAnnotation.class));
-
-		assertNotNull(ai1);
-		assertEquals(ai1, ai2);
-	}
-
-	@Test
-	void d04_equals_withAnnotation_comparesAnnotations() {
-		var ci = ClassInfo.of(TestClass.class);
-		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
+		// With Annotation
 		var annotation = ci.inner().getAnnotation(TestAnnotation.class);
-
-		assertNotNull(ai);
-		assertEquals(ai, annotation);
+		assertEquals(ai1, annotation);
 	}
 
 	//====================================================================================================
-	// getName()
+	// getBoolean(String)
 	//====================================================================================================
-
 	@Test
-	void e01_getName_returnsSimpleName() {
-		var ci = ClassInfo.of(TestClass.class);
-		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-		assertEquals("TestAnnotation", ai.getName());
-	}
-
-	//====================================================================================================
-	// getRank()
-	//====================================================================================================
-
-	@Test
-	void f01_getRank_withRankMethod_returnsRank() {
-		var ci = ClassInfo.of(RankedClass.class);
-		var ai = ci.getAnnotations(RankedAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-		assertEquals(5, ai.getRank());
-	}
-
-	@Test
-	void f02_getRank_withoutRankMethod_returnsZero() {
-		var ci = ClassInfo.of(UnrankedClass.class);
-		var ai = ci.getAnnotations(UnrankedAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-		assertEquals(0, ai.getRank());
-	}
-
-	@Test
-	void f03_getRank_withRankMethodWrongReturnType_returnsZero() {
-		// rank() method returns String, not int, so it doesn't match the filter
-		var ci = ClassInfo.of(RankWithWrongReturnTypeClass.class);
-		var ai = ci.getAnnotations(RankWithWrongReturnTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-		assertEquals(0, ai.getRank());
-	}
-
-	//====================================================================================================
-	// getMethod()
-	//====================================================================================================
-
-	@Test
-	void g01_getMethod_existingMethod_returnsMethodInfo() {
-		var ci = ClassInfo.of(TestClass.class);
-		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		var method = ai.getMethod("value");
-		assertTrue(method.isPresent());
-		assertEquals("value", method.get().getSimpleName());
-	}
-
-	@Test
-	void g02_getMethod_nonexistentMethod_returnsEmpty() {
-		var ci = ClassInfo.of(TestClass.class);
-		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		var method = ai.getMethod("nonexistent");
-		assertFalse(method.isPresent());
-	}
-
-	//====================================================================================================
-	// getReturnType()
-	//====================================================================================================
-
-	@Test
-	void h01_getReturnType_returnsCorrectType() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertTrue(ai.getReturnType("stringValue").isPresent());
-		assertEquals(String.class, ai.getReturnType("stringValue").get().inner());
-		assertEquals(int.class, ai.getReturnType("intValue").get().inner());
-		assertEquals(boolean.class, ai.getReturnType("boolValue").get().inner());
-		assertEquals(long.class, ai.getReturnType("longValue").get().inner());
-		assertEquals(double.class, ai.getReturnType("doubleValue").get().inner());
-		assertEquals(float.class, ai.getReturnType("floatValue").get().inner());
-		assertEquals(Class.class, ai.getReturnType("classValue").get().inner());
-		assertEquals(String[].class, ai.getReturnType("stringArray").get().inner());
-		assertEquals(Class[].class, ai.getReturnType("classArray").get().inner());
-	}
-
-	@Test
-	void h02_getReturnType_nonexistentMethod_returnsEmpty() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertFalse(ai.getReturnType("nonexistent").isPresent());
-	}
-
-	//====================================================================================================
-	// Value retrieval methods - getString(), getInt(), getBoolean(), etc.
-	//====================================================================================================
-
-	@Test
-	void i01_getString_returnsStringValue() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertTrue(ai.getString("stringValue").isPresent());
-		assertEquals("test", ai.getString("stringValue").get());
-		assertFalse(ai.getString("nonexistent").isPresent());
-	}
-
-	@Test
-	void i02_getInt_returnsIntValue() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertTrue(ai.getInt("intValue").isPresent());
-		assertEquals(123, ai.getInt("intValue").get());
-		assertFalse(ai.getInt("nonexistent").isPresent());
-	}
-
-	@Test
-	void i03_getBoolean_returnsBooleanValue() {
+	void a004_getBoolean() {
 		var ci = ClassInfo.of(MultiTypeClass.class);
 		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -388,68 +231,11 @@ class AnnotationInfo_Test extends TestBase {
 		assertFalse(ai.getBoolean("nonexistent").isPresent());
 	}
 
+	//====================================================================================================
+	// getClassArray(String)
+	//====================================================================================================
 	@Test
-	void i04_getLong_returnsLongValue() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertTrue(ai.getLong("longValue").isPresent());
-		assertEquals(999L, ai.getLong("longValue").get());
-		assertFalse(ai.getLong("nonexistent").isPresent());
-	}
-
-	@Test
-	void i05_getDouble_returnsDoubleValue() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertTrue(ai.getDouble("doubleValue").isPresent());
-		assertEquals(1.23, ai.getDouble("doubleValue").get(), 0.001);
-		assertFalse(ai.getDouble("nonexistent").isPresent());
-	}
-
-	@Test
-	void i06_getFloat_returnsFloatValue() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertTrue(ai.getFloat("floatValue").isPresent());
-		assertEquals(4.56f, ai.getFloat("floatValue").get(), 0.001);
-		assertFalse(ai.getFloat("nonexistent").isPresent());
-	}
-
-	@Test
-	void i07_getClassValue_returnsClassValue() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertTrue(ai.getClassValue("classValue").isPresent());
-		assertEquals(Integer.class, ai.getClassValue("classValue").get());
-		assertFalse(ai.getClassValue("nonexistent").isPresent());
-	}
-
-	@Test
-	void i08_getStringArray_returnsStringArray() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertTrue(ai.getStringArray("stringArray").isPresent());
-		var array = ai.getStringArray("stringArray").get();
-		assertNotNull(array);
-		assertEquals(3, array.length);
-		assertEquals("x", array[0]);
-		assertEquals("y", array[1]);
-		assertEquals("z", array[2]);
-		assertFalse(ai.getStringArray("nonexistent").isPresent());
-	}
-
-	@Test
-	void i09_getClassArray_returnsClassArray() {
+	void a005_getClassArray() {
 		var ci = ClassInfo.of(MultiTypeClass.class);
 		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -464,57 +250,10 @@ class AnnotationInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// getValue() - Convenience method
-	//====================================================================================================
-
-	@Test
-	void j01_getValue_returnsValueMethod() {
-		var ci = ClassInfo.of(TestClass.class);
-		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		var value = ai.getValue();
-		assertTrue(value.isPresent());
-		assertEquals("test", value.get());
-	}
-
-	//====================================================================================================
-	// getValue(Class<V> type, String name)
-	//====================================================================================================
-
-	@Test
-	void k01_getValue_withType_returnsTypedValue() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		var stringValue = ai.getValue(String.class, "stringValue");
-		assertTrue(stringValue.isPresent());
-		assertEquals("test", stringValue.get());
-
-		// intValue returns int.class, not Integer.class
-		var intValue = ai.getValue(int.class, "intValue");
-		assertTrue(intValue.isPresent());
-		assertEquals(123, intValue.get());
-	}
-
-	@Test
-	void k02_getValue_wrongType_returnsEmpty() {
-		var ci = ClassInfo.of(MultiTypeClass.class);
-		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		// Try to get stringValue as Integer
-		var intValue = ai.getValue(Integer.class, "stringValue");
-		assertFalse(intValue.isPresent());
-	}
-
-	//====================================================================================================
 	// getClassArray(String, Class<T>)
 	//====================================================================================================
-
 	@Test
-	void l01_getClassArray_typed_returnsTypedArray() {
+	void a006_getClassArray_typed() {
 		var ci = ClassInfo.of(ClassArrayClass.class);
 		var ai = ci.getAnnotations(ClassArrayAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -526,39 +265,39 @@ class AnnotationInfo_Test extends TestBase {
 		assertEquals(2, array.length);
 		assertEquals(String.class, array[0]);
 		assertEquals(Integer.class, array[1]);
-	}
-
-	@Test
-	void l02_getClassArray_typed_notAssignable_returnsEmpty() {
-		var ci = ClassInfo.of(ClassArrayClass.class);
-		var ai = ci.getAnnotations(ClassArrayAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
 
 		// String and Integer are not assignable to Exception
-		var classes = ai.getClassArray("classes", Exception.class);
-		assertFalse(classes.isPresent());
+		var classes2 = ai.getClassArray("classes", Exception.class);
+		assertFalse(classes2.isPresent());
+	}
+
+	//====================================================================================================
+	// getClassValue(String)
+	//====================================================================================================
+	@Test
+	void a007_getClassValue() {
+		var ci = ClassInfo.of(MultiTypeClass.class);
+		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		assertTrue(ai.getClassValue("classValue").isPresent());
+		assertEquals(Integer.class, ai.getClassValue("classValue").get());
+		assertFalse(ai.getClassValue("nonexistent").isPresent());
 	}
 
 	//====================================================================================================
 	// getClassValue(String, Class<T>)
 	//====================================================================================================
-
 	@Test
-	void m01_getClassValue_typed_returnsTypedClass() {
+	void a008_getClassValue_typed() {
 		var ci = ClassInfo.of(ClassValueClass.class);
 		var ai = ci.getAnnotations(ClassValueAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
 
+		// Integer is assignable to Number
 		var numberClass = ai.getClassValue("value", Number.class);
 		assertTrue(numberClass.isPresent());
 		assertEquals(Integer.class, numberClass.get());
-	}
-
-	@Test
-	void m02_getClassValue_typed_notAssignable_returnsEmpty() {
-		var ci = ClassInfo.of(ClassValueClass.class);
-		var ai = ci.getAnnotations(ClassValueAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
 
 		// Integer is not assignable to Exception
 		var exceptionClass = ai.getClassValue("value", Exception.class);
@@ -566,11 +305,234 @@ class AnnotationInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// hasName() and hasSimpleName()
+	// getDouble(String)
 	//====================================================================================================
-
 	@Test
-	void n01_hasName_returnsTrueForFullyQualifiedName() {
+	void a009_getDouble() {
+		var ci = ClassInfo.of(MultiTypeClass.class);
+		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		assertTrue(ai.getDouble("doubleValue").isPresent());
+		assertEquals(1.23, ai.getDouble("doubleValue").get(), 0.001);
+		assertFalse(ai.getDouble("nonexistent").isPresent());
+	}
+
+	//====================================================================================================
+	// getFloat(String)
+	//====================================================================================================
+	@Test
+	void a010_getFloat() {
+		var ci = ClassInfo.of(MultiTypeClass.class);
+		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		assertTrue(ai.getFloat("floatValue").isPresent());
+		assertEquals(4.56f, ai.getFloat("floatValue").get(), 0.001);
+		assertFalse(ai.getFloat("nonexistent").isPresent());
+	}
+
+	//====================================================================================================
+	// getInt(String)
+	//====================================================================================================
+	@Test
+	void a011_getInt() {
+		var ci = ClassInfo.of(MultiTypeClass.class);
+		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		assertTrue(ai.getInt("intValue").isPresent());
+		assertEquals(123, ai.getInt("intValue").get());
+		assertFalse(ai.getInt("nonexistent").isPresent());
+	}
+
+	//====================================================================================================
+	// getLong(String)
+	//====================================================================================================
+	@Test
+	void a012_getLong() {
+		var ci = ClassInfo.of(MultiTypeClass.class);
+		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		assertTrue(ai.getLong("longValue").isPresent());
+		assertEquals(999L, ai.getLong("longValue").get());
+		assertFalse(ai.getLong("nonexistent").isPresent());
+	}
+
+	//====================================================================================================
+	// getMethod(String)
+	//====================================================================================================
+	@Test
+	void a013_getMethod() {
+		var ci = ClassInfo.of(TestClass.class);
+		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		// Existing method
+		var method = ai.getMethod("value");
+		assertTrue(method.isPresent());
+		assertEquals("value", method.get().getSimpleName());
+
+		// Non-existent method
+		var method2 = ai.getMethod("nonexistent");
+		assertFalse(method2.isPresent());
+	}
+
+	//====================================================================================================
+	// getName()
+	//====================================================================================================
+	@Test
+	void a014_getName() {
+		var ci = ClassInfo.of(TestClass.class);
+		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+		assertEquals("TestAnnotation", ai.getName());
+	}
+
+	//====================================================================================================
+	// getRank()
+	//====================================================================================================
+	@Test
+	void a015_getRank() {
+		// With rank method
+		var ci1 = ClassInfo.of(RankedClass.class);
+		var ai1 = ci1.getAnnotations(RankedAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai1);
+		assertEquals(5, ai1.getRank());
+
+		// Without rank method
+		var ci2 = ClassInfo.of(UnrankedClass.class);
+		var ai2 = ci2.getAnnotations(UnrankedAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai2);
+		assertEquals(0, ai2.getRank());
+
+		// With rank method but wrong return type (String instead of int)
+		var ci3 = ClassInfo.of(RankWithWrongReturnTypeClass.class);
+		var ai3 = ci3.getAnnotations(RankWithWrongReturnTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai3);
+		assertEquals(0, ai3.getRank());
+	}
+
+	//====================================================================================================
+	// getReturnType(String)
+	//====================================================================================================
+	@Test
+	void a016_getReturnType() {
+		var ci = ClassInfo.of(MultiTypeClass.class);
+		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		assertTrue(ai.getReturnType("stringValue").isPresent());
+		assertEquals(String.class, ai.getReturnType("stringValue").get().inner());
+		assertEquals(int.class, ai.getReturnType("intValue").get().inner());
+		assertEquals(boolean.class, ai.getReturnType("boolValue").get().inner());
+		assertEquals(long.class, ai.getReturnType("longValue").get().inner());
+		assertEquals(double.class, ai.getReturnType("doubleValue").get().inner());
+		assertEquals(float.class, ai.getReturnType("floatValue").get().inner());
+		assertEquals(Class.class, ai.getReturnType("classValue").get().inner());
+		assertEquals(String[].class, ai.getReturnType("stringArray").get().inner());
+		assertEquals(Class[].class, ai.getReturnType("classArray").get().inner());
+
+		// Non-existent method
+		assertFalse(ai.getReturnType("nonexistent").isPresent());
+	}
+
+	//====================================================================================================
+	// getString(String)
+	//====================================================================================================
+	@Test
+	void a017_getString() {
+		var ci = ClassInfo.of(MultiTypeClass.class);
+		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		assertTrue(ai.getString("stringValue").isPresent());
+		assertEquals("test", ai.getString("stringValue").get());
+		assertFalse(ai.getString("nonexistent").isPresent());
+	}
+
+	//====================================================================================================
+	// getStringArray(String)
+	//====================================================================================================
+	@Test
+	void a018_getStringArray() {
+		var ci = ClassInfo.of(MultiTypeClass.class);
+		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		assertTrue(ai.getStringArray("stringArray").isPresent());
+		var array = ai.getStringArray("stringArray").get();
+		assertNotNull(array);
+		assertEquals(3, array.length);
+		assertEquals("x", array[0]);
+		assertEquals("y", array[1]);
+		assertEquals("z", array[2]);
+		assertFalse(ai.getStringArray("nonexistent").isPresent());
+	}
+
+	//====================================================================================================
+	// getValue()
+	//====================================================================================================
+	@Test
+	void a019_getValue() {
+		var ci = ClassInfo.of(TestClass.class);
+		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		var value = ai.getValue();
+		assertTrue(value.isPresent());
+		assertEquals("test", value.get());
+	}
+
+	//====================================================================================================
+	// getValue(Class<V>, String)
+	//====================================================================================================
+	@Test
+	void a020_getValue_typed() {
+		var ci = ClassInfo.of(MultiTypeClass.class);
+		var ai = ci.getAnnotations(MultiTypeAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		// String value
+		var stringValue = ai.getValue(String.class, "stringValue");
+		assertTrue(stringValue.isPresent());
+		assertEquals("test", stringValue.get());
+
+		// int value (primitive)
+		var intValue = ai.getValue(int.class, "intValue");
+		assertTrue(intValue.isPresent());
+		assertEquals(123, intValue.get());
+
+		// Wrong type returns empty
+		var intValue2 = ai.getValue(Integer.class, "stringValue");
+		assertFalse(intValue2.isPresent());
+	}
+
+	//====================================================================================================
+	// hasAnnotation(Class<A>)
+	//====================================================================================================
+	@Test
+	void a021_hasAnnotation() {
+		var ci = ClassInfo.of(DocumentedClass.class);
+		var ai = ci.getAnnotations(DocumentedAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+
+		// Has meta-annotation
+		assertTrue(ai.hasAnnotation(Documented.class));
+
+		// Doesn't have meta-annotation
+		var ci2 = ClassInfo.of(TestClass.class);
+		var ai2 = ci2.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai2);
+		assertFalse(ai2.hasAnnotation(Documented.class));
+	}
+
+	//====================================================================================================
+	// hasName(String)
+	//====================================================================================================
+	@Test
+	void a022_hasName() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -580,8 +542,11 @@ class AnnotationInfo_Test extends TestBase {
 		assertFalse(ai.hasName("TestAnnotation"));
 	}
 
+	//====================================================================================================
+	// hasSimpleName(String)
+	//====================================================================================================
 	@Test
-	void n02_hasSimpleName_returnsTrueForSimpleName() {
+	void a023_hasSimpleName() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -591,33 +556,24 @@ class AnnotationInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// hasAnnotation()
+	// hashCode()
 	//====================================================================================================
-
 	@Test
-	void o01_hasAnnotation_withMetaAnnotation_returnsTrue() {
-		var ci = ClassInfo.of(DocumentedClass.class);
-		var ai = ci.getAnnotations(DocumentedAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
-
-		assertTrue(ai.hasAnnotation(Documented.class));
-	}
-
-	@Test
-	void o02_hasAnnotation_withoutMetaAnnotation_returnsFalse() {
+	void a024_hashCode() {
 		var ci = ClassInfo.of(TestClass.class);
-		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
+		var ai1 = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
+		var ai2 = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 
-		assertFalse(ai.hasAnnotation(Documented.class));
+		assertNotNull(ai1);
+		assertNotNull(ai2);
+		assertEquals(ai1.hashCode(), ai2.hashCode());
 	}
 
 	//====================================================================================================
 	// inner()
 	//====================================================================================================
-
 	@Test
-	void p01_inner_returnsWrappedAnnotation() {
+	void a025_inner() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -629,11 +585,10 @@ class AnnotationInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// isInGroup()
+	// isInGroup(Class<A>)
 	//====================================================================================================
-
 	@Test
-	void q01_isInGroup_returnsTrueForGroupMembers() {
+	void a026_isInGroup() {
 		var ci = ClassInfo.of(GroupTestClass.class);
 		var groupMember1 = ci.getAnnotations(GroupMember1.class).findFirst().orElse(null);
 		var groupMember2 = ci.getAnnotations(GroupMember2.class).findFirst().orElse(null);
@@ -649,45 +604,40 @@ class AnnotationInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// isType()
+	// isType(Class<A>)
 	//====================================================================================================
-
 	@Test
-	void r01_isType_sameType_returnsTrue() {
+	void a027_isType() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
 
 		assertTrue(ai.isType(TestAnnotation.class));
+		assertFalse(ai.isType(Deprecated.class));
 	}
 
+	//====================================================================================================
+	// of(Annotatable, A)
+	//====================================================================================================
 	@Test
-	void r02_isType_differentType_returnsFalse() {
+	void a028_of() {
 		var ci = ClassInfo.of(TestClass.class);
-		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
+		var annotation = ci.inner().getAnnotation(TestAnnotation.class);
+		var ai = AnnotationInfo.of(ci, annotation);
 
-		assertFalse(ai.isType(Deprecated.class));
+		assertNotNull(ai);
+		assertEquals(TestAnnotation.class, ai.annotationType());
+		assertEquals("test", ai.getValue().orElse(null));
+
+		// Null annotation should throw
+		assertThrows(IllegalArgumentException.class, () -> AnnotationInfo.of(ci, null));
 	}
 
 	//====================================================================================================
 	// toMap()
 	//====================================================================================================
-
-	@Target(TYPE)
-	@Retention(RUNTIME)
-	public static @interface ToMapTestAnnotation {
-		String value() default "default";
-		String[] arrayValue() default {};
-		String[] nonEmptyArray() default {"a", "b"};
-		String[] emptyArrayWithNonEmptyDefault() default {"default"};
-	}
-
-	@ToMapTestAnnotation(value = "custom", arrayValue = {}, nonEmptyArray = {"x"}, emptyArrayWithNonEmptyDefault = {})
-	public static class ToMapTestClass {}
-
 	@Test
-	void s01_toMap_returnsMapRepresentation() {
+	void a029_toMap() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -700,35 +650,30 @@ class AnnotationInfo_Test extends TestBase {
 		var annotationMap = (java.util.Map<String,Object>)map.get("@TestAnnotation");
 		assertNotNull(annotationMap);
 		assertEquals("test", annotationMap.get("value"));
-	}
 
-	@Test
-	void s02_toMap_withNonDefaultValues_includesOnlyNonDefaults() {
-		var ci = ClassInfo.of(ToMapTestClass.class);
-		var ai = ci.getAnnotations(ToMapTestAnnotation.class).findFirst().orElse(null);
-		assertNotNull(ai);
+		// Test with non-default values
+		var ci2 = ClassInfo.of(ToMapTestClass.class);
+		var ai2 = ci2.getAnnotations(ToMapTestAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai2);
 
-		var map = ai.toMap();
-		assertNotNull(map);
-		var annotationMap = (java.util.Map<String,Object>)map.get("@ToMapTestAnnotation");
-		assertNotNull(annotationMap);
+		var map2 = ai2.toMap();
+		assertNotNull(map2);
+		var annotationMap2 = (java.util.Map<String,Object>)map2.get("@ToMapTestAnnotation");
+		assertNotNull(annotationMap2);
 		
-		// value differs from default (non-array), should be included - covers branch: isArray(v) = false
-		assertEquals("custom", annotationMap.get("value"));
+		// value differs from default (non-array), should be included
+		assertEquals("custom", annotationMap2.get("value"));
 		
-		// nonEmptyArray differs from default (non-empty array), should be included - covers branch: isArray(v) = true, length(v) != 0
-		assertTrue(annotationMap.containsKey("nonEmptyArray"));
+		// nonEmptyArray differs from default (non-empty array), should be included
+		assertTrue(annotationMap2.containsKey("nonEmptyArray"));
 		
-		// emptyArrayWithNonEmptyDefault is empty array but default is non-empty, should be included - covers branch: isArray(v) = true, length(v) == 0, length(d) != 0
-		assertTrue(annotationMap.containsKey("emptyArrayWithNonEmptyDefault"));
+		// emptyArrayWithNonEmptyDefault is empty array but default is non-empty, should be included
+		assertTrue(annotationMap2.containsKey("emptyArrayWithNonEmptyDefault"));
 		
-		// arrayValue is empty array matching default empty array, should NOT be included - covers branch: isArray(v) = true, length(v) == 0, length(d) == 0
-		assertFalse(annotationMap.containsKey("arrayValue"));
-	}
+		// arrayValue is empty array matching default empty array, should NOT be included
+		assertFalse(annotationMap2.containsKey("arrayValue"));
 
-	@Test
-	void s03_toMap_withExceptionHandling_handlesException() {
-		// Create a runtime annotation proxy that throws an exception when a method is invoked
+		// Test with exception handling
 		var annotationType = ToMapTestAnnotation.class;
 		var handler = new java.lang.reflect.InvocationHandler() {
 			@Override
@@ -758,17 +703,17 @@ class AnnotationInfo_Test extends TestBase {
 			handler
 		);
 		
-		var ci = ClassInfo.of(ToMapTestClass.class);
-		var ai = AnnotationInfo.of(ci, proxyAnnotation);
+		var ci3 = ClassInfo.of(ToMapTestClass.class);
+		var ai3 = AnnotationInfo.of(ci3, proxyAnnotation);
 		
-		var map = ai.toMap();
-		assertNotNull(map);
-		var annotationMap = (java.util.Map<String,Object>)map.get("@ToMapTestAnnotation");
-		assertNotNull(annotationMap);
+		var map3 = ai3.toMap();
+		assertNotNull(map3);
+		var annotationMap3 = (java.util.Map<String,Object>)map3.get("@ToMapTestAnnotation");
+		assertNotNull(annotationMap3);
 		
 		// The exception should be caught and stored as a localized message
-		assertTrue(annotationMap.containsKey("value"));
-		var value = annotationMap.get("value");
+		assertTrue(annotationMap3.containsKey("value"));
+		var value = annotationMap3.get("value");
 		assertNotNull(value);
 		// The value should be a string representation of the exception
 		assertTrue(value instanceof String);
@@ -777,9 +722,8 @@ class AnnotationInfo_Test extends TestBase {
 	//====================================================================================================
 	// toSimpleString()
 	//====================================================================================================
-
 	@Test
-	void t01_toSimpleString_returnsFormattedString() {
+	void a030_toSimpleString() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -793,9 +737,8 @@ class AnnotationInfo_Test extends TestBase {
 	//====================================================================================================
 	// toString()
 	//====================================================================================================
-
 	@Test
-	void u01_toString_returnsStringRepresentation() {
+	void a031_toString() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
@@ -806,3 +749,4 @@ class AnnotationInfo_Test extends TestBase {
 		assertTrue(str.contains("CLASS_TYPE") || str.contains("@TestAnnotation"));
 	}
 }
+

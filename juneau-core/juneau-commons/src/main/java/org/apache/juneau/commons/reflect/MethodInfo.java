@@ -447,6 +447,11 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	/**
 	 * Returns <jk>true</jk> if the parameters on the method only consist of the types specified in the list.
 	 *
+	 * <p>
+	 * <b>Note:</b> This method is not meant to be used on methods with duplicate parameter types.
+	 * It checks if each parameter type is present in the specified list, but does not verify
+	 * that the count of each type matches exactly.
+	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 *

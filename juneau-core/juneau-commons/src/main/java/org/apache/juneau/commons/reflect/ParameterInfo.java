@@ -189,7 +189,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if this parameter can accept the specified value.
 	 */
 	public boolean canAccept(Object value) {
-		return getParameterType().isInstance(value);
+		return getParameterType().canAcceptArg(value);
 	}
 
 	@Override /* Annotatable */
