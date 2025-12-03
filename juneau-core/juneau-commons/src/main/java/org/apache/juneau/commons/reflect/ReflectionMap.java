@@ -295,13 +295,6 @@ public class ReflectionMap<V> {
 		public ReflectionMap<V> build() {
 			return new ReflectionMap<>(this);
 		}
-
-		/**
-		 * Returns <jk>true</jk> if this builder has no entries.
-		 *
-		 * @return <jk>true</jk> if this builder has no entries.
-		 */
-		public boolean isEmpty() { return classEntries.isEmpty() && methodEntries.isEmpty() && fieldEntries.isEmpty() && constructorEntries.isEmpty(); }
 	}
 
 	private static class ClassEntry<V> {

@@ -551,13 +551,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T invoke(Object obj, Object...args) throws ExecutableException {
-		try {
-			return (T)inner.invoke(obj, args);
-		} catch (IllegalAccessException e) {
-			throw new ExecutableException(e);
-		} catch (InvocationTargetException e) {
-			throw new ExecutableException(e.getTargetException());
-		}
+		return safe(() -> {
+			try {
+				return (T)inner.invoke(obj, args);
+			} catch (InvocationTargetException e) {
+				throw new ExecutableException(e.getTargetException());
+			}
+		}, e -> new ExecutableException(e));
 	}
 
 	/**
@@ -583,11 +583,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public Object invokeLenient(Object pojo, Object...args) throws ExecutableException {
-		try {
+		return safe(() -> {
 			return inner.invoke(pojo, ClassUtils.getMatchingArgs(inner.getParameterTypes(), args));
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			throw new ExecutableException(e);
-		}
+		}, e -> new ExecutableException(e instanceof InvocationTargetException ? ((InvocationTargetException)e).getTargetException() : e));
 	}
 
 	@Override

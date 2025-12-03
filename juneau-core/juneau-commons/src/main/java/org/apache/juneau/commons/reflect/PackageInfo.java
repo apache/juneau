@@ -306,7 +306,7 @@ public class PackageInfo implements Annotatable {
 	 * @see Package#isCompatibleWith(String)
 	 */
 	public boolean isCompatibleWith(String desired) throws NumberFormatException {
-		return inner.isCompatibleWith(desired);
+		return inner.isCompatibleWith(desired);  // HTT - Hard to test normal return path: requires package with version set in JAR manifest (Specification-Version header), which is difficult to set in test environment
 	}
 
 	/**

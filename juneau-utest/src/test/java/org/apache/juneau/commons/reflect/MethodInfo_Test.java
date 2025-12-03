@@ -237,6 +237,16 @@ class MethodInfo_Test extends TestBase {
 	public interface DefaultInterface {
 		default String defaultMethod() { return "default"; }
 	}
+	
+	// Bridge method test class - when a class implements a generic interface/class
+	// and overrides a method with a more specific type, the compiler creates a bridge method
+	public interface GenericInterface<T> {
+		T getValue();
+	}
+	public static class BridgeTestClass implements GenericInterface<String> {
+		@Override
+		public String getValue() { return "value"; }  // This creates a bridge method
+	}
 
 	//====================================================================================================
 	// accessible()
@@ -547,7 +557,33 @@ class MethodInfo_Test extends TestBase {
 	void a026_is() {
 		// Bridge method
 		assertFalse(f_foo.is(ElementFlag.BRIDGE));
-		assertTrue(f_foo.is(ElementFlag.NOT_BRIDGE));
+		assertTrue(f_foo.is(ElementFlag.NOT_BRIDGE));  // Line 599: true branch - method is NOT a bridge
+		
+		// Test line 599: false branch - method IS a bridge (NOT_BRIDGE returns false)
+		// Bridge methods are created by the compiler for generic type erasure
+		// Bridge methods occur when a class implements a generic interface/class
+		// and overrides a method with a more specific type
+		ClassInfo bridgeClass = ClassInfo.of(BridgeTestClass.class);
+		var bridgeMethods = bridgeClass.getPublicMethods();
+		var bridgeMethod = bridgeMethods.stream()
+			.filter(m -> m.isBridge())
+			.findFirst();
+		if (bridgeMethod.isPresent()) {
+			// Test the false branch: when method IS a bridge, NOT_BRIDGE should return false
+			assertTrue(bridgeMethod.get().is(ElementFlag.BRIDGE));
+			assertFalse(bridgeMethod.get().is(ElementFlag.NOT_BRIDGE));  // Line 599: false branch
+		} else {
+			// Fallback: try ArrayList which should have bridge methods
+			ClassInfo listClass = ClassInfo.of(java.util.ArrayList.class);
+			var methods = listClass.getPublicMethods();
+			var arrayListBridge = methods.stream()
+				.filter(m -> m.isBridge())
+				.findFirst();
+			if (arrayListBridge.isPresent()) {
+				assertTrue(arrayListBridge.get().is(ElementFlag.BRIDGE));
+				assertFalse(arrayListBridge.get().is(ElementFlag.NOT_BRIDGE));  // Line 599: false branch
+			}
+		}
 		
 		// Default method
 		var defaultMethod = ClassInfo.of(DefaultInterface.class).getPublicMethod(m -> m.hasName("defaultMethod")).get();

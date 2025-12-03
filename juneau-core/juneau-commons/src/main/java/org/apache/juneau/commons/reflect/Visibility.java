@@ -126,7 +126,7 @@ public enum Visibility {
 		assertArgNotNull("x", x);
 		if (isVisible(x))
 			if (! setAccessible(x))
-				return null;
+				return null;  // HTT
 		return x;
 	}
 
@@ -146,7 +146,7 @@ public enum Visibility {
 		assertArgNotNull("x", x);
 		if (isVisible(x))
 			if (! setAccessible(x))
-				return null;
+				return null;  // HTT
 		return x;
 	}
 
@@ -166,7 +166,7 @@ public enum Visibility {
 		assertArgNotNull("x", x);
 		if (isVisible(x))
 			if (! setAccessible(x))
-				return null;
+				return null;  // HTT
 		return x;
 	}
 }

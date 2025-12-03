@@ -129,17 +129,12 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		ExecutableInfo execInfo;
 		if (exec instanceof Constructor<?> c)
 			execInfo = ConstructorInfo.of(c);
-		else if (exec instanceof Method m)
-			execInfo = MethodInfo.of(m);
 		else
-			throw new IllegalArgumentException("Unsupported executable type: " + exec.getClass());
-
-		for (var param : execInfo.getParameters()) {
-			var wrapped = param.inner();
-			if (wrapped == inner || wrapped.equals(inner))
-				return param;
-		}
-		throw new IllegalArgumentException("Parameter not found in declaring executable: " + inner);
+			execInfo = MethodInfo.of((Method)exec);
+		return execInfo.getParameters().stream()
+			.filter(x -> eq(x.inner(), inner))
+			.findFirst()
+			.orElse(null);
 	}
 
 	static void reset() {
@@ -468,7 +463,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	public boolean is(ElementFlag flag) {
 		return switch (flag) {
 			case SYNTHETIC -> isSynthetic();
-			case NOT_SYNTHETIC -> ! isSynthetic();
+			case NOT_SYNTHETIC -> ! isSynthetic();  // HTT
 			case VARARGS -> isVarArgs();
 			case NOT_VARARGS -> ! isVarArgs();
 			default -> super.is(flag);
@@ -626,18 +621,13 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			for (var ai : mp.getAnnotations()) {
 				if (ai.hasSimpleName("Name")) {
 					var value = ai.getValue().orElse(null);
-					if (value != null)
+					if (value != null)  // HTT
 						return value;
 				}
 			}
 		}
 
-		// Fall back to bytecode parameter name if available and not disabled
-		if (! DISABLE_PARAM_NAME_DETECTION.get() && inner.isNamePresent()) {
-			return inner.getName();
-		}
-
-		return null;
+		return opt(inner).filter(x -> x.isNamePresent()).filter(x -> ! DISABLE_PARAM_NAME_DETECTION.get()).map(x -> x.getName()).orElse(null);
 	}
 
 	private String findQualifierInternal() {

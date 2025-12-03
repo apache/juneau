@@ -46,16 +46,16 @@ class PackageInfo_Test extends TestBase {
 		var pi1 = PackageInfo.of(TestClass1.class);
 		var pi2 = PackageInfo.of(TestClass2.class);
 		var pi3 = PackageInfo.of(TestClass1.class);
-		
+
 		// Same package should be equal
 		assertEquals(pi1, pi3);
 		assertEquals(pi1.hashCode(), pi3.hashCode());
-		
+
 		// Different packages should not be equal
 		if (!pi1.getName().equals(pi2.getName())) {
 			assertNotEquals(pi1, pi2);
 		}
-		
+
 		// Should equal the underlying Package
 		assertEquals(pi1, pi1.inner());
 	}
@@ -146,7 +146,7 @@ class PackageInfo_Test extends TestBase {
 		var name = pi.getName();
 		assertNotNull(name);
 		assertEquals("org.apache.juneau.commons.reflect", name);
-		
+
 		// Test with String.class
 		var pi2 = PackageInfo.of(String.class);
 		assertEquals("java.lang", pi2.getName());
@@ -193,13 +193,13 @@ class PackageInfo_Test extends TestBase {
 		var pi1 = PackageInfo.of(TestClass1.class);
 		var pi2 = PackageInfo.of(TestClass1.class);
 		var pi3 = PackageInfo.of(TestClass2.class);
-		
+
 		// Same package should have same hash code
 		assertEquals(pi1.hashCode(), pi2.hashCode());
-		
+
 		// Should match underlying Package hash code
 		assertEquals(pi1.hashCode(), pi1.inner().hashCode());
-		
+
 		// Different packages may or may not have different hash codes
 		if (!pi1.getName().equals(pi3.getName())) {
 			// Hash codes might still be equal (collision), but usually different
@@ -223,26 +223,36 @@ class PackageInfo_Test extends TestBase {
 	@Test
 	void a015_isCompatibleWith() {
 		var pi = PackageInfo.of(String.class);
+
+		// Test line 309: ensure inner.isCompatibleWith(desired) is called
+		// Package versions come from JAR manifest (Specification-Version header)
+		// Most test packages don't have versions, so isCompatibleWith throws NumberFormatException
+		// However, line 309 is still executed - the exception is thrown FROM that line
 		
-		// Test with valid version strings - ensure line 309 is covered
-		// This calls inner.isCompatibleWith(desired) which may return true or false
-		// depending on the package version, but the line should be executed
-		// Note: Package.isCompatibleWith may throw NumberFormatException if the package
-		// version is empty or invalid, so we need to handle that
-		try {
+		// Try to find a package with a version (e.g., from standard library or a dependency)
+		// If found, test the normal return path
+		var specVersion = pi.getSpecificationVersion();
+		if (specVersion != null && !specVersion.isEmpty()) {
+			// Line 309: normal return path when package has a version
 			var compatible = pi.isCompatibleWith("1.0");
 			assertNotNull(Boolean.valueOf(compatible));
 			
-			// Test with another valid version
+			// Test with another version
 			var compatible2 = pi.isCompatibleWith("2.0");
 			assertNotNull(Boolean.valueOf(compatible2));
-		} catch (NumberFormatException e) {
-			// Package version may be empty or invalid, which causes isCompatibleWith to throw
-			// This is expected behavior - the line 309 is still covered by the call
+		} else {
+			// Package doesn't have a version - isCompatibleWith will throw NumberFormatException
+			// Line 309 is still executed, exception is thrown from inner.isCompatibleWith
+			assertThrows(NumberFormatException.class, () -> pi.isCompatibleWith("1.0"));
 		}
-		
-		// Test with invalid version - should throw
+
+		// Test with invalid version - should throw NumberFormatException
+		// Line 309 is executed, then exception is thrown from inner.isCompatibleWith
 		assertThrows(NumberFormatException.class, () -> pi.isCompatibleWith("invalid"));
+
+		// Test with null - Package.isCompatibleWith(null) throws NumberFormatException
+		// Line 309 is executed, then exception is thrown from inner.isCompatibleWith
+		assertThrows(NumberFormatException.class, () -> pi.isCompatibleWith(null));
 	}
 
 	//====================================================================================================
@@ -276,7 +286,7 @@ class PackageInfo_Test extends TestBase {
 		var pi = PackageInfo.of(TestClass1.class);
 		assertNotNull(pi);
 		assertEquals("org.apache.juneau.commons.reflect", pi.getName());
-		
+
 		// Test with null - should throw
 		assertThrows(NullPointerException.class, () -> PackageInfo.of((Class<?>)null));
 	}
@@ -301,11 +311,11 @@ class PackageInfo_Test extends TestBase {
 		var pi = PackageInfo.of(pkg);
 		assertNotNull(pi);
 		assertEquals("org.apache.juneau.commons.reflect", pi.getName());
-		
+
 		// Test caching - should return same instance
 		var pi2 = PackageInfo.of(pkg);
 		assertSame(pi, pi2);
-		
+
 		// Test with null - should throw
 		assertThrows(IllegalArgumentException.class, () -> PackageInfo.of((Package)null));
 	}
@@ -320,7 +330,7 @@ class PackageInfo_Test extends TestBase {
 		assertNotNull(str);
 		assertTrue(str.contains("package"));
 		assertTrue(str.contains("org.apache.juneau.commons.reflect"));
-		
+
 		// Should match underlying Package toString
 		assertEquals(pi.inner().toString(), str);
 	}
