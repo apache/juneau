@@ -237,7 +237,7 @@ class MethodInfo_Test extends TestBase {
 	public interface DefaultInterface {
 		default String defaultMethod() { return "default"; }
 	}
-	
+
 	// Bridge method test class - when a class implements a generic interface/class
 	// and overrides a method with a more specific type, the compiler creates a bridge method
 	public interface GenericInterface<T> {

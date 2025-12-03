@@ -37,6 +37,17 @@ class StringUtils_Test extends TestBase {
 	private abstract static class BadNumber extends Number {}
 
 	//====================================================================================================
+	// Constructor (line 51)
+	//====================================================================================================
+	@Test
+	void a00_constructor() {
+		// Test line 51: class instantiation
+		// StringUtils has an implicit public no-arg constructor
+		var instance = new StringUtils();
+		assertNotNull(instance);
+	}
+
+	//====================================================================================================
 	// abbreviate(String, int)
 	//====================================================================================================
 	@Test

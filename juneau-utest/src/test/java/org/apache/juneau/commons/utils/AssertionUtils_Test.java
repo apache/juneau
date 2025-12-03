@@ -30,6 +30,17 @@ import org.junit.jupiter.api.*;
 class AssertionUtils_Test extends TestBase {
 
 	//====================================================================================================
+	// Constructor (line 56)
+	//====================================================================================================
+	@Test
+	void a00_constructor() {
+		// Test line 56: class instantiation
+		// AssertionUtils has an implicit public no-arg constructor
+		var instance = new AssertionUtils();
+		assertNotNull(instance);
+	}
+
+	//====================================================================================================
 	// assertArg(boolean, String, Object...)
 	//====================================================================================================
 	@Test
@@ -419,6 +430,129 @@ class AssertionUtils_Test extends TestBase {
 		var value = "test";
 		var result = assertOneOf(value, "test", "other");
 		assertSame(value, result);
+	}
+
+	//====================================================================================================
+	// assertType(Class<T>, Object) - lines 236-240
+	//====================================================================================================
+	@Test
+	void k01_assertType_validInstance() {
+		// Test line 240: return (T)o when object is an instance of type
+		String value = "test";
+		String result = assertType(String.class, value);
+		assertSame(value, result);
+	}
+
+	@Test
+	void k02_assertType_subclass() {
+		// Test line 240: return (T)o when object is a subclass instance
+		Integer value = 123;
+		Number result = assertType(Number.class, value);
+		assertSame(value, result);
+	}
+
+	@Test
+	void k03_assertType_sameClass() {
+		// Test line 240: return (T)o when object is same class
+		Object obj = new Object();
+		Object result = assertType(Object.class, obj);
+		assertSame(obj, result);
+	}
+
+	@Test
+	void k04_assertType_typeNull() {
+		// Test line 236: assertArgNotNull("type", type) when type is null
+		assertThrowsWithMessage(IllegalArgumentException.class, l("type", "cannot be null"), () -> {
+			assertType(null, "test");
+		});
+	}
+
+	@Test
+	void k05_assertType_objectNull() {
+		// Test line 237: assertArgNotNull("o", o) when o is null
+		assertThrowsWithMessage(IllegalArgumentException.class, l("o", "cannot be null"), () -> {
+			assertType(String.class, null);
+		});
+	}
+
+	@Test
+	void k06_assertType_notInstance() {
+		// Test lines 238-239: if (! type.isInstance(o)) throw exception
+		assertThrowsWithMessage(IllegalArgumentException.class, l("Object is not an instance of", "String", "Integer"), () -> {
+			assertType(String.class, 123);
+		});
+	}
+
+	@Test
+	void k07_assertType_notInstance_differentTypes() {
+		// Test lines 238-239: if (! type.isInstance(o)) throw exception
+		assertThrowsWithMessage(IllegalArgumentException.class, "Object is not an instance of", () -> {
+			assertType(Integer.class, "test");
+		});
+	}
+
+	@Test
+	void k08_assertType_primitiveWrapper() {
+		// Test line 240: return (T)o with primitive wrapper
+		Integer value = 42;
+		Integer result = assertType(Integer.class, value);
+		assertSame(value, result);
+	}
+
+	//====================================================================================================
+	// assertType(Class<T>, Object, Supplier<? extends RuntimeException>) - line 269
+	//====================================================================================================
+	@Test
+	void l01_assertType_withSupplier_validInstance() {
+		// Test return (T)o when object is an instance of type
+		String value = "test";
+		String result = assertType(String.class, value, () -> new IllegalStateException("Should not throw"));
+		assertSame(value, result);
+	}
+
+	@Test
+	void l02_assertType_withSupplier_typeNull() {
+		// Test line 266: assertArgNotNull("type", type) when type is null
+		assertThrowsWithMessage(IllegalArgumentException.class, l("type", "cannot be null"), () -> {
+			assertType(null, "test", () -> new IllegalStateException("Custom"));
+		});
+	}
+
+	@Test
+	void l03_assertType_withSupplier_objectNull() {
+		// Test line 267: assertArgNotNull("o", o) when o is null
+		assertThrowsWithMessage(IllegalArgumentException.class, l("o", "cannot be null"), () -> {
+			assertType(String.class, null, () -> new IllegalStateException("Custom"));
+		});
+	}
+
+	@Test
+	void l04_assertType_withSupplier_notInstance() {
+		// Test line 269: throw exceptionSupplier.get() when object is not an instance
+		IllegalStateException customException = new IllegalStateException("Custom exception");
+		IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> {
+			assertType(String.class, 123, () -> customException);
+		});
+		assertSame(customException, thrown);
+	}
+
+	@Test
+	void l05_assertType_withSupplier_notInstance_differentException() {
+		// Test line 269: throw exceptionSupplier.get() with different exception type
+		RuntimeException customException = new RuntimeException("Custom runtime exception");
+		RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+			assertType(Integer.class, "test", () -> customException);
+		});
+		assertSame(customException, thrown);
+	}
+
+	@Test
+	void l06_assertType_withSupplier_notInstance_newException() {
+		// Test line 269: throw exceptionSupplier.get() when supplier creates new exception
+		IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> {
+			assertType(String.class, 123, () -> new IllegalStateException("Not a string"));
+		});
+		assertEquals("Not a string", thrown.getMessage());
 	}
 }
 

@@ -33,6 +33,7 @@ import org.apache.juneau.commons.reflect.*;
  *
  */
 public class ClassUtils {
+
 	/**
 	 * Predicate check to filter out void classes.
 	 */
@@ -623,13 +624,11 @@ public class ClassUtils {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Constructor<?> x) {
-		try {
-			if (nn(x))
-				x.setAccessible(true);
+		assertArgNotNull("x", x);
+		return safeOpt(() -> {
+			x.setAccessible(true);
 			return true;
-		} catch (@SuppressWarnings("unused") SecurityException e) {
-			return false;
-		}
+		}).orElse(false);
 	}
 
 	/**
@@ -639,13 +638,11 @@ public class ClassUtils {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Field x) {
-		try {
-			if (nn(x))
-				x.setAccessible(true);
+		assertArgNotNull("x", x);
+		return safeOpt(() -> {
+			x.setAccessible(true);
 			return true;
-		} catch (@SuppressWarnings("unused") SecurityException e) {
-			return false;
-		}
+		}).orElse(false);
 	}
 
 	/**
@@ -655,13 +652,11 @@ public class ClassUtils {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Method x) {
-		try {
-			if (nn(x))
-				x.setAccessible(true);
+		assertArgNotNull("x", x);
+		return safeOpt(() -> {
+			x.setAccessible(true);
 			return true;
-		} catch (@SuppressWarnings("unused") SecurityException e) {
-			return false;
-		}
+		}).orElse(false);
 	}
 
 	/**

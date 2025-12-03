@@ -29,6 +29,17 @@ import org.junit.jupiter.api.*;
 class ResourceBundleUtils_Test extends TestBase {
 
 	//====================================================================================================
+	// Constructor (line 27)
+	//====================================================================================================
+	@Test
+	void a00_constructor() {
+		// Test line 27: class instantiation
+		// ResourceBundleUtils has an implicit public no-arg constructor
+		var instance = new ResourceBundleUtils();
+		assertNotNull(instance);
+	}
+
+	//====================================================================================================
 	// findBundle(String, Locale, ClassLoader) tests
 	//====================================================================================================
 

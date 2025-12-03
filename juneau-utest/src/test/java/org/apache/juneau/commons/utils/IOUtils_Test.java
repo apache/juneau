@@ -33,6 +33,17 @@ import org.junit.jupiter.api.*;
 class IOUtils_Test extends TestBase {
 
 	//====================================================================================================
+	// Constructor (line 35)
+	//====================================================================================================
+	@Test
+	void a00_constructor() {
+		// Test line 35: class instantiation
+		// IOUtils has an implicit public no-arg constructor
+		var instance = new IOUtils();
+		assertNotNull(instance);
+	}
+
+	//====================================================================================================
 	// read(Path)
 	//====================================================================================================
 	@Test void a01_readPath() throws IOException {

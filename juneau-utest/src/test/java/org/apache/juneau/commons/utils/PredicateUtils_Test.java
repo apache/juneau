@@ -29,6 +29,12 @@ import org.junit.jupiter.api.*;
 
 public class PredicateUtils_Test {
 
+	//====================================================================================================
+	// Constructor (line 28)
+	//====================================================================================================
+	// Note: PredicateUtils has a private constructor, so it cannot be instantiated.
+	// Line 28 (class declaration) is covered by using the class's static methods.
+
     @Test
     void and_allNull_returnsTrue() {
         Predicate<String> p = and(null, null);

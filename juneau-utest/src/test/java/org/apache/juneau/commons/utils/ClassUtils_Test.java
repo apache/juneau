@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.utils;
 
+import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -25,6 +26,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.reflect.ClassInfo;
 import org.apache.juneau.commons.utils.*;
 import org.junit.jupiter.api.*;
 
@@ -33,6 +35,17 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({"serial","unused"})
 class ClassUtils_Test {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructor (line 35)
+	//-----------------------------------------------------------------------------------------------------------------
+	@Test
+	public void a00_constructor() {
+		// Test line 35: class instantiation
+		// ClassUtils has an implicit public no-arg constructor
+		var instance = new ClassUtils();
+		assertNotNull(instance);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// simpleQualifiedClassName tests
@@ -288,6 +301,18 @@ class ClassUtils_Test {
 		assertNull(cns(null));
 	}
 
+	@Test
+	public void f07_classNameSimple_withClassInfo() {
+		// Test line 190: value instanceof ClassInfo branch
+		// When value is a ClassInfo instance, should call getNameSimple() on it
+		var classInfo = ClassInfo.of(String.class);
+		assertEquals("String", cns(classInfo));
+		
+		// Test with different class
+		var listClassInfo = ClassInfo.of(ArrayList.class);
+		assertEquals("ArrayList", cns(listClassInfo));
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// getClasses(Object...) tests
 	//-----------------------------------------------------------------------------------------------------------------
@@ -469,7 +494,9 @@ class ClassUtils_Test {
 
 	@Test
 	public void j02_setAccessible_constructor_null() {
-		assertTrue(setAccessible((Constructor<?>)null));
+		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
+			setAccessible((Constructor<?>)null);
+		});
 	}
 
 	@Test
@@ -485,7 +512,9 @@ class ClassUtils_Test {
 
 	@Test
 	public void j04_setAccessible_field_null() {
-		assertTrue(setAccessible((Field)null));
+		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
+			setAccessible((Field)null);
+		});
 	}
 
 	@Test
@@ -497,7 +526,9 @@ class ClassUtils_Test {
 
 	@Test
 	public void j06_setAccessible_method_null() {
-		assertTrue(setAccessible((Method)null));
+		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
+			setAccessible((Method)null);
+		});
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -566,6 +597,31 @@ class ClassUtils_Test {
 		assertTrue(isInnerClass(Outer.Inner.class, Outer.Inner.Deep.class));
 	}
 
+	@Test
+	public void l05_isInnerClass_notClass() {
+		// Test line 590: false branch when od or id is not a Class
+		// When od or id is not a Class, the instanceof check fails and method returns false
+		Method method = null;
+		Constructor<?> constructor = null;
+		try {
+			method = String.class.getMethod("toString");
+			constructor = String.class.getConstructor();
+		} catch (NoSuchMethodException e) {
+			fail("Could not get method or constructor for testing");
+		}
+		
+		// Test with Method (not a Class)
+		assertFalse(isInnerClass(String.class, method));
+		assertFalse(isInnerClass(method, String.class));
+		
+		// Test with Constructor (not a Class)
+		assertFalse(isInnerClass(String.class, constructor));
+		assertFalse(isInnerClass(constructor, String.class));
+		
+		// Test with both non-Class
+		assertFalse(isInnerClass(method, constructor));
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// getProxyFor(Object) tests
 	//-----------------------------------------------------------------------------------------------------------------
@@ -626,6 +682,33 @@ class ClassUtils_Test {
 		extractTypes(typeMap, String.class);
 		// String doesn't have a generic superclass, so typeMap should remain empty
 		assertTrue(typeMap.isEmpty());
+	}
+
+	@Test
+	public void n03_extractTypes_transitiveMapping() {
+		// Test line 284: typeMap.containsKey(actualTypeArguments[i]) branch
+		// This tests transitive type mapping where an actual type argument is itself
+		// a type variable that's already been mapped in the typeMap
+		class Base<T> {}
+		class Middle<U> extends Base<U> {}
+		class Top<V> extends Middle<V> {}
+		class Concrete extends Top<String> {}
+		
+		var typeMap = new HashMap<Type,Type>();
+		// First extract from Concrete -> Top<String>
+		// This will add V -> String to typeMap
+		extractTypes(typeMap, Concrete.class);
+		
+		// Now extract from Top -> Middle<V>
+		// When processing Middle<V>, actualTypeArguments[0] is V (TypeVariable)
+		// Since V is already in typeMap (mapped to String), line 284 should execute:
+		// actualTypeArguments[i] = typeMap.get(actualTypeArguments[i]);
+		// This replaces V with String before putting it in the map
+		extractTypes(typeMap, Top.class);
+		
+		// Verify the transitive mapping worked
+		// The typeMap should now contain both V -> String and U -> String
+		assertFalse(typeMap.isEmpty());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

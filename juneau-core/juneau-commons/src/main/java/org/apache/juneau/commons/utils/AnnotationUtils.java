@@ -43,17 +43,13 @@ public class AnnotationUtils {
 		if (a1 == null || a2 == null)
 			return false;
 
-		Class<? extends Annotation> t1 = a1.annotationType();
-		Class<? extends Annotation> t2 = a2.annotationType();
+		var t1 = a1.annotationType();
+		var t2 = a2.annotationType();
 
 		if (! t1.equals(t2))
 			return false;
 
-		boolean b = getAnnotationMethods(t1).anyMatch(x -> ! memberEquals(x.getReturnType(), safeSupplier(() -> x.invoke(a1)), safeSupplier(() -> x.invoke(a2))));
-		if (b)
-			return false;
-
-		return true;
+		return ! getAnnotationMethods(t1).anyMatch(x -> ! memberEquals(x.getReturnType(), safeSupplier(() -> x.invoke(a1)), safeSupplier(() -> x.invoke(a2))));
 	}
 
 	/**
@@ -91,15 +87,11 @@ public class AnnotationUtils {
 	 * 	Never <jk>null</jk>.
 	 */
 	public static Stream<Annotation> streamRepeated(Annotation a) {
-		try {
-			var ci = info(a.annotationType());
-			var mi = ci.getRepeatedAnnotationMethod();
-			if (nn(mi)) {
-				Annotation[] annotations = mi.invoke(a);
-				return Arrays.stream(annotations);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		var ci = info(a.annotationType());
+		var mi = ci.getRepeatedAnnotationMethod();
+		if (nn(mi)) {
+			Annotation[] annotations = mi.invoke(a);
+			return Arrays.stream(annotations);
 		}
 		return Stream.of(a);
 	}
@@ -156,7 +148,7 @@ public class AnnotationUtils {
 	}
 
 	private static Stream<Method> getAnnotationMethods(Class<? extends Annotation> type) {
-		return l(type.getDeclaredMethods()).stream().filter(x -> x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation());
+		return l(type.getDeclaredMethods()).stream();
 	}
 
 	private static int hashMember(String name, Object value) {

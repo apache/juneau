@@ -29,6 +29,17 @@ import org.junit.jupiter.api.*;
 class ThrowableUtils_Test extends TestBase {
 
 	//====================================================================================================
+	// Constructor (line 29)
+	//====================================================================================================
+	@Test
+	void a00_constructor() {
+		// Test line 29: class instantiation
+		// ThrowableUtils has an implicit public no-arg constructor
+		var instance = new ThrowableUtils();
+		assertNotNull(instance);
+	}
+
+	//====================================================================================================
 	// findCause(Throwable, Class)
 	//====================================================================================================
 	@Test

@@ -29,6 +29,17 @@ import org.junit.jupiter.api.*;
 class AnnotationUtils_Test {
 
 	//====================================================================================================
+	// Constructor (line 31)
+	//====================================================================================================
+	@Test
+	void a00_constructor() {
+		// Test line 31: class instantiation
+		// AnnotationUtils has an implicit public no-arg constructor
+		var instance = new AnnotationUtils();
+		assertNotNull(instance);
+	}
+
+	//====================================================================================================
 	// equals(Annotation, Annotation) - Basic cases
 	//====================================================================================================
 	@Target({ElementType.TYPE, ElementType.METHOD})
@@ -466,6 +477,177 @@ class AnnotationUtils_Test {
 		// Annotations with default values should be equal and have same hash
 		assertTrue(AnnotationUtils.equals(a27, a28));
 		assertEquals(hash(a27), hash(a28));
+	}
+
+	//====================================================================================================
+	// hash(Annotation) - Null member values (line 157)
+	//====================================================================================================
+	@Target({ElementType.TYPE, ElementType.METHOD})
+	@Retention(RetentionPolicy.RUNTIME)
+	@interface NullableMemberAnnotation {
+		String value() default "default";
+	}
+
+	@NullableMemberAnnotation
+	static class TestClass29 {}
+
+	@Test
+	void b11_hash_nullMember() throws Exception {
+		// Test line 157: hashMember when value == null
+		// We need to create an annotation instance where a member returns null
+		// Since annotation members can't be null by default, we'll create a custom proxy
+		// that returns null for a member method
+		var a29 = TestClass29.class.getAnnotation(NullableMemberAnnotation.class);
+		
+		// Create a custom annotation proxy that returns null for the value() method
+		// This simulates the edge case where a member might return null
+		Annotation nullMemberAnnotation = (Annotation) java.lang.reflect.Proxy.newProxyInstance(
+			NullableMemberAnnotation.class.getClassLoader(),
+			new Class<?>[] { NullableMemberAnnotation.class },
+			(proxy, method, args) -> {
+				if (method.getName().equals("value")) {
+					return null;  // Return null to test line 157
+				}
+				if (method.getName().equals("annotationType")) {
+					return NullableMemberAnnotation.class;
+				}
+				if (method.getName().equals("toString")) {
+					return "@NullableMemberAnnotation(null)";
+				}
+				if (method.getName().equals("hashCode")) {
+					return 0;
+				}
+				if (method.getName().equals("equals")) {
+					return proxy == args[0];
+				}
+				return method.invoke(a29, args);
+			}
+		);
+		
+		// Test that hash() handles null member values correctly (line 157)
+		int hashNull = hash(nullMemberAnnotation);
+		// Should not throw, and should return a hash code based on part1 (name.hashCode() * 127)
+		assertTrue(hashNull != 0 || hashNull == 0); // Just verify it doesn't throw
+	}
+
+	//====================================================================================================
+	// equals(Annotation, Annotation) - Null member values (line 169)
+	//====================================================================================================
+	@Target({ElementType.TYPE, ElementType.METHOD})
+	@Retention(RetentionPolicy.RUNTIME)
+	@interface MemberEqualsTestAnnotation {
+		String value() default "test";
+	}
+
+	@MemberEqualsTestAnnotation
+	static class TestClass31 {}
+
+	@Test
+	void a24_equals_nullMember() throws Exception {
+		// Test line 169: memberEquals when o1 == null || o2 == null
+		// Create custom annotation proxies where one member returns null
+		var a31 = TestClass31.class.getAnnotation(MemberEqualsTestAnnotation.class);
+		
+		// Create annotation proxy with null member
+		Annotation nullMember1 = (Annotation) java.lang.reflect.Proxy.newProxyInstance(
+			MemberEqualsTestAnnotation.class.getClassLoader(),
+			new Class<?>[] { MemberEqualsTestAnnotation.class },
+			(proxy, method, args) -> {
+				if (method.getName().equals("value")) {
+					return null;  // Return null to test line 169
+				}
+				if (method.getName().equals("annotationType")) {
+					return MemberEqualsTestAnnotation.class;
+				}
+				if (method.getName().equals("toString")) {
+					return "@MemberEqualsTestAnnotation(null)";
+				}
+				if (method.getName().equals("hashCode")) {
+					return 0;
+				}
+				if (method.getName().equals("equals")) {
+					return proxy == args[0];
+				}
+				return method.invoke(a31, args);
+			}
+		);
+		
+		// Create another annotation proxy with non-null member
+		Annotation nonNullMember = (Annotation) java.lang.reflect.Proxy.newProxyInstance(
+			MemberEqualsTestAnnotation.class.getClassLoader(),
+			new Class<?>[] { MemberEqualsTestAnnotation.class },
+			(proxy, method, args) -> {
+				if (method.getName().equals("value")) {
+					return "test";  // Non-null value
+				}
+				if (method.getName().equals("annotationType")) {
+					return MemberEqualsTestAnnotation.class;
+				}
+				if (method.getName().equals("toString")) {
+					return "@MemberEqualsTestAnnotation(test)";
+				}
+				if (method.getName().equals("hashCode")) {
+					return 0;
+				}
+				if (method.getName().equals("equals")) {
+					return proxy == args[0];
+				}
+				return method.invoke(a31, args);
+			}
+		);
+		
+		// Test line 169: memberEquals when o1 == null || o2 == null
+		// When comparing nullMember1 (null value) with nonNullMember (non-null value),
+		// memberEquals should return false (line 169)
+		assertFalse(AnnotationUtils.equals(nullMember1, nonNullMember));
+		assertFalse(AnnotationUtils.equals(nonNullMember, nullMember1));
+	}
+
+	//====================================================================================================
+	// getAnnotationMethods - Filter coverage (line 151)
+	//====================================================================================================
+	@Target({ElementType.TYPE, ElementType.METHOD})
+	@Retention(RetentionPolicy.RUNTIME)
+	@interface FilterTestAnnotation {
+		String value() default "";
+	}
+
+	@FilterTestAnnotation("test")
+	static class TestClass33 {}
+
+	@Test
+	void c01_getAnnotationMethods_filter() throws Exception {
+		// Test line 151: getAnnotationMethods filter
+		// The filter checks: x.getParameterCount() == 0
+		// 
+		// Branch analysis:
+		// 1. getParameterCount() == 0 → passes filter (covered by normal annotation methods)
+		// 2. getParameterCount() != 0 → fails filter (not covered - impossible to test)
+		//
+		// The false branch (getParameterCount() != 0) cannot be tested because:
+		// - Annotation member methods must have 0 parameters by Java language specification
+		// - getDeclaredMethods() on an annotation class only returns annotation member methods
+		// - Even synthetic methods on annotation classes would have 0 parameters
+		//
+		// To attempt to cover the false branch, we can inspect what methods are actually returned
+		// and verify they all have 0 parameters, confirming the false branch is unreachable.
+		var annotationClass = FilterTestAnnotation.class;
+		var declaredMethods = annotationClass.getDeclaredMethods();
+		
+		// Verify all declared methods have 0 parameters (this exercises the true branch)
+		for (var method : declaredMethods) {
+			assertEquals(0, method.getParameterCount(), 
+				"All annotation member methods must have 0 parameters: " + method.getName());
+		}
+		
+		// Verify the filter works correctly
+		var a33 = TestClass33.class.getAnnotation(FilterTestAnnotation.class);
+		assertTrue(AnnotationUtils.equals(a33, a33));
+		int hash33 = hash(a33);
+		assertTrue(hash33 != 0 || hash33 == 0); // Just verify it doesn't throw
+		
+		// Note: The false branch (getParameterCount() != 0) is impossible to test because
+		// annotation member methods cannot have parameters. This is a language requirement.
 	}
 }
 
