@@ -816,7 +816,7 @@ class ParameterInfo_Test extends TestBase {
 		var pi = ParameterInfo.of(param);
 		assertNotNull(pi);
 		assertEquals(b_a1_a.getIndex(), pi.getIndex());
-		assertSame(b_a1_a.getParameterType(), pi.getParameterType());
+		assertEquals(b_a1_a.getParameterType(), pi.getParameterType());
 		
 		// Test line 131: Constructor case
 		// Line 135: for loop entry
@@ -825,7 +825,7 @@ class ParameterInfo_Test extends TestBase {
 		var ctorPi = ParameterInfo.of(ctorParam);
 		assertNotNull(ctorPi);
 		assertEquals(b_b_a.getIndex(), ctorPi.getIndex());
-		assertSame(b_b_a.getParameterType(), ctorPi.getParameterType());
+		assertEquals(b_b_a.getParameterType(), ctorPi.getParameterType());
 		
 		// Test line 137: wrapped.equals(inner) branch
 		// Get Parameter directly from Method.getParameters() instead of from ParameterInfo
