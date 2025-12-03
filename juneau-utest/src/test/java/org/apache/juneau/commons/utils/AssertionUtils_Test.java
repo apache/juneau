@@ -24,9 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-/**
- * Tests for {@link AssertionUtils}.
- */
 class AssertionUtils_Test extends TestBase {
 
 	//====================================================================================================
@@ -44,28 +41,21 @@ class AssertionUtils_Test extends TestBase {
 	// assertArg(boolean, String, Object...)
 	//====================================================================================================
 	@Test
-	void a01_assertArg_true() {
-		// Should not throw
+	void a001_assertArg() {
+		// Should not throw when expression is true
 		assertArg(true, "Should not throw");
 		assertArg(true, "Message with {0}", "arg");
-	}
-
-	@Test
-	void a02_assertArg_false() {
+		assertArg(true, "Test {0} {1} {2}", "a", "b", "c");
+		
+		// Should throw when expression is false
 		assertThrowsWithMessage(IllegalArgumentException.class, "Test message", () -> {
 			assertArg(false, "Test message");
 		});
-	}
-
-	@Test
-	void a03_assertArg_false_withArgs() {
+		
 		assertThrowsWithMessage(IllegalArgumentException.class, l("Test message", "arg1"), () -> {
 			assertArg(false, "Test message {0}", "arg1");
 		});
-	}
-
-	@Test
-	void a04_assertArg_false_withMultipleArgs() {
+		
 		assertThrowsWithMessage(IllegalArgumentException.class, "Test", () -> {
 			assertArg(false, "Test {0} {1} {2}", "a", "b", "c");
 		});
@@ -75,63 +65,83 @@ class AssertionUtils_Test extends TestBase {
 	// assertArgNotNull(String, T)
 	//====================================================================================================
 	@Test
-	void b01_assertArgNotNull_notNull() {
+	void a002_assertArgNotNull() {
+		// Should not throw when value is not null
 		var value = "test";
 		var result = assertArgNotNull("arg", value);
 		assertSame(value, result);
-	}
-
-	@Test
-	void b02_assertArgNotNull_null() {
+		
+		var obj = new Object();
+		var result2 = assertArgNotNull("arg", obj);
+		assertSame(obj, result2);
+		
+		var i = 123;
+		var result3 = assertArgNotNull("int", i);
+		assertEquals(i, result3);
+		
+		var d = 45.6;
+		var result4 = assertArgNotNull("double", d);
+		assertEquals(d, result4);
+		
+		// Should throw when value is null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be null"), () -> {
 			assertArgNotNull("arg", null);
 		});
 	}
 
+	//====================================================================================================
+	// assertArgNotNullOrBlank(String, String)
+	//====================================================================================================
 	@Test
-	void b03_assertArgNotNull_returnsValue() {
-		var obj = new Object();
-		var result = assertArgNotNull("arg", obj);
-		assertSame(obj, result);
-	}
-
-	@Test
-	void b04_assertArgNotNull_differentTypes() {
-		var i = 123;
-		var result = assertArgNotNull("int", i);
-		assertEquals(i, result);
-
-		var d = 45.6;
-		var result2 = assertArgNotNull("double", d);
-		assertEquals(d, result2);
+	void a003_assertArgNotNullOrBlank() {
+		// Should not throw when value is valid
+		var value = "test";
+		var result = assertArgNotNullOrBlank("arg", value);
+		assertSame(value, result);
+		
+		// Should throw when value is null
+		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be null"), () -> {
+			assertArgNotNullOrBlank("arg", null);
+		});
+		
+		// Should throw when value is empty
+		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be blank"), () -> {
+			assertArgNotNullOrBlank("arg", "");
+		});
+		
+		// Should throw when value is whitespace
+		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be blank"), () -> {
+			assertArgNotNullOrBlank("arg", "   ");
+		});
+		
+		assertThrowsWithMessage(IllegalArgumentException.class, "cannot be blank", () -> {
+			assertArgNotNullOrBlank("arg", "\t");
+		});
+		
+		assertThrowsWithMessage(IllegalArgumentException.class, "cannot be blank", () -> {
+			assertArgNotNullOrBlank("arg", "\n");
+		});
 	}
 
 	//====================================================================================================
 	// assertArgsNotNull(String, Object, String, Object) - 2 args
 	//====================================================================================================
 	@Test
-	void c01_assertArgsNotNull2_bothNotNull() {
-		// Should not throw
+	void a004_assertArgsNotNull_2args() {
+		// Should not throw when both are not null
 		assertArgsNotNull("arg1", "value1", "arg2", "value2");
-	}
-
-	@Test
-	void c02_assertArgsNotNull2_firstNull() {
+		
+		// Should throw when first is null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("arg1", "cannot be null"), () -> {
 			assertArgsNotNull("arg1", null, "arg2", "value2");
 		});
-	}
-
-	@Test
-	void c03_assertArgsNotNull2_secondNull() {
+		
+		// Should throw when second is null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("arg2", "cannot be null"), () -> {
 			assertArgsNotNull("arg1", "value1", "arg2", null);
 		});
-	}
-
-	@Test
-	void c04_assertArgsNotNull2_bothNull() {
-		// Should fail on first null
+		
+		// Should fail on first null when both are null
 		assertThrowsWithMessage(IllegalArgumentException.class, "arg1", () -> {
 			assertArgsNotNull("arg1", null, "arg2", null);
 		});
@@ -141,27 +151,21 @@ class AssertionUtils_Test extends TestBase {
 	// assertArgsNotNull(String, Object, String, Object, String, Object) - 3 args
 	//====================================================================================================
 	@Test
-	void d01_assertArgsNotNull3_allNotNull() {
-		// Should not throw
+	void a005_assertArgsNotNull_3args() {
+		// Should not throw when all are not null
 		assertArgsNotNull("arg1", "value1", "arg2", "value2", "arg3", "value3");
-	}
-
-	@Test
-	void d02_assertArgsNotNull3_firstNull() {
+		
+		// Should throw when first is null
 		assertThrowsWithMessage(IllegalArgumentException.class, "arg1", () -> {
 			assertArgsNotNull("arg1", null, "arg2", "value2", "arg3", "value3");
 		});
-	}
-
-	@Test
-	void d03_assertArgsNotNull3_secondNull() {
+		
+		// Should throw when second is null
 		assertThrowsWithMessage(IllegalArgumentException.class, "arg2", () -> {
 			assertArgsNotNull("arg1", "value1", "arg2", null, "arg3", "value3");
 		});
-	}
-
-	@Test
-	void d04_assertArgsNotNull3_thirdNull() {
+		
+		// Should throw when third is null
 		assertThrowsWithMessage(IllegalArgumentException.class, "arg3", () -> {
 			assertArgsNotNull("arg1", "value1", "arg2", "value2", "arg3", null);
 		});
@@ -171,20 +175,16 @@ class AssertionUtils_Test extends TestBase {
 	// assertArgsNotNull(String, Object, String, Object, String, Object, String, Object) - 4 args
 	//====================================================================================================
 	@Test
-	void e01_assertArgsNotNull4_allNotNull() {
-		// Should not throw
+	void a006_assertArgsNotNull_4args() {
+		// Should not throw when all are not null
 		assertArgsNotNull("arg1", "value1", "arg2", "value2", "arg3", "value3", "arg4", "value4");
-	}
-
-	@Test
-	void e02_assertArgsNotNull4_firstNull() {
+		
+		// Should throw when first is null
 		assertThrowsWithMessage(IllegalArgumentException.class, "arg1", () -> {
 			assertArgsNotNull("arg1", null, "arg2", "value2", "arg3", "value3", "arg4", "value4");
 		});
-	}
-
-	@Test
-	void e03_assertArgsNotNull4_fourthNull() {
+		
+		// Should throw when fourth is null
 		assertThrowsWithMessage(IllegalArgumentException.class, "arg4", () -> {
 			assertArgsNotNull("arg1", "value1", "arg2", "value2", "arg3", "value3", "arg4", null);
 		});
@@ -194,365 +194,238 @@ class AssertionUtils_Test extends TestBase {
 	// assertArgsNotNull(String, Object, String, Object, String, Object, String, Object, String, Object) - 5 args
 	//====================================================================================================
 	@Test
-	void f01_assertArgsNotNull5_allNotNull() {
-		// Should not throw
+	void a007_assertArgsNotNull_5args() {
+		// Should not throw when all are not null
 		assertArgsNotNull("arg1", "value1", "arg2", "value2", "arg3", "value3", "arg4", "value4", "arg5", "value5");
-	}
-
-	@Test
-	void f02_assertArgsNotNull5_firstNull() {
+		
+		// Should throw when first is null
 		assertThrowsWithMessage(IllegalArgumentException.class, "arg1", () -> {
 			assertArgsNotNull("arg1", null, "arg2", "value2", "arg3", "value3", "arg4", "value4", "arg5", "value5");
 		});
-	}
-
-	@Test
-	void f03_assertArgsNotNull5_fifthNull() {
+		
+		// Should throw when fifth is null
 		assertThrowsWithMessage(IllegalArgumentException.class, "arg5", () -> {
 			assertArgsNotNull("arg1", "value1", "arg2", "value2", "arg3", "value3", "arg4", "value4", "arg5", null);
 		});
 	}
 
 	//====================================================================================================
-	// assertArgNotNullOrBlank(String, String)
-	//====================================================================================================
-	@Test
-	void g01_assertArgNotNullOrBlank_valid() {
-		var value = "test";
-		var result = assertArgNotNullOrBlank("arg", value);
-		assertSame(value, result);
-	}
-
-	@Test
-	void g02_assertArgNotNullOrBlank_null() {
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be null"), () -> {
-			assertArgNotNullOrBlank("arg", null);
-		});
-	}
-
-	@Test
-	void g03_assertArgNotNullOrBlank_empty() {
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be blank"), () -> {
-			assertArgNotNullOrBlank("arg", "");
-		});
-	}
-
-	@Test
-	void g04_assertArgNotNullOrBlank_whitespace() {
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be blank"), () -> {
-			assertArgNotNullOrBlank("arg", "   ");
-		});
-	}
-
-	@Test
-	void g05_assertArgNotNullOrBlank_tab() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "cannot be blank", () -> {
-			assertArgNotNullOrBlank("arg", "\t");
-		});
-	}
-
-	@Test
-	void g06_assertArgNotNullOrBlank_newline() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "cannot be blank", () -> {
-			assertArgNotNullOrBlank("arg", "\n");
-		});
-	}
-
-	@Test
-	void g07_assertArgNotNullOrBlank_returnsValue() {
-		var value = "test";
-		var result = assertArgNotNullOrBlank("arg", value);
-		assertSame(value, result);
-	}
-
-	//====================================================================================================
 	// assertClassArrayArgIsType(String, Class<E>, Class<?>[])
 	//====================================================================================================
 	@Test
-	void h01_assertClassArrayArgIsType_valid() {
+	void a008_assertClassArrayArgIsType() {
+		// Should not throw when all classes are assignable
 		var classes = a(String.class, Object.class);
 		var result = assertClassArrayArgIsType("arg", Object.class, classes);
 		assertSame(classes, result);
-	}
-
-	@Test
-	void h02_assertClassArrayArgIsType_emptyArray() {
-		var classes = new Class<?>[0];
-		var result = assertClassArrayArgIsType("arg", Object.class, classes);
-		assertSame(classes, result);
-	}
-
-	@Test
-	void h03_assertClassArrayArgIsType_invalidType() {
-		var classes = a(String.class, Integer.class);
+		
+		// Should not throw with empty array
+		var emptyClasses = new Class<?>[0];
+		var result2 = assertClassArrayArgIsType("arg", Object.class, emptyClasses);
+		assertSame(emptyClasses, result2);
+		
+		// Should not throw with subclasses
+		var subclasses = a(Integer.class, Double.class);
+		var result3 = assertClassArrayArgIsType("arg", Number.class, subclasses);
+		assertSame(subclasses, result3);
+		
+		// Should not throw with same class
+		var sameClasses = a(String.class);
+		var result4 = assertClassArrayArgIsType("arg", String.class, sameClasses);
+		assertSame(sameClasses, result4);
+		
+		// Should throw when class is not assignable
+		var invalidClasses = a(String.class, Integer.class);
 		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "String"), () -> {
-			assertClassArrayArgIsType("arg", Number.class, classes);
+			assertClassArrayArgIsType("arg", Number.class, invalidClasses);
 		});
-	}
-
-	@Test
-	void h04_assertClassArrayArgIsType_invalidTypeAtIndex() {
-		var classes = a(String.class, Integer.class, Double.class);
+		
+		// Should throw with index information
+		var invalidClasses2 = a(String.class, Integer.class, Double.class);
 		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "index", "0"), () -> {
-			assertClassArrayArgIsType("arg", Number.class, classes);
+			assertClassArrayArgIsType("arg", Number.class, invalidClasses2);
 		});
-	}
-
-	@Test
-	void h05_assertClassArrayArgIsType_subclass() {
-		var classes = a(Integer.class, Double.class);
-		var result = assertClassArrayArgIsType("arg", Number.class, classes);
-		assertSame(classes, result);
-	}
-
-	@Test
-	void h06_assertClassArrayArgIsType_sameClass() {
-		var classes = a(String.class);
-		var result = assertClassArrayArgIsType("arg", String.class, classes);
-		assertSame(classes, result);
-	}
-
-	//====================================================================================================
-	// assertVarargsNotNull(String, T[])
-	//====================================================================================================
-	@Test
-	void i01_assertVarargsNotNull_valid() {
-		var array = a("a", "b", "c");
-		var result = assertVarargsNotNull("arg", array);
-		assertSame(array, result);
-	}
-
-	@Test
-	void i02_assertVarargsNotNull_emptyArray() {
-		var array = new String[0];
-		var result = assertVarargsNotNull("arg", array);
-		assertSame(array, result);
-	}
-
-	@Test
-	void i03_assertVarargsNotNull_nullArray() {
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be null"), () -> {
-			assertVarargsNotNull("arg", (String[])null);
-		});
-	}
-
-	@Test
-	void i04_assertVarargsNotNull_nullElement() {
-		var array = a("a", null, "c");
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "parameter", "1"), () -> {
-			assertVarargsNotNull("arg", array);
-		});
-	}
-
-	@Test
-	void i05_assertVarargsNotNull_multipleNullElements() {
-		var array = a("a", null, null, "d");
-		// Should fail on first null
-		assertThrowsWithMessage(IllegalArgumentException.class, "1", () -> {
-			assertVarargsNotNull("arg", array);
-		});
-	}
-
-	@Test
-	void i06_assertVarargsNotNull_returnsArray() {
-		var array = a(1, 2, 3);
-		var result = assertVarargsNotNull("arg", array);
-		assertSame(array, result);
-	}
-
-	@Test
-	void i07_assertVarargsNotNull_objectArray() {
-		var array = a(new Object(), new Object());
-		var result = assertVarargsNotNull("arg", array);
-		assertSame(array, result);
 	}
 
 	//====================================================================================================
 	// assertOneOf(T, T...)
 	//====================================================================================================
 	@Test
-	void j01_assertOneOf() {
+	void a009_assertOneOf() {
+		// Should return actual when it matches
 		assertEquals("test", assertOneOf("test", "test", "other"));
 		assertEquals(123, assertOneOf(123, 123, 456));
 		assertEquals("a", assertOneOf("a", "a", "b", "c"));
-	}
-
-	@Test
-	void j02_assertOneOf_matches() {
+		
 		// Exact match
 		assertEquals("test", assertOneOf("test", "test"));
 		assertEquals(1, assertOneOf(1, 1, 2, 3));
-
+		
 		// Match in middle
 		assertEquals(2, assertOneOf(2, 1, 2, 3));
-
+		
 		// Match at end
 		assertEquals(3, assertOneOf(3, 1, 2, 3));
-	}
-
-	@Test
-	void j03_assertOneOf_nulls() {
+		
+		// Should handle nulls
 		assertNull(assertOneOf(null, null, "test"));
 		assertNull(assertOneOf(null, "test", null));
-	}
-
-	@Test
-	void j04_assertOneOf_fails() {
-		assertThrowsWithMessage(AssertionError.class, l("Invalid value specified", "test"), () -> assertOneOf("test", "other"));
-	}
-
-	@Test
-	void j05_assertOneOf_fails_multiple() {
-		assertThrowsWithMessage(AssertionError.class, l("Invalid value specified", "test"), () -> assertOneOf("test", "a", "b", "c"));
-	}
-
-	@Test
-	void j06_assertOneOf_numbers() {
-		assertEquals(5, assertOneOf(5, 1, 2, 3, 4, 5));
-		assertThrows(AssertionError.class, () -> assertOneOf(10, 1, 2, 3, 4, 5));
-	}
-
-	@Test
-	void j07_assertOneOf_emptyExpected() {
-		assertThrowsWithMessage(AssertionError.class, "Invalid value specified", () -> assertOneOf("test"));
-	}
-
-	@Test
-	void j08_assertOneOf_objects() {
-		var obj1 = new Object();
-		var obj2 = new Object();
-		var result = assertOneOf(obj1, obj1, obj2);
-		assertSame(obj1, result);
-	}
-
-	@Test
-	void j09_assertOneOf_returnsActual() {
+		
+		// Should return same instance
 		var value = "test";
 		var result = assertOneOf(value, "test", "other");
 		assertSame(value, result);
+		
+		// Should work with objects
+		var obj1 = new Object();
+		var obj2 = new Object();
+		var result2 = assertOneOf(obj1, obj1, obj2);
+		assertSame(obj1, result2);
+		
+		// Should throw when value doesn't match
+		assertThrowsWithMessage(AssertionError.class, l("Invalid value specified", "test"), () -> {
+			assertOneOf("test", "other");
+		});
+		
+		assertThrowsWithMessage(AssertionError.class, l("Invalid value specified", "test"), () -> {
+			assertOneOf("test", "a", "b", "c");
+		});
+		
+		assertThrows(AssertionError.class, () -> assertOneOf(10, 1, 2, 3, 4, 5));
+		
+		// Should throw with empty expected
+		assertThrowsWithMessage(AssertionError.class, "Invalid value specified", () -> {
+			assertOneOf("test");
+		});
 	}
 
 	//====================================================================================================
-	// assertType(Class<T>, Object) - lines 236-240
+	// assertType(Class<T>, Object)
 	//====================================================================================================
 	@Test
-	void k01_assertType_validInstance() {
-		// Test line 240: return (T)o when object is an instance of type
+	void a010_assertType() {
+		// Should return object when it's an instance of type
 		String value = "test";
 		String result = assertType(String.class, value);
 		assertSame(value, result);
-	}
-
-	@Test
-	void k02_assertType_subclass() {
-		// Test line 240: return (T)o when object is a subclass instance
-		Integer value = 123;
-		Number result = assertType(Number.class, value);
-		assertSame(value, result);
-	}
-
-	@Test
-	void k03_assertType_sameClass() {
-		// Test line 240: return (T)o when object is same class
+		
+		// Should work with subclasses
+		Integer intValue = 123;
+		Number numberResult = assertType(Number.class, intValue);
+		assertSame(intValue, numberResult);
+		
+		// Should work with same class
 		Object obj = new Object();
-		Object result = assertType(Object.class, obj);
-		assertSame(obj, result);
-	}
-
-	@Test
-	void k04_assertType_typeNull() {
-		// Test line 236: assertArgNotNull("type", type) when type is null
+		Object result2 = assertType(Object.class, obj);
+		assertSame(obj, result2);
+		
+		// Should work with primitive wrappers
+		Integer intValue2 = 42;
+		Integer result3 = assertType(Integer.class, intValue2);
+		assertSame(intValue2, result3);
+		
+		// Should throw when type is null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("type", "cannot be null"), () -> {
 			assertType(null, "test");
 		});
-	}
-
-	@Test
-	void k05_assertType_objectNull() {
-		// Test line 237: assertArgNotNull("o", o) when o is null
+		
+		// Should throw when object is null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("o", "cannot be null"), () -> {
 			assertType(String.class, null);
 		});
-	}
-
-	@Test
-	void k06_assertType_notInstance() {
-		// Test lines 238-239: if (! type.isInstance(o)) throw exception
+		
+		// Should throw when object is not an instance
 		assertThrowsWithMessage(IllegalArgumentException.class, l("Object is not an instance of", "String", "Integer"), () -> {
 			assertType(String.class, 123);
 		});
-	}
-
-	@Test
-	void k07_assertType_notInstance_differentTypes() {
-		// Test lines 238-239: if (! type.isInstance(o)) throw exception
+		
 		assertThrowsWithMessage(IllegalArgumentException.class, "Object is not an instance of", () -> {
 			assertType(Integer.class, "test");
 		});
 	}
 
-	@Test
-	void k08_assertType_primitiveWrapper() {
-		// Test line 240: return (T)o with primitive wrapper
-		Integer value = 42;
-		Integer result = assertType(Integer.class, value);
-		assertSame(value, result);
-	}
-
 	//====================================================================================================
-	// assertType(Class<T>, Object, Supplier<? extends RuntimeException>) - line 269
+	// assertType(Class<T>, Object, Supplier<? extends RuntimeException>)
 	//====================================================================================================
 	@Test
-	void l01_assertType_withSupplier_validInstance() {
-		// Test return (T)o when object is an instance of type
+	void a011_assertType_withSupplier() {
+		// Should return object when it's an instance of type
 		String value = "test";
 		String result = assertType(String.class, value, () -> new IllegalStateException("Should not throw"));
 		assertSame(value, result);
-	}
-
-	@Test
-	void l02_assertType_withSupplier_typeNull() {
-		// Test line 266: assertArgNotNull("type", type) when type is null
+		
+		// Should throw when type is null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("type", "cannot be null"), () -> {
 			assertType(null, "test", () -> new IllegalStateException("Custom"));
 		});
-	}
-
-	@Test
-	void l03_assertType_withSupplier_objectNull() {
-		// Test line 267: assertArgNotNull("o", o) when o is null
+		
+		// Should throw when object is null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("o", "cannot be null"), () -> {
 			assertType(String.class, null, () -> new IllegalStateException("Custom"));
 		});
-	}
-
-	@Test
-	void l04_assertType_withSupplier_notInstance() {
-		// Test line 269: throw exceptionSupplier.get() when object is not an instance
+		
+		// Should throw custom exception when object is not an instance
 		IllegalStateException customException = new IllegalStateException("Custom exception");
 		IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> {
 			assertType(String.class, 123, () -> customException);
 		});
 		assertSame(customException, thrown);
-	}
-
-	@Test
-	void l05_assertType_withSupplier_notInstance_differentException() {
-		// Test line 269: throw exceptionSupplier.get() with different exception type
-		RuntimeException customException = new RuntimeException("Custom runtime exception");
-		RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-			assertType(Integer.class, "test", () -> customException);
+		
+		// Should work with different exception types
+		RuntimeException runtimeException = new RuntimeException("Custom runtime exception");
+		RuntimeException thrown2 = assertThrows(RuntimeException.class, () -> {
+			assertType(Integer.class, "test", () -> runtimeException);
 		});
-		assertSame(customException, thrown);
-	}
-
-	@Test
-	void l06_assertType_withSupplier_notInstance_newException() {
-		// Test line 269: throw exceptionSupplier.get() when supplier creates new exception
-		IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> {
+		assertSame(runtimeException, thrown2);
+		
+		// Should work with supplier that creates new exception
+		IllegalStateException thrown3 = assertThrows(IllegalStateException.class, () -> {
 			assertType(String.class, 123, () -> new IllegalStateException("Not a string"));
 		});
-		assertEquals("Not a string", thrown.getMessage());
+		assertEquals("Not a string", thrown3.getMessage());
+	}
+
+	//====================================================================================================
+	// assertVarargsNotNull(String, T[])
+	//====================================================================================================
+	@Test
+	void a012_assertVarargsNotNull() {
+		// Should not throw when array and elements are not null
+		var array = a("a", "b", "c");
+		var result = assertVarargsNotNull("arg", array);
+		assertSame(array, result);
+		
+		// Should not throw with empty array
+		var emptyArray = new String[0];
+		var result2 = assertVarargsNotNull("arg", emptyArray);
+		assertSame(emptyArray, result2);
+		
+		// Should work with integer array
+		var intArray = a(1, 2, 3);
+		var result3 = assertVarargsNotNull("arg", intArray);
+		assertSame(intArray, result3);
+		
+		// Should work with object array
+		var objArray = a(new Object(), new Object());
+		var result4 = assertVarargsNotNull("arg", objArray);
+		assertSame(objArray, result4);
+		
+		// Should throw when array is null
+		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be null"), () -> {
+			assertVarargsNotNull("arg", (String[])null);
+		});
+		
+		// Should throw when element is null
+		var nullElementArray = a("a", null, "c");
+		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "parameter", "1"), () -> {
+			assertVarargsNotNull("arg", nullElementArray);
+		});
+		
+		// Should fail on first null when multiple elements are null
+		var multipleNullArray = a("a", null, null, "d");
+		assertThrowsWithMessage(IllegalArgumentException.class, "1", () -> {
+			assertVarargsNotNull("arg", multipleNullArray);
+		});
 	}
 }
 

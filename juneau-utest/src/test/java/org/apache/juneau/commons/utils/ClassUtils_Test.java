@@ -30,40 +30,154 @@ import org.apache.juneau.commons.reflect.ClassInfo;
 import org.apache.juneau.commons.utils.*;
 import org.junit.jupiter.api.*;
 
-/**
- * Tests for {@link ClassUtils}.
- */
 @SuppressWarnings({"serial","unused"})
 class ClassUtils_Test {
 
-	//-----------------------------------------------------------------------------------------------------------------
+	//====================================================================================================
 	// Constructor (line 35)
-	//-----------------------------------------------------------------------------------------------------------------
+	//====================================================================================================
 	@Test
-	public void a00_constructor() {
+	void a00_constructor() {
 		// Test line 35: class instantiation
 		// ClassUtils has an implicit public no-arg constructor
 		var instance = new ClassUtils();
 		assertNotNull(instance);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// simpleQualifiedClassName tests
-	//-----------------------------------------------------------------------------------------------------------------
-
+	//====================================================================================================
+	// canAddTo(Collection<?>)
+	//====================================================================================================
 	@Test
-	public void a01_simpleQualifiedClassName_topLevelClass() {
+	void a001_canAddTo() {
+		// Modifiable collections
+		assertTrue(canAddTo(new ArrayList<>()));
+		assertTrue(canAddTo(new LinkedList<>()));
+		assertTrue(canAddTo(new HashSet<>()));
+		assertTrue(canAddTo(new LinkedHashSet<>()));
+		assertTrue(canAddTo(new TreeSet<>()));
+		assertTrue(canAddTo(new Vector<>()));
+		
+		// Unmodifiable collections
+		assertFalse(canAddTo(Collections.unmodifiableList(new ArrayList<>())));
+		assertFalse(canAddTo(Collections.unmodifiableSet(new HashSet<>())));
+		assertFalse(canAddTo(Collections.unmodifiableCollection(new ArrayList<>())));
+		assertFalse(canAddTo(Arrays.asList("a", "b"))); // Arrays$ArrayList
+		
+		// Java 9+ immutable collections
+		if (List.of("a").getClass().getName().contains("Immutable")) {
+			assertFalse(canAddTo(List.of("a")));
+			assertFalse(canAddTo(Set.of("a")));
+		}
+		
+		// Should throw when null
+		assertThrows(IllegalArgumentException.class, () -> {
+			canAddTo((Collection<?>)null);
+		});
+	}
+
+	//====================================================================================================
+	// canPutTo(Map<?,?>)
+	//====================================================================================================
+	@Test
+	void a002_canPutTo() {
+		// Modifiable maps
+		assertTrue(canPutTo(new HashMap<>()));
+		assertTrue(canPutTo(new LinkedHashMap<>()));
+		assertTrue(canPutTo(new TreeMap<>()));
+		assertTrue(canPutTo(new Hashtable<>()));
+		
+		// Unmodifiable maps
+		assertFalse(canPutTo(Collections.unmodifiableMap(new HashMap<>())));
+		
+		// Java 9+ immutable maps
+		if (Map.of("a", "b").getClass().getName().contains("Immutable")) {
+			assertFalse(canPutTo(Map.of("a", "b")));
+		}
+		
+		// Should throw when null
+		assertThrows(IllegalArgumentException.class, () -> {
+			canPutTo((Map<?,?>)null);
+		});
+	}
+
+	//====================================================================================================
+	// className(Object)
+	//====================================================================================================
+	@Test
+	void a003_className() {
+		// With Class
+		assertEquals("java.lang.String", cn(String.class));
+		assertEquals("java.util.ArrayList", cn(ArrayList.class));
+		
+		// With Object
+		assertEquals("java.util.HashMap", cn(new HashMap<>()));
+		assertEquals("java.lang.String", cn("test"));
+		
+		// With primitive
+		assertEquals("int", cn(int.class));
+		assertEquals("boolean", cn(boolean.class));
+		
+		// With array
+		assertEquals("[Ljava.lang.String;", cn(String[].class));
+		assertEquals("[I", cn(int[].class));
+		assertEquals("[[Ljava.lang.String;", cn(String[][].class));
+		
+		// With inner class
+		assertEquals("java.util.Map$Entry", cn(Map.Entry.class));
+		
+		// With null
+		assertNull(cn(null));
+	}
+
+	//====================================================================================================
+	// classNameSimple(Object)
+	//====================================================================================================
+	@Test
+	void a004_classNameSimple() {
+		// With Class
+		assertEquals("String", cns(String.class));
+		assertEquals("ArrayList", cns(ArrayList.class));
+		
+		// With Object
+		assertEquals("HashMap", cns(new HashMap<>()));
+		assertEquals("String", cns("test"));
+		
+		// With primitive
+		assertEquals("int", cns(int.class));
+		assertEquals("boolean", cns(boolean.class));
+		
+		// With array
+		assertEquals("String[]", cns(String[].class));
+		assertEquals("int[]", cns(int[].class));
+		assertEquals("String[][]", cns(String[][].class));
+		
+		// With inner class
+		assertEquals("Entry", cns(Map.Entry.class));
+		
+		// With null
+		assertNull(cns(null));
+		
+		// With ClassInfo (line 188-189)
+		var classInfo = ClassInfo.of(String.class);
+		assertEquals("String", cns(classInfo));
+		
+		var listClassInfo = ClassInfo.of(ArrayList.class);
+		assertEquals("ArrayList", cns(listClassInfo));
+	}
+
+	//====================================================================================================
+	// classNameSimpleQualified(Object)
+	//====================================================================================================
+	@Test
+	void a005_classNameSimpleQualified() {
+		// Top-level class
 		assertEquals("String", cnsq(String.class));
 		assertEquals("ArrayList", cnsq(ArrayList.class));
-	}
-
-	@Test
-	public void a02_simpleQualifiedClassName_innerClass() {
+		
+		// Inner class
 		assertEquals("Map.Entry", cnsq(Map.Entry.class));
-	}
-
-	@Test
-	public void a03_simpleQualifiedClassName_nestedInnerClass() {
+		
+		// Nested inner class
 		class Outer {
 			class Inner {
 				class Deep {}
@@ -71,518 +185,153 @@ class ClassUtils_Test {
 		}
 		var deepClass = Outer.Inner.Deep.class;
 		var result = cnsq(deepClass);
-		// Result will be something like "ClassUtils_Test.1Outer.Inner.Deep"
+		// Result will be something like "ClassUtils_2_Test.1Outer.Inner.Deep"
 		assertTrue(result.endsWith("Outer.Inner.Deep"), result);
 		assertFalse(result.contains("$"), result);
-	}
-
-	@Test
-	public void a04_simpleQualifiedClassName_withObject() {
+		
+		// With Object
 		var obj = new HashMap<>();
 		assertEquals("HashMap", cnsq(obj));
-	}
-
-	@Test
-	public void a05_simpleQualifiedClassName_null() {
+		
+		// With null
 		assertNull(cnsq(null));
-	}
-
-	@Test
-	public void a06_simpleQualifiedClassName_noPackage() {
-		// Test with a class that has no package (unlikely in practice, but good to test)
-		var name = cnsq(String.class);
-		assertFalse(name.contains(".java.lang"), name);
-	}
-
-	@Test
-	public void a07_simpleQualifiedClassName_anonymousClass() {
+		
+		// Anonymous class
 		var anon = new Object() {};
-		var result = cnsq(anon);
-		// Anonymous classes have names like "ClassUtils_Test$1"
-		// After conversion should be like "ClassUtils_Test.1"
-		assertNotNull(result);
-		assertFalse(result.contains("$"), result);
-	}
-
-	@Test
-	public void a08_simpleQualifiedClassName_arrayTypes() {
+		var anonResult = cnsq(anon);
+		// Anonymous classes have names like "ClassUtils_2_Test$1"
+		// After conversion should be like "ClassUtils_2_Test.1"
+		assertNotNull(anonResult);
+		assertFalse(anonResult.contains("$"), anonResult);
+		
+		// Array types
 		assertEquals("String[]", cnsq(String[].class));
 		assertEquals("String[][]", cnsq(String[][].class));
 		assertEquals("int[]", cnsq(int[].class));
 		assertEquals("Map.Entry[]", cnsq(Map.Entry[].class));
-	}
-
-	@Test
-	public void a09_simpleQualifiedClassName_arrayObjects() {
+		
+		// Array objects
 		var stringArray = new String[]{"a", "b"};
 		assertEquals("String[]", cnsq(stringArray));
-
+		
 		var intArray = new int[]{1, 2, 3};
 		assertEquals("int[]", cnsq(intArray));
-
+		
 		var multiDimArray = new String[][]{{"a"}};
 		assertEquals("String[][]", cnsq(multiDimArray));
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// sqcn shortcut tests
-	//-----------------------------------------------------------------------------------------------------------------
-
+	//====================================================================================================
+	// getClasses(Object...)
+	//====================================================================================================
 	@Test
-	public void b01_sqcn_shortcut() {
-		// Test that the shortcut method works the same as the full method
-		assertEquals("String", cnsq(String.class));
-		assertEquals("Map.Entry", cnsq(Map.Entry.class));
-		assertNull(cnsq(null));
-	}
-
-	@Test
-	public void b02_sqcn_withObject() {
-		var obj = new HashMap<>();
-		assertEquals("HashMap", cnsq(obj));
-		assertEquals(cnsq(obj), cnsq(obj));
-	}
-
-	@Test
-	public void b03_sqcn_withArrays() {
-		assertEquals("String[]", cnsq(String[].class));
-		assertEquals("int[][]", cnsq(int[][].class));
-		assertEquals("Map.Entry[]", cnsq(Map.Entry[].class));
-
-		var arr = new String[]{"test"};
-		assertEquals("String[]", cnsq(arr));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// canAddTo(Collection<?>) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void c01_canAddTo_modifiableCollections() {
-		assertTrue(canAddTo(new ArrayList<>()));
-		assertTrue(canAddTo(new LinkedList<>()));
-		assertTrue(canAddTo(new HashSet<>()));
-		assertTrue(canAddTo(new LinkedHashSet<>()));
-		assertTrue(canAddTo(new TreeSet<>()));
-		assertTrue(canAddTo(new Vector<>()));
-	}
-
-	@Test
-	public void c02_canAddTo_unmodifiableCollections() {
-		assertFalse(canAddTo(Collections.unmodifiableList(new ArrayList<>())));
-		assertFalse(canAddTo(Collections.unmodifiableSet(new HashSet<>())));
-		assertFalse(canAddTo(Collections.unmodifiableCollection(new ArrayList<>())));
-		assertFalse(canAddTo(Arrays.asList("a", "b"))); // Arrays$ArrayList
-	}
-
-	@Test
-	public void c03_canAddTo_immutableCollections() {
-		// Java 9+ immutable collections
-		if (List.of("a").getClass().getName().contains("Immutable")) {
-			assertFalse(canAddTo(List.of("a")));
-			assertFalse(canAddTo(Set.of("a")));
-		}
-	}
-
-	@Test
-	public void c04_canAddTo_null() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			canAddTo((Collection<?>)null);
-		});
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// canPutTo(Map<?,?>) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void d01_canPutTo_modifiableMaps() {
-		assertTrue(canPutTo(new HashMap<>()));
-		assertTrue(canPutTo(new LinkedHashMap<>()));
-		assertTrue(canPutTo(new TreeMap<>()));
-		assertTrue(canPutTo(new Hashtable<>()));
-	}
-
-	@Test
-	public void d02_canPutTo_unmodifiableMaps() {
-		assertFalse(canPutTo(Collections.unmodifiableMap(new HashMap<>())));
-	}
-
-	@Test
-	public void d03_canPutTo_immutableMaps() {
-		// Java 9+ immutable maps
-		if (Map.of("a", "b").getClass().getName().contains("Immutable")) {
-			assertFalse(canPutTo(Map.of("a", "b")));
-		}
-	}
-
-	@Test
-	public void d04_canPutTo_null() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			canPutTo((Map<?,?>)null);
-		});
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// className(Object) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void e01_className_withClass() {
-		assertEquals("java.lang.String", cn(String.class));
-		assertEquals("java.util.ArrayList", cn(ArrayList.class));
-	}
-
-	@Test
-	public void e02_className_withObject() {
-		assertEquals("java.util.HashMap", cn(new HashMap<>()));
-		assertEquals("java.lang.String", cn("test"));
-	}
-
-	@Test
-	public void e03_className_withPrimitive() {
-		assertEquals("int", cn(int.class));
-		assertEquals("boolean", cn(boolean.class));
-	}
-
-	@Test
-	public void e04_className_withArray() {
-		assertEquals("[Ljava.lang.String;", cn(String[].class));
-		assertEquals("[I", cn(int[].class));
-		assertEquals("[[Ljava.lang.String;", cn(String[][].class));
-	}
-
-	@Test
-	public void e05_className_withInnerClass() {
-		assertEquals("java.util.Map$Entry", cn(Map.Entry.class));
-	}
-
-	@Test
-	public void e06_className_null() {
-		assertNull(cn(null));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// classNameSimple(Object) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void f01_classNameSimple_withClass() {
-		assertEquals("String", cns(String.class));
-		assertEquals("ArrayList", cns(ArrayList.class));
-	}
-
-	@Test
-	public void f02_classNameSimple_withObject() {
-		assertEquals("HashMap", cns(new HashMap<>()));
-		assertEquals("String", cns("test"));
-	}
-
-	@Test
-	public void f03_classNameSimple_withPrimitive() {
-		assertEquals("int", cns(int.class));
-		assertEquals("boolean", cns(boolean.class));
-	}
-
-	@Test
-	public void f04_classNameSimple_withArray() {
-		assertEquals("String[]", cns(String[].class));
-		assertEquals("int[]", cns(int[].class));
-		assertEquals("String[][]", cns(String[][].class));
-	}
-
-	@Test
-	public void f05_classNameSimple_withInnerClass() {
-		assertEquals("Entry", cns(Map.Entry.class));
-	}
-
-	@Test
-	public void f06_classNameSimple_null() {
-		assertNull(cns(null));
-	}
-
-	@Test
-	public void f07_classNameSimple_withClassInfo() {
-		// Test line 190: value instanceof ClassInfo branch
-		// When value is a ClassInfo instance, should call getNameSimple() on it
-		var classInfo = ClassInfo.of(String.class);
-		assertEquals("String", cns(classInfo));
-		
-		// Test with different class
-		var listClassInfo = ClassInfo.of(ArrayList.class);
-		assertEquals("ArrayList", cns(listClassInfo));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// getClasses(Object...) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void g01_getClasses_basic() {
-		var classes = getClasses("test", 123, new HashMap<>());
+	void a006_getClasses() {
+		// Basic usage
+		Class<?>[] classes = getClasses("test", 123, new HashMap<>());
 		assertEquals(3, classes.length);
 		assertEquals(String.class, classes[0]);
 		assertEquals(Integer.class, classes[1]);
 		assertEquals(HashMap.class, classes[2]);
+		
+		// With null
+		Class<?>[] classes2 = getClasses("test", null, 123);
+		assertEquals(3, classes2.length);
+		assertEquals(String.class, classes2[0]);
+		assertNull(classes2[1]);
+		assertEquals(Integer.class, classes2[2]);
+		
+		// Empty
+		var classes3 = getClasses();
+		assertEquals(0, classes3.length);
+		
+		// All null
+		var classes4 = getClasses(null, null, null);
+		assertEquals(3, classes4.length);
+		assertNull(classes4[0]);
+		assertNull(classes4[1]);
+		assertNull(classes4[2]);
 	}
 
+	//====================================================================================================
+	// getMatchingArgs(Class<?>[], Object...)
+	//====================================================================================================
 	@Test
-	public void g02_getClasses_withNull() {
-		var classes = getClasses("test", null, 123);
-		assertEquals(3, classes.length);
-		assertEquals(String.class, classes[0]);
-		assertNull(classes[1]);
-		assertEquals(Integer.class, classes[2]);
-	}
-
-	@Test
-	public void g03_getClasses_empty() {
-		var classes = getClasses();
-		assertEquals(0, classes.length);
-	}
-
-	@Test
-	public void g04_getClasses_allNull() {
-		var classes = getClasses(null, null, null);
-		assertEquals(3, classes.length);
-		assertNull(classes[0]);
-		assertNull(classes[1]);
-		assertNull(classes[2]);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// getMatchingArgs(Class<?>[], Object...) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void h01_getMatchingArgs_exactMatch() {
+	void a007_getMatchingArgs() {
+		// Exact match - fast path returns original array
 		var paramTypes = a(String.class, Integer.class);
 		var args = a("test", 123);
 		var result = getMatchingArgs(paramTypes, (Object[])args);
-		assertSame(args, result); // Should return original array (fast path)
+		assertSame(args, result);
 		assertEquals("test", result[0]);
 		assertEquals(123, result[1]);
-	}
-
-	@Test
-	public void h02_getMatchingArgs_wrongOrder() {
-		var paramTypes = a(Integer.class, String.class);
-		var args = a("test", 123);
-		var result = getMatchingArgs(paramTypes, (Object[])args);
-		assertEquals(2, result.length);
-		assertEquals(123, result[0]);
-		assertEquals("test", result[1]);
-	}
-
-	@Test
-	public void h03_getMatchingArgs_extraArgs() {
-		var paramTypes = a(String.class);
-		var args = a("test", 123, true);
-		var result = getMatchingArgs(paramTypes, (Object[])args);
-		assertEquals(1, result.length);
-		assertEquals("test", result[0]);
-	}
-
-	@Test
-	public void h04_getMatchingArgs_missingArgs() {
-		var paramTypes = a(String.class, Integer.class, Boolean.class);
-		var args = a("test");
-		var result = getMatchingArgs(paramTypes, (Object[])args);
-		assertEquals(3, result.length);
-		assertEquals("test", result[0]);
-		assertNull(result[1]);
-		assertNull(result[2]);
-	}
-
-	@Test
-	public void h05_getMatchingArgs_primitiveTypes() {
-		var paramTypes = a(int.class, String.class);
-		var args = a("test", 123);
-		var result = getMatchingArgs(paramTypes, (Object[])args);
-		assertEquals(2, result.length);
-		assertEquals(123, result[0]);
-		assertEquals("test", result[1]);
-	}
-
-	@Test
-	public void h06_getMatchingArgs_typeHierarchy() {
-		var paramTypes = a(Number.class, String.class);
-		var args = a("test", 123);
-		var result = getMatchingArgs(paramTypes, (Object[])args);
-		assertEquals(2, result.length);
-		assertEquals(123, result[0]);
-		assertEquals("test", result[1]);
-	}
-
-	@Test
-	public void h07_getMatchingArgs_nullArgs() {
-		var paramTypes = a(String.class, Integer.class);
-		var args = new Object[] {null, null};
-		var result = getMatchingArgs(paramTypes, args);
-		assertEquals(2, result.length);
-		assertNull(result[0]);
-		assertNull(result[1]);
-	}
-
-	@Test
-	public void h08_getMatchingArgs_nullParamTypes() {
-		// getMatchingArgs checks args first, then paramTypes
-		// If paramTypes is null, it will throw NullPointerException when accessing paramTypes.length
+		
+		// Wrong order - method reorders them
+		var paramTypes2 = a(Integer.class, String.class);
+		var args2 = a("test", 123);
+		var result2 = getMatchingArgs(paramTypes2, (Object[])args2);
+		assertEquals(2, result2.length);
+		assertEquals(123, result2[0]);
+		assertEquals("test", result2[1]);
+		
+		// Extra args - ignored
+		var paramTypes3 = a(String.class);
+		var args3 = a("test", 123, true);
+		var result3 = getMatchingArgs(paramTypes3, (Object[])args3);
+		assertEquals(1, result3.length);
+		assertEquals("test", result3[0]);
+		
+		// Missing args - become null
+		var paramTypes4 = a(String.class, Integer.class, Boolean.class);
+		var args4 = a("test");
+		var result4 = getMatchingArgs(paramTypes4, (Object[])args4);
+		assertEquals(3, result4.length);
+		assertEquals("test", result4[0]);
+		assertNull(result4[1]);
+		assertNull(result4[2]);
+		
+		// Primitive types
+		var paramTypes5 = a(int.class, String.class);
+		var args5 = a("test", 123);
+		var result5 = getMatchingArgs(paramTypes5, (Object[])args5);
+		assertEquals(2, result5.length);
+		assertEquals(123, result5[0]);
+		assertEquals("test", result5[1]);
+		
+		// Type hierarchy
+		var paramTypes6 = a(Number.class, String.class);
+		var args6 = a("test", 123);
+		var result6 = getMatchingArgs(paramTypes6, (Object[])args6);
+		assertEquals(2, result6.length);
+		assertEquals(123, result6[0]);
+		assertEquals("test", result6[1]);
+		
+		// Null args
+		var paramTypes7 = a(String.class, Integer.class);
+		var args7 = new Object[] {null, null};
+		var result7 = getMatchingArgs(paramTypes7, args7);
+		assertEquals(2, result7.length);
+		assertNull(result7[0]);
+		assertNull(result7[1]);
+		
+		// Null paramTypes - should throw
 		assertThrows(NullPointerException.class, () -> {
 			getMatchingArgs(null, "test");
 		});
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// isVoid(Class) and isNotVoid(Class) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
+	//====================================================================================================
+	// getProxyFor(Object)
+	//====================================================================================================
 	@Test
-	public void i01_isVoid_voidClass() {
-		assertTrue(isVoid(void.class));
-		assertTrue(isVoid(Void.class));
-	}
-
-	@Test
-	public void i02_isVoid_null() {
-		assertTrue(isVoid(null));
-	}
-
-	@Test
-	public void i03_isVoid_nonVoid() {
-		assertFalse(isVoid(String.class));
-		assertFalse(isVoid(int.class));
-		assertFalse(isVoid(Object.class));
-	}
-
-	@Test
-	public void i04_isNotVoid_voidClass() {
-		assertFalse(isNotVoid(void.class));
-		assertFalse(isNotVoid(Void.class));
-	}
-
-	@Test
-	public void i05_isNotVoid_null() {
-		assertFalse(isNotVoid(null));
-	}
-
-	@Test
-	public void i06_isNotVoid_nonVoid() {
-		assertTrue(isNotVoid(String.class));
-		assertTrue(isNotVoid(int.class));
-		assertTrue(isNotVoid(Object.class));
-	}
-
-	@Test
-	public void i07_NOT_VOID_predicate() {
-		assertFalse(NOT_VOID.test(void.class));
-		assertFalse(NOT_VOID.test(Void.class));
-		assertTrue(NOT_VOID.test(String.class));
-		assertTrue(NOT_VOID.test(int.class));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// setAccessible(Constructor<?>), setAccessible(Field), setAccessible(Method) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void j01_setAccessible_constructor() throws Exception {
-		var ctor = String.class.getDeclaredConstructor();
-		// Should succeed (no security manager in tests typically)
-		assertTrue(setAccessible(ctor));
-	}
-
-	@Test
-	public void j02_setAccessible_constructor_null() {
-		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
-			setAccessible((Constructor<?>)null);
-		});
-	}
-
-	@Test
-	public void j03_setAccessible_field() throws Exception {
-		// Use a field from a test class, not from java.lang (which has module restrictions)
-		class TestClass {
-			private String field;
-		}
-		var field = TestClass.class.getDeclaredField("field");
-		// Should succeed (no security manager in tests typically)
-		assertTrue(setAccessible(field));
-	}
-
-	@Test
-	public void j04_setAccessible_field_null() {
-		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
-			setAccessible((Field)null);
-		});
-	}
-
-	@Test
-	public void j05_setAccessible_method() throws Exception {
-		var method = String.class.getDeclaredMethod("indexOf", String.class, int.class);
-		// Should succeed (no security manager in tests typically)
-		assertTrue(setAccessible(method));
-	}
-
-	@Test
-	public void j06_setAccessible_method_null() {
-		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
-			setAccessible((Method)null);
-		});
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// toClass(Type) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void k01_toClass_withClass() {
-		assertSame(String.class, toClass(String.class));
-		assertSame(Integer.class, toClass(Integer.class));
-	}
-
-	@Test
-	public void k02_toClass_withParameterizedType() throws Exception {
-		// Get a ParameterizedType from a generic field
-		class TestClass {
-			List<String> field;
-		}
-		var field = TestClass.class.getDeclaredField("field");
-		var genericType = field.getGenericType();
-		var result = toClass(genericType);
-		assertEquals(List.class, result);
-	}
-
-	@Test
-	public void k03_toClass_withTypeVariable() throws Exception {
-		// TypeVariable cannot be converted to Class
-		class TestClass<T> {
-			T field;
-		}
-		var field = TestClass.class.getDeclaredField("field");
-		var genericType = field.getGenericType();
-		var result = toClass(genericType);
-		assertNull(result);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// getProxyFor(Object) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void m01_getProxyFor_null() {
+	void a008_getProxyFor() {
+		// Null
 		assertNull(getProxyFor(null));
-	}
-
-	@Test
-	public void m02_getProxyFor_regularObject() {
+		
+		// Regular object
 		var obj = "test";
 		assertNull(getProxyFor(obj));
-	}
-
-	@Test
-	public void m03_getProxyFor_jdkProxy() {
-		// Create a JDK dynamic proxy
+		
+		// JDK dynamic proxy
 		var proxy = Proxy.newProxyInstance(
 			Thread.currentThread().getContextClassLoader(),
 			new Class[]{List.class},
@@ -590,19 +339,130 @@ class ClassUtils_Test {
 		);
 		var result = getProxyFor(proxy);
 		assertEquals(List.class, result);
-	}
-
-	@Test
-	public void m04_getProxyFor_jdkProxy_noInterfaces() {
-		// Create a JDK dynamic proxy with no interfaces (edge case)
-		var proxy = Proxy.newProxyInstance(
+		
+		// JDK dynamic proxy with no interfaces
+		var proxy2 = Proxy.newProxyInstance(
 			Thread.currentThread().getContextClassLoader(),
 			new Class[0],
 			(proxy1, method, args) -> null
 		);
-		var result = getProxyFor(proxy);
-		assertNull(result);
+		var result2 = getProxyFor(proxy2);
+		assertNull(result2);
 	}
 
+	//====================================================================================================
+	// isNotVoid(Class)
+	//====================================================================================================
+	@Test
+	void a009_isNotVoid() {
+		// Void classes
+		assertFalse(isNotVoid(void.class));
+		assertFalse(isNotVoid(Void.class));
+		assertFalse(isNotVoid(null));
+		
+		// Non-void classes
+		assertTrue(isNotVoid(String.class));
+		assertTrue(isNotVoid(int.class));
+		assertTrue(isNotVoid(Object.class));
+		
+		// NOT_VOID predicate
+		assertFalse(NOT_VOID.test(void.class));
+		assertFalse(NOT_VOID.test(Void.class));
+		assertTrue(NOT_VOID.test(String.class));
+		assertTrue(NOT_VOID.test(int.class));
+	}
+
+	//====================================================================================================
+	// isVoid(Class)
+	//====================================================================================================
+	@Test
+	void a010_isVoid() {
+		// Void classes
+		assertTrue(isVoid(void.class));
+		assertTrue(isVoid(Void.class));
+		assertTrue(isVoid(null));
+		
+		// Non-void classes
+		assertFalse(isVoid(String.class));
+		assertFalse(isVoid(int.class));
+		assertFalse(isVoid(Object.class));
+	}
+
+	//====================================================================================================
+	// setAccessible(Constructor<?>)
+	//====================================================================================================
+	@Test
+	void a011_setAccessible_constructor() throws Exception {
+		var ctor = String.class.getDeclaredConstructor();
+		// Should succeed (no security manager in tests typically)
+		assertTrue(setAccessible(ctor));
+		
+		// Should throw when null
+		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
+			setAccessible((Constructor<?>)null);
+		});
+	}
+
+	//====================================================================================================
+	// setAccessible(Field)
+	//====================================================================================================
+	@Test
+	void a012_setAccessible_field() throws Exception {
+		// Use a field from a test class, not from java.lang (which has module restrictions)
+		class TestClass {
+			private String field;
+		}
+		var field = TestClass.class.getDeclaredField("field");
+		// Should succeed (no security manager in tests typically)
+		assertTrue(setAccessible(field));
+		
+		// Should throw when null
+		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
+			setAccessible((Field)null);
+		});
+	}
+
+	//====================================================================================================
+	// setAccessible(Method)
+	//====================================================================================================
+	@Test
+	void a013_setAccessible_method() throws Exception {
+		var method = String.class.getDeclaredMethod("indexOf", String.class, int.class);
+		// Should succeed (no security manager in tests typically)
+		assertTrue(setAccessible(method));
+		
+		// Should throw when null
+		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
+			setAccessible((Method)null);
+		});
+	}
+
+	//====================================================================================================
+	// toClass(Type)
+	//====================================================================================================
+	@Test
+	void a014_toClass() throws Exception {
+		// With Class
+		assertSame(String.class, toClass(String.class));
+		assertSame(Integer.class, toClass(Integer.class));
+		
+		// With ParameterizedType
+		class TestClass {
+			List<String> field;
+		}
+		var field = TestClass.class.getDeclaredField("field");
+		var genericType = field.getGenericType();
+		var result = toClass(genericType);
+		assertEquals(List.class, result);
+		
+		// With TypeVariable - cannot be converted
+		class TestClass2<T> {
+			T field;
+		}
+		var field2 = TestClass2.class.getDeclaredField("field");
+		var genericType2 = field2.getGenericType();
+		var result2 = toClass(genericType2);
+		assertNull(result2);
+	}
 }
 

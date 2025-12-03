@@ -279,6 +279,14 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(1, intResult.get(0));
 		assertEquals(2, intResult.get(1));
 		assertEquals(3, intResult.get(2));
+		
+		// Test lines 431-433: char array
+		char[] charArr = {'a', 'b', 'c'};
+		List<Object> charResult = arrayToList(charArr);
+		assertEquals(3, charResult.size());
+		assertEquals('a', charResult.get(0));
+		assertEquals('b', charResult.get(1));
+		assertEquals('c', charResult.get(2));
 	}
 
 	//====================================================================================================
@@ -473,6 +481,9 @@ class CollectionUtils_Test extends TestBase {
 		assertNotNull(result);
 		assertTrue(result instanceof TreeMap);
 		assertEquals(1, result.size());
+		
+		// Test line 647: null map returns null
+		assertNull(copyOf((Map<String, Integer>)null, v -> v, TreeMap::new));
 	}
 
 	//====================================================================================================
@@ -588,6 +599,12 @@ class CollectionUtils_Test extends TestBase {
 		List<String> result = new ArrayList<>();
 		forEachReverse(list, result::add);
 		assertEquals(list("c", "b", "a"), result);
+		
+		// Test lines 762-764: non-ArrayList List uses ListIterator
+		LinkedList<String> linkedList = new LinkedList<>(list("x", "y", "z"));
+		List<String> result2 = new ArrayList<>();
+		forEachReverse(linkedList, result2::add);
+		assertEquals(list("z", "y", "x"), result2);
 	}
 
 	//====================================================================================================
@@ -893,10 +910,26 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, Integer> m5 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
 		assertEquals(5, m5.size());
 		
-		// 6-10 pairs
+		// 6 pairs
 		LinkedHashMap<String, Integer> m6 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
 		assertEquals(6, m6.size());
 		
+		// 7 pairs - test lines 1400-1408
+		LinkedHashMap<String, Integer> m7 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
+		assertEquals(7, m7.size());
+		assertEquals(7, m7.get("g"));
+		
+		// 8 pairs - test lines 1435-1444
+		LinkedHashMap<String, Integer> m8 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
+		assertEquals(8, m8.size());
+		assertEquals(8, m8.get("h"));
+		
+		// 9 pairs - test lines 1473-1483
+		LinkedHashMap<String, Integer> m9 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
+		assertEquals(9, m9.size());
+		assertEquals(9, m9.get("i"));
+		
+		// 10 pairs
 		LinkedHashMap<String, Integer> m10 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
 		assertEquals(10, m10.size());
 		assertEquals(l("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"), new ArrayList<>(m10.keySet()));
@@ -1281,6 +1314,26 @@ class CollectionUtils_Test extends TestBase {
 		List<?> result3 = toList(arr);
 		assertEquals(3, result3.size());
 		assertEquals("a", result3.get(0));
+		
+		// Test lines 2001-2006: Stream, Map, Optional
+		// Stream
+		List<?> result4 = toList(java.util.stream.Stream.of("x", "y", "z"));
+		assertEquals(3, result4.size());
+		assertEquals("x", result4.get(0));
+		
+		// Map
+		Map<String, Integer> map = map("a", 1, "b", 2);
+		List<?> result5 = toList(map);
+		assertEquals(2, result5.size());
+		
+		// Optional - empty
+		List<?> result6 = toList(Optional.empty());
+		assertTrue(result6.isEmpty());
+		
+		// Optional - present
+		List<?> result7 = toList(Optional.of("test"));
+		assertEquals(1, result7.size());
+		assertEquals("test", result7.get(0));
 	}
 
 	//====================================================================================================
@@ -1347,6 +1400,15 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a084_toObjectList() {
 		String[] arr = {"a", "b", "c"};
+		
+		// Test line 2041: nested arrays (recursive call)
+		String[][] nestedArr = {{"a", "b"}, {"c", "d"}};
+		List<Object> nestedResult = toObjectList(nestedArr);
+		assertEquals(2, nestedResult.size());
+		assertTrue(nestedResult.get(0) instanceof List);
+		assertTrue(nestedResult.get(1) instanceof List);
+		
+		String[] arr2 = {"a", "b", "c"};
 		List<Object> result = toObjectList(arr);
 		assertNotNull(result);
 		assertEquals(3, result.size());
@@ -1364,6 +1426,25 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(3, result.size());
 		assertTrue(result.contains("a"));
 		assertNull(toSet((Collection<String>)null));
+	}
+
+	//====================================================================================================
+	// toSortedSet(Collection<E>)
+	//====================================================================================================
+	@Test
+	void a085b_toSortedSet_collection() {
+		// Test lines 2117-2121: toSortedSet(Collection<E>) - different from toSortedSet(Set<E>)
+		Collection<String> col = list("c", "a", "b");
+		TreeSet<String> result = toSortedSet(col);
+		assertNotNull(result);
+		assertEquals(l("a", "b", "c"), new ArrayList<>(result));
+		
+		Collection<Integer> col2 = list(3, 1, 2);
+		TreeSet<Integer> result2 = toSortedSet(col2);
+		assertEquals(l(1, 2, 3), new ArrayList<>(result2));
+		
+		// Test line 2117: null returns null
+		assertNull(toSortedSet((Collection<String>)null));
 	}
 
 	//====================================================================================================
