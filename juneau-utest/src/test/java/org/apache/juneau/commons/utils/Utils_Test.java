@@ -39,10 +39,27 @@ import org.junit.jupiter.api.*;
 class Utils_Test extends TestBase {
 
 	//====================================================================================================
+	// Constructor (line 56)
+	//====================================================================================================
+	@Test
+	void a00_constructor() {
+		// Test line 56: class declaration
+		// Utils has a protected constructor, so it can be subclassed.
+		// Create a subclass to access the protected constructor
+		class TestUtils extends Utils {
+			TestUtils() {
+				super(); // This calls the protected Utils() constructor
+			}
+		}
+		var testUtils = new TestUtils();
+		assertNotNull(testUtils);
+	}
+
+	//====================================================================================================
 	// b(Object)
 	//====================================================================================================
 	@Test
-	void a01_b() {
+	void a001_b() {
 		assertTrue(b(true));
 		assertTrue(b("true"));
 		assertTrue(b("TRUE"));
@@ -59,7 +76,7 @@ class Utils_Test extends TestBase {
 	// cast(Class<T>, Object)
 	//====================================================================================================
 	@Test
-	void a02_cast() {
+	void a002_cast() {
 		var obj = "Hello";
 		assertEquals("Hello", cast(String.class, obj));
 		assertNull(cast(Integer.class, obj));
@@ -72,7 +89,7 @@ class Utils_Test extends TestBase {
 	// castOrNull(Object, Class<T>)
 	//====================================================================================================
 	@Test
-	void a03_castOrNull() {
+	void a003_castOrNull() {
 		var obj = "Hello";
 		assertEquals("Hello", castOrNull(obj, String.class));
 		assertNull(castOrNull(obj, Integer.class));
@@ -85,7 +102,7 @@ class Utils_Test extends TestBase {
 	// cn(Object)
 	//====================================================================================================
 	@Test
-	void a04_cn() {
+	void a004_cn() {
 		assertEquals("java.lang.String", cn(String.class));
 		assertEquals("java.util.HashMap", cn(new HashMap<>()));
 		assertEquals("java.util.Map$Entry", cn(Map.Entry.class));
@@ -100,7 +117,7 @@ class Utils_Test extends TestBase {
 	// cns(Object)
 	//====================================================================================================
 	@Test
-	void a05_cns() {
+	void a005_cns() {
 		assertEquals("String", cns(String.class));
 		assertEquals("HashMap", cns(new HashMap<>()));
 		assertEquals("Entry", cns(Map.Entry.class));
@@ -115,7 +132,7 @@ class Utils_Test extends TestBase {
 	// cnsq(Object)
 	//====================================================================================================
 	@Test
-	void a06_cnsq() {
+	void a006_cnsq() {
 		assertEquals("String", cnsq(String.class));
 		assertEquals("HashMap", cnsq(new HashMap<>()));
 		assertEquals("Map.Entry", cnsq(Map.Entry.class));
@@ -130,7 +147,7 @@ class Utils_Test extends TestBase {
 	// compare(Object, Object)
 	//====================================================================================================
 	@Test
-	void a07_compare() {
+	void a007_compare() {
 		assertTrue(compare("apple", "banana") < 0);
 		assertTrue(compare("banana", "apple") > 0);
 		assertEquals(0, compare("apple", "apple"));
@@ -153,7 +170,7 @@ class Utils_Test extends TestBase {
 	// ea(Class<T>)
 	//====================================================================================================
 	@Test
-	void a08_ea() {
+	void a008_ea() {
 		var empty1 = ea(String.class);
 		assertEquals(0, empty1.length);
 		var empty2 = ea(Integer.class);
@@ -166,7 +183,7 @@ class Utils_Test extends TestBase {
 	// emptyIfNull(Object)
 	//====================================================================================================
 	@Test
-	void a09_emptyIfNull() {
+	void a009_emptyIfNull() {
 		assertEquals("Hello", emptyIfNull("Hello"));
 		assertEquals("123", emptyIfNull(123));
 		assertEquals("", emptyIfNull(null));
@@ -176,7 +193,7 @@ class Utils_Test extends TestBase {
 	// env(String)
 	//====================================================================================================
 	@Test
-	void a10_env() {
+	void a010_env() {
 		// Test with system property
 		System.setProperty("test.property", "testValue");
 		var result = env("test.property");
@@ -193,8 +210,8 @@ class Utils_Test extends TestBase {
 	// env(String, T)
 	//====================================================================================================
 	@Test
-	void a11_env_withDefault() {
-		// Test with system property - covers toType line 1489-1490 (String)
+	void a011_env_withDefault() {
+		// Test with system property - covers toType line 1618-1619 (String)
 		System.setProperty("test.property2", "testValue2");
 		var result = env("test.property2", "default");
 		assertEquals("testValue2", result);
@@ -204,24 +221,32 @@ class Utils_Test extends TestBase {
 		var defaultValue = env("nonexistent.property.xyz2", "default");
 		assertEquals("default", defaultValue);
 
-		// Test with Boolean type - covers toType line 1493-1496 (ENV_FUNCTIONS)
+		// Test with Boolean type - covers toType line 1622-1625 (ENV_FUNCTIONS)
 		System.setProperty("test.boolean", "true");
 		var boolResult = env("test.boolean", false);
 		assertTrue(boolResult);
 		System.clearProperty("test.boolean");
 
-		// Test with Enum type - covers toType line 1491-1492 (Enum)
+		// Test with Enum type - covers toType line 1620-1621 (Enum)
 		enum TestEnum { VALUE1, VALUE2 }
 		System.setProperty("test.enum", "VALUE1");
 		var enumResult = env("test.enum", TestEnum.VALUE2);
 		assertEquals(TestEnum.VALUE1, enumResult);
 		System.clearProperty("test.enum");
 
-		// Test null default - covers toType line 1486-1487 (def == null)
-		var nullResult = env("nonexistent.property.null", (String)null);
-		assertNull(nullResult);
+		// Test null default - covers toType line 1615-1616 (def == null)
+		// When property doesn't exist, toType is never called, so test via reflection
+		// Also test with property set to ensure toType is called with s != null && def == null
+		System.setProperty("test.null.def", "value");
+		var nullResult = env("test.null.def", (String)null);
+		assertNull(nullResult); // toType returns null when def is null
+		System.clearProperty("test.null.def");
+		
+		// Also test when property doesn't exist (returns def directly without calling toType)
+		var nullResult2 = env("nonexistent.property.null", (String)null);
+		assertNull(nullResult2);
 
-		// Test null string - covers toType line 1486-1487 (s == null, def != null)
+		// Test null string - covers toType line 1615-1616 (s == null, def != null)
 		// Use reflection to call private toType method directly
 		try {
 			var toTypeMethod = Utils.class.getDeclaredMethod("toType", String.class, Object.class);
@@ -232,7 +257,7 @@ class Utils_Test extends TestBase {
 			fail("Failed to test toType with null string: " + e.getMessage());
 		}
 
-		// Test both null - covers toType line 1486-1487 (s == null && def == null)
+		// Test both null - covers toType line 1615-1616 (s == null && def == null)
 		// Use reflection to call private toType method directly
 		try {
 			var toTypeMethod = Utils.class.getDeclaredMethod("toType", String.class, Object.class);
@@ -242,8 +267,18 @@ class Utils_Test extends TestBase {
 		} catch (Exception e) {
 			fail("Failed to test toType with both null: " + e.getMessage());
 		}
+		
+		// Test s != null && def == null via reflection to ensure line 1615 is fully covered
+		try {
+			var toTypeMethod = Utils.class.getDeclaredMethod("toType", String.class, Object.class);
+			toTypeMethod.setAccessible(true);
+			var nonNullStringNullDef = (String)toTypeMethod.invoke(null, "value", (String)null);
+			assertNull(nonNullStringNullDef); // toType returns null when def is null
+		} catch (Exception e) {
+			fail("Failed to test toType with non-null string and null def: " + e.getMessage());
+		}
 
-		// Test invalid type - covers toType line 1494-1495 (exception)
+		// Test invalid type - covers toType line 1623-1624 (exception)
 		// Note: Charset doesn't work because def.getClass() returns concrete implementation class
 		System.setProperty("test.invalid", "value");
 		assertThrows(RuntimeException.class, () -> env("test.invalid", 123)); // Integer not in ENV_FUNCTIONS
@@ -254,7 +289,7 @@ class Utils_Test extends TestBase {
 	// eq(boolean, String, String)
 	//====================================================================================================
 	@Test
-	void a12_eq_caseSensitive() {
+	void a012_eq_caseSensitive() {
 		assertTrue(eq(false, "Hello", "Hello"));
 		assertFalse(eq(false, "Hello", "hello"));
 		assertTrue(eq(false, null, null));
@@ -269,7 +304,7 @@ class Utils_Test extends TestBase {
 	// eq(T, T)
 	//====================================================================================================
 	@Test
-	void a13_eq() {
+	void a013_eq() {
 		assertTrue(eq("Hello", "Hello"));
 		assertFalse(eq("Hello", "World"));
 		assertTrue(eq(null, null));
@@ -314,7 +349,7 @@ class Utils_Test extends TestBase {
 	// eq(T, U, BiPredicate<T,U>)
 	//====================================================================================================
 	@Test
-	void a14_eq_withPredicate() {
+	void a014_eq_withPredicate() {
 		class Role {
 			int id;
 			String name;
@@ -337,7 +372,7 @@ class Utils_Test extends TestBase {
 	// eqic(Object, Object)
 	//====================================================================================================
 	@Test
-	void a15_eqic_object() {
+	void a015_eqic_object() {
 		assertTrue(eqic("Hello", "Hello"));
 		assertTrue(eqic("Hello", "hello"));
 		assertTrue(eqic("Hello", "HELLO"));
@@ -352,7 +387,7 @@ class Utils_Test extends TestBase {
 	// eqic(String, String)
 	//====================================================================================================
 	@Test
-	void a16_eqic_string() {
+	void a016_eqic_string() {
 		assertTrue(eqic("Hello", "Hello"));
 		assertTrue(eqic("Hello", "hello"));
 		assertTrue(eqic("Hello", "HELLO"));
@@ -365,7 +400,7 @@ class Utils_Test extends TestBase {
 	// f(String, Object...)
 	//====================================================================================================
 	@Test
-	void a17_f() {
+	void a017_f() {
 		// Basic formatting
 		assertEquals("Hello John, you have 5 items", f("Hello %s, you have %d items", "John", 5));
 		assertEquals("Hello world", f("Hello %s", "world"));
@@ -391,7 +426,7 @@ class Utils_Test extends TestBase {
 	// firstNonNull(T...)
 	//====================================================================================================
 	@Test
-	void a18_firstNonNull() {
+	void a018_firstNonNull() {
 		assertEquals("Hello", firstNonNull(null, null, "Hello", "World"));
 		assertEquals("Hello", firstNonNull("Hello", "World"));
 		assertNull(firstNonNull(null, null));
@@ -408,7 +443,7 @@ class Utils_Test extends TestBase {
 	// fs(String, Object...)
 	//====================================================================================================
 	@Test
-	void a19_fs() {
+	void a019_fs() {
 		// Basic supplier
 		var supplier = fs("Hello %s, you have %d items", "John", 5);
 		assertNotNull(supplier);
@@ -436,7 +471,7 @@ class Utils_Test extends TestBase {
 	// hash(Object...)
 	//====================================================================================================
 	@Test
-	void a20_hash() {
+	void a020_hash() {
 		var hash1 = hash("Hello", 123, true);
 		var hash2 = hash("Hello", 123, true);
 		assertEquals(hash1, hash2);
@@ -456,7 +491,7 @@ class Utils_Test extends TestBase {
 	// identity(Object)
 	//====================================================================================================
 	@Test
-	void a21_identity() {
+	void a021_identity() {
 		var obj = "test";
 		var identity = identity(obj);
 		assertNotNull(identity);
@@ -470,7 +505,7 @@ class Utils_Test extends TestBase {
 	// isArray(Object)
 	//====================================================================================================
 	@Test
-	void a22_isArray() {
+	void a022_isArray() {
 		assertTrue(isArray(new int[]{1, 2, 3}));
 		assertTrue(isArray(a("a", "b")));
 		assertTrue(isArray(a()));
@@ -484,7 +519,7 @@ class Utils_Test extends TestBase {
 	// isBetween(int, int, int)
 	//====================================================================================================
 	@Test
-	void a23_isBetween() {
+	void a023_isBetween() {
 		assertTrue(isBetween(5, 1, 10));
 		assertTrue(isBetween(1, 1, 10));
 		assertTrue(isBetween(10, 1, 10));
@@ -496,7 +531,7 @@ class Utils_Test extends TestBase {
 	// isEmpty(CharSequence)
 	//====================================================================================================
 	@Test
-	void a24_isEmpty_CharSequence() {
+	void a024_isEmpty_CharSequence() {
 		assertTrue(isEmpty((String)null));
 		assertTrue(isEmpty(""));
 		assertFalse(isEmpty("   "));
@@ -508,7 +543,7 @@ class Utils_Test extends TestBase {
 	// isEmpty(Collection<?>)
 	//====================================================================================================
 	@Test
-	void a25_isEmpty_Collection() {
+	void a025_isEmpty_Collection() {
 		assertTrue(isEmpty((Collection<?>)null));
 		assertTrue(isEmpty(Collections.emptyList()));
 		assertTrue(isEmpty(new ArrayList<>()));
@@ -520,7 +555,7 @@ class Utils_Test extends TestBase {
 	// isEmpty(Map<?,?>)
 	//====================================================================================================
 	@Test
-	void a26_isEmpty_Map() {
+	void a026_isEmpty_Map() {
 		assertTrue(isEmpty((Map<?,?>)null));
 		assertTrue(isEmpty(Collections.emptyMap()));
 		assertTrue(isEmpty(new HashMap<>()));
@@ -528,14 +563,17 @@ class Utils_Test extends TestBase {
 		assertFalse(isEmpty(Collections.singletonMap("key", "value")));
 	}
 
+	//====================================================================================================
+	// isEmpty(Object)
+	//====================================================================================================
 	@Test
-	void a27_isEmpty_Object() {
+	void a027_isEmpty_Object() {
 		assertTrue(isEmpty((Object)null));
 		assertTrue(isEmpty((Object)""));
-		// Test line 835: Collection branch
+		// Test line 834: Collection branch
 		assertTrue(isEmpty((Object)Collections.emptyList()));
 		assertFalse(isEmpty((Object)Arrays.asList(1, 2)));  // Non-empty collection
-		// Test line 837: Map branch
+		// Test line 836: Map branch
 		assertTrue(isEmpty((Object)Collections.emptyMap()));
 		assertFalse(isEmpty((Object)Map.of("key", "value")));  // Non-empty map
 		assertTrue(isEmpty(new int[0]));
@@ -551,7 +589,7 @@ class Utils_Test extends TestBase {
 	// isNotEmpty(CharSequence)
 	//====================================================================================================
 	@Test
-	void a28_isNotEmpty_CharSequence() {
+	void a028_isNotEmpty_CharSequence() {
 		assertFalse(isNotEmpty((String)null));
 		assertFalse(isNotEmpty(""));
 		assertTrue(isNotEmpty("   "));
@@ -563,7 +601,7 @@ class Utils_Test extends TestBase {
 	// isNotEmpty(Collection<?>)
 	//====================================================================================================
 	@Test
-	void a29_isNotEmpty_Collection() {
+	void a029_isNotEmpty_Collection() {
 		assertFalse(isNotEmpty((Collection<?>)null));
 		assertFalse(isNotEmpty(Collections.emptyList()));
 		assertFalse(isNotEmpty(new ArrayList<>()));
@@ -575,7 +613,7 @@ class Utils_Test extends TestBase {
 	// isNotEmpty(Map<?,?>)
 	//====================================================================================================
 	@Test
-	void a30_isNotEmpty_Map() {
+	void a030_isNotEmpty_Map() {
 		assertFalse(isNotEmpty((Map<?,?>)null));
 		assertFalse(isNotEmpty(Collections.emptyMap()));
 		assertFalse(isNotEmpty(new HashMap<>()));
@@ -587,21 +625,21 @@ class Utils_Test extends TestBase {
 	// isNotEmpty(Object)
 	//====================================================================================================
 	@Test
-	void a31_isNotEmpty_Object() {
+	void a031_isNotEmpty_Object() {
 		assertFalse(isNotEmpty((Object)null));
-		// Test line 940: CharSequence branch
+		// Test line 939: CharSequence branch
 		assertFalse(isNotEmpty((Object)""));
 		assertTrue(isNotEmpty((Object)"hello"));  // Non-empty CharSequence
-		// Test line 942: Collection branch
+		// Test line 941: Collection branch
 		assertFalse(isNotEmpty((Object)Collections.emptyList()));
 		assertTrue(isNotEmpty((Object)Arrays.asList(1, 2)));  // Non-empty collection
-		// Test line 944: Map branch
+		// Test line 943: Map branch
 		assertFalse(isNotEmpty((Object)Collections.emptyMap()));
 		assertTrue(isNotEmpty((Object)Map.of("key", "value")));  // Non-empty map
 		assertFalse(isNotEmpty(new int[0]));
 		assertFalse(isNotEmpty(new String[0]));
 		assertTrue(isNotEmpty(a(1, 2)));
-		// Test line 947: fallback case (non-String, non-Collection, non-Map, non-Array)
+		// Test line 946: fallback case (non-String, non-Collection, non-Map, non-Array)
 		assertTrue(isNotEmpty(new Object() {
 			@Override public String toString() { return "test"; }
 		}));
@@ -614,7 +652,7 @@ class Utils_Test extends TestBase {
 	// isNotMinusOne(T)
 	//====================================================================================================
 	@Test
-	void a32_isNotMinusOne() {
+	void a032_isNotMinusOne() {
 		assertTrue(isNotMinusOne(5));
 		assertTrue(isNotMinusOne(0));
 		assertTrue(isNotMinusOne(100));
@@ -628,7 +666,7 @@ class Utils_Test extends TestBase {
 	// isNotNull(T)
 	//====================================================================================================
 	@Test
-	void a33_isNotNull() {
+	void a033_isNotNull() {
 		assertTrue(isNotNull("Hello"));
 		assertTrue(isNotNull(123));
 		assertTrue(isNotNull(new Object()));
@@ -639,7 +677,7 @@ class Utils_Test extends TestBase {
 	// isTrue(Boolean)
 	//====================================================================================================
 	@Test
-	void a34_isTrue() {
+	void a034_isTrue() {
 		assertTrue(isTrue(true));
 		assertFalse(isTrue(false));
 		assertFalse(isTrue(null));
@@ -649,7 +687,7 @@ class Utils_Test extends TestBase {
 	// lc(String)
 	//====================================================================================================
 	@Test
-	void a35_lc() {
+	void a035_lc() {
 		assertEquals("hello", lc("Hello"));
 		assertEquals("hello", lc("HELLO"));
 		assertEquals("hello world", lc("Hello World"));
@@ -661,7 +699,7 @@ class Utils_Test extends TestBase {
 	// memoize(Supplier<T>)
 	//====================================================================================================
 	@Test
-	void a36_memoize() {
+	void a036_memoize() {
 		var callCount = new AtomicInteger(0);
 		var supplier = memoize(() -> {
 			callCount.incrementAndGet();
@@ -682,7 +720,7 @@ class Utils_Test extends TestBase {
 	// memoizeResettable(Supplier<T>)
 	//====================================================================================================
 	@Test
-	void a37_memoizeResettable() {
+	void a037_memoizeResettable() {
 		var callCount = new AtomicInteger(0);
 		var supplier = memoizeResettable(() -> {
 			callCount.incrementAndGet();
@@ -706,7 +744,7 @@ class Utils_Test extends TestBase {
 	// n(Class<T>)
 	//====================================================================================================
 	@Test
-	void a38_n() {
+	void a038_n() {
 		assertNull(n(String.class));
 		assertNull(n(Integer.class));
 		assertNull(n(List.class));
@@ -716,7 +754,7 @@ class Utils_Test extends TestBase {
 	// ne(T, T)
 	//====================================================================================================
 	@Test
-	void a39_ne() {
+	void a039_ne() {
 		assertTrue(ne("Hello", "World"));
 		assertFalse(ne("Hello", "Hello"));
 		assertFalse(ne(null, null));
@@ -730,7 +768,7 @@ class Utils_Test extends TestBase {
 	// ne(T, U, BiPredicate<T,U>)
 	//====================================================================================================
 	@Test
-	void a40_ne_withPredicate() {
+	void a040_ne_withPredicate() {
 		class Role {
 			int id;
 			String name;
@@ -753,7 +791,7 @@ class Utils_Test extends TestBase {
 	// neic(String, String)
 	//====================================================================================================
 	@Test
-	void a41_neic() {
+	void a041_neic() {
 		assertTrue(neic("Hello", "World"));
 		assertFalse(neic("Hello", "hello"));
 		assertFalse(neic("Hello", "HELLO"));
@@ -766,7 +804,7 @@ class Utils_Test extends TestBase {
 	// nn(Object)
 	//====================================================================================================
 	@Test
-	void a42_nn() {
+	void a042_nn() {
 		assertTrue(nn("test"));
 		assertTrue(nn(123));
 		assertTrue(nn(new Object()));
@@ -780,7 +818,7 @@ class Utils_Test extends TestBase {
 	// opt(T)
 	//====================================================================================================
 	@Test
-	void a43_opt() {
+	void a043_opt() {
 		var opt1 = opt("Hello");
 		assertTrue(opt1.isPresent());
 		assertEquals("Hello", opt1.get());
@@ -793,7 +831,7 @@ class Utils_Test extends TestBase {
 	// opte()
 	//====================================================================================================
 	@Test
-	void a44_opte() {
+	void a044_opte() {
 		var empty = opte();
 		assertFalse(empty.isPresent());
 	}
@@ -802,7 +840,7 @@ class Utils_Test extends TestBase {
 	// printLines(String[])
 	//====================================================================================================
 	@Test
-	void a45_printLines() {
+	void a045_printLines() {
 		// This test just verifies the method doesn't throw
 		printLines(a("Line 1", "Line 2", "Line 3"));
 		printLines(a());
@@ -812,7 +850,7 @@ class Utils_Test extends TestBase {
 	// r(Object)
 	//====================================================================================================
 	@Test
-	void a46_r() {
+	void a046_r() {
 		assertEquals("hello", r("hello"));
 		assertEquals("123", r(123));
 		assertEquals("[1,2,3]", r(Arrays.asList(1, 2, 3)));
@@ -825,7 +863,7 @@ class Utils_Test extends TestBase {
 	// s(Object)
 	//====================================================================================================
 	@Test
-	void a47_s() {
+	void a047_s() {
 		assertEquals("Hello", s("Hello"));
 		assertEquals("123", s(123));
 		assertEquals("true", s(true));
@@ -836,7 +874,7 @@ class Utils_Test extends TestBase {
 	// safe(Snippet)
 	//====================================================================================================
 	@Test
-	void a48_safe_Snippet() {
+	void a048_safe_Snippet() {
 		// Test normal execution - covers line 1371
 		AtomicInteger count = new AtomicInteger(0);
 		safe((Snippet)() -> {
@@ -871,7 +909,7 @@ class Utils_Test extends TestBase {
 	// safe(Snippet, Function<Throwable, RuntimeException>)
 	//====================================================================================================
 	@Test
-	void a48b_safe_Snippet_withExceptionMapper() {
+	void a049_safe_Snippet_withExceptionMapper() {
 		// Test normal execution
 		AtomicInteger count = new AtomicInteger(0);
 		safe((Snippet)() -> {
@@ -918,7 +956,7 @@ class Utils_Test extends TestBase {
 	// safe(ThrowingSupplier<T>)
 	//====================================================================================================
 	@Test
-	void a49_safe_ThrowingSupplier() {
+	void a050_safe_ThrowingSupplier() {
 		// Test normal execution
 		var result = safe(() -> "result");
 		assertEquals("result", result);
@@ -938,7 +976,7 @@ class Utils_Test extends TestBase {
 	// safe(ThrowingSupplier<T>, Function<Exception, RuntimeException>)
 	//====================================================================================================
 	@Test
-	void a49b_safe_ThrowingSupplier_withExceptionMapper() {
+	void a051_safe_ThrowingSupplier_withExceptionMapper() {
 		// Test normal execution
 		ThrowingSupplier<String> supplier1 = () -> "result";
 		Function<Exception, RuntimeException> mapper1 = e -> new RuntimeException("mapped: " + e.getMessage());
@@ -978,10 +1016,27 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// safeOpt(ThrowingSupplier<T>)
+	//====================================================================================================
+	@Test
+	void a052_safeOpt() {
+		// Test normal execution
+		var result = safeOpt(() -> "result");
+		assertTrue(result.isPresent());
+		assertEquals("result", result.get());
+
+		// Test exception returns empty
+		var empty = safeOpt(() -> {
+			throw new Exception("test");
+		});
+		assertFalse(empty.isPresent());
+	}
+
+	//====================================================================================================
 	// safeSupplier(ThrowableUtils.SupplierWithThrowable<T>)
 	//====================================================================================================
 	@Test
-	void a50_safeSupplier() {
+	void a053_safeSupplier() {
 		// Test normal execution
 		var result = safeSupplier(() -> "result");
 		assertEquals("result", result);
@@ -1001,7 +1056,7 @@ class Utils_Test extends TestBase {
 	// safeSupplier(ThrowableUtils.SupplierWithThrowable<T>, Function<Throwable, RuntimeException>)
 	//====================================================================================================
 	@Test
-	void a50b_safeSupplier_withExceptionMapper() {
+	void a054_safeSupplier_withExceptionMapper() {
 		// Test normal execution
 		String result = Utils.<String>safeSupplier(() -> "result", e -> new RuntimeException("mapped: " + e.getMessage()));
 		assertEquals("result", result);
@@ -1045,7 +1100,7 @@ class Utils_Test extends TestBase {
 	// sb(String)
 	//====================================================================================================
 	@Test
-	void a51_sb() {
+	void a055_sb() {
 		var sb = sb("Hello");
 		assertNotNull(sb);
 		assertEquals("Hello", sb.toString());
@@ -1055,7 +1110,7 @@ class Utils_Test extends TestBase {
 	// ss(Supplier<?>)
 	//====================================================================================================
 	@Test
-	void a52_ss() {
+	void a056_ss() {
 		var stringSupplier = ss(() -> "test");
 		assertEquals("test", stringSupplier.get());
 
@@ -1067,7 +1122,7 @@ class Utils_Test extends TestBase {
 	// uc(String)
 	//====================================================================================================
 	@Test
-	void a53_uc() {
+	void a057_uc() {
 		assertEquals("HELLO", uc("Hello"));
 		assertEquals("HELLO", uc("hello"));
 		assertEquals("HELLO WORLD", uc("Hello World"));
@@ -1079,7 +1134,7 @@ class Utils_Test extends TestBase {
 	// unwrap(Object)
 	//====================================================================================================
 	@Test
-	void a54_unwrap() {
+	void a058_unwrap() {
 		// Test with Supplier
 		Supplier<String> supplier = () -> "test";
 		assertEquals("test", unwrap(supplier));
@@ -1100,20 +1155,5 @@ class Utils_Test extends TestBase {
 		assertEquals("test", unwrap("test"));
 		assertEquals(123, unwrap(123));
 	}
-
-	//====================================================================================================
-	// Utils() constructor
-	//====================================================================================================
-	@Test
-	void a55_Utils_constructor() {
-		// Test protected constructor - covers line 1500
-		// Create a subclass to access the protected constructor
-		class TestUtils extends Utils {
-			TestUtils() {
-				super(); // This calls the protected Utils() constructor
-			}
-		}
-		var testUtils = new TestUtils();
-		assertNotNull(testUtils);
-	}
 }
+
