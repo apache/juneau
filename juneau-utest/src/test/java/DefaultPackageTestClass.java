@@ -19,6 +19,8 @@
 // where a class has $ (is an inner class) but has no package
 
 public class DefaultPackageTestClass {
+	public int testField;  // Field for testing FieldInfo.getFullName() with null package
+	
 	public static class InnerClass {
 		public static class NestedInner {}
 	}

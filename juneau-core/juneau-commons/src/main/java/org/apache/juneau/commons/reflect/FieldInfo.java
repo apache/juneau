@@ -312,19 +312,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 			case ENUM_CONSTANT -> isEnumConstant();
 			case NOT_ENUM_CONSTANT -> ! isEnumConstant();
 			case SYNTHETIC -> isSynthetic();
-			case NOT_SYNTHETIC -> ! isSynthetic();
+			case NOT_SYNTHETIC -> ! isSynthetic();  // HTT
 			default -> super.is(flag);
 		};
-	}
-
-	@Override
-	public boolean isAll(ElementFlag...flags) {
-		return stream(flags).allMatch(this::is);
-	}
-
-	@Override
-	public boolean isAny(ElementFlag...flags) {
-		return stream(flags).anyMatch(this::is);
 	}
 
 	/**
@@ -458,6 +448,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		var pi = dc.getPackage();
 		if (nn(pi))
 			sb.append(pi.getName()).append('.');
+		// HTT - false branch (pi == null) is hard to test: some classloaders return Package objects
+		// even for default package classes, though Java API spec says it should return null
 		dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
 		sb.append('.').append(getName());
 		return sb.toString();

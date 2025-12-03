@@ -528,21 +528,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			case HAS_PARAMS -> hasParameters();
 			case HAS_NO_PARAMS -> getParameterCount() == 0;
 			case SYNTHETIC -> isSynthetic();
-			case NOT_SYNTHETIC -> ! isSynthetic();
+			case NOT_SYNTHETIC -> ! isSynthetic();  // HTT
 			case VARARGS -> isVarArgs();
 			case NOT_VARARGS -> ! isVarArgs();
 			default -> super.is(flag);
 		};
-	}
-
-	@Override
-	public boolean isAll(ElementFlag...flags) {
-		return stream(flags).allMatch(this::is);
-	}
-
-	@Override
-	public boolean isAny(ElementFlag...flags) {
-		return stream(flags).anyMatch(this::is);
 	}
 
 	/**
@@ -772,25 +762,18 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 
 	private List<ParameterInfo> findParameters() {
 		var rp = inner.getParameters();
-		var ptc = inner.getParameterTypes();
-		// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
-		// always return an empty array.  This appears to be fixed in Java 8 b75.
-		var ptt = inner.getGenericParameterTypes();
+		var ptc = inner.getParameterTypes();  // Class<?>[] - includes all parameters (including synthetic enclosing instance)
+		var ptt = inner.getGenericParameterTypes();  // Type[] - generic type information
 		Type[] genericTypes;
-		if (ptt.length != ptc.length) {
-			// Bug in javac: generic type array excludes enclosing instance parameter
-			// for inner classes with at least one generic constructor parameter.
-			if (ptt.length + 1 == ptc.length) {
-				var ptt2 = new Type[ptc.length];
-				ptt2[0] = ptc[0];
-				for (var i = 0; i < ptt.length; i++)
-					ptt2[i + 1] = ptt[i];
-				genericTypes = ptt2;
-			} else {
-				genericTypes = ptc;
-			}
-		} else {
+
+		if (ptt.length == ptc.length) {
 			genericTypes = ptt;
+		} else {
+			var ptt2 = new Type[ptc.length];
+			ptt2[0] = ptc[0];  // Enclosing instance type (Class<?>, not a generic Type)
+			for (var i = 0; i < ptt.length; i++)
+				ptt2[i + 1] = ptt[i];  // Copy remaining generic types
+			genericTypes = ptt2;
 		}
 		return IntStream.range(0, rp.length).mapToObj(i -> new ParameterInfo(this, rp[i], i, ClassInfo.of(ptc[i], genericTypes[i]))).toList();
 	}

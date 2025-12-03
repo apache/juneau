@@ -17,7 +17,6 @@
 package org.apache.juneau.commons.reflect;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
@@ -602,19 +601,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		};
 	}
 
-	@Override
-	public boolean isAll(ElementFlag...flags) {
-		return stream(flags).allMatch(this::is);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// High Priority Methods (direct Method API compatibility)
 	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public boolean isAny(ElementFlag...flags) {
-		return stream(flags).anyMatch(this::is);
-	}
 
 	/**
 	 * Returns <jk>true</jk> if this method is a bridge method.

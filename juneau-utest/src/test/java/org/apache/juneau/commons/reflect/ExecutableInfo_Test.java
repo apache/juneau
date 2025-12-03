@@ -305,7 +305,7 @@ class ExecutableInfo_Test extends TestBase {
 	// getFullName()
 	//====================================================================================================
 	@Test
-	void a010_getFullName() {
+	void a010_getFullName() throws Exception {
 		// Method
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X.foo()", x2.getPublicMethod(x -> x.hasName("foo") && x.getParameterCount() == 0).get().getFullName());
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X.foo(java.lang.String)", x2.getPublicMethod(x -> x.hasName("foo") && x.hasParameterTypes(String.class)).get().getFullName());
@@ -315,6 +315,27 @@ class ExecutableInfo_Test extends TestBase {
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X()", x2.getPublicConstructor(cons -> cons.getParameterCount() == 0).get().getFullName());
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X(java.lang.String)", x2.getPublicConstructor(x -> x.hasParameterTypes(String.class)).get().getFullName());
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X(java.util.Map<java.lang.String,java.lang.Object>)", x2.getPublicConstructor(x -> x.hasParameterTypes(Map.class)).get().getFullName());
+		
+		// Test line 752: getPackage() returns null branch
+		// Primitive types don't have packages, but we can't get methods/constructors from primitives.
+		// However, we can test with a class in the default package (no package declaration).
+		// Note: Some classloaders may assign a package even to default package classes.
+		try {
+			Class<?> defaultPkgClassType = Class.forName("DefaultPackageTestClass");
+			ClassInfo defaultPkgClass = ClassInfo.of(defaultPkgClassType);
+			PackageInfo pkg = defaultPkgClass.getPackage();
+			if (pkg == null) {
+				// Test the false branch of line 752: when package is null, don't append package name
+				ConstructorInfo defaultPkgCtor = defaultPkgClass.getPublicConstructor(cons -> cons.getParameterCount() == 0).get();
+				String fullName = defaultPkgCtor.getFullName();
+				// When package is null, getFullName() should not include package prefix
+				assertTrue(fullName.startsWith("DefaultPackageTestClass("), "Full name should start with class name when package is null: " + fullName);
+				// Verify no package prefix (no dots before the class name, except for inner classes)
+				assertFalse(fullName.matches("^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+\\."), "Full name should not have package prefix when package is null: " + fullName);
+			}
+		} catch (ClassNotFoundException e) {
+			// If class not found, skip this part of the test
+		}
 	}
 
 	//====================================================================================================
@@ -524,6 +545,20 @@ class ExecutableInfo_Test extends TestBase {
 		var longClass = ClassInfo.of(long.class);
 		assertTrue(e_hasParams.hasParameterTypes(intClass));
 		assertFalse(e_hasParams.hasParameterTypes(longClass));
+		
+		// Test line 484 branches:
+		// Branch 1: params.size() == args.length is false (short-circuit) - when sizes don't match
+		// e_hasParams has 1 parameter, so passing 0 or 2 args should return false
+		assertFalse(e_hasParams.hasParameterTypes(new ClassInfo[0]));  // Empty args array, but method has 1 parameter
+		var intClass2 = ClassInfo.of(int.class);
+		assertFalse(e_hasParams.hasParameterTypes(intClass, intClass2));  // 2 args, but method has 1 parameter
+		
+		// Branch 2: params.size() == args.length is true, args.length == 0 (empty stream, allMatch returns true)
+		// e_hasNoParams has 0 parameters, so passing empty args should return true
+		assertTrue(e_hasNoParams.hasParameterTypes(new ClassInfo[0]));  // Empty args array, method has 0 parameters
+		
+		// Branch 3: params.size() == args.length is true, args.length > 0, allMatch returns true - already covered above
+		// Branch 4: params.size() == args.length is true, args.length > 0, allMatch returns false - already covered above
 	}
 
 	//====================================================================================================

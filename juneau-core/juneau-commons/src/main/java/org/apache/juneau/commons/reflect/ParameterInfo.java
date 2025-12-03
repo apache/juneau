@@ -475,16 +475,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		};
 	}
 
-	@Override
-	public boolean isAll(ElementFlag...flags) {
-		return stream(flags).allMatch(this::is);
-	}
-
-	@Override
-	public boolean isAny(ElementFlag...flags) {
-		return stream(flags).anyMatch(this::is);
-	}
-
 	/**
 	 * Returns <jk>true</jk> if this parameter is implicitly declared in source code.
 	 *

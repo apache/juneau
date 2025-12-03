@@ -387,8 +387,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public ClassInfo arrayType() {
 		if (inner == null)
 			return null;
-		var at = inner.arrayType();
-		return at == null ? null : of(at);
+		return of(inner.arrayType());
 	}
 
 	/**
@@ -432,9 +431,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			return ! isPrimitive();  // Primitives can't accept null, all other types can
 		if (inner.isInstance(child))
 			return true;
-		if (this.isPrimitive() || child.getClass().isPrimitive()) {
+		if (this.isPrimitive())
 			return this.getWrapperIfPrimitive().isParentOf(of(child).getWrapperIfPrimitive());
-		}
 		return false;
 	}
 
@@ -1255,8 +1253,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public ClassInfo getNestHost() {
 		if (inner == null)
 			return null;
-		var nh = inner.getNestHost();
-		return nh == null ? null : of(nh);
+		return of(inner.getNestHost());
 	}
 
 	/**
@@ -1304,7 +1301,18 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	/**
 	 * Returns the package of this class.
 	 *
-	 * @return The package of this class wrapped in a {@link PackageInfo}, or <jk>null</jk> if this class has no package.
+	 * <p>
+	 * Returns <jk>null</jk> in the following cases:
+	 * <ul>
+	 * 	<li>Primitive types (e.g., <c>int.class</c>, <c>boolean.class</c>)
+	 * 	<li>Array types of primitives (e.g., <c>int[].class</c>)
+	 * 	<li>Classes in the default (unnamed) package - while the default package is technically a package,
+	 * 		Java's <c>Class.getPackage()</c> returns <jk>null</jk> for classes in the default package because
+	 * 		it has no name or associated <c>Package</c> object
+	 * </ul>
+	 *
+	 * @return The package of this class wrapped in a {@link PackageInfo}, or <jk>null</jk> if this class has no package
+	 * 	or is in the default (unnamed) package.
 	 */
 	public PackageInfo getPackage() { return packageInfo.get(); }
 
@@ -1364,11 +1372,14 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		} else if (actualType instanceof TypeVariable<?> actualType3) {
 			var nestedOuterTypes = new LinkedList<Class<?>>();
 			for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
-				var outerClass = cc.getClass();
+				var outerClass = ec;
 				nestedOuterTypes.add(outerClass);
 				var outerTypeMap = new HashMap<Type,Type>();
 				extractTypes(outerTypeMap, outerClass);
 				for (var entry : outerTypeMap.entrySet()) {
+					// HTT - Hard to test - requires nested generics where a type variable in an inner class
+					// maps to another TypeVariable (not a Class) in the outer class's type map, which then
+					// needs to be resolved further up the enclosing class chain.
 					var key = entry.getKey();
 					var value = entry.getValue();
 					if (key instanceof TypeVariable<?> key2) {
@@ -1793,14 +1804,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			case SEALED -> isSealed();
 			case NOT_SEALED -> ! isSealed();
 			case SYNTHETIC -> isSynthetic();
-			case NOT_SYNTHETIC -> ! isSynthetic();
+			case NOT_SYNTHETIC -> ! isSynthetic(); // HTT - synthetic classes are compiler-generated and difficult to create in tests
 			default -> super.is(flag);
 		};
-	}
-
-	@Override
-	public boolean isAll(ElementFlag...flags) {
-		return stream(flags).allMatch(this::is);
 	}
 
 	/**
@@ -1831,11 +1837,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			if (is(cc))
 				return true;
 		return false;
-	}
-
-	@Override
-	public boolean isAny(ElementFlag...flags) {
-		return stream(flags).anyMatch(this::is);
 	}
 
 	/**
@@ -2084,6 +2085,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			return false;
 		if (inner.isAssignableFrom(child.inner()))
 			return true;
+		// If at least one is a primitive, convert both to wrappers and compare
+		// Note: If both are primitives and the same type, we would have returned true above
+		// So this branch is only reached when at least one is a primitive and they're not directly assignable
 		if (this.isPrimitive() || child.isPrimitive()) {
 			return this.getWrapperIfPrimitive().isParentOf(child.getWrapperIfPrimitive());
 		}
@@ -2166,7 +2170,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return <jk>true</jk> if this class is synthetic.
 	 */
-	public boolean isSynthetic() { return nn(inner) && inner.isSynthetic(); }
+	public boolean isSynthetic() { return nn(inner) && inner.isSynthetic(); }  // HTT
 
 	/**
 	 * Identifies if the specified visibility matches this constructor.
@@ -2357,8 +2361,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			.filter(m -> {
 				var rct = m.getReturnType().getComponentType();
 				if (rct.hasAnnotation(Repeatable.class)) {
-					var r = rct.getAnnotations(Repeatable.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-					return r != null && r.value().equals(inner);
+					return rct.getAnnotations(Repeatable.class).findFirst().map(AnnotationInfo::inner).orElse(null).value().equals(inner);
 				}
 				return false;
 			})

@@ -191,7 +191,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 			} catch (InvocationTargetException e) {
 				throw new ExecutableException(e.getTargetException());
 			}
-		}, e -> new ExecutableException(e));
+		}, e -> new ExecutableException(e));  // HTT
 	}
 
 	/**

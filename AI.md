@@ -350,6 +350,7 @@ A reusable Python script is available at `scripts/build-and-test.py` for common 
 - Use JaCoCo reports to identify missing coverage
 - Focus on methods with 0% coverage first
 - Add comprehensive tests for all code paths
+- **Hard-to-Test Code Marking**: When a line of code is found to not be fully testable (e.g., requires complex setup, compiler-generated code, or unreachable branches), add a comment `// HTT` (Hard To Test) on that line to document why it's difficult to test
 
 ### 8. File Organization and Naming
 - Follow established file naming conventions

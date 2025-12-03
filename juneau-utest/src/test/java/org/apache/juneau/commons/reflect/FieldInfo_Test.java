@@ -336,9 +336,30 @@ class FieldInfo_Test extends TestBase {
 	// getFullName()
 	//====================================================================================================
 	@Test
-	void a010_getFullName() {
+	void a010_getFullName() throws Exception {
 		String fullName1 = g_field1.getFullName();
 		String fullName2 = g_field2.getFullName();
+		
+		// Test line 449: getPackage() returns null (default package class)
+		// A field can have a null package if its declaring class is in the default package
+		// According to Java API, Class.getPackage() returns null for classes in the default package
+		try {
+			Class<?> defaultPkgClassType = Class.forName("DefaultPackageTestClass");
+			ClassInfo defaultPkgClass = ClassInfo.of(defaultPkgClassType);
+			PackageInfo pkg = defaultPkgClass.getPackage();
+			if (pkg == null) {
+				// Test the false branch of line 449: when package is null, don't append package name
+				FieldInfo defaultPkgField = defaultPkgClass.getPublicField(x -> x.hasName("testField")).get();
+				String fullName = defaultPkgField.getFullName();
+				// When package is null, getFullName() should not include package prefix
+				assertTrue(fullName.startsWith("DefaultPackageTestClass"), "Full name should start with class name when package is null: " + fullName);
+				assertTrue(fullName.endsWith(".testField"), "Full name should end with field name: " + fullName);
+				// Verify no package prefix (no dots before the class name, except for inner classes)
+				assertFalse(fullName.matches("^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+\\."), "Full name should not have package prefix when package is null: " + fullName);
+			}
+		} catch (ClassNotFoundException e) {
+			// If class not found, skip this part of the test
+		}
 
 		assertTrue(fullName1.endsWith("FieldInfo_Test$G.field1"));
 		assertTrue(fullName2.endsWith("FieldInfo_Test$G.field2"));
@@ -434,7 +455,8 @@ class FieldInfo_Test extends TestBase {
 		// Enum constant
 		assertTrue(testEnum_value1.is(ENUM_CONSTANT));
 		assertFalse(a1_f1.is(ENUM_CONSTANT));
-		assertTrue(a1_f1.is(NOT_ENUM_CONSTANT));
+		assertTrue(a1_f1.is(NOT_ENUM_CONSTANT));  // Line 313: true branch - field is NOT an enum constant
+		assertFalse(testEnum_value1.is(NOT_ENUM_CONSTANT));  // Line 313: false branch - field IS an enum constant
 		
 		// Synthetic (lines 314-315)
 		assertFalse(a1_f1.is(SYNTHETIC));

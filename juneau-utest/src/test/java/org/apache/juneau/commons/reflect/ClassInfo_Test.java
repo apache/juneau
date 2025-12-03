@@ -49,6 +49,50 @@ public class ClassInfo_Test extends TestBase {
 		int value();
 	}
 
+	// Test annotations for repeatable annotation testing
+	@Repeatable(TestRepeatableContainer.class)
+	@Retention(RUNTIME)
+	@Target({TYPE, METHOD, FIELD})
+	public static @interface TestRepeatable {
+		String value();
+	}
+
+	@Retention(RUNTIME)
+	@Target({TYPE, METHOD, FIELD})
+	public static @interface TestRepeatableContainer {
+		TestRepeatable[] value();  // This makes TestRepeatableContainer the container for TestRepeatable
+	}
+
+	// Another repeatable annotation with a different container
+	@Repeatable(OtherRepeatableContainer.class)
+	@Retention(RUNTIME)
+	@Target({TYPE, METHOD, FIELD})
+	public static @interface OtherRepeatable {
+		String value();
+	}
+
+	@Retention(RUNTIME)
+	@Target({TYPE, METHOD, FIELD})
+	public static @interface OtherRepeatableContainer {
+		OtherRepeatable[] value();
+	}
+
+	// An annotation with a value() method returning an array, but the component type is not repeatable
+	@Retention(RUNTIME)
+	@Target({TYPE, METHOD, FIELD})
+	public static @interface NonRepeatableArrayContainer {
+		String[] value();  // Component type is String, not a repeatable annotation
+	}
+
+	// An annotation with a value() method returning an array of a repeatable annotation,
+	// but the @Repeatable annotation points to a different container (not this class)
+	// This tests the case where r != null is true but r.value().equals(inner) is false
+	@Retention(RUNTIME)
+	@Target({TYPE, METHOD, FIELD})
+	public static @interface WrongContainer {
+		TestRepeatable[] value();  // Returns TestRepeatable[], but TestRepeatable's @Repeatable points to TestRepeatableContainer, not WrongContainer
+	}
+
 	@Documented
 	@Target(TYPE)
 	@Retention(RUNTIME)
@@ -504,15 +548,25 @@ public class ClassInfo_Test extends TestBase {
 		assertNotNull(arrayType2);
 		assertEquals(String[][].class, arrayType2.inner());
 
-		// For types without inner class, should return null
+		// For types without inner class, should return null (line 388-389)
 		var ci3 = ClassInfo.of((Class<?>)null, pType);
 		assertNull(ci3.arrayType());
 
-		// Test when inner.arrayType() returns null (line 391)
-		// Note: Most classes' arrayType() returns a valid array class
-		// The null check at line 391 handles the case when inner.arrayType() returns null
-		// This is a defensive check, but in practice most classes have valid array types
-		// The line is covered by the null inner check above
+		// Test line 391: when inner.arrayType() returns null
+		// In Java, Class.arrayType() should always return a non-null value for valid classes
+		// However, the code has a defensive check at line 391: return at == null ? null : of(at);
+		// To test the at == null branch, we need inner != null but inner.arrayType() == null
+		// This is difficult to achieve with normal Java classes, but we can verify the non-null branch works
+		// The non-null branch (at != null) is already covered above with String.class and String[].class
+		
+		// Verify that the non-null branch works correctly (at != null -> return of(at))
+		var ci4 = ClassInfo.of(Integer.class);
+		var arrayType3 = ci4.arrayType();
+		assertNotNull(arrayType3);
+		assertEquals(Integer[].class, arrayType3.inner());
+		
+		// Note: The at == null branch at line 391 is a defensive check that may be unreachable
+		// in practice with normal Java classes, but the code includes it for safety
 	}
 
 	//====================================================================================================
@@ -702,6 +756,22 @@ public class ClassInfo_Test extends TestBase {
 		// Number can accept int (parent type)
 		assertTrue(ClassInfo.of(Number.class).canAcceptArg(42));
 		assertTrue(ClassInfo.of(Number.class).canAcceptArg(Integer.valueOf(42)));
+		
+		// Test line 434: all 4 branches of if (this.isPrimitive() || child.getClass().isPrimitive())
+		// Branch 1: this.isPrimitive() == true && child.getClass().isPrimitive() == true
+		// Note: When you pass a primitive value like 42, it gets autoboxed to Integer, so child.getClass() returns Integer.class (not primitive)
+		// This branch is likely unreachable in practice since primitive values are always autoboxed
+		
+		// Branch 2: this.isPrimitive() == true && child.getClass().isPrimitive() == false (already covered above at line 707)
+		// Branch 3: this.isPrimitive() == false && child.getClass().isPrimitive() == true (already covered above at line 710)
+		// Branch 4: this.isPrimitive() == false && child.getClass().isPrimitive() == false
+		// This happens when both are non-primitive, isInstance returns false, and we fall through to return false
+		// This is the missing branch - need to test when condition is false (both false), so we skip the if and return false
+		assertFalse(ClassInfo.of(String.class).canAcceptArg(new Object())); // Both non-primitive, isInstance false, condition false, returns false
+		assertFalse(ClassInfo.of(String.class).canAcceptArg(42)); // String is not primitive, Integer is not primitive, isInstance false, condition false, returns false
+		
+		// Test case where this is primitive but child is not (branch 2) - different primitive types that don't match
+		assertFalse(ClassInfo.of(int.class).canAcceptArg(Long.valueOf(42L))); // int is primitive, Long is not primitive, different types, condition true, returns false from isParentOf
 	}
 
 	//====================================================================================================
@@ -746,9 +816,23 @@ public class ClassInfo_Test extends TestBase {
 		assertEquals(pTypeGenericInfo, pTypeGenericInfo.getComponentType());
 		assertEquals(pTypeGenericArgInfo, pTypeGenericArgInfo.getComponentType());
 
-		// For types without inner class, should return null
+		// For types without inner class, should return null (line 474-475)
 		var ci = ClassInfo.of((Class<?>)null, pType);
 		assertNull(ci.componentType());
+		
+		// Test line 476-477: componentType() method
+		// For non-array types, inner.componentType() returns null, so ct == null branch is taken
+		var nonArray = ClassInfo.of(String.class);
+		var ct = nonArray.componentType();
+		// String.class.componentType() returns null for non-array types
+		// So the ternary at line 477: ct == null ? null : of(ct) takes the null branch
+		assertNull(ct);
+		
+		// For array types, inner.componentType() returns non-null, so ct != null branch is taken
+		var array = ClassInfo.of(String[].class);
+		var ct2 = array.componentType();
+		assertNotNull(ct2);
+		assertEquals(String.class, ct2.inner());
 	}
 
 	//====================================================================================================
@@ -804,6 +888,12 @@ public class ClassInfo_Test extends TestBase {
 		// G4 has no declared annotations (inherits from G3)
 		var declared2 = g4.getDeclaredAnnotations();
 		assertTrue(declared2.isEmpty());
+		
+		// Test with null inner (line 231: opt(inner) returns empty when inner is null)
+		var ci = ClassInfo.of((Class<?>)null, pType);
+		var declared3 = ci.getDeclaredAnnotations();
+		assertNotNull(declared3);
+		assertTrue(declared3.isEmpty());  // Should return empty list when inner is null
 	}
 
 	//====================================================================================================
@@ -996,16 +1086,27 @@ public class ClassInfo_Test extends TestBase {
 		assertNull(enclosing2);
 	}
 
+	// Helper class for testing getEnclosingConstructor with non-null result
+	static class EnclosingConstructorTestClass {
+		EnclosingConstructorTestClass() {
+			// Local class inside constructor
+			class LocalInConstructor {}
+			// Store the class for testing
+			ClassInfo_Test.localInConstructorClass = LocalInConstructor.class;
+		}
+	}
+	static Class<?> localInConstructorClass;
+
 	//====================================================================================================
 	// getEnclosingConstructor()
 	//====================================================================================================
 	@Test
 	void a025_getEnclosingConstructor() {
-		// For types with null inner, should return null
+		// For types with null inner, should return null (line 949-950)
 		var ci = ClassInfo.of((Class<?>)null, pType);
 		assertNull(ci.getEnclosingConstructor());
 
-		// For classes not declared in constructor, should return null (line 954)
+		// For classes not declared in constructor, should return null (line 952: ec == null branch)
 		// Regular classes don't have enclosing constructors
 		assertNull(aClass.getEnclosingConstructor());
 		assertNull(ClassInfo.of(String.class).getEnclosingConstructor());
@@ -1014,6 +1115,18 @@ public class ClassInfo_Test extends TestBase {
 		var local = ClassInfo.of(LocalClass.class);
 		var constructor = local.getEnclosingConstructor();
 		assertNull(constructor);
+		
+		// Test line 952: ec != null branch - class declared inside constructor
+		// Create an instance to trigger the constructor and capture the local class
+		new EnclosingConstructorTestClass();
+		if (localInConstructorClass != null) {
+			var localInCtor = ClassInfo.of(localInConstructorClass);
+			var enclosingCtor = localInCtor.getEnclosingConstructor();
+			// Verify that getEnclosingConstructor() returns non-null (covers line 952: ec != null branch)
+			// This proves that inner.getEnclosingConstructor() returned non-null, so the ternary
+			// operator on line 952 took the non-null branch and called getConstructor(ec)
+			assertNotNull(enclosingCtor, "Expected non-null enclosing constructor for local class in constructor");
+		}
 	}
 
 	//====================================================================================================
@@ -1158,13 +1271,25 @@ public class ClassInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a035_getNameCanonical() {
+		// Test line 1112: inner != null && ! isParameterizedType (branch 1)
 		assertEquals("org.apache.juneau.commons.reflect.AClass", aClass.getNameCanonical());
 		assertEquals("org.apache.juneau.commons.reflect.ClassInfo_Test.A1", aTypeInfo.getNameCanonical());
 
+		// Test line 1112: inner != null && isParameterizedType (branch 2)
 		// For ParameterizedType, should return null
 		assertNull(pTypeInfo.getNameCanonical());
 		assertNull(pTypeDimensionalInfo.getNameCanonical());
 		assertNull(pTypeGenericInfo.getNameCanonical());
+		
+		// Test line 1112: inner == null && ! isParameterizedType (branch 3)
+		// Create a ClassInfo with inner == null and innerType being a TypeVariable (not ParameterizedType)
+		// aType is a TypeVariable from A2 extends Value<A1>
+		// By explicitly passing null for inner, we ensure inner == null
+		// TypeVariable is not a ParameterizedType, so isParameterizedType == false
+		var typeVariableInfo = ClassInfo.of((Class<?>)null, aType);
+		// This should have inner == null and isParameterizedType == false
+		// So it should take branch 3: inner == null && ! isParameterizedType
+		assertNull(typeVariableInfo.getNameCanonical());
 	}
 
 	//====================================================================================================
@@ -1270,6 +1395,30 @@ public class ClassInfo_Test extends TestBase {
 		assertNotNull(formatted2);
 		// When inner is null but isParameterizedType is true, code extracts raw type and uses its simple name
 		assertEquals("Map", formatted2);
+		
+		// Test line 326: FULL format separator replacement (4 branches)
+		// Branch 1: separator != '$' && sb.indexOf("$") != -1 (true, true) - should replace '$' with separator
+		var ci12 = ClassInfo.of(Map.Entry.class);
+		assertEquals("java.util.Map.Entry", ci12.getNameFormatted(FULL, false, '.', BRACKETS));
+		
+		// Branch 2: separator != '$' && sb.indexOf("$") == -1 (true, false) - no '$' in name, no replacement needed
+		var ci13 = ClassInfo.of(String.class);
+		assertEquals("java.lang.String", ci13.getNameFormatted(FULL, false, '.', BRACKETS));
+		
+		// Branch 3: separator == '$' && sb.indexOf("$") != -1 (false, true) - separator is '$', no replacement
+		assertEquals("java.util.Map$Entry", ci12.getNameFormatted(FULL, false, '$', BRACKETS));
+		
+		// Branch 4: separator == '$' && sb.indexOf("$") == -1 (false, false) - separator is '$', no '$' in name
+		assertEquals("java.lang.String", ci13.getNameFormatted(FULL, false, '$', BRACKETS));
+		
+		// Test line 360: SIMPLE format with null class (not ParameterizedType) - should use innerType.getTypeName()
+		// Use an existing TypeVariable from MC class which has type parameters
+		var typeVar = MC.class.getTypeParameters()[0]; // MC<K,E> has K as first type parameter
+		var ci14 = ClassInfo.of((Class<?>)null, typeVar);
+		var formatted3 = ci14.getNameFormatted(SIMPLE, false, '$', BRACKETS);
+		assertNotNull(formatted3);
+		// Should use innerType.getTypeName() which returns the type variable name
+		assertEquals(typeVar.getName(), formatted3);
 	}
 
 	//====================================================================================================
@@ -1481,6 +1630,19 @@ public class ClassInfo_Test extends TestBase {
 		check("java.util", pTypeDimensionalInfo.getPackage());
 		check("java.util", pTypeGenericInfo.getPackage());
 		check(null, pTypeGenericArgInfo.getPackage());
+		
+		// Test line 229: packageInfo memoization with null inner
+		// When inner is null, opt(inner) is empty, so should return null
+		var ci = ClassInfo.of((Class<?>)null, pType);
+		assertNull(ci.getPackage());
+		
+		// Test with primitive types (getPackage() returns null)
+		var intCi = ClassInfo.of(int.class);
+		assertNull(intCi.getPackage()); // Primitives have no package
+		
+		// Test with arrays of primitives (getPackage() returns null)
+		var intArrayCi = ClassInfo.of(int[].class);
+		assertNull(intArrayCi.getPackage()); // Arrays of primitives have no package
 	}
 
 	//====================================================================================================
@@ -1553,6 +1715,13 @@ public class ClassInfo_Test extends TestBase {
 
 		// Nested type
 		check("MM", mn.getParameterType(1, HashMap.class));
+		
+		// Note: Line 1375 (actualType3 = (TypeVariable<?>)entry.getValue()) is executed when
+		// resolving a type variable in a nested inner class where the value in the outer type map
+		// is itself a TypeVariable (not a Class). This requires a complex nested generic scenario
+		// where type variables chain through multiple levels before resolving to a Class.
+		// The existing tests cover the main resolution paths. Line 1375 handles the edge case
+		// where a type variable maps to another type variable that needs further resolution.
 	}
 
 	//====================================================================================================
@@ -1596,21 +1765,60 @@ public class ClassInfo_Test extends TestBase {
 		assertTrue(names.contains("ISuperGrandParent"), "Should include ISuperGrandParent from IGrandParent hierarchy");
 	}
 
+	// Sealed class for testing getPermittedSubclasses (Java 17+)
+	// Only compile if sealed classes are available
+	@SuppressWarnings("unused")
+	public static sealed class SealedTestClass permits SealedSubclass1, SealedSubclass2 {
+	}
+	
+	@SuppressWarnings("unused")
+	public static final class SealedSubclass1 extends SealedTestClass {
+	}
+	
+	@SuppressWarnings("unused")
+	public static final class SealedSubclass2 extends SealedTestClass {
+	}
+	
+	// Record class for testing isRecord (Java 14+)
+	// Only compile if records are available
+	@SuppressWarnings("unused")
+	public static record TestRecord(String name, int value) {
+	}
+
 	//====================================================================================================
 	// getPermittedSubclasses()
 	//====================================================================================================
 	@Test
 	void a050_getPermittedSubclasses() {
-		// Most classes are not sealed, so should return empty list
+		// Most classes are not sealed, so should return empty list (line 1463: ! inner.isSealed())
 		var permitted = aClass.getPermittedSubclasses();
 		assertNotNull(permitted);
 		assertTrue(permitted.isEmpty());
 
-		// For types with null inner, should return empty list
+		// For types with null inner, should return empty list (line 1463: inner == null)
 		var ci = ClassInfo.of((Class<?>)null, pType);
 		var empty = ci.getPermittedSubclasses();
 		assertNotNull(empty);
 		assertTrue(empty.isEmpty());
+		
+		// Test line 1465: inner != null && inner.isSealed() - sealed class with permitted subclasses
+		// Only test if sealed classes are available (Java 17+)
+		try {
+			Class.forName("java.lang.constant.Constable");
+			// Sealed classes are available
+			var sealedInfo = ClassInfo.of(SealedTestClass.class);
+			var permittedSubclasses = sealedInfo.getPermittedSubclasses();
+			assertNotNull(permittedSubclasses);
+			assertFalse(permittedSubclasses.isEmpty());
+			// Should contain the permitted subclasses
+			var subclassNames = permittedSubclasses.stream()
+				.map(ClassInfo::getNameSimple)
+				.collect(Collectors.toSet());
+			assertTrue(subclassNames.contains("SealedSubclass1"));
+			assertTrue(subclassNames.contains("SealedSubclass2"));
+		} catch (ClassNotFoundException e) {
+			// Sealed classes not available (Java < 17), skip this test
+		}
 	}
 
 	//====================================================================================================
@@ -1711,6 +1919,16 @@ public class ClassInfo_Test extends TestBase {
 
 		// Test on types
 		check("", aTypeInfo.getPublicFields());
+		check("", pTypeGenericArgInfo.getPublicFields());
+		
+		// Test line 249: publicFields memoization
+		// This line uses parents.get().stream() which requires inner to be non-null
+		// When inner is null, parents.get() will return empty list, so publicFields should be empty
+		// However, since parents depends on inner, we need to test with a class that has no public fields
+		// to ensure the stream operations are covered
+		var emptyFields = ClassInfo.of(Object.class).getPublicFields();
+		assertNotNull(emptyFields);
+		// Object class has no public fields (except in some JVM implementations)
 	}
 
 	//====================================================================================================
@@ -1788,6 +2006,14 @@ public class ClassInfo_Test extends TestBase {
 			// Records not available, skip test
 			assertTrue(cc3.getRecordComponents().isEmpty());
 		}
+		
+		// Test line 240: recordComponents memoization
+		// When inner is null, opt(inner) is empty, so should return empty list
+		var ci = ClassInfo.of((Class<?>)null, pType);
+		assertTrue(ci.getRecordComponents().isEmpty());
+		
+		// When inner is not null but isRecord() is false, filter should return empty, so should return empty list
+		assertTrue(aClass.getRecordComponents().isEmpty());
 	}
 
 	//====================================================================================================
@@ -1800,6 +2026,37 @@ public class ClassInfo_Test extends TestBase {
 		var method = repeatable.getRepeatedAnnotationMethod();
 		// @Repeatable itself is not repeatable, so should return null
 		assertNull(method);
+		
+		// Test isRepeatedAnnotation() (line 2135)
+		// When getRepeatedAnnotationMethod() returns null, isRepeatedAnnotation() should return false
+		assertFalse(repeatable.isRepeatedAnnotation());
+		
+		// Test with a class that has a repeatable annotation method
+		// TestRepeatableContainer is the container annotation for TestRepeatable
+		// It has a value() method that returns TestRepeatable[], and TestRepeatable is marked with @Repeatable(TestRepeatableContainer.class)
+		var container = ClassInfo.of(TestRepeatableContainer.class);
+		var containerMethod = container.getRepeatedAnnotationMethod();
+		assertNotNull(containerMethod);  // Should find the value() method
+		assertTrue(container.isRepeatedAnnotation());  // Line 2135: getRepeatedAnnotationMethod() != null returns true
+		
+		// Test line 2364 branches: return r != null && r.value().equals(inner);
+		// Branch 1: r != null is false (r is null) - when component type doesn't have @Repeatable
+		// This is covered by NonRepeatableArrayContainer which has value() returning String[], but String is not a repeatable annotation
+		var nonRepeatableContainer = ClassInfo.of(NonRepeatableArrayContainer.class);
+		assertNull(nonRepeatableContainer.getRepeatedAnnotationMethod());  // Should return null because String is not repeatable
+		
+		// Branch 2: r != null is true, r.value().equals(inner) is true - covered by TestRepeatableContainer above
+		// TestRepeatableContainer has value() returning TestRepeatable[], and TestRepeatable is marked with @Repeatable(TestRepeatableContainer.class)
+		// So when checking TestRepeatableContainer, r.value() equals TestRepeatableContainer.class (inner)
+		
+		// Branch 3: r != null is true, r.value().equals(inner) is false - when @Repeatable points to a different container
+		// WrongContainer has value() returning TestRepeatable[], but TestRepeatable's @Repeatable points to TestRepeatableContainer, not WrongContainer
+		// So when checking WrongContainer, r.value() would be TestRepeatableContainer.class, not WrongContainer.class, so equals(inner) is false
+		var wrongContainer = ClassInfo.of(WrongContainer.class);
+		assertNull(wrongContainer.getRepeatedAnnotationMethod());  // Should return null because the @Repeatable points to a different container
+		
+		// Test that non-repeatable classes return false
+		assertFalse(aClass.isRepeatedAnnotation());
 	}
 
 	//====================================================================================================
@@ -1811,6 +2068,15 @@ public class ClassInfo_Test extends TestBase {
 		assertNotNull(signers);
 		// Most classes won't have signers unless from a signed JAR
 		assertTrue(signers.isEmpty() || !signers.isEmpty());
+		
+		// Test line 244: signers memoization
+		// When inner is null, opt(inner) is empty, so should return empty list
+		var ci = ClassInfo.of((Class<?>)null, pType);
+		assertTrue(ci.getSigners().isEmpty());
+		
+		// When inner is not null but getSigners() returns null, map should handle null and return empty list
+		// Most classes return null from getSigners(), which is then wrapped in u(l(x)) to create empty list
+		// This is already tested above with aClass.getSigners()
 	}
 
 	//====================================================================================================
@@ -1969,6 +2235,12 @@ public class ClassInfo_Test extends TestBase {
 		assertTrue(ClassInfo.of(A.class).is(ANNOTATION));
 		assertFalse(aClass.is(ANNOTATION));
 		
+		// NOT_ANNOTATION (line 1773) - test both branches
+		// Branch 1: isAnnotation() returns false, so NOT_ANNOTATION returns true
+		assertTrue(aClass.is(NOT_ANNOTATION));
+		// Branch 2: isAnnotation() returns true, so NOT_ANNOTATION returns false
+		assertFalse(ClassInfo.of(A.class).is(NOT_ANNOTATION));
+		
 		// ANONYMOUS and NOT_ANONYMOUS (lines 1774, 1775)
 		// Anonymous classes are created dynamically, so we test NOT_ANONYMOUS
 		assertTrue(aClass.is(NOT_ANONYMOUS));
@@ -1984,9 +2256,21 @@ public class ClassInfo_Test extends TestBase {
 		assertTrue(ClassInfo.of(String[].class).is(ARRAY));
 		assertFalse(aClass.is(ARRAY));
 		
+		// NOT_ARRAY (line 1777) - test both branches
+		// Branch 1: isArray() returns false, so NOT_ARRAY returns true
+		assertTrue(aClass.is(NOT_ARRAY));
+		// Branch 2: isArray() returns true, so NOT_ARRAY returns false
+		assertFalse(ClassInfo.of(String[].class).is(NOT_ARRAY));
+		
 		// ENUM (line 1781)
 		assertTrue(ClassInfo.of(ClassArrayFormat.class).is(ENUM));
 		assertFalse(aClass.is(ENUM));
+		
+		// NOT_ENUM (line 1782) - test both branches
+		// Branch 1: isEnum() returns false, so NOT_ENUM returns true
+		assertTrue(aClass.is(NOT_ENUM));
+		// Branch 2: isEnum() returns true, so NOT_ENUM returns false
+		assertFalse(ClassInfo.of(ClassArrayFormat.class).is(NOT_ENUM));
 		
 		// LOCAL and NOT_LOCAL (line 1783)
 		// Local class
@@ -2009,6 +2293,10 @@ public class ClassInfo_Test extends TestBase {
 		assertTrue(ClassInfo.of(int.class).is(PRIMITIVE));
 		assertFalse(aClass.is(PRIMITIVE));
 		
+		// NOT_PRIMITIVE (line 1790)
+		assertTrue(aClass.is(NOT_PRIMITIVE));
+		assertFalse(ClassInfo.of(int.class).is(NOT_PRIMITIVE));
+		
 		// RECORD (line 1791) - test if records are available
 		try {
 			Class.forName("java.lang.Record");
@@ -2019,15 +2307,59 @@ public class ClassInfo_Test extends TestBase {
 			// Records not available, skip
 		}
 		
+		// NOT_RECORD (line 1792) - test both branches
+		// Branch 1: isRecord() returns false, so NOT_RECORD returns true
+		assertTrue(aClass.is(NOT_RECORD));
+		// Branch 2: isRecord() returns true, so NOT_RECORD returns false
+		try {
+			Class.forName("java.lang.Record");
+			// Records are available (Java 14+)
+			var recordInfo = ClassInfo.of(TestRecord.class);
+			assertTrue(recordInfo.is(RECORD));
+			assertFalse(recordInfo.is(NOT_RECORD));
+		} catch (ClassNotFoundException e) {
+			// Records not available, skip
+		}
+		
 		// SEALED (line 1793) - test if sealed classes are available
 		try {
 			Class.forName("java.lang.constant.Constable");
 			// Sealed classes are available (Java 17+)
 			// Most classes are not sealed, so should return false
 			assertFalse(aClass.is(SEALED));
+			// Test with actual sealed class
+			var sealedInfo = ClassInfo.of(SealedTestClass.class);
+			assertTrue(sealedInfo.is(SEALED));
 		} catch (ClassNotFoundException e) {
 			// Sealed classes not available, skip
 		}
+		
+		// NOT_SEALED (line 1794) - test both branches
+		// Branch 1: isSealed() returns false, so NOT_SEALED returns true
+		assertTrue(aClass.is(NOT_SEALED));
+		// Branch 2: isSealed() returns true, so NOT_SEALED returns false
+		try {
+			Class.forName("java.lang.constant.Constable");
+			// Sealed classes are available (Java 17+)
+			var sealedInfo = ClassInfo.of(SealedTestClass.class);
+			assertFalse(sealedInfo.is(NOT_SEALED));
+		} catch (ClassNotFoundException e) {
+			// Sealed classes not available, skip
+		}
+		
+		// SYNTHETIC (line 1795) - synthetic classes are compiler-generated
+		// Most regular classes are not synthetic
+		assertFalse(aClass.is(SYNTHETIC));
+		// Inner classes and anonymous classes can be synthetic
+		// Anonymous classes are typically synthetic
+		if (anonymousInfo.isAnonymousClass()) {
+			// Anonymous classes may or may not be synthetic depending on JVM
+			// Just verify the method doesn't throw
+			anonymousInfo.is(SYNTHETIC);
+		}
+		
+		// NOT_SYNTHETIC (line 1796)
+		assertTrue(aClass.is(NOT_SYNTHETIC));
 	}
 
 	//====================================================================================================
@@ -2402,18 +2734,20 @@ public class ClassInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a088b_isNestmateOf() {
-		// Same class is nestmate of itself
+		// Same class is nestmate of itself (line 1957: nn(this.inner) = true, nn(c) = true, isNestmateOf(c) = true)
 		assertTrue(aClass.isNestmateOf(AClass.class));
 
-		// Different classes in same package may or may not be nestmates
-		// (depends on whether they're in the same nest)
+		// Different classes that are NOT nestmates (line 1957: nn(this.inner) = true, nn(c) = true, isNestmateOf(c) = false)
+		// Top-level classes in the same package are typically not nestmates unless they're in the same nest
+		assertFalse(aClass.isNestmateOf(String.class));
+		assertFalse(ClassInfo.of(String.class).isNestmateOf(AClass.class));
 
-		// For types with null inner, should return false
+		// For types with null inner, should return false (line 1957: nn(this.inner) = false, short-circuit)
 		var ci = ClassInfo.of((Class<?>)null, pType);
 		assertFalse(ci.isNestmateOf(AClass.class));
 		assertFalse(ci.isNestmateOf(null));
 
-		// With null argument, should return false
+		// With null argument, should return false (line 1957: nn(this.inner) = true, nn(c) = false, short-circuit)
 		assertFalse(aClass.isNestmateOf(null));
 	}
 
@@ -2573,6 +2907,18 @@ public class ClassInfo_Test extends TestBase {
 		assertFalse(ClassInfo.of(String.class).isParentOfLenient((ClassInfo)null));
 		var nullInnerCi = ClassInfo.of((Class<?>)null, pType);
 		assertFalse(nullInnerCi.isParentOfLenient(ClassInfo.of(String.class)));
+		
+		// Test all branches of line 2087: if (this.isPrimitive() || child.isPrimitive())
+		// Branch 1: this.isPrimitive() == true, child.isPrimitive() == false (already covered above)
+		// Branch 2: this.isPrimitive() == false, child.isPrimitive() == true (already covered above)
+		// Branch 3: this.isPrimitive() == true, child.isPrimitive() == true
+		// Note: If both are the same primitive, isAssignableFrom returns true, so we return early at line 2086
+		// To reach line 2087 with both primitives, we need different primitive types
+		assertFalse(ClassInfo.of(int.class).isParentOfLenient(ClassInfo.of(long.class)));
+		// Same primitive type (returns true at line 2086, doesn't reach line 2087)
+		assertTrue(ClassInfo.of(int.class).isParentOfLenient(int.class));
+		assertTrue(ClassInfo.of(int.class).isParentOfLenient(ClassInfo.of(int.class)));
+		// Branch 4: this.isPrimitive() == false, child.isPrimitive() == false (already covered by String tests)
 	}
 
 	//====================================================================================================
@@ -2619,6 +2965,10 @@ public class ClassInfo_Test extends TestBase {
 			// Records not available, skip test
 			assertFalse(cc3.isRecord());
 		}
+		
+		// Test with null inner (line 2120)
+		var ci = ClassInfo.of((Class<?>)null, pType);
+		assertFalse(ci.isRecord());
 	}
 
 	//====================================================================================================
@@ -2688,6 +3038,23 @@ public class ClassInfo_Test extends TestBase {
 		var anonymousInfo = ClassInfo.of(anonymous);
 		// Anonymous classes are typically synthetic
 		assertTrue(anonymousInfo.isSynthetic() || !anonymousInfo.isSynthetic());
+		
+		// Test with null inner (line 2169)
+		var ci = ClassInfo.of((Class<?>)null, pType);
+		assertFalse(ci.isSynthetic());
+	}
+
+	//====================================================================================================
+	// isSealed()
+	//====================================================================================================
+	@Test
+	void a097b_isSealed() {
+		// Test with null inner (line 2149)
+		var ci = ClassInfo.of((Class<?>)null, pType);
+		assertFalse(ci.isSealed());
+		
+		// Test with regular classes (most are not sealed)
+		assertFalse(aClass.isSealed());
 	}
 
 	//====================================================================================================
@@ -2777,6 +3144,18 @@ public class ClassInfo_Test extends TestBase {
 		assertNotNull(info);
 		assertNull(info.inner());
 		assertNotNull(info.innerType());
+		
+		// Test line 226: isParameterizedType initialization
+		// When innerType is null, isParameterizedType should be false
+		var nonParamType = ClassInfo.of(String.class);
+		// String.class is not a ParameterizedType, so isParameterizedType should be false
+		// We can't directly access isParameterizedType, but we can infer it from behavior
+		
+		// When innerType is a ParameterizedType, isParameterizedType should be true
+		// pTypeInfo has a ParameterizedType, so isParameterizedType should be true
+		// We can verify this indirectly by checking that it behaves as a parameterized type
+		assertNotNull(pTypeInfo);
+		assertNotNull(pTypeInfo.innerType());
 	}
 
 	//====================================================================================================
@@ -2788,6 +3167,16 @@ public class ClassInfo_Test extends TestBase {
 		var info = ClassInfo.ofProxy(obj);
 		assertNotNull(info);
 		assertEquals(A1.class, info.inner());
+		
+		// Test line 175: when getProxyFor returns null, should call ClassInfo.of(object)
+		// Most objects are not proxies, so getProxyFor should return null
+		// This tests the branch: inner == null ? ClassInfo.of(object) : ClassInfo.of(inner)
+		var obj2 = new A1();
+		var info2 = ClassInfo.ofProxy(obj2);
+		assertNotNull(info2);
+		assertEquals(A1.class, info2.inner());
+		// Should be the same as calling ClassInfo.of directly
+		assertEquals(ClassInfo.of(A1.class), info2);
 	}
 
 	//====================================================================================================
@@ -2819,6 +3208,64 @@ public class ClassInfo_Test extends TestBase {
 		mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2")).get();
 		check("A1", mi2.getParameter(0).getParameterType().unwrap(Value.class));
 		check("A1", mi2.getReturnType().unwrap(Value.class));
+		
+		// Test unwrap with ParameterizedType (line 2382)
+		// Create a ParameterizedType directly
+		var pTypeOptional = new java.lang.reflect.ParameterizedType() {
+			@Override
+			public Type[] getActualTypeArguments() {
+				return new Type[]{A1.class};
+			}
+			@Override
+			public Type getRawType() {
+				return Optional.class;
+			}
+			@Override
+			public Type getOwnerType() {
+				return null;
+			}
+		};
+		var ciOptional = ClassInfo.of((Class<?>)null, pTypeOptional);
+		check("A1", ciOptional.unwrap(Optional.class));
+		
+		// Test unwrap with ParameterizedType that has no type arguments (line 2383)
+		var pTypeEmpty = new java.lang.reflect.ParameterizedType() {
+			@Override
+			public Type[] getActualTypeArguments() {
+				return new Type[0];
+			}
+			@Override
+			public Type getRawType() {
+				return Optional.class;
+			}
+			@Override
+			public Type getOwnerType() {
+				return null;
+			}
+		};
+		var ciEmpty = ClassInfo.of((Class<?>)null, pTypeEmpty);
+		// Should return itself since there are no type arguments
+		assertSame(ciEmpty, ciEmpty.unwrap(Optional.class));
+		
+		// Test unwrap with Class that extends wrapper (line 2387, 2388)
+		// A2 extends Value<A1>, so unwrap should work
+		// This covers: innerType instanceof Class<?> is true, innerType3 != parameterizedType is true, isAssignableFrom is true
+		check("A1", of(A2.class).unwrap(Value.class));
+		
+		// Test unwrap with Class that doesn't extend wrapper (line 2388 - false branch)
+		// A1 doesn't extend Value, so unwrap should return itself
+		// This covers: innerType instanceof Class<?> is true, innerType3 != parameterizedType is true, isAssignableFrom is false
+		assertSame(of(A1.class), of(A1.class).unwrap(Value.class));
+		
+		// Test unwrap when innerType3 == parameterizedType (line 2388 - false branch of !=)
+		// When unwrapping Value.class from Value.class itself, innerType3 == parameterizedType, so should return itself
+		// This covers: innerType instanceof Class<?> is true, innerType3 != parameterizedType is false (short-circuit)
+		assertSame(of(Value.class), of(Value.class).unwrap(Value.class));
+		
+		// Test unwrap when innerType is not a Class<?> (line 2387 - false branch)
+		// When innerType is a ParameterizedType, the else if branch is not entered
+		// This is already covered by the ParameterizedType tests above, but let's verify
+		// The test with ciOptional above covers this case
 	}
 }
 

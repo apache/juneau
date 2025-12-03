@@ -358,7 +358,7 @@ public class AnnotationProvider {
 		 * @return A new immutable {@link AnnotationProvider} instance.
 		 */
 		public AnnotationProvider build() {
-			if ((runtimeAnnotations == null || runtimeAnnotations.isEmpty()) && INSTANCE != null)
+			if (isEmpty(runtimeAnnotations) && INSTANCE != null)
 				return INSTANCE;
 			return new AnnotationProvider(this);
 		}
