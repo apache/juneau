@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<strong class="jxr_keyword">void</strong> d06_constructor_withNullCauseNullClassAndNullMessage_handlesNulls() {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> ex = <strong class="jxr_keyword">new</strong> BeanRuntimeException(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> ex = <strong class="jxr_keyword">new</strong> BeanRuntimeException((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, (Object)<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertNotNull(ex);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertNull(ex.getCause());
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertNull(ex.getMessage());

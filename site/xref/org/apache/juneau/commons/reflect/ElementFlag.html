@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Modifier Flags:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * Standard Java modifiers: &lt;c&gt;PUBLIC&lt;/c&gt;, &lt;c&gt;PRIVATE&lt;/c&gt;, &lt;c&gt;PROTECTED&lt;/c&gt;, &lt;c&gt;STATIC&lt;/c&gt;, &lt;c&gt;FINAL&lt;/c&gt;,</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;c&gt;SYNCHRONIZED&lt;/c&gt;, &lt;c&gt;VOLATILE&lt;/c&gt;, &lt;c&gt;TRANSIENT&lt;/c&gt;, &lt;c&gt;NATIVE&lt;/c&gt;, &lt;c&gt;ABSTRACT&lt;/c&gt;, &lt;c&gt;STRICT&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;c&gt;SYNCHRONIZED&lt;/c&gt;, &lt;c&gt;VOLATILE&lt;/c&gt;, &lt;c&gt;TRANSIENT&lt;/c&gt;, &lt;c&gt;NATIVE&lt;/c&gt;, &lt;c&gt;ABSTRACT&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * Each has a corresponding &lt;c&gt;NOT_*&lt;/c&gt; flag.</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Attribute Flags:&lt;/h5&gt;</em>
@@ -149,125 +149,119 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_javadoccomment">/** NOT_ABSTRACT (negated) */</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	NOT_ABSTRACT,
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_javadoccomment">/** STRICT modifier */</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	STRICT,
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<em class="jxr_javadoccomment">/** NOT_STRICT (negated) */</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	NOT_STRICT,
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_comment">// Non-modifier attributes</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_comment">// Non-modifier attributes</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<em class="jxr_javadoccomment">/** ANNOTATION (is an annotation type) */</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	ANNOTATION,
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<em class="jxr_javadoccomment">/** NOT_ANNOTATION (not an annotation type) */</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	NOT_ANNOTATION,
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<em class="jxr_javadoccomment">/** ANNOTATION (is an annotation type) */</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	ANNOTATION,
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<em class="jxr_javadoccomment">/** ANONYMOUS (is an anonymous class) */</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	ANONYMOUS,
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_javadoccomment">/** NOT_ANNOTATION (not an annotation type) */</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	NOT_ANNOTATION,
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_javadoccomment">/** NOT_ANONYMOUS (not an anonymous class) */</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	NOT_ANONYMOUS,
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<em class="jxr_javadoccomment">/** ANONYMOUS (is an anonymous class) */</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	ANONYMOUS,
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<em class="jxr_javadoccomment">/** ARRAY (is an array type) */</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	ARRAY,
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_javadoccomment">/** NOT_ANONYMOUS (not an anonymous class) */</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	NOT_ANONYMOUS,
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_javadoccomment">/** NOT_ARRAY (not an array type) */</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	NOT_ARRAY,
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_javadoccomment">/** ARRAY (is an array type) */</em>
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	ARRAY,
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_javadoccomment">/** BRIDGE (is a bridge method) */</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	BRIDGE,
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<em class="jxr_javadoccomment">/** NOT_ARRAY (not an array type) */</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	NOT_ARRAY,
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<em class="jxr_javadoccomment">/** NOT_BRIDGE (not a bridge method) */</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	NOT_BRIDGE,
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<em class="jxr_javadoccomment">/** BRIDGE (is a bridge method) */</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	BRIDGE,
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<em class="jxr_javadoccomment">/** CLASS (is a class, not an interface) */</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	CLASS,
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<em class="jxr_javadoccomment">/** NOT_BRIDGE (not a bridge method) */</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	NOT_BRIDGE,
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<em class="jxr_javadoccomment">/** CONSTRUCTOR (is a constructor) */</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	CONSTRUCTOR,
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<em class="jxr_javadoccomment">/** CLASS (is a class, not an interface) */</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	CLASS,
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<em class="jxr_javadoccomment">/** NOT_CONSTRUCTOR (not a constructor) */</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	NOT_CONSTRUCTOR,
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_javadoccomment">/** CONSTRUCTOR (is a constructor) */</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	CONSTRUCTOR,
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_javadoccomment">/** DEFAULT (is a default interface method) */</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	DEFAULT,
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<em class="jxr_javadoccomment">/** NOT_CONSTRUCTOR (not a constructor) */</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	NOT_CONSTRUCTOR,
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<em class="jxr_javadoccomment">/** NOT_DEFAULT (not a default interface method) */</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	NOT_DEFAULT,
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<em class="jxr_javadoccomment">/** DEFAULT (is a default interface method) */</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	DEFAULT,
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<em class="jxr_javadoccomment">/** DEPRECATED (has @Deprecated annotation) */</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	DEPRECATED,
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<em class="jxr_javadoccomment">/** NOT_DEFAULT (not a default interface method) */</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	NOT_DEFAULT,
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<em class="jxr_javadoccomment">/** NOT_DEPRECATED (no @Deprecated annotation) */</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	NOT_DEPRECATED,
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_javadoccomment">/** DEPRECATED (has @Deprecated annotation) */</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	DEPRECATED,
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_javadoccomment">/** ENUM (is an enum type) */</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	ENUM,
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<em class="jxr_javadoccomment">/** NOT_DEPRECATED (no @Deprecated annotation) */</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	NOT_DEPRECATED,
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<em class="jxr_javadoccomment">/** NOT_ENUM (not an enum type) */</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	NOT_ENUM,
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<em class="jxr_javadoccomment">/** ENUM (is an enum type) */</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	ENUM,
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<em class="jxr_javadoccomment">/** ENUM_CONSTANT (is an enum constant field) */</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	ENUM_CONSTANT,
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_javadoccomment">/** NOT_ENUM (not an enum type) */</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	NOT_ENUM,
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_javadoccomment">/** NOT_ENUM_CONSTANT (not an enum constant field) */</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	NOT_ENUM_CONSTANT,
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<em class="jxr_javadoccomment">/** ENUM_CONSTANT (is an enum constant field) */</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	ENUM_CONSTANT,
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<em class="jxr_javadoccomment">/** HAS_PARAMS (has parameters) */</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	HAS_PARAMS,
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<em class="jxr_javadoccomment">/** NOT_ENUM_CONSTANT (not an enum constant field) */</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	NOT_ENUM_CONSTANT,
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<em class="jxr_javadoccomment">/** HAS_NO_PARAMS (has no parameters) */</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	HAS_NO_PARAMS,
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<em class="jxr_javadoccomment">/** HAS_PARAMS (has parameters) */</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	HAS_PARAMS,
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<em class="jxr_javadoccomment">/** LOCAL (is a local class) */</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	LOCAL,
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_javadoccomment">/** HAS_NO_PARAMS (has no parameters) */</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	HAS_NO_PARAMS,
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_javadoccomment">/** NOT_LOCAL (not a local class) */</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	NOT_LOCAL,
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<em class="jxr_javadoccomment">/** LOCAL (is a local class) */</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	LOCAL,
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<em class="jxr_javadoccomment">/** MEMBER (is a member class) */</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	MEMBER,
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_javadoccomment">/** NOT_LOCAL (not a local class) */</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	NOT_LOCAL,
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_javadoccomment">/** NOT_MEMBER (not a member class) */</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	NOT_MEMBER,
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_javadoccomment">/** MEMBER (is a member class) */</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	MEMBER,
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_javadoccomment">/** NON_STATIC_MEMBER (is a non-static member class) */</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	NON_STATIC_MEMBER,
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<em class="jxr_javadoccomment">/** NOT_MEMBER (not a member class) */</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	NOT_MEMBER,
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<em class="jxr_javadoccomment">/** NOT_NON_STATIC_MEMBER (not a non-static member class) */</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	NOT_NON_STATIC_MEMBER,
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<em class="jxr_javadoccomment">/** NON_STATIC_MEMBER (is a non-static member class) */</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	NON_STATIC_MEMBER,
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<em class="jxr_javadoccomment">/** PRIMITIVE (is a primitive type) */</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	PRIMITIVE,
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<em class="jxr_javadoccomment">/** NOT_NON_STATIC_MEMBER (not a non-static member class) */</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	NOT_NON_STATIC_MEMBER,
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<em class="jxr_javadoccomment">/** NOT_PRIMITIVE (not a primitive type) */</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	NOT_PRIMITIVE,
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<em class="jxr_javadoccomment">/** PRIMITIVE (is a primitive type) */</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	PRIMITIVE,
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<em class="jxr_javadoccomment">/** RECORD (is a record type) */</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	RECORD,
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<em class="jxr_javadoccomment">/** NOT_PRIMITIVE (not a primitive type) */</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	NOT_PRIMITIVE,
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<em class="jxr_javadoccomment">/** NOT_RECORD (not a record type) */</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	NOT_RECORD,
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<em class="jxr_javadoccomment">/** RECORD (is a record type) */</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	RECORD,
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<em class="jxr_javadoccomment">/** SEALED (is a sealed class) */</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	SEALED,
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/** NOT_RECORD (not a record type) */</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	NOT_RECORD,
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/** NOT_SEALED (not a sealed class) */</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	NOT_SEALED,
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<em class="jxr_javadoccomment">/** SEALED (is a sealed class) */</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	SEALED,
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<em class="jxr_javadoccomment">/** SYNTHETIC (is compiler-generated) */</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	SYNTHETIC,
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<em class="jxr_javadoccomment">/** NOT_SEALED (not a sealed class) */</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	NOT_SEALED,
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<em class="jxr_javadoccomment">/** NOT_SYNTHETIC (not compiler-generated) */</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	NOT_SYNTHETIC,
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<em class="jxr_javadoccomment">/** SYNTHETIC (is compiler-generated) */</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	SYNTHETIC,
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<em class="jxr_javadoccomment">/** VARARGS (has variable arity) */</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	VARARGS,
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<em class="jxr_javadoccomment">/** NOT_SYNTHETIC (not compiler-generated) */</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	NOT_SYNTHETIC,
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<em class="jxr_javadoccomment">/** VARARGS (has variable arity) */</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	VARARGS,
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	<em class="jxr_javadoccomment">/** NOT_VARARGS (does not have variable arity) */</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	NOT_VARARGS
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> }
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<em class="jxr_javadoccomment">/** NOT_VARARGS (does not have variable arity) */</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	NOT_VARARGS
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
