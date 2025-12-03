@@ -112,11 +112,9 @@ public class ThrowableUtils {
 	 * @return Either the same exception if it's already the specified type, or a wrapped exception.
 	 */
 	public static <T> T castException(Class<T> type, Throwable t) {
-		try {
+		return safeSupplier(() -> {
 			return type.isInstance(t) ? type.cast(t) : type.getConstructor(Throwable.class).newInstance(t);
-		} catch (Exception e) {
-			throw illegalArg(e);
-		}
+		});
 	}
 
 	/**
