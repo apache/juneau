@@ -414,8 +414,8 @@ public class ClassUtils {
 		if (s.contains("$$EnhancerBySpringCGLIB$$")) {
 			// Try to invoke getTargetClass() if available (Spring specific)
 			var v = Value.<Class<?>>empty();
-			info(c).getPublicMethods().stream().filter(m -> m.hasName("getTargetClass") && m.getParameterCount() == 0 && m.hasReturnType(Class.class)).forEach(m -> safe(() -> v.set(m.invoke(o))));
-			return v.isPresent() ? v.get() : c.getSuperclass();
+			info(c).getPublicMethods().stream().filter(m -> m.hasName("getTargetClass") && m.getParameterCount() == 0 && m.hasReturnType(Class.class)).forEach(m -> safe(() -> v.set(m.invoke(o)))); // HTT - Requires bytecode manipulation to create classes with $$EnhancerBySpringCGLIB$$ in name
+			return v.isPresent() ? v.get() : c.getSuperclass(); // HTT - Requires bytecode manipulation to create classes with $$EnhancerBySpringCGLIB$$ in name
 		}
 
 		// Javassist Proxy: Created by Javassist ProxyFactory
@@ -423,7 +423,7 @@ public class ClassUtils {
 		// ByteBuddy Proxy: Created by ByteBuddy framework
 		// Pattern: com.example.MyClass$ByteBuddy$abc123
 		if (s.contains("_$$_javassist") || s.contains("_$$_jvst") || s.contains("$ByteBuddy$")) {
-			return c.getSuperclass();
+			return c.getSuperclass(); // HTT - Requires bytecode manipulation to create classes with _$$_javassist, _$$_jvst, or $ByteBuddy$ in name
 		}
 
 		// Not a recognized proxy type
