@@ -2057,6 +2057,22 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public boolean isNotPrimitive() { return inner == null || ! inner.isPrimitive(); }
 
 	/**
+	 * Returns <jk>true</jk> if this class is <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 *
+	 * @return <jk>true</jk> if this class is <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 */
+	public boolean isVoid() {
+		return inner != null && (inner == void.class || inner == Void.class || inner.getSimpleName().equalsIgnoreCase("void"));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is not <c><jk>void</jk>.<jk>class</jk></c> and not {@link Void} and does not have the simple name <js>"Void</js>.
+	 *
+	 * @return <jk>true</jk> if this class is not <c><jk>void</jk>.<jk>class</jk></c> and not {@link Void} and does not have the simple name <js>"Void</js>.
+	 */
+	public boolean isNotVoid() { return ! isVoid(); }
+
+	/**
 	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 *
 	 * @param child The child class.

@@ -2960,10 +2960,43 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// isVoid()
+	//====================================================================================================
+		@Test
+	void a096_isVoid() {
+		assertTrue(of(void.class).isVoid());
+		assertTrue(of(Void.class).isVoid());
+		assertFalse(of(int.class).isVoid());
+		assertFalse(of(String.class).isVoid());
+		assertFalse(of(Integer.class).isVoid());
+		// Test on types
+		assertFalse(aTypeInfo.isVoid());
+		assertFalse(pTypeGenericArgInfo.isVoid());
+	}
+
+	//====================================================================================================
+	// isNotVoid()
+	//====================================================================================================
+		@Test
+	void a097_isNotVoid() {
+		assertFalse(of(void.class).isNotVoid());
+		assertFalse(of(Void.class).isNotVoid());
+		assertTrue(of(int.class).isNotVoid());
+		assertTrue(of(String.class).isNotVoid());
+		assertTrue(of(Integer.class).isNotVoid());
+		// Test on types
+		assertTrue(aTypeInfo.isNotVoid());
+		assertTrue(pTypeInfo.isNotVoid());
+		assertTrue(pTypeDimensionalInfo.isNotVoid());
+		assertTrue(pTypeGenericInfo.isNotVoid());
+		assertTrue(pTypeGenericArgInfo.isNotVoid());
+	}
+
+	//====================================================================================================
 	// isPublic()
 	//====================================================================================================
 		@Test
-	void a096_isPublic() {
+	void a098_isPublic() {
 		assertTrue(hPublic.isPublic());
 		assertFalse(hProtected.isPublic());
 		assertFalse(hPackage.isPublic());
