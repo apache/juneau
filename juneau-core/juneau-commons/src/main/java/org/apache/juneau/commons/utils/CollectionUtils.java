@@ -374,8 +374,7 @@ public class CollectionUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
-		if (value == null)
-			return null;
+		assertArgNotNull("value", value);
 		var array = (E[])Array.newInstance(componentType, value.size());
 		return value.toArray(array);
 	}
@@ -389,10 +388,7 @@ public class CollectionUtils {
 	 * @throws IllegalArgumentException if the input is not an array.
 	 */
 	public static List<Object> arrayToList(Object array) {
-		if (array == null) {
-			return null;  // NOSONAR
-		}
-
+		assertArgNotNull("array", array);
 		assertArg(isArray(array), "Input must be an array but was {0}", cn(array));
 
 		var componentType = array.getClass().getComponentType();
@@ -609,9 +605,7 @@ public class CollectionUtils {
 	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
 	 */
 	public static <E> List<E> copyOf(List<E> l, Function<? super E,? extends E> valueMapper, Supplier<List<E>> listFactory) {
-		if (l == null)
-			return null;  // NOSONAR - Intentional.
-		return l.stream().map(valueMapper).collect(toCollection(listFactory));
+		return l == null ? null : l.stream().map(valueMapper).collect(toCollection(listFactory));
 	}
 
 	/**
@@ -650,9 +644,7 @@ public class CollectionUtils {
 	 * @return A new map with the same keys as the specified map, but with values transformed by the specified function.  Null if the map being copied was null.
 	 */
 	public static <K,V> Map<K,V> copyOf(Map<K,V> m, Function<? super V,? extends V> valueMapper, Supplier<Map<K,V>> mapFactory) {
-		if (m == null)
-			return null;  // NOSONAR - Intentional.
-		return m.entrySet().stream().collect(toMap(Map.Entry::getKey, e -> valueMapper.apply(e.getValue()), (a, b) -> b, mapFactory));
+		return m == null ? null : m.entrySet().stream().collect(toMap(Map.Entry::getKey, e -> valueMapper.apply(e.getValue()), (a, b) -> b, mapFactory));
 	}
 
 	/**
@@ -688,9 +680,7 @@ public class CollectionUtils {
 	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
 	 */
 	public static <E> Set<E> copyOf(Set<E> l, Function<? super E,? extends E> valueMapper, Supplier<Set<E>> setFactory) {
-		if (l == null)
-			return null;  // NOSONAR - Intentional.
-		return l.stream().map(valueMapper).collect(toCollection(setFactory));
+		return l == null ? null : l.stream().map(valueMapper).collect(toCollection(setFactory));
 	}
 
 	/**
@@ -720,22 +710,6 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the following sorted arrays are equals.
-	 *
-	 * @param a1 Array #1.
-	 * @param a2 Array #2.
-	 * @return <jk>true</jk> if the following sorted arrays are equals.
-	 */
-	public static boolean equals(String[] a1, String[] a2) {
-		if (a1.length != a2.length)
-			return false;
-		for (var i = 0; i < a1.length; i++)
-			if (ne(a1[i], a2[i]))
-				return false;
-		return true;
-	}
-
-	/**
 	 * Returns the first element in a list.
 	 *
 	 * @param <E> The element type.
@@ -743,9 +717,7 @@ public class CollectionUtils {
 	 * @return The first element in the list, or <jk>null</jk> if the list is <jk>null</jk> or empty.
 	 */
 	public static <E> E first(List<E> l) {
-		if (l == null || l.isEmpty())
-			return null;
-		return l.get(0);
+		return isEmpty(l) ? null : l.get(0);
 	}
 
 	/**
@@ -866,9 +838,7 @@ public class CollectionUtils {
 	 * @return The last element, or <jk>null</jk> if the array is <jk>null</jk> or empty.
 	 */
 	public static <E> E last(E[] l) {
-		if (l == null || l.length == 0)
-			return null;
-		return l[l.length - 1];
+		return (l == null || l.length == 0) ? null : l[l.length - 1];
 	}
 
 	/**
@@ -879,9 +849,7 @@ public class CollectionUtils {
 	 * @return The last element, or <jk>null</jk> if the list is <jk>null</jk> or empty.
 	 */
 	public static <E> E last(List<E> l) {
-		if (l == null || l.isEmpty())
-			return null;
-		return l.get(l.size() - 1);
+		return isEmpty(l) ? null : l.get(l.size() - 1);
 	}
 
 	/**
@@ -1930,7 +1898,7 @@ public class CollectionUtils {
 	 * @return A new array.
 	 */
 	public static <E> Object toArray(Collection<?> c, Class<E> elementType) {
-		Object a = Array.newInstance(elementType, c.size());
+		var a = Array.newInstance(elementType, c.size());
 		Iterator<?> it = c.iterator();
 		int i = 0;
 		while (it.hasNext())
