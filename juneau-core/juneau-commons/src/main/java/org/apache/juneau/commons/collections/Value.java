@@ -17,12 +17,13 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+
+import org.apache.juneau.commons.reflect.ClassInfo;
 
 /**
  * A generic mutable value wrapper.
@@ -150,13 +151,33 @@ public class Value<T> {
 	}
 
 	/**
+	 * Returns the generic parameter type of the Value type.
+	 *
+	 * @param t The type to find the parameter type of.
+	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
+	 */
+	public static Type getParameterType(Type t) {
+		if (t instanceof ParameterizedType t2) {
+			if (t2.getRawType() == Value.class) {
+				var ta = t2.getActualTypeArguments();
+				if (ta.length > 0)
+					return ta[0];
+			}
+		} else if ((t instanceof Class<?> t3) && Value.class.isAssignableFrom(t3)) {
+			return ClassInfo.of(t3).getParameterType(0, Value.class);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Returns the unwrapped type.
 	 *
 	 * @param t The type to unwrap.
 	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
 	 */
 	public static Type unwrap(Type t) {
-		var x = getValueParameterType(t);
+		var x = getParameterType(t);
 		return nn(x) ? x : t;
 	}
 

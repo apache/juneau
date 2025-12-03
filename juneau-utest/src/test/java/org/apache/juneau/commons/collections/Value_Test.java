@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +34,7 @@ class Value_Test extends TestBase {
 	public static class A1 {}
 
 	@Test void a01_testSubclass() {
-		assertEquals(A1.class, getValueParameterType(A.class));
+		assertEquals(A1.class, Value.getParameterType(A.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

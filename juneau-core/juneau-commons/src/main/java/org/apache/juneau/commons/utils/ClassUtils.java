@@ -18,7 +18,6 @@ package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -247,47 +246,6 @@ public class ClassUtils {
 	}
 
 	/**
-	 * Extracts generic type parameter mappings from a class's superclass declaration and adds them to a type map.
-	 *
-	 * <p>
-	 * This method builds a mapping between type variables (e.g., <c>T</c>, <c>K</c>, <c>V</c>) and their actual
-	 * type arguments in the inheritance hierarchy. It's used to resolve generic type parameters when navigating
-	 * through class hierarchies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Given these classes:</jc>
-	 * 	<jk>class</jk> MyList&lt;T&gt; <jk>extends</jk> ArrayList&lt;T&gt; {}
-	 * 	<jk>class</jk> StringList <jk>extends</jk> MyList&lt;String&gt; {}
-	 *
-	 * 	<jc>// When called on StringList, this would extract:</jc>
-	 * 	<jc>//   T (from MyList) -&gt; String</jc>
-	 * </p>
-	 *
-	 * <p>
-	 * The method handles transitive type mappings by checking if an actual type argument is itself a type variable
-	 * that's already been mapped, and resolving it to its final type.
-	 *
-	 * @param typeMap
-	 * 	The map to populate with type variable to actual type mappings.
-	 * 	<br>Existing entries are used to resolve transitive mappings.
-	 * @param c
-	 * 	The class whose generic superclass should be examined for type parameters.
-	 */
-	public static void extractTypes(Map<Type,Type> typeMap, Class<?> c) {
-		var gs = c.getGenericSuperclass();
-		if (gs instanceof ParameterizedType gs2) {
-			var typeParameters = ((Class<?>)gs2.getRawType()).getTypeParameters();
-			var actualTypeArguments = gs2.getActualTypeArguments();
-			for (var i = 0; i < typeParameters.length; i++) {
-				if (typeMap.containsKey(actualTypeArguments[i]))
-					actualTypeArguments[i] = typeMap.get(actualTypeArguments[i]);
-				typeMap.put(typeParameters[i], actualTypeArguments[i]);
-			}
-		}
-	}
-
-	/**
 	 * Returns the class types for the specified arguments.
 	 *
 	 * @param args The objects we're getting the classes of.
@@ -394,70 +352,6 @@ public class ClassUtils {
 	}
 
 	/**
-	 * Returns the generic parameter type at the specified index for a class that extends a parameterized type.
-	 *
-	 * @param c The class to examine.
-	 * @param index The zero-based index of the parameter to retrieve.
-	 * @param pt The parameterized superclass or interface.
-	 * @return The parameter type at the specified index.
-	 * @throws IllegalArgumentException If the class is not a subclass of the parameterized type or if the index is invalid.
-	 */
-	public static Class<?> getParameterType(Class<?> c, int index, Class<?> pt) {
-		assertArgsNotNull("pt", pt, "c", c);
-
-		// We need to make up a mapping of type names.
-		var typeMap = new HashMap<Type,Type>();
-		var cc = c;
-		while (pt != cc.getSuperclass()) {
-			extractTypes(typeMap, cc);
-			cc = cc.getSuperclass();
-			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", cns(c), cns(pt));
-		}
-
-		var gsc = cc.getGenericSuperclass();
-
-		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", cns(pt));
-
-		var cpt = (ParameterizedType)gsc;
-		var atArgs = cpt.getActualTypeArguments();
-		assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
-		var actualType = cpt.getActualTypeArguments()[index];
-
-		if (typeMap.containsKey(actualType))
-			actualType = typeMap.get(actualType);
-
-		if (actualType instanceof Class actualType2) {
-			return actualType2;
-
-		}
-		if (actualType instanceof GenericArrayType actualType2) {
-			var gct = actualType2.getGenericComponentType();
-			if (gct instanceof ParameterizedType gct2)
-				return Array.newInstance((Class<?>)gct2.getRawType(), 0).getClass();
-		} else if (actualType instanceof TypeVariable<?> actualType3) {
-			var nestedOuterTypes = new LinkedList<Class<?>>();
-			for (var ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
-				var outerClass = cc.getClass();
-				nestedOuterTypes.add(outerClass);
-				var outerTypeMap = new HashMap<Type,Type>();
-				extractTypes(outerTypeMap, outerClass);
-				for (var entry : outerTypeMap.entrySet()) {
-					var key = entry.getKey();
-					var value = entry.getValue();
-					if ((key instanceof TypeVariable<?> key2) && (key2.getName().equals(actualType3.getName()) && isInnerClass(key2.getGenericDeclaration(), actualType3.getGenericDeclaration()))) {
-						if (value instanceof Class<?> value2)
-							return value2;
-						actualType3 = (TypeVariable<?>)entry.getValue();
-					}
-				}
-			}
-		} else if (actualType instanceof ParameterizedType actualType2) {
-			return (Class<?>)actualType2.getRawType();
-		}
-		throw illegalArg("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
-	}
-
-	/**
 	 * Attempts to unwrap a proxy object and return the underlying "real" class.
 	 *
 	 * <p>
@@ -533,26 +427,6 @@ public class ClassUtils {
 		}
 
 		// Not a recognized proxy type
-		return null;
-	}
-
-	/**
-	 * Returns the generic parameter type of the Value type.
-	 *
-	 * @param t The type to find the parameter type of.
-	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
-	 */
-	public static Type getValueParameterType(Type t) {
-		if (t instanceof ParameterizedType t2) {
-			if (t2.getRawType() == Value.class) {
-				var ta = t2.getActualTypeArguments();
-				if (ta.length > 0)
-					return ta[0];
-			}
-		} else if ((t instanceof Class<?> t3) && Value.class.isAssignableFrom(t3)) {
-			return getParameterType(t3, 0, Value.class);
-		}
-
 		return null;
 	}
 

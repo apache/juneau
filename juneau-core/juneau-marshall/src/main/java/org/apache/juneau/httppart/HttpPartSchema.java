@@ -2552,7 +2552,7 @@ public class HttpPartSchema {
 			if (t instanceof Class<?> c2) {
 				rstream(AP.find(c, info(c2))).forEach(x -> apply(x.inner()));
 			} else if (Value.isType(t)) {
-				apply(c, getValueParameterType(t));
+				apply(c, Value.getParameterType(t));
 			}
 			return this;
 		}

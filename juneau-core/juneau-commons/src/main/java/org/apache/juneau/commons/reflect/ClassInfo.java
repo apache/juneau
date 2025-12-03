@@ -1398,6 +1398,37 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
+	 * Extracts generic type parameter mappings from a class's superclass declaration and adds them to a type map.
+	 *
+	 * <p>
+	 * This method builds a mapping between type variables (e.g., <c>T</c>, <c>K</c>, <c>V</c>) and their actual
+	 * type arguments in the inheritance hierarchy. It's used to resolve generic type parameters when navigating
+	 * through class hierarchies.
+	 *
+	 * <p>
+	 * The method handles transitive type mappings by checking if an actual type argument is itself a type variable
+	 * that's already been mapped, and resolving it to its final type.
+	 *
+	 * @param typeMap
+	 * 	The map to populate with type variable to actual type mappings.
+	 * 	<br>Existing entries are used to resolve transitive mappings.
+	 * @param c
+	 * 	The class whose generic superclass should be examined for type parameters.
+	 */
+	private static void extractTypes(Map<Type,Type> typeMap, Class<?> c) {
+		var gs = c.getGenericSuperclass();
+		if (gs instanceof ParameterizedType gs2) {
+			var typeParameters = ((Class<?>)gs2.getRawType()).getTypeParameters();
+			var actualTypeArguments = gs2.getActualTypeArguments();
+			for (var i = 0; i < typeParameters.length; i++) {
+				if (typeMap.containsKey(actualTypeArguments[i]))
+					actualTypeArguments[i] = typeMap.get(actualTypeArguments[i]);
+				typeMap.put(typeParameters[i], actualTypeArguments[i]);
+			}
+		}
+	}
+
+	/**
 	 * Returns a list including this class and all parent classes.
 	 *
 	 * <p>
