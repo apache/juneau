@@ -2560,7 +2560,7 @@
 <a class="jxr_linenumber" name="L2552" href="#L2552">2552</a> 			<strong class="jxr_keyword">if</strong> (t instanceof Class&lt;?&gt; c2) {
 <a class="jxr_linenumber" name="L2553" href="#L2553">2553</a> 				rstream(AP.find(c, info(c2))).forEach(x -&gt; apply(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L2554" href="#L2554">2554</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Value.isType(t)) {
-<a class="jxr_linenumber" name="L2555" href="#L2555">2555</a> 				apply(c, getValueParameterType(t));
+<a class="jxr_linenumber" name="L2555" href="#L2555">2555</a> 				apply(c, Value.getParameterType(t));
 <a class="jxr_linenumber" name="L2556" href="#L2556">2556</a> 			}
 <a class="jxr_linenumber" name="L2557" href="#L2557">2557</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2558" href="#L2558">2558</a> 		}
