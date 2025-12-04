@@ -24,6 +24,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.MediaType;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;

@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;

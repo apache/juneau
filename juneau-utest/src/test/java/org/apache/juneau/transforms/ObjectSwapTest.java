@@ -19,6 +19,7 @@ package org.apache.juneau.transforms;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.MediaType;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;

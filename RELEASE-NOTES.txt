@@ -21,6 +21,7 @@ Release Notes - Juneau - Version 9.2.0
     * Bump org.eclipse.jgit:org.eclipse.jgit from 7.2.1.202505142326-r to 7.3.0.202506031305-r #221.
     * Bump jetty.version from 12.0.21 to 12.1.4 #222, #228, #229, #275.
     * Bump org.junit.vintage:junit-vintage-engine from 5.12.2 to 6.0.1 #223, #257, #280.
+    * Bump junit-jupiter from 5.13.4 to 6.0.1.
     * Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.11.2 to 3.12.0 #237m #255.
     * Annotations associated with a subclass of org.apache.juneau.annotation.AnnotationBuilder that didn't carry an `String[] description()` attribute now do.
         For example: org.apache.juneau.http.annotation.Path.
