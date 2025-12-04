@@ -113,10 +113,8 @@ public class IoUtils {
 	 * @param is The input stream to close.
 	 */
 	public static void closeQuietly(InputStream is) {
-		try {
-			if (nn(is))
-				is.close();
-		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
+		if (nn(is))
+			safe(() -> is.close());
 	}
 
 	/**
@@ -146,10 +144,8 @@ public class IoUtils {
 	 * @param os The output stream to close.
 	 */
 	public static void closeQuietly(OutputStream os) {
-		try {
-			if (nn(os))
-				os.close();
-		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
+		if (nn(os))
+			quiet(() -> os.close());
 	}
 
 	/**
@@ -161,10 +157,8 @@ public class IoUtils {
 	 * @param r The reader to close.
 	 */
 	public static void closeQuietly(Reader r) {
-		try {
-			if (nn(r))
-				r.close();
-		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
+		if (nn(r))
+			quiet(() -> r.close());
 	}
 
 	/**
@@ -176,10 +170,8 @@ public class IoUtils {
 	 * @param w The writer to close.
 	 */
 	public static void closeQuietly(Writer w) {
-		try {
-			if (nn(w))
-				w.close();
-		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
+		if (nn(w))
+			quiet(() -> w.close());
 	}
 
 	/**

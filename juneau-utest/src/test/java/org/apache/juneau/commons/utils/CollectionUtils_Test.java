@@ -1297,6 +1297,7 @@ class CollectionUtils_Test extends TestBase {
 		ArrayList<String> arrayList = new ArrayList<>();
 		arrayList.add("a");
 		arrayList.add("b");
+		@SuppressWarnings("cast")
 		List<?> result1 = toList((Object)arrayList);
 		assertSame(arrayList, result1);
 
@@ -1446,7 +1447,6 @@ class CollectionUtils_Test extends TestBase {
 		assertTrue(nestedResult.get(0) instanceof List);
 		assertTrue(nestedResult.get(1) instanceof List);
 
-		String[] arr2 = {"a", "b", "c"};
 		List<Object> result = toObjectList(arr);
 		assertNotNull(result);
 		assertEquals(3, result.size());

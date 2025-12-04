@@ -1377,6 +1377,33 @@ public class Utils {
 	}
 
 	/**
+	 * Runs a snippet of code and silently ignores any exceptions.
+	 *
+	 * <p>
+	 * This method is useful for operations that may fail but where you want to handle the failure
+	 * gracefully by ignoring it. This is commonly used for "quietly" closing resources where
+	 * exceptions during close operations are not critical.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Quietly close a stream, ignoring any exceptions</jc>
+	 * 	Utils.<jsm>quiet</jsm>(() -&gt; stream.close());
+	 * </p>
+	 *
+	 * <p>
+	 * This is different from {@link #safe(Snippet)} which wraps exceptions in a {@link RuntimeException}.
+	 *
+	 * @param snippet The snippet of code to run.
+	 * @see #safe(Snippet)
+	 * @see #safeOpt(ThrowingSupplier)
+	 */
+	public static void quiet(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (Throwable t) { /* Ignore */ }
+	}
+
+	/**
 	 * Runs a snippet of code with a custom exception mapper.
 	 *
 	 * <p>

@@ -20,8 +20,6 @@ import static org.apache.juneau.commons.utils.AnnotationUtils.hash;
 import static org.apache.juneau.commons.utils.AnnotationUtils.streamRepeated;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.commons.utils.AnnotationUtils;
-
 import java.lang.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -238,107 +236,107 @@ class AnnotationUtils_Test {
 		// Same instance
 		var a1 = TestClass1.class.getAnnotation(SimpleAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a1, a1));
-		
+
 		// Same value
 		var a2 = TestClass2.class.getAnnotation(SimpleAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a1, a2));
-		
+
 		// Different value
 		var a3 = TestClass3.class.getAnnotation(SimpleAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a1, a3));
-		
+
 		// Both null
 		assertTrue(AnnotationUtils.equals(null, null));
-		
+
 		// First null
 		assertFalse(AnnotationUtils.equals(null, a1));
-		
+
 		// Second null
 		assertFalse(AnnotationUtils.equals(a1, null));
-		
+
 		// Different types
 		var a4 = TestClass4.class.getAnnotation(DifferentAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a1, a4));
-		
+
 		// Multiple members - same
 		var a5 = TestClass5.class.getAnnotation(MultiMemberAnnotation.class);
 		var a6 = TestClass6.class.getAnnotation(MultiMemberAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a5, a6));
-		
+
 		// Multiple members - different boolean
 		var a7 = TestClass7.class.getAnnotation(MultiMemberAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a5, a7));
-		
+
 		// Multiple members - different string
 		var a8 = TestClass8.class.getAnnotation(MultiMemberAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a5, a8));
-		
+
 		// Multiple members - different int
 		var a9 = TestClass9.class.getAnnotation(MultiMemberAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a5, a9));
-		
+
 		// Array members - same
 		var a10 = TestClass10.class.getAnnotation(ArrayAnnotation.class);
 		var a11 = TestClass11.class.getAnnotation(ArrayAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a10, a11));
-		
+
 		// Array members - different length
 		var a12 = TestClass12.class.getAnnotation(ArrayAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a10, a12));
-		
+
 		// Array members - different int array length
 		var a13 = TestClass13.class.getAnnotation(ArrayAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a10, a13));
-		
+
 		// Array members - different string values
 		var a14 = TestClass14.class.getAnnotation(ArrayAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a10, a14));
-		
+
 		// Array members - different int values
 		var a15 = TestClass15.class.getAnnotation(ArrayAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a10, a15));
-		
+
 		// Array members - empty arrays
 		var a16 = TestClass16.class.getAnnotation(ArrayAnnotation.class);
 		var a16b = TestClass16.class.getAnnotation(ArrayAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a16, a16b));
-		
+
 		// Primitive arrays - same
 		var a17 = TestClass17.class.getAnnotation(PrimitiveArrayAnnotation.class);
 		var a18 = TestClass18.class.getAnnotation(PrimitiveArrayAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a17, a18));
-		
+
 		// Primitive arrays - different
 		var a19 = TestClass19.class.getAnnotation(PrimitiveArrayAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a17, a19));
-		
+
 		// Nested annotation - same
 		var a20 = TestClass20.class.getAnnotation(NestedAnnotation.class);
 		var a21 = TestClass21.class.getAnnotation(NestedAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a20, a21));
-		
+
 		// Nested annotation - different
 		var a22 = TestClass22.class.getAnnotation(NestedAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a20, a22));
-		
+
 		// Nested annotation array - same
 		var a23 = TestClass23.class.getAnnotation(NestedArrayAnnotation.class);
 		var a24 = TestClass24.class.getAnnotation(NestedArrayAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a23, a24));
-		
+
 		// Nested annotation array - different
 		var a25 = TestClass25.class.getAnnotation(NestedArrayAnnotation.class);
 		assertFalse(AnnotationUtils.equals(a23, a25));
-		
+
 		// Default values
 		var a27 = TestClass27.class.getAnnotation(DefaultValueAnnotation.class);
 		var a28 = TestClass28.class.getAnnotation(DefaultValueAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a27, a28));
-		
+
 		// Null member values - test line 169
 		try {
 			var a29 = TestClass29.class.getAnnotation(NullableMemberAnnotation.class);
-			
+
 			// Create annotation proxy with null member
 			Annotation nullMember1 = (Annotation) java.lang.reflect.Proxy.newProxyInstance(
 				MemberEqualsTestAnnotation.class.getClassLoader(),
@@ -362,7 +360,7 @@ class AnnotationUtils_Test {
 					return method.invoke(a29, args);
 				}
 			);
-			
+
 			// Create another annotation proxy with non-null member
 			Annotation nonNullMember = (Annotation) java.lang.reflect.Proxy.newProxyInstance(
 				MemberEqualsTestAnnotation.class.getClassLoader(),
@@ -386,7 +384,7 @@ class AnnotationUtils_Test {
 					return method.invoke(a29, args);
 				}
 			);
-			
+
 			// Test line 169: memberEquals when o1 == null || o2 == null
 			assertFalse(AnnotationUtils.equals(nullMember1, nonNullMember));
 			assertFalse(AnnotationUtils.equals(nonNullMember, nullMember1));
@@ -404,36 +402,36 @@ class AnnotationUtils_Test {
 		var a1 = TestClass1.class.getAnnotation(SimpleAnnotation.class);
 		var a2 = TestClass2.class.getAnnotation(SimpleAnnotation.class);
 		assertEquals(hash(a1), hash(a2));
-		
+
 		// Different values
 		var a3 = TestClass3.class.getAnnotation(SimpleAnnotation.class);
 		assertNotEquals(hash(a1), hash(a3));
-		
+
 		// Multiple members
 		var a5 = TestClass5.class.getAnnotation(MultiMemberAnnotation.class);
 		var a6 = TestClass6.class.getAnnotation(MultiMemberAnnotation.class);
 		assertEquals(hash(a5), hash(a6));
-		
+
 		// Array members
 		var a10 = TestClass10.class.getAnnotation(ArrayAnnotation.class);
 		var a11 = TestClass11.class.getAnnotation(ArrayAnnotation.class);
 		assertEquals(hash(a10), hash(a11));
-		
+
 		// Primitive arrays
 		var a17 = TestClass17.class.getAnnotation(PrimitiveArrayAnnotation.class);
 		var a18 = TestClass18.class.getAnnotation(PrimitiveArrayAnnotation.class);
 		assertEquals(hash(a17), hash(a18));
-		
+
 		// Nested annotation
 		var a20 = TestClass20.class.getAnnotation(NestedAnnotation.class);
 		var a21 = TestClass21.class.getAnnotation(NestedAnnotation.class);
 		assertEquals(hash(a20), hash(a21));
-		
+
 		// Nested annotation array
 		var a23 = TestClass23.class.getAnnotation(NestedArrayAnnotation.class);
 		var a24 = TestClass24.class.getAnnotation(NestedArrayAnnotation.class);
 		assertEquals(hash(a23), hash(a24));
-		
+
 		// Consistency with equals
 		assertTrue(AnnotationUtils.equals(a1, a2));
 		assertEquals(hash(a1), hash(a2));
@@ -441,22 +439,22 @@ class AnnotationUtils_Test {
 		assertEquals(hash(a5), hash(a6));
 		assertTrue(AnnotationUtils.equals(a10, a11));
 		assertEquals(hash(a10), hash(a11));
-		
+
 		// Empty annotation
 		var a26 = TestClass26.class.getAnnotation(EmptyAnnotation.class);
 		int hashCode = hash(a26);
 		assertTrue(hashCode >= 0 || hashCode < 0); // Just verify it returns a value
-		
+
 		// Default values
 		var a27 = TestClass27.class.getAnnotation(DefaultValueAnnotation.class);
 		var a28 = TestClass28.class.getAnnotation(DefaultValueAnnotation.class);
 		assertTrue(AnnotationUtils.equals(a27, a28));
 		assertEquals(hash(a27), hash(a28));
-		
+
 		// Null member values - test line 157
 		try {
 			var a29 = TestClass29.class.getAnnotation(NullableMemberAnnotation.class);
-			
+
 			// Create a custom annotation proxy that returns null for the value() method
 			Annotation nullMemberAnnotation = (Annotation) java.lang.reflect.Proxy.newProxyInstance(
 				NullableMemberAnnotation.class.getClassLoader(),
@@ -480,7 +478,7 @@ class AnnotationUtils_Test {
 					return method.invoke(a29, args);
 				}
 			);
-			
+
 			// Test that hash() handles null member values correctly (line 157)
 			int hashNull = hash(nullMemberAnnotation);
 			// Should not throw, and should return a hash code based on part1 (name.hashCode() * 127)
@@ -500,13 +498,13 @@ class AnnotationUtils_Test {
 		List<Annotation> result1 = streamRepeated(a1).collect(Collectors.toList());
 		assertEquals(1, result1.size());
 		assertSame(a1, result1.get(0));
-		
+
 		// Test with empty annotation
 		var a26 = TestClass26.class.getAnnotation(EmptyAnnotation.class);
 		List<Annotation> result2 = streamRepeated(a26).collect(Collectors.toList());
 		assertEquals(1, result2.size());
 		assertSame(a26, result2.get(0));
-		
+
 		// Test with multi-member annotation
 		var a5 = TestClass5.class.getAnnotation(MultiMemberAnnotation.class);
 		List<Annotation> result3 = streamRepeated(a5).collect(Collectors.toList());

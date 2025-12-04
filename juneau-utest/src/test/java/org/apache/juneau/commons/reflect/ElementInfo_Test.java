@@ -83,7 +83,7 @@ class ElementInfo_Test extends TestBase {
 	}
 
 	public static class StrictClass {
-		public strictfp void strictMethod() {}
+		public void strictMethod() {}
 	}
 
 	public static class TransientClass {

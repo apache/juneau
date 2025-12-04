@@ -636,13 +636,13 @@ class ParameterInfo_Test extends TestBase {
 			// 1. !DISABLE_PARAM_NAME_DETECTION.get() is true (flag is false)
 			// 2. inner.isNamePresent() is true (bytecode names available)
 			if (paramWithoutName.inner().isNamePresent()) {
-				// If bytecode names are available, try to get resolved name
-				// This will execute line 632 if the flag is actually false
-				var resolvedName = paramWithoutName.getResolvedName();
-				// Note: If resolvedName is null, it means the condition on line 631 was false
-				// (either flag is still true, or there's a caching issue)
-				// In that case, line 632 won't be covered, which is acceptable
-				// We don't assert here because the flag might not have reset properly
+			// If bytecode names are available, try to get resolved name
+			// This will execute line 632 if the flag is actually false
+			paramWithoutName.getResolvedName(); // Exercise the code path
+			// Note: If the result is null, it means the condition on line 631 was false
+			// (either flag is still true, or there's a caching issue)
+			// In that case, line 632 won't be covered, which is acceptable
+			// We don't assert here because the flag might not have reset properly
 			}
 			// If bytecode names are not available, line 632 won't be executed
 			// This is expected if the code wasn't compiled with -parameters flag

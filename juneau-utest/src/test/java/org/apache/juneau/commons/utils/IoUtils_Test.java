@@ -68,6 +68,13 @@ class IoUtils_Test extends TestBase {
 
 		// Test with empty array
 		close();
+
+		// Test with IOException (line 100)
+		var throwingIs = new ThrowingTestInputStream("test");
+		var throwingOs = new ThrowingTestOutputStream();
+		var throwingR = new ThrowingTestReader();
+		var throwingW = new ThrowingTestWriter();
+		assertThrows(IOException.class, () -> close(throwingIs, throwingOs, throwingR, throwingW));
 	}
 
 	//====================================================================================================
@@ -199,6 +206,11 @@ class IoUtils_Test extends TestBase {
 
 		// Test with empty array
 		flush();
+
+		// Test with IOException (line 245)
+		var throwingOs = new ThrowingTestOutputStream();
+		var throwingW = new ThrowingTestWriter();
+		assertThrows(IOException.class, () -> flush(throwingOs, throwingW));
 	}
 
 	//====================================================================================================
@@ -213,6 +225,12 @@ class IoUtils_Test extends TestBase {
 		assertNotNull(loadSystemResourceAsString("test3.txt", "."));
 		assertNotNull(loadSystemResourceAsString("test4.txt", ".", "sub"));
 		assertNotNull(loadSystemResourceAsString("test4.txt", "sub"));
+
+		// Test system resource path (line 280)
+		// Try to load a resource that exists in the system classloader
+		loadSystemResourceAsString("java/lang/String.class", "."); // Exercise the code path
+		// This may or may not return null depending on whether the resource is accessible
+		// The important thing is that line 280 is executed
 	}
 
 	//====================================================================================================
@@ -268,6 +286,18 @@ class IoUtils_Test extends TestBase {
 		assertEquals(data.length(), count);
 		assertEquals(data, os.toString());
 		assertFalse(exceptionCaught.get());
+
+		// Test with IOException (line 355)
+		var throwingIs = new ThrowingTestInputStream(data);
+		exceptionCaught.set(false);
+		var exception = new AtomicReference<IOException>();
+		count = pipe(throwingIs, os, e -> {
+			exceptionCaught.set(true);
+			exception.set(e);
+		});
+		assertTrue(exceptionCaught.get());
+		assertNotNull(exception.get());
+		assertEquals(-1, count);
 	}
 
 	//====================================================================================================
@@ -292,6 +322,13 @@ class IoUtils_Test extends TestBase {
 		// Test with null
 		assertEquals(0, pipe((InputStream)null, os, -1));
 		assertEquals(0, pipe(is, null, -1));
+
+		// Test with end of stream (read returns -1) (line 395)
+		var emptyIs = new ByteArrayInputStream(new byte[0]);
+		os = new ByteArrayOutputStream();
+		count = pipe(emptyIs, os, 100);
+		assertEquals(0, count);
+		assertEquals(0, os.size());
 	}
 
 	//====================================================================================================
@@ -324,6 +361,22 @@ class IoUtils_Test extends TestBase {
 		assertEquals(data.length(), count);
 		assertEquals(data, w.toString());
 		assertFalse(exceptionCaught.get());
+
+		// Test with null (line 444)
+		assertEquals(0, pipe((InputStream)null, w, e -> exceptionCaught.set(true)));
+		assertEquals(0, pipe(is, (Writer)null, e -> exceptionCaught.set(true)));
+
+		// Test with IOException (line 447)
+		var throwingIs = new ThrowingTestInputStream(data);
+		exceptionCaught.set(false);
+		var exception = new AtomicReference<IOException>();
+		count = pipe(throwingIs, w, e -> {
+			exceptionCaught.set(true);
+			exception.set(e);
+		});
+		assertTrue(exceptionCaught.get());
+		assertNotNull(exception.get());
+		assertEquals(-2, count);
 	}
 
 	//====================================================================================================
@@ -378,6 +431,23 @@ class IoUtils_Test extends TestBase {
 		assertEquals(data.length(), count);
 		assertEquals(data, os.toString());
 		assertFalse(exceptionCaught.get());
+
+		// Test with IOException (line 523)
+		var throwingR = new StringReader(data) {
+			@Override
+			public int read(char[] cbuf, int off, int len) throws IOException {
+				throw new IOException("Test exception");
+			}
+		};
+		exceptionCaught.set(false);
+		var exception = new AtomicReference<IOException>();
+		count = pipe(throwingR, os, e -> {
+			exceptionCaught.set(true);
+			exception.set(e);
+		});
+		assertTrue(exceptionCaught.get());
+		assertNotNull(exception.get());
+		assertEquals(-1, count);
 	}
 
 	//====================================================================================================
@@ -413,6 +483,23 @@ class IoUtils_Test extends TestBase {
 		assertEquals(data.length(), count);
 		assertEquals(data, w.toString());
 		assertFalse(exceptionCaught.get());
+
+		// Test with IOException (line 578)
+		var throwingR = new StringReader(data) {
+			@Override
+			public int read(char[] cbuf, int off, int len) throws IOException {
+				throw new IOException("Test exception");
+			}
+		};
+		exceptionCaught.set(false);
+		var exception = new AtomicReference<IOException>();
+		count = pipe(throwingR, w, e -> {
+			exceptionCaught.set(true);
+			exception.set(e);
+		});
+		assertTrue(exceptionCaught.get());
+		assertNotNull(exception.get());
+		assertEquals(-1, count);
 	}
 
 	//====================================================================================================
@@ -526,6 +613,18 @@ class IoUtils_Test extends TestBase {
 
 		// Test with null
 		assertNull(read((InputStream)null, StandardCharsets.UTF_8, e -> exceptionCaught.set(true)));
+
+		// Test with IOException (line 727)
+		var throwingIs = new ThrowingTestInputStream(data);
+		exceptionCaught.set(false);
+		var exception = new AtomicReference<IOException>();
+		result = read(throwingIs, StandardCharsets.UTF_8, e -> {
+			exceptionCaught.set(true);
+			exception.set(e);
+		});
+		assertTrue(exceptionCaught.get());
+		assertNotNull(exception.get());
+		assertNull(result);
 	}
 
 	//====================================================================================================
@@ -601,28 +700,32 @@ class IoUtils_Test extends TestBase {
 	void a033_read_Object() throws IOException {
 		var data = "Hello World";
 
-		// Test with Reader
+		// Test with Reader (line 827)
 		var r = new StringReader(data);
-		assertEquals(data, read(r));
+		Object readerObj = r; // Explicitly cast to Object to ensure read(Object) is called
+		assertEquals(data, read(readerObj));
 
-		// Test with InputStream
+		// Test with InputStream (line 829)
 		var is = new ByteArrayInputStream(data.getBytes());
-		assertEquals(data, read(is));
+		Object inputStreamObj = is; // Explicitly cast to Object to ensure read(Object) is called
+		assertEquals(data, read(inputStreamObj));
 
-		// Test with File
+		// Test with File (line 831)
 		var file = File.createTempFile("test", ".txt");
 		try {
 			try (var w = new FileWriter(file)) {
 				w.write(data);
 			}
-			assertEquals(data, read(file));
+			Object fileObj = file; // Explicitly cast to Object to ensure read(Object) is called
+			assertEquals(data, read(fileObj));
 		} finally {
 			file.delete();
 		}
 
-		// Test with byte[]
+		// Test with byte[] (line 833)
 		var bytes = data.getBytes();
-		assertEquals(data, read(bytes));
+		Object bytesObj = bytes; // Explicitly cast to Object to ensure read(Object) is called
+		assertEquals(data, read(bytesObj));
 
 		// Test with null
 		assertNull(read((Object)null));
@@ -676,6 +779,18 @@ class IoUtils_Test extends TestBase {
 
 		// Test with null
 		assertNull(read((Reader)null, e -> exceptionCaught.set(true)));
+
+		// Test with IOException (line 900)
+		var throwingR = new ThrowingTestReader();
+		exceptionCaught.set(false);
+		var exception = new AtomicReference<IOException>();
+		result = read(throwingR, e -> {
+			exceptionCaught.set(true);
+			exception.set(e);
+		});
+		assertTrue(exceptionCaught.get());
+		assertNotNull(exception.get());
+		assertNull(result);
 	}
 
 	//====================================================================================================
@@ -824,6 +939,28 @@ class IoUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// EMPTY_INPUT_STREAM and EMPTY_READER tests
+	//====================================================================================================
+	@Test
+	void a044_emptyInputStream() throws IOException {
+		// Test line 44: EMPTY_INPUT_STREAM.read()
+		assertEquals(-1, EMPTY_INPUT_STREAM.read());
+	}
+
+	@Test
+	void a045_emptyReader() throws IOException {
+		// Test line 65: EMPTY_READER.close()
+		EMPTY_READER.close(); // Should not throw
+
+		// Test line 69: EMPTY_READER.read()
+		assertEquals(-1, EMPTY_READER.read());
+
+		// Test line 74: EMPTY_READER.read(char[], int, int)
+		var buf = new char[10];
+		assertEquals(-1, EMPTY_READER.read(buf, 0, 10));
+	}
+
+	//====================================================================================================
 	// Test helper classes
 	//====================================================================================================
 	public static class TestReader extends StringReader {
@@ -878,6 +1015,80 @@ class IoUtils_Test extends TestBase {
 		@Override /* Overridden from Object */
 		public synchronized String toString() {
 			return new String(this.toByteArray(), UTF8);
+		}
+	}
+
+	public static class ThrowingTestInputStream extends InputStream {
+		private final byte[] data;
+		private int pos = 0;
+
+		public ThrowingTestInputStream(String s) {
+			this.data = s.getBytes();
+		}
+
+		@Override
+		public int read() throws IOException {
+			if (pos >= data.length)
+				return -1;
+			return data[pos++] & 0xFF;
+		}
+
+		@Override
+		public int read(byte[] b, int off, int len) throws IOException {
+			throw new IOException("Test exception");
+		}
+	}
+
+	public static class ThrowingTestOutputStream extends OutputStream {
+		private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+		@Override
+		public void write(int b) throws IOException {
+			baos.write(b);
+		}
+
+		@Override
+		public void flush() throws IOException {
+			throw new IOException("Test exception");
+		}
+
+		@Override
+		public void close() throws IOException {
+			throw new IOException("Test exception");
+		}
+	}
+
+	public static class ThrowingTestReader extends Reader {
+		public ThrowingTestReader() {
+		}
+
+		@Override
+		public int read(char[] cbuf, int off, int len) throws IOException {
+			throw new IOException("Test exception");
+		}
+
+		@Override
+		public void close() throws IOException {
+			throw new IOException("Test exception");
+		}
+	}
+
+	public static class ThrowingTestWriter extends Writer {
+		private final StringWriter sw = new StringWriter();
+
+		@Override
+		public void write(char[] cbuf, int off, int len) throws IOException {
+			sw.write(cbuf, off, len);
+		}
+
+		@Override
+		public void flush() throws IOException {
+			throw new IOException("Test exception");
+		}
+
+		@Override
+		public void close() throws IOException {
+			throw new IOException("Test exception");
 		}
 	}
 }
