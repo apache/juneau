@@ -67,7 +67,7 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ClassInfo extends ElementInfo implements Annotatable {
 
-	private static final Cache<Class,ClassInfo> CACHE = Cache.of(Class.class, ClassInfo.class).build();
+	private static final Cache<Class,ClassInfoTyped> CACHE = Cache.of(Class.class, ClassInfoTyped.class).build();
 
 	/** Reusable ClassInfo for Object class. */
 	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
@@ -139,7 +139,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The constructed class info.
 	 */
 	public static <T> ClassInfoTyped<T> of(Class<T> inner) {
-		return (ClassInfoTyped<T>)CACHE.get(inner, () -> new ClassInfoTyped<>(inner));
+		return CACHE.get(inner, () -> new ClassInfoTyped<>(inner));
 	}
 
 	/**

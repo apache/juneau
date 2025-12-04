@@ -84,7 +84,7 @@ public class ReflectionUtils {
 	 * @param o The class to wrap. Can be <jk>null</jk>.
 	 * @return The {@link ClassInfo} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
-	public static final ClassInfo info(Class<?> o) {
+	public static final <T> ClassInfoTyped<T> info(Class<T> o) {
 		return ClassInfo.of(o);
 	}
 
