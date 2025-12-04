@@ -29,6 +29,7 @@ Release Notes - Juneau - Version 9.2.0
     * Bump org.jacoco:jacoco-maven-plugin from 0.8.13 to 0.8.14 #273.
     * Bump js-yaml from 3.14.1 to 3.14.2 in /juneau-docs #282.
     * Bump node-forge from 1.3.1 to 1.3.2 in /juneau-docs #283, fixes CVE-2025-12816.
+    * Bump mdast-util-to-hast from 13.2.0 to 13.2.1 in /juneau-docs #286, fixes Dependabot alerts #17 mdast-util-to-hast has unsanitized class attribute.
 
 ** New Features - Multi-Key Cache and Concurrent Map Classes
 
