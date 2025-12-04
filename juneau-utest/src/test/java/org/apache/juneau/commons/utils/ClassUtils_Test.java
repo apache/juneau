@@ -30,7 +30,7 @@ import org.apache.juneau.commons.reflect.ClassInfo;
 import org.apache.juneau.commons.utils.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"serial","unused"})
+@SuppressWarnings({"unused"})
 class ClassUtils_Test {
 
 	//====================================================================================================
@@ -56,19 +56,19 @@ class ClassUtils_Test {
 		assertTrue(canAddTo(new LinkedHashSet<>()));
 		assertTrue(canAddTo(new TreeSet<>()));
 		assertTrue(canAddTo(new Vector<>()));
-		
+
 		// Unmodifiable collections
 		assertFalse(canAddTo(Collections.unmodifiableList(new ArrayList<>())));
 		assertFalse(canAddTo(Collections.unmodifiableSet(new HashSet<>())));
 		assertFalse(canAddTo(Collections.unmodifiableCollection(new ArrayList<>())));
 		assertFalse(canAddTo(Arrays.asList("a", "b"))); // Arrays$ArrayList
-		
+
 		// Java 9+ immutable collections
 		if (List.of("a").getClass().getName().contains("Immutable")) {
 			assertFalse(canAddTo(List.of("a")));
 			assertFalse(canAddTo(Set.of("a")));
 		}
-		
+
 		// Should throw when null
 		assertThrows(IllegalArgumentException.class, () -> {
 			canAddTo((Collection<?>)null);
@@ -85,15 +85,15 @@ class ClassUtils_Test {
 		assertTrue(canPutTo(new LinkedHashMap<>()));
 		assertTrue(canPutTo(new TreeMap<>()));
 		assertTrue(canPutTo(new Hashtable<>()));
-		
+
 		// Unmodifiable maps
 		assertFalse(canPutTo(Collections.unmodifiableMap(new HashMap<>())));
-		
+
 		// Java 9+ immutable maps
 		if (Map.of("a", "b").getClass().getName().contains("Immutable")) {
 			assertFalse(canPutTo(Map.of("a", "b")));
 		}
-		
+
 		// Should throw when null
 		assertThrows(IllegalArgumentException.class, () -> {
 			canPutTo((Map<?,?>)null);
@@ -108,23 +108,23 @@ class ClassUtils_Test {
 		// With Class
 		assertEquals("java.lang.String", cn(String.class));
 		assertEquals("java.util.ArrayList", cn(ArrayList.class));
-		
+
 		// With Object
 		assertEquals("java.util.HashMap", cn(new HashMap<>()));
 		assertEquals("java.lang.String", cn("test"));
-		
+
 		// With primitive
 		assertEquals("int", cn(int.class));
 		assertEquals("boolean", cn(boolean.class));
-		
+
 		// With array
 		assertEquals("[Ljava.lang.String;", cn(String[].class));
 		assertEquals("[I", cn(int[].class));
 		assertEquals("[[Ljava.lang.String;", cn(String[][].class));
-		
+
 		// With inner class
 		assertEquals("java.util.Map$Entry", cn(Map.Entry.class));
-		
+
 		// With null
 		assertNull(cn(null));
 	}
@@ -137,30 +137,30 @@ class ClassUtils_Test {
 		// With Class
 		assertEquals("String", cns(String.class));
 		assertEquals("ArrayList", cns(ArrayList.class));
-		
+
 		// With Object
 		assertEquals("HashMap", cns(new HashMap<>()));
 		assertEquals("String", cns("test"));
-		
+
 		// With primitive
 		assertEquals("int", cns(int.class));
 		assertEquals("boolean", cns(boolean.class));
-		
+
 		// With array
 		assertEquals("String[]", cns(String[].class));
 		assertEquals("int[]", cns(int[].class));
 		assertEquals("String[][]", cns(String[][].class));
-		
+
 		// With inner class
 		assertEquals("Entry", cns(Map.Entry.class));
-		
+
 		// With null
 		assertNull(cns(null));
-		
+
 		// With ClassInfo (line 188-189)
 		var classInfo = ClassInfo.of(String.class);
 		assertEquals("String", cns(classInfo));
-		
+
 		var listClassInfo = ClassInfo.of(ArrayList.class);
 		assertEquals("ArrayList", cns(listClassInfo));
 	}
@@ -173,10 +173,10 @@ class ClassUtils_Test {
 		// Top-level class
 		assertEquals("String", cnsq(String.class));
 		assertEquals("ArrayList", cnsq(ArrayList.class));
-		
+
 		// Inner class
 		assertEquals("Map.Entry", cnsq(Map.Entry.class));
-		
+
 		// Nested inner class
 		class Outer {
 			class Inner {
@@ -188,14 +188,14 @@ class ClassUtils_Test {
 		// Result will be something like "ClassUtils_2_Test.1Outer.Inner.Deep"
 		assertTrue(result.endsWith("Outer.Inner.Deep"), result);
 		assertFalse(result.contains("$"), result);
-		
+
 		// With Object
 		var obj = new HashMap<>();
 		assertEquals("HashMap", cnsq(obj));
-		
+
 		// With null
 		assertNull(cnsq(null));
-		
+
 		// Anonymous class
 		var anon = new Object() {};
 		var anonResult = cnsq(anon);
@@ -203,20 +203,20 @@ class ClassUtils_Test {
 		// After conversion should be like "ClassUtils_2_Test.1"
 		assertNotNull(anonResult);
 		assertFalse(anonResult.contains("$"), anonResult);
-		
+
 		// Array types
 		assertEquals("String[]", cnsq(String[].class));
 		assertEquals("String[][]", cnsq(String[][].class));
 		assertEquals("int[]", cnsq(int[].class));
 		assertEquals("Map.Entry[]", cnsq(Map.Entry[].class));
-		
+
 		// Array objects
 		var stringArray = new String[]{"a", "b"};
 		assertEquals("String[]", cnsq(stringArray));
-		
+
 		var intArray = new int[]{1, 2, 3};
 		assertEquals("int[]", cnsq(intArray));
-		
+
 		var multiDimArray = new String[][]{{"a"}};
 		assertEquals("String[][]", cnsq(multiDimArray));
 	}
@@ -232,18 +232,18 @@ class ClassUtils_Test {
 		assertEquals(String.class, classes[0]);
 		assertEquals(Integer.class, classes[1]);
 		assertEquals(HashMap.class, classes[2]);
-		
+
 		// With null
 		Class<?>[] classes2 = getClasses("test", null, 123);
 		assertEquals(3, classes2.length);
 		assertEquals(String.class, classes2[0]);
 		assertNull(classes2[1]);
 		assertEquals(Integer.class, classes2[2]);
-		
+
 		// Empty
 		var classes3 = getClasses();
 		assertEquals(0, classes3.length);
-		
+
 		// All null
 		var classes4 = getClasses(null, null, null);
 		assertEquals(3, classes4.length);
@@ -264,7 +264,7 @@ class ClassUtils_Test {
 		assertSame(args, result);
 		assertEquals("test", result[0]);
 		assertEquals(123, result[1]);
-		
+
 		// Wrong order - method reorders them
 		var paramTypes2 = a(Integer.class, String.class);
 		var args2 = a("test", 123);
@@ -272,14 +272,14 @@ class ClassUtils_Test {
 		assertEquals(2, result2.length);
 		assertEquals(123, result2[0]);
 		assertEquals("test", result2[1]);
-		
+
 		// Extra args - ignored
 		var paramTypes3 = a(String.class);
 		var args3 = a("test", 123, true);
 		var result3 = getMatchingArgs(paramTypes3, (Object[])args3);
 		assertEquals(1, result3.length);
 		assertEquals("test", result3[0]);
-		
+
 		// Missing args - become null
 		var paramTypes4 = a(String.class, Integer.class, Boolean.class);
 		var args4 = a("test");
@@ -288,7 +288,7 @@ class ClassUtils_Test {
 		assertEquals("test", result4[0]);
 		assertNull(result4[1]);
 		assertNull(result4[2]);
-		
+
 		// Primitive types
 		var paramTypes5 = a(int.class, String.class);
 		var args5 = a("test", 123);
@@ -296,7 +296,7 @@ class ClassUtils_Test {
 		assertEquals(2, result5.length);
 		assertEquals(123, result5[0]);
 		assertEquals("test", result5[1]);
-		
+
 		// Type hierarchy
 		var paramTypes6 = a(Number.class, String.class);
 		var args6 = a("test", 123);
@@ -304,7 +304,7 @@ class ClassUtils_Test {
 		assertEquals(2, result6.length);
 		assertEquals(123, result6[0]);
 		assertEquals("test", result6[1]);
-		
+
 		// Null args
 		var paramTypes7 = a(String.class, Integer.class);
 		var args7 = new Object[] {null, null};
@@ -312,7 +312,7 @@ class ClassUtils_Test {
 		assertEquals(2, result7.length);
 		assertNull(result7[0]);
 		assertNull(result7[1]);
-		
+
 		// Null paramTypes - should throw
 		assertThrows(NullPointerException.class, () -> {
 			getMatchingArgs(null, "test");
@@ -326,11 +326,11 @@ class ClassUtils_Test {
 	void a008_getProxyFor() {
 		// Null
 		assertNull(getProxyFor(null));
-		
+
 		// Regular object
 		var obj = "test";
 		assertNull(getProxyFor(obj));
-		
+
 		// JDK dynamic proxy
 		var proxy = Proxy.newProxyInstance(
 			Thread.currentThread().getContextClassLoader(),
@@ -339,7 +339,7 @@ class ClassUtils_Test {
 		);
 		var result = getProxyFor(proxy);
 		assertEquals(List.class, result);
-		
+
 		// JDK dynamic proxy with no interfaces
 		var proxy2 = Proxy.newProxyInstance(
 			Thread.currentThread().getContextClassLoader(),
@@ -359,12 +359,12 @@ class ClassUtils_Test {
 		assertFalse(isNotVoid(void.class));
 		assertFalse(isNotVoid(Void.class));
 		assertFalse(isNotVoid(null));
-		
+
 		// Non-void classes
 		assertTrue(isNotVoid(String.class));
 		assertTrue(isNotVoid(int.class));
 		assertTrue(isNotVoid(Object.class));
-		
+
 		// NOT_VOID predicate
 		assertFalse(NOT_VOID.test(void.class));
 		assertFalse(NOT_VOID.test(Void.class));
@@ -381,7 +381,7 @@ class ClassUtils_Test {
 		assertTrue(isVoid(void.class));
 		assertTrue(isVoid(Void.class));
 		assertTrue(isVoid(null));
-		
+
 		// Non-void classes
 		assertFalse(isVoid(String.class));
 		assertFalse(isVoid(int.class));
@@ -396,7 +396,7 @@ class ClassUtils_Test {
 		var ctor = String.class.getDeclaredConstructor();
 		// Should succeed (no security manager in tests typically)
 		assertTrue(setAccessible(ctor));
-		
+
 		// Should throw when null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
 			setAccessible((Constructor<?>)null);
@@ -415,7 +415,7 @@ class ClassUtils_Test {
 		var field = TestClass.class.getDeclaredField("field");
 		// Should succeed (no security manager in tests typically)
 		assertTrue(setAccessible(field));
-		
+
 		// Should throw when null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
 			setAccessible((Field)null);
@@ -430,7 +430,7 @@ class ClassUtils_Test {
 		var method = String.class.getDeclaredMethod("indexOf", String.class, int.class);
 		// Should succeed (no security manager in tests typically)
 		assertTrue(setAccessible(method));
-		
+
 		// Should throw when null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
 			setAccessible((Method)null);
@@ -445,7 +445,7 @@ class ClassUtils_Test {
 		// With Class
 		assertSame(String.class, toClass(String.class));
 		assertSame(Integer.class, toClass(Integer.class));
-		
+
 		// With ParameterizedType
 		class TestClass {
 			List<String> field;
@@ -454,7 +454,7 @@ class ClassUtils_Test {
 		var genericType = field.getGenericType();
 		var result = toClass(genericType);
 		assertEquals(List.class, result);
-		
+
 		// With TypeVariable - cannot be converted
 		class TestClass2<T> {
 			T field;

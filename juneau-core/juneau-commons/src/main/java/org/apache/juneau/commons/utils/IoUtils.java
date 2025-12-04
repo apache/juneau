@@ -32,7 +32,7 @@ import org.apache.juneau.commons.io.*;
 /**
  * Various I/O related utility methods.
  */
-public class IOUtils {
+public class IoUtils {
 
 	/** UTF-8 charset */
 	public static final Charset UTF8 = StandardCharsets.UTF_8;
@@ -1067,5 +1067,5 @@ public class IOUtils {
 	/**
 	 * Constructor.
 	 */
-	protected IOUtils() {}
+	protected IoUtils() {}
 }

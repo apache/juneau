@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;

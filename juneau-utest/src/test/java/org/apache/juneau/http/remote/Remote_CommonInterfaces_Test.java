@@ -17,7 +17,7 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.HttpResponses.*;

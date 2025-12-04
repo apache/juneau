@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -90,9 +90,9 @@ public class SerializerPipe implements Closeable {
 	@Override /* Overridden from Closeable */
 	public void close() {
 		try {
-			IOUtils.flush(writer, outputStream);
+			IoUtils.flush(writer, outputStream);
 			if (autoClose)
-				IOUtils.close(writer, outputStream);
+				IoUtils.close(writer, outputStream);
 		} catch (IOException e) {
 			throw bex(e);
 		}

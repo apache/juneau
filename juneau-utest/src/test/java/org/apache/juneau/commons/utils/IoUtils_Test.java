@@ -17,7 +17,7 @@
 
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -30,9 +30,9 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests {@link IOUtils}.
+ * Tests {@link IoUtils}.
  */
-class IOUtils_Test extends TestBase {
+class IoUtils_Test extends TestBase {
 
 	//====================================================================================================
 	// Constructor (line 35)
@@ -40,8 +40,8 @@ class IOUtils_Test extends TestBase {
 	@Test
 	void a00_constructor() {
 		// Test line 35: class instantiation
-		// IOUtils has an implicit public no-arg constructor
-		var instance = new IOUtils();
+		// IoUtils has an implicit public no-arg constructor
+		var instance = new IoUtils();
 		assertNotNull(instance);
 	}
 

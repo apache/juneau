@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean;
 
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.sql.*;

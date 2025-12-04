@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 
 import java.io.*;
 import java.time.*;

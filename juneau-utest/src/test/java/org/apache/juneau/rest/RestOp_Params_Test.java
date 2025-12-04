@@ -17,7 +17,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.http.HttpMethod.*;
 
 import java.io.*;

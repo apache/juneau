@@ -190,7 +190,7 @@ public class ClasspathStore extends ConfigStore {
 		var cl = Thread.currentThread().getContextClassLoader();
 		try (var in = cl.getResourceAsStream(name)) {
 			if (nn(in))
-				cache.put(name, IOUtils.read(in));
+				cache.put(name, IoUtils.read(in));
 		}
 		return emptyIfNull(cache.get(name));
 	}

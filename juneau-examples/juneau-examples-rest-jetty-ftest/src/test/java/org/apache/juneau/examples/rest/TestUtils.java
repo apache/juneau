@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;

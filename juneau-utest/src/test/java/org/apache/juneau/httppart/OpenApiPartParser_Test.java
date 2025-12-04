@@ -17,7 +17,7 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;

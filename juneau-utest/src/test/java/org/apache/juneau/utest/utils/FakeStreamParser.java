@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.utest.utils;
 
-import static org.apache.juneau.commons.utils.IOUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
 
 import java.io.*;
 
