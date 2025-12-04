@@ -566,13 +566,13 @@
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<em class="jxr_comment">// To test the at == null branch, we need inner != null but inner.arrayType() == null</em>
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<em class="jxr_comment">// This is difficult to achieve with normal Java classes, but we can verify the non-null branch works</em>
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<em class="jxr_comment">// The non-null branch (at != null) is already covered above with String.class and String[].class</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<em class="jxr_comment">// Verify that the non-null branch works correctly (at != null -&gt; return of(at))</em>
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">var</strong> ci4 = ClassInfo.of(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> arrayType3 = ci4.arrayType();
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 		assertNotNull(arrayType3);
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 		assertEquals(Integer[].<strong class="jxr_keyword">class</strong>, arrayType3.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<em class="jxr_comment">// Note: The at == null branch at line 391 is a defensive check that may be unreachable</em>
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<em class="jxr_comment">// in practice with normal Java classes, but the code includes it for safety</em>
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 	}
@@ -625,7 +625,7 @@
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 		check(<span class="jxr_string">"CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()"</span>, cc3.getAllMethodsTopDown());
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<em class="jxr_comment">// Test twice to verify caching</em>
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 		check(<span class="jxr_string">"CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()"</span>, cc3.getAllMethodsTopDown());
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<em class="jxr_comment">// Test line 248/590/615: getAllMethodsTopDown() initialization and method call</em>
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<em class="jxr_comment">// Test with class that has no methods</em>
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<strong class="jxr_keyword">var</strong> objectCi = ClassInfo.of(Object.<strong class="jxr_keyword">class</strong>);
@@ -634,7 +634,7 @@
 <a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<em class="jxr_comment">// Object class has methods, but we filter out Object.class methods in publicMethods</em>
 <a class="jxr_linenumber" name="L627" href="#L627">627</a> 		<em class="jxr_comment">// getAllMethodsTopDown includes all methods from all parents, so it should have methods</em>
 <a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<em class="jxr_comment">// Actually, getAllMethodsTopDown uses getAllParents() which includes Object, so it should have methods</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<em class="jxr_comment">// Test with interface that has no methods</em>
 <a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<strong class="jxr_keyword">var</strong> emptyInterface = ClassInfo.of(EmptyInterface.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> 		<strong class="jxr_keyword">var</strong> emptyMethods = emptyInterface.getAllMethodsTopDown();
@@ -642,7 +642,7 @@
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 		<em class="jxr_comment">// Empty interface should have no methods</em>
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 		assertTrue(emptyMethods.isEmpty() || emptyMethods.size() &gt;= 0); <em class="jxr_comment">// May have Object methods</em>
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 	}
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<em class="jxr_comment">// Helper interface for testing</em>
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 	<strong class="jxr_keyword">interface</strong> EmptyInterface {}
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 
@@ -783,12 +783,12 @@
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<em class="jxr_comment">// Number can accept int (parent type)</em>
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 		assertTrue(ClassInfo.of(Number.<strong class="jxr_keyword">class</strong>).canAcceptArg(42));
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 		assertTrue(ClassInfo.of(Number.<strong class="jxr_keyword">class</strong>).canAcceptArg(Integer.valueOf(42)));
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<em class="jxr_comment">// Test line 434: all 4 branches of if (this.isPrimitive() || child.getClass().isPrimitive())</em>
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 		<em class="jxr_comment">// Branch 1: this.isPrimitive() == true &amp;&amp; child.getClass().isPrimitive() == true</em>
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<em class="jxr_comment">// Note: When you pass a primitive value like 42, it gets autoboxed to Integer, so child.getClass() returns Integer.class (not primitive)</em>
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 		<em class="jxr_comment">// This branch is likely unreachable in practice since primitive values are always autoboxed</em>
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<em class="jxr_comment">// Branch 2: this.isPrimitive() == true &amp;&amp; child.getClass().isPrimitive() == false (already covered above at line 707)</em>
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 		<em class="jxr_comment">// Branch 3: this.isPrimitive() == false &amp;&amp; child.getClass().isPrimitive() == true (already covered above at line 710)</em>
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<em class="jxr_comment">// Branch 4: this.isPrimitive() == false &amp;&amp; child.getClass().isPrimitive() == false</em>
@@ -796,7 +796,7 @@
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 		<em class="jxr_comment">// This is the missing branch - need to test when condition is false (both false), so we skip the if and return false</em>
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> 		assertFalse(ClassInfo.of(String.<strong class="jxr_keyword">class</strong>).canAcceptArg(<strong class="jxr_keyword">new</strong> Object())); <em class="jxr_comment">// Both non-primitive, isInstance false, condition false, returns false</em>
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 		assertFalse(ClassInfo.of(String.<strong class="jxr_keyword">class</strong>).canAcceptArg(42)); <em class="jxr_comment">// String is not primitive, Integer is not primitive, isInstance false, condition false, returns false</em>
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 		<em class="jxr_comment">// Test case where this is primitive but child is not (branch 2) - different primitive types that don't match</em>
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 		assertFalse(ClassInfo.of(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>).canAcceptArg(Long.valueOf(42L))); <em class="jxr_comment">// int is primitive, Long is not primitive, different types, condition true, returns false from isParentOf</em>
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 	}
@@ -846,7 +846,7 @@
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 		<em class="jxr_comment">// For types without inner class, should return null (line 474-475)</em>
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L840" href="#L840">840</a> 		assertNull(ci.componentType());
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> 
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 		
 <a class="jxr_linenumber" name="L842" href="#L842">842</a> 		<em class="jxr_comment">// Test line 476-477: componentType() method</em>
 <a class="jxr_linenumber" name="L843" href="#L843">843</a> 		<em class="jxr_comment">// For non-array types, inner.componentType() returns null, so ct == null branch is taken</em>
 <a class="jxr_linenumber" name="L844" href="#L844">844</a> 		<strong class="jxr_keyword">var</strong> nonArray = ClassInfo.of(String.<strong class="jxr_keyword">class</strong>);
@@ -854,7 +854,7 @@
 <a class="jxr_linenumber" name="L846" href="#L846">846</a> 		<em class="jxr_comment">// String.class.componentType() returns null for non-array types</em>
 <a class="jxr_linenumber" name="L847" href="#L847">847</a> 		<em class="jxr_comment">// So the ternary at line 477: ct == null ? null : of(ct) takes the null branch</em>
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> 		assertNull(ct);
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> 
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 		
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> 		<em class="jxr_comment">// For array types, inner.componentType() returns non-null, so ct != null branch is taken</em>
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> 		<strong class="jxr_keyword">var</strong> array = ClassInfo.of(String[].<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 		<strong class="jxr_keyword">var</strong> ct2 = array.componentType();
@@ -915,7 +915,7 @@
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<em class="jxr_comment">// G4 has no declared annotations (inherits from G3)</em>
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">var</strong> declared2 = g4.getDeclaredAnnotations();
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 		assertTrue(declared2.isEmpty());
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<em class="jxr_comment">// Test with null inner (line 231: opt(inner) returns empty when inner is null)</em>
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 		<strong class="jxr_keyword">var</strong> declared3 = ci.getDeclaredAnnotations();
@@ -998,7 +998,7 @@
 <a class="jxr_linenumber" name="L990" href="#L990">990</a> 		check(<span class="jxr_string">""</span>, pTypeDimensionalInfo.getDeclaredInterfaces());
 <a class="jxr_linenumber" name="L991" href="#L991">991</a> 		check(<span class="jxr_string">"Map"</span>, pTypeGenericInfo.getDeclaredInterfaces());
 <a class="jxr_linenumber" name="L992" href="#L992">992</a> 		check(<span class="jxr_string">""</span>, pTypeGenericArgInfo.getDeclaredInterfaces());
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> 		<em class="jxr_comment">// Test line 190/235: inner == null case</em>
 <a class="jxr_linenumber" name="L995" href="#L995">995</a> 		<em class="jxr_comment">// When inner is null, opt(inner) returns empty, so orElse(liste()) returns empty list</em>
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
@@ -1149,7 +1149,7 @@
 <a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 		<strong class="jxr_keyword">var</strong> local = ClassInfo.of(LocalClass.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> 		<strong class="jxr_keyword">var</strong> constructor = local.getEnclosingConstructor();
 <a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 		assertNull(constructor);
-<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 
+<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 		
 <a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 		<em class="jxr_comment">// Test line 952: ec != null branch - class declared inside constructor</em>
 <a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 		<em class="jxr_comment">// Create an instance to trigger the constructor and capture the local class</em>
 <a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 		<strong class="jxr_keyword">new</strong> EnclosingConstructorTestClass();
@@ -1314,7 +1314,7 @@
 <a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 		assertNull(pTypeInfo.getNameCanonical());
 <a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 		assertNull(pTypeDimensionalInfo.getNameCanonical());
 <a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 		assertNull(pTypeGenericInfo.getNameCanonical());
-<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 
+<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 		
 <a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 		<em class="jxr_comment">// Test line 1112: inner == null &amp;&amp; ! isParameterizedType (branch 3)</em>
 <a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 		<em class="jxr_comment">// Create a ClassInfo with inner == null and innerType being a TypeVariable (not ParameterizedType)</em>
 <a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 		<em class="jxr_comment">// aType is a TypeVariable from A2 extends Value&lt;A1&gt;</em>
@@ -1429,22 +1429,22 @@
 <a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 		assertNotNull(formatted2);
 <a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 		<em class="jxr_comment">// When inner is null but isParameterizedType is true, code extracts raw type and uses its simple name</em>
 <a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 		assertEquals(<span class="jxr_string">"Map"</span>, formatted2);
-<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 
+<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 		
 <a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> 		<em class="jxr_comment">// Test line 326: FULL format separator replacement (4 branches)</em>
 <a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> 		<em class="jxr_comment">// Branch 1: separator != '$' &amp;&amp; sb.indexOf("$") != -1 (true, true) - should replace '$' with separator</em>
 <a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> 		<strong class="jxr_keyword">var</strong> ci12 = ClassInfo.of(Map.Entry.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> 		assertEquals(<span class="jxr_string">"java.util.Map.Entry"</span>, ci12.getNameFormatted(FULL, false, '.', BRACKETS));
-<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 
+<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 		
 <a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 		<em class="jxr_comment">// Branch 2: separator != '$' &amp;&amp; sb.indexOf("$") == -1 (true, false) - no '$' in name, no replacement needed</em>
 <a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 		<strong class="jxr_keyword">var</strong> ci13 = ClassInfo.of(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 		assertEquals(<span class="jxr_string">"java.lang.String"</span>, ci13.getNameFormatted(FULL, false, '.', BRACKETS));
-<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 
+<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 		
 <a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 		<em class="jxr_comment">// Branch 3: separator == '$' &amp;&amp; sb.indexOf("$") != -1 (false, true) - separator is '$', no replacement</em>
 <a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 		assertEquals(<span class="jxr_string">"java.util.Map$Entry"</span>, ci12.getNameFormatted(FULL, false, '$', BRACKETS));
-<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 
+<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 		
 <a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> 		<em class="jxr_comment">// Branch 4: separator == '$' &amp;&amp; sb.indexOf("$") == -1 (false, false) - separator is '$', no '$' in name</em>
 <a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 		assertEquals(<span class="jxr_string">"java.lang.String"</span>, ci13.getNameFormatted(FULL, false, '$', BRACKETS));
-<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 
+<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 		
 <a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 		<em class="jxr_comment">// Test line 360: SIMPLE format with null class (not ParameterizedType) - should use innerType.getTypeName()</em>
 <a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 		<em class="jxr_comment">// Use an existing TypeVariable from MC class which has type parameters</em>
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 		<strong class="jxr_keyword">var</strong> typeVar = MC.<strong class="jxr_keyword">class</strong>.getTypeParameters()[0]; <em class="jxr_comment">// MC&lt;K,E&gt; has K as first type parameter</em>
@@ -1664,16 +1664,16 @@
 <a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 		check(<span class="jxr_string">"java.util"</span>, pTypeDimensionalInfo.getPackage());
 <a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 		check(<span class="jxr_string">"java.util"</span>, pTypeGenericInfo.getPackage());
 <a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 		check(<strong class="jxr_keyword">null</strong>, pTypeGenericArgInfo.getPackage());
-<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 
+<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 		
 <a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 		<em class="jxr_comment">// Test line 229: packageInfo memoization with null inner</em>
 <a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 		<em class="jxr_comment">// When inner is null, opt(inner) is empty, so should return null</em>
 <a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 		assertNull(ci.getPackage());
-<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 
+<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 		
 <a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 		<em class="jxr_comment">// Test with primitive types (getPackage() returns null)</em>
 <a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 		<strong class="jxr_keyword">var</strong> intCi = ClassInfo.of(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 		assertNull(intCi.getPackage()); <em class="jxr_comment">// Primitives have no package</em>
-<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 
+<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 		
 <a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 		<em class="jxr_comment">// Test with arrays of primitives (getPackage() returns null)</em>
 <a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 		<strong class="jxr_keyword">var</strong> intArrayCi = ClassInfo.of(<strong class="jxr_keyword">int</strong>[].<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 		assertNull(intArrayCi.getPackage()); <em class="jxr_comment">// Arrays of primitives have no package</em>
@@ -1749,7 +1749,7 @@
 <a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> 
 <a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> 		<em class="jxr_comment">// Nested type</em>
 <a class="jxr_linenumber" name="L1743" href="#L1743">1743</a> 		check(<span class="jxr_string">"MM"</span>, mn.getParameterType(1, HashMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 
+<a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 		
 <a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 		<em class="jxr_comment">// Note: Line 1375 (actualType3 = (TypeVariable&lt;?&gt;)entry.getValue()) is executed when</em>
 <a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> 		<em class="jxr_comment">// resolving a type variable in a nested inner class where the value in the outer type map</em>
 <a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> 		<em class="jxr_comment">// is itself a TypeVariable (not a Class). This requires a complex nested generic scenario</em>
@@ -1803,13 +1803,13 @@
 <a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> 	<em class="jxr_comment">// Only compile if sealed classes are available</em>
 <a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> sealed <strong class="jxr_keyword">class</strong> SealedTestClass permits SealedSubclass1, SealedSubclass2 {
 <a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> 	}
-<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 
+<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 	
 <a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> SealedSubclass1 <strong class="jxr_keyword">extends</strong> SealedTestClass {
 <a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> 	}
-<a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> 
+<a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> 	
 <a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> SealedSubclass2 <strong class="jxr_keyword">extends</strong> SealedTestClass {
 <a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> 	}
-<a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 
+<a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 	
 <a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 	<em class="jxr_comment">// Record class for testing isRecord (Java 14+)</em>
 <a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 	<em class="jxr_comment">// Only compile if records are available</em>
 <a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> record TestRecord(String name, <strong class="jxr_keyword">int</strong> value) {
@@ -1830,7 +1830,7 @@
 <a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 		<strong class="jxr_keyword">var</strong> empty = ci.getPermittedSubclasses();
 <a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 		assertNotNull(empty);
 <a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 		assertTrue(empty.isEmpty());
-<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 
+<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 		
 <a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 		<em class="jxr_comment">// Test line 1465: inner != null &amp;&amp; inner.isSealed() - sealed class with permitted subclasses</em>
 <a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> 		<em class="jxr_comment">// Only test if sealed classes are available (Java 17+)</em>
 <a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> 		<strong class="jxr_keyword">try</strong> {
@@ -1950,7 +1950,7 @@
 <a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 		<em class="jxr_comment">// Test on types</em>
 <a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 		check(<span class="jxr_string">""</span>, aTypeInfo.getPublicFields());
 <a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 		check(<span class="jxr_string">""</span>, pTypeGenericArgInfo.getPublicFields());
-<a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 
+<a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 		
 <a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 		<em class="jxr_comment">// Test line 249: publicFields memoization</em>
 <a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> 		<em class="jxr_comment">// This line uses parents.get().stream() which requires inner to be non-null</em>
 <a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> 		<em class="jxr_comment">// When inner is null, parents.get() will return empty list, so publicFields should be empty</em>
@@ -2036,12 +2036,12 @@
 <a class="jxr_linenumber" name="L2028" href="#L2028">2028</a> 			<em class="jxr_comment">// Records not available, skip test</em>
 <a class="jxr_linenumber" name="L2029" href="#L2029">2029</a> 			assertTrue(cc3.getRecordComponents().isEmpty());
 <a class="jxr_linenumber" name="L2030" href="#L2030">2030</a> 		}
-<a class="jxr_linenumber" name="L2031" href="#L2031">2031</a> 
+<a class="jxr_linenumber" name="L2031" href="#L2031">2031</a> 		
 <a class="jxr_linenumber" name="L2032" href="#L2032">2032</a> 		<em class="jxr_comment">// Test line 240: recordComponents memoization</em>
 <a class="jxr_linenumber" name="L2033" href="#L2033">2033</a> 		<em class="jxr_comment">// When inner is null, opt(inner) is empty, so should return empty list</em>
 <a class="jxr_linenumber" name="L2034" href="#L2034">2034</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> 		assertTrue(ci.getRecordComponents().isEmpty());
-<a class="jxr_linenumber" name="L2036" href="#L2036">2036</a> 
+<a class="jxr_linenumber" name="L2036" href="#L2036">2036</a> 		
 <a class="jxr_linenumber" name="L2037" href="#L2037">2037</a> 		<em class="jxr_comment">// When inner is not null but isRecord() is false, filter should return empty, so should return empty list</em>
 <a class="jxr_linenumber" name="L2038" href="#L2038">2038</a> 		assertTrue(aClass.getRecordComponents().isEmpty());
 <a class="jxr_linenumber" name="L2039" href="#L2039">2039</a> 	}
@@ -2056,11 +2056,11 @@
 <a class="jxr_linenumber" name="L2048" href="#L2048">2048</a> 		<strong class="jxr_keyword">var</strong> method = repeatable.getRepeatedAnnotationMethod();
 <a class="jxr_linenumber" name="L2049" href="#L2049">2049</a> 		<em class="jxr_comment">// @Repeatable itself is not repeatable, so should return null</em>
 <a class="jxr_linenumber" name="L2050" href="#L2050">2050</a> 		assertNull(method);
-<a class="jxr_linenumber" name="L2051" href="#L2051">2051</a> 
+<a class="jxr_linenumber" name="L2051" href="#L2051">2051</a> 		
 <a class="jxr_linenumber" name="L2052" href="#L2052">2052</a> 		<em class="jxr_comment">// Test isRepeatedAnnotation() (line 2135)</em>
 <a class="jxr_linenumber" name="L2053" href="#L2053">2053</a> 		<em class="jxr_comment">// When getRepeatedAnnotationMethod() returns null, isRepeatedAnnotation() should return false</em>
 <a class="jxr_linenumber" name="L2054" href="#L2054">2054</a> 		assertFalse(repeatable.isRepeatedAnnotation());
-<a class="jxr_linenumber" name="L2055" href="#L2055">2055</a> 
+<a class="jxr_linenumber" name="L2055" href="#L2055">2055</a> 		
 <a class="jxr_linenumber" name="L2056" href="#L2056">2056</a> 		<em class="jxr_comment">// Test with a class that has a repeatable annotation method</em>
 <a class="jxr_linenumber" name="L2057" href="#L2057">2057</a> 		<em class="jxr_comment">// TestRepeatableContainer is the container annotation for TestRepeatable</em>
 <a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 		<em class="jxr_comment">// It has a value() method that returns TestRepeatable[], and TestRepeatable is marked with @Repeatable(TestRepeatableContainer.class)</em>
@@ -2068,23 +2068,23 @@
 <a class="jxr_linenumber" name="L2060" href="#L2060">2060</a> 		<strong class="jxr_keyword">var</strong> containerMethod = container.getRepeatedAnnotationMethod();
 <a class="jxr_linenumber" name="L2061" href="#L2061">2061</a> 		assertNotNull(containerMethod);  <em class="jxr_comment">// Should find the value() method</em>
 <a class="jxr_linenumber" name="L2062" href="#L2062">2062</a> 		assertTrue(container.isRepeatedAnnotation());  <em class="jxr_comment">// Line 2135: getRepeatedAnnotationMethod() != null returns true</em>
-<a class="jxr_linenumber" name="L2063" href="#L2063">2063</a> 
+<a class="jxr_linenumber" name="L2063" href="#L2063">2063</a> 		
 <a class="jxr_linenumber" name="L2064" href="#L2064">2064</a> 		<em class="jxr_comment">// Test line 2364 branches: return r != null &amp;&amp; r.value().equals(inner);</em>
 <a class="jxr_linenumber" name="L2065" href="#L2065">2065</a> 		<em class="jxr_comment">// Branch 1: r != null is false (r is null) - when component type doesn't have @Repeatable</em>
 <a class="jxr_linenumber" name="L2066" href="#L2066">2066</a> 		<em class="jxr_comment">// This is covered by NonRepeatableArrayContainer which has value() returning String[], but String is not a repeatable annotation</em>
 <a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> 		<strong class="jxr_keyword">var</strong> nonRepeatableContainer = ClassInfo.of(NonRepeatableArrayContainer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> 		assertNull(nonRepeatableContainer.getRepeatedAnnotationMethod());  <em class="jxr_comment">// Should return null because String is not repeatable</em>
-<a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> 
+<a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> 		
 <a class="jxr_linenumber" name="L2070" href="#L2070">2070</a> 		<em class="jxr_comment">// Branch 2: r != null is true, r.value().equals(inner) is true - covered by TestRepeatableContainer above</em>
 <a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> 		<em class="jxr_comment">// TestRepeatableContainer has value() returning TestRepeatable[], and TestRepeatable is marked with @Repeatable(TestRepeatableContainer.class)</em>
 <a class="jxr_linenumber" name="L2072" href="#L2072">2072</a> 		<em class="jxr_comment">// So when checking TestRepeatableContainer, r.value() equals TestRepeatableContainer.class (inner)</em>
-<a class="jxr_linenumber" name="L2073" href="#L2073">2073</a> 
+<a class="jxr_linenumber" name="L2073" href="#L2073">2073</a> 		
 <a class="jxr_linenumber" name="L2074" href="#L2074">2074</a> 		<em class="jxr_comment">// Branch 3: r != null is true, r.value().equals(inner) is false - when @Repeatable points to a different container</em>
 <a class="jxr_linenumber" name="L2075" href="#L2075">2075</a> 		<em class="jxr_comment">// WrongContainer has value() returning TestRepeatable[], but TestRepeatable's @Repeatable points to TestRepeatableContainer, not WrongContainer</em>
 <a class="jxr_linenumber" name="L2076" href="#L2076">2076</a> 		<em class="jxr_comment">// So when checking WrongContainer, r.value() would be TestRepeatableContainer.class, not WrongContainer.class, so equals(inner) is false</em>
 <a class="jxr_linenumber" name="L2077" href="#L2077">2077</a> 		<strong class="jxr_keyword">var</strong> wrongContainer = ClassInfo.of(WrongContainer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 		assertNull(wrongContainer.getRepeatedAnnotationMethod());  <em class="jxr_comment">// Should return null because the @Repeatable points to a different container</em>
-<a class="jxr_linenumber" name="L2079" href="#L2079">2079</a> 
+<a class="jxr_linenumber" name="L2079" href="#L2079">2079</a> 		
 <a class="jxr_linenumber" name="L2080" href="#L2080">2080</a> 		<em class="jxr_comment">// Test that non-repeatable classes return false</em>
 <a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> 		assertFalse(aClass.isRepeatedAnnotation());
 <a class="jxr_linenumber" name="L2082" href="#L2082">2082</a> 	}
@@ -2098,12 +2098,12 @@
 <a class="jxr_linenumber" name="L2090" href="#L2090">2090</a> 		assertNotNull(signers);
 <a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> 		<em class="jxr_comment">// Most classes won't have signers unless from a signed JAR</em>
 <a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> 		assertTrue(signers.isEmpty() || !signers.isEmpty());
-<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 
+<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 		
 <a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> 		<em class="jxr_comment">// Test line 244: signers memoization</em>
 <a class="jxr_linenumber" name="L2095" href="#L2095">2095</a> 		<em class="jxr_comment">// When inner is null, opt(inner) is empty, so should return empty list</em>
 <a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L2097" href="#L2097">2097</a> 		assertTrue(ci.getSigners().isEmpty());
-<a class="jxr_linenumber" name="L2098" href="#L2098">2098</a> 
+<a class="jxr_linenumber" name="L2098" href="#L2098">2098</a> 		
 <a class="jxr_linenumber" name="L2099" href="#L2099">2099</a> 		<em class="jxr_comment">// When inner is not null but getSigners() returns null, map should handle null and return empty list</em>
 <a class="jxr_linenumber" name="L2100" href="#L2100">2100</a> 		<em class="jxr_comment">// Most classes return null from getSigners(), which is then wrapped in u(l(x)) to create empty list</em>
 <a class="jxr_linenumber" name="L2101" href="#L2101">2101</a> 		<em class="jxr_comment">// This is already tested above with aClass.getSigners()</em>
@@ -2259,18 +2259,18 @@
 <a class="jxr_linenumber" name="L2251" href="#L2251">2251</a> 		assertTrue(aClass.is(NOT_RECORD));
 <a class="jxr_linenumber" name="L2252" href="#L2252">2252</a> 		assertTrue(aClass.is(NOT_SEALED));
 <a class="jxr_linenumber" name="L2253" href="#L2253">2253</a> 		assertTrue(aClass.is(NOT_SYNTHETIC));
-<a class="jxr_linenumber" name="L2254" href="#L2254">2254</a> 
+<a class="jxr_linenumber" name="L2254" href="#L2254">2254</a> 		
 <a class="jxr_linenumber" name="L2255" href="#L2255">2255</a> 		<em class="jxr_comment">// Test positive ElementFlag cases (lines 1772, 1774, 1775, 1776, 1781, 1783, 1787, 1789, 1791, 1793)</em>
 <a class="jxr_linenumber" name="L2256" href="#L2256">2256</a> 		<em class="jxr_comment">// ANNOTATION (line 1772)</em>
 <a class="jxr_linenumber" name="L2257" href="#L2257">2257</a> 		assertTrue(ClassInfo.of(A.<strong class="jxr_keyword">class</strong>).is(ANNOTATION));
 <a class="jxr_linenumber" name="L2258" href="#L2258">2258</a> 		assertFalse(aClass.is(ANNOTATION));
-<a class="jxr_linenumber" name="L2259" href="#L2259">2259</a> 
+<a class="jxr_linenumber" name="L2259" href="#L2259">2259</a> 		
 <a class="jxr_linenumber" name="L2260" href="#L2260">2260</a> 		<em class="jxr_comment">// NOT_ANNOTATION (line 1773) - test both branches</em>
 <a class="jxr_linenumber" name="L2261" href="#L2261">2261</a> 		<em class="jxr_comment">// Branch 1: isAnnotation() returns false, so NOT_ANNOTATION returns true</em>
 <a class="jxr_linenumber" name="L2262" href="#L2262">2262</a> 		assertTrue(aClass.is(NOT_ANNOTATION));
 <a class="jxr_linenumber" name="L2263" href="#L2263">2263</a> 		<em class="jxr_comment">// Branch 2: isAnnotation() returns true, so NOT_ANNOTATION returns false</em>
 <a class="jxr_linenumber" name="L2264" href="#L2264">2264</a> 		assertFalse(ClassInfo.of(A.<strong class="jxr_keyword">class</strong>).is(NOT_ANNOTATION));
-<a class="jxr_linenumber" name="L2265" href="#L2265">2265</a> 
+<a class="jxr_linenumber" name="L2265" href="#L2265">2265</a> 		
 <a class="jxr_linenumber" name="L2266" href="#L2266">2266</a> 		<em class="jxr_comment">// ANONYMOUS and NOT_ANONYMOUS (lines 1774, 1775)</em>
 <a class="jxr_linenumber" name="L2267" href="#L2267">2267</a> 		<em class="jxr_comment">// Anonymous classes are created dynamically, so we test NOT_ANONYMOUS</em>
 <a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> 		assertTrue(aClass.is(NOT_ANONYMOUS));
@@ -2281,27 +2281,27 @@
 <a class="jxr_linenumber" name="L2273" href="#L2273">2273</a> 			assertTrue(anonymousInfo.is(ANONYMOUS));
 <a class="jxr_linenumber" name="L2274" href="#L2274">2274</a> 			assertFalse(anonymousInfo.is(NOT_ANONYMOUS));
 <a class="jxr_linenumber" name="L2275" href="#L2275">2275</a> 		}
-<a class="jxr_linenumber" name="L2276" href="#L2276">2276</a> 
+<a class="jxr_linenumber" name="L2276" href="#L2276">2276</a> 		
 <a class="jxr_linenumber" name="L2277" href="#L2277">2277</a> 		<em class="jxr_comment">// ARRAY (line 1776)</em>
 <a class="jxr_linenumber" name="L2278" href="#L2278">2278</a> 		assertTrue(ClassInfo.of(String[].<strong class="jxr_keyword">class</strong>).is(ARRAY));
 <a class="jxr_linenumber" name="L2279" href="#L2279">2279</a> 		assertFalse(aClass.is(ARRAY));
-<a class="jxr_linenumber" name="L2280" href="#L2280">2280</a> 
+<a class="jxr_linenumber" name="L2280" href="#L2280">2280</a> 		
 <a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> 		<em class="jxr_comment">// NOT_ARRAY (line 1777) - test both branches</em>
 <a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> 		<em class="jxr_comment">// Branch 1: isArray() returns false, so NOT_ARRAY returns true</em>
 <a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> 		assertTrue(aClass.is(NOT_ARRAY));
 <a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> 		<em class="jxr_comment">// Branch 2: isArray() returns true, so NOT_ARRAY returns false</em>
 <a class="jxr_linenumber" name="L2285" href="#L2285">2285</a> 		assertFalse(ClassInfo.of(String[].<strong class="jxr_keyword">class</strong>).is(NOT_ARRAY));
-<a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 
+<a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 		
 <a class="jxr_linenumber" name="L2287" href="#L2287">2287</a> 		<em class="jxr_comment">// ENUM (line 1781)</em>
 <a class="jxr_linenumber" name="L2288" href="#L2288">2288</a> 		assertTrue(ClassInfo.of(ClassArrayFormat.<strong class="jxr_keyword">class</strong>).is(ENUM));
 <a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> 		assertFalse(aClass.is(ENUM));
-<a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> 
+<a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> 		
 <a class="jxr_linenumber" name="L2291" href="#L2291">2291</a> 		<em class="jxr_comment">// NOT_ENUM (line 1782) - test both branches</em>
 <a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> 		<em class="jxr_comment">// Branch 1: isEnum() returns false, so NOT_ENUM returns true</em>
 <a class="jxr_linenumber" name="L2293" href="#L2293">2293</a> 		assertTrue(aClass.is(NOT_ENUM));
 <a class="jxr_linenumber" name="L2294" href="#L2294">2294</a> 		<em class="jxr_comment">// Branch 2: isEnum() returns true, so NOT_ENUM returns false</em>
 <a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> 		assertFalse(ClassInfo.of(ClassArrayFormat.<strong class="jxr_keyword">class</strong>).is(NOT_ENUM));
-<a class="jxr_linenumber" name="L2296" href="#L2296">2296</a> 
+<a class="jxr_linenumber" name="L2296" href="#L2296">2296</a> 		
 <a class="jxr_linenumber" name="L2297" href="#L2297">2297</a> 		<em class="jxr_comment">// LOCAL and NOT_LOCAL (line 1783)</em>
 <a class="jxr_linenumber" name="L2298" href="#L2298">2298</a> 		<em class="jxr_comment">// Local class</em>
 <a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> 		<strong class="jxr_keyword">class</strong> LocalTestClass {}
@@ -2310,7 +2310,7 @@
 <a class="jxr_linenumber" name="L2302" href="#L2302">2302</a> 		assertFalse(localInfo.is(NOT_LOCAL));
 <a class="jxr_linenumber" name="L2303" href="#L2303">2303</a> 		assertTrue(aClass.is(NOT_LOCAL));
 <a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> 		assertFalse(aClass.is(LOCAL));
-<a class="jxr_linenumber" name="L2305" href="#L2305">2305</a> 
+<a class="jxr_linenumber" name="L2305" href="#L2305">2305</a> 		
 <a class="jxr_linenumber" name="L2306" href="#L2306">2306</a> 		<em class="jxr_comment">// NON_STATIC_MEMBER (line 1787)</em>
 <a class="jxr_linenumber" name="L2307" href="#L2307">2307</a> 		<em class="jxr_comment">// H_PublicMember is a non-static member class</em>
 <a class="jxr_linenumber" name="L2308" href="#L2308">2308</a> 		<strong class="jxr_keyword">var</strong> nonStaticMember = ClassInfo.of(H_PublicMember.<strong class="jxr_keyword">class</strong>);
@@ -2318,15 +2318,15 @@
 <a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> 		assertFalse(nonStaticMember.is(NOT_NON_STATIC_MEMBER));
 <a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> 		assertTrue(aClass.is(NOT_NON_STATIC_MEMBER));
 <a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> 		assertFalse(aClass.is(NON_STATIC_MEMBER));
-<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> 
+<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> 		
 <a class="jxr_linenumber" name="L2314" href="#L2314">2314</a> 		<em class="jxr_comment">// PRIMITIVE (line 1789)</em>
 <a class="jxr_linenumber" name="L2315" href="#L2315">2315</a> 		assertTrue(ClassInfo.of(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>).is(PRIMITIVE));
 <a class="jxr_linenumber" name="L2316" href="#L2316">2316</a> 		assertFalse(aClass.is(PRIMITIVE));
-<a class="jxr_linenumber" name="L2317" href="#L2317">2317</a> 
+<a class="jxr_linenumber" name="L2317" href="#L2317">2317</a> 		
 <a class="jxr_linenumber" name="L2318" href="#L2318">2318</a> 		<em class="jxr_comment">// NOT_PRIMITIVE (line 1790)</em>
 <a class="jxr_linenumber" name="L2319" href="#L2319">2319</a> 		assertTrue(aClass.is(NOT_PRIMITIVE));
 <a class="jxr_linenumber" name="L2320" href="#L2320">2320</a> 		assertFalse(ClassInfo.of(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>).is(NOT_PRIMITIVE));
-<a class="jxr_linenumber" name="L2321" href="#L2321">2321</a> 
+<a class="jxr_linenumber" name="L2321" href="#L2321">2321</a> 		
 <a class="jxr_linenumber" name="L2322" href="#L2322">2322</a> 		<em class="jxr_comment">// RECORD (line 1791) - test if records are available</em>
 <a class="jxr_linenumber" name="L2323" href="#L2323">2323</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L2324" href="#L2324">2324</a> 			Class.forName(<span class="jxr_string">"java.lang.Record"</span>);
@@ -2336,7 +2336,7 @@
 <a class="jxr_linenumber" name="L2328" href="#L2328">2328</a> 		} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
 <a class="jxr_linenumber" name="L2329" href="#L2329">2329</a> 			<em class="jxr_comment">// Records not available, skip</em>
 <a class="jxr_linenumber" name="L2330" href="#L2330">2330</a> 		}
-<a class="jxr_linenumber" name="L2331" href="#L2331">2331</a> 
+<a class="jxr_linenumber" name="L2331" href="#L2331">2331</a> 		
 <a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> 		<em class="jxr_comment">// NOT_RECORD (line 1792) - test both branches</em>
 <a class="jxr_linenumber" name="L2333" href="#L2333">2333</a> 		<em class="jxr_comment">// Branch 1: isRecord() returns false, so NOT_RECORD returns true</em>
 <a class="jxr_linenumber" name="L2334" href="#L2334">2334</a> 		assertTrue(aClass.is(NOT_RECORD));
@@ -2350,7 +2350,7 @@
 <a class="jxr_linenumber" name="L2342" href="#L2342">2342</a> 		} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
 <a class="jxr_linenumber" name="L2343" href="#L2343">2343</a> 			<em class="jxr_comment">// Records not available, skip</em>
 <a class="jxr_linenumber" name="L2344" href="#L2344">2344</a> 		}
-<a class="jxr_linenumber" name="L2345" href="#L2345">2345</a> 
+<a class="jxr_linenumber" name="L2345" href="#L2345">2345</a> 		
 <a class="jxr_linenumber" name="L2346" href="#L2346">2346</a> 		<em class="jxr_comment">// SEALED (line 1793) - test if sealed classes are available</em>
 <a class="jxr_linenumber" name="L2347" href="#L2347">2347</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L2348" href="#L2348">2348</a> 			Class.forName(<span class="jxr_string">"java.lang.constant.Constable"</span>);
@@ -2363,7 +2363,7 @@
 <a class="jxr_linenumber" name="L2355" href="#L2355">2355</a> 		} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
 <a class="jxr_linenumber" name="L2356" href="#L2356">2356</a> 			<em class="jxr_comment">// Sealed classes not available, skip</em>
 <a class="jxr_linenumber" name="L2357" href="#L2357">2357</a> 		}
-<a class="jxr_linenumber" name="L2358" href="#L2358">2358</a> 
+<a class="jxr_linenumber" name="L2358" href="#L2358">2358</a> 		
 <a class="jxr_linenumber" name="L2359" href="#L2359">2359</a> 		<em class="jxr_comment">// NOT_SEALED (line 1794) - test both branches</em>
 <a class="jxr_linenumber" name="L2360" href="#L2360">2360</a> 		<em class="jxr_comment">// Branch 1: isSealed() returns false, so NOT_SEALED returns true</em>
 <a class="jxr_linenumber" name="L2361" href="#L2361">2361</a> 		assertTrue(aClass.is(NOT_SEALED));
@@ -2376,7 +2376,7 @@
 <a class="jxr_linenumber" name="L2368" href="#L2368">2368</a> 		} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
 <a class="jxr_linenumber" name="L2369" href="#L2369">2369</a> 			<em class="jxr_comment">// Sealed classes not available, skip</em>
 <a class="jxr_linenumber" name="L2370" href="#L2370">2370</a> 		}
-<a class="jxr_linenumber" name="L2371" href="#L2371">2371</a> 
+<a class="jxr_linenumber" name="L2371" href="#L2371">2371</a> 		
 <a class="jxr_linenumber" name="L2372" href="#L2372">2372</a> 		<em class="jxr_comment">// SYNTHETIC (line 1795) - synthetic classes are compiler-generated</em>
 <a class="jxr_linenumber" name="L2373" href="#L2373">2373</a> 		<em class="jxr_comment">// Most regular classes are not synthetic</em>
 <a class="jxr_linenumber" name="L2374" href="#L2374">2374</a> 		assertFalse(aClass.is(SYNTHETIC));
@@ -2387,7 +2387,7 @@
 <a class="jxr_linenumber" name="L2379" href="#L2379">2379</a> 			<em class="jxr_comment">// Just verify the method doesn't throw</em>
 <a class="jxr_linenumber" name="L2380" href="#L2380">2380</a> 			anonymousInfo.is(SYNTHETIC);
 <a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> 		}
-<a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> 
+<a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> 		
 <a class="jxr_linenumber" name="L2383" href="#L2383">2383</a> 		<em class="jxr_comment">// NOT_SYNTHETIC (line 1796)</em>
 <a class="jxr_linenumber" name="L2384" href="#L2384">2384</a> 		assertTrue(aClass.is(NOT_SYNTHETIC));
 <a class="jxr_linenumber" name="L2385" href="#L2385">2385</a> 	}
@@ -2455,7 +2455,7 @@
 <a class="jxr_linenumber" name="L2447" href="#L2447">2447</a> 		assertTrue(ClassInfo.of(A.<strong class="jxr_keyword">class</strong>).isAnnotation());
 <a class="jxr_linenumber" name="L2448" href="#L2448">2448</a> 		assertTrue(ClassInfo.of(B.<strong class="jxr_keyword">class</strong>).isAnnotation());
 <a class="jxr_linenumber" name="L2449" href="#L2449">2449</a> 		assertFalse(aClass.isAnnotation());
-<a class="jxr_linenumber" name="L2450" href="#L2450">2450</a> 
+<a class="jxr_linenumber" name="L2450" href="#L2450">2450</a> 		
 <a class="jxr_linenumber" name="L2451" href="#L2451">2451</a> 		<em class="jxr_comment">// Test with null inner (line 1811)</em>
 <a class="jxr_linenumber" name="L2452" href="#L2452">2452</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L2453" href="#L2453">2453</a> 		assertFalse(ci.isAnnotation());
@@ -2513,16 +2513,16 @@
 <a class="jxr_linenumber" name="L2505" href="#L2505">2505</a> 		<em class="jxr_comment">// Test with array</em>
 <a class="jxr_linenumber" name="L2506" href="#L2506">2506</a> 		assertTrue(ClassInfo.of(String[].<strong class="jxr_keyword">class</strong>).isCollectionOrArray());
 <a class="jxr_linenumber" name="L2507" href="#L2507">2507</a> 		assertTrue(ClassInfo.of(<strong class="jxr_keyword">int</strong>[].<strong class="jxr_keyword">class</strong>).isCollectionOrArray());
-<a class="jxr_linenumber" name="L2508" href="#L2508">2508</a> 
+<a class="jxr_linenumber" name="L2508" href="#L2508">2508</a> 		
 <a class="jxr_linenumber" name="L2509" href="#L2509">2509</a> 		<em class="jxr_comment">// Test with Collection</em>
 <a class="jxr_linenumber" name="L2510" href="#L2510">2510</a> 		assertTrue(ClassInfo.of(java.util.List.<strong class="jxr_keyword">class</strong>).isCollectionOrArray());
 <a class="jxr_linenumber" name="L2511" href="#L2511">2511</a> 		assertTrue(ClassInfo.of(java.util.Set.<strong class="jxr_keyword">class</strong>).isCollectionOrArray());
 <a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> 		assertTrue(ClassInfo.of(java.util.Collection.<strong class="jxr_keyword">class</strong>).isCollectionOrArray());
-<a class="jxr_linenumber" name="L2513" href="#L2513">2513</a> 
+<a class="jxr_linenumber" name="L2513" href="#L2513">2513</a> 		
 <a class="jxr_linenumber" name="L2514" href="#L2514">2514</a> 		<em class="jxr_comment">// Test with non-collection, non-array</em>
 <a class="jxr_linenumber" name="L2515" href="#L2515">2515</a> 		assertFalse(aClass.isCollectionOrArray());
 <a class="jxr_linenumber" name="L2516" href="#L2516">2516</a> 		assertFalse(ClassInfo.of(String.<strong class="jxr_keyword">class</strong>).isCollectionOrArray());
-<a class="jxr_linenumber" name="L2517" href="#L2517">2517</a> 
+<a class="jxr_linenumber" name="L2517" href="#L2517">2517</a> 		
 <a class="jxr_linenumber" name="L2518" href="#L2518">2518</a> 		<em class="jxr_comment">// Test with null inner (line 1905)</em>
 <a class="jxr_linenumber" name="L2519" href="#L2519">2519</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L2520" href="#L2520">2520</a> 		assertFalse(ci.isCollectionOrArray());
@@ -2619,7 +2619,7 @@
 <a class="jxr_linenumber" name="L2611" href="#L2611">2611</a> 	<strong class="jxr_keyword">void</strong> a081_isEnum() {
 <a class="jxr_linenumber" name="L2612" href="#L2612">2612</a> 		assertTrue(ClassInfo.of(ClassArrayFormat.<strong class="jxr_keyword">class</strong>).isEnum());
 <a class="jxr_linenumber" name="L2613" href="#L2613">2613</a> 		assertFalse(aClass.isEnum());
-<a class="jxr_linenumber" name="L2614" href="#L2614">2614</a> 
+<a class="jxr_linenumber" name="L2614" href="#L2614">2614</a> 		
 <a class="jxr_linenumber" name="L2615" href="#L2615">2615</a> 		<em class="jxr_comment">// Test with null inner (line 1919)</em>
 <a class="jxr_linenumber" name="L2616" href="#L2616">2616</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L2617" href="#L2617">2617</a> 		assertFalse(ci.isEnum());
@@ -2898,10 +2898,10 @@
 <a class="jxr_linenumber" name="L2890" href="#L2890">2890</a> 		assertFalse(kc.isParentOf(ka));
 <a class="jxr_linenumber" name="L2891" href="#L2891">2891</a> 		assertFalse(kc.isParentOf(kb));
 <a class="jxr_linenumber" name="L2892" href="#L2892">2892</a> 		assertTrue(kc.isParentOf(kc));
-<a class="jxr_linenumber" name="L2893" href="#L2893">2893</a> 
+<a class="jxr_linenumber" name="L2893" href="#L2893">2893</a> 		
 <a class="jxr_linenumber" name="L2894" href="#L2894">2894</a> 		<em class="jxr_comment">// Test with null child (line 2029)</em>
 <a class="jxr_linenumber" name="L2895" href="#L2895">2895</a> 		assertFalse(ka.isParentOf((ClassInfo)<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L2896" href="#L2896">2896</a> 
+<a class="jxr_linenumber" name="L2896" href="#L2896">2896</a> 		
 <a class="jxr_linenumber" name="L2897" href="#L2897">2897</a> 		<em class="jxr_comment">// Test with null inner</em>
 <a class="jxr_linenumber" name="L2898" href="#L2898">2898</a> 		<strong class="jxr_keyword">var</strong> nullInnerCi = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L2899" href="#L2899">2899</a> 		assertFalse(nullInnerCi.isParentOf(ka));
@@ -2937,7 +2937,7 @@
 <a class="jxr_linenumber" name="L2929" href="#L2929">2929</a> 		assertFalse(ClassInfo.of(String.<strong class="jxr_keyword">class</strong>).isParentOfLenient((ClassInfo)<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L2930" href="#L2930">2930</a> 		<strong class="jxr_keyword">var</strong> nullInnerCi = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L2931" href="#L2931">2931</a> 		assertFalse(nullInnerCi.isParentOfLenient(ClassInfo.of(String.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L2932" href="#L2932">2932</a> 
+<a class="jxr_linenumber" name="L2932" href="#L2932">2932</a> 		
 <a class="jxr_linenumber" name="L2933" href="#L2933">2933</a> 		<em class="jxr_comment">// Test all branches of line 2087: if (this.isPrimitive() || child.isPrimitive())</em>
 <a class="jxr_linenumber" name="L2934" href="#L2934">2934</a> 		<em class="jxr_comment">// Branch 1: this.isPrimitive() == true, child.isPrimitive() == false (already covered above)</em>
 <a class="jxr_linenumber" name="L2935" href="#L2935">2935</a> 		<em class="jxr_comment">// Branch 2: this.isPrimitive() == false, child.isPrimitive() == true (already covered above)</em>
@@ -3028,7 +3028,7 @@
 <a class="jxr_linenumber" name="L3020" href="#L3020">3020</a> 			<em class="jxr_comment">// Records not available, skip test</em>
 <a class="jxr_linenumber" name="L3021" href="#L3021">3021</a> 			assertFalse(cc3.isRecord());
 <a class="jxr_linenumber" name="L3022" href="#L3022">3022</a> 		}
-<a class="jxr_linenumber" name="L3023" href="#L3023">3023</a> 
+<a class="jxr_linenumber" name="L3023" href="#L3023">3023</a> 		
 <a class="jxr_linenumber" name="L3024" href="#L3024">3024</a> 		<em class="jxr_comment">// Test with null inner (line 2120)</em>
 <a class="jxr_linenumber" name="L3025" href="#L3025">3025</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L3026" href="#L3026">3026</a> 		assertFalse(ci.isRecord());
@@ -3101,7 +3101,7 @@
 <a class="jxr_linenumber" name="L3093" href="#L3093">3093</a> 		<strong class="jxr_keyword">var</strong> anonymousInfo = ClassInfo.of(anonymous);
 <a class="jxr_linenumber" name="L3094" href="#L3094">3094</a> 		<em class="jxr_comment">// Anonymous classes are typically synthetic</em>
 <a class="jxr_linenumber" name="L3095" href="#L3095">3095</a> 		assertTrue(anonymousInfo.isSynthetic() || !anonymousInfo.isSynthetic());
-<a class="jxr_linenumber" name="L3096" href="#L3096">3096</a> 
+<a class="jxr_linenumber" name="L3096" href="#L3096">3096</a> 		
 <a class="jxr_linenumber" name="L3097" href="#L3097">3097</a> 		<em class="jxr_comment">// Test with null inner (line 2169)</em>
 <a class="jxr_linenumber" name="L3098" href="#L3098">3098</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L3099" href="#L3099">3099</a> 		assertFalse(ci.isSynthetic());
@@ -3115,7 +3115,7 @@
 <a class="jxr_linenumber" name="L3107" href="#L3107">3107</a> 		<em class="jxr_comment">// Test with null inner (line 2149)</em>
 <a class="jxr_linenumber" name="L3108" href="#L3108">3108</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pType);
 <a class="jxr_linenumber" name="L3109" href="#L3109">3109</a> 		assertFalse(ci.isSealed());
-<a class="jxr_linenumber" name="L3110" href="#L3110">3110</a> 
+<a class="jxr_linenumber" name="L3110" href="#L3110">3110</a> 		
 <a class="jxr_linenumber" name="L3111" href="#L3111">3111</a> 		<em class="jxr_comment">// Test with regular classes (most are not sealed)</em>
 <a class="jxr_linenumber" name="L3112" href="#L3112">3112</a> 		assertFalse(aClass.isSealed());
 <a class="jxr_linenumber" name="L3113" href="#L3113">3113</a> 	}
@@ -3207,13 +3207,13 @@
 <a class="jxr_linenumber" name="L3199" href="#L3199">3199</a> 		assertNotNull(info);
 <a class="jxr_linenumber" name="L3200" href="#L3200">3200</a> 		assertNull(info.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L3201" href="#L3201">3201</a> 		assertNotNull(info.innerType());
-<a class="jxr_linenumber" name="L3202" href="#L3202">3202</a> 
+<a class="jxr_linenumber" name="L3202" href="#L3202">3202</a> 		
 <a class="jxr_linenumber" name="L3203" href="#L3203">3203</a> 		<em class="jxr_comment">// Test line 226: isParameterizedType initialization</em>
 <a class="jxr_linenumber" name="L3204" href="#L3204">3204</a> 		<em class="jxr_comment">// When innerType is null, isParameterizedType should be false</em>
 <a class="jxr_linenumber" name="L3205" href="#L3205">3205</a> 		<em class="jxr_comment">// String.class is not a ParameterizedType, so isParameterizedType should be false</em>
 <a class="jxr_linenumber" name="L3206" href="#L3206">3206</a> 		<em class="jxr_comment">// We can't directly access isParameterizedType, but we can infer it from behavior</em>
 <a class="jxr_linenumber" name="L3207" href="#L3207">3207</a> 		ClassInfo.of(String.<strong class="jxr_keyword">class</strong>); <em class="jxr_comment">// Exercise the code path</em>
-<a class="jxr_linenumber" name="L3208" href="#L3208">3208</a> 
+<a class="jxr_linenumber" name="L3208" href="#L3208">3208</a> 		
 <a class="jxr_linenumber" name="L3209" href="#L3209">3209</a> 		<em class="jxr_comment">// When innerType is a ParameterizedType, isParameterizedType should be true</em>
 <a class="jxr_linenumber" name="L3210" href="#L3210">3210</a> 		<em class="jxr_comment">// pTypeInfo has a ParameterizedType, so isParameterizedType should be true</em>
 <a class="jxr_linenumber" name="L3211" href="#L3211">3211</a> 		<em class="jxr_comment">// We can verify this indirectly by checking that it behaves as a parameterized type</em>
@@ -3230,7 +3230,7 @@
 <a class="jxr_linenumber" name="L3222" href="#L3222">3222</a> 		<strong class="jxr_keyword">var</strong> info = ClassInfo.ofProxy(obj);
 <a class="jxr_linenumber" name="L3223" href="#L3223">3223</a> 		assertNotNull(info);
 <a class="jxr_linenumber" name="L3224" href="#L3224">3224</a> 		assertEquals(A1.<strong class="jxr_keyword">class</strong>, info.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L3225" href="#L3225">3225</a> 
+<a class="jxr_linenumber" name="L3225" href="#L3225">3225</a> 		
 <a class="jxr_linenumber" name="L3226" href="#L3226">3226</a> 		<em class="jxr_comment">// Test line 175: when getProxyFor returns null, should call ClassInfo.of(object)</em>
 <a class="jxr_linenumber" name="L3227" href="#L3227">3227</a> 		<em class="jxr_comment">// Most objects are not proxies, so getProxyFor should return null</em>
 <a class="jxr_linenumber" name="L3228" href="#L3228">3228</a> 		<em class="jxr_comment">// This tests the branch: inner == null ? ClassInfo.of(object) : ClassInfo.of(inner)</em>
@@ -3271,7 +3271,7 @@
 <a class="jxr_linenumber" name="L3263" href="#L3263">3263</a> 		mi2 = ClassInfo.of(A6.<strong class="jxr_keyword">class</strong>).getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m2"</span>)).get();
 <a class="jxr_linenumber" name="L3264" href="#L3264">3264</a> 		check(<span class="jxr_string">"A1"</span>, mi2.getParameter(0).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L3265" href="#L3265">3265</a> 		check(<span class="jxr_string">"A1"</span>, mi2.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L3266" href="#L3266">3266</a> 
+<a class="jxr_linenumber" name="L3266" href="#L3266">3266</a> 		
 <a class="jxr_linenumber" name="L3267" href="#L3267">3267</a> 		<em class="jxr_comment">// Test unwrap with ParameterizedType (line 2382)</em>
 <a class="jxr_linenumber" name="L3268" href="#L3268">3268</a> 		<em class="jxr_comment">// Create a ParameterizedType directly</em>
 <a class="jxr_linenumber" name="L3269" href="#L3269">3269</a> 		<strong class="jxr_keyword">var</strong> pTypeOptional = <strong class="jxr_keyword">new</strong> java.lang.reflect.ParameterizedType() {
@@ -3290,7 +3290,7 @@
 <a class="jxr_linenumber" name="L3282" href="#L3282">3282</a> 		};
 <a class="jxr_linenumber" name="L3283" href="#L3283">3283</a> 		<strong class="jxr_keyword">var</strong> ciOptional = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pTypeOptional);
 <a class="jxr_linenumber" name="L3284" href="#L3284">3284</a> 		check(<span class="jxr_string">"A1"</span>, ciOptional.unwrap(Optional.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L3285" href="#L3285">3285</a> 
+<a class="jxr_linenumber" name="L3285" href="#L3285">3285</a> 		
 <a class="jxr_linenumber" name="L3286" href="#L3286">3286</a> 		<em class="jxr_comment">// Test unwrap with ParameterizedType that has no type arguments (line 2383)</em>
 <a class="jxr_linenumber" name="L3287" href="#L3287">3287</a> 		<strong class="jxr_keyword">var</strong> pTypeEmpty = <strong class="jxr_keyword">new</strong> java.lang.reflect.ParameterizedType() {
 <a class="jxr_linenumber" name="L3288" href="#L3288">3288</a> 			@Override
@@ -3309,22 +3309,22 @@
 <a class="jxr_linenumber" name="L3301" href="#L3301">3301</a> 		<strong class="jxr_keyword">var</strong> ciEmpty = ClassInfo.of((Class&lt;?&gt;)<strong class="jxr_keyword">null</strong>, pTypeEmpty);
 <a class="jxr_linenumber" name="L3302" href="#L3302">3302</a> 		<em class="jxr_comment">// Should return itself since there are no type arguments</em>
 <a class="jxr_linenumber" name="L3303" href="#L3303">3303</a> 		assertSame(ciEmpty, ciEmpty.unwrap(Optional.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L3304" href="#L3304">3304</a> 
+<a class="jxr_linenumber" name="L3304" href="#L3304">3304</a> 		
 <a class="jxr_linenumber" name="L3305" href="#L3305">3305</a> 		<em class="jxr_comment">// Test unwrap with Class that extends wrapper (line 2387, 2388)</em>
 <a class="jxr_linenumber" name="L3306" href="#L3306">3306</a> 		<em class="jxr_comment">// A2 extends Value&lt;A1&gt;, so unwrap should work</em>
 <a class="jxr_linenumber" name="L3307" href="#L3307">3307</a> 		<em class="jxr_comment">// This covers: innerType instanceof Class&lt;?&gt; is true, innerType3 != parameterizedType is true, isAssignableFrom is true</em>
 <a class="jxr_linenumber" name="L3308" href="#L3308">3308</a> 		check(<span class="jxr_string">"A1"</span>, of(A2.<strong class="jxr_keyword">class</strong>).unwrap(Value.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L3309" href="#L3309">3309</a> 
+<a class="jxr_linenumber" name="L3309" href="#L3309">3309</a> 		
 <a class="jxr_linenumber" name="L3310" href="#L3310">3310</a> 		<em class="jxr_comment">// Test unwrap with Class that doesn't extend wrapper (line 2388 - false branch)</em>
 <a class="jxr_linenumber" name="L3311" href="#L3311">3311</a> 		<em class="jxr_comment">// A1 doesn't extend Value, so unwrap should return itself</em>
 <a class="jxr_linenumber" name="L3312" href="#L3312">3312</a> 		<em class="jxr_comment">// This covers: innerType instanceof Class&lt;?&gt; is true, innerType3 != parameterizedType is true, isAssignableFrom is false</em>
 <a class="jxr_linenumber" name="L3313" href="#L3313">3313</a> 		assertSame(of(A1.<strong class="jxr_keyword">class</strong>), of(A1.<strong class="jxr_keyword">class</strong>).unwrap(Value.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L3314" href="#L3314">3314</a> 
+<a class="jxr_linenumber" name="L3314" href="#L3314">3314</a> 		
 <a class="jxr_linenumber" name="L3315" href="#L3315">3315</a> 		<em class="jxr_comment">// Test unwrap when innerType3 == parameterizedType (line 2388 - false branch of !=)</em>
 <a class="jxr_linenumber" name="L3316" href="#L3316">3316</a> 		<em class="jxr_comment">// When unwrapping Value.class from Value.class itself, innerType3 == parameterizedType, so should return itself</em>
 <a class="jxr_linenumber" name="L3317" href="#L3317">3317</a> 		<em class="jxr_comment">// This covers: innerType instanceof Class&lt;?&gt; is true, innerType3 != parameterizedType is false (short-circuit)</em>
 <a class="jxr_linenumber" name="L3318" href="#L3318">3318</a> 		assertSame(of(Value.<strong class="jxr_keyword">class</strong>), of(Value.<strong class="jxr_keyword">class</strong>).unwrap(Value.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L3319" href="#L3319">3319</a> 
+<a class="jxr_linenumber" name="L3319" href="#L3319">3319</a> 		
 <a class="jxr_linenumber" name="L3320" href="#L3320">3320</a> 		<em class="jxr_comment">// Test unwrap when innerType is not a Class&lt;?&gt; (line 2387 - false branch)</em>
 <a class="jxr_linenumber" name="L3321" href="#L3321">3321</a> 		<em class="jxr_comment">// When innerType is a ParameterizedType, the else if branch is not entered</em>
 <a class="jxr_linenumber" name="L3322" href="#L3322">3322</a> 		<em class="jxr_comment">// This is already covered by the ParameterizedType tests above, but let's verify</em>
