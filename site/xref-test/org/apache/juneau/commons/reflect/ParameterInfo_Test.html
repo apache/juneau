@@ -644,13 +644,13 @@
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 			<em class="jxr_comment">// 1. !DISABLE_PARAM_NAME_DETECTION.get() is true (flag is false)</em>
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<em class="jxr_comment">// 2. inner.isNamePresent() is true (bytecode names available)</em>
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 			<strong class="jxr_keyword">if</strong> (paramWithoutName.<strong class="jxr_keyword">inner</strong>().isNamePresent()) {
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 				<em class="jxr_comment">// If bytecode names are available, try to get resolved name</em>
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 				<em class="jxr_comment">// This will execute line 632 if the flag is actually false</em>
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 				<strong class="jxr_keyword">var</strong> resolvedName = paramWithoutName.getResolvedName();
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 				<em class="jxr_comment">// Note: If resolvedName is null, it means the condition on line 631 was false</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 				<em class="jxr_comment">// (either flag is still true, or there's a caching issue)</em>
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 				<em class="jxr_comment">// In that case, line 632 won't be covered, which is acceptable</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 				<em class="jxr_comment">// We don't assert here because the flag might not have reset properly</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<em class="jxr_comment">// If bytecode names are available, try to get resolved name</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<em class="jxr_comment">// This will execute line 632 if the flag is actually false</em>
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 			paramWithoutName.getResolvedName(); <em class="jxr_comment">// Exercise the code path</em>
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 			<em class="jxr_comment">// Note: If the result is null, it means the condition on line 631 was false</em>
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 			<em class="jxr_comment">// (either flag is still true, or there's a caching issue)</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			<em class="jxr_comment">// In that case, line 632 won't be covered, which is acceptable</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			<em class="jxr_comment">// We don't assert here because the flag might not have reset properly</em>
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 			}
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<em class="jxr_comment">// If bytecode names are not available, line 632 won't be executed</em>
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 			<em class="jxr_comment">// This is expected if the code wasn't compiled with -parameters flag</em>
