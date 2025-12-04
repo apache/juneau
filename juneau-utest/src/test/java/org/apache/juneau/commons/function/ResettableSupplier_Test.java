@@ -203,5 +203,59 @@ class ResettableSupplier_Test extends TestBase {
 		// We just verify that the supplier was called at least once
 		assertTrue(callCount.get() >= 1, "Supplier should have been called at least once");
 	}
+
+	@Test void a08_set() {
+		var callCount = new AtomicInteger();
+		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
+			callCount.incrementAndGet();
+			return "computed";
+		});
+
+		// Set a value before any get() call
+		supplier.set("injected");
+		assertEquals("injected", supplier.get());
+		assertEquals(0, callCount.get()); // Supplier should not have been called
+
+		// Subsequent get() calls should return the set value
+		assertEquals("injected", supplier.get());
+		assertEquals(0, callCount.get()); // Still not called
+
+		// Set a different value
+		supplier.set("newValue");
+		assertEquals("newValue", supplier.get());
+		assertEquals(0, callCount.get()); // Still not called
+
+		// Reset clears the set value, next get() will invoke supplier
+		supplier.reset();
+		assertEquals("computed", supplier.get());
+		assertEquals(1, callCount.get()); // Now supplier is called
+
+		// Set after get() has been called
+		supplier.set("overridden");
+		assertEquals("overridden", supplier.get());
+		assertEquals(1, callCount.get()); // Should not increment
+	}
+
+	@Test void a09_setNull() {
+		var callCount = new AtomicInteger();
+		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
+			callCount.incrementAndGet();
+			return "computed";
+		});
+
+		// Set null value
+		supplier.set(null);
+		assertNull(supplier.get());
+		assertEquals(0, callCount.get()); // Supplier should not have been called
+
+		// Subsequent get() calls should return null
+		assertNull(supplier.get());
+		assertEquals(0, callCount.get()); // Still not called
+
+		// Reset and get() should invoke supplier
+		supplier.reset();
+		assertEquals("computed", supplier.get());
+		assertEquals(1, callCount.get());
+	}
 }
 
