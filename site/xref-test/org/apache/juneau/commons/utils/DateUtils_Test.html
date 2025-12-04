@@ -25,9 +25,9 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.utils;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.time.temporal.ChronoField.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.time.temporal.ChronoUnit.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.util.Calendar.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.DateUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.util.Calendar.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.time.*;
@@ -170,305 +170,206 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">void</strong> j01_fromIso8601Calendar(Input input) {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<em class="jxr_comment">// Parse the ISO8601 string</em>
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			Calendar result = fromIso8601Calendar(input.iso8601String);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<em class="jxr_comment">// Verify the result is not null</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			assertNotNull(result, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Result should not be null"</span>);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<em class="jxr_comment">// Verify date components</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			assertEquals(input.year, result.get(Calendar.YEAR), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Year should match"</span>);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			assertEquals(input.month, result.get(Calendar.MONTH), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Month should match"</span>);
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			assertEquals(input.day, result.get(Calendar.DAY_OF_MONTH), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Day should match"</span>);
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			assertEquals(input.hour, result.get(Calendar.HOUR_OF_DAY), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Hour should match"</span>);
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			assertEquals(input.minute, result.get(Calendar.MINUTE), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Minute should match"</span>);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			assertEquals(input.second, result.get(Calendar.SECOND), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Second should match"</span>);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<em class="jxr_comment">// Verify timezone (for non-system timezones)</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"System"</span>.equals(input.expectedTimezone)) {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">var</strong> expectedTz = TimeZone.getTimeZone(input.expectedTimezone);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				assertEquals(expectedTz.getID(), result.getTimeZone().getID(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Timezone should match"</span>);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			}
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<em class="jxr_comment">// fromIso8601(String) tests</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> K_fromIso8601 {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Input[] INPUT = {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<em class="jxr_comment">/* 01 */</em> input(1, <span class="jxr_string">"2024-01-15T14:30:45Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 15, 14, 30, 45),
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<em class="jxr_comment">/* 02 */</em> input(2, <span class="jxr_string">"2024-01-15T14:30:45-05:00"</span>, <span class="jxr_string">"-05:00"</span>, 2024, 1, 15, 14, 30, 45),
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<em class="jxr_comment">/* 03 */</em> input(3, <span class="jxr_string">"2024-01-15T14:30:45+09:00"</span>, <span class="jxr_string">"+09:00"</span>, 2024, 1, 15, 14, 30, 45),
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<em class="jxr_comment">/* 04 */</em> input(4, <span class="jxr_string">"2024-01-15"</span>, <span class="jxr_string">"System"</span>, 2024, 1, 15, 0, 0, 0),
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<em class="jxr_comment">/* 05 */</em> input(5, <span class="jxr_string">"2024-01-15T14:30"</span>, <span class="jxr_string">"System"</span>, 2024, 1, 15, 14, 30, 0),
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<em class="jxr_comment">/* 06 */</em> input(6, <span class="jxr_string">"2024-01-15T14:30:45.123Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 15, 14, 30, 45),
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<em class="jxr_comment">/* 07 */</em> input(7, <span class="jxr_string">"2024-07-15T14:30:45-04:00"</span>, <span class="jxr_string">"-04:00"</span>, 2024, 7, 15, 14, 30, 45), <em class="jxr_comment">// DST</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<em class="jxr_comment">/* 08 */</em> input(8, <span class="jxr_string">"2024-07-15T14:30:45-07:00"</span>, <span class="jxr_string">"-07:00"</span>, 2024, 7, 15, 14, 30, 45), <em class="jxr_comment">// DST</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<em class="jxr_comment">/* 09 */</em> input(9, <span class="jxr_string">"2024-02-29T12:00:00Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 2, 29, 12, 0, 0), <em class="jxr_comment">// Leap year</em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<em class="jxr_comment">/* 10 */</em> input(10, <span class="jxr_string">"2024-12-31T23:59:59Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 12, 31, 23, 59, 59), <em class="jxr_comment">// End of year</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<em class="jxr_comment">/* 11 */</em> input(11, <span class="jxr_string">"2024-01-01T00:00:00Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 1, 0, 0, 0), <em class="jxr_comment">// Start of year</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<em class="jxr_comment">/* 12 */</em> input(12, <span class="jxr_string">"2024-01-15T00:00:00Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 15, 0, 0, 0), <em class="jxr_comment">// Midnight</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<em class="jxr_comment">/* 13 */</em> input(13, <span class="jxr_string">"2024-01-15T23:59:59Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 15, 23, 59, 59), <em class="jxr_comment">// End of day</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">/* 14 */</em> input(14, <span class="jxr_string">"2024-01-15T12:00:00+05:30"</span>, <span class="jxr_string">"+05:30"</span>, 2024, 1, 15, 12, 0, 0), <em class="jxr_comment">// Custom offset</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<em class="jxr_comment">/* 15 */</em> input(15, <span class="jxr_string">"2024-01-15T12:00:00-05:30"</span>, <span class="jxr_string">"-05:30"</span>, 2024, 1, 15, 12, 0, 0) <em class="jxr_comment">// Custom offset</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		};
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Input input(<strong class="jxr_keyword">int</strong> index, String iso8601String, String expectedTimezone, <strong class="jxr_keyword">int</strong> year, <strong class="jxr_keyword">int</strong> month, <strong class="jxr_keyword">int</strong> day, <strong class="jxr_keyword">int</strong> hour, <strong class="jxr_keyword">int</strong> minute, <strong class="jxr_keyword">int</strong> second) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Input(index, iso8601String, expectedTimezone, year, month, day, hour, minute, second);
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		}
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Input {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index;
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">final</strong> String iso8601String;
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">final</strong> String expectedTimezone;
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> year;
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> month;
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> day;
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> hour;
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> minute;
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> second;
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">public</strong> Input(<strong class="jxr_keyword">int</strong> index, String iso8601String, String expectedTimezone, <strong class="jxr_keyword">int</strong> year, <strong class="jxr_keyword">int</strong> month, <strong class="jxr_keyword">int</strong> day, <strong class="jxr_keyword">int</strong> hour, <strong class="jxr_keyword">int</strong> minute, <strong class="jxr_keyword">int</strong> second) {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 				<strong class="jxr_keyword">this</strong>.index = index;
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				<strong class="jxr_keyword">this</strong>.iso8601String = iso8601String;
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 				<strong class="jxr_keyword">this</strong>.expectedTimezone = expectedTimezone;
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 				<strong class="jxr_keyword">this</strong>.year = year;
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				<strong class="jxr_keyword">this</strong>.month = month;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<strong class="jxr_keyword">this</strong>.day = day;
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">this</strong>.hour = hour;
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<strong class="jxr_keyword">this</strong>.minute = minute;
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">this</strong>.second = second;
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			}
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		}
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">static</strong> Input[] input() {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">return</strong> INPUT;
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		}
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		@ParameterizedTest
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		@MethodSource(<span class="jxr_string">"input"</span>)
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">void</strong> k01_fromIso8601(Input input) {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<em class="jxr_comment">// Parse the ISO8601 string</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			ZonedDateTime result = fromIso8601(input.iso8601String);
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<em class="jxr_comment">// Verify the result is not null</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			assertNotNull(result, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Result should not be null"</span>);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<em class="jxr_comment">// Verify date components</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			assertEquals(input.year, result.getYear(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Year should match"</span>);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			assertEquals(input.month, result.getMonthValue(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Month should match"</span>);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			assertEquals(input.day, result.getDayOfMonth(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Day should match"</span>);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			assertEquals(input.hour, result.getHour(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Hour should match"</span>);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			assertEquals(input.minute, result.getMinute(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Minute should match"</span>);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			assertEquals(input.second, result.getSecond(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Second should match"</span>);
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<em class="jxr_comment">// Verify timezone (for non-system timezones)</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"System"</span>.equals(input.expectedTimezone)) {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 				<strong class="jxr_keyword">var</strong> expectedZone = ZoneId.of(input.expectedTimezone);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 				assertEquals(expectedZone, result.getZone(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Timezone should match"</span>);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			}
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		}
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		@ParameterizedTest
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		@MethodSource(<span class="jxr_string">"input"</span>)
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">void</strong> k02_fromIso8601_immutability(Input input) {
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<em class="jxr_comment">// Parse the ISO8601 string</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			ZonedDateTime result = fromIso8601(input.iso8601String);
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			assertNotNull(result, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Result should not be null"</span>);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<em class="jxr_comment">// Verify immutability - operations should return new instances</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			ZonedDateTime plusOneDay = result.plusDays(1);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			assertNotSame(result, plusOneDay, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Plus operation should return new instance"</span>);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			assertNotEquals(result, plusOneDay, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Plus operation should change the value"</span>);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			ZonedDateTime minusOneDay = result.minusDays(1);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			assertNotSame(result, minusOneDay, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Minus operation should return new instance"</span>);
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			assertNotEquals(result, minusOneDay, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Minus operation should change the value"</span>);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		}
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<em class="jxr_comment">// fromIso8601Calendar and fromIso8601 edge cases and error handling</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> L_fromIso8601_edgeCases {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		@Test
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">void</strong> l01_nullInput() {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			assertNull(fromIso8601Calendar(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			assertNull(fromIso8601(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		}
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		@Test
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">void</strong> l02_emptyInput() {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			assertNull(fromIso8601Calendar(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			assertNull(fromIso8601(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			String s = input.iso8601String;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			Calendar result = opt(s).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.parse(s).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<em class="jxr_comment">// Verify the result is not null</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			assertNotNull(result, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Result should not be null"</span>);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<em class="jxr_comment">// Verify date components</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			assertEquals(input.year, result.get(Calendar.YEAR), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Year should match"</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			assertEquals(input.month, result.get(Calendar.MONTH), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Month should match"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			assertEquals(input.day, result.get(Calendar.DAY_OF_MONTH), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Day should match"</span>);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			assertEquals(input.hour, result.get(Calendar.HOUR_OF_DAY), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Hour should match"</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			assertEquals(input.minute, result.get(Calendar.MINUTE), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Minute should match"</span>);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			assertEquals(input.second, result.get(Calendar.SECOND), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Second should match"</span>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<em class="jxr_comment">// Verify timezone (for non-system timezones)</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"System"</span>.equals(input.expectedTimezone)) {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				<strong class="jxr_keyword">var</strong> expectedTz = TimeZone.getTimeZone(input.expectedTimezone);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				assertEquals(expectedTz.getID(), result.getTimeZone().getID(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Timezone should match"</span>);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<em class="jxr_comment">// fromIso8601(String) tests</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> K_fromIso8601 {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Input[] INPUT = {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<em class="jxr_comment">/* 01 */</em> input(1, <span class="jxr_string">"2024-01-15T14:30:45Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 15, 14, 30, 45),
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<em class="jxr_comment">/* 02 */</em> input(2, <span class="jxr_string">"2024-01-15T14:30:45-05:00"</span>, <span class="jxr_string">"-05:00"</span>, 2024, 1, 15, 14, 30, 45),
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<em class="jxr_comment">/* 03 */</em> input(3, <span class="jxr_string">"2024-01-15T14:30:45+09:00"</span>, <span class="jxr_string">"+09:00"</span>, 2024, 1, 15, 14, 30, 45),
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<em class="jxr_comment">/* 04 */</em> input(4, <span class="jxr_string">"2024-01-15"</span>, <span class="jxr_string">"System"</span>, 2024, 1, 15, 0, 0, 0),
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<em class="jxr_comment">/* 05 */</em> input(5, <span class="jxr_string">"2024-01-15T14:30"</span>, <span class="jxr_string">"System"</span>, 2024, 1, 15, 14, 30, 0),
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<em class="jxr_comment">/* 06 */</em> input(6, <span class="jxr_string">"2024-01-15T14:30:45.123Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 15, 14, 30, 45),
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<em class="jxr_comment">/* 07 */</em> input(7, <span class="jxr_string">"2024-07-15T14:30:45-04:00"</span>, <span class="jxr_string">"-04:00"</span>, 2024, 7, 15, 14, 30, 45), <em class="jxr_comment">// DST</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<em class="jxr_comment">/* 08 */</em> input(8, <span class="jxr_string">"2024-07-15T14:30:45-07:00"</span>, <span class="jxr_string">"-07:00"</span>, 2024, 7, 15, 14, 30, 45), <em class="jxr_comment">// DST</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<em class="jxr_comment">/* 09 */</em> input(9, <span class="jxr_string">"2024-02-29T12:00:00Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 2, 29, 12, 0, 0), <em class="jxr_comment">// Leap year</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<em class="jxr_comment">/* 10 */</em> input(10, <span class="jxr_string">"2024-12-31T23:59:59Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 12, 31, 23, 59, 59), <em class="jxr_comment">// End of year</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<em class="jxr_comment">/* 11 */</em> input(11, <span class="jxr_string">"2024-01-01T00:00:00Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 1, 0, 0, 0), <em class="jxr_comment">// Start of year</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<em class="jxr_comment">/* 12 */</em> input(12, <span class="jxr_string">"2024-01-15T00:00:00Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 15, 0, 0, 0), <em class="jxr_comment">// Midnight</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">/* 13 */</em> input(13, <span class="jxr_string">"2024-01-15T23:59:59Z"</span>, <span class="jxr_string">"Z"</span>, 2024, 1, 15, 23, 59, 59), <em class="jxr_comment">// End of day</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<em class="jxr_comment">/* 14 */</em> input(14, <span class="jxr_string">"2024-01-15T12:00:00+05:30"</span>, <span class="jxr_string">"+05:30"</span>, 2024, 1, 15, 12, 0, 0), <em class="jxr_comment">// Custom offset</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<em class="jxr_comment">/* 15 */</em> input(15, <span class="jxr_string">"2024-01-15T12:00:00-05:30"</span>, <span class="jxr_string">"-05:30"</span>, 2024, 1, 15, 12, 0, 0) <em class="jxr_comment">// Custom offset</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		};
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Input input(<strong class="jxr_keyword">int</strong> index, String iso8601String, String expectedTimezone, <strong class="jxr_keyword">int</strong> year, <strong class="jxr_keyword">int</strong> month, <strong class="jxr_keyword">int</strong> day, <strong class="jxr_keyword">int</strong> hour, <strong class="jxr_keyword">int</strong> minute, <strong class="jxr_keyword">int</strong> second) {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Input(index, iso8601String, expectedTimezone, year, month, day, hour, minute, second);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Input {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index;
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">final</strong> String iso8601String;
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">final</strong> String expectedTimezone;
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> year;
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> month;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> day;
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> hour;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> minute;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> second;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			<strong class="jxr_keyword">public</strong> Input(<strong class="jxr_keyword">int</strong> index, String iso8601String, String expectedTimezone, <strong class="jxr_keyword">int</strong> year, <strong class="jxr_keyword">int</strong> month, <strong class="jxr_keyword">int</strong> day, <strong class="jxr_keyword">int</strong> hour, <strong class="jxr_keyword">int</strong> minute, <strong class="jxr_keyword">int</strong> second) {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				<strong class="jxr_keyword">this</strong>.index = index;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 				<strong class="jxr_keyword">this</strong>.iso8601String = iso8601String;
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 				<strong class="jxr_keyword">this</strong>.expectedTimezone = expectedTimezone;
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				<strong class="jxr_keyword">this</strong>.year = year;
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<strong class="jxr_keyword">this</strong>.month = month;
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">this</strong>.day = day;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<strong class="jxr_keyword">this</strong>.hour = hour;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">this</strong>.minute = minute;
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				<strong class="jxr_keyword">this</strong>.second = second;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			}
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">static</strong> Input[] input() {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">return</strong> INPUT;
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		}
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		@ParameterizedTest
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		@MethodSource(<span class="jxr_string">"input"</span>)
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">void</strong> k01_fromIso8601(Input input) {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<em class="jxr_comment">// Parse the ISO8601 string</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			ZonedDateTime result = GranularZonedDateTime.parse(input.iso8601String).getZonedDateTime();
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<em class="jxr_comment">// Verify the result is not null</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			assertNotNull(result, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Result should not be null"</span>);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<em class="jxr_comment">// Verify date components</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			assertEquals(input.year, result.getYear(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Year should match"</span>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			assertEquals(input.month, result.getMonthValue(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Month should match"</span>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			assertEquals(input.day, result.getDayOfMonth(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Day should match"</span>);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			assertEquals(input.hour, result.getHour(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Hour should match"</span>);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			assertEquals(input.minute, result.getMinute(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Minute should match"</span>);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			assertEquals(input.second, result.getSecond(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Second should match"</span>);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<em class="jxr_comment">// Verify timezone (for non-system timezones)</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"System"</span>.equals(input.expectedTimezone)) {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 				<strong class="jxr_keyword">var</strong> expectedZone = ZoneId.of(input.expectedTimezone);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				assertEquals(expectedZone, result.getZone(), <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Timezone should match"</span>);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			}
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		}
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		@ParameterizedTest
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		@MethodSource(<span class="jxr_string">"input"</span>)
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">void</strong> k02_fromIso8601_immutability(Input input) {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<em class="jxr_comment">// Parse the ISO8601 string</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			ZonedDateTime result = GranularZonedDateTime.parse(input.iso8601String).getZonedDateTime();
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			assertNotNull(result, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Result should not be null"</span>);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<em class="jxr_comment">// Verify immutability - operations should return new instances</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			ZonedDateTime plusOneDay = result.plusDays(1);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			assertNotSame(result, plusOneDay, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Plus operation should return new instance"</span>);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			assertNotEquals(result, plusOneDay, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Plus operation should change the value"</span>);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			ZonedDateTime minusOneDay = result.minusDays(1);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			assertNotSame(result, minusOneDay, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Minus operation should return new instance"</span>);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			assertNotEquals(result, minusOneDay, <span class="jxr_string">"Test "</span> + input.index + <span class="jxr_string">": Minus operation should change the value"</span>);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<em class="jxr_comment">// fromIso8601Calendar and fromIso8601 edge cases and error handling</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> L_fromIso8601_edgeCases {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		@Test
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">void</strong> l04_invalidFormat() {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<em class="jxr_comment">// These should throw DateTimeParseException</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				opt(<span class="jxr_string">"invalid-date"</span>).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.parse(<span class="jxr_string">"invalid-date"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			});
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 				GranularZonedDateTime.parse(<span class="jxr_string">"invalid-date"</span>).getZonedDateTime();
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			});
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		}
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		@Test
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">void</strong> l03_whitespaceInput() {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			assertNull(fromIso8601Calendar(<span class="jxr_string">"   "</span>));
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			assertNull(fromIso8601(<span class="jxr_string">"   "</span>));
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		}
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		@Test
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">void</strong> l04_invalidFormat() {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<em class="jxr_comment">// These should throw DateTimeParseException</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 				fromIso8601Calendar(<span class="jxr_string">"invalid-date"</span>);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			});
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 				fromIso8601(<span class="jxr_string">"invalid-date"</span>);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			});
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		}
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		@Test
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">void</strong> l05_minimumDate() {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			Calendar cal = fromIso8601Calendar(<span class="jxr_string">"0001-01-01T00:00:00Z"</span>);
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			assertNotNull(cal);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			assertEquals(1, cal.get(Calendar.YEAR));
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			assertEquals(Calendar.JANUARY, cal.get(Calendar.MONTH));
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			assertEquals(1, cal.get(Calendar.DAY_OF_MONTH));
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			ZonedDateTime zdt = fromIso8601(<span class="jxr_string">"0001-01-01T00:00:00Z"</span>);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			assertNotNull(zdt);
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			assertEquals(1, zdt.getYear());
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			assertEquals(1, zdt.getMonthValue());
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			assertEquals(1, zdt.getDayOfMonth());
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		@Test
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">void</strong> l06_maximumDate() {
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			Calendar cal = fromIso8601Calendar(<span class="jxr_string">"9999-12-31T23:59:59Z"</span>);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			assertNotNull(cal);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			assertEquals(9999, cal.get(Calendar.YEAR));
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			assertEquals(Calendar.DECEMBER, cal.get(Calendar.MONTH));
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			assertEquals(31, cal.get(Calendar.DAY_OF_MONTH));
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			ZonedDateTime zdt = fromIso8601(<span class="jxr_string">"9999-12-31T23:59:59Z"</span>);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			assertNotNull(zdt);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			assertEquals(9999, zdt.getYear());
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			assertEquals(12, zdt.getMonthValue());
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			assertEquals(31, zdt.getDayOfMonth());
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		}
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		@Test
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">void</strong> l07_leapYear() {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			Calendar cal = fromIso8601Calendar(<span class="jxr_string">"2024-02-29T12:00:00Z"</span>);
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			assertNotNull(cal);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			assertEquals(2024, cal.get(Calendar.YEAR));
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			assertEquals(Calendar.FEBRUARY, cal.get(Calendar.MONTH));
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			assertEquals(29, cal.get(Calendar.DAY_OF_MONTH));
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			ZonedDateTime zdt = fromIso8601(<span class="jxr_string">"2024-02-29T12:00:00Z"</span>);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			assertNotNull(zdt);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			assertEquals(2024, zdt.getYear());
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertEquals(2, zdt.getMonthValue());
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			assertEquals(29, zdt.getDayOfMonth());
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		}
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		@Test
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">void</strong> l08_dstTransition() {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<em class="jxr_comment">// Test DST transition in America/New_York (Spring forward)</em>
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			Calendar cal = fromIso8601Calendar(<span class="jxr_string">"2024-03-10T02:30:00-05:00"</span>);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			assertNotNull(cal);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			assertEquals(2024, cal.get(Calendar.YEAR));
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			assertEquals(Calendar.MARCH, cal.get(Calendar.MONTH));
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			assertEquals(10, cal.get(Calendar.DAY_OF_MONTH));
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			ZonedDateTime zdt = fromIso8601(<span class="jxr_string">"2024-03-10T02:30:00-05:00"</span>);
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			assertNotNull(zdt);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			assertEquals(2024, zdt.getYear());
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			assertEquals(3, zdt.getMonthValue());
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			assertEquals(10, zdt.getDayOfMonth());
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		}
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<em class="jxr_comment">// parseIsoCalendar(String) tests</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	@Test
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<strong class="jxr_keyword">void</strong> m01_parseIsoCalendar() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<em class="jxr_comment">// Various ISO8601 formats</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> cal1 = parseIsoCalendar(<span class="jxr_string">"2023"</span>);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertNotNull(cal1);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertEquals(2023, cal1.get(Calendar.YEAR));
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">var</strong> cal2 = parseIsoCalendar(<span class="jxr_string">"2023-12"</span>);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertNotNull(cal2);
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		assertEquals(2023, cal2.get(Calendar.YEAR));
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertEquals(Calendar.DECEMBER, cal2.get(Calendar.MONTH));
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">var</strong> cal3 = parseIsoCalendar(<span class="jxr_string">"2023-12-25"</span>);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertNotNull(cal3);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		assertEquals(2023, cal3.get(Calendar.YEAR));
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertEquals(Calendar.DECEMBER, cal3.get(Calendar.MONTH));
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertEquals(25, cal3.get(Calendar.DAY_OF_MONTH));
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> cal4 = parseIsoCalendar(<span class="jxr_string">"2023-12-25T14:30:00"</span>);
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertNotNull(cal4);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertEquals(14, cal4.get(Calendar.HOUR_OF_DAY));
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		assertEquals(30, cal4.get(Calendar.MINUTE));
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertEquals(0, cal4.get(Calendar.SECOND));
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<em class="jxr_comment">// Should throw for invalid dates (DateTimeParseException is thrown by DateUtils, not IllegalArgumentException)</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; parseIsoCalendar(<span class="jxr_string">"invalid"</span>));
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; parseIsoCalendar(<span class="jxr_string">"2023-13-25"</span>)); <em class="jxr_comment">// Invalid month</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<em class="jxr_comment">// Test empty input - triggers code path</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertNull(parseIsoCalendar(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		assertNull(parseIsoCalendar(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertNull(parseIsoCalendar(<span class="jxr_string">"   "</span>));
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<em class="jxr_comment">// Test with milliseconds (comma) - triggers code path</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> cal5 = parseIsoCalendar(<span class="jxr_string">"2023-12-25T14:30:00,123"</span>);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertNotNull(cal5);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertEquals(14, cal5.get(Calendar.HOUR_OF_DAY));
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertEquals(30, cal5.get(Calendar.MINUTE));
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		assertEquals(0, cal5.get(Calendar.SECOND)); <em class="jxr_comment">// Milliseconds trimmed</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<em class="jxr_comment">// Test format yyyy-MM-ddThh - triggers code path</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">var</strong> cal6 = parseIsoCalendar(<span class="jxr_string">"2023-12-25T14"</span>);
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertNotNull(cal6);
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		assertEquals(14, cal6.get(Calendar.HOUR_OF_DAY));
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		assertEquals(0, cal6.get(Calendar.MINUTE));
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		assertEquals(0, cal6.get(Calendar.SECOND));
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<em class="jxr_comment">// Test format yyyy-MM-ddThh:mm - triggers code path</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> cal7 = parseIsoCalendar(<span class="jxr_string">"2023-12-25T14:30"</span>);
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		assertNotNull(cal7);
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		assertEquals(14, cal7.get(Calendar.HOUR_OF_DAY));
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertEquals(30, cal7.get(Calendar.MINUTE));
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		assertEquals(0, cal7.get(Calendar.SECOND));
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	}
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	<em class="jxr_comment">// parseIsoDate(String) tests</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	@Test
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	<strong class="jxr_keyword">void</strong> m02_parseIsoDate() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<em class="jxr_comment">// parseIsoDate wraps parseIsoCalendar, so test similar cases</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">var</strong> date1 = parseIsoDate(<span class="jxr_string">"2023-12-25"</span>);
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		assertNotNull(date1);
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">var</strong> date2 = parseIsoDate(<span class="jxr_string">"2023-12-25T14:30:00"</span>);
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		assertNotNull(date2);
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<em class="jxr_comment">// Test empty input - triggers code path</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<em class="jxr_comment">// Note: parseIsoDate checks isEmpty before calling parseIsoCalendar, so it returns null</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		assertNull(parseIsoDate(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		assertNull(parseIsoDate(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<em class="jxr_comment">// Should throw for invalid dates (DateTimeParseException is thrown by DateUtils, not IllegalArgumentException)</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; parseIsoDate(<span class="jxr_string">"invalid"</span>));
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> }
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">void</strong> l05_minimumDate() {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			Calendar cal = opt(<span class="jxr_string">"0001-01-01T00:00:00Z"</span>).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.parse(<span class="jxr_string">"0001-01-01T00:00:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			assertNotNull(cal);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			assertEquals(1, cal.get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			assertEquals(Calendar.JANUARY, cal.get(Calendar.MONTH));
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			assertEquals(1, cal.get(Calendar.DAY_OF_MONTH));
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			ZonedDateTime zdt = GranularZonedDateTime.parse(<span class="jxr_string">"0001-01-01T00:00:00Z"</span>).getZonedDateTime();
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			assertNotNull(zdt);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			assertEquals(1, zdt.getYear());
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			assertEquals(1, zdt.getMonthValue());
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			assertEquals(1, zdt.getDayOfMonth());
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		}
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		@Test
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">void</strong> l06_maximumDate() {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			Calendar cal = opt(<span class="jxr_string">"9999-12-31T23:59:59Z"</span>).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.parse(<span class="jxr_string">"9999-12-31T23:59:59Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			assertNotNull(cal);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			assertEquals(9999, cal.get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			assertEquals(Calendar.DECEMBER, cal.get(Calendar.MONTH));
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			assertEquals(31, cal.get(Calendar.DAY_OF_MONTH));
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			ZonedDateTime zdt = GranularZonedDateTime.parse(<span class="jxr_string">"9999-12-31T23:59:59Z"</span>).getZonedDateTime();
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			assertNotNull(zdt);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			assertEquals(9999, zdt.getYear());
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			assertEquals(12, zdt.getMonthValue());
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			assertEquals(31, zdt.getDayOfMonth());
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		@Test
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">void</strong> l07_leapYear() {
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			Calendar cal = opt(<span class="jxr_string">"2024-02-29T12:00:00Z"</span>).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.parse(<span class="jxr_string">"2024-02-29T12:00:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			assertNotNull(cal);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			assertEquals(2024, cal.get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			assertEquals(Calendar.FEBRUARY, cal.get(Calendar.MONTH));
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			assertEquals(29, cal.get(Calendar.DAY_OF_MONTH));
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			ZonedDateTime zdt = GranularZonedDateTime.parse(<span class="jxr_string">"2024-02-29T12:00:00Z"</span>).getZonedDateTime();
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			assertNotNull(zdt);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			assertEquals(2024, zdt.getYear());
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			assertEquals(2, zdt.getMonthValue());
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			assertEquals(29, zdt.getDayOfMonth());
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		@Test
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">void</strong> l08_dstTransition() {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<em class="jxr_comment">// Test DST transition in America/New_York (Spring forward)</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			Calendar cal = opt(<span class="jxr_string">"2024-03-10T02:30:00-05:00"</span>).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.parse(<span class="jxr_string">"2024-03-10T02:30:00-05:00"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			assertNotNull(cal);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			assertEquals(2024, cal.get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			assertEquals(Calendar.MARCH, cal.get(Calendar.MONTH));
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			assertEquals(10, cal.get(Calendar.DAY_OF_MONTH));
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			ZonedDateTime zdt = GranularZonedDateTime.parse(<span class="jxr_string">"2024-03-10T02:30:00-05:00"</span>).getZonedDateTime();
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			assertNotNull(zdt);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			assertEquals(2024, zdt.getYear());
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			assertEquals(3, zdt.getMonthValue());
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertEquals(10, zdt.getDayOfMonth());
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
