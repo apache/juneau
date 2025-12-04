@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  @SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> ClassInfo <strong class="jxr_keyword">extends</strong> <a name="ElementInfo" href="../../../../../org/apache/juneau/commons/reflect/ElementInfo.html#ElementInfo">ElementInfo</a> <strong class="jxr_keyword">implements</strong> <a name="Annotatable" href="../../../../../org/apache/juneau/commons/reflect/Annotatable.html#Annotatable">Annotatable</a> {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Class,ClassInfo&gt; CACHE = Cache.of(Class.<strong class="jxr_keyword">class</strong>, ClassInfo.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Class,ClassInfoTyped&gt; CACHE = Cache.of(Class.<strong class="jxr_keyword">class</strong>, ClassInfoTyped.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_javadoccomment">/** Reusable ClassInfo for Object class. */</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ClassInfo OBJECT = ClassInfo.of(Object.<strong class="jxr_keyword">class</strong>);
@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * @return The constructed class info.</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; ClassInfoTyped&lt;T&gt; of(Class&lt;T&gt; <strong class="jxr_keyword">inner</strong>) {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong> (ClassInfoTyped&lt;T&gt;)CACHE.get(<strong class="jxr_keyword">inner</strong>, () -&gt; <strong class="jxr_keyword">new</strong> ClassInfoTyped&lt;&gt;(<strong class="jxr_keyword">inner</strong>));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong> CACHE.get(<strong class="jxr_keyword">inner</strong>, () -&gt; <strong class="jxr_keyword">new</strong> ClassInfoTyped&lt;&gt;(<strong class="jxr_keyword">inner</strong>));
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<em class="jxr_javadoccomment">/**</em>
