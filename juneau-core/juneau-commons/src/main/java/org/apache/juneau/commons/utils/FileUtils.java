@@ -42,12 +42,9 @@ public class FileUtils {
 	public static void create(File f) {
 		if (f.exists())
 			return;
-		try {
-			if (! f.createNewFile())
-				throw rex("Could not create file ''{0}''", f.getAbsolutePath());
-		} catch (IOException e) {
-			throw toRex(e);
-		}
+		safe(() -> {
+			opt(f.createNewFile()).filter(x -> x).orElseThrow(() -> rex("Could not create file ''{0}''", f.getAbsolutePath()));
+		});
 	}
 
 	/**
@@ -201,14 +198,12 @@ public class FileUtils {
 		assertArgNotNull("f", f);
 		if (f.exists()) {
 			if (clean) {
-				if (! deleteFile(f))
-					throw rex("Could not clean directory ''{0}''", f.getAbsolutePath());
+				opt(deleteFile(f)).filter(x -> x).orElseThrow(() -> rex("Could not clean directory ''{0}''", f.getAbsolutePath()));
 			} else {
 				return f;
 			}
 		}
-		if (! f.mkdirs())
-			throw rex("Could not create directory ''{0}''", f.getAbsolutePath());
+		opt(f.mkdirs()).filter(x -> x).orElseThrow(() -> rex("Could not create directory ''{0}''", f.getAbsolutePath()));
 		return f;
 	}
 
@@ -237,14 +232,10 @@ public class FileUtils {
 		var l = System.currentTimeMillis();
 		if (lm == l)
 			l++;
-		if (! f.setLastModified(l))
-			throw rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
+		opt(f.setLastModified(l)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath()));
 
 		// Linux only gives 1s precision, so set the date 1s into the future.
-		if (lm == f.lastModified()) {
-			l += 1000;
-			if (! f.setLastModified(l))
-				throw rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
-		}
+		if (lm == f.lastModified())
+			opt(f.setLastModified(l + 1000)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath()));
 	}
 }

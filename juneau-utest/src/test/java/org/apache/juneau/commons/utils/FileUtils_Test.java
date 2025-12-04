@@ -46,11 +46,10 @@ class FileUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// create(File) tests
+	// create(File)
 	//====================================================================================================
-
 	@Test
-	void a01_create_newFile() {
+	void a001_create() {
 		var f = new File(tempDir.toFile(), "test.txt");
 		assertFalse(f.exists());
 		FileUtils.create(f);
@@ -59,7 +58,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void a02_create_existingFile() throws IOException {
+	void a002_create_existingFile() throws IOException {
 		var f = new File(tempDir.toFile(), "test.txt");
 		f.createNewFile();
 		assertTrue(f.exists());
@@ -71,7 +70,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void a03_create_parentDirectoryDoesNotExist() {
+	void a003_create_parentDirectoryDoesNotExist() {
 		var f = new File(tempDir.toFile(), "nonexistent/test.txt");
 		var e = assertThrows(RuntimeException.class, () -> {
 			FileUtils.create(f);
@@ -83,11 +82,10 @@ class FileUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// createTempFile(String) tests
+	// createTempFile(String)
 	//====================================================================================================
-
 	@Test
-	void b01_createTempFile_basic() throws IOException {
+	void a004_createTempFile() throws IOException {
 		var f = FileUtils.createTempFile("test.txt");
 		assertNotNull(f);
 		assertTrue(f.exists());
@@ -97,7 +95,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void b02_createTempFile_multipleDots() throws IOException {
+	void a005_createTempFile_multipleDots() throws IOException {
 		var f = FileUtils.createTempFile("test.backup.txt");
 		assertNotNull(f);
 		assertTrue(f.exists());
@@ -109,7 +107,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void b03_createTempFile_noExtension() {
+	void a006_createTempFile_noExtension() {
 		// When there's no dot, split("\\.") returns array with one element
 		// This will cause ArrayIndexOutOfBoundsException when accessing parts[1]
 		// Note: This tests the current behavior, which may be a bug in the implementation
@@ -119,11 +117,10 @@ class FileUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// createTempFile(String, String) tests
+	// createTempFile(String, String)
 	//====================================================================================================
-
 	@Test
-	void c01_createTempFile_withContents() throws IOException {
+	void a007_createTempFile_withContents() throws IOException {
 		var contents = "test content\nline 2";
 		var f = FileUtils.createTempFile("test.txt", contents);
 		assertNotNull(f);
@@ -143,7 +140,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void c02_createTempFile_withEmptyContents() throws IOException {
+	void a008_createTempFile_withEmptyContents() throws IOException {
 		var f = FileUtils.createTempFile("test.txt", "");
 		assertNotNull(f);
 		assertTrue(f.exists());
@@ -152,20 +149,20 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void c03_createTempFile_withNullContents() throws IOException {
+	void a009_createTempFile_withNullContents() throws IOException {
 		var f = FileUtils.createTempFile("test.txt", null);
 		assertNotNull(f);
 		assertTrue(f.exists());
-		// null contents should result in empty file or "null" string
+		// null contents should result in empty file
+		assertEquals(0, f.length());
 		f.delete();
 	}
 
 	//====================================================================================================
-	// deleteFile(File) tests
+	// deleteFile(File)
 	//====================================================================================================
-
 	@Test
-	void d01_deleteFile_singleFile() throws IOException {
+	void a010_deleteFile() throws IOException {
 		var f = new File(tempDir.toFile(), "test.txt");
 		f.createNewFile();
 		assertTrue(f.exists());
@@ -174,19 +171,19 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void d02_deleteFile_null() {
+	void a011_deleteFile_null() {
 		assertTrue(FileUtils.deleteFile(null));
 	}
 
 	@Test
-	void d03_deleteFile_nonexistent() {
+	void a012_deleteFile_nonexistent() {
 		var f = new File(tempDir.toFile(), "nonexistent.txt");
 		assertFalse(f.exists());
 		assertFalse(FileUtils.deleteFile(f));
 	}
 
 	@Test
-	void d04_deleteFile_directory() throws IOException {
+	void a013_deleteFile_directory() throws IOException {
 		var dir = new File(tempDir.toFile(), "testdir");
 		dir.mkdirs();
 		var f1 = new File(dir, "file1.txt");
@@ -203,7 +200,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void d05_deleteFile_nestedDirectories() throws IOException {
+	void a014_deleteFile_nestedDirectories() throws IOException {
 		var dir1 = new File(tempDir.toFile(), "dir1");
 		var dir2 = new File(dir1, "dir2");
 		var f = new File(dir2, "file.txt");
@@ -219,7 +216,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void d06_deleteFile_emptyDirectory() {
+	void a015_deleteFile_emptyDirectory() {
 		var dir = new File(tempDir.toFile(), "emptydir");
 		dir.mkdirs();
 		assertTrue(dir.exists());
@@ -228,11 +225,10 @@ class FileUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// fileExists(File, String) tests
+	// fileExists(File, String)
 	//====================================================================================================
-
 	@Test
-	void e01_fileExists_existingFile() throws IOException {
+	void a016_fileExists() throws IOException {
 		var dir = tempDir.toFile();
 		var f = new File(dir, "test.txt");
 		f.createNewFile();
@@ -240,29 +236,29 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void e02_fileExists_nonexistentFile() {
+	void a017_fileExists_nonexistentFile() {
 		var dir = tempDir.toFile();
 		assertFalse(FileUtils.fileExists(dir, "nonexistent.txt"));
 	}
 
 	@Test
-	void e03_fileExists_nullDir() {
+	void a018_fileExists_nullDir() {
 		assertFalse(FileUtils.fileExists(null, "test.txt"));
 	}
 
 	@Test
-	void e04_fileExists_nullFileName() {
+	void a019_fileExists_nullFileName() {
 		var dir = tempDir.toFile();
 		assertFalse(FileUtils.fileExists(dir, null));
 	}
 
 	@Test
-	void e05_fileExists_bothNull() {
+	void a020_fileExists_bothNull() {
 		assertFalse(FileUtils.fileExists(null, null));
 	}
 
 	@Test
-	void e06_fileExists_subdirectory() throws IOException {
+	void a021_fileExists_subdirectory() throws IOException {
 		var dir = tempDir.toFile();
 		var subdir = new File(dir, "subdir");
 		subdir.mkdirs();
@@ -272,168 +268,163 @@ class FileUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// getBaseName(String) tests
+	// getBaseName(String)
 	//====================================================================================================
-
 	@Test
-	void f01_getBaseName_withExtension() {
+	void a022_getBaseName() {
 		assertEquals("test", FileUtils.getBaseName("test.txt"));
 		assertEquals("file.backup", FileUtils.getBaseName("file.backup.txt"));
 	}
 
 	@Test
-	void f02_getBaseName_noExtension() {
+	void a023_getBaseName_noExtension() {
 		assertEquals("test", FileUtils.getBaseName("test"));
 		assertEquals("file", FileUtils.getBaseName("file"));
 	}
 
 	@Test
-	void f03_getBaseName_null() {
+	void a024_getBaseName_null() {
 		assertNull(FileUtils.getBaseName(null));
 	}
 
 	@Test
-	void f04_getBaseName_onlyExtension() {
+	void a025_getBaseName_onlyExtension() {
 		assertEquals("", FileUtils.getBaseName(".txt"));
 	}
 
 	@Test
-	void f05_getBaseName_multipleDots() {
+	void a026_getBaseName_multipleDots() {
 		assertEquals("test.backup", FileUtils.getBaseName("test.backup.txt"));
 	}
 
 	//====================================================================================================
-	// getFileExtension(String) tests
+	// getFileExtension(String)
 	//====================================================================================================
-
 	@Test
-	void g01_getFileExtension_withExtension() {
+	void a027_getFileExtension() {
 		assertEquals("txt", FileUtils.getFileExtension("test.txt"));
 		assertEquals("java", FileUtils.getFileExtension("FileUtils.java"));
 	}
 
 	@Test
-	void g02_getFileExtension_noExtension() {
+	void a028_getFileExtension_noExtension() {
 		assertEquals("", FileUtils.getFileExtension("test"));
 		assertEquals("", FileUtils.getFileExtension("file"));
 	}
 
 	@Test
-	void g03_getFileExtension_null() {
+	void a029_getFileExtension_null() {
 		assertNull(FileUtils.getFileExtension(null));
 	}
 
 	@Test
-	void g04_getFileExtension_onlyExtension() {
+	void a030_getFileExtension_onlyExtension() {
 		assertEquals("txt", FileUtils.getFileExtension(".txt"));
 	}
 
 	@Test
-	void g05_getFileExtension_multipleDots() {
+	void a031_getFileExtension_multipleDots() {
 		assertEquals("txt", FileUtils.getFileExtension("test.backup.txt"));
 	}
 
 	@Test
-	void g06_getFileExtension_emptyString() {
+	void a032_getFileExtension_emptyString() {
 		assertEquals("", FileUtils.getFileExtension(""));
 	}
 
 	//====================================================================================================
-	// getFileName(String) tests
+	// getFileName(String)
 	//====================================================================================================
-
 	@Test
-	void h01_getFileName_simplePath() {
+	void a033_getFileName() {
 		assertEquals("test.txt", FileUtils.getFileName("test.txt"));
 	}
 
 	@Test
-	void h02_getFileName_withPath() {
+	void a034_getFileName_withPath() {
 		assertEquals("test.txt", FileUtils.getFileName("/path/to/test.txt"));
 		assertEquals("file.java", FileUtils.getFileName("dir/subdir/file.java"));
 	}
 
 	@Test
-	void h03_getFileName_withTrailingSlash() {
+	void a035_getFileName_withTrailingSlash() {
 		assertEquals("test.txt", FileUtils.getFileName("/path/to/test.txt/"));
 		assertEquals("dir", FileUtils.getFileName("/path/to/dir/"));
 	}
 
 	@Test
-	void h04_getFileName_null() {
+	void a036_getFileName_null() {
 		assertNull(FileUtils.getFileName(null));
 	}
 
 	@Test
-	void h05_getFileName_emptyString() {
+	void a037_getFileName_emptyString() {
 		assertNull(FileUtils.getFileName(""));
 	}
 
 	@Test
-	void h06_getFileName_onlySlashes() {
+	void a038_getFileName_onlySlashes() {
 		assertNull(FileUtils.getFileName("/"));
 		assertNull(FileUtils.getFileName("//"));
 	}
 
 	@Test
-	void h07_getFileName_windowsPath() {
+	void a039_getFileName_windowsPath() {
 		assertEquals("test.txt", FileUtils.getFileName("C:\\path\\to\\test.txt"));
 	}
 
 	//====================================================================================================
-	// hasExtension(String, String) tests
+	// hasExtension(String, String)
 	//====================================================================================================
-
 	@Test
-	void i01_hasExtension_matching() {
+	void a040_hasExtension() {
 		assertTrue(FileUtils.hasExtension("test.txt", "txt"));
 		assertTrue(FileUtils.hasExtension("file.java", "java"));
 	}
 
 	@Test
-	void i02_hasExtension_notMatching() {
+	void a041_hasExtension_notMatching() {
 		assertFalse(FileUtils.hasExtension("test.txt", "java"));
 		assertFalse(FileUtils.hasExtension("file.java", "txt"));
 	}
 
 	@Test
-	void i03_hasExtension_noExtension() {
+	void a042_hasExtension_noExtension() {
 		assertFalse(FileUtils.hasExtension("test", "txt"));
 	}
 
 	@Test
-	void i04_hasExtension_nullName() {
+	void a043_hasExtension_nullName() {
 		assertFalse(FileUtils.hasExtension(null, "txt"));
 	}
 
 	@Test
-	void i05_hasExtension_nullExt() {
+	void a044_hasExtension_nullExt() {
 		assertFalse(FileUtils.hasExtension("test.txt", null));
 	}
 
 	@Test
-	void i06_hasExtension_bothNull() {
+	void a045_hasExtension_bothNull() {
 		assertFalse(FileUtils.hasExtension(null, null));
 	}
 
 	@Test
-	void i07_hasExtension_caseSensitive() {
+	void a046_hasExtension_caseSensitive() {
 		assertFalse(FileUtils.hasExtension("test.TXT", "txt"));
 		assertTrue(FileUtils.hasExtension("test.TXT", "TXT"));
 	}
 
 	@Test
-	void i08_hasExtension_multipleDots() {
+	void a047_hasExtension_multipleDots() {
 		assertTrue(FileUtils.hasExtension("test.backup.txt", "txt"));
 		assertFalse(FileUtils.hasExtension("test.backup.txt", "backup"));
 	}
 
 	//====================================================================================================
-	// mkdirs(File, boolean) tests
+	// mkdirs(File, boolean)
 	//====================================================================================================
-
 	@Test
-	void j01_mkdirs_newDirectory() {
+	void a048_mkdirs() {
 		var dir = new File(tempDir.toFile(), "newdir");
 		assertFalse(dir.exists());
 		var result = FileUtils.mkdirs(dir, false);
@@ -443,7 +434,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void j02_mkdirs_nestedDirectories() {
+	void a049_mkdirs_nestedDirectories() {
 		var dir = new File(tempDir.toFile(), "dir1/dir2/dir3");
 		assertFalse(dir.exists());
 		var result = FileUtils.mkdirs(dir, false);
@@ -453,7 +444,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void j03_mkdirs_existingDirectory_cleanFalse() {
+	void a050_mkdirs_existingDirectory_cleanFalse() {
 		var dir = new File(tempDir.toFile(), "existingdir");
 		dir.mkdirs();
 		assertTrue(dir.exists());
@@ -463,7 +454,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void j04_mkdirs_existingDirectory_cleanTrue() throws IOException {
+	void a051_mkdirs_existingDirectory_cleanTrue() throws IOException {
 		var dir = new File(tempDir.toFile(), "cleandir");
 		dir.mkdirs();
 		var f = new File(dir, "test.txt");
@@ -477,18 +468,17 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void j05_mkdirs_null() {
+	void a052_mkdirs_null() {
 		assertThrows(IllegalArgumentException.class, () -> {
 			FileUtils.mkdirs((File)null, false);
 		});
 	}
 
 	//====================================================================================================
-	// mkdirs(String, boolean) tests
+	// mkdirs(String, boolean)
 	//====================================================================================================
-
 	@Test
-	void k01_mkdirs_string_newDirectory() {
+	void a053_mkdirs_string() {
 		var dir = new File(tempDir.toFile(), "newdir");
 		var path = dir.getAbsolutePath();
 		var result = FileUtils.mkdirs(path, false);
@@ -498,7 +488,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void k02_mkdirs_string_nestedDirectories() {
+	void a054_mkdirs_string_nestedDirectories() {
 		var dir = new File(tempDir.toFile(), "dir1/dir2/dir3");
 		var path = dir.getAbsolutePath();
 		var result = FileUtils.mkdirs(path, false);
@@ -508,7 +498,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void k03_mkdirs_string_existingDirectory_cleanTrue() throws IOException {
+	void a055_mkdirs_string_existingDirectory_cleanTrue() throws IOException {
 		var dir = new File(tempDir.toFile(), "cleandir");
 		dir.mkdirs();
 		var f = new File(dir, "test.txt");
@@ -521,18 +511,17 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void k04_mkdirs_string_null() {
+	void a056_mkdirs_string_null() {
 		assertThrows(IllegalArgumentException.class, () -> {
 			FileUtils.mkdirs((String)null, false);
 		});
 	}
 
 	//====================================================================================================
-	// modifyTimestamp(File) tests
+	// modifyTimestamp(File)
 	//====================================================================================================
-
 	@Test
-	void l01_modifyTimestamp_existingFile() throws IOException, InterruptedException {
+	void a057_modifyTimestamp() throws IOException, InterruptedException {
 		var f = new File(tempDir.toFile(), "test.txt");
 		f.createNewFile();
 		var originalTime = f.lastModified();
@@ -547,7 +536,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void l02_modifyTimestamp_nonexistentFile() {
+	void a058_modifyTimestamp_nonexistentFile() {
 		var f = new File(tempDir.toFile(), "nonexistent.txt");
 		assertFalse(f.exists());
 		assertThrowsWithMessage(RuntimeException.class, "Could not modify timestamp", () -> {
@@ -556,7 +545,7 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void l03_modifyTimestamp_directory() throws InterruptedException {
+	void a059_modifyTimestamp_directory() throws InterruptedException {
 		var dir = new File(tempDir.toFile(), "testdir");
 		dir.mkdirs();
 		var originalTime = dir.lastModified();
