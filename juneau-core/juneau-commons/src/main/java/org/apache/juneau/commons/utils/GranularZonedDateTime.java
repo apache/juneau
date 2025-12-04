@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.utils;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StateEnum.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -67,16 +68,7 @@ public class GranularZonedDateTime {
 	 * @throws BasicRuntimeException If the string cannot be parsed as a valid timestamp.
 	 */
 	public static GranularZonedDateTime parse(String seg) {
-		//seg = seg.replace(' ', 'T').replace(',', '.');
-		//var precision = getPrecisionFromString(seg);
-		ZonedDateTime zdt = fromIso8601(seg);
-		if (nn(zdt)) {
-			// Determine precision based on the input string
-			var precision = getPrecisionFromString(seg);
-			return new GranularZonedDateTime(zdt, precision);
-		}
-
-		throw rex("Invalid date encountered: ''{0}''", seg);
+		return parse2(seg);
 	}
 
 	/** The ZonedDateTime value */
@@ -566,4 +558,458 @@ public class GranularZonedDateTime {
 		return ZonedDateTime.parse(validDate, DateTimeFormatter.ISO_DATE_TIME);
 	}
 
+	public static GranularZonedDateTime parse2(String seg) {
+		return parse2(seg, null);
+	}
+
+	public static GranularZonedDateTime parse2(String seg, ZoneId defaultZoneId) {
+		assertArgNotNull("seg", seg);
+		var digit = StringUtils.DIGIT;
+
+		// States:
+		// S01: Looking for Y(S02) or T(S07).
+		// S02: Found Y, looking for Y(S02)/-(S03)/T(S07).
+		// S03: Found -, looking for M(S04).
+		// S04: Found M, looking for M(S04)/-(S05)/T(S07).
+		// S05: Found -, looking for D(S10).
+		// S06  Found D, looking for D(S06)/T(S07).
+		// S07: Found T, looking for h(S08)/Z(S15)/+(S16)/-(S17).
+		// S08: Found h, looking for h(S08)/:(S09)/Z(S15)/+(S16)/-(S17).
+		// S09: Found :, looking for m(S10).
+		// S10: Found m, looking for m(S10)/:(S11)/Z(S15)/+(S16)/-(S17).
+		// S11: Found :, looking for s(S12).
+		// S12: Found s, looking for s(S12)/.(S13)/Z(S15)/+(S16)/-(S17).
+		// S13: Found ., looking for S(S14)/Z(S15)/+(S16)/-(S17).
+		// S14: Found S, looking for S(S14)/Z(S15)/+(S16)/-(S17).
+		// S15: Found Z.
+		// S16: Found +, looking for oh(S18).
+		// S17: Found -, looking for oh(S18).
+		// S18: Found oh, looking for oh(S18)/:(S19).
+		// S19: Found :, looking for om(S20).
+		// S20: Found om, looking for om(S20).
+
+
+		int year = 1, month = 1, day = 1, hour = 0, minute = 0, second = 0, nanos = 0, ohour = -1, ominute = -1;
+		boolean nego = false; // negative offset
+		boolean timeOnly = false; // Track if format started with "T" (time-only)
+		ZoneId zoneId = null;
+		var state = S1;
+		var mark = 0;
+		ChronoField precision = ChronoField.YEAR; // Track precision as we go
+
+		for (var i = 0; i < seg.length(); i++) {
+			var c = seg.charAt(i);
+
+			if (state == S1) {
+				// S01: Looking for Y(S02) or T(S07)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S2;
+				} else if (c == 'T') {
+					timeOnly = true; // Mark as time-only format
+					state = S7;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S2) {
+				// S02: Found Y, looking for Y(S02)/-(S03)/T(S07)
+				if (digit.contains(c)) {
+					// Stay in S2
+				} else if (c == '-') {
+					year = parse(seg, 4, mark, i, 0, 9999);
+					state = S3;
+				} else if (c == 'T') {
+					year = parse(seg, 4, mark, i, 0, 9999);
+					state = S7;
+				} else if (c == 'Z') {
+					zoneId = ZoneId.of("Z");
+					year = parse(seg, 4, mark, i, 0, 9999);
+					state = S15;
+				} else if (c == '+') {
+					year = parse(seg, 4, mark, i, 0, 9999);
+					nego = false;
+					state = S16;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S3) {
+				// S03: Found -, looking for M(S04)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S4;
+					precision = ChronoField.MONTH_OF_YEAR;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S4) {
+				// S04: Found M, looking for M(S04)/-(S05)/T(S07)
+				if (digit.contains(c)) {
+					// Stay in S4
+				} else if (c == '-') {
+					month = parse(seg, 2, mark, i, 1, 12);
+					state = S5;
+				} else if (c == 'T') {
+					month = parse(seg, 2, mark, i, 1, 12);
+					state = S7;
+				} else if (c == 'Z') {
+					month = parse(seg, 2, mark, i, 1, 12);
+					zoneId = ZoneId.of("Z");
+					state = S15;
+				} else if (c == '+') {
+					month = parse(seg, 2, mark, i, 1, 12);
+					nego = false;
+					state = S16;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S5) {
+				// S05: Found -, looking for D(S06)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S6;
+					precision = ChronoField.DAY_OF_MONTH;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S6) {
+				// S06: Found D, looking for D(S06)/T(S07)
+				if (digit.contains(c)) {
+					// Stay in S6
+				} else if (c == 'T') {
+					day = parse(seg, 2, mark, i, 1, 31);
+					state = S7;
+				} else if (c == 'Z') {
+					day = parse(seg, 2, mark, i, 1, 31);
+					zoneId = ZoneId.of("Z");
+					state = S15;
+				} else if (c == '+') {
+					day = parse(seg, 2, mark, i, 1, 31);
+					nego = false;
+					state = S16;
+				} else if (c == '-') {
+					day = parse(seg, 2, mark, i, 1, 31);
+					nego = true;
+					state = S17;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S7) {
+				// S07: Found T, looking for h(S08)/Z(S15)/+(S16)/-(S17)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S8;
+					precision = ChronoField.HOUR_OF_DAY;
+				} else if (c == 'Z') {
+					zoneId = ZoneId.of("Z");
+					state = S15;
+				} else if (c == '+') {
+					nego = false;
+					state = S16;
+				} else if (c == '-') {
+					nego = true;
+					state = S17;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S8) {
+				// S08: Found h, looking for h(S08)/:(S09)/Z(S15)/+(S16)/-(S17)
+				if (digit.contains(c)) {
+					// Stay in S8
+				} else if (c == ':') {
+					hour = parse(seg, 2, mark, i, 0, 23);
+					state = S9;
+				} else if (c == 'Z') {
+					hour = parse(seg, 2, mark, i, 0, 23);
+					zoneId = ZoneId.of("Z");
+					state = S15;
+				} else if (c == '+') {
+					hour = parse(seg, 2, mark, i, 0, 23);
+					nego = false;
+					state = S16;
+				} else if (c == '-') {
+					hour = parse(seg, 2, mark, i, 0, 23);
+					nego = true;
+					state = S17;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S9) {
+				// S09: Found :, looking for m(S10)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S10;
+					precision = ChronoField.MINUTE_OF_HOUR;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S10) {
+				// S10: Found m, looking for m(S10)/:(S11)/Z(S15)/+(S16)/-(S17)
+				if (digit.contains(c)) {
+					// Stay in S10
+				} else if (c == ':') {
+					minute = parse(seg, 2, mark, i, 0, 59);
+					state = S11;
+				} else if (c == 'Z') {
+					minute = parse(seg, 2, mark, i, 0, 59);
+					zoneId = ZoneId.of("Z");
+					state = S15;
+				} else if (c == '+') {
+					minute = parse(seg, 2, mark, i, 0, 59);
+					nego = false;
+					state = S16;
+				} else if (c == '-') {
+					minute = parse(seg, 2, mark, i, 0, 59);
+					nego = true;
+					state = S17;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S11) {
+				// S11: Found :, looking for s(S12)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S12;
+					precision = ChronoField.SECOND_OF_MINUTE;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S12) {
+				// S12: Found s, looking for s(S12)/.(S13)/Z(S15)/+(S16)/-(S17)
+				if (digit.contains(c)) {
+					// Stay in S12
+			} else if (c == '.' || c == ',') {
+				second = parse(seg, 2, mark, i, 0, 59);
+				state = S13;
+				// Precision will be set based on number of fractional digits
+				} else if (c == 'Z') {
+					second = parse(seg, 2, mark, i, 0, 59);
+					zoneId = ZoneId.of("Z");
+					state = S15;
+				} else if (c == '+') {
+					second = parse(seg, 2, mark, i, 0, 59);
+					nego = false;
+					state = S16;
+				} else if (c == '-') {
+					second = parse(seg, 2, mark, i, 0, 59);
+					nego = true;
+					state = S17;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S13) {
+				// S13: Found . or ,, looking for S(S14)/Z(S15)/+(S16)/-(S17)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S14;
+				} else if (c == 'Z') {
+					zoneId = ZoneId.of("Z");
+					state = S15;
+				} else if (c == '+') {
+					nego = false;
+					state = S16;
+				} else if (c == '-') {
+					nego = true;
+					state = S17;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S14) {
+				// S14: Found S, looking for S(S14)/Z(S15)/+(S16)/-(S17)
+				if (digit.contains(c)) {
+					// Stay in S14
+				} else if (c == 'Z') {
+					nanos = parseNanos(seg, mark, i);
+					zoneId = ZoneId.of("Z");
+					// Set precision based on number of fractional digits: 1-3 = milliseconds, 4-9 = nanoseconds
+					var digitCount = i - mark;
+					precision = (digitCount <= 3) ? ChronoField.MILLI_OF_SECOND : ChronoField.NANO_OF_SECOND;
+					state = S15;
+				} else if (c == '+') {
+					nanos = parseNanos(seg, mark, i);
+					// Set precision based on number of fractional digits: 1-3 = milliseconds, 4-9 = nanoseconds
+					var digitCount = i - mark;
+					precision = (digitCount <= 3) ? ChronoField.MILLI_OF_SECOND : ChronoField.NANO_OF_SECOND;
+					nego = false;
+					state = S16;
+				} else if (c == '-') {
+					nanos = parseNanos(seg, mark, i);
+					// Set precision based on number of fractional digits: 1-3 = milliseconds, 4-9 = nanoseconds
+					var digitCount = i - mark;
+					precision = (digitCount <= 3) ? ChronoField.MILLI_OF_SECOND : ChronoField.NANO_OF_SECOND;
+					nego = true;
+					state = S17;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S15) {
+				// Shouldn't find anything after Z
+				throw bad(seg, i);
+			} else if (state == S16) {
+				// S16: Found +, looking for oh(S18)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S18;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S17) {
+				// S17: Found -, looking for oh(S18)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S18;
+				} else {
+					throw bad(seg, i);
+				}
+			} else if (state == S18) {
+				// S18: Found oh, looking for oh(S18)/:(S19)/end
+				if (digit.contains(c)) {
+					// Stay in S18
+				} else if (c == ':') {
+					ohour = parse(seg, 2, mark, i, 0, 18);
+					state = S19;
+				} else {
+					throw bad(seg, i);
+				}
+				// If we reach end of string, ohour is complete (2 digits)
+			} else if (state == S19) {
+				// S19: Found :, looking for om(S20)
+				if (digit.contains(c)) {
+					mark = i;
+					state = S20;
+				} else {
+					throw bad(seg, i);
+				}
+			} else /* (state == S20) */ {
+				// S20: Found om, looking for om(S20)
+				if (digit.contains(c)) {
+					// Stay in S20
+				} else {
+					throw bad(seg, i);
+				}
+			}
+		}
+
+		var end = seg.length(); // end is exclusive (one past last character)
+		if (state.isAny(S1, S3, S5, S7, S9, S11, S13, S16, S17, S19)) {
+			throw bad(seg, end - 1);
+		} else if (state == S2) {
+			// S02: Found Y, looking for Y(S02)/-(S03)/T(S07).
+			year = parse(seg, 4, mark, end, 0, 9999);
+			precision = ChronoField.YEAR;
+		} else if (state == S4) {
+			// S04: Found M, looking for M(S04)/-(S05)/T(S07).
+			month = parse(seg, 2, mark, end, 1, 12);
+			precision = ChronoField.MONTH_OF_YEAR;
+		} else if (state == S6) {
+			// S06  Found D, looking for D(S06)/T(S07).
+			day = parse(seg, 2, mark, end, 1, 31);
+			precision = ChronoField.DAY_OF_MONTH;
+		} else if (state == S8) {
+			// S08: Found h, looking for h(S08)/:(S09)/Z(S15)/+(S16)/-(S17).
+			hour = parse(seg, 2, mark, end, 0, 23);
+			precision = ChronoField.HOUR_OF_DAY;
+		} else if (state == S10) {
+			// S10: Found m, looking for m(S10)/:(S11)/Z(S15)/+(S16)/-(S17).
+			minute = parse(seg, 2, mark, end, 0, 59);
+			precision = ChronoField.MINUTE_OF_HOUR;
+		} else if (state == S12) {
+			// S12: Found s, looking for s(S12)/.(S13)/Z(S15)/+(S16)/-(S17).
+			second = parse(seg, 2, mark, end, 0, 59);
+			precision = ChronoField.SECOND_OF_MINUTE;
+		} else if (state == S14) {
+			// S14: Found S, looking for S(S14)/Z(S15)/+(S16)/-(S17).
+			nanos = parseNanos(seg, mark, end);
+			// Set precision based on number of digits: 1-3 = milliseconds, 4-9 = nanoseconds
+			var digitCount = end - mark;
+			precision = (digitCount <= 3) ? ChronoField.MILLI_OF_SECOND : ChronoField.NANO_OF_SECOND;
+		} else if (state == S15) {
+			// S15: Found Z.
+		} else if (state == S18) {
+			// S18: Found oh, looking for oh(S18)/:(S19).
+			// Check if we have 2 digits (+hh) or 4 digits (+hhmm)
+			if (end - mark == 2) {
+				ohour = parse(seg, 2, mark, end, 0, 18);
+			} else if (end - mark == 4) {
+				// +hhmm format: parse hours from mark to mark+2, minutes from mark+2 to end
+				ohour = parse(seg, 2, mark, mark + 2, 0, 18);
+				ominute = parse(seg, 2, mark + 2, end, 0, 59);
+			} else {
+				throw bad(seg, mark);
+			}
+		} else /* (state == S20) */ {
+			// S20: Found om, looking for om(S20).
+			ominute = parse(seg, 2, mark, end, 0, 59);
+		}
+
+		// Build ZoneId if we have offset information
+		if (zoneId == null) {
+			if (ohour >= 0) {
+				if (ominute >= 0) {
+					// If negative offset, both hours and minutes must be negative
+					var offset = ZoneOffset.ofHoursMinutes(nego ? -ohour : ohour, nego ? -ominute : ominute);
+					zoneId = offset;
+				} else {
+					var offset = ZoneOffset.ofHours(nego ? -ohour : ohour);
+					zoneId = offset;
+				}
+			}
+		}
+
+		// Use provided default zone if no zone specified, otherwise use system default
+		if (zoneId == null) {
+			zoneId = defaultZoneId != null ? defaultZoneId : ZoneId.systemDefault();
+		}
+
+		// Construct ZonedDateTime from parsed values
+		// Default values for missing components
+		// For time-only formats (started with "T"), use current date
+		// For date formats, default to 1/1/1
+		if (timeOnly) {
+			// Time-only format: use current year/month/day
+			var now = ZonedDateTime.now(zoneId);
+			year = now.getYear();
+			month = now.getMonthValue();
+			day = now.getDayOfMonth();
+		}
+
+		var localDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
+		if (nanos > 0) {
+			localDateTime = localDateTime.plusNanos(nanos);
+		}
+
+		var zdt = ZonedDateTime.of(localDateTime, zoneId);
+
+		// Return GranularZonedDateTime with the determined precision
+		return new GranularZonedDateTime(zdt, precision);
+	}
+
+	private static DateTimeParseException bad(String s, int pos) {
+		return new DateTimeParseException("Invalid ISO8601 timestamp", s, pos);
+	}
+
+	private static int parse(String s, int chars, int pos, int end, int min, int max) {
+		if (end-pos != chars) throw bad(s, pos);
+		var i = Integer.parseInt(s, pos, end, 10);
+		if (i < min || i > max) throw bad(s, pos);
+		return i;
+	}
+
+	private static int parseNanos(String s, int pos, int end) {
+		var len = end - pos; // Length of the substring being parsed
+		if (len > 9) {
+			throw bad(s, pos);
+		}
+		var n = Integer.parseInt(s, pos, end, 10);
+		// Convert to nanoseconds based on number of digits
+		// 1 digit = hundreds of milliseconds, 2 = tens, 3 = milliseconds, etc.
+		if (len == 1) return n * 100000000;
+		if (len == 2) return n * 10000000;
+		if (len == 3) return n * 1000000;
+		if (len == 4) return n * 100000;
+		if (len == 5) return n * 10000;
+		if (len == 6) return n * 1000;
+		if (len == 7) return n * 100;
+		if (len == 8) return n * 10;
+		return n;
+	}
 }
