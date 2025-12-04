@@ -18,7 +18,6 @@ package org.apache.juneau.commons.time;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StateEnum.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.time.*;
 import java.time.format.*;
@@ -164,14 +163,19 @@ public class GranularZonedDateTime {
 	 * 	<li>With 4-9 fractional digits → {@link ChronoField#NANO_OF_SECOND}
 	 * </ul>
 	 *
-	 * @param timestamp The ISO8601 timestamp string to parse.
+	 * @param value The ISO8601 timestamp string to parse.
 	 * @return A new GranularZonedDateTime instance.
 	 * @throws IllegalArgumentException if timestamp is null.
 	 * @throws DateTimeParseException if the timestamp format is invalid.
 	 */
-	public static GranularZonedDateTime of(String timestamp) {
-		return of(timestamp, null);
+	public static GranularZonedDateTime of(String value) {
+		return of(value, null, null);
 	}
+
+	public static GranularZonedDateTime of(String value, TimeProvider timeProvider) {
+		return of(value, null, timeProvider);
+	}
+
 
 	/**
 	 * Parses an ISO8601 timestamp string into a GranularZonedDateTime with a default timezone.
@@ -202,16 +206,17 @@ public class GranularZonedDateTime {
 	 * 	<jc>// Result uses UTC (Z), not America/New_York</jc>
 	 * </p>
 	 *
-	 * @param seg The ISO8601 timestamp string to parse.
+	 * @param value The ISO8601 timestamp string to parse.
 	 * @param defaultZoneId The default timezone to use if no timezone is specified in the string.
 	 * 	If null, {@link ZoneId#systemDefault()} is used.
 	 * @return A new GranularZonedDateTime instance.
 	 * @throws IllegalArgumentException if seg is null.
 	 * @throws DateTimeParseException if the timestamp format is invalid.
 	 */
-	public static GranularZonedDateTime of(String seg, ZoneId defaultZoneId) {
-		assertArgNotNull("seg", seg);
+	public static GranularZonedDateTime of(String value, ZoneId defaultZoneId, TimeProvider timeProvider) {
+		assertArgNotNull("value", value);
 		var digit = StringUtils.DIGIT;
+		timeProvider = timeProvider == null ? TimeProvider.INSTANCE : timeProvider;
 
 		// States:
 		// S01: Looking for Y(S02) or T(S07).
@@ -244,8 +249,8 @@ public class GranularZonedDateTime {
 		var mark = 0;
 		ChronoField precision = ChronoField.YEAR; // Track precision as we go
 
-		for (var i = 0; i < seg.length(); i++) {
-			var c = seg.charAt(i);
+		for (var i = 0; i < value.length(); i++) {
+			var c = value.charAt(i);
 
 			if (state == S1) {
 				// S01: Looking for Y(S02) or T(S07)
@@ -256,28 +261,28 @@ public class GranularZonedDateTime {
 					timeOnly = true; // Mark as time-only format
 					state = S7;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S2) {
 				// S02: Found Y, looking for Y(S02)/-(S03)/T(S07)
 				if (digit.contains(c)) {
 					// Stay in S2
 				} else if (c == '-') {
-					year = parse(seg, 4, mark, i, 0, 9999);
+					year = parse(value, 4, mark, i, 0, 9999);
 					state = S3;
 				} else if (c == 'T') {
-					year = parse(seg, 4, mark, i, 0, 9999);
+					year = parse(value, 4, mark, i, 0, 9999);
 					state = S7;
 				} else if (c == 'Z') {
 					zoneId = ZoneId.of("Z");
-					year = parse(seg, 4, mark, i, 0, 9999);
+					year = parse(value, 4, mark, i, 0, 9999);
 					state = S15;
 				} else if (c == '+') {
-					year = parse(seg, 4, mark, i, 0, 9999);
+					year = parse(value, 4, mark, i, 0, 9999);
 					nego = false;
 					state = S16;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S3) {
 				// S03: Found -, looking for M(S04)
@@ -286,28 +291,28 @@ public class GranularZonedDateTime {
 					state = S4;
 					precision = ChronoField.MONTH_OF_YEAR;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S4) {
 				// S04: Found M, looking for M(S04)/-(S05)/T(S07)
 				if (digit.contains(c)) {
 					// Stay in S4
 				} else if (c == '-') {
-					month = parse(seg, 2, mark, i, 1, 12);
+					month = parse(value, 2, mark, i, 1, 12);
 					state = S5;
 				} else if (c == 'T') {
-					month = parse(seg, 2, mark, i, 1, 12);
+					month = parse(value, 2, mark, i, 1, 12);
 					state = S7;
 				} else if (c == 'Z') {
-					month = parse(seg, 2, mark, i, 1, 12);
+					month = parse(value, 2, mark, i, 1, 12);
 					zoneId = ZoneId.of("Z");
 					state = S15;
 				} else if (c == '+') {
-					month = parse(seg, 2, mark, i, 1, 12);
+					month = parse(value, 2, mark, i, 1, 12);
 					nego = false;
 					state = S16;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S5) {
 				// S05: Found -, looking for D(S06)
@@ -316,29 +321,29 @@ public class GranularZonedDateTime {
 					state = S6;
 					precision = ChronoField.DAY_OF_MONTH;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S6) {
 				// S06: Found D, looking for D(S06)/T(S07)
 				if (digit.contains(c)) {
 					// Stay in S6
 				} else if (c == 'T') {
-					day = parse(seg, 2, mark, i, 1, 31);
+					day = parse(value, 2, mark, i, 1, 31);
 					state = S7;
 				} else if (c == 'Z') {
-					day = parse(seg, 2, mark, i, 1, 31);
+					day = parse(value, 2, mark, i, 1, 31);
 					zoneId = ZoneId.of("Z");
 					state = S15;
 				} else if (c == '+') {
-					day = parse(seg, 2, mark, i, 1, 31);
+					day = parse(value, 2, mark, i, 1, 31);
 					nego = false;
 					state = S16;
 				} else if (c == '-') {
-					day = parse(seg, 2, mark, i, 1, 31);
+					day = parse(value, 2, mark, i, 1, 31);
 					nego = true;
 					state = S17;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S7) {
 				// S07: Found T, looking for h(S08)/Z(S15)/+(S16)/-(S17)
@@ -348,37 +353,46 @@ public class GranularZonedDateTime {
 					precision = ChronoField.HOUR_OF_DAY;
 				} else if (c == 'Z') {
 					zoneId = ZoneId.of("Z");
+					if (timeOnly) {
+						precision = ChronoField.HOUR_OF_DAY;
+					}
 					state = S15;
 				} else if (c == '+') {
 					nego = false;
+					if (timeOnly) {
+						precision = ChronoField.HOUR_OF_DAY;
+					}
 					state = S16;
 				} else if (c == '-') {
 					nego = true;
+					if (timeOnly) {
+						precision = ChronoField.HOUR_OF_DAY;
+					}
 					state = S17;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S8) {
 				// S08: Found h, looking for h(S08)/:(S09)/Z(S15)/+(S16)/-(S17)
 				if (digit.contains(c)) {
 					// Stay in S8
 				} else if (c == ':') {
-					hour = parse(seg, 2, mark, i, 0, 23);
+					hour = parse(value, 2, mark, i, 0, 23);
 					state = S9;
 				} else if (c == 'Z') {
-					hour = parse(seg, 2, mark, i, 0, 23);
+					hour = parse(value, 2, mark, i, 0, 23);
 					zoneId = ZoneId.of("Z");
 					state = S15;
 				} else if (c == '+') {
-					hour = parse(seg, 2, mark, i, 0, 23);
+					hour = parse(value, 2, mark, i, 0, 23);
 					nego = false;
 					state = S16;
 				} else if (c == '-') {
-					hour = parse(seg, 2, mark, i, 0, 23);
+					hour = parse(value, 2, mark, i, 0, 23);
 					nego = true;
 					state = S17;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S9) {
 				// S09: Found :, looking for m(S10)
@@ -387,29 +401,29 @@ public class GranularZonedDateTime {
 					state = S10;
 					precision = ChronoField.MINUTE_OF_HOUR;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S10) {
 				// S10: Found m, looking for m(S10)/:(S11)/Z(S15)/+(S16)/-(S17)
 				if (digit.contains(c)) {
 					// Stay in S10
 				} else if (c == ':') {
-					minute = parse(seg, 2, mark, i, 0, 59);
+					minute = parse(value, 2, mark, i, 0, 59);
 					state = S11;
 				} else if (c == 'Z') {
-					minute = parse(seg, 2, mark, i, 0, 59);
+					minute = parse(value, 2, mark, i, 0, 59);
 					zoneId = ZoneId.of("Z");
 					state = S15;
 				} else if (c == '+') {
-					minute = parse(seg, 2, mark, i, 0, 59);
+					minute = parse(value, 2, mark, i, 0, 59);
 					nego = false;
 					state = S16;
 				} else if (c == '-') {
-					minute = parse(seg, 2, mark, i, 0, 59);
+					minute = parse(value, 2, mark, i, 0, 59);
 					nego = true;
 					state = S17;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S11) {
 				// S11: Found :, looking for s(S12)
@@ -418,30 +432,30 @@ public class GranularZonedDateTime {
 					state = S12;
 					precision = ChronoField.SECOND_OF_MINUTE;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S12) {
 				// S12: Found s, looking for s(S12)/.(S13)/Z(S15)/+(S16)/-(S17)
 				if (digit.contains(c)) {
 					// Stay in S12
 			} else if (c == '.' || c == ',') {
-				second = parse(seg, 2, mark, i, 0, 59);
+				second = parse(value, 2, mark, i, 0, 59);
 				state = S13;
 				// Precision will be set based on number of fractional digits
 				} else if (c == 'Z') {
-					second = parse(seg, 2, mark, i, 0, 59);
+					second = parse(value, 2, mark, i, 0, 59);
 					zoneId = ZoneId.of("Z");
 					state = S15;
 				} else if (c == '+') {
-					second = parse(seg, 2, mark, i, 0, 59);
+					second = parse(value, 2, mark, i, 0, 59);
 					nego = false;
 					state = S16;
 				} else if (c == '-') {
-					second = parse(seg, 2, mark, i, 0, 59);
+					second = parse(value, 2, mark, i, 0, 59);
 					nego = true;
 					state = S17;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S13) {
 				// S13: Found . or ,, looking for S(S14)/Z(S15)/+(S16)/-(S17)
@@ -458,46 +472,46 @@ public class GranularZonedDateTime {
 					nego = true;
 					state = S17;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S14) {
 				// S14: Found S, looking for S(S14)/Z(S15)/+(S16)/-(S17)
 				if (digit.contains(c)) {
 					// Stay in S14
 				} else if (c == 'Z') {
-					nanos = parseNanos(seg, mark, i);
+					nanos = parseNanos(value, mark, i);
 					zoneId = ZoneId.of("Z");
 					// Set precision based on number of fractional digits: 1-3 = milliseconds, 4-9 = nanoseconds
 					var digitCount = i - mark;
 					precision = (digitCount <= 3) ? ChronoField.MILLI_OF_SECOND : ChronoField.NANO_OF_SECOND;
 					state = S15;
 				} else if (c == '+') {
-					nanos = parseNanos(seg, mark, i);
+					nanos = parseNanos(value, mark, i);
 					// Set precision based on number of fractional digits: 1-3 = milliseconds, 4-9 = nanoseconds
 					var digitCount = i - mark;
 					precision = (digitCount <= 3) ? ChronoField.MILLI_OF_SECOND : ChronoField.NANO_OF_SECOND;
 					nego = false;
 					state = S16;
 				} else if (c == '-') {
-					nanos = parseNanos(seg, mark, i);
+					nanos = parseNanos(value, mark, i);
 					// Set precision based on number of fractional digits: 1-3 = milliseconds, 4-9 = nanoseconds
 					var digitCount = i - mark;
 					precision = (digitCount <= 3) ? ChronoField.MILLI_OF_SECOND : ChronoField.NANO_OF_SECOND;
 					nego = true;
 					state = S17;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S15) {
 				// Shouldn't find anything after Z
-				throw bad(seg, i);
+				throw bad(value, i);
 			} else if (state == S16) {
 				// S16: Found +, looking for oh(S18)
 				if (digit.contains(c)) {
 					mark = i;
 					state = S18;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S17) {
 				// S17: Found -, looking for oh(S18)
@@ -505,17 +519,17 @@ public class GranularZonedDateTime {
 					mark = i;
 					state = S18;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else if (state == S18) {
 				// S18: Found oh, looking for oh(S18)/:(S19)/end
 				if (digit.contains(c)) {
 					// Stay in S18
 				} else if (c == ':') {
-					ohour = parse(seg, 2, mark, i, 0, 18);
+					ohour = parse(value, 2, mark, i, 0, 18);
 					state = S19;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 				// If we reach end of string, ohour is complete (2 digits)
 			} else if (state == S19) {
@@ -524,48 +538,48 @@ public class GranularZonedDateTime {
 					mark = i;
 					state = S20;
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			} else /* (state == S20) */ {
 				// S20: Found om, looking for om(S20)
 				if (digit.contains(c)) {
 					// Stay in S20
 				} else {
-					throw bad(seg, i);
+					throw bad(value, i);
 				}
 			}
 		}
 
-		var end = seg.length(); // end is exclusive (one past last character)
+		var end = value.length(); // end is exclusive (one past last character)
 		if (state.isAny(S1, S3, S5, S7, S9, S11, S13, S16, S17, S19)) {
-			throw bad(seg, end - 1);
+			throw bad(value, end - 1);
 		} else if (state == S2) {
 			// S02: Found Y, looking for Y(S02)/-(S03)/T(S07).
-			year = parse(seg, 4, mark, end, 0, 9999);
+			year = parse(value, 4, mark, end, 0, 9999);
 			precision = ChronoField.YEAR;
 		} else if (state == S4) {
 			// S04: Found M, looking for M(S04)/-(S05)/T(S07).
-			month = parse(seg, 2, mark, end, 1, 12);
+			month = parse(value, 2, mark, end, 1, 12);
 			precision = ChronoField.MONTH_OF_YEAR;
 		} else if (state == S6) {
 			// S06  Found D, looking for D(S06)/T(S07).
-			day = parse(seg, 2, mark, end, 1, 31);
+			day = parse(value, 2, mark, end, 1, 31);
 			precision = ChronoField.DAY_OF_MONTH;
 		} else if (state == S8) {
 			// S08: Found h, looking for h(S08)/:(S09)/Z(S15)/+(S16)/-(S17).
-			hour = parse(seg, 2, mark, end, 0, 23);
+			hour = parse(value, 2, mark, end, 0, 23);
 			precision = ChronoField.HOUR_OF_DAY;
 		} else if (state == S10) {
 			// S10: Found m, looking for m(S10)/:(S11)/Z(S15)/+(S16)/-(S17).
-			minute = parse(seg, 2, mark, end, 0, 59);
+			minute = parse(value, 2, mark, end, 0, 59);
 			precision = ChronoField.MINUTE_OF_HOUR;
 		} else if (state == S12) {
 			// S12: Found s, looking for s(S12)/.(S13)/Z(S15)/+(S16)/-(S17).
-			second = parse(seg, 2, mark, end, 0, 59);
+			second = parse(value, 2, mark, end, 0, 59);
 			precision = ChronoField.SECOND_OF_MINUTE;
 		} else if (state == S14) {
 			// S14: Found S, looking for S(S14)/Z(S15)/+(S16)/-(S17).
-			nanos = parseNanos(seg, mark, end);
+			nanos = parseNanos(value, mark, end);
 			// Set precision based on number of digits: 1-3 = milliseconds, 4-9 = nanoseconds
 			var digitCount = end - mark;
 			precision = (digitCount <= 3) ? ChronoField.MILLI_OF_SECOND : ChronoField.NANO_OF_SECOND;
@@ -575,17 +589,17 @@ public class GranularZonedDateTime {
 			// S18: Found oh, looking for oh(S18)/:(S19).
 			// Check if we have 2 digits (+hh) or 4 digits (+hhmm)
 			if (end - mark == 2) {
-				ohour = parse(seg, 2, mark, end, 0, 18);
+				ohour = parse(value, 2, mark, end, 0, 18);
 			} else if (end - mark == 4) {
 				// +hhmm format: parse hours from mark to mark+2, minutes from mark+2 to end
-				ohour = parse(seg, 2, mark, mark + 2, 0, 18);
-				ominute = parse(seg, 2, mark + 2, end, 0, 59);
+				ohour = parse(value, 2, mark, mark + 2, 0, 18);
+				ominute = parse(value, 2, mark + 2, end, 0, 59);
 			} else {
-				throw bad(seg, mark);
+				throw bad(value, mark);
 			}
 		} else /* (state == S20) */ {
 			// S20: Found om, looking for om(S20).
-			ominute = parse(seg, 2, mark, end, 0, 59);
+			ominute = parse(value, 2, mark, end, 0, 59);
 		}
 
 		// Build ZoneId if we have offset information
@@ -604,7 +618,7 @@ public class GranularZonedDateTime {
 
 		// Use provided default zone if no zone specified, otherwise use system default
 		if (zoneId == null) {
-			zoneId = defaultZoneId != null ? defaultZoneId : ZoneId.systemDefault();
+			zoneId = defaultZoneId != null ? defaultZoneId : timeProvider.getSystemDefaultZoneId();
 		}
 
 		// Construct ZonedDateTime from parsed values
@@ -613,7 +627,7 @@ public class GranularZonedDateTime {
 		// For date formats, default to 1/1/1
 		if (timeOnly) {
 			// Time-only format: use current year/month/day
-			var now = ZonedDateTime.now(zoneId);
+			var now = timeProvider.now(zoneId);
 			year = now.getYear();
 			month = now.getMonthValue();
 			day = now.getDayOfMonth();
@@ -684,6 +698,19 @@ public class GranularZonedDateTime {
 	 * This method provides a mapping from date/time fields to time units.
 	 * Not all ChronoField values have direct ChronoUnit equivalents.
 	 *
+	 * <p>
+	 * Supported fields:
+	 * <ul>
+	 * 	<li>{@link ChronoField#YEAR} → {@link ChronoUnit#YEARS}
+	 * 	<li>{@link ChronoField#MONTH_OF_YEAR} → {@link ChronoUnit#MONTHS}
+	 * 	<li>{@link ChronoField#DAY_OF_MONTH} → {@link ChronoUnit#DAYS}
+	 * 	<li>{@link ChronoField#HOUR_OF_DAY} → {@link ChronoUnit#HOURS}
+	 * 	<li>{@link ChronoField#MINUTE_OF_HOUR} → {@link ChronoUnit#MINUTES}
+	 * 	<li>{@link ChronoField#SECOND_OF_MINUTE} → {@link ChronoUnit#SECONDS}
+	 * 	<li>{@link ChronoField#MILLI_OF_SECOND} → {@link ChronoUnit#MILLIS}
+	 * 	<li>{@link ChronoField#NANO_OF_SECOND} → {@link ChronoUnit#NANOS}
+	 * </ul>
+	 *
 	 * @param field The ChronoField to convert
 	 * @return The corresponding ChronoUnit, or null if no direct mapping exists
 	 */
@@ -696,6 +723,7 @@ public class GranularZonedDateTime {
 			case MINUTE_OF_HOUR -> ChronoUnit.MINUTES;
 			case SECOND_OF_MINUTE -> ChronoUnit.SECONDS;
 			case MILLI_OF_SECOND -> ChronoUnit.MILLIS;
+			case NANO_OF_SECOND -> ChronoUnit.NANOS;
 			default -> null;
 		};
 	}
@@ -734,11 +762,49 @@ public class GranularZonedDateTime {
 	public ZonedDateTime getZonedDateTime() { return zdt; }
 
 	/**
+	 * Returns the precision of this time value.
+	 *
+	 * <p>
+	 * The precision indicates the finest granularity of the time value, which determines
+	 * how the value was parsed or created. For example:
+	 * <ul>
+	 * 	<li>{@link ChronoField#YEAR} - Year precision (e.g., "2011")
+	 * 	<li>{@link ChronoField#MONTH_OF_YEAR} - Month precision (e.g., "2011-01")
+	 * 	<li>{@link ChronoField#DAY_OF_MONTH} - Day precision (e.g., "2011-01-15")
+	 * 	<li>{@link ChronoField#HOUR_OF_DAY} - Hour precision (e.g., "2011-01-15T12")
+	 * 	<li>{@link ChronoField#MINUTE_OF_HOUR} - Minute precision (e.g., "2011-01-15T12:30")
+	 * 	<li>{@link ChronoField#SECOND_OF_MINUTE} - Second precision (e.g., "2011-01-15T12:30:45")
+	 * 	<li>{@link ChronoField#MILLI_OF_SECOND} - Millisecond precision (e.g., "2011-01-15T12:30:45.123")
+	 * 	<li>{@link ChronoField#NANO_OF_SECOND} - Nanosecond precision (e.g., "2011-01-15T12:30:45.123456789")
+	 * </ul>
+	 *
+	 * @return The precision of this time value.
+	 */
+	public ChronoField getPrecision() { return precision; }
+
+	@Override
+	public String toString() {
+		return zdt.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) + "(" + precision + ")";
+	}
+
+	/**
 	 * Rolls this time value by the specified amount using the specified field.
 	 *
 	 * <p>
 	 * This method creates a new GranularZonedDateTime by adding the specified amount to the
 	 * specified field. The precision of the returned object remains the same as this object.
+	 *
+	 * <h5 class='section'>Supported Fields:</h5>
+	 * <ul>
+	 * 	<li>{@link ChronoField#YEAR}
+	 * 	<li>{@link ChronoField#MONTH_OF_YEAR}
+	 * 	<li>{@link ChronoField#DAY_OF_MONTH}
+	 * 	<li>{@link ChronoField#HOUR_OF_DAY}
+	 * 	<li>{@link ChronoField#MINUTE_OF_HOUR}
+	 * 	<li>{@link ChronoField#SECOND_OF_MINUTE}
+	 * 	<li>{@link ChronoField#MILLI_OF_SECOND}
+	 * 	<li>{@link ChronoField#NANO_OF_SECOND}
+	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -749,21 +815,16 @@ public class GranularZonedDateTime {
 	 * 	<jc>// Result: 2011-01-15T14:00:00Z (precision still HOUR_OF_DAY)</jc>
 	 * </p>
 	 *
-	 * <p>
-	 * If the field cannot be converted to a ChronoUnit (e.g., unsupported field), this method
-	 * returns this object unchanged.
-	 *
-	 * @param field The field to roll by (e.g., {@link ChronoField#YEAR}, {@link ChronoField#HOUR_OF_DAY}).
+	 * @param field The field to roll by. Must be one of the supported fields listed above.
 	 * @param amount The amount to roll by. Positive values roll forward, negative values roll backward.
-	 * @return A new GranularZonedDateTime with the rolled value, or this object if the field is unsupported.
+	 * @return A new GranularZonedDateTime with the rolled value.
+	 * @throws IllegalArgumentException If the field is not supported.
 	 */
 	public GranularZonedDateTime roll(ChronoField field, int amount) {
-		ChronoUnit unit = toChronoUnit(field);
-		if (nn(unit)) {
-			ZonedDateTime newZdt = zdt.plus(amount, unit);
-			return new GranularZonedDateTime(newZdt, precision);
-		}
-		return this;
+		var unit = toChronoUnit(field);
+		assertArg(unit != null, "Unsupported roll field: {0}", field);
+		var newZdt = zdt.plus(amount, unit);
+		return new GranularZonedDateTime(newZdt, precision);
 	}
 
 	/**

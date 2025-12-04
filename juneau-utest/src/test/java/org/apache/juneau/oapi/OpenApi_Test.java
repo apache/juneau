@@ -31,12 +31,15 @@ import org.apache.juneau.commons.time.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utest.utils.FakeTimeProvider;
 import org.junit.jupiter.api.*;
 
 /**
  * Tests the OpenApiSerializer and OpenApiParser classes.
  */
 public class OpenApi_Test extends TestBase {
+
+	private static final FakeTimeProvider FAKE_TIME_PROVIDER = new FakeTimeProvider();
 
 	public static final OpenApiSerializer DS = OpenApiSerializer.DEFAULT;
 	public static final OpenApiParser DP = OpenApiParser.DEFAULT;
@@ -862,6 +865,6 @@ public class OpenApi_Test extends TestBase {
 	//---------------------------------------------------------------------------------------------
 
 	private static Calendar cal(String in) {
-		return opt(in).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(in).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
+		return opt(in).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(in, FAKE_TIME_PROVIDER).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 	}
 }

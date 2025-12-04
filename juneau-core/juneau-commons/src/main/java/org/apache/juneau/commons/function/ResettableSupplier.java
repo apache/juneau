@@ -19,6 +19,7 @@ package org.apache.juneau.commons.function;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
@@ -107,5 +108,9 @@ public class ResettableSupplier<T> implements Supplier<T> {
 	 */
 	public void reset() {
 		cache.set(null);
+	}
+
+	public void set(T value) {
+		cache.set(opt(value));
 	}
 }

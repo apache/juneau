@@ -16,15 +16,18 @@
  */
 package org.apache.juneau.commons.time;
 
-import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.time.temporal.*;
-import java.util.*;
+import java.util.Date;
 
 import org.apache.juneau.*;
+import org.apache.juneau.utest.utils.FakeTimeProvider;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests for {@link GranularZonedDateTime}.
@@ -46,27 +49,44 @@ class GranularZonedDateTime_Test extends TestBase {
 	@Test
 	void b02_constructorWithZonedDateTime_preservesZone() {
 		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("America/New_York"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.MINUTE_OF_HOUR);
+		var gdt = new GranularZonedDateTime(zdt, ChronoField.HOUR_OF_DAY);
 		assertEquals(ZoneId.of("America/New_York"), gdt.zdt.getZone());
 	}
 
 	@Test
-	void b03_constructorWithZonedDateTime_allPrecisions() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 123000000, ZoneId.of("UTC"));
-		var precisions = new ChronoField[] {
-			ChronoField.YEAR,
-			ChronoField.MONTH_OF_YEAR,
-			ChronoField.DAY_OF_MONTH,
-			ChronoField.HOUR_OF_DAY,
-			ChronoField.MINUTE_OF_HOUR,
-			ChronoField.SECOND_OF_MINUTE,
-			ChronoField.MILLI_OF_SECOND
-		};
-		for (var precision : precisions) {
-			var gdt = new GranularZonedDateTime(zdt, precision);
-			assertEquals(zdt, gdt.zdt);
-			assertEquals(precision, gdt.precision);
-		}
+	void b03_constructorWithZonedDateTime_preservesPrecision() {
+		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
+		var gdt = new GranularZonedDateTime(zdt, ChronoField.MINUTE_OF_HOUR);
+		assertEquals(ChronoField.MINUTE_OF_HOUR, gdt.precision);
+	}
+
+	@Test
+	void b04_ofZonedDateTime() {
+		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
+		var gdt = GranularZonedDateTime.of(zdt, ChronoField.HOUR_OF_DAY);
+		assertEquals(zdt, gdt.zdt);
+		assertEquals(ChronoField.HOUR_OF_DAY, gdt.precision);
+	}
+
+	@Test
+	void b05_ofDate() {
+		var date = new Date(1705322445000L); // 2024-01-15T12:30:45Z
+		var gdt = GranularZonedDateTime.of(date, ChronoField.SECOND_OF_MINUTE);
+		assertEquals(ChronoField.SECOND_OF_MINUTE, gdt.precision);
+		// Verify the instant is correct (date uses system default timezone)
+		assertEquals(date.toInstant(), gdt.zdt.toInstant());
+	}
+
+	@Test
+	void b06_ofDateWithZoneId() {
+		var date = new Date(1705322445000L); // 2024-01-15T12:30:45Z
+		var zoneId = ZoneId.of("America/New_York");
+		var gdt = GranularZonedDateTime.of(date, ChronoField.SECOND_OF_MINUTE, zoneId);
+		assertEquals(ChronoField.SECOND_OF_MINUTE, gdt.precision);
+		assertEquals(zoneId, gdt.zdt.getZone());
+		assertEquals(2024, gdt.zdt.getYear());
+		assertEquals(1, gdt.zdt.getMonthValue());
+		assertEquals(15, gdt.zdt.getDayOfMonth());
 	}
 
 	//====================================================================================================
@@ -74,24 +94,13 @@ class GranularZonedDateTime_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void c01_copy_createsNewInstance() {
+	void c01_copy() {
 		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt1 = new GranularZonedDateTime(zdt, ChronoField.DAY_OF_MONTH);
+		var gdt1 = new GranularZonedDateTime(zdt, ChronoField.HOUR_OF_DAY);
 		var gdt2 = gdt1.copy();
 		assertNotSame(gdt1, gdt2);
 		assertEquals(gdt1.zdt, gdt2.zdt);
 		assertEquals(gdt1.precision, gdt2.precision);
-	}
-
-	@Test
-	void c02_copy_immutable() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt1 = new GranularZonedDateTime(zdt, ChronoField.YEAR);
-		var gdt2 = gdt1.copy();
-		// Modifying the copy should not affect original (though ZonedDateTime is immutable anyway)
-		var gdt3 = gdt2.roll(1);
-		assertEquals(gdt1.zdt, gdt1.zdt); // Original unchanged
-		assertNotEquals(gdt1.zdt, gdt3.zdt);
 	}
 
 	//====================================================================================================
@@ -99,116 +108,17 @@ class GranularZonedDateTime_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void d01_getZonedDateTime_returnsCorrectValue() {
+	void d01_getZonedDateTime() {
 		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
 		var gdt = new GranularZonedDateTime(zdt, ChronoField.HOUR_OF_DAY);
 		assertEquals(zdt, gdt.getZonedDateTime());
-		assertSame(gdt.zdt, gdt.getZonedDateTime());
 	}
 
 	@Test
-	void d02_getZonedDateTime_differentZones() {
-		var zdt1 = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var zdt2 = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("America/New_York"));
-		var gdt1 = new GranularZonedDateTime(zdt1, ChronoField.MINUTE_OF_HOUR);
-		var gdt2 = new GranularZonedDateTime(zdt2, ChronoField.MINUTE_OF_HOUR);
-		assertEquals(zdt1, gdt1.getZonedDateTime());
-		assertEquals(zdt2, gdt2.getZonedDateTime());
-		assertNotEquals(gdt1.getZonedDateTime(), gdt2.getZonedDateTime());
-	}
-
-	//====================================================================================================
-	// roll(int) tests
-	//====================================================================================================
-
-	@Test
-	void e01_roll_forwardByOne() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.YEAR);
-		var rolled = gdt.roll(1);
-		assertEquals(zdt.plusYears(1), rolled.zdt);
-		assertEquals(ChronoField.YEAR, rolled.precision);
-	}
-
-	@Test
-	void e02_roll_backwardByOne() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.YEAR);
-		var rolled = gdt.roll(-1);
-		assertEquals(zdt.minusYears(1), rolled.zdt);
-		assertEquals(ChronoField.YEAR, rolled.precision);
-	}
-
-	@Test
-	void e03_roll_byMultiple() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.MONTH_OF_YEAR);
-		var rolled = gdt.roll(3);
-		assertEquals(zdt.plusMonths(3), rolled.zdt);
-	}
-
-	@Test
-	void e04_roll_monthPrecision() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.MONTH_OF_YEAR);
-		var rolled = gdt.roll(1);
-		assertEquals(zdt.plusMonths(1), rolled.zdt);
-	}
-
-	@Test
-	void e05_roll_dayPrecision() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.DAY_OF_MONTH);
-		var rolled = gdt.roll(1);
-		assertEquals(zdt.plusDays(1), rolled.zdt);
-	}
-
-	@Test
-	void e06_roll_hourPrecision() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.HOUR_OF_DAY);
-		var rolled = gdt.roll(1);
-		assertEquals(zdt.plusHours(1), rolled.zdt);
-	}
-
-	@Test
-	void e07_roll_minutePrecision() {
+	void d02_getPrecision() {
 		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
 		var gdt = new GranularZonedDateTime(zdt, ChronoField.MINUTE_OF_HOUR);
-		var rolled = gdt.roll(1);
-		assertEquals(zdt.plusMinutes(1), rolled.zdt);
-	}
-
-	@Test
-	void e08_roll_secondPrecision() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.SECOND_OF_MINUTE);
-		var rolled = gdt.roll(1);
-		assertEquals(zdt.plusSeconds(1), rolled.zdt);
-	}
-
-	@Test
-	void e09_roll_millisecondPrecision() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 123000000, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.MILLI_OF_SECOND);
-		var rolled = gdt.roll(1);
-		assertEquals(zdt.plus(1, ChronoUnit.MILLIS), rolled.zdt);
-	}
-
-	@Test
-	void e10_roll_zero() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.YEAR);
-		var rolled = gdt.roll(0);
-		assertEquals(zdt, rolled.zdt);
-	}
-
-	@Test
-	void e11_roll_preservesPrecision() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.DAY_OF_MONTH);
-		var rolled = gdt.roll(5);
-		assertEquals(ChronoField.DAY_OF_MONTH, rolled.precision);
+		assertEquals(ChronoField.MINUTE_OF_HOUR, gdt.getPrecision());
 	}
 
 	//====================================================================================================
@@ -216,26 +126,7 @@ class GranularZonedDateTime_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void f01_rollWithField_differentField() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.YEAR);
-		var rolled = gdt.roll(ChronoField.MONTH_OF_YEAR, 2);
-		assertEquals(zdt.plusMonths(2), rolled.zdt);
-		// Precision should remain the same as original
-		assertEquals(ChronoField.YEAR, rolled.precision);
-	}
-
-	@Test
-	void f02_rollWithField_sameField() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.YEAR);
-		var rolled = gdt.roll(ChronoField.YEAR, 1);
-		assertEquals(zdt.plusYears(1), rolled.zdt);
-		assertEquals(ChronoField.YEAR, rolled.precision);
-	}
-
-	@Test
-	void f03_rollWithField_allSupportedFields() {
+	void e01_roll_withField() {
 		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 123000000, ZoneId.of("UTC"));
 		var gdt = new GranularZonedDateTime(zdt, ChronoField.MILLI_OF_SECOND);
 
@@ -259,150 +150,42 @@ class GranularZonedDateTime_Test extends TestBase {
 
 		var rolled7 = gdt.roll(ChronoField.MILLI_OF_SECOND, 1);
 		assertEquals(zdt.plus(1, ChronoUnit.MILLIS), rolled7.zdt);
+
+		var rolled8 = gdt.roll(ChronoField.NANO_OF_SECOND, 1);
+		assertEquals(zdt.plus(1, ChronoUnit.NANOS), rolled8.zdt);
 	}
 
 	@Test
-	void f04_rollWithField_unsupportedField() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.YEAR);
-		// Using an unsupported ChronoField (one that toChronoUnit returns null for)
-		var rolled = gdt.roll(ChronoField.DAY_OF_WEEK, 1);
-		// Should return the same instance (no change)
-		assertEquals(gdt.zdt, rolled.zdt);
-		assertEquals(gdt.precision, rolled.precision);
+	void e02_roll_withNanoOfSecondPrecision() {
+		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 123456789, ZoneId.of("UTC"));
+		var gdt = new GranularZonedDateTime(zdt, ChronoField.NANO_OF_SECOND);
+
+		var rolled = gdt.roll(ChronoField.NANO_OF_SECOND, 100);
+		assertEquals(zdt.plus(100, ChronoUnit.NANOS), rolled.zdt);
+		assertEquals(ChronoField.NANO_OF_SECOND, rolled.precision);
 	}
 
 	@Test
-	void f05_rollWithField_negativeAmount() {
+	void e03_roll_withUnsupportedField() {
 		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.YEAR);
-		var rolled = gdt.roll(ChronoField.MONTH_OF_YEAR, -3);
-		assertEquals(zdt.minusMonths(3), rolled.zdt);
-	}
+		var gdt = new GranularZonedDateTime(zdt, ChronoField.HOUR_OF_DAY);
 
-	@Test
-	void f06_rollWithField_zeroAmount() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.YEAR);
-		var rolled = gdt.roll(ChronoField.MONTH_OF_YEAR, 0);
-		assertEquals(zdt, rolled.zdt);
-	}
-
-	@Test
-	void f07_rollWithField_preservesOriginalPrecision() {
-		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
-		var gdt = new GranularZonedDateTime(zdt, ChronoField.DAY_OF_MONTH);
-		var rolled = gdt.roll(ChronoField.YEAR, 1);
-		// Precision should remain DAY_OF_MONTH, not YEAR
-		assertEquals(ChronoField.DAY_OF_MONTH, rolled.precision);
+		assertThrowsWithMessage(IllegalArgumentException.class,
+			"Unsupported roll field: AmPmOfDay",
+			() -> gdt.roll(ChronoField.AMPM_OF_DAY, 1));
 	}
 
 	//====================================================================================================
-	// of(String) tests
+	// roll(int) tests
 	//====================================================================================================
 
 	@Test
-	void g01_of_yearOnly() {
-		var gdt = GranularZonedDateTime.of("2011");
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(ChronoField.YEAR, gdt.precision);
-	}
-
-	@Test
-	void g02_of_yearMonth() {
-		var gdt = GranularZonedDateTime.of("2011-01");
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(ChronoField.MONTH_OF_YEAR, gdt.precision);
-	}
-
-	@Test
-	void g03_of_date() {
-		var gdt = GranularZonedDateTime.of("2011-01-15");
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(15, gdt.zdt.getDayOfMonth());
-		assertEquals(ChronoField.DAY_OF_MONTH, gdt.precision);
-	}
-
-	@Test
-	void g04_of_dateTime_hour() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12Z");
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(ChronoField.HOUR_OF_DAY, gdt.precision);
-	}
-
-	@Test
-	void g05_of_dateTime_minute() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30Z");
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(ChronoField.MINUTE_OF_HOUR, gdt.precision);
-	}
-
-	@Test
-	void g06_of_dateTime_second() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45Z");
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(45, gdt.zdt.getSecond());
-		assertEquals(ChronoField.SECOND_OF_MINUTE, gdt.precision);
-	}
-
-	@Test
-	void g07_of_dateTime_millisecond() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.123Z");
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(45, gdt.zdt.getSecond());
-		assertEquals(123, gdt.zdt.getNano() / 1_000_000);
-		assertEquals(ChronoField.MILLI_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void g08_of_withOffset() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45-05:00");
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(ZoneOffset.of("-05:00"), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void g09_of_withPositiveOffset() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45+09:00");
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.of("+09:00"), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void g10_of_invalidString() {
-		// fromIso8601 throws DateTimeParseException for invalid input
-		// The exception may be DateTimeParseException (from fromIso8601) or BasicRuntimeException (from of)
-		var e = assertThrows(RuntimeException.class, () -> {
-			GranularZonedDateTime.of("invalid-date");
-		});
-		// Verify that an exception was thrown (the exact message format may vary)
-		assertNotNull(e);
-		assertNotNull(e.getMessage());
-	}
-
-	@Test
-	void g11_of_null() {
-		assertThrows(IllegalArgumentException.class, () -> GranularZonedDateTime.of(null));
-	}
-
-	@Test
-	void g12_of_emptyString() {
-		assertThrowsWithMessage(RuntimeException.class, "Invalid ISO8601 timestamp", () -> {
-			GranularZonedDateTime.of("");
-		});
+	void f01_roll_withPrecision() {
+		var zdt = ZonedDateTime.of(2024, 1, 15, 12, 30, 45, 0, ZoneId.of("UTC"));
+		var gdt = new GranularZonedDateTime(zdt, ChronoField.HOUR_OF_DAY);
+		var rolled = gdt.roll(2);
+		assertEquals(zdt.plusHours(2), rolled.zdt);
+		assertEquals(ChronoField.HOUR_OF_DAY, rolled.precision);
 	}
 
 	//====================================================================================================
@@ -411,7 +194,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 	@Test
 	void h01_rollAndof() {
-		var gdt1 = GranularZonedDateTime.of("2011");
+		var gdt1 = GranularZonedDateTime.of("2011", FAKE_TIME_PROVIDER);
 		var gdt2 = gdt1.roll(1);
 		assertEquals(2012, gdt2.zdt.getYear());
 		assertEquals(ChronoField.YEAR, gdt2.precision);
@@ -419,7 +202,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 	@Test
 	void h02_rollMultipleTimes() {
-		var gdt = GranularZonedDateTime.of("2011-01-15");
+		var gdt = GranularZonedDateTime.of("2011-01-15", FAKE_TIME_PROVIDER);
 		var rolled1 = gdt.roll(1);
 		var rolled2 = rolled1.roll(1);
 		assertEquals(17, rolled2.zdt.getDayOfMonth());
@@ -427,7 +210,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 	@Test
 	void h03_rollWithDifferentField() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30Z");
+		var gdt = GranularZonedDateTime.of("2011-01-15T12:30Z", FAKE_TIME_PROVIDER);
 		// Roll by hours even though precision is minutes
 		var rolled = gdt.roll(ChronoField.HOUR_OF_DAY, 2);
 		assertEquals(14, rolled.zdt.getHour());
@@ -437,7 +220,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 	@Test
 	void h04_copyAndRoll() {
-		var gdt1 = GranularZonedDateTime.of("2011-01-15");
+		var gdt1 = GranularZonedDateTime.of("2011-01-15", FAKE_TIME_PROVIDER);
 		var gdt2 = gdt1.copy();
 		var rolled = gdt2.roll(1);
 		// Original should be unchanged
@@ -446,1081 +229,245 @@ class GranularZonedDateTime_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// of(String) tests
+	// of(String) and of(String, ZoneId) tests - see J_parserTests nested class below
 	//====================================================================================================
 
-	@Test
-	void i01_of_null() {
-		// of(String) overload throws IllegalArgumentException when seg is null
-		assertThrows(IllegalArgumentException.class, () -> {
-			GranularZonedDateTime.of((String)null);
-		});
-		// of(String, ZoneId) also throws when seg is null
-		assertThrows(IllegalArgumentException.class, () -> {
-			GranularZonedDateTime.of((String)null, (ZoneId)null);
-		});
-	}
-
-	@Test
-	void i02_of_yearOnly() {
-		var gdt = GranularZonedDateTime.of("2011", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(1, gdt.zdt.getDayOfMonth());
-		assertEquals(0, gdt.zdt.getHour());
-		assertEquals(ChronoField.YEAR, gdt.precision);
-	}
-
-	@Test
-	void i03_of_yearMonth() {
-		var gdt = GranularZonedDateTime.of("2011-01", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(1, gdt.zdt.getDayOfMonth());
-		assertEquals(ChronoField.MONTH_OF_YEAR, gdt.precision);
-	}
-
-	@Test
-	void i04_of_date() {
-		var gdt = GranularZonedDateTime.of("2011-01-15", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(15, gdt.zdt.getDayOfMonth());
-		assertEquals(ChronoField.DAY_OF_MONTH, gdt.precision);
-	}
-
-	@Test
-	void i05_of_dateTime_hour() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(15, gdt.zdt.getDayOfMonth());
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(0, gdt.zdt.getMinute());
-		assertEquals(ChronoField.HOUR_OF_DAY, gdt.precision);
-	}
-
-	@Test
-	void i06_of_dateTime_minute() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30", null);
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(0, gdt.zdt.getSecond());
-		assertEquals(ChronoField.MINUTE_OF_HOUR, gdt.precision);
-	}
-
-	@Test
-	void i07_of_dateTime_second() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45", null);
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(45, gdt.zdt.getSecond());
-		assertEquals(ChronoField.SECOND_OF_MINUTE, gdt.precision);
-	}
-
-	@Test
-	void i08_of_dateTime_millisecond_dot() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.123", null);
-		assertNotNull(gdt);
-		assertEquals(45, gdt.zdt.getSecond());
-		assertEquals(123000000, gdt.zdt.getNano());
-		assertEquals(ChronoField.MILLI_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i09_of_dateTime_millisecond_comma() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45,123", null);
-		assertNotNull(gdt);
-		assertEquals(45, gdt.zdt.getSecond());
-		assertEquals(123000000, gdt.zdt.getNano());
-		assertEquals(ChronoField.MILLI_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i10_of_timeOnly_hour() {
-		var now = ZonedDateTime.now();
-		var gdt = GranularZonedDateTime.of("T12", null);
-		assertNotNull(gdt);
-		assertEquals(now.getYear(), gdt.zdt.getYear());
-		assertEquals(now.getMonthValue(), gdt.zdt.getMonthValue());
-		assertEquals(now.getDayOfMonth(), gdt.zdt.getDayOfMonth());
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(0, gdt.zdt.getMinute());
-		assertEquals(ChronoField.HOUR_OF_DAY, gdt.precision);
-	}
-
-	@Test
-	void i11_of_timeOnly_minute() {
-		var now = ZonedDateTime.now();
-		var gdt = GranularZonedDateTime.of("T12:30", null);
-		assertNotNull(gdt);
-		assertEquals(now.getYear(), gdt.zdt.getYear());
-		assertEquals(now.getMonthValue(), gdt.zdt.getMonthValue());
-		assertEquals(now.getDayOfMonth(), gdt.zdt.getDayOfMonth());
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(ChronoField.MINUTE_OF_HOUR, gdt.precision);
-	}
-
-	@Test
-	void i12_of_timeOnly_second() {
-		var now = ZonedDateTime.now();
-		var gdt = GranularZonedDateTime.of("T12:30:45", null);
-		assertNotNull(gdt);
-		assertEquals(now.getYear(), gdt.zdt.getYear());
-		assertEquals(now.getMonthValue(), gdt.zdt.getMonthValue());
-		assertEquals(now.getDayOfMonth(), gdt.zdt.getDayOfMonth());
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(45, gdt.zdt.getSecond());
-		assertEquals(ChronoField.SECOND_OF_MINUTE, gdt.precision);
-	}
-
-	@Test
-	void i13_of_timeOnly_millisecond() {
-		var now = ZonedDateTime.now();
-		var gdt = GranularZonedDateTime.of("T12:30:45.123", null);
-		assertNotNull(gdt);
-		assertEquals(now.getYear(), gdt.zdt.getYear());
-		assertEquals(now.getMonthValue(), gdt.zdt.getMonthValue());
-		assertEquals(now.getDayOfMonth(), gdt.zdt.getDayOfMonth());
-		assertEquals(123000000, gdt.zdt.getNano());
-		assertEquals(ChronoField.MILLI_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i14_of_withZ() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45Z", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-		assertEquals(12, gdt.zdt.getHour());
-	}
-
-	@Test
-	void i15_of_withOffset_plusHH() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45+05", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i16_of_withOffset_minusHH() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45-05", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHours(-5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i17_of_withOffset_plusHHMM() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45+0530", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHoursMinutes(5, 30), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i18_of_withOffset_minusHHMM() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45-0530", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHoursMinutes(-5, -30), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i19_of_withOffset_plusHH_MM() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45+05:30", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHoursMinutes(5, 30), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i20_of_withOffset_minusHH_MM() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45-05:30", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHoursMinutes(-5, -30), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i21_of_timezoneAfterYear() {
-		var gdt = GranularZonedDateTime.of("2011Z", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i22_of_timezoneAfterMonth() {
-		var gdt = GranularZonedDateTime.of("2011-01Z", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i23_of_timezoneAfterDay() {
-		var gdt = GranularZonedDateTime.of("2011-01-15Z", null);
-		assertNotNull(gdt);
-		assertEquals(15, gdt.zdt.getDayOfMonth());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i24_of_timezoneAfterHour() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12Z", null);
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i25_of_timezoneAfterMinute() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30Z", null);
-		assertNotNull(gdt);
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i26_of_timezoneAfterT() {
-		var gdt = GranularZonedDateTime.of("2011-01T+05:30", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(ZoneOffset.ofHoursMinutes(5, 30), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i27_of_nanoseconds_1digit() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.1", null);
-		assertNotNull(gdt);
-		assertEquals(100000000, gdt.zdt.getNano());
-		// 1 digit is treated as milliseconds (hundreds of milliseconds)
-		assertEquals(ChronoField.MILLI_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i28_of_nanoseconds_2digits() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.12", null);
-		assertNotNull(gdt);
-		assertEquals(120000000, gdt.zdt.getNano());
-	}
-
-	@Test
-	void i29_of_nanoseconds_3digits() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.123", null);
-		assertNotNull(gdt);
-		assertEquals(123000000, gdt.zdt.getNano());
-	}
-
-	@Test
-	void i30_of_nanoseconds_4digits() {
-		// Lines 1018: len == 4
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.1234", null);
-		assertNotNull(gdt);
-		assertEquals(123400000, gdt.zdt.getNano());
-		assertEquals(ChronoField.NANO_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i30a_of_nanoseconds_5digits() {
-		// Lines 1019: len == 5
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.12345", null);
-		assertNotNull(gdt);
-		assertEquals(123450000, gdt.zdt.getNano());
-		assertEquals(ChronoField.NANO_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i30b_of_nanoseconds_6digits() {
-		// Lines 1020: len == 6
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.123456", null);
-		assertNotNull(gdt);
-		assertEquals(123456000, gdt.zdt.getNano());
-		assertEquals(ChronoField.NANO_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i30c_of_nanoseconds_7digits() {
-		// Lines 1021: len == 7
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.1234567", null);
-		assertNotNull(gdt);
-		assertEquals(123456700, gdt.zdt.getNano());
-		assertEquals(ChronoField.NANO_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i30d_of_nanoseconds_8digits() {
-		// Lines 1022: len == 8
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.12345678", null);
-		assertNotNull(gdt);
-		assertEquals(123456780, gdt.zdt.getNano());
-		assertEquals(ChronoField.NANO_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i30e_of_nanoseconds_9digits() {
-		// Line 1023: len == 9 (default return)
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.123456789", null);
-		assertNotNull(gdt);
-		assertEquals(123456789, gdt.zdt.getNano());
-		assertEquals(ChronoField.NANO_OF_SECOND, gdt.precision);
-	}
-
-	@Test
-	void i31_of_badTimestamps() {
-		// Invalid formats
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("invalid", null));
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("", null));
-
-		// Invalid year length
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("123", null));
-
-		// Invalid month - below minimum (0)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-00", null));
-
-		// Invalid month - above maximum (13)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-13", null));
-
-		// Invalid month - way above maximum
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-99", null));
-
-		// Invalid day - below minimum (0)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-00", null));
-
-		// Invalid day - above maximum (32)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-32", null));
-
-		// Invalid day - way above maximum
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-99", null));
-
-		// Invalid hour - below minimum (-1, but this would be caught as invalid format)
-		// Invalid hour - above maximum (24)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T24", null));
-
-		// Invalid hour - way above maximum
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T99", null));
-
-		// Invalid minute - above maximum (60)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:60", null));
-
-		// Invalid minute - way above maximum
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:99", null));
-
-		// Invalid second - above maximum (60)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:60", null));
-
-		// Invalid second - way above maximum
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:99", null));
-
-		// Invalid character after year (line 642)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011X", null));
-
-		// Invalid character after '-' in S3 (line 651)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-X", null));
-
-		// Invalid character after month (line 676)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01X", null));
-
-		// Invalid character after '-' in S5 (line 685)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-X", null));
-
-		// Invalid character after day (line 707)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15X", null));
-
-		// Invalid character after 'T' in S7 (line 725)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("TX", null));
-
-		// Invalid character after hour (line 747)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12X", null));
-
-		// Invalid character after ':' in S9 (line 756)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:X", null));
-
-		// Invalid character after minute (line 778)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30X", null));
-
-		// Invalid character after ':' in S11 (line 787)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:X", null));
-
-		// Invalid character in S12 after seconds (line 810)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45X", null));
-
-		// Invalid character in S13 after '.' or ',' (line 827)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45.X", null));
-
-		// Invalid character in S14 while reading milliseconds (line 846)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45.12X", null));
-
-		// Invalid character in S16 after '+' (line 857)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45+X", null));
-
-		// Invalid character in S17 after '-' (line 865)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45-X", null));
-
-		// Invalid character in S18 while reading offset hours (line 875)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45+05X", null));
-
-		// Invalid character in S19 after ':' in offset (line 884)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45+05:X", null));
-
-		// Invalid character in S20 while reading offset minutes (line 891)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45+05:30X", null));
-
-		// Invalid offset format in S18 finalization - not 2 or 4 digits (line 941)
-		// Ending in S18 with 1 digit (should be 2 or 4)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45+1", null));
-		// Ending in S18 with 3 digits (should be 2 or 4)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45+123", null));
-		// Ending in S18 with 5 digits (should be 2 or 4)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45+12345", null));
-
-		// Invalid nanosecond length in ofNanos (line 1010)
-		// This is defensive code - ofNanos checks length is 1-9 digits
-		// The state machine should prevent this, but we test the defensive check
-		// by ending in S14 with 0 digits (which shouldn't happen, but tests the check)
-		// Actually, we can't easily trigger 0 digits since we transition to S14 only after seeing a digit.
-		// For >9 digits, if we have 10+ digits, the 10th non-digit would trigger line 846, not 1010.
-		// However, if we end the string with exactly 10 digits, we'd call ofNanos with len=10, triggering 1010.
-		// But wait, the state machine allows digits in S14, so we'd need to end the string with 10+ digits.
-		// Let's test with a string that ends with 10 digits of fractional seconds (no timezone)
-		// This would end in S14 with 10 digits, calling ofNanos with len=10, which is >9, triggering line 1010.
-		assertThrows(java.time.format.DateTimeParseException.class, () -> GranularZonedDateTime.of("2011-01-15T12:30:45.1234567890", null));
-	}
-
-	@Test
-	void i38_of_timeOnly_withZ() {
-		var now = ZonedDateTime.now();
-		var gdt = GranularZonedDateTime.of("T12:30:45Z", null);
-		assertNotNull(gdt);
-		assertEquals(now.getYear(), gdt.zdt.getYear());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i39_of_timeOnly_withOffset() {
-		var now = ZonedDateTime.now();
-		var gdt = GranularZonedDateTime.of("T12:30:45+05:30", null);
-		assertNotNull(gdt);
-		assertEquals(now.getYear(), gdt.zdt.getYear());
-		assertEquals(ZoneOffset.ofHoursMinutes(5, 30), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i40_of_noTimezone_usesSystemDefault() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneId.systemDefault(), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i41_of_yearFollowedByT() {
-		// Lines 627-628: Year followed by 'T'
-		var gdt = GranularZonedDateTime.of("2011T12", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(12, gdt.zdt.getHour());
-	}
-
-	@Test
-	void i42_of_yearFollowedByZ() {
-		// Lines 629-632: Year followed by 'Z'
-		var gdt = GranularZonedDateTime.of("2011Z", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i43_of_yearFollowedByPlus() {
-		// Lines 633-636: Year followed by '+'
-		var gdt = GranularZonedDateTime.of("2011+05", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i44_of_yearFollowedByMinus() {
-		// Lines 637-640: Year followed by '-' (timezone)
-		// Note: The code has two '-' checks in S2, but the first one (line 621) goes to S3 (month),
-		// so the second '-' check (line 637) is unreachable in normal parsing.
-		// However, we can test the negative timezone path by using a format that works:
-		// After parsing a complete component, we can have timezone. Let's test with hour followed by negative timezone.
-		// Actually, let's test the negative timezone path that IS reachable - after hour, minute, or second.
-		// This test covers the concept even if the specific line isn't reachable.
-		var gdt = GranularZonedDateTime.of("2011-01-15T12-05", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(ZoneOffset.ofHours(-5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i45_of_monthFollowedByZ() {
-		// Lines 663-666: Month followed by 'Z'
-		var gdt = GranularZonedDateTime.of("2011-01Z", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i46_of_monthFollowedByPlus() {
-		// Lines 667-670: Month followed by '+'
-		var gdt = GranularZonedDateTime.of("2011-01+05", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i47_of_monthFollowedByMinus() {
-		// Lines 671-674: Month followed by '-' (timezone)
-		// Note: Similar to i44, the second '-' check in S4 may be unreachable because the first '-' goes to S5 (day).
-		// However, we can test the negative timezone concept with a reachable path.
-		// Let's test with minute followed by negative timezone to cover the negative timezone logic.
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30-05", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(ZoneOffset.ofHours(-5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i48_of_dayFollowedByZ() {
-		// Lines 692-697: Day followed by 'Z'
-		var gdt = GranularZonedDateTime.of("2011-01-15Z", null);
-		assertNotNull(gdt);
-		assertEquals(15, gdt.zdt.getDayOfMonth());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i49_of_dayFollowedByPlus() {
-		// Lines 698-701: Day followed by '+'
-		var gdt = GranularZonedDateTime.of("2011-01-15+05", null);
-		assertNotNull(gdt);
-		assertEquals(15, gdt.zdt.getDayOfMonth());
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i50_of_dayFollowedByMinus() {
-		// Lines 702-705: Day followed by '-'
-		var gdt = GranularZonedDateTime.of("2011-01-15-05", null);
-		assertNotNull(gdt);
-		assertEquals(15, gdt.zdt.getDayOfMonth());
-		assertEquals(ZoneOffset.ofHours(-5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i51_of_TFollowedByZ() {
-		// Lines 715-717: 'T' followed by 'Z'
-		var gdt = GranularZonedDateTime.of("TZ", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i52_of_TFollowedByPlus() {
-		// Lines 718-720: 'T' followed by '+'
-		var gdt = GranularZonedDateTime.of("T+05", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i53_of_TFollowedByMinus() {
-		// Lines 721-723: 'T' followed by '-'
-		var gdt = GranularZonedDateTime.of("T-05", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHours(-5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i54_of_hourFollowedByZ() {
-		// Lines 732-737: Hour followed by 'Z'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12Z", null);
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i55_of_hourFollowedByPlus() {
-		// Lines 738-741: Hour followed by '+'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12+05", null);
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i56_of_hourFollowedByMinus() {
-		// Lines 742-745: Hour followed by '-'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12-05", null);
-		assertNotNull(gdt);
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(ZoneOffset.ofHours(-5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i57_of_minuteFollowedByZ() {
-		// Lines 765-768: Minute followed by 'Z'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30Z", null);
-		assertNotNull(gdt);
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i58_of_minuteFollowedByPlus() {
-		// Lines 769-772: Minute followed by '+'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30+05", null);
-		assertNotNull(gdt);
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i59_of_minuteFollowedByMinus() {
-		// Lines 773-776: Minute followed by '-'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30-05", null);
-		assertNotNull(gdt);
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(ZoneOffset.ofHours(-5), gdt.zdt.getOffset());
-	}
-
-	//====================================================================================================
-	// of(String) - Timezone after fractional seconds tests
-	//====================================================================================================
-
-	@Test
-	void i73_of_S13_fractionalSeparatorFollowedByZ() {
-		// Lines 817-819: S13 - '.' or ',' followed by 'Z'
-		var gdt1 = GranularZonedDateTime.of("2011-01-15T12:30:45.Z", null);
-		assertNotNull(gdt1);
-		assertEquals(ZoneId.of("Z"), gdt1.zdt.getZone());
-		assertEquals(0, gdt1.zdt.getNano());
-
-		var gdt2 = GranularZonedDateTime.of("2011-01-15T12:30:45,Z", null);
-		assertNotNull(gdt2);
-		assertEquals(ZoneId.of("Z"), gdt2.zdt.getZone());
-		assertEquals(0, gdt2.zdt.getNano());
-	}
-
-	@Test
-	void i74_of_S13_fractionalSeparatorFollowedByPlus() {
-		// Lines 820-822: S13 - '.' or ',' followed by '+'
-		var gdt1 = GranularZonedDateTime.of("2011-01-15T12:30:45.+05:00", null);
-		assertNotNull(gdt1);
-		assertEquals(ZoneOffset.ofHours(5), gdt1.zdt.getOffset());
-		assertEquals(0, gdt1.zdt.getNano());
-
-		var gdt2 = GranularZonedDateTime.of("2011-01-15T12:30:45,+05:00", null);
-		assertNotNull(gdt2);
-		assertEquals(ZoneOffset.ofHours(5), gdt2.zdt.getOffset());
-		assertEquals(0, gdt2.zdt.getNano());
-	}
-
-	@Test
-	void i75_of_S13_fractionalSeparatorFollowedByMinus() {
-		// Lines 823-825: S13 - '.' or ',' followed by '-'
-		var gdt1 = GranularZonedDateTime.of("2011-01-15T12:30:45.-05:00", null);
-		assertNotNull(gdt1);
-		assertEquals(ZoneOffset.ofHours(-5), gdt1.zdt.getOffset());
-		assertEquals(0, gdt1.zdt.getNano());
-
-		var gdt2 = GranularZonedDateTime.of("2011-01-15T12:30:45,-05:00", null);
-		assertNotNull(gdt2);
-		assertEquals(ZoneOffset.ofHours(-5), gdt2.zdt.getOffset());
-		assertEquals(0, gdt2.zdt.getNano());
-	}
-
-	@Test
-	void i76_of_S14_fractionalSecondsFollowedByZ() {
-		// Lines 833-836: S14 - fractional seconds followed by 'Z'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.123Z", null);
-		assertNotNull(gdt);
-		assertEquals(123000000, gdt.zdt.getNano());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i77_of_S14_fractionalSecondsFollowedByPlus() {
-		// Lines 837-840: S14 - fractional seconds followed by '+'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.123+05:00", null);
-		assertNotNull(gdt);
-		assertEquals(123000000, gdt.zdt.getNano());
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i78_of_S14_fractionalSecondsFollowedByMinus() {
-		// Lines 841-844: S14 - fractional seconds followed by '-'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45.123-05:00", null);
-		assertNotNull(gdt);
-		assertEquals(123000000, gdt.zdt.getNano());
-		assertEquals(ZoneOffset.ofHours(-5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i79_of_S14_fractionalSecondsWithCommaFollowedByZ() {
-		// Lines 833-836: S14 - fractional seconds (comma separator) followed by 'Z'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45,123Z", null);
-		assertNotNull(gdt);
-		assertEquals(123000000, gdt.zdt.getNano());
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-	}
-
-	@Test
-	void i80_of_S14_fractionalSecondsWithCommaFollowedByPlus() {
-		// Lines 837-840: S14 - fractional seconds (comma separator) followed by '+'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45,123+05:00", null);
-		assertNotNull(gdt);
-		assertEquals(123000000, gdt.zdt.getNano());
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i81_of_S14_fractionalSecondsWithCommaFollowedByMinus() {
-		// Lines 841-844: S14 - fractional seconds (comma separator) followed by '-'
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45,123-05:00", null);
-		assertNotNull(gdt);
-		assertEquals(123000000, gdt.zdt.getNano());
-		assertEquals(ZoneOffset.ofHours(-5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i82_of_S15_invalidCharacterAfterZ() {
-		// Line 846: S15 - invalid character after 'Z' (should throw error)
-		// After finding 'Z', any additional characters should trigger this error
-		// Test all possible transitions to S15:
-
-		// S2 -> S15 (year followed by Z, then invalid char)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011Z5", null);
-		});
-
-		// S4 -> S15 (month followed by Z, then invalid char)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01ZX", null);
-		});
-
-		// S6 -> S15 (day followed by Z, then invalid char)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15ZX", null);
-		});
-
-		// S7 -> S15 (T followed by Z, then invalid char)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("TZX", null);
-		});
-
-		// S8 -> S15 (hour followed by Z, then invalid char)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12ZX", null);
-		});
-
-		// S10 -> S15 (minute followed by Z, then invalid char)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30ZX", null);
-		});
-
-		// S12 -> S15 (second followed by Z, then invalid char)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45ZX", null);
-		});
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45Z+", null);
-		});
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45Z-", null);
-		});
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45Z5", null);
-		});
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45Z ", null);
-		});
-
-		// S13 -> S15 (fractional separator followed by Z, then invalid char)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45.ZX", null);
-		});
-
-		// S14 -> S15 (fractional digits followed by Z, then invalid char)
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45.123ZX", null);
-		});
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("T12:30:45ZX", null);
-		});
-	}
-
-	@Test
-	void i83_of_invalidDateForMonth() {
-		// Invalid dates for specific months - LocalDateTime.of() throws DateTimeException
-		// November only has 30 days
-		assertThrows(java.time.DateTimeException.class, () -> {
-			GranularZonedDateTime.of("2011-11-31", null);
-		});
-		// February in non-leap year only has 28 days
-		assertThrows(java.time.DateTimeException.class, () -> {
-			GranularZonedDateTime.of("2011-02-29", null);
-		});
-		// February in non-leap year only has 28 days (day 30)
-		assertThrows(java.time.DateTimeException.class, () -> {
-			GranularZonedDateTime.of("2011-02-30", null);
-		});
-		// April only has 30 days
-		assertThrows(java.time.DateTimeException.class, () -> {
-			GranularZonedDateTime.of("2011-04-31", null);
-		});
-		// June only has 30 days
-		assertThrows(java.time.DateTimeException.class, () -> {
-			GranularZonedDateTime.of("2011-06-31", null);
-		});
-		// September only has 30 days
-		assertThrows(java.time.DateTimeException.class, () -> {
-			GranularZonedDateTime.of("2011-09-31", null);
-		});
-		// Valid: February 29 in leap year
-		var gdt = GranularZonedDateTime.of("2024-02-29", null);
-		assertNotNull(gdt);
-		assertEquals(2024, gdt.zdt.getYear());
-		assertEquals(2, gdt.zdt.getMonthValue());
-		assertEquals(29, gdt.zdt.getDayOfMonth());
-	}
-
-	@Test
-	void i84_of_zoneIdAlreadySet() {
-		// Line 941: zoneId is not null, so offset building is skipped (false branch)
-		// Test with 'Z' timezone (zoneId already set)
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45Z", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-		// ohour and ominute remain -1, but zoneId is already set, so the if condition on line 941 is false
-	}
-
-	@Test
-	void i85_of_offsetOnlyHours() {
-		// Line 946: ohour >= 0 but ominute < 0 (only hours, no minutes) - else if branch
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45+05", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHours(5), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i86_of_offsetHoursAndMinutes() {
-		// Line 942: ohour >= 0 && ominute >= 0 (both hours and minutes)
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45+05:30", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHoursMinutes(5, 30), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i87_of_timeOnlyMissingYear() {
-		// Lines 964-966: timeOnly=true, year/month/day are -1, use current date
-		var now = ZonedDateTime.now();
-		var gdt = GranularZonedDateTime.of("T12:30:45", null);
-		assertNotNull(gdt);
-		assertEquals(now.getYear(), gdt.zdt.getYear());
-		assertEquals(now.getMonthValue(), gdt.zdt.getMonthValue());
-		assertEquals(now.getDayOfMonth(), gdt.zdt.getDayOfMonth());
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(45, gdt.zdt.getSecond());
-	}
-
-	@Test
-	void i88_of_dateFormatMissingMonth() {
-		// Line 970: timeOnly=false, month is -1, default to 1
-		var gdt = GranularZonedDateTime.of("2011", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue()); // Defaults to 1
-		assertEquals(1, gdt.zdt.getDayOfMonth()); // Defaults to 1
-	}
-
-	@Test
-	void i89_of_dateFormatMissingDay() {
-		// Line 971: timeOnly=false, day is -1, default to 1
-		var gdt = GranularZonedDateTime.of("2011-01", null);
-		assertNotNull(gdt);
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(1, gdt.zdt.getDayOfMonth()); // Defaults to 1
-	}
-
-	@Test
-	void i90_of_withDefaultZoneId() {
-		// Line 958: defaultZoneId != null branch - use provided defaultZoneId when no zone in string
-		var defaultZone = ZoneId.of("America/New_York");
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45", defaultZone);
-		assertNotNull(gdt);
-		assertEquals(defaultZone, gdt.zdt.getZone());
-		assertEquals(2011, gdt.zdt.getYear());
-		assertEquals(1, gdt.zdt.getMonthValue());
-		assertEquals(15, gdt.zdt.getDayOfMonth());
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(45, gdt.zdt.getSecond());
-	}
-
-	@Test
-	void i91_of_withDefaultZoneId_timeOnly() {
-		// Line 958: defaultZoneId != null branch - use provided defaultZoneId for time-only format
-		var defaultZone = ZoneId.of("Europe/London");
-		var now = ZonedDateTime.now(defaultZone);
-		var gdt = GranularZonedDateTime.of("T12:30:45", defaultZone);
-		assertNotNull(gdt);
-		assertEquals(defaultZone, gdt.zdt.getZone());
-		assertEquals(now.getYear(), gdt.zdt.getYear());
-		assertEquals(now.getMonthValue(), gdt.zdt.getMonthValue());
-		assertEquals(now.getDayOfMonth(), gdt.zdt.getDayOfMonth());
-		assertEquals(12, gdt.zdt.getHour());
-		assertEquals(30, gdt.zdt.getMinute());
-		assertEquals(45, gdt.zdt.getSecond());
-	}
-
-	@Test
-	void i92_of_withDefaultZoneId_ignoredWhenZoneInString() {
-		// Line 958: defaultZoneId is ignored when zone is found in the string
-		var defaultZone = ZoneId.of("America/New_York");
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45Z", defaultZone);
-		assertNotNull(gdt);
-		// Should use 'Z' from the string, not the defaultZoneId
-		assertEquals(ZoneId.of("Z"), gdt.zdt.getZone());
-		assertNotEquals(defaultZone, gdt.zdt.getZone());
-	}
-
-	//====================================================================================================
-	// of(String) - ISO8601 offset range validation tests (-18:00 ≤ offset ≤ +18:00)
-	//====================================================================================================
-
-	@Test
-	void i60_of_offsetBoundary_minus18_00() {
-		// Minimum valid offset: -18:00
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45-18:00", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHoursMinutes(-18, 0), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i61_of_offsetBoundary_plus18_00() {
-		// Maximum valid offset: +18:00
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45+18:00", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHoursMinutes(18, 0), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i62_of_offsetBoundary_minus18_00_compact() {
-		// Minimum valid offset in compact format: -1800
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45-1800", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHoursMinutes(-18, 0), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i63_of_offsetBoundary_plus18_00_compact() {
-		// Maximum valid offset in compact format: +1800
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45+1800", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHoursMinutes(18, 0), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i64_of_offsetBoundary_minus18_00_hoursOnly() {
-		// Minimum valid offset hours only: -18
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45-18", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHours(-18), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i65_of_offsetBoundary_plus18_00_hoursOnly() {
-		// Maximum valid offset hours only: +18
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30:45+18", null);
-		assertNotNull(gdt);
-		assertEquals(ZoneOffset.ofHours(18), gdt.zdt.getOffset());
-	}
-
-	@Test
-	void i66_of_offsetInvalid_belowMinimum() {
-		// Invalid: offset below -18:00
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45-19:00", null);
-		});
-	}
-
-	@Test
-	void i67_of_offsetInvalid_aboveMaximum() {
-		// Invalid: offset above +18:00
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45+19:00", null);
-		});
-	}
-
-	@Test
-	void i68_of_offsetInvalid_belowMinimum_compact() {
-		// Invalid: offset below -18:00 in compact format
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45-1900", null);
-		});
-	}
-
-	@Test
-	void i69_of_offsetInvalid_aboveMaximum_compact() {
-		// Invalid: offset above +18:00 in compact format
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45+1900", null);
-		});
-	}
-
-	@Test
-	void i70_of_offsetInvalid_belowMinimum_hoursOnly() {
-		// Invalid: offset below -18 hours only
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45-19", null);
-		});
-	}
-
-	@Test
-	void i71_of_offsetInvalid_aboveMaximum_hoursOnly() {
-		// Invalid: offset above +18 hours only
-		assertThrows(java.time.format.DateTimeParseException.class, () -> {
-			GranularZonedDateTime.of("2011-01-15T12:30:45+19", null);
-		});
-	}
-
-	@Test
-	void i72_of_offsetValid_withinRange() {
-		// Valid offsets within range
-		var gdt1 = GranularZonedDateTime.of("2011-01-15T12:30:45-12:30", null);
-		assertNotNull(gdt1);
-		assertEquals(ZoneOffset.ofHoursMinutes(-12, -30), gdt1.zdt.getOffset());
-
-		var gdt2 = GranularZonedDateTime.of("2011-01-15T12:30:45+12:30", null);
-		assertNotNull(gdt2);
-		assertEquals(ZoneOffset.ofHoursMinutes(12, 30), gdt2.zdt.getOffset());
-
-		var gdt3 = GranularZonedDateTime.of("2011-01-15T12:30:45-17:59", null);
-		assertNotNull(gdt3);
-		assertEquals(ZoneOffset.ofHoursMinutes(-17, -59), gdt3.zdt.getOffset());
-
-		var gdt4 = GranularZonedDateTime.of("2011-01-15T12:30:45+17:59", null);
-		assertNotNull(gdt4);
-		assertEquals(ZoneOffset.ofHoursMinutes(17, 59), gdt4.zdt.getOffset());
+	private static final FakeTimeProvider FAKE_TIME_PROVIDER = new FakeTimeProvider();
+
+	@Nested class J_parserTests extends TestBase {
+
+		record ParseTest(int index, String name, String input, String expected, ZoneId defaultZoneId) {
+			ParseTest(int index, String name, String input, String expected) {
+				this(index, name, input, expected, null);
+			}
+		}
+
+		static ParseTest[] parseTests() {
+			return new ParseTest[] {
+				// Date formats
+				new ParseTest(1, "yearOnly", "2011", "2011-01-01T00:00:00Z(Year)"),
+				new ParseTest(2, "yearMonth", "2011-01", "2011-01-01T00:00:00Z(MonthOfYear)"),
+				new ParseTest(3, "date", "2011-01-15", "2011-01-15T00:00:00Z(DayOfMonth)"),
+
+				// DateTime formats
+				new ParseTest(4, "dateTime_hour", "2011-01-15T12", "2011-01-15T12:00:00Z(HourOfDay)"),
+				new ParseTest(5, "dateTime_minute", "2011-01-15T12:30", "2011-01-15T12:30:00Z(MinuteOfHour)"),
+				new ParseTest(6, "dateTime_second", "2011-01-15T12:30:45", "2011-01-15T12:30:45Z(SecondOfMinute)"),
+
+				// With fractional seconds
+				new ParseTest(7, "dateTime_millisecond_dot", "2011-01-15T12:30:45.123", "2011-01-15T12:30:45.123Z(MilliOfSecond)"),
+				new ParseTest(8, "dateTime_millisecond_comma", "2011-01-15T12:30:45,123", "2011-01-15T12:30:45.123Z(MilliOfSecond)"),
+				new ParseTest(9, "dateTime_nanosecond_1digit", "2011-01-15T12:30:45.1", "2011-01-15T12:30:45.1Z(MilliOfSecond)"),
+				new ParseTest(10, "dateTime_nanosecond_2digits", "2011-01-15T12:30:45.12", "2011-01-15T12:30:45.12Z(MilliOfSecond)"),
+				new ParseTest(11, "dateTime_nanosecond_3digits", "2011-01-15T12:30:45.123", "2011-01-15T12:30:45.123Z(MilliOfSecond)"),
+				new ParseTest(12, "dateTime_nanosecond_4digits", "2011-01-15T12:30:45.1234", "2011-01-15T12:30:45.1234Z(NanoOfSecond)"),
+				new ParseTest(13, "dateTime_nanosecond_5digits", "2011-01-15T12:30:45.12345", "2011-01-15T12:30:45.12345Z(NanoOfSecond)"),
+				new ParseTest(14, "dateTime_nanosecond_6digits", "2011-01-15T12:30:45.123456", "2011-01-15T12:30:45.123456Z(NanoOfSecond)"),
+				new ParseTest(15, "dateTime_nanosecond_7digits", "2011-01-15T12:30:45.1234567", "2011-01-15T12:30:45.1234567Z(NanoOfSecond)"),
+				new ParseTest(16, "dateTime_nanosecond_8digits", "2011-01-15T12:30:45.12345678", "2011-01-15T12:30:45.12345678Z(NanoOfSecond)"),
+				new ParseTest(17, "dateTime_nanosecond_9digits", "2011-01-15T12:30:45.123456789", "2011-01-15T12:30:45.123456789Z(NanoOfSecond)"),
+
+				// Time-only formats (use fixed current time: 2000-01-01T12:00:00Z)
+				new ParseTest(18, "timeOnly_hour", "T12", "2000-01-01T12:00:00Z(HourOfDay)"),
+				new ParseTest(19, "timeOnly_minute", "T12:30", "2000-01-01T12:30:00Z(MinuteOfHour)"),
+				new ParseTest(20, "timeOnly_second", "T12:30:45", "2000-01-01T12:30:45Z(SecondOfMinute)"),
+				new ParseTest(21, "timeOnly_millisecond", "T12:30:45.123", "2000-01-01T12:30:45.123Z(MilliOfSecond)"),
+				new ParseTest(22, "timeOnly_withZ", "T12:30:45Z", "2000-01-01T12:30:45Z(SecondOfMinute)"),
+				new ParseTest(23, "timeOnly_withOffset", "T12:30:45+05:30", "2000-01-01T12:30:45+05:30(SecondOfMinute)"),
+
+				// With UTC timezone
+				new ParseTest(24, "withZ", "2011-01-15T12:30:45Z", "2011-01-15T12:30:45Z(SecondOfMinute)"),
+				new ParseTest(25, "yearWithZ", "2011Z", "2011-01-01T00:00:00Z(Year)"),
+				new ParseTest(26, "yearMonthWithZ", "2011-01Z", "2011-01-01T00:00:00Z(MonthOfYear)"),
+				new ParseTest(27, "dateWithZ", "2011-01-15Z", "2011-01-15T00:00:00Z(DayOfMonth)"),
+				new ParseTest(28, "hourWithZ", "2011-01-15T12Z", "2011-01-15T12:00:00Z(HourOfDay)"),
+				new ParseTest(29, "minuteWithZ", "2011-01-15T12:30Z", "2011-01-15T12:30:00Z(MinuteOfHour)"),
+				new ParseTest(30, "millisecondWithZ", "2011-01-15T12:30:45.123Z", "2011-01-15T12:30:45.123Z(MilliOfSecond)"),
+
+				// With offset (hours only)
+				new ParseTest(31, "offset_plusHH", "2011-01-15T12:30:45+05", "2011-01-15T12:30:45+05:00(SecondOfMinute)"),
+				new ParseTest(32, "offset_minusHH", "2011-01-15T12:30:45-05", "2011-01-15T12:30:45-05:00(SecondOfMinute)"),
+
+				// With offset (hours and minutes, compact)
+				new ParseTest(33, "offset_plusHHMM", "2011-01-15T12:30:45+0530", "2011-01-15T12:30:45+05:30(SecondOfMinute)"),
+				new ParseTest(34, "offset_minusHHMM", "2011-01-15T12:30:45-0530", "2011-01-15T12:30:45-05:30(SecondOfMinute)"),
+
+				// With offset (hours and minutes, with colon)
+				new ParseTest(35, "offset_plusHH_MM", "2011-01-15T12:30:45+05:30", "2011-01-15T12:30:45+05:30(SecondOfMinute)"),
+				new ParseTest(36, "offset_minusHH_MM", "2011-01-15T12:30:45-05:30", "2011-01-15T12:30:45-05:30(SecondOfMinute)"),
+				new ParseTest(37, "offset_minus12_30", "2011-01-15T12:30:45-12:30", "2011-01-15T12:30:45-12:30(SecondOfMinute)"),
+				new ParseTest(38, "offset_plus09_00", "2011-01-15T12:30:45+09:00", "2011-01-15T12:30:45+09:00(SecondOfMinute)"),
+
+				// Timezone after various components
+				new ParseTest(39, "yearFollowedByT", "2011T12", "2011-01-01T12:00:00Z(HourOfDay)"),
+				new ParseTest(40, "yearFollowedByPlus", "2011+05", "2011-01-01T00:00:00+05:00(Year)"),
+				new ParseTest(41, "yearFollowedByMinus", "2011-01-15T12-05", "2011-01-15T12:00:00-05:00(HourOfDay)"),
+				new ParseTest(42, "monthFollowedByZ", "2011-01Z", "2011-01-01T00:00:00Z(MonthOfYear)"),
+				new ParseTest(43, "monthFollowedByPlus", "2011-01+05", "2011-01-01T00:00:00+05:00(MonthOfYear)"),
+				new ParseTest(44, "monthFollowedByMinus", "2011-01-15T12:30-05", "2011-01-15T12:30:00-05:00(MinuteOfHour)"),
+				new ParseTest(45, "dayFollowedByZ", "2011-01-15Z", "2011-01-15T00:00:00Z(DayOfMonth)"),
+				new ParseTest(46, "dayFollowedByPlus", "2011-01-15+05", "2011-01-15T00:00:00+05:00(DayOfMonth)"),
+				new ParseTest(47, "dayFollowedByMinus", "2011-01-15-05", "2011-01-15T00:00:00-05:00(DayOfMonth)"),
+				new ParseTest(48, "hourFollowedByZ", "2011-01-15T12Z", "2011-01-15T12:00:00Z(HourOfDay)"),
+				new ParseTest(49, "hourFollowedByPlus", "2011-01-15T12+05", "2011-01-15T12:00:00+05:00(HourOfDay)"),
+				new ParseTest(50, "hourFollowedByMinus", "2011-01-15T12-05", "2011-01-15T12:00:00-05:00(HourOfDay)"),
+				new ParseTest(51, "minuteFollowedByZ", "2011-01-15T12:30Z", "2011-01-15T12:30:00Z(MinuteOfHour)"),
+				new ParseTest(52, "minuteFollowedByPlus", "2011-01-15T12:30+05", "2011-01-15T12:30:00+05:00(MinuteOfHour)"),
+				new ParseTest(53, "minuteFollowedByMinus", "2011-01-15T12:30-05", "2011-01-15T12:30:00-05:00(MinuteOfHour)"),
+				new ParseTest(54, "timezoneAfterT", "2011-01T+05:30", "2011-01-01T00:00:00+05:30(MonthOfYear)"),
+				new ParseTest(55, "dateFollowedByTZ", "2011-01TZ", "2011-01-01T00:00:00Z(MonthOfYear)"),
+				new ParseTest(56, "dateFollowedByTMinus", "2011-01T-05:30", "2011-01-01T00:00:00-05:30(MonthOfYear)"),
+				new ParseTest(57, "TFollowedByZ", "TZ", "2000-01-01T00:00:00Z(HourOfDay)"),
+				new ParseTest(58, "TFollowedByPlus", "T+05", "2000-01-01T00:00:00+05:00(HourOfDay)"),
+				new ParseTest(59, "TFollowedByMinus", "T-05", "2000-01-01T00:00:00-05:00(HourOfDay)"),
+
+				// Fractional separator followed by timezone
+				new ParseTest(60, "fractionalSeparatorDotFollowedByZ", "2011-01-15T12:30:45.Z", "2011-01-15T12:30:45Z(SecondOfMinute)"),
+				new ParseTest(61, "fractionalSeparatorCommaFollowedByZ", "2011-01-15T12:30:45,Z", "2011-01-15T12:30:45Z(SecondOfMinute)"),
+				new ParseTest(62, "fractionalSeparatorDotFollowedByPlus", "2011-01-15T12:30:45.+05:00", "2011-01-15T12:30:45+05:00(SecondOfMinute)"),
+				new ParseTest(63, "fractionalSeparatorCommaFollowedByPlus", "2011-01-15T12:30:45,+05:00", "2011-01-15T12:30:45+05:00(SecondOfMinute)"),
+				new ParseTest(64, "fractionalSeparatorDotFollowedByMinus", "2011-01-15T12:30:45.-05:00", "2011-01-15T12:30:45-05:00(SecondOfMinute)"),
+				new ParseTest(65, "fractionalSeparatorCommaFollowedByMinus", "2011-01-15T12:30:45,-05:00", "2011-01-15T12:30:45-05:00(SecondOfMinute)"),
+
+				// Fractional seconds followed by timezone
+				new ParseTest(66, "fractionalSecondsFollowedByZ", "2011-01-15T12:30:45.123Z", "2011-01-15T12:30:45.123Z(MilliOfSecond)"),
+				new ParseTest(67, "fractionalSecondsFollowedByPlus", "2011-01-15T12:30:45.123+05:00", "2011-01-15T12:30:45.123+05:00(MilliOfSecond)"),
+				new ParseTest(68, "fractionalSecondsFollowedByMinus", "2011-01-15T12:30:45.123-05:00", "2011-01-15T12:30:45.123-05:00(MilliOfSecond)"),
+				new ParseTest(69, "fractionalSecondsCommaFollowedByZ", "2011-01-15T12:30:45,123Z", "2011-01-15T12:30:45.123Z(MilliOfSecond)"),
+				new ParseTest(70, "fractionalSecondsCommaFollowedByPlus", "2011-01-15T12:30:45,123+05:00", "2011-01-15T12:30:45.123+05:00(MilliOfSecond)"),
+				new ParseTest(71, "fractionalSecondsCommaFollowedByMinus", "2011-01-15T12:30:45,123-05:00", "2011-01-15T12:30:45.123-05:00(MilliOfSecond)"),
+
+				// Nanoseconds (4+ digits) followed by timezone
+				new ParseTest(72, "nanosecondsFollowedByZ", "2011-01-15T12:30:45.1234Z", "2011-01-15T12:30:45.1234Z(NanoOfSecond)"),
+				new ParseTest(73, "nanosecondsFollowedByPlus", "2011-01-15T12:30:45.1234+05:00", "2011-01-15T12:30:45.1234+05:00(NanoOfSecond)"),
+				new ParseTest(74, "nanosecondsFollowedByMinus", "2011-01-15T12:30:45.1234-05:00", "2011-01-15T12:30:45.1234-05:00(NanoOfSecond)"),
+
+				// ISO8601 offset range validation (-18:00 ≤ offset ≤ +18:00)
+				new ParseTest(75, "offsetBoundary_minus18_00", "2011-01-15T12:30:45-18:00", "2011-01-15T12:30:45-18:00(SecondOfMinute)"),
+				new ParseTest(76, "offsetBoundary_plus18_00", "2011-01-15T12:30:45+18:00", "2011-01-15T12:30:45+18:00(SecondOfMinute)"),
+				new ParseTest(77, "offsetBoundary_minus18_00_compact", "2011-01-15T12:30:45-1800", "2011-01-15T12:30:45-18:00(SecondOfMinute)"),
+				new ParseTest(78, "offsetBoundary_plus18_00_compact", "2011-01-15T12:30:45+1800", "2011-01-15T12:30:45+18:00(SecondOfMinute)"),
+				new ParseTest(79, "offsetBoundary_minus18_hoursOnly", "2011-01-15T12:30:45-18", "2011-01-15T12:30:45-18:00(SecondOfMinute)"),
+				new ParseTest(80, "offsetBoundary_plus18_hoursOnly", "2011-01-15T12:30:45+18", "2011-01-15T12:30:45+18:00(SecondOfMinute)"),
+				new ParseTest(81, "offsetValid_withinRange1", "2011-01-15T12:30:45-12:30", "2011-01-15T12:30:45-12:30(SecondOfMinute)"),
+				new ParseTest(82, "offsetValid_withinRange2", "2011-01-15T12:30:45+12:30", "2011-01-15T12:30:45+12:30(SecondOfMinute)"),
+				new ParseTest(83, "offsetValid_withinRange3", "2011-01-15T12:30:45-17:59", "2011-01-15T12:30:45-17:59(SecondOfMinute)"),
+				new ParseTest(84, "offsetValid_withinRange4", "2011-01-15T12:30:45+17:59", "2011-01-15T12:30:45+17:59(SecondOfMinute)"),
+
+				// Invalid offset range
+				new ParseTest(85, "offsetInvalid_belowMinimum", "2011-01-15T12:30:45-19:00", "Invalid ISO8601 timestamp"),
+				new ParseTest(86, "offsetInvalid_aboveMaximum", "2011-01-15T12:30:45+19:00", "Invalid ISO8601 timestamp"),
+				new ParseTest(87, "offsetInvalid_belowMinimum_compact", "2011-01-15T12:30:45-1900", "Invalid ISO8601 timestamp"),
+				new ParseTest(88, "offsetInvalid_aboveMaximum_compact", "2011-01-15T12:30:45+1900", "Invalid ISO8601 timestamp"),
+				new ParseTest(89, "offsetInvalid_belowMinimum_hoursOnly", "2011-01-15T12:30:45-19", "Invalid ISO8601 timestamp"),
+				new ParseTest(90, "offsetInvalid_aboveMaximum_hoursOnly", "2011-01-15T12:30:45+19", "Invalid ISO8601 timestamp"),
+
+				// Invalid offset format
+				new ParseTest(91, "offsetInvalid_1digit", "2011-01-15T12:30:45+1", "Invalid ISO8601 timestamp"),
+				new ParseTest(92, "offsetInvalid_3digits", "2011-01-15T12:30:45+123", "Invalid ISO8601 timestamp"),
+				new ParseTest(93, "offsetInvalid_5digits", "2011-01-15T12:30:45+12345", "Invalid ISO8601 timestamp"),
+
+				// Invalid date/time values
+				new ParseTest(94, "invalidYearLength", "123", "Invalid ISO8601 timestamp"),
+				new ParseTest(95, "invalidMonth_00", "2011-00", "Invalid ISO8601 timestamp"),
+				new ParseTest(96, "invalidMonth_13", "2011-13", "Invalid ISO8601 timestamp"),
+				new ParseTest(97, "invalidMonth_99", "2011-99", "Invalid ISO8601 timestamp"),
+				new ParseTest(98, "invalidDay_00", "2011-01-00", "Invalid ISO8601 timestamp"),
+				new ParseTest(99, "invalidDay_32", "2011-01-32", "Invalid ISO8601 timestamp"),
+				new ParseTest(100, "invalidDay_99", "2011-01-99", "Invalid ISO8601 timestamp"),
+				new ParseTest(101, "invalidHour_24", "2011-01-15T24", "Invalid ISO8601 timestamp"),
+				new ParseTest(102, "invalidHour_99", "2011-01-15T99", "Invalid ISO8601 timestamp"),
+				new ParseTest(103, "invalidMinute_60", "2011-01-15T12:60", "Invalid ISO8601 timestamp"),
+				new ParseTest(104, "invalidMinute_99", "2011-01-15T12:99", "Invalid ISO8601 timestamp"),
+				new ParseTest(105, "invalidSecond_60", "2011-01-15T12:30:60", "Invalid ISO8601 timestamp"),
+				new ParseTest(106, "invalidSecond_99", "2011-01-15T12:30:99", "Invalid ISO8601 timestamp"),
+
+				// Invalid dates for specific months
+				new ParseTest(107, "invalidDate_Nov31", "2011-11-31", "Invalid date 'NOVEMBER 31'"),
+				new ParseTest(108, "invalidDate_Feb29_nonLeap", "2011-02-29", "Invalid date 'February 29' as '2011' is not a leap year"),
+				new ParseTest(109, "invalidDate_Feb30", "2011-02-30", "Invalid date 'FEBRUARY 30'"),
+				new ParseTest(110, "invalidDate_Apr31", "2011-04-31", "Invalid date 'APRIL 31'"),
+				new ParseTest(111, "invalidDate_Jun31", "2011-06-31", "Invalid date 'JUNE 31'"),
+				new ParseTest(112, "invalidDate_Sep31", "2011-09-31", "Invalid date 'SEPTEMBER 31'"),
+				new ParseTest(113, "validDate_Feb29_leap", "2024-02-29", "2024-02-29T00:00:00Z(DayOfMonth)"),
+
+				// Invalid characters in various states
+				new ParseTest(114, "invalidCharAfterYear", "2011X", "Invalid ISO8601 timestamp"),
+				new ParseTest(115, "invalidCharAfterYearDash", "2011-X", "Invalid ISO8601 timestamp"),
+				new ParseTest(116, "invalidCharAfterMonth", "2011-01X", "Invalid ISO8601 timestamp"),
+				new ParseTest(117, "invalidCharAfterMonthDash", "2011-01-X", "Invalid ISO8601 timestamp"),
+				new ParseTest(118, "invalidCharAfterDay", "2011-01-15X", "Invalid ISO8601 timestamp"),
+				new ParseTest(119, "invalidCharAfterT", "TX", "Invalid ISO8601 timestamp"),
+				new ParseTest(120, "invalidCharAfterHour", "2011-01-15T12X", "Invalid ISO8601 timestamp"),
+				new ParseTest(121, "invalidCharAfterHourColon", "2011-01-15T12:X", "Invalid ISO8601 timestamp"),
+				new ParseTest(122, "invalidCharAfterMinute", "2011-01-15T12:30X", "Invalid ISO8601 timestamp"),
+				new ParseTest(123, "invalidCharAfterMinuteColon", "2011-01-15T12:30:X", "Invalid ISO8601 timestamp"),
+				new ParseTest(124, "invalidCharAfterSecond", "2011-01-15T12:30:45X", "Invalid ISO8601 timestamp"),
+				new ParseTest(125, "invalidCharAfterFractionalSeparator", "2011-01-15T12:30:45.X", "Invalid ISO8601 timestamp"),
+				new ParseTest(126, "invalidCharInFractionalSeconds", "2011-01-15T12:30:45.12X", "Invalid ISO8601 timestamp"),
+				new ParseTest(127, "invalidCharAfterPlus", "2011-01-15T12:30:45+X", "Invalid ISO8601 timestamp"),
+				new ParseTest(128, "invalidCharAfterMinus", "2011-01-15T12:30:45-X", "Invalid ISO8601 timestamp"),
+				new ParseTest(129, "invalidCharInOffsetHours", "2011-01-15T12:30:45+05X", "Invalid ISO8601 timestamp"),
+				new ParseTest(130, "invalidCharAfterOffsetColon", "2011-01-15T12:30:45+05:X", "Invalid ISO8601 timestamp"),
+				new ParseTest(131, "invalidCharInOffsetMinutes", "2011-01-15T12:30:45+05:30X", "Invalid ISO8601 timestamp"),
+
+				// Invalid character after Z
+				new ParseTest(132, "invalidCharAfterZ_year", "2011Z5", "Invalid ISO8601 timestamp"),
+				new ParseTest(133, "invalidCharAfterZ_month", "2011-01ZX", "Invalid ISO8601 timestamp"),
+				new ParseTest(134, "invalidCharAfterZ_day", "2011-01-15ZX", "Invalid ISO8601 timestamp"),
+				new ParseTest(135, "invalidCharAfterZ_T", "TZX", "Invalid ISO8601 timestamp"),
+				new ParseTest(136, "invalidCharAfterZ_hour", "2011-01-15T12ZX", "Invalid ISO8601 timestamp"),
+				new ParseTest(137, "invalidCharAfterZ_minute", "2011-01-15T12:30ZX", "Invalid ISO8601 timestamp"),
+				new ParseTest(138, "invalidCharAfterZ_second", "2011-01-15T12:30:45ZX", "Invalid ISO8601 timestamp"),
+				new ParseTest(139, "invalidCharAfterZ_secondPlus", "2011-01-15T12:30:45Z+", "Invalid ISO8601 timestamp"),
+				new ParseTest(140, "invalidCharAfterZ_secondMinus", "2011-01-15T12:30:45Z-", "Invalid ISO8601 timestamp"),
+				new ParseTest(141, "invalidCharAfterZ_secondDigit", "2011-01-15T12:30:45Z5", "Invalid ISO8601 timestamp"),
+				new ParseTest(142, "invalidCharAfterZ_secondSpace", "2011-01-15T12:30:45Z ", "Invalid ISO8601 timestamp"),
+				new ParseTest(143, "invalidCharAfterZ_fractionalSeparator", "2011-01-15T12:30:45.ZX", "Invalid ISO8601 timestamp"),
+				new ParseTest(144, "invalidCharAfterZ_fractionalSeconds", "2011-01-15T12:30:45.123ZX", "Invalid ISO8601 timestamp"),
+				new ParseTest(145, "invalidCharAfterZ_timeOnly", "T12:30:45ZX", "Invalid ISO8601 timestamp"),
+
+				// Invalid nanosecond length (>9 digits)
+				new ParseTest(146, "invalidNanos_10digits", "2011-01-15T12:30:45.1234567890", "Invalid ISO8601 timestamp"),
+
+				// Edge cases with defaultZoneId
+				new ParseTest(147, "withDefaultZoneId", "2011-01-15T12:30:45", "2011-01-15T12:30:45-05:00(SecondOfMinute)", ZoneId.of("America/New_York")),
+				new ParseTest(148, "withDefaultZoneId_timeOnly", "T12:30:45", "2000-01-01T12:30:45-05:00(SecondOfMinute)", ZoneId.of("America/New_York")),
+				new ParseTest(149, "withDefaultZoneId_ignoredWhenZoneInString", "2011-01-15T12:30:45Z", "2011-01-15T12:30:45Z(SecondOfMinute)", ZoneId.of("America/New_York")),
+
+				// Invalid inputs (expect exceptions)
+				new ParseTest(150, "null", null, "Argument 'value' cannot be null."),
+				new ParseTest(151, "emptyString", "", "Invalid ISO8601 timestamp"),
+				new ParseTest(152, "invalidString", "invalid-date", "Invalid ISO8601 timestamp"),
+			};
+		}
+
+		@ParameterizedTest(name = "[{0}] {1}")
+		@MethodSource("parseTests")
+		void j01_parse(ParseTest test) {
+			if (test.defaultZoneId == null) {
+				testParse(test.expected, test.input);
+			} else {
+				testParse(test.expected, test.input, test.defaultZoneId);
+			}
+		}
+
+		private void testParse(String expected, String in) {
+			try {
+				var x = GranularZonedDateTime.of(in, FAKE_TIME_PROVIDER);
+				assertEquals(expected, x.toString(), "Failed for input: " + in);
+			} catch (Exception e) {
+				assertEquals(expected, e.getLocalizedMessage(), "Failed for input: " + in);
+			}
+		}
+
+		private void testParse(String expected, String in, ZoneId zoneId) {
+			try {
+				var x = GranularZonedDateTime.of(in, zoneId, FAKE_TIME_PROVIDER);
+				assertEquals(expected, x.toString(), "Failed for input: " + in + " with zoneId: " + zoneId);
+			} catch (Exception e) {
+				assertEquals(expected, e.getLocalizedMessage(), "Failed for input: " + in + " with zoneId: " + zoneId);
+			}
+		}
 	}
 }
-
