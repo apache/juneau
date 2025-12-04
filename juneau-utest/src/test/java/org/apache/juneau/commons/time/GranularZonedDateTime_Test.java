@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.commons.utils;
+package org.apache.juneau.commons.time;
 
 import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;

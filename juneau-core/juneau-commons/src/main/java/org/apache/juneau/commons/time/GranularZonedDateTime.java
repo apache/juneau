@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.commons.utils;
+package org.apache.juneau.commons.time;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StateEnum.*;
@@ -24,6 +24,8 @@ import java.time.*;
 import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
+
+import org.apache.juneau.commons.utils.*;
 
 /**
  * A ZonedDateTime with precision information for granular time operations.
