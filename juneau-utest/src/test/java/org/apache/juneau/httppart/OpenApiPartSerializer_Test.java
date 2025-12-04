@@ -176,14 +176,14 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void c06_stringType_dateFormat() throws Exception {
 		var ps = T_DATE;
-		var in = StringUtils.parseIsoCalendar("2012-12-21");
+		var in = DateUtils.parseIsoCalendar("2012-12-21");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
 	}
 
 	@Test void c07_stringType_dateTimeFormat() throws Exception {
 		var ps = T_DATETIME;
-		var in = StringUtils.parseIsoCalendar("2012-12-21T12:34:56.789");
+		var in = DateUtils.parseIsoCalendar("2012-12-21T12:34:56.789");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
 	}
@@ -918,13 +918,13 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 		assertEquals(
 			"f01=foo,f02=Zm9v,f04=2012-12-21T12:34:56Z,f05=666F6F,f06=66 6F 6F,f07=foo,f08=1,f09=2,f10=1.0,f11=1.0,f12=true,f99=1",
-			serialize(ps, new H2("foo",foob,parseIsoCalendar("2012-12-21T12:34:56Z"),foob,foob,"foo",1,2,1.0,1.0,true,1))
+			serialize(ps, new H2("foo",foob,DateUtils.parseIsoCalendar("2012-12-21T12:34:56Z"),foob,foob,"foo",1,2,1.0,1.0,true,1))
 		);
 		assertEquals("", serialize(ps, new H2(null,null,null,null,null,null,null,null,null,null,null,null)));
 		assertEquals("null", serialize(ps, null));
 		assertEquals(
 			"f01=foo,f02=Zm9v,f04=2012-12-21T12:34:56Z,f05=666F6F,f06=66 6F 6F,f07=foo,f08=1,f09=2,f10=1.0,f11=1.0,f12=true,f99=1",
-			serialize(ps, JsonMap.of("f01","foo","f02",foob,"f04",parseIsoCalendar("2012-12-21T12:34:56Z"),"f05",foob,"f06",foob,"f07","foo","f08",1,"f09",2,"f10",1.0,"f11",1.0,"f12",true,"f99",1))
+			serialize(ps, JsonMap.of("f01","foo","f02",foob,"f04",DateUtils.parseIsoCalendar("2012-12-21T12:34:56Z"),"f05",foob,"f06",foob,"f07","foo","f08",1,"f09",2,"f10",1.0,"f11",1.0,"f12",true,"f99",1))
 		);
 	}
 
@@ -948,7 +948,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 		assertEquals(
 			"(f01=@('a,b',null),f02=@(Zm9v,null),f04=@(2012-12-21T12:34:56Z,null),f05=@(666F6F,null),f06=@('66 6F 6F',null),f07=@(a,b,null),f08=@(1,2,null),f09=@(3,4,null),f10=@(1.0,2.0,null),f11=@(3.0,4.0,null),f12=@(true,false,null),f99=@(1,x,null))",
-			serialize(ps, new H2(a("a,b",null),new byte[][]{foob,null},a(parseIsoCalendar("2012-12-21T12:34:56Z"),null),new byte[][]{foob,null},new byte[][]{foob,null},a("a","b",null),a(1,2,null),a(3,4,null),a(1f,2f,null),a(3f,4f,null),a(true,false,null),a(1,"x",null)))
+			serialize(ps, new H2(a("a,b",null),new byte[][]{foob,null},a(DateUtils.parseIsoCalendar("2012-12-21T12:34:56Z"),null),new byte[][]{foob,null},new byte[][]{foob,null},a("a","b",null),a(1,2,null),a(3,4,null),a(1f,2f,null),a(3f,4f,null),a(true,false,null),a(1,"x",null)))
 		);
 
 	}

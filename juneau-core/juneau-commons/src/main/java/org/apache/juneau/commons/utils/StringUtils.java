@@ -5076,56 +5076,6 @@ public class StringUtils {
 	}
 
 	/**
-	 * Parses an ISO8601 string into a calendar.
-	 *
-	 * <p>
-	 * TODO-90: Investigate whether this helper can be removed in favor of java.time parsing (see TODO.md).
-	 *
-	 * <p>
-	 * Supports any of the following formats:
-	 * <br><c>yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS</c>
-	 *
-	 * @param date The date string.
-	 * @return The parsed calendar.
-	 * @throws IllegalArgumentException Value was not a valid date.
-	 */
-	public static Calendar parseIsoCalendar(String date) throws IllegalArgumentException {
-		if (isEmpty(date))
-			return null;
-		date = date.trim().replace(' ', 'T');  // Convert to 'standard' ISO8601
-		if (date.indexOf(',') != -1)  // Trim milliseconds
-			date = date.substring(0, date.indexOf(','));
-		if (date.matches("\\d{4}"))
-			date += "-01-01T00:00:00";
-		else if (date.matches("\\d{4}\\-\\d{2}"))
-			date += "-01T00:00:00";
-		else if (date.matches("\\d{4}\\-\\d{2}\\-\\d{2}"))
-			date += "T00:00:00";
-		else if (date.matches("\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}"))
-			date += ":00:00";
-		else if (date.matches("\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}\\:\\d{2}"))
-			date += ":00";
-		return DateUtils.fromIso8601Calendar(date);
-	}
-
-	/**
-	 * Parses an ISO8601 string into a date.
-	 *
-	 * <p>
-	 * Supports any of the following formats:
-	 * <br><c>yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS</c>
-	 *
-	 * @param date The date string.
-	 * @return The parsed date.
-	 * @throws IllegalArgumentException Value was not a valid date.
-	 */
-	public static Date parseIsoDate(String date) throws IllegalArgumentException {
-		if (isEmpty(date))
-			return null;
-		return parseIsoCalendar(date).getTime();  // NOSONAR - NPE not possible.
-	}
-
-	/**
 	 * Same as {@link Long#parseLong(String)} but removes any underscore characters first.
 	 *
 	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000_000"</js>).

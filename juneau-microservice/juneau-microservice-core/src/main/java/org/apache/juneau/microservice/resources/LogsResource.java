@@ -25,6 +25,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
@@ -226,8 +227,8 @@ public class LogsResource extends BasicRestServlet {
 
 		var f = getFile(path);
 
-		var startDate = parseIsoDate(start);
-		var endDate = parseIsoDate(end);
+		var startDate = DateUtils.parseIsoDate(start);
+		var endDate = DateUtils.parseIsoDate(end);
 
 		if (! highlight) {
 			var o = getReader(f, startDate, endDate, thread, loggers, severity);
@@ -296,8 +297,8 @@ public class LogsResource extends BasicRestServlet {
 		var f = getFile(path);
 		req.setAttribute("fullPath", f.getAbsolutePath());
 
-		var startDate = parseIsoDate(start);
-		var endDate = parseIsoDate(end);
+		var startDate = DateUtils.parseIsoDate(start);
+		var endDate = DateUtils.parseIsoDate(end);
 
 		return getLogParser(f, startDate, endDate, thread, loggers, severity);
 	}

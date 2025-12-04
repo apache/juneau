@@ -17,10 +17,12 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.DateUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.apache.juneau.rest.util.*;
@@ -60,7 +62,10 @@ public class MockServletResponse implements HttpServletResponse {
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addDateHeader(String name, long date) {
-		headerMap.put(name, a(formatDate(new Date(date), PATTERN_RFC1123)));
+		Instant instant = Instant.ofEpochMilli(date);
+		DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME
+			.withZone(ZoneId.of("GMT"));
+		headerMap.put(name, a(formatter.format(instant)));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
@@ -205,7 +210,10 @@ public class MockServletResponse implements HttpServletResponse {
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setDateHeader(String name, long date) {
-		headerMap.put(name, a(formatDate(new Date(date), PATTERN_RFC1123)));
+		Instant instant = Instant.ofEpochMilli(date);
+		DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME
+			.withZone(ZoneId.of("GMT"));
+		headerMap.put(name, a(formatter.format(instant)));
 	}
 
 	@Override /* Overridden from HttpServletResponse */

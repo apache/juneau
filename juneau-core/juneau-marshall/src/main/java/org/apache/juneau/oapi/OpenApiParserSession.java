@@ -280,7 +280,7 @@ public class OpenApiParserSession extends UonParserSession {
 					if (f == BYTE)
 						return toType(base64Decode(in), type);
 					if (f == DATE || f == DATE_TIME)
-						return toType(parseIsoCalendar(in), type);
+						return toType(DateUtils.parseIsoCalendar(in), type);
 					if (f == BINARY)
 						return toType(fromHex(in), type);
 					if (f == BINARY_SPACED)
