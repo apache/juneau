@@ -255,7 +255,7 @@ public class HtmlParserSession extends XmlParserSession {
 	private <T> T parseAnchor(XmlReader r, ClassMeta<T> beanType) throws IOException, ParseException, XMLStreamException {
 		String href = r.getAttributeValue(null, "href");
 		String name = getElementText(r);
-		if (nn(beanType) && beanType.hasAnnotation(HtmlLink.class)) {
+		if (nn(beanType) && beanType.hasAnnotation2(HtmlLink.class)) {
 			var uriProperty = Value.<String>empty();
 			var nameProperty = Value.<String>empty();
 			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));

@@ -64,7 +64,7 @@ import org.apache.juneau.swap.*;
  * @param <T> The class type of the wrapped class.
  */
 @Bean(properties = "innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
-public class ClassMeta<T> implements Type {
+public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
@@ -605,6 +605,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings("unchecked")
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
+		super(innerClass);
 		this.innerClass = innerClass;
 		this.info = info(innerClass);
 		this.beanContext = beanContext;
@@ -663,6 +664,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
+		super((Class<T>)Object[].class);
 		this.innerClass = (Class<T>)Object[].class;
 		this.info = info(innerClass);
 		this.args = args;
@@ -708,6 +710,7 @@ public class ClassMeta<T> implements Type {
 	 * Used for creating Map and Collection class metas that shouldn't be cached.
 	 */
 	ClassMeta(ClassMeta<T> mainType, ClassMeta<?> keyType, ClassMeta<?> valueType, ClassMeta<?> elementType) {
+		super(mainType.innerClass);
 		this.innerClass = mainType.innerClass;
 		this.info = mainType.info;
 		this.implClass = mainType.implClass;
@@ -818,6 +821,7 @@ public class ClassMeta<T> implements Type {
 	 * @param o The object to cast.
 	 * @return The cast object.
 	 */
+	@Override
 	public T cast(Object o) {
 		return this.innerClass.cast(o);
 	}
@@ -1101,6 +1105,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The  name of the inner class.
 	 */
+	@Override
 	public String getName() { return innerClass.getName(); }
 
 	/**
@@ -1147,6 +1152,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The default value, or <jk>null</jk> if this class type is not a primitive.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public T getPrimitiveDefault() { return (T)primitiveDefault; }
 
@@ -1183,7 +1189,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The public methods on this class.
 	 */
-	public Map<String,Method> getPublicMethods() { return publicMethods; }
+	public Map<String,Method> getPublicMethods2() { return publicMethods; }
 
 	/**
 	 * Returns the transform for this class for creating instances from a Reader.
@@ -1283,7 +1289,7 @@ public class ClassMeta<T> implements Type {
 	 * @param a The annotation to check for.
 	 * @return <jk>true</jk> if the inner class has the annotation.
 	 */
-	public boolean hasAnnotation(Class<? extends Annotation> a) {
+	public boolean hasAnnotation2(Class<? extends Annotation> a) {
 		return nn(getLastAnnotation(a));
 	}
 
@@ -1365,6 +1371,7 @@ public class ClassMeta<T> implements Type {
 	 * @param value The value to check against.
 	 * @return <jk>true</jk> if the specified class is an exact match for this metadata.
 	 */
+	@Override
 	public boolean is(Class<?> value) {
 		return eq(innerClass, value);
 	}
@@ -1374,6 +1381,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is abstract.
 	 */
+	@Override
 	public boolean isAbstract() { return isAbstract; }
 
 	/**
@@ -1388,6 +1396,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is an array.
 	 */
+	@Override
 	public boolean isArray() { return cc == ARRAY; }
 
 	/**
@@ -1455,6 +1464,7 @@ public class ClassMeta<T> implements Type {
 	 * @param c The class to test against.
 	 * @return <jk>true</jk> if this metadata represents the specified type.
 	 */
+	@Override
 	public boolean isChildOf(Class<?> c) {
 		return info.isChildOf(c);
 	}
@@ -1464,6 +1474,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is {@link Class}.
 	 */
+	@Override
 	public boolean isClass() { return cc == ClassCategory.CLASS; }
 
 	/**
@@ -1478,6 +1489,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
 	 */
+	@Override
 	public boolean isCollectionOrArray() { return cc == COLLECTION || cc == ARRAY; }
 
 	/**
@@ -1535,6 +1547,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is an {@link Enum}.
 	 */
+	@Override
 	public boolean isEnum() { return cc == ENUM; }
 
 	/**
@@ -1560,6 +1573,7 @@ public class ClassMeta<T> implements Type {
 	 * @param o The object to check.
 	 * @return <jk>true</jk> if the specified object is an instance of this class.
 	 */
+	@Override
 	public boolean isInstance(Object o) {
 		if (nn(o))
 			return info.isParentOf(o.getClass()) || (isPrimitive() && info.getPrimitiveWrapper() == o.getClass());
@@ -1616,6 +1630,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is an inner class.
 	 */
+	@Override
 	public boolean isMemberClass() { return isMemberClass; }
 
 	/**
@@ -1673,6 +1688,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is a primitive.
 	 */
+	@Override
 	public boolean isPrimitive() { return innerClass.isPrimitive(); }
 
 	/**
@@ -1722,6 +1738,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is {@link Void} or <jk>void</jk>.
 	 */
+	@Override
 	public boolean isVoid() { return cc == VOID; }
 
 	/**
@@ -1789,6 +1806,7 @@ public class ClassMeta<T> implements Type {
 	 * @return A new instance of the object, or <jk>null</jk> if there is no no-arg constructor on the object.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public T newInstance() throws ExecutableException {
 		if (isArray())

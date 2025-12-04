@@ -595,7 +595,7 @@ public class ObjectRest {
 		var o = get(url);
 		if (o == null)
 			return null;
-		return session.getClassMeta(o.getClass()).getPublicMethods().keySet();
+		return session.getClassMeta(o.getClass()).getPublicMethods2().keySet();
 	}
 
 	/**

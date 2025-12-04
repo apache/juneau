@@ -65,7 +65,7 @@ import org.apache.juneau.commons.collections.*;
  *
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class ClassInfo extends ElementInfo implements Annotatable {
+public class ClassInfo extends ElementInfo implements Annotatable, Type {
 
 	private static final Cache<Class,ClassInfoTyped> CACHE = Cache.of(Class.class, ClassInfoTyped.class).build();
 
