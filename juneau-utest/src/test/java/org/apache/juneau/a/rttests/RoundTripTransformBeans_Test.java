@@ -18,7 +18,6 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.DateUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
@@ -32,7 +31,6 @@ import javax.xml.datatype.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.time.*;
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;

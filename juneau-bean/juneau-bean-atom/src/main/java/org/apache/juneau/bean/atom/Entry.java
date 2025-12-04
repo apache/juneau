@@ -23,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.time.*;
-import org.apache.juneau.commons.utils.*;
 
 /**
  * Represents an individual entry within an Atom feed or as a standalone Atom document.

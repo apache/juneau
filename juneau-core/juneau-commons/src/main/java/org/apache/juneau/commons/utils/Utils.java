@@ -1400,7 +1400,7 @@ public class Utils {
 	public static void quiet(Snippet snippet) {
 		try {
 			snippet.run();
-		} catch (Throwable t) { /* Ignore */ }
+		} catch (@SuppressWarnings("unused") Throwable t) { /* Ignore */ }
 	}
 
 	/**

@@ -23,7 +23,6 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.commons.time.*;
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**

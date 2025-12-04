@@ -19,7 +19,6 @@ package org.apache.juneau.commons.function;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
@@ -110,6 +109,36 @@ public class ResettableSupplier<T> implements Supplier<T> {
 		cache.set(null);
 	}
 
+	/**
+	 * Sets the cached value directly without invoking the underlying supplier.
+	 *
+	 * <p>
+	 * This method allows you to override the cached value, bypassing the supplier.
+	 * Subsequent calls to {@link #get()} will return the set value until {@link #reset()} is called
+	 * or the value is set again.
+	 *
+	 * <p>
+	 * This method is thread-safe and is particularly useful for testing when you need to
+	 * inject a specific value without invoking the supplier.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create a supplier</jc>
+	 * 	ResettableSupplier&lt;String&gt; <jv>supplier</jv> = <jk>new</jk> ResettableSupplier&lt;&gt;(() -&gt; <js>"computed"</js>);
+	 *
+	 * 	<jc>// Set a value directly without invoking the supplier</jc>
+	 * 	<jv>supplier</jv>.<jsm>set</jsm>(<js>"injected"</js>);
+	 *
+	 * 	<jc>// get() returns the injected value</jc>
+	 * 	assertEquals(<js>"injected"</js>, <jv>supplier</jv>.<jsm>get</jsm>());
+	 *
+	 * 	<jc>// Reset clears the cache, next get() will invoke the supplier</jc>
+	 * 	<jv>supplier</jv>.<jsm>reset</jsm>();
+	 * 	assertEquals(<js>"computed"</js>, <jv>supplier</jv>.<jsm>get</jsm>());
+	 * </p>
+	 *
+	 * @param value The value to cache. Can be <jk>null</jk>.
+	 */
 	public void set(T value) {
 		cache.set(opt(value));
 	}

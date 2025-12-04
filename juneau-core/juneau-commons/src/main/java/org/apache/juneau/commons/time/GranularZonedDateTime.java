@@ -172,45 +172,90 @@ public class GranularZonedDateTime {
 		return of(value, null, null);
 	}
 
+	/**
+	 * Parses an ISO8601 timestamp string into a GranularZonedDateTime with a custom time provider.
+	 *
+	 * <p>
+	 * This method is similar to {@link #of(String)}, but allows you to specify a custom
+	 * {@link TimeProvider} to use for obtaining the system default timezone and current time.
+	 * This is useful for testing or when you need deterministic time behavior.
+	 *
+	 * <p>
+	 * The time provider is used when:
+	 * <ul>
+	 * 	<li>No timezone is specified in the string - uses {@link TimeProvider#getSystemDefaultZoneId()}
+	 * 	<li>Time-only formats (starting with "T") - uses {@link TimeProvider#now(ZoneId)} to get the current date
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Parse with custom time provider for testing</jc>
+	 * 	<jk>var</jk> <jv>timeProvider</jv> = <jk>new</jk> FakeTimeProvider();
+	 * 	GranularZonedDateTime <jv>gdt</jv> = GranularZonedDateTime.<jsm>of</jsm>(
+	 * 		<js>"T12:30:45"</js>,
+	 * 		<jv>timeProvider</jv>
+	 * 	);
+	 * 	<jc>// Result uses the time provider's current date and timezone</jc>
+	 * </p>
+	 *
+	 * @param value The ISO8601 timestamp string to parse.
+	 * @param timeProvider The time provider to use for system default timezone and current time.
+	 * 	If null, {@link TimeProvider#INSTANCE} is used.
+	 * @return A new GranularZonedDateTime instance.
+	 * @throws IllegalArgumentException if value is null.
+	 * @throws DateTimeParseException if the timestamp format is invalid.
+	 */
 	public static GranularZonedDateTime of(String value, TimeProvider timeProvider) {
 		return of(value, null, timeProvider);
 	}
 
 
 	/**
-	 * Parses an ISO8601 timestamp string into a GranularZonedDateTime with a default timezone.
+	 * Parses an ISO8601 timestamp string into a GranularZonedDateTime with a default timezone and custom time provider.
 	 *
 	 * <p>
-	 * This method is similar to {@link #of(String)}, but allows you to specify a default
-	 * timezone to use when no timezone is present in the timestamp string.
+	 * This method is similar to {@link #of(String)}, but allows you to specify both a default
+	 * timezone and a custom {@link TimeProvider} to use when no timezone is present in the timestamp string.
 	 *
 	 * <p>
 	 * If the timestamp string contains a timezone (Z, +HH:mm, -HH:mm, etc.), that timezone
 	 * takes precedence over the defaultZoneId parameter. The defaultZoneId is only used when
 	 * no timezone is specified in the string.
 	 *
+	 * <p>
+	 * The time provider is used when:
+	 * <ul>
+	 * 	<li>No timezone is specified and defaultZoneId is null - uses {@link TimeProvider#getSystemDefaultZoneId()}
+	 * 	<li>Time-only formats (starting with "T") - uses {@link TimeProvider#now(ZoneId)} to get the current date
+	 * </ul>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Parse with default timezone</jc>
+	 * 	<jc>// Parse with default timezone and custom time provider</jc>
+	 * 	<jk>var</jk> <jv>timeProvider</jv> = <jk>new</jk> FakeTimeProvider();
 	 * 	GranularZonedDateTime <jv>gdt1</jv> = GranularZonedDateTime.<jsm>of</jsm>(
 	 * 		<js>"2011-01-15T12:30:45"</js>,
-	 * 		<jv>ZoneId</jv>.<jsm>of</jsm>(<js>"America/New_York"</js>)
+	 * 		<jv>ZoneId</jv>.<jsm>of</jsm>(<js>"America/New_York"</js>),
+	 * 		<jv>timeProvider</jv>
 	 * 	);
 	 * 	<jc>// Result uses America/New_York timezone</jc>
 	 *
 	 * 	<jc>// Parse with timezone in string (defaultZoneId is ignored)</jc>
 	 * 	GranularZonedDateTime <jv>gdt2</jv> = GranularZonedDateTime.<jsm>of</jsm>(
 	 * 		<js>"2011-01-15T12:30:45Z"</js>,
-	 * 		<jv>ZoneId</jv>.<jsm>of</jsm>(<js>"America/New_York"</js>)
+	 * 		<jv>ZoneId</jv>.<jsm>of</jsm>(<js>"America/New_York"</js>),
+	 * 		<jv>timeProvider</jv>
 	 * 	);
 	 * 	<jc>// Result uses UTC (Z), not America/New_York</jc>
 	 * </p>
 	 *
 	 * @param value The ISO8601 timestamp string to parse.
 	 * @param defaultZoneId The default timezone to use if no timezone is specified in the string.
-	 * 	If null, {@link ZoneId#systemDefault()} is used.
+	 * 	If null, the time provider's system default timezone is used.
+	 * @param timeProvider The time provider to use for system default timezone and current time.
+	 * 	If null, {@link TimeProvider#INSTANCE} is used.
 	 * @return A new GranularZonedDateTime instance.
-	 * @throws IllegalArgumentException if seg is null.
+	 * @throws IllegalArgumentException if value is null.
 	 * @throws DateTimeParseException if the timestamp format is invalid.
 	 */
 	public static GranularZonedDateTime of(String value, ZoneId defaultZoneId, TimeProvider timeProvider) {
