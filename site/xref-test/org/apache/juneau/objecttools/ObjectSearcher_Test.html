@@ -395,7 +395,7 @@
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">var</strong> bb = <strong class="jxr_keyword">new</strong> B[dates.length];
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; dates.length; i++) {
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 				bb[i] = <strong class="jxr_keyword">new</strong> B();
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 				bb[i].f = opt(dates[i]).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.parse(x).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 				bb[i].f = opt(dates[i]).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.of(x).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 			}
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">return</strong> bb;
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		}

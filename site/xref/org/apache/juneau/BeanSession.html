@@ -1558,13 +1558,13 @@
 <a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> 						<strong class="jxr_keyword">return</strong> (T)c2;
 <a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> 					}
 <a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> 				}
-<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> 				<strong class="jxr_keyword">return</strong> (T)GregorianCalendar.from(GranularZonedDateTime.parse(value.toString()).getZonedDateTime());
+<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> 				<strong class="jxr_keyword">return</strong> (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime());
 <a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> 			}
 <a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> 
 <a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> 			<strong class="jxr_keyword">if</strong> (to.isDate() &amp;&amp; to.getInnerClass() == Date.<strong class="jxr_keyword">class</strong>) {
 <a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> 				<strong class="jxr_keyword">if</strong> (from.isCalendar())
 <a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> 					<strong class="jxr_keyword">return</strong> (T)((Calendar)value).getTime();
-<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> 				<strong class="jxr_keyword">return</strong> (T)GregorianCalendar.from(GranularZonedDateTime.parse(value.toString()).getZonedDateTime()).getTime();
+<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> 				<strong class="jxr_keyword">return</strong> (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime()).getTime();
 <a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> 			}
 <a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> 
 <a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> 			<strong class="jxr_keyword">if</strong> (to.hasMutaterFrom(from))

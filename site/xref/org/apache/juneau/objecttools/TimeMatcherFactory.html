@@ -337,7 +337,7 @@
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		ZonedDateTime end;
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">public</strong> TimestampRange(<a name="Equality" href="../../../../org/apache/juneau/objecttools/Equality.html#Equality">Equality</a> eq, String singleDate) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">var</strong> singleDate1 = GranularZonedDateTime.parse(singleDate);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">var</strong> singleDate1 = GranularZonedDateTime.of(singleDate);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">if</strong> (eq == Equality.GT) {
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 				<strong class="jxr_keyword">this</strong>.start = singleDate1.roll(1).roll(MILLI_OF_SECOND, -1).getZonedDateTime();
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 				<strong class="jxr_keyword">this</strong>.end = Instant.ofEpochMilli(Long.MAX_VALUE).atZone(ZoneId.systemDefault());
@@ -357,8 +357,8 @@
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">public</strong> TimestampRange(String start, String end) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">var</strong> start1 = GranularZonedDateTime.parse(start);
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">var</strong> end1 = GranularZonedDateTime.parse(end);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">var</strong> start1 = GranularZonedDateTime.of(start);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">var</strong> end1 = GranularZonedDateTime.of(end);
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<strong class="jxr_keyword">this</strong>.start = start1.copy().roll(MILLI_OF_SECOND, -1).getZonedDateTime();
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">this</strong>.end = end1.roll(1).getZonedDateTime();
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		}

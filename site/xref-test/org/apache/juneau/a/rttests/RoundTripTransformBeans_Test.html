@@ -562,7 +562,7 @@
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F1 create() {
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F1();
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			x.setC(opt(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).filter(x2 -&gt; ! isBlank(x2)).map(x1 -&gt; GranularZonedDateTime.parse(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			x.setC(opt(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).filter(x2 -&gt; ! isBlank(x2)).map(x1 -&gt; GranularZonedDateTime.of(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 			<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		}
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 	}
@@ -597,7 +597,7 @@
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> 
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F1c create() {
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F1c();
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			x.setC(opt(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).filter(x2 -&gt; ! isBlank(x2)).map(x1 -&gt; GranularZonedDateTime.parse(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			x.setC(opt(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).filter(x2 -&gt; ! isBlank(x2)).map(x1 -&gt; GranularZonedDateTime.of(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 			<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 		}
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 	}
@@ -631,7 +631,7 @@
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F2 create() {
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F2();
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			x.setC(opt(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).filter(x2 -&gt; ! isBlank(x2)).map(x1 -&gt; GranularZonedDateTime.parse(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			x.setC(opt(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).filter(x2 -&gt; ! isBlank(x2)).map(x1 -&gt; GranularZonedDateTime.of(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L627" href="#L627">627</a> 			<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L628" href="#L628">628</a> 		}
 <a class="jxr_linenumber" name="L629" href="#L629">629</a> 	}
@@ -669,7 +669,7 @@
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F2c create() {
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F2c();
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			x.setC(opt(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).filter(x2 -&gt; ! isBlank(x2)).map(x1 -&gt; GranularZonedDateTime.parse(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			x.setC(opt(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).filter(x2 -&gt; ! isBlank(x2)).map(x1 -&gt; GranularZonedDateTime.of(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 			<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 		}
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 	}

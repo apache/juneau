@@ -869,7 +869,7 @@
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Calendar cal(String in) {
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 		<strong class="jxr_keyword">return</strong> opt(in).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.parse(in).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 		<strong class="jxr_keyword">return</strong> opt(in).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.of(in).getZonedDateTime()).map(GregorianCalendar::from).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L865" href="#L865">865</a> 	}
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> }
 </pre>
