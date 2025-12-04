@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.DateUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,6 +31,7 @@ import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -552,7 +554,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		public static F1 create() {
 			var x = new F1();
-			x.setC(fromIso8601Calendar("2018-12-12T05:12:00Z"));
+			x.setC(opt("2018-12-12T05:12:00Z").filter(x2 -> ! isBlank(x2)).map(x1 -> GranularZonedDateTime.parse("2018-12-12T05:12:00Z").getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
 			return x;
 		}
 	}
@@ -587,7 +589,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		public static F1c create() {
 			var x = new F1c();
-			x.setC(fromIso8601Calendar("2018-12-12T05:12:00Z"));
+			x.setC(opt("2018-12-12T05:12:00Z").filter(x2 -> ! isBlank(x2)).map(x1 -> GranularZonedDateTime.parse("2018-12-12T05:12:00Z").getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
 			return x;
 		}
 	}
@@ -621,7 +623,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		public static F2 create() {
 			var x = new F2();
-			x.setC(fromIso8601Calendar("2018-12-12T05:12:00Z"));
+			x.setC(opt("2018-12-12T05:12:00Z").filter(x2 -> ! isBlank(x2)).map(x1 -> GranularZonedDateTime.parse("2018-12-12T05:12:00Z").getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
 			return x;
 		}
 	}
@@ -659,7 +661,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		public static F2c create() {
 			var x = new F2c();
-			x.setC(fromIso8601Calendar("2018-12-12T05:12:00Z"));
+			x.setC(opt("2018-12-12T05:12:00Z").filter(x2 -> ! isBlank(x2)).map(x1 -> GranularZonedDateTime.parse("2018-12-12T05:12:00Z").getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
 			return x;
 		}
 	}

@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.DateUtils.*;
 import static org.apache.juneau.commons.utils.StateEnum.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.time.*;
+import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
 
@@ -67,7 +67,8 @@ public class GranularZonedDateTime {
 	 * @throws BasicRuntimeException If the string cannot be parsed as a valid timestamp.
 	 */
 	public static GranularZonedDateTime parse(String seg) {
-		// Try DateUtils.fromIso8601 first for consistency
+		//seg = seg.replace(' ', 'T').replace(',', '.');
+		//var precision = getPrecisionFromString(seg);
 		ZonedDateTime zdt = fromIso8601(seg);
 		if (nn(zdt)) {
 			// Determine precision based on the input string
@@ -218,8 +219,12 @@ public class GranularZonedDateTime {
 		// S13: Found ., looking for millisecond digits (YYYY-MM-DDTHH:MM:SS.SSS)
 		// S14: Found timezone (Z, +HH:mm, -HH:mm)
 
+		seg = seg.replace(' ', 'T').replace(',', '.');
+
 		var state = S1;
 		var precision = ChronoField.YEAR; // Track precision as we go
+
+		int year, month, day, hour, minute, second, ms;
 
 		for (var i = 0; i < seg.length(); i++) {
 			var c = seg.charAt(i);
@@ -372,4 +377,193 @@ public class GranularZonedDateTime {
 
 		return precision;
 	}
+
+	/**
+	 * Parses an ISO8601 date string into a ZonedDateTime object.
+	 *
+	 * <p>
+	 * This method converts an ISO8601 formatted date/time string into a ZonedDateTime object,
+	 * which provides full timezone context including DST handling. The method automatically
+	 * normalizes the input string to ensure it can be parsed correctly.
+	 *
+	 * <p>
+	 * The method supports the same ISO8601 formats as {@link #fromIso8601Calendar(String)},
+	 * but returns a modern {@link ZonedDateTime} instead of a legacy {@link Calendar}.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Parse UTC timezone</jc>
+	 * 	ZonedDateTime <jv>utcZdt</jv> = DateUtils.<jsm>fromIso8601</jsm>(<js>"2024-01-15T14:30:45Z"</js>);
+	 * 	<jc>// Result: ZonedDateTime with UTC timezone</jc>
+	 *
+	 * 	<jc>// Parse offset timezone</jc>
+	 * 	ZonedDateTime <jv>estZdt</jv> = DateUtils.<jsm>fromIso8601</jsm>(<js>"2024-01-15T14:30:45-05:00"</js>);
+	 * 	<jc>// Result: ZonedDateTime with EST timezone (-05:00)</jc>
+	 *
+	 * 	<jc>// Parse date only</jc>
+	 * 	ZonedDateTime <jv>dateZdt</jv> = DateUtils.<jsm>fromIso8601</jsm>(<js>"2024-01-15"</js>);
+	 * 	<jc>// Result: ZonedDateTime with time set to 00:00:00 in system timezone</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Advantages over Calendar:</h5>
+	 * <ul>
+	 * 	<li><c>Immutable</c> - Thread-safe by design
+	 * 	<li><c>DST Aware</c> - Automatic Daylight Saving Time handling
+	 * 	<li><c>Modern API</c> - Part of Java 8+ time package
+	 * 	<li><c>Better Performance</c> - Optimized for modern JVMs
+	 * 	<li><c>Type Safety</c> - Compile-time validation of operations
+	 * </ul>
+	 *
+	 * <h5 class='section'>Timezone Handling:</h5>
+	 * <p>
+	 * The method preserves the original timezone information from the ISO8601 string.
+	 * If no timezone is specified, the system's default timezone is used. The resulting
+	 * ZonedDateTime object will have the appropriate timezone set and will automatically
+	 * handle DST transitions.
+	 * </p>
+	 *
+	 * <h5 class='section'>Input Normalization:</h5>
+	 * <p>
+	 * The method automatically normalizes incomplete ISO8601 strings by:
+	 * <ul>
+	 * 	<li>Adding missing time components (defaults to 00:00:00)
+	 * 	<li>Adding timezone information if missing (uses system default)
+	 * 	<li>Ensuring proper format compliance
+	 * </ul>
+	 * </p>
+	 *
+	 * See Also:  <a class="doclink" href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601 - Wikipedia</a>
+	 *
+	 * @param s The ISO8601 formatted string to parse (can be null or empty)
+	 * @return ZonedDateTime object representing the parsed date/time, or null if input is null/empty
+	 * @throws DateTimeParseException if the string cannot be parsed as a valid ISO8601 date
+	 * @see #fromIso8601Calendar(String)
+	 * @see ZonedDateTime
+	 */
+	private static ZonedDateTime fromIso8601(String s) {
+		if (StringUtils.isBlank(s))
+			return null;
+
+		// Inline toValidIso8601DT logic
+		var in = s.trim();
+
+		// "2001-07-04T15:30:45Z"
+		// S1: Looking for -
+		// S2: Found -, looking for -
+		// S3: Found -, looking for T
+		// S4: Found T, looking for :
+		// S5: Found :, looking for :
+		// S6: Found :, looking for Z or - or + or . or ,
+		// S7: Found time zone
+		// S8: Found . or , after seconds, skipping milliseconds digits
+
+		var state = S1;
+		var needsT = false;
+		var timezoneAfterHour = false;  // Track if timezone found after hour (S4)
+		var timezoneAfterMinute = false;  // Track if timezone found after minute (S5)
+		var millisCommaIndex = -1;  // Track where comma-separated milliseconds start (to convert to dot)
+
+		for (var i = 0; i < in.length(); i++) {
+			var c = in.charAt(i);
+			if (state == S1) {
+				if (c == '-')
+					state = S2;
+			} else if (state == S2) {
+				if (c == '-')
+					state = S3;
+			} else if (state == S3) {
+				if (c == 'T')
+					state = S4;
+				if (c == ' ') {
+					state = S4;
+					needsT = true;
+				}
+			} else if (state == S4) {
+				if (c == ':')
+					state = S5;
+				else if (c == 'Z' || c == '+' || c == '-') {
+					state = S7;  // Timezone immediately after hour (e.g., "2011-01-15T12Z")
+					timezoneAfterHour = true;
+				}
+			} else if (state == S5) {
+				if (c == ':')
+					state = S6;
+				else if (c == 'Z' || c == '+' || c == '-') {
+					state = S7;  // Timezone immediately after minute (e.g., "2011-01-15T12:30Z")
+					timezoneAfterMinute = true;
+				}
+			} else if (state == S6) {
+				if (c == '.' || c == ',') {
+					state = S8;  // Found milliseconds separator
+					if (c == ',') {
+						millisCommaIndex = i;  // Track comma to convert to dot
+					}
+				} else if (c == 'Z' || c == '+' || c == '-') {
+					state = S7;
+				}
+			} else if (state == S8) {
+				// S8: Reading milliseconds digits, looking for timezone
+				if (Character.isDigit(c)) {
+					// Continue reading milliseconds
+				} else if (c == 'Z' || c == '+' || c == '-') {
+					state = S7;
+				}
+			}
+		}
+
+		// Convert comma-separated milliseconds to dot-separated (ISO_DATE_TIME expects dots)
+		if (millisCommaIndex >= 0) {
+			var chars = in.toCharArray();
+			chars[millisCommaIndex] = '.';
+			in = new String(chars);
+		}
+
+		if (needsT)
+			in = in.replace(' ', 'T');
+
+		var validDate = switch (state) {
+			case S1 -> in + "-01-01T00:00:00";
+			case S2 -> in + "-01T00:00:00";
+			case S3 -> in + "T00:00:00";
+			case S4 -> in + ":00:00";
+			case S5 -> in + ":00";
+			case S6 -> in;  // Complete time, no timezone
+			case S7 -> {
+				// Complete time with timezone, but may need to add missing components
+				if (timezoneAfterHour) {
+					// Timezone found after hour, need to add :00:00 before timezone
+					var tzIndex = in.length();
+					for (var i = in.length() - 1; i >= 0; i--) {
+						var ch = in.charAt(i);
+						if (ch == 'Z' || ch == '+' || ch == '-') {
+							tzIndex = i;
+							break;
+						}
+					}
+					yield in.substring(0, tzIndex) + ":00:00" + in.substring(tzIndex);
+				} else if (timezoneAfterMinute) {
+					// Timezone found after minute, need to add :00 before timezone
+					var tzIndex = in.length();
+					for (var i = in.length() - 1; i >= 0; i--) {
+						var ch = in.charAt(i);
+						if (ch == 'Z' || ch == '+' || ch == '-') {
+							tzIndex = i;
+							break;
+						}
+					}
+					yield in.substring(0, tzIndex) + ":00" + in.substring(tzIndex);
+				} else {
+					yield in;  // Complete time with timezone (already has seconds)
+				}
+			}
+			default -> in;
+		};
+
+
+		if (state != S7)
+			validDate += ZonedDateTime.now(ZoneId.systemDefault()).getOffset().toString();
+
+		return ZonedDateTime.parse(validDate, DateTimeFormatter.ISO_DATE_TIME);
+	}
+
 }

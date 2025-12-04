@@ -279,8 +279,10 @@ public class OpenApiParserSession extends UonParserSession {
 				if (sType.isObject()) {
 					if (f == BYTE)
 						return toType(base64Decode(in), type);
-					if (f == DATE || f == DATE_TIME)
-						return toType(DateUtils.parseIsoCalendar(in), type);
+					if (f == DATE || f == DATE_TIME) {
+						var in2 = in;
+						return toType(opt(in).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse(in2).getZonedDateTime()).map(GregorianCalendar::from).orElse(null), type);
+					}
 					if (f == BINARY)
 						return toType(fromHex(in), type);
 					if (f == BINARY_SPACED)

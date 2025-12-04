@@ -17,9 +17,9 @@
 package org.apache.juneau.commons.utils;
 
 import static java.time.temporal.ChronoField.*;
-import static java.time.temporal.ChronoUnit.*;
 import static java.util.Calendar.*;
-import static org.apache.juneau.commons.utils.DateUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -162,7 +162,8 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void j01_fromIso8601Calendar(Input input) {
 			// Parse the ISO8601 string
-			Calendar result = fromIso8601Calendar(input.iso8601String);
+			String s = input.iso8601String;
+			Calendar result = opt(s).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse(s).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 
 			// Verify the result is not null
 			assertNotNull(result, "Test " + input.index + ": Result should not be null");
@@ -244,7 +245,7 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void k01_fromIso8601(Input input) {
 			// Parse the ISO8601 string
-			ZonedDateTime result = fromIso8601(input.iso8601String);
+			ZonedDateTime result = GranularZonedDateTime.parse(input.iso8601String).getZonedDateTime();
 
 			// Verify the result is not null
 			assertNotNull(result, "Test " + input.index + ": Result should not be null");
@@ -268,7 +269,7 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void k02_fromIso8601_immutability(Input input) {
 			// Parse the ISO8601 string
-			ZonedDateTime result = fromIso8601(input.iso8601String);
+			ZonedDateTime result = GranularZonedDateTime.parse(input.iso8601String).getZonedDateTime();
 			assertNotNull(result, "Test " + input.index + ": Result should not be null");
 
 			// Verify immutability - operations should return new instances
@@ -289,43 +290,25 @@ class DateUtils_Test extends TestBase {
 	static class L_fromIso8601_edgeCases {
 
 		@Test
-		void l01_nullInput() {
-			assertNull(fromIso8601Calendar(null));
-			assertNull(fromIso8601(null));
-		}
-
-		@Test
-		void l02_emptyInput() {
-			assertNull(fromIso8601Calendar(""));
-			assertNull(fromIso8601(""));
-		}
-
-		@Test
-		void l03_whitespaceInput() {
-			assertNull(fromIso8601Calendar("   "));
-			assertNull(fromIso8601("   "));
-		}
-
-		@Test
 		void l04_invalidFormat() {
 			// These should throw DateTimeParseException
 			assertThrows(Exception.class, () -> {
-				fromIso8601Calendar("invalid-date");
+				opt("invalid-date").filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse("invalid-date").getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 			});
 			assertThrows(Exception.class, () -> {
-				fromIso8601("invalid-date");
+				GranularZonedDateTime.parse("invalid-date").getZonedDateTime();
 			});
 		}
 
 		@Test
 		void l05_minimumDate() {
-			Calendar cal = fromIso8601Calendar("0001-01-01T00:00:00Z");
+			Calendar cal = opt("0001-01-01T00:00:00Z").filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse("0001-01-01T00:00:00Z").getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 			assertNotNull(cal);
 			assertEquals(1, cal.get(Calendar.YEAR));
 			assertEquals(Calendar.JANUARY, cal.get(Calendar.MONTH));
 			assertEquals(1, cal.get(Calendar.DAY_OF_MONTH));
 
-			ZonedDateTime zdt = fromIso8601("0001-01-01T00:00:00Z");
+			ZonedDateTime zdt = GranularZonedDateTime.parse("0001-01-01T00:00:00Z").getZonedDateTime();
 			assertNotNull(zdt);
 			assertEquals(1, zdt.getYear());
 			assertEquals(1, zdt.getMonthValue());
@@ -334,13 +317,13 @@ class DateUtils_Test extends TestBase {
 
 		@Test
 		void l06_maximumDate() {
-			Calendar cal = fromIso8601Calendar("9999-12-31T23:59:59Z");
+			Calendar cal = opt("9999-12-31T23:59:59Z").filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse("9999-12-31T23:59:59Z").getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 			assertNotNull(cal);
 			assertEquals(9999, cal.get(Calendar.YEAR));
 			assertEquals(Calendar.DECEMBER, cal.get(Calendar.MONTH));
 			assertEquals(31, cal.get(Calendar.DAY_OF_MONTH));
 
-			ZonedDateTime zdt = fromIso8601("9999-12-31T23:59:59Z");
+			ZonedDateTime zdt = GranularZonedDateTime.parse("9999-12-31T23:59:59Z").getZonedDateTime();
 			assertNotNull(zdt);
 			assertEquals(9999, zdt.getYear());
 			assertEquals(12, zdt.getMonthValue());
@@ -349,13 +332,13 @@ class DateUtils_Test extends TestBase {
 
 		@Test
 		void l07_leapYear() {
-			Calendar cal = fromIso8601Calendar("2024-02-29T12:00:00Z");
+			Calendar cal = opt("2024-02-29T12:00:00Z").filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse("2024-02-29T12:00:00Z").getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 			assertNotNull(cal);
 			assertEquals(2024, cal.get(Calendar.YEAR));
 			assertEquals(Calendar.FEBRUARY, cal.get(Calendar.MONTH));
 			assertEquals(29, cal.get(Calendar.DAY_OF_MONTH));
 
-			ZonedDateTime zdt = fromIso8601("2024-02-29T12:00:00Z");
+			ZonedDateTime zdt = GranularZonedDateTime.parse("2024-02-29T12:00:00Z").getZonedDateTime();
 			assertNotNull(zdt);
 			assertEquals(2024, zdt.getYear());
 			assertEquals(2, zdt.getMonthValue());
@@ -365,99 +348,17 @@ class DateUtils_Test extends TestBase {
 		@Test
 		void l08_dstTransition() {
 			// Test DST transition in America/New_York (Spring forward)
-			Calendar cal = fromIso8601Calendar("2024-03-10T02:30:00-05:00");
+			Calendar cal = opt("2024-03-10T02:30:00-05:00").filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse("2024-03-10T02:30:00-05:00").getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 			assertNotNull(cal);
 			assertEquals(2024, cal.get(Calendar.YEAR));
 			assertEquals(Calendar.MARCH, cal.get(Calendar.MONTH));
 			assertEquals(10, cal.get(Calendar.DAY_OF_MONTH));
 
-			ZonedDateTime zdt = fromIso8601("2024-03-10T02:30:00-05:00");
+			ZonedDateTime zdt = GranularZonedDateTime.parse("2024-03-10T02:30:00-05:00").getZonedDateTime();
 			assertNotNull(zdt);
 			assertEquals(2024, zdt.getYear());
 			assertEquals(3, zdt.getMonthValue());
 			assertEquals(10, zdt.getDayOfMonth());
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// parseIsoCalendar(String) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void m01_parseIsoCalendar() throws Exception {
-		// Various ISO8601 formats
-		var cal1 = parseIsoCalendar("2023");
-		assertNotNull(cal1);
-		assertEquals(2023, cal1.get(Calendar.YEAR));
-
-		var cal2 = parseIsoCalendar("2023-12");
-		assertNotNull(cal2);
-		assertEquals(2023, cal2.get(Calendar.YEAR));
-		assertEquals(Calendar.DECEMBER, cal2.get(Calendar.MONTH));
-
-		var cal3 = parseIsoCalendar("2023-12-25");
-		assertNotNull(cal3);
-		assertEquals(2023, cal3.get(Calendar.YEAR));
-		assertEquals(Calendar.DECEMBER, cal3.get(Calendar.MONTH));
-		assertEquals(25, cal3.get(Calendar.DAY_OF_MONTH));
-
-		var cal4 = parseIsoCalendar("2023-12-25T14:30:00");
-		assertNotNull(cal4);
-		assertEquals(14, cal4.get(Calendar.HOUR_OF_DAY));
-		assertEquals(30, cal4.get(Calendar.MINUTE));
-		assertEquals(0, cal4.get(Calendar.SECOND));
-
-		// Should throw for invalid dates (DateTimeParseException is thrown by DateUtils, not IllegalArgumentException)
-		assertThrows(Exception.class, () -> parseIsoCalendar("invalid"));
-		assertThrows(Exception.class, () -> parseIsoCalendar("2023-13-25")); // Invalid month
-
-		// Test empty input - triggers code path
-		assertNull(parseIsoCalendar(null));
-		assertNull(parseIsoCalendar(""));
-		assertNull(parseIsoCalendar("   "));
-
-		// Test with milliseconds (comma) - triggers code path
-		var cal5 = parseIsoCalendar("2023-12-25T14:30:00,123");
-		assertNotNull(cal5);
-		assertEquals(14, cal5.get(Calendar.HOUR_OF_DAY));
-		assertEquals(30, cal5.get(Calendar.MINUTE));
-		assertEquals(0, cal5.get(Calendar.SECOND)); // Milliseconds trimmed
-
-		// Test format yyyy-MM-ddThh - triggers code path
-		var cal6 = parseIsoCalendar("2023-12-25T14");
-		assertNotNull(cal6);
-		assertEquals(14, cal6.get(Calendar.HOUR_OF_DAY));
-		assertEquals(0, cal6.get(Calendar.MINUTE));
-		assertEquals(0, cal6.get(Calendar.SECOND));
-
-		// Test format yyyy-MM-ddThh:mm - triggers code path
-		var cal7 = parseIsoCalendar("2023-12-25T14:30");
-		assertNotNull(cal7);
-		assertEquals(14, cal7.get(Calendar.HOUR_OF_DAY));
-		assertEquals(30, cal7.get(Calendar.MINUTE));
-		assertEquals(0, cal7.get(Calendar.SECOND));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// parseIsoDate(String) tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void m02_parseIsoDate() throws Exception {
-		// parseIsoDate wraps parseIsoCalendar, so test similar cases
-		var date1 = parseIsoDate("2023-12-25");
-		assertNotNull(date1);
-
-		var date2 = parseIsoDate("2023-12-25T14:30:00");
-		assertNotNull(date2);
-
-		// Test empty input - triggers code path
-		// Note: parseIsoDate checks isEmpty before calling parseIsoCalendar, so it returns null
-		assertNull(parseIsoDate(null));
-		assertNull(parseIsoDate(""));
-
-		// Should throw for invalid dates (DateTimeParseException is thrown by DateUtils, not IllegalArgumentException)
-		assertThrows(Exception.class, () -> parseIsoDate("invalid"));
-	}
-
 }

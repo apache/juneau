@@ -18,7 +18,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.DateUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -1551,13 +1550,13 @@ public class BeanSession extends ContextSession {
 						return (T)c2;
 					}
 				}
-				return (T)GregorianCalendar.from(fromIso8601(value.toString()));
+				return (T)GregorianCalendar.from(GranularZonedDateTime.parse(value.toString()).getZonedDateTime());
 			}
 
 			if (to.isDate() && to.getInnerClass() == Date.class) {
 				if (from.isCalendar())
 					return (T)((Calendar)value).getTime();
-				return (T)GregorianCalendar.from(fromIso8601(value.toString())).getTime();
+				return (T)GregorianCalendar.from(GranularZonedDateTime.parse(value.toString()).getZonedDateTime()).getTime();
 			}
 
 			if (to.hasMutaterFrom(from))

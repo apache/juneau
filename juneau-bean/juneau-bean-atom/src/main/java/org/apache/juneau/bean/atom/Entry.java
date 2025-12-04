@@ -16,11 +16,13 @@
  */
 package org.apache.juneau.bean.atom;
 
-import static org.apache.juneau.commons.utils.DateUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Represents an individual entry within an Atom feed or as a standalone Atom document.
@@ -329,7 +331,7 @@ public class Entry extends CommonEntry {
 	 * @return This object.
 	 */
 	public Entry setPublished(String value) {
-		setPublished(fromIso8601Calendar(value));
+		setPublished(opt(value).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse(value).getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
 		return this;
 	}
 
