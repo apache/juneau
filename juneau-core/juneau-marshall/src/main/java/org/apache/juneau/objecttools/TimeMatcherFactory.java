@@ -329,7 +329,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 		ZonedDateTime end;
 
 		public TimestampRange(Equality eq, String singleDate) {
-			var singleDate1 = GranularZonedDateTime.parse(singleDate);
+			var singleDate1 = GranularZonedDateTime.of(singleDate);
 			if (eq == Equality.GT) {
 				this.start = singleDate1.roll(1).roll(MILLI_OF_SECOND, -1).getZonedDateTime();
 				this.end = Instant.ofEpochMilli(Long.MAX_VALUE).atZone(ZoneId.systemDefault());
@@ -349,8 +349,8 @@ public class TimeMatcherFactory extends MatcherFactory {
 		}
 
 		public TimestampRange(String start, String end) {
-			var start1 = GranularZonedDateTime.parse(start);
-			var end1 = GranularZonedDateTime.parse(end);
+			var start1 = GranularZonedDateTime.of(start);
+			var end1 = GranularZonedDateTime.of(end);
 			this.start = start1.copy().roll(MILLI_OF_SECOND, -1).getZonedDateTime();
 			this.end = end1.roll(1).getZonedDateTime();
 		}

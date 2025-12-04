@@ -861,6 +861,6 @@ public class OpenApi_Test extends TestBase {
 	//---------------------------------------------------------------------------------------------
 
 	private static Calendar cal(String in) {
-		return opt(in).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse(in).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
+		return opt(in).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(in).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 	}
 }

@@ -387,7 +387,7 @@ public class ObjectSearcher_Test extends TestBase {
 			var bb = new B[dates.length];
 			for (var i = 0; i < dates.length; i++) {
 				bb[i] = new B();
-				bb[i].f = opt(dates[i]).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse(x).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
+				bb[i].f = opt(dates[i]).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(x).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 			}
 			return bb;
 		}

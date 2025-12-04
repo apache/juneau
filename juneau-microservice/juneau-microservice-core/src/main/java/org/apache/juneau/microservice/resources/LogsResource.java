@@ -227,8 +227,8 @@ public class LogsResource extends BasicRestServlet {
 
 		var f = getFile(path);
 
-		var startDate = opt(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.parse(start).getZonedDateTime()).map(GregorianCalendar::from).map(x -> x.getTime()).orElse(null);
-		var endDate = opt(end).filter(x11 -> ! isBlank(x11)).map(x4 -> GranularZonedDateTime.parse(end).getZonedDateTime()).map(GregorianCalendar::from).map(x3 -> x3.getTime()).orElse(null);
+		var startDate = opt(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(x -> x.getTime()).orElse(null);
+		var endDate = opt(end).filter(x11 -> ! isBlank(x11)).map(x4 -> GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(x3 -> x3.getTime()).orElse(null);
 
 		if (! highlight) {
 			var o = getReader(f, startDate, endDate, thread, loggers, severity);
@@ -297,8 +297,8 @@ public class LogsResource extends BasicRestServlet {
 		var f = getFile(path);
 		req.setAttribute("fullPath", f.getAbsolutePath());
 
-		var startDate = opt(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.parse(start).getZonedDateTime()).map(GregorianCalendar::from).map(x -> x.getTime()).orElse(null);
-		var endDate = opt(end).filter(x11 -> ! isBlank(x11)).map(x4 -> GranularZonedDateTime.parse(end).getZonedDateTime()).map(GregorianCalendar::from).map(x3 -> x3.getTime()).orElse(null);
+		var startDate = opt(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(x -> x.getTime()).orElse(null);
+		var endDate = opt(end).filter(x11 -> ! isBlank(x11)).map(x4 -> GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(x3 -> x3.getTime()).orElse(null);
 
 		return getLogParser(f, startDate, endDate, thread, loggers, severity);
 	}

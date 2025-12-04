@@ -331,7 +331,7 @@ public class Entry extends CommonEntry {
 	 * @return This object.
 	 */
 	public Entry setPublished(String value) {
-		setPublished(opt(value).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.parse(value).getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
+		setPublished(opt(value).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(value).getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
 		return this;
 	}
 

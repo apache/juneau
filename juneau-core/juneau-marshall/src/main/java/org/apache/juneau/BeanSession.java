@@ -1550,13 +1550,13 @@ public class BeanSession extends ContextSession {
 						return (T)c2;
 					}
 				}
-				return (T)GregorianCalendar.from(GranularZonedDateTime.parse(value.toString()).getZonedDateTime());
+				return (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime());
 			}
 
 			if (to.isDate() && to.getInnerClass() == Date.class) {
 				if (from.isCalendar())
 					return (T)((Calendar)value).getTime();
-				return (T)GregorianCalendar.from(GranularZonedDateTime.parse(value.toString()).getZonedDateTime()).getTime();
+				return (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime()).getTime();
 			}
 
 			if (to.hasMutaterFrom(from))
