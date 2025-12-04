@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
@@ -297,12 +298,15 @@ public class RestSession extends ContextSession {
 	 */
 	public Throwable getException() { return (Throwable)req.getAttribute("Exception"); }
 
+	private static AsciiSet VALID_METHOD_CHARS = AsciiSet.create().ranges("A-Z", "a-z" ,"0-9").chars("_-").build();
+
 	/**
 	 * Returns the HTTP method name.
 	 *
 	 * @return The HTTP method name, always uppercased.
+	 * @throws NotFound If the method parameter contains invalid/malformed characters.
 	 */
-	public String getMethod() {
+	public String getMethod() throws NotFound {
 		if (method == null) {
 
 			Set<String> s1 = context.getAllowedMethodParams();
@@ -312,12 +316,18 @@ public class RestSession extends ContextSession {
 				String[] x = getQueryParams().get("method");
 				if (nn(x) && (s1.contains("*") || s1.contains(x[0])))
 					method = x[0];
+				if (method != null && ! VALID_METHOD_CHARS.containsOnly(method)) {
+					throw new MethodNotAllowed();
+				}
 			}
 
 			if (method == null && ! s2.isEmpty()) {
 				var x = req.getHeader("X-Method");
 				if (nn(x) && (s2.contains("*") || s2.contains(x)))
 					method = x;
+				if (method != null && ! VALID_METHOD_CHARS.containsOnly(method)) {
+					throw new MethodNotAllowed();
+				}
 			}
 
 			if (method == null)

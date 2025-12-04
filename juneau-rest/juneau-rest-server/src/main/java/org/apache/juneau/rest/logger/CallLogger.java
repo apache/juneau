@@ -576,7 +576,7 @@ public class CallLogger {
 
 		if (nn(sti)) {
 			var count = sti.getCount();
-			sb.append(',').append(StringUtils.toHex8(sti.getHash())).append('.').append(count);
+			sb.append(',').append(StringUtils.toHex8(Math.abs(sti.getHash()))).append('.').append(count);
 			if (count > 1)
 				e = null;
 		}

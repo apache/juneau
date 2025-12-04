@@ -165,4 +165,27 @@ class Rest_AllowedMethodParams_Test extends TestBase {
 		a8.get("/?method=OPTIONS").run().assertContent("GET");
 		a8.request("get","/?method=FOO").run().assertContent("GET");
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Security: Malformed method parameters should return 405, not 500 (CWE-74)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void b01_malformedMethodParameter_returns405() throws Exception {
+		var a5 = MockRestClient.build(A5.class);
+
+		// Test various malformed method parameters that should return 404
+		// These contain special characters that indicate malformed/encoded input
+		a5.get("/?method=VIEW%5C%5C%5C%22&noTrace=true").ignoreErrors().run().assertStatus(405);
+		a5.get("/?method=VIEW\\\"&noTrace=true").ignoreErrors().run().assertStatus(405);
+		a5.get("/?method=VIEW%22&noTrace=true").ignoreErrors().run().assertStatus(405);
+		a5.get("/?method=VIEW<script>&noTrace=true").ignoreErrors().run().assertStatus(405);
+		a5.get("/?method=VIEW/test&noTrace=true").ignoreErrors().run().assertStatus(405);
+		a5.get("/?method=VIEW%2Ftest&noTrace=true").ignoreErrors().run().assertStatus(405);
+		// Test with spaces and other invalid characters
+		a5.get("/?method=VIEW test&noTrace=true").ignoreErrors().run().assertStatus(405);
+		a5.get("/?method=VIEW+test&noTrace=true").ignoreErrors().run().assertStatus(405);
+		// Valid method parameters should still work
+		a5.get("/?method=VIEW").ignoreErrors().run().assertStatus(405); // 405 because VIEW method doesn't exist, but not 500
+		a5.get("/?method=FOO").run().assertContent("FOO"); // Valid method works
+	}
 }
