@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
@@ -404,9 +405,11 @@ public class Config extends Context implements ConfigEventListener {
 		}
 	}
 
-	private static final boolean DISABLE_AUTO_SYSTEM_PROPS = Boolean.getBoolean("juneau.disableAutoSystemProps");
+	// Use set(T)/reset() for testing.
+	static final ResettableSupplier<Boolean> DISABLE_AUTO_SYSTEM_PROPS = memoizeResettable(() -> Boolean.getBoolean("juneau.disableAutoSystemProps"));
 
-	private static final AtomicReference<Config> SYSTEM_DEFAULT = new AtomicReference<>(findSystemDefault());
+	// Use set(T)/reset() for testing.
+	static final ResettableSupplier<Config> SYSTEM_DEFAULT = memoizeResettable(() -> findSystemDefault());
 
 	/**
 	 * Creates a new builder for this object.
@@ -467,10 +470,12 @@ public class Config extends Context implements ConfigEventListener {
 			l.add(cmd + ".cfg");
 		}
 
-		var files = sortedSet(new File(".").listFiles());
-		for (var f : files)
-			if (f.getName().endsWith(".cfg"))
-				l.add(f.getName());
+		var fileArray = new File(".").listFiles();
+		if (fileArray != null) {
+			for (var f : fileArray)
+				if (f.getName().endsWith(".cfg"))
+					l.add(f.getName());
+		}
 
 		l.add("juneau.cfg");
 		l.add("default.cfg");
@@ -513,7 +518,7 @@ public class Config extends Context implements ConfigEventListener {
 		for (var n : getCandidateSystemDefaultConfigNames()) {
 			var config = find(n);
 			if (nn(config)) {
-				if (! DISABLE_AUTO_SYSTEM_PROPS)
+				if (! DISABLE_AUTO_SYSTEM_PROPS.get())
 					config.setSystemProperties();
 				return config;
 			}
@@ -522,6 +527,31 @@ public class Config extends Context implements ConfigEventListener {
 		return null;
 	}
 
+	private static boolean isSimpleType(Type t) {
+		if (! (t instanceof Class))
+			return false;
+		var c = (Class<?>)t;
+		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
+	}
+	private static String section(String section) {
+		assertArgNotNull("section", section);
+		if (isEmpty(section))
+			return "";
+		return section;
+	}
+	private static String skey(String key) {
+		var i = key.indexOf('/');
+		if (i == -1)
+			return key;
+		return key.substring(i + 1);
+	}
+	private static String sname(String key) {
+		assertArgNotNull("key", key);
+		var i = key.indexOf('/');
+		if (i == -1)
+			return "";
+		return key.substring(0, i);
+	}
 	final String name;
 	final ConfigStore store;
 	final WriterSerializer serializer;
@@ -529,12 +559,16 @@ public class Config extends Context implements ConfigEventListener {
 	final Map<Character,Mod> mods;
 	final VarResolver varResolver;
 	final int binaryLineLength;
+
 	final BinaryFormat binaryFormat;
 	final boolean multiLineValuesOnSeparateLines, readOnly;
+
 	final BeanSession beanSession;
+
 	final VarResolverSession varSession;
 
 	private final ConfigMap configMap;
+
 	private final List<ConfigEventListener> listeners = synced(new LinkedList<>());
 
 	/**
@@ -1118,25 +1152,11 @@ public class Config extends Context implements ConfigEventListener {
 		return removeMods(ce.getModifiers(), ce.getValue());
 	}
 
-	private static boolean isSimpleType(Type t) {
-		if (! (t instanceof Class))
-			return false;
-		var c = (Class<?>)t;
-		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
-	}
-
 	private String nlIfMl(CharSequence cs) {
 		var s = cs.toString();
 		if (s.indexOf('\n') != -1 && multiLineValuesOnSeparateLines)
 			return "\n" + s;
 		return s;
-	}
-
-	private static String section(String section) {
-		assertArgNotNull("section", section);
-		if (isEmpty(section))
-			return "";
-		return section;
 	}
 
 	private String serialize(Object value, Serializer serializer) throws SerializeException {
@@ -1176,21 +1196,6 @@ public class Config extends Context implements ConfigEventListener {
 		if (r.startsWith("'"))
 			return r.substring(1, r.length() - 1);
 		return r;
-	}
-
-	private static String skey(String key) {
-		var i = key.indexOf('/');
-		if (i == -1)
-			return key;
-		return key.substring(i + 1);
-	}
-
-	private static String sname(String key) {
-		assertArgNotNull("key", key);
-		var i = key.indexOf('/');
-		if (i == -1)
-			return "";
-		return key.substring(0, i);
 	}
 
 	String applyMods(String mods, String x) {

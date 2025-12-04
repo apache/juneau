@@ -184,6 +184,63 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 	}
 
+	private static void checkKeyName(String s) {
+		if (! isValidKeyName(s))
+			throw illegalArg("Invalid key name: ''{0}''", s);
+	}
+
+	private static void checkSectionName(String s) {
+		if (! ("".equals(s) || isValidNewSectionName(s)))
+			throw illegalArg("Invalid section name: ''{0}''", s);
+	}
+
+	private static boolean isValidConfigName(String s) {
+		if (s == null)
+			return false;
+		s = s.trim();
+		if (s.isEmpty())
+			return false;
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (i == 0) {
+				if (! Character.isJavaIdentifierStart(c))
+					return false;
+			} else {
+				if (! Character.isJavaIdentifierPart(c))
+					return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean isValidKeyName(String s) {
+		if (s == null)
+			return false;
+		s = s.trim();
+		if (s.isEmpty())
+			return false;
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '/' || c == '\\' || c == '[' || c == ']' || c == '=' || c == '#')
+				return false;
+		}
+		return true;
+	}
+
+	private static boolean isValidNewSectionName(String s) {
+		if (s == null)
+			return false;
+		s = s.trim();
+		if (s.isEmpty())
+			return false;
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '/' || c == '\\' || c == '[' || c == ']')
+				return false;
+		}
+		return true;
+	}
+
 	private final ConfigStore store;         // The store that created this object.
 
 	private volatile String contents;        // The original contents of this object.
@@ -669,16 +726,6 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 	}
 
-	private static void checkKeyName(String s) {
-		if (! isValidKeyName(s))
-			throw illegalArg("Invalid key name: ''{0}''", s);
-	}
-
-	private static void checkSectionName(String s) {
-		if (! ("".equals(s) || isValidNewSectionName(s)))
-			throw illegalArg("Invalid section name: ''{0}''", s);
-	}
-
 	private ConfigEvents findDiffs(String updatedContents) throws IOException {
 		var changes2 = new ConfigEvents();
 		var newMap = new ConfigMap(store, name, updatedContents);
@@ -740,53 +787,6 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		return changes2;
-	}
-
-	private static boolean isValidConfigName(String s) {
-		if (s == null)
-			return false;
-		s = s.trim();
-		if (s.isEmpty())
-			return false;
-		for (var i = 0; i < s.length(); i++) {
-			var c = s.charAt(i);
-			if (i == 0) {
-				if (! Character.isJavaIdentifierStart(c))
-					return false;
-			} else {
-				if (! Character.isJavaIdentifierPart(c))
-					return false;
-			}
-		}
-		return true;
-	}
-
-	private static boolean isValidKeyName(String s) {
-		if (s == null)
-			return false;
-		s = s.trim();
-		if (s.isEmpty())
-			return false;
-		for (var i = 0; i < s.length(); i++) {
-			var c = s.charAt(i);
-			if (c == '/' || c == '\\' || c == '[' || c == ']' || c == '=' || c == '#')
-				return false;
-		}
-		return true;
-	}
-
-	private static boolean isValidNewSectionName(String s) {
-		if (s == null)
-			return false;
-		s = s.trim();
-		if (s.isEmpty())
-			return false;
-		for (var i = 0; i < s.length(); i++) {
-			var c = s.charAt(i);
-			if (c == '/' || c == '\\' || c == '[' || c == ']')
-				return false;
-		}
-		return true;
 	}
 
 	private ConfigMap load(String contents) throws IOException {

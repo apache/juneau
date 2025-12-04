@@ -37,8 +37,22 @@ import org.apache.juneau.parser.*;
  */
 public class Entry {
 
+	private static boolean isArray(Type t) {
+		if (! (t instanceof Class))
+			return false;
+		var c = (Class<?>)t;
+		return (c.isArray());
+	}
+	private static boolean isSimpleType(Type t) {
+		if (! (t instanceof Class))
+			return false;
+		var c = (Class<?>)t;
+		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
+	}
 	private final ConfigMapEntry configEntry;
+
 	private final Config config;
+
 	private final String value;
 
 	/**
@@ -543,21 +557,7 @@ public class Entry {
 		return isPresent() ? config.varSession.resolve(value) : null;
 	}
 
-	private static boolean isArray(Type t) {
-		if (! (t instanceof Class))
-			return false;
-		var c = (Class<?>)t;
-		return (c.isArray());
-	}
-
 	private boolean isEmpty() { return Utils.isEmpty(value); }  // NOAI
 
 	private boolean isNull() { return value == null; }
-
-	private static boolean isSimpleType(Type t) {
-		if (! (t instanceof Class))
-			return false;
-		var c = (Class<?>)t;
-		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
-	}
 }
