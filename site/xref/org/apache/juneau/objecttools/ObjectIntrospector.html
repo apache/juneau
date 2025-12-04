@@ -247,7 +247,7 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">public</strong> Object invokeMethod(String method, String args) <strong class="jxr_keyword">throws</strong> NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">if</strong> (object == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		Method m = parser.getBeanContext().getClassMeta(object.getClass()).getPublicMethods().get(method);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		Method m = parser.getBeanContext().getClassMeta(object.getClass()).getPublicMethods2().get(method);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchMethodException(method);
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">return</strong> invokeMethod(m, args == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> StringReader(args));

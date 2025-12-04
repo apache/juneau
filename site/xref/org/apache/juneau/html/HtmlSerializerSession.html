@@ -364,7 +364,7 @@
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">if</strong> (nn(swap))
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 			cm1 = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">if</strong> (cm1 == <strong class="jxr_keyword">null</strong> || ! cm1.isMapOrBean() || cm1.hasAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">if</strong> (cm1 == <strong class="jxr_keyword">null</strong> || ! cm1.isMapOrBean() || cm1.hasAnnotation2(HtmlLink.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		HtmlClassMeta cHtml = getHtmlClassMeta(cm1);
@@ -941,7 +941,7 @@
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isBean()) {
 <a class="jxr_linenumber" name="L935" href="#L935">935</a> 				BeanMap m = toBeanMap(o);
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 				<strong class="jxr_keyword">if</strong> (aType.hasAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 				<strong class="jxr_keyword">if</strong> (aType.hasAnnotation2(HtmlLink.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 					<strong class="jxr_keyword">var</strong> uriProperty = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 					<strong class="jxr_keyword">var</strong> nameProperty = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L939" href="#L939">939</a> 					aType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.uriProperty()), x -&gt; uriProperty.set(x.uriProperty()));
