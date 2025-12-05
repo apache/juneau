@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		String init(BeanMeta&lt;T&gt; beanMeta) {
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">var</strong> c = classMeta.getInnerClass();
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">var</strong> ci = classMeta.getInfo();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">var</strong> ci = classMeta;
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">var</strong> ap = ctx.getAnnotationProvider();
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">try</strong> {
@@ -1053,7 +1053,7 @@
 <a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 	<strong class="jxr_keyword">protected</strong> T newBean(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		<strong class="jxr_keyword">if</strong> (classMeta.isMemberClass()) {
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		<strong class="jxr_keyword">if</strong> (classMeta.isMemberClass() &amp;&amp; classMeta.isNotStatic()) {
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 			<strong class="jxr_keyword">if</strong> (nn(constructor))
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 				<strong class="jxr_keyword">return</strong> constructor.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 		} <strong class="jxr_keyword">else</strong> {

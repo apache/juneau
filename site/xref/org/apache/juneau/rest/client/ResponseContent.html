@@ -240,7 +240,7 @@
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">if</strong> (type.is(HttpResource.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 				type = (ClassMeta&lt;T&gt;)getClassMeta(BasicResource.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">var</strong> result = type.getInfo().getPublicConstructor(x -&gt; x.hasParameterTypes(HttpResponse.<strong class="jxr_keyword">class</strong>)).map(ci -&gt; safe(() -&gt; (T)ci.newInstance(response)));
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">var</strong> result = type.getPublicConstructor(x -&gt; x.hasParameterTypes(HttpResponse.<strong class="jxr_keyword">class</strong>)).map(ci -&gt; safe(() -&gt; (T)ci.newInstance(response)));
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">if</strong> (result.isPresent())
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 				<strong class="jxr_keyword">return</strong> result.get();
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
@@ -272,7 +272,7 @@
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 					<em class="jxr_comment">// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.</em>
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 					<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> &amp;&amp; ! type.is(String.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 						<strong class="jxr_keyword">var</strong> result2 = type.getInfo().getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).map(c -&gt; safe(() -&gt; c.&lt;T&gt;newInstance()));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 						<strong class="jxr_keyword">var</strong> result2 = type.getPublicConstructor(cons -&gt; cons.getParameterCount() == 0).map(c -&gt; safe(() -&gt; c.&lt;T&gt;newInstance()));
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 						<strong class="jxr_keyword">if</strong> (result2.isPresent())
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 							<strong class="jxr_keyword">return</strong> result2.get();
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 					}

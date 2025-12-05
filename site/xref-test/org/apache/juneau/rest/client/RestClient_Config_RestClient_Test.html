@@ -435,7 +435,7 @@
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object in(HttpPartType type, HttpPartSchema schema, String in, ClassMeta&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 				<strong class="jxr_keyword">if</strong> (c.isInstanceOf(ABean.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 				<strong class="jxr_keyword">if</strong> (c.isParentOf(ABean.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 					<strong class="jxr_keyword">return</strong> Json5.DEFAULT.read(in.substring(1),c);
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 				<strong class="jxr_keyword">return</strong> SimplePartParser.DEFAULT.parse(type,schema,in,c);
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {

@@ -300,7 +300,7 @@
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			isDyna = <span class="jxr_string">"*"</span>.equals(name);
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<em class="jxr_comment">// Do some annotation validation.</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">var</strong> ci = rawTypeMeta.getInfo();
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">var</strong> ci = rawTypeMeta;
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) {
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 				<strong class="jxr_keyword">var</strong> pt = getter.getParameterTypes();
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 				<strong class="jxr_keyword">if</strong> (isDyna) {
@@ -695,7 +695,7 @@
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">var</strong> si = setter == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : info(setter);
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 			<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		rstream(ap.find(a, getBeanMeta().getClassMeta().getInfo())).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		rstream(ap.find(a, getBeanMeta().getClassMeta())).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">if</strong> (nn(field)) {
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 			ap.find(a, fi).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L693" href="#L693">693</a> 			rstream(ap.find(a, info(field.getType()))).forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>()));
@@ -1104,7 +1104,7 @@
 <a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 				<strong class="jxr_keyword">var</strong> r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) &amp;&amp; (nn(getter) || nn(field)) ? get(m, pName) : <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 				<strong class="jxr_keyword">var</strong> propertyClass = rawTypeMeta.getInnerClass();
-<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 				<strong class="jxr_keyword">var</strong> pcInfo = rawTypeMeta.getInfo();
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 				<strong class="jxr_keyword">var</strong> pcInfo = rawTypeMeta;
 <a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 
 <a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 				<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> &amp;&amp; (isMap || isCollection)) {
 <a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 					invokeSetter(bean, pName, <strong class="jxr_keyword">null</strong>);

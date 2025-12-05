@@ -437,13 +437,13 @@
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (tc == COLLECTION) {
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 				ClassMeta et = sType.getElementType();
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 				<strong class="jxr_keyword">if</strong> (sType.isCollection() &amp;&amp; sType.getInfo().isChildOf(Set.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 				<strong class="jxr_keyword">if</strong> (sType.isCollection() &amp;&amp; sType.isChildOf(Set.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 					out.put(<span class="jxr_string">"uniqueItems"</span>, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 				out.put(<span class="jxr_string">"items"</span>, getSchema(et, <span class="jxr_string">"items"</span>, pNames, exampleAdded, descriptionAdded, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (tc == ARRAY) {
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 				ClassMeta et = sType.getElementType();
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 				<strong class="jxr_keyword">if</strong> (sType.isCollection() &amp;&amp; sType.getInfo().isChildOf(Set.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 				<strong class="jxr_keyword">if</strong> (sType.isCollection() &amp;&amp; sType.isChildOf(Set.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 					out.put(<span class="jxr_string">"uniqueItems"</span>, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 				out.put(<span class="jxr_string">"items"</span>, getSchema(et, <span class="jxr_string">"items"</span>, pNames, exampleAdded, descriptionAdded, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 
