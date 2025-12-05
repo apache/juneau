@@ -292,7 +292,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * Otherwise, returns c2.
 	 */
 	private static ClassMeta<?> getNarrowedClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
-		if (c2 == null || c2.getInfo().isParentOf(c1.getInnerClass()))
+		if (c2 == null || c2.isParentOf(c1.getInnerClass()))
 			return c1;
 		return c2;
 	}

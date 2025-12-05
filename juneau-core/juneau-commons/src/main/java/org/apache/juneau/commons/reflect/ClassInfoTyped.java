@@ -44,4 +44,6 @@ public class ClassInfoTyped<T> extends ClassInfo {
 		super(inner, innerType);
 	}
 
+	@Override
+	public T getPrimitiveDefault() { return (T)super.getPrimitiveDefault(); }
 }

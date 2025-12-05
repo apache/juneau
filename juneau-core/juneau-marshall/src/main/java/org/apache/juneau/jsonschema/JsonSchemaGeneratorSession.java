@@ -429,13 +429,13 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 			} else if (tc == COLLECTION) {
 				ClassMeta et = sType.getElementType();
-				if (sType.isCollection() && sType.getInfo().isChildOf(Set.class))
+				if (sType.isCollection() && sType.isChildOf(Set.class))
 					out.put("uniqueItems", true);
 				out.put("items", getSchema(et, "items", pNames, exampleAdded, descriptionAdded, null));
 
 			} else if (tc == ARRAY) {
 				ClassMeta et = sType.getElementType();
-				if (sType.isCollection() && sType.getInfo().isChildOf(Set.class))
+				if (sType.isCollection() && sType.isChildOf(Set.class))
 					out.put("uniqueItems", true);
 				out.put("items", getSchema(et, "items", pNames, exampleAdded, descriptionAdded, null));
 

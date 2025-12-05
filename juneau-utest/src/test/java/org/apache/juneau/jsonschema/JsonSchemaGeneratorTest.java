@@ -246,7 +246,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	public static class CustomBeanDefMapper extends BasicBeanDefMapper {
 		@Override
 		public String getId(ClassMeta<?> cm) {
-			return cm.getFullName();
+			return cm.getNameFull();
 		}
 	}
 
@@ -263,7 +263,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		}
 		@Override
 		public String getId(ClassMeta<?> cm) {
-			return cm.getFullName();
+			return cm.getNameFull();
 		}
 	}
 

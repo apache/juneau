@@ -28,15 +28,15 @@ class Setter_Test extends TestBase {
 	public static class TestClass {
 		public String publicField;
 		private String privateField;
-		
+
 		public void setPublicField(String value) {
 			this.publicField = value;
 		}
-		
+
 		public void setPrivateField(String value) {
 			this.privateField = value;
 		}
-		
+
 		public String getPrivateField() {
 			return privateField;
 		}
@@ -50,11 +50,11 @@ class Setter_Test extends TestBase {
 		TestClass obj = new TestClass();
 		Field field = TestClass.class.getField("publicField");
 		Setter setter = new Setter.FieldSetter(field);
-		
+
 		// Set value
 		setter.set(obj, "testValue");
 		assertEquals("testValue", obj.publicField);
-		
+
 		// Set null
 		setter.set(obj, null);
 		assertNull(obj.publicField);
@@ -69,7 +69,7 @@ class Setter_Test extends TestBase {
 		Field field = TestClass.class.getDeclaredField("privateField");
 		field.setAccessible(true);
 		Setter setter = new Setter.FieldSetter(field);
-		
+
 		// Set value
 		setter.set(obj, "testValue");
 		assertEquals("testValue", obj.getPrivateField());
@@ -83,9 +83,9 @@ class Setter_Test extends TestBase {
 		TestClass obj = new TestClass();
 		Field field = TestClass.class.getField("publicField");
 		Setter setter = new Setter.FieldSetter(field);
-		
+
 		// Type mismatch should throw ExecutableException
-		assertThrows(ExecutableException.class, () -> setter.set(obj, 123));
+		assertThrows(IllegalArgumentException.class, () -> setter.set(obj, 123));
 	}
 
 	//====================================================================================================
@@ -96,11 +96,11 @@ class Setter_Test extends TestBase {
 		TestClass obj = new TestClass();
 		Method method = TestClass.class.getMethod("setPublicField", String.class);
 		Setter setter = new Setter.MethodSetter(method);
-		
+
 		// Set value
 		setter.set(obj, "testValue");
 		assertEquals("testValue", obj.publicField);
-		
+
 		// Set null
 		setter.set(obj, null);
 		assertNull(obj.publicField);
@@ -114,7 +114,7 @@ class Setter_Test extends TestBase {
 		TestClass obj = new TestClass();
 		Method method = TestClass.class.getMethod("setPrivateField", String.class);
 		Setter setter = new Setter.MethodSetter(method);
-		
+
 		// Set value
 		setter.set(obj, "testValue");
 		assertEquals("testValue", obj.getPrivateField());
@@ -128,9 +128,9 @@ class Setter_Test extends TestBase {
 		TestClass obj = new TestClass();
 		Method method = TestClass.class.getMethod("setPublicField", String.class);
 		Setter setter = new Setter.MethodSetter(method);
-		
+
 		// Type mismatch should throw ExecutableException
-		assertThrows(ExecutableException.class, () -> setter.set(obj, 123));
+		assertThrows(IllegalArgumentException.class, () -> setter.set(obj, 123));
 	}
 
 	//====================================================================================================
@@ -141,7 +141,7 @@ class Setter_Test extends TestBase {
 		TestClass obj = new TestClass();
 		Method method = TestClass.class.getMethod("setPublicField", String.class);
 		Setter setter = new Setter.MethodSetter(method);
-		
+
 		// Null object - Method.invoke throws NPE directly, which is wrapped in ExecutableException
 		// However, the NPE might be thrown before the invoke, so we test with a valid object
 		// that causes an InvocationTargetException

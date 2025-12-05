@@ -70,8 +70,7 @@ public class HttpParts {
 	};
 
 	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {
-		var ci = x.getInfo();
-		return ci.getPublicConstructor(y -> y.hasParameterTypes(String.class)).orElseGet(() -> ci.getPublicConstructor(y -> y.hasParameterTypes(String.class, String.class)).orElse(null));
+		return x.getPublicConstructor(y -> y.hasParameterTypes(String.class)).orElseGet(() -> x.getPublicConstructor(y -> y.hasParameterTypes(String.class, String.class)).orElse(null));
 	};
 
 	/**

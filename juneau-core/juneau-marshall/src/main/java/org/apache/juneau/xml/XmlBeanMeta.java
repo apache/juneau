@@ -45,7 +45,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 
 		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 			var c = beanMeta.getClassMeta().getInnerClass();
-			var ci = beanMeta.getClassMeta().getInfo();
+			var ci = beanMeta.getClassMeta();
 			var defaultFormat = Value.<XmlFormat>empty();
 
 			beanMeta.getClassMeta().getBeanContext().getAnnotationProvider().find(Xml.class, ci).stream().map(AnnotationInfo::inner).forEach(x -> {

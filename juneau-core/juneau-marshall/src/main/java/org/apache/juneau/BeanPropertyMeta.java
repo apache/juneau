@@ -292,7 +292,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			isDyna = "*".equals(name);
 
 			// Do some annotation validation.
-			var ci = rawTypeMeta.getInfo();
+			var ci = rawTypeMeta;
 			if (nn(getter)) {
 				var pt = getter.getParameterTypes();
 				if (isDyna) {
@@ -687,7 +687,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		var si = setter == null ? null : info(setter);
 		if (a == null)
 			return l;
-		rstream(ap.find(a, getBeanMeta().getClassMeta().getInfo())).forEach(x -> l.add(x.inner()));
+		rstream(ap.find(a, getBeanMeta().getClassMeta())).forEach(x -> l.add(x.inner()));
 		if (nn(field)) {
 			ap.find(a, fi).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, info(field.getType()))).forEach(x -> l.add(x.inner()));
@@ -1096,7 +1096,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 				var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
 				var propertyClass = rawTypeMeta.getInnerClass();
-				var pcInfo = rawTypeMeta.getInfo();
+				var pcInfo = rawTypeMeta;
 
 				if (value == null && (isMap || isCollection)) {
 					invokeSetter(bean, pName, null);

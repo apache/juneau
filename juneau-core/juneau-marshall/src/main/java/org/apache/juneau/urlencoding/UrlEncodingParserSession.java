@@ -262,10 +262,10 @@ public class UrlEncodingParserSession extends UonParserSession {
 			var m = new TreeMap<Integer,Object>();
 			parseIntoMap2(r, m, sType, c2);
 			c2.addAll(m.values());
-			if (sType.isArray())
-				o = CollectionUtils.toArray(c2, sType.getElementType().getInnerClass());
-			else if (sType.isArgs())
+			if (sType.isArgs())
 				o = c2.toArray(new Object[c2.size()]);
+			else if (sType.isArray())
+				o = CollectionUtils.toArray(c2, sType.getElementType().getInnerClass());
 			else
 				o = c2;
 		} else {

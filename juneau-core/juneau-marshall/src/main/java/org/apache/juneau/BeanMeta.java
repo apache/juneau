@@ -194,7 +194,7 @@ public class BeanMeta<T> {
 
 		String init(BeanMeta<T> beanMeta) {
 			var c = classMeta.getInnerClass();
-			var ci = classMeta.getInfo();
+			var ci = classMeta;
 			var ap = ctx.getAnnotationProvider();
 
 			try {
@@ -1045,7 +1045,7 @@ public class BeanMeta<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected T newBean(Object outer) throws ExecutableException {
-		if (classMeta.isMemberClass()) {
+		if (classMeta.isMemberClass() && classMeta.isNotStatic()) {
 			if (nn(constructor))
 				return constructor.<T>newInstance(outer);
 		} else {

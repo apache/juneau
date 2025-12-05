@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.objecttools;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 
@@ -239,9 +241,13 @@ public class ObjectIntrospector {
 	public Object invokeMethod(String method, String args) throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
 		if (object == null)
 			return null;
-		Method m = parser.getBeanContext().getClassMeta(object.getClass()).getPublicMethods2().get(method);
-		if (m == null)
-			throw new NoSuchMethodException(method);
-		return invokeMethod(m, args == null ? null : new StringReader(args));
+		var m = parser.getBeanContext()
+			.getClassMeta(object.getClass())
+			.getPublicMethods()
+			.stream()
+			.filter(x -> x.isNotDeprecated() && eq(x.getSignature(), method))
+			.findFirst()
+			.orElseThrow(() -> new NoSuchMethodException(method));
+		return invokeMethod(m.inner(), args == null ? null : new StringReader(args));
 	}
 }

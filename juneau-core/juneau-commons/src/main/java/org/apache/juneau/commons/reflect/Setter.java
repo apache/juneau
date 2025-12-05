@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+
 import java.lang.reflect.*;
 
 /**
@@ -73,19 +75,20 @@ public interface Setter {
 	 */
 	static class FieldSetter implements Setter {
 
-		private final Field f;
+		private final FieldInfo f;
 
+		@Deprecated
 		public FieldSetter(Field f) {
+			this.f = info(f);
+		}
+
+		public FieldSetter(FieldInfo f) {
 			this.f = f;
 		}
 
 		@Override /* Overridden from Setter */
 		public void set(Object object, Object value) throws ExecutableException {
-			try {
-				f.set(object, value);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				throw new ExecutableException(e);
-			}
+			f.set(object, value);
 		}
 	}
 
@@ -99,19 +102,20 @@ public interface Setter {
 	 */
 	static class MethodSetter implements Setter {
 
-		private final Method m;
+		private final MethodInfo m;
 
+		@Deprecated
 		public MethodSetter(Method m) {
+			this.m = info(m);
+		}
+
+		public MethodSetter(MethodInfo m) {
 			this.m = m;
 		}
 
 		@Override /* Overridden from Setter */
 		public void set(Object object, Object value) throws ExecutableException {
-			try {
-				m.invoke(object, value);
-			} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-				throw new ExecutableException(e);
-			}
+			m.invoke(object, value);
 		}
 	}
 

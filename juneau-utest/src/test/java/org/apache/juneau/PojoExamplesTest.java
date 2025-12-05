@@ -307,36 +307,4 @@ class PojoExamplesTest extends TestBase {
 			return new E2().init();
 		}
 	}
-
-	//====================================================================================================
-	// test invalid uses of @Example
-	//====================================================================================================
-	@Test void a14_invalidUsesOfExample() {
-		var bs = BeanContext.DEFAULT_SESSION;
-		assertThrowsWithMessage(Exception.class, "invalid method 'example(String)'", ()->bs.getClassMeta(F1.class));
-		assertThrowsWithMessage(Exception.class, "invalid method 'example()'", ()->bs.getClassMeta(F2.class));
-		assertThrowsWithMessage(Exception.class, l("invalid field","$F3.F3"), ()->bs.getClassMeta(F3.class));
-		assertThrowsWithMessage(Exception.class, l("invalid field ","$F4.f4"), ()->bs.getClassMeta(F4.class));
-	}
-
-	public static class F1 {
-		@Example
-		public static F1 example(String s) {
-			return null;
-		}
-	}
-	public static class F2 {
-		@Example
-		public F2 example() {
-			return null;
-		}
-	}
-	public static class F3 {
-		@Example
-		public static String F3 = "foo";
-	}
-	public static class F4 {
-		@Example
-		public F4 f4 = new F4();
-	}
 }

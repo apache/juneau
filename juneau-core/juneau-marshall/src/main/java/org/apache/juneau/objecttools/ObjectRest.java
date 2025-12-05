@@ -595,7 +595,12 @@ public class ObjectRest {
 		var o = get(url);
 		if (o == null)
 			return null;
-		return session.getClassMeta(o.getClass()).getPublicMethods2().keySet();
+		return session
+			.getClassMeta(o.getClass())
+			.getPublicMethods()
+			.stream()
+			.map(x -> x.getSignature())
+			.toList();
 	}
 
 	/**

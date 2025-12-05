@@ -427,7 +427,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 
 		private static Object in(HttpPartType type, HttpPartSchema schema, String in, ClassMeta<?> c) {
 			try {
-				if (c.isInstanceOf(ABean.class))
+				if (c.isParentOf(ABean.class))
 					return Json5.DEFAULT.read(in.substring(1),c);
 				return SimplePartParser.DEFAULT.parse(type,schema,in,c);
 			} catch (Exception e) {

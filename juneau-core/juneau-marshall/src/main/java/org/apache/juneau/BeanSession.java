@@ -1177,7 +1177,7 @@ public class BeanSession extends ContextSession {
 			// If no conversion needed, then just return the value.
 			// Don't include maps or collections, because child elements may need conversion.
 			if (tc.isInstance(value))
-				if (! ((to.isMap() && to.getValueType().isNotObject()) || ((to.isCollection() || to.isOptional()) && to.getElementType().isNotObject())))
+				if (! ((to.isMap() && ! to.getValueType().is(Object.class)) || ((to.isCollection() || to.isOptional()) && ! to.getElementType().isObject())))
 					return (T)value;
 
 			ObjectSwap swap = to.getSwap(this);
@@ -1233,7 +1233,7 @@ public class BeanSession extends ContextSession {
 						if (tc == Byte.TYPE)
 							return (T)(Byte.valueOf(b ? (byte)1 : 0));
 					} else if (isNullOrEmpty(value)) {
-						return (T)to.info.getPrimitiveDefault();
+						return to.getPrimitiveDefault();
 					} else {
 						var s = value.toString();
 						var multiplier = (tc == Integer.TYPE || tc == Short.TYPE || tc == Long.TYPE) ? getMultiplier(s) : 1;
@@ -1263,14 +1263,14 @@ public class BeanSession extends ContextSession {
 					}
 				} else if (to.isChar()) {
 					if (isNullOrEmpty(value))
-						return (T)to.info.getPrimitiveDefault();
+						return to.getPrimitiveDefault();
 					return (T)parseCharacter(value);
 				} else if (to.isBoolean()) {
 					if (from.isNumber()) {
 						var i = ((Number)value).intValue();
 						return (T)(i == 0 ? Boolean.FALSE : Boolean.TRUE);
 					} else if (isNullOrEmpty(value)) {
-						return (T)to.info.getPrimitiveDefault();
+						return to.getPrimitiveDefault();
 					} else {
 						return (T)Boolean.valueOf(value.toString());
 					}
@@ -1397,14 +1397,14 @@ public class BeanSession extends ContextSession {
 						var valueType = to.getValueType();
 						((Map<?,?>)value).forEach((k, v) -> {
 							var k2 = k;
-							if (keyType.isNotObject()) {
+							if (! keyType.isObject()) {
 								if (keyType.isString() && k.getClass() != Class.class)
 									k2 = k.toString();
 								else
 									k2 = convertToMemberType(m, k, keyType);
 							}
 							var v2 = v;
-							if (valueType.isNotObject())
+							if (! valueType.isObject())
 								v2 = convertToMemberType(m, v, valueType);
 							m.put(k2, v2);
 						});
@@ -1466,7 +1466,7 @@ public class BeanSession extends ContextSession {
 					var ws = ctx.getBeanToStringSerializer();
 					if (nn(ws))
 						return (T)ws.serialize(value);
-				} else if (from.isClass()) {
+				} else if (from.is(Class.class)) {
 					return (T)((Class<?>)value).getName();
 				}
 				return (T)value.toString();
@@ -1505,7 +1505,7 @@ public class BeanSession extends ContextSession {
 					var typeName = m2.getString(getBeanTypePropertyName(to));
 					if (nn(typeName)) {
 						var cm = to.getBeanRegistry().getClassMeta(typeName);
-						if (nn(cm) && to.info.isParentOf(cm.innerClass))
+						if (nn(cm) && to.isParentOf(cm.innerClass))
 							return (T)m2.cast(cm);
 					}
 				}

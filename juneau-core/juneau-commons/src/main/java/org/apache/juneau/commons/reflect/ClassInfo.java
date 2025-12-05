@@ -1895,6 +1895,14 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type {
 		return false;
 	}
 
+	public boolean isAny(Class<?> t1, Class<?> t2) {
+		return inner == t1 || inner == t2;
+	}
+
+	public boolean isAny(Class<?> t1, Class<?> t2, Class<?> t3) {
+		return inner == t1 || inner == t2 || inner == t3;
+	}
+
 	/**
 	 * Returns <jk>true</jk> if this class is an array.
 	 *
