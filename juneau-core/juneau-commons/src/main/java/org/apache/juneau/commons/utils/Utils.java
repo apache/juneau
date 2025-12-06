@@ -1069,7 +1069,7 @@ public class Utils {
 	 * @return A thread-safe memoizing wrapper around the supplier.
 	 * @throws NullPointerException if supplier is <jk>null</jk>.
 	 */
-	public static <T> Supplier<T> memoize(Supplier<T> supplier) {
+	public static <T> OptionalSupplier<T> memoize(Supplier<T> supplier) {
 		assertArgNotNull("supplier", supplier);
 
 		var cache = new AtomicReference<Optional<T>>();

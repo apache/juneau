@@ -27,8 +27,9 @@ import java.util.function.*;
  * A thread-safe supplier that caches the result of the first call and supports resetting the cache.
  *
  * <p>
- * This class provides both standard {@link Supplier#get()} functionality and a {@link #reset()} method
- * to clear the cache, forcing recomputation on the next call to {@link #get()}.
+ * This class extends {@link OptionalSupplier} to provide both standard {@link Supplier#get()} functionality
+ * and a {@link #reset()} method to clear the cache, forcing recomputation on the next call to {@link #get()}.
+ * It also inherits all Optional-like convenience methods from {@link OptionalSupplier}.
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
@@ -40,6 +41,11 @@ import java.util.function.*;
  *
  * 	<jc>// Subsequent calls return cached value</jc>
  * 	String <jv>result2</jv> = <jv>supplier</jv>.get();
+ *
+ * 	<jc>// Use Optional-like methods</jc>
+ * 	<jk>if</jk> (<jv>supplier</jv>.isPresent()) {
+ * 		String <jv>upper</jv> = <jv>supplier</jv>.map(String::toUpperCase).orElse(<js>"default"</js>);
+ * 	}
  *
  * 	<jc>// Reset forces recomputation on next get()</jc>
  * 	<jv>supplier</jv>.reset();
@@ -58,16 +64,18 @@ import java.util.function.*;
  * 	<li>The cached value can be <jk>null</jk> if the supplier returns <jk>null</jk>.
  * 	<li>After reset, the next get() will recompute the value.
  * 	<li>This is particularly useful for testing when configuration changes and cached values need to be recalculated.
+ * 	<li>Inherits all Optional-like methods from {@link OptionalSupplier} (isPresent(), isEmpty(), map(), orElse(), etc.).
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jm'>{@link org.apache.juneau.commons.utils.Utils#memoizeResettable(Supplier)}
+ * 	<li class='jc'>{@link OptionalSupplier} - Base interface providing Optional-like methods
  * </ul>
  *
  * @param <T> The type of value supplied.
  */
-public class ResettableSupplier<T> implements Supplier<T> {
+public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	private final Supplier<T> supplier;
 	private final AtomicReference<Optional<T>> cache = new AtomicReference<>();
 

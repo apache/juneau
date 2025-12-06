@@ -35,6 +35,7 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
@@ -152,24 +153,24 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childUnswapMap;                                       // Maps swap subclasses to ObjectSwaps.
 	private final Supplier<String> dictionaryName;                                                                  // The dictionary name of this class if it has one.
 	private final ClassMeta<?> elementType;                                                                         // If ARRAY or COLLECTION, the element class type.
-	private final Supplier<String> example;                                                                         // Example JSON.
-	private final Supplier<FieldInfo> exampleField;                                                                 // The @Example-annotated field (if it has one).
-	private final Supplier<MethodInfo> exampleMethod;                                                               // The example() or @Example-annotated method (if it has one).
+	private final OptionalSupplier<String> example;                                                                         // Example JSON.
+	private final OptionalSupplier<FieldInfo> exampleField;                                                                 // The @Example-annotated field (if it has one).
+	private final OptionalSupplier<MethodInfo> exampleMethod;                                                               // The example() or @Example-annotated method (if it has one).
 	private final Supplier<BidiMap<Object,String>> enumValues;
 	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
-	private final Supplier<MethodInfo> fromStringMethod;                                                            // Static fromString(String) or equivalent method
-	private final Supplier<ClassInfoTyped<? extends T>> implClass2;                                                 // The implementation class to use if this is an interface.
-	private final InvocationHandler invocationHandler;                                                              // The invocation handler for this class (if it has one).
+	private final OptionalSupplier<MethodInfo> fromStringMethod;                                                            // Static fromString(String) or equivalent method
+	private final OptionalSupplier<ClassInfoTyped<? extends T>> implClass;                                                 // The implementation class to use if this is an interface.
+	private final OptionalSupplier<InvocationHandler> proxyInvocationHandler;                                                              // The invocation handler for this class (if it has one).
 	private final ClassMeta<?> keyType;                                                                             // If MAP, the key class type.
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 	private final Supplier<MarshalledFilter> marshalledFilter;
 	private final Supplier<Property<T,Object>> nameProperty;                                            // The method to set the name on an object (if it has one).
-	private final Supplier<ConstructorInfo> noArgConstructor;                                                       // The no-arg constructor for this class (if it has one).
+	private final OptionalSupplier<ConstructorInfo> noArgConstructor;                                                       // The no-arg constructor for this class (if it has one).
 	private final String notABeanReason;                                                                            // If this isn't a bean, the reason why.
 	private final Supplier<Property<T,Object>> parentProperty;                                          // The method to set the parent on an object (if it has one).
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
-	private final Supplier<ConstructorInfo> stringConstructor;                                                     // The X(String) constructor (if it has one).
+	private final OptionalSupplier<ConstructorInfo> stringConstructor;                                                     // The X(String) constructor (if it has one).
 	private final ObjectSwap<T,?>[] swaps;                                                                          // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final String typePropertyName;                                                                          // The property name of the _type property for this class and subclasses.
@@ -264,7 +265,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			marshalledFilter = memoize(()->findMarshalledFilter());
 			builderSwap = memoize(()->findBuilderSwap());
 			example = memoize(()->findExample());
-			implClass2 = memoize(()->findImplClass());
+			implClass = memoize(()->findImplClass());
 
 			var _elementType = (ClassMeta<?>)null;
 			var _keyType = (ClassMeta<?>)null;
@@ -292,25 +293,20 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				}
 			}
 
-			BeanMeta<T> _beanMeta = null;
+			var _beanMeta = (BeanMeta<T>)null;
 			var _beanRegistry = new Value<BeanRegistry>();
 
 			if (! cat.isUnknown()) {
 				notABeanReason = "Known non-bean type";
 			} else {
 				try {
-					_beanMeta = new BeanMeta<>(ClassMeta.this, beanContext, beanFilter.get(), null, implClass2.get() == null ? null : noArgConstructor.get());
+					_beanMeta = new BeanMeta<>(ClassMeta.this, beanContext, beanFilter.get(), null, implClass.get() == null ? null : noArgConstructor.get());
 					notABeanReason = _beanMeta.notABeanReason;
 					_beanRegistry.set(_beanMeta.beanRegistry);
 				} catch (RuntimeException e) {
 					notABeanReason = e.getMessage();
 				}
 			}
-
-			ap.find(Bean.class, this).stream().map(AnnotationInfo::inner).forEach(x2 -> {
-				if (x2.dictionary().length != 0)
-					_beanRegistry.set(new BeanRegistry(beanContext, null, x2.dictionary()));
-			});
 
 			this.beanMeta = notABeanReason == null ? _beanMeta : null;
 			if (nn(this.beanMeta))
@@ -343,7 +339,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			this.swaps = _swaps.isEmpty() ? null : _swaps.toArray(new ObjectSwap[_swaps.size()]);
 			this.typePropertyName = opt(beanMeta).map(x2 -> x2.typePropertyName).orElse(null);
 
-			this.invocationHandler = (nn(beanMeta) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta) : null;
+			this.proxyInvocationHandler = ()->(nn(beanMeta) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta) : null;
 			this.beanRegistry = _beanRegistry.get();
 
 			this.childSwaps = childSwaps;
@@ -370,7 +366,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.elementType = null;
 		this.keyType = null;
 		this.valueType = null;
-		this.invocationHandler = null;
+		this.proxyInvocationHandler = null;
 		this.beanMeta = null;
 		this.typePropertyName = null;
 		this.notABeanReason = null;
@@ -388,7 +384,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.marshalledFilter = memoize(()->findMarshalledFilter());
 		this.builderSwap = memoize(()->findBuilderSwap());
 		this.example = memoize(()->findExample());
-		this.implClass2 = memoize(()->findImplClass());
+		this.implClass = memoize(()->findImplClass());
 		this.enumValues = memoize(()->findEnumValues());
 		this.dictionaryName = memoize(()->findBeanDictionaryName());
 	}
@@ -410,7 +406,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.elementType = elementType;
 		this.keyType = keyType;
 		this.valueType = valueType;
-		this.invocationHandler = mainType.invocationHandler;
+		this.proxyInvocationHandler = mainType.proxyInvocationHandler;
 		this.beanMeta = mainType.beanMeta;
 		this.typePropertyName = mainType.typePropertyName;
 		this.notABeanReason = mainType.notABeanReason;
@@ -428,10 +424,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.marshalledFilter = mainType.marshalledFilter;
 		this.builderSwap = mainType.builderSwap;
 		this.example = mainType.example;
-		this.implClass2 = mainType.implClass2;
+		this.implClass = mainType.implClass;
 		this.enumValues = mainType.enumValues;
 		this.dictionaryName = mainType.dictionaryName;
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this class can be instantiated as a bean.
 	 * Returns <jk>false</jk> if this is a non-static member class and the outer object does not match the class type of
@@ -458,7 +455,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public boolean canCreateNewInstance() {
 		if (isMemberClass() && isNotStatic())
 			return false;
-		if (nn(noArgConstructor.get()) || nn(getProxyInvocationHandler()) || (super.isArray() && elementType.canCreateNewInstance()))
+		if (noArgConstructor.isPresent() || proxyInvocationHandler.isPresent() || (isArray() && elementType.canCreateNewInstance()))
 			return true;
 		return false;
 	}
@@ -475,7 +472,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 */
 	public boolean canCreateNewInstance(Object outer) {
 		if (isMemberClass() && isNotStatic())
-			return nn(outer) && nn(noArgConstructor.get()) && noArgConstructor.get().hasParameterTypes(outer.getClass());
+			return nn(outer) && noArgConstructor.map(x -> x.hasParameterTypes(outer.getClass())).orElse(false);
 		return canCreateNewInstance();
 	}
 
@@ -488,11 +485,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return <jk>true</jk> if this class has a no-arg constructor or invocation handler.
 	 */
 	public boolean canCreateNewInstanceFromString(Object outer) {
-		if (nn(fromStringMethod.get()))
+		if (fromStringMethod.isPresent())
 			return true;
-		if (nn(stringConstructor.get())) {
+		if (stringConstructor.isPresent()) {
 			if (isMemberClass() && isNotStatic())
-				return nn(outer) && stringConstructor.get().hasParameterTypes(outer.getClass(), String.class);
+				return nn(outer) && stringConstructor.map(x -> x.hasParameterTypes(outer.getClass(), String.class)).orElse(false);
 			return true;
 		}
 		return false;
@@ -591,13 +588,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	/**
-	 * Returns the no-arg constructor for this class.
-	 *
-	 * @return The no-arg constructor for this class, or <jk>null</jk> if it does not exist.
-	 */
-	public ConstructorInfo getConstructor() { return noArgConstructor.get(); }
-
-	/**
 	 * Returns the bean dictionary name associated with this class.
 	 *
 	 * <p>
@@ -629,11 +619,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	@SuppressWarnings({ "unchecked" })
 	public T getExample(BeanSession session, JsonParserSession jpSession) {
 		try {
-			if (nn(example.get()))
+			if (example.isPresent())
 				return jpSession.parse(example.get(), this);
-			if (nn(exampleMethod.get()))
+			if (exampleMethod.isPresent())
 				return (T)exampleMethod.get().invokeLenient(null, session);
-			if (nn(exampleField.get()))
+			if (exampleField.isPresent())
 				return (T)exampleField.get().get(null);
 
 			if (isCollection()) {
@@ -700,9 +690,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The no-arg constructor for this class, or <jk>null</jk> if it does not exist.
 	 */
 	public ConstructorInfo getImplClassConstructor(Visibility conVis) {
-		if (nn(implClass2.get()))
-			return implClass2.get().getNoArgConstructor(conVis).orElse(null);
-		return null;
+		return implClass.map(x -> x.getNoArgConstructor(conVis).orElse(null)).orElse(null);
 	}
 
 	/**
@@ -778,12 +766,42 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public Property<T,Object> getParentProperty() { return parentProperty.get(); }
 
 	/**
-	 * Returns a calculated property on this context.
+	 * Returns a lazily-computed, cached property value for this {@link ClassMeta} instance.
 	 *
-	 * @param <T2> The type to convert the property to.
-	 * @param name The name of the property.
-	 * @param function The function used to create this property.
-	 * @return The property value.  Never <jk>null</jk>.
+	 * <p>
+	 * This method provides a memoization mechanism for expensive computations. The property value is computed
+	 * on the first call using the provided function, then cached for subsequent calls with the same property name.
+	 *
+	 * <p>
+	 * The function is only invoked once per property name per {@link ClassMeta} instance. Subsequent calls
+	 * with the same name will return the cached value without re-invoking the function.
+	 *
+	 * <h5 class='section'>Thread Safety:</h5>
+	 * <p>
+	 * This method is thread-safe. If multiple threads call this method simultaneously with the same property name,
+	 * the function may be invoked multiple times, but only one result will be cached and returned.
+	 *
+	 * <h5 class='section'>Usage:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Compute and cache an expensive property</jc>
+	 * 	Optional&lt;String&gt; <jv>computedValue</jv> = classMeta.<jsm>getProperty</jsm>(<js>"expensiveProperty"</js>, cm -&gt; {
+	 * 		<jc>// Expensive computation that only runs once</jc>
+	 * 		<jk>return</jk> performExpensiveComputation(cm);
+	 * 	});
+	 *
+	 * 	<jc>// Subsequent calls return cached value</jc>
+	 * 	Optional&lt;String&gt; <jv>cached</jv> = classMeta.<jsm>getProperty</jsm>(<js>"expensiveProperty"</js>, cm -&gt; {
+	 * 		<jc>// This function is NOT called again</jc>
+	 * 		<jk>return</jk> performExpensiveComputation(cm);
+	 * 	});
+	 * </p>
+	 *
+	 * @param <T2> The type of the property value.
+	 * @param name The unique name identifying this property. Used as the cache key.
+	 * @param function The function that computes the property value. Receives this {@link ClassMeta} instance as input.
+	 * 	Only invoked if the property hasn't been computed yet. Can return <jk>null</jk>.
+	 * @return An {@link Optional} containing the property value if the function returned a non-null value,
+	 * 	otherwise an empty {@link Optional}. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
@@ -800,7 +818,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The interface proxy invocation handler, or <jk>null</jk> if it does not exist.
 	 */
-	public InvocationHandler getProxyInvocationHandler() { return invocationHandler; }
+	public InvocationHandler getProxyInvocationHandler() { return proxyInvocationHandler.get(); }
 
 	/**
 	 * Returns the transform for this class for creating instances from a Reader.
@@ -1284,9 +1302,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public T newInstance() throws ExecutableException {
 		if (super.isArray())
 			return (T)Array.newInstance(inner().getComponentType(), 0);
-		var c = getConstructor();
-		if (nn(c))
-			return c.<T>newInstance();
+		if (noArgConstructor.isPresent())
+			return noArgConstructor.get().newInstance();
 		var h = getProxyInvocationHandler();
 		if (nn(h))
 			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(inner(), java.io.Serializable.class), h);
@@ -1303,7 +1320,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public T newInstance(Object outer) throws ExecutableException {
-		if (isMemberClass() && isNotStatic())
+		if (isMemberClass() && isNotStatic() && noArgConstructor.isPresent())
 			return noArgConstructor.get().<T>newInstance(outer);
 		return newInstance();
 	}
@@ -1335,15 +1352,13 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return t;
 		}
 
-		var m = fromStringMethod.get();
-		if (nn(m)) {
-			return (T)m.invoke(null, arg);
-		}
-		var c = stringConstructor.get();
-		if (nn(c)) {
+		if (fromStringMethod.isPresent())
+			return (T)fromStringMethod.get().invoke(null, arg);
+
+		if (stringConstructor.isPresent()) {
 			if (isMemberClass() && isNotStatic())
-				return c.<T>newInstance(outer, arg);
-			return c.<T>newInstance(arg);
+				return stringConstructor.get().<T>newInstance(outer, arg);
+			return stringConstructor.get().<T>newInstance(arg);
 		}
 		throw new ExecutableException("No string constructor or valueOf(String) method found for class '" + inner().getName() + "'");
 	}
@@ -1649,8 +1664,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (is(Object.class))
 			return null;
 
-		if (implClass2.get() != null)
-			return implClass2.get().getPublicConstructor(x -> x.hasNumParameters(0)).orElse(null);
+		if (implClass.isPresent())
+			return implClass.get().getPublicConstructor(x -> x.hasNumParameters(0)).orElse(null);
 
 		if (isAbstract())
 			return null;
@@ -1741,8 +1756,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (is(Object.class) || isAbstract())
 			return null;
 
-		if (implClass2.get() != null)
-			return implClass2.get().getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null);
+		if (implClass.isPresent())
+			return implClass.get().getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null);
 
 		if (isAbstract())
 			return null;
