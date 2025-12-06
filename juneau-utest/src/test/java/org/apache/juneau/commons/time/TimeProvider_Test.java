@@ -38,11 +38,6 @@ class TimeProvider_Test extends TestBase {
 		assertNotNull(TimeProvider.INSTANCE);
 	}
 
-	@Test
-	void a02_instanceIsTimeProvider() {
-		assertTrue(TimeProvider.INSTANCE instanceof TimeProvider);
-	}
-
 	//====================================================================================================
 	// getSystemDefaultZoneId() tests
 	//====================================================================================================

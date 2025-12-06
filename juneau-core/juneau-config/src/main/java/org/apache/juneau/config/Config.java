@@ -27,7 +27,6 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;

@@ -1590,7 +1590,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		if (setterMethod.isPresent()) {
 			builder.setter(setterMethod.get().accessible());
-			
+
 			// Try to find a corresponding getter method (even if not annotated)
 			// If setter is "setName", look for "getName" or "isName"
 			var setterName = setterMethod.get().getSimpleName();
@@ -1601,7 +1601,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 				var getter = getAllMethods()
 					.stream()
-					.filter(x -> !x.isStatic() && x.hasNumParameters(0) && 
+					.filter(x -> !x.isStatic() && x.hasNumParameters(0) &&
 						(x.hasName(getterName1) || x.hasName(getterName2)) &&
 						!x.getReturnType().is(Void.TYPE))
 					.findFirst();
@@ -1618,7 +1618,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 					if (field.isPresent()) {
 						var f = field.get().accessible();
-						builder.getter(obj -> (Object)f.get(obj));
+						builder.getter(obj -> f.get(obj));
 					}
 				}
 			}
@@ -1682,7 +1682,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		if (setterMethod.isPresent()) {
 			builder.setter(setterMethod.get().accessible());
-			
+
 			// Try to find a corresponding getter method (even if not annotated)
 			// If setter is "setParent", look for "getParent" or "isParent"
 			var setterName = setterMethod.get().getSimpleName();
@@ -1693,7 +1693,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 				var getter = getAllMethods()
 					.stream()
-					.filter(x -> !x.isStatic() && x.hasNumParameters(0) && 
+					.filter(x -> !x.isStatic() && x.hasNumParameters(0) &&
 						(x.hasName(getterName1) || x.hasName(getterName2)) &&
 						!x.getReturnType().is(Void.TYPE))
 					.findFirst();
@@ -1710,7 +1710,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 					if (field.isPresent()) {
 						var f = field.get().accessible();
-						builder.getter(obj -> (Object)f.get(obj));
+						builder.getter(obj -> f.get(obj));
 					}
 				}
 			}

@@ -28,8 +28,7 @@ import org.apache.juneau.commons.function.*;
  *
  * <p>
  * This class provides a flexible, builder-based approach to defining properties on objects,
- * supporting both method-based and field-based access patterns. It's an improvement over
- * {@link Setter} by providing bidirectional access (getters and setters) and type safety.
+ * supporting both method-based and field-based access patterns.
  *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
@@ -72,7 +71,6 @@ import org.apache.juneau.commons.function.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link Setter} - Legacy setter interface
  * 	<li class='jc'>{@link FieldInfo} - Field introspection
  * 	<li class='jc'>{@link MethodInfo} - Method introspection
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflect">juneau-commons-reflect</a>

@@ -235,7 +235,7 @@ public class ParserSession extends BeanSession {
 	 * @param parent The parent to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected static final void setParent(ClassMeta<?> cm, Object o, Object parent) throws ExecutableException {
 		Property m = cm.getParentProperty();
 		if (nn(m) && m.canWrite())
