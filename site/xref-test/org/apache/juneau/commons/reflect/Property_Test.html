@@ -98,8 +98,8 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> obj = <strong class="jxr_keyword">new</strong> TestClass();
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		obj.setPublicField(<span class="jxr_string">"testValue"</span>);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(<span class="jxr_string">"testValue"</span>, prop.get(obj));
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertTrue(prop.hasGetter());
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertFalse(prop.hasSetter());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertTrue(prop.canRead());
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertFalse(prop.canWrite());
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_comment">//====================================================================================================</em>
@@ -114,8 +114,8 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> obj = <strong class="jxr_keyword">new</strong> TestClass();
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		prop.set(obj, <span class="jxr_string">"testValue"</span>);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertEquals(<span class="jxr_string">"testValue"</span>, obj.getPublicField());
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertFalse(prop.hasGetter());
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertTrue(prop.hasSetter());
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertFalse(prop.canRead());
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertTrue(prop.canWrite());
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_comment">//====================================================================================================</em>
@@ -431,8 +431,8 @@
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 			.build();
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		assertNotNull(prop);
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertTrue(prop.hasGetter());
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		assertTrue(prop.hasSetter());
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertTrue(prop.canRead());
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		assertTrue(prop.canWrite());
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 	<em class="jxr_comment">//====================================================================================================</em>

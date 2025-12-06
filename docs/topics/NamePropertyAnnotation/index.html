@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">@NameProperty Annotation | Apache Juneau</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://juneau.apache.org/docs/topics/NamePropertyAnnotation"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="@NameProperty Annotation | Apache Juneau"><meta data-rh="true" name="description" content="The @NameProperty annotation is used to identify a setter method or field for setting the name of a POJO as it&#x27;s known by its parent object."><meta data-rh="true" property="og:description" content="The @NameProperty annotation is used to identify a setter method or field for setting the name of a POJO as it&#x27;s known by its parent object."><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://juneau.apache.org/docs/topics/NamePropertyAnnotation"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/topics/NamePropertyAnnotation" hreflang="en"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/topics/NamePropertyAnnotation" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://DVIGEYTUK7-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"2.4.7. @NameProperty Annotation","item":"https://juneau.apache.org/docs/topics/NamePropertyAnnotation"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Apache Juneau" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.3bd1d0d5.css">
-<script src="/assets/js/runtime~main.f638afb0.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.8647e60b.js" defer="defer"></script>
 <script src="/assets/js/main.bea4614e.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -16,8 +16,8 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="requirements">Requirements<a href="#requirements" class="hash-link" aria-label="Direct link to Requirements" title="Direct link to Requirements">​</a></h2>
 <ul>
 <li>Must be an <strong>instance</strong> method or field (not static)</li>
-<li>For methods: Must accept exactly one parameter of type <code>String</code></li>
-<li>For fields: Must be of type <code>String</code></li>
+<li>For methods: Must accept exactly one parameter (any type)</li>
+<li>For fields: Can be any type</li>
 <li>The method or field does not need to be public (will be made accessible automatically)</li>
 </ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="usage">Usage<a href="#usage" class="hash-link" aria-label="Direct link to Usage" title="Direct link to Usage">​</a></h2>
