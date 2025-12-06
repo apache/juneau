@@ -219,7 +219,7 @@ public class ParserSession extends BeanSession {
 	 */
 	protected static final void setName(ClassMeta<?> cm, Object o, Object name) throws ExecutableException {
 		if (nn(cm)) {
-			Setter m = cm.getNameProperty();
+			Property m = cm.getNameProperty();
 			if (nn(m))
 				m.set(o, name);
 		}
@@ -235,7 +235,7 @@ public class ParserSession extends BeanSession {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	protected static final void setParent(ClassMeta<?> cm, Object o, Object parent) throws ExecutableException {
-		Setter m = cm.getParentProperty();
+		Property m = cm.getParentProperty();
 		if (nn(m))
 			m.set(o, parent);
 	}

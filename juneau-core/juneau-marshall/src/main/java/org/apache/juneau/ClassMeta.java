@@ -162,10 +162,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final ClassMeta<?> keyType;                                                                             // If MAP, the key class type.
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 	private final Supplier<MarshalledFilter> marshalledFilter;
-	private final Supplier<Setter> namePropertySetter;                                                              // The method to set the name on an object (if it has one).
+	private final Supplier<Property<T,String>> namePropertySetter;                                            // The method to set the name on an object (if it has one).
 	private final Supplier<ConstructorInfo> noArgConstructor;                                                       // The no-arg constructor for this class (if it has one).
 	private final String notABeanReason;                                                                            // If this isn't a bean, the reason why.
-	private final Supplier<Setter> parentPropertySetter;                                                            // The method to set the parent on an object (if it has one).
+	private final Supplier<Property<T,?>> parentPropertySetter;                                          // The method to set the parent on an object (if it has one).
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
 	private final Supplier<ConstructorInfo> stringConstructor;                                                     // The X(String) constructor (if it has one).
@@ -742,7 +742,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	The method or field  annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does not
 	 * 	exist.
 	 */
-	public Setter getNameProperty() { return namePropertySetter.get(); }
+	public Property<T,String> getNameProperty() { return namePropertySetter.get(); }
 
 	/**
 	 * Returns the reason why this class is not a bean, or <jk>null</jk> if it is a bean.
@@ -772,7 +772,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	The method or field annotated with {@link ParentProperty @ParentProperty} or <jk>null</jk> if method does not
 	 * 	exist.
 	 */
-	public Setter getParentProperty() { return parentPropertySetter.get(); }
+	public Property<T,?> getParentProperty() { return parentPropertySetter.get(); }
 
 	/**
 	 * Returns a calculated property on this context.
@@ -1568,24 +1568,23 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return MarshalledFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
 	}
 
-	private Setter findNamePropertySetter() {
+	private Property<T,String> findNamePropertySetter() {
 		var ap = beanContext.getAnnotationProvider();
 
 		var s = getAllFields()
 			.stream()
-			.filter(x -> x.isStatic() && ap.has(NameProperty.class, x))
+			.filter(x -> x.getFieldType().is(String.class) && ap.has(NameProperty.class, x))
 			.map(x -> x.accessible())
-			.map(x -> new Setter.FieldSetter(x))
+			.map(x -> Property.<T,String>create().field(x).build())
 			.findFirst();
 
 		if (s.isPresent()) return s.get();
 
 		return getAllMethods()
 			.stream()
-			.filter(x -> x.isStatic() || x.hasNumParameters(1))
-			.filter(x -> ap.has(NameProperty.class, x))
+			.filter(x -> ap.has(NameProperty.class, x) && x.hasNumParameters(1))
 			.map(x -> x.accessible())
-			.map(x -> new Setter.MethodSetter(x))
+			.map(x -> Property.<T,String>create().setter(x).build())
 			.findFirst()
 			.orElse(null);
 	}
@@ -1609,24 +1608,23 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			.orElse(null);
 	}
 
-	private Setter findParentPropertySetter() {
+	private Property<T,?> findParentPropertySetter() {
 		var ap = beanContext.getAnnotationProvider();
 
 		var s = getAllFields()
 			.stream()
-			.filter(x -> x.isStatic() && ap.has(ParentProperty.class, x))
+			.filter(x -> ap.has(ParentProperty.class, x))
 			.map(x -> x.accessible())
-			.map(x -> new Setter.FieldSetter(x))
+			.map(x -> Property.<T,Object>create().field(x).build())
 			.findFirst();
 
 		if (s.isPresent()) return s.get();
 
 		return getAllMethods()
 			.stream()
-			.filter(x -> x.isStatic() || x.hasNumParameters(1))
-			.filter(x -> ap.has(ParentProperty.class, x))
+			.filter(x -> ap.has(ParentProperty.class, x) && x.hasNumParameters(1))
 			.map(x -> x.accessible())
-			.map(x -> new Setter.MethodSetter(x))
+			.map(x -> Property.<T,Object>create().setter(x).build())
 			.findFirst()
 			.orElse(null);
 	}

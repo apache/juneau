@@ -208,8 +208,9 @@ public class Property<T, V> {
 		public Builder<T, V> field(FieldInfo field) {
 			assertArgNotNull("field", field);
 			field.accessible();
-			this.producer = obj -> (V)field.get(obj);
-			this.consumer = (obj, val) -> field.set(obj, val);
+			boolean isStatic = field.isStatic();
+			this.producer = obj -> (V)field.get(isStatic ? null : obj);
+			this.consumer = (obj, val) -> field.set(isStatic ? null : obj, val);
 			return this;
 		}
 
@@ -226,7 +227,8 @@ public class Property<T, V> {
 		public Builder<T, V> getter(MethodInfo method) {
 			assertArgNotNull("method", method);
 			method.accessible();
-			this.producer = obj -> (V)method.invoke(obj);
+			boolean isStatic = method.isStatic();
+			this.producer = obj -> (V)method.invoke(isStatic ? null : obj);
 			return this;
 		}
 
@@ -242,7 +244,8 @@ public class Property<T, V> {
 		public Builder<T, V> setter(MethodInfo method) {
 			assertArgNotNull("method", method);
 			method.accessible();
-			this.consumer = (obj, val) -> method.invoke(obj, val);
+			boolean isStatic = method.isStatic();
+			this.consumer = (obj, val) -> method.invoke(isStatic ? null : obj, val);
 			return this;
 		}
 
