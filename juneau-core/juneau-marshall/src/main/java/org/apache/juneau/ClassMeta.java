@@ -137,55 +137,42 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return true;
 	}
 
-	private final Categories cat;                         // The class category.
-	private final ObjectSwap<?,?>[] childSwaps;              // Any ObjectSwaps where the normal type is a subclass of this class.
-	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap;                                        // Maps normal subclasses to ObjectSwaps.
-	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childUnswapMap;                                      // Maps swap subclasses to ObjectSwaps.
-	private final ObjectSwap<T,?>[] swaps;                     // The object POJO swaps associated with this bean (if it has any).
-	private final BeanContext beanContext;                  // The bean context that created this object.
-	private final ClassMeta<?> elementType;                                         // If ARRAY or COLLECTION, the element class type.
-	private final ClassMeta<?> keyType;                                             // If MAP, the key class type.
-	private final ClassMeta<?> valueType;                                           // If MAP, the value class type.
-	private final BeanMeta<T> beanMeta;                     // The bean meta for this bean class (if it's a bean).
-	private final String typePropertyName;                                    // The property name of the _type property for this class and subclasses.
-	private final String notABeanReason;                                      // If this isn't a bean, the reason why.
-	private final InvocationHandler invocationHandler;      // The invocation handler for this class (if it has one).
-	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
-	private final ClassMeta<?>[] args;                      // Arg types if this is an array of args.
-	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
-	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
-	private final Mutater<String,T> stringMutater;
 	private final Map<Class<?>,Annotation[]> annotationArrayMap = new ConcurrentHashMap<>();
 	private final Map<Class<?>,Optional<?>> annotationLastMap = new ConcurrentHashMap<>();
-	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
-	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
-
-	private final Supplier<String> dictionaryName;                                      // The dictionary name of this class if it has one.
-
-	private final Supplier<MethodInfo> fromStringMethod;  // Static fromString(String) or equivalent method
-
-	private final Supplier<MethodInfo> exampleMethod;  // The example() or @Example-annotated method (if it has one).
-
-	private final Supplier<Setter> parentPropertySetter;  // The method to set the parent on an object (if it has one).
-
-	private final Supplier<Setter> namePropertySetter;  // The method to set the name on an object (if it has one).
-
-	private final Supplier<FieldInfo> exampleField;                                        // The @Example-annotated field (if it has one).
-
-	private final Supplier<ConstructorInfo> noArgConstructor;                                    // The no-arg constructor for this class (if it has one).
-
-	private final Supplier<ConstructorInfo> stringConstructor;                                   // The X(String) constructor (if it has one).
-
+	private final ClassMeta<?>[] args;                                                                              // Arg types if this is an array of args.
+	private final BeanContext beanContext;                                                                          // The bean context that created this object.
 	private final Supplier<BeanFilter> beanFilter;
-
-	private final Supplier<MarshalledFilter> marshalledFilter;
-
-	private final Supplier<BuilderSwap<T,?>> builderSwap;             // The builder swap associated with this bean (if it has one).
-
-	private final Supplier<String> example;                           // Example JSON.
-
-	private final Supplier<ClassInfoTyped<? extends T>> implClass2;             // The implementation class to use if this is an interface.
+	private final BeanMeta<T> beanMeta;                                                                             // The bean meta for this bean class (if it's a bean).
+	private final BeanRegistry beanRegistry;                                                                        // The bean registry of this class meta (if it has one).
+	private final Supplier<BuilderSwap<T,?>> builderSwap;                                                           // The builder swap associated with this bean (if it has one).
+	private final Categories cat;                                                                                   // The class category.
+	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap;                                         // Maps normal subclasses to ObjectSwaps.
+	private final ObjectSwap<?,?>[] childSwaps;                                                                     // Any ObjectSwaps where the normal type is a subclass of this class.
+	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childUnswapMap;                                       // Maps swap subclasses to ObjectSwaps.
+	private final Supplier<String> dictionaryName;                                                                  // The dictionary name of this class if it has one.
+	private final ClassMeta<?> elementType;                                                                         // If ARRAY or COLLECTION, the element class type.
+	private final Supplier<String> example;                                                                         // Example JSON.
+	private final Supplier<FieldInfo> exampleField;                                                                 // The @Example-annotated field (if it has one).
+	private final Supplier<MethodInfo> exampleMethod;                                                               // The example() or @Example-annotated method (if it has one).
 	private final Supplier<BidiMap<Object,String>> enumValues;
+	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
+	private final Supplier<MethodInfo> fromStringMethod;                                                            // Static fromString(String) or equivalent method
+	private final Supplier<ClassInfoTyped<? extends T>> implClass2;                                                 // The implementation class to use if this is an interface.
+	private final InvocationHandler invocationHandler;                                                              // The invocation handler for this class (if it has one).
+	private final ClassMeta<?> keyType;                                                                             // If MAP, the key class type.
+	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
+	private final Supplier<MarshalledFilter> marshalledFilter;
+	private final Supplier<Setter> namePropertySetter;                                                              // The method to set the name on an object (if it has one).
+	private final Supplier<ConstructorInfo> noArgConstructor;                                                       // The no-arg constructor for this class (if it has one).
+	private final String notABeanReason;                                                                            // If this isn't a bean, the reason why.
+	private final Supplier<Setter> parentPropertySetter;                                                            // The method to set the parent on an object (if it has one).
+	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
+	private final Mutater<String,T> stringMutater;
+	private final Supplier<ConstructorInfo> stringConstructor;                                                     // The X(String) constructor (if it has one).
+	private final ObjectSwap<T,?>[] swaps;                                                                          // The object POJO swaps associated with this bean (if it has any).
+	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
+	private final String typePropertyName;                                                                          // The property name of the _type property for this class and subclasses.
+	private final ClassMeta<?> valueType;                                                                           // If MAP, the value class type.
 
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
