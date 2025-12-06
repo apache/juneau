@@ -104,6 +104,39 @@ public class ThrowableUtils {
 	}
 
 	/**
+	 * Shortcut for creating an {@link ExecutableException} with a message.
+	 *
+	 * @param msg The message.
+	 * @param args Optional {@link String#format(String, Object...)} arguments.
+	 * @return A new {@link ExecutableException}.
+	 */
+	public static ExecutableException exex(String msg, Object...args) {
+		return new ExecutableException(msg, args);
+	}
+
+	/**
+	 * Creates an {@link ExecutableException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new ExecutableException wrapping the given cause.
+	 */
+	public static ExecutableException exex(Throwable cause) {
+		return new ExecutableException(cause);
+	}
+
+	/**
+	 * Creates an {@link ExecutableException} with a cause.
+	 *
+	 * @param cause The cause of the exception.
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new ExecutableException with the formatted message and cause.
+	 */
+	public static ExecutableException exex(Throwable cause, String msg, Object...args) {
+		return new ExecutableException(cause, msg, args);
+	}
+
+	/**
 	 * Casts or wraps the specified throwable to the specified type.
 	 *
 	 * @param <T> The class to cast to.

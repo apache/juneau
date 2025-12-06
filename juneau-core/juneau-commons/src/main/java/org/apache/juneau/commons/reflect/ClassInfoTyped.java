@@ -44,11 +44,13 @@ public class ClassInfoTyped<T> extends ClassInfo {
 		super(inner, innerType);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Class<T> inner() {
 		return (Class<T>)super.inner();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T getPrimitiveDefault() { return (T)super.getPrimitiveDefault(); }
 }

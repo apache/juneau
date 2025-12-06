@@ -1895,12 +1895,70 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type {
 		return false;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this class is any of the specified types.
+	 *
+	 * <p>
+	 * This is a high-performance overload that avoids array creation and iteration.
+	 * Use this method instead of {@link #isAny(Class...)} when checking against exactly 2 types.
+	 *
+	 * @param t1 The first type to check against.
+	 * @param t2 The second type to check against.
+	 * @return <jk>true</jk> if this class is any of the specified types.
+	 */
 	public boolean isAny(Class<?> t1, Class<?> t2) {
 		return inner == t1 || inner == t2;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this class is any of the specified types.
+	 *
+	 * <p>
+	 * This is a high-performance overload that avoids array creation and iteration.
+	 * Use this method instead of {@link #isAny(Class...)} when checking against exactly 3 types.
+	 *
+	 * @param t1 The first type to check against.
+	 * @param t2 The second type to check against.
+	 * @param t3 The third type to check against.
+	 * @return <jk>true</jk> if this class is any of the specified types.
+	 */
 	public boolean isAny(Class<?> t1, Class<?> t2, Class<?> t3) {
 		return inner == t1 || inner == t2 || inner == t3;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is any of the specified types.
+	 *
+	 * <p>
+	 * This is a high-performance overload that avoids array creation and iteration.
+	 * Use this method instead of {@link #isAny(Class...)} when checking against exactly 4 types.
+	 *
+	 * @param t1 The first type to check against.
+	 * @param t2 The second type to check against.
+	 * @param t3 The third type to check against.
+	 * @param t4 The fourth type to check against.
+	 * @return <jk>true</jk> if this class is any of the specified types.
+	 */
+	public boolean isAny(Class<?> t1, Class<?> t2, Class<?> t3, Class<?> t4) {
+		return inner == t1 || inner == t2 || inner == t3 || inner == t4;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is any of the specified types.
+	 *
+	 * <p>
+	 * This is a high-performance overload that avoids array creation and iteration.
+	 * Use this method instead of {@link #isAny(Class...)} when checking against exactly 5 types.
+	 *
+	 * @param t1 The first type to check against.
+	 * @param t2 The second type to check against.
+	 * @param t3 The third type to check against.
+	 * @param t4 The fourth type to check against.
+	 * @param t5 The fifth type to check against.
+	 * @return <jk>true</jk> if this class is any of the specified types.
+	 */
+	public boolean isAny(Class<?> t1, Class<?> t2, Class<?> t3, Class<?> t4, Class<?> t5) {
+		return inner == t1 || inner == t2 || inner == t3 || inner == t4 || inner == t5;
 	}
 
 	/**
@@ -2270,11 +2328,11 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type {
 	 */
 	public Object newInstance() throws ExecutableException {
 		if (inner == null)
-			throw new ExecutableException("Type ''{0}'' cannot be instantiated", getNameFull());
+			throw exex("Type ''{0}'' cannot be instantiated", getNameFull());
 		try {
 			return inner.getDeclaredConstructor().newInstance();
 		} catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
-			throw new ExecutableException(e);
+			throw exex(e);
 		}
 	}
 

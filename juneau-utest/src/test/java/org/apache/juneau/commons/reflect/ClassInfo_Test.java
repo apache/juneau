@@ -2471,6 +2471,101 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// isAny(Class<?>, Class<?>)
+	//====================================================================================================
+	@Test
+	void a075a_isAny_twoParameters() {
+		// Test with matching first parameter
+		assertTrue(ka.isAny(KA.class, KB.class));
+		// Test with matching second parameter
+		assertTrue(kb.isAny(KA.class, KB.class));
+		// Test with no matches
+		assertFalse(ka.isAny(Integer.class, String.class));
+		assertFalse(kb.isAny(Integer.class, String.class));
+		assertFalse(kc.isAny(Integer.class, String.class));
+		// Test with all same class
+		assertTrue(ka.isAny(KA.class, KA.class));
+		// Test with null (should not match)
+		assertFalse(ka.isAny(null, null));
+		// Test with one match
+		assertTrue(ka.isAny(KA.class, String.class));
+		assertTrue(ka.isAny(String.class, KA.class));
+	}
+
+	//====================================================================================================
+	// isAny(Class<?>, Class<?>, Class<?>)
+	//====================================================================================================
+	@Test
+	void a075b_isAny_threeParameters() {
+		// Test with matching first parameter
+		assertTrue(ka.isAny(KA.class, KB.class, KC.class));
+		// Test with matching second parameter
+		assertTrue(kb.isAny(KA.class, KB.class, KC.class));
+		// Test with matching third parameter
+		assertTrue(kc.isAny(KA.class, KB.class, KC.class));
+		// Test with no matches
+		assertFalse(ka.isAny(Integer.class, Double.class, String.class));
+		assertFalse(kb.isAny(Integer.class, Double.class, String.class));
+		assertFalse(kc.isAny(Integer.class, Double.class, String.class));
+		// Test with all same class
+		assertTrue(ka.isAny(KA.class, KA.class, KA.class));
+		// Test with null (should not match)
+		assertFalse(ka.isAny(null, null, null));
+		// Test with one match
+		assertTrue(ka.isAny(KA.class, String.class, Integer.class));
+		assertTrue(kb.isAny(String.class, KB.class, Integer.class));
+		assertTrue(kc.isAny(String.class, Integer.class, KC.class));
+	}
+
+	//====================================================================================================
+	// isAny(Class<?>, Class<?>, Class<?>, Class<?>)
+	//====================================================================================================
+	@Test
+	void a075c_isAny_fourParameters() {
+		// Test with matching first parameter
+		assertTrue(ka.isAny(KA.class, KB.class, KC.class, String.class));
+		// Test with matching second parameter
+		assertTrue(kb.isAny(KA.class, KB.class, KC.class, String.class));
+		// Test with matching third parameter
+		assertTrue(kc.isAny(KA.class, KB.class, KC.class, String.class));
+		// Test with matching fourth parameter
+		assertTrue(ClassInfo.of(String.class).isAny(KA.class, KB.class, KC.class, String.class));
+		// Test with no matches
+		assertFalse(ka.isAny(Integer.class, Double.class, Float.class, Long.class));
+		assertFalse(kb.isAny(Integer.class, Double.class, Float.class, Long.class));
+		assertFalse(kc.isAny(Integer.class, Double.class, Float.class, Long.class));
+		// Test with all same class
+		assertTrue(ka.isAny(KA.class, KA.class, KA.class, KA.class));
+		// Test with null (should not match)
+		assertFalse(ka.isAny(null, null, null, null));
+	}
+
+	//====================================================================================================
+	// isAny(Class<?>, Class<?>, Class<?>, Class<?>, Class<?>)
+	//====================================================================================================
+	@Test
+	void a075d_isAny_fiveParameters() {
+		// Test with matching first parameter
+		assertTrue(ka.isAny(KA.class, KB.class, KC.class, String.class, Integer.class));
+		// Test with matching second parameter
+		assertTrue(kb.isAny(KA.class, KB.class, KC.class, String.class, Integer.class));
+		// Test with matching third parameter
+		assertTrue(kc.isAny(KA.class, KB.class, KC.class, String.class, Integer.class));
+		// Test with matching fourth parameter
+		assertTrue(ClassInfo.of(String.class).isAny(KA.class, KB.class, KC.class, String.class, Integer.class));
+		// Test with matching fifth parameter
+		assertTrue(ClassInfo.of(Integer.class).isAny(KA.class, KB.class, KC.class, String.class, Integer.class));
+		// Test with no matches
+		assertFalse(ka.isAny(Double.class, Float.class, Long.class, Boolean.class, Character.class));
+		assertFalse(kb.isAny(Double.class, Float.class, Long.class, Boolean.class, Character.class));
+		assertFalse(kc.isAny(Double.class, Float.class, Long.class, Boolean.class, Character.class));
+		// Test with all same class
+		assertTrue(ka.isAny(KA.class, KA.class, KA.class, KA.class, KA.class));
+		// Test with null (should not match)
+		assertFalse(ka.isAny(null, null, null, null, null));
+	}
+
+	//====================================================================================================
 	// isArray()
 	//====================================================================================================
 	@Test

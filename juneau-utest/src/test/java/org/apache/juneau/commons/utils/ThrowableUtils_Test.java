@@ -452,5 +452,39 @@ class ThrowableUtils_Test extends TestBase {
 		assertEquals("Object is read only.", ex.getMessage());
 		assertNull(ex.getCause());
 	}
+
+	//====================================================================================================
+	// exex(String, Object...)
+	//====================================================================================================
+	@Test
+	void a027_exex_withMessage() {
+		ExecutableException ex = exex("Error message {0}", "test");
+		assertNotNull(ex);
+		assertTrue(ex.getMessage().contains("Error message test"));
+		assertNull(ex.getCause());
+	}
+
+	//====================================================================================================
+	// exex(Throwable)
+	//====================================================================================================
+	@Test
+	void a028_exex_withCause() {
+		var cause = new IOException("root cause");
+		ExecutableException ex = exex(cause);
+		assertNotNull(ex);
+		assertSame(cause, ex.getCause());
+	}
+
+	//====================================================================================================
+	// exex(Throwable, String, Object...)
+	//====================================================================================================
+	@Test
+	void a029_exex_withCauseAndMessage() {
+		var cause = new IOException("root cause");
+		ExecutableException ex = exex(cause, "Error message {0}", "test");
+		assertNotNull(ex);
+		assertSame(cause, ex.getCause());
+		assertTrue(ex.getMessage().contains("Error message test"));
+	}
 }
 

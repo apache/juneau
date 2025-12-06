@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.reflect;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -189,9 +190,9 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 			try {
 				return (T)inner.newInstance(args);
 			} catch (InvocationTargetException e) {
-				throw new ExecutableException(e.getTargetException());
+				throw exex(e.getTargetException());
 			}
-		}, e -> new ExecutableException(e));  // HTT
+		}, e -> exex(e));  // HTT
 	}
 
 	/**

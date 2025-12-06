@@ -37,6 +37,7 @@ import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
 
 import com.hp.hpl.jena.rdf.model.*;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.util.iterator.*;
 
 /**

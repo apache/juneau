@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.reflect;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
@@ -555,9 +556,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			try {
 				return (T)inner.invoke(obj, args);
 			} catch (InvocationTargetException e) {
-				throw new ExecutableException(e.getTargetException());
+				throw exex(e.getTargetException());
 			}
-		}, e -> new ExecutableException(e));
+		}, e -> exex(e));
 	}
 
 	/**
@@ -585,7 +586,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public Object invokeLenient(Object pojo, Object...args) throws ExecutableException {
 		return safe(() -> {
 			return inner.invoke(pojo, ClassUtils.getMatchingArgs(inner.getParameterTypes(), args));
-		}, e -> new ExecutableException(e instanceof InvocationTargetException ? ((InvocationTargetException)e).getTargetException() : e));
+		}, e -> exex(e instanceof InvocationTargetException ? ((InvocationTargetException)e).getTargetException() : e));
 	}
 
 	@Override
