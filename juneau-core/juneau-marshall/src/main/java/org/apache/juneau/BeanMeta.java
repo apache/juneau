@@ -163,13 +163,13 @@ public class BeanMeta<T> {
 				if (nn(s))
 					return s;
 			}
-			var pcm = cm.innerClass.getSuperclass();
+			var pcm = cm.inner().getSuperclass();
 			if (nn(pcm)) {
 				var s = findDictionaryName(ctx.getClassMeta(pcm));
 				if (nn(s))
 					return s;
 			}
-			for (var icm : cm.innerClass.getInterfaces()) {
+			for (var icm : cm.inner().getInterfaces()) {
 				var s = findDictionaryName(ctx.getClassMeta(icm));
 				if (nn(s))
 					return s;
@@ -193,7 +193,7 @@ public class BeanMeta<T> {
 		}
 
 		String init(BeanMeta<T> beanMeta) {
-			var c = classMeta.getInnerClass();
+			var c = classMeta.inner();
 			var ci = classMeta;
 			var ap = ctx.getAnnotationProvider();
 
@@ -210,7 +210,7 @@ public class BeanMeta<T> {
 				var typeName = Value.<String>empty();
 				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
 				if (typeName.isPresent())
-					bdClasses.add(classMeta.innerClass);
+					bdClasses.add(classMeta.inner());
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
 				var typePropertyName = Value.<String>empty();
@@ -889,7 +889,7 @@ public class BeanMeta<T> {
 	protected BeanMeta(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
-		this.c = classMeta.getInnerClass();
+		this.c = classMeta.inner();
 
 		Builder<T> b = new Builder<>(classMeta, ctx, beanFilter, pNames, implClassConstructor);
 		notABeanReason = b.init(this);
@@ -1053,8 +1053,8 @@ public class BeanMeta<T> {
 				return constructor.<T>newInstance();
 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 			if (nn(h)) {
-				ClassLoader cl = classMeta.innerClass.getClassLoader();
-				return (T)Proxy.newProxyInstance(cl, a(classMeta.innerClass, java.io.Serializable.class), h);
+				ClassLoader cl = classMeta.inner().getClassLoader();
+				return (T)Proxy.newProxyInstance(cl, a(classMeta.inner(), java.io.Serializable.class), h);
 			}
 		}
 		return null;

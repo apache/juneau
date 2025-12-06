@@ -473,7 +473,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		} else if (sType.isCollection()) {
 			serializeCollection(out, (Collection)o, eType);
 		} else if (sType.isArray()) {
-			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
+			serializeCollection(out, toList(sType.inner(), o), eType);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {

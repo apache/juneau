@@ -398,7 +398,7 @@ public class OpenApiParserSession extends UonParserSession {
 				var items = schema.getItems();
 				if (items == null)
 					items = HttpPartSchema.DEFAULT;
-				var o = Array.newInstance(eType.getInnerClass(), ss.length);
+				var o = Array.newInstance(eType.inner(), ss.length);
 				for (var i = 0; i < ss.length; i++)
 					Array.set(o, i, parse(partType, items, ss[i], eType));
 				if (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
@@ -441,7 +441,7 @@ public class OpenApiParserSession extends UonParserSession {
 				}
 
 				if (type.isBean()) {
-					var m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
+					var m = ctx.getBeanContext().newBeanMap(type.inner());
 					for (var s : ss) {
 						var kv = StringUtils.splita(s, '=', 2);
 						if (kv.length != 2)

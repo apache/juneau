@@ -848,11 +848,11 @@ public class XmlParserSession extends ReaderParserSession {
 			var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
 			o = parseIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isNumber()) {
-			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.getInnerClass());
+			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.inner());
 		} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 			if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
 				var fieldName = r.getLocalName();
-				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
+				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
 				var bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
 				var cm = m.getMeta().getClassMeta();
 				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, null);
@@ -860,7 +860,7 @@ public class XmlParserSession extends ReaderParserSession {
 				bpm.set(m, currAttr, value);
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			} else {
-				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
+				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
 				m = parseIntoBean(r, m, isNil);
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
@@ -874,9 +874,9 @@ public class XmlParserSession extends ReaderParserSession {
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (nn(wrapperAttr))
 				m = new JsonMap(this).append(wrapperAttr, m);
-			o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
+			o = newBeanMap(outer, sType.inner()).load(m).getBean();
 		} else {
-			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", sType.getInnerClass().getName(), sType.getNotABeanReason(),
+			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", sType.inner().getName(), sType.getNotABeanReason(),
 				pMeta == null ? null : pMeta.getName());
 		}
 

@@ -365,7 +365,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		} else if (sType.isChar()) {
 			o = parseCharacter(parseString(r, isUrlParamValue));
 		} else if (sType.isNumber()) {
-			o = parseNumber(r, (Class<? extends Number>)sType.getInnerClass());
+			o = parseNumber(r, (Class<? extends Number>)sType.inner());
 		} else if (sType.isMap()) {
 			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
@@ -391,7 +391,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : builder.build(this, m.getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
-			var m = newBeanMap(outer, sType.getInnerClass());
+			var m = newBeanMap(outer, sType.inner());
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : m.getBean();
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
@@ -422,14 +422,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			if (m.containsKey(getBeanTypePropertyName(sType)))
 				o = cast(m, pMeta, eType);
 			else if (nn(sType.getProxyInvocationHandler()))
-				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
+				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
 		} else if (c == 'n') {
 			r.read(); // NOSONAR - Intentional.
 			parseNull(r);
 		} else {
-			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
 		}
 
 		if (o == null && sType.isPrimitive())

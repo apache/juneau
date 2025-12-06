@@ -84,7 +84,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 			else
 				bme = this.getProperty(k);
 			if (bme == null)
-				throw bex(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", k);
+				throw bex(super.getClassMeta().inner(), "Property ''{0}'' not found on class.", k);
 			s.add(bme);
 		});
 		return s;

@@ -260,7 +260,7 @@ public class HtmlParserSession extends XmlParserSession {
 			var nameProperty = Value.<String>empty();
 			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
 			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
-			BeanMap<T> m = newBeanMap(beanType.getInnerClass());
+			BeanMap<T> m = newBeanMap(beanType.inner());
 			m.put(uriProperty.orElse(""), href);
 			m.put(nameProperty.orElse(""), name);
 			return m.getBean();
@@ -337,7 +337,7 @@ public class HtmlParserSession extends XmlParserSession {
 			else if (sType.isBoolean())
 				o = Boolean.parseBoolean(text);
 			else if (sType.isNumber())
-				o = parseNumber(text, (Class<? extends Number>)eType.getInnerClass());
+				o = parseNumber(text, (Class<? extends Number>)eType.inner());
 			else if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, text);
 			else
@@ -360,7 +360,7 @@ public class HtmlParserSession extends XmlParserSession {
 			if (sType.isObject())
 				o = parseNumber(text, Number.class);
 			else if (sType.isNumber())
-				o = parseNumber(text, (Class<? extends Number>)sType.getInnerClass());
+				o = parseNumber(text, (Class<? extends Number>)sType.inner());
 			else
 				isValid = false;
 			skipTag(r, xNUMBER);
@@ -409,10 +409,10 @@ public class HtmlParserSession extends XmlParserSession {
 					BeanMap m = toBeanMap(builder.create(this, eType));
 					o = builder.build(this, parseIntoBean(r, m).getBean(), eType);
 				} else if (sType.canCreateNewBean(outer)) {
-					BeanMap m = newBeanMap(outer, sType.getInnerClass());
+					BeanMap m = newBeanMap(outer, sType.inner());
 					o = parseIntoBean(r, m).getBean();
 				} else if (nn(sType.getProxyInvocationHandler())) {
-					BeanMap m = newBeanMap(outer, sType.getInnerClass());
+					BeanMap m = newBeanMap(outer, sType.inner());
 					o = parseIntoBean(r, m).getBean();
 				} else {
 					isValid = false;
@@ -599,7 +599,7 @@ public class HtmlParserSession extends XmlParserSession {
 				BeanMap m =
 					nn(builder)
 					? toBeanMap(builder.create(this, elementType))
-					: newBeanMap(l, elementType.getInnerClass())
+					: newBeanMap(l, elementType.inner())
 				;
 				// @formatter:on
 				for (var key : keys) {

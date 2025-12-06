@@ -86,7 +86,7 @@ public class BeanRegistry {
 		if (typeName.charAt(typeName.length() - 1) == '^') {
 			cm = getClassMeta(typeName.substring(0, typeName.length() - 1));
 			if (nn(cm)) {
-				cm = bc.getClassMeta(Array.newInstance(cm.innerClass, 1).getClass());
+				cm = bc.getClassMeta(Array.newInstance(cm.inner(), 1).getClass());
 				map.put(typeName, cm);
 			}
 			return cm;
@@ -101,7 +101,7 @@ public class BeanRegistry {
 	 * @return The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.
 	 */
 	public String getTypeName(ClassMeta<?> c) {
-		return isEmpty ? null : reverseMap.get(c.innerClass);
+		return isEmpty ? null : reverseMap.get(c.inner());
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class BeanRegistry {
 
 	private void addToMap(String typeName, ClassMeta<?> cm) {
 		map.put(typeName, cm);
-		reverseMap.put(cm.innerClass, typeName);
+		reverseMap.put(cm.inner(), typeName);
 	}
 
 	private ClassMeta<?> getTypedClassMeta(Object array) {

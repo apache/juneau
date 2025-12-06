@@ -385,7 +385,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 			return null;
 		if (hint == null)
 			hint = session.getClassMeta(Instant.class);
-		var tc = (Class<? extends Temporal>)hint.getInnerClass();
+		var tc = (Class<? extends Temporal>)hint.inner();
 
 		var offset = session.getTimeZoneId();
 

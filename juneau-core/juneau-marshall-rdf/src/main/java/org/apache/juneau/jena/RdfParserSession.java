@@ -392,7 +392,7 @@ public class RdfParserSession extends ReaderParserSession {
 		} else if (sType.isChar()) {
 			o = parseCharacter(decodeString(getValue(n, outer)));
 		} else if (sType.isNumber()) {
-			o = parseNumber(getValue(n, outer).toString(), (Class<? extends Number>)sType.getInnerClass());
+			o = parseNumber(getValue(n, outer).toString(), (Class<? extends Number>)sType.inner());
 		} else if (sType.isMap()) {
 			var r = n.asResource();
 			if (! urisVisited.add(r))
@@ -428,7 +428,7 @@ public class RdfParserSession extends ReaderParserSession {
 			var r = n.asResource();
 			if (! urisVisited.add(r))
 				return null;
-			var bm = newBeanMap(outer, sType.getInnerClass());
+			var bm = newBeanMap(outer, sType.inner());
 			o = parseIntoBeanMap(r, bm).getBean();
 		} else if (sType.isUri() && n.isResource()) {
 			o = sType.newInstanceFromString(outer, decodeString(n.asResource().getURI()));
@@ -441,11 +441,11 @@ public class RdfParserSession extends ReaderParserSession {
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((JsonMap)m, pMeta, eType);
 			else if (nn(sType.getProxyInvocationHandler()))
-				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
+				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
 		} else {
-			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
 		}
 
 		if (nn(swap) && nn(o))

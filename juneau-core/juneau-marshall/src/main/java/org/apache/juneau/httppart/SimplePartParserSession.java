@@ -35,6 +35,6 @@ public class SimplePartParserSession extends BaseHttpPartParserSession {
 
 	@Override /* Overridden from HttpPartParserSession */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return Mutaters.fromString(toType.getInnerClass(), in);
+		return Mutaters.fromString(toType.inner(), in);
 	}
 }

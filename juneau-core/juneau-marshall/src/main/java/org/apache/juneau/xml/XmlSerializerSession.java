@@ -506,7 +506,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		var eeType = eType.getElementType();
 
-		var c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));
+		var c = (sType.isCollection() ? (Collection)in : toList(sType.inner(), in));
 
 		var type2 = (String)null;
 

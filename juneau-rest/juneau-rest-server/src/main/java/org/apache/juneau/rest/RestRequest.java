@@ -1158,7 +1158,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public <T> T getRequest(RequestBeanMeta rbm) {
 		try {
-			var c = (Class<T>)rbm.getClassMeta().getInnerClass();
+			var c = (Class<T>)rbm.getClassMeta().inner();
 			final BeanSession bs = getBeanSession();
 			final BeanMeta<T> bm = bs.getBeanMeta(c);
 			return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {

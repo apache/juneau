@@ -44,7 +44,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 		XmlFormat contentFormat = DEFAULT;
 
 		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
-			var c = beanMeta.getClassMeta().getInnerClass();
+			var c = beanMeta.getClassMeta().inner();
 			var ci = beanMeta.getClassMeta();
 			var defaultFormat = Value.<XmlFormat>empty();
 
@@ -121,7 +121,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 		super(beanMeta);
 
-		var c = beanMeta.getClassMeta().getInnerClass();
+		var c = beanMeta.getClassMeta().inner();
 		var b = new XmlBeanMetaBuilder(beanMeta, mp);
 
 		attrs = u(b.attrs);

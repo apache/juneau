@@ -117,7 +117,7 @@ public class Section {
 				if (! ignoreUnknownProperties)
 					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, name);
 			} else {
-				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(null));
+				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().inner()).orElse(null));
 			}
 		}
 
@@ -254,7 +254,7 @@ public class Section {
 				if (! ignoreUnknownProperties)
 					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, name);
 			} else {
-				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(null));
+				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().inner()).orElse(null));
 			}
 		}
 

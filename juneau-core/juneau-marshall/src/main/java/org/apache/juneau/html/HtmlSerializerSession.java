@@ -471,7 +471,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		HtmlClassMeta cHtml = getHtmlClassMeta(sType);
 		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
 
-		Collection c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));
+		Collection c = (sType.isCollection() ? (Collection)in : toList(sType.inner(), in));
 
 		boolean isCdc = cHtml.isHtmlCdc() || bpHtml.isHtmlCdc();
 		boolean isSdc = cHtml.isHtmlSdc() || bpHtml.isHtmlSdc();

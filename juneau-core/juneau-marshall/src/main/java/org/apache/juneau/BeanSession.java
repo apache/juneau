@@ -1172,7 +1172,7 @@ public class BeanSession extends ContextSession {
 			if (to.isOptional() && (! (value instanceof Optional)))
 				return (T)opt(convertToMemberType(outer, value, to.getElementType()));
 
-			var tc = to.getInnerClass();
+			var tc = to.inner();
 
 			// If no conversion needed, then just return the value.
 			// Don't include maps or collections, because child elements may need conversion.
@@ -1198,7 +1198,7 @@ public class BeanSession extends ContextSession {
 			if (nn(swap)) {
 				var nc = swap.getNormalClass();
 				var fc = swap.getSwapClass();
-				if (nc.isParentOf(from.getInnerClass()) && fc.isParentOf(tc))
+				if (nc.isParentOf(from.inner()) && fc.isParentOf(tc))
 					return (T)swap.swap(this, value);
 			}
 
@@ -1505,7 +1505,7 @@ public class BeanSession extends ContextSession {
 					var typeName = m2.getString(getBeanTypePropertyName(to));
 					if (nn(typeName)) {
 						var cm = to.getBeanRegistry().getClassMeta(typeName);
-						if (nn(cm) && to.isParentOf(cm.innerClass))
+						if (nn(cm) && to.isParentOf(cm.inner()))
 							return (T)m2.cast(cm);
 					}
 				}
@@ -1554,7 +1554,7 @@ public class BeanSession extends ContextSession {
 				return (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime());
 			}
 
-			if (to.isDate() && to.getInnerClass() == Date.class) {
+			if (to.isDate() && to.inner() == Date.class) {
 				if (from.isCalendar())
 					return (T)((Calendar)value).getTime();
 				return (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime()).getTime();
@@ -1567,7 +1567,7 @@ public class BeanSession extends ContextSession {
 				return from.mutateTo(value, to);
 
 			if (to.isBean())
-				return newBeanMap(to.getInnerClass()).load(value.toString()).getBean();
+				return newBeanMap(to.inner()).load(value.toString()).getBean();
 
 			if (to.canCreateNewInstanceFromString(outer))
 				return to.newInstanceFromString(outer, value.toString());
@@ -1649,11 +1649,11 @@ public class BeanSession extends ContextSession {
 		if (list == null)
 			return null;
 		var componentType = type.isArgs() ? object() : type.getElementType();
-		var array = Array.newInstance(componentType.getInnerClass(), list.size());
+		var array = Array.newInstance(componentType.inner(), list.size());
 		var i = IntegerValue.create();
 		list.forEach(x -> {
 			var x2 = x;
-			if (! type.getInnerClass().isInstance(x)) {
+			if (! type.inner().isInstance(x)) {
 				if (componentType.isArray() && x instanceof Collection<?> c)
 					x2 = toArray(componentType, c);
 				else if (x == null && componentType.isPrimitive())

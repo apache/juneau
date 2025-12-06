@@ -57,7 +57,7 @@ public class BasicBeanDefMapper implements BeanDefMapper {
 
 	@Override /* Overridden from BeanDefMapper */
 	public String getId(ClassMeta<?> cm) {
-		return cm.getSimpleName();
+		return cm.getNameSimple();
 	}
 
 	@Override /* Overridden from BeanDefMapper */

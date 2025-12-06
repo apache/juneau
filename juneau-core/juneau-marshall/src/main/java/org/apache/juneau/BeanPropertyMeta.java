@@ -922,7 +922,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return name + ": " + this.rawTypeMeta.getInnerClass().getName() + ", field=[" + field + "], getter=[" + getter + "], setter=[" + setter + "]";
+		return name + ": " + this.rawTypeMeta.inner().getName() + ", field=[" + field + "], getter=[" + getter + "], setter=[" + setter + "]";
 	}
 
 	private Object applyChildPropertiesFilter(BeanSession session, ClassMeta cm, Object o) {
@@ -1047,7 +1047,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				m = (Map<String,Object>)getter.invoke(bean);
 			else
 				throw bex(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null",
-					name, this.getClassMeta().getInnerClass().getName(), findClassName(val));
+					name, this.getClassMeta().inner().getName(), findClassName(val));
 			return (m == null ? null : m.put(pName, val));
 		}
 		if (nn(setter))
@@ -1057,7 +1057,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return null;
 		}
 		throw bex(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
-			this.getClassMeta().getInnerClass().getName(), findClassName(val));
+			this.getClassMeta().inner().getName(), findClassName(val));
 	}
 
 	@SuppressWarnings("null")
@@ -1095,7 +1095,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			try {
 
 				var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
-				var propertyClass = rawTypeMeta.getInnerClass();
+				var propertyClass = rawTypeMeta.inner();
 				var pcInfo = rawTypeMeta;
 
 				if (value == null && (isMap || isCollection)) {
@@ -1131,7 +1131,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 								if (! valueType.isObject()) {
 									var needsConversion = Flag.create();
 									valueMap.forEach((k, v) -> {
-										if (nn(v) && ! valueType.getInnerClass().isInstance(v)) {
+										if (nn(v) && ! valueType.inner().isInstance(v)) {
 											needsConversion.set();
 										}
 									});
@@ -1190,7 +1190,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 									List l = new JsonList(valueList);
 									for (ListIterator<Object> i = l.listIterator(); i.hasNext();) {
 										Object v = i.next();
-										if (nn(v) && (! elementType.getInnerClass().isInstance(v))) {
+										if (nn(v) && (! elementType.inner().isInstance(v))) {
 											i.set(session.convertToType(v, elementType));
 										}
 									}
@@ -1310,7 +1310,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @throws InvocationTargetException Thrown by method invocation.
 	 */
 	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Object array = toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
+		Object array = toArray(l, this.rawTypeMeta.getElementType().inner());
 		invokeSetter(bean, name, array);
 	}
 

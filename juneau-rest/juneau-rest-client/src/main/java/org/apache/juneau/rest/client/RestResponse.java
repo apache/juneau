@@ -907,7 +907,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 
 	@SuppressWarnings("unchecked")
 	<T> T as(ResponseBeanMeta rbm) {
-		var c = (Class<T>)rbm.getClassMeta().getInnerClass();
+		var c = (Class<T>)rbm.getClassMeta().inner();
 		final RestClient rc = this.client;
 		return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
 			var pm = rbm.getProperty(method.getName());

@@ -756,7 +756,7 @@ public class ParserSession extends BeanSession {
 		var cm = getClassMeta(typeName, pMeta, eType);
 
 		if (nn(cm)) {
-			var bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
+			var bm = m.getBeanSession().newBeanMap(cm.inner());
 
 			// Iterate through all the entries in the map and set the individual field values.
 			m.forEach((k, v) -> {
@@ -800,7 +800,7 @@ public class ParserSession extends BeanSession {
 		if (sType.isChar())
 			o = parseCharacter(s);
 		else if (sType.isNumber())
-			o = parseNumber(s, (Class<? extends Number>)sType.getInnerClass());
+			o = parseNumber(s, (Class<? extends Number>)sType.inner());
 		else if (sType.isBoolean())
 			o = Boolean.parseBoolean(s);
 		else if (! (sType.isCharSequence() || sType.isObject())) {
@@ -1074,7 +1074,7 @@ public class ParserSession extends BeanSession {
 			if (nn(value) || ! isIgnoreUnknownNullBeanProperties())
 				throw new ParseException(this, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
 		if (nn(listener))
-			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean());
+			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().inner(), beanMap.getBean());
 	}
 
 	@Override /* Overridden from ContextSession */

@@ -3653,7 +3653,7 @@ public class HttpPartSchema {
 		Class<?> parsedType = Object.class;
 		if (type == ARRAY) {
 			if (nn(items))
-				parsedType = Array.newInstance(items.parsedType.getInnerClass(), 0).getClass();
+				parsedType = Array.newInstance(items.parsedType.inner(), 0).getClass();
 		} else if (type == BOOLEAN) {
 			parsedType = Boolean.class;
 		} else if (type == INTEGER) {

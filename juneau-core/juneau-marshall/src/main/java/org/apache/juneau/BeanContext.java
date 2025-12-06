@@ -4441,10 +4441,10 @@ public class BeanContext extends Context {
 			if (cm.getBeanContext() == this)
 				return cm;
 			if (cm.isMap())
-				return getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
+				return getClassMeta(cm.inner(), cm.getKeyType(), cm.getValueType());
 			if (cm.isCollection() || cm.isOptional())
-				return getClassMeta(cm.innerClass, cm.getElementType());
-			return getClassMeta(cm.innerClass);
+				return getClassMeta(cm.inner(), cm.getElementType());
+			return getClassMeta(cm.inner());
 		}
 
 		Class c = resolve(o, typeVarImpls);

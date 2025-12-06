@@ -91,7 +91,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 			.create()
 			.append("name", name)
 			.append("value", value)
-			.append("type", pMeta.getClassMeta().getInnerClass().getSimpleName())
+			.append("type", pMeta.getClassMeta().inner().getSimpleName())
 			.toString();
 		// @formatter:on
 	}

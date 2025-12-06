@@ -35,7 +35,6 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
@@ -68,116 +67,6 @@ import org.apache.juneau.swap.*;
 public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
-
-	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
-	private class ClassMetaBuilder<T> {
-		Class<T> innerClass;
-		BeanContext beanContext;
-		ConstructorInfo noArgConstructor = null;
-		ClassMeta<?> keyType = null, valueType = null, elementType = null;
-		String typePropertyName = null, notABeanReason = null;
-		Throwable initException = null;
-		BeanMeta beanMeta = null;
-		InvocationHandler invocationHandler = null;
-		BeanRegistry beanRegistry = null;
-
-		ClassMetaBuilder(ClassInfo ci, Class<T> innerClass, BeanContext beanContext) {
-			this.innerClass = innerClass;
-			this.beanContext = beanContext;
-			var bc = beanContext;
-			var ap = bc.getAnnotationProvider();
-
-			Class c = ClassMeta.this.inner();
-
-			// Find constructor(String) method if present.
-			ci.getPublicConstructors().stream().filter(cs -> cs.isPublic() && cs.isNotDeprecated()).forEach(cs -> {
-				var params = cs.getParameters();
-				if (params.size() == (ci.isMemberClass() && ci.isNotStatic() ? 1 : 0) && c != Object.class && ! (ci.isAbstract() && ci.isNotPrimitive())) {
-					noArgConstructor = cs;
-				}
-			});
-
-			if (innerClass != Object.class) {
-				var x = implClass2.get() == null ? ci : implClass2.get();
-				noArgConstructor = x.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null);
-			}
-
-			try {
-
-				// If this is an array, get the element type.
-				if (cat.is(ARRAY))
-					elementType = findClassMeta(innerClass.getComponentType());
-
-				// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
-				else if (cat.is(MAP) && ! cat.is(BEANMAP)) {
-					ClassMeta[] parameters = findParameters();
-					if (nn(parameters) && parameters.length == 2) {
-						keyType = parameters[0];
-						valueType = parameters[1];
-					} else {
-						keyType = findClassMeta(Object.class);
-						valueType = findClassMeta(Object.class);
-					}
-				}
-
-				// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
-				else if (cat.is(COLLECTION) || ci.is(Optional.class)) {
-					ClassMeta[] parameters = findParameters();
-					if (nn(parameters) && parameters.length == 1) {
-						elementType = parameters[0];
-					} else {
-						elementType = findClassMeta(Object.class);
-					}
-				}
-
-				// If the category is unknown, see if it's a bean.
-				// Note that this needs to be done after all other initialization has been done.
-				if (cat.isUnknown()) {
-
-					var newMeta = (BeanMeta)null;
-					try {
-						newMeta = new BeanMeta(ClassMeta.this, bc, beanFilter.get(), null, implClass2.get() == null ? null : noArgConstructor);
-						notABeanReason = newMeta.notABeanReason;
-
-						// Always get these even if it's not a bean:
-						beanRegistry = newMeta.beanRegistry;
-						typePropertyName = newMeta.typePropertyName;
-
-					} catch (RuntimeException e) {
-						notABeanReason = e.getMessage();
-						throw e;
-					}
-					if (notABeanReason == null)
-						beanMeta = newMeta;
-				}
-
-			} catch (NoClassDefFoundError e) {
-				initException = e;
-			} catch (RuntimeException e) {
-				initException = e;
-				throw e;
-			}
-
-			if (nn(beanMeta) && nn(bc) && bc.isUseInterfaceProxies() && innerClass.isInterface())
-				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
-
-			if (nn(bc)) {
-				ap.find(Bean.class, ci).stream().map(AnnotationInfo::inner).forEach(x -> {
-					if (x.dictionary().length != 0)
-						beanRegistry = new BeanRegistry(bc, null, x.dictionary());
-				});
-			}
-		}
-
-		private ClassMeta<?> findClassMeta(Class<?> c) {
-			return beanContext.getClassMeta(c, false);
-		}
-
-		private ClassMeta<?>[] findParameters() {
-			return beanContext.findParameters(innerClass, innerClass);
-		}
-
-	}
 
 	enum Category {
 		MAP(0),
@@ -281,8 +170,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		// @formatter:on
 	}
 
-	final Class<T> innerClass;                              // The class being wrapped.
-	final ClassInfo info;
 	private final Categories cat;                         // The class category.
 	private final ObjectSwap<?,?>[] childSwaps;              // Any ObjectSwaps where the normal type is a subclass of this class.
 	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap;                                        // Maps normal subclasses to ObjectSwaps.
@@ -295,7 +182,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final BeanMeta<T> beanMeta;                     // The bean meta for this bean class (if it's a bean).
 	private final String typePropertyName;                                    // The property name of the _type property for this class and subclasses.
 	private final String notABeanReason;                                      // If this isn't a bean, the reason why.
-	private final Throwable initException;                  // Any exceptions thrown in the init() method.
 	private final InvocationHandler invocationHandler;      // The invocation handler for this class (if it has one).
 	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
 	private final ClassMeta<?>[] args;                      // Arg types if this is an array of args.
@@ -303,61 +189,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
 	private final Map<Class<?>,Annotation[]> annotationArrayMap = new ConcurrentHashMap<>();
-
 	private final Map<Class<?>,Optional<?>> annotationLastMap = new ConcurrentHashMap<>();
-
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
-
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 
-	private final Supplier<String> typePropertyName2;                                    // The property name of the _type property for this class and subclasses.
-
-	private String findTypePropertyName() {
-		var b = beanMeta2.get();
-		if (b.getA() != null)
-			return b.getA().typePropertyName;
-		return null;
-	}
-
-	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta2;
-
-	private Tuple2<BeanMeta<T>,String> findBeanMeta() {
-		if (! cat.isUnknown())
-			return new Tuple2<>(null, "Known non-bean type");
-		if (beanContext == null)
-			return new Tuple2<>(null, "No bean context");
-
-		BeanMeta<T> newMeta = null;
-		String notABeanReason = null;
-		try {
-			newMeta = new BeanMeta<>(ClassMeta.this, beanContext, beanFilter.get(), null, implClass2.get() == null ? null : noArgConstructor.get());
-			notABeanReason = newMeta.notABeanReason;
-		} catch (RuntimeException e) {
-			notABeanReason = e.getMessage();
-			throw e;
-		}
-		return Tuple2.of(newMeta, notABeanReason);
-	}
-
-	private final Supplier<BeanRegistry> beanRegistry2;                // The bean registry of this class meta (if it has one).
 	private final Supplier<String> dictionaryName;                                      // The dictionary name of this class if it has one.
-
-	private BeanRegistry findBeanRegistry() {
-		if (beanContext == null)
-			return null;
-
-		var b = beanMeta2.get();
-		if (b.getA() != null)
-			return b.getA().beanRegistry;
-
-		return beanContext.getAnnotationProvider().find(Bean.class, this)
-			.stream()
-			.map(AnnotationInfo::inner)
-			.filter(x -> x.dictionary().length > 0)
-			.map(x -> new BeanRegistry(beanContext, null, x.dictionary()))
-			.findFirst()
-			.orElse(null);
-	}
 
 	private String findBeanDictionaryName() {
 		if (beanContext == null)
@@ -481,7 +317,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private ConstructorInfo findNoArgConstructor() {
 
-		if (is(Object.class) || isAbstract())
+		if (is(Object.class))
 			return null;
 
 		if (implClass2.get() != null)
@@ -549,6 +385,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private final Supplier<String> example;                           // Example JSON.
 
+	@SuppressWarnings("unchecked")
 	private String findExample() {
 
 		var example = opt(beanFilter.get()).map(x -> x.getExample()).orElse(null);
@@ -567,7 +404,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			} else if (cat.is(CHARSEQ)) {
 				example = "foo";
 			} else if (cat.is(ENUM)) {
-				Iterator<? extends Enum<?>> i = EnumSet.allOf((Class<? extends Enum>)(Class)inner()).iterator();
+				Iterator<? extends Enum<?>> i = EnumSet.allOf(inner().asSubclass(Enum.class)).iterator();
 				example = i.hasNext() ? (beanContext.isUseEnumNames() ? i.next().name() : i.next().toString()) : null;
 			} else if (isAny(float.class, Float.class, double.class, Double.class)) {
 				example = "1.0";
@@ -595,10 +432,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return (ClassInfoTyped<? extends T>)v;
 	}
 
-	private final ClassMeta<?> elementType2;                                         // If ARRAY or COLLECTION, the element class type.
-	private final ClassMeta<?> keyType2;                                             // If MAP, the key class type.
-	private final ClassMeta<?> valueType2;                                           // If MAP, the value class type.
-
 	private final Supplier<BidiMap<Object,String>> enumValues;
 
 	private BidiMap<Object,String> findEnumValues() {
@@ -609,7 +442,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		var useEnumNames = nn(bc) && bc.isUseEnumNames();
 
 		var m = BidiMap.<Object,String>create().unmodifiable();
-		var c = (Class<? extends Enum<?>>)(Class)inner();
+		var c = inner().asSubclass(Enum.class);
 		stream(c.getEnumConstants()).forEach(x -> m.add(x, useEnumNames ? x.name() : x.toString()));
 		return m.build();
 	}
@@ -637,8 +470,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	@SuppressWarnings("unchecked")
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
 		super(innerClass);
-		this.innerClass = innerClass;
-		this.info = info(innerClass);
 		this.beanContext = beanContext;
 		this.cat = new Categories();
 		var notABeanReason = (String)null;
@@ -713,7 +544,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			var _valueType = (ClassMeta<?>)null;
 
 			if (cat.is(ARRAY)) {
-				_elementType = beanContext.getClassMeta(getComponentType().inner(), false);
+				_elementType = beanContext.getClassMeta(inner().getComponentType(), false);
 			} else if (cat.is(MAP) && ! cat.is(BEANMAP)) {
 				// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
 				var parameters = beanContext.findParameters(inner(), inner());
@@ -734,18 +565,32 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				}
 			}
 
-			this.elementType2 = _elementType;
-			this.keyType2 = _keyType;
-			this.valueType2 = _valueType;
+			BeanMeta<T> _beanMeta = null;
+			var _beanRegistry = new Value<BeanRegistry>();
 
-			var builder = new ClassMetaBuilder<>(info, innerClass, beanContext);
+			if (! cat.isUnknown()) {
+				notABeanReason = "Known non-bean type";
+			} else {
+				try {
+					_beanMeta = new BeanMeta<>(ClassMeta.this, beanContext, beanFilter.get(), null, implClass2.get() == null ? null : noArgConstructor.get());
+					notABeanReason = _beanMeta.notABeanReason;
+					_beanRegistry.set(_beanMeta.beanRegistry);
+				} catch (RuntimeException e) {
+					notABeanReason = e.getMessage();
+				}
+			}
 
+			ap.find(Bean.class, this).stream().map(AnnotationInfo::inner).forEach(x2 -> {
+				if (x2.dictionary().length != 0)
+					_beanRegistry.set(new BeanRegistry(beanContext, null, x2.dictionary()));
+			});
+
+			this.beanMeta = notABeanReason == null ? _beanMeta : null;
+			this.keyType = _keyType;
+			this.valueType = _valueType;
+			this.elementType = _elementType;
 			this.enumValues = memoize(()->findEnumValues());
-			this.beanRegistry2 = memoize(()->findBeanRegistry());
 			this.dictionaryName = memoize(()->findBeanDictionaryName());
-			this.beanMeta2 = memoize(()->findBeanMeta());
-			this.typePropertyName2 = memoize(()->findTypePropertyName());
-
 
 			var _swaps = new ArrayList<ObjectSwap<T,?>>();
 			if (swaps != null)
@@ -767,25 +612,16 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				_swaps.add((ObjectSwap<T,?>)ds);
 
 			this.swaps = _swaps.isEmpty() ? null : _swaps.toArray(new ObjectSwap[_swaps.size()]);
-			this.keyType = builder.keyType;
-			this.valueType = builder.valueType;
-			this.elementType = builder.elementType;
-			notABeanReason = builder.notABeanReason;
-			this.beanMeta = builder.beanMeta;
-			this.initException = builder.initException;
-			this.typePropertyName = builder.typePropertyName;
-			this.invocationHandler = builder.invocationHandler;
-			this.beanRegistry = builder.beanRegistry;
+			this.typePropertyName = opt(beanMeta).map(x2 -> x2.typePropertyName).orElse(null);
+
+			this.invocationHandler = (nn(beanMeta) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta) : null;
+			this.beanRegistry = _beanRegistry.get();
 
 			this.childSwaps = childSwaps;
 			this.childUnswapMap = childSwaps == null ? null : new ConcurrentHashMap<>();
 			this.childSwapMap = childSwaps == null ? null : new ConcurrentHashMap<>();
 			this.args = null;
 			this.stringMutater = Mutaters.get(String.class, inner());
-		} catch (ClassMetaRuntimeException e) {
-			notABeanReason = e.getMessage();
-			throw e;
-		} finally {
 			this.notABeanReason = notABeanReason;
 		}
 	}
@@ -796,8 +632,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
 		super((Class<T>)Object[].class);
-		this.innerClass = (Class<T>)Object[].class;
-		this.info = info(innerClass);
 		this.args = args;
 		this.childSwaps = null;
 		this.childSwapMap = null;
@@ -812,7 +646,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.typePropertyName = null;
 		this.notABeanReason = null;
 		this.swaps = null;
-		this.initException = null;
 		this.beanRegistry = null;
 		this.stringMutater = null;
 		this.fromStringMethod = memoize(()->findFromStringMethod());
@@ -827,14 +660,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.builderSwap = memoize(()->findBuilderSwap());
 		this.example = memoize(()->findExample());
 		this.implClass2 = memoize(()->findImplClass());
-		this.elementType2 = null;
-		this.keyType2 = null;
-		this.valueType2 = null;
 		this.enumValues = memoize(()->findEnumValues());
-		this.beanRegistry2 = memoize(()->findBeanRegistry());
 		this.dictionaryName = memoize(()->findBeanDictionaryName());
-		this.beanMeta2 = memoize(()->findBeanMeta());
-		this.typePropertyName2 = memoize(()->findTypePropertyName());
 	}
 
 	/**
@@ -844,10 +671,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * Used for creating Map and Collection class metas that shouldn't be cached.
 	 */
 	ClassMeta(ClassMeta<T> mainType, ClassMeta<?> keyType, ClassMeta<?> valueType, ClassMeta<?> elementType) {
-		super(mainType.innerClass);
-		this.innerClass = mainType.innerClass;
-		this.info = mainType.info;
-//		this.implClass = mainType.implClass;
+		super(mainType.inner());
 		this.childSwaps = mainType.childSwaps;
 		this.childSwapMap = mainType.childSwapMap;
 		this.childUnswapMap = mainType.childUnswapMap;
@@ -860,16 +684,12 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.invocationHandler = mainType.invocationHandler;
 		this.beanMeta = mainType.beanMeta;
 		this.typePropertyName = mainType.typePropertyName;
-//		this.dictionaryName = mainType.dictionaryName;
 		this.notABeanReason = mainType.notABeanReason;
 		this.swaps = mainType.swaps;
-		this.initException = mainType.initException;
 		this.beanRegistry = mainType.beanRegistry;
 		this.exampleMethod = mainType.exampleMethod;
-//		this.example = mainType.example;
 		this.args = null;
 		this.stringMutater = mainType.stringMutater;
-//		this.enumValues = mainType.enumValues;
 		this.parentPropertySetter = mainType.parentPropertySetter;
 		this.namePropertySetter = mainType.namePropertySetter;
 		this.exampleField = mainType.exampleField;
@@ -880,16 +700,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.builderSwap = mainType.builderSwap;
 		this.example = mainType.example;
 		this.implClass2 = mainType.implClass2;
-		this.elementType2 = mainType.elementType2;
-		this.keyType2 = mainType.keyType2;
-		this.valueType2 = mainType.valueType2;
 		this.enumValues = mainType.enumValues;
-		this.beanRegistry2 = mainType.beanRegistry2;
 		this.dictionaryName = mainType.dictionaryName;
-		this.beanMeta2 = mainType.beanMeta2;
-		this.typePropertyName2 = mainType.typePropertyName2;
 	}
 
+	@SuppressWarnings("unchecked")
 	private ObjectSwap<T,?> createSwap(Swap s) {
 		var c = s.value();
 		if (ClassUtils.isVoid(c))
@@ -982,7 +797,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof ClassMeta<?> o2) && eq(this, o2, (x, y) -> eq(x.innerClass, y.innerClass));
+		return (o instanceof ClassMeta<?>) && super.equals(o);
 	}
 
 	/**
@@ -1130,7 +945,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			} else if (super.isArray()) {
 				var etExample = getElementType().getExample(session, jpSession);
 				if (nn(etExample)) {
-					var o = Array.newInstance(getElementType().innerClass, 1);
+					var o = Array.newInstance(getElementType().inner(), 1);
 					Array.set(o, 0, etExample);
 					return (T)o;
 				}
@@ -1166,7 +981,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (t == Mutaters.NULL)
 			return null;
 		if (t == null) {
-			t = Mutaters.get(c, innerClass);
+			t = Mutaters.get(c, inner());
 			if (t == null)
 				t = Mutaters.NULL;
 			fromMutaters.put(c, t);
@@ -1185,20 +1000,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return implClass2.get().getNoArgConstructor(conVis).orElse(null);
 		return null;
 	}
-
-	/**
-	 * Returns any exception that was throw in the <c>init()</c> method.
-	 *
-	 * @return The cached exception.
-	 */
-	public Throwable getInitException() { return initException; }
-
-	/**
-	 * Returns the {@link Class} object that this class type wraps.
-	 *
-	 * @return The wrapped class object.
-	 */
-	public Class<T> getInnerClass() { return innerClass; }
 
 	/**
 	 * Returns the transform for this class for creating instances from an InputStream.
@@ -1318,13 +1119,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	/**
-	 * Shortcut for calling {@link Class#getSimpleName()} on the inner class of this metadata.
-	 *
-	 * @return The simple name of the inner class.
-	 */
-	public String getSimpleName() { return innerClass.getSimpleName(); }
-
-	/**
 	 * Returns the transform for this class for creating instances from a String.
 	 *
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
@@ -1374,7 +1168,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (t == Mutaters.NULL)
 			return null;
 		if (t == null) {
-			t = Mutaters.get(innerClass, c);
+			t = Mutaters.get(inner(), c);
 			if (t == null)
 				t = Mutaters.NULL;
 			toMutaters.put(c, t);
@@ -1425,7 +1219,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
 	 */
 	public boolean hasMutaterFrom(ClassMeta<?> c) {
-		return nn(getFromMutater(c.getInnerClass()));
+		return nn(getFromMutater(c.inner()));
 	}
 
 	/**
@@ -1445,7 +1239,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return <jk>true</jk> if this class can be transformed to the specified type.
 	 */
 	public boolean hasMutaterTo(ClassMeta<?> c) {
-		return nn(getToMutater(c.getInnerClass()));
+		return nn(getToMutater(c.inner()));
 	}
 
 	/**
@@ -1648,7 +1442,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return <jk>true</jk> if instance of this class can be null.
 	 */
 	public boolean isNullable() {
-		if (innerClass.isPrimitive())
+		if (isPrimitive())
 			return is(char.class);
 		return true;
 	}
@@ -1673,14 +1467,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return <jk>true</jk> if this class is a subclass of {@link Optional}.
 	 */
 	public boolean isOptional() { return is(Optional.class); }
-
-	/**
-	 * Returns <jk>true</jk> if this class is a primitive.
-	 *
-	 * @return <jk>true</jk> if this class is a primitive.
-	 */
-	@Override
-	public boolean isPrimitive() { return innerClass.isPrimitive(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Reader}.
@@ -1765,10 +1551,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @param c The class
 	 * @return The transformed object.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public <O> O mutateTo(Object o, Class<O> c) {
 		Mutater<Object,O> t = (Mutater<Object,O>)getToMutater(c);
-		return (O)(t == null ? null : t.mutate(o));
+		return t == null ? null : t.mutate(o);
 	}
 
 	/**
@@ -1780,7 +1566,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The transformed object.
 	 */
 	public <O> O mutateTo(Object o, ClassMeta<O> c) {
-		return mutateTo(o, c.getInnerClass());
+		return mutateTo(o, c.inner());
 	}
 
 	/**
@@ -1793,13 +1579,13 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	@SuppressWarnings("unchecked")
 	public T newInstance() throws ExecutableException {
 		if (super.isArray())
-			return (T)Array.newInstance(getInnerClass().getComponentType(), 0);
+			return (T)Array.newInstance(inner().getComponentType(), 0);
 		var c = getConstructor();
 		if (nn(c))
 			return c.<T>newInstance();
 		var h = getProxyInvocationHandler();
 		if (nn(h))
-			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(getInnerClass(), java.io.Serializable.class), h);
+			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(inner(), java.io.Serializable.class), h);
 		return null;
 	}
 
@@ -1841,7 +1627,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (isEnum()) {
 			var t = (T)enumValues.get().getKey(arg);
 			if (t == null && ! beanContext.isIgnoreUnknownEnumValues())
-				throw new ExecutableException("Could not resolve enum value ''{0}'' on class ''{1}''", arg, getInnerClass().getName());
+				throw new ExecutableException("Could not resolve enum value ''{0}'' on class ''{1}''", arg, inner().getName());
 			return t;
 		}
 
@@ -1855,7 +1641,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				return c.<T>newInstance(outer, arg);
 			return c.<T>newInstance(arg);
 		}
-		throw new ExecutableException("No string constructor or valueOf(String) method found for class '" + getInnerClass().getName() + "'");
+		throw new ExecutableException("No string constructor or valueOf(String) method found for class '" + inner().getName() + "'");
 	}
 
 	/**
@@ -1986,7 +1772,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The passed-in string builder.
 	 */
 	protected StringBuilder toString(StringBuilder sb, boolean simple) {
-		var n = innerClass.getName();
+		var n = inner().getName();
 		if (simple) {
 			var i = n.lastIndexOf('.');
 			n = n.substring(i == -1 ? 0 : i + 1).replace('$', '.');

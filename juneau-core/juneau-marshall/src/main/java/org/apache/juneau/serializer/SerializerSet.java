@@ -381,7 +381,7 @@ public class SerializerSet {
 		}
 
 		private Object createBuilder(Object o) {
-			if (o instanceof Class o2) {
+			if (o instanceof Class<?> o2) {
 
 				// Check for no-arg constructor.
 				var ci = info(o2).getPublicConstructor(c -> c.getParameterCount() == 0).orElse(null);

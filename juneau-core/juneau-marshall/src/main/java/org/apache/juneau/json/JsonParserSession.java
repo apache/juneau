@@ -263,7 +263,7 @@ public class JsonParserSession extends ReaderParserSession {
 		} else if (sType.isChar()) {
 			o = parseCharacter(parseString(r));
 		} else if (sType.isNumber()) {
-			o = parseNumber(r, (Class<? extends Number>)sType.getInnerClass());
+			o = parseNumber(r, (Class<? extends Number>)sType.inner());
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
@@ -280,7 +280,7 @@ public class JsonParserSession extends ReaderParserSession {
 			var m = toBeanMap(builder.create(this, eType));
 			o = builder.build(this, parseIntoBeanMap2(r, m).getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
-			var m = newBeanMap(outer, sType.getInnerClass());
+			var m = newBeanMap(outer, sType.inner());
 			o = parseIntoBeanMap2(r, m).getBean();
 		} else if (sType.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
 			o = sType.newInstanceFromString(outer, parseString(r));
@@ -299,9 +299,9 @@ public class JsonParserSession extends ReaderParserSession {
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((JsonMap)m, pMeta, eType);
 			else if (nn(sType.getProxyInvocationHandler()))
-				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
+				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && ! isStrict()) {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else {

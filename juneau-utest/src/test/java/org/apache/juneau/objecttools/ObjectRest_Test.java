@@ -755,8 +755,8 @@ class ObjectRest_Test extends TestBase {
 	//====================================================================================================
 	@Test void f04_getClassMeta() {
 		var model = ObjectRest.create(new AddressBook().init());
-		assertEquals("Person", model.getClassMeta("0").getInnerClass().getSimpleName());
-		assertEquals("String", model.getClassMeta("0/addresses/0/state").getInnerClass().getSimpleName());
+		assertEquals("Person", model.getClassMeta("0").inner().getSimpleName());
+		assertEquals("String", model.getClassMeta("0/addresses/0/state").inner().getSimpleName());
 		assertNull(model.getClassMeta("1"));
 		assertNull(model.getClassMeta("0/addresses/1/state"));
 	}

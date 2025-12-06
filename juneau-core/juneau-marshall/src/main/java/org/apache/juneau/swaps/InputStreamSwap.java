@@ -119,7 +119,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 	 * @return The byte array.
 	 */
 	protected InputStream toStream(byte[] b, ClassMeta<?> hint) {
-		var c = hint == null ? InputStream.class : hint.getInnerClass();
+		var c = hint == null ? InputStream.class : hint.inner();
 		if (c == InputStream.class || c == ByteArrayInputStream.class)
 			return new ByteArrayInputStream(b);
 		return null;

@@ -250,7 +250,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				}
 			} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
-					BeanMap m = builder == null ? newBeanMap(outer, sType.getInnerClass()) : toBeanMap(builder.create(this, eType));
+					BeanMap m = builder == null ? newBeanMap(outer, sType.inner()) : toBeanMap(builder.create(this, eType));
 					for (var i = 0; i < length; i++) {
 						String pName = parseAnything(string(), is, m.getBean(false), null);
 						var bpm = m.getPropertyMeta(pName);
@@ -312,9 +312,9 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast(m, pMeta, eType);
 				else if (nn(sType.getProxyInvocationHandler()))
-					o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
+					o = newBeanMap(outer, sType.inner()).load(m).getBean();
 				else
-					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
 			} else {
 				throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 			}

@@ -403,7 +403,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 		} else if (sType.isCollectionOrArray() || (nn(wType) && wType.isCollection())) {
 
-			var c = sort(sType.isCollection() ? (Collection)o : toList(sType.getInnerClass(), o));
+			var c = sort(sType.isCollection() ? (Collection)o : toList(sType.inner(), o));
 			var f = getCollectionFormat();
 			var cRdf = getRdfClassMeta(sType);
 			var bpRdf = getRdfBeanPropertyMeta(bpm);
@@ -545,7 +545,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 		var cm = getClassMetaForObject(o);
 		if (isLooseCollections() && nn(cm) && cm.isCollectionOrArray()) {
-			Collection c = cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o);
+			Collection c = cm.isCollection() ? (Collection)o : toList(cm.inner(), o);
 			forEachEntry(c, x -> serializeAnything(x, false, object(), "root", null, null));
 		} else {
 			RDFNode n = serializeAnything(o, false, getExpectedRootType(o), "root", null, null);

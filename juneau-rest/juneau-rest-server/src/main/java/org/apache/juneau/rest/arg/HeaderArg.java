@@ -239,7 +239,7 @@ public class HeaderArg implements RestOpArg {
 		if (multi) {
 			var c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());
 			rh.stream(name).map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
-			return cm.isArray() ? toArray(c, cm.getElementType().getInnerClass()) : c;
+			return cm.isArray() ? toArray(c, cm.getElementType().inner()) : c;
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {

@@ -922,7 +922,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 */
 	public boolean isIgnoredType(ClassMeta<?> cm) {
 		for (var p : ignoreTypePatterns)
-			if (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
+			if (p.matcher(cm.getNameSimple()).matches() || p.matcher(cm.getName()).matches())
 				return true;
 		return false;
 	}

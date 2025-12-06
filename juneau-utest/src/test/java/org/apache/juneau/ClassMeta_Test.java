@@ -43,18 +43,18 @@ class ClassMeta_Test extends TestBase {
 		assertTrue(t.isMap());
 		assertFalse(t.isCollection());
 		assertNull(t.newInstance());
-		assertEquals(Map.class, t.getInnerClass());
-		assertEquals(String.class, t.getKeyType().getInnerClass());
-		assertEquals(String.class, t.getValueType().getInnerClass());
+		assertEquals(Map.class, t.inner());
+		assertEquals(String.class, t.getKeyType().inner());
+		assertEquals(String.class, t.getValueType().inner());
 	}
 
 	public String fb;
 
 	@Test void a02_string() throws Exception {
 		var t = bc.getClassMeta(this.getClass().getField("fb").getGenericType());
-		assertEquals(String.class, t.getInnerClass());
+		assertEquals(String.class, t.inner());
 		var t2 = bc.getClassMeta(this.getClass().getField("fb").getType());
-		assertEquals(String.class, t2.getInnerClass());
+		assertEquals(String.class, t2.inner());
 	}
 
 	public Map<String,Map<String,Integer>> fc;
@@ -126,11 +126,11 @@ class ClassMeta_Test extends TestBase {
 		assertNull(hc1.getSwap(bs));
 		assertNull(hi2.getSwap(bs));
 		assertNull(hc2.getSwap(bs));
-		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), BI1.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), BC1.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), BI2.class);
-		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), BC2.class);
+		assertEquals(ooo.getSerializedClassMeta(bs).inner(), Object.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).inner(), BI1.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).inner(), BC1.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).inner(), BI2.class);
+		assertEquals(hc2.getSerializedClassMeta(bs).inner(), BC2.class);
 
 		bc2 = BeanContext.create().swaps(BI1Swap.class).build();
 		bs = bc2.getSession();
@@ -149,11 +149,11 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hc1.getSwap(bs).getClass(), BI1Swap.class);
 		assertEquals(hi2.getSwap(bs).getClass(), BI1Swap.class);
 		assertEquals(hc2.getSwap(bs).getClass(), BI1Swap.class);
-		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
+		assertEquals(ooo.getSerializedClassMeta(bs).inner(), Object.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
 		bc2 = BeanContext.create().swaps(BC1Swap.class).build();
 		bs = bc2.getSession();
@@ -172,11 +172,11 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hc1.getSwap(bs).getClass(), BC1Swap.class);
 		assertNull(hi2.getSwap(bs));
 		assertEquals(hc2.getSwap(bs).getClass(), BC1Swap.class);
-		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), BI1.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), BI2.class);
-		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
+		assertEquals(ooo.getSerializedClassMeta(bs).inner(), Object.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).inner(), BI1.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).inner(), BI2.class);
+		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
 		bc2 = BeanContext.create().swaps(BI2Swap.class).build();
 		bs = bc2.getSession();
@@ -195,11 +195,11 @@ class ClassMeta_Test extends TestBase {
 		assertNull(hc1.getSwap(bs));
 		assertEquals(hi2.getSwap(bs).getClass(), BI2Swap.class);
 		assertEquals(hc2.getSwap(bs).getClass(), BI2Swap.class);
-		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), BI1.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), BC1.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
+		assertEquals(ooo.getSerializedClassMeta(bs).inner(), Object.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).inner(), BI1.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).inner(), BC1.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
 		bc2 = BeanContext.create().swaps(BC2Swap.class).build();
 		bs = bc2.getSession();
@@ -218,11 +218,11 @@ class ClassMeta_Test extends TestBase {
 		assertNull(hc1.getSwap(bs));
 		assertNull(hi2.getSwap(bs));
 		assertEquals(hc2.getSwap(bs).getClass(), BC2Swap.class);
-		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), BI1.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), BC1.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), BI2.class);
-		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
+		assertEquals(ooo.getSerializedClassMeta(bs).inner(), Object.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).inner(), BI1.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).inner(), BC1.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).inner(), BI2.class);
+		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
 		bc2 = BeanContext.create().swaps(BI1Swap.class,BC1Swap.class,BI2Swap.class, BC2Swap.class).build();
 		bs = bc2.getSession();
@@ -241,11 +241,11 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hc1.getSwap(bs).getClass(), BI1Swap.class);
 		assertEquals(hi2.getSwap(bs).getClass(), BI1Swap.class);
 		assertEquals(hc2.getSwap(bs).getClass(), BI1Swap.class);
-		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
+		assertEquals(ooo.getSerializedClassMeta(bs).inner(), Object.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
 		bc2 = BeanContext.create().swaps(BC2Swap.class,BI2Swap.class,BC1Swap.class, BI1Swap.class).build();
 		bs = bc2.getSession();
@@ -264,11 +264,11 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hc1.getSwap(bs).getClass(), BC1Swap.class);
 		assertEquals(hi2.getSwap(bs).getClass(), BI2Swap.class);
 		assertEquals(hc2.getSwap(bs).getClass(), BC2Swap.class);
-		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
+		assertEquals(ooo.getSerializedClassMeta(bs).inner(), Object.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).inner(), Map.class);
+		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

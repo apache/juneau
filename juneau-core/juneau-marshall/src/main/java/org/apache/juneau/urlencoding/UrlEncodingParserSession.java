@@ -253,7 +253,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : builder.build(this, m.getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
-			var m = newBeanMap(outer, sType.getInnerClass());
+			var m = newBeanMap(outer, sType.inner());
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : m.getBean();
 		} else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
@@ -265,7 +265,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			if (sType.isArgs())
 				o = c2.toArray(new Object[c2.size()]);
 			else if (sType.isArray())
-				o = CollectionUtils.toArray(c2, sType.getElementType().getInnerClass());
+				o = CollectionUtils.toArray(c2, sType.getElementType().inner());
 			else
 				o = c2;
 		} else {
@@ -277,7 +277,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			else if (m.containsKey("_value"))
 				o = convertToType(m.get("_value"), sType);
 			else if (nn(sType.getProxyInvocationHandler())) {
-				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
+				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			} else {
 				if (nn(sType.getNotABeanReason()))
 					throw new ParseException(this, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());

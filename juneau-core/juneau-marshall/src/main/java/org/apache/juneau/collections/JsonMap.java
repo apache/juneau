@@ -292,7 +292,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * Otherwise, returns c2.
 	 */
 	private static ClassMeta<?> getNarrowedClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
-		if (c2 == null || c2.isParentOf(c1.getInnerClass()))
+		if (c2 == null || c2.isParentOf(c1.inner()))
 			return c1;
 		return c2;
 	}
@@ -1795,7 +1795,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 				return (T)m2;
 
 			} else if (cm.isBean()) {
-				BeanMap<? extends T> bm = bs.newBeanMap(cm.getInnerClass());
+				BeanMap<? extends T> bm = bs.newBeanMap(cm.inner());
 
 				// Iterate through all the entries in the map and set the individual field values.
 				forEach((k, v) -> {
@@ -1820,10 +1820,10 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			}
 
 		} catch (Exception e) {
-			throw bex(e, cm.getInnerClass(), "Error occurred attempting to cast to an object of type ''{0}''", cm.getInnerClass().getName());
+			throw bex(e, cm.inner(), "Error occurred attempting to cast to an object of type ''{0}''", cm.inner().getName());
 		}
 
-		throw bex(cm.getInnerClass(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cm.getInnerClass().getName());
+		throw bex(cm.inner(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cm.inner().getName());
 	}
 
 	private ObjectRest getObjectRest() {
@@ -1845,11 +1845,11 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		if (c1.isMap()) {
 			ClassMeta<?> k = getNarrowedClassMeta(c1.getKeyType(), c2.getKeyType());
 			ClassMeta<?> v = getNarrowedClassMeta(c1.getValueType(), c2.getValueType());
-			return bs().getClassMeta(c.getInnerClass(), k, v);
+			return bs().getClassMeta(c.inner(), k, v);
 		}
 		if (c1.isCollection()) {
 			ClassMeta<?> e = getNarrowedClassMeta(c1.getElementType(), c2.getElementType());
-			return bs().getClassMeta(c.getInnerClass(), e);
+			return bs().getClassMeta(c.inner(), e);
 		}
 		return c;
 	}

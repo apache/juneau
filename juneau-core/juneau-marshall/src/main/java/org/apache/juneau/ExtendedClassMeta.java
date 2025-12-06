@@ -48,5 +48,5 @@ public class ExtendedClassMeta extends ExtendedMeta {
 	 *
 	 * @return The class wrapped by this metadata.
 	 */
-	protected Class<?> getInnerClass() { return cm.getInnerClass(); }
+	protected Class<?> getInnerClass() { return cm.inner(); }
 }
