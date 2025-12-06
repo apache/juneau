@@ -35,34 +35,114 @@ class ParentProperty_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a01_parentProperty(RoundTrip_Tester t) throws Exception {
-		var x = new B().init();
+		var x = new ParentPropertyMethodContainer().init();
 		x = t.roundTrip(x);
 		if (t.isValidationOnly())
 			return;
-		assertEquals(x.f1, x.b2.parent.f1);
+		assertEquals(x.f1, x.bean.parent.f1);
 	}
 
-	public static class B {
+	public static class ParentPropertyMethodContainer {
 		public int f1;
-		public B2 b2;
+		public ParentPropertyMethodBean bean;
 
-		B init() {
+		ParentPropertyMethodContainer init() {
 			f1 = 1;
-			b2 = new B2().init();
+			bean = new ParentPropertyMethodBean().init();
 			return this;
 		}
 
 	}
-	public static class B2 {
-		B parent;
+	public static class ParentPropertyMethodBean {
+		ParentPropertyMethodContainer parent;
 		public int f2;
 
 		@ParentProperty
-		protected void setParent(B v) {
+		protected void setParent(ParentPropertyMethodContainer v) {
 			parent = v;
 		}
 
-		B2 init() {
+		ParentPropertyMethodBean init() {
+			f2 = 2;
+			return this;
+		}
+	}
+
+	//====================================================================================================
+	// @ParentProperty field.
+	//====================================================================================================
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_parentPropertyField(RoundTrip_Tester t) throws Exception {
+		var x = new ParentPropertyFieldContainer().init();
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
+			return;
+		assertEquals(x.f1, x.bean.parent.f1);
+	}
+
+	public static class ParentPropertyFieldContainer {
+		public int f1;
+		public ParentPropertyFieldBean bean;
+
+		ParentPropertyFieldContainer init() {
+			f1 = 1;
+			bean = new ParentPropertyFieldBean().init();
+			return this;
+		}
+	}
+	public static class ParentPropertyFieldBean {
+		@ParentProperty
+		public ParentPropertyFieldContainer parent;
+		public int f2;
+
+		ParentPropertyFieldBean init() {
+			f2 = 2;
+			return this;
+		}
+	}
+
+	//====================================================================================================
+	// @ParentProperty read-only (getter only, no setter).
+	//====================================================================================================
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a03_readOnlyParentProperty(RoundTrip_Tester t) throws Exception {
+		var x = new ReadOnlyParentPropertyContainer().init();
+		// Initially, parent should be null (read-only property, can't be set)
+		assertNull(x.bean.getParent(), "Read-only parent property should initially be null");
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
+			return;
+		// After round-trip, parent should still be null because parser won't set read-only properties
+		assertNull(x.bean.getParent(), "Read-only parent property should not be set by parser");
+		// Verify the object structure is still correct
+		assertEquals(1, x.f1);
+		assertEquals(2, x.bean.f2);
+	}
+
+	public static class ReadOnlyParentPropertyContainer {
+		public int f1;
+		public ReadOnlyParentPropertyBean bean;
+
+		ReadOnlyParentPropertyContainer init() {
+			f1 = 1;
+			bean = new ReadOnlyParentPropertyBean().init();
+			return this;
+		}
+	}
+	public static class ReadOnlyParentPropertyBean {
+		private ReadOnlyParentPropertyContainer parent;
+		public int f2;
+
+		@ParentProperty
+		public ReadOnlyParentPropertyContainer getParent() {
+			return parent;
+		}
+
+		ReadOnlyParentPropertyBean init() {
 			f2 = 2;
 			return this;
 		}

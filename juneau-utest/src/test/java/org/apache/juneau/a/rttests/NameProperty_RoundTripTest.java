@@ -38,28 +38,28 @@ class NameProperty_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a01_nameProperty(RoundTrip_Tester t) throws Exception {
-		var x = new A().init();
+		var x = new NamePropertyMethodContainer().init();
 		x = t.roundTrip(x);
-		assertBean(x, "a2{f2},m{k1{f2}}", "{2},{{2}}");
+		assertBean(x, "bean{f2},m{k1{f2}}", "{2},{{2}}");
 		if (t.isValidationOnly())
 			return;
-		assertBean(x, "a2{name}", "{a2}");
+		assertBean(x, "bean{name}", "{bean}");
 		assertBean(x, "m{k1{name}}", "{{k1}}");
 	}
 
-	public static class A {
-		public A2 a2;
-		public Map<String,A2> m;
+	public static class NamePropertyMethodContainer {
+		public NamePropertyMethodBean bean;
+		public Map<String,NamePropertyMethodBean> m;
 
-		A init() {
-			a2 = new A2().init();
+		NamePropertyMethodContainer init() {
+			bean = new NamePropertyMethodBean().init();
 			m = new LinkedHashMap<>();
-			m.put("k1", new A2().init());
+			m.put("k1", new NamePropertyMethodBean().init());
 			return this;
 		}
 
 	}
-	public static class A2 {
+	public static class NamePropertyMethodBean {
 		String name;
 		public int f2;
 
@@ -68,7 +68,90 @@ class NameProperty_RoundTripTest extends RoundTripTest_Base {
 			this.name = name;
 		}
 
-		A2 init() {
+		NamePropertyMethodBean init() {
+			f2 = 2;
+			return this;
+		}
+	}
+
+	//====================================================================================================
+	// @NameProperty field.
+	//====================================================================================================
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_namePropertyField(RoundTrip_Tester t) throws Exception {
+		var x = new NamePropertyFieldContainer().init();
+		x = t.roundTrip(x);
+		assertBean(x, "bean{f2},m{k1{f2}}", "{2},{{2}}");
+		if (t.isValidationOnly())
+			return;
+		assertBean(x, "bean{name}", "{bean}");
+		assertBean(x, "m{k1{name}}", "{{k1}}");
+	}
+
+	public static class NamePropertyFieldContainer {
+		public NamePropertyFieldBean bean;
+		public Map<String,NamePropertyFieldBean> m;
+
+		NamePropertyFieldContainer init() {
+			bean = new NamePropertyFieldBean().init();
+			m = new LinkedHashMap<>();
+			m.put("k1", new NamePropertyFieldBean().init());
+			return this;
+		}
+	}
+	public static class NamePropertyFieldBean {
+		@NameProperty
+		public String name;
+		public int f2;
+
+		NamePropertyFieldBean init() {
+			f2 = 2;
+			return this;
+		}
+	}
+
+	//====================================================================================================
+	// @NameProperty read-only (getter only, no setter).
+	//====================================================================================================
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a03_readOnlyNameProperty(RoundTrip_Tester t) throws Exception {
+		var x = new ReadOnlyNamePropertyContainer().init();
+		var originalName = x.bean.getName(); // Should be "initialName"
+		x = t.roundTrip(x);
+		assertBean(x, "bean{f2},m{k1{f2}}", "{2},{{2}}");
+		if (t.isValidationOnly())
+			return;
+		// The name should NOT have changed because the property is read-only
+		assertEquals(originalName, x.bean.getName(), "Read-only name property should not be set by parser");
+		assertBean(x, "bean{name}", "{initialName}");
+		assertBean(x, "m{k1{name}}", "{{initialName}}");
+	}
+
+	public static class ReadOnlyNamePropertyContainer {
+		public ReadOnlyNamePropertyBean bean;
+		public Map<String,ReadOnlyNamePropertyBean> m;
+
+		ReadOnlyNamePropertyContainer init() {
+			bean = new ReadOnlyNamePropertyBean().init();
+			m = new LinkedHashMap<>();
+			m.put("k1", new ReadOnlyNamePropertyBean().init());
+			return this;
+		}
+	}
+	public static class ReadOnlyNamePropertyBean {
+		private String name = "initialName";
+		public int f2;
+
+		@NameProperty
+		public String getName() {
+			return name;
+		}
+
+		ReadOnlyNamePropertyBean init() {
 			f2 = 2;
 			return this;
 		}

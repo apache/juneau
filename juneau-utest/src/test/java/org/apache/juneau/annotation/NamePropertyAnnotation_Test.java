@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.ExecutableException;
 import org.junit.jupiter.api.*;
 
 class NamePropertyAnnotation_Test extends TestBase {
@@ -209,5 +210,30 @@ class NamePropertyAnnotation_Test extends TestBase {
 		prop.set(bean, 42);
 		assertEquals(42, prop.get(bean));
 		assertEquals(Integer.valueOf(42), bean.getId());
+	}
+
+	public static class TestBeanWithReadOnlyNameProperty {
+		private String name = "defaultName";
+
+		@NameProperty
+		public String getName() {
+			return name;
+		}
+	}
+
+	@Test void e06_readOnlyNameProperty() throws Exception {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(TestBeanWithReadOnlyNameProperty.class);
+		var prop = cm.getNameProperty();
+		assertNotNull(prop, "NameProperty should be found even if read-only");
+		assertFalse(prop.canWrite(), "Should not have setter");
+		assertTrue(prop.canRead(), "Should have getter");
+
+		var bean = new TestBeanWithReadOnlyNameProperty();
+		assertEquals("defaultName", prop.get(bean));
+
+		// Verify that set() throws an exception
+		var ex = assertThrows(ExecutableException.class, () -> prop.set(bean, "newName"));
+		assertTrue(ex.getMessage().contains("No setter defined"), "Should throw exception when trying to set read-only property");
 	}
 }

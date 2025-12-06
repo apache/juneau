@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.ExecutableException;
 import org.junit.jupiter.api.*;
 
 class ParentPropertyAnnotation_Test extends TestBase {
@@ -169,5 +170,33 @@ class ParentPropertyAnnotation_Test extends TestBase {
 		var cm = bc.getClassMeta(String.class);
 		var prop = cm.getParentProperty();
 		assertNull(prop, "ParentProperty should not be found on String class");
+	}
+
+	public static class TestBeanWithReadOnlyParentProperty {
+		private ParentBean parent = new ParentBean();
+
+		@ParentProperty
+		public ParentBean getParent() {
+			return parent;
+		}
+	}
+
+	@Test void e04_readOnlyParentProperty() throws Exception {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(TestBeanWithReadOnlyParentProperty.class);
+		var prop = cm.getParentProperty();
+		assertNotNull(prop, "ParentProperty should be found even if read-only");
+		assertFalse(prop.canWrite(), "Should not have setter");
+		assertTrue(prop.canRead(), "Should have getter");
+
+		var bean = new TestBeanWithReadOnlyParentProperty();
+		var parent = (ParentBean)prop.get(bean);
+		assertNotNull(parent, "Should be able to get parent");
+		assertEquals(42, parent.value);
+
+		// Verify that set() throws an exception
+		var newParent = new ParentBean();
+		var ex = assertThrows(ExecutableException.class, () -> prop.set(bean, newParent));
+		assertTrue(ex.getMessage().contains("No setter defined"), "Should throw exception when trying to set read-only property");
 	}
 }
