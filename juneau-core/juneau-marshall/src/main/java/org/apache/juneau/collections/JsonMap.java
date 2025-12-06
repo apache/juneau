@@ -1820,10 +1820,10 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			}
 
 		} catch (Exception e) {
-			throw bex(e, cm.inner(), "Error occurred attempting to cast to an object of type ''{0}''", cm.inner().getName());
+			throw bex(e, cm.inner(), "Error occurred attempting to cast to an object of type ''{0}''", cn(cm));
 		}
 
-		throw bex(cm.inner(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cm.inner().getName());
+		throw bex(cm.inner(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cn(cm));
 	}
 
 	private ObjectRest getObjectRest() {

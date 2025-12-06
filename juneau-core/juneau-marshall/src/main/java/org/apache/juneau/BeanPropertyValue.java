@@ -16,6 +16,8 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import org.apache.juneau.collections.*;
 
 /**
@@ -91,7 +93,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 			.create()
 			.append("name", name)
 			.append("value", value)
-			.append("type", pMeta.getClassMeta().inner().getSimpleName())
+			.append("type", cns(pMeta.getClassMeta()))
 			.toString();
 		// @formatter:on
 	}

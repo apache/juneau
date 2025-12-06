@@ -19,6 +19,7 @@ package org.apache.juneau.commons.annotation;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -446,7 +447,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		public BuilderT on(ClassInfo...value) {
 			assertVarargsNotNull("value", value);
 			for (var v : value)
-				on = addAll(on, v.inner().getName());
+				on = addAll(on, cn(v));
 			return this;
 		}
 

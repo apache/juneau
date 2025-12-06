@@ -149,7 +149,13 @@ public class ClassUtils {
 	 * @return The name of the class or <jk>null</jk> if the value was null.
 	 */
 	public static String className(Object value) {
-		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getName() : value.getClass().getName();
+		if (value == null)
+			return null;
+		if (value instanceof Class value2)
+			return value2.getName();
+		if (value instanceof ClassInfo value2)
+			return value2.getName();
+		return value.getClass().getName();
 	}
 
 	/**
@@ -185,9 +191,13 @@ public class ClassUtils {
 	 * @return The simple name of the class or <jk>null</jk> if the value was null.
 	 */
 	public static String classNameSimple(Object value) {
+		if (value == null)
+			return null;
+		if (value instanceof Class value2)
+			return value2.getSimpleName();
 		if (value instanceof ClassInfo value2)
 			return value2.getNameSimple();
-		return value == null ? null : value instanceof Class<?> c ? c.getSimpleName() : value.getClass().getSimpleName();
+		return value.getClass().getSimpleName();
 	}
 
 	/**

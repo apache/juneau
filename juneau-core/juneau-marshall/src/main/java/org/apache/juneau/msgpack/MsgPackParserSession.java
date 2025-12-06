@@ -314,7 +314,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				else if (nn(sType.getProxyInvocationHandler()))
 					o = newBeanMap(outer, sType.inner()).load(m).getBean();
 				else
-					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
+					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
 			} else {
 				throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 			}

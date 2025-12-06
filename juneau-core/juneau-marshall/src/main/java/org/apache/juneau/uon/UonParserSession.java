@@ -424,12 +424,12 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
+				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
 		} else if (c == 'n') {
 			r.read(); // NOSONAR - Intentional.
 			parseNull(r);
 		} else {
-			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
+			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
 		}
 
 		if (o == null && sType.isPrimitive())

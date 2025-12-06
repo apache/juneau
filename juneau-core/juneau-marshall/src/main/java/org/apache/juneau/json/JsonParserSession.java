@@ -301,7 +301,7 @@ public class JsonParserSession extends ReaderParserSession {
 			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.inner().getName(), sType.getNotABeanReason());
+				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && ! isStrict()) {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else {

@@ -922,7 +922,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return name + ": " + this.rawTypeMeta.inner().getName() + ", field=[" + field + "], getter=[" + getter + "], setter=[" + setter + "]";
+		return name + ": " + cn(this.rawTypeMeta) + ", field=[" + field + "], getter=[" + getter + "], setter=[" + setter + "]";
 	}
 
 	private Object applyChildPropertiesFilter(BeanSession session, ClassMeta cm, Object o) {
@@ -1047,7 +1047,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				m = (Map<String,Object>)getter.invoke(bean);
 			else
 				throw bex(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null",
-					name, this.getClassMeta().inner().getName(), findClassName(val));
+					name, cn(this.getClassMeta()), findClassName(val));
 			return (m == null ? null : m.put(pName, val));
 		}
 		if (nn(setter))
@@ -1057,7 +1057,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return null;
 		}
 		throw bex(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
-			this.getClassMeta().inner().getName(), findClassName(val));
+			cn(this.getClassMeta()), findClassName(val));
 	}
 
 	@SuppressWarnings("null")

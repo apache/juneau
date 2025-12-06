@@ -876,7 +876,7 @@ public class XmlParserSession extends ReaderParserSession {
 				m = new JsonMap(this).append(wrapperAttr, m);
 			o = newBeanMap(outer, sType.inner()).load(m).getBean();
 		} else {
-			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", sType.inner().getName(), sType.getNotABeanReason(),
+			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", cn(sType), sType.getNotABeanReason(),
 				pMeta == null ? null : pMeta.getName());
 		}
 
