@@ -106,7 +106,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		TEMPORAL(16),
 		LIST(17),
 		SET(18),
-		DELEGATE(19);
+		DELEGATE(19),
+		BEAN(20);
 
 		private final int mask;
 
@@ -312,6 +313,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			});
 
 			this.beanMeta = notABeanReason == null ? _beanMeta : null;
+			if (nn(this.beanMeta))
+				cat.set(BEAN);
 			this.keyType = _keyType;
 			this.valueType = _valueType;
 			this.elementType = _elementType;
@@ -973,7 +976,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a bean.
 	 */
-	public boolean isBean() { return nn(beanMeta); }
+	public boolean isBean() { return cat.is(BEAN); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link BeanMap}.
