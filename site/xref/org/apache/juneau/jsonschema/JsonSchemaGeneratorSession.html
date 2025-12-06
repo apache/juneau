@@ -290,7 +290,7 @@
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; getEnums(ClassMeta&lt;?&gt; cm) {
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		List&lt;String&gt; l = list();
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : ((Class&lt;Enum&lt;?&gt;&gt;)cm.getInnerClass()).getEnumConstants())
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : ((Class&lt;Enum&lt;?&gt;&gt;)cm.<strong class="jxr_keyword">inner</strong>()).getEnumConstants())
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			l.add(cm.toString(e));
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
@@ -425,7 +425,7 @@
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">if</strong> (tc == BEAN) {
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 				<strong class="jxr_keyword">var</strong> properties = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 				BeanMeta bm = getBeanMeta(sType.getInnerClass());
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 				BeanMeta bm = getBeanMeta(sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 				<strong class="jxr_keyword">if</strong> (nn(pNames))
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 					bm = <strong class="jxr_keyword">new</strong> <a name="BeanMetaFiltered" href="../../../../org/apache/juneau/BeanMetaFiltered.html#BeanMetaFiltered">BeanMetaFiltered</a>(bm, pNames);
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 				<strong class="jxr_keyword">for</strong> (Iterator&lt;BeanPropertyMeta&gt; i = bm.getPropertyMetas().iterator(); i.hasNext();) {

@@ -247,7 +247,7 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">if</strong> (multi) {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">var</strong> c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : <strong class="jxr_keyword">new</strong> <a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>());
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			rh.stream(name).map(x -&gt; x.parser(ps).schema(schema).as(cm.getElementType()).orElse(<strong class="jxr_keyword">null</strong>)).forEach(x -&gt; c.add(x));
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">return</strong> cm.isArray() ? toArray(c, cm.getElementType().getInnerClass()) : c;
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">return</strong> cm.isArray() ? toArray(c, cm.getElementType().<strong class="jxr_keyword">inner</strong>()) : c;
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">if</strong> (cm.isMapOrBean() &amp;&amp; isOneOf(name, <span class="jxr_string">"*"</span>, <span class="jxr_string">""</span>)) {

@@ -3661,7 +3661,7 @@
 <a class="jxr_linenumber" name="L3653" href="#L3653">3653</a> 		Class&lt;?&gt; parsedType = Object.<strong class="jxr_keyword">class</strong>;
 <a class="jxr_linenumber" name="L3654" href="#L3654">3654</a> 		<strong class="jxr_keyword">if</strong> (type == ARRAY) {
 <a class="jxr_linenumber" name="L3655" href="#L3655">3655</a> 			<strong class="jxr_keyword">if</strong> (nn(items))
-<a class="jxr_linenumber" name="L3656" href="#L3656">3656</a> 				parsedType = Array.newInstance(items.parsedType.getInnerClass(), 0).getClass();
+<a class="jxr_linenumber" name="L3656" href="#L3656">3656</a> 				parsedType = Array.newInstance(items.parsedType.<strong class="jxr_keyword">inner</strong>(), 0).getClass();
 <a class="jxr_linenumber" name="L3657" href="#L3657">3657</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type == BOOLEAN) {
 <a class="jxr_linenumber" name="L3658" href="#L3658">3658</a> 			parsedType = Boolean.<strong class="jxr_keyword">class</strong>;
 <a class="jxr_linenumber" name="L3659" href="#L3659">3659</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type == INTEGER) {

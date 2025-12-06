@@ -763,8 +763,8 @@
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> 	@Test <strong class="jxr_keyword">void</strong> f04_getClassMeta() {
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">var</strong> model = ObjectRest.create(<strong class="jxr_keyword">new</strong> AddressBook().init());
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		assertEquals(<span class="jxr_string">"Person"</span>, model.getClassMeta(<span class="jxr_string">"0"</span>).getInnerClass().getSimpleName());
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		assertEquals(<span class="jxr_string">"String"</span>, model.getClassMeta(<span class="jxr_string">"0/addresses/0/state"</span>).getInnerClass().getSimpleName());
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		assertEquals(<span class="jxr_string">"Person"</span>, model.getClassMeta(<span class="jxr_string">"0"</span>).<strong class="jxr_keyword">inner</strong>().getSimpleName());
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		assertEquals(<span class="jxr_string">"String"</span>, model.getClassMeta(<span class="jxr_string">"0/addresses/0/state"</span>).<strong class="jxr_keyword">inner</strong>().getSimpleName());
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 		assertNull(model.getClassMeta(<span class="jxr_string">"1"</span>));
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 		assertNull(model.getClassMeta(<span class="jxr_string">"0/addresses/1/state"</span>));
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 	}

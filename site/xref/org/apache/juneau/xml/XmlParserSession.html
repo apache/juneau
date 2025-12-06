@@ -856,11 +856,11 @@
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> 			<strong class="jxr_keyword">var</strong> l = (sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Collection)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : <strong class="jxr_keyword">new</strong> <a name="JsonList" href="../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L849" href="#L849">849</a> 			o = parseIntoCollection(r, l, sType, pMeta);
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isNumber()) {
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> 			o = parseNumber(getElementText(r), (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)sType.getInnerClass());
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 			o = parseNumber(getElementText(r), (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(builder) || sType.canCreateNewBean(<strong class="jxr_keyword">outer</strong>)) {
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 			<strong class="jxr_keyword">if</strong> (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 				<strong class="jxr_keyword">var</strong> fieldName = r.getLocalName();
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 				<strong class="jxr_keyword">var</strong> m = nn(builder) ? toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType)) : newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass());
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 				<strong class="jxr_keyword">var</strong> m = nn(builder) ? toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType)) : newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 				<strong class="jxr_keyword">var</strong> bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> 				<strong class="jxr_keyword">var</strong> cm = m.getMeta().getClassMeta();
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, <strong class="jxr_keyword">null</strong>);
@@ -868,7 +868,7 @@
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> 				bpm.set(m, currAttr, value);
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 				o = nn(builder) ? builder.build(<strong class="jxr_keyword">this</strong>, m.getBean(), eType) : m.getBean();
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> 				<strong class="jxr_keyword">var</strong> m = nn(builder) ? toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType)) : newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass());
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 				<strong class="jxr_keyword">var</strong> m = nn(builder) ? toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType)) : newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L864" href="#L864">864</a> 				m = parseIntoBean(r, m, isNil);
 <a class="jxr_linenumber" name="L865" href="#L865">865</a> 				o = nn(builder) ? builder.build(<strong class="jxr_keyword">this</strong>, m.getBean(), eType) : m.getBean();
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> 			}
@@ -882,9 +882,9 @@
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> 			parseIntoMap(r, m, string(), object(), pMeta);
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> 			<strong class="jxr_keyword">if</strong> (nn(wrapperAttr))
 <a class="jxr_linenumber" name="L876" href="#L876">876</a> 				m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>).append(wrapperAttr, m);
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 			o = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass()).load(m).getBean();
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 			o = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>()).load(m).getBean();
 <a class="jxr_linenumber" name="L878" href="#L878">878</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L879" href="#L879">879</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''"</span>, sType.getInnerClass().getName(), sType.getNotABeanReason(),
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''"</span>, sType.<strong class="jxr_keyword">inner</strong>().getName(), sType.getNotABeanReason(),
 <a class="jxr_linenumber" name="L880" href="#L880">880</a> 				pMeta == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : pMeta.getName());
 <a class="jxr_linenumber" name="L881" href="#L881">881</a> 		}
 <a class="jxr_linenumber" name="L882" href="#L882">882</a> 

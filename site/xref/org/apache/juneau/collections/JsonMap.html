@@ -300,7 +300,7 @@
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_comment">	 * Otherwise, returns c2.</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ClassMeta&lt;?&gt; getNarrowedClassMeta(ClassMeta&lt;?&gt; c1, ClassMeta&lt;?&gt; c2) {
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">if</strong> (c2 == <strong class="jxr_keyword">null</strong> || c2.isParentOf(c1.getInnerClass()))
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">if</strong> (c2 == <strong class="jxr_keyword">null</strong> || c2.isParentOf(c1.<strong class="jxr_keyword">inner</strong>()))
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">return</strong> c1;
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">return</strong> c2;
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
@@ -1803,7 +1803,7 @@
 <a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> 				<strong class="jxr_keyword">return</strong> (T)m2;
 <a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 
 <a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isBean()) {
-<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 				BeanMap&lt;? <strong class="jxr_keyword">extends</strong> T&gt; bm = bs.newBeanMap(cm.getInnerClass());
+<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 				BeanMap&lt;? <strong class="jxr_keyword">extends</strong> T&gt; bm = bs.newBeanMap(cm.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> 
 <a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> 				<em class="jxr_comment">// Iterate through all the entries in the map and set the individual field values.</em>
 <a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> 				forEach((k, v) -&gt; {
@@ -1828,10 +1828,10 @@
 <a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 			}
 <a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 
 <a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 			<strong class="jxr_keyword">throw</strong> bex(e, cm.getInnerClass(), <span class="jxr_string">"Error occurred attempting to cast to an object of type ''{0}''"</span>, cm.getInnerClass().getName());
+<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 			<strong class="jxr_keyword">throw</strong> bex(e, cm.<strong class="jxr_keyword">inner</strong>(), <span class="jxr_string">"Error occurred attempting to cast to an object of type ''{0}''"</span>, cm.<strong class="jxr_keyword">inner</strong>().getName());
 <a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 		}
 <a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 
-<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 		<strong class="jxr_keyword">throw</strong> bex(cm.getInnerClass(), <span class="jxr_string">"Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method."</span>, cm.getInnerClass().getName());
+<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 		<strong class="jxr_keyword">throw</strong> bex(cm.<strong class="jxr_keyword">inner</strong>(), <span class="jxr_string">"Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method."</span>, cm.<strong class="jxr_keyword">inner</strong>().getName());
 <a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> 	}
 <a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> 
 <a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> 	<strong class="jxr_keyword">private</strong> ObjectRest getObjectRest() {
@@ -1853,11 +1853,11 @@
 <a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 		<strong class="jxr_keyword">if</strong> (c1.isMap()) {
 <a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 			ClassMeta&lt;?&gt; k = getNarrowedClassMeta(c1.getKeyType(), c2.getKeyType());
 <a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 			ClassMeta&lt;?&gt; v = getNarrowedClassMeta(c1.getValueType(), c2.getValueType());
-<a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 			<strong class="jxr_keyword">return</strong> bs().getClassMeta(c.getInnerClass(), k, v);
+<a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 			<strong class="jxr_keyword">return</strong> bs().getClassMeta(c.<strong class="jxr_keyword">inner</strong>(), k, v);
 <a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 		}
 <a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 		<strong class="jxr_keyword">if</strong> (c1.isCollection()) {
 <a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 			ClassMeta&lt;?&gt; e = getNarrowedClassMeta(c1.getElementType(), c2.getElementType());
-<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 			<strong class="jxr_keyword">return</strong> bs().getClassMeta(c.getInnerClass(), e);
+<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 			<strong class="jxr_keyword">return</strong> bs().getClassMeta(c.<strong class="jxr_keyword">inner</strong>(), e);
 <a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> 		}
 <a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 		<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> 	}

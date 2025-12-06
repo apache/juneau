@@ -258,7 +258,7 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				}
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(builder) || sType.canCreateNewBean(<strong class="jxr_keyword">outer</strong>)) {
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 				<strong class="jxr_keyword">if</strong> (dt == MAP) {
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 					BeanMap m = builder == <strong class="jxr_keyword">null</strong> ? newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass()) : toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 					BeanMap m = builder == <strong class="jxr_keyword">null</strong> ? newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>()) : toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType));
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; length; i++) {
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 						String pName = parseAnything(string(), is, m.getBean(false), <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 						<strong class="jxr_keyword">var</strong> bpm = m.getPropertyMeta(pName);
@@ -320,9 +320,9 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">if</strong> (m.containsKey(getBeanTypePropertyName(eType)))
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 					o = <strong class="jxr_keyword">cast</strong>(m, pMeta, eType);
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(sType.getProxyInvocationHandler()))
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 					o = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass()).load(m).getBean();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 					o = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>()).load(m).getBean();
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 				<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class ''{0}'' could not be instantiated.  Reason: ''{1}''"</span>, sType.getInnerClass().getName(), sType.getNotABeanReason());
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class ''{0}'' could not be instantiated.  Reason: ''{1}''"</span>, sType.<strong class="jxr_keyword">inner</strong>().getName(), sType.getNotABeanReason());
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Invalid data type {0} encountered for parse type {1}"</span>, dt, sType);
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 			}

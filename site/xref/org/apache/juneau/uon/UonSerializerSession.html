@@ -481,7 +481,7 @@
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isCollection()) {
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 			serializeCollection(out, (Collection)o, eType);
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isArray()) {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			serializeCollection(out, toList(sType.<strong class="jxr_keyword">inner</strong>(), o), eType);
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isReader()) {
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 			pipe((Reader)o, out, SerializerSession::handleThrown);
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isInputStream()) {

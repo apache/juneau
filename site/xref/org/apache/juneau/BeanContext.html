@@ -4449,10 +4449,10 @@
 <a class="jxr_linenumber" name="L4441" href="#L4441">4441</a> 			<strong class="jxr_keyword">if</strong> (cm.getBeanContext() == <strong class="jxr_keyword">this</strong>)
 <a class="jxr_linenumber" name="L4442" href="#L4442">4442</a> 				<strong class="jxr_keyword">return</strong> cm;
 <a class="jxr_linenumber" name="L4443" href="#L4443">4443</a> 			<strong class="jxr_keyword">if</strong> (cm.isMap())
-<a class="jxr_linenumber" name="L4444" href="#L4444">4444</a> 				<strong class="jxr_keyword">return</strong> getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
+<a class="jxr_linenumber" name="L4444" href="#L4444">4444</a> 				<strong class="jxr_keyword">return</strong> getClassMeta(cm.<strong class="jxr_keyword">inner</strong>(), cm.getKeyType(), cm.getValueType());
 <a class="jxr_linenumber" name="L4445" href="#L4445">4445</a> 			<strong class="jxr_keyword">if</strong> (cm.isCollection() || cm.isOptional())
-<a class="jxr_linenumber" name="L4446" href="#L4446">4446</a> 				<strong class="jxr_keyword">return</strong> getClassMeta(cm.innerClass, cm.getElementType());
-<a class="jxr_linenumber" name="L4447" href="#L4447">4447</a> 			<strong class="jxr_keyword">return</strong> getClassMeta(cm.innerClass);
+<a class="jxr_linenumber" name="L4446" href="#L4446">4446</a> 				<strong class="jxr_keyword">return</strong> getClassMeta(cm.<strong class="jxr_keyword">inner</strong>(), cm.getElementType());
+<a class="jxr_linenumber" name="L4447" href="#L4447">4447</a> 			<strong class="jxr_keyword">return</strong> getClassMeta(cm.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L4448" href="#L4448">4448</a> 		}
 <a class="jxr_linenumber" name="L4449" href="#L4449">4449</a> 
 <a class="jxr_linenumber" name="L4450" href="#L4450">4450</a> 		Class c = resolve(o, typeVarImpls);

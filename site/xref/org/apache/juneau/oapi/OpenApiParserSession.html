@@ -406,7 +406,7 @@
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 				<strong class="jxr_keyword">var</strong> items = schema.getItems();
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 				<strong class="jxr_keyword">if</strong> (items == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 					items = HttpPartSchema.DEFAULT;
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 				<strong class="jxr_keyword">var</strong> o = Array.newInstance(eType.getInnerClass(), ss.length);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 				<strong class="jxr_keyword">var</strong> o = Array.newInstance(eType.<strong class="jxr_keyword">inner</strong>(), ss.length);
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; ss.length; i++)
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 					Array.set(o, i, parse(partType, items, ss[i], eType));
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 				<strong class="jxr_keyword">if</strong> (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
@@ -449,7 +449,7 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 				}
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 				<strong class="jxr_keyword">if</strong> (type.isBean()) {
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					<strong class="jxr_keyword">var</strong> m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					<strong class="jxr_keyword">var</strong> m = ctx.getBeanContext().newBeanMap(type.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : ss) {
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 						<strong class="jxr_keyword">var</strong> kv = StringUtils.splita(s, '=', 2);
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 						<strong class="jxr_keyword">if</strong> (kv.length != 2)

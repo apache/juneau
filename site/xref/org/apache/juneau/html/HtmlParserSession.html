@@ -268,7 +268,7 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">var</strong> nameProperty = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			beanType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.uriProperty()), x -&gt; uriProperty.set(x.uriProperty()));
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			beanType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.nameProperty()), x -&gt; nameProperty.set(x.nameProperty()));
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			BeanMap&lt;T&gt; m = newBeanMap(beanType.getInnerClass());
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			BeanMap&lt;T&gt; m = newBeanMap(beanType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			m.put(uriProperty.orElse(<span class="jxr_string">""</span>), href);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 			m.put(nameProperty.orElse(<span class="jxr_string">""</span>), name);
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">return</strong> m.getBean();
@@ -345,7 +345,7 @@
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isBoolean())
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 				o = Boolean.parseBoolean(text);
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isNumber())
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 				o = parseNumber(text, (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)eType.getInnerClass());
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 				o = parseNumber(text, (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)eType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.canCreateNewInstanceFromString(<strong class="jxr_keyword">outer</strong>))
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 				o = sType.newInstanceFromString(<strong class="jxr_keyword">outer</strong>, text);
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 			<strong class="jxr_keyword">else</strong>
@@ -368,7 +368,7 @@
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">if</strong> (sType.isObject())
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 				o = parseNumber(text, Number.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isNumber())
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 				o = parseNumber(text, (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)sType.getInnerClass());
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 				o = parseNumber(text, (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 				isValid = false;
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 			skipTag(r, xNUMBER);
@@ -417,10 +417,10 @@
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 					BeanMap m = toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType));
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 					o = builder.build(<strong class="jxr_keyword">this</strong>, parseIntoBean(r, m).getBean(), eType);
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.canCreateNewBean(<strong class="jxr_keyword">outer</strong>)) {
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 					BeanMap m = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass());
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 					BeanMap m = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 					o = parseIntoBean(r, m).getBean();
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(sType.getProxyInvocationHandler())) {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					BeanMap m = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass());
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					BeanMap m = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 					o = parseIntoBean(r, m).getBean();
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 					isValid = false;
@@ -607,7 +607,7 @@
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 				BeanMap m =
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 					nn(builder)
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 					? toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, elementType))
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 					: newBeanMap(l, elementType.getInnerClass())
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 					: newBeanMap(l, elementType.<strong class="jxr_keyword">inner</strong>())
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 				;
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 				<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> key : keys) {

@@ -171,13 +171,13 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 				<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 					<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">var</strong> pcm = cm.innerClass.getSuperclass();
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">var</strong> pcm = cm.<strong class="jxr_keyword">inner</strong>().getSuperclass();
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">if</strong> (nn(pcm)) {
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">var</strong> s = findDictionaryName(ctx.getClassMeta(pcm));
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 					<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 			}
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> icm : cm.innerClass.getInterfaces()) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> icm : cm.<strong class="jxr_keyword">inner</strong>().getInterfaces()) {
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 				<strong class="jxr_keyword">var</strong> s = findDictionaryName(ctx.getClassMeta(icm));
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 				<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 					<strong class="jxr_keyword">return</strong> s;
@@ -201,7 +201,7 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		}
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		String init(BeanMeta&lt;T&gt; beanMeta) {
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">var</strong> c = classMeta.getInnerClass();
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">var</strong> c = classMeta.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">var</strong> ci = classMeta;
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">var</strong> ap = ctx.getAnnotationProvider();
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
@@ -218,7 +218,7 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">var</strong> typeName = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 				classMeta.forEachAnnotation(Bean.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.typeName()), x -&gt; typeName.set(x.typeName()));
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 				<strong class="jxr_keyword">if</strong> (typeName.isPresent())
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					bdClasses.add(classMeta.innerClass);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					bdClasses.add(classMeta.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 				<strong class="jxr_keyword">this</strong>.beanRegistry = <strong class="jxr_keyword">new</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a>(ctx, <strong class="jxr_keyword">null</strong>, bdClasses.toArray(<strong class="jxr_keyword">new</strong> Class&lt;?&gt;[bdClasses.size()]));
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 				<strong class="jxr_keyword">var</strong> typePropertyName = Value.&lt;String&gt;empty();
@@ -897,7 +897,7 @@
 <a class="jxr_linenumber" name="L889" href="#L889">889</a> 	<strong class="jxr_keyword">protected</strong> <a name="BeanMeta" href="../../../org/apache/juneau/BeanMeta.html#BeanMeta">BeanMeta</a>(ClassMeta&lt;T&gt; classMeta, BeanContext ctx, <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> beanFilter, String[] pNames, <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> implClassConstructor) {
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> 		<strong class="jxr_keyword">this</strong>.classMeta = classMeta;
 <a class="jxr_linenumber" name="L891" href="#L891">891</a> 		<strong class="jxr_keyword">this</strong>.ctx = ctx;
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 		<strong class="jxr_keyword">this</strong>.c = classMeta.getInnerClass();
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 		<strong class="jxr_keyword">this</strong>.c = classMeta.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L893" href="#L893">893</a> 
 <a class="jxr_linenumber" name="L894" href="#L894">894</a> 		Builder&lt;T&gt; b = <strong class="jxr_keyword">new</strong> Builder&lt;&gt;(classMeta, ctx, beanFilter, pNames, implClassConstructor);
 <a class="jxr_linenumber" name="L895" href="#L895">895</a> 		notABeanReason = b.init(<strong class="jxr_keyword">this</strong>);
@@ -1061,8 +1061,8 @@
 <a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 				<strong class="jxr_keyword">return</strong> constructor.&lt;T&gt;newInstance();
 <a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 <a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 			<strong class="jxr_keyword">if</strong> (nn(h)) {
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 				ClassLoader cl = classMeta.innerClass.getClassLoader();
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 				<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(cl, a(classMeta.innerClass, java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 				ClassLoader cl = classMeta.<strong class="jxr_keyword">inner</strong>().getClassLoader();
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 				<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(cl, a(classMeta.<strong class="jxr_keyword">inner</strong>(), java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
 <a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 			}
 <a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		}
 <a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 				<strong class="jxr_keyword">if</strong> (! ignoreUnknownProperties)
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Unknown property ''{0}'' encountered in configuration section ''{1}''."</span>, k, name);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 			}
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		}
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 
@@ -262,7 +262,7 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 				<strong class="jxr_keyword">if</strong> (! ignoreUnknownProperties)
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Unknown property ''{0}'' encountered in configuration section ''{1}''."</span>, k, name);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 			}
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 		}
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 

@@ -281,7 +281,7 @@
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isByteArray()) {
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			out.appendBinary((byte[])o);
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isArray()) {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			serializeCollection(out, toList(sType.<strong class="jxr_keyword">inner</strong>(), o), eType);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isReader()) {
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 			pipe((Reader)o, out, SerializerSession::handleThrown);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isInputStream()) {

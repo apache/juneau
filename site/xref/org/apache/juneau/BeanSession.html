@@ -1180,7 +1180,7 @@
 <a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 			<strong class="jxr_keyword">if</strong> (to.isOptional() &amp;&amp; (! (value instanceof Optional)))
 <a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 				<strong class="jxr_keyword">return</strong> (T)opt(convertToMemberType(<strong class="jxr_keyword">outer</strong>, value, to.getElementType()));
 <a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 
-<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 			<strong class="jxr_keyword">var</strong> tc = to.getInnerClass();
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 			<strong class="jxr_keyword">var</strong> tc = to.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 
 <a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 			<em class="jxr_comment">// If no conversion needed, then just return the value.</em>
 <a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 			<em class="jxr_comment">// Don't include maps or collections, because child elements may need conversion.</em>
@@ -1206,7 +1206,7 @@
 <a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 			<strong class="jxr_keyword">if</strong> (nn(swap)) {
 <a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 				<strong class="jxr_keyword">var</strong> nc = swap.getNormalClass();
 <a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 				<strong class="jxr_keyword">var</strong> fc = swap.getSwapClass();
-<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 				<strong class="jxr_keyword">if</strong> (nc.isParentOf(from.getInnerClass()) &amp;&amp; fc.isParentOf(tc))
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 				<strong class="jxr_keyword">if</strong> (nc.isParentOf(from.<strong class="jxr_keyword">inner</strong>()) &amp;&amp; fc.isParentOf(tc))
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 					<strong class="jxr_keyword">return</strong> (T)swap.swap(<strong class="jxr_keyword">this</strong>, value);
 <a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 			}
 <a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 
@@ -1513,7 +1513,7 @@
 <a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 					<strong class="jxr_keyword">var</strong> typeName = m2.getString(getBeanTypePropertyName(to));
 <a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 					<strong class="jxr_keyword">if</strong> (nn(typeName)) {
 <a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 						<strong class="jxr_keyword">var</strong> cm = to.getBeanRegistry().getClassMeta(typeName);
-<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 						<strong class="jxr_keyword">if</strong> (nn(cm) &amp;&amp; to.isParentOf(cm.innerClass))
+<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 						<strong class="jxr_keyword">if</strong> (nn(cm) &amp;&amp; to.isParentOf(cm.<strong class="jxr_keyword">inner</strong>()))
 <a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> 							<strong class="jxr_keyword">return</strong> (T)m2.<strong class="jxr_keyword">cast</strong>(cm);
 <a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> 					}
 <a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> 				}
@@ -1562,7 +1562,7 @@
 <a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> 				<strong class="jxr_keyword">return</strong> (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime());
 <a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> 			}
 <a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> 
-<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> 			<strong class="jxr_keyword">if</strong> (to.isDate() &amp;&amp; to.getInnerClass() == Date.<strong class="jxr_keyword">class</strong>) {
+<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> 			<strong class="jxr_keyword">if</strong> (to.isDate() &amp;&amp; to.<strong class="jxr_keyword">inner</strong>() == Date.<strong class="jxr_keyword">class</strong>) {
 <a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> 				<strong class="jxr_keyword">if</strong> (from.isCalendar())
 <a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> 					<strong class="jxr_keyword">return</strong> (T)((Calendar)value).getTime();
 <a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> 				<strong class="jxr_keyword">return</strong> (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime()).getTime();
@@ -1575,7 +1575,7 @@
 <a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> 				<strong class="jxr_keyword">return</strong> from.mutateTo(value, to);
 <a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> 
 <a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 			<strong class="jxr_keyword">if</strong> (to.isBean())
-<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 				<strong class="jxr_keyword">return</strong> newBeanMap(to.getInnerClass()).load(value.toString()).getBean();
+<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 				<strong class="jxr_keyword">return</strong> newBeanMap(to.<strong class="jxr_keyword">inner</strong>()).load(value.toString()).getBean();
 <a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 
 <a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 			<strong class="jxr_keyword">if</strong> (to.canCreateNewInstanceFromString(<strong class="jxr_keyword">outer</strong>))
 <a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> 				<strong class="jxr_keyword">return</strong> to.newInstanceFromString(<strong class="jxr_keyword">outer</strong>, value.toString());
@@ -1657,11 +1657,11 @@
 <a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> 		<strong class="jxr_keyword">if</strong> (list == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 		<strong class="jxr_keyword">var</strong> componentType = type.isArgs() ? object() : type.getElementType();
-<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 		<strong class="jxr_keyword">var</strong> array = Array.newInstance(componentType.getInnerClass(), list.size());
+<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 		<strong class="jxr_keyword">var</strong> array = Array.newInstance(componentType.<strong class="jxr_keyword">inner</strong>(), list.size());
 <a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 		<strong class="jxr_keyword">var</strong> i = IntegerValue.create();
 <a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 		list.forEach(x -&gt; {
 <a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 			<strong class="jxr_keyword">var</strong> x2 = x;
-<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 			<strong class="jxr_keyword">if</strong> (! type.getInnerClass().isInstance(x)) {
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 			<strong class="jxr_keyword">if</strong> (! type.<strong class="jxr_keyword">inner</strong>().isInstance(x)) {
 <a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 				<strong class="jxr_keyword">if</strong> (componentType.isArray() &amp;&amp; x instanceof Collection&lt;?&gt; c)
 <a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 					x2 = toArray(componentType, c);
 <a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x == <strong class="jxr_keyword">null</strong> &amp;&amp; componentType.isPrimitive())

@@ -373,7 +373,7 @@
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isChar()) {
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 			o = parseCharacter(parseString(r, isUrlParamValue));
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isNumber()) {
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			o = parseNumber(r, (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)sType.getInnerClass());
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			o = parseNumber(r, (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isMap()) {
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">var</strong> m = (sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Map)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : newGenericMap(sType));
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
@@ -399,7 +399,7 @@
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 			m = parseIntoBeanMap(r, m);
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 			o = m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : builder.build(<strong class="jxr_keyword">this</strong>, m.getBean(), eType);
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.canCreateNewBean(<strong class="jxr_keyword">outer</strong>)) {
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">var</strong> m = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass());
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">var</strong> m = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 			m = parseIntoBeanMap(r, m);
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 			o = m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.getBean();
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.canCreateNewInstanceFromString(<strong class="jxr_keyword">outer</strong>)) {
@@ -430,14 +430,14 @@
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">if</strong> (m.containsKey(getBeanTypePropertyName(sType)))
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 				o = <strong class="jxr_keyword">cast</strong>(m, pMeta, eType);
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(sType.getProxyInvocationHandler()))
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 				o = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass()).load(m).getBean();
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 				o = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>()).load(m).getBean();
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class ''{0}'' could not be instantiated.  Reason: ''{1}''"</span>, sType.getInnerClass().getName(), sType.getNotABeanReason());
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class ''{0}'' could not be instantiated.  Reason: ''{1}''"</span>, sType.<strong class="jxr_keyword">inner</strong>().getName(), sType.getNotABeanReason());
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == 'n') {
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 			r.read(); <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 			parseNull(r);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class ''{0}'' could not be instantiated.  Reason: ''{1}''"</span>, sType.getInnerClass().getName(), sType.getNotABeanReason());
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class ''{0}'' could not be instantiated.  Reason: ''{1}''"</span>, sType.<strong class="jxr_keyword">inner</strong>().getName(), sType.getNotABeanReason());
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 		}
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong> &amp;&amp; sType.isPrimitive())

@@ -930,7 +930,7 @@
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> 
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<strong class="jxr_keyword">return</strong> name + <span class="jxr_string">": "</span> + <strong class="jxr_keyword">this</strong>.rawTypeMeta.getInnerClass().getName() + <span class="jxr_string">", field=["</span> + field + <span class="jxr_string">"], getter=["</span> + getter + <span class="jxr_string">"], setter=["</span> + setter + <span class="jxr_string">"]"</span>;
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<strong class="jxr_keyword">return</strong> name + <span class="jxr_string">": "</span> + <strong class="jxr_keyword">this</strong>.rawTypeMeta.<strong class="jxr_keyword">inner</strong>().getName() + <span class="jxr_string">", field=["</span> + field + <span class="jxr_string">"], getter=["</span> + getter + <span class="jxr_string">"], setter=["</span> + setter + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 	}
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 
 <a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">private</strong> Object applyChildPropertiesFilter(BeanSession session, <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> cm, Object o) {
@@ -1055,7 +1055,7 @@
 <a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 				m = (Map&lt;String,Object&gt;)getter.invoke(bean);
 <a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>,
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 					name, <strong class="jxr_keyword">this</strong>.getClassMeta().getInnerClass().getName(), findClassName(val));
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 					name, <strong class="jxr_keyword">this</strong>.getClassMeta().<strong class="jxr_keyword">inner</strong>().getName(), findClassName(val));
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 			<strong class="jxr_keyword">return</strong> (m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.put(pName, val));
 <a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 		}
 <a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 		<strong class="jxr_keyword">if</strong> (nn(setter))
@@ -1065,7 +1065,7 @@
 <a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 		}
 <a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>, name,
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 			<strong class="jxr_keyword">this</strong>.getClassMeta().getInnerClass().getName(), findClassName(val));
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 			<strong class="jxr_keyword">this</strong>.getClassMeta().<strong class="jxr_keyword">inner</strong>().getName(), findClassName(val));
 <a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 	}
 <a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 	@SuppressWarnings(<span class="jxr_string">"null"</span>)
@@ -1103,7 +1103,7 @@
 <a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 				<strong class="jxr_keyword">var</strong> r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) &amp;&amp; (nn(getter) || nn(field)) ? get(m, pName) : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 				<strong class="jxr_keyword">var</strong> propertyClass = rawTypeMeta.getInnerClass();
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 				<strong class="jxr_keyword">var</strong> propertyClass = rawTypeMeta.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 				<strong class="jxr_keyword">var</strong> pcInfo = rawTypeMeta;
 <a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 
 <a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 				<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> &amp;&amp; (isMap || isCollection)) {
@@ -1139,7 +1139,7 @@
 <a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 								<strong class="jxr_keyword">if</strong> (! valueType.isObject()) {
 <a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 									<strong class="jxr_keyword">var</strong> needsConversion = Flag.create();
 <a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 									valueMap.forEach((k, v) -&gt; {
-<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 										<strong class="jxr_keyword">if</strong> (nn(v) &amp;&amp; ! valueType.getInnerClass().isInstance(v)) {
+<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 										<strong class="jxr_keyword">if</strong> (nn(v) &amp;&amp; ! valueType.<strong class="jxr_keyword">inner</strong>().isInstance(v)) {
 <a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 											needsConversion.set();
 <a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 										}
 <a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 									});
@@ -1198,7 +1198,7 @@
 <a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 									List l = <strong class="jxr_keyword">new</strong> <a name="JsonList" href="../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>(valueList);
 <a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 									<strong class="jxr_keyword">for</strong> (ListIterator&lt;Object&gt; i = l.listIterator(); i.hasNext();) {
 <a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 										Object v = i.next();
-<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 										<strong class="jxr_keyword">if</strong> (nn(v) &amp;&amp; (! elementType.getInnerClass().isInstance(v))) {
+<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 										<strong class="jxr_keyword">if</strong> (nn(v) &amp;&amp; (! elementType.<strong class="jxr_keyword">inner</strong>().isInstance(v))) {
 <a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 											i.set(session.convertToType(v, elementType));
 <a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 										}
 <a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 									}
@@ -1318,7 +1318,7 @@
 <a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> <em class="jxr_javadoccomment">	 * @throws InvocationTargetException Thrown by method invocation.</em>
 <a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> setArray(Object bean, List l) <strong class="jxr_keyword">throws</strong> IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 		Object array = toArray(l, <strong class="jxr_keyword">this</strong>.rawTypeMeta.getElementType().getInnerClass());
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 		Object array = toArray(l, <strong class="jxr_keyword">this</strong>.rawTypeMeta.getElementType().<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 		invokeSetter(bean, name, array);
 <a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 	}
 <a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 

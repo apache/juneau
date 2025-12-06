@@ -1166,7 +1166,7 @@
 <a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRequest(<a name="RequestBeanMeta" href="../../../../org/apache/juneau/httppart/bean/RequestBeanMeta.html#RequestBeanMeta">RequestBeanMeta</a> rbm) {
 <a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 			<strong class="jxr_keyword">var</strong> c = (Class&lt;T&gt;)rbm.getClassMeta().getInnerClass();
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 			<strong class="jxr_keyword">var</strong> c = (Class&lt;T&gt;)rbm.getClassMeta().<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 			<strong class="jxr_keyword">final</strong> BeanSession bs = getBeanSession();
 <a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 			<strong class="jxr_keyword">final</strong> BeanMeta&lt;T&gt; bm = bs.getBeanMeta(c);
 <a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -&gt; {

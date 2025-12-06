@@ -479,7 +479,7 @@
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 		HtmlClassMeta cHtml = getHtmlClassMeta(sType);
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		Collection c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		Collection c = (sType.isCollection() ? (Collection)in : toList(sType.<strong class="jxr_keyword">inner</strong>(), in));
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">boolean</strong> isCdc = cHtml.isHtmlCdc() || bpHtml.isHtmlCdc();
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">boolean</strong> isSdc = cHtml.isHtmlSdc() || bpHtml.isHtmlSdc();

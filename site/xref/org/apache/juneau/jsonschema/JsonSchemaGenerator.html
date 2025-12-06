@@ -930,7 +930,7 @@
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isIgnoredType(ClassMeta&lt;?&gt; cm) {
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : ignoreTypePatterns)
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 			<strong class="jxr_keyword">if</strong> (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 			<strong class="jxr_keyword">if</strong> (p.matcher(cm.getNameSimple()).matches() || p.matcher(cm.getName()).matches())
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L928" href="#L928">928</a> 	}
