@@ -962,6 +962,29 @@ public class BeanMeta<T> {
 	public final String getDictionaryName() { return dictionaryName; }
 
 	/**
+	 * Returns the type property name for this bean.
+	 *
+	 * <p>
+	 * This is the name of the bean property used to store the dictionary name of a bean type so that the parser knows
+	 * the data type to reconstruct.
+	 *
+	 * <p>
+	 * If <jk>null</jk>, <js>"_type"</js> should be assumed.
+	 *
+	 * <p>
+	 * The value is determined from:
+	 * <ul>
+	 * 	<li>The {@link Bean#typePropertyName() @Bean(typePropertyName)} annotation on the class, if present.
+	 * 	<li>Otherwise, the default value from {@link BeanContext#getBeanTypePropertyName()}.
+	 * </ul>
+	 *
+	 * @return
+	 * 	The type property name associated with this bean, or <jk>null</jk> if the default <js>"_type"</js> should be used.
+	 * @see BeanContext#getBeanTypePropertyName()
+	 */
+	public final String getTypePropertyName() { return typePropertyName; }
+
+	/**
 	 * Returns metadata about the specified property.
 	 *
 	 * @param name The name of the property on this bean.

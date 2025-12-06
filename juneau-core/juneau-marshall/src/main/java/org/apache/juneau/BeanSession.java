@@ -588,7 +588,12 @@ public class BeanSession extends ContextSession {
 	 * @return The type property name.  Never <jk>null</jk>.
 	 */
 	public final String getBeanTypePropertyName(ClassMeta cm) {
-		var s = cm == null ? null : cm.getBeanTypePropertyName();
+		if (cm == null)
+			return getBeanTypePropertyName();
+		var beanMeta = cm.getBeanMeta();
+		if (beanMeta == null)
+			return getBeanTypePropertyName();
+		var s = beanMeta.getTypePropertyName();
 		return s == null ? getBeanTypePropertyName() : s;
 	}
 

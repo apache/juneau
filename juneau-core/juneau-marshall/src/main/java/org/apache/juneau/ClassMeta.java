@@ -173,7 +173,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final OptionalSupplier<ConstructorInfo> stringConstructor;                                                     // The X(String) constructor (if it has one).
 	private final ObjectSwap<T,?>[] swaps;                                                                          // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
-	private final String typePropertyName;                                                                          // The property name of the _type property for this class and subclasses.
 	private final ClassMeta<?> valueType;                                                                           // If MAP, the value class type.
 
 	/**
@@ -337,7 +336,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				_swaps.add((ObjectSwap<T,?>)ds);
 
 			this.swaps = _swaps.isEmpty() ? null : _swaps.toArray(new ObjectSwap[_swaps.size()]);
-			this.typePropertyName = opt(beanMeta).map(x2 -> x2.typePropertyName).orElse(null);
 
 			this.proxyInvocationHandler = ()->(nn(beanMeta) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta) : null;
 			this.beanRegistry = _beanRegistry.get();
@@ -368,7 +366,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.valueType = null;
 		this.proxyInvocationHandler = null;
 		this.beanMeta = null;
-		this.typePropertyName = null;
 		this.notABeanReason = null;
 		this.swaps = null;
 		this.beanRegistry = null;
@@ -408,7 +405,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.valueType = valueType;
 		this.proxyInvocationHandler = mainType.proxyInvocationHandler;
 		this.beanMeta = mainType.beanMeta;
-		this.typePropertyName = mainType.typePropertyName;
 		this.notABeanReason = mainType.notABeanReason;
 		this.swaps = mainType.swaps;
 		this.beanRegistry = mainType.beanRegistry;
@@ -565,17 +561,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public BeanRegistry getBeanRegistry() { return beanRegistry; }
 
 
-	/**
-	 * Returns the type property name associated with this class and subclasses.
-	 *
-	 * <p>
-	 * If <jk>null</jk>, <js>"_type"</js> should be assumed.
-	 *
-	 * @return
-	 * 	The type property name associated with this bean class, or <jk>null</jk> if there is no explicit type
-	 * 	property name defined or this isn't a bean.
-	 */
-	public String getBeanTypePropertyName() { return typePropertyName; }
 
 	/**
 	 * Returns the builder swap associated with this class.
