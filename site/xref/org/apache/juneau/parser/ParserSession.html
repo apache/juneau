@@ -227,7 +227,7 @@
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setName(ClassMeta&lt;?&gt; cm, Object o, Object name) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">if</strong> (nn(cm)) {
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			Setter m = cm.getNameProperty();
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			Property m = cm.getNameProperty();
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">if</strong> (nn(m))
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 				m.set(o, name);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		}
@@ -243,7 +243,7 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setParent(ClassMeta&lt;?&gt; cm, Object o, Object parent) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		Setter m = cm.getParentProperty();
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		Property m = cm.getParentProperty();
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">if</strong> (nn(m))
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			m.set(o, parent);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
