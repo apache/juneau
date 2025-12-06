@@ -1077,7 +1077,7 @@
 <a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> <em class="jxr_javadoccomment">	 * @return A thread-safe memoizing wrapper around the supplier.</em>
 <a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException if supplier is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Supplier&lt;T&gt; memoize(Supplier&lt;T&gt; supplier) {
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; OptionalSupplier&lt;T&gt; memoize(Supplier&lt;T&gt; supplier) {
 <a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 		assertArgNotNull(<span class="jxr_string">"supplier"</span>, supplier);
 <a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 
 <a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 		<strong class="jxr_keyword">var</strong> cache = <strong class="jxr_keyword">new</strong> AtomicReference&lt;Optional&lt;T&gt;&gt;();
