@@ -243,7 +243,7 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * @param parent The parent to set.</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setParent(ClassMeta&lt;?&gt; cm, Object o, Object parent) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		Property m = cm.getParentProperty();
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">if</strong> (nn(m) &amp;&amp; m.canWrite())

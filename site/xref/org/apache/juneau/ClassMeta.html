@@ -1598,7 +1598,7 @@
 <a class="jxr_linenumber" name="L1590" href="#L1590">1590</a> 
 <a class="jxr_linenumber" name="L1591" href="#L1591">1591</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isPresent()) {
 <a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> 			builder.setter(setterMethod.get().accessible());
-<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> 			
+<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> 
 <a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> 			<em class="jxr_comment">// Try to find a corresponding getter method (even if not annotated)</em>
 <a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> 			<em class="jxr_comment">// If setter is "setName", look for "getName" or "isName"</em>
 <a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> 			<strong class="jxr_keyword">var</strong> setterName = setterMethod.get().getSimpleName();
@@ -1609,7 +1609,7 @@
 <a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 
 <a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 				<strong class="jxr_keyword">var</strong> getter = getAllMethods()
 <a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> 					.stream()
-<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> 					.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp; 
+<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> 					.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;
 <a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> 						(x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;
 <a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> 						!x.getReturnType().is(Void.TYPE))
 <a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> 					.findFirst();
@@ -1626,7 +1626,7 @@
 <a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> 
 <a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> 					<strong class="jxr_keyword">if</strong> (field.isPresent()) {
 <a class="jxr_linenumber" name="L1620" href="#L1620">1620</a> 						<strong class="jxr_keyword">var</strong> f = field.get().accessible();
-<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> 						builder.getter(obj -&gt; (Object)f.get(obj));
+<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> 						builder.getter(obj -&gt; f.get(obj));
 <a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> 					}
 <a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> 				}
 <a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> 			}
@@ -1690,7 +1690,7 @@
 <a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> 
 <a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isPresent()) {
 <a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> 			builder.setter(setterMethod.get().accessible());
-<a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> 			
+<a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> 
 <a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> 			<em class="jxr_comment">// Try to find a corresponding getter method (even if not annotated)</em>
 <a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> 			<em class="jxr_comment">// If setter is "setParent", look for "getParent" or "isParent"</em>
 <a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> 			<strong class="jxr_keyword">var</strong> setterName = setterMethod.get().getSimpleName();
@@ -1701,7 +1701,7 @@
 <a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> 
 <a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> 				<strong class="jxr_keyword">var</strong> getter = getAllMethods()
 <a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> 					.stream()
-<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> 					.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp; 
+<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> 					.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;
 <a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> 						(x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;
 <a class="jxr_linenumber" name="L1698" href="#L1698">1698</a> 						!x.getReturnType().is(Void.TYPE))
 <a class="jxr_linenumber" name="L1699" href="#L1699">1699</a> 					.findFirst();
@@ -1718,7 +1718,7 @@
 <a class="jxr_linenumber" name="L1710" href="#L1710">1710</a> 
 <a class="jxr_linenumber" name="L1711" href="#L1711">1711</a> 					<strong class="jxr_keyword">if</strong> (field.isPresent()) {
 <a class="jxr_linenumber" name="L1712" href="#L1712">1712</a> 						<strong class="jxr_keyword">var</strong> f = field.get().accessible();
-<a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 						builder.getter(obj -&gt; (Object)f.get(obj));
+<a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 						builder.getter(obj -&gt; f.get(obj));
 <a class="jxr_linenumber" name="L1714" href="#L1714">1714</a> 					}
 <a class="jxr_linenumber" name="L1715" href="#L1715">1715</a> 				}
 <a class="jxr_linenumber" name="L1716" href="#L1716">1716</a> 			}
