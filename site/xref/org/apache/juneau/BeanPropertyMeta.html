@@ -930,7 +930,7 @@
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> 
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<strong class="jxr_keyword">return</strong> name + <span class="jxr_string">": "</span> + <strong class="jxr_keyword">this</strong>.rawTypeMeta.<strong class="jxr_keyword">inner</strong>().getName() + <span class="jxr_string">", field=["</span> + field + <span class="jxr_string">"], getter=["</span> + getter + <span class="jxr_string">"], setter=["</span> + setter + <span class="jxr_string">"]"</span>;
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<strong class="jxr_keyword">return</strong> name + <span class="jxr_string">": "</span> + cn(<strong class="jxr_keyword">this</strong>.rawTypeMeta) + <span class="jxr_string">", field=["</span> + field + <span class="jxr_string">"], getter=["</span> + getter + <span class="jxr_string">"], setter=["</span> + setter + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 	}
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 
 <a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">private</strong> Object applyChildPropertiesFilter(BeanSession session, <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> cm, Object o) {
@@ -1055,7 +1055,7 @@
 <a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 				m = (Map&lt;String,Object&gt;)getter.invoke(bean);
 <a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>,
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 					name, <strong class="jxr_keyword">this</strong>.getClassMeta().<strong class="jxr_keyword">inner</strong>().getName(), findClassName(val));
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 					name, cn(<strong class="jxr_keyword">this</strong>.getClassMeta()), findClassName(val));
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 			<strong class="jxr_keyword">return</strong> (m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.put(pName, val));
 <a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 		}
 <a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 		<strong class="jxr_keyword">if</strong> (nn(setter))
@@ -1065,7 +1065,7 @@
 <a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 		}
 <a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>, name,
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 			<strong class="jxr_keyword">this</strong>.getClassMeta().<strong class="jxr_keyword">inner</strong>().getName(), findClassName(val));
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 			cn(<strong class="jxr_keyword">this</strong>.getClassMeta()), findClassName(val));
 <a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 	}
 <a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 	@SuppressWarnings(<span class="jxr_string">"null"</span>)

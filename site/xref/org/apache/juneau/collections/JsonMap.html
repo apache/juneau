@@ -1828,10 +1828,10 @@
 <a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 			}
 <a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 
 <a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 			<strong class="jxr_keyword">throw</strong> bex(e, cm.<strong class="jxr_keyword">inner</strong>(), <span class="jxr_string">"Error occurred attempting to cast to an object of type ''{0}''"</span>, cm.<strong class="jxr_keyword">inner</strong>().getName());
+<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 			<strong class="jxr_keyword">throw</strong> bex(e, cm.<strong class="jxr_keyword">inner</strong>(), <span class="jxr_string">"Error occurred attempting to cast to an object of type ''{0}''"</span>, cn(cm));
 <a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 		}
 <a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 
-<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 		<strong class="jxr_keyword">throw</strong> bex(cm.<strong class="jxr_keyword">inner</strong>(), <span class="jxr_string">"Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method."</span>, cm.<strong class="jxr_keyword">inner</strong>().getName());
+<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 		<strong class="jxr_keyword">throw</strong> bex(cm.<strong class="jxr_keyword">inner</strong>(), <span class="jxr_string">"Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method."</span>, cn(cm));
 <a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> 	}
 <a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> 
 <a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> 	<strong class="jxr_keyword">private</strong> ObjectRest getObjectRest() {
