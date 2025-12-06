@@ -16,10 +16,7 @@
  */
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.params.*;
@@ -29,50 +26,7 @@ import org.junit.jupiter.params.provider.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-class ObjectsWithSpecialMethods_RoundTripTest extends RoundTripTest_Base {
-
-	//====================================================================================================
-	// @NameProperty method.
-	//====================================================================================================
-
-	@ParameterizedTest
-	@MethodSource("testers")
-	void a01_nameProperty(RoundTrip_Tester t) throws Exception {
-		var x = new A().init();
-		x = t.roundTrip(x);
-		assertBean(x, "a2{f2},m{k1{f2}}", "{2},{{2}}");
-		if (t.isValidationOnly())
-			return;
-		assertBean(x, "a2{name}", "{a2}");
-		assertBean(x, "m{k1{name}}", "{{k1}}");
-	}
-
-	public static class A {
-		public A2 a2;
-		public Map<String,A2> m;
-
-		A init() {
-			a2 = new A2().init();
-			m = new LinkedHashMap<>();
-			m.put("k1", new A2().init());
-			return this;
-		}
-
-	}
-	public static class A2 {
-		String name;
-		public int f2;
-
-		@NameProperty
-		protected void setName(String name) {
-			this.name = name;
-		}
-
-		A2 init() {
-			f2 = 2;
-			return this;
-		}
-	}
+class ParentProperty_RoundTripTest extends RoundTripTest_Base {
 
 	//====================================================================================================
 	// @ParentProperty method.
@@ -80,7 +34,7 @@ class ObjectsWithSpecialMethods_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_parentProperty(RoundTrip_Tester t) throws Exception {
+	void a01_parentProperty(RoundTrip_Tester t) throws Exception {
 		var x = new B().init();
 		x = t.roundTrip(x);
 		if (t.isValidationOnly())
@@ -114,3 +68,4 @@ class ObjectsWithSpecialMethods_RoundTripTest extends RoundTripTest_Base {
 		}
 	}
 }
+

@@ -107,4 +107,67 @@ class ParentPropertyAnnotation_Test extends TestBase {
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Property functionality tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class ParentBean {
+		public int value = 42;
+	}
+
+	public static class TestBeanWithParentPropertyField {
+		@ParentProperty
+		public ParentBean parent;
+	}
+
+	public static class TestBeanWithParentPropertyMethod {
+		private ParentBean parent;
+
+		@ParentProperty
+		protected void setParent(ParentBean parent) {
+			this.parent = parent;
+		}
+
+		public ParentBean getParent() {
+			return parent;
+		}
+	}
+
+	@Test void e01_parentPropertyField() throws Exception {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(TestBeanWithParentPropertyField.class);
+		var prop = cm.getParentProperty();
+		assertNotNull(prop, "ParentProperty should be found");
+		assertTrue(prop.canWrite(), "Should have setter");
+		assertTrue(prop.canRead(), "Should have getter");
+
+		var bean = new TestBeanWithParentPropertyField();
+		var parent = new ParentBean();
+		prop.set(bean, parent);
+		assertSame(parent, prop.get(bean));
+		assertSame(parent, bean.parent);
+	}
+
+	@Test void e02_parentPropertyMethod() throws Exception {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(TestBeanWithParentPropertyMethod.class);
+		var prop = cm.getParentProperty();
+		assertNotNull(prop, "ParentProperty should be found");
+		assertTrue(prop.canWrite(), "Should have setter");
+		assertTrue(prop.canRead(), "Should have getter");
+
+		var bean = new TestBeanWithParentPropertyMethod();
+		var parent = new ParentBean();
+		prop.set(bean, parent);
+		assertSame(parent, prop.get(bean));
+		assertSame(parent, bean.getParent());
+	}
+
+	@Test void e03_parentPropertyNotFound() {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(String.class);
+		var prop = cm.getParentProperty();
+		assertNull(prop, "ParentProperty should not be found on String class");
+	}
 }

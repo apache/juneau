@@ -90,8 +90,8 @@ class Property_Test extends TestBase {
 		var obj = new TestClass();
 		obj.setPublicField("testValue");
 		assertEquals("testValue", prop.get(obj));
-		assertTrue(prop.hasGetter());
-		assertFalse(prop.hasSetter());
+		assertTrue(prop.canRead());
+		assertFalse(prop.canWrite());
 	}
 
 	//====================================================================================================
@@ -106,8 +106,8 @@ class Property_Test extends TestBase {
 		var obj = new TestClass();
 		prop.set(obj, "testValue");
 		assertEquals("testValue", obj.getPublicField());
-		assertFalse(prop.hasGetter());
-		assertTrue(prop.hasSetter());
+		assertFalse(prop.canRead());
+		assertTrue(prop.canWrite());
 	}
 
 	//====================================================================================================
@@ -423,8 +423,8 @@ class Property_Test extends TestBase {
 			.build();
 
 		assertNotNull(prop);
-		assertTrue(prop.hasGetter());
-		assertTrue(prop.hasSetter());
+		assertTrue(prop.canRead());
+		assertTrue(prop.canWrite());
 	}
 
 	//====================================================================================================

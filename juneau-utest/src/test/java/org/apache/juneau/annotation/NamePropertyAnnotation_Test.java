@@ -107,4 +107,107 @@ class NamePropertyAnnotation_Test extends TestBase {
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Property functionality tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class TestBeanWithNamePropertyField {
+		@NameProperty
+		public String name;
+	}
+
+	public static class TestBeanWithNamePropertyMethod {
+		private String name;
+
+		@NameProperty
+		protected void setName(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+
+	@Test void e01_namePropertyField() throws Exception {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(TestBeanWithNamePropertyField.class);
+		var prop = cm.getNameProperty();
+		assertNotNull(prop, "NameProperty should be found");
+		assertTrue(prop.canWrite(), "Should have setter");
+		assertTrue(prop.canRead(), "Should have getter");
+
+		var bean = new TestBeanWithNamePropertyField();
+		prop.set(bean, "testName");
+		assertEquals("testName", prop.get(bean));
+		assertEquals("testName", bean.name);
+	}
+
+	@Test void e02_namePropertyMethod() throws Exception {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(TestBeanWithNamePropertyMethod.class);
+		var prop = cm.getNameProperty();
+		assertNotNull(prop, "NameProperty should be found");
+		assertTrue(prop.canWrite(), "Should have setter");
+		assertTrue(prop.canRead(), "Should have getter");
+
+		var bean = new TestBeanWithNamePropertyMethod();
+		prop.set(bean, "testName");
+		assertEquals("testName", prop.get(bean));
+		assertEquals("testName", bean.getName());
+	}
+
+	@Test void e03_namePropertyNotFound() {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(String.class);
+		var prop = cm.getNameProperty();
+		assertNull(prop, "NameProperty should not be found on String class");
+	}
+
+	public static class TestBeanWithNamePropertyIntegerField {
+		@NameProperty
+		public Integer id;
+	}
+
+	public static class TestBeanWithNamePropertyIntegerMethod {
+		private Integer id;
+
+		@NameProperty
+		protected void setId(Integer id) {
+			this.id = id;
+		}
+
+		public Integer getId() {
+			return id;
+		}
+	}
+
+	@Test void e04_namePropertyWithIntegerField() throws Exception {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(TestBeanWithNamePropertyIntegerField.class);
+		var prop = cm.getNameProperty();
+		assertNotNull(prop, "NameProperty should be found");
+		assertTrue(prop.canWrite(), "Should have setter");
+		assertTrue(prop.canRead(), "Should have getter");
+
+		var bean = new TestBeanWithNamePropertyIntegerField();
+		prop.set(bean, 42);
+		assertEquals(42, prop.get(bean));
+		assertEquals(Integer.valueOf(42), bean.id);
+	}
+
+	@Test void e05_namePropertyWithIntegerMethod() throws Exception {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(TestBeanWithNamePropertyIntegerMethod.class);
+		var prop = cm.getNameProperty();
+		assertNotNull(prop, "NameProperty should be found");
+		assertTrue(prop.canWrite(), "Should have setter");
+		assertTrue(prop.canRead(), "Should have getter");
+
+		var bean = new TestBeanWithNamePropertyIntegerMethod();
+		prop.set(bean, 42);
+		assertEquals(42, prop.get(bean));
+		assertEquals(Integer.valueOf(42), bean.getId());
+	}
 }

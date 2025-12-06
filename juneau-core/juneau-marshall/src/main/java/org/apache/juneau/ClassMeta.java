@@ -162,10 +162,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final ClassMeta<?> keyType;                                                                             // If MAP, the key class type.
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 	private final Supplier<MarshalledFilter> marshalledFilter;
-	private final Supplier<Property<T,String>> namePropertySetter;                                            // The method to set the name on an object (if it has one).
+	private final Supplier<Property<T,Object>> nameProperty;                                            // The method to set the name on an object (if it has one).
 	private final Supplier<ConstructorInfo> noArgConstructor;                                                       // The no-arg constructor for this class (if it has one).
 	private final String notABeanReason;                                                                            // If this isn't a bean, the reason why.
-	private final Supplier<Property<T,?>> parentPropertySetter;                                          // The method to set the parent on an object (if it has one).
+	private final Supplier<Property<T,Object>> parentProperty;                                          // The method to set the parent on an object (if it has one).
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
 	private final Supplier<ConstructorInfo> stringConstructor;                                                     // The X(String) constructor (if it has one).
@@ -254,8 +254,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			fromStringMethod = memoize(()->findFromStringMethod());
 			exampleMethod = memoize(()->findExampleMethod());
-			parentPropertySetter = memoize(()->findParentPropertySetter());
-			namePropertySetter = memoize(()->findNamePropertySetter());
+			parentProperty = memoize(()->findParentProperty());
+			nameProperty = memoize(()->findNameProperty());
 			exampleField = memoize(()->findExampleField());
 			noArgConstructor = memoize(()->findNoArgConstructor());
 			stringConstructor = memoize(()->findStringConstructor());
@@ -376,8 +376,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.stringMutater = null;
 		this.fromStringMethod = memoize(()->findFromStringMethod());
 		this.exampleMethod = memoize(()->findExampleMethod());
-		this.parentPropertySetter = memoize(()->findParentPropertySetter());
-		this.namePropertySetter = memoize(()->findNamePropertySetter());
+		this.parentProperty = memoize(()->findParentProperty());
+		this.nameProperty = memoize(()->findNameProperty());
 		this.exampleField = memoize(()->findExampleField());
 		this.noArgConstructor = memoize(()->findNoArgConstructor());
 		this.stringConstructor = memoize(()->findStringConstructor());
@@ -416,8 +416,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.exampleMethod = mainType.exampleMethod;
 		this.args = null;
 		this.stringMutater = mainType.stringMutater;
-		this.parentPropertySetter = mainType.parentPropertySetter;
-		this.namePropertySetter = mainType.namePropertySetter;
+		this.parentProperty = mainType.parentProperty;
+		this.nameProperty = mainType.nameProperty;
 		this.exampleField = mainType.exampleField;
 		this.noArgConstructor = mainType.noArgConstructor;
 		this.stringConstructor = mainType.stringConstructor;
@@ -742,7 +742,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	The method or field  annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does not
 	 * 	exist.
 	 */
-	public Property<T,String> getNameProperty() { return namePropertySetter.get(); }
+	public Property<T,Object> getNameProperty() { return nameProperty.get(); }
 
 	/**
 	 * Returns the reason why this class is not a bean, or <jk>null</jk> if it is a bean.
@@ -772,7 +772,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	The method or field annotated with {@link ParentProperty @ParentProperty} or <jk>null</jk> if method does not
 	 * 	exist.
 	 */
-	public Property<T,?> getParentProperty() { return parentPropertySetter.get(); }
+	public Property<T,Object> getParentProperty() { return parentProperty.get(); }
 
 	/**
 	 * Returns a calculated property on this context.
@@ -1568,25 +1568,77 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return MarshalledFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
 	}
 
-	private Property<T,String> findNamePropertySetter() {
+	private Property<T,Object> findNameProperty() {
 		var ap = beanContext.getAnnotationProvider();
 
 		var s = getAllFields()
 			.stream()
-			.filter(x -> x.getFieldType().is(String.class) && ap.has(NameProperty.class, x))
+			.filter(x -> ap.has(NameProperty.class, x))
 			.map(x -> x.accessible())
-			.map(x -> Property.<T,String>create().field(x).build())
+			.map(x -> Property.<T,Object>create().field(x).build())
 			.findFirst();
 
 		if (s.isPresent()) return s.get();
 
-		return getAllMethods()
+		var builder = Property.<T,Object>create();
+
+		// Look for setter method (1 parameter) with @NameProperty
+		var setterMethod = getAllMethods()
 			.stream()
 			.filter(x -> ap.has(NameProperty.class, x) && x.hasNumParameters(1))
-			.map(x -> x.accessible())
-			.map(x -> Property.<T,String>create().setter(x).build())
-			.findFirst()
-			.orElse(null);
+			.findFirst();
+
+		if (setterMethod.isPresent()) {
+			builder.setter(setterMethod.get().accessible());
+			
+			// Try to find a corresponding getter method (even if not annotated)
+			// If setter is "setName", look for "getName" or "isName"
+			var setterName = setterMethod.get().getSimpleName();
+			if (setterName.startsWith("set") && setterName.length() > 3) {
+				var propertyName = setterName.substring(3);
+				var getterName1 = "get" + propertyName;
+				var getterName2 = "is" + propertyName;
+
+				var getter = getAllMethods()
+					.stream()
+					.filter(x -> !x.isStatic() && x.hasNumParameters(0) && 
+						(x.hasName(getterName1) || x.hasName(getterName2)) &&
+						!x.getReturnType().is(Void.TYPE))
+					.findFirst();
+
+				if (getter.isPresent()) {
+					builder.getter(getter.get().accessible());
+				} else {
+					// Try to find a field with the property name (lowercase first letter)
+					var fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+					var field = getAllFields()
+						.stream()
+						.filter(x -> !x.isStatic() && x.hasName(fieldName))
+						.findFirst();
+
+					if (field.isPresent()) {
+						var f = field.get().accessible();
+						builder.getter(obj -> (Object)f.get(obj));
+					}
+				}
+			}
+		}
+
+		// Look for getter method (0 parameters, non-void return) with @NameProperty
+		var getterMethod = getAllMethods()
+			.stream()
+			.filter(x -> ap.has(NameProperty.class, x) && x.hasNumParameters(0) && !x.getReturnType().is(Void.TYPE))
+			.findFirst();
+
+		if (getterMethod.isPresent()) {
+			builder.getter(getterMethod.get().accessible());
+		}
+
+		// Return null if neither setter nor getter was found
+		if (setterMethod.isEmpty() && getterMethod.isEmpty())
+			return null;
+
+		return builder.build();
 	}
 
 	private ConstructorInfo findNoArgConstructor() {
@@ -1608,7 +1660,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			.orElse(null);
 	}
 
-	private Property<T,?> findParentPropertySetter() {
+	private Property<T,Object> findParentProperty() {
 		var ap = beanContext.getAnnotationProvider();
 
 		var s = getAllFields()
@@ -1620,13 +1672,65 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		if (s.isPresent()) return s.get();
 
-		return getAllMethods()
+		var builder = Property.<T,Object>create();
+
+		// Look for setter method (1 parameter) with @ParentProperty
+		var setterMethod = getAllMethods()
 			.stream()
 			.filter(x -> ap.has(ParentProperty.class, x) && x.hasNumParameters(1))
-			.map(x -> x.accessible())
-			.map(x -> Property.<T,Object>create().setter(x).build())
-			.findFirst()
-			.orElse(null);
+			.findFirst();
+
+		if (setterMethod.isPresent()) {
+			builder.setter(setterMethod.get().accessible());
+			
+			// Try to find a corresponding getter method (even if not annotated)
+			// If setter is "setParent", look for "getParent" or "isParent"
+			var setterName = setterMethod.get().getSimpleName();
+			if (setterName.startsWith("set") && setterName.length() > 3) {
+				var propertyName = setterName.substring(3);
+				var getterName1 = "get" + propertyName;
+				var getterName2 = "is" + propertyName;
+
+				var getter = getAllMethods()
+					.stream()
+					.filter(x -> !x.isStatic() && x.hasNumParameters(0) && 
+						(x.hasName(getterName1) || x.hasName(getterName2)) &&
+						!x.getReturnType().is(Void.TYPE))
+					.findFirst();
+
+				if (getter.isPresent()) {
+					builder.getter(getter.get().accessible());
+				} else {
+					// Try to find a field with the property name (lowercase first letter)
+					var fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+					var field = getAllFields()
+						.stream()
+						.filter(x -> !x.isStatic() && x.hasName(fieldName))
+						.findFirst();
+
+					if (field.isPresent()) {
+						var f = field.get().accessible();
+						builder.getter(obj -> (Object)f.get(obj));
+					}
+				}
+			}
+		}
+
+		// Look for getter method (0 parameters, non-void return) with @ParentProperty
+		var getterMethod = getAllMethods()
+			.stream()
+			.filter(x -> ap.has(ParentProperty.class, x) && x.hasNumParameters(0) && !x.getReturnType().is(Void.TYPE))
+			.findFirst();
+
+		if (getterMethod.isPresent()) {
+			builder.getter(getterMethod.get().accessible());
+		}
+
+		// Return null if neither setter nor getter was found
+		if (setterMethod.isEmpty() && getterMethod.isEmpty())
+			return null;
+
+		return builder.build();
 	}
 
 	private ConstructorInfo findStringConstructor() {

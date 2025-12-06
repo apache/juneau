@@ -217,7 +217,7 @@ public class ParserSession extends BeanSession {
 	 * @param name The name to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	protected static final void setName(ClassMeta<?> cm, Object o, Object name) throws ExecutableException {
+	protected static final <T> void setName(ClassMeta<?> cm, Object o, Object name) throws ExecutableException {
 		if (nn(cm)) {
 			Property m = cm.getNameProperty();
 			if (nn(m))

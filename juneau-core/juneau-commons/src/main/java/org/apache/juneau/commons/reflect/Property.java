@@ -146,20 +146,20 @@ public class Property<T, V> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this property has a getter (producer).
+	 * Returns <jk>true</jk> if this property can be read.
 	 *
-	 * @return <jk>true</jk> if a producer is defined.
+	 * @return <jk>true</jk> if this property can be read.
 	 */
-	public boolean hasGetter() {
+	public boolean canRead() {
 		return producer != null;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this property has a setter (consumer).
+	 * Returns <jk>true</jk> if this property can be written.
 	 *
-	 * @return <jk>true</jk> if a consumer is defined.
+	 * @return <jk>true</jk> if this property can be written.
 	 */
-	public boolean hasSetter() {
+	public boolean canWrite() {
 		return consumer != null;
 	}
 

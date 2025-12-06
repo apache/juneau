@@ -32,8 +32,8 @@ import java.lang.annotation.*;
  * <h5 class='section'>Requirements:</h5>
  * <ul class='spaced-list'>
  * 	<li>Must be an <strong>instance</strong> method or field (not static)
- * 	<li>For methods: Must accept exactly one parameter of type <c>String</c>
- * 	<li>For fields: Must be of type <c>String</c>
+ * 	<li>For methods: Must accept exactly one parameter (any type)
+ * 	<li>For fields: Can be any type
  * 	<li>The method or field does not need to be public (will be made accessible automatically)
  * </ul>
  *
