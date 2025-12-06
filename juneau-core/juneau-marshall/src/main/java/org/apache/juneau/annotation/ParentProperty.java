@@ -22,21 +22,61 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Identifies a setter as a method for adding a parent reference to a child object.
+ * Identifies a setter method or field for adding a parent reference to a child object.
+ *
+ * <p>
+ * This annotation is used by parsers to automatically establish parent-child relationships when parsing
+ * nested objects. When a child object is created within a parent object (e.g., in a list or as a property),
+ * the parser automatically sets the parent reference on the child.
+ *
+ * <h5 class='section'>Requirements:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Must be an <strong>instance</strong> method or field (not static)
+ * 	<li>For methods: Must accept exactly one parameter (the parent object type)
+ * 	<li>For fields: Can be any type (typically the parent object type)
+ * 	<li>The method or field does not need to be public (will be made accessible automatically)
+ * </ul>
  *
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Bean getter/setter/field.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li>Bean setter methods or fields
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified
  * </ul>
  *
- * <p>
- * Used by the parsers to add references to parent objects in child objects.
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jk>public class</jk> AddressBook {
+ * 		<jk>public</jk> List&lt;Person&gt; people;
+ * 	}
  *
- * <h5 class='section'>Notes:</h5><ul>
- * 	<li class='note'>
- * 		The annotated field or method does not need to be public.
+ * 	<jk>public class</jk> Person {
+ * 		<ja>@ParentProperty</ja>
+ * 		<jk>public</jk> AddressBook addressBook;  <jc>// Automatically set to containing AddressBook</jc>
+ *
+ * 		<jk>public</jk> String name;
+ * 		<jk>public</jk> <jk>char</jk> sex;
+ * 	}
+ *
+ * 	<jc>// Or using a setter method:</jc>
+ * 	<jk>public class</jk> Person {
+ * 		<jk>private</jk> AddressBook parent;
+ *
+ * 		<ja>@ParentProperty</ja>
+ * 		<jk>protected void</jk> setParent(AddressBook <jv>parent</jv>) {
+ * 			<jk>this</jk>.parent = <jv>parent</jv>;
+ * 		}
+ *
+ * 		<jk>public</jk> String name;
+ * 		<jk>public</jk> <jk>char</jk> sex;
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>When It's Called:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>During parsing when a child object is created within a parent object
+ * 	<li>The parser automatically calls the setter or sets the field with a reference to the parent object
+ * 	<li>This allows child objects to navigate back to their parent if needed
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>

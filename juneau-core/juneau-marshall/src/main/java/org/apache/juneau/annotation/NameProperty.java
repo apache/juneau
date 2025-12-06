@@ -22,18 +22,62 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Identifies a setter as a method for setting the name of a POJO as it's known by its parent object.
+ * Identifies a setter method or field for setting the name of a POJO as it's known by its parent object.
+ *
+ * <p>
+ * This annotation is used by parsers to automatically set the name/key of an object when parsing structured data
+ * (e.g., JSON maps, XML elements). A common use case is when parsing a map where the map key should be stored
+ * as a property on the bean.
+ *
+ * <h5 class='section'>Requirements:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Must be an <strong>instance</strong> method or field (not static)
+ * 	<li>For methods: Must accept exactly one parameter of type <c>String</c>
+ * 	<li>For fields: Must be of type <c>String</c>
+ * 	<li>The method or field does not need to be public (will be made accessible automatically)
+ * </ul>
  *
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Bean getter/setter/field.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li>Bean setter methods or fields
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
- * 	<li class='note'>
- * 		The annotated field or method does not need to be public.
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// JSON being parsed:</jc>
+ * 	<jc>// {</jc>
+ * 	<jc>//   "id1": {name: "John Smith", sex: "M"},</jc>
+ * 	<jc>//   "id2": {name: "Jane Doe", sex: "F"}</jc>
+ * 	<jc>// }</jc>
+ *
+ * 	<jk>public class</jk> Person {
+ * 		<ja>@NameProperty</ja>
+ * 		<jk>public</jk> String id;  <jc>// Gets set to "id1" or "id2" from map key</jc>
+ *
+ * 		<jk>public</jk> String name;
+ * 		<jk>public</jk> <jk>char</jk> sex;
+ * 	}
+ *
+ * 	<jc>// Or using a setter method:</jc>
+ * 	<jk>public class</jk> Person {
+ * 		<jk>private</jk> String id;
+ *
+ * 		<ja>@NameProperty</ja>
+ * 		<jk>protected void</jk> setName(String <jv>name</jv>) {
+ * 			<jk>this</jk>.id = <jv>name</jv>;
+ * 		}
+ *
+ * 		<jk>public</jk> String name;
+ * 		<jk>public</jk> <jk>char</jk> sex;
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>When It's Called:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>During parsing when an object is created as a value in a map/collection
+ * 	<li>The parser automatically calls the setter or sets the field with the key/name from the parent structure
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
