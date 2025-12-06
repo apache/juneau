@@ -66,7 +66,26 @@ import org.apache.juneau.swap.*;
 @Bean(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 public class ClassMeta<T> extends ClassInfoTyped<T> {
 
-	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static class Categories {
+		int bits;
+
+		public boolean same(Categories cat) {
+			return cat.bits == bits;
+		}
+
+		boolean is(Category c) {
+			return (bits & c.mask) != 0;
+		}
+
+		boolean isUnknown() {
+			return bits == 0;
+		}
+
+		Categories set(Category c) {
+			bits |= c.mask;
+			return this;
+		}
+	}
 
 	enum Category {
 		MAP(0),
@@ -96,30 +115,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		}
 	}
 
-	static class Categories {
-		int bits;
-
-		boolean is(Category c) {
-			return (bits & c.mask) != 0;
-		}
-
-		boolean isNot(Category c) {
-			return ! is(c);
-		}
-
-		Categories set(Category c) {
-			bits |= c.mask;
-			return this;
-		}
-
-		boolean isUnknown() {
-			return bits == 0;
-		}
-
-		public boolean same(Categories cat) {
-			return cat.bits == bits;
-		}
-	}
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Checks if the specified category is set in the bitmap.
@@ -139,35 +135,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Locates the no-arg constructor for the specified class.
-	 *
-	 * <p>
-	 * Constructor must match the visibility requirements specified by parameter 'v'.
-	 * If class is abstract, always returns <jk>null</jk>.
-	 * Note that this also returns the 1-arg constructor for non-static member classes.
-	 *
-	 * @param <T> The class from which to locate the no-arg constructor.
-	 * @param c The class from which to locate the no-arg constructor.
-	 * @param v The minimum visibility.
-	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
-	 */
-	@SuppressWarnings({ "unchecked" })
-	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<?> c, Visibility v) {
-		var ci = info(c);
-		if (ci.isAbstract())
-			return null;
-
-		var isMemberClass = ci.isMemberClass() && ci.isNotStatic();
-		var numParams = isMemberClass ? 1 : 0;
-
-		// @formatter:off
-		return ci.getPublicConstructor(x -> x.isVisible(v)&& x.isNotDeprecated() && x.hasNumParameters(numParams))
-			.map(x -> (Constructor<? extends T>)v.transform(x.inner()))
-			.orElse(null);
-		// @formatter:on
 	}
 
 	private final Categories cat;                         // The class category.
@@ -195,258 +162,30 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private final Supplier<String> dictionaryName;                                      // The dictionary name of this class if it has one.
 
-	private String findBeanDictionaryName() {
-		if (beanContext == null)
-			return null;
-
-		if (nn(beanMeta) && beanMeta.getDictionaryName() != null)
-			return beanMeta.getDictionaryName();
-
-		return beanContext.getAnnotationProvider().find(Bean.class, this)
-			.stream()
-			.map(AnnotationInfo::inner)
-			.filter(x -> ! x.typeName().isEmpty())
-			.map(x -> x.typeName())
-			.findFirst()
-			.orElse(null);
-	}
-
 	private final Supplier<MethodInfo> fromStringMethod;  // Static fromString(String) or equivalent method
-
-	private MethodInfo findFromStringMethod() {
-		// Find static fromString(String) or equivalent method.
-		// fromString() must be checked before valueOf() so that Enum classes can create their own
-		//		specialized fromString() methods to override the behavior of Enum.valueOf(String).
-		// valueOf() is used by enums.
-		// parse() is used by the java logging Level class.
-		// forName() is used by Class and Charset
-		// @formatter:off
-		var names = a("fromString", "fromValue", "valueOf", "parse", "parseString", "forName", "forString");
-		return getPublicMethod(
-			x -> x.isStatic() && x.isNotDeprecated() && x.hasReturnType(this) && x.hasParameterTypes(String.class) && contains(x.getName(), names)
-		).orElse(null);
-		// @formatter:on
-	}
 
 	private final Supplier<MethodInfo> exampleMethod;  // The example() or @Example-annotated method (if it has one).
 
-	private MethodInfo findExampleMethod() {
-		// @formatter:off
-		var ap = beanContext.getAnnotationProvider();
-
-		// Option 1:  Public example() or @Example method.
-		var m = getPublicMethod(
-			x -> x.isStatic() && x.isNotDeprecated() && (x.hasName("example") || ap.has(Example.class, x)) && x.hasParameterTypesLenient(BeanSession.class)
-		);
-		if (m.isPresent()) return m.get();
-
-		// Option 2:  Non-public @Example method.
-		return getDeclaredMethods()
-			.stream()
-			.flatMap(x -> x.getMatchingMethods().stream())
-			.filter(x -> x.isStatic() && ap.has(Example.class, x))
-			.map(x -> x.accessible())
-			.findFirst()
-			.orElse(null);
-		// @formatter:on
-	}
-
 	private final Supplier<Setter> parentPropertySetter;  // The method to set the parent on an object (if it has one).
-
-	private Setter findParentPropertySetter() {
-		var ap = beanContext.getAnnotationProvider();
-
-		var s = getAllFields()
-			.stream()
-			.filter(x -> x.isStatic() && ap.has(ParentProperty.class, x))
-			.map(x -> x.accessible())
-			.map(x -> new Setter.FieldSetter(x))
-			.findFirst();
-
-		if (s.isPresent()) return s.get();
-
-		return getAllMethods()
-			.stream()
-			.filter(x -> x.isStatic() || x.hasNumParameters(1))
-			.filter(x -> ap.has(ParentProperty.class, x))
-			.map(x -> x.accessible())
-			.map(x -> new Setter.MethodSetter(x))
-			.findFirst()
-			.orElse(null);
-	}
 
 	private final Supplier<Setter> namePropertySetter;  // The method to set the name on an object (if it has one).
 
-	private Setter findNamePropertySetter() {
-		var ap = beanContext.getAnnotationProvider();
-
-		var s = getAllFields()
-			.stream()
-			.filter(x -> x.isStatic() && ap.has(NameProperty.class, x))
-			.map(x -> x.accessible())
-			.map(x -> new Setter.FieldSetter(x))
-			.findFirst();
-
-		if (s.isPresent()) return s.get();
-
-		return getAllMethods()
-			.stream()
-			.filter(x -> x.isStatic() || x.hasNumParameters(1))
-			.filter(x -> ap.has(NameProperty.class, x))
-			.map(x -> x.accessible())
-			.map(x -> new Setter.MethodSetter(x))
-			.findFirst()
-			.orElse(null);
-	}
-
 	private final Supplier<FieldInfo> exampleField;                                        // The @Example-annotated field (if it has one).
 
-	private FieldInfo findExampleField() {
-		var ap = beanContext.getAnnotationProvider();
-
-		return getDeclaredFields()
-			.stream()
-			.filter(x -> x.isStatic() && isParentOf(x.getFieldType()) && ap.has(Example.class, x))
-			.map(x -> x.accessible())
-			.findFirst()
-			.orElse(null);
-	}
-
 	private final Supplier<ConstructorInfo> noArgConstructor;                                    // The no-arg constructor for this class (if it has one).
+
 	private final Supplier<ConstructorInfo> stringConstructor;                                   // The X(String) constructor (if it has one).
 
-	private ConstructorInfo findNoArgConstructor() {
-
-		if (is(Object.class))
-			return null;
-
-		if (implClass2.get() != null)
-			return implClass2.get().getPublicConstructor(x -> x.hasNumParameters(0)).orElse(null);
-
-		if (isAbstract())
-			return null;
-
-		var numParams = isMemberClass() && isNotStatic() ? 1 : 0;
-		return getPublicConstructors()
-			.stream()
-			.filter(x -> x.isPublic() && x.isNotDeprecated() && x.hasNumParameters(numParams))
-			.findFirst()
-			.orElse(null);
-	}
-
-	private ConstructorInfo findStringConstructor() {
-
-		if (is(Object.class) || isAbstract())
-			return null;
-
-		if (implClass2.get() != null)
-			return implClass2.get().getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null);
-
-		if (isAbstract())
-			return null;
-
-		var numParams = isMemberClass() && isNotStatic() ? 2 : 1;
-		return getPublicConstructors()
-			.stream()
-			.filter(x -> x.isPublic() && x.isNotDeprecated() && x.hasNumParameters(numParams))
-			.filter(x -> x.getParameter(numParams == 2 ? 1 : 0).isType(String.class))
-			.findFirst()
-			.orElse(null);
-	}
-
 	private final Supplier<BeanFilter> beanFilter;
+
 	private final Supplier<MarshalledFilter> marshalledFilter;
-
-	private BeanFilter findBeanFilter() {
-		var ap = beanContext.getAnnotationProvider();
-		var l = ap.find(Bean.class, this);
-		if (l.isEmpty())
-			return null;
-		return BeanFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
-	}
-
-	private MarshalledFilter findMarshalledFilter() {
-		var ap = beanContext.getAnnotationProvider();
-		var l = ap.find(Marshalled.class, this);
-		if (l.isEmpty())
-			return null;
-		return MarshalledFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
-	}
 
 	private final Supplier<BuilderSwap<T,?>> builderSwap;             // The builder swap associated with this bean (if it has one).
 
-	@SuppressWarnings("unchecked")
-	private BuilderSwap<T,?> findBuilderSwap() {
-		var bc = beanContext;
-		if (bc == null)
-			return null;
-		return (BuilderSwap<T,?>)BuilderSwap.findSwapFromObjectClass(bc, inner(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
-	}
-
 	private final Supplier<String> example;                           // Example JSON.
 
-	@SuppressWarnings("unchecked")
-	private String findExample() {
-
-		var example = opt(beanFilter.get()).map(x -> x.getExample()).orElse(null);
-
-		if (example == null)
-			example = opt(marshalledFilter.get()).map(x -> x.getExample()).orElse(null);
-
-		if (example == null && nn(beanContext))
-			example = beanContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::isNotEmpty).findFirst().orElse(null);
-
-		if (example == null) {
-			if (isAny(boolean.class, Boolean.class)) {
-				example = "true";
-			} else if (isAny(char.class, Character.class)) {
-				example = "a";
-			} else if (cat.is(CHARSEQ)) {
-				example = "foo";
-			} else if (cat.is(ENUM)) {
-				Iterator<? extends Enum<?>> i = EnumSet.allOf(inner().asSubclass(Enum.class)).iterator();
-				example = i.hasNext() ? (beanContext.isUseEnumNames() ? i.next().name() : i.next().toString()) : null;
-			} else if (isAny(float.class, Float.class, double.class, Double.class)) {
-				example = "1.0";
-			} else if (isAny(short.class, Short.class, int.class, Integer.class, long.class, Long.class)) {
-				example = "1";
-			}
-		}
-
-		return example;
-	}
-
 	private final Supplier<ClassInfoTyped<? extends T>> implClass2;             // The implementation class to use if this is an interface.
-
-	@SuppressWarnings("unchecked")
-	private ClassInfoTyped<? extends T> findImplClass() {
-
-		if (is(Object.class))
-			return null;
-
-		var v = opt(beanFilter.get()).map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
-
-		if (v == null)
-			v = opt(marshalledFilter.get()).map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
-
-		return (ClassInfoTyped<? extends T>)v;
-	}
-
 	private final Supplier<BidiMap<Object,String>> enumValues;
-
-	private BidiMap<Object,String> findEnumValues() {
-		if (! isEnum())
-			return null;
-
-		var bc = beanContext;
-		var useEnumNames = nn(bc) && bc.isUseEnumNames();
-
-		var m = BidiMap.<Object,String>create().unmodifiable();
-		var c = inner().asSubclass(Enum.class);
-		stream(c.getEnumConstants()).forEach(x -> m.add(x, useEnumNames ? x.name() : x.toString()));
-		return m.build();
-	}
-
 
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
@@ -703,32 +442,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.enumValues = mainType.enumValues;
 		this.dictionaryName = mainType.dictionaryName;
 	}
-
-	@SuppressWarnings("unchecked")
-	private ObjectSwap<T,?> createSwap(Swap s) {
-		var c = s.value();
-		if (ClassUtils.isVoid(c))
-			c = s.impl();
-		var ci = info(c);
-
-		if (ci.isChildOf(ObjectSwap.class)) {
-			var ps = BeanCreator.of(ObjectSwap.class).type(c).run();
-			if (s.mediaTypes().length > 0)
-				ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
-			if (! s.template().isEmpty())
-				ps.withTemplate(s.template());
-			return ps;
-		}
-
-		if (ci.isChildOf(Surrogate.class)) {
-			List<SurrogateSwap<?,?>> l = SurrogateSwap.findObjectSwaps(c, beanContext);
-			if (! l.isEmpty())
-				return (ObjectSwap<T,?>)l.iterator().next();
-		}
-
-		throw new ClassMetaRuntimeException(c, "Invalid swap class ''{0}'' specified.  Must extend from ObjectSwap or Surrogate.", c);
-	}
-
 	/**
 	 * Returns <jk>true</jk> if this class can be instantiated as a bean.
 	 * Returns <jk>false</jk> if this is a non-static member class and the outer object does not match the class type of
@@ -863,6 +576,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The bean registry for this class, or <jk>null</jk> if no bean registry is associated with it.
 	 */
 	public BeanRegistry getBeanRegistry() { return beanRegistry; }
+
 
 	/**
 	 * Returns the type property name associated with this class and subclasses.
@@ -1697,6 +1411,259 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return (A[])array;
 	}
 
+	@SuppressWarnings("unchecked")
+	private ObjectSwap<T,?> createSwap(Swap s) {
+		var c = s.value();
+		if (ClassUtils.isVoid(c))
+			c = s.impl();
+		var ci = info(c);
+
+		if (ci.isChildOf(ObjectSwap.class)) {
+			var ps = BeanCreator.of(ObjectSwap.class).type(c).run();
+			if (s.mediaTypes().length > 0)
+				ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
+			if (! s.template().isEmpty())
+				ps.withTemplate(s.template());
+			return ps;
+		}
+
+		if (ci.isChildOf(Surrogate.class)) {
+			List<SurrogateSwap<?,?>> l = SurrogateSwap.findObjectSwaps(c, beanContext);
+			if (! l.isEmpty())
+				return (ObjectSwap<T,?>)l.iterator().next();
+		}
+
+		throw new ClassMetaRuntimeException(c, "Invalid swap class ''{0}'' specified.  Must extend from ObjectSwap or Surrogate.", c);
+	}
+
+	private String findBeanDictionaryName() {
+		if (beanContext == null)
+			return null;
+
+		if (nn(beanMeta) && beanMeta.getDictionaryName() != null)
+			return beanMeta.getDictionaryName();
+
+		return beanContext.getAnnotationProvider().find(Bean.class, this)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> ! x.typeName().isEmpty())
+			.map(x -> x.typeName())
+			.findFirst()
+			.orElse(null);
+	}
+
+	private BeanFilter findBeanFilter() {
+		var ap = beanContext.getAnnotationProvider();
+		var l = ap.find(Bean.class, this);
+		if (l.isEmpty())
+			return null;
+		return BeanFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
+	}
+
+	@SuppressWarnings("unchecked")
+	private BuilderSwap<T,?> findBuilderSwap() {
+		var bc = beanContext;
+		if (bc == null)
+			return null;
+		return (BuilderSwap<T,?>)BuilderSwap.findSwapFromObjectClass(bc, inner(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
+	}
+
+	private BidiMap<Object,String> findEnumValues() {
+		if (! isEnum())
+			return null;
+
+		var bc = beanContext;
+		var useEnumNames = nn(bc) && bc.isUseEnumNames();
+
+		var m = BidiMap.<Object,String>create().unmodifiable();
+		var c = inner().asSubclass(Enum.class);
+		stream(c.getEnumConstants()).forEach(x -> m.add(x, useEnumNames ? x.name() : x.toString()));
+		return m.build();
+	}
+
+	@SuppressWarnings("unchecked")
+	private String findExample() {
+
+		var example = opt(beanFilter.get()).map(x -> x.getExample()).orElse(null);
+
+		if (example == null)
+			example = opt(marshalledFilter.get()).map(x -> x.getExample()).orElse(null);
+
+		if (example == null && nn(beanContext))
+			example = beanContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::isNotEmpty).findFirst().orElse(null);
+
+		if (example == null) {
+			if (isAny(boolean.class, Boolean.class)) {
+				example = "true";
+			} else if (isAny(char.class, Character.class)) {
+				example = "a";
+			} else if (cat.is(CHARSEQ)) {
+				example = "foo";
+			} else if (cat.is(ENUM)) {
+				Iterator<? extends Enum<?>> i = EnumSet.allOf(inner().asSubclass(Enum.class)).iterator();
+				example = i.hasNext() ? (beanContext.isUseEnumNames() ? i.next().name() : i.next().toString()) : null;
+			} else if (isAny(float.class, Float.class, double.class, Double.class)) {
+				example = "1.0";
+			} else if (isAny(short.class, Short.class, int.class, Integer.class, long.class, Long.class)) {
+				example = "1";
+			}
+		}
+
+		return example;
+	}
+
+	private FieldInfo findExampleField() {
+		var ap = beanContext.getAnnotationProvider();
+
+		return getDeclaredFields()
+			.stream()
+			.filter(x -> x.isStatic() && isParentOf(x.getFieldType()) && ap.has(Example.class, x))
+			.map(x -> x.accessible())
+			.findFirst()
+			.orElse(null);
+	}
+
+	private MethodInfo findExampleMethod() {
+		// @formatter:off
+		var ap = beanContext.getAnnotationProvider();
+
+		// Option 1:  Public example() or @Example method.
+		var m = getPublicMethod(
+			x -> x.isStatic() && x.isNotDeprecated() && (x.hasName("example") || ap.has(Example.class, x)) && x.hasParameterTypesLenient(BeanSession.class)
+		);
+		if (m.isPresent()) return m.get();
+
+		// Option 2:  Non-public @Example method.
+		return getDeclaredMethods()
+			.stream()
+			.flatMap(x -> x.getMatchingMethods().stream())
+			.filter(x -> x.isStatic() && ap.has(Example.class, x))
+			.map(x -> x.accessible())
+			.findFirst()
+			.orElse(null);
+		// @formatter:on
+	}
+
+	private MethodInfo findFromStringMethod() {
+		// Find static fromString(String) or equivalent method.
+		// fromString() must be checked before valueOf() so that Enum classes can create their own
+		//		specialized fromString() methods to override the behavior of Enum.valueOf(String).
+		// valueOf() is used by enums.
+		// parse() is used by the java logging Level class.
+		// forName() is used by Class and Charset
+		// @formatter:off
+		var names = a("fromString", "fromValue", "valueOf", "parse", "parseString", "forName", "forString");
+		return getPublicMethod(
+			x -> x.isStatic() && x.isNotDeprecated() && x.hasReturnType(this) && x.hasParameterTypes(String.class) && contains(x.getName(), names)
+		).orElse(null);
+		// @formatter:on
+	}
+
+	@SuppressWarnings("unchecked")
+	private ClassInfoTyped<? extends T> findImplClass() {
+
+		if (is(Object.class))
+			return null;
+
+		var v = opt(beanFilter.get()).map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
+
+		if (v == null)
+			v = opt(marshalledFilter.get()).map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
+
+		return (ClassInfoTyped<? extends T>)v;
+	}
+
+	private MarshalledFilter findMarshalledFilter() {
+		var ap = beanContext.getAnnotationProvider();
+		var l = ap.find(Marshalled.class, this);
+		if (l.isEmpty())
+			return null;
+		return MarshalledFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
+	}
+
+	private Setter findNamePropertySetter() {
+		var ap = beanContext.getAnnotationProvider();
+
+		var s = getAllFields()
+			.stream()
+			.filter(x -> x.isStatic() && ap.has(NameProperty.class, x))
+			.map(x -> x.accessible())
+			.map(x -> new Setter.FieldSetter(x))
+			.findFirst();
+
+		if (s.isPresent()) return s.get();
+
+		return getAllMethods()
+			.stream()
+			.filter(x -> x.isStatic() || x.hasNumParameters(1))
+			.filter(x -> ap.has(NameProperty.class, x))
+			.map(x -> x.accessible())
+			.map(x -> new Setter.MethodSetter(x))
+			.findFirst()
+			.orElse(null);
+	}
+
+	private ConstructorInfo findNoArgConstructor() {
+
+		if (is(Object.class))
+			return null;
+
+		if (implClass2.get() != null)
+			return implClass2.get().getPublicConstructor(x -> x.hasNumParameters(0)).orElse(null);
+
+		if (isAbstract())
+			return null;
+
+		var numParams = isMemberClass() && isNotStatic() ? 1 : 0;
+		return getPublicConstructors()
+			.stream()
+			.filter(x -> x.isPublic() && x.isNotDeprecated() && x.hasNumParameters(numParams))
+			.findFirst()
+			.orElse(null);
+	}
+
+	private Setter findParentPropertySetter() {
+		var ap = beanContext.getAnnotationProvider();
+
+		var s = getAllFields()
+			.stream()
+			.filter(x -> x.isStatic() && ap.has(ParentProperty.class, x))
+			.map(x -> x.accessible())
+			.map(x -> new Setter.FieldSetter(x))
+			.findFirst();
+
+		if (s.isPresent()) return s.get();
+
+		return getAllMethods()
+			.stream()
+			.filter(x -> x.isStatic() || x.hasNumParameters(1))
+			.filter(x -> ap.has(ParentProperty.class, x))
+			.map(x -> x.accessible())
+			.map(x -> new Setter.MethodSetter(x))
+			.findFirst()
+			.orElse(null);
+	}
+
+	private ConstructorInfo findStringConstructor() {
+
+		if (is(Object.class) || isAbstract())
+			return null;
+
+		if (implClass2.get() != null)
+			return implClass2.get().getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null);
+
+		if (isAbstract())
+			return null;
+
+		var numParams = isMemberClass() && isNotStatic() ? 2 : 1;
+		return getPublicConstructors()
+			.stream()
+			.filter(x -> x.isPublic() && x.isNotDeprecated() && x.hasNumParameters(numParams))
+			.filter(x -> x.getParameter(numParams == 2 ? 1 : 0).isType(String.class))
+			.findFirst()
+			.orElse(null);
+	}
+
 	/**
 	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the normal class of one of the
 	 * child POJO swaps associated with this class.
@@ -1781,7 +1748,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return elementType.toString(sb, simple).append('[').append(']');
 		if (cat.is(BEANMAP))
 			return sb.append(cn(BeanMap.class)).append('<').append(n).append('>');
-		else if (cat.is(MAP))
+		if (cat.is(MAP))
 			return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<" + keyType.toString(simple) + "," + valueType.toString(simple) + ">");
 		if (cat.is(COLLECTION) || is(Optional.class))
 			return sb.append(n).append(elementType.isObject() ? "" : "<" + elementType.toString(simple) + ">");
