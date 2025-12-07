@@ -144,7 +144,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final ClassMeta<?>[] args;                                                                              // Arg types if this is an array of args.
 	private final BeanContext beanContext;                                                                          // The bean context that created this object.
 	private final Supplier<BeanFilter> beanFilter;
-	private final BeanMeta<T> beanMeta;                                                                             // The bean meta for this bean class (if it's a bean).
+//	private final BeanMeta<T> beanMeta;                                                                             // The bean meta for this bean class (if it's a bean).
 	private final Supplier<BuilderSwap<T,?>> builderSwap;                                                           // The builder swap associated with this bean (if it has one).
 	private final Categories cat;                                                                                   // The class category.
 	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap;                                         // Maps normal subclasses to ObjectSwaps.
@@ -312,7 +312,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				}
 			}
 
-			this.beanMeta = notABeanReason == null ? _beanMeta : null;
+//			this.beanMeta = null;
 			this.beanMeta2 = memoize(()->findBeanMeta());
 			this.keyType = _keyType;
 			this.valueType = _valueType;
@@ -368,7 +368,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.keyType = null;
 		this.valueType = null;
 		this.proxyInvocationHandler = null;
-		this.beanMeta = null;
+//		this.beanMeta = null;
 		this.beanMeta2 = memoize(()->findBeanMeta());
 		this.notABeanReason = null;
 		this.swaps = null;
@@ -407,7 +407,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.keyType = keyType;
 		this.valueType = valueType;
 		this.proxyInvocationHandler = mainType.proxyInvocationHandler;
-		this.beanMeta = mainType.beanMeta;
+//		this.beanMeta = mainType.beanMeta;
 		this.beanMeta2 = mainType.beanMeta2;
 		this.notABeanReason = mainType.notABeanReason;
 		this.swaps = mainType.swaps;
