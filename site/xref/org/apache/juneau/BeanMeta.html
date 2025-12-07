@@ -816,7 +816,7 @@
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 				<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 		}
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		<strong class="jxr_keyword">return</strong> classMeta
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		<strong class="jxr_keyword">var</strong> n = classMeta
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 			.getParentsAndInterfaces()
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 			.stream()
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 			.skip(1)
@@ -827,226 +827,237 @@
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 			.filter(Objects::nonNull)
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 			.findFirst()
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 	}
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 		<strong class="jxr_keyword">if</strong> (n != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 			<strong class="jxr_keyword">return</strong> n;
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> 
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> <em class="jxr_javadoccomment">	 * @param classMeta The target class.</em>
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> <em class="jxr_javadoccomment">	 * @param ctx The bean context that created this object.</em>
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> <em class="jxr_javadoccomment">	 * @param beanFilter Optional bean filter associated with the target class.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> <em class="jxr_javadoccomment">	 * @param pNames Explicit list of property names and order of properties.  If &lt;jk&gt;null&lt;/jk&gt;, determine automatically.</em>
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> <em class="jxr_javadoccomment">	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> 	<strong class="jxr_keyword">protected</strong> <a name="BeanMeta" href="../../../org/apache/juneau/BeanMeta.html#BeanMeta">BeanMeta</a>(ClassMeta&lt;T&gt; classMeta, <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> beanFilter, String[] pNames, <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> implClassConstructor) {
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		<strong class="jxr_keyword">return</strong> classMeta.getBeanContext().getAnnotationProvider().find(Bean.<strong class="jxr_keyword">class</strong>, classMeta)
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 			.stream()
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 			.filter(x -&gt; ! x.typeName().isEmpty())
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 			.map(x -&gt; x.typeName())
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 			.findFirst()
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 	}
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		Builder&lt;T&gt; b = <strong class="jxr_keyword">new</strong> Builder&lt;&gt;(classMeta, classMeta.getBeanContext(), beanFilter, pNames, implClassConstructor);
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> 		<strong class="jxr_keyword">this</strong>.classMeta = classMeta;
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> 		<strong class="jxr_keyword">this</strong>.ctx = classMeta.getBeanContext();
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> 		<strong class="jxr_keyword">this</strong>.c = classMeta.<strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> 		notABeanReason = b.init(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> 
-<a class="jxr_linenumber" name="L843" href="#L843">843</a> 		<strong class="jxr_keyword">this</strong>.beanFilter = beanFilter;
-<a class="jxr_linenumber" name="L844" href="#L844">844</a> 		properties = u(b.properties);
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> 		propertyArray = properties == <strong class="jxr_keyword">null</strong> ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> 		hiddenProperties = u(b.hiddenProperties);
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> 		getterProps = u(b.getterProps);
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> 		setterProps = u(b.setterProps);
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> 		dynaProperty = b.dynaProperty;
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> 		constructor = b.constructor;
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> 		constructorArgs = b.constructorArgs;
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> 		beanRegistry = b.beanRegistry;
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		typePropertyName = b.typePropertyName;
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 		typeProperty = BeanPropertyMeta.builder(<strong class="jxr_keyword">this</strong>, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 		sortProperties = b.sortProperties;
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> 		fluentSetters = b.fluentSetters;
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> 
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> 		<strong class="jxr_keyword">if</strong> (sortProperties)
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> 			Arrays.sort(propertyArray);
-<a class="jxr_linenumber" name="L860" href="#L860">860</a> 		dictionaryName2 = memoize(()-&gt;findDictionaryName());
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	}
-<a class="jxr_linenumber" name="L862" href="#L862">862</a> 
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		<strong class="jxr_keyword">return</strong> (o instanceof BeanMeta&lt;?&gt; o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.classMeta, y.classMeta));
-<a class="jxr_linenumber" name="L866" href="#L866">866</a> 	}
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> 
-<a class="jxr_linenumber" name="L868" href="#L868">868</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> <em class="jxr_javadoccomment">	 * Performs a function on the first property that matches the specified filter.</em>
-<a class="jxr_linenumber" name="L870" href="#L870">870</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L871" href="#L871">871</a> <em class="jxr_javadoccomment">	 * @param &lt;T2&gt; The type to convert the property to.</em>
-<a class="jxr_linenumber" name="L872" href="#L872">872</a> <em class="jxr_javadoccomment">	 * @param filter The filter to apply.</em>
-<a class="jxr_linenumber" name="L873" href="#L873">873</a> <em class="jxr_javadoccomment">	 * @param function The function to apply to the matching property.</em>
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> <em class="jxr_javadoccomment">	 * @return The result of the function.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L875" href="#L875">875</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> 	<strong class="jxr_keyword">public</strong> &lt;T2&gt; Optional&lt;T2&gt; firstProperty(Predicate&lt;BeanPropertyMeta&gt; filter, Function&lt;BeanPropertyMeta,T2&gt; function) {
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : propertyArray)
-<a class="jxr_linenumber" name="L878" href="#L878">878</a> 			<strong class="jxr_keyword">if</strong> (test(filter, x))
-<a class="jxr_linenumber" name="L879" href="#L879">879</a> 				<strong class="jxr_keyword">return</strong> opt(function.apply(x));
-<a class="jxr_linenumber" name="L880" href="#L880">880</a> 		<strong class="jxr_keyword">return</strong> opte();
-<a class="jxr_linenumber" name="L881" href="#L881">881</a> 	}
-<a class="jxr_linenumber" name="L882" href="#L882">882</a> 
-<a class="jxr_linenumber" name="L883" href="#L883">883</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L884" href="#L884">884</a> <em class="jxr_javadoccomment">	 * Performs an action on all matching properties.</em>
-<a class="jxr_linenumber" name="L885" href="#L885">885</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> <em class="jxr_javadoccomment">	 * @param filter The filter to apply.</em>
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> <em class="jxr_javadoccomment">	 * @param action The action to apply.</em>
-<a class="jxr_linenumber" name="L888" href="#L888">888</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> forEachProperty(Predicate&lt;BeanPropertyMeta&gt; filter, Consumer&lt;BeanPropertyMeta&gt; action) {
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : propertyArray)
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 			<strong class="jxr_keyword">if</strong> (test(filter, x))
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 				action.accept(x);
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> 	}
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> 
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> <em class="jxr_javadoccomment">	 * Returns the {@link ClassMeta} of this bean.</em>
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> <em class="jxr_javadoccomment">	 * @return The {@link ClassMeta} of this bean.</em>
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">	 * @param classMeta The target class.</em>
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">	 * @param ctx The bean context that created this object.</em>
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	 * @param beanFilter Optional bean filter associated with the target class.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">	 * @param pNames Explicit list of property names and order of properties.  If &lt;jk&gt;null&lt;/jk&gt;, determine automatically.</em>
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> 	<strong class="jxr_keyword">protected</strong> <a name="BeanMeta" href="../../../org/apache/juneau/BeanMeta.html#BeanMeta">BeanMeta</a>(ClassMeta&lt;T&gt; classMeta, <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> beanFilter, String[] pNames, <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> implClassConstructor) {
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> 		Builder&lt;T&gt; b = <strong class="jxr_keyword">new</strong> Builder&lt;&gt;(classMeta, classMeta.getBeanContext(), beanFilter, pNames, implClassConstructor);
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 		<strong class="jxr_keyword">this</strong>.classMeta = classMeta;
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 		<strong class="jxr_keyword">this</strong>.ctx = classMeta.getBeanContext();
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 		<strong class="jxr_keyword">this</strong>.c = classMeta.<strong class="jxr_keyword">inner</strong>();
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> 		notABeanReason = b.init(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 		<strong class="jxr_keyword">this</strong>.beanFilter = beanFilter;
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 		properties = u(b.properties);
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 		propertyArray = properties == <strong class="jxr_keyword">null</strong> ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		hiddenProperties = u(b.hiddenProperties);
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 		getterProps = u(b.getterProps);
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> 		setterProps = u(b.setterProps);
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> 		dynaProperty = b.dynaProperty;
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 		constructor = b.constructor;
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		constructorArgs = b.constructorArgs;
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 		beanRegistry = b.beanRegistry;
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 		typePropertyName = b.typePropertyName;
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		typeProperty = BeanPropertyMeta.builder(<strong class="jxr_keyword">this</strong>, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 		sortProperties = b.sortProperties;
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 		fluentSetters = b.fluentSetters;
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 		<strong class="jxr_keyword">if</strong> (sortProperties)
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 			Arrays.sort(propertyArray);
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		dictionaryName2 = memoize(()-&gt;findDictionaryName());
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 	}
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		<strong class="jxr_keyword">return</strong> (o instanceof BeanMeta&lt;?&gt; o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.classMeta, y.classMeta));
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 	}
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> <em class="jxr_javadoccomment">	 * Performs a function on the first property that matches the specified filter.</em>
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> <em class="jxr_javadoccomment">	 * @param &lt;T2&gt; The type to convert the property to.</em>
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> <em class="jxr_javadoccomment">	 * @param filter The filter to apply.</em>
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> <em class="jxr_javadoccomment">	 * @param function The function to apply to the matching property.</em>
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> <em class="jxr_javadoccomment">	 * @return The result of the function.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 	<strong class="jxr_keyword">public</strong> &lt;T2&gt; Optional&lt;T2&gt; firstProperty(Predicate&lt;BeanPropertyMeta&gt; filter, Function&lt;BeanPropertyMeta,T2&gt; function) {
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : propertyArray)
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 			<strong class="jxr_keyword">if</strong> (test(filter, x))
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 				<strong class="jxr_keyword">return</strong> opt(function.apply(x));
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		<strong class="jxr_keyword">return</strong> opte();
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 	}
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">	 * Performs an action on all matching properties.</em>
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> <em class="jxr_javadoccomment">	 * @param filter The filter to apply.</em>
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> <em class="jxr_javadoccomment">	 * @param action The action to apply.</em>
 <a class="jxr_linenumber" name="L899" href="#L899">899</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;T&gt; getClassMeta() { <strong class="jxr_keyword">return</strong> classMeta; }
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> <em class="jxr_javadoccomment">	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean(typeName)} annotation.</em>
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> <em class="jxr_javadoccomment">	 * @return The dictionary name for this bean, or &lt;jk&gt;null&lt;/jk&gt; if it has no dictionary name defined.</em>
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String getDictionaryName() { <strong class="jxr_keyword">return</strong> dictionaryName2.get(); }
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 * Returns the type property name for this bean.</em>
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> <em class="jxr_javadoccomment">	 * This is the name of the bean property used to store the dictionary name of a bean type so that the parser knows</em>
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> <em class="jxr_javadoccomment">	 * the data type to reconstruct.</em>
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> forEachProperty(Predicate&lt;BeanPropertyMeta&gt; filter, Consumer&lt;BeanPropertyMeta&gt; action) {
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : propertyArray)
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 			<strong class="jxr_keyword">if</strong> (test(filter, x))
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 				action.accept(x);
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	}
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> <em class="jxr_javadoccomment">	 * Returns the {@link ClassMeta} of this bean.</em>
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment">	 * @return The {@link ClassMeta} of this bean.</em>
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;T&gt; getClassMeta() { <strong class="jxr_keyword">return</strong> classMeta; }
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> <em class="jxr_javadoccomment">	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean(typeName)} annotation.</em>
 <a class="jxr_linenumber" name="L915" href="#L915">915</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> <em class="jxr_javadoccomment">	 * If &lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"_type"&lt;/js&gt; should be assumed.</em>
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">	 * The value is determined from:</em>
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;The {@link Bean#typePropertyName() @Bean(typePropertyName)} annotation on the class, if present.</em>
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Otherwise, the default value from {@link BeanContext#getBeanTypePropertyName()}.</em>
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 * 	The type property name associated with this bean, or &lt;jk&gt;null&lt;/jk&gt; if the default &lt;js&gt;"_type"&lt;/js&gt; should be used.</em>
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> <em class="jxr_javadoccomment">	 * @see BeanContext#getBeanTypePropertyName()</em>
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String getTypePropertyName() { <strong class="jxr_keyword">return</strong> typePropertyName; }
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 * Returns the bean registry for this bean.</em>
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 * The bean registry is used to resolve dictionary names to class types. It's created when a bean class has a</em>
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * {@link Bean#dictionary() @Bean(dictionary)} annotation that specifies a list of possible subclasses.</em>
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 * @return The bean registry for this bean, or &lt;jk&gt;null&lt;/jk&gt; if no bean registry is associated with it.</em>
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> <em class="jxr_javadoccomment">	 * @return The dictionary name for this bean, or &lt;jk&gt;null&lt;/jk&gt; if it has no dictionary name defined.</em>
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String getDictionaryName() { <strong class="jxr_keyword">return</strong> dictionaryName2.get(); }
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> <em class="jxr_javadoccomment">	 * Returns the type property name for this bean.</em>
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> <em class="jxr_javadoccomment">	 * This is the name of the bean property used to store the dictionary name of a bean type so that the parser knows</em>
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> <em class="jxr_javadoccomment">	 * the data type to reconstruct.</em>
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> <em class="jxr_javadoccomment">	 * If &lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"_type"&lt;/js&gt; should be assumed.</em>
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 * The value is determined from:</em>
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;The {@link Bean#typePropertyName() @Bean(typePropertyName)} annotation on the class, if present.</em>
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Otherwise, the default value from {@link BeanContext#getBeanTypePropertyName()}.</em>
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 * 	The type property name associated with this bean, or &lt;jk&gt;null&lt;/jk&gt; if the default &lt;js&gt;"_type"&lt;/js&gt; should be used.</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 * @see BeanContext#getBeanTypePropertyName()</em>
 <a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a> getBeanRegistry() { <strong class="jxr_keyword">return</strong> beanRegistry; }
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String getTypePropertyName() { <strong class="jxr_keyword">return</strong> typePropertyName; }
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> <em class="jxr_javadoccomment">	 * Returns metadata about the specified property.</em>
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> <em class="jxr_javadoccomment">	 * Returns the bean registry for this bean.</em>
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 * @param name The name of the property on this bean.</em>
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 * @return The metadata about the property, or &lt;jk&gt;null&lt;/jk&gt; if no such property exists on this bean.</em>
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 	<strong class="jxr_keyword">public</strong> BeanPropertyMeta getPropertyMeta(String name) {
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		BeanPropertyMeta bpm = properties.get(name);
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 			bpm = hiddenProperties.get(name);
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 			bpm = dynaProperty;
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 		<strong class="jxr_keyword">return</strong> bpm;
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 	}
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 * Returns the metadata on all properties associated with this bean.</em>
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> <em class="jxr_javadoccomment">	 * @return Metadata on all properties associated with this bean.</em>
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;BeanPropertyMeta&gt; getPropertyMetas() { <strong class="jxr_keyword">return</strong> u(l(propertyArray)); }
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> <em class="jxr_javadoccomment">	 * Returns a mock bean property that resolves to the name &lt;js&gt;"_type"&lt;/js&gt; and whose value always resolves to the</em>
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> <em class="jxr_javadoccomment">	 * dictionary name of the bean.</em>
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> <em class="jxr_javadoccomment">	 * @return The type name property.</em>
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> BeanPropertyMeta getTypeProperty() { <strong class="jxr_keyword">return</strong> typeProperty; }
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		<strong class="jxr_keyword">return</strong> classMeta.hashCode();
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 	}
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> <em class="jxr_javadoccomment">	 * Property read interceptor.</em>
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> <em class="jxr_javadoccomment">	 * Called immediately after calling the getter to allow the value to be overridden.</em>
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 * @param bean The bean from which the property was read.</em>
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 * @param name The property name.</em>
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 * @param value The value just extracted from calling the bean getter.</em>
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 * @return The value to serialize.  Default is just to return the existing value.</em>
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 	<strong class="jxr_keyword">public</strong> Object onReadProperty(Object bean, String name, Object value) {
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<strong class="jxr_keyword">return</strong> beanFilter == <strong class="jxr_keyword">null</strong> ? value : beanFilter.readProperty(bean, name, value);
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 	}
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 * Property write interceptor.</em>
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * Called immediately before calling theh setter to allow value to be overwridden.</em>
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">	 * @param bean The bean from which the property was read.</em>
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> <em class="jxr_javadoccomment">	 * @param name The property name.</em>
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> <em class="jxr_javadoccomment">	 * @param value The value just parsed.</em>
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> <em class="jxr_javadoccomment">	 * @return The value to serialize.  Default is just to return the existing value.</em>
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 	<strong class="jxr_keyword">public</strong> Object onWriteProperty(Object bean, String name, Object value) {
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">return</strong> beanFilter == <strong class="jxr_keyword">null</strong> ? value : beanFilter.writeProperty(bean, name, value);
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 	}
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(c.getName());
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		sb.append(<span class="jxr_string">" {\n"</span>);
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pm : propertyArray)
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 			sb.append('\t').append(pm.toString()).append(<span class="jxr_string">",\n"</span>);
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		sb.append('}');
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 	}
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> <em class="jxr_javadoccomment">	 * Creates a new instance of this bean.</em>
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> <em class="jxr_javadoccomment">	 * @param outer The outer object if bean class is a non-static inner member class.</em>
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> <em class="jxr_javadoccomment">	 * @return A new instance of this bean if possible, or &lt;jk&gt;null&lt;/jk&gt; if not.</em>
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 	<strong class="jxr_keyword">protected</strong> T newBean(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		<strong class="jxr_keyword">if</strong> (classMeta.isMemberClass() &amp;&amp; classMeta.isNotStatic()) {
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 			<strong class="jxr_keyword">if</strong> (nn(constructor))
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 				<strong class="jxr_keyword">return</strong> constructor.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>);
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 			<strong class="jxr_keyword">if</strong> (nn(constructor))
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 				<strong class="jxr_keyword">return</strong> constructor.&lt;T&gt;newInstance();
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 			InvocationHandler h = classMeta.getProxyInvocationHandler();
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 			<strong class="jxr_keyword">if</strong> (nn(h)) {
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 				ClassLoader cl = classMeta.<strong class="jxr_keyword">inner</strong>().getClassLoader();
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 				<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(cl, a(classMeta.<strong class="jxr_keyword">inner</strong>(), java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 			}
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 		}
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	}
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> }
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 * The bean registry is used to resolve dictionary names to class types. It's created when a bean class has a</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 * {@link Bean#dictionary() @Bean(dictionary)} annotation that specifies a list of possible subclasses.</em>
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 * @return The bean registry for this bean, or &lt;jk&gt;null&lt;/jk&gt; if no bean registry is associated with it.</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a> getBeanRegistry() { <strong class="jxr_keyword">return</strong> beanRegistry; }
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">	 * Returns metadata about the specified property.</em>
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * @param name The name of the property on this bean.</em>
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 * @return The metadata about the property, or &lt;jk&gt;null&lt;/jk&gt; if no such property exists on this bean.</em>
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	<strong class="jxr_keyword">public</strong> BeanPropertyMeta getPropertyMeta(String name) {
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 		BeanPropertyMeta bpm = properties.get(name);
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 			bpm = hiddenProperties.get(name);
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 			bpm = dynaProperty;
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		<strong class="jxr_keyword">return</strong> bpm;
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 	}
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 * Returns the metadata on all properties associated with this bean.</em>
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 * @return Metadata on all properties associated with this bean.</em>
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;BeanPropertyMeta&gt; getPropertyMetas() { <strong class="jxr_keyword">return</strong> u(l(propertyArray)); }
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 * Returns a mock bean property that resolves to the name &lt;js&gt;"_type"&lt;/js&gt; and whose value always resolves to the</em>
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">	 * dictionary name of the bean.</em>
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> <em class="jxr_javadoccomment">	 * @return The type name property.</em>
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> BeanPropertyMeta getTypeProperty() { <strong class="jxr_keyword">return</strong> typeProperty; }
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<strong class="jxr_keyword">return</strong> classMeta.hashCode();
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 	}
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> <em class="jxr_javadoccomment">	 * Property read interceptor.</em>
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * Called immediately after calling the getter to allow the value to be overridden.</em>
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * @param bean The bean from which the property was read.</em>
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * @param name The property name.</em>
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * @param value The value just extracted from calling the bean getter.</em>
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 * @return The value to serialize.  Default is just to return the existing value.</em>
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	<strong class="jxr_keyword">public</strong> Object onReadProperty(Object bean, String name, Object value) {
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<strong class="jxr_keyword">return</strong> beanFilter == <strong class="jxr_keyword">null</strong> ? value : beanFilter.readProperty(bean, name, value);
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 	}
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> <em class="jxr_javadoccomment">	 * Property write interceptor.</em>
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> <em class="jxr_javadoccomment">	 * Called immediately before calling theh setter to allow value to be overwridden.</em>
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> <em class="jxr_javadoccomment">	 * @param bean The bean from which the property was read.</em>
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> <em class="jxr_javadoccomment">	 * @param name The property name.</em>
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> <em class="jxr_javadoccomment">	 * @param value The value just parsed.</em>
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> <em class="jxr_javadoccomment">	 * @return The value to serialize.  Default is just to return the existing value.</em>
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 	<strong class="jxr_keyword">public</strong> Object onWriteProperty(Object bean, String name, Object value) {
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		<strong class="jxr_keyword">return</strong> beanFilter == <strong class="jxr_keyword">null</strong> ? value : beanFilter.writeProperty(bean, name, value);
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 	}
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(c.getName());
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		sb.append(<span class="jxr_string">" {\n"</span>);
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pm : propertyArray)
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 			sb.append('\t').append(pm.toString()).append(<span class="jxr_string">",\n"</span>);
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 		sb.append('}');
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 	}
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * Creates a new instance of this bean.</em>
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">	 * @param outer The outer object if bean class is a non-static inner member class.</em>
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">	 * @return A new instance of this bean if possible, or &lt;jk&gt;null&lt;/jk&gt; if not.</em>
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 	<strong class="jxr_keyword">protected</strong> T newBean(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 		<strong class="jxr_keyword">if</strong> (classMeta.isMemberClass() &amp;&amp; classMeta.isNotStatic()) {
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 			<strong class="jxr_keyword">if</strong> (nn(constructor))
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 				<strong class="jxr_keyword">return</strong> constructor.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>);
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 			<strong class="jxr_keyword">if</strong> (nn(constructor))
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 				<strong class="jxr_keyword">return</strong> constructor.&lt;T&gt;newInstance();
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 			InvocationHandler h = classMeta.getProxyInvocationHandler();
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 			<strong class="jxr_keyword">if</strong> (nn(h)) {
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 				ClassLoader cl = classMeta.<strong class="jxr_keyword">inner</strong>().getClassLoader();
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 				<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(cl, a(classMeta.<strong class="jxr_keyword">inner</strong>(), java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 			}
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		}
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 	}
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
