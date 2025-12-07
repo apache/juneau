@@ -292,7 +292,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			}
 
 			var _beanMeta = (BeanMeta<T>)null;
-			var _beanRegistry = new Value<BeanRegistry>();
 
 			if (! cat.isUnknown()) {
 				notABeanReason = "Known non-bean type";
@@ -300,7 +299,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				try {
 					_beanMeta = new BeanMeta<>(ClassMeta.this, beanContext, beanFilter.get(), null, implClass.get() == null ? null : noArgConstructor.get());
 					notABeanReason = _beanMeta.notABeanReason;
-					_beanRegistry.set(_beanMeta.beanRegistry);
 				} catch (RuntimeException e) {
 					notABeanReason = e.getMessage();
 				}
@@ -551,6 +549,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * This bean registry contains names specified in the {@link Bean#dictionary() @Bean(dictionary)} annotation
 	 * defined on the class, regardless of whether the class is an actual bean.
 	 * This allows interfaces to define subclasses with type names.
+	 *
+	 * <p>
+	 * This is a shortcut for calling getBeanMeta().getBeanRegistry().
 	 *
 	 * @return The bean registry for this class, or <jk>null</jk> if no bean registry is associated with it.
 	 */
