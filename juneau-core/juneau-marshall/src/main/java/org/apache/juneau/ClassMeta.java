@@ -179,7 +179,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private Tuple2<BeanMeta<T>,String> findBeanMeta() {
 		if (! cat.isUnknown())
 			return Tuple2.of(null, "Known non-bean type");
-		return BeanMeta.create(this, beanFilter.get(), null, implClass.isPresent() ? noArgConstructor.get() : null);
+		return BeanMeta.create(this, beanFilter.get(), null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
 	}
 
 	/**
@@ -314,8 +314,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			this.beanMeta = notABeanReason == null ? _beanMeta : null;
 			this.beanMeta2 = memoize(()->findBeanMeta());
-//			if (nn(this.beanMeta))
-//				cat.set(BEAN);
 			this.keyType = _keyType;
 			this.valueType = _valueType;
 			this.elementType = _elementType;
@@ -343,7 +341,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			this.swaps = _swaps.isEmpty() ? null : _swaps.toArray(new ObjectSwap[_swaps.size()]);
 
-			this.proxyInvocationHandler = ()->(nn(beanMeta) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta) : null;
+			this.proxyInvocationHandler = ()->(nn(beanMeta2.get().getA()) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta2.get().getA()) : null;
 
 			this.childSwaps = childSwaps;
 			this.childUnswapMap = childSwaps == null ? null : new ConcurrentHashMap<>();
