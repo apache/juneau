@@ -439,10 +439,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	<jk>true</jk> if a new instance of this bean can be created within the context of the specified outer object.
 	 */
 	public boolean canCreateNewBean(Object outer) {
-		if (beanMeta == null || beanMeta.constructor == null)
+		var bm = getBeanMeta();
+		if (bm == null || bm.constructor == null)
 			return false;
 		if (isMemberClass() && isNotStatic())
-			return nn(outer) && beanMeta.constructor.hasParameterTypes(outer.getClass());
+			return nn(outer) && bm.constructor.hasParameterTypes(outer.getClass());
 		return true;
 	}
 
