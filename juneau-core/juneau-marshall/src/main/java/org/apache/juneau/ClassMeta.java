@@ -558,9 +558,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The bean registry for this class, or <jk>null</jk> if no bean registry is associated with it.
 	 */
-	public BeanRegistry getBeanRegistry() { return beanRegistry; }
-
-
+	public BeanRegistry getBeanRegistry() {
+		return beanMeta == null ? null : beanMeta.getBeanRegistry();
+	}
 
 	/**
 	 * Returns the builder swap associated with this class.

@@ -985,6 +985,17 @@ public class BeanMeta<T> {
 	public final String getTypePropertyName() { return typePropertyName; }
 
 	/**
+	 * Returns the bean registry for this bean.
+	 *
+	 * <p>
+	 * The bean registry is used to resolve dictionary names to class types. It's created when a bean class has a
+	 * {@link Bean#dictionary() @Bean(dictionary)} annotation that specifies a list of possible subclasses.
+	 *
+	 * @return The bean registry for this bean, or <jk>null</jk> if no bean registry is associated with it.
+	 */
+	public final BeanRegistry getBeanRegistry() { return beanRegistry; }
+
+	/**
 	 * Returns metadata about the specified property.
 	 *
 	 * @param name The name of the property on this bean.
