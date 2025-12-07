@@ -177,9 +177,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta2;
 
 	private Tuple2<BeanMeta<T>,String> findBeanMeta() {
-		if (cat.isUnknown())
+		if (! cat.isUnknown())
 			return Tuple2.of(null, "Known non-bean type");
-		return BeanMeta.create(this, beanFilter.get(), null, implClass.isPresent() ? null : noArgConstructor.get());
+		return BeanMeta.create(this, beanFilter.get(), null, implClass.isPresent() ? noArgConstructor.get() : null);
 	}
 
 	/**
@@ -305,7 +305,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				notABeanReason = "Known non-bean type";
 			} else {
 				try {
-					_beanMeta = new BeanMeta<>(ClassMeta.this, beanFilter.get(), null, implClass.get() == null ? null : noArgConstructor.get());
+					_beanMeta = new BeanMeta<>(this, beanFilter.get(), null, implClass.get() == null ? null : noArgConstructor.get());
 					notABeanReason = _beanMeta.notABeanReason;
 				} catch (RuntimeException e) {
 					notABeanReason = e.getMessage();
@@ -552,8 +552,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	this class.
 	 */
 	public BeanMeta<T> getBeanMeta() {
-		return beanMeta;
-		//return beanMeta2.get().getA();
+		return beanMeta2.get().getA();
 	}
 
 	/**

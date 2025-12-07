@@ -68,9 +68,9 @@ import org.apache.juneau.commons.utils.*;
  */
 public class BeanMeta<T> {
 
-	public static <T> Tuple2<BeanMeta<T>,String> create(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ConstructorInfo noArgConstructor) {
+	public static <T> Tuple2<BeanMeta<T>,String> create(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ConstructorInfo implClassConstructor) {
 		try {
-			var bm = new BeanMeta<>(cm, bf, pNames, noArgConstructor);
+			var bm = new BeanMeta<>(cm, bf, pNames, implClassConstructor);
 			var nabr = bm.notABeanReason;
 			return Tuple2.of(nabr == null ? bm : null, nabr);
 		} catch (RuntimeException e) {
