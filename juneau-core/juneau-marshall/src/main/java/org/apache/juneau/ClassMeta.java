@@ -2,7 +2,7 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The ASF licenses this file to You under  the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -174,6 +174,12 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final ClassMeta<?> valueType;                                                                           // If MAP, the value class type.
 
+	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta2;
+
+	private Tuple2<BeanMeta<T>,String> findBeanMeta() {
+		return BeanMeta.create(this, beanFilter.get(), null, implClass.isPresent() ? null : noArgConstructor.get());
+	}
+
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
 	 *
@@ -305,6 +311,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			}
 
 			this.beanMeta = notABeanReason == null ? _beanMeta : null;
+			this.beanMeta2 = memoize(()->findBeanMeta());
 			if (nn(this.beanMeta))
 				cat.set(BEAN);
 			this.keyType = _keyType;
@@ -362,6 +369,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.valueType = null;
 		this.proxyInvocationHandler = null;
 		this.beanMeta = null;
+		this.beanMeta2 = memoize(()->findBeanMeta());
 		this.notABeanReason = null;
 		this.swaps = null;
 		this.stringMutater = null;
@@ -400,6 +408,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.valueType = valueType;
 		this.proxyInvocationHandler = mainType.proxyInvocationHandler;
 		this.beanMeta = mainType.beanMeta;
+		this.beanMeta2 = mainType.beanMeta2;
 		this.notABeanReason = mainType.notABeanReason;
 		this.swaps = mainType.swaps;
 		this.exampleMethod = mainType.exampleMethod;
@@ -976,7 +985,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a bean.
 	 */
-	public boolean isBean() { return cat.is(BEAN); }
+	public boolean isBean() { return beanMeta != null; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link BeanMap}.
