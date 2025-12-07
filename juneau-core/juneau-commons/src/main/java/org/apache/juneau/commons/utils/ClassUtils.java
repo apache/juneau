@@ -524,6 +524,72 @@ public class ClassUtils {
 		return null;
 	}
 
+	/**
+	 * Recursively determines the classes represented by parameterized types in the class hierarchy of the specified
+	 * type, and puts the results in the specified map.
+	 *
+	 * <p>
+	 * For example, given the following classes...
+	 * <p class='bjava'>
+	 * 	<jk>public static class</jk> BeanA&lt;T&gt; {
+	 * 		<jk>public</jk> T <jf>x</jf>;
+	 * 	}
+	 * 	<jk>public static class</jk> BeanB <jk>extends</jk> BeanA&lt;Integer> {...}
+	 * </p>
+	 * <p>
+	 * 	...calling this method on {@code BeanB.class} will load the following data into {@code m} indicating
+	 * 	that the {@code T} parameter on the BeanA class is implemented with an {@code Integer}:
+	 * <p class='bcode'>
+	 * 	{BeanA.class:[Integer.class]}
+	 * </p>
+	 *
+	 * <h5 class='section'>Known Limitations:</h5>
+	 * <p>
+	 * This code doesn't currently properly handle the following situation with nested generic bounds:
+	 * <p class='bjava'>
+	 * 	<jk>public static class</jk> BeanB&lt;T <jk>extends</jk> Number&gt; <jk>extends</jk> BeanA&lt;>;
+	 * 	<jk>public static class</jk> BeanC <jk>extends</jk> BeanB&lt;Integer>;
+	 * </p>
+	 *
+	 * <p>
+	 * When called on {@code BeanC}, the type variable will be resolved as {@code Number}, not {@code Integer}.
+	 * This limitation exists because the intermediate type parameter bound information is lost during type resolution
+	 *
+	 * @param t The type we're recursing.
+	 * @param m Where the results are loaded.
+	 */
+	public static Map<Class<?>,Class<?>[]> findTypeVarImpls(Type t) {
+		Map<Class<?>,Class<?>[]> m = new LinkedHashMap<>();
+		return findTypeVarImpls(t, m);
+	}
+
+	private static Map<Class<?>,Class<?>[]> findTypeVarImpls(Type t, Map<Class<?>,Class<?>[]> m) {
+		if (t instanceof Class<?> c) {
+			findTypeVarImpls(c.getGenericSuperclass(), m);
+			for (var ci : c.getGenericInterfaces())
+				findTypeVarImpls(ci, m);
+		} else if (t instanceof ParameterizedType t2) {
+			var rt = t2.getRawType();
+			if (rt instanceof Class) {
+				Type[] gImpls = t2.getActualTypeArguments();
+				Class<?>[] gTypes = new Class[gImpls.length];
+				for (var i = 0; i < gImpls.length; i++) {
+					Type gt = gImpls[i];
+					if (gt instanceof Class<?> c)
+						gTypes[i] = c;
+					else if (gt instanceof TypeVariable<?> tv) {
+						for (var upperBound : tv.getBounds())
+							if (upperBound instanceof Class upperBound2)
+								gTypes[i] = upperBound2;
+					}
+				}
+				m.put((Class<?>)rt, gTypes);
+				findTypeVarImpls(t2.getRawType(), m);
+			}
+		}
+		return m;
+	}
+
 	private static boolean canAddTo(Class<?> c) {
 		var b = MODIFIABLE_COLLECTION_TYPES.get(c);
 		if (b == null) {
