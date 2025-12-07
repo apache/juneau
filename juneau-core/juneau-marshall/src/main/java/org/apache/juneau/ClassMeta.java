@@ -145,7 +145,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final BeanContext beanContext;                                                                          // The bean context that created this object.
 	private final Supplier<BeanFilter> beanFilter;
 	private final BeanMeta<T> beanMeta;                                                                             // The bean meta for this bean class (if it's a bean).
-	private final BeanRegistry beanRegistry;                                                                        // The bean registry of this class meta (if it has one).
 	private final Supplier<BuilderSwap<T,?>> builderSwap;                                                           // The builder swap associated with this bean (if it has one).
 	private final Categories cat;                                                                                   // The class category.
 	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap;                                         // Maps normal subclasses to ObjectSwaps.
@@ -338,7 +337,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			this.swaps = _swaps.isEmpty() ? null : _swaps.toArray(new ObjectSwap[_swaps.size()]);
 
 			this.proxyInvocationHandler = ()->(nn(beanMeta) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta) : null;
-			this.beanRegistry = _beanRegistry.get();
 
 			this.childSwaps = childSwaps;
 			this.childUnswapMap = childSwaps == null ? null : new ConcurrentHashMap<>();
@@ -368,7 +366,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.beanMeta = null;
 		this.notABeanReason = null;
 		this.swaps = null;
-		this.beanRegistry = null;
 		this.stringMutater = null;
 		this.fromStringMethod = memoize(()->findFromStringMethod());
 		this.exampleMethod = memoize(()->findExampleMethod());
@@ -407,7 +404,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.beanMeta = mainType.beanMeta;
 		this.notABeanReason = mainType.notABeanReason;
 		this.swaps = mainType.swaps;
-		this.beanRegistry = mainType.beanRegistry;
 		this.exampleMethod = mainType.exampleMethod;
 		this.args = null;
 		this.stringMutater = mainType.stringMutater;
