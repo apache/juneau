@@ -305,7 +305,7 @@
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 				notABeanReason = <span class="jxr_string">"Known non-bean type"</span>;
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 					_beanMeta = <strong class="jxr_keyword">new</strong> BeanMeta&lt;&gt;(ClassMeta.<strong class="jxr_keyword">this</strong>, beanContext, beanFilter.get(), <strong class="jxr_keyword">null</strong>, implClass.get() == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : noArgConstructor.get());
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 					_beanMeta = <strong class="jxr_keyword">new</strong> BeanMeta&lt;&gt;(ClassMeta.<strong class="jxr_keyword">this</strong>, beanFilter.get(), <strong class="jxr_keyword">null</strong>, implClass.get() == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : noArgConstructor.get());
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 					notABeanReason = _beanMeta.notABeanReason;
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 				} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 					notABeanReason = e.getMessage();
