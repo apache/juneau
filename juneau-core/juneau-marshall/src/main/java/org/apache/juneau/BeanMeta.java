@@ -808,7 +808,7 @@ public class BeanMeta<T> {
 				return s;
 		}
 
-		return classMeta
+		var n = classMeta
 			.getParentsAndInterfaces()
 			.stream()
 			.skip(1)
@@ -817,6 +817,17 @@ public class BeanMeta<T> {
 			.filter(Objects::nonNull)
 			.map(x -> x.getTypeName(this.classMeta))
 			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
+
+		if (n != null)
+			return n;
+
+		return classMeta.getBeanContext().getAnnotationProvider().find(Bean.class, classMeta)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> ! x.typeName().isEmpty())
+			.map(x -> x.typeName())
 			.findFirst()
 			.orElse(null);
 	}

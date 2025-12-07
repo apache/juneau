@@ -568,7 +568,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The bean registry for this class, or <jk>null</jk> if no bean registry is associated with it.
 	 */
 	public BeanRegistry getBeanRegistry() {
-		return beanMeta == null ? null : beanMeta.getBeanRegistry();
+		var bm = getBeanMeta();
+		return bm == null ? null : bm.getBeanRegistry();
 	}
 
 	/**
@@ -988,7 +989,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a bean.
 	 */
-	public boolean isBean() { return beanMeta != null; }
+	public boolean isBean() { return nn(getBeanMeta()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link BeanMap}.
@@ -1139,7 +1140,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
 	 */
-	public boolean isMapOrBean() { return cat.is(MAP) || nn(beanMeta); }
+	public boolean isMapOrBean() { return cat.is(MAP) || nn(getBeanMeta()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is {@link Method}.
@@ -1439,8 +1440,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (beanContext == null)
 			return null;
 
-		if (nn(beanMeta) && beanMeta.getDictionaryName() != null)
-			return beanMeta.getDictionaryName();
+		var bm = getBeanMeta();
+		if (nn(bm) && bm.getDictionaryName() != null)
+			return bm.getDictionaryName();
 
 		return beanContext.getAnnotationProvider().find(Bean.class, this)
 			.stream()
