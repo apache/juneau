@@ -155,7 +155,7 @@ public class BeanMeta<T> {
 		String[] constructorArgs = {};
 		PropertyNamer propertyNamer;
 		BeanRegistry beanRegistry;
-		String dictionaryName, typePropertyName;
+		String typePropertyName;
 		boolean sortProperties, fluentSetters;
 
 		Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
@@ -165,27 +165,6 @@ public class BeanMeta<T> {
 			this.beanFilter = beanFilter;
 			this.pNames = pNames;
 			this.implClassConstructor = implClassConstructor;
-		}
-
-		private String findDictionaryName(ClassMeta<?> cm) {
-			var br = cm.getBeanRegistry();
-			if (nn(br)) {
-				String s = br.getTypeName(this.classMeta);
-				if (nn(s))
-					return s;
-			}
-			var pcm = cm.inner().getSuperclass();
-			if (nn(pcm)) {
-				var s = findDictionaryName(ctx.getClassMeta(pcm));
-				if (nn(s))
-					return s;
-			}
-			for (var icm : cm.inner().getInterfaces()) {
-				var s = findDictionaryName(ctx.getClassMeta(icm));
-				if (nn(s))
-					return s;
-			}
-			return null;
 		}
 
 		/*
@@ -468,11 +447,6 @@ public class BeanMeta<T> {
 				sortProperties = (ctx.isSortProperties() || (nn(beanFilter) && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
 				properties = sortProperties ? sortedMap() : map();
-
-				if (nn(beanFilter) && nn(beanFilter.getTypeName()))
-					dictionaryName = beanFilter.getTypeName();
-				if (dictionaryName == null)
-					dictionaryName = findDictionaryName(this.classMeta);
 
 				normalProps.forEach((k, v) -> {
 					var pMeta = v.build();
@@ -878,7 +852,7 @@ public class BeanMeta<T> {
 
 	final BeanPropertyMeta dynaProperty;                   // "extras" property.
 
-	private final String dictionaryName;                   // The @Bean(typeName) annotation defined on this bean class.
+	private final Supplier<String> dictionaryName2;                   // The @Bean(typeName) annotation defined on this bean class.
 
 	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
 
@@ -887,6 +861,32 @@ public class BeanMeta<T> {
 	final boolean sortProperties;
 
 	final boolean fluentSetters;
+
+	private String findDictionaryName() {
+		if (nn(beanFilter) && nn(beanFilter.getTypeName()))
+			return beanFilter.getTypeName();
+
+		var br = getBeanRegistry();
+		if (nn(br)) {
+			String s = br.getTypeName(this.classMeta);
+			if (nn(s))
+				return s;
+		}
+
+		return classMeta
+			.getParentsAndInterfaces()
+			.stream()
+			.skip(1)
+			.map(x -> ctx.getClassMeta(x))
+			.map(x -> x.getBeanRegistry())
+			.filter(Objects::nonNull)
+			.map(x -> x.getTypeName(this.classMeta))
+			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
+	}
+
+
 
 	/**
 	 * Constructor.
@@ -898,15 +898,14 @@ public class BeanMeta<T> {
 	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be <jk>null</jk>.
 	 */
 	protected BeanMeta(ClassMeta<T> classMeta, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
+
+		Builder<T> b = new Builder<>(classMeta, classMeta.getBeanContext(), beanFilter, pNames, implClassConstructor);
 		this.classMeta = classMeta;
 		this.ctx = classMeta.getBeanContext();
 		this.c = classMeta.inner();
-
-		Builder<T> b = new Builder<>(classMeta, ctx, beanFilter, pNames, implClassConstructor);
 		notABeanReason = b.init(this);
 
 		this.beanFilter = beanFilter;
-		dictionaryName = b.dictionaryName;
 		properties = u(b.properties);
 		propertyArray = properties == null ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.class);
 		hiddenProperties = u(b.hiddenProperties);
@@ -924,6 +923,7 @@ public class BeanMeta<T> {
 
 		if (sortProperties)
 			Arrays.sort(propertyArray);
+		dictionaryName2 = memoize(()->findDictionaryName());
 	}
 
 	@Override /* Overridden from Object */
@@ -970,7 +970,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
 	 */
-	public final String getDictionaryName() { return dictionaryName; }
+	public final String getDictionaryName() { return dictionaryName2.get(); }
 
 	/**
 	 * Returns the type property name for this bean.
