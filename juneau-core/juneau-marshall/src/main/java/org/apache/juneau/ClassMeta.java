@@ -297,7 +297,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				notABeanReason = "Known non-bean type";
 			} else {
 				try {
-					_beanMeta = new BeanMeta<>(ClassMeta.this, beanContext, beanFilter.get(), null, implClass.get() == null ? null : noArgConstructor.get());
+					_beanMeta = new BeanMeta<>(ClassMeta.this, beanFilter.get(), null, implClass.get() == null ? null : noArgConstructor.get());
 					notABeanReason = _beanMeta.notABeanReason;
 				} catch (RuntimeException e) {
 					notABeanReason = e.getMessage();

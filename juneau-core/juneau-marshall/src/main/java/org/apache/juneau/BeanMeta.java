@@ -33,6 +33,7 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.commons.utils.*;
@@ -66,6 +67,16 @@ import org.apache.juneau.commons.utils.*;
  * @param <T> The class type that this metadata applies to.
  */
 public class BeanMeta<T> {
+
+	public static <T> Tuple2<BeanMeta<T>,String> create(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ConstructorInfo noArgConstructor) {
+		try {
+			var bm = new BeanMeta<>(cm, bf, pNames, noArgConstructor);
+			var nabr = bm.notABeanReason;
+			return Tuple2.of(nabr == null ? bm : null, nabr);
+		} catch (RuntimeException e) {
+			return Tuple2.of(null, e.getMessage());
+		}
+	}
 
 	/*
 	 * Temporary getter/setter method struct.
@@ -886,9 +897,9 @@ public class BeanMeta<T> {
 	 * @param pNames Explicit list of property names and order of properties.  If <jk>null</jk>, determine automatically.
 	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be <jk>null</jk>.
 	 */
-	protected BeanMeta(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
+	protected BeanMeta(ClassMeta<T> classMeta, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
 		this.classMeta = classMeta;
-		this.ctx = ctx;
+		this.ctx = classMeta.getBeanContext();
 		this.c = classMeta.inner();
 
 		Builder<T> b = new Builder<>(classMeta, ctx, beanFilter, pNames, implClassConstructor);
