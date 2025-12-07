@@ -177,6 +177,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta2;
 
 	private Tuple2<BeanMeta<T>,String> findBeanMeta() {
+		if (cat.isUnknown())
+			return Tuple2.of(null, "Known non-bean type");
 		return BeanMeta.create(this, beanFilter.get(), null, implClass.isPresent() ? null : noArgConstructor.get());
 	}
 
@@ -312,8 +314,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			this.beanMeta = notABeanReason == null ? _beanMeta : null;
 			this.beanMeta2 = memoize(()->findBeanMeta());
-			if (nn(this.beanMeta))
-				cat.set(BEAN);
+//			if (nn(this.beanMeta))
+//				cat.set(BEAN);
 			this.keyType = _keyType;
 			this.valueType = _valueType;
 			this.elementType = _elementType;
@@ -549,7 +551,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	The {@link BeanMeta} associated with this class, or <jk>null</jk> if there is no bean meta associated with
 	 * 	this class.
 	 */
-	public BeanMeta<T> getBeanMeta() { return beanMeta; }
+	public BeanMeta<T> getBeanMeta() {
+		return beanMeta;
+		//return beanMeta2.get().getA();
+	}
 
 	/**
 	 * Returns the bean registry for this class.
