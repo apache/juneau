@@ -152,7 +152,7 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt;[] args;                                                                              <em class="jxr_comment">// Arg types if this is an array of args.</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BeanContext beanContext;                                                                          <em class="jxr_comment">// The bean context that created this object.</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;BeanFilter&gt; beanFilter;
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BeanMeta&lt;T&gt; beanMeta;                                                                             <em class="jxr_comment">// The bean meta for this bean class (if it's a bean).</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_comment">//	private final BeanMeta&lt;T&gt; beanMeta;                                                                             // The bean meta for this bean class (if it's a bean).</em>
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;BuilderSwap&lt;T,?&gt;&gt; builderSwap;                                                           <em class="jxr_comment">// The builder swap associated with this bean (if it has one).</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Categories cat;                                                                                   <em class="jxr_comment">// The class category.</em>
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;Class&lt;?&gt;,ObjectSwap&lt;?,?&gt;&gt; childSwapMap;                                         <em class="jxr_comment">// Maps normal subclasses to ObjectSwaps.</em>
@@ -320,7 +320,7 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				}
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">this</strong>.beanMeta = notABeanReason == <strong class="jxr_keyword">null</strong> ? _beanMeta : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_comment">//			this.beanMeta = null;</em>
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">this</strong>.beanMeta2 = memoize(()-&gt;findBeanMeta());
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">this</strong>.keyType = _keyType;
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">this</strong>.valueType = _valueType;
@@ -376,7 +376,7 @@
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">this</strong>.keyType = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">this</strong>.valueType = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">this</strong>.proxyInvocationHandler = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">this</strong>.beanMeta = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_comment">//		this.beanMeta = null;</em>
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">this</strong>.beanMeta2 = memoize(()-&gt;findBeanMeta());
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">this</strong>.notABeanReason = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">this</strong>.swaps = <strong class="jxr_keyword">null</strong>;
@@ -415,7 +415,7 @@
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">this</strong>.keyType = keyType;
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">this</strong>.valueType = valueType;
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">this</strong>.proxyInvocationHandler = mainType.proxyInvocationHandler;
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">this</strong>.beanMeta = mainType.beanMeta;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_comment">//		this.beanMeta = mainType.beanMeta;</em>
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">this</strong>.beanMeta2 = mainType.beanMeta2;
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">this</strong>.notABeanReason = mainType.notABeanReason;
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">this</strong>.swaps = mainType.swaps;
