@@ -76,9 +76,9 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> BeanMeta&lt;T&gt; {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Tuple2&lt;BeanMeta&lt;T&gt;,String&gt; create(ClassMeta&lt;T&gt; cm, <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> bf, String[] pNames, <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> noArgConstructor) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Tuple2&lt;BeanMeta&lt;T&gt;,String&gt; create(ClassMeta&lt;T&gt; cm, <a name="BeanFilter" href="../../../org/apache/juneau/BeanFilter.html#BeanFilter">BeanFilter</a> bf, String[] pNames, <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> implClassConstructor) {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			<strong class="jxr_keyword">var</strong> bm = <strong class="jxr_keyword">new</strong> BeanMeta&lt;&gt;(cm, bf, pNames, noArgConstructor);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			<strong class="jxr_keyword">var</strong> bm = <strong class="jxr_keyword">new</strong> BeanMeta&lt;&gt;(cm, bf, pNames, implClassConstructor);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">var</strong> nabr = bm.notABeanReason;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">return</strong> Tuple2.of(nabr == <strong class="jxr_keyword">null</strong> ? bm : <strong class="jxr_keyword">null</strong>, nabr);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
