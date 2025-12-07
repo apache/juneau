@@ -566,9 +566,9 @@
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 * @return The bean registry for this class, or &lt;jk&gt;null&lt;/jk&gt; if no bean registry is associated with it.</em>
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	<strong class="jxr_keyword">public</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a> getBeanRegistry() { <strong class="jxr_keyword">return</strong> beanRegistry; }
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	<strong class="jxr_keyword">public</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a> getBeanRegistry() {
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">return</strong> beanMeta == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : beanMeta.getBeanRegistry();
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	}
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 * Returns the builder swap associated with this class.</em>
