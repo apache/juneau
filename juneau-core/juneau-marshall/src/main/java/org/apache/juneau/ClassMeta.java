@@ -164,7 +164,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
 	private final OptionalSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
-	private final List<ObjectSwap<T,?>> swaps;                                 // The object POJO swaps associated with this bean (if it has any).
+	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta;
 
@@ -255,27 +255,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			this.enumValues = memoize(()->findEnumValues());
 			this.dictionaryName = memoize(()->findBeanDictionaryName());
 
-			var _swaps = new ArrayList<ObjectSwap<T,?>>();
-			var programmaticSwaps = beanContext.findObjectSwaps(innerClass);
-			if (programmaticSwaps != null)
-				for (var s : programmaticSwaps)
-					_swaps.add((ObjectSwap<T,?>)s);
-
-			ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -> _swaps.add(createSwap(x)));
-			var ds = DefaultSwaps.find(this);
-			if (ds == null)
-				ds = AutoObjectSwap.find(beanContext, this);
-			if (ds == null)
-				ds = AutoNumberSwap.find(beanContext, this);
-			if (ds == null)
-				ds = AutoMapSwap.find(beanContext, this);
-			if (ds == null)
-				ds = AutoListSwap.find(beanContext, this);
-
-			if (nn(ds))
-				_swaps.add((ObjectSwap<T,?>)ds);
-
-			this.swaps = _swaps.isEmpty() ? null : _swaps;
+			this.swaps = memoize(()->findSwaps());
 
 			this.proxyInvocationHandler = ()->(nn(beanMeta.get().getA()) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta.get().getA()) : null;
 
@@ -318,7 +298,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.keyValueTypes = memoize(()->findKeyValueTypes());
 		this.proxyInvocationHandler = null;
 		this.beanMeta = memoize(()->findBeanMeta());
-		this.swaps = null;
+		this.swaps = memoize(()->findSwaps());
 		this.stringMutater = null;
 		this.fromStringMethod = memoize(()->findFromStringMethod());
 		this.exampleMethod = memoize(()->findExampleMethod());
@@ -783,11 +763,12 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	this class.
 	 */
 	public ObjectSwap<T,?> getSwap(BeanSession session) {
-		if (swaps != null && ! swaps.isEmpty()) {
+		var swapsList = swaps.get();
+		if (! swapsList.isEmpty()) {
 			var matchQuant = 0;
 			ObjectSwap<T,?> matchSwap = null;
 
-			for (var swap : swaps) {
+			for (var swap : swapsList) {
 				var q = swap.match(session);
 				if (q > matchQuant) {
 					matchQuant = q;
@@ -1390,6 +1371,35 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (bc == null)
 			return null;
 		return (BuilderSwap<T,?>)BuilderSwap.findSwapFromObjectClass(bc, inner(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<ObjectSwap<T,?>> findSwaps() {
+		if (beanContext == null)
+			return l();
+
+		var list = new ArrayList<ObjectSwap<T,?>>();
+		var programmaticSwaps = beanContext.findObjectSwaps(inner());
+		if (programmaticSwaps != null)
+			for (var s : programmaticSwaps)
+				list.add(s);
+
+		var ap = beanContext.getAnnotationProvider();
+		ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -> list.add(createSwap(x)));
+		var ds = DefaultSwaps.find(this);
+		if (ds == null)
+			ds = AutoObjectSwap.find(beanContext, this);
+		if (ds == null)
+			ds = AutoNumberSwap.find(beanContext, this);
+		if (ds == null)
+			ds = AutoMapSwap.find(beanContext, this);
+		if (ds == null)
+			ds = AutoListSwap.find(beanContext, this);
+
+		if (nn(ds))
+			list.add((ObjectSwap<T,?>)ds);
+
+		return u(list);
 	}
 
 	private BidiMap<Object,String> findEnumValues() {
