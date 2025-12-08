@@ -271,15 +271,15 @@ public class BeanMeta<T> {
 		 * Returns the property name of the specified field if it's a valid property.
 		 * Returns null if the field isn't a valid property.
 		 */
-		private String findPropertyName(FieldInfo f) {
+		private static String findPropertyName(FieldInfo f, AnnotationProvider ap, PropertyNamer pn) {
 			List<Beanp> lp = list();
 			List<Name> ln = list();
-			_ap.find(Beanp.class, f).forEach(x -> lp.add(x.inner()));
-			_ap.find(Name.class, f).forEach(x -> ln.add(x.inner()));
+			ap.find(Beanp.class, f).forEach(x -> lp.add(x.inner()));
+			ap.find(Name.class, f).forEach(x -> ln.add(x.inner()));
 			var name = bpName(lp, ln);
 			if (isNotEmpty(name))
 				return name;
-			return _propertyNamer.getPropertyName(f.getName());
+			return pn.getPropertyName(f.getName());
 		}
 
 		void init(BeanMeta<T> beanMeta) {
@@ -432,7 +432,7 @@ public class BeanMeta<T> {
 				} else /* Use 'better' introspection */ {
 
 					findBeanFields(_ctx, c2, stopClass, fVis).forEach(x -> {
-						var name = findPropertyName(info(x));
+						var name = findPropertyName(info(x), _ap, _propertyNamer);
 						if (nn(name)) {
 							if (! normalProps.containsKey(name))
 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
