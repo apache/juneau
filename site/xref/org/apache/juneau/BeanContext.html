@@ -3541,8 +3541,8 @@
 <a class="jxr_linenumber" name="L3533" href="#L3533">3533</a> 		swapArray = _swaps.toArray(<strong class="jxr_keyword">new</strong> ObjectSwap[_swaps.size()]);
 <a class="jxr_linenumber" name="L3534" href="#L3534">3534</a> 
 <a class="jxr_linenumber" name="L3535" href="#L3535">3535</a> 		cmCache = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L3536" href="#L3536">3536</a> 		cmCache.put(String.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(String.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>, findObjectSwaps(String.<strong class="jxr_keyword">class</strong>), findChildObjectSwaps(String.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L3537" href="#L3537">3537</a> 		cmCache.put(Object.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(Object.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>, findObjectSwaps(Object.<strong class="jxr_keyword">class</strong>), findChildObjectSwaps(Object.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L3536" href="#L3536">3536</a> 		cmCache.put(String.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(String.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L3537" href="#L3537">3537</a> 		cmCache.put(Object.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(Object.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L3538" href="#L3538">3538</a> 		cmString = cmCache.get(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L3539" href="#L3539">3539</a> 		cmObject = cmCache.get(Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L3540" href="#L3540">3540</a> 		cmClass = cmCache.get(Class.<strong class="jxr_keyword">class</strong>);
@@ -4053,7 +4053,7 @@
 <a class="jxr_linenumber" name="L4045" href="#L4045">4045</a> <em class="jxr_javadoccomment">	 * @param c The class to check.</em>
 <a class="jxr_linenumber" name="L4046" href="#L4046">4046</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class or one of its subclasses has a {@link ObjectSwap} associated with it.</em>
 <a class="jxr_linenumber" name="L4047" href="#L4047">4047</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L4048" href="#L4048">4048</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ObjectSwap[] findChildObjectSwaps(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L4048" href="#L4048">4048</a> 	<strong class="jxr_keyword">final</strong> ObjectSwap[] findChildObjectSwaps(Class&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L4049" href="#L4049">4049</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong> || swapArray.length == 0)
 <a class="jxr_linenumber" name="L4050" href="#L4050">4050</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L4051" href="#L4051">4051</a> 		<strong class="jxr_keyword">var</strong> l = (List&lt;ObjectSwap&gt;)<strong class="jxr_keyword">null</strong>;
@@ -4075,7 +4075,7 @@
 <a class="jxr_linenumber" name="L4067" href="#L4067">4067</a> <em class="jxr_javadoccomment">	 * @param c The class associated with the swap.</em>
 <a class="jxr_linenumber" name="L4068" href="#L4068">4068</a> <em class="jxr_javadoccomment">	 * @return The swap associated with the class, or null if there is no association.</em>
 <a class="jxr_linenumber" name="L4069" href="#L4069">4069</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L4070" href="#L4070">4070</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; ObjectSwap[] findObjectSwaps(Class&lt;T&gt; c) {
+<a class="jxr_linenumber" name="L4070" href="#L4070">4070</a> 	<strong class="jxr_keyword">final</strong> &lt;T&gt; ObjectSwap[] findObjectSwaps(Class&lt;T&gt; c) {
 <a class="jxr_linenumber" name="L4071" href="#L4071">4071</a> 		<em class="jxr_comment">// Note:  On first</em>
 <a class="jxr_linenumber" name="L4072" href="#L4072">4072</a> 		<strong class="jxr_keyword">if</strong> (nn(c)) {
 <a class="jxr_linenumber" name="L4073" href="#L4073">4073</a> 			List&lt;ObjectSwap&gt; l = list();
@@ -4375,7 +4375,7 @@
 <a class="jxr_linenumber" name="L4367" href="#L4367">4367</a> 				<em class="jxr_comment">// Make sure someone didn't already set it while this thread was blocked.</em>
 <a class="jxr_linenumber" name="L4368" href="#L4368">4368</a> 				cm = cmCache.get(type);
 <a class="jxr_linenumber" name="L4369" href="#L4369">4369</a> 				<strong class="jxr_keyword">if</strong> (cm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L4370" href="#L4370">4370</a> 					cm = <strong class="jxr_keyword">new</strong> ClassMeta&lt;&gt;(type, <strong class="jxr_keyword">this</strong>, findObjectSwaps(type), findChildObjectSwaps(type));
+<a class="jxr_linenumber" name="L4370" href="#L4370">4370</a> 					cm = <strong class="jxr_keyword">new</strong> ClassMeta&lt;&gt;(type, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L4371" href="#L4371">4371</a> 			}
 <a class="jxr_linenumber" name="L4372" href="#L4372">4372</a> 		}
 <a class="jxr_linenumber" name="L4373" href="#L4373">4373</a> 		<strong class="jxr_keyword">if</strong> (waitForInit)
