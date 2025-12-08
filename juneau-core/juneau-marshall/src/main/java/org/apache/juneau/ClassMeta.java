@@ -137,36 +137,36 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return true;
 	}
 
-	private final List<ClassMeta<?>> args;                                                                          // Arg types if this is an array of args.
-	private final BeanContext beanContext;                                                                          // The bean context that created this object.
+	private final List<ClassMeta<?>> args;                                     // Arg types if this is an array of args.
+	private final BeanContext beanContext;                                     // The bean context that created this object.
 	private final OptionalSupplier<BeanFilter> beanFilter;
-	private final Supplier<BuilderSwap<T,?>> builderSwap;                                                           // The builder swap associated with this bean (if it has one).
-	private final Categories cat;                                                                                   // The class category.
-	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap;                                         // Maps normal subclasses to ObjectSwaps.
-	private final ObjectSwap<?,?>[] childSwaps;                                                                     // Any ObjectSwaps where the normal type is a subclass of this class.
-	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childUnswapMap;                                       // Maps swap subclasses to ObjectSwaps.
-	private final Supplier<String> dictionaryName;                                                                  // The dictionary name of this class if it has one.
-	private final ClassMeta<?> elementType;                                                                         // If ARRAY or COLLECTION, the element class type.
-	private final OptionalSupplier<String> example;                                                                         // Example JSON.
-	private final OptionalSupplier<FieldInfo> exampleField;                                                                 // The @Example-annotated field (if it has one).
-	private final OptionalSupplier<MethodInfo> exampleMethod;                                                               // The example() or @Example-annotated method (if it has one).
+	private final Supplier<BuilderSwap<T,?>> builderSwap;                      // The builder swap associated with this bean (if it has one).
+	private final Categories cat;                                              // The class category.
+	private final Cache<Class<?>,ObjectSwap<?,?>> childSwapMap;                // Maps normal subclasses to ObjectSwaps.
+	private final List<ObjectSwap<?,?>> childSwaps;                            // Any ObjectSwaps where the normal type is a subclass of this class.
+	private final Cache<Class<?>,ObjectSwap<?,?>> childUnswapMap;              // Maps swap subclasses to ObjectSwaps.
+	private final Supplier<String> dictionaryName;                             // The dictionary name of this class if it has one.
+	private final ClassMeta<?> elementType;                                    // If ARRAY or COLLECTION, the element class type.
+	private final OptionalSupplier<String> example;                            // Example JSON.
+	private final OptionalSupplier<FieldInfo> exampleField;                    // The @Example-annotated field (if it has one).
+	private final OptionalSupplier<MethodInfo> exampleMethod;                  // The example() or @Example-annotated method (if it has one).
 	private final Supplier<BidiMap<Object,String>> enumValues;
 	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
-	private final OptionalSupplier<MethodInfo> fromStringMethod;                                                            // Static fromString(String) or equivalent method
-	private final OptionalSupplier<ClassInfoTyped<? extends T>> implClass;                                                 // The implementation class to use if this is an interface.
-	private final OptionalSupplier<InvocationHandler> proxyInvocationHandler;                                                              // The invocation handler for this class (if it has one).
-	private final ClassMeta<?> keyType;                                                                             // If MAP, the key class type.
+	private final OptionalSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
+	private final OptionalSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
+	private final OptionalSupplier<InvocationHandler> proxyInvocationHandler;  // The invocation handler for this class (if it has one).
+	private final ClassMeta<?> keyType;                                        // If MAP, the key class type.
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 	private final OptionalSupplier<MarshalledFilter> marshalledFilter;
-	private final Supplier<Property<T,Object>> nameProperty;                                            // The method to set the name on an object (if it has one).
-	private final OptionalSupplier<ConstructorInfo> noArgConstructor;                                                       // The no-arg constructor for this class (if it has one).
-	private final Supplier<Property<T,Object>> parentProperty;                                          // The method to set the parent on an object (if it has one).
+	private final Supplier<Property<T,Object>> nameProperty;                   // The method to set the name on an object (if it has one).
+	private final OptionalSupplier<ConstructorInfo> noArgConstructor;          // The no-arg constructor for this class (if it has one).
+	private final Supplier<Property<T,Object>> parentProperty;                 // The method to set the parent on an object (if it has one).
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
-	private final OptionalSupplier<ConstructorInfo> stringConstructor;                                                     // The X(String) constructor (if it has one).
-	private final ObjectSwap<T,?>[] swaps;                                                                          // The object POJO swaps associated with this bean (if it has any).
+	private final OptionalSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
+	private final ObjectSwap<T,?>[] swaps;                                     // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
-	private final ClassMeta<?> valueType;                                                                           // If MAP, the value class type.
+	private final ClassMeta<?> valueType;                                      // If MAP, the value class type.
 	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta;
 
 	/**
@@ -194,7 +194,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.beanContext = beanContext;
 		this.cat = new Categories();
 
-		try (var x = lock.write()) {
+		try (var lw = lock.write()) {
 			// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
 			if (nn(beanContext) && nn(beanContext.cmCache) && isCacheable(innerClass))
 				beanContext.cmCache.put(innerClass, this);
@@ -297,7 +297,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				for (var s : swaps)
 					_swaps.add(s);
 
-			ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x2 -> _swaps.add(createSwap(x2)));
+			ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -> _swaps.add(createSwap(x)));
 			var ds = DefaultSwaps.find(this);
 			if (ds == null)
 				ds = AutoObjectSwap.find(beanContext, this);
@@ -315,13 +315,26 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			this.proxyInvocationHandler = ()->(nn(beanMeta.get().getA()) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta.get().getA()) : null;
 
-			this.childSwaps = childSwaps;
-			this.childUnswapMap = childSwaps == null ? null : new ConcurrentHashMap<>();
-			this.childSwapMap = childSwaps == null ? null : new ConcurrentHashMap<>();
+			this.childSwaps = childSwaps == null ? null : Arrays.asList(childSwaps);
+			this.childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
+			this.childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
 			this.args = null;
 			this.stringMutater = Mutaters.get(String.class, inner());
 		}
 	}
+
+	protected ObjectSwap<?,?> findSwap(Class<?> c) {
+		if (isEmpty(childSwaps))
+			return null;
+		return childSwaps.stream().filter(x -> x.getNormalClass().isParentOf(c)).findFirst().orElse(null);
+	}
+
+	protected ObjectSwap<?,?> findUnswap(Class<?> c) {
+		if (isEmpty(childSwaps))
+			return null;
+		return childSwaps.stream().filter(x -> x.getSwapClass().isParentOf(c)).findFirst().orElse(null);
+	}
+
 
 	/**
 	 * Constructor for args-arrays.
@@ -1689,23 +1702,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The resolved {@link ObjectSwap} or <jk>null</jk> if none were found.
 	 */
 	protected ObjectSwap<?,?> getChildObjectSwapForSwap(Class<?> normalClass) {
-		if (nn(childSwapMap)) {
-			var s = childSwapMap.get(normalClass);
-			if (s == null) {
-				for (var f : childSwaps)
-					if (s == null && f.getNormalClass().isParentOf(normalClass))
-						s = f;
-				if (s == null)
-					s = ObjectSwap.NULL;
-				var s2 = childSwapMap.putIfAbsent(normalClass, s);
-				if (nn(s2))
-					s = s2;
-			}
-			if (s == ObjectSwap.NULL)
-				return null;
-			return s;
-		}
-		return null;
+		return childSwapMap.get(normalClass);
 	}
 
 	/**
@@ -1716,23 +1713,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The resolved {@link ObjectSwap} or <jk>null</jk> if none were found.
 	 */
 	protected ObjectSwap<?,?> getChildObjectSwapForUnswap(Class<?> swapClass) {
-		if (nn(childUnswapMap)) {
-			var s = childUnswapMap.get(swapClass);
-			if (s == null) {
-				for (var f : childSwaps)
-					if (s == null && f.getSwapClass().isParentOf(swapClass))
-						s = f;
-				if (s == null)
-					s = ObjectSwap.NULL;
-				var s2 = childUnswapMap.putIfAbsent(swapClass, s);
-				if (nn(s2))
-					s = s2;
-			}
-			if (s == ObjectSwap.NULL)
-				return null;
-			return s;
-		}
-		return null;
+		return childUnswapMap.get(swapClass);
 	}
 
 	/**
@@ -1745,7 +1726,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return <jk>true</jk> if this class or any child classes has a {@link ObjectSwap} associated with it.
 	 */
 	protected boolean hasChildSwaps() {
-		return nn(childSwaps);
+		return childSwaps != null && ! childSwaps.isEmpty();
 	}
 
 	/**
