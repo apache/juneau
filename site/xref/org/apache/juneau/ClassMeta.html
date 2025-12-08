@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Optional&lt;?&gt;&gt; properties = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Mutater&lt;String,T&gt; stringMutater;
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> OptionalSupplier&lt;ConstructorInfo&gt; stringConstructor;         <em class="jxr_comment">// The X(String) constructor (if it has one).</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ObjectSwap&lt;T,?&gt;[] swaps;                                     <em class="jxr_comment">// The object POJO swaps associated with this bean (if it has any).</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;ObjectSwap&lt;T,?&gt;&gt; swaps;                                 <em class="jxr_comment">// The object POJO swaps associated with this bean (if it has any).</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,Mutater&lt;T,?&gt;&gt; toMutaters = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;Tuple2&lt;BeanMeta&lt;T&gt;,String&gt;&gt; beanMeta;
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 
@@ -283,7 +283,7 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">if</strong> (nn(ds))
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 				_swaps.add((ObjectSwap&lt;T,?&gt;)ds);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">this</strong>.swaps = _swaps.isEmpty() ? <strong class="jxr_keyword">null</strong> : _swaps.toArray(<strong class="jxr_keyword">new</strong> ObjectSwap[_swaps.size()]);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">this</strong>.swaps = _swaps.isEmpty() ? <strong class="jxr_keyword">null</strong> : _swaps;
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">this</strong>.proxyInvocationHandler = ()-&gt;(nn(beanMeta.get().getA()) &amp;&amp; beanContext.isUseInterfaceProxies() &amp;&amp; isInterface()) ? <strong class="jxr_keyword">new</strong> BeanProxyInvocationHandler&lt;&gt;(beanMeta.get().getA()) : <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
@@ -791,20 +791,20 @@
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">	 * 	this class.</em>
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 	<strong class="jxr_keyword">public</strong> ObjectSwap&lt;T,?&gt; getSwap(BeanSession session) {
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">if</strong> (nn(swaps)) {
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">if</strong> (swaps != <strong class="jxr_keyword">null</strong> &amp;&amp; ! swaps.isEmpty()) {
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 			<strong class="jxr_keyword">var</strong> matchQuant = 0;
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 			<strong class="jxr_keyword">var</strong> matchIndex = -1;
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 			ObjectSwap&lt;T,?&gt; matchSwap = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> 
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; swaps.length; i++) {
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 				<strong class="jxr_keyword">var</strong> q = swaps[i].match(session);
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> swap : swaps) {
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 				<strong class="jxr_keyword">var</strong> q = swap.match(session);
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 				<strong class="jxr_keyword">if</strong> (q &gt; matchQuant) {
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 					matchQuant = q;
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 					matchIndex = i;
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 					matchSwap = swap;
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 				}
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 			}
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 			<strong class="jxr_keyword">if</strong> (matchIndex &gt; -1)
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 				<strong class="jxr_keyword">return</strong> swaps[matchIndex];
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 			<strong class="jxr_keyword">if</strong> (matchSwap != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 				<strong class="jxr_keyword">return</strong> matchSwap;
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> 		}
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 	}
