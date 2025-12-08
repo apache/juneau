@@ -167,50 +167,14 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final OptionalSupplier<Tuple2<BeanMeta<T>,String>> beanMeta;
 
-	private static class KeyValueTypes extends Tuple2<ClassMeta<?>,ClassMeta<?>> {
-
-		public KeyValueTypes(ClassMeta<?> a, ClassMeta<?> b) {
-			super(a, b);
-		}
-
-		public ClassMeta<?> getKeyType() {
-			return getA();
-		}
-
-		public Optional<ClassMeta<?>> optKeyType() {
-			return optA();
-		}
-
-		public ClassMeta<?> getValueType() {
-			return getB();
-		}
-
-		public Optional<ClassMeta<?>> optValueType() {
-			return optB();
-		}
+	record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
+		Optional<ClassMeta<?>> optKeyType() { return opt(keyType()); }
+		Optional<ClassMeta<?>> optValueType() { return Optional.of(valueType()); }
 	}
 
-	private static class BeanMetaValue<T> extends Tuple2<BeanMeta<T>,String> {
-
-		public BeanMetaValue(BeanMeta<T> a, String b) {
-			super(a, b);
-		}
-
-		public BeanMeta<T> getBeanMeta() {
-			return getA();
-		}
-
-		public Optional<BeanMeta<T>> optBeanMeta() {
-			return optA();
-		}
-
-		public String getNoArgReason() {
-			return getB();
-		}
-
-		public Optional<String> optNoArgReason() {
-			return optB();
-		}
+	record BeanMetaValue<T>(BeanMeta<T> beanMeta, String notABeanReason) {
+		public Optional<BeanMeta<T>> optBeanMeta() { return opt(beanMeta()); }
+		public Optional<String> optNotABeanReason() { return opt(notABeanReason()); }
 	}
 
 	/**
