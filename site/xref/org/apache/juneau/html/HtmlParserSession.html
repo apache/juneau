@@ -263,7 +263,7 @@
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T parseAnchor(<a name="XmlReader" href="../../../../org/apache/juneau/xml/XmlReader.html#XmlReader">XmlReader</a> r, ClassMeta&lt;T&gt; beanType) <strong class="jxr_keyword">throws</strong> IOException, ParseException, XMLStreamException {
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		String href = r.getAttributeValue(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"href"</span>);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		String name = getElementText(r);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (nn(beanType) &amp;&amp; beanType.hasAnnotation2(HtmlLink.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (nn(beanType) &amp;&amp; getAnnotationProvider().has(HtmlLink.<strong class="jxr_keyword">class</strong>, beanType)) {
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">var</strong> uriProperty = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">var</strong> nameProperty = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			beanType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.uriProperty()), x -&gt; uriProperty.set(x.uriProperty()));
