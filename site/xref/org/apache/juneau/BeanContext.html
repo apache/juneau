@@ -4144,22 +4144,22 @@
 <a class="jxr_linenumber" name="L4136" href="#L4136">4136</a> <em class="jxr_javadoccomment">	 * Determines whether the specified class is ignored as a bean class based on the various exclusion parameters</em>
 <a class="jxr_linenumber" name="L4137" href="#L4137">4137</a> <em class="jxr_javadoccomment">	 * specified on this context class.</em>
 <a class="jxr_linenumber" name="L4138" href="#L4138">4138</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4139" href="#L4139">4139</a> <em class="jxr_javadoccomment">	 * @param c The class type being tested.</em>
+<a class="jxr_linenumber" name="L4139" href="#L4139">4139</a> <em class="jxr_javadoccomment">	 * @param ci The class info being tested.</em>
 <a class="jxr_linenumber" name="L4140" href="#L4140">4140</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class matches any of the exclusion parameters.</em>
 <a class="jxr_linenumber" name="L4141" href="#L4141">4141</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L4142" href="#L4142">4142</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isNotABean(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L4143" href="#L4143">4143</a> 		<strong class="jxr_keyword">if</strong> (c.isArray() || c.isPrimitive() || c.isEnum() || c.isAnnotation())
+<a class="jxr_linenumber" name="L4142" href="#L4142">4142</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isNotABean(ClassInfo ci) {
+<a class="jxr_linenumber" name="L4143" href="#L4143">4143</a> 		<strong class="jxr_keyword">if</strong> (ci.isArray() || ci.isPrimitive() || ci.isEnum() || ci.isAnnotation())
 <a class="jxr_linenumber" name="L4144" href="#L4144">4144</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L4145" href="#L4145">4145</a> 		Package p = c.getPackage();
+<a class="jxr_linenumber" name="L4145" href="#L4145">4145</a> 		<strong class="jxr_keyword">var</strong> p = ci.getPackage();
 <a class="jxr_linenumber" name="L4146" href="#L4146">4146</a> 		<strong class="jxr_keyword">if</strong> (nn(p)) {
-<a class="jxr_linenumber" name="L4147" href="#L4147">4147</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p2 : notBeanPackageNames)
-<a class="jxr_linenumber" name="L4148" href="#L4148">4148</a> 				<strong class="jxr_keyword">if</strong> (p.getName().equals(p2))
-<a class="jxr_linenumber" name="L4149" href="#L4149">4149</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L4150" href="#L4150">4150</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p2 : notBeanPackagePrefixes)
-<a class="jxr_linenumber" name="L4151" href="#L4151">4151</a> 				<strong class="jxr_keyword">if</strong> (p.getName().startsWith(p2))
-<a class="jxr_linenumber" name="L4152" href="#L4152">4152</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L4153" href="#L4153">4153</a> 		}
-<a class="jxr_linenumber" name="L4154" href="#L4154">4154</a> 		<strong class="jxr_keyword">var</strong> ci = info(c);
+<a class="jxr_linenumber" name="L4147" href="#L4147">4147</a> 			<strong class="jxr_keyword">var</strong> pn = p.getName();
+<a class="jxr_linenumber" name="L4148" href="#L4148">4148</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p2 : notBeanPackageNames)
+<a class="jxr_linenumber" name="L4149" href="#L4149">4149</a> 				<strong class="jxr_keyword">if</strong> (pn.equals(p2))
+<a class="jxr_linenumber" name="L4150" href="#L4150">4150</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L4151" href="#L4151">4151</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p2 : notBeanPackagePrefixes)
+<a class="jxr_linenumber" name="L4152" href="#L4152">4152</a> 				<strong class="jxr_keyword">if</strong> (pn.startsWith(p2))
+<a class="jxr_linenumber" name="L4153" href="#L4153">4153</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L4154" href="#L4154">4154</a> 		}
 <a class="jxr_linenumber" name="L4155" href="#L4155">4155</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> exclude : notBeanClassesArray)
 <a class="jxr_linenumber" name="L4156" href="#L4156">4156</a> 			<strong class="jxr_keyword">if</strong> (ci.isChildOf(exclude))
 <a class="jxr_linenumber" name="L4157" href="#L4157">4157</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
