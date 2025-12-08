@@ -1599,10 +1599,7 @@ public class BeanSession extends ContextSession {
 	 */
 	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
 		assertArgNotNull("classes", classes);
-		var cm = new ClassMeta<?>[classes.length];
-		for (var i = 0; i < classes.length; i++)
-			cm[i] = getClassMeta(classes[i]);
-		return new ClassMeta(cm);
+		return new ClassMeta(Arrays.stream(classes).map(x -> getClassMeta(x)).toList());
 	}
 
 	/**

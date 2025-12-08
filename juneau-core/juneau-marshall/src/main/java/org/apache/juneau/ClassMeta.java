@@ -29,6 +29,7 @@ import java.lang.reflect.Proxy;
 import java.net.*;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.function.*;
 
@@ -136,7 +137,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return true;
 	}
 
-	private final ClassMeta<?>[] args;                                                                              // Arg types if this is an array of args.
+	private final List<ClassMeta<?>> args;                                                                          // Arg types if this is an array of args.
 	private final BeanContext beanContext;                                                                          // The bean context that created this object.
 	private final OptionalSupplier<BeanFilter> beanFilter;
 	private final Supplier<BuilderSwap<T,?>> builderSwap;                                                           // The builder swap associated with this bean (if it has one).
@@ -326,7 +327,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * Constructor for args-arrays.
 	 */
 	@SuppressWarnings("unchecked")
-	ClassMeta(ClassMeta<?>[] args) {
+	ClassMeta(List<ClassMeta<?>> args) {
 		super((Class<T>)Object[].class);
 		this.args = args;
 		this.childSwaps = null;
@@ -490,9 +491,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @throws BeanRuntimeException If this metadata object is not a list of arguments, or the index is out of range.
 	 */
 	public ClassMeta<?> getArg(int index) {
-		if (nn(args) && index >= 0 && index < args.length)
-			return args[index];
-		throw bex("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.length);
+		if (nn(args) && index >= 0 && index < args.size())
+			return args.get(index);
+		throw bex("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.size());
 	}
 
 	/**
@@ -500,7 +501,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The argument types of this meta, or <jk>null</jk> if this isn't an array of argument types.
 	 */
-	public ClassMeta<?>[] getArgs() { return args; }
+	public List<ClassMeta<?>> getArgs() { return args; }
 
 	/**
 	 * Returns the {@link BeanContext} that created this object.
