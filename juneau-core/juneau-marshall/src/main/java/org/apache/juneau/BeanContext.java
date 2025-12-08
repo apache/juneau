@@ -4059,26 +4059,6 @@ public class BeanContext extends Context {
 		return l == null ? null : l.toArray(new ObjectSwap[l.size()]);
 	}
 
-	/**
-	 * Returns the {@link ObjectSwap} associated with the specified class, or <jk>null</jk> if there is no POJO swap
-	 * associated with the class.
-	 *
-	 * @param <T> The class associated with the swap.
-	 * @param c The class associated with the swap.
-	 * @return The swap associated with the class, or null if there is no association.
-	 */
-	final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
-		// Note:  On first
-		if (nn(c)) {
-			List<ObjectSwap> l = list();
-			for (var f : swapArray)
-				if (f.getNormalClass().isParentOf(c))
-					l.add(f);
-			return l.isEmpty() ? null : l.toArray(new ObjectSwap[l.size()]);
-		}
-		return null;
-	}
-
 	/*
 	 * Resolves the 'genericized' class meta at the specified position in the ClassMeta array.
 	 */

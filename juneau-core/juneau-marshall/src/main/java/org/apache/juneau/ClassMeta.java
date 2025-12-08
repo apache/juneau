@@ -177,7 +177,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	Don't call init() in constructor.
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
-	@SuppressWarnings("unchecked")
 	ClassMeta(Class<T> innerClass, BeanContext beanContext) {
 		super(innerClass);
 		this.beanContext = beanContext;
@@ -1379,10 +1378,13 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return l();
 
 		var list = new ArrayList<ObjectSwap<T,?>>();
-		var programmaticSwaps = beanContext.findObjectSwaps(inner());
-		if (programmaticSwaps != null)
-			for (var s : programmaticSwaps)
-				list.add(s);
+		var swapArray = beanContext.getSwaps();
+		if (swapArray != null && swapArray.length > 0) {
+			var innerClass = inner();
+			for (var f : swapArray)
+				if (f.getNormalClass().isParentOf(innerClass))
+					list.add((ObjectSwap<T,?>)f);
+		}
 
 		var ap = beanContext.getAnnotationProvider();
 		ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -> list.add(createSwap(x)));
