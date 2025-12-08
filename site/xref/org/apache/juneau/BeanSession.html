@@ -1607,86 +1607,83 @@
 <a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;Object[]&gt; getArgsClassMeta(Type[] classes) {
 <a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 		assertArgNotNull(<span class="jxr_string">"classes"</span>, classes);
-<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 		<strong class="jxr_keyword">var</strong> cm = <strong class="jxr_keyword">new</strong> ClassMeta&lt;?&gt;[classes.length];
-<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; classes.length; i++)
-<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> 			cm[i] = getClassMeta(classes[i]);
-<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(cm);
-<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> 	}
-<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> 
-<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@code getClassMeta(o.getClass())} but returns a default value if object is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> <em class="jxr_javadoccomment">	 * @param o The class to find the class type for.</em>
-<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> <em class="jxr_javadoccomment">	 * @param def The default {@link ClassMeta} if the object is null.</em>
-<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> <em class="jxr_javadoccomment">	 * @return The ClassMeta object, or the default value if {@code o} is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; getClassMetaForObject(Object o, ClassMeta&lt;?&gt; def) {
-<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> 			<strong class="jxr_keyword">return</strong> def;
-<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> 		<strong class="jxr_keyword">return</strong> getClassMeta(o.getClass());
-<a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> 	}
-<a class="jxr_linenumber" name="L1620" href="#L1620">1620</a> 
-<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> <em class="jxr_javadoccomment">	 * Bean package exclusions.</em>
-<a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> <em class="jxr_javadoccomment">	 * @see BeanContext.Builder#notBeanPackages(String...)</em>
-<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1626" href="#L1626">1626</a> <em class="jxr_javadoccomment">	 * 	The list of package name prefixes to exclude from being classified as beans.</em>
-<a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String[] getNotBeanPackagesPrefixes() { <strong class="jxr_keyword">return</strong> ctx.getNotBeanPackagesPrefixes(); }
-<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> 
-<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> <em class="jxr_javadoccomment">	 * Creates either an {@link JsonMap} or {@link LinkedHashMap} depending on whether the key type is</em>
-<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> <em class="jxr_javadoccomment">	 * String or something else.</em>
-<a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> <em class="jxr_javadoccomment">	 * @param mapMeta The metadata of the map to create.</em>
-<a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> <em class="jxr_javadoccomment">	 * @return A new map.</em>
-<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 	<strong class="jxr_keyword">protected</strong> Map newGenericMap(<a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> mapMeta) {
-<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> 		<strong class="jxr_keyword">var</strong> k = mapMeta.getKeyType();
-<a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> 		<strong class="jxr_keyword">return</strong> (k == <strong class="jxr_keyword">null</strong> || k.isString()) ? <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>) : map();
-<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> 	}
-<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> 
-<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> <em class="jxr_javadoccomment">	 * Converts the contents of the specified list into an array.</em>
+<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(Arrays.stream(classes).map(x -&gt; getClassMeta(x)).toList());
+<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> 	}
+<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> 
+<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@code getClassMeta(o.getClass())} but returns a default value if object is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> <em class="jxr_javadoccomment">	 * @param o The class to find the class type for.</em>
+<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">	 * @param def The default {@link ClassMeta} if the object is null.</em>
+<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> <em class="jxr_javadoccomment">	 * @return The ClassMeta object, or the default value if {@code o} is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; getClassMetaForObject(Object o, ClassMeta&lt;?&gt; def) {
+<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> 			<strong class="jxr_keyword">return</strong> def;
+<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> 		<strong class="jxr_keyword">return</strong> getClassMeta(o.getClass());
+<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> 	}
+<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> 
+<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> <em class="jxr_javadoccomment">	 * Bean package exclusions.</em>
+<a class="jxr_linenumber" name="L1620" href="#L1620">1620</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> <em class="jxr_javadoccomment">	 * @see BeanContext.Builder#notBeanPackages(String...)</em>
+<a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> <em class="jxr_javadoccomment">	 * 	The list of package name prefixes to exclude from being classified as beans.</em>
+<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String[] getNotBeanPackagesPrefixes() { <strong class="jxr_keyword">return</strong> ctx.getNotBeanPackagesPrefixes(); }
+<a class="jxr_linenumber" name="L1626" href="#L1626">1626</a> 
+<a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> <em class="jxr_javadoccomment">	 * Creates either an {@link JsonMap} or {@link LinkedHashMap} depending on whether the key type is</em>
+<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> <em class="jxr_javadoccomment">	 * String or something else.</em>
+<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> <em class="jxr_javadoccomment">	 * @param mapMeta The metadata of the map to create.</em>
+<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> <em class="jxr_javadoccomment">	 * @return A new map.</em>
+<a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 	<strong class="jxr_keyword">protected</strong> Map newGenericMap(<a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> mapMeta) {
+<a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> 		<strong class="jxr_keyword">var</strong> k = mapMeta.getKeyType();
+<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> 		<strong class="jxr_keyword">return</strong> (k == <strong class="jxr_keyword">null</strong> || k.isString()) ? <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>) : map();
+<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 	}
+<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> 
+<a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> <em class="jxr_javadoccomment">	 * Converts the contents of the specified list into an array.</em>
+<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> <em class="jxr_javadoccomment">	 * Works on both object and primitive arrays.</em>
 <a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> <em class="jxr_javadoccomment">	 * Works on both object and primitive arrays.</em>
-<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> <em class="jxr_javadoccomment">	 * In the case of multi-dimensional arrays, the incoming list must contain elements of type n-1 dimension.</em>
-<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> <em class="jxr_javadoccomment">	 * i.e. if {@code type} is &lt;code&gt;&lt;jk&gt;int&lt;/jk&gt;[][]&lt;/code&gt; then {@code list} must have entries of type</em>
-<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> <em class="jxr_javadoccomment">	 * &lt;code&gt;&lt;jk&gt;int&lt;/jk&gt;[]&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> <em class="jxr_javadoccomment">	 * @param type The type to convert to.  Must be an array type.</em>
-<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> <em class="jxr_javadoccomment">	 * @param list The contents to populate the array with.</em>
-<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> <em class="jxr_javadoccomment">	 * @return A new object or primitive array.</em>
-<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Object toArray(ClassMeta&lt;?&gt; type, Collection&lt;?&gt; list) {
-<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 		<strong class="jxr_keyword">if</strong> (list == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 		<strong class="jxr_keyword">var</strong> componentType = type.isArgs() ? object() : type.getElementType();
-<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 		<strong class="jxr_keyword">var</strong> array = Array.newInstance(componentType.<strong class="jxr_keyword">inner</strong>(), list.size());
-<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 		<strong class="jxr_keyword">var</strong> i = IntegerValue.create();
-<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 		list.forEach(x -&gt; {
-<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 			<strong class="jxr_keyword">var</strong> x2 = x;
-<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 			<strong class="jxr_keyword">if</strong> (! type.<strong class="jxr_keyword">inner</strong>().isInstance(x)) {
-<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 				<strong class="jxr_keyword">if</strong> (componentType.isArray() &amp;&amp; x instanceof Collection&lt;?&gt; c)
-<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 					x2 = toArray(componentType, c);
-<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x == <strong class="jxr_keyword">null</strong> &amp;&amp; componentType.isPrimitive())
-<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 					x2 = componentType.getPrimitiveDefault();
-<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 				<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 					x2 = convertToType(x, componentType);
-<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 			}
-<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 				Array.set(array, i.getAndIncrement(), x2);
-<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 				<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> 			}
-<a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> 		});
-<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> 		<strong class="jxr_keyword">return</strong> array;
-<a class="jxr_linenumber" name="L1680" href="#L1680">1680</a> 	}
-<a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> }
+<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> <em class="jxr_javadoccomment">	 * In the case of multi-dimensional arrays, the incoming list must contain elements of type n-1 dimension.</em>
+<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> <em class="jxr_javadoccomment">	 * i.e. if {@code type} is &lt;code&gt;&lt;jk&gt;int&lt;/jk&gt;[][]&lt;/code&gt; then {@code list} must have entries of type</em>
+<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> <em class="jxr_javadoccomment">	 * &lt;code&gt;&lt;jk&gt;int&lt;/jk&gt;[]&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> <em class="jxr_javadoccomment">	 * @param type The type to convert to.  Must be an array type.</em>
+<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> <em class="jxr_javadoccomment">	 * @param list The contents to populate the array with.</em>
+<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> <em class="jxr_javadoccomment">	 * @return A new object or primitive array.</em>
+<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Object toArray(ClassMeta&lt;?&gt; type, Collection&lt;?&gt; list) {
+<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 		<strong class="jxr_keyword">if</strong> (list == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 		<strong class="jxr_keyword">var</strong> componentType = type.isArgs() ? object() : type.getElementType();
+<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 		<strong class="jxr_keyword">var</strong> array = Array.newInstance(componentType.<strong class="jxr_keyword">inner</strong>(), list.size());
+<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 		<strong class="jxr_keyword">var</strong> i = IntegerValue.create();
+<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 		list.forEach(x -&gt; {
+<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 			<strong class="jxr_keyword">var</strong> x2 = x;
+<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 			<strong class="jxr_keyword">if</strong> (! type.<strong class="jxr_keyword">inner</strong>().isInstance(x)) {
+<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 				<strong class="jxr_keyword">if</strong> (componentType.isArray() &amp;&amp; x instanceof Collection&lt;?&gt; c)
+<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 					x2 = toArray(componentType, c);
+<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x == <strong class="jxr_keyword">null</strong> &amp;&amp; componentType.isPrimitive())
+<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 					x2 = componentType.getPrimitiveDefault();
+<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 				<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 					x2 = convertToType(x, componentType);
+<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 			}
+<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 				Array.set(array, i.getAndIncrement(), x2);
+<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 				<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 			}
+<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 		});
+<a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 		<strong class="jxr_keyword">return</strong> array;
+<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> 	}
+<a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
