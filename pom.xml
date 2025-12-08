@@ -44,7 +44,7 @@
 		<junit.version>5.13.4</junit.version>
 		<javadoc.plugin.version>3.11.3</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.14</jacoco.plugin.version>
-		<jetty.version>12.1.4</jetty.version>
+		<jetty.version>12.1.5</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 	</properties>
 
