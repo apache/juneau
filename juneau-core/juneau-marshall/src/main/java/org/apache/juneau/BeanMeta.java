@@ -33,7 +33,6 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.function.OptionalSupplier;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
@@ -69,13 +68,78 @@ import org.apache.juneau.commons.utils.*;
  */
 public class BeanMeta<T> {
 
-	public static <T> Tuple2<BeanMeta<T>,String> create(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ConstructorInfo implClassConstructor) {
+	/**
+	 * Represents the result of creating a BeanMeta, including the bean metadata and any reason why it's not a bean.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanMeta The bean metadata, or <jk>null</jk> if the class is not a bean.
+	 * @param notABeanReason The reason why the class is not a bean, or <jk>null</jk> if it is a bean.
+	 */
+	record BeanMetaValue<T>(BeanMeta<T> beanMeta, String notABeanReason) {
+		Optional<BeanMeta<T>> optBeanMeta() { return opt(beanMeta()); }
+		Optional<String> optNotABeanReason() { return opt(notABeanReason()); }
+	}
+
+	/**
+	 * Creates a {@link BeanMeta} instance for the specified class metadata.
+	 *
+	 * <p>
+	 * This is a factory method that attempts to create bean metadata for a class. If the class is determined to be a bean,
+	 * the returned {@link BeanMetaValue} will contain the {@link BeanMeta} instance and a <jk>null</jk> reason.
+	 * If the class is not a bean, the returned value will contain <jk>null</jk> for the bean metadata and a non-null
+	 * string explaining why it's not a bean.
+	 *
+	 * <h5 class='section'>Parameters:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>cm</b> - The class metadata for the class to create bean metadata for.
+	 * 	<li><b>bf</b> - Optional bean filter to apply. Can be <jk>null</jk>.
+	 * 	<li><b>pNames</b> - Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
+	 * 	<li><b>implClassConstructor</b> - Optional constructor to use if one cannot be found. Can be <jk>null</jk>.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Return Value:</h5>
+	 * <p>
+	 * Returns a {@link BeanMetaValue} containing:
+	 * <ul>
+	 * 	<li><b>beanMeta</b> - The bean metadata if the class is a bean, or <jk>null</jk> if it's not.
+	 * 	<li><b>notABeanReason</b> - A string explaining why the class is not a bean, or <jk>null</jk> if it is a bean.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Exception Handling:</h5>
+	 * <p>
+	 * If a {@link RuntimeException} is thrown during bean metadata creation, it is caught and the exception message
+	 * is returned as the <c>notABeanReason</c> with <jk>null</jk> for the bean metadata.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create bean metadata for a class</jc>
+	 * 	ClassMeta&lt;Person&gt; <jv>cm</jv> = <jv>beanContext</jv>.getClassMeta(Person.<jk>class</jk>);
+	 * 	BeanMetaValue&lt;Person&gt; <jv>result</jv> = BeanMeta.<jsm>create</jsm>(<jv>cm</jv>, <jk>null</jk>, <jk>null</jk>, <jk>null</jk>);
+	 *
+	 * 	<jc>// Check if it's a bean</jc>
+	 * 	<jk>if</jk> (<jv>result</jv>.beanMeta() != <jk>null</jk>) {
+	 * 		BeanMeta&lt;Person&gt; <jv>bm</jv> = <jv>result</jv>.beanMeta();
+	 * 		<jc>// Use the bean metadata...</jc>
+	 * 	} <jk>else</jk> {
+	 * 		String <jv>reason</jv> = <jv>result</jv>.notABeanReason();
+	 * 		<jc>// Handle the case where it's not a bean...</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @param <T> The class type.
+	 * @param cm The class metadata for the class to create bean metadata for.
+	 * @param bf Optional bean filter to apply. Can be <jk>null</jk>.
+	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
+	 * @param implClassConstructor Optional constructor to use if one cannot be found. Can be <jk>null</jk>.
+	 * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
+	 */
+	public static <T> BeanMetaValue<T> create(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ConstructorInfo implClassConstructor) {
 		try {
 			var bm = new BeanMeta<>(cm, bf, pNames, implClassConstructor);
 			var nabr = bm.notABeanReason;
-			return Tuple2.of(nabr == null ? bm : null, nabr);
+			return new BeanMetaValue<>(nabr == null ? bm : null, nabr);
 		} catch (RuntimeException e) {
-			return Tuple2.of(null, e.getMessage());
+			return new BeanMetaValue<>(null, e.getMessage());
 		}
 	}
 

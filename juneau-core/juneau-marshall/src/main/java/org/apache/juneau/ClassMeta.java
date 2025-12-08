@@ -165,16 +165,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final OptionalSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
-	private final OptionalSupplier<BeanMetaValue<T>> beanMeta;
+	private final OptionalSupplier<BeanMeta.BeanMetaValue<T>> beanMeta;
 
 	record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
 		Optional<ClassMeta<?>> optKeyType() { return opt(keyType()); }
 		Optional<ClassMeta<?>> optValueType() { return opt(valueType()); }
-	}
-
-	record BeanMetaValue<T>(BeanMeta<T> beanMeta, String notABeanReason) {
-		Optional<BeanMeta<T>> optBeanMeta() { return opt(beanMeta()); }
-		Optional<String> optNotABeanReason() { return opt(notABeanReason()); }
 	}
 
 	/**
@@ -243,31 +238,27 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				cat.set(INPUTSTREAM);
 			}
 
-			fromStringMethod = memoize(()->findFromStringMethod());
-			exampleMethod = memoize(()->findExampleMethod());
-			parentProperty = memoize(()->findParentProperty());
-			nameProperty = memoize(()->findNameProperty());
-			exampleField = memoize(()->findExampleField());
-			noArgConstructor = memoize(()->findNoArgConstructor());
-			stringConstructor = memoize(()->findStringConstructor());
 			beanFilter = memoize(()->findBeanFilter());
-			marshalledFilter = memoize(()->findMarshalledFilter());
+			beanMeta = memoize(()->findBeanMeta());
 			builderSwap = memoize(()->findBuilderSwap());
+			childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
+			childSwaps = memoize(()->findChildSwaps());
+			childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
+			dictionaryName = memoize(()->findBeanDictionaryName());
+			elementType = memoize(()->findElementType());
+			enumValues = memoize(()->findEnumValues());
 			example = memoize(()->findExample());
+			exampleField = memoize(()->findExampleField());
+			exampleMethod = memoize(()->findExampleMethod());
+			fromStringMethod = memoize(()->findFromStringMethod());
 			implClass = memoize(()->findImplClass());
-
-			this.keyValueTypes = memoize(()->findKeyValueTypes());
-			this.elementType = memoize(()->findElementType());
-
-			this.beanMeta = memoize(()->findBeanMeta());
-			this.enumValues = memoize(()->findEnumValues());
-			this.dictionaryName = memoize(()->findBeanDictionaryName());
-
-			this.swaps = memoize(()->findSwaps());
-
-			this.childSwaps = memoize(()->findChildSwaps());
-			this.childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
-			this.childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
+			keyValueTypes = memoize(()->findKeyValueTypes());
+			marshalledFilter = memoize(()->findMarshalledFilter());
+			nameProperty = memoize(()->findNameProperty());
+			noArgConstructor = memoize(()->findNoArgConstructor());
+			parentProperty = memoize(()->findParentProperty());
+			stringConstructor = memoize(()->findStringConstructor());
+			swaps = memoize(()->findSwaps());
 
 			this.args = null;
 			this.stringMutater = Mutaters.get(String.class, inner());
@@ -492,8 +483,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The bean registry for this class, or <jk>null</jk> if no bean registry is associated with it.
 	 */
 	public BeanRegistry getBeanRegistry() {
-		var bm = getBeanMeta();
-		return bm == null ? null : bm.getBeanRegistry();
+		return beanMeta.get().optBeanMeta().map(x -> x.getBeanRegistry()).orElse(null);
 	}
 
 	/**
@@ -723,8 +713,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The interface proxy invocation handler, or <jk>null</jk> if it does not exist.
 	 */
 	public InvocationHandler getProxyInvocationHandler() {
-		var bm = getBeanMeta();
-		return bm == null ? null : bm.getBeanProxyInvocationHandler();
+		return beanMeta.get().optBeanMeta().map(x -> x.getBeanProxyInvocationHandler()).orElse(null);
 	}
 
 	/**
@@ -1313,9 +1302,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (beanContext == null)
 			return null;
 
-		var bm = getBeanMeta();
-		if (nn(bm) && bm.getDictionaryName() != null)
-			return bm.getDictionaryName();
+		var d = beanMeta.get().optBeanMeta().map(x -> x.getDictionaryName()).orElse(null);
+		if (nn(d))
+			return d;
 
 		return beanContext.getAnnotationProvider().find(Bean.class, this)
 			.stream()
@@ -1334,11 +1323,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return BeanFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
 	}
 
-	private BeanMetaValue<T> findBeanMeta() {
+	private BeanMeta.BeanMetaValue<T> findBeanMeta() {
 		if (! cat.isUnknown())
-			return new BeanMetaValue<>(null, "Known non-bean type");
-		var result = BeanMeta.create(this, beanFilter.get(), null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
-		return new BeanMetaValue<>(result.getA(), result.getB());
+			return new BeanMeta.BeanMetaValue<>(null, "Known non-bean type");
+		return BeanMeta.create(this, beanFilter.get(), null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
 	}
 
 	private KeyValueTypes findKeyValueTypes() {
