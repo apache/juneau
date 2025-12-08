@@ -786,10 +786,10 @@
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<strong class="jxr_keyword">if</strong> (eType == aType || ! (isAddBeanTypes() || (session.isRoot() &amp;&amp; isAddRootType())))
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		String eTypeTn = eType.getDictionaryName();
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		String eTypeTn = eType.getBeanDictionaryName();
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 		<em class="jxr_comment">// First see if it's defined on the actual type.</em>
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		String tn = aType.getDictionaryName();
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		String tn = aType.getBeanDictionaryName();
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 		<strong class="jxr_keyword">if</strong> (nn(tn) &amp;&amp; ! tn.equals(eTypeTn)) {
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 			<strong class="jxr_keyword">return</strong> tn;
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 		}

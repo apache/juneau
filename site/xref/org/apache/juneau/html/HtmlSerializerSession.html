@@ -493,7 +493,7 @@
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> type2 = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">if</strong> (sType != eType)
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			type2 = sType.getDictionaryName();
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			type2 = sType.getBeanDictionaryName();
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 		<strong class="jxr_keyword">if</strong> (type2 == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 			type2 = <span class="jxr_string">"array"</span>;
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 
@@ -532,7 +532,7 @@
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 				}
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 				out.oTag(i + 1, <span class="jxr_string">"tr"</span>);
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 				String typeName = (cm == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : cm.getDictionaryName());
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 				String typeName = (cm == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : cm.getBeanDictionaryName());
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 				String typeProperty = getBeanTypePropertyName(cm);
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 				<strong class="jxr_keyword">if</strong> (nn(typeName) &amp;&amp; eType.getElementType() != cm)
@@ -860,7 +860,7 @@
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 			<strong class="jxr_keyword">var</strong> typeName = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 			<strong class="jxr_keyword">if</strong> (isAddBeanTypes() &amp;&amp; ! eType.equals(aType))
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 				typeName = aType.getDictionaryName();
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 				typeName = aType.getBeanDictionaryName();
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> 			<em class="jxr_comment">// Swap if necessary</em>
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 			ObjectSwap swap = aType.getSwap(<strong class="jxr_keyword">this</strong>);
