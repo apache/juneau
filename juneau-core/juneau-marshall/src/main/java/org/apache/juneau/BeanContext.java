@@ -3533,8 +3533,8 @@ public class BeanContext extends Context {
 		swapArray = _swaps.toArray(new ObjectSwap[_swaps.size()]);
 
 		cmCache = new ConcurrentHashMap<>();
-		cmCache.put(String.class, new ClassMeta(String.class, this, findObjectSwaps(String.class), findChildObjectSwaps(String.class)));
-		cmCache.put(Object.class, new ClassMeta(Object.class, this, findObjectSwaps(Object.class), findChildObjectSwaps(Object.class)));
+		cmCache.put(String.class, new ClassMeta(String.class, this));
+		cmCache.put(Object.class, new ClassMeta(Object.class, this));
 		cmString = cmCache.get(String.class);
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
@@ -4045,7 +4045,7 @@ public class BeanContext extends Context {
 	 * @param c The class to check.
 	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link ObjectSwap} associated with it.
 	 */
-	private final ObjectSwap[] findChildObjectSwaps(Class<?> c) {
+	final ObjectSwap[] findChildObjectSwaps(Class<?> c) {
 		if (c == null || swapArray.length == 0)
 			return null;
 		var l = (List<ObjectSwap>)null;
@@ -4067,7 +4067,7 @@ public class BeanContext extends Context {
 	 * @param c The class associated with the swap.
 	 * @return The swap associated with the class, or null if there is no association.
 	 */
-	private final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
+	final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
 		// Note:  On first
 		if (nn(c)) {
 			List<ObjectSwap> l = list();
@@ -4367,7 +4367,7 @@ public class BeanContext extends Context {
 				// Make sure someone didn't already set it while this thread was blocked.
 				cm = cmCache.get(type);
 				if (cm == null)
-					cm = new ClassMeta<>(type, this, findObjectSwaps(type), findChildObjectSwaps(type));
+					cm = new ClassMeta<>(type, this);
 			}
 		}
 		if (waitForInit)

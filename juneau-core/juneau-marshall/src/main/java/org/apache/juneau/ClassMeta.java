@@ -173,22 +173,12 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @param innerClass The class being wrapped.
 	 * @param beanContext The bean context that created this object.
-	 * @param implClass
-	 * 	For interfaces and abstract classes, this represents the "real" class to instantiate.
-	 * 	Can be <jk>null</jk>.
-	 * @param swaps
-	 * 	The {@link ObjectSwap} programmatically associated with this class.
-	 * 	Can be <jk>null</jk>.
-	 * @param childSwaps
-	 * 	The child {@link ObjectSwap ObjectSwaps} programmatically associated with this class.
-	 * 	These are the <c>ObjectSwaps</c> that have normal classes that are subclasses of this class.
-	 * 	Can be <jk>null</jk>.
 	 * @param delayedInit
 	 * 	Don't call init() in constructor.
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings("unchecked")
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
+	ClassMeta(Class<T> innerClass, BeanContext beanContext) {
 		super(innerClass);
 		this.beanContext = beanContext;
 		this.cat = new Categories();
@@ -266,9 +256,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			this.dictionaryName = memoize(()->findBeanDictionaryName());
 
 			var _swaps = new ArrayList<ObjectSwap<T,?>>();
-			if (swaps != null)
-				for (var s : swaps)
-					_swaps.add(s);
+			var programmaticSwaps = beanContext.findObjectSwaps(innerClass);
+			if (programmaticSwaps != null)
+				for (var s : programmaticSwaps)
+					_swaps.add((ObjectSwap<T,?>)s);
 
 			ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -> _swaps.add(createSwap(x)));
 			var ds = DefaultSwaps.find(this);
@@ -288,7 +279,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			this.proxyInvocationHandler = ()->(nn(beanMeta.get().getA()) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta.get().getA()) : null;
 
-			this.childSwaps = childSwaps == null ? null : Arrays.asList(childSwaps);
+			var childSwapsArray = beanContext.findChildObjectSwaps(innerClass);
+			this.childSwaps = childSwapsArray == null ? null : Arrays.asList(childSwapsArray);
 			this.childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
 			this.childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
 
