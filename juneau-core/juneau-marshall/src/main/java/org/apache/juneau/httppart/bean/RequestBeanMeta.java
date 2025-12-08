@@ -55,7 +55,8 @@ public class RequestBeanMeta {
 
 		Builder apply(Class<?> c) {
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			apply(cm.getLastAnnotation(Request.class));
+			var ap = cm.getBeanContext().getAnnotationProvider();
+			apply(ap.find(Request.class, cm).stream().findFirst().map(x -> x.inner()).orElse(null));
 			cm.getPublicMethods().stream().forEach(x -> {
 				var n = x.getSimpleName();
 				if (x.hasAnnotation(Header.class)) {

@@ -140,7 +140,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	private final Map<Class<?>,Annotation[]> annotationArrayMap = new ConcurrentHashMap<>();
-	private final Map<Class<?>,Optional<?>> annotationLastMap = new ConcurrentHashMap<>();
 	private final ClassMeta<?>[] args;                                                                              // Arg types if this is an array of args.
 	private final BeanContext beanContext;                                                                          // The bean context that created this object.
 	private final Supplier<BeanFilter> beanFilter;
@@ -682,25 +681,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public ClassMeta<?> getKeyType() { return keyType; }
 
 	/**
-	 * Shortcut for calling <c>getInnerClass().getAnnotation(a)</c>.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param a The annotation to retrieve.
-	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
-	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> A getLastAnnotation(Class<A> a) {
-		var o = annotationLastMap.get(a);
-		if (o == null) {
-			if (beanContext == null)
-				return AP.find(a, this).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
-			o = beanContext.getAnnotationProvider().find(a, this).stream().findFirst().map(AnnotationInfo::inner);
-			annotationLastMap.put(a, o);
-		}
-		return (A)o.orElse(null);
-	}
-
-	/**
 	 * Returns the method or field annotated with {@link NameProperty @NameProperty}.
 	 *
 	 * @return
@@ -880,16 +860,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The value class type, or <jk>null</jk> if this class is not a Map.
 	 */
 	public ClassMeta<?> getValueType() { return valueType; }
-
-	/**
-	 * Shortcut for calling <code>getInnerClass().getAnnotation(a) != <jk>null</jk></code>.
-	 *
-	 * @param a The annotation to check for.
-	 * @return <jk>true</jk> if the inner class has the annotation.
-	 */
-	public boolean hasAnnotation2(Class<? extends Annotation> a) {
-		return nn(getLastAnnotation(a));
-	}
 
 	/**
 	 * Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.

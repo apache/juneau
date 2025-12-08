@@ -300,6 +300,10 @@ public class BeanSession extends ContextSession {
 		return ctx._class();
 	}
 
+	public AnnotationProvider getAnnotationProvider() {
+		return ctx.getAnnotationProvider();
+	}
+
 	/**
 	 * Logs a warning message.
 	 *

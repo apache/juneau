@@ -341,7 +341,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		var jscm = (JsonSchemaClassMeta)null;
 		var objectSwapCM = objectSwap == null ? null : getClassMeta(objectSwap.getClass());
-		if (nn(objectSwapCM) && objectSwapCM.hasAnnotation2(Schema.class))
+		if (nn(objectSwapCM) && getAnnotationProvider().has(Schema.class, objectSwapCM))
 			jscm = getJsonSchemaClassMeta(objectSwapCM);
 		if (jscm == null)
 			jscm = getJsonSchemaClassMeta(sType);

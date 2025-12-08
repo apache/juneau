@@ -356,7 +356,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (nn(swap))
 			cm1 = swap.getSwapClassMeta(this);
 
-		if (cm1 == null || ! cm1.isMapOrBean() || cm1.hasAnnotation2(HtmlLink.class))
+		if (cm1 == null || ! cm1.isMapOrBean() || getAnnotationProvider().has(HtmlLink.class, cm1))
 			return null;
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(cm1);
@@ -933,7 +933,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			} else if (sType.isBean()) {
 				BeanMap m = toBeanMap(o);
-				if (aType.hasAnnotation2(HtmlLink.class)) {
+				if (getAnnotationProvider().has(HtmlLink.class, aType)) {
 					var uriProperty = Value.<String>empty();
 					var nameProperty = Value.<String>empty();
 					aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
