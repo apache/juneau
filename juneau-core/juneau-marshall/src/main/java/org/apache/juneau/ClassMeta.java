@@ -19,7 +19,6 @@ package org.apache.juneau;
 import static org.apache.juneau.ClassMeta.Category.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -117,8 +116,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		}
 	}
 
-	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
-
 	/**
 	 * Checks if the specified category is set in the bitmap.
 	 *
@@ -139,7 +136,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return true;
 	}
 
-	private final Map<Class<?>,Annotation[]> annotationArrayMap = new ConcurrentHashMap<>();
 	private final ClassMeta<?>[] args;                                                                              // Arg types if this is an array of args.
 	private final BeanContext beanContext;                                                                          // The bean context that created this object.
 	private final Supplier<BeanFilter> beanFilter;
@@ -1179,27 +1175,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public boolean isUri() { return cat != null && cat.is(URI); }
 
 	/**
-	 * Returns the last matching annotation on this class or parent classes/interfaces in parent-to-child order.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to search for.
-	 * @param filter A predicate to apply to the entries to determine if annotation should be used.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public <A extends Annotation> Optional<A> lastAnnotation(Class<A> type, Predicate<A> filter) {
-		var array = annotationArray(type);
-		if (array == null) {
-			if (beanContext == null)
-				return AP.find(type, this).stream().map(AnnotationInfo::inner).filter(a -> test(filter, a)).findFirst();  // AnnotationProvider returns child-to-parent, so first is "last"
-			return opte();
-		}
-		for (var i = array.length - 1; i >= 0; i--)
-			if (test(filter, array[i]))
-				return opt(array[i]);
-		return opte();
-	}
-
-	/**
 	 * Transforms the specified object into an instance of this class.
 	 *
 	 * @param o The object to transform.
@@ -1349,17 +1324,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (isEnum() && beanContext.isUseEnumNames())
 			return ((Enum<?>)t).name();
 		return t.toString();
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotationArray(Class<A> type) {
-		var array = annotationArrayMap.get(type);
-		if (array == null && nn(beanContext)) {
-			var ap = beanContext.getAnnotationProvider();
-			array = ap.find(type, this).stream().map(AnnotationInfo::inner).toArray(i -> array(type, i));
-			annotationArrayMap.put(type, array);
-		}
-		return (A[])array;
 	}
 
 	@SuppressWarnings("unchecked")
