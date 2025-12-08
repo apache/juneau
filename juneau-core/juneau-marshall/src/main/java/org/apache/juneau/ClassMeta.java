@@ -139,7 +139,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private final List<ClassMeta<?>> args;                                     // Arg types if this is an array of args.
 	private final BeanContext beanContext;                                     // The bean context that created this object.
-	private final OptionalSupplier<BeanFilter> beanFilter;
 	private final Supplier<BuilderSwap<T,?>> builderSwap;                      // The builder swap associated with this bean (if it has one).
 	private final Categories cat;                                              // The class category.
 	private final Cache<Class<?>,ObjectSwap<?,?>> childSwapMap;                // Maps normal subclasses to ObjectSwaps.
@@ -238,7 +237,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				cat.set(INPUTSTREAM);
 			}
 
-			beanFilter = memoize(()->findBeanFilter());
 			beanMeta = memoize(()->findBeanMeta());
 			builderSwap = memoize(()->findBuilderSwap());
 			childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
@@ -298,7 +296,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.exampleField = memoize(()->findExampleField());
 		this.noArgConstructor = memoize(()->findNoArgConstructor());
 		this.stringConstructor = memoize(()->findStringConstructor());
-		this.beanFilter = memoize(()->findBeanFilter());
 		this.marshalledFilter = memoize(()->findMarshalledFilter());
 		this.builderSwap = memoize(()->findBuilderSwap());
 		this.example = memoize(()->findExample());
@@ -333,7 +330,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.exampleField = mainType.exampleField;
 		this.noArgConstructor = mainType.noArgConstructor;
 		this.stringConstructor = mainType.stringConstructor;
-		this.beanFilter = mainType.beanFilter;
 		this.marshalledFilter = mainType.marshalledFilter;
 		this.builderSwap = mainType.builderSwap;
 		this.example = mainType.example;
@@ -1319,18 +1315,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			.orElse(null);
 	}
 
-	private BeanFilter findBeanFilter() {
-		var ap = beanContext.getAnnotationProvider();
-		var l = ap.find(Bean.class, this);
-		if (l.isEmpty())
-			return null;
-		return BeanFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
-	}
-
 	private BeanMeta.BeanMetaValue<T> findBeanMeta() {
 		if (! cat.isUnknown())
 			return new BeanMeta.BeanMetaValue<>(null, "Known non-bean type");
-		return BeanMeta.create(this, beanFilter.get(), null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
+		return BeanMeta.create(this, null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
 	}
 
 	private KeyValueTypes findKeyValueTypes() {
@@ -1431,7 +1419,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	@SuppressWarnings("unchecked")
 	private String findExample() {
 
-		var example = beanFilter.map(x -> x.getExample()).orElse(null);
+		var example = beanMeta.get().optBeanMeta().map(x -> x.getBeanFilter()).map(x -> x.getExample()).orElse(null);
 
 		if (example == null)
 			example = marshalledFilter.map(x -> x.getExample()).orElse(null);
@@ -1512,7 +1500,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (is(Object.class))
 			return null;
 
-		var v = beanFilter.map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
+		var v = beanContext.getAnnotationProvider().find(Bean.class, this).stream().map(x -> x.inner()).filter(x -> ne(x.implClass(), void.class)).map(x -> ClassInfo.of(x)).findFirst().orElse(null);
 
 		if (v == null)
 			v = marshalledFilter.map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);

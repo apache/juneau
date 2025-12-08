@@ -81,6 +81,21 @@ public class BeanMeta<T> {
 	}
 
 	/**
+	 * Finds the bean filter for the specified class metadata.
+	 *
+	 * @param <T> The class type.
+	 * @param cm The class metadata to find the filter for.
+	 * @return The bean filter, or <jk>null</jk> if no filter is found.
+	 */
+	static <T> BeanFilter findBeanFilter(ClassMeta<T> cm) {
+		var ap = cm.getBeanContext().getAnnotationProvider();
+		var l = ap.find(Bean.class, cm);
+		if (l.isEmpty())
+			return null;
+		return BeanFilter.create(cm.inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
+	}
+
+	/**
 	 * Creates a {@link BeanMeta} instance for the specified class metadata.
 	 *
 	 * <p>
@@ -133,7 +148,7 @@ public class BeanMeta<T> {
 	 * @param implClassConstructor Optional constructor to use if one cannot be found. Can be <jk>null</jk>.
 	 * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
 	 */
-	public static <T> BeanMetaValue<T> create(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ConstructorInfo implClassConstructor) {
+	public static <T> BeanMetaValue<T> create(ClassMeta<T> cm, String[] pNames, ConstructorInfo implClassConstructor) {
 		try {
 			var bc = cm.getBeanContext();
 			var ap = bc.getAnnotationProvider();
@@ -142,7 +157,7 @@ public class BeanMeta<T> {
 			if (bc.isNotABean(cm))
 				return notABean("Class matches exclude-class list");
 
-			if (bf == null && bc.isBeansRequireSerializable() && ! cm.isChildOf(Serializable.class))
+			if (bc.isBeansRequireSerializable() && ! cm.isChildOf(Serializable.class) && ! ap.has(Bean.class, cm))
 				return notABean("Class is not serializable");
 
 			if (ap.has(BeanIgnore.class, cm))
@@ -151,7 +166,7 @@ public class BeanMeta<T> {
 			if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! ap.has(Bean.class, cm))
 				return notABean("Class is not public");
 
-			var bm = new BeanMeta<>(cm, bf, pNames, implClassConstructor);
+			var bm = new BeanMeta<>(cm, findBeanFilter(cm), pNames, implClassConstructor);
 			var nabr = bm.notABeanReason;
 			return new BeanMetaValue<>(nabr == null ? bm : null, nabr);
 		} catch (RuntimeException e) {
@@ -843,6 +858,10 @@ public class BeanMeta<T> {
 	/** Optional bean filter associated with the target class. */
 	protected final BeanFilter beanFilter;
 
+	public BeanFilter getBeanFilter() {
+		return beanFilter;
+	}
+
 	/** The constructor for this bean. */
 	protected final ConstructorInfo constructor;
 
@@ -924,11 +943,11 @@ public class BeanMeta<T> {
 	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be <jk>null</jk>.
 	 */
 	protected BeanMeta(ClassMeta<T> classMeta, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
-
-		Builder<T> b = new Builder<>(classMeta, classMeta.getBeanContext(), beanFilter, pNames, implClassConstructor);
 		this.classMeta = classMeta;
 		this.ctx = classMeta.getBeanContext();
 		this.c = classMeta.inner();
+
+		Builder<T> b = new Builder<>(classMeta, classMeta.getBeanContext(), beanFilter, pNames, implClassConstructor);
 		notABeanReason = b.init(this);
 
 		this.beanFilter = beanFilter;
