@@ -485,7 +485,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		var type2 = (String)null;
 		if (sType != eType)
-			type2 = sType.getDictionaryName();
+			type2 = sType.getBeanDictionaryName();
 		if (type2 == null)
 			type2 = "array";
 
@@ -524,7 +524,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				}
 
 				out.oTag(i + 1, "tr");
-				String typeName = (cm == null ? null : cm.getDictionaryName());
+				String typeName = (cm == null ? null : cm.getBeanDictionaryName());
 				String typeProperty = getBeanTypePropertyName(cm);
 
 				if (nn(typeName) && eType.getElementType() != cm)
@@ -852,7 +852,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			var typeName = (String)null;
 			if (isAddBeanTypes() && ! eType.equals(aType))
-				typeName = aType.getDictionaryName();
+				typeName = aType.getBeanDictionaryName();
 
 			// Swap if necessary
 			ObjectSwap swap = aType.getSwap(this);

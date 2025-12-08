@@ -778,10 +778,10 @@ public class SerializerSession extends BeanTraverseSession {
 		if (eType == aType || ! (isAddBeanTypes() || (session.isRoot() && isAddRootType())))
 			return null;
 
-		String eTypeTn = eType.getDictionaryName();
+		String eTypeTn = eType.getBeanDictionaryName();
 
 		// First see if it's defined on the actual type.
-		String tn = aType.getDictionaryName();
+		String tn = aType.getBeanDictionaryName();
 		if (nn(tn) && ! tn.equals(eTypeTn)) {
 			return tn;
 		}

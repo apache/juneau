@@ -812,13 +812,13 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				isExpectedType = false;
 		}
 
-		var resolvedDictionaryName = isExpectedType ? null : aType.getDictionaryName();
+		var resolvedDictionaryName = isExpectedType ? null : aType.getBeanDictionaryName();
 
 		// Note that the dictionary name may be specified on the actual type or the serialized type.
 		// HTML templates will have them defined on the serialized type.
-		var dictionaryName = aType.getDictionaryName();
+		var dictionaryName = aType.getBeanDictionaryName();
 		if (dictionaryName == null)
-			dictionaryName = sType.getDictionaryName();
+			dictionaryName = sType.getBeanDictionaryName();
 
 		// char '\0' is interpreted as null.
 		if (nn(o) && sType.isChar() && ((Character)o).charValue() == 0)

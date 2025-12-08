@@ -145,7 +145,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Cache<Class<?>,ObjectSwap<?,?>> childSwapMap;                // Maps normal subclasses to ObjectSwaps.
 	private final Supplier<List<ObjectSwap<?,?>>> childSwaps;                  // Any ObjectSwaps where the normal type is a subclass of this class.
 	private final Cache<Class<?>,ObjectSwap<?,?>> childUnswapMap;              // Maps swap subclasses to ObjectSwaps.
-	private final Supplier<String> dictionaryName;                             // The dictionary name of this class if it has one.
+	private final Supplier<String> beanDictionaryName;                             // The dictionary name of this class if it has one.
 	private final Supplier<ClassMeta<?>> elementType;                          // If ARRAY or COLLECTION, the element class type.
 	private final OptionalSupplier<String> example;                            // Example JSON.
 	private final OptionalSupplier<FieldInfo> exampleField;                    // The @Example-annotated field (if it has one).
@@ -244,7 +244,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
 			childSwaps = memoize(()->findChildSwaps());
 			childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
-			dictionaryName = memoize(()->findBeanDictionaryName());
+			beanDictionaryName = memoize(()->findBeanDictionaryName());
 			elementType = memoize(()->findElementType());
 			enumValues = memoize(()->findEnumValues());
 			example = memoize(()->findExample());
@@ -304,7 +304,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.example = memoize(()->findExample());
 		this.implClass = memoize(()->findImplClass());
 		this.enumValues = memoize(()->findEnumValues());
-		this.dictionaryName = memoize(()->findBeanDictionaryName());
+		this.beanDictionaryName = memoize(()->findBeanDictionaryName());
 	}
 
 	/**
@@ -339,7 +339,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.example = mainType.example;
 		this.implClass = mainType.implClass;
 		this.enumValues = mainType.enumValues;
-		this.dictionaryName = mainType.dictionaryName;
+		this.beanDictionaryName = mainType.beanDictionaryName;
 	}
 
 	/**
@@ -506,7 +506,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this
 	 * 	isn't a bean.
 	 */
-	public String getDictionaryName() { return dictionaryName.get(); }
+	public String getBeanDictionaryName() {
+		return beanDictionaryName.get();
+	}
 
 	/**
 	 * For array and {@code Collection} types, returns the class type of the components of the array or
@@ -1306,6 +1308,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (nn(d))
 			return d;
 
+		// Note that @Bean(typeName) can be defined on non-bean types, so
+		// we have to check again.
 		return beanContext.getAnnotationProvider().find(Bean.class, this)
 			.stream()
 			.map(AnnotationInfo::inner)
