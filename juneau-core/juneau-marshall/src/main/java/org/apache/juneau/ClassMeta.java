@@ -164,7 +164,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
 	private final OptionalSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
-	private final ObjectSwap<T,?>[] swaps;                                     // The object POJO swaps associated with this bean (if it has any).
+	private final List<ObjectSwap<T,?>> swaps;                                 // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta;
 
@@ -275,7 +275,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			if (nn(ds))
 				_swaps.add((ObjectSwap<T,?>)ds);
 
-			this.swaps = _swaps.isEmpty() ? null : _swaps.toArray(new ObjectSwap[_swaps.size()]);
+			this.swaps = _swaps.isEmpty() ? null : _swaps;
 
 			this.proxyInvocationHandler = ()->(nn(beanMeta.get().getA()) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta.get().getA()) : null;
 
@@ -783,20 +783,20 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	this class.
 	 */
 	public ObjectSwap<T,?> getSwap(BeanSession session) {
-		if (nn(swaps)) {
+		if (swaps != null && ! swaps.isEmpty()) {
 			var matchQuant = 0;
-			var matchIndex = -1;
+			ObjectSwap<T,?> matchSwap = null;
 
-			for (var i = 0; i < swaps.length; i++) {
-				var q = swaps[i].match(session);
+			for (var swap : swaps) {
+				var q = swap.match(session);
 				if (q > matchQuant) {
 					matchQuant = q;
-					matchIndex = i;
+					matchSwap = swap;
 				}
 			}
 
-			if (matchIndex > -1)
-				return swaps[matchIndex];
+			if (matchSwap != null)
+				return matchSwap;
 		}
 		return null;
 	}
