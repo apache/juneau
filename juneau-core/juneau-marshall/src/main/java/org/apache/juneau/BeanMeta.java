@@ -267,21 +267,6 @@ public class BeanMeta<T> {
 			this._implClassConstructor = implClassConstructor;
 		}
 
-		/*
-		 * Returns the property name of the specified field if it's a valid property.
-		 * Returns null if the field isn't a valid property.
-		 */
-		private static String findPropertyName(FieldInfo f, AnnotationProvider ap, PropertyNamer pn) {
-			List<Beanp> lp = list();
-			List<Name> ln = list();
-			ap.find(Beanp.class, f).forEach(x -> lp.add(x.inner()));
-			ap.find(Name.class, f).forEach(x -> ln.add(x.inner()));
-			var name = bpName(lp, ln);
-			if (isNotEmpty(name))
-				return name;
-			return pn.getPropertyName(f.getName());
-		}
-
 		void init(BeanMeta<T> beanMeta) {
 			var c = _classMeta.inner();
 			var ci = _classMeta;
@@ -432,7 +417,7 @@ public class BeanMeta<T> {
 				} else /* Use 'better' introspection */ {
 
 					findBeanFields(_ctx, c2, stopClass, fVis).forEach(x -> {
-						var name = findPropertyName(info(x), _ap, _propertyNamer);
+						var name = _ap.find(info(x)).stream().filter(x2 -> x2.isType(Beanp.class) || x2.isType(Name.class)).map(x2 -> name(x2)).filter(Objects::nonNull).findFirst().orElse(_propertyNamer.getPropertyName(x.getName()));
 						if (nn(name)) {
 							if (! normalProps.containsKey(name))
 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
@@ -622,6 +607,21 @@ public class BeanMeta<T> {
 		});
 
 		return name.orElse(null);
+	}
+
+	static String name(AnnotationInfo<?> ai) {
+		if (ai.isType(Beanp.class)) {
+			Beanp p = ai.cast(Beanp.class).inner();
+			if (isNotEmpty(p.name()))
+				return p.name();
+			if (isNotEmpty(p.value()))
+				return p.value();
+		} else {
+			Name n = ai.cast(Name.class).inner();
+			if (isNotEmpty(n.value()))
+				return n.value();
+		}
+		return null;
 	}
 
 	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v) {
