@@ -144,7 +144,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final ClassMeta<?>[] args;                                                                              // Arg types if this is an array of args.
 	private final BeanContext beanContext;                                                                          // The bean context that created this object.
 	private final Supplier<BeanFilter> beanFilter;
-//	private final BeanMeta<T> beanMeta;                                                                             // The bean meta for this bean class (if it's a bean).
 	private final Supplier<BuilderSwap<T,?>> builderSwap;                                                           // The builder swap associated with this bean (if it has one).
 	private final Categories cat;                                                                                   // The class category.
 	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap;                                         // Maps normal subclasses to ObjectSwaps.
@@ -165,7 +164,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Supplier<MarshalledFilter> marshalledFilter;
 	private final Supplier<Property<T,Object>> nameProperty;                                            // The method to set the name on an object (if it has one).
 	private final OptionalSupplier<ConstructorInfo> noArgConstructor;                                                       // The no-arg constructor for this class (if it has one).
-	private final String notABeanReason;                                                                            // If this isn't a bean, the reason why.
 	private final Supplier<Property<T,Object>> parentProperty;                                          // The method to set the parent on an object (if it has one).
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
@@ -206,7 +204,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		super(innerClass);
 		this.beanContext = beanContext;
 		this.cat = new Categories();
-		var notABeanReason = (String)null;
 
 		try (var x = lock.write()) {
 			// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
@@ -299,20 +296,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				}
 			}
 
-			var _beanMeta = (BeanMeta<T>)null;
-
-			if (! cat.isUnknown()) {
-				notABeanReason = "Known non-bean type";
-			} else {
-				try {
-					_beanMeta = new BeanMeta<>(this, beanFilter.get(), null, implClass.get() == null ? null : noArgConstructor.get());
-					notABeanReason = _beanMeta.notABeanReason;
-				} catch (RuntimeException e) {
-					notABeanReason = e.getMessage();
-				}
-			}
-
-//			this.beanMeta = null;
 			this.beanMeta2 = memoize(()->findBeanMeta());
 			this.keyType = _keyType;
 			this.valueType = _valueType;
@@ -348,7 +331,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			this.childSwapMap = childSwaps == null ? null : new ConcurrentHashMap<>();
 			this.args = null;
 			this.stringMutater = Mutaters.get(String.class, inner());
-			this.notABeanReason = notABeanReason;
 		}
 	}
 
@@ -370,7 +352,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.proxyInvocationHandler = null;
 //		this.beanMeta = null;
 		this.beanMeta2 = memoize(()->findBeanMeta());
-		this.notABeanReason = null;
+//		this.notABeanReason = null;
 		this.swaps = null;
 		this.stringMutater = null;
 		this.fromStringMethod = memoize(()->findFromStringMethod());
@@ -409,7 +391,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.proxyInvocationHandler = mainType.proxyInvocationHandler;
 //		this.beanMeta = mainType.beanMeta;
 		this.beanMeta2 = mainType.beanMeta2;
-		this.notABeanReason = mainType.notABeanReason;
+//		this.notABeanReason = mainType.notABeanReason;
 		this.swaps = mainType.swaps;
 		this.exampleMethod = mainType.exampleMethod;
 		this.args = null;
@@ -735,7 +717,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The reason why this class is not a bean, or <jk>null</jk> if it is a bean.
 	 */
-	public synchronized String getNotABeanReason() { return notABeanReason; }
+	public synchronized String getNotABeanReason() {
+		return beanMeta2.get().getB();
+	}
 
 	/**
 	 * If this is an {@link Optional}, returns an empty optional.
