@@ -154,7 +154,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
 	private final OptionalSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
 	private final OptionalSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
-	private final Supplier<Tuple2<ClassMeta<?>,ClassMeta<?>>> keyValueTypes;   // Key and value types for MAP types.
+	private final Supplier<KeyValueTypes> keyValueTypes;                        // Key and value types for MAP types.
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 	private final OptionalSupplier<MarshalledFilter> marshalledFilter;
 	private final Supplier<Property<T,Object>> nameProperty;                   // The method to set the name on an object (if it has one).
@@ -165,16 +165,16 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final OptionalSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
-	private final OptionalSupplier<Tuple2<BeanMeta<T>,String>> beanMeta;
+	private final OptionalSupplier<BeanMetaValue<T>> beanMeta;
 
 	record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
 		Optional<ClassMeta<?>> optKeyType() { return opt(keyType()); }
-		Optional<ClassMeta<?>> optValueType() { return Optional.of(valueType()); }
+		Optional<ClassMeta<?>> optValueType() { return opt(valueType()); }
 	}
 
 	record BeanMetaValue<T>(BeanMeta<T> beanMeta, String notABeanReason) {
-		public Optional<BeanMeta<T>> optBeanMeta() { return opt(beanMeta()); }
-		public Optional<String> optNotABeanReason() { return opt(notABeanReason()); }
+		Optional<BeanMeta<T>> optBeanMeta() { return opt(beanMeta()); }
+		Optional<String> optNotABeanReason() { return opt(notABeanReason()); }
 	}
 
 	/**
@@ -331,7 +331,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.fromStringMethod = mainType.fromStringMethod;
 		this.beanContext = mainType.beanContext;
 		this.elementType = elementType != null ? memoize(()->elementType) : mainType.elementType;
-		this.keyValueTypes = (keyType != null || valueType != null) ? memoize(()->Tuple2.of(keyType, valueType)) : mainType.keyValueTypes;
+		this.keyValueTypes = (keyType != null || valueType != null) ? memoize(()->new KeyValueTypes(keyType, valueType)) : mainType.keyValueTypes;
 		this.beanMeta = mainType.beanMeta;
 		this.swaps = mainType.swaps;
 		this.exampleMethod = mainType.exampleMethod;
@@ -475,7 +475,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	this class.
 	 */
 	public BeanMeta<T> getBeanMeta() {
-		return beanMeta.get().getA();
+		return beanMeta.get().beanMeta();
 	}
 
 	/**
@@ -625,7 +625,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The key class type, or <jk>null</jk> if this class is not a Map.
 	 */
 	public ClassMeta<?> getKeyType() {
-		return keyValueTypes.get().getA();
+		return keyValueTypes.get().keyType();
 	}
 
 	/**
@@ -643,7 +643,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The reason why this class is not a bean, or <jk>null</jk> if it is a bean.
 	 */
 	public synchronized String getNotABeanReason() {
-		return beanMeta.get().getB();
+		return beanMeta.get().notABeanReason();
 	}
 
 	/**
@@ -812,7 +812,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The value class type, or <jk>null</jk> if this class is not a Map.
 	 */
 	public ClassMeta<?> getValueType() {
-		return keyValueTypes.get().getB();
+		return keyValueTypes.get().valueType();
 	}
 
 	/**
@@ -1334,22 +1334,23 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return BeanFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
 	}
 
-	private Tuple2<BeanMeta<T>,String> findBeanMeta() {
+	private BeanMetaValue<T> findBeanMeta() {
 		if (! cat.isUnknown())
-			return Tuple2.of(null, "Known non-bean type");
-		return BeanMeta.create(this, beanFilter.get(), null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
+			return new BeanMetaValue<>(null, "Known non-bean type");
+		var result = BeanMeta.create(this, beanFilter.get(), null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
+		return new BeanMetaValue<>(result.getA(), result.getB());
 	}
 
-	private Tuple2<ClassMeta<?>,ClassMeta<?>> findKeyValueTypes() {
+	private KeyValueTypes findKeyValueTypes() {
 		if (cat.is(MAP) && ! cat.is(BEANMAP)) {
 			// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
 			var parameters = beanContext.findParameters(inner(), inner());
 			if (nn(parameters) && parameters.length == 2) {
-				return Tuple2.of(parameters[0], parameters[1]);
+				return new KeyValueTypes(parameters[0], parameters[1]);
 			}
-			return Tuple2.of(beanContext.getClassMeta(Object.class), beanContext.getClassMeta(Object.class));
+			return new KeyValueTypes(beanContext.getClassMeta(Object.class), beanContext.getClassMeta(Object.class));
 		}
-		return Tuple2.of(null,null);
+		return new KeyValueTypes(null, null);
 	}
 
 	private ClassMeta<?> findElementType() {
@@ -1774,11 +1775,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return sb.append(cn(BeanMap.class)).append('<').append(n).append('>');
 		if (cat.is(MAP)) {
 			var kvTypes = keyValueTypes.get();
-			var kt = kvTypes.getA();
-			var vt = kvTypes.getB();
-			if (kt != null && vt != null && kt.isObject() && vt.isObject())
+			var kt = kvTypes.optKeyType();
+			var vt = kvTypes.optValueType();
+			if (kt.isPresent() && vt.isPresent() && kt.get().isObject() && vt.get().isObject())
 				return sb.append(n);
-			return sb.append(n).append('<').append(kt == null ? "?" : kt.toString(simple)).append(',').append(vt == null ? "?" : vt.toString(simple)).append('>');
+			return sb.append(n).append('<').append(kt.map(x -> x.toString(simple)).orElse("?")).append(',').append(vt.map(x -> x.toString(simple)).orElse("?")).append('>');
 		}
 		if (cat.is(COLLECTION) || is(Optional.class)) {
 			var et = elementType.get();
