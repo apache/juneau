@@ -1,6 +1,6 @@
 # TODO List
 
-**Last generated TODO number: TODO-93**
+**Last generated TODO number: TODO-94**
 
 This file tracks pending tasks for the Apache Juneau project. For completed items, see [TODO-completed.md](TODO-completed.md).
 
@@ -28,6 +28,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-21 Thrown NotFound causes - javax.servlet.ServletException: Invalid method response: 200
 - [x] TODO-89 Add ClassInfoTyped
 - [ ] TODO-91 Security: LogsResource returns HTTP 500 instead of 404 for malformed query parameters (CWE-74). When accessing log file URLs with encoded special characters in query parameters (e.g., `?method=VIEW%5C%5C%5C%22`), the system returns HTTP 500 "Invalid method response: 200" instead of HTTP 404. The error suggests it's incorrectly trying to find a Java method matching a malformed path. Should return 404 for invalid/malformed requests.
+- [ ] TODO-94 Add a "cloaked" mode to IRS to always return 404s in place of 40x/50x responses.
 
 ## HTTP Response/Exception Improvements
 

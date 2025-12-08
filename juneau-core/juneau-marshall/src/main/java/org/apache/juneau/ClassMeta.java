@@ -146,7 +146,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final List<ObjectSwap<?,?>> childSwaps;                            // Any ObjectSwaps where the normal type is a subclass of this class.
 	private final Cache<Class<?>,ObjectSwap<?,?>> childUnswapMap;              // Maps swap subclasses to ObjectSwaps.
 	private final Supplier<String> dictionaryName;                             // The dictionary name of this class if it has one.
-	private final ClassMeta<?> elementType;                                    // If ARRAY or COLLECTION, the element class type.
+	private final Supplier<ClassMeta<?>> elementType;                          // If ARRAY or COLLECTION, the element class type.
 	private final OptionalSupplier<String> example;                            // Example JSON.
 	private final OptionalSupplier<FieldInfo> exampleField;                    // The @Example-annotated field (if it has one).
 	private final OptionalSupplier<MethodInfo> exampleMethod;                  // The example() or @Example-annotated method (if it has one).
@@ -258,20 +258,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			example = memoize(()->findExample());
 			implClass = memoize(()->findImplClass());
 
-			var _elementType = (ClassMeta<?>)null;
-			if (cat.is(ARRAY)) {
-				_elementType = beanContext.getClassMeta(inner().getComponentType(), false);
-			} else if (cat.is(COLLECTION) || is(Optional.class)) {
-				// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
-				var parameters = beanContext.findParameters(inner(), inner());
-				if (nn(parameters) && parameters.length == 1) {
-					_elementType = parameters[0];
-				} else {
-					_elementType = beanContext.getClassMeta(Object.class);
-				}
-			}
-			this.elementType = _elementType;
 			this.keyValueTypes = memoize(()->findKeyValueTypes());
+			this.elementType = memoize(()->findElementType());
 
 			this.beanMeta = memoize(()->findBeanMeta());
 			this.enumValues = memoize(()->findEnumValues());
@@ -334,7 +322,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.childUnswapMap = null;
 		this.cat = new Categories().set(ARGS);
 		this.beanContext = null;
-		this.elementType = null;
+		this.elementType = memoize(()->findElementType());
 		this.keyValueTypes = memoize(()->findKeyValueTypes());
 		this.proxyInvocationHandler = null;
 		this.beanMeta = memoize(()->findBeanMeta());
@@ -370,7 +358,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.cat = mainType.cat;
 		this.fromStringMethod = mainType.fromStringMethod;
 		this.beanContext = mainType.beanContext;
-		this.elementType = elementType;
+		this.elementType = elementType != null ? memoize(()->elementType) : mainType.elementType;
 		this.keyValueTypes = (keyType != null || valueType != null) ? memoize(()->Tuple2.of(keyType, valueType)) : mainType.keyValueTypes;
 		this.proxyInvocationHandler = mainType.proxyInvocationHandler;
 		this.beanMeta = mainType.beanMeta;
@@ -419,7 +407,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public boolean canCreateNewInstance() {
 		if (isMemberClass() && isNotStatic())
 			return false;
-		if (noArgConstructor.isPresent() || proxyInvocationHandler.isPresent() || (isArray() && elementType.canCreateNewInstance()))
+		if (noArgConstructor.isPresent() || proxyInvocationHandler.isPresent() || (isArray() && elementType.get().canCreateNewInstance()))
 			return true;
 		return false;
 	}
@@ -564,7 +552,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The element class type, or <jk>null</jk> if this class is not an array or Collection.
 	 */
-	public ClassMeta<?> getElementType() { return elementType; }
+	public ClassMeta<?> getElementType() { return elementType.get(); }
 
 	/**
 	 * Returns the example of this class.
@@ -1388,6 +1376,22 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return Tuple2.of(null,null);
 	}
 
+	private ClassMeta<?> findElementType() {
+		if (beanContext == null)
+			return null;
+		if (cat.is(ARRAY)) {
+			return beanContext.getClassMeta(inner().getComponentType(), false);
+		} else if (cat.is(COLLECTION) || is(Optional.class)) {
+			// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
+			var parameters = beanContext.findParameters(inner(), inner());
+			if (nn(parameters) && parameters.length == 1) {
+				return parameters[0];
+			}
+			return beanContext.getClassMeta(Object.class);
+		}
+		return null;
+	}
+
 	@SuppressWarnings("unchecked")
 	private BuilderSwap<T,?> findBuilderSwap() {
 		var bc = beanContext;
@@ -1743,7 +1747,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			n = n.substring(i == -1 ? 0 : i + 1).replace('$', '.');
 		}
 		if (cat.is(ARRAY))
-			return elementType.toString(sb, simple).append('[').append(']');
+			return elementType.get().toString(sb, simple).append('[').append(']');
 		if (cat.is(BEANMAP))
 			return sb.append(cn(BeanMap.class)).append('<').append(n).append('>');
 		if (cat.is(MAP)) {
@@ -1754,8 +1758,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				return sb.append(n);
 			return sb.append(n).append('<').append(kt == null ? "?" : kt.toString(simple)).append(',').append(vt == null ? "?" : vt.toString(simple)).append('>');
 		}
-		if (cat.is(COLLECTION) || is(Optional.class))
-			return sb.append(n).append(elementType.isObject() ? "" : "<" + elementType.toString(simple) + ">");
+		if (cat.is(COLLECTION) || is(Optional.class)) {
+			var et = elementType.get();
+			return sb.append(n).append(et != null && et.isObject() ? "" : "<" + (et == null ? "?" : et.toString(simple)) + ">");
+		}
 		return sb.append(n);
 	}
 
