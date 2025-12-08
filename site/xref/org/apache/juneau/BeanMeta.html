@@ -279,15 +279,15 @@
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_comment">		 * Returns the property name of the specified field if it's a valid property.</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_comment">		 * Returns null if the field isn't a valid property.</em>
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_comment">		 */</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">private</strong> String findPropertyName(<a name="FieldInfo" href="../../../org/apache/juneau/commons/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> f) {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findPropertyName(<a name="FieldInfo" href="../../../org/apache/juneau/commons/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> f, AnnotationProvider ap, <a name="PropertyNamer" href="../../../org/apache/juneau/PropertyNamer.html#PropertyNamer">PropertyNamer</a> pn) {
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			List&lt;Beanp&gt; lp = list();
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			List&lt;Name&gt; ln = list();
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			_ap.find(Beanp.<strong class="jxr_keyword">class</strong>, f).forEach(x -&gt; lp.add(x.<strong class="jxr_keyword">inner</strong>()));
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			_ap.find(Name.<strong class="jxr_keyword">class</strong>, f).forEach(x -&gt; ln.add(x.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			ap.find(Beanp.<strong class="jxr_keyword">class</strong>, f).forEach(x -&gt; lp.add(x.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			ap.find(Name.<strong class="jxr_keyword">class</strong>, f).forEach(x -&gt; ln.add(x.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">var</strong> name = bpName(lp, ln);
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(name))
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 				<strong class="jxr_keyword">return</strong> name;
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">return</strong> _propertyNamer.getPropertyName(f.getName());
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">return</strong> pn.getPropertyName(f.getName());
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		}
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">void</strong> init(BeanMeta&lt;T&gt; beanMeta) {
@@ -440,7 +440,7 @@
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 				} <strong class="jxr_keyword">else</strong> <em class="jxr_comment">/* Use 'better' introspection */</em> {
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 					findBeanFields(_ctx, c2, stopClass, fVis).forEach(x -&gt; {
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 						<strong class="jxr_keyword">var</strong> name = findPropertyName(info(x));
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 						<strong class="jxr_keyword">var</strong> name = findPropertyName(info(x), _ap, _propertyNamer);
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 						<strong class="jxr_keyword">if</strong> (nn(name)) {
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 							<strong class="jxr_keyword">if</strong> (! normalProps.containsKey(name))
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
