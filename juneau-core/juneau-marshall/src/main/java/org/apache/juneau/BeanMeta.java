@@ -238,342 +238,6 @@ public class BeanMeta<T> {
 		}
 	}
 
-	private static class Builder<T> {
-		ClassMeta<T> _classMeta;
-		BeanContext _ctx;
-		AnnotationProvider _ap;
-		BeanFilter _beanFilter;
-		String[] _pNames;
-		Map<String,BeanPropertyMeta> _properties;
-		Map<String,BeanPropertyMeta> _hiddenProperties = map();
-		Map<Method,String> _getterProps = map();
-		Map<Method,String> _setterProps = map();
-		BeanPropertyMeta _dynaProperty;
-
-		ConstructorInfo _constructor, _implClassConstructor;
-		String[] _constructorArgs = {};
-		PropertyNamer _propertyNamer;
-		BeanRegistry _beanRegistry;
-		String _typePropertyName;
-		boolean _sortProperties, _fluentSetters;
-		String notABeanReason;
-
-		Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
-			this._classMeta = classMeta;
-			this._ctx = ctx;
-			this._ap = ctx.getAnnotationProvider();
-			this._beanFilter = beanFilter;
-			this._pNames = pNames;
-			this._implClassConstructor = implClassConstructor;
-		}
-
-		void init(BeanMeta<T> beanMeta) {
-			var c = _classMeta.inner();
-			var ci = _classMeta;
-			var ap = _ctx.getAnnotationProvider();
-
-			try {
-				var conVis = _ctx.getBeanConstructorVisibility();
-				var mVis = _ctx.getBeanMethodVisibility();
-				var fVis = _ctx.getBeanFieldVisibility();
-
-				List<Class<?>> bdClasses = list();
-				if (nn(_beanFilter) && nn(_beanFilter.getBeanDictionary()))
-					addAll(bdClasses, _beanFilter.getBeanDictionary());
-
-				var typeName = Value.<String>empty();
-				_classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
-				if (typeName.isPresent())
-					bdClasses.add(_classMeta.inner());
-				this._beanRegistry = new BeanRegistry(_ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
-
-				var typePropertyName = Value.<String>empty();
-				_classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typePropertyName()), x -> typePropertyName.set(x.typePropertyName()));
-				this._typePropertyName = typePropertyName.orElseGet(() -> _ctx.getBeanTypePropertyName());
-
-				_fluentSetters = (_ctx.isFindFluentSetters() || (nn(_beanFilter) && _beanFilter.isFluentSetters()));
-
-				// If @Bean.interfaceClass is specified on the parent class, then we want
-				// to use the properties defined on that class, not the subclass.
-				var c2 = (nn(_beanFilter) && nn(_beanFilter.getInterfaceClass()) ? _beanFilter.getInterfaceClass() : c);
-
-				var stopClass = (nn(_beanFilter) ? _beanFilter.getStopClass() : Object.class);
-				if (stopClass == null)
-					stopClass = Object.class;
-
-				Map<String,BeanPropertyMeta.Builder> normalProps = map();  // NOAI
-
-				var hasBean = ap.has(Bean.class, ci);
-
-				// Look for @Beanc constructor on public constructors.
-				ci.getPublicConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
-					if (nn(_constructor))
-						throw bex(c, "Multiple instances of '@Beanc' found.");
-					_constructor = x;
-					_constructorArgs = new String[0];
-					ap.find(Beanc.class, x).stream().map(x2 -> x2.inner().properties()).filter(StringUtils::isNotBlank).findFirst().ifPresent(z -> _constructorArgs = splita(z));
-					if (! x.hasNumParameters(_constructorArgs.length)) {
-						if (_constructorArgs.length != 0)
-							throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
-						_constructorArgs = new String[x.getParameterCount()];
-						var i = IntegerValue.create();
-						x.getParameters().forEach(pi -> {
-							var pn = pi.getName();
-							if (pn == null)
-								throw bex(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
-							_constructorArgs[i.getAndIncrement()] = pn;
-						});
-					}
-					_constructor.setAccessible();
-				});
-
-				// Look for @Beanc on all other constructors.
-				if (_constructor == null) {
-					ci.getDeclaredConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
-						if (nn(_constructor))
-							throw bex(c, "Multiple instances of '@Beanc' found.");
-						_constructor = x;
-						_constructorArgs = new String[0];
-						ap.find(Beanc.class, x).stream().map(x2 -> x2.inner().properties()).filter(Utils::isNotEmpty).findFirst().ifPresent(z -> _constructorArgs = splita(z));
-						if (! x.hasNumParameters(_constructorArgs.length)) {
-							if (_constructorArgs.length != 0)
-								throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
-							_constructorArgs = new String[x.getParameterCount()];
-							var i = IntegerValue.create();
-							x.getParameters().forEach(y -> {
-								var pn = y.getName();
-								if (pn == null)
-									throw bex(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
-								_constructorArgs[i.getAndIncrement()] = pn;
-							});
-						}
-						_constructor.setAccessible();
-					});
-				}
-
-				// If this is an interface, look for impl classes defined in the context.
-				if (_constructor == null)
-					_constructor = _implClassConstructor;
-
-				if (_constructor == null)
-					_constructor = ci.getNoArgConstructor(hasBean ? Visibility.PRIVATE : conVis).orElse(null);
-
-				if (_constructor == null && _beanFilter == null && _ctx.isBeansRequireDefaultConstructor())
-					notABeanReason = "Class does not have the required no-arg constructor";
-
-				if (nn(_constructor))
-					_constructor.setAccessible();
-
-				// Explicitly defined property names in @Bean annotation.
-				Set<String> fixedBeanProps = set();
-				Set<String> bpi = set();
-				Set<String> bpx = set();
-				Set<String> bpro = set();
-				Set<String> bpwo = set();
-
-				Set<String> filterProps = set();  // Names of properties defined in @Bean(properties)
-
-				if (nn(_beanFilter)) {
-
-					var bfbpi = _beanFilter.getProperties();
-
-					filterProps.addAll(bfbpi);
-
-					// Get the 'properties' attribute if specified.
-					if (bpi.isEmpty())
-						fixedBeanProps.addAll(bfbpi);
-
-					if (nn(_beanFilter.getPropertyNamer()))
-						_propertyNamer = _beanFilter.getPropertyNamer();
-
-					bpro.addAll(_beanFilter.getReadOnlyProperties());
-					bpwo.addAll(_beanFilter.getWriteOnlyProperties());
-				}
-
-				fixedBeanProps.addAll(bpi);
-
-				if (_propertyNamer == null)
-					_propertyNamer = _ctx.getPropertyNamer();
-
-				// First populate the properties with those specified in the bean annotation to
-				// ensure that ordering first.
-				fixedBeanProps.forEach(x -> normalProps.put(x, BeanPropertyMeta.builder(beanMeta, x)));
-
-				if (_ctx.isUseJavaBeanIntrospector()) {
-					var bi = (BeanInfo)null;
-					if (! c2.isInterface())
-						bi = Introspector.getBeanInfo(c2, stopClass);
-					else
-						bi = Introspector.getBeanInfo(c2, null);
-					if (nn(bi)) {
-						for (var pd : bi.getPropertyDescriptors()) {
-							var name = pd.getName();
-							if (! normalProps.containsKey(name))
-								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
-							normalProps.get(name).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
-						}
-					}
-
-				} else /* Use 'better' introspection */ {
-
-					findBeanFields(_ctx, c2, stopClass, fVis).forEach(x -> {
-						var name = _ap.find(info(x)).stream().filter(x2 -> x2.isType(Beanp.class) || x2.isType(Name.class)).map(x2 -> name(x2)).filter(Objects::nonNull).findFirst().orElse(_propertyNamer.getPropertyName(x.getName()));
-						if (nn(name)) {
-							if (! normalProps.containsKey(name))
-								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
-							normalProps.get(name).setField(x);
-						}
-					});
-
-					var bms = findBeanMethods(_ctx, c2, stopClass, mVis, _propertyNamer, _fluentSetters);
-
-					// Iterate through all the getters.
-					bms.forEach(x -> {
-						var pn = x.propertyName;
-						var m = x.method;
-						var mi = info(m);
-						if (! normalProps.containsKey(pn))
-							normalProps.put(pn, new BeanPropertyMeta.Builder(beanMeta, pn));
-						var bpm = normalProps.get(pn);
-						if (x.methodType == GETTER) {
-							// Two getters.  Pick the best.
-							if (nn(bpm.getter)) {
-
-								if (! ap.has(Beanp.class, mi) && ap.has(Beanp.class, info(bpm.getter)))
-									m = bpm.getter;  // @Beanp annotated method takes precedence.
-
-								else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get"))
-									m = bpm.getter;  // getX() overrides isX().
-							}
-							bpm.setGetter(m);
-						}
-					});
-
-					// Now iterate through all the setters.
-					bms.forEach(x -> {
-						if (x.methodType == SETTER) {
-							var bpm = normalProps.get(x.propertyName);
-							if (x.matchesPropertyType(bpm))
-								bpm.setSetter(x.method);
-						}
-					});
-
-					// Now iterate through all the extraKeys.
-					bms.forEach(x -> {
-						if (x.methodType == EXTRAKEYS) {
-							var bpm = normalProps.get(x.propertyName);
-							bpm.setExtraKeys(x.method);
-						}
-					});
-				}
-
-				var typeVarImpls = ClassUtils.findTypeVarImpls(c);
-
-				// Eliminate invalid properties, and set the contents of getterProps and setterProps.
-				for (Iterator<BeanPropertyMeta.Builder> i = normalProps.values().iterator(); i.hasNext();) {
-					var p = i.next();
-					try {
-						if (p.field == null)
-							p.setInnerField(findInnerBeanField(_ctx, c, stopClass, p.name));
-
-						if (p.validate(_ctx, _beanRegistry, typeVarImpls, bpro, bpwo)) {
-
-							if (nn(p.getter))
-								_getterProps.put(p.getter, p.name);
-
-							if (nn(p.setter))
-								_setterProps.put(p.setter, p.name);
-
-						} else {
-							i.remove();
-						}
-					} catch (ClassNotFoundException e) {
-						throw bex(c, lm(e));
-					}
-				}
-
-				// Check for missing properties.
-				fixedBeanProps.forEach(x -> {
-					if (! normalProps.containsKey(x))
-						throw bex(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getNameSimple());
-				});
-
-				// Mark constructor arg properties.
-				for (var fp : _constructorArgs) {
-					var m = normalProps.get(fp);
-					if (m == null)
-						throw bex(c, "The property ''{0}'' was defined on the @Beanc(properties=X) annotation but was not found on the class definition.", fp);
-					m.setAsConstructorArg();
-				}
-
-				// Make sure at least one property was found.
-				if (_beanFilter == null && _ctx.isBeansRequireSomeProperties() && normalProps.isEmpty())
-					notABeanReason = "No properties detected on bean class";
-
-				_sortProperties = (_ctx.isSortProperties() || (nn(_beanFilter) && _beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
-
-				_properties = _sortProperties ? sortedMap() : map();
-
-				normalProps.forEach((k, v) -> {
-					var pMeta = v.build();
-					if (pMeta.isDyna())
-						_dynaProperty = pMeta;
-					_properties.put(k, pMeta);
-				});
-
-				// If a beanFilter is defined, look for inclusion and exclusion lists.
-				if (nn(_beanFilter)) {
-
-					// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
-					Set<String> bfbpi = _beanFilter.getProperties();
-					Set<String> bfbpx = _beanFilter.getExcludeProperties();
-
-					if (bpi.isEmpty() && ! bfbpi.isEmpty()) {
-						// Only include specified properties if BeanFilter.includeKeys is specified.
-						// Note that the order must match includeKeys.
-						Map<String,BeanPropertyMeta> properties2 = map();  // NOAI
-						bfbpi.forEach(x -> {
-							if (_properties.containsKey(x))
-								properties2.put(x, _properties.remove(x));
-						});
-						_hiddenProperties.putAll(_properties);
-						_properties = properties2;
-					}
-					if (bpx.isEmpty() && ! bfbpx.isEmpty()) {
-						bfbpx.forEach(x -> _hiddenProperties.put(x, _properties.remove(x)));
-					}
-				}
-
-				if (! bpi.isEmpty()) {
-					Map<String,BeanPropertyMeta> properties2 = map();  // NOAI
-					bpi.forEach(x -> {
-						if (_properties.containsKey(x))
-							properties2.put(x, _properties.remove(x));
-					});
-					_hiddenProperties.putAll(_properties);
-					_properties = properties2;
-				}
-
-				bpx.forEach(x -> _hiddenProperties.put(x, _properties.remove(x)));
-
-				if (nn(_pNames)) {
-					Map<String,BeanPropertyMeta> properties2 = map();
-					for (var k : _pNames) {
-						if (_properties.containsKey(k))
-							properties2.put(k, _properties.get(k));
-						else
-							_hiddenProperties.put(k, _properties.get(k));
-					}
-					_properties = properties2;
-				}
-
-			} catch (BeanRuntimeException e) {
-				throw e;
-			} catch (Exception e) {
-				notABeanReason = "Exception:  " + getStackTrace(e);
-			}
-		}
-	}
 
 	/**
 	 * Possible property method types.
@@ -945,25 +609,343 @@ public class BeanMeta<T> {
 		this.classMeta = classMeta;
 		this.ctx = classMeta.getBeanContext();
 		this.c = classMeta.inner();
-
-		Builder<T> b = new Builder<>(classMeta, classMeta.getBeanContext(), beanFilter, pNames, implClassConstructor);
-		b.init(this);
-		notABeanReason = b.notABeanReason;
-
 		this.beanFilter = beanFilter;
-		properties = u(b._properties);
-		propertyArray = properties == null ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.class);
-		hiddenProperties = u(b._hiddenProperties);
-		getterProps = u(b._getterProps);
-		setterProps = u(b._setterProps);
-		dynaProperty = b._dynaProperty;
-		constructor = b._constructor;
-		constructorArgs = b._constructorArgs;
-		beanRegistry = b._beanRegistry;
-		typePropertyName = b._typePropertyName;
-		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
-		sortProperties = b._sortProperties;
-		fluentSetters = b._fluentSetters;
+
+		// Local variables for initialization
+		var ap = ctx.getAnnotationProvider();
+		var c = classMeta.inner();
+		var ci = classMeta;
+		String notABeanReason = null;
+		var properties = Value.<Map<String,BeanPropertyMeta>>empty();
+		Map<String,BeanPropertyMeta> hiddenProperties = map();
+		Map<Method,String> getterProps = map();
+		Map<Method,String> setterProps = map();
+		var dynaProperty = Value.<BeanPropertyMeta>empty();
+		var constructor = Value.<ConstructorInfo>empty();
+		var constructorArgs = Value.<String[]>of(new String[0]);
+		var propertyNamer = Value.<PropertyNamer>empty();
+		BeanRegistry beanRegistry = null;
+		String typePropertyName = null;
+		boolean sortProperties = false;
+		boolean fluentSetters = false;
+
+		try {
+			var conVis = ctx.getBeanConstructorVisibility();
+			var mVis = ctx.getBeanMethodVisibility();
+			var fVis = ctx.getBeanFieldVisibility();
+
+			List<Class<?>> bdClasses = list();
+			if (nn(beanFilter) && nn(beanFilter.getBeanDictionary()))
+				addAll(bdClasses, beanFilter.getBeanDictionary());
+
+			var typeName = Value.<String>empty();
+			classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
+			if (typeName.isPresent())
+				bdClasses.add(classMeta.inner());
+			beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
+
+			var typePropertyNameValue = Value.<String>empty();
+			classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typePropertyName()), x -> typePropertyNameValue.set(x.typePropertyName()));
+			typePropertyName = typePropertyNameValue.orElseGet(() -> ctx.getBeanTypePropertyName());
+
+			fluentSetters = (ctx.isFindFluentSetters() || (nn(beanFilter) && beanFilter.isFluentSetters()));
+
+			// If @Bean.interfaceClass is specified on the parent class, then we want
+			// to use the properties defined on that class, not the subclass.
+			var c2 = (nn(beanFilter) && nn(beanFilter.getInterfaceClass()) ? beanFilter.getInterfaceClass() : c);
+
+			var stopClass = (nn(beanFilter) ? beanFilter.getStopClass() : Object.class);
+			if (stopClass == null)
+				stopClass = Object.class;
+
+			Map<String,BeanPropertyMeta.Builder> normalProps = map();  // NOAI
+
+			var hasBean = ap.has(Bean.class, ci);
+
+			// Look for @Beanc constructor on public constructors.
+			ci.getPublicConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
+				if (constructor.isPresent())
+					throw bex(c, "Multiple instances of '@Beanc' found.");
+				constructor.set(x);
+				constructorArgs.set(new String[0]);
+				ap.find(Beanc.class, x).stream().map(x2 -> x2.inner().properties()).filter(StringUtils::isNotBlank).findFirst().ifPresent(z -> constructorArgs.set(splita(z)));
+				if (! x.hasNumParameters(constructorArgs.get().length)) {
+					if (constructorArgs.get().length != 0)
+						throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
+					constructorArgs.set(new String[x.getParameterCount()]);
+					var i = IntegerValue.create();
+					x.getParameters().forEach(pi -> {
+						var pn = pi.getName();
+						if (pn == null)
+							throw bex(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
+						constructorArgs.get()[i.getAndIncrement()] = pn;
+					});
+				}
+				constructor.get().setAccessible();
+			});
+
+			// Look for @Beanc on all other constructors.
+			if (! constructor.isPresent()) {
+				ci.getDeclaredConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
+					if (constructor.isPresent())
+						throw bex(c, "Multiple instances of '@Beanc' found.");
+					constructor.set(x);
+					constructorArgs.set(new String[0]);
+					ap.find(Beanc.class, x).stream().map(x2 -> x2.inner().properties()).filter(Utils::isNotEmpty).findFirst().ifPresent(z -> constructorArgs.set(splita(z)));
+					if (! x.hasNumParameters(constructorArgs.get().length)) {
+						if (constructorArgs.get().length != 0)
+							throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
+						constructorArgs.set(new String[x.getParameterCount()]);
+						var i = IntegerValue.create();
+						x.getParameters().forEach(y -> {
+							var pn = y.getName();
+							if (pn == null)
+								throw bex(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
+							constructorArgs.get()[i.getAndIncrement()] = pn;
+						});
+					}
+					constructor.get().setAccessible();
+				});
+			}
+
+			// If this is an interface, look for impl classes defined in the context.
+			if (! constructor.isPresent())
+				constructor.set(implClassConstructor);
+
+			if (! constructor.isPresent())
+				constructor.set(ci.getNoArgConstructor(hasBean ? Visibility.PRIVATE : conVis).orElse(null));
+
+			if (! constructor.isPresent() && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
+				notABeanReason = "Class does not have the required no-arg constructor";
+
+			if (constructor.isPresent())
+				constructor.get().setAccessible();
+
+			// Explicitly defined property names in @Bean annotation.
+			Set<String> fixedBeanProps = set();
+			Set<String> bpi = set();
+			Set<String> bpx = set();
+			Set<String> bpro = set();
+			Set<String> bpwo = set();
+
+			Set<String> filterProps = set();  // Names of properties defined in @Bean(properties)
+
+			if (nn(beanFilter)) {
+
+				var bfbpi = beanFilter.getProperties();
+
+				filterProps.addAll(bfbpi);
+
+				// Get the 'properties' attribute if specified.
+				if (bpi.isEmpty())
+					fixedBeanProps.addAll(bfbpi);
+
+				if (nn(beanFilter.getPropertyNamer()))
+					propertyNamer.set(beanFilter.getPropertyNamer());
+
+				bpro.addAll(beanFilter.getReadOnlyProperties());
+				bpwo.addAll(beanFilter.getWriteOnlyProperties());
+			}
+
+			fixedBeanProps.addAll(bpi);
+
+			if (! propertyNamer.isPresent())
+				propertyNamer.set(ctx.getPropertyNamer());
+
+			// First populate the properties with those specified in the bean annotation to
+			// ensure that ordering first.
+			fixedBeanProps.forEach(x -> normalProps.put(x, BeanPropertyMeta.builder(this, x)));
+
+			if (ctx.isUseJavaBeanIntrospector()) {
+				var bi = (BeanInfo)null;
+				if (! c2.isInterface())
+					bi = Introspector.getBeanInfo(c2, stopClass);
+				else
+					bi = Introspector.getBeanInfo(c2, null);
+				if (nn(bi)) {
+					for (var pd : bi.getPropertyDescriptors()) {
+						var name = pd.getName();
+						if (! normalProps.containsKey(name))
+							normalProps.put(name, BeanPropertyMeta.builder(this, name));
+						normalProps.get(name).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
+					}
+				}
+
+			} else /* Use 'better' introspection */ {
+
+				findBeanFields(ctx, c2, stopClass, fVis).forEach(x -> {
+					var name = ap.find(info(x)).stream().filter(x2 -> x2.isType(Beanp.class) || x2.isType(Name.class)).map(x2 -> name(x2)).filter(Objects::nonNull).findFirst().orElse(propertyNamer.get().getPropertyName(x.getName()));
+					if (nn(name)) {
+						if (! normalProps.containsKey(name))
+							normalProps.put(name, BeanPropertyMeta.builder(this, name));
+						normalProps.get(name).setField(x);
+					}
+				});
+
+				var bms = findBeanMethods(ctx, c2, stopClass, mVis, propertyNamer.get(), fluentSetters);
+
+				// Iterate through all the getters.
+				bms.forEach(x -> {
+					var pn = x.propertyName;
+					var m = x.method;
+					var mi = info(m);
+					if (! normalProps.containsKey(pn))
+						normalProps.put(pn, new BeanPropertyMeta.Builder(this, pn));
+					var bpm = normalProps.get(pn);
+					if (x.methodType == GETTER) {
+						// Two getters.  Pick the best.
+						if (nn(bpm.getter)) {
+
+							if (! ap.has(Beanp.class, mi) && ap.has(Beanp.class, info(bpm.getter)))
+								m = bpm.getter;  // @Beanp annotated method takes precedence.
+
+							else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get"))
+								m = bpm.getter;  // getX() overrides isX().
+						}
+						bpm.setGetter(m);
+					}
+				});
+
+				// Now iterate through all the setters.
+				bms.forEach(x -> {
+					if (x.methodType == SETTER) {
+						var bpm = normalProps.get(x.propertyName);
+						if (x.matchesPropertyType(bpm))
+							bpm.setSetter(x.method);
+					}
+				});
+
+				// Now iterate through all the extraKeys.
+				bms.forEach(x -> {
+					if (x.methodType == EXTRAKEYS) {
+						var bpm = normalProps.get(x.propertyName);
+						bpm.setExtraKeys(x.method);
+					}
+				});
+			}
+
+			var typeVarImpls = ClassUtils.findTypeVarImpls(c);
+
+			// Eliminate invalid properties, and set the contents of getterProps and setterProps.
+			for (Iterator<BeanPropertyMeta.Builder> i = normalProps.values().iterator(); i.hasNext();) {
+				var p = i.next();
+				try {
+					if (p.field == null)
+						p.setInnerField(findInnerBeanField(ctx, c, stopClass, p.name));
+
+					if (p.validate(ctx, beanRegistry, typeVarImpls, bpro, bpwo)) {
+
+						if (nn(p.getter))
+							getterProps.put(p.getter, p.name);
+
+						if (nn(p.setter))
+							setterProps.put(p.setter, p.name);
+
+					} else {
+						i.remove();
+					}
+				} catch (ClassNotFoundException e) {
+					throw bex(c, lm(e));
+				}
+			}
+
+			// Check for missing properties.
+			fixedBeanProps.forEach(x -> {
+				if (! normalProps.containsKey(x))
+					throw bex(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getNameSimple());
+			});
+
+			// Mark constructor arg properties.
+			for (var fp : constructorArgs.get()) {
+				var m = normalProps.get(fp);
+				if (m == null)
+					throw bex(c, "The property ''{0}'' was defined on the @Beanc(properties=X) annotation but was not found on the class definition.", fp);
+				m.setAsConstructorArg();
+			}
+
+			// Make sure at least one property was found.
+			if (beanFilter == null && ctx.isBeansRequireSomeProperties() && normalProps.isEmpty())
+				notABeanReason = "No properties detected on bean class";
+
+			sortProperties = (ctx.isSortProperties() || (nn(beanFilter) && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
+
+			properties.set(sortProperties ? sortedMap() : map());
+
+			normalProps.forEach((k, v) -> {
+				var pMeta = v.build();
+				if (pMeta.isDyna())
+					dynaProperty.set(pMeta);
+				properties.get().put(k, pMeta);
+			});
+
+			// If a beanFilter is defined, look for inclusion and exclusion lists.
+			if (nn(beanFilter)) {
+
+				// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
+				Set<String> bfbpi = beanFilter.getProperties();
+				Set<String> bfbpx = beanFilter.getExcludeProperties();
+
+				if (bpi.isEmpty() && ! bfbpi.isEmpty()) {
+					// Only include specified properties if BeanFilter.includeKeys is specified.
+					// Note that the order must match includeKeys.
+					Map<String,BeanPropertyMeta> properties2 = map();  // NOAI
+					bfbpi.forEach(x -> {
+						if (properties.get().containsKey(x))
+							properties2.put(x, properties.get().remove(x));
+					});
+					hiddenProperties.putAll(properties.get());
+					properties.set(properties2);
+				}
+				if (bpx.isEmpty() && ! bfbpx.isEmpty()) {
+					bfbpx.forEach(x -> hiddenProperties.put(x, properties.get().remove(x)));
+				}
+			}
+
+			if (! bpi.isEmpty()) {
+				Map<String,BeanPropertyMeta> properties2 = map();  // NOAI
+				bpi.forEach(x -> {
+					if (properties.get().containsKey(x))
+						properties2.put(x, properties.get().remove(x));
+				});
+				hiddenProperties.putAll(properties.get());
+				properties.set(properties2);
+			}
+
+			bpx.forEach(x -> hiddenProperties.put(x, properties.get().remove(x)));
+
+			if (nn(pNames)) {
+				Map<String,BeanPropertyMeta> properties2 = map();
+				for (var k : pNames) {
+					if (properties.get().containsKey(k))
+						properties2.put(k, properties.get().get(k));
+					else
+						hiddenProperties.put(k, properties.get().get(k));
+				}
+				properties.set(properties2);
+			}
+
+		} catch (BeanRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			notABeanReason = "Exception:  " + getStackTrace(e);
+		}
+
+		// Assign to final fields
+		this.notABeanReason = notABeanReason;
+		this.properties = u(properties.get());
+		this.propertyArray = this.properties == null ? EMPTY_PROPERTIES : array(this.properties.values(), BeanPropertyMeta.class);
+		this.hiddenProperties = u(hiddenProperties);
+		this.getterProps = u(getterProps);
+		this.setterProps = u(setterProps);
+		this.dynaProperty = dynaProperty.get();
+		this.constructor = constructor.get();
+		this.constructorArgs = constructorArgs.get();
+		this.beanRegistry = beanRegistry;
+		this.typePropertyName = typePropertyName;
+		this.sortProperties = sortProperties;
+		this.fluentSetters = fluentSetters;
+
+		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
 
 		if (sortProperties)
 			Arrays.sort(propertyArray);
