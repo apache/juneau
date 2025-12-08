@@ -138,7 +138,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private final ClassMeta<?>[] args;                                                                              // Arg types if this is an array of args.
 	private final BeanContext beanContext;                                                                          // The bean context that created this object.
-	private final Supplier<BeanFilter> beanFilter;
+	private final OptionalSupplier<BeanFilter> beanFilter;
 	private final Supplier<BuilderSwap<T,?>> builderSwap;                                                           // The builder swap associated with this bean (if it has one).
 	private final Categories cat;                                                                                   // The class category.
 	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap;                                         // Maps normal subclasses to ObjectSwaps.
@@ -156,7 +156,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final OptionalSupplier<InvocationHandler> proxyInvocationHandler;                                                              // The invocation handler for this class (if it has one).
 	private final ClassMeta<?> keyType;                                                                             // If MAP, the key class type.
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
-	private final Supplier<MarshalledFilter> marshalledFilter;
+	private final OptionalSupplier<MarshalledFilter> marshalledFilter;
 	private final Supplier<Property<T,Object>> nameProperty;                                            // The method to set the name on an object (if it has one).
 	private final OptionalSupplier<ConstructorInfo> noArgConstructor;                                                       // The no-arg constructor for this class (if it has one).
 	private final Supplier<Property<T,Object>> parentProperty;                                          // The method to set the parent on an object (if it has one).
@@ -167,12 +167,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final ClassMeta<?> valueType;                                                                           // If MAP, the value class type.
 	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta;
-
-	private Tuple2<BeanMeta<T>,String> findBeanMeta() {
-		if (! cat.isUnknown())
-			return Tuple2.of(null, "Known non-bean type");
-		return BeanMeta.create(this, beanFilter.get(), null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
-	}
 
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
@@ -344,9 +338,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.keyType = null;
 		this.valueType = null;
 		this.proxyInvocationHandler = null;
-//		this.beanMeta = null;
 		this.beanMeta = memoize(()->findBeanMeta());
-//		this.notABeanReason = null;
 		this.swaps = null;
 		this.stringMutater = null;
 		this.fromStringMethod = memoize(()->findFromStringMethod());
@@ -1376,6 +1368,12 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return BeanFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
 	}
 
+	private Tuple2<BeanMeta<T>,String> findBeanMeta() {
+		if (! cat.isUnknown())
+			return Tuple2.of(null, "Known non-bean type");
+		return BeanMeta.create(this, beanFilter.get(), null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
+	}
+
 	@SuppressWarnings("unchecked")
 	private BuilderSwap<T,?> findBuilderSwap() {
 		var bc = beanContext;
@@ -1400,10 +1398,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	@SuppressWarnings("unchecked")
 	private String findExample() {
 
-		var example = opt(beanFilter.get()).map(x -> x.getExample()).orElse(null);
+		var example = beanFilter.map(x -> x.getExample()).orElse(null);
 
 		if (example == null)
-			example = opt(marshalledFilter.get()).map(x -> x.getExample()).orElse(null);
+			example = marshalledFilter.map(x -> x.getExample()).orElse(null);
 
 		if (example == null && nn(beanContext))
 			example = beanContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::isNotEmpty).findFirst().orElse(null);
@@ -1481,10 +1479,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (is(Object.class))
 			return null;
 
-		var v = opt(beanFilter.get()).map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
+		var v = beanFilter.map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
 
 		if (v == null)
-			v = opt(marshalledFilter.get()).map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
+			v = marshalledFilter.map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
 
 		return (ClassInfoTyped<? extends T>)v;
 	}
