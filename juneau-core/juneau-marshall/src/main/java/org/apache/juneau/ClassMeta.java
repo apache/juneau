@@ -143,7 +143,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Supplier<BuilderSwap<T,?>> builderSwap;                      // The builder swap associated with this bean (if it has one).
 	private final Categories cat;                                              // The class category.
 	private final Cache<Class<?>,ObjectSwap<?,?>> childSwapMap;                // Maps normal subclasses to ObjectSwaps.
-	private final List<ObjectSwap<?,?>> childSwaps;                            // Any ObjectSwaps where the normal type is a subclass of this class.
+	private final Supplier<List<ObjectSwap<?,?>>> childSwaps;                  // Any ObjectSwaps where the normal type is a subclass of this class.
 	private final Cache<Class<?>,ObjectSwap<?,?>> childUnswapMap;              // Maps swap subclasses to ObjectSwaps.
 	private final Supplier<String> dictionaryName;                             // The dictionary name of this class if it has one.
 	private final Supplier<ClassMeta<?>> elementType;                          // If ARRAY or COLLECTION, the element class type.
@@ -258,8 +258,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			this.proxyInvocationHandler = ()->(nn(beanMeta.get().getA()) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta.get().getA()) : null;
 
-			var childSwapsArray = beanContext.findChildObjectSwaps(innerClass);
-			this.childSwaps = childSwapsArray == null ? null : Arrays.asList(childSwapsArray);
+			this.childSwaps = memoize(()->findChildSwaps());
 			this.childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
 			this.childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
 
@@ -269,15 +268,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	protected ObjectSwap<?,?> findSwap(Class<?> c) {
-		if (isEmpty(childSwaps))
-			return null;
-		return childSwaps.stream().filter(x -> x.getNormalClass().isParentOf(c)).findFirst().orElse(null);
+		return childSwaps.get().stream().filter(x -> x.getNormalClass().isParentOf(c)).findFirst().orElse(null);
 	}
 
 	protected ObjectSwap<?,?> findUnswap(Class<?> c) {
-		if (isEmpty(childSwaps))
-			return null;
-		return childSwaps.stream().filter(x -> x.getSwapClass().isParentOf(c)).findFirst().orElse(null);
+		return childSwaps.get().stream().filter(x -> x.getSwapClass().isParentOf(c)).findFirst().orElse(null);
 	}
 
 
@@ -288,7 +283,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	ClassMeta(List<ClassMeta<?>> args) {
 		super((Class<T>)Object[].class);
 		this.args = args;
-		this.childSwaps = null;
+		this.childSwaps = memoize(()->findChildSwaps());
 		this.childSwapMap = null;
 		this.childUnswapMap = null;
 		this.cat = new Categories().set(ARGS);
@@ -1404,6 +1399,20 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return u(list);
 	}
 
+	private List<ObjectSwap<?,?>> findChildSwaps() {
+		if (beanContext == null)
+			return l();
+		var swapArray = beanContext.getSwaps();
+		if (swapArray == null || swapArray.length == 0)
+			return l();
+		var list = new ArrayList<ObjectSwap<?,?>>();
+		var innerClass = inner();
+		for (var f : swapArray)
+			if (f.getNormalClass().isChildOf(innerClass))
+				list.add(f);
+		return u(list);
+	}
+
 	private BidiMap<Object,String> findEnumValues() {
 		if (! isEnum())
 			return null;
@@ -1734,7 +1743,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return <jk>true</jk> if this class or any child classes has a {@link ObjectSwap} associated with it.
 	 */
 	protected boolean hasChildSwaps() {
-		return childSwaps != null && ! childSwaps.isEmpty();
+		return ! childSwaps.get().isEmpty();
 	}
 
 	/**

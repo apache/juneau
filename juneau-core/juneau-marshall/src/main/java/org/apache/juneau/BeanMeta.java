@@ -34,6 +34,7 @@ import java.util.function.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.function.OptionalSupplier;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.commons.utils.*;
@@ -789,6 +790,8 @@ public class BeanMeta<T> {
 
 	private final Supplier<String> dictionaryName2;                   // The @Bean(typeName) annotation defined on this bean class.
 
+	private final OptionalSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
+
 	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
 
 	final BeanRegistry beanRegistry;
@@ -869,6 +872,7 @@ public class BeanMeta<T> {
 		if (sortProperties)
 			Arrays.sort(propertyArray);
 		dictionaryName2 = memoize(()->findDictionaryName());
+		beanProxyInvocationHandler = memoize(()->ctx.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
 	}
 
 	@Override /* Overridden from Object */

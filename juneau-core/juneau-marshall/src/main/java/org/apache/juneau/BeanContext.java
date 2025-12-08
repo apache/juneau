@@ -4039,25 +4039,6 @@ public class BeanContext extends Context {
 		return defaultSession.toBeanMap(object);
 	}
 
-	/**
-	 * Checks whether a class has a {@link ObjectSwap} associated with it in this bean context.
-	 *
-	 * @param c The class to check.
-	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link ObjectSwap} associated with it.
-	 */
-	final ObjectSwap[] findChildObjectSwaps(Class<?> c) {
-		if (c == null || swapArray.length == 0)
-			return null;
-		var l = (List<ObjectSwap>)null;
-		for (var f : swapArray) {
-			if (f.getNormalClass().isChildOf(c)) {
-				if (l == null)
-					l = list();
-				l.add(f);
-			}
-		}
-		return l == null ? null : l.toArray(new ObjectSwap[l.size()]);
-	}
 
 	/*
 	 * Resolves the 'genericized' class meta at the specified position in the ClassMeta array.
