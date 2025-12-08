@@ -155,7 +155,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final OptionalSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
 	private final OptionalSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
 	private final OptionalSupplier<InvocationHandler> proxyInvocationHandler;  // The invocation handler for this class (if it has one).
-	private final ClassMeta<?> keyType;                                        // If MAP, the key class type.
+	private final Supplier<Tuple2<ClassMeta<?>,ClassMeta<?>>> keyValueTypes;   // Key and value types for MAP types.
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 	private final OptionalSupplier<MarshalledFilter> marshalledFilter;
 	private final Supplier<Property<T,Object>> nameProperty;                   // The method to set the name on an object (if it has one).
@@ -166,7 +166,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final OptionalSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final ObjectSwap<T,?>[] swaps;                                     // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
-	private final ClassMeta<?> valueType;                                      // If MAP, the value class type.
 	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta;
 
 	/**
@@ -260,21 +259,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			implClass = memoize(()->findImplClass());
 
 			var _elementType = (ClassMeta<?>)null;
-			var _keyType = (ClassMeta<?>)null;
-			var _valueType = (ClassMeta<?>)null;
-
 			if (cat.is(ARRAY)) {
 				_elementType = beanContext.getClassMeta(inner().getComponentType(), false);
-			} else if (cat.is(MAP) && ! cat.is(BEANMAP)) {
-				// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
-				var parameters = beanContext.findParameters(inner(), inner());
-				if (nn(parameters) && parameters.length == 2) {
-					_keyType = parameters[0];
-					_valueType = parameters[1];
-				} else {
-					_keyType = beanContext.getClassMeta(Object.class);
-					_valueType = beanContext.getClassMeta(Object.class);
-				}
 			} else if (cat.is(COLLECTION) || is(Optional.class)) {
 				// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
 				var parameters = beanContext.findParameters(inner(), inner());
@@ -284,11 +270,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 					_elementType = beanContext.getClassMeta(Object.class);
 				}
 			}
+			this.elementType = _elementType;
+			this.keyValueTypes = memoize(()->findKeyValueTypes());
 
 			this.beanMeta = memoize(()->findBeanMeta());
-			this.keyType = _keyType;
-			this.valueType = _valueType;
-			this.elementType = _elementType;
 			this.enumValues = memoize(()->findEnumValues());
 			this.dictionaryName = memoize(()->findBeanDictionaryName());
 
@@ -318,6 +303,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			this.childSwaps = childSwaps == null ? null : Arrays.asList(childSwaps);
 			this.childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
 			this.childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
+
 			this.args = null;
 			this.stringMutater = Mutaters.get(String.class, inner());
 		}
@@ -349,8 +335,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.cat = new Categories().set(ARGS);
 		this.beanContext = null;
 		this.elementType = null;
-		this.keyType = null;
-		this.valueType = null;
+		this.keyValueTypes = memoize(()->findKeyValueTypes());
 		this.proxyInvocationHandler = null;
 		this.beanMeta = memoize(()->findBeanMeta());
 		this.swaps = null;
@@ -386,8 +371,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.fromStringMethod = mainType.fromStringMethod;
 		this.beanContext = mainType.beanContext;
 		this.elementType = elementType;
-		this.keyType = keyType;
-		this.valueType = valueType;
+		this.keyValueTypes = (keyType != null || valueType != null) ? memoize(()->Tuple2.of(keyType, valueType)) : mainType.keyValueTypes;
 		this.proxyInvocationHandler = mainType.proxyInvocationHandler;
 		this.beanMeta = mainType.beanMeta;
 		this.swaps = mainType.swaps;
@@ -680,7 +664,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The key class type, or <jk>null</jk> if this class is not a Map.
 	 */
-	public ClassMeta<?> getKeyType() { return keyType; }
+	public ClassMeta<?> getKeyType() {
+		return keyValueTypes.get().getA();
+	}
 
 	/**
 	 * Returns the method or field annotated with {@link NameProperty @NameProperty}.
@@ -861,7 +847,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The value class type, or <jk>null</jk> if this class is not a Map.
 	 */
-	public ClassMeta<?> getValueType() { return valueType; }
+	public ClassMeta<?> getValueType() {
+		return keyValueTypes.get().getB();
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.
@@ -1388,6 +1376,18 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return BeanMeta.create(this, beanFilter.get(), null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
 	}
 
+	private Tuple2<ClassMeta<?>,ClassMeta<?>> findKeyValueTypes() {
+		if (cat.is(MAP) && ! cat.is(BEANMAP)) {
+			// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
+			var parameters = beanContext.findParameters(inner(), inner());
+			if (nn(parameters) && parameters.length == 2) {
+				return Tuple2.of(parameters[0], parameters[1]);
+			}
+			return Tuple2.of(beanContext.getClassMeta(Object.class), beanContext.getClassMeta(Object.class));
+		}
+		return Tuple2.of(null,null);
+	}
+
 	@SuppressWarnings("unchecked")
 	private BuilderSwap<T,?> findBuilderSwap() {
 		var bc = beanContext;
@@ -1746,8 +1746,14 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return elementType.toString(sb, simple).append('[').append(']');
 		if (cat.is(BEANMAP))
 			return sb.append(cn(BeanMap.class)).append('<').append(n).append('>');
-		if (cat.is(MAP))
-			return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<" + keyType.toString(simple) + "," + valueType.toString(simple) + ">");
+		if (cat.is(MAP)) {
+			var kvTypes = keyValueTypes.get();
+			var kt = kvTypes.getA();
+			var vt = kvTypes.getB();
+			if (kt != null && vt != null && kt.isObject() && vt.isObject())
+				return sb.append(n);
+			return sb.append(n).append('<').append(kt == null ? "?" : kt.toString(simple)).append(',').append(vt == null ? "?" : vt.toString(simple)).append('>');
+		}
 		if (cat.is(COLLECTION) || is(Optional.class))
 			return sb.append(n).append(elementType.isObject() ? "" : "<" + elementType.toString(simple) + ">");
 		return sb.append(n);
