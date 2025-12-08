@@ -4136,22 +4136,22 @@ public class BeanContext extends Context {
 	 * Determines whether the specified class is ignored as a bean class based on the various exclusion parameters
 	 * specified on this context class.
 	 *
-	 * @param c The class type being tested.
+	 * @param ci The class info being tested.
 	 * @return <jk>true</jk> if the specified class matches any of the exclusion parameters.
 	 */
-	protected final boolean isNotABean(Class<?> c) {
-		if (c.isArray() || c.isPrimitive() || c.isEnum() || c.isAnnotation())
+	protected final boolean isNotABean(ClassInfo ci) {
+		if (ci.isArray() || ci.isPrimitive() || ci.isEnum() || ci.isAnnotation())
 			return true;
-		Package p = c.getPackage();
+		var p = ci.getPackage();
 		if (nn(p)) {
+			var pn = p.getName();
 			for (var p2 : notBeanPackageNames)
-				if (p.getName().equals(p2))
+				if (pn.equals(p2))
 					return true;
 			for (var p2 : notBeanPackagePrefixes)
-				if (p.getName().startsWith(p2))
+				if (pn.startsWith(p2))
 					return true;
 		}
-		var ci = info(c);
 		for (var exclude : notBeanClassesArray)
 			if (ci.isChildOf(exclude))
 				return true;

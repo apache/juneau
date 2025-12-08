@@ -135,12 +135,32 @@ public class BeanMeta<T> {
 	 */
 	public static <T> BeanMetaValue<T> create(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ConstructorInfo implClassConstructor) {
 		try {
+			var bc = cm.getBeanContext();
+			var ap = bc.getAnnotationProvider();
+
+			// Sanity checks first.
+			if (bc.isNotABean(cm))
+				return notABean("Class matches exclude-class list");
+
+			if (bf == null && bc.isBeansRequireSerializable() && ! cm.isChildOf(Serializable.class))
+				return notABean("Class is not serializable");
+
+			if (ap.has(BeanIgnore.class, cm))
+				return notABean("Class is annotated with @BeanIgnore");
+
+			if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! ap.has(Bean.class, cm))
+				return notABean("Class is not public");
+
 			var bm = new BeanMeta<>(cm, bf, pNames, implClassConstructor);
 			var nabr = bm.notABeanReason;
 			return new BeanMetaValue<>(nabr == null ? bm : null, nabr);
 		} catch (RuntimeException e) {
 			return new BeanMetaValue<>(null, e.getMessage());
 		}
+	}
+
+	private static <T> BeanMetaValue<T> notABean(String reason) {
+		return new BeanMetaValue<>(null, reason);
 	}
 
 	/*
@@ -253,7 +273,6 @@ public class BeanMeta<T> {
 
 			try {
 				var conVis = ctx.getBeanConstructorVisibility();
-				var cVis = ctx.getBeanClassVisibility();
 				var mVis = ctx.getBeanMethodVisibility();
 				var fVis = ctx.getBeanFieldVisibility();
 
@@ -284,21 +303,6 @@ public class BeanMeta<T> {
 				Map<String,BeanPropertyMeta.Builder> normalProps = map();  // NOAI
 
 				var hasBean = ap.has(Bean.class, ci);
-				var hasBeanIgnore = ap.has(BeanIgnore.class, ci);
-
-				/// See if this class matches one the patterns in the exclude-class list.
-				if (ctx.isNotABean(c))
-					return "Class matches exclude-class list";
-
-				if (! hasBean && ! (cVis.isVisible(c.getModifiers()) || c.isAnonymousClass()))
-					return "Class is not public";
-
-				if (hasBeanIgnore)
-					return "Class is annotated with @BeanIgnore";
-
-				// Make sure it's serializable.
-				if (beanFilter == null && ctx.isBeansRequireSerializable() && ! ci.isChildOf(Serializable.class))
-					return "Class is not serializable";
 
 				// Look for @Beanc constructor on public constructors.
 				ci.getPublicConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {

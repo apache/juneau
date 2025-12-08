@@ -182,6 +182,62 @@ public class ThrowableUtils {
 	}
 
 	/**
+	 * Prints a stack trace with a maximum depth limit.
+	 *
+	 * <p>
+	 * This method is useful for {@link StackOverflowError} situations where printing the full stack trace
+	 * can cause additional errors due to stack exhaustion. The stack trace will be limited to the specified
+	 * maximum number of elements.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>try</jk> {
+	 * 		<jc>// Some code that might cause StackOverflowError</jc>
+	 * 	} <jk>catch</jk> (StackOverflowError <jv>e</jv>) {
+	 * 		<jc>// Print only first 100 stack trace elements</jc>
+	 * 		ThrowableUtils.<jsm>printStackTrace</jsm>(<jv>e</jv>, System.err, 100);
+	 * 	}
+	 * </p>
+	 *
+	 * @param t The throwable to print the stack trace for.
+	 * @param pw The print writer to write to.
+	 * @param maxDepth The maximum number of stack trace elements to print. If <jk>null</jk> or negative, prints all elements.
+	 */
+	public static void printStackTrace(Throwable t, PrintWriter pw, Integer maxDepth) {
+		try {
+			pw.println(t);
+			var stackTrace = t.getStackTrace();
+			var depth = maxDepth != null && maxDepth > 0 ? Math.min(maxDepth, stackTrace.length) : stackTrace.length;
+			for (var i = 0; i < depth; i++) {
+				pw.println("\tat " + stackTrace[i]);
+			}
+			if (maxDepth != null && maxDepth > 0 && stackTrace.length > maxDepth) {
+				pw.println("\t... (" + (stackTrace.length - maxDepth) + " more)");
+			}
+			var cause = t.getCause();
+			if (cause != null && cause != t) {
+				pw.print("Caused by: ");
+				printStackTrace(cause, pw, maxDepth);
+			}
+		} catch (Exception e) {
+			pw.println("Error printing stack trace: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Prints a stack trace with a maximum depth limit to standard error.
+	 *
+	 * <p>
+	 * Same as {@link #printStackTrace(Throwable, PrintWriter, Integer)} but writes to {@link System#err}.
+	 *
+	 * @param t The throwable to print the stack trace for.
+	 * @param maxDepth The maximum number of stack trace elements to print. If <jk>null</jk> or negative, prints all elements.
+	 */
+	public static void printStackTrace(Throwable t, Integer maxDepth) {
+		printStackTrace(t, new PrintWriter(System.err, true), maxDepth);
+	}
+
+	/**
 	 * Same as {@link Throwable#getCause()} but searches the throwable chain for an exception of the specified type.
 	 *
 	 * @param c The throwable type to search for.

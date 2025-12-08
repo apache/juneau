@@ -31,6 +31,7 @@ import org.apache.juneau.json.*;
 /**
  * Root class for all Swagger beans.
  */
+@Bean
 public abstract class OpenApiElement {
 
 	private boolean strict;
