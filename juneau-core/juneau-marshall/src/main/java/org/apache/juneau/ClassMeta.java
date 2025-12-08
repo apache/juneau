@@ -171,8 +171,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final ObjectSwap<T,?>[] swaps;                                                                          // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final ClassMeta<?> valueType;                                                                           // If MAP, the value class type.
-
-	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta2;
+	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta;
 
 	private Tuple2<BeanMeta<T>,String> findBeanMeta() {
 		if (! cat.isUnknown())
@@ -296,7 +295,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				}
 			}
 
-			this.beanMeta2 = memoize(()->findBeanMeta());
+			this.beanMeta = memoize(()->findBeanMeta());
 			this.keyType = _keyType;
 			this.valueType = _valueType;
 			this.elementType = _elementType;
@@ -324,7 +323,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			this.swaps = _swaps.isEmpty() ? null : _swaps.toArray(new ObjectSwap[_swaps.size()]);
 
-			this.proxyInvocationHandler = ()->(nn(beanMeta2.get().getA()) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta2.get().getA()) : null;
+			this.proxyInvocationHandler = ()->(nn(beanMeta.get().getA()) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta.get().getA()) : null;
 
 			this.childSwaps = childSwaps;
 			this.childUnswapMap = childSwaps == null ? null : new ConcurrentHashMap<>();
@@ -351,7 +350,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.valueType = null;
 		this.proxyInvocationHandler = null;
 //		this.beanMeta = null;
-		this.beanMeta2 = memoize(()->findBeanMeta());
+		this.beanMeta = memoize(()->findBeanMeta());
 //		this.notABeanReason = null;
 		this.swaps = null;
 		this.stringMutater = null;
@@ -389,9 +388,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.keyType = keyType;
 		this.valueType = valueType;
 		this.proxyInvocationHandler = mainType.proxyInvocationHandler;
-//		this.beanMeta = mainType.beanMeta;
-		this.beanMeta2 = mainType.beanMeta2;
-//		this.notABeanReason = mainType.notABeanReason;
+		this.beanMeta = mainType.beanMeta;
 		this.swaps = mainType.swaps;
 		this.exampleMethod = mainType.exampleMethod;
 		this.args = null;
@@ -533,7 +530,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	this class.
 	 */
 	public BeanMeta<T> getBeanMeta() {
-		return beanMeta2.get().getA();
+		return beanMeta.get().getA();
 	}
 
 	/**
@@ -718,7 +715,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The reason why this class is not a bean, or <jk>null</jk> if it is a bean.
 	 */
 	public synchronized String getNotABeanReason() {
-		return beanMeta2.get().getB();
+		return beanMeta.get().getB();
 	}
 
 	/**
