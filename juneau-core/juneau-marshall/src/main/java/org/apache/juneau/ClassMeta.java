@@ -154,7 +154,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
 	private final OptionalSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
 	private final OptionalSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
-	private final OptionalSupplier<InvocationHandler> proxyInvocationHandler;  // The invocation handler for this class (if it has one).
 	private final Supplier<Tuple2<ClassMeta<?>,ClassMeta<?>>> keyValueTypes;   // Key and value types for MAP types.
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 	private final OptionalSupplier<MarshalledFilter> marshalledFilter;
@@ -166,7 +165,53 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final OptionalSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
-	private final Supplier<Tuple2<BeanMeta<T>,String>> beanMeta;
+	private final OptionalSupplier<Tuple2<BeanMeta<T>,String>> beanMeta;
+
+	private static class KeyValueTypes extends Tuple2<ClassMeta<?>,ClassMeta<?>> {
+
+		public KeyValueTypes(ClassMeta<?> a, ClassMeta<?> b) {
+			super(a, b);
+		}
+
+		public ClassMeta<?> getKeyType() {
+			return getA();
+		}
+
+		public Optional<ClassMeta<?>> optKeyType() {
+			return optA();
+		}
+
+		public ClassMeta<?> getValueType() {
+			return getB();
+		}
+
+		public Optional<ClassMeta<?>> optValueType() {
+			return optB();
+		}
+	}
+
+	private static class BeanMetaValue<T> extends Tuple2<BeanMeta<T>,String> {
+
+		public BeanMetaValue(BeanMeta<T> a, String b) {
+			super(a, b);
+		}
+
+		public BeanMeta<T> getBeanMeta() {
+			return getA();
+		}
+
+		public Optional<BeanMeta<T>> optBeanMeta() {
+			return optA();
+		}
+
+		public String getNoArgReason() {
+			return getB();
+		}
+
+		public Optional<String> optNoArgReason() {
+			return optB();
+		}
+	}
 
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
@@ -256,8 +301,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			this.swaps = memoize(()->findSwaps());
 
-			this.proxyInvocationHandler = ()->(nn(beanMeta.get().getA()) && beanContext.isUseInterfaceProxies() && isInterface()) ? new BeanProxyInvocationHandler<>(beanMeta.get().getA()) : null;
-
 			this.childSwaps = memoize(()->findChildSwaps());
 			this.childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
 			this.childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
@@ -290,7 +333,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.beanContext = null;
 		this.elementType = memoize(()->findElementType());
 		this.keyValueTypes = memoize(()->findKeyValueTypes());
-		this.proxyInvocationHandler = null;
 		this.beanMeta = memoize(()->findBeanMeta());
 		this.swaps = memoize(()->findSwaps());
 		this.stringMutater = null;
@@ -326,7 +368,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.beanContext = mainType.beanContext;
 		this.elementType = elementType != null ? memoize(()->elementType) : mainType.elementType;
 		this.keyValueTypes = (keyType != null || valueType != null) ? memoize(()->Tuple2.of(keyType, valueType)) : mainType.keyValueTypes;
-		this.proxyInvocationHandler = mainType.proxyInvocationHandler;
 		this.beanMeta = mainType.beanMeta;
 		this.swaps = mainType.swaps;
 		this.exampleMethod = mainType.exampleMethod;
@@ -373,7 +414,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public boolean canCreateNewInstance() {
 		if (isMemberClass() && isNotStatic())
 			return false;
-		if (noArgConstructor.isPresent() || proxyInvocationHandler.isPresent() || (isArray() && elementType.get().canCreateNewInstance()))
+		var bm = getBeanMeta();
+		if (noArgConstructor.isPresent() || (bm != null && bm.getBeanProxyInvocationHandler() != null) || (isArray() && elementType.get().canCreateNewInstance()))
 			return true;
 		return false;
 	}
@@ -716,7 +758,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The interface proxy invocation handler, or <jk>null</jk> if it does not exist.
 	 */
-	public InvocationHandler getProxyInvocationHandler() { return proxyInvocationHandler.get(); }
+	public InvocationHandler getProxyInvocationHandler() {
+		var bm = getBeanMeta();
+		return bm == null ? null : bm.getBeanProxyInvocationHandler();
+	}
 
 	/**
 	 * Returns the transform for this class for creating instances from a Reader.

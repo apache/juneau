@@ -18,6 +18,8 @@ package org.apache.juneau.commons.function;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.Optional;
+
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -131,6 +133,51 @@ public class Tuple5<A,B,C,D,E> {
 	 * @return The fifth object in this tuple.
 	 */
 	public E getE() { return e; }
+
+	/**
+	 * Returns the first object in this tuple wrapped in an {@link Optional}.
+	 *
+	 * @return The first object wrapped in an Optional, or Optional.empty() if the value is null.
+	 */
+	public Optional<A> optA() {
+		return Optional.ofNullable(a);
+	}
+
+	/**
+	 * Returns the second object in this tuple wrapped in an {@link Optional}.
+	 *
+	 * @return The second object wrapped in an Optional, or Optional.empty() if the value is null.
+	 */
+	public Optional<B> optB() {
+		return Optional.ofNullable(b);
+	}
+
+	/**
+	 * Returns the third object in this tuple wrapped in an {@link Optional}.
+	 *
+	 * @return The third object wrapped in an Optional, or Optional.empty() if the value is null.
+	 */
+	public Optional<C> optC() {
+		return Optional.ofNullable(c);
+	}
+
+	/**
+	 * Returns the fourth object in this tuple wrapped in an {@link Optional}.
+	 *
+	 * @return The fourth object wrapped in an Optional, or Optional.empty() if the value is null.
+	 */
+	public Optional<D> optD() {
+		return Optional.ofNullable(d);
+	}
+
+	/**
+	 * Returns the fifth object in this tuple wrapped in an {@link Optional}.
+	 *
+	 * @return The fifth object wrapped in an Optional, or Optional.empty() if the value is null.
+	 */
+	public Optional<E> optE() {
+		return Optional.ofNullable(e);
+	}
 
 	@Override /* Overridden from Object */
 	public int hashCode() {

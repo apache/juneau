@@ -18,6 +18,8 @@ package org.apache.juneau.commons.function;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.Optional;
+
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -130,6 +132,24 @@ public class Tuple1<A> {
 	 * @return The value contained in this tuple.
 	 */
 	public A getA() { return a; }
+
+	/**
+	 * Returns the value contained in this tuple wrapped in an {@link Optional}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Tuple1&lt;String&gt; <jv>tuple</jv> = Tuple1.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Optional&lt;String&gt; <jv>value</jv> = <jv>tuple</jv>.optA();  <jc>// Returns Optional.of("hello")</jc>
+	 *
+	 * 	Tuple1&lt;String&gt; <jv>tuple2</jv> = Tuple1.<jsm>of</jsm>(<jk>null</jk>);
+	 * 	Optional&lt;String&gt; <jv>value2</jv> = <jv>tuple2</jv>.optA();  <jc>// Returns Optional.empty()</jc>
+	 * </p>
+	 *
+	 * @return The value wrapped in an Optional, or Optional.empty() if the value is null.
+	 */
+	public Optional<A> optA() {
+		return Optional.ofNullable(a);
+	}
 
 	@Override /* Overridden from Object */
 	public int hashCode() {

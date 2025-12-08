@@ -52,4 +52,63 @@ class Tuple4_Test extends TestBase {
 		assertNotEquals(x1, x6);
 		assertNotEquals(x1.hashCode(), x6.hashCode());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Optional methods tests.
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void a03_optA_withValue() {
+		var x = Tuple4.of("foo", 1, 2, 3);
+		var opt = x.optA();
+		assertTrue(opt.isPresent());
+		assertEquals("foo", opt.get());
+	}
+
+	@Test void a04_optA_withNull() {
+		var x = Tuple4.of(null, 1, 2, 3);
+		var opt = x.optA();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
+
+	@Test void a05_optB_withValue() {
+		var x = Tuple4.of("foo", 1, 2, 3);
+		var opt = x.optB();
+		assertTrue(opt.isPresent());
+		assertEquals(1, opt.get());
+	}
+
+	@Test void a06_optB_withNull() {
+		var x = Tuple4.of("foo", null, 2, 3);
+		var opt = x.optB();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
+
+	@Test void a07_optC_withValue() {
+		var x = Tuple4.of("foo", 1, 2, 3);
+		var opt = x.optC();
+		assertTrue(opt.isPresent());
+		assertEquals(2, opt.get());
+	}
+
+	@Test void a08_optC_withNull() {
+		var x = Tuple4.of("foo", 1, null, 3);
+		var opt = x.optC();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
+
+	@Test void a09_optD_withValue() {
+		var x = Tuple4.of("foo", 1, 2, 3);
+		var opt = x.optD();
+		assertTrue(opt.isPresent());
+		assertEquals(3, opt.get());
+	}
+
+	@Test void a10_optD_withNull() {
+		var x = Tuple4.of("foo", 1, 2, null);
+		var opt = x.optD();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
 }

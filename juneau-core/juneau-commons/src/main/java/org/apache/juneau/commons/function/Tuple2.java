@@ -18,6 +18,8 @@ package org.apache.juneau.commons.function;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.Optional;
+
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -151,6 +153,42 @@ public class Tuple2<A,B> {
 	 * @return The second value in this tuple.
 	 */
 	public B getB() { return b; }
+
+	/**
+	 * Returns the first value in this tuple wrapped in an {@link Optional}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Tuple2&lt;String,Integer&gt; <jv>tuple</jv> = Tuple2.<jsm>of</jsm>(<js>"hello"</js>, 42);
+	 * 	Optional&lt;String&gt; <jv>first</jv> = <jv>tuple</jv>.optA();  <jc>// Returns Optional.of("hello")</jc>
+	 *
+	 * 	Tuple2&lt;String,Integer&gt; <jv>tuple2</jv> = Tuple2.<jsm>of</jsm>(<jk>null</jk>, 42);
+	 * 	Optional&lt;String&gt; <jv>first2</jv> = <jv>tuple2</jv>.optA();  <jc>// Returns Optional.empty()</jc>
+	 * </p>
+	 *
+	 * @return The first value wrapped in an Optional, or Optional.empty() if the value is null.
+	 */
+	public Optional<A> optA() {
+		return Optional.ofNullable(a);
+	}
+
+	/**
+	 * Returns the second value in this tuple wrapped in an {@link Optional}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Tuple2&lt;String,Integer&gt; <jv>tuple</jv> = Tuple2.<jsm>of</jsm>(<js>"hello"</js>, 42);
+	 * 	Optional&lt;Integer&gt; <jv>second</jv> = <jv>tuple</jv>.optB();  <jc>// Returns Optional.of(42)</jc>
+	 *
+	 * 	Tuple2&lt;String,Integer&gt; <jv>tuple2</jv> = Tuple2.<jsm>of</jsm>(<js>"hello"</js>, <jk>null</jk>);
+	 * 	Optional&lt;Integer&gt; <jv>second2</jv> = <jv>tuple2</jv>.optB();  <jc>// Returns Optional.empty()</jc>
+	 * </p>
+	 *
+	 * @return The second value wrapped in an Optional, or Optional.empty() if the value is null.
+	 */
+	public Optional<B> optB() {
+		return Optional.ofNullable(b);
+	}
 
 	@Override /* Overridden from Object */
 	public int hashCode() {

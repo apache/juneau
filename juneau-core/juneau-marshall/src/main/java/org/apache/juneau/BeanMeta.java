@@ -792,6 +792,15 @@ public class BeanMeta<T> {
 
 	private final OptionalSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
 
+	/**
+	 * Returns the proxy invocation handler for this bean if it's an interface.
+	 *
+	 * @return The invocation handler, or <jk>null</jk> if this is not an interface or interface proxies are disabled.
+	 */
+	public InvocationHandler getBeanProxyInvocationHandler() {
+		return beanProxyInvocationHandler.get();
+	}
+
 	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
 
 	final BeanRegistry beanRegistry;

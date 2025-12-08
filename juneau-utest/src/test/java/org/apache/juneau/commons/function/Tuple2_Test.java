@@ -44,4 +44,35 @@ class Tuple2_Test extends TestBase {
 		assertNotEquals(x1, x4);
 		assertNotEquals(x1.hashCode(), x4.hashCode());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Optional methods tests.
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void a03_optA_withValue() {
+		var x = Tuple2.of("foo", 1);
+		var opt = x.optA();
+		assertTrue(opt.isPresent());
+		assertEquals("foo", opt.get());
+	}
+
+	@Test void a04_optA_withNull() {
+		var x = Tuple2.of(null, 1);
+		var opt = x.optA();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
+
+	@Test void a05_optB_withValue() {
+		var x = Tuple2.of("foo", 1);
+		var opt = x.optB();
+		assertTrue(opt.isPresent());
+		assertEquals(1, opt.get());
+	}
+
+	@Test void a06_optB_withNull() {
+		var x = Tuple2.of("foo", null);
+		var opt = x.optB();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
 }

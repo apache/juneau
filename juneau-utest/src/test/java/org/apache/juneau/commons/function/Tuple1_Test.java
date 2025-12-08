@@ -142,5 +142,22 @@ class Tuple1_Test extends TestBase {
 		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Optional methods tests.
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void a14_optA_withValue() {
+		var x = Tuple1.of("foo");
+		var opt = x.optA();
+		assertTrue(opt.isPresent());
+		assertEquals("foo", opt.get());
+	}
+
+	@Test void a15_optA_withNull() {
+		var x = Tuple1.of((String)null);
+		var opt = x.optA();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
 }
 

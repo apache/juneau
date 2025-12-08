@@ -56,4 +56,77 @@ class Tuple5_Test extends TestBase {
 		assertNotEquals(x1, x7);
 		assertNotEquals(x1.hashCode(), x7.hashCode());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Optional methods tests.
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void a03_optA_withValue() {
+		var x = Tuple5.of("foo", 1, 2, 3, 4);
+		var opt = x.optA();
+		assertTrue(opt.isPresent());
+		assertEquals("foo", opt.get());
+	}
+
+	@Test void a04_optA_withNull() {
+		var x = Tuple5.of(null, 1, 2, 3, 4);
+		var opt = x.optA();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
+
+	@Test void a05_optB_withValue() {
+		var x = Tuple5.of("foo", 1, 2, 3, 4);
+		var opt = x.optB();
+		assertTrue(opt.isPresent());
+		assertEquals(1, opt.get());
+	}
+
+	@Test void a06_optB_withNull() {
+		var x = Tuple5.of("foo", null, 2, 3, 4);
+		var opt = x.optB();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
+
+	@Test void a07_optC_withValue() {
+		var x = Tuple5.of("foo", 1, 2, 3, 4);
+		var opt = x.optC();
+		assertTrue(opt.isPresent());
+		assertEquals(2, opt.get());
+	}
+
+	@Test void a08_optC_withNull() {
+		var x = Tuple5.of("foo", 1, null, 3, 4);
+		var opt = x.optC();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
+
+	@Test void a09_optD_withValue() {
+		var x = Tuple5.of("foo", 1, 2, 3, 4);
+		var opt = x.optD();
+		assertTrue(opt.isPresent());
+		assertEquals(3, opt.get());
+	}
+
+	@Test void a10_optD_withNull() {
+		var x = Tuple5.of("foo", 1, 2, null, 4);
+		var opt = x.optD();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
+
+	@Test void a11_optE_withValue() {
+		var x = Tuple5.of("foo", 1, 2, 3, 4);
+		var opt = x.optE();
+		assertTrue(opt.isPresent());
+		assertEquals(4, opt.get());
+	}
+
+	@Test void a12_optE_withNull() {
+		var x = Tuple5.of("foo", 1, 2, 3, null);
+		var opt = x.optE();
+		assertFalse(opt.isPresent());
+		assertTrue(opt.isEmpty());
+	}
 }
