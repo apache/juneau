@@ -428,12 +428,12 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<strong class="jxr_keyword">public</strong> T getBean(<strong class="jxr_keyword">boolean</strong> create) {
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<em class="jxr_javadoccomment">/** If this is a read-only bean, then we need to create it. */</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong> &amp;&amp; create &amp;&amp; meta.constructorArgs.length &gt; 0) {
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">var</strong> props = meta.constructorArgs;
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">var</strong> c = meta.constructor;
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> Object[props.length];
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; props.length; i++)
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				args[i] = propertyCache.remove(props[i]);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong> &amp;&amp; create &amp;&amp; isNotEmpty(meta.getConstructorArgs())) {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">var</strong> props = meta.getConstructorArgs();
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">var</strong> c = meta.getConstructor();
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> Object[props.size()];
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; props.size(); i++)
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				args[i] = propertyCache.remove(props.get(i));
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 				bean = c.&lt;T&gt;newInstance(args);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 				propertyCache.forEach((k, v) -&gt; put(k, v));
