@@ -555,11 +555,22 @@ public class BeanMeta<T> {
 
 	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
 
-	final BeanRegistry beanRegistry;
+	private final Supplier<BeanRegistry> beanRegistry;
 
 	final boolean sortProperties;
 
 	final boolean fluentSetters;
+
+	private BeanRegistry findBeanRegistry() {
+		// Bean dictionary on bean filter.
+		List<Class<?>> beanDictionaryClasses = nn(beanFilter) ? copyOf(beanFilter.getBeanDictionary()) : list();
+
+		// Bean dictionary from @Bean(typeName) annotation.
+		var ba = ctx.getAnnotationProvider().find(Bean.class, classMeta);
+		ba.stream().map(x -> x.inner().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -> beanDictionaryClasses.add(classMeta.inner()));
+
+		return new BeanRegistry(ctx, null, beanDictionaryClasses.toArray(new Class<?>[beanDictionaryClasses.size()]));
+	}
 
 	private String findDictionaryName() {
 		if (nn(beanFilter) && nn(beanFilter.getTypeName()))
@@ -616,6 +627,8 @@ public class BeanMeta<T> {
 		this.fluentSetters = ctx.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters());
 		this.stopClass = opt(bf).map(x -> (Class)x.getStopClass()).orElse(Object.class);
 
+		this.beanRegistry = memoize(()->findBeanRegistry());
+
 		// Local variables for initialization
 		var ap = ctx.getAnnotationProvider();
 		var c = cm.inner();
@@ -628,7 +641,6 @@ public class BeanMeta<T> {
 		var dynaProperty = Value.<BeanPropertyMeta>empty();
 		var constructor = Value.<ConstructorInfo>empty();
 		var constructorArgs = Value.<String[]>of(new String[0]);
-		var beanRegistry = (BeanRegistry)null;
 		var sortProperties = false;
 
 		var ba = ap.find(Bean.class, cm);
@@ -640,14 +652,6 @@ public class BeanMeta<T> {
 			var conVis = ctx.getBeanConstructorVisibility();
 			var mVis = ctx.getBeanMethodVisibility();
 			var fVis = ctx.getBeanFieldVisibility();
-
-			// Bean dictionary on bean filter.
-			List<Class<?>> beanDictionaryClasses = nn(bf) ? copyOf(bf.getBeanDictionary()) : list();
-
-			// Bean dictionary from @Bean(typeName) annotation.
-			ba.stream().map(x -> x.inner().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -> beanDictionaryClasses.add(cm.inner()));
-
-			beanRegistry = new BeanRegistry(ctx, null, beanDictionaryClasses.toArray(new Class<?>[beanDictionaryClasses.size()]));
 
 			// If @Bean.interfaceClass is specified on the parent class, then we want
 			// to use the properties defined on that class, not the subclass.
@@ -816,7 +820,7 @@ public class BeanMeta<T> {
 					if (p.field == null)
 						p.setInnerField(findInnerBeanField(ctx, c, stopClass, p.name));
 
-					if (p.validate(ctx, beanRegistry, typeVarImpls, bpro, bpwo)) {
+					if (p.validate(ctx, beanRegistry.get(), typeVarImpls, bpro, bpwo)) {
 
 						if (nn(p.getter))
 							getterProps.put(p.getter, p.name);
@@ -923,10 +927,9 @@ public class BeanMeta<T> {
 		this.dynaProperty = dynaProperty.get();
 		this.constructor = constructor.get();
 		this.constructorArgs = constructorArgs.get();
-		this.beanRegistry = beanRegistry;
 		this.sortProperties = sortProperties;
 
-		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
+		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry.get()).build();
 
 		if (sortProperties)
 			Arrays.sort(propertyArray);
@@ -1012,7 +1015,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return The bean registry for this bean, or <jk>null</jk> if no bean registry is associated with it.
 	 */
-	public final BeanRegistry getBeanRegistry() { return beanRegistry; }
+	public final BeanRegistry getBeanRegistry() { return beanRegistry.get(); }
 
 	/**
 	 * Returns metadata about the specified property.
