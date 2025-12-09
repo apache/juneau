@@ -428,7 +428,7 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 				BeanMeta bm = getBeanMeta(sType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 				<strong class="jxr_keyword">if</strong> (nn(pNames))
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 					bm = <strong class="jxr_keyword">new</strong> <a name="BeanMetaFiltered" href="../../../../org/apache/juneau/BeanMetaFiltered.html#BeanMetaFiltered">BeanMetaFiltered</a>(bm, pNames);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 				<strong class="jxr_keyword">for</strong> (Iterator&lt;BeanPropertyMeta&gt; i = bm.getPropertyMetas().iterator(); i.hasNext();) {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 				<strong class="jxr_keyword">for</strong> (Iterator&lt;BeanPropertyMeta&gt; i = bm.getProperties().values().iterator(); i.hasNext();) {
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 					BeanPropertyMeta p = i.next();
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 					<strong class="jxr_keyword">if</strong> (p.canRead())
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 						properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), p.getProperties(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));

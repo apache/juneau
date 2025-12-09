@@ -96,9 +96,9 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		BeanMeta&lt;?&gt; bm = BeanContext.DEFAULT.getBeanMeta(c);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">if</strong> (bm == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Class ''{0}'' is not a valid bean."</span>, cn(c));
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		properties = <strong class="jxr_keyword">new</strong> BeanPropertyDescription[bm.getPropertyMetas().size()];
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		properties = <strong class="jxr_keyword">new</strong> BeanPropertyDescription[bm.getProperties().size()];
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pm : bm.getPropertyMetas())
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pm : bm.getProperties().values())
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			properties[i++] = <strong class="jxr_keyword">new</strong> BeanPropertyDescription(pm.getName(), pm.getClassMeta());
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  }

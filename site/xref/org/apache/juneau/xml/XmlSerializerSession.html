@@ -623,7 +623,7 @@
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 				}
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 				<strong class="jxr_keyword">if</strong> (innerType.isBean()) {
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 					innerType.getBeanMeta().forEachProperty(BeanPropertyMeta::canRead, x -&gt; {
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 					innerType.getBeanMeta().getProperties().values().stream().filter(BeanPropertyMeta::canRead).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 						ns.set(getXmlBeanPropertyMeta(x).getNamespace());
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> 						<strong class="jxr_keyword">if</strong> (ns.isPresent() &amp;&amp; nn(ns.get().uri))
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 							addNamespace(ns.get());

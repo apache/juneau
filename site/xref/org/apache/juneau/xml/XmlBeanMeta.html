@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  					<strong class="jxr_keyword">throw</strong> bex(c, <span class="jxr_string">"Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID"</span>, x.format());
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			});
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			beanMeta.forEachProperty(<strong class="jxr_keyword">null</strong>, p -&gt; {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			beanMeta.getProperties().values().forEach(p -&gt; {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  				<strong class="jxr_keyword">var</strong> xf = mp.getXmlBeanPropertyMeta(p).getXmlFormat();
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  				<strong class="jxr_keyword">var</strong> pcm = p.getClassMeta();
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  				<strong class="jxr_keyword">if</strong> (xf == ATTR) {
