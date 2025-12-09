@@ -350,10 +350,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 */
 	public boolean canCreateNewBean(Object outer) {
 		var bm = getBeanMeta();
-		if (bm == null || bm.constructor == null)
+		if (bm == null || ! bm.hasConstructor())
 			return false;
 		if (isMemberClass() && isNotStatic())
-			return nn(outer) && bm.constructor.hasParameterTypes(outer.getClass());
+			return nn(outer) && bm.getConstructor().hasParameterTypes(outer.getClass());
 		return true;
 	}
 

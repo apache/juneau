@@ -487,9 +487,6 @@ public class BeanMeta<T> {
 	/** The constructor for this bean. */
 	protected final BeanConstructor constructor2;
 
-	/** The constructor for this bean. */
-	protected final ConstructorInfo constructor;
-
 	/** For beans with constructors with Beanc annotation, this is the list of constructor arg properties. */
 	protected final String[] constructorArgs;
 
@@ -903,7 +900,6 @@ public class BeanMeta<T> {
 		this.getterProps = u(getterProps);
 		this.setterProps = u(setterProps);
 		this.dynaProperty = dynaProperty.get();
-		this.constructor = constructor.get();
 		this.constructorArgs = constructorArgs.get();
 		this.constructor2 = new BeanConstructor(opt(constructor.get()), l(constructorArgs.get()));
 		this.sortProperties = sortProperties;

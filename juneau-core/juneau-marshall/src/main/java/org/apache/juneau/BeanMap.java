@@ -420,12 +420,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	public T getBean(boolean create) {
 		/** If this is a read-only bean, then we need to create it. */
-		if (bean == null && create && meta.constructorArgs.length > 0) {
-			var props = meta.constructorArgs;
-			var c = meta.constructor;
-			var args = new Object[props.length];
-			for (var i = 0; i < props.length; i++)
-				args[i] = propertyCache.remove(props[i]);
+		if (bean == null && create && isNotEmpty(meta.getConstructorArgs())) {
+			var props = meta.getConstructorArgs();
+			var c = meta.getConstructor();
+			var args = new Object[props.size()];
+			for (var i = 0; i < props.size(); i++)
+				args[i] = propertyCache.remove(props.get(i));
 			try {
 				bean = c.<T>newInstance(args);
 				propertyCache.forEach((k, v) -> put(k, v));
