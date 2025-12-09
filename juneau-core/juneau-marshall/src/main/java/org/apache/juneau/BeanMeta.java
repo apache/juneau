@@ -550,67 +550,39 @@ public class BeanMeta<T> {
 
 	private BeanConstructor findBeanConstructor() {
 		var ap = ctx.getAnnotationProvider();
+		var vis = ctx.getBeanConstructorVisibility();
 		var ci = classMeta;
-		var c = ci.inner();
-		var ba = ap.find(Bean.class, classMeta);
-		var conVis = ctx.getBeanConstructorVisibility();
-		var constructor = Value.<ConstructorInfo>empty();
-		var constructorArgs = Value.<String[]>of(new String[0]);
 
-		// Look for @Beanc constructor on public constructors.
-		ci.getPublicConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
-			if (constructor.isPresent())
-				throw bex(c, "Multiple instances of '@Beanc' found.");
-			constructor.set(x);
-			constructorArgs.set(new String[0]);
-			ap.find(Beanc.class, x).stream().map(x2 -> x2.inner().properties()).filter(StringUtils::isNotBlank).findFirst().ifPresent(z -> constructorArgs.set(splita(z)));
-			if (! x.hasNumParameters(constructorArgs.get().length)) {
-				if (constructorArgs.get().length != 0)
+		var l = ci.getPublicConstructors().stream().filter(x -> ap.has(Beanc.class, x)).toList();
+		if (l.isEmpty())
+			l = ci.getDeclaredConstructors().stream().filter(x -> ap.has(Beanc.class, x)).toList();
+		if (l.size() > 1)
+			throw bex(c, "Multiple instances of '@Beanc' found.");
+		if (l.size() == 1) {
+			var con = l.get(0).accessible();
+			var args = ap.find(Beanc.class, con).stream().map(x -> x.inner().properties()).filter(StringUtils::isNotBlank).map(x -> split(x)).findFirst().orElse(liste());
+			if (! con.hasNumParameters(args.size())) {
+				if (isNotEmpty(args))
 					throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
-				constructorArgs.set(new String[x.getParameterCount()]);
-				var i = IntegerValue.create();
-				x.getParameters().forEach(pi -> {
-					constructorArgs.get()[i.getAndIncrement()] = opt(pi.getName()).orElseThrow(()->bex(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName()));
-				});
-			}
-			constructor.get().setAccessible();
-		});
-
-		// Look for @Beanc on all other constructors.
-		if (! constructor.isPresent()) {
-			ci.getDeclaredConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
-				if (constructor.isPresent())
-					throw bex(c, "Multiple instances of '@Beanc' found.");
-				constructor.set(x);
-				constructorArgs.set(new String[0]);
-				ap.find(Beanc.class, x).stream().map(x2 -> x2.inner().properties()).filter(Utils::isNotEmpty).findFirst().ifPresent(z -> constructorArgs.set(splita(z)));
-				if (! x.hasNumParameters(constructorArgs.get().length)) {
-					if (constructorArgs.get().length != 0)
-						throw bex(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
-					constructorArgs.set(new String[x.getParameterCount()]);
-					var i = IntegerValue.create();
-					x.getParameters().forEach(y -> {
-						constructorArgs.get()[i.getAndIncrement()] = opt(y.getName()).orElseThrow(()->bex(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName()));
-					});
+				args = con.getParameters().stream().map(x -> x.getName()).toList();
+				for (int i = 0; i < args.size(); i++) {
+					if (isBlank(args.get(i)))
+						throw bex(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, con.getFullName());
 				}
-				constructor.get().setAccessible();
-			});
+			}
+			return new BeanConstructor(opt(con), args);
 		}
 
-		// If this is an interface, look for impl classes defined in the context.
-		if (! constructor.isPresent())
-			constructor.set(implClassConstructor);
+		if (implClassConstructor != null)
+			return new BeanConstructor(opt(implClassConstructor.accessible()), liste());
 
-		if (! constructor.isPresent())
-			constructor.set(ci.getNoArgConstructor(! ba.isEmpty() ? Visibility.PRIVATE : conVis).orElse(null));
+		var ba = ap.find(Bean.class, classMeta);
+		var con = ci.getNoArgConstructor(! ba.isEmpty() ? Visibility.PRIVATE : vis).orElse(null);
+		if (con != null)
+			return new BeanConstructor(opt(con.accessible()), liste());
 
-		if (constructor.isPresent())
-			constructor.get().setAccessible();
-
-		return new BeanConstructor(opt(constructor.get()), l(constructorArgs.get()));
+		return new BeanConstructor(opte(), liste());
 	}
-
-
 
 	private String findDictionaryName() {
 		if (nn(beanFilter) && nn(beanFilter.getTypeName()))
@@ -688,7 +660,6 @@ public class BeanMeta<T> {
 		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::isNotEmpty).findFirst().orElseGet(() -> ctx.getBeanTypePropertyName());
 
 		try {
-			var conVis = ctx.getBeanConstructorVisibility();
 			var mVis = ctx.getBeanMethodVisibility();
 			var fVis = ctx.getBeanFieldVisibility();
 
