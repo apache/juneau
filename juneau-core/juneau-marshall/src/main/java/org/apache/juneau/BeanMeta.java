@@ -615,19 +615,19 @@ public class BeanMeta<T> {
 		var ap = ctx.getAnnotationProvider();
 		var c = classMeta.inner();
 		var ci = classMeta;
-		String notABeanReason = null;
+		var notABeanReason = (String)null;
 		var properties = Value.<Map<String,BeanPropertyMeta>>empty();
-		Map<String,BeanPropertyMeta> hiddenProperties = map();
-		Map<Method,String> getterProps = map();
-		Map<Method,String> setterProps = map();
+		var hiddenProperties = CollectionUtils.<String,BeanPropertyMeta>map();
+		var getterProps = CollectionUtils.<Method,String>map();
+		var setterProps = CollectionUtils.<Method,String>map();
 		var dynaProperty = Value.<BeanPropertyMeta>empty();
 		var constructor = Value.<ConstructorInfo>empty();
 		var constructorArgs = Value.<String[]>of(new String[0]);
 		var propertyNamer = Value.<PropertyNamer>empty();
-		BeanRegistry beanRegistry = null;
-		String typePropertyName = null;
-		boolean sortProperties = false;
-		boolean fluentSetters = false;
+		var beanRegistry = (BeanRegistry)null;
+		var typePropertyName = (String)null;
+		var sortProperties = false;
+		var fluentSetters = false;
 
 		try {
 			var conVis = ctx.getBeanConstructorVisibility();
@@ -638,9 +638,8 @@ public class BeanMeta<T> {
 			if (nn(beanFilter) && nn(beanFilter.getBeanDictionary()))
 				addAll(bdClasses, beanFilter.getBeanDictionary());
 
-			var typeName = Value.<String>empty();
-			classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
-			if (typeName.isPresent())
+			var typeName = ap.find(Bean.class, classMeta).stream().map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.typeName())).findFirst().orElse(null);
+			if (typeName != null)
 				bdClasses.add(classMeta.inner());
 			beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
