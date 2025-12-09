@@ -193,6 +193,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return this;
 		}
 
+		BeanPropertyMeta.Builder setInnerField(FieldInfo innerField) {
+			this.innerField = innerField == null ? null : innerField.inner();
+			return this;
+		}
+
 		BeanPropertyMeta.Builder setInnerField(Field innerField) {
 			this.innerField = innerField;
 			return this;
