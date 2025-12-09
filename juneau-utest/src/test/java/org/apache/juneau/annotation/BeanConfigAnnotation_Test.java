@@ -66,7 +66,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 				return apply(e.getKey()) + "=" + apply(e.getValue());
 			}
 			if (t instanceof BeanFilter)
-				return ((BeanFilter)t).getBeanClass().getSimpleName();
+				return ((BeanFilter)t).getBeanClass().getNameSimple();
 			if (t instanceof Class)
 				return ((Class<?>)t).getSimpleName();
 			if (t instanceof ClassInfo)

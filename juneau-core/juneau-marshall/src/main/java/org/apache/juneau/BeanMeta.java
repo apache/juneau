@@ -20,10 +20,10 @@ import static org.apache.juneau.BeanMeta.MethodType.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.BeanMeta.MethodType.*;
 
 import java.beans.*;
 import java.io.*;
@@ -92,7 +92,7 @@ public class BeanMeta<T> {
 		var l = ap.find(Bean.class, cm);
 		if (l.isEmpty())
 			return null;
-		return BeanFilter.create(cm.inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
+		return BeanFilter.create(cm).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
 	}
 
 	/**
@@ -199,10 +199,7 @@ public class BeanMeta<T> {
 			this.propertyName = propertyName;
 			this.methodType = type;
 			this.method = method;
-			if (type == MethodType.SETTER)
-				this.type = info(method.getParameterTypes()[0]);
-			else
-				this.type = info(method.getReturnType());
+			this.type = info(type == SETTER ? method.getParameterTypes()[0] : method.getReturnType());
 		}
 
 		@Override /* Overridden from Object */
@@ -253,8 +250,6 @@ public class BeanMeta<T> {
 	enum MethodType {
 		UNKNOWN, GETTER, SETTER, EXTRAKEYS;
 	}
-
-	private static final BeanPropertyMeta[] EMPTY_PROPERTIES = {};
 
 	static final String bpName(List<Beanp> p, List<Name> n) {
 		if (p.isEmpty() && n.isEmpty())

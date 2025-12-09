@@ -25,6 +25,7 @@ import java.beans.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 
@@ -45,7 +46,7 @@ public class BeanFilter {
 	 */
 	public static class Builder {
 
-		Class<?> beanClass;
+		ClassInfoTyped<?> beanClass;
 		String typeName, example;
 		Set<String> properties = set(), excludeProperties = set(), readOnlyProperties = set(), writeOnlyProperties = set();
 		Class<?> implClass, interfaceClass, stopClass;
@@ -60,7 +61,7 @@ public class BeanFilter {
 		 *
 		 * @param beanClass The bean class that this filter applies to.
 		 */
-		protected Builder(Class<?> beanClass) {
+		protected Builder(ClassInfoTyped<?> beanClass) {
 			this.beanClass = beanClass;
 		}
 
@@ -695,11 +696,11 @@ public class BeanFilter {
 	 * @param beanClass The bean class being filtered.
 	 * @return A new builder.
 	 */
-	public static <T> Builder create(Class<T> beanClass) {
+	public static <T> Builder create(ClassInfoTyped<T> beanClass) {
 		return new Builder(beanClass);
 	}
 
-	private final Class<?> beanClass;
+	private final ClassInfoTyped<?> beanClass;
 	private final Set<String> properties, excludeProperties, readOnlyProperties, writeOnlyProperties;
 	private final PropertyNamer propertyNamer;
 	private final Class<?> implClass, interfaceClass, stopClass;
@@ -735,7 +736,7 @@ public class BeanFilter {
 	 *
 	 * @return The bean class that this filter applies to.
 	 */
-	public Class<?> getBeanClass() { return beanClass; }
+	public ClassInfoTyped<?> getBeanClass() { return beanClass; }
 
 	/**
 	 * Returns the bean dictionary defined on this bean.
