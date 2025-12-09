@@ -178,6 +178,14 @@ public class BeanMeta<T> {
 		return new BeanMetaValue<>(null, reason);
 	}
 
+	/**
+	 * Represents a bean constructor with its associated property names.
+	 *
+	 * @param constructor The constructor information.
+	 * @param propertyNames The list of property names that correspond to the constructor parameters.
+	 */
+	record BeanConstructor(Optional<ConstructorInfo> constructor, List<String> args) {}
+
 	/*
 	 * Temporary getter/setter method struct.
 	 */
@@ -477,6 +485,9 @@ public class BeanMeta<T> {
 	}
 
 	/** The constructor for this bean. */
+	protected final BeanConstructor constructor2;
+
+	/** The constructor for this bean. */
 	protected final ConstructorInfo constructor;
 
 	/** For beans with constructors with Beanc annotation, this is the list of constructor arg properties. */
@@ -576,8 +587,6 @@ public class BeanMeta<T> {
 			.findFirst()
 			.orElse(null);
 	}
-
-
 
 	/**
 	 * Constructor.
@@ -896,6 +905,7 @@ public class BeanMeta<T> {
 		this.dynaProperty = dynaProperty.get();
 		this.constructor = constructor.get();
 		this.constructorArgs = constructorArgs.get();
+		this.constructor2 = new BeanConstructor(opt(constructor.get()), l(constructorArgs.get()));
 		this.sortProperties = sortProperties;
 
 		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry.get()).build();
@@ -904,6 +914,18 @@ public class BeanMeta<T> {
 			Arrays.sort(propertyArray);
 		dictionaryName2 = memoize(()->findDictionaryName());
 		beanProxyInvocationHandler = memoize(()->ctx.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
+	}
+
+	protected boolean hasConstructor() {
+		return constructor2.constructor().isPresent();
+	}
+
+	protected ConstructorInfo getConstructor() {
+		return constructor2.constructor().orElse(null);
+	}
+
+	protected List<String> getConstructorArgs() {
+		return constructor2.args();
 	}
 
 	@Override /* Overridden from Object */
@@ -1071,14 +1093,14 @@ public class BeanMeta<T> {
 	@SuppressWarnings("unchecked")
 	protected T newBean(Object outer) throws ExecutableException {
 		if (classMeta.isMemberClass() && classMeta.isNotStatic()) {
-			if (nn(constructor))
-				return constructor.<T>newInstance(outer);
+			if (hasConstructor())
+				return getConstructor().<T>newInstance(outer);
 		} else {
-			if (nn(constructor))
-				return constructor.<T>newInstance();
-			InvocationHandler h = classMeta.getProxyInvocationHandler();
+			if (hasConstructor())
+				return getConstructor().<T>newInstance();
+			var h = classMeta.getProxyInvocationHandler();
 			if (nn(h)) {
-				ClassLoader cl = classMeta.inner().getClassLoader();
+				var cl = classMeta.getClassLoader();
 				return (T)Proxy.newProxyInstance(cl, a(classMeta.inner(), java.io.Serializable.class), h);
 			}
 		}
