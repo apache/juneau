@@ -322,25 +322,26 @@ public class BeanMeta<T> {
 	 * @param fixedBeanProps Only include methods whose properties are in this list.
 	 * @param pn Use this property namer to determine property names from the method names.
 	 */
-	final List<BeanMethod> findBeanMethods(Visibility v, PropertyNamer pn, boolean fluentSetters) {
+	private final List<BeanMethod> findBeanMethods(Visibility v, PropertyNamer pn, boolean fluentSetters) {
 		var l = new LinkedList<BeanMethod>();
 		var ap = ctx.getAnnotationProvider();
 
 		classHierarchy.get().stream().forEach(c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
 
-				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.getMatchingMethods().stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF, MATCHING_METHODS)))
+				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2)
 					continue;
 
-				if (m.getMatchingMethods().stream().map(m2 -> ap.find(Transient.class, m2).stream().map(AnnotationInfo::inner).findFirst().orElse(null)).filter(Objects::nonNull).map(x -> x.value()).findFirst().orElse(false))
+				var mm = m.getMatchingMethods();
+
+				if (mm.stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF)))
+					continue;
+
+				if (mm.stream().anyMatch(m2 -> ap.find(Transient.class, m2, SELF).stream().map(x -> x.inner().value()).findFirst().orElse(false)))
 					continue;
 
 				var beanps = ap.find(Beanp.class, m).stream().map(AnnotationInfo::inner).toList();
 				var names = ap.find(Name.class, m).stream().map(AnnotationInfo::inner).toList();
-
-				// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does
-				// This ensures property names are inherited correctly, preventing duplicate property definitions
-				inheritParentAnnotations(m, c2, beanps, names);
 
 				if (! (m.isVisible(v) || isNotEmpty(beanps) || isNotEmpty(names)))
 					continue;
@@ -446,34 +447,6 @@ public class BeanMeta<T> {
 			// @formatter:on
 		});
 		return value.get();
-	}
-
-
-	/**
-	 * Finds @Beanp and @Name annotations from parent methods if this method overrides a parent.
-	 * This ensures that property names are inherited from parent methods, preventing duplicate
-	 * property definitions when a child overrides a @Beanp-annotated parent method.
-	 *
-	 * <p>
-	 * Uses the class hierarchy to look for parent classes that come before the declaring class
-	 * in the hierarchy traversal order.
-	 *
-	 * @param method The method to check.
-	 * @param declaringClass The class that declares this method.
-	 * @param lp List to populate with @Beanp annotations (input/output parameter).
-	 * @param ln List to populate with @Name annotations (input/output parameter).
-	 */
-	final void inheritParentAnnotations(MethodInfo method, ClassInfo declaringClass, List<Beanp> lp, List<Name> ln) {
-		// If this method already has @Beanp or @Name annotations, don't look for parent annotations
-		if (! lp.isEmpty() || ! ln.isEmpty())
-			return;
-
-		var ap = ctx.getAnnotationProvider();
-
-		for (var parentMethod : method.getMatchingMethods()) {
-			ap.find(Beanp.class, parentMethod).forEach(x -> lp.add(x.inner()));
-			ap.find(Name.class, parentMethod).forEach(x -> ln.add(x.inner()));
-		}
 	}
 
 	/** The target class type that this meta object describes. */
@@ -656,8 +629,6 @@ public class BeanMeta<T> {
 			var c2 = (nn(bf) && nn(bf.getInterfaceClass()) ? bf.getInterfaceClass() : c);
 
 			Map<String,BeanPropertyMeta.Builder> normalProps = map();  // NOAI
-
-			//var hasBean = ap.has(Bean.class, ci);
 
 			// Look for @Beanc constructor on public constructors.
 			ci.getPublicConstructors().stream().filter(x -> ap.has(Beanc.class, x)).forEach(x -> {
