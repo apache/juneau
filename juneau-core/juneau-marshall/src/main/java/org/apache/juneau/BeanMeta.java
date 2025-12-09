@@ -557,6 +557,8 @@ public class BeanMeta<T> {
 
 	private final Supplier<BeanRegistry> beanRegistry;
 
+	private final Supplier<List<ClassInfo>> classHierarchy;
+
 	final boolean sortProperties;
 
 	final boolean fluentSetters;
@@ -570,6 +572,15 @@ public class BeanMeta<T> {
 		ba.stream().map(x -> x.inner().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -> beanDictionaryClasses.add(classMeta.inner()));
 
 		return new BeanRegistry(ctx, null, beanDictionaryClasses.toArray(new Class<?>[beanDictionaryClasses.size()]));
+	}
+
+	private List<ClassInfo> findClassHierarchy() {
+		var result = new LinkedList<ClassInfo>();
+		// If @Bean.interfaceClass is specified on the parent class, then we want
+		// to use the properties defined on that class, not the subclass.
+		var c2 = (nn(beanFilter) && nn(beanFilter.getInterfaceClass()) ? beanFilter.getInterfaceClass() : c);
+		forEachClass(info(c2), stopClass, result::add);
+		return u(result);
 	}
 
 	private String findDictionaryName() {
@@ -628,6 +639,7 @@ public class BeanMeta<T> {
 		this.stopClass = opt(bf).map(x -> (Class)x.getStopClass()).orElse(Object.class);
 
 		this.beanRegistry = memoize(()->findBeanRegistry());
+		this.classHierarchy = memoize(()->findClassHierarchy());
 
 		// Local variables for initialization
 		var ap = ctx.getAnnotationProvider();
