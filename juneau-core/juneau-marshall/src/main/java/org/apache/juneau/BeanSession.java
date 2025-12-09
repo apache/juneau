@@ -1025,7 +1025,7 @@ public class BeanSession extends ContextSession {
 		if (m == null)
 			return null;
 		T bean = null;
-		if (m.constructorArgs.length == 0)
+		if (isEmpty(m.getConstructorArgs()))
 			bean = newBean(outer, c);
 		return new BeanMap<>(this, bean, m);
 	}

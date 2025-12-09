@@ -106,7 +106,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		this.session = session;
 		this.bean = bean;
 		this.meta = meta;
-		if (meta.constructorArgs.length > 0)
+		if (isNotEmpty(meta.getConstructorArgs()))
 			propertyCache = new TreeMap<>();
 		this.typePropertyName = session.getBeanTypePropertyName(meta.classMeta);
 	}

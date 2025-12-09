@@ -485,10 +485,7 @@ public class BeanMeta<T> {
 	}
 
 	/** The constructor for this bean. */
-	protected final BeanConstructor constructor2;
-
-	/** For beans with constructors with Beanc annotation, this is the list of constructor arg properties. */
-	protected final String[] constructorArgs;
+	protected final BeanConstructor beanConstructor;
 
 	// Other fields
 	final String typePropertyName;                         // "_type" property actual name.
@@ -900,8 +897,7 @@ public class BeanMeta<T> {
 		this.getterProps = u(getterProps);
 		this.setterProps = u(setterProps);
 		this.dynaProperty = dynaProperty.get();
-		this.constructorArgs = constructorArgs.get();
-		this.constructor2 = new BeanConstructor(opt(constructor.get()), l(constructorArgs.get()));
+		this.beanConstructor = new BeanConstructor(opt(constructor.get()), l(constructorArgs.get()));
 		this.sortProperties = sortProperties;
 
 		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry.get()).build();
@@ -913,15 +909,15 @@ public class BeanMeta<T> {
 	}
 
 	protected boolean hasConstructor() {
-		return constructor2.constructor().isPresent();
+		return beanConstructor.constructor().isPresent();
 	}
 
 	protected ConstructorInfo getConstructor() {
-		return constructor2.constructor().orElse(null);
+		return beanConstructor.constructor().orElse(null);
 	}
 
 	protected List<String> getConstructorArgs() {
-		return constructor2.args();
+		return beanConstructor.args();
 	}
 
 	@Override /* Overridden from Object */
