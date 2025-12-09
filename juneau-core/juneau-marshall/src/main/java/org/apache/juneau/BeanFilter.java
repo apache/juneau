@@ -705,7 +705,7 @@ public class BeanFilter {
 	private final Class<?> implClass, interfaceClass, stopClass;
 	private final boolean sortProperties, fluentSetters;
 	private final String typeName, example;
-	private final Class<?>[] beanDictionary;
+	private final List<Class<?>> beanDictionary;
 	@SuppressWarnings("rawtypes")
 	private final BeanInterceptor interceptor;
 
@@ -726,7 +726,7 @@ public class BeanFilter {
 		this.sortProperties = builder.sortProperties;
 		this.fluentSetters = builder.fluentSetters;
 		this.propertyNamer = builder.propertyNamer.orElse(null);
-		this.beanDictionary = builder.dictionary == null ? null : builder.dictionary.toArray(new Class<?>[builder.dictionary.size()]);
+		this.beanDictionary = builder.dictionary == null ? list() : u(copyOf(builder.dictionary));
 		this.interceptor = builder.interceptor.orElse(BeanInterceptor.DEFAULT);
 	}
 
@@ -740,9 +740,9 @@ public class BeanFilter {
 	/**
 	 * Returns the bean dictionary defined on this bean.
 	 *
-	 * @return The bean dictionary defined on this bean, or <jk>null</jk> if no bean dictionary is defined.
+	 * @return An unmodifiable list of the bean dictionary defined on this bean, or an empty list if no bean dictionary is defined.
 	 */
-	public Class<?>[] getBeanDictionary() { return beanDictionary; }
+	public List<Class<?>> getBeanDictionary() { return beanDictionary; }
 
 	/**
 	 * Returns the example associated with this class.

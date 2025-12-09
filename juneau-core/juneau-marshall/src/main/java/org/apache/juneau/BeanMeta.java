@@ -641,13 +641,13 @@ public class BeanMeta<T> {
 			var mVis = ctx.getBeanMethodVisibility();
 			var fVis = ctx.getBeanFieldVisibility();
 
-			List<Class<?>> bdClasses = list();
-			if (nn(bf) && nn(bf.getBeanDictionary()))
-				addAll(bdClasses, bf.getBeanDictionary());
+			// Bean dictionary on bean filter.
+			List<Class<?>> beanDictionaryClasses = nn(bf) ? copyOf(bf.getBeanDictionary()) : list();
 
-			ba.stream().map(x -> x.inner().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -> bdClasses.add(cm.inner()));
+			// Bean dictionary from @Bean(typeName) annotation.
+			ba.stream().map(x -> x.inner().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -> beanDictionaryClasses.add(cm.inner()));
 
-			beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
+			beanRegistry = new BeanRegistry(ctx, null, beanDictionaryClasses.toArray(new Class<?>[beanDictionaryClasses.size()]));
 
 			// If @Bean.interfaceClass is specified on the parent class, then we want
 			// to use the properties defined on that class, not the subclass.
