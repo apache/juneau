@@ -649,13 +649,13 @@
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 			<strong class="jxr_keyword">var</strong> mVis = ctx.getBeanMethodVisibility();
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 			<strong class="jxr_keyword">var</strong> fVis = ctx.getBeanFieldVisibility();
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			List&lt;Class&lt;?&gt;&gt; bdClasses = list();
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			<strong class="jxr_keyword">if</strong> (nn(bf) &amp;&amp; nn(bf.getBeanDictionary()))
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 				addAll(bdClasses, bf.getBeanDictionary());
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			ba.stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -&gt; bdClasses.add(cm.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			<em class="jxr_comment">// Bean dictionary on bean filter.</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			List&lt;Class&lt;?&gt;&gt; beanDictionaryClasses = nn(bf) ? copyOf(bf.getBeanDictionary()) : list();
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<em class="jxr_comment">// Bean dictionary from @Bean(typeName) annotation.</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			ba.stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -&gt; beanDictionaryClasses.add(cm.<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			beanRegistry = <strong class="jxr_keyword">new</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a>(ctx, <strong class="jxr_keyword">null</strong>, bdClasses.toArray(<strong class="jxr_keyword">new</strong> Class&lt;?&gt;[bdClasses.size()]));
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			beanRegistry = <strong class="jxr_keyword">new</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a>(ctx, <strong class="jxr_keyword">null</strong>, beanDictionaryClasses.toArray(<strong class="jxr_keyword">new</strong> Class&lt;?&gt;[beanDictionaryClasses.size()]));
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 			<em class="jxr_comment">// If @Bean.interfaceClass is specified on the parent class, then we want</em>
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 			<em class="jxr_comment">// to use the properties defined on that class, not the subclass.</em>
