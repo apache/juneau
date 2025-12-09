@@ -889,7 +889,7 @@ public class BeanMeta<T> {
 		beanProxyInvocationHandler = memoize(()->ctx.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
 	}
 
-	protected Map<String,BeanPropertyMeta> getProperties() {
+	public Map<String,BeanPropertyMeta> getProperties() {
 		return properties;
 	}
 
@@ -912,28 +912,6 @@ public class BeanMeta<T> {
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return (o instanceof BeanMeta<?> o2) && eq(this, o2, (x, y) -> eq(x.classMeta, y.classMeta));
-	}
-
-	/**
-	 * Performs a function on the first property that matches the specified filter.
-	 *
-	 * @param <T2> The type to convert the property to.
-	 * @param filter The filter to apply.
-	 * @param function The function to apply to the matching property.
-	 * @return The result of the function.  Never <jk>null</jk>.
-	 */
-	public <T2> Optional<T2> firstProperty(Predicate<BeanPropertyMeta> filter, Function<BeanPropertyMeta,T2> function) {
-		return properties.values().stream().filter(filter).map(function).findFirst();
-	}
-
-	/**
-	 * Performs an action on all matching properties.
-	 *
-	 * @param filter The filter to apply.
-	 * @param action The action to apply.
-	 */
-	public void forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
-		properties.values().stream().filter(x -> filter == null ? true : filter.test(x)).forEach(action);
 	}
 
 	/**
@@ -998,13 +976,6 @@ public class BeanMeta<T> {
 			bpm = dynaProperty;
 		return bpm;
 	}
-
-	/**
-	 * Returns the metadata on all properties associated with this bean.
-	 *
-	 * @return Metadata on all properties associated with this bean.
-	 */
-	public Collection<BeanPropertyMeta> getPropertyMetas() { return properties.values(); }
 
 	/**
 	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the

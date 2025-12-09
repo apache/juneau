@@ -88,9 +88,9 @@ public class BeanDescription {
 		BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(c);
 		if (bm == null)
 			throw rex("Class ''{0}'' is not a valid bean.", cn(c));
-		properties = new BeanPropertyDescription[bm.getPropertyMetas().size()];
+		properties = new BeanPropertyDescription[bm.getProperties().size()];
 		int i = 0;
-		for (var pm : bm.getPropertyMetas())
+		for (var pm : bm.getProperties().values())
 			properties[i++] = new BeanPropertyDescription(pm.getName(), pm.getClassMeta());
 	}
 }

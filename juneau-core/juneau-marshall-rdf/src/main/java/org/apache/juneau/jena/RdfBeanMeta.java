@@ -43,7 +43,7 @@ public class RdfBeanMeta extends ExtendedBeanMeta {
 	 */
 	public RdfBeanMeta(BeanMeta<?> beanMeta, RdfMetaProvider mp) {
 		super(beanMeta);
-		this.beanUriProperty = beanMeta.firstProperty(x -> mp.getRdfBeanPropertyMeta(x).isBeanUri(), x -> x).orElse(null);
+		this.beanUriProperty = beanMeta.getProperties().values().stream().filter(x -> mp.getRdfBeanPropertyMeta(x).isBeanUri()).findFirst().orElse(null);
 	}
 
 	/**

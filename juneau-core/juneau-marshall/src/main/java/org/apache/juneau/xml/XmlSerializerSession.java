@@ -615,7 +615,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				}
 
 				if (innerType.isBean()) {
-					innerType.getBeanMeta().forEachProperty(BeanPropertyMeta::canRead, x -> {
+					innerType.getBeanMeta().getProperties().values().stream().filter(BeanPropertyMeta::canRead).forEach(x -> {
 						ns.set(getXmlBeanPropertyMeta(x).getNamespace());
 						if (ns.isPresent() && nn(ns.get().uri))
 							addNamespace(ns.get());

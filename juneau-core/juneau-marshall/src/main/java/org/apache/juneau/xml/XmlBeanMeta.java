@@ -61,7 +61,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 					throw bex(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", x.format());
 			});
 
-			beanMeta.forEachProperty(null, p -> {
+			beanMeta.getProperties().values().forEach(p -> {
 				var xf = mp.getXmlBeanPropertyMeta(p).getXmlFormat();
 				var pcm = p.getClassMeta();
 				if (xf == ATTR) {

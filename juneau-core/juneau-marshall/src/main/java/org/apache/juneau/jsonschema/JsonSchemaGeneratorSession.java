@@ -420,7 +420,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 				BeanMeta bm = getBeanMeta(sType.inner());
 				if (nn(pNames))
 					bm = new BeanMetaFiltered(bm, pNames);
-				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {
+				for (Iterator<BeanPropertyMeta> i = bm.getProperties().values().iterator(); i.hasNext();) {
 					BeanPropertyMeta p = i.next();
 					if (p.canRead())
 						properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), p.getProperties(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));

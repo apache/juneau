@@ -246,15 +246,21 @@ public class CsvSerializerSession extends WriterSerializerSession {
 				if (entryType.isBean()) {
 					var bm = entryType.getBeanMeta();
 					var addComma = Flag.create();
-					bm.forEachProperty(BeanPropertyMeta::canRead, x -> {
+
+					bm.getProperties().values().stream().filter(BeanPropertyMeta::canRead).forEach(x -> {
 						addComma.ifSet(() -> w.w(',')).set();
 						w.writeEntry(x.getName());
 					});
+
+//					bm.forEachProperty(BeanPropertyMeta::canRead, x -> {
+//						addComma.ifSet(() -> w.w(',')).set();
+//						w.writeEntry(x.getName());
+//					});
 					w.append('\n');
 					l.forEach(x -> {
 						var addComma2 = Flag.create();
 						BeanMap<?> bean = toBeanMap(x);
-						bm.forEachProperty(BeanPropertyMeta::canRead, y -> {
+						bm.getProperties().values().stream().filter(BeanPropertyMeta::canRead).forEach(y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
 							// Bean property values are already swapped by BeanPropertyMeta.get() via toSerializedForm()
 							var value = y.get(bean, y.getName());
