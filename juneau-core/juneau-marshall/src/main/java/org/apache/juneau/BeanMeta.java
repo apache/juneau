@@ -248,14 +248,6 @@ public class BeanMeta<T> {
 
 	private static final BeanPropertyMeta[] EMPTY_PROPERTIES = {};
 
-	private static void forEachClass(ClassInfo c, Class<?> stopClass, Consumer<ClassInfo> consumer) {
-		var sc = c.getSuperclass();
-		if (nn(sc) && ! sc.is(stopClass))
-			forEachClass(sc, stopClass, consumer);
-		c.getInterfaces().forEach(x -> forEachClass(x, stopClass, consumer));
-		consumer.accept(c);
-	}
-
 	static final String bpName(List<Beanp> p, List<Name> n) {
 		if (p.isEmpty() && n.isEmpty())
 			return null;
@@ -288,22 +280,37 @@ public class BeanMeta<T> {
 		return null;
 	}
 
-	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v) {
-		var l = new LinkedList<Field>();
+	/**
+	 * Finds all bean fields in the class hierarchy.
+	 *
+	 * <p>
+	 * Traverses the complete class hierarchy (as defined by {@link #classHierarchy}) and collects all fields that
+	 * meet the bean field criteria:
+	 * <ul>
+	 * 	<li>Not static
+	 * 	<li>Not transient (unless transient fields are not ignored)
+	 * 	<li>Not annotated with {@link Transient @Transient} (unless transient fields are not ignored)
+	 * 	<li>Not annotated with {@link BeanIgnore @BeanIgnore}
+	 * 	<li>Visible according to the specified visibility level, or annotated with {@link Beanp @Beanp}
+	 * </ul>
+	 *
+	 * @param v The minimum visibility level required for fields to be included.
+	 * @return A collection of all bean fields found in the class hierarchy.
+	 */
+	final Collection<Field> findBeanFields(Visibility v) {
 		var noIgnoreTransients = ! ctx.isIgnoreTransientFields();
-		forEachClass(info(c), stopClass, c2 -> {
-			// @formatter:off
-			c2.getDeclaredFields().stream()
-				.filter(x -> x.isNotStatic()
+		var ap = ctx.getAnnotationProvider();
+		// @formatter:off
+		return classHierarchy.get().stream()
+			.flatMap(c2 -> c2.getDeclaredFields().stream())
+			.filter(x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
-				&& ! ctx.getAnnotationProvider().has(BeanIgnore.class, x)
-				&& (v.isVisible(x.inner()) || ctx.getAnnotationProvider().has(Beanp.class, x)))
-				.forEach(x -> l.add(x.inner())
-			);
-			// @formatter:on
-		});
-		return l;
+				&& ! ap.has(BeanIgnore.class, x)
+				&& (v.isVisible(x.inner()) || ap.has(Beanp.class, x)))
+			.map(FieldInfo::inner)
+			.toList();
+		// @formatter:on
 	}
 
 	/*
@@ -315,28 +322,27 @@ public class BeanMeta<T> {
 	 * @param fixedBeanProps Only include methods whose properties are in this list.
 	 * @param pn Use this property namer to determine property names from the method names.
 	 */
-	static final List<BeanMethod> findBeanMethods(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, PropertyNamer pn, boolean fluentSetters) {
+	final List<BeanMethod> findBeanMethods(Visibility v, PropertyNamer pn, boolean fluentSetters) {
 		var l = new LinkedList<BeanMethod>();
 		var ap = ctx.getAnnotationProvider();
 
-		forEachClass(info(c), stopClass, c2 -> {
+		classHierarchy.get().stream().forEach(c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
+
 				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.getMatchingMethods().stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF, MATCHING_METHODS)))
 					continue;
 
-				var t = m.getMatchingMethods().stream().map(m2 -> ap.find(Transient.class, m2).stream().map(AnnotationInfo::inner).findFirst().orElse(null)).filter(Objects::nonNull).findFirst()
-					.orElse(null);
-				if (nn(t) && t.value())
+				if (m.getMatchingMethods().stream().map(m2 -> ap.find(Transient.class, m2).stream().map(AnnotationInfo::inner).findFirst().orElse(null)).filter(Objects::nonNull).map(x -> x.value()).findFirst().orElse(false))
 					continue;
 
-				var lp = ap.find(Beanp.class, m).stream().map(AnnotationInfo::inner).toList();
-				var ln = ap.find(Name.class, m).stream().map(AnnotationInfo::inner).toList();
+				var beanps = ap.find(Beanp.class, m).stream().map(AnnotationInfo::inner).toList();
+				var names = ap.find(Name.class, m).stream().map(AnnotationInfo::inner).toList();
 
 				// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does
 				// This ensures property names are inherited correctly, preventing duplicate property definitions
-				inheritParentAnnotations(ctx, m, c, stopClass, lp, ln);
+				inheritParentAnnotations(ctx, m, c, stopClass, beanps, names);
 
-				if (! (m.isVisible(v) || isNotEmpty(lp) || isNotEmpty(ln)))
+				if (! (m.isVisible(v) || isNotEmpty(beanps) || isNotEmpty(names)))
 					continue;
 
 				var n = m.getSimpleName();
@@ -344,7 +350,7 @@ public class BeanMeta<T> {
 				var params = m.getParameters();
 				var rt = m.getReturnType();
 				var methodType = UNKNOWN;
-				var bpName = bpName(lp, ln);
+				var bpName = bpName(beanps, names);
 
 				if (params.isEmpty()) {
 					if ("*".equals(bpName)) {
@@ -425,10 +431,10 @@ public class BeanMeta<T> {
 		return l;
 	}
 
-	static final Field findInnerBeanField(BeanContext ctx, Class<?> c, Class<?> stopClass, String name) {
+	final Field findInnerBeanField(String name) {
 		var noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 		var value = Value.<Field>empty();
-		forEachClass(info(c), stopClass, c2 -> {
+		classHierarchy.get().stream().forEach(c2 -> {
 			// @formatter:off
 			c2.getDeclaredField(
 				x -> x.isNotStatic()
@@ -582,6 +588,16 @@ public class BeanMeta<T> {
 		forEachClass(info(c2), stopClass, result::add);
 		return u(result);
 	}
+
+	private static void forEachClass(ClassInfo c, Class<?> stopClass, Consumer<ClassInfo> consumer) {
+		var sc = c.getSuperclass();
+		if (nn(sc) && ! sc.is(stopClass))
+			forEachClass(sc, stopClass, consumer);
+		c.getInterfaces().forEach(x -> forEachClass(x, stopClass, consumer));
+		consumer.accept(c);
+	}
+
+
 
 	private String findDictionaryName() {
 		if (nn(beanFilter) && nn(beanFilter.getTypeName()))
@@ -772,7 +788,7 @@ public class BeanMeta<T> {
 
 			} else /* Use 'better' introspection */ {
 
-				findBeanFields(ctx, c2, stopClass, fVis).forEach(x -> {
+				findBeanFields(fVis).forEach(x -> {
 					var name = ap.find(info(x)).stream().filter(x2 -> x2.isType(Beanp.class) || x2.isType(Name.class)).map(x2 -> name(x2)).filter(Objects::nonNull).findFirst().orElse(propertyNamer.getPropertyName(x.getName()));
 					if (nn(name)) {
 						if (! normalProps.containsKey(name))
@@ -781,7 +797,7 @@ public class BeanMeta<T> {
 					}
 				});
 
-				var bms = findBeanMethods(ctx, c2, stopClass, mVis, propertyNamer, fluentSetters);
+				var bms = findBeanMethods(mVis, propertyNamer, fluentSetters);
 
 				// Iterate through all the getters.
 				bms.forEach(x -> {
@@ -830,7 +846,7 @@ public class BeanMeta<T> {
 				var p = i.next();
 				try {
 					if (p.field == null)
-						p.setInnerField(findInnerBeanField(ctx, c, stopClass, p.name));
+						p.setInnerField(findInnerBeanField(p.name));
 
 					if (p.validate(ctx, beanRegistry.get(), typeVarImpls, bpro, bpwo)) {
 
