@@ -599,22 +599,22 @@ public class BeanMeta<T> {
 	/**
 	 * Constructor.
 	 *
-	 * @param classMeta The target class.
+	 * @param cm The target class.
 	 * @param ctx The bean context that created this object.
-	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
+	 * @param bf Optional bean filter associated with the target class.  Can be <jk>null</jk>.
 	 * @param pNames Explicit list of property names and order of properties.  If <jk>null</jk>, determine automatically.
 	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be <jk>null</jk>.
 	 */
-	protected BeanMeta(ClassMeta<T> classMeta, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
-		this.classMeta = classMeta;
-		this.ctx = classMeta.getBeanContext();
-		this.c = classMeta.inner();
-		this.beanFilter = beanFilter;
+	protected BeanMeta(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ConstructorInfo implClassConstructor) {
+		this.classMeta = cm;
+		this.ctx = cm.getBeanContext();
+		this.c = cm.inner();
+		this.beanFilter = bf;
 
 		// Local variables for initialization
 		var ap = ctx.getAnnotationProvider();
-		var c = classMeta.inner();
-		var ci = classMeta;
+		var c = cm.inner();
+		var ci = cm;
 		var notABeanReason = (String)null;
 		var properties = Value.<Map<String,BeanPropertyMeta>>empty();
 		var hiddenProperties = CollectionUtils.<String,BeanPropertyMeta>map();
@@ -635,25 +635,24 @@ public class BeanMeta<T> {
 			var fVis = ctx.getBeanFieldVisibility();
 
 			List<Class<?>> bdClasses = list();
-			if (nn(beanFilter) && nn(beanFilter.getBeanDictionary()))
-				addAll(bdClasses, beanFilter.getBeanDictionary());
+			if (nn(bf) && nn(bf.getBeanDictionary()))
+				addAll(bdClasses, bf.getBeanDictionary());
 
-			var typeName = ap.find(Bean.class, classMeta).stream().map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.typeName())).findFirst().orElse(null);
-			if (typeName != null)
-				bdClasses.add(classMeta.inner());
+			ap.find(Bean.class, cm).stream().map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.typeName())).findFirst().ifPresent(x -> bdClasses.add(cm.inner()));
+
 			beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
 			var typePropertyNameValue = Value.<String>empty();
-			classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typePropertyName()), x -> typePropertyNameValue.set(x.typePropertyName()));
+			cm.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typePropertyName()), x -> typePropertyNameValue.set(x.typePropertyName()));
 			typePropertyName = typePropertyNameValue.orElseGet(() -> ctx.getBeanTypePropertyName());
 
-			fluentSetters = (ctx.isFindFluentSetters() || (nn(beanFilter) && beanFilter.isFluentSetters()));
+			fluentSetters = (ctx.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters()));
 
 			// If @Bean.interfaceClass is specified on the parent class, then we want
 			// to use the properties defined on that class, not the subclass.
-			var c2 = (nn(beanFilter) && nn(beanFilter.getInterfaceClass()) ? beanFilter.getInterfaceClass() : c);
+			var c2 = (nn(bf) && nn(bf.getInterfaceClass()) ? bf.getInterfaceClass() : c);
 
-			var stopClass = (nn(beanFilter) ? beanFilter.getStopClass() : Object.class);
+			var stopClass = (nn(bf) ? bf.getStopClass() : Object.class);
 			if (stopClass == null)
 				stopClass = Object.class;
 
@@ -714,7 +713,7 @@ public class BeanMeta<T> {
 			if (! constructor.isPresent())
 				constructor.set(ci.getNoArgConstructor(hasBean ? Visibility.PRIVATE : conVis).orElse(null));
 
-			if (! constructor.isPresent() && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
+			if (! constructor.isPresent() && bf == null && ctx.isBeansRequireDefaultConstructor())
 				notABeanReason = "Class does not have the required no-arg constructor";
 
 			if (constructor.isPresent())
@@ -729,9 +728,9 @@ public class BeanMeta<T> {
 
 			Set<String> filterProps = set();  // Names of properties defined in @Bean(properties)
 
-			if (nn(beanFilter)) {
+			if (nn(bf)) {
 
-				var bfbpi = beanFilter.getProperties();
+				var bfbpi = bf.getProperties();
 
 				filterProps.addAll(bfbpi);
 
@@ -739,11 +738,11 @@ public class BeanMeta<T> {
 				if (bpi.isEmpty())
 					fixedBeanProps.addAll(bfbpi);
 
-				if (nn(beanFilter.getPropertyNamer()))
-					propertyNamer.set(beanFilter.getPropertyNamer());
+				if (nn(bf.getPropertyNamer()))
+					propertyNamer.set(bf.getPropertyNamer());
 
-				bpro.addAll(beanFilter.getReadOnlyProperties());
-				bpwo.addAll(beanFilter.getWriteOnlyProperties());
+				bpro.addAll(bf.getReadOnlyProperties());
+				bpwo.addAll(bf.getWriteOnlyProperties());
 			}
 
 			fixedBeanProps.addAll(bpi);
@@ -863,10 +862,10 @@ public class BeanMeta<T> {
 			}
 
 			// Make sure at least one property was found.
-			if (beanFilter == null && ctx.isBeansRequireSomeProperties() && normalProps.isEmpty())
+			if (bf == null && ctx.isBeansRequireSomeProperties() && normalProps.isEmpty())
 				notABeanReason = "No properties detected on bean class";
 
-			sortProperties = (ctx.isSortProperties() || (nn(beanFilter) && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
+			sortProperties = (ctx.isSortProperties() || (nn(bf) && bf.isSortProperties())) && fixedBeanProps.isEmpty();
 
 			properties.set(sortProperties ? sortedMap() : map());
 
@@ -878,11 +877,11 @@ public class BeanMeta<T> {
 			});
 
 			// If a beanFilter is defined, look for inclusion and exclusion lists.
-			if (nn(beanFilter)) {
+			if (nn(bf)) {
 
 				// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
-				Set<String> bfbpi = beanFilter.getProperties();
-				Set<String> bfbpx = beanFilter.getExcludeProperties();
+				Set<String> bfbpi = bf.getProperties();
+				Set<String> bfbpx = bf.getExcludeProperties();
 
 				if (bpi.isEmpty() && ! bfbpi.isEmpty()) {
 					// Only include specified properties if BeanFilter.includeKeys is specified.
