@@ -340,7 +340,7 @@ public class BeanMeta<T> {
 
 				// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does
 				// This ensures property names are inherited correctly, preventing duplicate property definitions
-				inheritParentAnnotations(ctx, m, c, stopClass, beanps, names);
+				inheritParentAnnotations(m, c2, beanps, names);
 
 				if (! (m.isVisible(v) || isNotEmpty(beanps) || isNotEmpty(names)))
 					continue;
@@ -454,55 +454,25 @@ public class BeanMeta<T> {
 	 * This ensures that property names are inherited from parent methods, preventing duplicate
 	 * property definitions when a child overrides a @Beanp-annotated parent method.
 	 *
-	 * @param ctx The bean context.
+	 * <p>
+	 * Uses the class hierarchy to look for parent classes that come before the declaring class
+	 * in the hierarchy traversal order.
+	 *
 	 * @param method The method to check.
-	 * @param c The current class being inspected.
-	 * @param stopClass Don't look above this class in the hierarchy.
+	 * @param declaringClass The class that declares this method.
 	 * @param lp List to populate with @Beanp annotations (input/output parameter).
 	 * @param ln List to populate with @Name annotations (input/output parameter).
 	 */
-	static final void inheritParentAnnotations(BeanContext ctx, MethodInfo method, Class<?> c, Class<?> stopClass, List<Beanp> lp, List<Name> ln) {
+	final void inheritParentAnnotations(MethodInfo method, ClassInfo declaringClass, List<Beanp> lp, List<Name> ln) {
 		// If this method already has @Beanp or @Name annotations, don't look for parent annotations
 		if (! lp.isEmpty() || ! ln.isEmpty())
 			return;
 
-		String methodName = method.getSimpleName();
-		List<ParameterInfo> params = method.getParameters();
 		var ap = ctx.getAnnotationProvider();
 
-		// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name
-		var currentClass = info(c);
-		var sc = currentClass.getSuperclass();
-
-		while (nn(sc) && ! sc.is(stopClass) && ! sc.is(Object.class)) {
-			// Look for a method with the same signature in the parent class
-			for (var parentMethod : sc.getDeclaredMethods()) {
-				if (parentMethod.getSimpleName().equals(methodName) && params.size() == parentMethod.getParameters().size()) {
-
-					// Check if parameter types match
-					var paramsMatch = true;
-					List<ParameterInfo> parentParams = parentMethod.getParameters();
-					for (var i = 0; i < params.size(); i++) {
-						if (! params.get(i).getParameterType().is(parentParams.get(i).getParameterType().inner())) {
-							paramsMatch = false;
-							break;
-						}
-					}
-
-					if (paramsMatch) {
-						// Found a matching parent method - check for @Beanp and @Name annotations
-						ap.find(Beanp.class, parentMethod).forEach(x -> lp.add(x.inner()));
-						ap.find(Name.class, parentMethod).forEach(x -> ln.add(x.inner()));
-
-						// If we found annotations, we're done
-						if (! lp.isEmpty() || ! ln.isEmpty())
-							return;
-					}
-				}
-			}
-
-			// Move to the next superclass
-			sc = sc.getSuperclass();
+		for (var parentMethod : method.getMatchingMethods()) {
+			ap.find(Beanp.class, parentMethod).forEach(x -> lp.add(x.inner()));
+			ap.find(Name.class, parentMethod).forEach(x -> ln.add(x.inner()));
 		}
 	}
 
