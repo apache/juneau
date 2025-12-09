@@ -465,8 +465,6 @@ public class BeanMeta<T> {
 
 	/** The properties on the target class. */
 	protected final Map<String,BeanPropertyMeta> properties;
-	/** The properties on the target class. */
-	protected final BeanPropertyMeta[] propertyArray;
 	/** The hidden properties on the target class. */
 	protected final Map<String,BeanPropertyMeta> hiddenProperties;
 	/** The getter properties on the target class. */
@@ -879,7 +877,6 @@ public class BeanMeta<T> {
 		// Assign to final fields
 		this.notABeanReason = notABeanReason;
 		this.properties = u(properties.get());
-		this.propertyArray = this.properties == null ? EMPTY_PROPERTIES : array(this.properties.values(), BeanPropertyMeta.class);
 		this.hiddenProperties = u(hiddenProperties);
 		this.getterProps = u(getterProps);
 		this.setterProps = u(setterProps);
@@ -888,10 +885,16 @@ public class BeanMeta<T> {
 
 		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry.get()).build();
 
-		if (sortProperties)
-			Arrays.sort(propertyArray);
 		dictionaryName2 = memoize(()->findDictionaryName());
 		beanProxyInvocationHandler = memoize(()->ctx.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
+	}
+
+	protected Map<String,BeanPropertyMeta> getProperties() {
+		return properties;
+	}
+
+	protected Map<String,BeanPropertyMeta> getHiddenProperties() {
+		return hiddenProperties;
 	}
 
 	protected boolean hasConstructor() {
@@ -920,10 +923,7 @@ public class BeanMeta<T> {
 	 * @return The result of the function.  Never <jk>null</jk>.
 	 */
 	public <T2> Optional<T2> firstProperty(Predicate<BeanPropertyMeta> filter, Function<BeanPropertyMeta,T2> function) {
-		for (var x : propertyArray)
-			if (test(filter, x))
-				return opt(function.apply(x));
-		return opte();
+		return properties.values().stream().filter(filter).map(function).findFirst();
 	}
 
 	/**
@@ -933,9 +933,7 @@ public class BeanMeta<T> {
 	 * @param action The action to apply.
 	 */
 	public void forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
-		for (var x : propertyArray)
-			if (test(filter, x))
-				action.accept(x);
+		properties.values().stream().filter(x -> filter == null ? true : filter.test(x)).forEach(action);
 	}
 
 	/**
@@ -1006,7 +1004,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return Metadata on all properties associated with this bean.
 	 */
-	public Collection<BeanPropertyMeta> getPropertyMetas() { return u(l(propertyArray)); }
+	public Collection<BeanPropertyMeta> getPropertyMetas() { return properties.values(); }
 
 	/**
 	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the
@@ -1055,8 +1053,7 @@ public class BeanMeta<T> {
 	public String toString() {
 		var sb = new StringBuilder(c.getName());
 		sb.append(" {\n");
-		for (var pm : propertyArray)
-			sb.append('\t').append(pm.toString()).append(",\n");
+		properties.values().forEach(x -> sb.append('\t').append(x.toString()).append(",\n"));
 		sb.append('}');
 		return sb.toString();
 	}

@@ -226,9 +226,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return This object.
 	 */
 	public BeanMap<T> forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
-		for (var bpm : meta.propertyArray)
-			if (filter.test(bpm))
-				action.accept(bpm);
+		meta.getProperties().values().stream().filter(filter).forEach(action);
+//		for (var bpm : meta.propertyArray)
+//			if (filter.test(bpm))
+//				action.accept(bpm);
 		return this;
 	}
 
@@ -389,16 +390,17 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		}
 
 		// Initialize any null Optional<X> fields.
-		for (var pMeta : this.meta.propertyArray) {
-			var cm = pMeta.getClassMeta();
-			if (cm.isOptional() && pMeta.get(this, pMeta.getName()) == null)
-				pMeta.set(this, pMeta.getName(), cm.getOptionalDefault());
-		}
-		// Do the same for hidden fields.
-		this.meta.hiddenProperties.forEach((k, v) -> {
+		meta.getProperties().forEach((k,v) -> {
 			var cm = v.getClassMeta();
-			if (cm.isOptional() && v.get(this, v.getName()) == null)
-				v.set(this, v.getName(), cm.getOptionalDefault());
+			if (cm.isOptional() && v.get(this, k) == null)
+				v.set(this, k, cm.getOptionalDefault());
+		});
+
+		// Do the same for hidden fields.
+		meta.getHiddenProperties().forEach((k, v) -> {
+			var cm = v.getClassMeta();
+			if (cm.isOptional() && v.get(this, k) == null)
+				v.set(this, k, cm.getOptionalDefault());
 		});
 
 		return b;
@@ -658,7 +660,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * @return A simple collection of properties for this bean map.
 	 */
-	protected Collection<BeanPropertyMeta> getProperties() { return l(meta.propertyArray); }
+	protected Collection<BeanPropertyMeta> getProperties() { return meta.getProperties().values(); }
 
 	@SuppressWarnings("unchecked")
 	void setBean(Object bean) { this.bean = (T)bean; }
