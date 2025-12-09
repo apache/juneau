@@ -1711,6 +1711,10 @@ public class CollectionUtils {
 		return new LinkedHashSet<>(Arrays.asList(values));
 	}
 
+	public static <T> Set<T> sete() {
+		return Collections.emptySet();
+	}
+
 	/**
 	 * Convenience factory for a {@link SetBuilder}.
 	 *

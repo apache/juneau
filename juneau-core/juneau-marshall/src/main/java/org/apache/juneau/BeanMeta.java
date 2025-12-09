@@ -661,27 +661,14 @@ public class BeanMeta<T> {
 		if (! beanConstructor.constructor().isPresent() && bf == null && ctx.isBeansRequireDefaultConstructor())
 			notABeanReason = "Class does not have the required no-arg constructor";
 
-		var fixedBeanProps = bf == null ? Collections.<String>emptySet() : bf.getProperties();
+		var bfo = opt(bf);
+		var fixedBeanProps = bfo.map(x -> x.getProperties()).orElse(sete());
 
 		try {
 			var mVis = ctx.getBeanMethodVisibility();
 			var fVis = ctx.getBeanFieldVisibility();
 
-			// If @Bean.interfaceClass is specified on the parent class, then we want
-			// to use the properties defined on that class, not the subclass.
-
 			Map<String,BeanPropertyMeta.Builder> normalProps = map();  // NOAI
-
-			// Explicitly defined property names in @Bean annotation.
-			Set<String> bpi = set();
-			Set<String> bpx = set();
-			Set<String> bpro = set();
-			Set<String> bpwo = set();
-
-			if (bf != null) {
-				bpro.addAll(bf.getReadOnlyProperties());
-				bpwo.addAll(bf.getWriteOnlyProperties());
-			}
 
 			// First populate the properties with those specified in the bean annotation to
 			// ensure that ordering first.
@@ -696,10 +683,7 @@ public class BeanMeta<T> {
 					bi = Introspector.getBeanInfo(c2, null);
 				if (nn(bi)) {
 					for (var pd : bi.getPropertyDescriptors()) {
-						var name = pd.getName();
-						if (! normalProps.containsKey(name))
-							normalProps.put(name, BeanPropertyMeta.builder(this, name));
-						normalProps.get(name).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
+						normalProps.computeIfAbsent(pd.getName(), n -> BeanPropertyMeta.builder(this, n)).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
 					}
 				}
 
@@ -708,9 +692,7 @@ public class BeanMeta<T> {
 				findBeanFields(fVis).forEach(x -> {
 					var name = ap.find(info(x)).stream().filter(x2 -> x2.isType(Beanp.class) || x2.isType(Name.class)).map(x2 -> name(x2)).filter(Objects::nonNull).findFirst().orElse(propertyNamer.getPropertyName(x.getName()));
 					if (nn(name)) {
-						if (! normalProps.containsKey(name))
-							normalProps.put(name, BeanPropertyMeta.builder(this, name));
-						normalProps.get(name).setField(x);
+						normalProps.computeIfAbsent(name, n->BeanPropertyMeta.builder(this, n)).setField(x);
 					}
 				});
 
@@ -720,10 +702,8 @@ public class BeanMeta<T> {
 				bms.forEach(x -> {
 					var pn = x.propertyName;
 					var m = x.method;
-					var mi = info(m);
-					if (! normalProps.containsKey(pn))
-						normalProps.put(pn, new BeanPropertyMeta.Builder(this, pn));
-					var bpm = normalProps.get(pn);
+				var mi = info(m);
+				var bpm = normalProps.computeIfAbsent(pn, k -> new BeanPropertyMeta.Builder(this, k));
 					if (x.methodType == GETTER) {
 						// Two getters.  Pick the best.
 						if (nn(bpm.getter)) {
@@ -759,13 +739,15 @@ public class BeanMeta<T> {
 			var typeVarImpls = ClassUtils.findTypeVarImpls(c);
 
 			// Eliminate invalid properties, and set the contents of getterProps and setterProps.
+			var readOnlyProps = bfo.map(x -> x.getReadOnlyProperties()).orElse(sete());
+			var writeOnlyProps = bfo.map(x -> x.getWriteOnlyProperties()).orElse(sete());
 			for (Iterator<BeanPropertyMeta.Builder> i = normalProps.values().iterator(); i.hasNext();) {
 				var p = i.next();
 				try {
 					if (p.field == null)
 						p.setInnerField(findInnerBeanField(p.name));
 
-					if (p.validate(ctx, beanRegistry.get(), typeVarImpls, bpro, bpwo)) {
+					if (p.validate(ctx, beanRegistry.get(), typeVarImpls, readOnlyProps, writeOnlyProps)) {
 
 						if (nn(p.getter))
 							getterProps.put(p.getter, p.name);
@@ -817,7 +799,7 @@ public class BeanMeta<T> {
 				Set<String> bfbpi = bf.getProperties();
 				Set<String> bfbpx = bf.getExcludeProperties();
 
-				if (bpi.isEmpty() && ! bfbpi.isEmpty()) {
+				if (! bfbpi.isEmpty()) {
 					// Only include specified properties if BeanFilter.includeKeys is specified.
 					// Note that the order must match includeKeys.
 					Map<String,BeanPropertyMeta> properties2 = map();  // NOAI
@@ -828,22 +810,10 @@ public class BeanMeta<T> {
 					hiddenProperties.putAll(properties.get());
 					properties.set(properties2);
 				}
-				if (bpx.isEmpty() && ! bfbpx.isEmpty()) {
+				if (! bfbpx.isEmpty()) {
 					bfbpx.forEach(x -> hiddenProperties.put(x, properties.get().remove(x)));
 				}
 			}
-
-			if (! bpi.isEmpty()) {
-				Map<String,BeanPropertyMeta> properties2 = map();  // NOAI
-				bpi.forEach(x -> {
-					if (properties.get().containsKey(x))
-						properties2.put(x, properties.get().remove(x));
-				});
-				hiddenProperties.putAll(properties.get());
-				properties.set(properties2);
-			}
-
-			bpx.forEach(x -> hiddenProperties.put(x, properties.get().remove(x)));
 
 			if (nn(pNames)) {
 				Map<String,BeanPropertyMeta> properties2 = map();

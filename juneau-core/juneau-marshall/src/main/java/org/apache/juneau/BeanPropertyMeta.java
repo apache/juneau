@@ -496,13 +496,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			} else /* isArray() */ {
 
-				if (m.arrayPropertyCache == null)
-					m.arrayPropertyCache = new TreeMap<>();
+			if (m.arrayPropertyCache == null)
+				m.arrayPropertyCache = new TreeMap<>();
 
-				List l = m.arrayPropertyCache.get(name);
-				if (l == null) {
-					l = new LinkedList();  // ArrayLists and LinkLists appear to perform equally.
-					m.arrayPropertyCache.put(name, l);
+			List l = m.arrayPropertyCache.get(name);
+			if (l == null) {
+				l = new LinkedList();  // ArrayLists and LinkLists appear to perform equally.
+				m.arrayPropertyCache.put(name, l);
 
 					// Copy any existing array values into the temporary list.
 					var oldArray = invokeGetter(bean, pName);
