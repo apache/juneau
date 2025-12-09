@@ -657,50 +657,38 @@ public class BeanMeta<T> {
 
 		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::isNotEmpty).findFirst().orElseGet(() -> ctx.getBeanTypePropertyName());
 
+		// Check if constructor is required but not found
+		if (! beanConstructor.constructor().isPresent() && bf == null && ctx.isBeansRequireDefaultConstructor())
+			notABeanReason = "Class does not have the required no-arg constructor";
+
+		var fixedBeanProps = bf == null ? Collections.<String>emptySet() : bf.getProperties();
+
 		try {
 			var mVis = ctx.getBeanMethodVisibility();
 			var fVis = ctx.getBeanFieldVisibility();
 
 			// If @Bean.interfaceClass is specified on the parent class, then we want
 			// to use the properties defined on that class, not the subclass.
-			var c2 = (nn(bf) && nn(bf.getInterfaceClass()) ? bf.getInterfaceClass() : c);
 
 			Map<String,BeanPropertyMeta.Builder> normalProps = map();  // NOAI
 
-			// Check if constructor is required but not found
-			if (! beanConstructor.constructor().isPresent() && bf == null && ctx.isBeansRequireDefaultConstructor())
-				notABeanReason = "Class does not have the required no-arg constructor";
-
 			// Explicitly defined property names in @Bean annotation.
-			Set<String> fixedBeanProps = set();
 			Set<String> bpi = set();
 			Set<String> bpx = set();
 			Set<String> bpro = set();
 			Set<String> bpwo = set();
 
-			Set<String> filterProps = set();  // Names of properties defined in @Bean(properties)
-
 			if (bf != null) {
-
-				var bfbpi = bf.getProperties();
-
-				filterProps.addAll(bfbpi);
-
-				// Get the 'properties' attribute if specified.
-				if (bpi.isEmpty())
-					fixedBeanProps.addAll(bfbpi);
-
 				bpro.addAll(bf.getReadOnlyProperties());
 				bpwo.addAll(bf.getWriteOnlyProperties());
 			}
-
-			fixedBeanProps.addAll(bpi);
 
 			// First populate the properties with those specified in the bean annotation to
 			// ensure that ordering first.
 			fixedBeanProps.forEach(x -> normalProps.put(x, BeanPropertyMeta.builder(this, x)));
 
 			if (ctx.isUseJavaBeanIntrospector()) {
+				var c2 = (bf != null && nn(bf.getInterfaceClass()) ? bf.getInterfaceClass() : c);
 				var bi = (BeanInfo)null;
 				if (! c2.isInterface())
 					bi = Introspector.getBeanInfo(c2, stopClass);
