@@ -154,7 +154,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final OptionalSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
 	private final OptionalSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
 	private final Supplier<KeyValueTypes> keyValueTypes;                        // Key and value types for MAP types.
-	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 	private final OptionalSupplier<MarshalledFilter> marshalledFilter;
 	private final Supplier<Property<T,Object>> nameProperty;                   // The method to set the name on an object (if it has one).
 	private final OptionalSupplier<ConstructorInfo> noArgConstructor;          // The no-arg constructor for this class (if it has one).
@@ -166,7 +165,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final OptionalSupplier<BeanMeta.BeanMetaValue<T>> beanMeta;
 
-	record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
+	private record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
 		Optional<ClassMeta<?>> optKeyType() { return opt(keyType()); }
 		Optional<ClassMeta<?>> optValueType() { return opt(valueType()); }
 	}
@@ -185,82 +184,80 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.beanContext = beanContext;
 		this.cat = new Categories();
 
-		try (var lw = lock.write()) {
-			// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
-			if (nn(beanContext) && nn(beanContext.cmCache) && isCacheable(innerClass))
-				beanContext.cmCache.put(innerClass, this);
+		// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
+		if (nn(beanContext) && nn(beanContext.cmCache) && isCacheable(innerClass))
+			beanContext.cmCache.put(innerClass, this);
 
-			var ap = beanContext.getAnnotationProvider();
+		var ap = beanContext.getAnnotationProvider();
 
-			if (isChildOf(Delegate.class)) {
-				cat.set(DELEGATE);
-			}
-			if (isEnum()) {
-				cat.set(ENUM);
-			} else if (isChildOf(CharSequence.class)) {
-				cat.set(CHARSEQ);
-				if (is(String.class)) {
-					cat.set(STR);
-				}
-			} else if (isChildOf(Number.class) || isAny(byte.class, short.class, int.class, long.class, float.class, double.class)) {
-				cat.set(NUMBER);
-				if (isChildOfAny(Float.class, Double.class) || isAny(float.class, double.class)) {
-					cat.set(DECIMAL);
-				}
-			} else if (isChildOf(Collection.class)) {
-				cat.set(COLLECTION);
-				if (isChildOf(Set.class)) {
-					cat.set(SET);
-				} else if (isChildOf(List.class)) {
-					cat.set(LIST);
-				}
-			} else if (isChildOf(Map.class)) {
-				cat.set(MAP);
-				if (isChildOf(BeanMap.class)) {
-					cat.set(BEANMAP);
-				}
-			} else if (isChildOfAny(Date.class, Calendar.class)) {
-				if (isChildOf(Date.class)) {
-					cat.set(DATE);
-				} else if (isChildOf(Calendar.class)) {
-					cat.set(CALENDAR);
-				}
-			} else if (isChildOf(Temporal.class)) {
-				cat.set(TEMPORAL);
-			} else if (inner().isArray()) {
-				cat.set(ARRAY);
-			} else if (isChildOfAny(URL.class, URI.class) || ap.has(Uri.class, this)) {
-				cat.set(URI);
-			} else if (isChildOf(Reader.class)) {
-				cat.set(READER);
-			} else if (isChildOf(InputStream.class)) {
-				cat.set(INPUTSTREAM);
-			}
-
-			beanMeta = memoize(()->findBeanMeta());
-			builderSwap = memoize(()->findBuilderSwap());
-			childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
-			childSwaps = memoize(()->findChildSwaps());
-			childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
-			beanDictionaryName = memoize(()->findBeanDictionaryName());
-			elementType = memoize(()->findElementType());
-			enumValues = memoize(()->findEnumValues());
-			example = memoize(()->findExample());
-			exampleField = memoize(()->findExampleField());
-			exampleMethod = memoize(()->findExampleMethod());
-			fromStringMethod = memoize(()->findFromStringMethod());
-			implClass = memoize(()->findImplClass());
-			keyValueTypes = memoize(()->findKeyValueTypes());
-			marshalledFilter = memoize(()->findMarshalledFilter());
-			nameProperty = memoize(()->findNameProperty());
-			noArgConstructor = memoize(()->findNoArgConstructor());
-			parentProperty = memoize(()->findParentProperty());
-			stringConstructor = memoize(()->findStringConstructor());
-			swaps = memoize(()->findSwaps());
-
-			this.args = null;
-			this.stringMutater = Mutaters.get(String.class, inner());
+		if (isChildOf(Delegate.class)) {
+			cat.set(DELEGATE);
 		}
+		if (isEnum()) {
+			cat.set(ENUM);
+		} else if (isChildOf(CharSequence.class)) {
+			cat.set(CHARSEQ);
+			if (is(String.class)) {
+				cat.set(STR);
+			}
+		} else if (isChildOf(Number.class) || isAny(byte.class, short.class, int.class, long.class, float.class, double.class)) {
+			cat.set(NUMBER);
+			if (isChildOfAny(Float.class, Double.class) || isAny(float.class, double.class)) {
+				cat.set(DECIMAL);
+			}
+		} else if (isChildOf(Collection.class)) {
+			cat.set(COLLECTION);
+			if (isChildOf(Set.class)) {
+				cat.set(SET);
+			} else if (isChildOf(List.class)) {
+				cat.set(LIST);
+			}
+		} else if (isChildOf(Map.class)) {
+			cat.set(MAP);
+			if (isChildOf(BeanMap.class)) {
+				cat.set(BEANMAP);
+			}
+		} else if (isChildOfAny(Date.class, Calendar.class)) {
+			if (isChildOf(Date.class)) {
+				cat.set(DATE);
+			} else if (isChildOf(Calendar.class)) {
+				cat.set(CALENDAR);
+			}
+		} else if (isChildOf(Temporal.class)) {
+			cat.set(TEMPORAL);
+		} else if (inner().isArray()) {
+			cat.set(ARRAY);
+		} else if (isChildOfAny(URL.class, URI.class) || ap.has(Uri.class, this)) {
+			cat.set(URI);
+		} else if (isChildOf(Reader.class)) {
+			cat.set(READER);
+		} else if (isChildOf(InputStream.class)) {
+			cat.set(INPUTSTREAM);
+		}
+
+		beanMeta = memoize(()->findBeanMeta());
+		builderSwap = memoize(()->findBuilderSwap());
+		childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
+		childSwaps = memoize(()->findChildSwaps());
+		childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
+		beanDictionaryName = memoize(()->findBeanDictionaryName());
+		elementType = memoize(()->findElementType());
+		enumValues = memoize(()->findEnumValues());
+		example = memoize(()->findExample());
+		exampleField = memoize(()->findExampleField());
+		exampleMethod = memoize(()->findExampleMethod());
+		fromStringMethod = memoize(()->findFromStringMethod());
+		implClass = memoize(()->findImplClass());
+		keyValueTypes = memoize(()->findKeyValueTypes());
+		marshalledFilter = memoize(()->findMarshalledFilter());
+		nameProperty = memoize(()->findNameProperty());
+		noArgConstructor = memoize(()->findNoArgConstructor());
+		parentProperty = memoize(()->findParentProperty());
+		stringConstructor = memoize(()->findStringConstructor());
+		swaps = memoize(()->findSwaps());
+
+		this.args = null;
+		this.stringMutater = Mutaters.get(String.class, inner());
 	}
 
 	protected ObjectSwap<?,?> findSwap(Class<?> c) {
@@ -1766,12 +1763,5 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return sb.append(n).append(et != null && et.isObject() ? "" : "<" + (et == null ? "?" : et.toString(simple)) + ">");
 		}
 		return sb.append(n);
-	}
-
-	/**
-	 * Causes thread to wait until constructor has exited.
-	 */
-	void waitForInit() {
-		try (var x = lock.read()) {}
 	}
 }

@@ -4331,8 +4331,8 @@ public class BeanContext extends Context {
 					cm = new ClassMeta<>(type, this);
 			}
 		}
-		if (waitForInit)
-			cm.waitForInit();
+//		if (waitForInit)
+//			cm.waitForInit();
 		return cm;
 	}
 
