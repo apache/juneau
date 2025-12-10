@@ -1197,13 +1197,13 @@
 <a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 	<strong class="jxr_keyword">private</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a> findBeanRegistry() {
 <a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 		<em class="jxr_comment">// Bean dictionary on bean filter.</em>
-<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 		List&lt;Class&lt;?&gt;&gt; beanDictionaryClasses = nn(beanFilter) ? copyOf(beanFilter.getBeanDictionary()) : list();
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 		<strong class="jxr_keyword">var</strong> beanDictionaryClasses = opt(beanFilter).map(x -&gt; (List&lt;ClassInfo&gt;)copyOf(x.getBeanDictionary())).orElse(list());
 <a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 
 <a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 		<em class="jxr_comment">// Bean dictionary from @Bean(typeName) annotation.</em>
 <a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 		<strong class="jxr_keyword">var</strong> ba = beanContext.getAnnotationProvider().find(Bean.<strong class="jxr_keyword">class</strong>, classMeta);
-<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 		ba.stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -&gt; beanDictionaryClasses.add(classMeta.<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 		ba.stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -&gt; beanDictionaryClasses.add(classMeta));
 <a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 
-<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a>(beanContext, <strong class="jxr_keyword">null</strong>, beanDictionaryClasses.toArray(<strong class="jxr_keyword">new</strong> Class&lt;?&gt;[beanDictionaryClasses.size()]));
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a>(beanContext, <strong class="jxr_keyword">null</strong>, beanDictionaryClasses.stream().map(ClassInfo::<strong class="jxr_keyword">inner</strong>).toArray(Class&lt;?&gt;[]::<strong class="jxr_keyword">new</strong>));
 <a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 	}
 <a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 	<em class="jxr_comment">/*</em>
