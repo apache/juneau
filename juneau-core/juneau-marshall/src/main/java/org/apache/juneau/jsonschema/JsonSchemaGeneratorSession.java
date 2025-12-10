@@ -302,9 +302,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		return null;
 	}
 
-	// TODO - Convert pNames to List<String>
-	@SuppressWarnings({ "unchecked", "rawtypes", "null" })
-	private JsonMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private JsonMap getSchema(ClassMeta<?> eType, String attrName, List<String> pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
 		throws BeanRecursionException, SerializeException {
 
 		if (ctx.isIgnoredType(eType))
@@ -425,8 +424,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 					BeanPropertyMeta p = i.next();
 					if (p.canRead()) {
 						var pProps = p.getProperties();
-						var pNamesArray = pProps == null ? null : pProps.toArray(new String[0]);
-						properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), pNamesArray, exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
+						properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), pProps, exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
 					}
 				}
 				out.put("properties", properties);
