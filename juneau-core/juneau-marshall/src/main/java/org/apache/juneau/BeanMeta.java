@@ -358,7 +358,7 @@ public class BeanMeta<T> {
 	private final Map<String,BeanPropertyMeta> properties;                     // The properties on the target class.
 	private final Map<Method,String> setterProps;                              // The setter properties on the target class.
 	private final boolean sortProperties;                                      // Whether properties should be sorted.
-	private final Class<?> stopClass;                                          // The stop class for hierarchy traversal.
+	private final ClassInfo stopClass;                                          // The stop class for hierarchy traversal.
 	private final BeanPropertyMeta typeProperty;                               // "_type" mock bean property.
 	private final String typePropertyName;                                     // "_type" property actual name.
 
@@ -385,14 +385,13 @@ public class BeanMeta<T> {
 	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
 	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
 	 */
-	@SuppressWarnings("rawtypes")
 	protected BeanMeta(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ClassInfo implClass) {
 		classMeta = cm;
 		beanContext = cm.getBeanContext();
 		beanFilter = bf;
 		implClassConstructor = opt(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null);
 		fluentSetters = beanContext.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters());
-		stopClass = opt(bf).map(x -> (Class)x.getStopClass()).orElse(Object.class);
+		stopClass = opt(bf).map(x -> x.getStopClass()).orElse(info(Object.class));
 		beanRegistry = memoize(()->findBeanRegistry());
 		classHierarchy = memoize(()->findClassHierarchy());
 		beanConstructor = findBeanConstructor();
@@ -428,12 +427,12 @@ public class BeanMeta<T> {
 			fixedBeanProps.forEach(x -> normalProps.put(x, BeanPropertyMeta.builder(this, x)));
 
 			if (beanContext.isUseJavaBeanIntrospector()) {
-				var c2 = bfo.map(x -> (Class)x.getInterfaceClass()).filter(Objects::nonNull).orElse(c);
+				var c2 = bfo.map(x -> x.getInterfaceClass()).filter(Objects::nonNull).orElse(classMeta);
 				var bi = (BeanInfo)null;
 				if (! c2.isInterface())
-					bi = Introspector.getBeanInfo(c2, stopClass);
+					bi = Introspector.getBeanInfo(c2.inner(), stopClass.inner());
 				else
-					bi = Introspector.getBeanInfo(c2, null);
+					bi = Introspector.getBeanInfo(c2.inner(), null);
 				if (nn(bi)) {
 					for (var pd : bi.getPropertyDescriptors()) {
 						normalProps.computeIfAbsent(pd.getName(), n -> BeanPropertyMeta.builder(this, n)).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
@@ -1228,8 +1227,8 @@ public class BeanMeta<T> {
 		var result = new LinkedList<ClassInfo>();
 		// If @Bean.interfaceClass is specified on the parent class, then we want
 		// to use the properties defined on that class, not the subclass.
-		var c2 = (nn(beanFilter) && nn(beanFilter.getInterfaceClass()) ? beanFilter.getInterfaceClass() : classMeta.inner());
-		findClassHierarchy(info(c2), stopClass, result::add);
+		var c2 = (nn(beanFilter) && nn(beanFilter.getInterfaceClass()) ? beanFilter.getInterfaceClass() : classMeta);
+		findClassHierarchy(c2, stopClass, result::add);
 		return u(result);
 	}
 
@@ -1251,9 +1250,9 @@ public class BeanMeta<T> {
 	 * @param stopClass The class to stop traversal at (exclusive). Traversal will not proceed beyond this class.
 	 * @param consumer The consumer to invoke for each class in the hierarchy.
 	 */
-	private void findClassHierarchy(ClassInfo c, Class<?> stopClass, Consumer<ClassInfo> consumer) {
+	private void findClassHierarchy(ClassInfo c, ClassInfo stopClass, Consumer<ClassInfo> consumer) {
 		var sc = c.getSuperclass();
-		if (nn(sc) && ! sc.is(stopClass))
+		if (nn(sc) && ! sc.is(stopClass.inner()))
 			findClassHierarchy(sc, stopClass, consumer);
 		c.getInterfaces().forEach(x -> findClassHierarchy(x, stopClass, consumer));
 		consumer.accept(c);

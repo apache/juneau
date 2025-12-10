@@ -51,7 +51,7 @@ public class BeanFilter {
 		private ClassInfoTyped<?> beanClass;
 		private String typeName, example;
 		private Set<String> properties = set(), excludeProperties = set(), readOnlyProperties = set(), writeOnlyProperties = set();
-		private Class<?> implClass, interfaceClass, stopClass;
+		private ClassInfo implClass, interfaceClass, stopClass;
 		private boolean sortProperties, fluentSetters;
 		private BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
 		private List<ClassInfo> dictionary;
@@ -92,13 +92,13 @@ public class BeanFilter {
 				if (isNotVoid(x.propertyNamer()))
 					propertyNamer(x.propertyNamer());
 				if (isNotVoid(x.interfaceClass()))
-					interfaceClass(x.interfaceClass());
+					interfaceClass(info(x.interfaceClass()));
 				if (isNotVoid(x.stopClass()))
-					stopClass(x.stopClass());
+					stopClass(info(x.stopClass()));
 				if (isNotVoid(x.interceptor()))
 					interceptor(x.interceptor());
 				if (isNotVoid(x.implClass()))
-					implClass(x.implClass());
+					implClass(info(x.implClass()));
 				if (isNotEmptyArray(x.dictionary()))
 					dictionary(x.dictionary());
 				if (isNotEmpty(x.example()))
@@ -279,6 +279,20 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
+			this.implClass = value == null ? null : info(value);
+			return this;
+		}
+
+		/**
+		 * Implementation class.
+		 *
+		 * <p>
+		 * Same as the other implClass method but accepts a {@link ClassInfo} object directly instead of a {@link Class} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder implClass(ClassInfo value) {
 			this.implClass = value;
 			return this;
 		}
@@ -372,6 +386,20 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> value) {
+			this.interfaceClass = value == null ? null : info(value);
+			return this;
+		}
+
+		/**
+		 * Interface class.
+		 *
+		 * <p>
+		 * Same as the other interfaceClass method but accepts a {@link ClassInfo} object directly instead of a {@link Class} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder interfaceClass(ClassInfo value) {
 			this.interfaceClass = value;
 			return this;
 		}
@@ -621,6 +649,20 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> value) {
+			this.stopClass = value == null ? null : info(value);
+			return this;
+		}
+
+		/**
+		 * Stop class.
+		 *
+		 * <p>
+		 * Same as the other stopClass method but accepts a {@link ClassInfo} object directly instead of a {@link Class} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder stopClass(ClassInfo value) {
 			this.stopClass = value;
 			return this;
 		}
@@ -725,14 +767,14 @@ public class BeanFilter {
 	private final String example;
 	private final Set<String> excludeProperties;
 	private final boolean fluentSetters;
-	private final Class<?> implClass;
-	private final Class<?> interfaceClass;
+	private final ClassInfo implClass;
+	private final ClassInfo interfaceClass;
 	private final BeanInterceptor interceptor;
 	private final Set<String> properties;
 	private final PropertyNamer propertyNamer;
 	private final Set<String> readOnlyProperties;
 	private final boolean sortProperties;
-	private final Class<?> stopClass;
+	private final ClassInfo stopClass;
 	private final String typeName;
 	private final Set<String> writeOnlyProperties;
 
@@ -790,14 +832,14 @@ public class BeanFilter {
 	 *
 	 * @return The implementation class associated with this class, or <jk>null</jk> if no implementation class is associated.
 	 */
-	public Class<?> getImplClass() { return implClass; }
+	public ClassInfo getImplClass() { return implClass; }
 
 	/**
 	 * Returns the interface class associated with this class.
 	 *
 	 * @return The interface class associated with this class, or <jk>null</jk> if no interface class is associated.
 	 */
-	public Class<?> getInterfaceClass() { return interfaceClass; }
+	public ClassInfo getInterfaceClass() { return interfaceClass; }
 
 	/**
 	 * Returns the set and order of names of properties associated with a bean class.
@@ -827,7 +869,7 @@ public class BeanFilter {
 	 *
 	 * @return The stop class associated with this class, or <jk>null</jk> if no stop class is associated.
 	 */
-	public Class<?> getStopClass() { return stopClass; }
+	public ClassInfo getStopClass() { return stopClass; }
 
 	/**
 	 * Returns the dictionary name associated with this bean.
