@@ -68,15 +68,15 @@ import org.apache.juneau.commons.utils.*;
 public class BeanMeta<T> {
 
 	/*
-	 * Temporary getter/setter method struct.
+	 * Temporary getter/setter method struct used for calculating bean methods.
 	 */
 	private static class BeanMethod {
-		String propertyName;
-		MethodType methodType;
-		Method method;
-		ClassInfo type;
+		private String propertyName;
+		private MethodType methodType;
+		private Method method;
+		private ClassInfo type;
 
-		BeanMethod(String propertyName, MethodType type, Method method) {
+		private BeanMethod(String propertyName, MethodType type, Method method) {
 			this.propertyName = propertyName;
 			this.methodType = type;
 			this.method = method;
@@ -92,7 +92,7 @@ public class BeanMeta<T> {
 		 * Returns true if this method matches the class type of the specified property.
 		 * Only meant to be used for setters.
 		 */
-		boolean matchesPropertyType(BeanPropertyMeta.Builder b) {
+		private boolean matchesPropertyType(BeanPropertyMeta.Builder b) {
 			if (b == null)
 				return false;
 
@@ -124,6 +124,14 @@ public class BeanMeta<T> {
 		}
 	}
 
+	/*
+	 * Represents a bean constructor with its associated property names.
+	 *
+	 * @param constructor The constructor information.
+	 * @param propertyNames The list of property names that correspond to the constructor parameters.
+	 */
+	private record BeanConstructor(Optional<ConstructorInfo> constructor, List<String> args) {}
+
 	/**
 	 * Represents the result of creating a BeanMeta, including the bean metadata and any reason why it's not a bean.
 	 *
@@ -135,14 +143,6 @@ public class BeanMeta<T> {
 		Optional<BeanMeta<T>> optBeanMeta() { return opt(beanMeta()); }
 		Optional<String> optNotABeanReason() { return opt(notABeanReason()); }
 	}
-
-	/**
-	 * Represents a bean constructor with its associated property names.
-	 *
-	 * @param constructor The constructor information.
-	 * @param propertyNames The list of property names that correspond to the constructor parameters.
-	 */
-	record BeanConstructor(Optional<ConstructorInfo> constructor, List<String> args) {}
 
 	/**
 	 * Possible property method types.
@@ -223,26 +223,36 @@ public class BeanMeta<T> {
 				return notABean("Class is not public");
 
 			var bm = new BeanMeta<>(cm, findBeanFilter(cm), pNames, implClassConstructor);
-			var nabr = bm.notABeanReason;
-			return new BeanMetaValue<>(nabr == null ? bm : null, nabr);
+
+			if (nn(bm.notABeanReason))
+				return notABean(bm.notABeanReason);
+
+			return new BeanMetaValue<>(bm, null);
 		} catch (RuntimeException e) {
 			return new BeanMetaValue<>(null, e.getMessage());
 		}
 	}
 
-	private static void forEachClass(ClassInfo c, Class<?> stopClass, Consumer<ClassInfo> consumer) {
-		var sc = c.getSuperclass();
-		if (nn(sc) && ! sc.is(stopClass))
-			forEachClass(sc, stopClass, consumer);
-		c.getInterfaces().forEach(x -> forEachClass(x, stopClass, consumer));
-		consumer.accept(c);
-	}
-
+	/*
+	 * Shortcut for creating a BeanMetaValue with a not-a-bean reason.
+	 */
 	private static <T> BeanMetaValue<T> notABean(String reason) {
 		return new BeanMetaValue<>(null, reason);
 	}
 
-	static final String bpName(List<Beanp> p, List<Name> n) {
+	/*
+	 * Extracts the property name from {@link Beanp @Beanp} or {@link Name @Name} annotations.
+	 *
+	 * <p>
+	 * If {@link Name @Name} annotations are present, returns the value from the last one.
+	 * Otherwise, searches through {@link Beanp @Beanp} annotations and returns the first non-empty
+	 * {@link Beanp#value() value()} or {@link Beanp#name() name()} found.
+	 *
+	 * @param p List of {@link Beanp @Beanp} annotations.
+	 * @param n List of {@link Name @Name} annotations.
+	 * @return The property name, or <jk>null</jk> if no name is found.
+	 */
+	private static String bpName(List<Beanp> p, List<Name> n) {
 		if (p.isEmpty() && n.isEmpty())
 			return null;
 		if (! n.isEmpty())
@@ -259,14 +269,35 @@ public class BeanMeta<T> {
 		return name.orElse(null);
 	}
 
-	/**
-	 * Finds the bean filter for the specified class metadata.
+	/*
+	 * Finds and creates the bean filter for the specified class metadata.
+	 *
+	 * <p>
+	 * Searches for {@link Bean @Bean} annotations on the class and its parent classes/interfaces. If found, creates a
+	 * {@link BeanFilter} that applies the configuration from those annotations.
+	 *
+	 * <p>
+	 * When multiple {@link Bean @Bean} annotations are found (e.g., on a parent class and a child class), they are
+	 * applied in reverse order (parent classes first, then child classes). This ensures that child class annotations
+	 * override parent class annotations, allowing child classes to customize or extend the bean configuration.
+	 *
+	 * <p>
+	 * The bean filter controls various aspects of bean serialization and parsing, such as:
+	 * <ul>
+	 * 	<li>Property inclusion/exclusion lists
+	 * 	<li>Property ordering and sorting
+	 * 	<li>Type name mapping for dictionary lookups
+	 * 	<li>Fluent setter detection
+	 * 	<li>Read-only and write-only property definitions
+	 * </ul>
 	 *
 	 * @param <T> The class type.
 	 * @param cm The class metadata to find the filter for.
-	 * @return The bean filter, or <jk>null</jk> if no filter is found.
+	 * @return The bean filter, or <jk>null</jk> if no {@link Bean @Bean} annotations are found on the class or its hierarchy.
+	 * @see Bean
+	 * @see BeanFilter
 	 */
-	static <T> BeanFilter findBeanFilter(ClassMeta<T> cm) {
+	private static <T> BeanFilter findBeanFilter(ClassMeta<T> cm) {
 		var ap = cm.getBeanContext().getAnnotationProvider();
 		var l = ap.find(Bean.class, cm);
 		if (l.isEmpty())
@@ -274,7 +305,28 @@ public class BeanMeta<T> {
 		return BeanFilter.create(cm).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
 	}
 
-	static String name(AnnotationInfo<?> ai) {
+	/*
+	 * Extracts the property name from a single {@link Beanp @Beanp} or {@link Name @Name} annotation.
+	 *
+	 * <p>
+	 * For {@link Beanp @Beanp} annotations, returns the first non-empty value found in the following order:
+	 * <ol>
+	 * 	<li>{@link Beanp#name() name()}
+	 * 	<li>{@link Beanp#value() value()}
+	 * </ol>
+	 *
+	 * <p>
+	 * For {@link Name @Name} annotations, returns the {@link Name#value() value()}.
+	 *
+	 * <p>
+	 * This method is used to extract property names from individual annotations, typically when processing
+	 * annotation lists in stream operations.
+	 *
+	 * @param ai The annotation info containing either a {@link Beanp @Beanp} or {@link Name @Name} annotation.
+	 * @return The property name extracted from the annotation, or <jk>null</jk> if no name is found.
+	 * @see #bpName(List, List)
+	 */
+	private static String name(AnnotationInfo<?> ai) {
 		if (ai.isType(Beanp.class)) {
 			Beanp p = ai.cast(Beanp.class).inner();
 			if (isNotEmpty(p.name()))
@@ -289,53 +341,27 @@ public class BeanMeta<T> {
 		return null;
 	}
 
-	/** The target class type that this meta object describes. */
-	protected final ClassMeta<T> classMeta;
-
-	/** The target class that this meta object describes. */
-	protected final Class<T> c;
-
-	/** The properties on the target class. */
-	protected final Map<String,BeanPropertyMeta> properties;
-
-	/** The hidden properties on the target class. */
-	protected final Map<String,BeanPropertyMeta> hiddenProperties;
-
-	/** The getter properties on the target class. */
-	protected final Map<Method,String> getterProps;
-	/** The setter properties on the target class. */
-	protected final Map<Method,String> setterProps;
-	/** The bean context that created this metadata object. */
-	protected final BeanContext ctx;
-	/** Optional bean filter associated with the target class. */
-	protected final BeanFilter beanFilter;
-	private final Class<?> stopClass;
-	/** The constructor for this bean. */
-	private final BeanConstructor beanConstructor;
-
-	/** Optional constructor to use if one cannot be found. */
-	private final ConstructorInfo implClassConstructor;
-
-	// Other fields
-	final String typePropertyName;                         // "_type" property actual name.
-
-	private final BeanPropertyMeta typeProperty;           // "_type" mock bean property.
-
-	final BeanPropertyMeta dynaProperty;                   // "extras" property.
-
-	private final Supplier<String> dictionaryName2;                   // The @Bean(typeName) annotation defined on this bean class.
-
-	private final OptionalSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
-
-	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
-
-	private final Supplier<BeanRegistry> beanRegistry;
-
-	private final Supplier<List<ClassInfo>> classHierarchy;
-
-	final boolean sortProperties;
-
-	final boolean fluentSetters;
+	private final BeanConstructor beanConstructor;                                                                  // The constructor for this bean.
+	protected final BeanFilter beanFilter;                                                                          // Optional bean filter associated with the target class.
+	private final OptionalSupplier<InvocationHandler> beanProxyInvocationHandler;                                  // The invocation handler for this bean (if it's an interface).
+	private final Supplier<BeanRegistry> beanRegistry;                                                              // The bean registry for this bean.
+	protected final Class<T> c;                                                                                     // The target class that this meta object describes.
+	private final Supplier<List<ClassInfo>> classHierarchy;                                                         // List of all classes traversed in the class hierarchy.
+	protected final ClassMeta<T> classMeta;                                                                         // The target class type that this meta object describes.
+	protected final BeanContext ctx;                                                                                // The bean context that created this metadata object.
+	private final Supplier<String> dictionaryName2;                                                                 // The @Bean(typeName) annotation defined on this bean class.
+	final BeanPropertyMeta dynaProperty;                                                                            // "extras" property.
+	final boolean fluentSetters;                                                                                    // Whether fluent setters are enabled.
+	protected final Map<Method,String> getterProps;                                                                 // The getter properties on the target class.
+	protected final Map<String,BeanPropertyMeta> hiddenProperties;                                                  // The hidden properties on the target class.
+	private final ConstructorInfo implClassConstructor;                                                             // Optional constructor to use if one cannot be found.
+	final String notABeanReason;                                                                                    // Readable string explaining why this class wasn't a bean.
+	protected final Map<String,BeanPropertyMeta> properties;                                                        // The properties on the target class.
+	protected final Map<Method,String> setterProps;                                                                 // The setter properties on the target class.
+	final boolean sortProperties;                                                                                   // Whether properties should be sorted.
+	private final Class<?> stopClass;                                                                               // The stop class for hierarchy traversal.
+	private final BeanPropertyMeta typeProperty;                                                                    // "_type" mock bean property.
+	final String typePropertyName;                                                                                  // "_type" property actual name.
 
 	/**
 	 * Constructor.
@@ -909,8 +935,16 @@ public class BeanMeta<T> {
 		// If @Bean.interfaceClass is specified on the parent class, then we want
 		// to use the properties defined on that class, not the subclass.
 		var c2 = (nn(beanFilter) && nn(beanFilter.getInterfaceClass()) ? beanFilter.getInterfaceClass() : c);
-		forEachClass(info(c2), stopClass, result::add);
+		findClassHierarchy(info(c2), stopClass, result::add);
 		return u(result);
+	}
+
+	private void findClassHierarchy(ClassInfo c, Class<?> stopClass, Consumer<ClassInfo> consumer) {
+		var sc = c.getSuperclass();
+		if (nn(sc) && ! sc.is(stopClass))
+			findClassHierarchy(sc, stopClass, consumer);
+		c.getInterfaces().forEach(x -> findClassHierarchy(x, stopClass, consumer));
+		consumer.accept(c);
 	}
 
 	private String findDictionaryName() {
