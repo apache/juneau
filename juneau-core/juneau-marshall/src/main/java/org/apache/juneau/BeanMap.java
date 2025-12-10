@@ -124,9 +124,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public void add(String property, Object value) {
 		var p = getPropertyMeta(property);
 		if (p == null) {
-			if (meta.getCtx().isIgnoreUnknownBeanProperties())
+			if (meta.getBeanContext().isIgnoreUnknownBeanProperties())
 				return;
-			throw bex(meta.getC(), "Bean property ''{0}'' not found.", property);
+			throw bex(meta.getClassMeta(), "Bean property ''{0}'' not found.", property);
 		}
 		p.add(this, property, value);
 	}
@@ -634,12 +634,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public Object put(String property, Object value) {
 		var p = getPropertyMeta(property);
 		if (p == null) {
-			if (meta.getCtx().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
+			if (meta.getBeanContext().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
 				return meta.onWriteProperty(bean, property, null);
 
 			p = getPropertyMeta("*");
 			if (p == null)
-				throw bex(meta.getC(), "Bean property ''{0}'' not found.", property);
+				throw bex(meta.getClassMeta(), "Bean property ''{0}'' not found.", property);
 		}
 		return p.set(this, property, value);
 	}

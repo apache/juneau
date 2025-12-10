@@ -58,6 +58,21 @@ public class ThrowableUtils {
 	}
 
 	/**
+	 * Shortcut for creating a {@link BeanRuntimeException} with a message and associated class.
+	 *
+	 * <p>
+	 * Same as {@link #bex(Class, String, Object...) bex(Class, String, Object...)} but accepts a {@link ClassInfo} instead of a {@link Class}.
+	 *
+	 * @param c The class info associated with the exception.
+	 * @param msg The message.
+	 * @param args Optional {@link String#format(String, Object...)} arguments.
+	 * @return A new {@link BeanRuntimeException}.
+	 */
+	public static BeanRuntimeException bex(ClassInfo c, String msg, Object...args) {
+		return new BeanRuntimeException(c.inner(), msg, args);
+	}
+
+	/**
 	 * Creates a {@link RuntimeException}.
 	 *
 	 * @param msg The exception message.
@@ -89,6 +104,22 @@ public class ThrowableUtils {
 	 */
 	public static BeanRuntimeException bex(Throwable e, Class<?> c, String msg, Object...args) {
 		return new BeanRuntimeException(e, c, msg, args);
+	}
+
+	/**
+	 * Shortcut for creating a {@link BeanRuntimeException} with a cause, message, and associated class.
+	 *
+	 * <p>
+	 * Same as {@link #bex(Throwable, Class, String, Object...)} but accepts a {@link ClassInfo} instead of a {@link Class}.
+	 *
+	 * @param e The cause of the exception.
+	 * @param c The class info associated with the exception.
+	 * @param msg The message.
+	 * @param args Optional {@link String#format(String, Object...)} arguments.
+	 * @return A new {@link BeanRuntimeException}.
+	 */
+	public static BeanRuntimeException bex(Throwable e, ClassInfo c, String msg, Object...args) {
+		return new BeanRuntimeException(e, c.inner(), msg, args);
 	}
 
 	/**
@@ -228,7 +259,22 @@ public class ThrowableUtils {
 	 * Prints a stack trace with a maximum depth limit to standard error.
 	 *
 	 * <p>
+	 * This method is useful for {@link StackOverflowError} situations where printing the full stack trace
+	 * can cause additional errors due to stack exhaustion. The stack trace will be limited to the specified
+	 * maximum number of elements.
+	 *
+	 * <p>
 	 * Same as {@link #printStackTrace(Throwable, PrintWriter, Integer)} but writes to {@link System#err}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>try</jk> {
+	 * 		<jc>// Some code that might cause StackOverflowError</jc>
+	 * 	} <jk>catch</jk> (StackOverflowError <jv>e</jv>) {
+	 * 		<jc>// Print only first 100 stack trace elements to stderr</jc>
+	 * 		ThrowableUtils.<jsm>printStackTrace</jsm>(<jv>e</jv>, 100);
+	 * 	}
+	 * </p>
 	 *
 	 * @param t The throwable to print the stack trace for.
 	 * @param maxDepth The maximum number of stack trace elements to print. If <jk>null</jk> or negative, prints all elements.

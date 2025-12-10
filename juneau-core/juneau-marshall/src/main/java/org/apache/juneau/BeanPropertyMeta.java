@@ -77,7 +77,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
-			this.bc = beanMeta.getCtx();
+			this.bc = beanMeta.getBeanContext();
 			this.name = name;
 		}
 
@@ -466,7 +466,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		var isArray = rawTypeMeta.isArray();
 
 		if (! (isCollection || isArray))
-			throw bex(beanMeta.getC(), "Attempt to add element to property ''{0}'' which is not a collection or array", name);
+			throw bex(beanMeta.getClassMeta(), "Attempt to add element to property ''{0}'' which is not a collection or array", name);
 
 		var bean = m.getBean(true);
 
@@ -552,7 +552,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		var isBean = rawTypeMeta.isBean();
 
 		if (! (isBean || isMap))
-			throw bex(beanMeta.getC(), "Attempt to add key/value to property ''{0}'' which is not a map or bean", name);
+			throw bex(beanMeta.getClassMeta(), "Attempt to add key/value to property ''{0}'' which is not a map or bean", name);
 
 		var bean = m.getBean(true);
 
@@ -793,7 +793,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return (Map)getter.invoke(bean);
 			if (nn(field))
 				return (Map)field.get(bean);
-			throw bex(beanMeta.getC(), "Getter or public field not defined on property ''{0}''", name);
+			throw bex(beanMeta.getClassMeta(), "Getter or public field not defined on property ''{0}''", name);
 		}
 		return Collections.EMPTY_MAP;
 	}
@@ -858,7 +858,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
 			}
-			throw bex(e, beanMeta.getC(), "Exception occurred while getting property ''{0}''", name);
+			throw bex(e, beanMeta.getClassMeta(), "Exception occurred while getting property ''{0}''", name);
 		}
 	}
 
@@ -1017,7 +1017,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
 			}
-			throw bex(e, beanMeta.getC(), "Exception occurred while getting property ''{0}''", name);
+			throw bex(e, beanMeta.getClassMeta(), "Exception occurred while getting property ''{0}''", name);
 		}
 	}
 
@@ -1031,14 +1031,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			} else if (nn(field))
 				m = (Map)field.get(bean);
 			else
-				throw bex(beanMeta.getC(), "Getter or public field not defined on property ''{0}''", name);
+				throw bex(beanMeta.getClassMeta(), "Getter or public field not defined on property ''{0}''", name);
 			return (m == null ? null : m.get(pName));
 		}
 		if (nn(getter))
 			return getter.invoke(bean);
 		if (nn(field))
 			return field.get(bean);
-		throw bex(beanMeta.getC(), "Getter or public field not defined on property ''{0}''", name);
+		throw bex(beanMeta.getClassMeta(), "Getter or public field not defined on property ''{0}''", name);
 	}
 
 	private Object invokeSetter(Object bean, String pName, Object val) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
@@ -1051,7 +1051,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			else if (nn(getter))
 				m = (Map<String,Object>)getter.invoke(bean);
 			else
-				throw bex(beanMeta.getC(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null",
+				throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null",
 					name, cn(this.getClassMeta()), findClassName(val));
 			return (m == null ? null : m.put(pName, val));
 		}
@@ -1061,7 +1061,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			field.set(bean, val);
 			return null;
 		}
-		throw bex(beanMeta.getC(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
+		throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
 			cn(this.getClassMeta()), findClassName(val));
 	}
 
@@ -1092,7 +1092,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if ((! isDyna) && field == null && setter == null && ! (isMap || isCollection)) {
 				if ((value == null && bc.isIgnoreUnknownNullBeanProperties()) || bc.isIgnoreMissingSetters())
 					return null;
-				throw bex(beanMeta.getC(), "Setter or public field not defined on property ''{0}''", name);
+				throw bex(beanMeta.getClassMeta(), "Setter or public field not defined on property ''{0}''", name);
 			}
 
 			var bean = m.getBean(true);  // Don't use getBean() because it triggers array creation!
@@ -1116,7 +1116,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						if (value instanceof CharSequence value2)
 							value = JsonMap.ofJson(value2).session(session);
 						else
-							throw bex(beanMeta.getC(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
+							throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
 
 					var valueMap = (Map)value;
@@ -1128,7 +1128,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (! rawTypeMeta.canCreateNewInstance()) {
 						if (propMap == null) {
 							if (setter == null && field == null)
-								throw bex(beanMeta.getC(),
+								throw bex(beanMeta.getClassMeta(),
 									"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name,
 									propertyClass.getName(), findClassName(value));
 
@@ -1146,7 +1146,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 								invokeSetter(bean, pName, valueMap);
 								return r;
 							}
-							throw bex(beanMeta.getC(),
+							throw bex(beanMeta.getClassMeta(),
 								"Cannot set property ''{0}'' of type ''{2}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
 								name, propertyClass.getName(), findClassName(value));
 						}
@@ -1174,7 +1174,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						if (value instanceof CharSequence value2)
 							value = new JsonList(value2).setBeanSession(session);
 						else
-							throw bex(beanMeta.getC(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
+							throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
 
 					var valueList = (Collection)value;
@@ -1186,7 +1186,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (! rawTypeMeta.canCreateNewInstance()) {
 						if (propList == null) {
 							if (setter == null && field == null)
-								throw bex(beanMeta.getC(),
+								throw bex(beanMeta.getClassMeta(),
 									"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name,
 									propertyClass.getName(), findClassName(value));
 
@@ -1204,7 +1204,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 								invokeSetter(bean, pName, valueList);
 								return r;
 							}
-							throw bex(beanMeta.getC(),
+							throw bex(beanMeta.getClassMeta(),
 								"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
 								name, propertyClass.getName(), findClassName(value));
 						}
@@ -1245,7 +1245,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						return rawTypeMeta.getPrimitiveDefault();
 					return null;
 				}
-				throw bex(e, beanMeta.getC(), "Error occurred trying to set property ''{0}''", name);
+				throw bex(e, beanMeta.getClassMeta(), "Error occurred trying to set property ''{0}''", name);
 			}
 		} catch (ParseException e) {
 			throw bex(e);

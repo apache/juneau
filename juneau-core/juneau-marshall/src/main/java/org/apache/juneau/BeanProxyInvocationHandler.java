@@ -68,7 +68,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 					return this.beanProps.equals(ih2.beanProps);
 				}
 			}
-			BeanMap<Object> bean = this.meta.getCtx().toBeanMap(arg);
+			BeanMap<Object> bean = this.meta.getBeanContext().toBeanMap(arg);
 			return this.beanProps.equals(bean);
 		}
 
