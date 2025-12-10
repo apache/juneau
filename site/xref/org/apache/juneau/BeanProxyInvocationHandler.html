@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.beanProps.equals(ih2.beanProps);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  				}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			}
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			BeanMap&lt;Object&gt; bean = <strong class="jxr_keyword">this</strong>.meta.ctx.toBeanMap(arg);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			BeanMap&lt;Object&gt; bean = <strong class="jxr_keyword">this</strong>.meta.getCtx().toBeanMap(arg);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.beanProps.equals(bean);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
@@ -86,11 +86,11 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">if</strong> (mi.hasName(<span class="jxr_string">"toString"</span>) &amp;&amp; mi.getParameterCount() == 0)
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">return</strong> Json5Serializer.DEFAULT.toString(<strong class="jxr_keyword">this</strong>.beanProps);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		String prop = <strong class="jxr_keyword">this</strong>.meta.getterProps.get(method);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		String prop = <strong class="jxr_keyword">this</strong>.meta.getGetterProps().get(method);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">if</strong> (nn(prop))
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.beanProps.get(prop);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		prop = <strong class="jxr_keyword">this</strong>.meta.setterProps.get(method);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		prop = <strong class="jxr_keyword">this</strong>.meta.getSetterProps().get(method);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">if</strong> (nn(prop)) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">this</strong>.beanProps.put(prop, args[0]);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

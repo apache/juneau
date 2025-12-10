@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">this</strong>.meta = meta;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (isNotEmpty(meta.getConstructorArgs()))
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			propertyCache = <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">this</strong>.typePropertyName = session.getBeanTypePropertyName(meta.classMeta);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">this</strong>.typePropertyName = session.getBeanTypePropertyName(meta.getClassMeta());
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -132,9 +132,9 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> add(String property, Object value) {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">var</strong> p = getPropertyMeta(property);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">if</strong> (meta.ctx.isIgnoreUnknownBeanProperties())
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">if</strong> (meta.getCtx().isIgnoreUnknownBeanProperties())
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">throw</strong> bex(meta.c, <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">throw</strong> bex(meta.getC(), <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		}
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		p.add(<strong class="jxr_keyword">this</strong>, property, value);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
@@ -143,11 +143,11 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> containsKey(Object property) {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<em class="jxr_comment">// JUNEAU-248: Match the behavior of keySet() - only check properties map, not hiddenProperties</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> key = emptyIfNull(property);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">if</strong> (meta.properties.containsKey(key) &amp;&amp; ! <span class="jxr_string">"*"</span>.equals(key))
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">if</strong> (meta.getProperties().containsKey(key) &amp;&amp; ! <span class="jxr_string">"*"</span>.equals(key))
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (nn(meta.dynaProperty)) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (nn(meta.getDynaProperty())) {
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">return</strong> meta.dynaProperty.getDynaMap(bean).containsKey(key);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">return</strong> meta.getDynaProperty().getDynaMap(bean).containsKey(key);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 				<strong class="jxr_keyword">throw</strong> bex(e);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			}
@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_comment">// If this bean has a dyna-property, then we need to construct the entire set before returning.</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<em class="jxr_comment">// Otherwise, we can create an iterator without a new data structure.</em>
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">if</strong> (nn(meta.dynaProperty)) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">if</strong> (nn(meta.getDynaProperty())) {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			Set&lt;Entry&lt;String,Object&gt;&gt; s = set();
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 			forEachProperty(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 				<strong class="jxr_keyword">if</strong> (x.isDyna()) {
@@ -193,7 +193,7 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			@Override <em class="jxr_comment">/* Overridden from Set */</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">public</strong> Iterator&lt;java.util.Map.Entry&lt;String,Object&gt;&gt; iterator() {
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<em class="jxr_comment">// Construct our own anonymous iterator that uses iterators against the meta.properties</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<em class="jxr_comment">// Construct our own anonymous iterator that uses iterators against the meta.getProperties()</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 				<em class="jxr_comment">// map to maintain position.  This prevents us from having to construct any of our own</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 				<em class="jxr_comment">// collection objects.</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Iterator&lt;&gt;() {
@@ -251,7 +251,7 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">public</strong> BeanMap&lt;T&gt; forEachValue(Predicate&lt;Object&gt; valueFilter, <a name="BeanPropertyConsumer" href="../../../org/apache/juneau/BeanPropertyConsumer.html#BeanPropertyConsumer">BeanPropertyConsumer</a> action) {
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<em class="jxr_comment">// Normal bean.</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">if</strong> (meta.dynaProperty == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">if</strong> (meta.getDynaProperty() == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			forEachProperty(BeanPropertyMeta::canRead, bpm -&gt; {
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 					<strong class="jxr_keyword">var</strong> val = bpm.get(<strong class="jxr_keyword">this</strong>, <strong class="jxr_keyword">null</strong>);
@@ -267,7 +267,7 @@
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<em class="jxr_comment">// Bean with dyna properties.</em>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			Map&lt;String,BeanPropertyValue&gt; actions = (meta.sortProperties ? sortedMap() : map());
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			Map&lt;String,BeanPropertyValue&gt; actions = (meta.isSortProperties() ? sortedMap() : map());
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			forEachProperty(x -&gt; ! x.isDyna(), bpm -&gt; {
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 				<strong class="jxr_keyword">try</strong> {
@@ -441,7 +441,7 @@
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 				propertyCache.forEach((k, v) -&gt; put(k, v));
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 				propertyCache = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				<strong class="jxr_keyword">throw</strong> bex(e, meta.classMeta.<strong class="jxr_keyword">inner</strong>(), <span class="jxr_string">"IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''"</span>, c.getSimpleName(),
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				<strong class="jxr_keyword">throw</strong> bex(e, meta.getClassMeta().<strong class="jxr_keyword">inner</strong>(), <span class="jxr_string">"IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''"</span>, c.getSimpleName(),
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 					Json5Serializer.DEFAULT.toString(getClasses(args)));
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 				<strong class="jxr_keyword">throw</strong> bex(e);
@@ -537,15 +537,15 @@
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 	@Override <em class="jxr_comment">/* Overridden from Map */</em>
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">if</strong> (meta.dynaProperty == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 			<strong class="jxr_keyword">return</strong> meta.properties.keySet();
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">if</strong> (meta.getDynaProperty() == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 			<strong class="jxr_keyword">return</strong> meta.getProperties().keySet();
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 		Set&lt;String&gt; l = set();
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		meta.properties.forEach((k, v) -&gt; {
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		meta.getProperties().forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"*"</span>.equals(k))
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 				l.add(k);
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 		});
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 			l.addAll(meta.dynaProperty.getDynaMap(bean).keySet());
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 			l.addAll(meta.getDynaProperty().getDynaMap(bean).keySet());
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/commons/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e);
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 		}
@@ -642,12 +642,12 @@
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 	<strong class="jxr_keyword">public</strong> Object put(String property, Object value) {
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">var</strong> p = getPropertyMeta(property);
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">if</strong> (meta.ctx.isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">if</strong> (meta.getCtx().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 				<strong class="jxr_keyword">return</strong> meta.onWriteProperty(bean, property, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 			p = getPropertyMeta(<span class="jxr_string">"*"</span>);
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 			<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 				<strong class="jxr_keyword">throw</strong> bex(meta.c, <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 				<strong class="jxr_keyword">throw</strong> bex(meta.getC(), <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 		}
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">return</strong> p.set(<strong class="jxr_keyword">this</strong>, property, value);
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 	}

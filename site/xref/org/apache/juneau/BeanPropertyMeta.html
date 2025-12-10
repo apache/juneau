@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		Builder(BeanMeta&lt;?&gt; beanMeta, String name) {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">this</strong>.beanMeta = beanMeta;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">this</strong>.bc = beanMeta.ctx;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">this</strong>.bc = beanMeta.getCtx();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">this</strong>.name = name;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		}
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
@@ -474,7 +474,7 @@
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">var</strong> isArray = rawTypeMeta.isArray();
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<strong class="jxr_keyword">if</strong> (! (isCollection || isArray))
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Attempt to add element to property ''{0}'' which is not a collection or array"</span>, name);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Attempt to add element to property ''{0}'' which is not a collection or array"</span>, name);
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">var</strong> bean = m.getBean(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 
@@ -560,7 +560,7 @@
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">var</strong> isBean = rawTypeMeta.isBean();
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">if</strong> (! (isBean || isMap))
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Attempt to add key/value to property ''{0}'' which is not a map or bean"</span>, name);
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Attempt to add key/value to property ''{0}'' which is not a map or bean"</span>, name);
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">var</strong> bean = m.getBean(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 
@@ -801,7 +801,7 @@
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 				<strong class="jxr_keyword">return</strong> (Map)getter.invoke(bean);
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 			<strong class="jxr_keyword">if</strong> (nn(field))
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 				<strong class="jxr_keyword">return</strong> (Map)field.get(bean);
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 			<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 			<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 		}
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> 		<strong class="jxr_keyword">return</strong> Collections.EMPTY_MAP;
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> 	}
@@ -866,7 +866,7 @@
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 					<strong class="jxr_keyword">return</strong> rawTypeMeta.getPrimitiveDefault();
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> 			}
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 			<strong class="jxr_keyword">throw</strong> bex(e, beanMeta.c, <span class="jxr_string">"Exception occurred while getting property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 			<strong class="jxr_keyword">throw</strong> bex(e, beanMeta.getC(), <span class="jxr_string">"Exception occurred while getting property ''{0}''"</span>, name);
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 		}
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> 	}
 <a class="jxr_linenumber" name="L864" href="#L864">864</a> 
@@ -1025,7 +1025,7 @@
 <a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 					<strong class="jxr_keyword">return</strong> rawTypeMeta.getPrimitiveDefault();
 <a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 			}
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 			<strong class="jxr_keyword">throw</strong> bex(e, beanMeta.c, <span class="jxr_string">"Exception occurred while getting property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 			<strong class="jxr_keyword">throw</strong> bex(e, beanMeta.getC(), <span class="jxr_string">"Exception occurred while getting property ''{0}''"</span>, name);
 <a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		}
 <a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 	}
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 
@@ -1039,14 +1039,14 @@
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(field))
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 				m = (Map)field.get(bean);
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
 <a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 			<strong class="jxr_keyword">return</strong> (m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.get(pName));
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		}
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 		<strong class="jxr_keyword">if</strong> (nn(getter))
 <a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 			<strong class="jxr_keyword">return</strong> getter.invoke(bean);
 <a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 		<strong class="jxr_keyword">if</strong> (nn(field))
 <a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 			<strong class="jxr_keyword">return</strong> field.get(bean);
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
 <a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	}
 <a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 
 <a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	<strong class="jxr_keyword">private</strong> Object invokeSetter(Object bean, String pName, Object val) <strong class="jxr_keyword">throws</strong> IllegalArgumentException, IllegalAccessException, InvocationTargetException {
@@ -1059,7 +1059,7 @@
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(getter))
 <a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 				m = (Map&lt;String,Object&gt;)getter.invoke(bean);
 <a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>,
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>,
 <a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 					name, cn(<strong class="jxr_keyword">this</strong>.getClassMeta()), findClassName(val));
 <a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 			<strong class="jxr_keyword">return</strong> (m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.put(pName, val));
 <a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 		}
@@ -1069,7 +1069,7 @@
 <a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 			field.set(bean, val);
 <a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 		}
-<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>, name,
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>, name,
 <a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 			cn(<strong class="jxr_keyword">this</strong>.getClassMeta()), findClassName(val));
 <a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 	}
 <a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 
@@ -1100,7 +1100,7 @@
 <a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 			<strong class="jxr_keyword">if</strong> ((! isDyna) &amp;&amp; field == <strong class="jxr_keyword">null</strong> &amp;&amp; setter == <strong class="jxr_keyword">null</strong> &amp;&amp; ! (isMap || isCollection)) {
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 				<strong class="jxr_keyword">if</strong> ((value == <strong class="jxr_keyword">null</strong> &amp;&amp; bc.isIgnoreUnknownNullBeanProperties()) || bc.isIgnoreMissingSetters())
 <a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Setter or public field not defined on property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Setter or public field not defined on property ''{0}''"</span>, name);
 <a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 			}
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 
 <a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 			<strong class="jxr_keyword">var</strong> bean = m.getBean(<strong class="jxr_keyword">true</strong>);  <em class="jxr_comment">// Don't use getBean() because it triggers array creation!</em>
@@ -1124,7 +1124,7 @@
 <a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 						<strong class="jxr_keyword">if</strong> (value instanceof CharSequence value2)
 <a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 							value = JsonMap.ofJson(value2).session(session);
 <a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 						<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 							<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''"</span>, name, propertyClass.getName(), findClassName(value));
+<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 							<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''"</span>, name, propertyClass.getName(), findClassName(value));
 <a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 					}
 <a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 					<strong class="jxr_keyword">var</strong> valueMap = (Map)value;
@@ -1136,7 +1136,7 @@
 <a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 					<strong class="jxr_keyword">if</strong> (! rawTypeMeta.canCreateNewInstance()) {
 <a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 						<strong class="jxr_keyword">if</strong> (propMap == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 							<strong class="jxr_keyword">if</strong> (setter == <strong class="jxr_keyword">null</strong> &amp;&amp; field == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 								<strong class="jxr_keyword">throw</strong> bex(beanMeta.c,
+<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 								<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(),
 <a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 									<span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null"</span>, name,
 <a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 									propertyClass.getName(), findClassName(value));
 <a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 
@@ -1154,7 +1154,7 @@
 <a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 								invokeSetter(bean, pName, valueMap);
 <a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 								<strong class="jxr_keyword">return</strong> r;
 <a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 							}
-<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 							<strong class="jxr_keyword">throw</strong> bex(beanMeta.c,
+<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 							<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(),
 <a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 								<span class="jxr_string">"Cannot set property ''{0}'' of type ''{2}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null"</span>,
 <a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 								name, propertyClass.getName(), findClassName(value));
 <a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> 						}
@@ -1182,7 +1182,7 @@
 <a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 						<strong class="jxr_keyword">if</strong> (value instanceof CharSequence value2)
 <a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 							value = <strong class="jxr_keyword">new</strong> <a name="JsonList" href="../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>(value2).setBeanSession(session);
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 						<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 							<strong class="jxr_keyword">throw</strong> bex(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''"</span>, name, propertyClass.getName(), findClassName(value));
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 							<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(), <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''"</span>, name, propertyClass.getName(), findClassName(value));
 <a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 					}
 <a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 
 <a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 					<strong class="jxr_keyword">var</strong> valueList = (Collection)value;
@@ -1194,7 +1194,7 @@
 <a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 					<strong class="jxr_keyword">if</strong> (! rawTypeMeta.canCreateNewInstance()) {
 <a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 						<strong class="jxr_keyword">if</strong> (propList == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 							<strong class="jxr_keyword">if</strong> (setter == <strong class="jxr_keyword">null</strong> &amp;&amp; field == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 								<strong class="jxr_keyword">throw</strong> bex(beanMeta.c,
+<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 								<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(),
 <a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 									<span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null"</span>, name,
 <a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 									propertyClass.getName(), findClassName(value));
 <a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 
@@ -1212,7 +1212,7 @@
 <a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 								invokeSetter(bean, pName, valueList);
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 								<strong class="jxr_keyword">return</strong> r;
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 							}
-<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 							<strong class="jxr_keyword">throw</strong> bex(beanMeta.c,
+<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 							<strong class="jxr_keyword">throw</strong> bex(beanMeta.getC(),
 <a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 								<span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null"</span>,
 <a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 								name, propertyClass.getName(), findClassName(value));
 <a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 						}
@@ -1253,7 +1253,7 @@
 <a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 						<strong class="jxr_keyword">return</strong> rawTypeMeta.getPrimitiveDefault();
 <a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 				}
-<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 				<strong class="jxr_keyword">throw</strong> bex(e, beanMeta.c, <span class="jxr_string">"Error occurred trying to set property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 				<strong class="jxr_keyword">throw</strong> bex(e, beanMeta.getC(), <span class="jxr_string">"Error occurred trying to set property ''{0}''"</span>, name);
 <a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 			}
 <a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> 			<strong class="jxr_keyword">throw</strong> bex(e);
