@@ -199,12 +199,12 @@ public class BeanMeta<T> {
 	 *
 	 * @param <T> The class type.
 	 * @param cm The class metadata for the class to create bean metadata for.
+	 * @param implClass
 	 * @param bf Optional bean filter to apply. Can be <jk>null</jk>.
-	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
 	 * @param implClassConstructor Optional constructor to use if one cannot be found. Can be <jk>null</jk>.
 	 * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
 	 */
-	public static <T> BeanMetaValue<T> create(ClassMeta<T> cm, String[] pNames, ConstructorInfo implClassConstructor) {
+	public static <T> BeanMetaValue<T> create(ClassMeta<T> cm, ClassInfo implClass) {
 		try {
 			var bc = cm.getBeanContext();
 			var ap = bc.getAnnotationProvider();
@@ -222,7 +222,7 @@ public class BeanMeta<T> {
 			if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! ap.has(Bean.class, cm))
 				return notABean("Class is not public");
 
-			var bm = new BeanMeta<>(cm, findBeanFilter(cm), pNames, implClassConstructor);
+			var bm = new BeanMeta<>(cm, findBeanFilter(cm), null, opt(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
 
 			if (nn(bm.notABeanReason))
 				return notABean(bm.notABeanReason);

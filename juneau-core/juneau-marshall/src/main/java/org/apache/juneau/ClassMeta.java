@@ -1313,7 +1313,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private BeanMeta.BeanMetaValue<T> findBeanMeta() {
 		if (! cat.isUnknown())
 			return new BeanMeta.BeanMetaValue<>(null, "Known non-bean type");
-		return BeanMeta.create(this, null, implClass.map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null));
+		return BeanMeta.create(this, implClass.get());
 	}
 
 	private KeyValueTypes findKeyValueTypes() {
