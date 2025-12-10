@@ -132,9 +132,9 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> add(String property, Object value) {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">var</strong> p = getPropertyMeta(property);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">if</strong> (meta.getCtx().isIgnoreUnknownBeanProperties())
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">if</strong> (meta.getBeanContext().isIgnoreUnknownBeanProperties())
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">throw</strong> bex(meta.getC(), <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">throw</strong> bex(meta.getClassMeta(), <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		}
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		p.add(<strong class="jxr_keyword">this</strong>, property, value);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
@@ -642,12 +642,12 @@
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 	<strong class="jxr_keyword">public</strong> Object put(String property, Object value) {
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">var</strong> p = getPropertyMeta(property);
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">if</strong> (meta.getCtx().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">if</strong> (meta.getBeanContext().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 				<strong class="jxr_keyword">return</strong> meta.onWriteProperty(bean, property, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 			p = getPropertyMeta(<span class="jxr_string">"*"</span>);
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 			<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 				<strong class="jxr_keyword">throw</strong> bex(meta.getC(), <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 				<strong class="jxr_keyword">throw</strong> bex(meta.getClassMeta(), <span class="jxr_string">"Bean property ''{0}'' not found."</span>, property);
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 		}
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">return</strong> p.set(<strong class="jxr_keyword">this</strong>, property, value);
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 	}
