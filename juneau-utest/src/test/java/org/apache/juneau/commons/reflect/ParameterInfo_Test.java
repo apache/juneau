@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -246,6 +247,10 @@ class ParameterInfo_Test extends TestBase {
 	}
 
 	// Constructor hierarchy tests
+	public static class EqualsTestClass {
+		public void method(String param1, int param2) {}
+	}
+
 	public static class PC1 {
 		public PC1(String foo) {}  // NOSONAR
 	}
@@ -858,6 +863,61 @@ class ParameterInfo_Test extends TestBase {
 	@Test
 	void a029_toString() {
 		assertEquals("a1[1]", e_a1_b.toString());
+	}
+
+	//====================================================================================================
+	// equals(Object) and hashCode()
+	//====================================================================================================
+	@Test
+	void a030_equals_hashCode() throws Exception {
+		// Get ParameterInfo instances from the same Parameter
+		Method method = EqualsTestClass.class.getMethod("method", String.class, int.class);
+		Parameter p1 = method.getParameters()[0];
+		ParameterInfo pi1a = ParameterInfo.of(p1);
+		ParameterInfo pi1b = ParameterInfo.of(p1);
+		
+		Parameter p2 = method.getParameters()[1];
+		ParameterInfo pi2 = ParameterInfo.of(p2);
+
+		// Same parameter should be equal
+		assertEquals(pi1a, pi1b);
+		assertEquals(pi1a.hashCode(), pi1b.hashCode());
+		
+		// Different parameters should not be equal
+		assertNotEquals(pi1a, pi2);
+		assertNotEquals(pi1a, null);
+		assertNotEquals(pi1a, "not a ParameterInfo");
+		
+		// Reflexive
+		assertEquals(pi1a, pi1a);
+		
+		// Symmetric
+		assertEquals(pi1a, pi1b);
+		assertEquals(pi1b, pi1a);
+		
+		// Transitive
+		ParameterInfo pi1c = ParameterInfo.of(p1);
+		assertEquals(pi1a, pi1b);
+		assertEquals(pi1b, pi1c);
+		assertEquals(pi1a, pi1c);
+		
+		// HashMap usage - same parameter should map to same value
+		Map<ParameterInfo, String> map = new HashMap<>();
+		map.put(pi1a, "value1");
+		assertEquals("value1", map.get(pi1b));
+		assertEquals("value1", map.get(pi1c));
+		
+		// HashMap usage - different parameters should map to different values
+		map.put(pi2, "value2");
+		assertEquals("value2", map.get(pi2));
+		assertNotEquals("value2", map.get(pi1a));
+		
+		// HashSet usage
+		Set<ParameterInfo> set = new HashSet<>();
+		set.add(pi1a);
+		assertTrue(set.contains(pi1b));
+		assertTrue(set.contains(pi1c));
+		assertFalse(set.contains(pi2));
 	}
 }
 

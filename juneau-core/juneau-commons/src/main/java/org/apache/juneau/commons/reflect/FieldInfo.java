@@ -299,6 +299,48 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	}
 
 	/**
+	 * Compares this FieldInfo with the specified object for equality.
+	 *
+	 * <p>
+	 * Two FieldInfo objects are considered equal if they wrap the same underlying {@link Field} object.
+	 * This delegates to the underlying {@link Field#equals(Object)} method.
+	 *
+	 * <p>
+	 * This method makes FieldInfo suitable for use as keys in hash-based collections such as {@link HashMap}
+	 * and {@link HashSet}.
+	 *
+	 * @param obj The object to compare with.
+	 * @return <jk>true</jk> if the objects are equal, <jk>false</jk> otherwise.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (obj instanceof FieldInfo other)
+			return inner.equals(other.inner);
+		return false;
+	}
+
+	/**
+	 * Returns a hash code value for this FieldInfo.
+	 *
+	 * <p>
+	 * This delegates to the underlying {@link Field#hashCode()} method.
+	 *
+	 * <p>
+	 * This method makes FieldInfo suitable for use as keys in hash-based collections such as {@link HashMap}
+	 * and {@link HashSet}.
+	 *
+	 * @return A hash code value for this FieldInfo.
+	 */
+	@Override
+	public int hashCode() {
+		return inner.hashCode();
+	}
+
+	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
 	 *
 	 * @param flags The flags to test for.

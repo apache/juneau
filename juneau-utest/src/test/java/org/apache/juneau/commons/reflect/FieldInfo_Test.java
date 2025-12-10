@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -193,6 +194,11 @@ class FieldInfo_Test extends TestBase {
 	static FieldInfo
 		testEnum_value1 = testEnum.getPublicField(x -> x.hasName("VALUE1")).get(),
 		testEnum_value2 = testEnum.getPublicField(x -> x.hasName("VALUE2")).get();
+
+	public static class EqualsTestClass {
+		public String field1;
+		public int field2;
+	}
 
 	//====================================================================================================
 	// accessible()
@@ -665,6 +671,60 @@ class FieldInfo_Test extends TestBase {
 	@Test
 	void a031_toString() {
 		assertEquals("org.apache.juneau.commons.reflect.FieldInfo_Test$E.a1", e_a1.toString());
+	}
+
+	//====================================================================================================
+	// equals(Object) and hashCode()
+	//====================================================================================================
+	@Test
+	void a032_equals_hashCode() throws Exception {
+		// Get FieldInfo instances from the same Field
+		Field f1 = EqualsTestClass.class.getField("field1");
+		FieldInfo fi1a = FieldInfo.of(f1);
+		FieldInfo fi1b = FieldInfo.of(f1);
+		
+		Field f2 = EqualsTestClass.class.getField("field2");
+		FieldInfo fi2 = FieldInfo.of(f2);
+
+		// Same field should be equal
+		assertEquals(fi1a, fi1b);
+		assertEquals(fi1a.hashCode(), fi1b.hashCode());
+		
+		// Different fields should not be equal
+		assertNotEquals(fi1a, fi2);
+		assertNotEquals(fi1a, null);
+		assertNotEquals(fi1a, "not a FieldInfo");
+		
+		// Reflexive
+		assertEquals(fi1a, fi1a);
+		
+		// Symmetric
+		assertEquals(fi1a, fi1b);
+		assertEquals(fi1b, fi1a);
+		
+		// Transitive
+		FieldInfo fi1c = FieldInfo.of(f1);
+		assertEquals(fi1a, fi1b);
+		assertEquals(fi1b, fi1c);
+		assertEquals(fi1a, fi1c);
+		
+		// HashMap usage - same field should map to same value
+		Map<FieldInfo, String> map = new HashMap<>();
+		map.put(fi1a, "value1");
+		assertEquals("value1", map.get(fi1b));
+		assertEquals("value1", map.get(fi1c));
+		
+		// HashMap usage - different fields should map to different values
+		map.put(fi2, "value2");
+		assertEquals("value2", map.get(fi2));
+		assertNotEquals("value2", map.get(fi1a));
+		
+		// HashSet usage
+		Set<FieldInfo> set = new HashSet<>();
+		set.add(fi1a);
+		assertTrue(set.contains(fi1b));
+		assertTrue(set.contains(fi1c));
+		assertFalse(set.contains(fi2));
 	}
 }
 

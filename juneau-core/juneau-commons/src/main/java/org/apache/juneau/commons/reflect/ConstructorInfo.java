@@ -177,6 +177,48 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	/**
+	 * Compares this ConstructorInfo with the specified object for equality.
+	 *
+	 * <p>
+	 * Two ConstructorInfo objects are considered equal if they wrap the same underlying {@link Constructor} object.
+	 * This delegates to the underlying {@link Constructor#equals(Object)} method.
+	 *
+	 * <p>
+	 * This method makes ConstructorInfo suitable for use as keys in hash-based collections such as {@link HashMap}
+	 * and {@link HashSet}.
+	 *
+	 * @param obj The object to compare with.
+	 * @return <jk>true</jk> if the objects are equal, <jk>false</jk> otherwise.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (obj instanceof ConstructorInfo other)
+			return inner.equals(other.inner);
+		return false;
+	}
+
+	/**
+	 * Returns a hash code value for this ConstructorInfo.
+	 *
+	 * <p>
+	 * This delegates to the underlying {@link Constructor#hashCode()} method.
+	 *
+	 * <p>
+	 * This method makes ConstructorInfo suitable for use as keys in hash-based collections such as {@link HashMap}
+	 * and {@link HashSet}.
+	 *
+	 * @return A hash code value for this ConstructorInfo.
+	 */
+	@Override
+	public int hashCode() {
+		return inner.hashCode();
+	}
+
+	/**
 	 * Shortcut for calling the new-instance method on the underlying constructor.
 	 *
 	 * @param <T> The constructor class type.

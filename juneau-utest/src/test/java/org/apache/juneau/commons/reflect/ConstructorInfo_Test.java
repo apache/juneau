@@ -117,6 +117,11 @@ class ConstructorInfo_Test extends TestBase {
 		public ExceptionClass() throws Exception {}
 	}
 
+	public static class EqualsTestClass {
+		public EqualsTestClass() {}
+		public EqualsTestClass(String param) {}
+	}
+
 	//====================================================================================================
 	// accessible()
 	//====================================================================================================
@@ -714,6 +719,60 @@ class ConstructorInfo_Test extends TestBase {
 		check("A()", a.toString());
 		check("B()", b_c1.toString());
 		check("B(String)", b_c2.toString());
+	}
+
+	//====================================================================================================
+	// equals(Object) and hashCode()
+	//====================================================================================================
+	@Test
+	void a054_equals_hashCode() throws Exception {
+		// Get ConstructorInfo instances from the same Constructor
+		Constructor<?> c1 = EqualsTestClass.class.getConstructor();
+		ConstructorInfo ci1a = ConstructorInfo.of(c1);
+		ConstructorInfo ci1b = ConstructorInfo.of(c1);
+		
+		Constructor<?> c2 = EqualsTestClass.class.getConstructor(String.class);
+		ConstructorInfo ci2 = ConstructorInfo.of(c2);
+
+		// Same constructor should be equal
+		assertEquals(ci1a, ci1b);
+		assertEquals(ci1a.hashCode(), ci1b.hashCode());
+		
+		// Different constructors should not be equal
+		assertNotEquals(ci1a, ci2);
+		assertNotEquals(ci1a, null);
+		assertNotEquals(ci1a, "not a ConstructorInfo");
+		
+		// Reflexive
+		assertEquals(ci1a, ci1a);
+		
+		// Symmetric
+		assertEquals(ci1a, ci1b);
+		assertEquals(ci1b, ci1a);
+		
+		// Transitive
+		ConstructorInfo ci1c = ConstructorInfo.of(c1);
+		assertEquals(ci1a, ci1b);
+		assertEquals(ci1b, ci1c);
+		assertEquals(ci1a, ci1c);
+		
+		// HashMap usage - same constructor should map to same value
+		Map<ConstructorInfo, String> map = new HashMap<>();
+		map.put(ci1a, "value1");
+		assertEquals("value1", map.get(ci1b));
+		assertEquals("value1", map.get(ci1c));
+		
+		// HashMap usage - different constructors should map to different values
+		map.put(ci2, "value2");
+		assertEquals("value2", map.get(ci2));
+		assertNotEquals("value2", map.get(ci1a));
+		
+		// HashSet usage
+		Set<ConstructorInfo> set = new HashSet<>();
+		set.add(ci1a);
+		assertTrue(set.contains(ci1b));
+		assertTrue(set.contains(ci1c));
+		assertFalse(set.contains(ci2));
 	}
 }
 

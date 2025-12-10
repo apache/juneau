@@ -97,6 +97,11 @@ class MethodInfo_Test extends TestBase {
 	}
 	static MethodInfo a_m = ofm(A1.class, "m");  // NOSONAR
 
+	public static class EqualsTestClass {
+		public void method1() {}
+		public void method2(String param) {}
+	}
+
 	public interface B1 {
 		int foo(int x);
 		int foo(String x);
@@ -737,6 +742,60 @@ class MethodInfo_Test extends TestBase {
 	void a040_isConstructor() {
 		assertFalse(a_m.isConstructor());
 		assertTrue(ClassInfo.of(A1.class).getPublicConstructor(cons -> cons.getParameterCount() == 0).get().isConstructor());
+	}
+
+	//====================================================================================================
+	// equals(Object) and hashCode()
+	//====================================================================================================
+	@Test
+	void a041_equals_hashCode() throws Exception {
+		// Get MethodInfo instances from the same Method
+		Method m1 = EqualsTestClass.class.getMethod("method1");
+		MethodInfo mi1a = MethodInfo.of(m1);
+		MethodInfo mi1b = MethodInfo.of(m1);
+		
+		Method m2 = EqualsTestClass.class.getMethod("method2", String.class);
+		MethodInfo mi2 = MethodInfo.of(m2);
+
+		// Same method should be equal
+		assertEquals(mi1a, mi1b);
+		assertEquals(mi1a.hashCode(), mi1b.hashCode());
+		
+		// Different methods should not be equal
+		assertNotEquals(mi1a, mi2);
+		assertNotEquals(mi1a, null);
+		assertNotEquals(mi1a, "not a MethodInfo");
+		
+		// Reflexive
+		assertEquals(mi1a, mi1a);
+		
+		// Symmetric
+		assertEquals(mi1a, mi1b);
+		assertEquals(mi1b, mi1a);
+		
+		// Transitive
+		MethodInfo mi1c = MethodInfo.of(m1);
+		assertEquals(mi1a, mi1b);
+		assertEquals(mi1b, mi1c);
+		assertEquals(mi1a, mi1c);
+		
+		// HashMap usage - same method should map to same value
+		Map<MethodInfo, String> map = new HashMap<>();
+		map.put(mi1a, "value1");
+		assertEquals("value1", map.get(mi1b));
+		assertEquals("value1", map.get(mi1c));
+		
+		// HashMap usage - different methods should map to different values
+		map.put(mi2, "value2");
+		assertEquals("value2", map.get(mi2));
+		assertNotEquals("value2", map.get(mi1a));
+		
+		// HashSet usage
+		Set<MethodInfo> set = new HashSet<>();
+		set.add(mi1a);
+		assertTrue(set.contains(mi1b));
+		assertTrue(set.contains(mi1c));
+		assertFalse(set.contains(mi2));
 	}
 }
 

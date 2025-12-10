@@ -459,6 +459,48 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		return inner;
 	}
 
+	/**
+	 * Compares this ParameterInfo with the specified object for equality.
+	 *
+	 * <p>
+	 * Two ParameterInfo objects are considered equal if they wrap the same underlying {@link Parameter} object.
+	 * This delegates to the underlying {@link Parameter#equals(Object)} method.
+	 *
+	 * <p>
+	 * This method makes ParameterInfo suitable for use as keys in hash-based collections such as {@link HashMap}
+	 * and {@link HashSet}.
+	 *
+	 * @param obj The object to compare with.
+	 * @return <jk>true</jk> if the objects are equal, <jk>false</jk> otherwise.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (obj instanceof ParameterInfo other)
+			return inner.equals(other.inner);
+		return false;
+	}
+
+	/**
+	 * Returns a hash code value for this ParameterInfo.
+	 *
+	 * <p>
+	 * This delegates to the underlying {@link Parameter#hashCode()} method.
+	 *
+	 * <p>
+	 * This method makes ParameterInfo suitable for use as keys in hash-based collections such as {@link HashMap}
+	 * and {@link HashSet}.
+	 *
+	 * @return A hash code value for this ParameterInfo.
+	 */
+	@Override
+	public int hashCode() {
+		return inner.hashCode();
+	}
+
 	@Override
 	public boolean is(ElementFlag flag) {
 		return switch (flag) {
