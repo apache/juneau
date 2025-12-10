@@ -30,7 +30,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 
 /**
- * Parent class for all bean filters.
+ * TODO
  *
  * <p>
  * Bean filters are used to control aspects of how beans are handled during serialization and parsing.
@@ -38,23 +38,23 @@ import org.apache.juneau.swap.*;
  * <p>
  * Bean filters are created by {@link Builder} which is the programmatic equivalent to the {@link Bean @Bean}
  * annotation.
- *
  */
+@SuppressWarnings("rawtypes")
 public class BeanFilter {
+
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	protected static class Builder {
 
-		ClassInfoTyped<?> beanClass;
-		String typeName, example;
-		Set<String> properties = set(), excludeProperties = set(), readOnlyProperties = set(), writeOnlyProperties = set();
-		Class<?> implClass, interfaceClass, stopClass;
-		boolean sortProperties, fluentSetters;
-		BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
-		List<Class<?>> dictionary;
-		@SuppressWarnings("rawtypes")
-		BeanCreator<BeanInterceptor> interceptor = BeanCreator.of(BeanInterceptor.class);
+		private ClassInfoTyped<?> beanClass;
+		private String typeName, example;
+		private Set<String> properties = set(), excludeProperties = set(), readOnlyProperties = set(), writeOnlyProperties = set();
+		private Class<?> implClass, interfaceClass, stopClass;
+		private boolean sortProperties, fluentSetters;
+		private BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
+		private List<Class<?>> dictionary;
+		private BeanCreator<BeanInterceptor> interceptor = BeanCreator.of(BeanInterceptor.class);
 
 		/**
 		 * Constructor.
@@ -701,14 +701,20 @@ public class BeanFilter {
 	}
 
 	private final ClassInfoTyped<?> beanClass;
-	private final Set<String> properties, excludeProperties, readOnlyProperties, writeOnlyProperties;
-	private final PropertyNamer propertyNamer;
-	private final Class<?> implClass, interfaceClass, stopClass;
-	private final boolean sortProperties, fluentSetters;
-	private final String typeName, example;
 	private final List<Class<?>> beanDictionary;
-	@SuppressWarnings("rawtypes")
+	private final String example;
+	private final Set<String> excludeProperties;
+	private final boolean fluentSetters;
+	private final Class<?> implClass;
+	private final Class<?> interfaceClass;
 	private final BeanInterceptor interceptor;
+	private final Set<String> properties;
+	private final PropertyNamer propertyNamer;
+	private final Set<String> readOnlyProperties;
+	private final boolean sortProperties;
+	private final Class<?> stopClass;
+	private final String typeName;
+	private final Set<String> writeOnlyProperties;
 
 	/**
 	 * Constructor.
