@@ -1321,7 +1321,7 @@
 <a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 	<strong class="jxr_keyword">private</strong> BeanMeta.BeanMetaValue&lt;T&gt; findBeanMeta() {
 <a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 		<strong class="jxr_keyword">if</strong> (! cat.isUnknown())
 <a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BeanMeta.BeanMetaValue&lt;&gt;(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Known non-bean type"</span>);
-<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 		<strong class="jxr_keyword">return</strong> BeanMeta.create(<strong class="jxr_keyword">this</strong>, <strong class="jxr_keyword">null</strong>, implClass.map(x -&gt; x.getPublicConstructor(x2 -&gt; x2.hasNumParameters(0)).orElse(<strong class="jxr_keyword">null</strong>)).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 		<strong class="jxr_keyword">return</strong> BeanMeta.create(<strong class="jxr_keyword">this</strong>, implClass.get());
 <a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 	}
 <a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 
 <a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 	<strong class="jxr_keyword">private</strong> KeyValueTypes findKeyValueTypes() {
