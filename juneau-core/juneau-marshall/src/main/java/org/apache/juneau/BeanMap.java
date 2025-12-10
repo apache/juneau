@@ -108,7 +108,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		this.meta = meta;
 		if (isNotEmpty(meta.getConstructorArgs()))
 			propertyCache = new TreeMap<>();
-		this.typePropertyName = session.getBeanTypePropertyName(meta.classMeta);
+		this.typePropertyName = session.getBeanTypePropertyName(meta.getClassMeta());
 	}
 
 	/**
@@ -124,9 +124,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public void add(String property, Object value) {
 		var p = getPropertyMeta(property);
 		if (p == null) {
-			if (meta.ctx.isIgnoreUnknownBeanProperties())
+			if (meta.getCtx().isIgnoreUnknownBeanProperties())
 				return;
-			throw bex(meta.c, "Bean property ''{0}'' not found.", property);
+			throw bex(meta.getC(), "Bean property ''{0}'' not found.", property);
 		}
 		p.add(this, property, value);
 	}
@@ -135,11 +135,11 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public boolean containsKey(Object property) {
 		// JUNEAU-248: Match the behavior of keySet() - only check properties map, not hiddenProperties
 		var key = emptyIfNull(property);
-		if (meta.properties.containsKey(key) && ! "*".equals(key))
+		if (meta.getProperties().containsKey(key) && ! "*".equals(key))
 			return true;
-		if (nn(meta.dynaProperty)) {
+		if (nn(meta.getDynaProperty())) {
 			try {
-				return meta.dynaProperty.getDynaMap(bean).containsKey(key);
+				return meta.getDynaProperty().getDynaMap(bean).containsKey(key);
 			} catch (Exception e) {
 				throw bex(e);
 			}
@@ -157,7 +157,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 		// If this bean has a dyna-property, then we need to construct the entire set before returning.
 		// Otherwise, we can create an iterator without a new data structure.
-		if (nn(meta.dynaProperty)) {
+		if (nn(meta.getDynaProperty())) {
 			Set<Entry<String,Object>> s = set();
 			forEachProperty(x -> true, x -> {
 				if (x.isDyna()) {
@@ -185,7 +185,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			@Override /* Overridden from Set */
 			public Iterator<java.util.Map.Entry<String,Object>> iterator() {
 
-				// Construct our own anonymous iterator that uses iterators against the meta.properties
+				// Construct our own anonymous iterator that uses iterators against the meta.getProperties()
 				// map to maintain position.  This prevents us from having to construct any of our own
 				// collection objects.
 				return new Iterator<>() {
@@ -243,7 +243,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public BeanMap<T> forEachValue(Predicate<Object> valueFilter, BeanPropertyConsumer action) {
 
 		// Normal bean.
-		if (meta.dynaProperty == null) {
+		if (meta.getDynaProperty() == null) {
 			forEachProperty(BeanPropertyMeta::canRead, bpm -> {
 				try {
 					var val = bpm.get(this, null);
@@ -259,7 +259,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 			// Bean with dyna properties.
 		} else {
-			Map<String,BeanPropertyValue> actions = (meta.sortProperties ? sortedMap() : map());
+			Map<String,BeanPropertyValue> actions = (meta.isSortProperties() ? sortedMap() : map());
 
 			forEachProperty(x -> ! x.isDyna(), bpm -> {
 				try {
@@ -433,7 +433,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				propertyCache.forEach((k, v) -> put(k, v));
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
-				throw bex(e, meta.classMeta.inner(), "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getSimpleName(),
+				throw bex(e, meta.getClassMeta().inner(), "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getSimpleName(),
 					Json5Serializer.DEFAULT.toString(getClasses(args)));
 			} catch (Exception e) {
 				throw bex(e);
@@ -529,15 +529,15 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Overridden from Map */
 	public Set<String> keySet() {
-		if (meta.dynaProperty == null)
-			return meta.properties.keySet();
+		if (meta.getDynaProperty() == null)
+			return meta.getProperties().keySet();
 		Set<String> l = set();
-		meta.properties.forEach((k, v) -> {
+		meta.getProperties().forEach((k, v) -> {
 			if (! "*".equals(k))
 				l.add(k);
 		});
 		try {
-			l.addAll(meta.dynaProperty.getDynaMap(bean).keySet());
+			l.addAll(meta.getDynaProperty().getDynaMap(bean).keySet());
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e);
 		}
@@ -634,12 +634,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public Object put(String property, Object value) {
 		var p = getPropertyMeta(property);
 		if (p == null) {
-			if (meta.ctx.isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
+			if (meta.getCtx().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
 				return meta.onWriteProperty(bean, property, null);
 
 			p = getPropertyMeta("*");
 			if (p == null)
-				throw bex(meta.c, "Bean property ''{0}'' not found.", property);
+				throw bex(meta.getC(), "Bean property ''{0}'' not found.", property);
 		}
 		return p.set(this, property, value);
 	}

@@ -68,7 +68,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 					return this.beanProps.equals(ih2.beanProps);
 				}
 			}
-			BeanMap<Object> bean = this.meta.ctx.toBeanMap(arg);
+			BeanMap<Object> bean = this.meta.getCtx().toBeanMap(arg);
 			return this.beanProps.equals(bean);
 		}
 
@@ -78,11 +78,11 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 		if (mi.hasName("toString") && mi.getParameterCount() == 0)
 			return Json5Serializer.DEFAULT.toString(this.beanProps);
 
-		String prop = this.meta.getterProps.get(method);
+		String prop = this.meta.getGetterProps().get(method);
 		if (nn(prop))
 			return this.beanProps.get(prop);
 
-		prop = this.meta.setterProps.get(method);
+		prop = this.meta.getSetterProps().get(method);
 		if (nn(prop)) {
 			this.beanProps.put(prop, args[0]);
 			return null;

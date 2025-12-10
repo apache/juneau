@@ -341,27 +341,27 @@ public class BeanMeta<T> {
 		return null;
 	}
 
-	private final BeanConstructor beanConstructor;                                                                  // The constructor for this bean.
-	protected final BeanFilter beanFilter;                                                                          // Optional bean filter associated with the target class.
-	private final OptionalSupplier<InvocationHandler> beanProxyInvocationHandler;                                  // The invocation handler for this bean (if it's an interface).
-	private final Supplier<BeanRegistry> beanRegistry;                                                              // The bean registry for this bean.
-	protected final Class<T> c;                                                                                     // The target class that this meta object describes.
-	private final Supplier<List<ClassInfo>> classHierarchy;                                                         // List of all classes traversed in the class hierarchy.
-	protected final ClassMeta<T> classMeta;                                                                         // The target class type that this meta object describes.
-	protected final BeanContext ctx;                                                                                // The bean context that created this metadata object.
-	private final Supplier<String> dictionaryName2;                                                                 // The @Bean(typeName) annotation defined on this bean class.
-	final BeanPropertyMeta dynaProperty;                                                                            // "extras" property.
-	final boolean fluentSetters;                                                                                    // Whether fluent setters are enabled.
-	protected final Map<Method,String> getterProps;                                                                 // The getter properties on the target class.
-	protected final Map<String,BeanPropertyMeta> hiddenProperties;                                                  // The hidden properties on the target class.
-	private final ConstructorInfo implClassConstructor;                                                             // Optional constructor to use if one cannot be found.
-	final String notABeanReason;                                                                                    // Readable string explaining why this class wasn't a bean.
-	protected final Map<String,BeanPropertyMeta> properties;                                                        // The properties on the target class.
-	protected final Map<Method,String> setterProps;                                                                 // The setter properties on the target class.
-	final boolean sortProperties;                                                                                   // Whether properties should be sorted.
-	private final Class<?> stopClass;                                                                               // The stop class for hierarchy traversal.
-	private final BeanPropertyMeta typeProperty;                                                                    // "_type" mock bean property.
-	final String typePropertyName;                                                                                  // "_type" property actual name.
+	private final BeanConstructor beanConstructor;                             // The constructor for this bean.
+	private final BeanFilter beanFilter;                                       // Optional bean filter associated with the target class.
+	private final OptionalSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
+	private final Supplier<BeanRegistry> beanRegistry;                         // The bean registry for this bean.
+	private final Class<T> c;                                                  // The target class that this meta object describes.
+	private final Supplier<List<ClassInfo>> classHierarchy;                    // List of all classes traversed in the class hierarchy.
+	private final ClassMeta<T> classMeta;                                      // The target class type that this meta object describes.
+	private final BeanContext ctx;                                             // The bean context that created this metadata object.
+	private final Supplier<String> dictionaryName2;                            // The @Bean(typeName) annotation defined on this bean class.
+	private final BeanPropertyMeta dynaProperty;                               // "extras" property.
+	private final boolean fluentSetters;                                       // Whether fluent setters are enabled.
+	private final Map<Method,String> getterProps;                              // The getter properties on the target class.
+	private final Map<String,BeanPropertyMeta> hiddenProperties;               // The hidden properties on the target class.
+	private final ConstructorInfo implClassConstructor;                        // Optional constructor to use if one cannot be found.
+	private final String notABeanReason;                                       // Readable string explaining why this class wasn't a bean.
+	private final Map<String,BeanPropertyMeta> properties;                     // The properties on the target class.
+	private final Map<Method,String> setterProps;                              // The setter properties on the target class.
+	private final boolean sortProperties;                                      // Whether properties should be sorted.
+	private final Class<?> stopClass;                                          // The stop class for hierarchy traversal.
+	private final BeanPropertyMeta typeProperty;                               // "_type" mock bean property.
+	private final String typePropertyName;                                     // "_type" property actual name.
 
 	/**
 	 * Constructor.
@@ -719,6 +719,62 @@ public class BeanMeta<T> {
 	 * @see BeanContext#getBeanTypePropertyName()
 	 */
 	public final String getTypePropertyName() { return typePropertyName; }
+
+	/**
+	 * Returns the target class that this meta object describes.
+	 *
+	 * @return The target class.
+	 */
+	protected final Class<T> getC() { return c; }
+
+	/**
+	 * Returns the bean context that created this metadata object.
+	 *
+	 * @return The bean context.
+	 */
+	protected final BeanContext getCtx() { return ctx; }
+
+	/**
+	 * Returns the "extras" property for dynamic bean properties.
+	 *
+	 * @return The dynamic property, or <jk>null</jk> if not present.
+	 */
+	protected final BeanPropertyMeta getDynaProperty() { return dynaProperty; }
+
+	/**
+	 * Returns whether fluent setters are enabled for this bean.
+	 *
+	 * @return <jk>true</jk> if fluent setters are enabled.
+	 */
+	protected final boolean isFluentSetters() { return fluentSetters; }
+
+	/**
+	 * Returns the map of getter methods to property names.
+	 *
+	 * @return The getter properties map.
+	 */
+	protected final Map<Method,String> getGetterProps() { return getterProps; }
+
+	/**
+	 * Returns the reason why this class is not a bean, if applicable.
+	 *
+	 * @return The not-a-bean reason, or <jk>null</jk> if this is a bean.
+	 */
+	protected final String getNotABeanReason() { return notABeanReason; }
+
+	/**
+	 * Returns the map of setter methods to property names.
+	 *
+	 * @return The setter properties map.
+	 */
+	protected final Map<Method,String> getSetterProps() { return setterProps; }
+
+	/**
+	 * Returns whether properties should be sorted for this bean.
+	 *
+	 * @return <jk>true</jk> if properties should be sorted.
+	 */
+	protected final boolean isSortProperties() { return sortProperties; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
