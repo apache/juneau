@@ -61,19 +61,19 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * BeanPropertyMeta builder class.
 	 */
 	public static class Builder {
-		BeanMeta<?> beanMeta;
-		BeanContext bc;
-		String name;
-		Field field, innerField;  // TODO - Replace with FieldInfo fields
-		Method getter, setter, extraKeys;  // TODO - Replace with MethodInfo fields
-		boolean isConstructorArg, isUri, isDyna, isDynaGetterMap;
-		ClassMeta<?> rawTypeMeta, typeMeta;
-		String[] properties;
-		ObjectSwap swap;
-		BeanRegistry beanRegistry;
-		Object overrideValue;
-		BeanPropertyMeta delegateFor;
-		boolean canRead, canWrite, readOnly, writeOnly;
+		BeanMeta<?> beanMeta;  // Package-private for BeanMeta access
+		BeanContext bc;  // Package-private for BeanMeta access
+		String name;  // Package-private for BeanMeta access
+		Field field, innerField;  // Package-private for BeanMeta access. TODO - Replace with FieldInfo fields
+		Method getter, setter, extraKeys;  // Package-private for BeanMeta access. TODO - Replace with MethodInfo fields
+		private boolean isConstructorArg, isUri, isDyna, isDynaGetterMap;
+		private ClassMeta<?> rawTypeMeta, typeMeta;
+		private List<String> properties;
+		private ObjectSwap swap;
+		private BeanRegistry beanRegistry;
+		private Object overrideValue;
+		private BeanPropertyMeta delegateFor;
+		private boolean canRead, canWrite, readOnly, writeOnly;
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
@@ -240,7 +240,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (! x.properties().isEmpty())
-						properties = splita(x.properties());
+						properties = split(x.properties());
 					addAll(bdClasses, (Object[])x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
@@ -260,7 +260,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (nn(properties) && ! x.properties().isEmpty())
-						properties = splita(x.properties());
+						properties = split(x.properties());
 					addAll(bdClasses, (Object[])x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
@@ -279,7 +279,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (nn(properties) && ! x.properties().isEmpty())
-						properties = splita(x.properties());
+						properties = split(x.properties());
 					addAll(bdClasses, (Object[])x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
@@ -393,7 +393,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final ClassMeta<?> rawTypeMeta,                                           // The real class type of the bean property.
 		typeMeta;                                              // The transformed class type of the bean property.
 
-	private final String[] properties;                        // The value of the @Beanp(properties) annotation.
+	private final List<String> properties;                        // The value of the @Beanp(properties) annotation (unmodifiable).
 	private final ObjectSwap swap;                              // ObjectSwap defined only via @Beanp annotation.
 	private final BeanRegistry beanRegistry;
 	private final Object overrideValue;                       // The bean property value (if it's an overridden delegate).
@@ -422,7 +422,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		name = b.name;
 		rawTypeMeta = b.rawTypeMeta;
 		typeMeta = b.typeMeta;
-		properties = b.properties;
+		properties = b.properties == null ? null : u(b.properties);
 		swap = b.swap;
 		beanRegistry = b.beanRegistry;
 		overrideValue = b.overrideValue;
@@ -830,9 +830,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * Returns the override list of properties defined through a {@link Beanp#properties() @Beanp(properties)} annotation
 	 * on this property.
 	 *
-	 * @return The list of override properties, or <jk>null</jk> if annotation not specified.
+	 * @return An unmodifiable list of override properties, or <jk>null</jk> if annotation not specified.
 	 */
-	public String[] getProperties() { return properties; }
+	public List<String> getProperties() { return properties; }
 
 	/**
 	 * Equivalent to calling {@link BeanMap#getRaw(Object)}, but is faster since it avoids looking up the property meta.
@@ -935,11 +935,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return null;
 		if (cm.isBean())
 			return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
-		if (cm.isMap())
-			return new FilteredMap(cm, (Map)o, properties);
+		if (cm.isMap()) {
+			var propsArray = properties == null ? null : properties.toArray(new String[0]);
+			return new FilteredMap(cm, (Map)o, propsArray);
+		}
 		if (cm.isObject()) {
-			if (o instanceof Map o2)
-				return new FilteredMap(cm, o2, properties);
+			if (o instanceof Map o2) {
+				var propsArray = properties == null ? null : properties.toArray(new String[0]);
+				return new FilteredMap(cm, o2, propsArray);
+			}
 			var bm = bc.getBeanMeta(o.getClass());
 			if (nn(bm))
 				return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
