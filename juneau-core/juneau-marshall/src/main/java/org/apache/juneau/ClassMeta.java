@@ -158,7 +158,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Supplier<Property<T,Object>> nameProperty;                   // The method to set the name on an object (if it has one).
 	private final OptionalSupplier<ConstructorInfo> noArgConstructor;          // The no-arg constructor for this class (if it has one).
 	private final Supplier<Property<T,Object>> parentProperty;                 // The method to set the parent on an object (if it has one).
-	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
+	private final Cache<String,Optional<?>> properties;
 	private final Mutater<String,T> stringMutater;
 	private final OptionalSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
@@ -253,6 +253,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		nameProperty = memoize(()->findNameProperty());
 		noArgConstructor = memoize(()->findNoArgConstructor());
 		parentProperty = memoize(()->findParentProperty());
+		properties = Cache.<String,Optional<?>>create().build();
 		stringConstructor = memoize(()->findStringConstructor());
 		swaps = memoize(()->findSwaps());
 
@@ -292,6 +293,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.nameProperty = memoize(()->findNameProperty());
 		this.exampleField = memoize(()->findExampleField());
 		this.noArgConstructor = memoize(()->findNoArgConstructor());
+		this.properties = Cache.<String,Optional<?>>create().build();
 		this.stringConstructor = memoize(()->findStringConstructor());
 		this.marshalledFilter = memoize(()->findMarshalledFilter());
 		this.builderSwap = memoize(()->findBuilderSwap());
@@ -326,6 +328,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.nameProperty = mainType.nameProperty;
 		this.exampleField = mainType.exampleField;
 		this.noArgConstructor = mainType.noArgConstructor;
+		this.properties = mainType.properties;
 		this.stringConstructor = mainType.stringConstructor;
 		this.marshalledFilter = mainType.marshalledFilter;
 		this.builderSwap = mainType.builderSwap;
@@ -694,12 +697,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
-		var t = properties.get(name);
-		if (t == null) {
-			t = opt(function.apply(this));
-			properties.put(name, t);
-		}
-		return (Optional<T2>)t;
+		return (Optional<T2>)properties.get(name, () -> opt(function.apply(this)));
 	}
 
 	/**
