@@ -1189,13 +1189,13 @@ public class BeanMeta<T> {
 	 */
 	private BeanRegistry findBeanRegistry() {
 		// Bean dictionary on bean filter.
-		List<Class<?>> beanDictionaryClasses = nn(beanFilter) ? copyOf(beanFilter.getBeanDictionary()) : list();
+		var beanDictionaryClasses = opt(beanFilter).map(x -> (List<ClassInfo>)copyOf(x.getBeanDictionary())).orElse(list());
 
 		// Bean dictionary from @Bean(typeName) annotation.
 		var ba = beanContext.getAnnotationProvider().find(Bean.class, classMeta);
-		ba.stream().map(x -> x.inner().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -> beanDictionaryClasses.add(classMeta.inner()));
+		ba.stream().map(x -> x.inner().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -> beanDictionaryClasses.add(classMeta));
 
-		return new BeanRegistry(beanContext, null, beanDictionaryClasses.toArray(new Class<?>[beanDictionaryClasses.size()]));
+		return new BeanRegistry(beanContext, null, beanDictionaryClasses.stream().map(ClassInfo::inner).toArray(Class<?>[]::new));
 	}
 
 	/*

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -53,7 +54,7 @@ public class BeanFilter {
 		private Class<?> implClass, interfaceClass, stopClass;
 		private boolean sortProperties, fluentSetters;
 		private BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
-		private List<Class<?>> dictionary;
+		private List<ClassInfo> dictionary;
 		private BeanCreator<BeanInterceptor> interceptor = BeanCreator.of(BeanInterceptor.class);
 
 		/**
@@ -152,10 +153,29 @@ public class BeanFilter {
 		 */
 		public Builder dictionary(Class<?>...values) {
 			if (dictionary == null)
-				dictionary = list(values);
-			else
-				for (var cc : values)
-					dictionary.add(cc);
+				dictionary = list();
+			for (var cc : values)
+				dictionary.add(info(cc));
+			return this;
+		}
+
+		/**
+		 * Bean dictionary.
+		 *
+		 * <p>
+		 * Adds to the list of classes that make up the bean dictionary for this bean.
+		 *
+		 * <p>
+		 * Same as the other dictionary method but accepts {@link ClassInfo} objects directly instead of {@link Class} objects.
+		 *
+		 * @param values The class info objects to add to this property.
+		 * @return This object.
+		 */
+		public Builder dictionary(ClassInfo...values) {
+			if (dictionary == null)
+				dictionary = list();
+			for (var ci : values)
+				dictionary.add(ci);
 			return this;
 		}
 
@@ -701,7 +721,7 @@ public class BeanFilter {
 	}
 
 	private final ClassInfoTyped<?> beanClass;
-	private final List<Class<?>> beanDictionary;
+	private final List<ClassInfo> beanDictionary;
 	private final String example;
 	private final Set<String> excludeProperties;
 	private final boolean fluentSetters;
@@ -749,7 +769,7 @@ public class BeanFilter {
 	 *
 	 * @return An unmodifiable list of the bean dictionary defined on this bean, or an empty list if no bean dictionary is defined.
 	 */
-	public List<Class<?>> getBeanDictionary() { return beanDictionary; }
+	public List<ClassInfo> getBeanDictionary() { return beanDictionary; }
 
 	/**
 	 * Returns the example associated with this class.

@@ -56,6 +56,7 @@ public class BeanRegistry {
 	private final AnnotationProvider ap;
 	private final boolean isEmpty;
 
+	// TODO - Convert classes to use ClassInfo.
 	BeanRegistry(BeanContext bc, BeanRegistry parent, Class<?>...classes) {
 		this.bc = bc;
 		this.ap = bc.getAnnotationProvider();
