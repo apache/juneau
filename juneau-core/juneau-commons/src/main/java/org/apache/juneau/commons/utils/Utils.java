@@ -1520,6 +1520,45 @@ public class Utils {
 	}
 
 	/**
+	 * Executes a supplier that may throw an exception and returns the result or <c>null</c>.
+	 *
+	 * <p>
+	 * If the supplier executes successfully, returns the result.
+	 * If the supplier throws any exception, returns <c>null</c>.
+	 *
+	 * <p>
+	 * This is useful for operations that may fail but you want to handle the failure
+	 * gracefully by returning <c>null</c> instead of throwing an exception. This is particularly
+	 * useful in fluent method chains where you want to filter out failed conversions.
+	 *
+	 * <p>
+	 * This method is similar to {@link #safeOpt(ThrowingSupplier)} but returns <c>null</c> instead
+	 * of <c>Optional.empty()</c> when an exception occurs. Use this method when you prefer <c>null</c>
+	 * over <c>Optional</c> for error handling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Parse an integer, returning null if parsing fails</jc>
+	 * 	Integer <jv>value</jv> = <jsm>safeOrNull</jsm>(() -&gt; Integer.valueOf(<js>"123"</js>));  <jc>// 123</jc>
+	 * 	Integer <jv>invalid</jv> = <jsm>safeOrNull</jsm>(() -&gt; Integer.valueOf(<js>"abc"</js>));  <jc>// null</jc>
+	 *
+	 * 	<jc>// Use in a fluent chain to filter out failed conversions</jc>
+	 * 	Optional&lt;Integer&gt; <jv>parsed</jv> = get(<js>"my.property"</js>)
+	 * 		.map(<jv>v</jv> -&gt; <jsm>safeOrNull</jsm>(() -&gt; Integer.valueOf(<jv>v</jv>)))
+	 * 		.filter(Objects::nonNull);
+	 * </p>
+	 *
+	 * @param <T> The return type.
+	 * @param s The supplier that may throw an exception.
+	 * @return The result of the supplier if successful, or <c>null</c> if an exception was thrown.
+	 * @see #safeOpt(ThrowingSupplier)
+	 * @see #safe(ThrowingSupplier)
+	 */
+	public static <T> T safeOrNull(ThrowingSupplier<T> s) {
+		return safeOpt(s).orElse(null);
+	}
+
+	/**
 	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
 	 *
 	 * @param <T> The supplier type.
