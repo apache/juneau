@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -88,6 +89,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder beanRegistry(BeanRegistry value) {
+			assertArgNotNull("value", value);
 			this.beanRegistry = value;
 			return this;
 		}
@@ -106,6 +108,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder delegateFor(BeanPropertyMeta value) {
+			assertArgNotNull("value", value);
 			this.delegateFor = value;
 			return this;
 		}
@@ -128,6 +131,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder rawMetaType(ClassMeta<?> value) {
+			assertArgNotNull("value", value);
 			this.rawTypeMeta = value;
 			this.typeMeta = rawTypeMeta;
 			return this;
@@ -156,60 +160,128 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 			if (ci.isChildOf(Surrogate.class))
 				throw unsupportedOp("TODO - Surrogate swaps not yet supported on bean properties.");
-			throw rex("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
-		}
+		throw rex("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
+	}
 
-		Builder canRead() {
-			this.canRead = true;
-			return this;
-		}
+	/**
+	 * Marks this property as readable.
+	 *
+	 * @return This object.
+	 */
+	public Builder canRead() {
+		this.canRead = true;
+		return this;
+	}
 
-		Builder canWrite() {
-			this.canWrite = true;
-			return this;
-		}
+	/**
+	 * Marks this property as writable.
+	 *
+	 * @return This object.
+	 */
+	public Builder canWrite() {
+		this.canWrite = true;
+		return this;
+	}
 
-		BeanPropertyMeta.Builder setAsConstructorArg() {
-			this.isConstructorArg = true;
-			return this;
-		}
+	/**
+	 * Marks this property as a constructor argument.
+	 *
+	 * @return This object.
+	 */
+	public BeanPropertyMeta.Builder setAsConstructorArg() {
+		this.isConstructorArg = true;
+		return this;
+	}
 
-		BeanPropertyMeta.Builder setExtraKeys(Method extraKeys) {
-			setAccessible(extraKeys);
-			this.extraKeys = extraKeys;
-			return this;
-		}
+	/**
+	 * Sets the extra keys method for this bean property.
+	 *
+	 * @param value The method that returns extra keys for this property.
+	 * @return This object.
+	 */
+	public BeanPropertyMeta.Builder setExtraKeys(Method value) {
+		assertArgNotNull("value", value);
+		setAccessible(value);
+		this.extraKeys = value;
+		return this;
+	}
 
-		BeanPropertyMeta.Builder setField(Field field) {
-			setAccessible(field);
-			this.field = field;
-			this.innerField = field;
-			return this;
-		}
+	/**
+	 * Sets the field for this bean property.
+	 *
+	 * @param value The field for this bean property.
+	 * @return This object.
+	 */
+	public BeanPropertyMeta.Builder setField(Field value) {
+		assertArgNotNull("value", value);
+		setAccessible(value);
+		this.field = value;
+		this.innerField = value;
+		return this;
+	}
 
-		BeanPropertyMeta.Builder setGetter(Method getter) {
-			setAccessible(getter);
-			this.getter = getter;
-			return this;
-		}
+	/**
+	 * Sets the getter method for this bean property.
+	 *
+	 * @param value The getter method for this bean property.
+	 * @return This object.
+	 */
+	public BeanPropertyMeta.Builder setGetter(Method value) {
+		assertArgNotNull("value", value);
+		setAccessible(value);
+		this.getter = value;
+		return this;
+	}
 
-		BeanPropertyMeta.Builder setInnerField(FieldInfo innerField) {
-			this.innerField = innerField == null ? null : innerField.inner();
-			return this;
-		}
+	/**
+	 * Sets the inner field for this bean property from a {@link FieldInfo}.
+	 *
+	 * @param value The field info containing the inner field.
+	 * @return This object.
+	 */
+	public BeanPropertyMeta.Builder setInnerField(FieldInfo value) {
+		assertArgNotNull("value", value);
+		this.innerField = value == null ? null : value.inner();
+		return this;
+	}
 
-		BeanPropertyMeta.Builder setInnerField(Field innerField) {
-			this.innerField = innerField;
-			return this;
-		}
+	/**
+	 * Sets the inner field for this bean property.
+	 *
+	 * @param value The inner field for this bean property.
+	 * @return This object.
+	 */
+	public BeanPropertyMeta.Builder setInnerField(Field value) {
+		assertArgNotNull("value", value);
+		this.innerField = value;
+		return this;
+	}
 
-		BeanPropertyMeta.Builder setSetter(Method setter) {
-			setAccessible(setter);
-			this.setter = setter;
-			return this;
-		}
+	/**
+	 * Sets the setter method for this bean property.
+	 *
+	 * @param value The setter method for this bean property.
+	 * @return This object.
+	 */
+	public BeanPropertyMeta.Builder setSetter(Method value) {
+		assertArgNotNull("value", value);
+		setAccessible(value);
+		this.setter = value;
+		return this;
+	}
 
-		boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
+	/**
+	 * Validates this bean property configuration.
+	 *
+	 * @param bc The bean context.
+	 * @param parentBeanRegistry The parent bean registry.
+	 * @param typeVarImpls Type variable implementations.
+	 * @param bpro Bean properties read-only set.
+	 * @param bpwo Bean properties write-only set.
+	 * @return <jk>true</jk> if this property is valid, <jk>false</jk> otherwise.
+	 * @throws Exception If validation fails.
+	 */
+	public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var bdClasses = list();
 			var ap = bc.getAnnotationProvider();

@@ -31,6 +31,7 @@ import org.apache.juneau.commons.settings.*;
 public class ThrowableUtils {
 
 	static AtomicBoolean VERBOSE = new AtomicBoolean(Settings.get().getBoolean("juneau.enableVerboseExceptions").orElse(false));
+//	static AtomicBoolean VERBOSE = new AtomicBoolean(true);
 
 	/**
 	 * Interface used with {@link Utils#safeSupplier(SupplierWithThrowable)}.

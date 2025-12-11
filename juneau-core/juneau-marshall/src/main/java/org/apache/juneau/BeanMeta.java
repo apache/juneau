@@ -495,7 +495,7 @@ public class BeanMeta<T> {
 				var p = i.next();
 				try {
 					if (p.field == null)
-						p.setInnerField(findInnerBeanField(p.name));
+						findInnerBeanField(p.name).ifPresent(x -> p.setInnerField(x));
 
 					if (p.validate(beanContext, beanRegistry.get(), typeVarImpls, readOnlyProps, writeOnlyProps)) {
 
@@ -1349,7 +1349,7 @@ public class BeanMeta<T> {
 	 * @return The {@link FieldInfo} for the field if found, or <jk>null</jk> if no matching field exists
 	 * 	in the class hierarchy.
 	 */
-	private FieldInfo findInnerBeanField(String name) {
+	private Optional<FieldInfo> findInnerBeanField(String name) {
 		var noIgnoreTransients = ! beanContext.isIgnoreTransientFields();
 		var ap = beanContext.getAnnotationProvider();
 
@@ -1362,8 +1362,7 @@ public class BeanMeta<T> {
 					&& ! ap.has(BeanIgnore.class, x)
 					&& x.hasName(name)
 			).stream())
-			.findFirst()
-			.orElse(null);
+			.findFirst();
 		// @formatter:on
 	}
 }

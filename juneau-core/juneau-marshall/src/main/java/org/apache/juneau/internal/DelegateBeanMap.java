@@ -132,7 +132,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 			if (overrideValues.containsKey(k))
 				p = BeanPropertyMeta.builder(this.meta, k).overrideValue(overrideValues.get(k)).delegateFor(p).build();
 			if (p == null)
-				p = BeanPropertyMeta.builder(this.meta, k).overrideValue(null).delegateFor(p).build();
+				p = BeanPropertyMeta.builder(this.meta, k).overrideValue(null).build();
 			l.add(p);
 		});
 		return l;

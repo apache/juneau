@@ -300,6 +300,11 @@ public class BeanSession extends ContextSession {
 		return ctx._class();
 	}
 
+	/**
+	 * Returns the annotation provider for this session.
+	 *
+	 * @return The annotation provider for this session.
+	 */
 	public AnnotationProvider getAnnotationProvider() {
 		return ctx.getAnnotationProvider();
 	}
