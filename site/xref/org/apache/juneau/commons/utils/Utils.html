@@ -1528,141 +1528,180 @@
 <a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> 	}
 <a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> 
 <a class="jxr_linenumber" name="L1522" href="#L1522">1522</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> <em class="jxr_javadoccomment">	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.</em>
+<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> <em class="jxr_javadoccomment">	 * Executes a supplier that may throw an exception and returns the result or &lt;c&gt;null&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The supplier type.</em>
-<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> <em class="jxr_javadoccomment">	 * @param supplier The supplier throwing an exception.</em>
-<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> <em class="jxr_javadoccomment">	 * @return The supplied result.</em>
-<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException if supplier threw an exception.</em>
-<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T safeSupplier(ThrowableUtils.SupplierWithThrowable&lt;T&gt; supplier) {
-<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> 			<strong class="jxr_keyword">return</strong> supplier.get();
-<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException t) {
-<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> 			<strong class="jxr_keyword">throw</strong> t;
-<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {
-<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> 			<strong class="jxr_keyword">throw</strong> toRex(t);
-<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> 		}
-<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> 	}
-<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> 
-<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> <em class="jxr_javadoccomment">	 * Allows you to wrap a supplier that throws an exception with a custom exception mapper.</em>
-<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> <em class="jxr_javadoccomment">	 * This method allows you to define a function that converts any thrown throwable into a runtime exception.</em>
-<a class="jxr_linenumber" name="L1545" href="#L1545">1545</a> <em class="jxr_javadoccomment">	 * This is useful when you need to wrap exceptions in a specific runtime exception type.</em>
-<a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1548" href="#L1548">1548</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Wrap a supplier with custom exception handling&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;return&lt;/jk&gt; Utils.&lt;jsm&gt;safeSupplier&lt;/jsm&gt;(() -&amp;gt; {</em>
-<a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// some code that may throw&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;result&lt;/jv&gt;;</em>
-<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> <em class="jxr_javadoccomment">	 * 	}, &lt;jv&gt;e&lt;/jv&gt; -&amp;gt; &lt;jk&gt;new&lt;/jk&gt; CustomRuntimeException(&lt;jv&gt;e&lt;/jv&gt;));</em>
-<a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The supplier type.</em>
-<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> <em class="jxr_javadoccomment">	 * @param supplier The supplier throwing an exception.</em>
-<a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> <em class="jxr_javadoccomment">	 * @param exceptionMapper A function that converts the thrown throwable into a runtime exception.</em>
-<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> <em class="jxr_javadoccomment">	 * @return The supplied result.</em>
-<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException The exception returned by the exception mapper if the supplier threw a throwable.</em>
-<a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T safeSupplier(ThrowableUtils.SupplierWithThrowable&lt;T&gt; supplier, Function&lt;Throwable, RuntimeException&gt; exceptionMapper) {
-<a class="jxr_linenumber" name="L1563" href="#L1563">1563</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a> 			<strong class="jxr_keyword">return</strong> supplier.get();
-<a class="jxr_linenumber" name="L1565" href="#L1565">1565</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException t) {
-<a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> 			<strong class="jxr_keyword">throw</strong> t;
-<a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {
-<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> 			<strong class="jxr_keyword">throw</strong> exceptionMapper.apply(t);
-<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 		}
-<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 	}
-<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 
-<a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> <em class="jxr_javadoccomment">	 * Helper method for creating StringBuilder objects.</em>
-<a class="jxr_linenumber" name="L1574" href="#L1574">1574</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1575" href="#L1575">1575</a> <em class="jxr_javadoccomment">	 * @param value The string value to wrap in a StringBuilder.</em>
-<a class="jxr_linenumber" name="L1576" href="#L1576">1576</a> <em class="jxr_javadoccomment">	 * @return A new StringBuilder containing the specified value.</em>
-<a class="jxr_linenumber" name="L1577" href="#L1577">1577</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1578" href="#L1578">1578</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> StringBuilder sb(String value) {
-<a class="jxr_linenumber" name="L1579" href="#L1579">1579</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StringBuilder(value);
-<a class="jxr_linenumber" name="L1580" href="#L1580">1580</a> 	}
-<a class="jxr_linenumber" name="L1581" href="#L1581">1581</a> 
-<a class="jxr_linenumber" name="L1582" href="#L1582">1582</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link StringUtils#stringSupplier(Supplier)}.</em>
-<a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> <em class="jxr_javadoccomment">	 * @param s The supplier.</em>
-<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> <em class="jxr_javadoccomment">	 * @return A string supplier that calls {@link #r(Object)} on the supplied value.</em>
-<a class="jxr_linenumber" name="L1587" href="#L1587">1587</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Supplier&lt;String&gt; ss(Supplier&lt;?&gt; s) {
-<a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> 		<strong class="jxr_keyword">return</strong> stringSupplier(s);
-<a class="jxr_linenumber" name="L1590" href="#L1590">1590</a> 	}
-<a class="jxr_linenumber" name="L1591" href="#L1591">1591</a> 
-<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> <em class="jxr_javadoccomment">	 * Convenience method for calling {@link StringUtils#upperCase(String)}.</em>
+<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> <em class="jxr_javadoccomment">	 * If the supplier executes successfully, returns the result.</em>
+<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> <em class="jxr_javadoccomment">	 * If the supplier throws any exception, returns &lt;c&gt;null&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> <em class="jxr_javadoccomment">	 * This is useful for operations that may fail but you want to handle the failure</em>
+<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> <em class="jxr_javadoccomment">	 * gracefully by returning &lt;c&gt;null&lt;/c&gt; instead of throwing an exception. This is particularly</em>
+<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> <em class="jxr_javadoccomment">	 * useful in fluent method chains where you want to filter out failed conversions.</em>
+<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> <em class="jxr_javadoccomment">	 * This method is similar to {@link #safeOpt(ThrowingSupplier)} but returns &lt;c&gt;null&lt;/c&gt; instead</em>
+<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> <em class="jxr_javadoccomment">	 * of &lt;c&gt;Optional.empty()&lt;/c&gt; when an exception occurs. Use this method when you prefer &lt;c&gt;null&lt;/c&gt;</em>
+<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> <em class="jxr_javadoccomment">	 * over &lt;c&gt;Optional&lt;/c&gt; for error handling.</em>
+<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Parse an integer, returning null if parsing fails&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a> <em class="jxr_javadoccomment">	 * 	Integer &lt;jv&gt;value&lt;/jv&gt; = &lt;jsm&gt;safeOrNull&lt;/jsm&gt;(() -&amp;gt; Integer.valueOf(&lt;js&gt;"123"&lt;/js&gt;));  &lt;jc&gt;// 123&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a> <em class="jxr_javadoccomment">	 * 	Integer &lt;jv&gt;invalid&lt;/jv&gt; = &lt;jsm&gt;safeOrNull&lt;/jsm&gt;(() -&amp;gt; Integer.valueOf(&lt;js&gt;"abc"&lt;/js&gt;));  &lt;jc&gt;// null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1545" href="#L1545">1545</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Use in a fluent chain to filter out failed conversions&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> <em class="jxr_javadoccomment">	 * 	Optional&amp;lt;Integer&amp;gt; &lt;jv&gt;parsed&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> <em class="jxr_javadoccomment">	 * 		.map(&lt;jv&gt;v&lt;/jv&gt; -&amp;gt; &lt;jsm&gt;safeOrNull&lt;/jsm&gt;(() -&amp;gt; Integer.valueOf(&lt;jv&gt;v&lt;/jv&gt;)))</em>
+<a class="jxr_linenumber" name="L1548" href="#L1548">1548</a> <em class="jxr_javadoccomment">	 * 		.filter(Objects::nonNull);</em>
+<a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The return type.</em>
+<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> <em class="jxr_javadoccomment">	 * @param s The supplier that may throw an exception.</em>
+<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> <em class="jxr_javadoccomment">	 * @return The result of the supplier if successful, or &lt;c&gt;null&lt;/c&gt; if an exception was thrown.</em>
+<a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> <em class="jxr_javadoccomment">	 * @see #safeOpt(ThrowingSupplier)</em>
+<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> <em class="jxr_javadoccomment">	 * @see #safe(ThrowingSupplier)</em>
+<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T safeOrNull(ThrowingSupplier&lt;T&gt; s) {
+<a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> 		<strong class="jxr_keyword">return</strong> safeOpt(s).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> 	}
+<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> 
+<a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> <em class="jxr_javadoccomment">	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.</em>
+<a class="jxr_linenumber" name="L1563" href="#L1563">1563</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The supplier type.</em>
+<a class="jxr_linenumber" name="L1565" href="#L1565">1565</a> <em class="jxr_javadoccomment">	 * @param supplier The supplier throwing an exception.</em>
+<a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> <em class="jxr_javadoccomment">	 * @return The supplied result.</em>
+<a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException if supplier threw an exception.</em>
+<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T safeSupplier(ThrowableUtils.SupplierWithThrowable&lt;T&gt; supplier) {
+<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 			<strong class="jxr_keyword">return</strong> supplier.get();
+<a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException t) {
+<a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> 			<strong class="jxr_keyword">throw</strong> t;
+<a class="jxr_linenumber" name="L1574" href="#L1574">1574</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {
+<a class="jxr_linenumber" name="L1575" href="#L1575">1575</a> 			<strong class="jxr_keyword">throw</strong> toRex(t);
+<a class="jxr_linenumber" name="L1576" href="#L1576">1576</a> 		}
+<a class="jxr_linenumber" name="L1577" href="#L1577">1577</a> 	}
+<a class="jxr_linenumber" name="L1578" href="#L1578">1578</a> 
+<a class="jxr_linenumber" name="L1579" href="#L1579">1579</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1580" href="#L1580">1580</a> <em class="jxr_javadoccomment">	 * Allows you to wrap a supplier that throws an exception with a custom exception mapper.</em>
+<a class="jxr_linenumber" name="L1581" href="#L1581">1581</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1582" href="#L1582">1582</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> <em class="jxr_javadoccomment">	 * This method allows you to define a function that converts any thrown throwable into a runtime exception.</em>
+<a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> <em class="jxr_javadoccomment">	 * This is useful when you need to wrap exceptions in a specific runtime exception type.</em>
+<a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1587" href="#L1587">1587</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Wrap a supplier with custom exception handling&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;return&lt;/jk&gt; Utils.&lt;jsm&gt;safeSupplier&lt;/jsm&gt;(() -&amp;gt; {</em>
+<a class="jxr_linenumber" name="L1590" href="#L1590">1590</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// some code that may throw&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1591" href="#L1591">1591</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;result&lt;/jv&gt;;</em>
+<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> <em class="jxr_javadoccomment">	 * 	}, &lt;jv&gt;e&lt;/jv&gt; -&amp;gt; &lt;jk&gt;new&lt;/jk&gt; CustomRuntimeException(&lt;jv&gt;e&lt;/jv&gt;));</em>
+<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> <em class="jxr_javadoccomment">	 * Converts the string to uppercase if not null.</em>
-<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> <em class="jxr_javadoccomment">	 * @param value The string to convert.</em>
-<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> <em class="jxr_javadoccomment">	 * @return The uppercase string, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The supplier type.</em>
+<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> <em class="jxr_javadoccomment">	 * @param supplier The supplier throwing an exception.</em>
+<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> <em class="jxr_javadoccomment">	 * @param exceptionMapper A function that converts the thrown throwable into a runtime exception.</em>
+<a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> <em class="jxr_javadoccomment">	 * @return The supplied result.</em>
+<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException The exception returned by the exception mapper if the supplier threw a throwable.</em>
 <a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String uc(String value) {
-<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 		<strong class="jxr_keyword">return</strong> StringUtils.upperCase(value);
-<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> 	}
-<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> 
-<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> <em class="jxr_javadoccomment">	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.</em>
-<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> <em class="jxr_javadoccomment">	 * @param o The object to unwrap.</em>
-<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">	 * @return The unwrapped object.</em>
-<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Object unwrap(Object o) {
-<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Supplier&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 			o = unwrap(o2.get());
-<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Value&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> 			o = unwrap(o2.get());
-<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Optional&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> 			o = unwrap(o2.orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> 		<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T safeSupplier(ThrowableUtils.SupplierWithThrowable&lt;T&gt; supplier, Function&lt;Throwable, RuntimeException&gt; exceptionMapper) {
+<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> 			<strong class="jxr_keyword">return</strong> supplier.get();
+<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException t) {
+<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> 			<strong class="jxr_keyword">throw</strong> t;
+<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {
+<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> 			<strong class="jxr_keyword">throw</strong> exceptionMapper.apply(t);
+<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> 		}
+<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> 	}
+<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> 
+<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> <em class="jxr_javadoccomment">	 * Helper method for creating StringBuilder objects.</em>
+<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> <em class="jxr_javadoccomment">	 * @param value The string value to wrap in a StringBuilder.</em>
+<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> <em class="jxr_javadoccomment">	 * @return A new StringBuilder containing the specified value.</em>
+<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> StringBuilder sb(String value) {
+<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StringBuilder(value);
 <a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> 	}
 <a class="jxr_linenumber" name="L1620" href="#L1620">1620</a> 
 <a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> <em class="jxr_javadoccomment">	 * Converts a property name to an environment variable name.</em>
+<a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link StringUtils#stringSupplier(Supplier)}.</em>
 <a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> <em class="jxr_javadoccomment">	 * @param name The property name to convert.</em>
-<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> <em class="jxr_javadoccomment">	 * @return The environment variable name (uppercase with dots replaced by underscores).</em>
+<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> <em class="jxr_javadoccomment">	 * @param s The supplier.</em>
+<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> <em class="jxr_javadoccomment">	 * @return A string supplier that calls {@link #r(Object)} on the supplied value.</em>
 <a class="jxr_linenumber" name="L1626" href="#L1626">1626</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String envName(String name) {
-<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> 		<strong class="jxr_keyword">return</strong> PROPERTY_TO_ENV.computeIfAbsent(name, x -&gt; x.toUpperCase().replace(<span class="jxr_string">"."</span>, <span class="jxr_string">"_"</span>));
+<a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Supplier&lt;String&gt; ss(Supplier&lt;?&gt; s) {
+<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> 		<strong class="jxr_keyword">return</strong> stringSupplier(s);
 <a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> 	}
 <a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> 
 <a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> <em class="jxr_javadoccomment">	 * Converts a string to the specified type using registered conversion functions.</em>
+<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> <em class="jxr_javadoccomment">	 * Convenience method for calling {@link StringUtils#upperCase(String)}.</em>
 <a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
-<a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> <em class="jxr_javadoccomment">	 * @param s The string to convert.</em>
-<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> <em class="jxr_javadoccomment">	 * @param def The default value (used to determine the target type).</em>
-<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> <em class="jxr_javadoccomment">	 * @return The converted value, or &lt;jk&gt;null&lt;/jk&gt; if the string or default is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException If the type is not supported for conversion.</em>
+<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> <em class="jxr_javadoccomment">	 * Converts the string to uppercase if not null.</em>
+<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> <em class="jxr_javadoccomment">	 * @param value The string to convert.</em>
+<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> <em class="jxr_javadoccomment">	 * @return The uppercase string, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T toType(String s, T def) {
-<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> || def == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> 		<strong class="jxr_keyword">var</strong> c = (Class&lt;T&gt;)def.getClass();
-<a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> 		<strong class="jxr_keyword">if</strong> (c == String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> 			<strong class="jxr_keyword">return</strong> (T)s;
-<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> 		<strong class="jxr_keyword">if</strong> (c.isEnum())
-<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> 			<strong class="jxr_keyword">return</strong> (T)Enum.valueOf((Class&lt;? <strong class="jxr_keyword">extends</strong> Enum&gt;)c, s);
-<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> 		<strong class="jxr_keyword">var</strong> f = (Function&lt;String,T&gt;)ENV_FUNCTIONS.get(c);
-<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid env type: {0}"</span>, c);
-<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 		<strong class="jxr_keyword">return</strong> f.apply(s);
-<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 	}
-<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 
-<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 	<em class="jxr_javadoccomment">/** Constructor - This class is meant to be subclasses. */</em>
-<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 	<strong class="jxr_keyword">protected</strong> <a name="Utils" href="../../../../../org/apache/juneau/commons/utils/Utils.html#Utils">Utils</a>() {}
-<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> }
+<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String uc(String value) {
+<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> 		<strong class="jxr_keyword">return</strong> StringUtils.upperCase(value);
+<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> 	}
+<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> 
+<a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> <em class="jxr_javadoccomment">	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.</em>
+<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> <em class="jxr_javadoccomment">	 * @param o The object to unwrap.</em>
+<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> <em class="jxr_javadoccomment">	 * @return The unwrapped object.</em>
+<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Object unwrap(Object o) {
+<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Supplier&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 			o = unwrap(o2.get());
+<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Value&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 			o = unwrap(o2.get());
+<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Optional&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 			o = unwrap(o2.orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 		<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 	}
+<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 
+<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> <em class="jxr_javadoccomment">	 * Converts a property name to an environment variable name.</em>
+<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> <em class="jxr_javadoccomment">	 * @param name The property name to convert.</em>
+<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> <em class="jxr_javadoccomment">	 * @return The environment variable name (uppercase with dots replaced by underscores).</em>
+<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String envName(String name) {
+<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 		<strong class="jxr_keyword">return</strong> PROPERTY_TO_ENV.computeIfAbsent(name, x -&gt; x.toUpperCase().replace(<span class="jxr_string">"."</span>, <span class="jxr_string">"_"</span>));
+<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 	}
+<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 
+<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> <em class="jxr_javadoccomment">	 * Converts a string to the specified type using registered conversion functions.</em>
+<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
+<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> <em class="jxr_javadoccomment">	 * @param s The string to convert.</em>
+<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> <em class="jxr_javadoccomment">	 * @param def The default value (used to determine the target type).</em>
+<a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> <em class="jxr_javadoccomment">	 * @return The converted value, or &lt;jk&gt;null&lt;/jk&gt; if the string or default is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException If the type is not supported for conversion.</em>
+<a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L1680" href="#L1680">1680</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T toType(String s, T def) {
+<a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> || def == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> 		<strong class="jxr_keyword">var</strong> c = (Class&lt;T&gt;)def.getClass();
+<a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> 		<strong class="jxr_keyword">if</strong> (c == String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> 			<strong class="jxr_keyword">return</strong> (T)s;
+<a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> 		<strong class="jxr_keyword">if</strong> (c.isEnum())
+<a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> 			<strong class="jxr_keyword">return</strong> (T)Enum.valueOf((Class&lt;? <strong class="jxr_keyword">extends</strong> Enum&gt;)c, s);
+<a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> 		<strong class="jxr_keyword">var</strong> f = (Function&lt;String,T&gt;)ENV_FUNCTIONS.get(c);
+<a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1690" href="#L1690">1690</a> 			<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Invalid env type: {0}"</span>, c);
+<a class="jxr_linenumber" name="L1691" href="#L1691">1691</a> 		<strong class="jxr_keyword">return</strong> f.apply(s);
+<a class="jxr_linenumber" name="L1692" href="#L1692">1692</a> 	}
+<a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> 
+<a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> 	<em class="jxr_javadoccomment">/** Constructor - This class is meant to be subclasses. */</em>
+<a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> 	<strong class="jxr_keyword">protected</strong> <a name="Utils" href="../../../../../org/apache/juneau/commons/utils/Utils.html#Utils">Utils</a>() {}
+<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
