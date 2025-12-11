@@ -503,7 +503,7 @@
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 				<strong class="jxr_keyword">var</strong> p = i.next();
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 					<strong class="jxr_keyword">if</strong> (p.field == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 						p.setInnerField(findInnerBeanField(p.name));
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 						findInnerBeanField(p.name).ifPresent(x -&gt; p.setInnerField(x));
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 					<strong class="jxr_keyword">if</strong> (p.validate(beanContext, beanRegistry.get(), typeVarImpls, readOnlyProps, writeOnlyProps)) {
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 
@@ -1357,7 +1357,7 @@
 <a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> <em class="jxr_comment">	 * @return The {@link FieldInfo} for the field if found, or &lt;jk&gt;null&lt;/jk&gt; if no matching field exists</em>
 <a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> <em class="jxr_comment">	 * 	in the class hierarchy.</em>
 <a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> <em class="jxr_comment">	 */</em>
-<a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 	<strong class="jxr_keyword">private</strong> <a name="FieldInfo" href="../../../org/apache/juneau/commons/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> findInnerBeanField(String name) {
+<a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;FieldInfo&gt; findInnerBeanField(String name) {
 <a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> 		<strong class="jxr_keyword">var</strong> noIgnoreTransients = ! beanContext.isIgnoreTransientFields();
 <a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> 		<strong class="jxr_keyword">var</strong> ap = beanContext.getAnnotationProvider();
 <a class="jxr_linenumber" name="L1355" href="#L1355">1355</a> 
@@ -1370,11 +1370,10 @@
 <a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> 					&amp;&amp; ! ap.has(BeanIgnore.<strong class="jxr_keyword">class</strong>, x)
 <a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> 					&amp;&amp; x.hasName(name)
 <a class="jxr_linenumber" name="L1364" href="#L1364">1364</a> 			).stream())
-<a class="jxr_linenumber" name="L1365" href="#L1365">1365</a> 			.findFirst()
-<a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> 		<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> 	}
-<a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> }
+<a class="jxr_linenumber" name="L1365" href="#L1365">1365</a> 			.findFirst();
+<a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> 	}
+<a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
